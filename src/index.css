@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Playfair Display", serif;
+  --font-display: "Playfair Display", serif;
+
+  --color-bg: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-line: #E2E8F0;
+  --color-accent: #FF7F50; /* Vibrant Coral */
+  --color-accent-teal: #2C7A7B;
+  --color-accent-orange: #C05621;
+  --color-text-main: #111111; /* Near Black for headers */
+  --color-text-body: #333333; /* Charcoal for body */
+  --color-text-dim: #555555;
+  --color-card-bg: #F5F5F5;
+  
+  /* shadcn compatibility */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text-body);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-text-main);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-text-main);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: var(--color-line);
+  --color-secondary-foreground: var(--color-text-main);
+  --color-muted: var(--color-card-bg);
+  --color-muted-foreground: var(--color-text-dim);
+  --color-border: var(--color-line);
+  --color-input: var(--color-line);
+  --color-ring: var(--color-accent);
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-body font-sans antialiased leading-[1.8];
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-text-main font-bold;
+  }
+}
+
+.panel {
+  @apply bg-bg p-12 relative overflow-hidden;
+}
+
+.nav-rail {
+  @apply w-[260px] border-r border-line flex flex-col p-8 justify-between h-screen sticky top-0 bg-surface;
+}
+
+.main-grid {
+  @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line;
+}
+
+.stats-widget {
+  @apply bg-surface p-6 border-l-4 border-accent shadow-sm rounded-r-lg;
+}
+
+.tech-specs-code {
+  @apply font-mono text-[11px] bg-bg p-4 text-accent-teal rounded border border-line;
+}
+
+.experience-chip {
+  @apply text-[10px] border border-line px-3 py-1 rounded-full text-text-dim bg-surface shadow-sm;
+}
+
+.product-card {
+  @apply bg-surface border border-line p-6 rounded-[12px] shadow-sm hover:shadow-md transition-all duration-300;
+}
+
+.content-card {
+  @apply bg-card-bg p-8 rounded-[8px] border border-line/50;
+}
