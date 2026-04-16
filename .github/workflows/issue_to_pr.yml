@@ -1,0 +1,32 @@
+name: Process Content Issue
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  issue_to_pr:
+    if: contains(github.event.issue.labels.*.name, 'content-draft')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+
+      - name: Process Issue and Create PR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          REPO_FULL_NAME: ${{ github.repository }}
+        run: python scripts/process_issue.py

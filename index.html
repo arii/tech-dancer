@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech-Dancer Data Lab | WCS Simulation Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px;
+            max-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        canvas#danceFloor {
+            width: 100%;
+            height: auto;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: crosshair;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+
+<!-- Navigation Bar -->
+<nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-microchip text-teal-400 text-xl"></i>
+                <span class="font-bold text-xl tracking-tight">Tech-Dancer <span class="text-slate-400 font-light">| Data Lab</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#lifestyle" class="text-slate-300 hover:text-white text-sm font-medium transition-colors">Lifestyle Feed</a>
+                <a href="#datalab" class="text-teal-400 border-b-2 border-teal-400 text-sm font-medium pb-1">Data Lab</a>
+                <a href="#automation" class="text-slate-300 hover:text-white text-sm font-medium transition-colors">Automation Pipeline</a>
+                <a href="#business" class="text-slate-300 hover:text-white text-sm font-medium transition-colors">SF Business Ops</a>
+            </div>
+            <div class="flex items-center md:hidden">
+                <button class="text-slate-300 hover:text-white focus:outline-none"><i class="fa-solid fa-bars text-xl"></i></button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+    <!-- DATA LAB SECTION -->
+    <section id="datalab" class="space-y-12">
+        <!-- Intro Section: Data Journalism & Authority -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="inline-flex items-center space-x-2 bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
+                        <i class="fa-solid fa-flask"></i>
+                        <span>Project 3 Demo</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
+                        Simulating the Floor: The "Zero-Gain" Phenomenon
+                    </h1>
+                    <p class="text-lg text-slate-600">
+                        In West Coast Swing (WCS), judges are typically clustered in the center of the room. This structural layout creates a massive blind spot. Because the panel functions as a centralized sensor cluster, they share a nearly identical <span class="font-semibold text-slate-800">Occlusion Profile</span>.
+                    </p>
+                    <p class="text-slate-600">
+                        This interactive Monte Carlo simulation visualizes how dynamic occlusion systematically excludes dancers from being judged, proving that making the cut is often more about spatial probability than pure skill. <strong class="text-teal-700">This platform serves as a live demonstration of complex system modeling and data infrastructure.</strong>
+                    </p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3 shadow-inner">
+                    <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-2"><i class="fa-solid fa-briefcase text-slate-500 mr-2"></i>Portfolio Competencies</h3>
+                    <ul class="text-sm text-slate-600 space-y-2">
+                        <li><i class="fa-solid fa-check text-teal-500 mr-2"></i> Agent-Based Modeling (ABM)</li>
+                        <li><i class="fa-solid fa-check text-teal-500 mr-2"></i> Ray-Casting & Spatial Algorithms</li>
+                        <li><i class="fa-solid fa-check text-teal-500 mr-2"></i> Real-time Statistical Aggregation</li>
+                        <li><i class="fa-solid fa-check text-teal-500 mr-2"></i> JavaScript/HTML5 Engine Dev</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE SIMULATION DASHBOARD -->
+        <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+            <div class="bg-slate-800 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-gamepad text-teal-400 mr-2"></i> Live Occlusion Simulator</h2>
+                <span class="bg-slate-700 text-xs text-slate-300 px-2 py-1 rounded">60 FPS Engine</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+                <!-- Controls Sidebar -->
+                <div class="lg:col-span-3 bg-slate-50 p-6 border-r border-slate-200 space-y-6">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4">Environment Parameters</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="flex justify-between text-sm text-slate-600 font-medium mb-1">
+                                    <span>Couples on Floor</span>
+                                    <span id="valCouples" class="text-teal-600 font-bold">30</span>
+                                </label>
+                                <input type="range" id="simCouples" min="10" max="60" value="30" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600">
+                            </div>
+                            <div>
+                                <label class="flex justify-between text-sm text-slate-600 font-medium mb-1">
+                                    <span>Number of Judges</span>
+                                    <span id="valJudges" class="text-teal-600 font-bold">5</span>
+                                </label>
+                                <input type="range" id="simJudges" min="1" max="9" value="5" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-600 font-medium mb-1">Judge Layout</label>
+                                <select id="simLayout" class="w-full bg-white border border-slate-300 text-slate-700 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm">
+                                    <option value="center">Center Cluster (Traditional)</option>
+                                    <option value="edge">Edge Distributed (Proposed)</option>
+                                </select>
+                            </div>
+                            <hr class="border-slate-200">
+                            <button id="btnResetStats" class="w-full bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-medium py-2 px-4 rounded shadow-sm text-sm transition-colors flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span>Reset Statistics</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                        <h4 class="text-xs font-bold text-amber-800 uppercase mb-2">Legend</h4>
+                        <ul class="text-xs space-y-2 text-amber-900">
+                            <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-teal-500 mr-2"></span> Visible to 2+ Judges</li>
+                            <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-400 mr-2"></span> Visible to 1 Judge</li>
+                            <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span> Occluded (Dead Zone)</li>
+                            <li class="flex items-center"><span class="w-3 h-3 bg-slate-800 mr-2"></span> Judge / Sensor</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Canvas Area -->
+                <div class="lg:col-span-6 p-6 flex flex-col">
+                    <p class="text-sm text-slate-500 mb-2 italic">Rays illustrate line-of-sight. Red targets are structurally ignored.</p>
+                    <canvas id="danceFloor" width="800" height="500" class="flex-grow shadow-inner"></canvas>
+                </div>
+                <!-- Stats & Charts Area -->
+                <div class="lg:col-span-3 bg-white p-6 border-l border-slate-200 space-y-6 flex flex-col">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4">Real-Time Data</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-slate-50 p-3 rounded border border-slate-100 text-center">
+                                <p class="text-xs text-slate-500 mb-1">Avg Visibility</p>
+                                <p class="text-2xl font-bold text-teal-600" id="statAvgVis">0.0%</p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded border border-slate-100 text-center">
+                                <p class="text-xs text-slate-500 mb-1">Total Occlusion</p>
+                                <p class="text-2xl font-bold text-red-500" id="statDead">0.0%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h4 class="text-xs font-bold text-slate-600 mb-2 text-center">Time Spent in Visibility States</h4>
+                        <div class="chart-container">
+                            <canvas id="visibilityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Plan Section -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-5 border-b border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-800">
+                    <i class="fa-solid fa-laptop-code text-teal-600 mr-2"></i> Simulation Architecture
+                </h2>
+                <p class="text-slate-600 mt-2 text-sm">
+                    How the high-performance simulation engine is built using NumPy vectorization and RangeLibc for elite-grade modeling.
+                </p>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-3">Kinematic Foundations</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            WCS agents are modeled as non-static rectangular agents within linear corridors ("slots"). Kinematics are defined by periodic functions simulating 6-count and 8-count rhythmic cycles.
+                        </p>
+                        <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2"></i> Cartesian Coordinate Mapping (0,0 center)</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2"></i> Vectorized Translation along Slot Vectors</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2"></i> Monte Carlo Sensitivity Analysis</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-3">Computational Optimization</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            To achieve the "Scalability" required of a professional portfolio, the engine eliminates Python loops in favor of NumPy broadcasting and matrix operations.
+                        </p>
+                        <div class="mt-4 bg-slate-900 rounded-lg p-3 text-xs text-teal-400 font-mono">
+                            # Vectorized slot positions<br>
+                            slot_positions = amplitudes[:, None] * np.sin(time_steps[None, :] + phases[:, None])
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- LIFESTYLE FEED SECTION -->
+    <section id="lifestyle" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-teal-600 px-8 py-10 text-white">
+            <h2 class="text-3xl font-extrabold mb-2">Lifestyle Feed: Organic Community Value</h2>
+            <p class="text-teal-100 max-w-2xl text-lg">Curating the Tech-Dancer experience: Look good for less, travel efficiently, and leverage tech for artistic growth.</p>
+        </div>
+
+        <div class="p-8 space-y-12">
+            <!-- Travel Rig Table -->
+            <div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                    <i class="fa-solid fa-plane-departure text-teal-600 mr-3"></i> The Tech-Dancer Travel Rig
+                </h3>
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-4">Product Category</th>
+                                <th class="px-6 py-4">Strategic Justification & Value</th>
+                                <th class="px-6 py-4">Recommended Affiliate Item</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-600">
+                            <tr>
+                                <td class="px-6 py-4 font-semibold text-slate-900">High-Fidelity Acoustics</td>
+                                <td class="px-6 py-4">Ballrooms generate hazardous decibel levels. Dancers require protection that preserves musicality, while also needing solutions to sleep in crowded hotel rooms.</td>
+                                <td class="px-6 py-4"><a href="#" class="text-teal-600 hover:underline">Loop Experience / Loop Quiet 2</a></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-semibold text-slate-900">Footwear Customization</td>
+                                <td class="px-6 py-4">Traditional dance shoes are expensive. Applying aftermarket suede to supportive, budget-friendly Amazon sneakers provides a superior, personalized experience.</td>
+                                <td class="px-6 py-4"><a href="#" class="text-teal-600 hover:underline">Suede Stick-on Sheets</a></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-semibold text-slate-900">Workstation Connectivity</td>
+                                <td class="px-6 py-4">Essential for streaming live event footage or reviewing personal competition recordings on hotel televisions.</td>
+                                <td class="px-6 py-4"><a href="#" class="text-teal-600 hover:underline">10ft Braided HDMI Cable</a></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-semibold text-slate-900">Power Density</td>
+                                <td class="px-6 py-4">A single high-output hub must fast-charge laptops, phones, and portable fans simultaneously between workshops.</td>
+                                <td class="px-6 py-4"><a href="#" class="text-teal-600 hover:underline">65W GaN Fast Charger</a></td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-semibold text-slate-900">Modular Luggage</td>
+                                <td class="px-6 py-4">Avoiding checked bag fees is vital for budget travel. The ideal bag must secure a tech setup and dynamically expand.</td>
+                                <td class="px-6 py-4"><a href="#" class="text-teal-600 hover:underline">Aer Travel Pack / Pakt</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fashion & Finance -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-shirt text-teal-600 mr-2"></i> Performance Aesthetics
+                    </h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Transition seamlessly from corporate Zoom calls to late-night socials. Mastering the "Clean Leg Line" through tapered silhouettes and UV-reactive materials for Glow Nights.
+                    </p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-credit-card text-teal-600 mr-2"></i> Travel-Hacking Literacy
+                    </h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Strategically leverage premium credit cards (Amex Platinum, World of Hyatt) to fund cross-country flights and secure accommodations at major convention chains.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CONTENT SUBMISSION FORM -->
+            <div class="bg-slate-900 rounded-2xl p-8 text-white">
+                <div class="max-w-3xl">
+                    <h3 class="text-2xl font-bold mb-4">Contribute to the Lifestyle Feed</h3>
+                    <p class="text-slate-400 mb-8">Have a recommendation for the "Look Good for Less" niche? Submit a content draft below. Our "Human-in-the-Loop" pipeline will process it using AI for final review.</p>
+
+                    <form action="https://github.com/OWNER/REPO/issues/new" method="GET" target="_blank" class="space-y-4">
+                        <!-- Instructions for the user: They will be redirected to GitHub to submit -->
+                        <input type="hidden" name="labels" value="content-draft">
+                        <input type="hidden" name="title" value="Content Draft: [Title]">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Proposed Topic</label>
+                            <input type="text" placeholder="e.g. Best UV reactive shirts under $20" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-teal-500 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Draft Content / Product Links</label>
+                            <textarea rows="4" name="body" placeholder="Describe the product and why it provides value to the Tech-Dancer community..." class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-teal-500 outline-none text-white"></textarea>
+                        </div>
+                        <button type="submit" class="bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold py-3 px-8 rounded-lg transition-colors flex items-center">
+                            <i class="fa-brands fa-github mr-2"></i> Submit as GitHub Issue
+                        </button>
+                    </form>
+                    <p class="mt-4 text-xs text-slate-500 italic">This submission triggers an automated ETL pipeline via GitHub Actions and Google AI Studio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUTOMATION PIPELINE SECTION -->
+    <section id="automation" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10">
+        <div class="flex flex-col md:flex-row gap-10">
+            <div class="md:w-1/2 space-y-6">
+                <h2 class="text-3xl font-extrabold text-slate-900">Agentic Commerce: The Automation Pipeline</h2>
+                <p class="text-lg text-slate-600">
+                    The backend demonstrates mastery over AI orchestration and DevOps. We use a "Human-in-the-Loop" architecture to scale content without sacrificing quality.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="bg-teal-100 p-2 rounded-lg mr-4"><i class="fa-solid fa-gears text-teal-600"></i></div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">CI/CD via GitHub Actions</h4>
+                            <p class="text-sm text-slate-600">Automated testing of the NumPy physics engine and validation of content schemas on every push.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-teal-100 p-2 rounded-lg mr-4"><i class="fa-solid fa-brain text-teal-600"></i></div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">LLM Orchestration (Gemini)</h4>
+                            <p class="text-sm text-slate-600">Using Google AI Studio to transform raw issue data into SEO-optimized Markdown drafts with affiliate integration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 bg-slate-900 rounded-2xl p-6 relative overflow-hidden flex items-center justify-center">
+                <!-- Visual representation of pipeline -->
+                <div class="z-10 text-center space-y-4">
+                    <div class="inline-block bg-teal-500/10 border border-teal-500/20 rounded px-4 py-2 text-teal-400 font-mono text-sm">Issue Created</div>
+                    <div class="text-slate-500"><i class="fa-solid fa-arrow-down"></i></div>
+                    <div class="inline-block bg-slate-800 border border-slate-700 rounded px-4 py-2 text-slate-300 font-mono text-sm">GitHub Action Workflow</div>
+                    <div class="text-slate-500"><i class="fa-solid fa-arrow-down"></i></div>
+                    <div class="inline-block bg-teal-500 border border-teal-600 rounded px-4 py-2 text-slate-900 font-bold font-mono text-sm">Gemini API Transformation</div>
+                    <div class="text-slate-500"><i class="fa-solid fa-arrow-down"></i></div>
+                    <div class="inline-block bg-slate-800 border border-slate-700 rounded px-4 py-2 text-slate-300 font-mono text-sm">Pull Request Created</div>
+                </div>
+                <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SF BUSINESS OPS SECTION -->
+    <section id="business" class="bg-slate-900 rounded-2xl shadow-xl overflow-hidden text-white">
+        <div class="p-8 md:p-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-extrabold mb-6">SF Business Infrastructure</h2>
+                    <p class="text-slate-400 mb-8 leading-relaxed">
+                        To cement the platform as a legitimate enterprise, backend operations adhere strictly to San Francisco business regulations and IRS tax optimization strategies.
+                    </p>
+
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-xl font-bold mb-4 flex items-center"><i class="fa-solid fa-building-columns text-teal-400 mr-3"></i> Tax Strategy: The S-Corp Pivot</h3>
+                        <p class="text-sm text-slate-400 mb-4">
+                            Transitioning to a California S-Corp to mitigate the 15.3% FICA tax and unlock Solo 401(k) contributions.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-slate-900 p-3 rounded">
+                                <span class="block text-teal-400 font-bold">15.3%</span>
+                                <span class="text-[10px] uppercase text-slate-500">Tax Mitigation</span>
+                            </div>
+                            <div class="bg-slate-900 p-3 rounded">
+                                <span class="block text-teal-400 font-bold">Solo 401(k)</span>
+                                <span class="text-[10px] uppercase text-slate-500">Max Savings</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-6 uppercase tracking-wider text-slate-500">Operational Compliance at 1 Brady St</h3>
+                    <div class="space-y-4">
+                        <!-- Compliance Item -->
+                        <div class="flex items-center justify-between p-4 bg-slate-800/30 border border-slate-700/50 rounded-lg">
+                            <div>
+                                <h4 class="font-bold text-sm">City Registration</h4>
+                                <p class="text-xs text-slate-500">SF Business Account Number (BAN)</p>
+                            </div>
+                            <span class="bg-teal-500/20 text-teal-400 text-[10px] px-2 py-1 rounded font-bold uppercase border border-teal-500/30">Compliant</span>
+                        </div>
+                        <!-- Compliance Item -->
+                        <div class="flex items-center justify-between p-4 bg-slate-800/30 border border-slate-700/50 rounded-lg">
+                            <div>
+                                <h4 class="font-bold text-sm">Home Office Deductions</h4>
+                                <p class="text-xs text-slate-500">IRS "Exclusive Use" Verification</p>
+                            </div>
+                            <span class="bg-teal-500/20 text-teal-400 text-[10px] px-2 py-1 rounded font-bold uppercase border border-teal-500/30">Compliant</span>
+                        </div>
+                        <!-- Compliance Item -->
+                        <div class="flex items-center justify-between p-4 bg-slate-800/30 border border-slate-700/50 rounded-lg">
+                            <div>
+                                <h4 class="font-bold text-sm">Asset Declaration</h4>
+                                <p class="text-xs text-slate-500">Form 571-L Equipment Valuation</p>
+                            </div>
+                            <span class="bg-teal-500/20 text-teal-400 text-[10px] px-2 py-1 rounded font-bold uppercase border border-teal-500/30">Compliant</span>
+                        </div>
+                        <!-- Compliance Item -->
+                        <div class="flex items-center justify-between p-4 bg-slate-800/30 border border-slate-700/50 rounded-lg">
+                            <div>
+                                <h4 class="font-bold text-sm">Contractor Reporting</h4>
+                                <p class="text-xs text-slate-500">California EDD Form DE 542</p>
+                            </div>
+                            <span class="bg-teal-500/20 text-teal-400 text-[10px] px-2 py-1 rounded font-bold uppercase border border-teal-500/30">Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-slate-950 px-12 py-4 text-xs text-slate-600 flex justify-between items-center">
+            <span>Anders Robotics &copy; 2026</span>
+            <span>San Francisco, CA</span>
+        </div>
+    </section>
+
+</main>
+
+<footer class="bg-slate-50 py-12 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <div class="inline-flex items-center space-x-3 text-slate-400 mb-6">
+            <i class="fa-solid fa-microchip text-xl"></i>
+            <span class="font-bold text-lg tracking-tight">Tech-Dancer</span>
+        </div>
+        <p class="text-slate-500 text-sm max-w-md mx-auto">
+            A professional portfolio merging robotic kinematics, cloud automation, and community-driven commerce.
+        </p>
+    </div>
+</footer>
+
+<!-- JavaScript Application Logic -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- UI Elements ---
+        const canvas = document.getElementById('danceFloor');
+        const ctx = canvas.getContext('2d');
+        const inCouples = document.getElementById('simCouples');
+        const valCouples = document.getElementById('valCouples');
+        const inJudges = document.getElementById('simJudges');
+        const valJudges = document.getElementById('valJudges');
+        const inLayout = document.getElementById('simLayout');
+        const btnResetStats = document.getElementById('btnResetStats');
+
+        const statAvgVis = document.getElementById('statAvgVis');
+        const statDead = document.getElementById('statDead');
+
+        // --- Simulation State ---
+        let couples = [];
+        let judges = [];
+        const COUPLE_RADIUS = 8;
+        const SLOT_HEIGHT = 40;
+        let width = canvas.width;
+        let height = canvas.height;
+
+        // Statistics tracking
+        let frameCount = 0;
+        let visibilityHistory = [0, 0, 0];
+
+        // --- Chart.js Setup ---
+        const chartCtx = document.getElementById('visibilityChart').getContext('2d');
+        const visibilityChart = new Chart(chartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occluded (0)', 'Seen (1)', 'Consensus (2+)'],
+                datasets: [{
+                    data: [33, 33, 33],
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)', // Red
+                        'rgba(251, 191, 36, 0.8)', // Amber
+                        'rgba(20, 184, 166, 0.8)'  // Teal
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                let sum = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let val = context.raw;
+                                let percentage = sum === 0 ? 0 : ((val / sum) * 100).toFixed(1);
+                                return label + percentage + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Math Helpers ---
+        function distToSegmentSquared(p, v, w) {
+            let l2 = (w.x - v.x)*(w.x - v.x) + (w.y - v.y)*(w.y - v.y);
+            if (l2 === 0) return (p.x - v.x)*(p.x - v.x) + (p.y - v.y)*(p.y - v.y);
+            let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+            t = Math.max(0, Math.min(1, t));
+            let projX = v.x + t * (w.x - v.x);
+            let projY = v.y + t * (w.y - v.y);
+            return (p.x - projX)*(p.x - projX) + (p.y - projY)*(p.y - projY);
+        }
+
+        // --- Simulation Classes ---
+        class Couple {
+            constructor(id) {
+                this.id = id;
+                this.slotY = (Math.floor(Math.random() * (height / SLOT_HEIGHT))) * SLOT_HEIGHT + (SLOT_HEIGHT/2);
+                this.x = Math.random() * (width - 100) + 50;
+                this.y = this.slotY;
+                this.vx = (Math.random() - 0.5) * 2.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.visibilityCount = 0;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < COUPLE_RADIUS || this.x > width - COUPLE_RADIUS) this.vx *= -1;
+                if (Math.abs(this.y - this.slotY) > 10) this.vy *= -1;
+                if (Math.random() < 0.02) this.vx *= -1;
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, COUPLE_RADIUS, 0, Math.PI * 2);
+                if (this.visibilityCount >= 2) ctx.fillStyle = '#14b8a6';
+                else if (this.visibilityCount === 1) ctx.fillStyle = '#fbbf24';
+                else ctx.fillStyle = '#ef4444';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+                ctx.stroke();
+            }
+        }
+
+        // --- Initialization ---
+        function initSimulation() {
+            couples = [];
+            judges = [];
+            const numCouples = parseInt(inCouples.value);
+            const numJudges = parseInt(inJudges.value);
+            const layout = inLayout.value;
+            for (let i = 0; i < numCouples; i++) {
+                couples.push(new Couple(i));
+            }
+            if (layout === 'center') {
+                let startX = width/2 - (numJudges*15)/2;
+                for(let i=0; i<numJudges; i++) {
+                    judges.push({ x: startX + i*15, y: height/2 });
+                }
+            } else {
+                let spacing = width / (numJudges + 1);
+                for(let i=1; i<=numJudges; i++) {
+                    judges.push({ x: spacing * i, y: 20 });
+                }
+            }
+        }
+
+        function resetStats() {
+            frameCount = 0;
+            visibilityHistory = [0, 0, 0];
+        }
+
+        // --- Main Loop ---
+        function loop() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            for(let y=0; y<height; y+=SLOT_HEIGHT) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+            }
+
+            couples.forEach(c => c.update());
+            couples.forEach(c => c.visibilityCount = 0);
+
+            ctx.lineWidth = 0.5;
+            judges.forEach(j => {
+                couples.forEach(c => {
+                    let occluded = false;
+                    for (let other of couples) {
+                        if (other.id === c.id) continue;
+                        let distSq = distToSegmentSquared(other, j, c);
+                        if (distSq < (COUPLE_RADIUS * 1.5) ** 2) {
+                            occluded = true;
+                            break;
+                        }
+                    }
+                    if (!occluded) {
+                        c.visibilityCount++;
+                        ctx.beginPath(); ctx.moveTo(j.x, j.y); ctx.lineTo(c.x, c.y);
+                        ctx.strokeStyle = 'rgba(20, 184, 166, 0.15)'; ctx.stroke();
+                    }
+                });
+            });
+
+            frameCount++;
+            couples.forEach(c => {
+                if (c.visibilityCount === 0) visibilityHistory[0]++;
+                else if (c.visibilityCount === 1) visibilityHistory[1]++;
+                else visibilityHistory[2]++;
+            });
+
+            couples.forEach(c => c.draw(ctx));
+            judges.forEach(j => {
+                ctx.beginPath(); ctx.rect(j.x - 5, j.y - 5, 10, 10);
+                ctx.fillStyle = '#1e293b'; ctx.fill();
+            });
+
+            if (frameCount % 10 === 0) {
+                let total = visibilityHistory.reduce((a,b)=>a+b, 0);
+                if(total > 0) {
+                    let deadPct = (visibilityHistory[0] / total) * 100;
+                    let avgVisPct = ((visibilityHistory[1] + visibilityHistory[2]) / total) * 100;
+                    statDead.innerText = deadPct.toFixed(1) + '%';
+                    statAvgVis.innerText = avgVisPct.toFixed(1) + '%';
+                    visibilityChart.data.datasets[0].data = [visibilityHistory[0], visibilityHistory[1], visibilityHistory[2]];
+                    visibilityChart.update();
+                }
+            }
+            requestAnimationFrame(loop);
+        }
+
+        inCouples.addEventListener('input', (e) => { valCouples.innerText = e.target.value; initSimulation(); resetStats(); });
+        inJudges.addEventListener('input', (e) => { valJudges.innerText = e.target.value; initSimulation(); resetStats(); });
+        inLayout.addEventListener('change', () => { initSimulation(); resetStats(); });
+        btnResetStats.addEventListener('click', resetStats);
+        initSimulation();
+        loop();
+    });
+</script>
+</body>
+</html>
