@@ -463,7 +463,6 @@
         let couples = [];
         let judges = [];
         const COUPLE_RADIUS = 8;
-        const SLOT_HEIGHT = 40;
         let width = canvas.width;
         let height = canvas.height;
 
@@ -522,22 +521,26 @@
 
         // --- Simulation Classes ---
         class Couple {
-            constructor(id) {
+            constructor(id, slotX) {
                 this.id = id;
-                this.slotY = (Math.floor(Math.random() * (height / SLOT_HEIGHT))) * SLOT_HEIGHT + (SLOT_HEIGHT/2);
-                this.x = Math.random() * (width - 100) + 50;
-                this.y = this.slotY;
-                this.vx = (Math.random() - 0.5) * 2.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
+                this.slotX = slotX;
+                this.yBase = Math.random() * (height - 100) + 50;
+                this.amplitude = 40 + Math.random() * 40;
+                this.phase = Math.random() * Math.PI * 2;
+                this.speed = 0.05 + Math.random() * 0.05;
+
+                this.x = this.slotX;
+                this.y = this.yBase + this.amplitude * Math.sin(this.phase);
                 this.visibilityCount = 0;
             }
 
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < COUPLE_RADIUS || this.x > width - COUPLE_RADIUS) this.vx *= -1;
-                if (Math.abs(this.y - this.slotY) > 10) this.vy *= -1;
-                if (Math.random() < 0.02) this.vx *= -1;
+                this.phase += this.speed;
+                this.y = this.yBase + this.amplitude * Math.sin(this.phase);
+
+                // Keep within bounds
+                if (this.y < COUPLE_RADIUS) this.y = COUPLE_RADIUS;
+                if (this.y > height - COUPLE_RADIUS) this.y = height - COUPLE_RADIUS;
             }
 
             draw(ctx) {
@@ -559,18 +562,32 @@
             const numCouples = parseInt(inCouples.value);
             const numJudges = parseInt(inJudges.value);
             const layout = inLayout.value;
+
+            // Create couples in parallel vertical slots
+            const horizontalPadding = 50;
+            const availableWidth = width - 2 * horizontalPadding;
             for (let i = 0; i < numCouples; i++) {
-                couples.push(new Couple(i));
+                const slotX = horizontalPadding + (i / (numCouples - 1)) * availableWidth;
+                couples.push(new Couple(i, slotX));
             }
+
             if (layout === 'center') {
-                let startX = width/2 - (numJudges*15)/2;
+                // Clustered in the center of the floor
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const spacing = 15;
                 for(let i=0; i<numJudges; i++) {
-                    judges.push({ x: startX + i*15, y: height/2 });
+                    judges.push({ x: centerX + (i - (numJudges-1)/2) * spacing, y: centerY });
                 }
             } else {
-                let spacing = width / (numJudges + 1);
-                for(let i=1; i<=numJudges; i++) {
-                    judges.push({ x: spacing * i, y: 20 });
+                // Distributed along the side edge
+                const sidePadding = 20;
+                const availableHeight = height - 2 * sidePadding;
+                for(let i=0; i<numJudges; i++) {
+                    judges.push({
+                        x: sidePadding,
+                        y: sidePadding + (i / (numJudges - 1)) * availableHeight
+                    });
                 }
             }
         }
@@ -583,10 +600,19 @@
         // --- Main Loop ---
         function loop() {
             ctx.clearRect(0, 0, width, height);
+
+            // Draw floor slots (Vertical lines)
             ctx.strokeStyle = '#e2e8f0';
             ctx.lineWidth = 1;
-            for(let y=0; y<height; y+=SLOT_HEIGHT) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+            const numCouplesRef = parseInt(inCouples.value);
+            const horizontalPadding = 50;
+            const availableWidth = width - 2 * horizontalPadding;
+            for (let i = 0; i < numCouplesRef; i++) {
+                const slotX = horizontalPadding + (i / (numCouplesRef - 1)) * availableWidth;
+                ctx.beginPath();
+                ctx.moveTo(slotX, 20);
+                ctx.lineTo(slotX, height - 20);
+                ctx.stroke();
             }
 
             couples.forEach(c => c.update());
