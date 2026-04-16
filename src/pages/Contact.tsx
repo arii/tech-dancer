@@ -133,28 +133,37 @@ export default function Contact() {
                 <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Personnel_Name</label>
                 {errors.name && <span className="text-[9px] text-accent font-mono font-bold uppercase">{errors.name}</span>}
               </div>
-              <input 
+              <motion.input 
+                whileFocus={{ scale: 1.01, borderColor: 'var(--color-accent)' }}
+                transition={{ duration: 0.2 }}
                 type="text" 
                 className={`w-full bg-bg border ${errors.name ? 'border-accent' : 'border-line'} px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors`}
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
             </div>
-            <div className="space-y-3">
+            <motion.div 
+              animate={errors.email ? { x: [-2, 2, -2, 2, 0] } : {}}
+              className="space-y-3"
+            >
               <div className="flex justify-between items-center">
                 <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Email_Destination</label>
                 {errors.email && <span className="text-[9px] text-accent font-mono font-bold uppercase">{errors.email}</span>}
               </div>
-              <input 
+              <motion.input 
+                whileFocus={{ scale: 1.01, borderColor: 'var(--color-accent)' }}
+                transition={{ duration: 0.2 }}
                 type="email" 
                 className={`w-full bg-bg border ${errors.email ? 'border-accent' : 'border-line'} px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors`}
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
-            </div>
+            </motion.div>
             <div className="space-y-3">
               <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Mission_Objective</label>
-              <select 
+              <motion.select 
+                whileFocus={{ scale: 1.01, borderColor: 'var(--color-accent)' }}
+                transition={{ duration: 0.2 }}
                 className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors"
                 value={formData.subject}
                 onChange={(e) => setFormData({...formData, subject: e.target.value})}
@@ -163,21 +172,28 @@ export default function Contact() {
                 <option>Content Request</option>
                 <option>Gear Review Request</option>
                 <option>Science/Data Inquiry</option>
-              </select>
+              </motion.select>
             </div>
-            <div className="space-y-3">
+            <motion.div 
+              animate={errors.message ? { x: [-2, 2, -2, 2, 0] } : {}}
+              className="space-y-3"
+            >
               <div className="flex justify-between items-center">
                 <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Data_Payload</label>
                 {errors.message && <span className="text-[9px] text-accent font-mono font-bold uppercase">{errors.message}</span>}
               </div>
-              <textarea 
+              <motion.textarea 
+                whileFocus={{ scale: 1.01, borderColor: 'var(--color-accent)' }}
+                transition={{ duration: 0.2 }}
                 rows={5}
                 className={`w-full bg-bg border ${errors.message ? 'border-accent' : 'border-line'} px-4 py-3 text-sm font-mono focus:outline-none focus:border-accent transition-colors resize-none`}
                 value={formData.message}
                 onChange={(e) => setFormData({...formData, message: e.target.value})}
-              ></textarea>
-            </div>
-            <button 
+              ></motion.textarea>
+            </motion.div>
+            <motion.button 
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
               disabled={isSubmitting}
               className="w-full bg-text-main text-bg py-5 font-bold uppercase tracking-[3px] text-xs hover:bg-black transition-all flex items-center justify-center gap-3 disabled:opacity-50"
             >
@@ -189,7 +205,7 @@ export default function Contact() {
                   Transmit_Data
                 </>
               )}
-            </button>
+            </motion.button>
           </form>
         </div>
       </div>

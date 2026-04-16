@@ -4,7 +4,7 @@
  */
 
 import { motion } from 'motion/react';
-import { Calendar, Clock, User, ArrowLeft, Share2, Bookmark } from 'lucide-react';
+import { Calendar, Clock, User, ArrowLeft, Share2, Bookmark, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { getAllContent, ContentItem } from '../lib/content';
@@ -29,7 +29,11 @@ export default function Blog() {
           Back to Blog
         </button>
 
-        <div className="max-w-4xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-4xl mx-auto"
+        >
           <div className="flex flex-col md:flex-row md:items-center gap-6 mb-12">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent border border-accent/20 px-3 py-1 w-fit">
               {selectedPost.category}
@@ -59,18 +63,23 @@ export default function Blog() {
               </div>
             </div>
             <div className="flex gap-4">
-              <button className="p-3 border border-line hover:bg-line transition-colors text-text-dim">
+              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="p-3 border border-line hover:bg-line transition-colors text-text-dim">
                 <Share2 className="w-4 h-4" />
-              </button>
-              <button className="p-3 border border-line hover:bg-line transition-colors text-text-dim">
+              </motion.button>
+              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="p-3 border border-line hover:bg-line transition-colors text-text-dim">
                 <Bookmark className="w-4 h-4" />
-              </button>
+              </motion.button>
             </div>
           </div>
 
-          <div className="aspect-[21/9] border border-line overflow-hidden mb-16 shadow-2xl">
+          <motion.div 
+            initial={{ scale: 1.05, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
+            className="aspect-[21/9] border border-line overflow-hidden mb-16 shadow-2xl"
+          >
             <img src={selectedPost.image} alt={selectedPost.title} className="w-full h-full object-cover grayscale" referrerPolicy="no-referrer" />
-          </div>
+          </motion.div>
 
           <div className="markdown-body prose prose-lg max-w-none text-text-body font-sans leading-relaxed space-y-8">
             <Markdown>{selectedPost.content}</Markdown>
@@ -96,7 +105,7 @@ export default function Blog() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
     );
   }
@@ -112,18 +121,35 @@ export default function Blog() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-1 border-t border-line bg-line max-w-5xl">
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+        className="grid grid-cols-1 gap-1 border-t border-line bg-line max-w-5xl"
+      >
         {posts.map((post, index) => (
           <motion.div
             key={post.slug}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: index * 0.05 }}
+            variants={{
+              hidden: { opacity: 0, x: -10 },
+              visible: { opacity: 1, x: 0 }
+            }}
+            whileHover={{ x: 5 }}
             onClick={() => setSelectedPost(post)}
             className="bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-all flex flex-col md:flex-row gap-12 border-x border-b border-line"
           >
             <div className="w-full md:w-2/5 aspect-video md:aspect-square overflow-hidden shrink-0 border border-line">
-              <img 
+              <motion.img 
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.8 }}
                 src={post.image} 
                 alt={post.title} 
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
@@ -145,26 +171,16 @@ export default function Blog() {
               <p className="text-[15px] text-text-body leading-relaxed line-clamp-3 font-sans">
                 {post.excerpt}
               </p>
-              <div className="flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent pt-2 group-hover:translate-x-1 transition-transform">
+              <motion.div 
+                whileHover={{ x: 3 }}
+                className="flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent pt-2"
+              >
                 Read Full Entry <ArrowRight className="w-4 h-4" />
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
-  );
-}
-
-function ArrowRight({ className }: { className?: string }) {
-  return (
-    <svg 
-      className={className} 
-      fill="none" 
-      stroke="currentColor" 
-      viewBox="0 0 24 24"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-    </svg>
   );
 }

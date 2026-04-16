@@ -50,34 +50,63 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
         </span>
         
         <div className="space-y-6 mb-24 px-4 md:px-0">
-          <h1 className="font-display uppercase text-5xl md:text-9xl leading-[0.9] text-text-main font-bold tracking-tighter">
+          <motion.h1 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
+            className="font-display uppercase text-5xl md:text-9xl leading-[0.9] text-text-main font-bold tracking-tighter"
+          >
             The Roboticist's Guide to WCS.
-          </h1>
+          </motion.h1>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-12">
-            <p className="text-xl md:text-2xl text-text-body max-w-3xl font-sans leading-relaxed">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-xl md:text-2xl text-text-body max-w-3xl font-sans leading-relaxed"
+            >
               Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis to maximize your West Coast Swing trajectory.
-            </p>
-            <div className="stats-widget !p-4 !m-0 border-l-2 border-accent bg-accent/5 shrink-0 rounded-none shadow-none">
+            </motion.p>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="stats-widget !p-4 !m-0 border-l-2 border-accent bg-accent/5 shrink-0 rounded-none shadow-none"
+            >
               <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent mb-1">Status: Optimized</div>
               <div className="text-sm font-display font-medium">BOUGIE ON A BUDGET</div>
-            </div>
+            </motion.div>
           </div>
         </div>
         
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
           className="space-y-0 border-y border-line"
         >
           <div className="grid grid-cols-12 gap-0">
             {/* Main Feature */}
-            <div 
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
               onClick={() => setActiveTab('lab')}
               className="col-span-12 lg:col-span-8 border-r border-line p-8 md:p-16 hover:bg-card-bg transition-colors cursor-pointer group"
             >
               <div className="aspect-[16/9] overflow-hidden bg-line">
-                <img 
+                <motion.img 
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
                   src="https://picsum.photos/seed/gear-stack/1200/675" 
                   alt="Hardware & Shell" 
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
@@ -89,15 +118,22 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 <p className="text-lg md:text-xl text-text-body max-w-xl">
                   Stress-tested apparel and footwear for the 3:00 AM social floor. From friction-reduction DIYs to sustainable packing manifests.
                 </p>
-                <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-[2px] text-accent">
-                  Explore The Lab <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
+                <motion.div 
+                  whileHover={{ x: 5 }}
+                  className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-[2px] text-accent"
+                >
+                  Explore The Lab <ArrowRight className="w-4 h-4" />
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
             
             {/* Side Stack */}
             <div className="col-span-12 lg:col-span-4 flex flex-col">
-              <div 
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, x: 20 },
+                  visible: { opacity: 1, x: 0 }
+                }}
                 onClick={() => setActiveTab('feed')}
                 className="flex-1 p-8 md:p-12 border-b border-line bg-accent text-white hover:bg-accent-orange transition-colors cursor-pointer group"
               >
@@ -106,11 +142,18 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 <p className="text-sm text-white/80 mb-8 leading-relaxed">
                   High-efficiency travel protocols. Hotel block arbitrage, flight matrix optimization, and status stacking.
                 </p>
-                <div className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px]">
-                  Access Systems <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-              <div 
+                <motion.div 
+                  whileHover={{ x: 5 }}
+                  className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px]"
+                >
+                  Access Systems <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </motion.div>
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, x: 20 },
+                  visible: { opacity: 1, x: 0 }
+                }}
                 onClick={() => setActiveTab('engine')}
                 className="flex-1 p-8 md:p-12 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
               >
@@ -119,75 +162,128 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 <p className="text-sm text-text-body mb-8 leading-relaxed">
                   The physics of momentum and connection. Quantifying judge variance and heat density.
                 </p>
-                <div className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent">
-                  View Data <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
+                <motion.div 
+                  whileHover={{ x: 5 }}
+                  className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent"
+                >
+                  View Data <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </motion.div>
 
         {/* Latest Updates Section */}
         <div className="mt-24 space-y-8">
-          <div className="flex items-end justify-between border-b border-line pb-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="flex items-end justify-between border-b border-line pb-4"
+          >
             <h3 className="text-sm font-bold uppercase tracking-[3px] text-text-main">Latest Updates</h3>
             <div className="text-[10px] text-text-dim font-mono uppercase tracking-widest">System Time: 2026.04.15</div>
-          </div>
+          </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
             {latestUpdates.map((update, idx) => (
               <motion.div
                 key={update.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + idx * 0.1 }}
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                whileHover={{ y: -5, borderColor: 'var(--color-accent)' }}
                 onClick={() => setActiveTab(update.link)}
-                className="bg-surface border border-line p-5 rounded-lg hover:border-accent transition-all group cursor-pointer shadow-sm hover:shadow-md"
+                className="bg-surface border border-line p-5 rounded-none hover:border-accent transition-all group cursor-pointer shadow-sm"
               >
                 <div className="flex justify-between items-start mb-3">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-accent bg-accent/10 px-2 py-0.5 rounded">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-accent bg-accent/10 px-2 py-0.5">
                     {update.type}
                   </span>
                   <span className="text-[9px] text-text-dim font-mono">{update.date}</span>
                 </div>
-                <h5 className="text-base font-serif font-bold text-text-main group-hover:text-accent transition-colors mb-2">
+                <h5 className="text-base font-display font-bold text-text-main group-hover:text-accent transition-colors mb-2 uppercase tracking-tight">
                   {update.title}
                 </h5>
-                <p className="text-xs text-text-body leading-relaxed line-clamp-2">
+                <p className="text-xs text-text-body leading-relaxed line-clamp-2 font-sans">
                   {update.desc}
                 </p>
-                <div className="mt-4 flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-accent group-hover:translate-x-1 transition-transform">
+                <motion.div 
+                  whileHover={{ x: 3 }}
+                  className="mt-4 flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-accent"
+                >
                   View <ArrowRight className="w-3 h-3" />
-                </div>
+                </motion.div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Upcoming Circuit Section */}
         <div className="mt-24 space-y-8">
-          <div className="flex items-end justify-between border-b border-line pb-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="flex items-end justify-between border-b border-line pb-4"
+          >
             <h3 className="text-sm font-bold uppercase tracking-[3px] text-text-main">Upcoming Circuit</h3>
             <div className="text-[10px] text-accent animate-pulse font-mono uppercase tracking-widest font-bold">● Live Itinerary</div>
-          </div>
+          </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.05
+                }
+              }
+            }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border border-line bg-line"
+          >
             {upcomingEvents.map((event, idx) => (
-              <div key={event.name} className="bg-surface/50 border border-line p-6 rounded-lg flex items-start gap-4 hover:border-accent transition-colors">
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0">
-                  <event.icon className="w-5 h-5" />
+              <motion.div 
+                key={event.name} 
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 1 }
+                }}
+                className="bg-bg p-6 border-line flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default"
+              >
+                <div className="w-10 h-10 border border-line bg-line flex items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
+                  <event.icon className="w-5 h-5 stroke-1" />
                 </div>
                 <div className="space-y-1">
                   <div className="text-[9px] text-accent font-mono uppercase font-bold tracking-widest">{event.status}</div>
-                  <div className="text-lg font-serif font-bold text-text-main leading-tight">{event.name}</div>
-                  <div className="text-xs text-text-dim flex items-center gap-2">
+                  <div className="text-lg font-display font-bold text-text-main leading-tight uppercase tracking-tight">{event.name}</div>
+                  <div className="text-xs text-text-dim flex items-center gap-2 font-mono">
                     <Calendar className="w-3 h-3" />
                     {event.date}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         <div className="stats-widget mt-24 w-fit pb-12">

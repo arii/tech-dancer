@@ -74,13 +74,19 @@ export default function Engine() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
+      >
         <div className="content-card overflow-hidden !p-0">
-          <div className="aspect-video bg-line">
-            <img 
+          <div className="aspect-video bg-line overflow-hidden">
+            <motion.img 
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.8 }}
               src="https://picsum.photos/seed/dance-data/800/450" 
               alt="Dance Data" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -94,9 +100,28 @@ export default function Engine() {
         </div>
         <div className="space-y-8">
           <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-text-main border-b-2 border-accent w-fit pb-1">Quick Insights</h3>
-          <div className="grid grid-cols-1 gap-4">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.1 }
+              }
+            }}
+            className="grid grid-cols-1 gap-4"
+          >
             {experiencePacks.map((pack) => (
-              <div key={pack.category} className="content-card !p-6 flex items-center gap-6 group hover:border-accent transition-colors">
+              <motion.div 
+                key={pack.category} 
+                variants={{
+                  hidden: { opacity: 0, x: 20 },
+                  visible: { opacity: 1, x: 0 }
+                }}
+                whileHover={{ x: 5, borderColor: 'var(--color-accent)' }}
+                className="content-card !p-6 flex items-center gap-6 group hover:border-accent transition-colors cursor-default"
+              >
                 <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0">
                   <pack.icon className="w-6 h-6" />
                 </div>
@@ -105,19 +130,32 @@ export default function Engine() {
                   <div className="text-lg font-serif font-bold text-text-main leading-tight">{pack.focus}</div>
                   <div className="text-sm italic text-text-body">"{pack.benefit}"</div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 }
+          }
+        }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+      >
         {studies.map((paper, index) => (
           <motion.div
             key={paper.slug}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            variants={{
+              hidden: { opacity: 0, scale: 0.98 },
+              visible: { opacity: 1, scale: 1 }
+            }}
             className="relative border border-line p-10 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
             onClick={() => setSelectedStudy(paper)}
           >
@@ -152,7 +190,7 @@ export default function Engine() {
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {selectedStudy && (
         <div className="fixed inset-0 z-[100] bg-bg overflow-y-auto p-6 md:p-12">

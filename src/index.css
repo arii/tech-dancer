@@ -34,6 +34,11 @@
   --color-border: var(--color-line);
   --color-input: var(--color-line);
   --color-ring: var(--color-accent);
+
+  /* Principled Easing - Technical & Responsive */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {

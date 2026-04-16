@@ -13,12 +13,13 @@ import About from './pages/About';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import Drafter from './pages/Drafter';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { X } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [showEmailBar, setShowEmailBar] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
 
   const renderPage = () => {
     switch (activeTab) {
@@ -34,19 +35,26 @@ export default function App() {
     }
   };
 
+  const pageTransition = {
+    initial: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0 },
+    transition: { 
+      duration: 0.3, 
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number] 
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-bg">
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <main className="flex-1 flex flex-col relative pt-16 md:pt-0">
-        <div className="flex-1 bg-line grid grid-cols-1">
+        <div className="flex-1 bg-line grid grid-cols-1 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              {...pageTransition}
               className="bg-bg h-full"
             >
               {renderPage()}
