@@ -30,7 +30,7 @@ export default function App() {
       case 'feed': return <Feed />;
       case 'about': return <About />;
       case 'contact': return <Contact />;
-      case 'drafter': return <Drafter />;
+      case 'systems': return <Drafter />;
       default: return <Home setActiveTab={setActiveTab} />;
     }
   };

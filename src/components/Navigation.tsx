@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ShoppingBag, BarChart2, BookOpen, User, Home as HomeIcon, PenTool, Menu, X, Mail, FileText } from 'lucide-react';
+import { ShoppingBag, BarChart2, BookOpen, User, Home as HomeIcon, PenTool, Menu, X, Mail, FileText, Cpu, Terminal } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -21,7 +21,7 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
     { id: 'engine', label: 'Dance Analytics', icon: BarChart2 },
     { id: 'blog', label: 'Blog', icon: FileText },
     { id: 'feed', label: 'Resources', icon: BookOpen },
-    { id: 'drafter', label: 'Drafter', icon: PenTool },
+    { id: 'systems', label: 'Systems', icon: Terminal },
     { id: 'about', label: 'About Ariel', icon: User },
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
