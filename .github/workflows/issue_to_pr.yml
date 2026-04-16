@@ -1,0 +1,96 @@
+name: Generate PR from Content Issue
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  build-and-pr:
+    runs-on: ubuntu-latest
+    # SECURITY GATE: ONLY run if the issue was opened by an owner, member, or collaborator
+    if: contains(fromJson('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association)
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Parse Issue and Generate Markdown File
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          import os
+          import re
+          from datetime import datetime
+
+          body = os.environ['ISSUE_BODY']
+          title = os.environ['ISSUE_TITLE'].replace('Draft: ', '').strip()
+
+          # Extract the Markdown block using regex
+          match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
+          if not match:
+              print("No markdown block found in issue. Exiting.")
+              exit(1)
+
+          content = match.group(1).strip()
+
+          # Create filename based on date and safe title
+          date_str = datetime.now().strftime('%Y-%m-%d')
+          safe_title = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
+          filename = f"content/posts/{date_str}-{safe_title}.md"
+
+          # Ensure target directory exists
+          os.makedirs('content/posts/', exist_ok=True)
+
+          # Write content to file
+          with open(filename, 'w', encoding='utf-8') as f:
+              f.write(content)
+
+          print(f"File created: {filename}")
+
+          # Save variables to environment for the next step
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write(f"NEW_FILE={filename}\n")
+              f.write(f"SAFE_TITLE={safe_title}\n")
+
+      - name: Commit and Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }} # Uses the Fine-Grained Token
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          # Setup Git Identity
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create a new branch
+          BRANCH_NAME="content/issue-${ISSUE_NUMBER}-${SAFE_TITLE}"
+          git checkout -b $BRANCH_NAME
+
+          # Commit the new file
+          git add ${{ env.NEW_FILE }}
+          git commit -m "Add new blog post draft from Issue #${ISSUE_NUMBER}"
+          git push -u origin $BRANCH_NAME
+
+          # Create the Pull Request using GitHub CLI
+          gh pr create \
+            --title "📝 New Post Draft: ${{ github.event.issue.title }}" \
+            --body "Automated PR generated from Issue #${ISSUE_NUMBER}. Please review the markdown, formatting, and affiliate links before merging." \
+            --base main \
+            --head $BRANCH_NAME
+
+      - name: Comment on Original Issue
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment $ISSUE_NUMBER --body "✅ Draft successfully processed! I've opened a Pull Request for your review."
