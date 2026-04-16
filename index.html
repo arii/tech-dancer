@@ -462,6 +462,8 @@
         // --- Simulation State ---
         let couples = [];
         let judges = [];
+        let heatmapCanvas = document.createElement('canvas');
+        let hctx = heatmapCanvas.getContext('2d');
         const COUPLE_RADIUS = 8;
         let width = canvas.width;
         let height = canvas.height;
@@ -469,6 +471,7 @@
         // Statistics tracking
         let frameCount = 0;
         let visibilityHistory = [0, 0, 0];
+        let judicialFocus = 1.0; // Focus Decay variable
 
         // --- Chart.js Setup ---
         const chartCtx = document.getElementById('visibilityChart').getContext('2d');
@@ -535,8 +538,17 @@
             }
 
             update() {
+                this.prevY = this.y;
                 this.phase += this.speed;
-                this.y = this.yBase + this.amplitude * Math.sin(this.phase);
+
+                // High-fidelity non-linear rhythmic warping (weighted rhythmic delay)
+                // alpha < 1 increases "peak time" simulating anchor deceleration
+                const alpha = 0.65;
+                const s = Math.sin(this.phase);
+                const warpedSin = Math.sign(s) * Math.pow(Math.abs(s), alpha);
+
+                this.y = this.yBase + this.amplitude * warpedSin;
+                this.velocity = this.y - this.prevY;
 
                 // Keep within bounds
                 if (this.y < COUPLE_RADIUS) this.y = COUPLE_RADIUS;
@@ -544,8 +556,13 @@
             }
 
             draw(ctx) {
+                // Dynamic elliptical orientation (frame extension at slot extremes)
+                const extensionFactor = 1 + Math.abs((this.y - this.yBase) / this.amplitude) * 0.8;
+                const radiusX = COUPLE_RADIUS * extensionFactor;
+                const radiusY = COUPLE_RADIUS * (2 - extensionFactor);
+
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, COUPLE_RADIUS, 0, Math.PI * 2);
+                ctx.ellipse(this.x, this.y, radiusX, radiusY, 0, 0, Math.PI * 2);
                 if (this.visibilityCount >= 2) ctx.fillStyle = '#14b8a6';
                 else if (this.visibilityCount === 1) ctx.fillStyle = '#fbbf24';
                 else ctx.fillStyle = '#ef4444';
@@ -559,6 +576,12 @@
         function initSimulation() {
             couples = [];
             judges = [];
+
+            // Reset Persistent Heatmap
+            heatmapCanvas.width = width;
+            heatmapCanvas.height = height;
+            hctx.clearRect(0, 0, width, height);
+
             const numCouples = parseInt(inCouples.value);
             const numJudges = parseInt(inJudges.value);
             const layout = inLayout.value;
@@ -567,7 +590,9 @@
             const horizontalPadding = 50;
             const availableWidth = width - 2 * horizontalPadding;
             for (let i = 0; i < numCouples; i++) {
-                const slotX = horizontalPadding + (i / (numCouples - 1)) * availableWidth;
+                // High-fidelity "Variable Slot Widths" (simulating crowding)
+                const jitter = (Math.random() - 0.5) * (availableWidth / numCouples) * 0.4;
+                const slotX = horizontalPadding + (i / (numCouples - 1)) * availableWidth + jitter;
                 couples.push(new Couple(i, slotX));
             }
 
@@ -595,11 +620,18 @@
         function resetStats() {
             frameCount = 0;
             visibilityHistory = [0, 0, 0];
+            judicialFocus = 1.0;
+            hctx.clearRect(0, 0, width, height);
         }
 
         // --- Main Loop ---
         function loop() {
             ctx.clearRect(0, 0, width, height);
+
+            // Draw Persistent Occlusion Heatmap Layer
+            ctx.globalAlpha = 0.3;
+            ctx.drawImage(heatmapCanvas, 0, 0);
+            ctx.globalAlpha = 1.0;
 
             // Draw floor slots (Vertical lines)
             ctx.strokeStyle = '#e2e8f0';
@@ -616,23 +648,43 @@
             }
 
             couples.forEach(c => c.update());
+
+            // Judicial Fatigue Simulation: Focus Decay over time
+            judicialFocus = Math.max(0.4, 1.0 - (frameCount / 5000));
+
             couples.forEach(c => c.visibilityCount = 0);
 
             ctx.lineWidth = 0.5;
             judges.forEach(j => {
+                // Focus affects sampling frequency (Focus Decay)
+                if (Math.random() > judicialFocus) return;
+
                 couples.forEach(c => {
+                    // Predictive LOS: Tracking agent's projected position based on velocity
+                    const lookAheadFrames = 5;
+                    const predictedTarget = {
+                        x: c.x,
+                        y: c.y + (c.velocity || 0) * lookAheadFrames
+                    };
+
                     let occluded = false;
                     for (let other of couples) {
                         if (other.id === c.id) continue;
-                        let distSq = distToSegmentSquared(other, j, c);
-                        if (distSq < (COUPLE_RADIUS * 1.5) ** 2) {
+
+                        // Enhanced Elliptical Occlusion Math
+                        const otherExtension = 1 + Math.abs((other.y - other.yBase) / other.amplitude) * 0.8;
+                        const otherRadiusX = COUPLE_RADIUS * otherExtension;
+
+                        let distSq = distToSegmentSquared(other, j, predictedTarget);
+                        // Hitbox threshold varies with elliptical width
+                        if (distSq < (otherRadiusX * 1.2) ** 2) {
                             occluded = true;
                             break;
                         }
                     }
                     if (!occluded) {
                         c.visibilityCount++;
-                        ctx.beginPath(); ctx.moveTo(j.x, j.y); ctx.lineTo(c.x, c.y);
+                        ctx.beginPath(); ctx.moveTo(j.x, j.y); ctx.lineTo(predictedTarget.x, predictedTarget.y);
                         ctx.strokeStyle = 'rgba(20, 184, 166, 0.15)'; ctx.stroke();
                     }
                 });
@@ -640,7 +692,14 @@
 
             frameCount++;
             couples.forEach(c => {
-                if (c.visibilityCount === 0) visibilityHistory[0]++;
+                if (c.visibilityCount === 0) {
+                    visibilityHistory[0]++;
+                    // Accumulate persistent heatmap data (Red spots for occlusion)
+                    hctx.fillStyle = 'rgba(239, 68, 68, 0.05)';
+                    hctx.beginPath();
+                    hctx.arc(c.x, c.y, 4, 0, Math.PI * 2);
+                    hctx.fill();
+                }
                 else if (c.visibilityCount === 1) visibilityHistory[1]++;
                 else visibilityHistory[2]++;
             });

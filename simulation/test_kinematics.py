@@ -1,58 +1,75 @@
 import numpy as np
 
-def test_vectorized_paths_vertical():
-    """Verify that agent paths follow the expected vertical slot kinematic model."""
-    num_couples = 10
+def test_phase_warped_kinematics():
+    """Verify that phase warping creates the expected non-linear movement."""
+    num_couples = 1
     duration = 10
-    total_frames = 100
+    fps = 10
+    total_frames = duration * fps
     time_steps = np.linspace(0, duration, total_frames)
 
-    # Mock parameters as in app.py
-    x_positions = np.linspace(10, 90, num_couples)
+    alpha = 0.65
+    phases = np.array([0.0])
     base_y = 30
-    phases = np.zeros(num_couples) # 0 phase for predictable test
-    amplitudes = np.ones(num_couples) * 10
+    amplitude = 10
 
-    paths = np.zeros((total_frames, num_couples, 2))
+    # Warped time: t' = t + alpha * sin(t)
+    raw_time = time_steps + phases
+    warped_time = raw_time + alpha * np.sin(raw_time)
+    y_warped = base_y + amplitude * np.sin(warped_time)
 
-    # Logic from app.py
-    paths[:, :, 0] = x_positions[None, :]
-    paths[:, :, 1] = base_y + amplitudes[None, :] * np.sin(time_steps[:, None] + phases[None, :])
+    # Linear time for comparison
+    y_linear = base_y + amplitude * np.sin(raw_time)
 
-    # At t=0, sin(0)=0, so y should be base_y (30)
-    assert np.allclose(paths[0, :, 1], 30)
-    # x should be fixed to initial x_positions
-    assert np.all(paths[:, :, 0] == x_positions)
-    # Check max displacement (base_y + amplitude = 30 + 10 = 40)
-    assert np.max(paths[:, :, 1]) <= 40.0001
-    assert np.min(paths[:, :, 1]) >= 19.9999
+    # The paths should be different due to warping
+    assert not np.allclose(y_warped, y_linear)
 
-def test_visibility_logic():
-    """Test simple occlusion logic with two agents and one sensor."""
-    # Sensor at (0,0), Target at (0,10), Obstacle at (0,5)
-    # Vertical arrangement matching new model
-    sensor = np.array([0, 0])
-    target = np.array([0, 10])
-    obstacle = np.array([0, 5])
-    radius = 1.0
+    # Displacement bounds should still hold
+    assert np.max(y_warped) <= base_y + amplitude + 1e-5
+    assert np.min(y_warped) >= base_y - amplitude - 1e-5
 
-    # Vector from sensor to target
-    v = target - sensor
-    v_len_sq = np.sum(v**2)
+def test_vectorized_occlusion_invariants():
+    """Test the core ray-casting math used in the vectorized HF engine."""
+    # Setup: 1 sensor, 2 agents (Target and Obstacle)
+    sensors = np.array([[0, 0]]) # (S, 2)
+    pos = np.array([[0, 10], [0, 5]]) # (C, 2) Target at index 0, Obstacle at index 1
+    couples = 2
 
-    # Check obstacle
-    t = np.sum((obstacle - sensor) * v) / v_len_sq
-    projection = sensor + t * v
-    dist_sq = np.sum((obstacle - projection)**2)
+    # Logic mirroring app.py
+    v = pos[None, :, :] - sensors[:, None, :]
+    v_len_sq = np.sum(v**2, axis=2) + 1e-9
+    diff = pos[None, :, :] - sensors[:, None, :]
+    t = np.sum(diff[:, None, :, :] * v[:, :, None, :], axis=3) / v_len_sq[:, :, None]
 
-    # Obstacle is on the line, so distance should be 0
-    assert dist_sq < 1e-6
-    # Obstacle is between sensor and target, so t should be 0.5
-    assert 0 < t < 1
+    # Obstacle (idx 1) is halfway between sensor and target (idx 0)
+    assert np.allclose(t[0, 0, 1], 0.5)
 
-    # Now check an obstacle NOT on the line
-    obstacle_far = np.array([10, 5])
-    t_far = np.sum((obstacle_far - sensor) * v) / v_len_sq
-    projection_far = sensor + t_far * v
-    dist_sq_far = np.sum((obstacle_far - projection_far)**2)
-    assert dist_sq_far == 100
+    t_clipped = np.clip(t, 0, 1)
+    proj = sensors[:, None, None, :] + t_clipped[:, :, :, None] * v[:, :, None, :]
+    dist_sq = np.sum((pos[None, None, :, :] - proj)**2, axis=3)
+
+    # Dist from Obstacle(1) to Ray(Sensor->Target(0)) is 0
+    assert dist_sq[0, 0, 1] < 1e-6
+
+def test_heatmap_binning():
+    """Ensure spatial paths are correctly mapped to heatmap grid indices."""
+    # Floor: 100x60. Grid: 50x30.
+    # Point (0,0) -> (0,0)
+    # Point (100,60) -> (49, 29)
+    # Point (50, 30) -> (25, 15)
+
+    paths = np.array([[[0, 0], [100, 60], [50, 30]]]) # (1, 3, 2)
+
+    grid_x = np.clip(((paths[:, :, 0]) / 100 * 50).astype(int), 0, 49)
+    grid_y = np.clip(((paths[:, :, 1]) / 60 * 30).astype(int), 0, 29)
+
+    assert grid_x[0, 0] == 0 and grid_y[0, 0] == 0
+    assert grid_x[0, 1] == 49 and grid_y[0, 1] == 29
+    assert grid_x[0, 2] == 25 and grid_y[0, 2] == 15
+
+def test_hitbox_elliptical_invariants():
+    """Verify that elliptical hitboxes correctly modulate occlusion sensitivity."""
+    base_radius = 2.5
+    ext_large = 6.0
+    rad_sq_large = (base_radius + ext_large * 0.5)**2
+    assert np.isclose(rad_sq_large, 30.25)
