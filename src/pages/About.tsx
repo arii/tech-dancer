@@ -12,88 +12,89 @@ export default function About() {
 
   return (
     <section className="panel h-full overflow-y-auto">
-      <span className="text-[10px] uppercase tracking-[2px] text-accent mb-3 block font-mono">
-        // THE ARCHITECT // PROFILE
-      </span>
-      
-      <div className="space-y-8 mb-16">
-        <h1 className="font-serif italic text-5xl md:text-7xl leading-[1.1] text-text-main font-bold">
-          The Scientist who Cracked the WCS Travel Code.
-        </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl">
-          I’m Ariel. I use my robotics background to find the best gear, travel hacks, and data for West Coast Swing. 
-          Maximize your WCS lifestyle without the PhD-level stress.
-        </p>
-      </div>
-
-      <div className="flex items-center gap-6 mb-16">
-        <div className="w-[100px] h-[100px] bg-line rounded-full border-4 border-accent overflow-hidden shrink-0 shadow-lg">
+      <div className="flex flex-col md:flex-row items-start gap-12 mb-20">
+        <div className="w-full md:w-1/3 border border-line aspect-square overflow-hidden bg-line">
           <img 
-            src="https://picsum.photos/seed/ariel/200/200" 
+            src="https://picsum.photos/seed/ariel-anders/600/600" 
             alt="Ariel Anders"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
             referrerPolicy="no-referrer"
           />
         </div>
-        <div>
-          <h2 className="text-3xl font-serif font-bold text-text-main">Ariel Anders, PhD</h2>
-          <div className="text-sm text-accent font-bold tracking-[2px] uppercase mt-1">MIT Roboticist // WCS Tech-Dancer</div>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8 mb-12">
-        <div className="content-card space-y-6">
-          <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-text-main border-b-2 border-accent w-fit pb-1">My Dance Journey</h3>
-          <p className="text-[15px] text-text-body leading-[1.8]">
-            I started dancing West Coast Swing in 2022 and haven't looked back! I compete in the Intermediate division 
-            as a follow and will lead from time to time. You can find me at Mission City Swing in SF on Wednesdays, 
-            likely vibing to Motown Monday—my favorite genre.
-          </p>
-        </div>
-        <div className="content-card space-y-6">
-          <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-text-main border-b-2 border-accent w-fit pb-1">Why the PhD Matters</h3>
-          <p className="text-[15px] text-text-body leading-[1.8]">
-            My technical life is rooted in autonomous systems and robotics. I spent a decade at MIT learning how to 
-            predict momentum and optimize trajectories. I bring that same analytical lens to the dance floor—not to 
-            make it robotic, but to find the "hacks" that make the WCS lifestyle sustainable and stylish.
+        <div className="flex-1 space-y-6">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-[3px] text-accent block">
+            // PERSONNEL_FILE: AA_001
+          </span>
+          <h1 className="font-display uppercase text-5xl md:text-8xl leading-[0.9] text-text-main font-bold tracking-tighter">
+            Ariel Anders, PhD.
+          </h1>
+          <div className="text-xl md:text-2xl text-text-body font-sans leading-relaxed max-w-2xl">
+            MIT Roboticist. WCS Competitor. Data Architect.
+          </div>
+          <p className="text-lg text-text-body/80 max-w-xl font-sans">
+            I use my background in robotics to find the best gear, travel systems, and analysis platforms for the West Coast Swing circuit. 
+            Maximizing the WCS lifestyle through system-level optimization.
           </p>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 mb-12">
-        <div className="content-card space-y-6">
-          <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-text-main border-b-2 border-accent w-fit pb-1">On the Floor</h3>
-          <p className="text-[15px] text-text-body leading-[1.8]">
-            I’m a competitive Intermediate-level follow (and an occasional lead!) who loves the conversation and connection unique to WCS. 
-            Mission City Swing is where it all began for me. If it’s a Wednesday night in San Francisco, I'm there.
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-line bg-line mb-20">
+        <div className="bg-bg p-8 md:p-12 border-b md:border-b-0 md:border-r border-line space-y-8">
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">The Origin Story</h3>
+          <p className="text-[15px] text-text-body leading-[1.8] font-sans">
+            My journey into partner dance started in 2019 with Lindy Hop and Fusion. Seeking progression in San Francisco, I signed up for a series at Mission City Swing—not realizing it wasn't a Lindy venue. They were playing music like "In Da Club" by 50 Cent and it was so much fun that I never left. WCS is now my primary focus, driven by the event circuit and the incredible quality of the community.
           </p>
         </div>
-        <div className="content-card space-y-6">
-          <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-text-main border-b-2 border-accent w-fit pb-1">Why This Site Exists</h3>
-          <p className="text-[15px] text-text-body leading-[1.8]">
-            I am often asked: "Where did you get that outfit?" and "How do you afford to travel to so many events?" 
-            While I'm grateful for a strong career, I’ve always tried to make my lifestyle as financially efficient as possible. 
-            This site is my way of sharing the "stacks" I’ve built—from curated gear reviews to travel-hacking systems.
+        <div className="bg-bg p-8 md:p-12 space-y-8">
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">Scientific Merit</h3>
+          <p className="text-[15px] text-text-body leading-[1.8] font-sans">
+            I care a lot about making things work. Since 2010, I’ve been dedicated to building robotic systems that remain reliable in complex and uncertain domains. From my PhD at MIT CSAIL to my work in the industry, I don’t just analyze data to make sense of things—I build real-world systems that perform. I consider myself a pragmatic roboticist: I leverage machine learning alongside classical AI techniques and solid software design principles to build systems that are robust, functional, and ready for the task at hand.
           </p>
         </div>
       </div>
 
-      <div className="content-card mb-12 border-l-8 border-accent">
-        <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-accent mb-4 italic">Bougie on a Budget</h3>
-        <p className="text-[15px] text-text-body leading-[1.8] max-w-3xl">
-          I love maximizing credit card perks and hotel benefits to make the convention circuit lifestyle both high-end and highly feasible. 
-          I’m known for my bright, fun outfits and my "bougie on a budget" travel philosophy.
-        </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-x border-b border-line bg-line mb-20">
+        <div className="bg-bg p-8 md:p-12 border-b md:border-b-0 md:border-r border-line space-y-8">
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">Circuit Protocol</h3>
+          <p className="text-[15px] text-text-body leading-[1.8] font-sans">
+            I’m a competitive Intermediate-level follow (and an occasional lead!) who loves the conversation and connection unique to WCS. Mission City Swing is my home base. If it’s a Wednesday night in San Francisco, you'll find me at the tech-bench or on the floor.
+          </p>
+        </div>
+        <div className="bg-accent text-white p-8 md:p-12 space-y-8">
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight">Bougie on a Budget</h3>
+          <p className="text-[15px] text-white/90 leading-[1.8] font-sans">
+            I maximize credit card perks and hotel benefits to make the convention circuit lifestyle both high-end and highly feasible. I'm known for my bright, fun outfits and my "efficiency-first" travel philosophy.
+          </p>
+        </div>
       </div>
 
-      <div className="space-y-6">
-        <h3 className="text-sm font-bold uppercase tracking-[2px] text-text-main">Where I've Been</h3>
-        <div className="flex flex-wrap gap-3">
-          {['MIT PhD', 'MIT CSAIL', 'Civ Robotics', 'Intermediate WCS', 'Mission City Swing', 'SF Local', 'Motown Monday', 'Marriott Titanium', 'Amex Platinum'].map(chip => (
-            <span key={chip} className="experience-chip border-accent/20 text-text-body font-medium px-4 py-2">
+      <div className="space-y-8 px-4 md:px-0">
+        <h3 className="text-[10px] font-mono font-bold uppercase tracking-[3px] text-text-dim">// SYSTEM_MANIFEST: BACKGROUND_DATA</h3>
+        <div className="flex flex-wrap gap-2">
+          {[
+            'MIT_PHD_ROBOTICS', 
+            'MIT_CSAIL_RESEARCHER', 
+            'CIV_ROBOTICS_ENGINEER', 
+            'INTERMEDIATE_WCS_FOLLOW', 
+            'MCS_REGULAR', 
+            'SF_LOCAL', 
+            'MARRIOTT_TITANIUM', 
+            'AMEX_PLATINUM'
+          ].map(chip => (
+            <span key={chip} className="text-[9px] font-mono font-bold border border-line px-3 py-1 bg-surface text-text-main tracking-widest">
               {chip}
             </span>
           ))}
+        </div>
+        <div className="pt-8">
+          <a 
+            href="https://arii.github.io" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent border border-accent/20 px-6 py-3 hover:bg-accent/10 transition-colors"
+          >
+            Request Full Log [External_Link] <Repeat className="w-3 h-3" />
+          </a>
         </div>
       </div>
     </section>

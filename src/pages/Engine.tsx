@@ -5,11 +5,14 @@
 
 import { motion } from 'motion/react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { Shield, Plane, Hotel, Activity, Code, Server, Music } from 'lucide-react';
+import { Shield, Plane, Hotel, Activity, Code, Server, Music, ArrowRight, User, Calendar, Share2, Bookmark, ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
 import { affiliateManager } from '../lib/affiliateManager';
+import { useState, useEffect } from 'react';
+import Markdown from 'react-markdown';
+import { getAllContent, ContentItem } from '../lib/content';
 
 const wcsData = [
   { month: 'Jan', scores: 45, events: 2 },
@@ -31,29 +34,13 @@ const travelData = [
 ];
 
 export default function Engine() {
-  const researchPapers = [
-    {
-      title: 'The Variance Engine: Why Some Judges Love Your Connection (and Others Don\'t)',
-      abstract: 'An analysis of scoring outliers and judge agreement across national WCS events.',
-      methodology: 'Aggregated scores from 12 national events to identify standard deviation in placement.',
-      results: 'Identified a 14% variance in "Connection" scoring vs. "Timing" across the Intermediate division.',
-      tags: ['Data', 'Scoring']
-    },
-    {
-      title: 'Probability of Advancement: Can We Predict the Finals?',
-      abstract: 'Using historical placement data to calculate the likelihood of advancing to finals based on heat density.',
-      methodology: 'Monte Carlo simulations applied to 2024 competition rosters.',
-      results: 'Advancement probability correlates 0.82 with "Lead-Follow Ratio" in heat distribution.',
-      tags: ['Data', 'Competition']
-    },
-    {
-      title: 'Line-of-Sight Bias: Why Judges Miss Your Best Moves',
-      abstract: 'How judge positioning creates occlusion zones, similar to LIDAR blind spots in mobile manipulators.',
-      methodology: 'Geometric mapping of judging circles based on dancer trajectory and judge orientation.',
-      results: 'Verified a 22% "Occlusion Zone" where judge visibility is compromised by other couples.',
-      tags: ['Robotics', 'Insights']
-    }
-  ];
+  const [studies, setStudies] = useState<ContentItem[]>([]);
+  const [selectedStudy, setSelectedStudy] = useState<ContentItem | null>(null);
+
+  useEffect(() => {
+    const loadedStudies = getAllContent('studies');
+    setStudies(loadedStudies);
+  }, []);
 
   const experiencePacks = [
     {
@@ -78,12 +65,12 @@ export default function Engine() {
 
   return (
     <section className="panel h-full overflow-y-auto">
-      <div className="space-y-8 mb-16">
-        <h1 className="font-serif italic text-5xl md:text-7xl leading-[1.1] text-text-main font-bold">
-          Dance Analytics.
+      <div className="space-y-8 mb-16 px-4 md:px-0">
+        <h1 className="font-display uppercase text-5xl md:text-8xl leading-[1.0] text-text-main font-bold tracking-tighter">
+          The Engine.
         </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl">
-          A Quantitative Research Journal for the modern WCS dancer. Proving data science competency through the lens of social connection.
+        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+          Deep-dive analysis on the mechanics of West Coast Swing. From judge variance to the physics of momentum.
         </p>
       </div>
 
@@ -124,53 +111,80 @@ export default function Engine() {
         </div>
       </div>
 
-      <div className="space-y-12">
-        <h3 className="text-3xl font-serif font-bold text-text-main">Research Journal</h3>
-        {researchPapers.map((paper, index) => (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {studies.map((paper, index) => (
           <motion.div
-            key={paper.title}
+            key={paper.slug}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="content-card border-l-8 border-accent space-y-8"
+            className="relative border border-line p-10 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
+            onClick={() => setSelectedStudy(paper)}
           >
-            <div className="flex flex-wrap gap-3">
-              {paper.tags.map(tag => (
-                <span key={tag} className="experience-chip border-accent/20 text-text-body font-medium px-4 py-2">
+            {/* Replace side-stripe with a top-right index */}
+            <div className="absolute top-6 right-8 font-mono text-[10px] text-accent font-bold tracking-widest opacity-40 group-hover:opacity-100 transition-opacity">
+              REF_ID: 00{index + 1}
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              {paper.tags?.map(tag => (
+                <span key={tag} className="text-[9px] font-mono tracking-tighter border border-line px-2 py-0.5 uppercase text-text-dim">
                   {tag}
                 </span>
               ))}
             </div>
 
-            <h4 className="text-3xl font-serif font-bold text-text-main leading-tight">
+            <h4 className="text-3xl font-display font-bold mb-8 max-w-2xl leading-tight">
               {paper.title}
             </h4>
 
-            <div className="grid md:grid-cols-3 gap-12">
-              <div className="space-y-4">
-                <div className="text-xs font-bold uppercase text-accent tracking-[2px]">The "Why"</div>
-                <p className="text-[15px] text-text-body leading-relaxed italic">
-                  {paper.abstract}
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <div className="text-[9px] font-mono font-bold uppercase text-accent tracking-[2px]">Abstract</div>
+                <p className="text-sm text-text-body leading-relaxed line-clamp-2">
+                  {paper.excerpt}
                 </p>
               </div>
-              <div className="space-y-4">
-                <div className="text-xs font-bold uppercase text-accent tracking-[2px]">The Method</div>
-                <p className="text-[15px] text-text-body leading-relaxed">
-                  {paper.methodology}
-                </p>
-              </div>
-              <div className="space-y-4">
-                <div className="text-xs font-bold uppercase text-accent tracking-[2px]">The Result</div>
-                <div className="p-6 bg-bg border border-line rounded-lg shadow-sm">
-                  <p className="text-[14px] text-text-main font-mono leading-relaxed font-medium">
-                    {paper.results}
-                  </p>
-                </div>
+              
+              <div className="flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent group-hover:translate-x-1 transition-transform">
+                Read Full Analysis <ArrowRight className="w-3 h-3" />
               </div>
             </div>
           </motion.div>
         ))}
       </div>
+
+      {selectedStudy && (
+        <div className="fixed inset-0 z-[100] bg-bg overflow-y-auto p-6 md:p-12">
+          <div className="max-w-4xl mx-auto">
+            <button 
+              onClick={() => setSelectedStudy(null)}
+              className="flex items-center gap-2 text-accent font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Journal
+            </button>
+
+            <div className="flex items-center gap-4 mb-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">
+                {selectedStudy.category}
+              </span>
+              <div className="flex items-center gap-2 text-text-dim text-xs font-medium">
+                <Calendar className="w-3 h-3" />
+                {selectedStudy.date}
+              </div>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-serif font-bold text-text-main mb-12 leading-tight">
+              {selectedStudy.title}
+            </h1>
+
+            <div className="markdown-body prose prose-lg max-w-none text-text-body leading-relaxed space-y-6">
+              <Markdown>{selectedStudy.content}</Markdown>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

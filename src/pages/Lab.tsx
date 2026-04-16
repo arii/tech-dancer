@@ -4,143 +4,118 @@
  */
 
 import { motion } from 'motion/react';
-import { ShoppingBag, ExternalLink, Tag } from 'lucide-react';
+import { ShoppingBag, ExternalLink, Tag, ArrowRight, ArrowLeft, Calendar } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { affiliateManager } from '../lib/affiliateManager';
-import { GearItem } from '../types';
+import { useState, useEffect } from 'react';
+import Markdown from 'react-markdown';
+import { getAllContent, ContentItem } from '../lib/content';
 
 export default function Lab() {
-  const stacks = [
-    {
-      mission: 'The 3:00 AM Social Set',
-      hardware: 'How to Suede Your Own Shoes for $15',
-      justification: 'It’s 3:00 AM in a crowded ballroom and the floor is slick. These suede-modified soles ensure you maintain your connection and flow without losing your pivot on fast rotations.',
-      tags: ['Gear', 'Performance']
-    },
-    {
-      mission: 'The Carry-on Only Weekend',
-      hardware: 'The 3 Recovery Tools I Never Fly Without',
-      justification: 'When you’re hopping from the airport straight to the workshop, every cubic inch of momentum counts. Verified for TSA-efficiency to keep your social wear fresh and your luggage light.',
-      tags: ['Travel', 'Recovery']
-    },
-    {
-      mission: 'The Hotel-Room Office',
-      hardware: 'How I Get Suites for the Price of a Standard Room',
-      justification: 'Protect your focus without losing the beat. Whether it’s a noisy roommate or a nearby ballroom, these tools ensure your deep-work trajectory remains stable between social sets.',
-      tags: ['Travel', 'Focus']
-    }
-  ];
+  const [gear, setGear] = useState<ContentItem[]>([]);
+  const [selectedGear, setSelectedGear] = useState<ContentItem | null>(null);
+
+  useEffect(() => {
+    const loadedResources = getAllContent('resources');
+    // For Lab, we focus on Gear category or tag
+    setGear(loadedResources.filter(r => r.category === 'Gear' || r.tags?.includes('gear')));
+  }, []);
+
+  if (selectedGear) {
+    return (
+      <section className="panel h-full overflow-y-auto">
+        <button 
+          onClick={() => setSelectedGear(null)}
+          className="flex items-center gap-2 text-accent font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Toolbox
+        </button>
+
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">
+              {selectedGear.category}
+            </span>
+            <div className="flex items-center gap-2 text-text-dim text-xs font-medium">
+              <Calendar className="w-3 h-3" />
+              {selectedGear.date}
+            </div>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-text-main mb-12 leading-tight">
+            {selectedGear.title}
+          </h1>
+
+          <div className="markdown-body prose prose-lg max-w-none text-text-body leading-relaxed space-y-6">
+            <Markdown>{selectedGear.content}</Markdown>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="panel h-full overflow-y-auto">
-      <div className="mb-8 p-3 bg-line/30 border border-line rounded-sm italic text-[10px] text-text-dim max-w-2xl">
-        Disclosure: This site contains affiliate links. If you use these links to buy something, I may earn a commission. 
-        I only recommend gear I have personally tested for 8+ hour social dance durability.
+      <div className="mb-12 p-4 bg-accent/5 border border-accent/20 rounded-none italic text-[11px] text-text-dim max-w-2xl font-sans leading-relaxed">
+        <span className="text-accent font-bold uppercase tracking-wider mr-2">Advisory:</span>
+        This site contains affiliate links. If you use these links to buy something, I may earn a commission. I only recommend gear I have personally tested for 8+ hour social dance durability.
       </div>
 
-      <div className="space-y-8 mb-16">
-        <h1 className="font-serif italic text-5xl md:text-7xl leading-[1.1] text-text-main font-bold">
+      <div className="space-y-8 mb-16 px-4 md:px-0">
+        <h1 className="font-display uppercase text-5xl md:text-8xl leading-[1.0] text-text-main font-bold tracking-tighter">
           The Toolbox.
         </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl">
+        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
           Solutions for the modern dancer. Tested for 8-hour social dance durability and hotel-room office efficiency.
         </p>
       </div>
 
-      <div className="content-card mb-16 overflow-hidden !p-0">
-        <div className="aspect-[21/9] bg-line">
+      <div className="content-card mb-20 overflow-hidden !p-0 border border-line">
+        <div className="aspect-[21/7] bg-line overflow-hidden">
           <img 
             src="https://picsum.photos/seed/dance-gear/1200/500" 
             alt="Dance Gear" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="p-8 space-y-4">
-          <h3 className="text-2xl font-serif font-bold text-text-main">Lead with the Dance.</h3>
-          <p className="text-[15px] text-text-body leading-[1.8]">
+        <div className="p-12 space-y-6">
+          <h3 className="text-3xl font-display font-bold text-text-main uppercase">Lead with the Dance.</h3>
+          <p className="text-lg text-text-body leading-relaxed max-w-3xl">
             I don't just review products; I test them in the wild. From the 2:00 AM social floor to the 8:00 AM airport dash, 
             these are the tools that survive the WCS circuit.
           </p>
         </div>
       </div>
 
-      <div className="space-y-8">
-        {stacks.map((stack, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-line bg-line">
+        {gear.map((item, index) => (
           <motion.div
-            key={stack.mission}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            key={item.slug}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: index * 0.05 }}
-            className="content-card grid grid-cols-1 md:grid-cols-12 gap-8 relative hover:border-accent transition-colors"
+            onClick={() => setSelectedGear(item)}
+            className="bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-colors flex flex-col h-full border-r border-b border-line"
           >
-            <div className="col-span-3 space-y-4">
-              <div className="text-xs font-bold uppercase tracking-[2px] text-accent">The Mission</div>
-              <div className="text-xl font-serif font-bold text-text-main leading-tight">{stack.mission}</div>
-              <div className="flex flex-wrap gap-2">
-                {stack.tags.map(tag => (
-                  <span key={tag} className="experience-chip border-accent/20">{tag}</span>
-                ))}
-              </div>
+            <div className="text-accent mb-8">
+              <ShoppingBag className="w-8 h-8 stroke-1" />
             </div>
-            <div className="col-span-4 space-y-4">
-              <div className="text-xs font-bold uppercase tracking-[2px] text-accent">Hardware / Apparel</div>
-              <div className="text-[13px] text-text-main font-mono leading-relaxed bg-bg p-4 rounded border border-line">
-                {stack.hardware}
+            <div className="space-y-4 flex-1">
+              <div className="flex items-center gap-4">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent">{item.category}</span>
+                <div className="text-[9px] font-mono border border-accent/30 text-accent px-2 py-0.5 uppercase font-bold">Hardware</div>
               </div>
+              <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent transition-colors leading-none uppercase">{item.title}</h4>
+              <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans">{item.excerpt}</p>
             </div>
-            <div className="col-span-5 flex justify-between items-start gap-6">
-              <div className="space-y-4">
-                <div className="text-xs font-bold uppercase tracking-[2px] text-accent">Performance Justification</div>
-                <div className="text-[14px] text-text-body leading-relaxed italic">
-                  "{stack.justification}"
-                </div>
-              </div>
-              <div className="flex flex-col items-end gap-3 shrink-0">
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-all cursor-pointer shadow-sm">
-                  <ExternalLink className="w-5 h-5" />
-                </div>
-              </div>
+            <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent pt-10 group-hover:translate-x-1 transition-transform mt-auto">
+              Inspect Tool <ArrowRight className="w-3 h-3" />
             </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* DIY Section */}
-      <div className="mt-16 space-y-8">
-        <h3 className="text-2xl font-serif font-bold text-text-main">
-          DIY: SHOE MODIFICATIONS
-        </h3>
-        <div className="content-card space-y-8 border-l-8 border-accent">
-          <div className="flex items-center gap-4 text-accent">
-            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-              <span className="font-mono text-sm font-bold">01</span>
-            </div>
-            <h4 className="text-xl font-sans font-bold uppercase tracking-wider">How to Add Suede to Your Shoes</h4>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8 text-[14px] text-text-body leading-relaxed">
-            <div className="space-y-3">
-              <div className="text-text-main font-bold uppercase tracking-tighter border-b border-line pb-1">Step 1: Surface Prep</div>
-              <p>Clean the sole thoroughly with isopropyl alcohol. Ensure no rubber residue or dust remains for maximum adhesive bond.</p>
-            </div>
-            <div className="space-y-3">
-              <div className="text-text-main font-bold uppercase tracking-tighter border-b border-line pb-1">Step 2: Adhesive Application</div>
-              <p>Apply a thin, even layer of Barge Cement to both the shoe sole and the suede backing. Wait 15 minutes until tacky.</p>
-            </div>
-            <div className="space-y-3">
-              <div className="text-text-main font-bold uppercase tracking-tighter border-b border-line pb-1">Step 3: Compression</div>
-              <p>Press firmly and use a rubber mallet to ensure contact. Let cure for 24 hours under pressure before dancing.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8 p-4 bg-surface border-l-2 border-accent">
-        <h4 className="text-[10px] font-bold text-text-main uppercase tracking-wider mb-1">System Management Feature</h4>
-        <p className="text-[10px] text-text-dim leading-relaxed">
-          Affiliate metadata is injected via central manager. No hard-coded commercial CTAs in UI layer.
-        </p>
       </div>
     </section>
   );

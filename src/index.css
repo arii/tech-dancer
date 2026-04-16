@@ -1,22 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Space+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-serif: "Playfair Display", serif;
-  --font-display: "Playfair Display", serif;
+  /* New Typography Identity */
+  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "Space Mono", monospace;
 
   --color-bg: #FFFFFF;
   --color-surface: #FFFFFF;
-  --color-line: #E2E8F0;
-  --color-accent: #FF7F50; /* Vibrant Coral */
+  --color-line: #111111; /* High-contrast thinner lines */
+  --color-accent: #FF7F50; 
   --color-accent-teal: #2C7A7B;
-  --color-accent-orange: #C05621;
-  --color-text-main: #111111; /* Near Black for headers */
-  --color-text-body: #333333; /* Charcoal for body */
+  --color-accent-orange: #FF7F50;
+  --color-text-main: #111111;
+  --color-text-body: #333333;
   --color-text-dim: #555555;
-  --color-card-bg: #F5F5F5;
+  --color-card-bg: #F9F9F9;
   
   /* shadcn compatibility */
   --color-background: var(--color-bg);
@@ -38,19 +38,51 @@
 
 @layer base {
   body {
-    @apply bg-bg text-text-body font-sans antialiased leading-[1.8];
+    @apply bg-bg text-text-body font-sans antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-text-main font-bold;
+
+  /* Modular Type Scale using Clamp for Fluidity */
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    @apply font-bold uppercase text-text-main;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1.1;
+    @apply font-bold uppercase text-text-main;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    line-height: 1.2;
+    @apply font-bold uppercase text-text-main;
+  }
+
+  h4 {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    @apply font-bold uppercase text-text-main;
+  }
+
+  p {
+    max-width: 65ch;
+    line-height: 1.6;
+    @apply text-text-body;
   }
 }
 
 .panel {
-  @apply bg-bg p-12 relative overflow-hidden;
+  @apply bg-bg p-6 md:p-12 relative overflow-hidden;
 }
 
 .nav-rail {
-  @apply w-[260px] border-r border-line flex flex-col p-8 justify-between h-screen sticky top-0 bg-surface;
+  @apply hidden md:flex w-[260px] border-r border-line flex-col p-8 justify-between h-screen sticky top-0 bg-surface z-50;
 }
 
 .main-grid {
@@ -58,21 +90,21 @@
 }
 
 .stats-widget {
-  @apply bg-surface p-6 border-l-4 border-accent shadow-sm rounded-r-lg;
+  @apply bg-surface p-6 border border-line shadow-none rounded-none;
 }
 
 .tech-specs-code {
-  @apply font-mono text-[11px] bg-bg p-4 text-accent-teal rounded border border-line;
+  @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none;
 }
 
 .experience-chip {
-  @apply text-[10px] border border-line px-3 py-1 rounded-full text-text-dim bg-surface shadow-sm;
+  @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
 
 .product-card {
-  @apply bg-surface border border-line p-6 rounded-[12px] shadow-sm hover:shadow-md transition-all duration-300;
+  @apply bg-surface border border-line p-6 rounded-none transition-all duration-300;
 }
 
 .content-card {
-  @apply bg-card-bg p-8 rounded-[8px] border border-line/50;
+  @apply bg-card-bg p-8 rounded-none border border-line;
 }
