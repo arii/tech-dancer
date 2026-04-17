@@ -18,6 +18,11 @@
   --color-text-dim: #6B7280;
   --color-card-bg: #F3F4F6; /* Light Grey */
   
+  /* Industrial Radius Scale */
+  --radius-none: 0px;
+  --radius-industrial: 2px;
+  --radius-default: var(--radius-none);
+
   /* Layout Scale */
   --gap-base: clamp(1rem, 2vw, 2rem);
   --padding-canvas: clamp(1.5rem, 5vw, 4rem);

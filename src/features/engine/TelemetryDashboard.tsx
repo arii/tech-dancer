@@ -6,13 +6,15 @@
 import { motion } from 'motion/react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Shield, Plane, Hotel, Activity, Code, Server, Music, ArrowRight, User, Calendar, Share2, Bookmark, ArrowLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Badge } from '../components/ui/badge';
-import { affiliateManager } from '../lib/affiliateManager';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { affiliateManager } from '@/lib/affiliateManager';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { getAllContent, ContentItem } from '../lib/content';
+import { getAllContent, ContentItem } from '@/lib/content';
+
+import { layout, typography, borders } from '@/styles/design-tokens';
 
 const wcsData = [
   { month: 'Jan', scores: 45, events: 2 },
@@ -64,12 +66,12 @@ export default function Engine() {
   ];
 
   return (
-    <section className="panel h-full overflow-y-auto">
+    <section className={layout.panel}>
       <div className="space-y-8 mb-16 px-4 md:px-0">
-        <h1 className="font-display uppercase text-5xl md:text-8xl leading-[1.0] text-text-main font-bold tracking-tighter">
+        <h1 className={typography.headline + " text-5xl md:text-8xl"}>
           The Engine.
         </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+        <p className={typography.body + " text-lg md:text-xl"}>
           Deep-dive analysis on the mechanics of West Coast Swing. From judge variance to the physics of momentum.
         </p>
       </div>
@@ -91,8 +93,8 @@ export default function Engine() {
             />
           </div>
           <div className="p-8 space-y-4">
-            <h3 className="text-3xl font-display font-bold text-text-main uppercase tracking-tighter">Data with a Heartbeat.</h3>
-            <p className="text-[15px] text-text-body leading-[1.8] font-sans opacity-80">
+            <h3 className={typography.headline + " text-3xl"}>Data with a Heartbeat.</h3>
+            <p className={typography.body + " text-[15px] opacity-80"}>
               I use my robotics background to crack the code of West Coast Swing. 
               From judge consistency to the physics of connection, this is data you can actually use on the floor.
             </p>
@@ -126,9 +128,9 @@ export default function Engine() {
                   <pack.icon className="w-6 h-6 stroke-1" />
                 </div>
                 <div className="space-y-1">
-                  <div className="text-[10px] text-accent-brand font-mono uppercase font-bold tracking-widest leading-none">{pack.category}</div>
-                  <div className="text-xl font-display font-bold text-text-main leading-tight uppercase tracking-tight">{pack.focus}</div>
-                  <div className="text-xs italic text-text-dim font-sans">"{pack.benefit}"</div>
+                  <div className={typography.mono + " text-accent-brand font-bold leading-none"}>{pack.category}</div>
+                  <div className={typography.headline + " text-xl leading-tight"}>{pack.focus}</div>
+                  <div className={typography.body + " text-xs italic text-text-dim"}>"{pack.benefit}"</div>
                 </div>
               </motion.div>
             ))}
@@ -160,26 +162,26 @@ export default function Engine() {
             onClick={() => setSelectedStudy(paper)}
           >
             {/* Replace side-stripe with a top-right index */}
-            <div className="absolute top-6 right-8 font-mono text-[10px] text-accent font-bold tracking-widest opacity-40 group-hover:opacity-100 transition-opacity">
+            <div className={typography.mono + " absolute top-6 right-8 text-accent font-bold opacity-40 group-hover:opacity-100 transition-opacity"}>
               REF_ID: 00{index + 1}
             </div>
 
             <div className="flex flex-wrap gap-2 mb-6">
               {paper.tags?.map(tag => (
-                <span key={tag} className="text-[9px] font-mono tracking-tighter border border-line px-2 py-0.5 uppercase text-text-dim">
+                <span key={tag} className={typography.mono + " border border-line px-2 py-0.5 text-text-dim"}>
                   {tag}
                 </span>
               ))}
             </div>
 
-            <h4 className="text-3xl font-display font-bold mb-8 max-w-2xl leading-tight">
+            <h4 className={typography.headline + " text-3xl mb-8 leading-tight"}>
               {paper.title}
             </h4>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <div className="text-[9px] font-mono font-bold uppercase text-accent tracking-[2px]">Abstract</div>
-                <p className="text-sm text-text-body leading-relaxed line-clamp-2">
+                <div className={typography.mono + " font-bold text-accent tracking-[2px]"}>Abstract</div>
+                <p className={typography.body + " text-sm line-clamp-2"}>
                   {paper.excerpt}
                 </p>
               </div>

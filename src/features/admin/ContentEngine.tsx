@@ -6,8 +6,13 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { PenTool, Send, Copy, Sparkles, Github, ArrowRight, ArrowLeft, Info, Badge as BadgeIcon, CheckCircle2, Activity, BarChart3, Terminal as TerminalIcon, Cpu, Globe, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Badge } from '../components/ui/badge';
+import { Badge } from '../../components/ui/badge';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+
+import { cn } from '../../lib/utils';
+import { layout, typography, inputs, buttons } from '../../styles/design-tokens';
+import { useForm } from '../../hooks/use-form';
+import { Box, Stack, Text, Grid } from '../../components/layout/Primitives';
 
 const dummyMetrics = {
   activeUsers: 4210,
@@ -24,9 +29,9 @@ const dummyMetrics = {
   ]
 };
 
-export default function Drafter() {
+export default function ContentEngine() {
   const [activeTool, setActiveTool] = useState<'drafter' | 'metrics'>('drafter');
-  const [formData, setFormData] = useState({
+  const { formData, setFormData, handleChange, setValues } = useForm({
     type: 'post',
     title: '',
     tagline: '',
@@ -174,7 +179,7 @@ ${formData.commentary}
   };
 
   return (
-    <section className="panel h-full overflow-y-auto">
+    <Box as="section" panel>
       <AnimatePresence>
         {showSuccess && (
           <motion.div 
@@ -184,47 +189,49 @@ ${formData.commentary}
             className="fixed bottom-12 right-12 bg-accent text-white px-8 py-6 shadow-2xl z-[200] border-2 border-white/20 flex items-center gap-4"
           >
             <CheckCircle2 className="w-8 h-8" />
-            <div className="space-y-1">
-              <div className="font-display font-bold uppercase tracking-tight text-xl">SUCCESS_TRANSMITTED</div>
-              <div className="text-[10px] font-mono opacity-80 uppercase tracking-widest">Buffer updated // integrity verified</div>
-            </div>
+            <Stack gap={1}>
+              <Text variant="headline" size="text-xl" className="text-white">SUCCESS_TRANSMITTED</Text>
+              <Text variant="mono" className="opacity-80 text-white">Buffer updated // integrity verified</Text>
+            </Stack>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col md:flex-row md:items-end justify-between items-start gap-8 mb-16 border-b border-line pb-12">
-        <div className="space-y-6">
-            <div className="flex items-center gap-3 text-accent-brand mb-2">
+      <Box className="flex flex-col md:flex-row md:items-end justify-between items-start gap-8 mb-16 border-b border-line pb-12">
+        <Stack gap={6}>
+            <Stack direction="row" align="center" gap={3} className="text-accent-brand mb-2">
               <TerminalIcon className="w-5 h-5" />
-              <span className="text-[10px] font-mono font-bold uppercase tracking-[4px]">Internal_Systems_Console</span>
-            </div>
-            <h1 className="font-display uppercase text-5xl md:text-8xl leading-[0.9] text-text-main font-bold tracking-tighter">
+              <Text variant="mono" className="tracking-[4px] font-bold">Internal_Systems_Console</Text>
+            </Stack>
+            <Text as="h1" variant="headline" size="text-5xl md:text-8xl">
               The Hub.
-            </h1>
-            <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+            </Text>
+            <Text variant="body" size="text-lg md:text-xl">
               Administrative terminal for Content Orchestration and Audience Telemetry. Private engineering tools made public for transparency.
-            </p>
-          </div>
+            </Text>
+          </Stack>
 
-          <div className="flex bg-line p-1 gap-1 w-full md:w-auto">
+          <Box className="flex bg-line p-1 gap-1 w-full md:w-auto">
             <button 
               onClick={() => setActiveTool('drafter')}
-              className={`flex-1 md:flex-none px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
+              className={cn(
+                buttons.tab,
                 activeTool === 'drafter' ? 'bg-accent text-white' : 'bg-transparent text-text-dim hover:text-text-main hover:bg-white/5'
-              }`}
+              )}
             >
               [ Content_Engine ]
             </button>
             <button 
               onClick={() => setActiveTool('metrics')}
-              className={`flex-1 md:flex-none px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
+              className={cn(
+                buttons.tab,
                 activeTool === 'metrics' ? 'bg-accent text-white' : 'bg-transparent text-text-dim hover:text-text-main hover:bg-white/5'
-              }`}
+              )}
             >
               [ Telemetry_Lab ]
             </button>
-          </div>
-      </div>
+          </Box>
+      </Box>
 
       <AnimatePresence mode="wait">
         {activeTool === 'drafter' ? (
@@ -236,93 +243,100 @@ ${formData.commentary}
             className="grid grid-cols-1 md:grid-cols-12 gap-12 max-w-7xl"
           >
             {/* Input Form */}
-            <div className="space-y-8 md:col-span-7">
-              <div className="bg-bg border border-line p-8 space-y-6">
-                <div className="flex justify-between items-center border-b border-line pb-4">
-                  <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// CONFIG_INPUT</h3>
+            <Stack gap={8} className="md:col-span-7">
+              <Box border surface className="p-8 space-y-6">
+                <Box className="flex justify-between items-center border-b border-line pb-4">
+                  <Text variant="mono">// CONFIG_INPUT</Text>
                   <motion.select 
                     whileFocus={{ borderColor: 'var(--color-accent)' }}
-                    className="bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent"
+                    className={inputs.select}
+                    name="type"
                     value={formData.type}
-                    onChange={(e) => setFormData({...formData, type: e.target.value})}
+                    onChange={handleChange}
                   >
                     <option value="post">Blog Post</option>
                     <option value="resource">Gear Guide</option>
                     <option value="study">Data Study</option>
                   </motion.select>
-                </div>
+                </Box>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Title</label>
+                <Grid cols={2} gap={6}>
+                  <Stack gap={2}>
+                    <Text as="label" variant="mono" className={inputs.label}>Title</Text>
                     <motion.input 
                       whileFocus={{ scale: 1.01 }}
                       type="text" 
+                      name="title"
                       value={formData.title}
-                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      onChange={handleChange}
                       placeholder="The Physics of the Pivot"
-                      className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all"
+                      className={inputs.base}
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Category</label>
+                  </Stack>
+                  <Stack gap={2}>
+                    <Text as="label" variant="mono" className={inputs.label}>Category</Text>
                     <motion.input 
                       whileFocus={{ scale: 1.01 }}
                       type="text" 
+                      name="category"
                       value={formData.category}
-                      onChange={(e) => setFormData({...formData, category: e.target.value})}
-                      className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all"
+                      onChange={handleChange}
+                      className={inputs.base}
                     />
-                  </div>
-                </div>
+                  </Stack>
+                </Grid>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Tagline / Hook</label>
+                <Stack gap={2}>
+                  <Text as="label" variant="mono" className={inputs.label}>Tagline / Hook</Text>
                   <motion.input 
                     whileFocus={{ scale: 1.01 }}
                     type="text" 
+                    name="tagline"
                     value={formData.tagline}
-                    onChange={(e) => setFormData({...formData, tagline: e.target.value})}
+                    onChange={handleChange}
                     placeholder="Why your choice of suede matters."
-                    className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all"
+                    className={inputs.base}
                   />
-                </div>
+                </Stack>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Short Excerpt</label>
+                <Stack gap={2}>
+                  <Text as="label" variant="mono" className={inputs.label}>Short Excerpt</Text>
                   <motion.textarea 
                     whileFocus={{ scale: 1.01 }}
                     rows={2}
+                    name="description"
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={handleChange}
                     placeholder="A brief summary for the index card..."
-                    className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all resize-none"
+                    className={inputs.base + " resize-none"}
                   />
-                </div>
+                </Stack>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">SEO Keywords</label>
+                <Grid cols={2} gap={6}>
+                  <Stack gap={2}>
+                    <Text as="label" variant="mono" className={inputs.label}>SEO Keywords</Text>
                     <motion.input 
                       whileFocus={{ scale: 1.01 }}
                       type="text" 
+                      name="seoTerms"
                       value={formData.seoTerms}
-                      onChange={(e) => setFormData({...formData, seoTerms: e.target.value})}
+                      onChange={handleChange}
                       placeholder="wcs, engineering, gear"
-                      className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all"
+                      className={inputs.base}
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Tags</label>
+                  </Stack>
+                  <Stack gap={2}>
+                    <Text as="label" variant="mono" className={inputs.label}>Tags</Text>
                     <motion.input 
                       whileFocus={{ scale: 1.01 }}
                       type="text" 
+                      name="tags"
                       value={formData.tags}
-                      onChange={(e) => setFormData({...formData, tags: e.target.value})}
-                      className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all"
+                      onChange={handleChange}
+                      className={inputs.base}
                     />
-                  </div>
-                </div>
+                  </Stack>
+                </Grid>
 
                 <AnimatePresence mode="popLayout">
                   {formData.type === 'resource' && (
@@ -330,44 +344,49 @@ ${formData.commentary}
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-line overflow-hidden"
+                      className="overflow-hidden"
                     >
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Product Name</label>
-                        <input 
-                          type="text" 
-                          value={formData.productName}
-                          onChange={(e) => setFormData({...formData, productName: e.target.value})}
-                          placeholder="Loop Quiet 2"
-                          className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Affiliate Link</label>
-                        <input 
-                          type="url" 
-                          value={formData.itemLink}
-                          onChange={(e) => setFormData({...formData, itemLink: e.target.value})}
-                          placeholder="https://amzn.to/..."
-                          className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors"
-                        />
-                      </div>
+                      <Grid cols={2} gap={6} className="pt-4 border-t border-line">
+                        <Stack gap={2}>
+                          <Text as="label" variant="mono" className="text-[10px] font-bold uppercase tracking-widest text-text-dim">Product Name</Text>
+                          <input 
+                            type="text" 
+                            name="productName"
+                            value={formData.productName}
+                            onChange={handleChange}
+                            placeholder="Loop Quiet 2"
+                            className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors"
+                          />
+                        </Stack>
+                        <Stack gap={2}>
+                          <Text as="label" variant="mono" className="text-[10px] font-bold uppercase tracking-widest text-text-dim">Affiliate Link</Text>
+                          <input 
+                            type="url" 
+                            name="itemLink"
+                            value={formData.itemLink}
+                            onChange={handleChange}
+                            placeholder="https://amzn.to/..."
+                            className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-colors"
+                          />
+                        </Stack>
+                      </Grid>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Featured Image URL / Seed</label>
-                  <div className="flex gap-4">
+                <Stack gap={2}>
+                  <Text as="label" variant="mono" className="text-[10px] font-bold uppercase tracking-widest text-text-dim">Featured Image URL / Seed</Text>
+                  <Box className="flex gap-4">
                     <motion.input 
                       whileFocus={{ scale: 1.01 }}
                       type="text" 
+                      name="image"
                       value={formData.image}
-                      onChange={(e) => setFormData({...formData, image: e.target.value})}
+                      onChange={handleChange}
                       placeholder="https://picsum.photos/seed/tech/1200/600"
                       className="flex-1 bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all"
                     />
-                    <div className="w-12 h-12 bg-line border border-line overflow-hidden shrink-0">
+                    <Box className="w-12 h-12 bg-line border border-line overflow-hidden shrink-0">
                       <img 
                         src={formData.image} 
                         alt="Preview" 
@@ -377,38 +396,38 @@ ${formData.commentary}
                           (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/error/120/120';
                         }}
                       />
-                    </div>
-                  </div>
-                </div>
+                    </Box>
+                  </Box>
+                </Stack>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Content / Commentary (Markdown)</label>
-                    <span className={`text-[9px] font-mono font-bold uppercase ${formData.commentary.length >= 2800 ? 'text-accent' : 'text-text-dim'}`}>
+                <Stack gap={2}>
+                  <Box className="flex justify-between items-center">
+                    <Text as="label" variant="mono" className="text-[10px] font-bold uppercase tracking-widest text-text-dim">Content / Commentary (Markdown)</Text>
+                    <Text variant="mono" weight="font-bold" className={`text-[9px] uppercase ${formData.commentary.length >= 2800 ? 'text-accent' : 'text-text-dim'}`}>
                       {formData.commentary.length} / 3000
-                    </span>
-                  </div>
+                    </Text>
+                  </Box>
                   <textarea 
                     rows={10}
+                    name="commentary"
                     value={formData.commentary}
                     onChange={(e) => {
                       const val = e.target.value;
                       if (val.length <= 3000) {
-                        setFormData({...formData, commentary: val});
+                        handleChange(e);
                       }
                     }}
                     placeholder="The core analysis or story goes here..."
                     className={`w-full bg-bg border ${formData.commentary.length >= 3000 ? 'border-accent' : 'border-line'} px-4 py-3 text-sm font-mono focus:outline-none focus:border-accent transition-colors`}
                   />
-                </div>
-              </div>
-            </div>
+                </Stack>
+              </Box>
+            </Stack>
 
-            {/* Live Preview */}
-            <div className="space-y-8 sticky top-0 md:col-span-5">
-              <div className="flex items-center justify-between">
-                <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// OUTPUT_BUFFER</h3>
-                <div className="flex gap-2">
+            <Stack gap={8} className="sticky top-0 md:col-span-5">
+              <Box className="flex items-center justify-between">
+                <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-[2px] text-text-main">// OUTPUT_BUFFER</Text>
+                <Box className="flex gap-2">
                   <motion.button 
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -430,15 +449,15 @@ ${formData.commentary}
                       )}
                     </AnimatePresence>
                   </motion.button>
-                </div>
-              </div>
+                </Box>
+              </Box>
 
               <motion.div 
                 layout
                 className="bg-card-bg border border-line overflow-hidden shadow-2xl"
               >
-                <div className="bg-line/50 px-6 py-3 border-b border-line flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Markdown_Source</span>
+                <Box className="bg-line/50 px-6 py-3 border-b border-line flex items-center justify-between">
+                  <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-widest text-text-dim">Markdown_Source</Text>
                   <motion.span 
                     animate={{ opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 2, repeat: Infinity }}
@@ -446,42 +465,42 @@ ${formData.commentary}
                   >
                     STATUS: READY
                   </motion.span>
-                </div>
+                </Box>
                 <pre className="p-6 text-xs text-text-body font-mono overflow-x-auto whitespace-pre-wrap max-h-[500px] custom-scrollbar">
                   {markdown}
                 </pre>
               </motion.div>
 
-              <div className="space-y-4">
+              <Stack gap={4}>
                 <motion.button 
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={submitToGithub}
-                  className="w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3 group"
+                  className={buttons.primary + " group"}
                 >
                   <Github className="w-5 h-5 transition-transform group-hover:rotate-12" />
                   DEPLOY TO GITHUB PIPELINE
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
-                <p className="text-[9px] font-mono text-text-dim text-center px-8 leading-relaxed uppercase tracking-widest">
+                <Text variant="mono" className="text-text-dim text-center px-8 leading-relaxed">
                   Submitting triggers the repository automation workflow. 
                   Manual PR review required for final deployment.
-                </p>
-              </div>
+                </Text>
+              </Stack>
 
-              <motion.div 
+              <Box as="motion.div" 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 className="bg-accent-brand/5 border border-accent-brand/20 p-6 space-y-4"
               >
-                <div className="flex items-center gap-3 text-accent-brand mb-2">
+                <Stack direction="row" align="center" gap={3} className="text-accent-brand mb-2">
                   <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-widest">AI_DRFT_PRO_MODULE</h4>
-                </div>
-                <p className="text-[11px] text-text-body leading-relaxed font-sans">
+                  <Text variant="mono" weight="font-bold" size="text-[10px]" className="tracking-widest">AI_DRFT_PRO_MODULE</Text>
+                </Stack>
+                <Text variant="body" size="text-[11px]" className="leading-relaxed">
                   Request tone optimization for the current draft. Balanced for MIT structural integrity and WSDC Registry dynamics.
-                </p>
+                </Text>
                 <motion.button 
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
@@ -523,11 +542,12 @@ ${JSON.stringify(currentData, null, 2)}`;
                   GENERATE_AI_OPTIM_PROMPT
                 </motion.button>
 
-                <motion.div 
+                <Stack as="motion.div" 
                   animate={aiError ? { x: [-2, 2, -2, 2, 0] } : {}}
-                  className="pt-4 border-t border-accent-brand/10 space-y-3"
+                  gap={3}
+                  className="pt-4 border-t border-accent-brand/10"
                 >
-                  <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">PASTE_AI_JSON_STREAM</label>
+                  <Text as="label" variant="mono" size="text-[10px]" weight="font-bold" className="tracking-widest text-text-dim">PASTE_AI_JSON_STREAM</Text>
                   <textarea 
                     rows={3}
                     value={aiJson}
@@ -543,9 +563,9 @@ ${JSON.stringify(currentData, null, 2)}`;
                   >
                     APPLY_AI_ARCHITECTURE
                   </motion.button>
-                </motion.div>
-              </motion.div>
-            </div>
+                </Stack>
+              </Box>
+            </Stack>
           </motion.div>
         ) : (
           <motion.div 
@@ -555,32 +575,32 @@ ${JSON.stringify(currentData, null, 2)}`;
             exit={{ opacity: 0, x: -20 }}
             className="space-y-12"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Grid cols={1} md={2} lg={4} gap={6}>
               {[
                 { label: 'Active_Nodes', value: dummyMetrics.activeUsers, icon: Users, trend: '+12%' },
                 { label: 'Signal_Strength', value: dummyMetrics.engagementRate, icon: Activity, trend: '+2.1%' },
                 { label: 'Broadband_Reach', value: dummyMetrics.contentReach, icon: Globe, trend: '+452' },
                 { label: 'System_Compute', value: dummyMetrics.systemLoad, icon: Cpu, trend: 'Optimal' },
               ].map((stat) => (
-                <div key={stat.label} className="bg-bg border border-line p-6 space-y-4 scanline-hover">
-                  <div className="flex items-center justify-between text-text-dim">
+                <Box key={stat.label} border surface className="p-6 space-y-4 scanline-hover">
+                  <Box className="flex items-center justify-between text-text-dim">
                     <stat.icon className="w-4 h-4" />
-                    <span className="text-[10px] font-mono text-accent-brand">{stat.trend}</span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-2xl font-display font-black text-text-main">{stat.value}</div>
-                    <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">{stat.label}</div>
-                  </div>
-                </div>
+                    <Text variant="mono" size="text-[10px]" color="accent" weight="font-bold">{stat.trend}</Text>
+                  </Box>
+                  <Stack gap={1}>
+                    <Text variant="headline" size="text-2xl" color="main" weight="font-black">{stat.value}</Text>
+                    <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-widest text-text-dim">{stat.label}</Text>
+                  </Stack>
+                </Box>
               ))}
-            </div>
+            </Grid>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-              <div className="bg-card-bg border border-line p-8 space-y-8 md:col-span-12 lg:col-span-7">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// AUDIENCE_TRAFFIC_WAVE</h3>
+            <Grid cols={1} gap={8} className="md:grid-cols-12">
+              <Box border surface className="p-8 space-y-8 md:col-span-12 lg:col-span-7">
+                <Box className="flex items-center justify-between">
+                  <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-[2px] text-text-main">// AUDIENCE_TRAFFIC_WAVE</Text>
                   <BarChart3 className="w-4 h-4 text-accent-brand" />
-                </div>
+                </Box>
                 <div className="h-[300px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={dummyMetrics.timeline}>
@@ -608,13 +628,13 @@ ${JSON.stringify(currentData, null, 2)}`;
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </div>
+              </Box>
 
-              <div className="bg-card-bg border border-line p-8 space-y-8 md:col-span-12 lg:col-span-5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// LOAD_LATENCY</h3>
+              <Box border surface className="p-8 space-y-8 md:col-span-12 lg:col-span-5">
+                <Box className="flex items-center justify-between">
+                  <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-[2px] text-text-main">// LOAD_LATENCY</Text>
                   <Activity className="w-4 h-4 text-accent-brand" />
-                </div>
+                </Box>
                 <div className="h-[150px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={dummyMetrics.timeline}>
@@ -639,19 +659,19 @@ ${JSON.stringify(currentData, null, 2)}`;
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="pt-8 border-t border-line">
-                   <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main mb-6">// SUBSYSTEM_REPORT</h3>
-                   <div className="space-y-4">
+                <Box className="pt-8 border-t border-line">
+                   <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-[2px] text-text-main mb-6">// SUBSYSTEM_REPORT</Text>
+                   <Stack gap={4}>
                      {[
                        { name: 'Registry_Sync', status: 'Optimal', value: 98 },
                        { name: 'Analysis_Engine', status: 'Synced', value: 100 },
                        { name: 'Circuit_Buffer', status: 'Buffering', value: 45 },
                      ].map(item => (
-                       <div key={item.name} className="space-y-1">
-                         <div className="flex justify-between text-[8px] font-mono uppercase tracking-widest text-text-dim">
+                       <Stack key={item.name} gap={1}>
+                         <Box className="flex justify-between text-[8px] font-mono uppercase tracking-widest text-text-dim">
                            <span>{item.name}</span>
                            <span>{item.status}</span>
-                         </div>
+                         </Box>
                          <div className="h-1 bg-line w-full overflow-hidden">
                            <motion.div 
                             initial={{ width: 0 }}
@@ -660,36 +680,36 @@ ${JSON.stringify(currentData, null, 2)}`;
                             className="h-full bg-accent-brand" 
                            />
                          </div>
-                       </div>
+                       </Stack>
                      ))}
-                   </div>
-                </div>
-              </div>
-            </div>
+                   </Stack>
+                </Box>
+              </Box>
+            </Grid>
 
-            <div className="bg-bg border border-line p-8">
-              <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main mb-8">// LIVE_SYSTEM_LOGS</h3>
-              <div className="space-y-3 font-mono text-[10px] uppercase">
-                <div className="flex gap-4 text-text-dim">
-                  <span className="text-accent">[15:32:01]</span>
+            <Box border surface className="p-8">
+              <Text variant="mono" size="text-[10px]" weight="font-bold" className="tracking-[2px] text-text-main mb-8">// LIVE_SYSTEM_LOGS</Text>
+              <Stack gap={3} className="font-mono text-[10px] uppercase">
+                <Box className="flex gap-4 text-text-dim">
+                  <Text variant="mono" color="accent" weight="font-bold">[15:32:01]</Text>
                   <span>Signal_Gateway: Authenticated admin_ari_anders</span>
-                </div>
-                <div className="flex gap-4 text-text-dim">
-                  <span className="text-accent">[15:31:45]</span>
+                </Box>
+                <Box className="flex gap-4 text-text-dim">
+                  <Text variant="mono" color="accent" weight="font-bold">[15:31:45]</Text>
                   <span>Cache_Purge: Success // TTL reset for site_assets</span>
-                </div>
-                <div className="flex gap-4 text-text-dim">
-                  <span className="text-accent">[15:30:12]</span>
+                </Box>
+                <Box className="flex gap-4 text-text-dim">
+                  <Text variant="mono" color="accent" weight="font-bold">[15:30:12]</Text>
                   <span>Inbound_Payload: Drafter_Buffer updated via AI_Module</span>
-                </div>
-                <div className="flex gap-4 text-text-dim/40 italic">
+                </Box>
+                <Box className="flex gap-4 text-text-dim/40 italic">
                   <span>[Listening for system events...]</span>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Stack>
+            </Box>
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </Box>
   );
 }

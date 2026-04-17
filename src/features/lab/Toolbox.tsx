@@ -5,12 +5,15 @@
 
 import { motion } from 'motion/react';
 import { ShoppingBag, ExternalLink, Tag, ArrowRight, ArrowLeft, Calendar } from 'lucide-react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
-import { affiliateManager } from '../lib/affiliateManager';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { affiliateManager } from '@/lib/affiliateManager';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { getAllContent, ContentItem } from '../lib/content';
+import { getAllContent, ContentItem } from '@/lib/content';
+
+import { cn } from '@/lib/utils';
+import { layout, typography, borders } from '@/styles/design-tokens';
 
 export default function Lab() {
   const [gear, setGear] = useState<ContentItem[]>([]);
@@ -24,7 +27,7 @@ export default function Lab() {
 
   if (selectedGear) {
     return (
-      <section className="panel h-full overflow-y-auto">
+      <section className={layout.panel}>
         <button 
           onClick={() => setSelectedGear(null)}
           className="flex items-center gap-2 text-accent font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform"
@@ -36,16 +39,16 @@ export default function Lab() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-6 relative">
             <div className="absolute -top-4 right-0 text-[8px] font-mono opacity-30 select-none">ITEM_REF: {selectedGear.slug?.toUpperCase()}</div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand border border-accent-brand/20 px-3 py-1">
+            <span className={cn(typography.mono, "text-accent-brand border border-accent-brand/20 px-3 py-1")}>
               {selectedGear.category}
             </span>
-            <div className="flex items-center gap-2 text-text-dim text-[10px] font-mono uppercase tracking-widest">
+            <div className={typography.mono + " text-text-dim flex items-center gap-2"}>
               <Calendar className="w-3 h-3" />
               {selectedGear.date}
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-display font-bold text-text-main mb-12 leading-none uppercase tracking-tighter">
+          <h1 className={typography.headline + " text-4xl md:text-7xl mb-12"}>
             {selectedGear.title}
           </h1>
 
@@ -58,7 +61,7 @@ export default function Lab() {
   }
 
   return (
-    <section className="panel h-full overflow-y-auto">
+    <section className={layout.panel}>
       <div className="mb-12 p-6 bg-accent-brand/5 border border-accent-brand/20 rounded-none text-[11px] text-text-dim max-w-2xl font-mono leading-relaxed relative">
         <div className="absolute top-2 right-2 text-[8px] opacity-30">REF_ID: ADV_001</div>
         <span className="text-accent-brand font-bold uppercase tracking-wider mr-2">Advisory:</span>
@@ -66,10 +69,10 @@ export default function Lab() {
       </div>
 
       <div className="space-y-8 mb-16 px-4 md:px-0">
-        <h1 className="font-display uppercase text-5xl md:text-8xl leading-[1.0] text-text-main font-bold tracking-tighter">
+        <h1 className={typography.headline + " text-5xl md:text-8xl"}>
           The Toolbox.
         </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+        <p className={typography.body + " text-lg md:text-xl"}>
           Solutions for the modern dancer. Tested for 8-hour social dance durability and hotel-room office efficiency.
         </p>
       </div>
@@ -124,11 +127,11 @@ export default function Lab() {
               </div>
               <div className="space-y-4 flex-1">
                 <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand">{item.category}</span>
-                  <div className="text-[9px] font-mono border border-accent-brand/30 text-accent-brand px-2 py-0.5 uppercase font-bold">Hardware</div>
+                  <span className={typography.mono + " text-accent-brand font-bold"}>{item.category}</span>
+                  <div className={typography.mono + " border border-accent-brand/30 text-accent-brand px-2 py-0.5 font-bold"}>Hardware</div>
                 </div>
-                <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent-brand transition-colors leading-none uppercase tracking-tighter">{item.title}</h4>
-                <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans opacity-80">{item.excerpt}</p>
+                <h4 className={typography.headline + " text-2xl group-hover:text-accent-brand transition-colors"}>{item.title}</h4>
+                <p className={typography.body + " text-sm line-clamp-3 opacity-80"}>{item.excerpt}</p>
               </div>
               <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent-brand pt-10 group-hover:translate-x-1 transition-transform mt-auto">
                 Inspect Tool <ArrowRight className="w-3 h-3" />

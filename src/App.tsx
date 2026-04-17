@@ -5,14 +5,14 @@
 
 import { useState } from 'react';
 import Navigation from './components/Navigation';
-import Home from './pages/Home';
-import Lab from './pages/Lab';
-import Engine from './pages/Engine';
-import Feed from './pages/Feed';
-import About from './pages/About';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
-import Drafter from './pages/Drafter';
+import Home from './features/dashboard/Dashboard';
+import Lab from './features/lab/Toolbox';
+import Engine from './features/engine/TelemetryDashboard';
+import Feed from './features/resources/ResourceGallery';
+import About from './features/profile/ArielProfile';
+import Blog from './features/journal/BlogFeed';
+import Contact from './features/profile/ContactConsole';
+import Drafter from './features/admin/ContentEngine';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { X } from 'lucide-react';
 

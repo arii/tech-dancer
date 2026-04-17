@@ -5,8 +5,11 @@
 
 import { motion } from 'motion/react';
 import { Cpu, Zap, Database, ArrowRight, Home as HomeIcon, Shield, Calendar } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { cn } from '../../lib/utils';
+import { layout, typography, borders } from '../../styles/design-tokens';
+import { Box, Stack, Text, Grid } from '../../components/layout/Primitives';
 
 export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   const latestUpdates = [
@@ -43,44 +46,51 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
   ];
 
   return (
-    <section className="panel h-full overflow-y-auto">
-      <div className="min-h-full flex flex-col justify-center py-20">
-        <span className="text-[10px] uppercase tracking-[3px] text-accent mb-4 block font-mono font-bold">
+    <Box as="section" panel>
+      <Box className="min-h-full flex flex-col justify-center py-20">
+        <Text variant="mono" color="accent" weight="font-bold" className="mb-4 block">
           // WELCOME
-        </span>
+        </Text>
         
-        <div className="space-y-6 mb-24 px-4 md:px-0">
-          <motion.h1 
+        <Stack gap={6} className="mb-24 px-4 md:px-0">
+          <Text 
+            as={motion.h1}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-            className="font-display uppercase text-5xl md:text-9xl leading-[0.9] text-text-main font-bold tracking-tighter"
+            variant="headline"
+            size="text-5xl md:text-9xl"
           >
             The Roboticist's Guide to WCS.
-          </motion.h1>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-12">
-            <motion.p 
+          </Text>
+          <Box className="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-12">
+            <Text 
+              as={motion.p}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-xl md:text-2xl text-text-body max-w-3xl font-sans leading-relaxed"
+              variant="body"
+              size="text-xl md:text-2xl"
+              className="max-w-[75ch]"
             >
               Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis to maximize your West Coast Swing trajectory.
-            </motion.p>
-            <motion.div 
+            </Text>
+            <Box 
+              as={motion.div}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
               className="stats-widget !p-4 !m-0 border border-accent-brand bg-accent-brand/5 shrink-0 rounded-none shadow-none relative"
             >
               <div className="absolute top-1 right-1 text-[8px] font-mono opacity-30 select-none">REF_ID: STATUS_001</div>
-              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand mb-1">Status: Optimized</div>
+              <Text variant="mono" color="accent" className="mb-1">Status: Optimized</Text>
               <div className="text-sm font-display font-medium">BOUGIE ON A BUDGET</div>
-            </motion.div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Stack>
         
-        <motion.div
+        <Box
+          as={motion.div}
           initial="hidden"
           animate="visible"
           variants={{
@@ -94,9 +104,10 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
           }}
           className="space-y-0 border-y border-line"
         >
-          <div className="grid grid-cols-12 gap-0">
+          <Grid cols={12} gap={0}>
             {/* Main Feature */}
-            <motion.div 
+            <Box 
+              as={motion.div}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 }
@@ -104,7 +115,7 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
               onClick={() => setActiveTab('lab')}
               className="col-span-12 lg:col-span-8 border-r border-line p-8 md:p-16 hover:bg-card-bg transition-colors cursor-pointer group"
             >
-              <div className="aspect-[16/9] overflow-hidden bg-line">
+              <Box className="aspect-[16/9] overflow-hidden bg-line">
                 <motion.img 
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
@@ -113,24 +124,25 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
-              </div>
-              <div className="mt-12 space-y-6">
-                <h3 className="text-4xl md:text-6xl font-display font-bold uppercase leading-none">Hardware & Shell</h3>
-                <p className="text-lg md:text-xl text-text-body max-w-xl">
+              </Box>
+              <Stack gap={6} className="mt-12">
+                <Text as="h3" size="text-4xl md:text-6xl" weight="font-bold" className="uppercase leading-none">Hardware & Shell</Text>
+                <Text variant="body" size="text-lg md:text-xl" className="max-w-xl">
                   Stress-tested apparel and footwear for the 3:00 AM social floor. From friction-reduction DIYs to sustainable packing manifests.
-                </p>
+                </Text>
                 <motion.div 
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-[2px] text-accent"
                 >
                   Explore The Lab <ArrowRight className="w-4 h-4" />
                 </motion.div>
-              </div>
-            </motion.div>
+              </Stack>
+            </Box>
             
             {/* Side Stack */}
-            <div className="col-span-12 lg:col-span-4 flex flex-col">
-              <motion.div 
+            <Box className="col-span-12 lg:col-span-4 flex flex-col">
+              <Box 
+                as={motion.div}
                 variants={{
                   hidden: { opacity: 0, x: 20 },
                   visible: { opacity: 1, x: 0 }
@@ -138,19 +150,20 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 onClick={() => setActiveTab('feed')}
                 className="flex-1 p-8 md:p-12 border-b border-line bg-accent text-white hover:bg-accent-orange transition-colors cursor-pointer group"
               >
-                <div className="text-[10px] font-mono font-bold uppercase tracking-widest mb-8 text-white/60">COLLECTION: 01</div>
-                <h3 className="text-3xl font-display font-bold uppercase mb-4">Logistics Logic</h3>
-                <p className="text-sm text-white/80 mb-8 leading-relaxed">
+                <Text variant="mono" weight="font-bold" size="text-[10px]" className="tracking-widest mb-8 opacity-60">COLLECTION: 01</Text>
+                <Text as="h3" size="text-3xl" weight="font-bold" className="uppercase mb-4 text-white">Logistics Logic</Text>
+                <Text variant="body" size="text-sm" className="mb-8 leading-relaxed text-white/80">
                   High-efficiency travel protocols. Hotel block arbitrage, flight matrix optimization, and status stacking.
-                </p>
+                </Text>
                 <motion.div 
                   whileHover={{ x: 5 }}
                   className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px]"
                 >
                   Access Systems <ArrowRight className="w-4 h-4" />
                 </motion.div>
-              </motion.div>
-              <motion.div 
+              </Box>
+              <Box 
+                as={motion.div}
                 variants={{
                   hidden: { opacity: 0, x: 20 },
                   visible: { opacity: 1, x: 0 }
@@ -158,35 +171,35 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 onClick={() => setActiveTab('engine')}
                 className="flex-1 p-8 md:p-12 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
               >
-                <div className="text-[10px] font-mono font-bold uppercase tracking-widest mb-8 text-accent">ANALYSIS: 02</div>
-                <h3 className="text-3xl font-display font-bold uppercase mb-4 text-text-main">Predictive Engine</h3>
-                <p className="text-sm text-text-body mb-8 leading-relaxed">
+                <Text variant="mono" weight="font-bold" size="text-[10px]" color="accent" className="tracking-widest mb-8">ANALYSIS: 02</Text>
+                <Text as="h3" size="text-3xl" weight="font-bold" className="uppercase mb-4 text-text-main">Predictive Engine</Text>
+                <Text variant="body" size="text-sm" className="mb-8 leading-relaxed">
                   The physics of momentum and connection. Quantifying judge variance and heat density.
-                </p>
+                </Text>
                 <motion.div 
                   whileHover={{ x: 5 }}
                   className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent"
                 >
                   View Data <ArrowRight className="w-4 h-4" />
                 </motion.div>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
+              </Box>
+            </Box>
+          </Grid>
+        </Box>
 
         {/* Latest Updates Section */}
-        <div className="mt-24 space-y-8">
-          <motion.div 
+        <Box className={layout.section}>
+          <Stack as={motion.div} 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex items-end justify-between border-b border-line pb-4"
+            direction="row" align="center" justify="between" className="border-b border-line pb-4 mb-8"
           >
-            <h3 className="text-sm font-bold uppercase tracking-[3px] text-text-main">Latest Updates</h3>
-            <div className="text-[10px] text-text-dim font-mono uppercase tracking-widest">System Time: 2026.04.15</div>
-          </motion.div>
+            <Text variant="mono" size="text-sm" weight="font-bold" className="uppercase tracking-[3px] text-text-main">Latest Updates</Text>
+            <Text variant="mono" className="text-text-dim">System Time: 2026.04.15</Text>
+          </Stack>
           
-          <motion.div 
+          <Grid as={motion.div} 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -199,12 +212,13 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 }
               }
             }}
-            className="grid grid-cols-1 md:grid-cols-12 gap-8"
+            cols={1} md={12} gap={8}
           >
             {latestUpdates.map((update, idx) => {
               const isFirst = idx === 0;
               return (
-                <motion.div
+                <Box
+                  as={motion.div}
                   key={update.title}
                   variants={{
                     hidden: { opacity: 0, y: 10 },
@@ -212,42 +226,49 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                   }}
                   whileHover={{ y: -5, borderColor: 'var(--color-accent-brand)' }}
                   onClick={() => setActiveTab(update.link)}
-                  className={`bg-surface border border-line p-8 rounded-none transition-all group cursor-pointer scanline-hover ${isFirst ? 'md:col-span-7' : 'md:col-span-5'}`}
+                  border surface
+                  className={cn(
+                    layout.interactive,
+                    "p-8",
+                    isFirst ? 'md:col-span-7' : 'md:col-span-5'
+                  )}
                 >
-                  <div className="flex justify-between items-start mb-6">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent-brand border border-accent-brand/20 px-3 py-1">
-                      {update.type}
-                    </span>
-                    <span className="text-[10px] text-text-dim font-mono">{update.date}</span>
-                  </div>
-                  <h3 className="text-3xl font-display font-bold text-text-main group-hover:text-accent-brand transition-colors mb-4 uppercase tracking-tighter">
+                  <Box className="flex justify-between items-start mb-6">
+                    <Box className="border border-accent-brand/20 px-3 py-1">
+                      <Text variant="mono" color="accent" weight="font-bold">
+                        {update.type}
+                      </Text>
+                    </Box>
+                    <Text variant="mono" className="text-text-dim">{update.date}</Text>
+                  </Box>
+                  <Text variant="headline" size="text-3xl" className="group-hover:text-accent-brand transition-colors mb-4">
                     {update.title}
-                  </h3>
-                  <p className="text-base text-text-body leading-relaxed line-clamp-2 font-sans opacity-80">
+                  </Text>
+                  <Text variant="body" size="text-base" className="line-clamp-2 opacity-80">
                     {update.desc}
-                  </p>
-                  <div className="mt-8 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[2px] text-accent-brand group-hover:translate-x-1 transition-transform">
+                  </Text>
+                  <Box className="mt-8 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[2px] text-accent-brand group-hover:translate-x-1 transition-transform">
                     Inspect Report <ArrowRight className="w-3 h-3" />
-                  </div>
-                </motion.div>
+                  </Box>
+                </Box>
               );
             })}
-          </motion.div>
-        </div>
+          </Grid>
+        </Box>
 
         {/* WSDC Registry Ledger Section */}
-        <div className="mt-24 space-y-8">
-          <motion.div 
+        <Box className={layout.section}>
+          <Box as={motion.div} 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex items-end justify-between border-b border-line pb-4"
+            className="flex justify-between items-baseline border-b border-line pb-4 mb-8"
           >
-            <h3 className="text-sm font-bold uppercase tracking-[3px] text-text-main">WSDC Registry Ledger</h3>
-            <div className="text-[10px] text-accent-brand animate-pulse font-mono uppercase tracking-widest font-bold">● Live Itinerary</div>
-          </motion.div>
+            <Text variant="mono" size="text-sm" weight="font-bold" className="uppercase tracking-[3px] text-text-main">WSDC Registry Ledger</Text>
+            <Text variant="mono" color="accent" className="animate-pulse font-bold">● Live Itinerary</Text>
+          </Box>
           
-          <motion.div 
+          <Grid as={motion.div} 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -260,41 +281,43 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 }
               }
             }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border border-line bg-line"
+            cols={1} md={2} lg={3}
+            className="bg-line border border-line"
           >
-            {upcomingEvents.map((event, idx) => (
-              <motion.div 
+            {upcomingEvents.map((event) => (
+              <Box 
+                as={motion.div}
                 key={event.name} 
                 variants={{
                   hidden: { opacity: 0 },
                   visible: { opacity: 1 }
                 }}
-                className="bg-bg p-6 border-line flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default"
+                className="bg-bg p-6 flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default"
               >
-                <div className="w-10 h-10 border border-line bg-line flex items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
+                <Box className="w-10 h-10 border border-line bg-line flex items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
                   <event.icon className="w-5 h-5 stroke-1" />
-                </div>
-                <div className="space-y-1">
-                  <div className="text-[9px] text-accent font-mono uppercase font-bold tracking-widest">{event.status}</div>
-                  <div className="text-lg font-display font-bold text-text-main leading-tight uppercase tracking-tight">{event.name}</div>
-                  <div className="text-xs text-text-dim flex items-center gap-2 font-mono">
-                    <Calendar className="w-3 h-3" />
-                    {event.date}
-                  </div>
-                </div>
-              </motion.div>
+                </Box>
+                <Stack gap={1}>
+                  <Text variant="mono" color="accent" weight="font-bold">{event.status}</Text>
+                  <Text variant="headline" size="text-lg" className="leading-tight">{event.name}</Text>
+                  <Box className="flex items-center gap-2">
+                    <Calendar className="w-3 h-3 text-text-dim" />
+                    <Text variant="mono" className="text-text-dim">{event.date}</Text>
+                  </Box>
+                </Stack>
+              </Box>
             ))}
-          </motion.div>
-        </div>
+          </Grid>
+        </Box>
 
-        <div className="stats-widget mt-24 w-fit pb-12 relative">
+        <Box border surface className="mt-24 w-fit pb-12 p-8 relative">
           <div className="absolute top-2 right-2 text-[8px] font-mono opacity-30 select-none">DATA_REF: 099</div>
-          <div className="font-display font-bold uppercase text-3xl text-accent-brand tracking-tighter">Registry Calibration</div>
-          <div className="text-[10px] uppercase tracking-[2px] text-text-dim mt-2 font-mono">
+          <Text variant="headline" size="text-3xl" color="accent">Registry Calibration</Text>
+          <Text variant="mono" className="text-text-dim mt-2">
             Currently Obsessed: Hypervolt Mini & Motown Monday
-          </div>
-        </div>
-      </div>
-    </section>
+          </Text>
+        </Box>
+      </Box>
+    </Box>
   );
 }

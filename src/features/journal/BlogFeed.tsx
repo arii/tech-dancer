@@ -7,7 +7,10 @@ import { motion } from 'motion/react';
 import { Calendar, Clock, User, ArrowLeft, Share2, Bookmark, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { getAllContent, ContentItem } from '../lib/content';
+import { getAllContent, ContentItem } from '@/lib/content';
+
+import { cn } from '@/lib/utils';
+import { layout, typography, borders } from '@/styles/design-tokens';
 
 export default function Blog() {
   const [selectedPost, setSelectedPost] = useState<ContentItem | null>(null);
@@ -20,7 +23,7 @@ export default function Blog() {
 
   if (selectedPost) {
     return (
-      <section className="panel h-full overflow-y-auto">
+      <section className={layout.panel}>
         <button 
           onClick={() => setSelectedPost(null)}
           className="flex items-center gap-2 text-accent font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform"
@@ -35,20 +38,20 @@ export default function Blog() {
           className="max-w-4xl mx-auto"
         >
           <div className="flex flex-col md:flex-row md:items-center gap-6 mb-12">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent border border-accent/20 px-3 py-1 w-fit">
+            <span className={cn(typography.mono, "text-accent border border-accent/20 px-3 py-1 w-fit")}>
               {selectedPost.category}
             </span>
-            <div className="flex items-center gap-2 text-text-dim text-[10px] font-mono uppercase tracking-widest font-bold">
+            <div className={typography.mono + " text-text-dim flex items-center gap-2 font-bold"}>
               <Calendar className="w-3 h-3" />
               {selectedPost.date}
             </div>
             <div className="hidden md:block w-px h-4 bg-line"></div>
-            <div className="text-[10px] text-text-dim font-mono uppercase tracking-widest font-bold">
+            <div className={typography.mono + " text-text-dim font-bold"}>
               LOG_REF: {selectedPost.slug.substring(0, 8).toUpperCase()}
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-display font-bold text-text-main mb-12 leading-[0.9] uppercase tracking-tighter">
+          <h1 className={typography.headline + " text-4xl md:text-7xl mb-12"}>
             {selectedPost.title}
           </h1>
 
@@ -111,12 +114,12 @@ export default function Blog() {
   }
 
   return (
-    <section className="panel h-full overflow-y-auto">
+    <section className={layout.panel}>
       <div className="space-y-8 mb-16 px-4 md:px-0">
-        <h1 className="font-display uppercase text-5xl md:text-8xl leading-[1.0] text-text-main font-bold tracking-tighter">
+        <h1 className={typography.headline + " text-5xl md:text-8xl"}>
           The Blog.
         </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+        <p className={typography.body + " text-lg md:text-xl"}>
           Deep dives into the intersection of robotics, dance, and lifestyle optimization.
         </p>
       </div>
@@ -158,17 +161,17 @@ export default function Blog() {
             </div>
             <div className="flex flex-col justify-center space-y-6">
               <div className="flex items-center gap-4">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent border border-accent/30 px-2 py-0.5">
+                <span className={typography.mono + " text-accent border border-accent/30 px-2 py-0.5 font-bold"}>
                   {post.category}
                 </span>
-                <span className="text-[10px] text-text-dim font-mono uppercase tracking-widest flex items-center gap-1">
+                <span className={typography.mono + " text-text-dim flex items-center gap-1"}>
                   <Calendar className="w-3 h-3" /> {post.date}
                 </span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-text-main group-hover:text-accent transition-colors leading-none uppercase">
+              <h2 className={typography.headline + " text-3xl md:text-4xl group-hover:text-accent transition-colors"}>
                 {post.title}
               </h2>
-              <p className="text-[15px] text-text-body leading-relaxed line-clamp-3 font-sans">
+              <p className={typography.body + " text-[15px]"}>
                 {post.excerpt}
               </p>
               <motion.div 

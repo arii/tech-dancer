@@ -5,10 +5,13 @@
 
 import { motion } from 'motion/react';
 import { BookOpen, Clock, ArrowRight, Database, Code, Plane, Scissors, Music, Calendar, ArrowLeft, Activity, Shield } from 'lucide-react';
-import { Badge } from '../components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { getAllContent, ContentItem } from '../lib/content';
+import { getAllContent, ContentItem } from '@/lib/content';
+
+import { cn } from '@/lib/utils';
+import { layout, typography, borders } from '@/styles/design-tokens';
 
 export default function Feed() {
   const [resources, setResources] = useState<ContentItem[]>([]);
@@ -32,7 +35,7 @@ export default function Feed() {
 
   if (selectedResource) {
     return (
-      <section className="panel h-full overflow-y-auto">
+      <section className={layout.panel}>
         <button 
           onClick={() => setSelectedResource(null)}
           className="flex items-center gap-2 text-accent font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform"
@@ -44,16 +47,16 @@ export default function Feed() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-6 relative">
             <div className="absolute top-0 right-0 text-[8px] font-mono opacity-30 select-none">ASSET_REF: {selectedResource.slug?.toUpperCase()}</div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand border border-accent-brand/20 px-3 py-1">
+            <span className={cn(typography.mono, "text-accent-brand border border-accent-brand/20 px-3 py-1")}>
               {selectedResource.category}
             </span>
-            <div className="flex items-center gap-2 text-text-dim text-[10px] font-mono uppercase tracking-widest">
+            <div className={typography.mono + " text-text-dim flex items-center gap-2"}>
               <Calendar className="w-3 h-3" />
               {selectedResource.date}
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-display font-bold text-text-main mb-12 leading-none uppercase tracking-tighter">
+          <h1 className={typography.headline + " text-4xl md:text-7xl mb-12"}>
             {selectedResource.title}
           </h1>
 
@@ -66,12 +69,12 @@ export default function Feed() {
   }
 
   return (
-    <section className="panel h-full overflow-y-auto">
+    <section className={layout.panel}>
       <div className="space-y-8 mb-16 px-4 md:px-0">
-        <h1 className="font-display uppercase text-5xl md:text-8xl leading-[1.0] text-text-main font-bold tracking-tighter">
+        <h1 className={typography.headline + " text-5xl md:text-8xl"}>
           Resources.
         </h1>
-        <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+        <p className={typography.body + " text-lg md:text-xl"}>
           The Toolbox: Resources for the Road. Curated systems for travel, gear, and lifestyle optimization.
         </p>
       </div>
@@ -128,11 +131,11 @@ export default function Feed() {
               </div>
               <div className="space-y-4 flex-1">
                 <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand">{resource.category}</span>
-                  <div className="text-[9px] font-mono border border-accent-brand/30 text-accent-brand px-2 py-0.5 uppercase font-bold">Protocol</div>
+                  <span className={typography.mono + " text-accent-brand font-bold"}>{resource.category}</span>
+                  <div className={typography.mono + " border border-accent-brand/30 text-accent-brand px-2 py-0.5 font-bold"}>Protocol</div>
                 </div>
-                <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent-brand transition-colors leading-none uppercase tracking-tighter">{resource.title}</h4>
-                <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans opacity-80">{resource.excerpt}</p>
+                <h4 className={typography.headline + " text-2xl group-hover:text-accent-brand transition-colors"}>{resource.title}</h4>
+                <p className={typography.body + " text-sm line-clamp-3 opacity-80"}>{resource.excerpt}</p>
               </div>
               <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent-brand pt-10 group-hover:translate-x-1 transition-transform mt-auto">
                 Access System <ArrowRight className="w-3 h-3" />

@@ -5,13 +5,15 @@
 
 import { motion } from 'motion/react';
 import { GraduationCap, Briefcase, Heart, Binary, Users, Repeat } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+
+import { layout, typography, borders } from '@/styles/design-tokens';
 
 export default function About() {
   const chips = ['MIT PhD', 'Civ Robotics', 'CSAIL Researcher', 'Intermediate WCS', 'SF Local', 'Motown Monday'];
 
   return (
-    <section className="panel h-full overflow-y-auto">
+    <section className={layout.panel}>
       <div className="flex flex-col md:flex-row items-start gap-12 mb-20">
         <div className="w-full md:w-1/3 border border-line aspect-square overflow-hidden bg-line">
           <img 
@@ -23,16 +25,16 @@ export default function About() {
         </div>
         <div className="flex-1 space-y-6 relative">
           <div className="absolute top-0 right-0 text-[8px] font-mono opacity-30 select-none">FILE_REF: AA_001</div>
-          <span className="text-[10px] font-mono font-bold uppercase tracking-[3px] text-accent-brand block">
+          <span className={typography.mono + " text-accent-brand block"}>
             // PERSONNEL_FILE: AA_001
           </span>
-          <h1 className="font-display uppercase text-5xl md:text-8xl leading-[0.9] text-text-main font-bold tracking-tighter">
+          <h1 className={typography.headline + " text-5xl md:text-8xl"}>
             Ariel Anders, PhD.
           </h1>
-          <div className="text-xl md:text-2xl text-text-body font-sans leading-relaxed max-w-2xl">
+          <div className={typography.body + " text-xl md:text-2xl"}>
             MIT Roboticist. WCS Competitor. Data Architect.
           </div>
-          <p className="text-lg text-text-body/80 max-w-xl font-sans">
+          <p className={typography.body + " text-lg opacity-80"}>
             I use my background in robotics to find the best gear, travel systems, and analysis platforms for the WSDC Registry. 
             Maximizing the WCS lifestyle through system-level optimization.
           </p>
@@ -72,7 +74,7 @@ export default function About() {
       </div>
 
       <div className="space-y-8 px-4 md:px-0">
-        <h3 className="text-[10px] font-mono font-bold uppercase tracking-[3px] text-text-dim">// SYSTEM_MANIFEST: BACKGROUND_DATA</h3>
+        <h3 className={typography.mono + " text-text-dim"}>// SYSTEM_MANIFEST: BACKGROUND_DATA</h3>
         <div className="flex flex-wrap gap-2">
           {[
             'MIT_PHD_ROBOTICS', 
@@ -84,7 +86,7 @@ export default function About() {
             'MARRIOTT_TITANIUM', 
             'AMEX_PLATINUM'
           ].map(chip => (
-            <span key={chip} className="text-[9px] font-mono font-bold border border-line px-3 py-1 bg-surface text-text-main tracking-widest">
+            <span key={chip} className={typography.mono + " border border-line px-3 py-1 bg-surface text-text-main font-bold"}>
               {chip}
             </span>
           ))}
