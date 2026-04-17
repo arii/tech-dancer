@@ -54,11 +54,11 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface border-b border-line z-[110] flex items-center justify-between px-6">
         <div className="flex flex-col">
           <span className="text-xs font-display font-bold tracking-[1px] uppercase text-text-main">Ariel Anders</span>
-          <span className="text-[8px] text-accent uppercase tracking-widest font-bold">MIT Roboticist // WCS</span>
+          <span className="text-[8px] text-accent-brand uppercase tracking-widest font-bold">MIT Roboticist // WCS</span>
         </div>
         <button 
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 text-text-main hover:text-accent transition-colors relative z-[120]"
+          className="p-2 text-text-main hover:text-accent-brand transition-colors relative z-[120]"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -66,7 +66,7 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </motion.div>
@@ -96,7 +96,7 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
                   variants={itemVariants}
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center gap-4 py-3 border-b border-line/50 transition-colors ${
-                    activeTab === item.id ? 'text-accent' : 'text-text-main'
+                    activeTab === item.id ? 'text-accent-brand' : 'text-text-main'
                   }`}
                 >
                   <item.icon className="w-6 h-6" />
@@ -141,12 +141,12 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
                 {activeTab === item.id && (
                   <motion.div 
                     layoutId="nav-indicator"
-                    className="absolute left-[-20px] w-1 h-4 bg-accent"
-                    transition={{ type: 'spring', damping: 20, stiffness: 150 }}
+                    className="absolute left-[-20px] w-1 h-4 bg-accent-brand"
+                    transition={{ type: 'spring', damping: 20, stiffness: 250 }}
                   />
                 )}
-                <item.icon className={`w-4 h-4 stroke-1 transition-colors ${activeTab === item.id ? 'text-accent' : 'text-text-dim group-hover:text-accent'}`} />
-                <span className={`text-[11px] font-mono font-bold uppercase tracking-widest transition-colors ${activeTab === item.id ? 'text-accent' : 'text-text-dim group-hover:text-accent'}`}>
+                <item.icon className={`w-4 h-4 stroke-1 transition-colors ${activeTab === item.id ? 'text-accent-brand' : 'text-text-dim group-hover:text-accent-brand'}`} />
+                <span className={`text-[11px] font-mono font-bold uppercase tracking-widest transition-colors ${activeTab === item.id ? 'text-accent-brand' : 'text-text-dim group-hover:text-accent-brand'}`}>
                   {item.label}
                 </span>
                 

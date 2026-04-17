@@ -42,17 +42,18 @@ export default function Feed() {
         </button>
 
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">
+          <div className="flex items-center gap-4 mb-6 relative">
+            <div className="absolute top-0 right-0 text-[8px] font-mono opacity-30 select-none">ASSET_REF: {selectedResource.slug?.toUpperCase()}</div>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand border border-accent-brand/20 px-3 py-1">
               {selectedResource.category}
             </span>
-            <div className="flex items-center gap-2 text-text-dim text-xs font-medium">
+            <div className="flex items-center gap-2 text-text-dim text-[10px] font-mono uppercase tracking-widest">
               <Calendar className="w-3 h-3" />
               {selectedResource.date}
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-text-main mb-12 leading-tight">
+          <h1 className="text-4xl md:text-7xl font-display font-bold text-text-main mb-12 leading-none uppercase tracking-tighter">
             {selectedResource.title}
           </h1>
 
@@ -85,10 +86,10 @@ export default function Feed() {
           />
         </div>
         <div className="p-12 space-y-6">
-          <h3 className="text-3xl font-display font-bold text-text-main uppercase">Optimized Assets.</h3>
-          <p className="text-lg text-text-body leading-relaxed max-w-3xl">
-            These are the protocols and hardware I use to maintain a high-performance WCS (West Coast Swing) lifestyle. 
-            From friction-coefficient mods to Titanium-status stacking, these systems are verified by 20+ weekends on the circuit annually.
+          <h3 className="text-4xl font-display font-bold text-text-main uppercase tracking-tight">Optimized Assets.</h3>
+          <p className="text-lg text-text-body leading-relaxed max-w-3xl font-sans">
+            These are the protocols and hardware I use to maintain a high-performance WSDC Registry lifestyle. 
+            From friction-coefficient mods to Titanium-status stacking, these systems are verified by 20+ weekends on the competition cycle annually.
           </p>
         </div>
       </div>
@@ -105,10 +106,12 @@ export default function Feed() {
             }
           }
         }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-line bg-line"
+        className="grid grid-cols-1 md:grid-cols-12 gap-0 border-t border-l border-line bg-line"
       >
         {resources.map((resource, index) => {
           const Icon = getIcon(resource.category);
+          // MECHANICAL_NOTE: Cards use a 7/5 asymmetrical split to break uniform grid dependency and create a 'Folio' rhythm.
+          const isWide = index % 2 === 0;
           return (
             <motion.div
               key={resource.slug}
@@ -117,20 +120,21 @@ export default function Feed() {
                 visible: { opacity: 1, y: 0 }
               }}
               onClick={() => setSelectedResource(resource)}
-              className="bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-colors flex flex-col h-full border-r border-b border-line"
+              className={`bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-colors flex flex-col h-full border-r border-b border-line scanline-hover ${isWide ? 'md:col-span-7' : 'md:col-span-5'}`}
             >
-              <div className="text-accent mb-8">
+              <div className="text-accent-brand mb-8 flex justify-between items-start">
                 <Icon className="w-8 h-8 stroke-1" />
+                <span className="text-[10px] font-mono opacity-20">REF_{index.toString().padStart(3, '0')}</span>
               </div>
               <div className="space-y-4 flex-1">
                 <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent">{resource.category}</span>
-                  <div className="text-[9px] font-mono border border-accent/30 text-accent px-2 py-0.5 uppercase font-bold">Protocol</div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand">{resource.category}</span>
+                  <div className="text-[9px] font-mono border border-accent-brand/30 text-accent-brand px-2 py-0.5 uppercase font-bold">Protocol</div>
                 </div>
-                <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent transition-colors leading-none uppercase">{resource.title}</h4>
-                <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans">{resource.excerpt}</p>
+                <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent-brand transition-colors leading-none uppercase tracking-tighter">{resource.title}</h4>
+                <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans opacity-80">{resource.excerpt}</p>
               </div>
-              <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent pt-10 group-hover:translate-x-1 transition-transform mt-auto">
+              <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent-brand pt-10 group-hover:translate-x-1 transition-transform mt-auto">
                 Access System <ArrowRight className="w-3 h-3" />
               </div>
             </motion.div>

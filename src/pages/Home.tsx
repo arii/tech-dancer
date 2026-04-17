@@ -71,9 +71,10 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="stats-widget !p-4 !m-0 border-l-2 border-accent bg-accent/5 shrink-0 rounded-none shadow-none"
+              className="stats-widget !p-4 !m-0 border border-accent-brand bg-accent-brand/5 shrink-0 rounded-none shadow-none relative"
             >
-              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent mb-1">Status: Optimized</div>
+              <div className="absolute top-1 right-1 text-[8px] font-mono opacity-30 select-none">REF_ID: STATUS_001</div>
+              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand mb-1">Status: Optimized</div>
               <div className="text-sm font-display font-medium">BOUGIE ON A BUDGET</div>
             </motion.div>
           </div>
@@ -198,43 +199,43 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 }
               }
             }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-12 gap-8"
           >
-            {latestUpdates.map((update, idx) => (
-              <motion.div
-                key={update.title}
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-                whileHover={{ y: -5, borderColor: 'var(--color-accent)' }}
-                onClick={() => setActiveTab(update.link)}
-                className="bg-surface border border-line p-5 rounded-none hover:border-accent transition-all group cursor-pointer shadow-sm"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-accent bg-accent/10 px-2 py-0.5">
-                    {update.type}
-                  </span>
-                  <span className="text-[9px] text-text-dim font-mono">{update.date}</span>
-                </div>
-                <h5 className="text-base font-display font-bold text-text-main group-hover:text-accent transition-colors mb-2 uppercase tracking-tight">
-                  {update.title}
-                </h5>
-                <p className="text-xs text-text-body leading-relaxed line-clamp-2 font-sans">
-                  {update.desc}
-                </p>
-                <motion.div 
-                  whileHover={{ x: 3 }}
-                  className="mt-4 flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-accent"
+            {latestUpdates.map((update, idx) => {
+              const isFirst = idx === 0;
+              return (
+                <motion.div
+                  key={update.title}
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  whileHover={{ y: -5, borderColor: 'var(--color-accent-brand)' }}
+                  onClick={() => setActiveTab(update.link)}
+                  className={`bg-surface border border-line p-8 rounded-none transition-all group cursor-pointer scanline-hover ${isFirst ? 'md:col-span-7' : 'md:col-span-5'}`}
                 >
-                  View <ArrowRight className="w-3 h-3" />
+                  <div className="flex justify-between items-start mb-6">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent-brand border border-accent-brand/20 px-3 py-1">
+                      {update.type}
+                    </span>
+                    <span className="text-[10px] text-text-dim font-mono">{update.date}</span>
+                  </div>
+                  <h3 className="text-3xl font-display font-bold text-text-main group-hover:text-accent-brand transition-colors mb-4 uppercase tracking-tighter">
+                    {update.title}
+                  </h3>
+                  <p className="text-base text-text-body leading-relaxed line-clamp-2 font-sans opacity-80">
+                    {update.desc}
+                  </p>
+                  <div className="mt-8 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[2px] text-accent-brand group-hover:translate-x-1 transition-transform">
+                    Inspect Report <ArrowRight className="w-3 h-3" />
+                  </div>
                 </motion.div>
-              </motion.div>
-            ))}
+              );
+            })}
           </motion.div>
         </div>
 
-        {/* Upcoming Circuit Section */}
+        {/* WSDC Registry Ledger Section */}
         <div className="mt-24 space-y-8">
           <motion.div 
             initial={{ opacity: 0 }}
@@ -242,8 +243,8 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
             viewport={{ once: true }}
             className="flex items-end justify-between border-b border-line pb-4"
           >
-            <h3 className="text-sm font-bold uppercase tracking-[3px] text-text-main">Upcoming Circuit</h3>
-            <div className="text-[10px] text-accent animate-pulse font-mono uppercase tracking-widest font-bold">● Live Itinerary</div>
+            <h3 className="text-sm font-bold uppercase tracking-[3px] text-text-main">WSDC Registry Ledger</h3>
+            <div className="text-[10px] text-accent-brand animate-pulse font-mono uppercase tracking-widest font-bold">● Live Itinerary</div>
           </motion.div>
           
           <motion.div 
@@ -286,8 +287,9 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
           </motion.div>
         </div>
 
-        <div className="stats-widget mt-24 w-fit pb-12">
-          <div className="font-serif italic text-3xl text-accent">Connect With the Journey</div>
+        <div className="stats-widget mt-24 w-fit pb-12 relative">
+          <div className="absolute top-2 right-2 text-[8px] font-mono opacity-30 select-none">DATA_REF: 099</div>
+          <div className="font-display font-bold uppercase text-3xl text-accent-brand tracking-tighter">Registry Calibration</div>
           <div className="text-[10px] uppercase tracking-[2px] text-text-dim mt-2 font-mono">
             Currently Obsessed: Hypervolt Mini & Motown Monday
           </div>

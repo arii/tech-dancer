@@ -77,9 +77,9 @@ export default function Engine() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
+        className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16"
       >
-        <div className="content-card overflow-hidden !p-0">
+        <div className="md:col-span-7 content-card overflow-hidden !p-0">
           <div className="aspect-video bg-line overflow-hidden">
             <motion.img 
               whileHover={{ scale: 1.05 }}
@@ -91,15 +91,15 @@ export default function Engine() {
             />
           </div>
           <div className="p-8 space-y-4">
-            <h3 className="text-2xl font-serif font-bold text-text-main">Data with a Heartbeat.</h3>
-            <p className="text-[15px] text-text-body leading-[1.8]">
+            <h3 className="text-3xl font-display font-bold text-text-main uppercase tracking-tighter">Data with a Heartbeat.</h3>
+            <p className="text-[15px] text-text-body leading-[1.8] font-sans opacity-80">
               I use my robotics background to crack the code of West Coast Swing. 
               From judge consistency to the physics of connection, this is data you can actually use on the floor.
             </p>
           </div>
         </div>
-        <div className="space-y-8">
-          <h3 className="text-xl font-sans font-bold uppercase tracking-[1px] text-text-main border-b-2 border-accent w-fit pb-1">Quick Insights</h3>
+        <div className="md:col-span-5 space-y-8">
+          <h3 className="text-sm font-sans font-bold uppercase tracking-[3px] text-text-main border-b border-line w-full pb-4 leading-none">Quick Insights</h3>
           <motion.div 
             initial="hidden"
             animate="visible"
@@ -119,16 +119,16 @@ export default function Engine() {
                   hidden: { opacity: 0, x: 20 },
                   visible: { opacity: 1, x: 0 }
                 }}
-                whileHover={{ x: 5, borderColor: 'var(--color-accent)' }}
-                className="content-card !p-6 flex items-center gap-6 group hover:border-accent transition-colors cursor-default"
+                whileHover={{ x: 5, borderColor: 'var(--color-accent-brand)' }}
+                className="bg-bg border border-line !p-6 flex items-center gap-6 group hover:border-accent-brand transition-colors cursor-default scanline-hover"
               >
-                <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0">
-                  <pack.icon className="w-6 h-6" />
+                <div className="w-12 h-12 bg-accent/5 border border-accent/10 flex items-center justify-center text-accent shrink-0">
+                  <pack.icon className="w-6 h-6 stroke-1" />
                 </div>
                 <div className="space-y-1">
-                  <div className="text-[10px] text-accent font-mono uppercase font-bold tracking-widest">{pack.category}</div>
-                  <div className="text-lg font-serif font-bold text-text-main leading-tight">{pack.focus}</div>
-                  <div className="text-sm italic text-text-body">"{pack.benefit}"</div>
+                  <div className="text-[10px] text-accent-brand font-mono uppercase font-bold tracking-widest leading-none">{pack.category}</div>
+                  <div className="text-xl font-display font-bold text-text-main leading-tight uppercase tracking-tight">{pack.focus}</div>
+                  <div className="text-xs italic text-text-dim font-sans">"{pack.benefit}"</div>
                 </div>
               </motion.div>
             ))}

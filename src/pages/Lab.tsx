@@ -34,17 +34,18 @@ export default function Lab() {
         </button>
 
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">
+          <div className="flex items-center gap-4 mb-6 relative">
+            <div className="absolute -top-4 right-0 text-[8px] font-mono opacity-30 select-none">ITEM_REF: {selectedGear.slug?.toUpperCase()}</div>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand border border-accent-brand/20 px-3 py-1">
               {selectedGear.category}
             </span>
-            <div className="flex items-center gap-2 text-text-dim text-xs font-medium">
+            <div className="flex items-center gap-2 text-text-dim text-[10px] font-mono uppercase tracking-widest">
               <Calendar className="w-3 h-3" />
               {selectedGear.date}
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-text-main mb-12 leading-tight">
+          <h1 className="text-4xl md:text-7xl font-display font-bold text-text-main mb-12 leading-none uppercase tracking-tighter">
             {selectedGear.title}
           </h1>
 
@@ -58,9 +59,10 @@ export default function Lab() {
 
   return (
     <section className="panel h-full overflow-y-auto">
-      <div className="mb-12 p-4 bg-accent/5 border border-accent/20 rounded-none italic text-[11px] text-text-dim max-w-2xl font-sans leading-relaxed">
-        <span className="text-accent font-bold uppercase tracking-wider mr-2">Advisory:</span>
-        This site contains affiliate links. If you use these links to buy something, I may earn a commission. I only recommend gear I have personally tested for 8+ hour social dance durability.
+      <div className="mb-12 p-6 bg-accent-brand/5 border border-accent-brand/20 rounded-none text-[11px] text-text-dim max-w-2xl font-mono leading-relaxed relative">
+        <div className="absolute top-2 right-2 text-[8px] opacity-30">REF_ID: ADV_001</div>
+        <span className="text-accent-brand font-bold uppercase tracking-wider mr-2">Advisory:</span>
+        This project ledger contains affiliate integrations. If you utilize these links for procurement, I may earn a commission. I exclusively advocate for hardware that has survived 12+ hour stress-tests in competition cycles.
       </div>
 
       <div className="space-y-8 mb-16 px-4 md:px-0">
@@ -82,10 +84,10 @@ export default function Lab() {
           />
         </div>
         <div className="p-12 space-y-6">
-          <h3 className="text-3xl font-display font-bold text-text-main uppercase">Lead with the Dance.</h3>
-          <p className="text-lg text-text-body leading-relaxed max-w-3xl">
-            I don't just review products; I test them in the wild. From the 2:00 AM social floor to the 8:00 AM airport dash, 
-            these are the tools that survive the WCS circuit.
+          <h3 className="text-4xl font-display font-bold text-text-main uppercase tracking-tight">Lead with the Technical.</h3>
+          <p className="text-lg text-text-body leading-relaxed max-w-3xl font-sans">
+            I don't just review products; I benchmark them in high-variance environments. From the 2:00 AM social floor to the 8:00 AM airport dash, 
+            this is the hardware that survives the WSDC Registry cycles.
           </p>
         </div>
       </div>
@@ -102,34 +104,38 @@ export default function Lab() {
             }
           }
         }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-line bg-line"
+        className="grid grid-cols-1 md:grid-cols-12 gap-0 border-t border-l border-line bg-line"
       >
-        {gear.map((item, index) => (
-          <motion.div
-            key={item.slug}
-            variants={{
-              hidden: { opacity: 0, y: 10 },
-              visible: { opacity: 1, y: 0 }
-            }}
-            onClick={() => setSelectedGear(item)}
-            className="bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-colors flex flex-col h-full border-r border-b border-line"
-          >
-            <div className="text-accent mb-8">
-              <ShoppingBag className="w-8 h-8 stroke-1" />
-            </div>
-            <div className="space-y-4 flex-1">
-              <div className="flex items-center gap-4">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent">{item.category}</span>
-                <div className="text-[9px] font-mono border border-accent/30 text-accent px-2 py-0.5 uppercase font-bold">Hardware</div>
+        {gear.map((item, index) => {
+          const isWide = index % 3 === 0;
+          return (
+            <motion.div
+              key={item.slug}
+              variants={{
+                hidden: { opacity: 0, y: 10 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              onClick={() => setSelectedGear(item)}
+              className={`bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-colors flex flex-col h-full border-r border-b border-line scanline-hover opacity-90 hover:opacity-100 ${isWide ? 'md:col-span-8' : 'md:col-span-4'}`}
+            >
+              <div className="text-accent-brand mb-8 flex justify-between items-start">
+                <ShoppingBag className="w-8 h-8 stroke-1" />
+                <span className="text-[10px] font-mono opacity-20">ID_{index.toString().padStart(3, '0')}</span>
               </div>
-              <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent transition-colors leading-none uppercase">{item.title}</h4>
-              <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans">{item.excerpt}</p>
-            </div>
-            <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent pt-10 group-hover:translate-x-1 transition-transform mt-auto">
-              Inspect Tool <ArrowRight className="w-3 h-3" />
-            </div>
-          </motion.div>
-        ))}
+              <div className="space-y-4 flex-1">
+                <div className="flex items-center gap-4">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent-brand">{item.category}</span>
+                  <div className="text-[9px] font-mono border border-accent-brand/30 text-accent-brand px-2 py-0.5 uppercase font-bold">Hardware</div>
+                </div>
+                <h4 className="text-2xl font-display font-bold text-text-main group-hover:text-accent-brand transition-colors leading-none uppercase tracking-tighter">{item.title}</h4>
+                <p className="text-sm text-text-body leading-relaxed line-clamp-3 font-sans opacity-80">{item.excerpt}</p>
+              </div>
+              <div className="flex items-center gap-3 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent-brand pt-10 group-hover:translate-x-1 transition-transform mt-auto">
+                Inspect Tool <ArrowRight className="w-3 h-3" />
+              </div>
+            </motion.div>
+          );
+        })}
       </motion.div>
     </section>
   );

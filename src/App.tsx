@@ -125,12 +125,18 @@ export default function App() {
         <footer className="border-t border-line py-8 px-8 bg-bg">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="space-y-2 text-center md:text-left">
-              <div className="text-[9px] font-display font-black text-accent tracking-[0.2em] uppercase">
+              <div className="text-[9px] font-display font-black text-accent-brand tracking-[0.2em] uppercase">
                 ARIEL ANDERS // TECH-DANCER
               </div>
-              <p className="text-[9px] text-text-dim font-mono uppercase tracking-widest">
-                SYSTEM_ID: 2026_AA_PORTFOLIO
-              </p>
+              <div className="flex items-center justify-center md:justify-start gap-4">
+                <p className="text-[9px] text-text-dim font-mono uppercase tracking-widest">
+                  SYSTEM_ID: 2026_AA_PORTFOLIO
+                </p>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 bg-green-500 animate-pulse" />
+                  <span className="text-[7px] font-mono text-text-dim/50 uppercase">Sync_Ready</span>
+                </div>
+              </div>
             </div>
             
             <div className="flex gap-8 text-[9px] font-mono uppercase tracking-[0.1em] text-text-dim">

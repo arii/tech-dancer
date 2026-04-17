@@ -198,7 +198,10 @@ export default function Contact() {
               className="w-full bg-text-main text-bg py-5 font-bold uppercase tracking-[3px] text-xs hover:bg-black transition-all flex items-center justify-center gap-3 disabled:opacity-50"
             >
               {isSubmitting ? (
-                <div className="w-5 h-5 border-2 border-line/30 border-t-line animate-spin" />
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 border-2 border-bg/30 border-t-bg animate-spin" />
+                  <span className="font-mono text-[10px] animate-pulse uppercase">Calibrating Variance...</span>
+                </div>
               ) : (
                 <>
                   <Send className="w-4 h-4" />

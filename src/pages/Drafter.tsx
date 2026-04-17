@@ -194,36 +194,36 @@ ${formData.commentary}
 
       <div className="flex flex-col md:flex-row md:items-end justify-between items-start gap-8 mb-16 border-b border-line pb-12">
         <div className="space-y-6">
-          <div className="flex items-center gap-3 text-accent mb-2">
-            <TerminalIcon className="w-5 h-5" />
-            <span className="text-[10px] font-mono font-bold uppercase tracking-[4px]">Internal_Systems_Console</span>
+            <div className="flex items-center gap-3 text-accent-brand mb-2">
+              <TerminalIcon className="w-5 h-5" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-[4px]">Internal_Systems_Console</span>
+            </div>
+            <h1 className="font-display uppercase text-5xl md:text-8xl leading-[0.9] text-text-main font-bold tracking-tighter">
+              The Hub.
+            </h1>
+            <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
+              Administrative terminal for Content Orchestration and Audience Telemetry. Private engineering tools made public for transparency.
+            </p>
           </div>
-          <h1 className="font-display uppercase text-5xl md:text-8xl leading-[0.9] text-text-main font-bold tracking-tighter">
-            The Hub.
-          </h1>
-          <p className="text-lg md:text-xl leading-[1.6] text-text-body max-w-2xl font-sans">
-            Administrative terminal for Content Orchestration and Audience Telemetry. Private engineering tools made public for transparency.
-          </p>
-        </div>
 
-        <div className="flex bg-line p-1 gap-1 w-full md:w-auto">
-          <button 
-            onClick={() => setActiveTool('drafter')}
-            className={`flex-1 md:flex-none px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
-              activeTool === 'drafter' ? 'bg-accent text-white' : 'bg-transparent text-text-dim hover:text-text-main hover:bg-white/5'
-            }`}
-          >
-            [ Content_Engine ]
-          </button>
-          <button 
-            onClick={() => setActiveTool('metrics')}
-            className={`flex-1 md:flex-none px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
-              activeTool === 'metrics' ? 'bg-accent text-white' : 'bg-transparent text-text-dim hover:text-text-main hover:bg-white/5'
-            }`}
-          >
-            [ Telemetry_Lab ]
-          </button>
-        </div>
+          <div className="flex bg-line p-1 gap-1 w-full md:w-auto">
+            <button 
+              onClick={() => setActiveTool('drafter')}
+              className={`flex-1 md:flex-none px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
+                activeTool === 'drafter' ? 'bg-accent text-white' : 'bg-transparent text-text-dim hover:text-text-main hover:bg-white/5'
+              }`}
+            >
+              [ Content_Engine ]
+            </button>
+            <button 
+              onClick={() => setActiveTool('metrics')}
+              className={`flex-1 md:flex-none px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
+                activeTool === 'metrics' ? 'bg-accent text-white' : 'bg-transparent text-text-dim hover:text-text-main hover:bg-white/5'
+              }`}
+            >
+              [ Telemetry_Lab ]
+            </button>
+          </div>
       </div>
 
       <AnimatePresence mode="wait">
@@ -233,10 +233,10 @@ ${formData.commentary}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="grid grid-cols-1 xl:grid-cols-2 gap-12 max-w-7xl"
+            className="grid grid-cols-1 md:grid-cols-12 gap-12 max-w-7xl"
           >
             {/* Input Form */}
-            <div className="space-y-8">
+            <div className="space-y-8 md:col-span-7">
               <div className="bg-bg border border-line p-8 space-y-6">
                 <div className="flex justify-between items-center border-b border-line pb-4">
                   <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// CONFIG_INPUT</h3>
@@ -405,7 +405,7 @@ ${formData.commentary}
             </div>
 
             {/* Live Preview */}
-            <div className="space-y-8 sticky top-0">
+            <div className="space-y-8 sticky top-0 md:col-span-5">
               <div className="flex items-center justify-between">
                 <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// OUTPUT_BUFFER</h3>
                 <div className="flex gap-2">
@@ -413,7 +413,7 @@ ${formData.commentary}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={copyToClipboard}
-                    className="p-2 border border-line hover:border-accent hover:text-accent transition-colors group relative"
+                    className="p-2 border border-line hover:border-accent-brand hover:text-accent-brand transition-colors group relative"
                     title="Copy Markdown"
                   >
                     <Copy className="w-4 h-4" />
@@ -423,7 +423,7 @@ ${formData.commentary}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="absolute -top-10 left-1/2 -translate-x-1/2 bg-accent text-white text-[10px] py-1 px-2 font-mono whitespace-nowrap"
+                          className="absolute -top-10 left-1/2 -translate-x-1/2 bg-accent-brand text-white text-[10px] py-1 px-2 font-mono whitespace-nowrap"
                         >
                           COPIED_TO_CLIPBOARD
                         </motion.span>
@@ -435,14 +435,14 @@ ${formData.commentary}
 
               <motion.div 
                 layout
-                className="bg-surface border border-line overflow-hidden shadow-2xl"
+                className="bg-card-bg border border-line overflow-hidden shadow-2xl"
               >
                 <div className="bg-line/50 px-6 py-3 border-b border-line flex items-center justify-between">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Markdown_Source</span>
                   <motion.span 
                     animate={{ opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 2, repeat: Infinity }}
-                    className="text-[10px] font-mono text-accent"
+                    className="text-[10px] font-mono text-accent-brand"
                   >
                     STATUS: READY
                   </motion.span>
@@ -457,7 +457,7 @@ ${formData.commentary}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={submitToGithub}
-                  className="w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-black transition-all flex items-center justify-center gap-3 group"
+                  className="w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3 group"
                 >
                   <Github className="w-5 h-5 transition-transform group-hover:rotate-12" />
                   DEPLOY TO GITHUB PIPELINE
@@ -473,14 +473,14 @@ ${formData.commentary}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="bg-accent/5 border border-accent/20 p-6 space-y-4"
+                className="bg-accent-brand/5 border border-accent-brand/20 p-6 space-y-4"
               >
-                <div className="flex items-center gap-3 text-accent mb-2">
+                <div className="flex items-center gap-3 text-accent-brand mb-2">
                   <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                   <h4 className="text-[10px] font-mono font-bold uppercase tracking-widest">AI_DRFT_PRO_MODULE</h4>
                 </div>
                 <p className="text-[11px] text-text-body leading-relaxed font-sans">
-                  Request tone optimization for the current draft. Balanced for MIT research clinicality and circuit energy.
+                  Request tone optimization for the current draft. Balanced for MIT structural integrity and WSDC Registry dynamics.
                 </p>
                 <motion.button 
                   whileHover={{ scale: 1.01 }}
@@ -498,31 +498,34 @@ ${formData.commentary}
                       tags: formData.tags || "[No Tags Provided]"
                     };
 
-                    const prompt = `Please act as an expert affiliate marketer and blog copywriter for my "Tech-Dancer" niche website. 
+                    const prompt = `Please act as an expert affiliate marketer and technical blog copywriter for my "Tech-Dancer" niche website. 
+Maintain a balance between MIT structural integrity and WSDC Registry dynamics. Use "Bougie on a Budget" terminology where appropriate.
 
-I am providing my current draft details in JSON format. Please improve and expand upon them, making the copy engaging, well-structured, naturally weaving in my commentary, and ensuring the provided SEO terms are naturally integrated into the text.
+EDITORIAL PROTOCOL:
+1. THE AFFILIATE BRIDGE: For any gear mentions (productName: ${formData.productName}), follow this sequence:
+   - Identify a Social Floor Pain Point (e.g., foot fatigue, loud music).
+   - Write 2 sentences validating the frustration ("Real Talk").
+   - Insert the product as the systematic "Gear Solution".
+2. TERMINOLOGY LINTING: Use "WSDC Registry" instead of "Circuit". Use "Compression", "Stretch", and "Anchor" accurately.
+3. BURN-LIST: NEVER use "journey", "vibrant", "testament", or "unlock your potential".
 
-Maintain a balance between MIT researcher clinicality and WCS circuit excitement. Use "Bougie on a Budget" terminology where appropriate.
-
-CRITICAL INSTRUCTION REGARDING IMAGES: Do NOT generate, hallucinate, or include any Markdown image tags (e.g., ![alt text](url)) in your response. I will handle the image placement separately within my generator. You MAY however suggest a relevant high-quality image URL or Picsum seed in the 'image' field if requested.
+I am providing my current draft details in JSON format. Please improve and expand upon them. Respond ONLY with a valid JSON object using keys: 'title', 'tagline', 'description', 'seoTerms', 'productName', 'affiliateLink', 'commentary', 'tags', 'image'.
 
 Current Data:
-${JSON.stringify(currentData, null, 2)}
-
-Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagline', 'description', 'seoTerms', 'productName', 'affiliateLink', 'commentary', 'tags', 'image'. The 'commentary' field should contain the full, expanded Markdown blog post body. Do not include any conversational text or markdown blocks like \`\`\`json outside the object.`;
+${JSON.stringify(currentData, null, 2)}`;
                     
                     navigator.clipboard.writeText(prompt);
                     setShowSuccess(true);
                     setTimeout(() => setShowSuccess(false), 2000);
                   }}
-                  className="w-full py-2 border border-accent/30 text-accent text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-accent/10 transition-colors"
+                  className="w-full py-2 border border-accent-brand/30 text-accent-brand text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-accent-brand/10 transition-colors"
                 >
                   GENERATE_AI_OPTIM_PROMPT
                 </motion.button>
 
                 <motion.div 
                   animate={aiError ? { x: [-2, 2, -2, 2, 0] } : {}}
-                  className="pt-4 border-t border-accent/10 space-y-3"
+                  className="pt-4 border-t border-accent-brand/10 space-y-3"
                 >
                   <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">PASTE_AI_JSON_STREAM</label>
                   <textarea 
@@ -530,13 +533,13 @@ Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagli
                     value={aiJson}
                     onChange={(e) => setAiJson(e.target.value)}
                     placeholder='{"title": "...", "commentary": "..."}'
-                    className={`w-full bg-bg border ${aiError ? 'border-accent' : 'border-line'} px-4 py-3 text-[10px] font-mono focus:outline-none focus:border-accent transition-colors`}
+                    className={`w-full bg-bg border ${aiError ? 'border-accent-brand' : 'border-line'} px-4 py-3 text-[10px] font-mono focus:outline-none focus:border-accent-brand transition-colors`}
                   />
                   <motion.button 
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={applyAiJson}
-                    className="w-full py-2 bg-accent text-white text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-accent-orange transition-colors"
+                    className="w-full py-2 bg-accent-brand text-white text-[10px] font-mono font-bold uppercase tracking-widest hover:opacity-90 transition-all"
                   >
                     APPLY_AI_ARCHITECTURE
                   </motion.button>
@@ -559,10 +562,10 @@ Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagli
                 { label: 'Broadband_Reach', value: dummyMetrics.contentReach, icon: Globe, trend: '+452' },
                 { label: 'System_Compute', value: dummyMetrics.systemLoad, icon: Cpu, trend: 'Optimal' },
               ].map((stat) => (
-                <div key={stat.label} className="bg-bg border border-line p-6 space-y-4">
+                <div key={stat.label} className="bg-bg border border-line p-6 space-y-4 scanline-hover">
                   <div className="flex items-center justify-between text-text-dim">
                     <stat.icon className="w-4 h-4" />
-                    <span className="text-[10px] font-mono text-accent">{stat.trend}</span>
+                    <span className="text-[10px] font-mono text-accent-brand">{stat.trend}</span>
                   </div>
                   <div className="space-y-1">
                     <div className="text-2xl font-display font-black text-text-main">{stat.value}</div>
@@ -572,11 +575,11 @@ Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagli
               ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-surface border border-line p-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+              <div className="bg-card-bg border border-line p-8 space-y-8 md:col-span-12 lg:col-span-7">
                 <div className="flex items-center justify-between">
                   <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// AUDIENCE_TRAFFIC_WAVE</h3>
-                  <BarChart3 className="w-4 h-4 text-accent" />
+                  <BarChart3 className="w-4 h-4 text-accent-brand" />
                 </div>
                 <div className="h-[300px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -597,8 +600,8 @@ Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagli
                       <Area 
                         type="monotone" 
                         dataKey="users" 
-                        stroke="var(--color-accent)" 
-                        fill="var(--color-accent)" 
+                        stroke="var(--color-accent-brand)" 
+                        fill="var(--color-accent-brand)" 
                         fillOpacity={0.1} 
                         strokeWidth={2}
                       />
@@ -607,12 +610,12 @@ Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagli
                 </div>
               </div>
 
-              <div className="bg-surface border border-line p-8 space-y-8">
+              <div className="bg-card-bg border border-line p-8 space-y-8 md:col-span-12 lg:col-span-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// SYSTEM_LOAD_LATENCY</h3>
-                  <Activity className="w-4 h-4 text-accent" />
+                  <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main">// LOAD_LATENCY</h3>
+                  <Activity className="w-4 h-4 text-accent-brand" />
                 </div>
-                <div className="h-[300px] w-full">
+                <div className="h-[150px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={dummyMetrics.timeline}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-line)" vertical={false} />
@@ -629,12 +632,37 @@ Respond ONLY with a valid JSON object using the exact same keys: 'title', 'tagli
                       <Line 
                         type="stepAfter" 
                         dataKey="load" 
-                        stroke="var(--color-accent)" 
+                        stroke="var(--color-accent-brand)" 
                         strokeWidth={2} 
                         dot={false}
                       />
                     </LineChart>
                   </ResponsiveContainer>
+                </div>
+                <div className="pt-8 border-t border-line">
+                   <h3 className="text-[10px] font-mono font-bold uppercase tracking-[2px] text-text-main mb-6">// SUBSYSTEM_REPORT</h3>
+                   <div className="space-y-4">
+                     {[
+                       { name: 'Registry_Sync', status: 'Optimal', value: 98 },
+                       { name: 'Analysis_Engine', status: 'Synced', value: 100 },
+                       { name: 'Circuit_Buffer', status: 'Buffering', value: 45 },
+                     ].map(item => (
+                       <div key={item.name} className="space-y-1">
+                         <div className="flex justify-between text-[8px] font-mono uppercase tracking-widest text-text-dim">
+                           <span>{item.name}</span>
+                           <span>{item.status}</span>
+                         </div>
+                         <div className="h-1 bg-line w-full overflow-hidden">
+                           <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${item.value}%` }}
+                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
+                            className="h-full bg-accent-brand" 
+                           />
+                         </div>
+                       </div>
+                     ))}
+                   </div>
                 </div>
               </div>
             </div>

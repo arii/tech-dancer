@@ -21,8 +21,9 @@ export default function About() {
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="flex-1 space-y-6">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-[3px] text-accent block">
+        <div className="flex-1 space-y-6 relative">
+          <div className="absolute top-0 right-0 text-[8px] font-mono opacity-30 select-none">FILE_REF: AA_001</div>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-[3px] text-accent-brand block">
             // PERSONNEL_FILE: AA_001
           </span>
           <h1 className="font-display uppercase text-5xl md:text-8xl leading-[0.9] text-text-main font-bold tracking-tighter">
@@ -32,38 +33,40 @@ export default function About() {
             MIT Roboticist. WCS Competitor. Data Architect.
           </div>
           <p className="text-lg text-text-body/80 max-w-xl font-sans">
-            I use my background in robotics to find the best gear, travel systems, and analysis platforms for the West Coast Swing circuit. 
+            I use my background in robotics to find the best gear, travel systems, and analysis platforms for the WSDC Registry. 
             Maximizing the WCS lifestyle through system-level optimization.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-line bg-line mb-20">
-        <div className="bg-bg p-8 md:p-12 border-b md:border-b-0 md:border-r border-line space-y-8">
-          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">The Origin Story</h3>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-0 border border-line bg-line mb-20">
+        <div className="bg-bg p-8 md:p-12 border-b md:border-b-0 md:border-r border-line space-y-8 md:col-span-7">
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">The Entry Point</h3>
           <p className="text-[15px] text-text-body leading-[1.8] font-sans">
-            My journey into partner dance started in 2019 with Lindy Hop and Fusion. Seeking progression in San Francisco, I signed up for a series at Mission City Swing—not realizing it wasn't a Lindy venue. They were playing music like "In Da Club" by 50 Cent and it was so much fun that I never left. WCS is now my primary focus, driven by the event circuit and the incredible quality of the community.
+            My initiation into partner dance started in 2019 with Lindy Hop and Fusion. Seeking progression in San Francisco, I signed up for a series at Mission City Swing—not realizing it wasn't a Lindy venue. They were playing music like "In Da Club" by 50 Cent and it was so much fun that I never left. WCS is now my primary focus, driven by the WSDC Registry Ledger and the specialized mechanics of the community.
           </p>
         </div>
-        <div className="bg-bg p-8 md:p-12 space-y-8">
+        <div className="bg-bg p-8 md:p-12 space-y-8 md:col-span-5">
           <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">Scientific Merit</h3>
           <p className="text-[15px] text-text-body leading-[1.8] font-sans">
-            I care a lot about making things work. Since 2010, I’ve been dedicated to building robotic systems that remain reliable in complex and uncertain domains. From my PhD at MIT CSAIL to my work in the industry, I don’t just analyze data to make sense of things—I build real-world systems that perform. I consider myself a pragmatic roboticist: I leverage machine learning alongside classical AI techniques and solid software design principles to build systems that are robust, functional, and ready for the task at hand.
+            I care a lot about making things work. Since 2010, I’ve been dedicated to building robotic systems that remain reliable in complex and uncertain domains. From my PhD at MIT CSAIL to my work in industry, I build real-world systems that perform. I consider myself a pragmatic roboticist: I leverage machine learning alongside classical AI techniques to build robust modules.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-x border-b border-line bg-line mb-20">
-        <div className="bg-bg p-8 md:p-12 border-b md:border-b-0 md:border-r border-line space-y-8">
-          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">Circuit Protocol</h3>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-0 border-x border-b border-line bg-line mb-20">
+        <div className="bg-bg p-8 md:p-12 border-b md:border-b-0 md:border-r border-line space-y-8 relative md:col-span-5">
+          <div className="absolute top-2 right-2 text-[8px] font-mono opacity-30 select-none">PROTOCOL: 004</div>
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-text-main">Registry Ledger Protocol</h3>
           <p className="text-[15px] text-text-body leading-[1.8] font-sans">
-            I’m a competitive Intermediate-level follow (and an occasional lead!) who loves the conversation and connection unique to WCS. Mission City Swing is my home base. If it’s a Wednesday night in San Francisco, you'll find me at the tech-bench or on the floor.
+            I’m a competitive Intermediate-level follow (and an occasional lead!) who loves the conversation and connection unique to WCS. Mission City Swing is my home base.
           </p>
         </div>
-        <div className="bg-accent text-white p-8 md:p-12 space-y-8">
-          <h3 className="text-2xl font-display font-bold uppercase tracking-tight">Bougie on a Budget</h3>
+        <div className="bg-accent-brand text-white p-8 md:p-12 space-y-8 relative md:col-span-7">
+          <div className="absolute top-2 right-2 text-[8px] font-mono opacity-40 select-none text-white">SYSTEM: B.O.B</div>
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tight text-white">Bougie on a Budget</h3>
           <p className="text-[15px] text-white/90 leading-[1.8] font-sans">
-            I maximize credit card perks and hotel benefits to make the convention circuit lifestyle both high-end and highly feasible. I'm known for my bright, fun outfits and my "efficiency-first" travel philosophy.
+            I maximize credit card perks and hotel benefits to make the WSDC competition cycle lifestyle both high-end and highly feasible. I'm known for "efficiency-first" travel philosophy.
           </p>
         </div>
       </div>

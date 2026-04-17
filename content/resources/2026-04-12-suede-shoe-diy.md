@@ -14,26 +14,27 @@ tags:
   - budget
 ---
 
-## What You Need
+## The Pain Point: Inconsistent Traction
 
-List all materials, products, or prerequisites here.
+There is nothing worse than arriving at a major WSDC convention only to find that the hotel ballroom floor is either a "slip-and-slide" or effectively a sheet of flypaper. When your equipment fails to provide predictable friction, your technique—and your knee health—takes the hit.
 
-| Item | Why It Matters | Approx. Cost |
+## The Solution: DIY Suede Calibration
+
+Instead of paying the $180 "dance shoe tax" for flimsy professional shoes, I use a systematic $15 DIY approach to convert my favorite comfortable sneakers into high-performance dance hardware.
+
+### Required Hardware
+
+| Asset | Technical Purpose | ROI |
 |---|---|---|
-| Adhesive Suede Sheet | Controls friction coefficient | $12 |
-| Isopropyl Alcohol | Surface prep — removes oils | $3 |
-| Barge Cement | The industry standard for bonding | $8 |
+| Adhesive Suede | Micro-texture for friction control | High |
+| Barge Cement | Permanent bond under shear stress | Critical |
+| Isopropyl Alcohol | Surface de-contamination | Essential |
 
-## Step-by-Step
+### Step-by-Step Protocol
 
-### Step 1 — Surface Prep
-Clean the sole thoroughly with isopropyl alcohol. Ensure no rubber residue or dust remains for maximum adhesive bond.
-
-### Step 2 — Application
-Apply a thin, even layer of Barge Cement to both the shoe sole and the suede backing. Wait 15 minutes until tacky.
-
-### Step 3 — Cure & Test
-Press firmly and use a rubber mallet to ensure contact. Let cure for 24 hours under pressure before dancing.
+1.  **De-contamination**: Clean the rubber sole with isopropyl alcohol. Any residual oils will compromise the bond during 4:00 AM social sets.
+2.  **Contact Adhesion**: Apply a thin layer of Barge Cement to both the shoe and the suede. Wait for it to become tacky—physics requires the solvent to evaporate for a primary bond.
+3.  **Pressure Cure**: Press the surfaces together and let cure for 24 hours. The resulting hardware is rugged enough for any social floor.
 
 ## Performance Notes
 These modification have survived 8+ hour social sets at major conventions. The bond is permanent and the friction is highly consistent.
