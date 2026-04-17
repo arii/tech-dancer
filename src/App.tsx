@@ -101,6 +101,7 @@ export default function App() {
                   <input 
                     type="email" 
                     name="email"
+                    aria-label="Email address for newsletter"
                     placeholder="ENTER_EMAIL_DESTINATION..." 
                     className="bg-white/10 border border-white/20 px-4 py-2 text-[11px] font-mono focus:outline-none focus:bg-white/20 transition-all w-full placeholder:text-white/40"
                     required

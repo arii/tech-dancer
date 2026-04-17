@@ -59,6 +59,7 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 text-text-main hover:text-accent-brand transition-colors relative z-[120]"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           <AnimatePresence mode="wait">
             <motion.div
