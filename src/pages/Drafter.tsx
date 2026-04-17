@@ -181,7 +181,7 @@ ${formData.commentary}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -20 }}
-            className="fixed bottom-12 right-12 bg-accent text-white px-8 py-6  z-[200] border-2 border-white/20 flex items-center gap-4"
+            className="fixed bottom-12 right-12 bg-accent text-white px-8 py-6 shadow-2xl z-[200] border-2 border-white/20 flex items-center gap-4"
           >
             <CheckCircle2 className="w-8 h-8" />
             <div className="space-y-1">
@@ -435,7 +435,7 @@ ${formData.commentary}
 
               <motion.div 
                 layout
-                className="bg-card-bg border border-line overflow-hidden "
+                className="bg-card-bg border border-line overflow-hidden shadow-2xl"
               >
                 <div className="bg-line/50 px-6 py-3 border-b border-line flex items-center justify-between">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim">Markdown_Source</span>
@@ -645,7 +645,7 @@ ${JSON.stringify(currentData, null, 2)}`;
                      {[
                        { name: 'Registry_Sync', status: 'Optimal', value: 98 },
                        { name: 'Analysis_Engine', status: 'Synced', value: 100 },
-                       { name: 'Registry_Buffer', status: 'Calibrating Variance...', value: 45 },
+                       { name: 'Circuit_Buffer', status: 'Buffering', value: 45 },
                      ].map(item => (
                        <div key={item.name} className="space-y-1">
                          <div className="flex justify-between text-[8px] font-mono uppercase tracking-widest text-text-dim">
