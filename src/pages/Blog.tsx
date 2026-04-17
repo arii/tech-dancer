@@ -76,7 +76,7 @@ export default function Blog() {
             initial={{ scale: 1.05, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-            className="aspect-[21/9] border border-line overflow-hidden mb-16 "
+            className="aspect-[21/9] border border-line overflow-hidden mb-16 shadow-2xl"
           >
             <img src={selectedPost.image} alt={selectedPost.title} className="w-full h-full object-cover grayscale" referrerPolicy="no-referrer" />
           </motion.div>

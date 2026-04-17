@@ -175,7 +175,6 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
         </motion.div>
 
         {/* Latest Updates Section */}
-        {/* MECHANICAL_NOTE: Staggered entry animation mimics sequential system startup. */}
         <div className="mt-24 space-y-8">
           <motion.div 
             initial={{ opacity: 0 }}
@@ -261,18 +260,16 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                 }
               }
             }}
-            className="grid grid-cols-1 md:grid-cols-12 gap-0 border border-line bg-line"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border border-line bg-line"
           >
-            {upcomingEvents.map((event, idx) => {
-              const isWide = idx % 2 === 0;
-              return (
+            {upcomingEvents.map((event, idx) => (
               <motion.div 
                 key={event.name} 
                 variants={{
                   hidden: { opacity: 0 },
                   visible: { opacity: 1 }
                 }}
-                className={`bg-bg p-6 border-line flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default border-r border-b ${isWide ? 'md:col-span-7' : 'md:col-span-5'}`}
+                className="bg-bg p-6 border-line flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default"
               >
                 <div className="w-10 h-10 border border-line bg-line flex items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
                   <event.icon className="w-5 h-5 stroke-1" />
@@ -286,7 +283,7 @@ export default function Home({ setActiveTab }: { setActiveTab: (tab: string) => 
                   </div>
                 </div>
               </motion.div>
-            );})}
+            ))}
           </motion.div>
         </div>
 

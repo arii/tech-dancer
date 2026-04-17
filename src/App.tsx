@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Lab from './pages/Lab';
@@ -21,10 +21,6 @@ export default function App() {
   const [showEmailBar, setShowEmailBar] = useState(true);
   const shouldReduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    console.log('%c [SYSTEM_BOOT]: Tech-Dancer OS loaded. Calibrating variance... ', 'background: #001F3F; color: #D4AF37; font-family: monospace; font-size: 12px;');
-  }, []);
-
   const renderPage = () => {
     switch (activeTab) {
       case 'home': return <Home setActiveTab={setActiveTab} />;
@@ -39,8 +35,6 @@ export default function App() {
     }
   };
 
-
-  // MECHANICAL_NOTE: Page transitions use a stepped ease to simulate mechanical indexing.
   const pageTransition = {
     initial: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 },
     animate: { opacity: 1, y: 0 },
@@ -75,7 +69,7 @@ export default function App() {
               initial={{ y: 100 }}
               animate={{ y: 0 }}
               exit={{ y: 100 }}
-              className="sticky bottom-0 z-50 bg-accent text-white py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4  border-t border-accent-orange/30"
+              className="sticky bottom-0 z-50 bg-accent text-white py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] border-t border-accent-orange/30"
             >
               <div className="flex items-center gap-6 w-full md:w-auto">
                 <div className="w-10 h-10 border border-white/30 bg-white/5 flex items-center justify-center shrink-0">
@@ -139,7 +133,8 @@ export default function App() {
                   SYSTEM_ID: 2026_AA_PORTFOLIO
                 </p>
                 <div className="flex items-center gap-1">
-                  <span className="text-[7px] font-mono text-green-500 uppercase animate-pulse tracking-widest font-bold">SYSTEM_HEALTH: OPTIMAL</span>
+                  <div className="w-1.5 h-1.5 bg-green-500 animate-pulse" />
+                  <span className="text-[7px] font-mono text-text-dim/50 uppercase">Sync_Ready</span>
                 </div>
               </div>
             </div>
