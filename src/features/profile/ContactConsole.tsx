@@ -26,32 +26,54 @@ export default function Contact() {
     submit();
   };
 
-  if (submitted) {
-    return (
-      <Box as="section" panel className="flex flex-col items-center justify-center text-center">
-        <Stack gap={12} align="center">
-          <Box className="w-24 h-24 border border-accent-brand bg-accent-brand/5 flex items-center justify-center text-accent-brand">
-            <Sparkles className="w-12 h-12 stroke-1" />
-          </Box>
-          <Stack gap={4}>
-            <Text variant="headline" size="text-4xl md:text-6xl">Transmission Received.</Text>
-            <Text variant="body" className="max-w-md mx-auto">
-              Data integrity verified. I've received your inquiry and will recalculate my trajectory to respond as soon as possible.
-            </Text>
-          </Stack>
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={reset}
-            className="text-accent-brand font-mono font-bold uppercase tracking-[3px] text-xs border border-accent-brand/20 px-8 py-4 hover:bg-accent-brand/5 transition-colors"
-          >
-            Initialize_New_Contact
-          </motion.button>
-        </Stack>
-      </Box>
-    );
-  }
+  return submitted ? (
+    <SuccessState onReset={reset} />
+  ) : (
+    <ContactForm 
+      formData={formData} 
+      errors={errors} 
+      isSubmitting={isSubmitting} 
+      onChange={handleChange} 
+      onSubmit={handleSubmit} 
+    />
+  );
+}
 
+function SuccessState({ onReset }: { onReset: () => void }) {
+  return (
+    <Box as="section" panel className="flex flex-col items-center justify-center text-center">
+      <Stack gap={12} align="center">
+        <Box className="w-24 h-24 border border-accent-brand bg-accent-brand/5 flex items-center justify-center text-accent-brand">
+          <Sparkles className="w-12 h-12 stroke-1" />
+        </Box>
+        <Stack gap={4}>
+          <Text variant="headline" size="text-4xl md:text-6xl">Transmission Received.</Text>
+          <Text variant="body" className="max-w-md mx-auto">
+            Data integrity verified. I've received your inquiry and will recalculate my trajectory to respond as soon as possible.
+          </Text>
+        </Stack>
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onReset}
+          className="text-accent-brand font-mono font-bold uppercase tracking-[3px] text-xs border border-accent-brand/20 px-8 py-4 hover:bg-accent-brand/5 transition-colors"
+        >
+          Initialize_New_Contact
+        </motion.button>
+      </Stack>
+    </Box>
+  );
+}
+
+interface ContactFormProps {
+  formData: any;
+  errors: any;
+  isSubmitting: boolean;
+  onChange: (e: React.ChangeEvent<any>) => void;
+  onSubmit: (e: React.FormEvent) => void;
+}
+
+function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
   return (
     <Box as="section" panel>
       <Stack gap={8} className="mb-16 px-4 md:px-0">
@@ -65,7 +87,7 @@ export default function Contact() {
         <Box surface="default" className="p-8 md:p-12 border-b md:border-b-0 md:border-r border-line">
           <Stack gap={12}>
             <Stack gap={6}>
-              <Text as="h3" size="text-2xl" weight="font-bold" className="uppercase">Request New Data</Text>
+              <Text as="h3" variant="display" size="text-2xl">Request New Data</Text>
               <Text variant="body" size="text-[15px]" className="max-w-md">
                 The engine thrives on new puzzles. Request stress-tests for specific gear or analytical deep-dives into dance metrics.
               </Text>
@@ -92,7 +114,7 @@ export default function Contact() {
         </Box>
 
         <Box surface="default" className="p-8 md:p-12">
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={onSubmit} className="space-y-8">
             <Stack gap={3}>
               <Box className="flex justify-between items-center">
                 <Text as="label" variant="mono" weight="font-bold" color="dim">Personnel_Name</Text>
@@ -108,7 +130,7 @@ export default function Contact() {
                   errors.name ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.name}
-                onChange={handleChange}
+                onChange={onChange}
               />
             </Stack>
             <Stack gap={3} as={motion.div} animate={errors.email ? { x: [-2, 2, -2, 2, 0] } : {}}>
@@ -126,7 +148,7 @@ export default function Contact() {
                   errors.email ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.email}
-                onChange={handleChange}
+                onChange={onChange}
               />
             </Stack>
             <Stack gap={3}>
@@ -137,7 +159,7 @@ export default function Contact() {
                 transition={{ duration: 0.2 }}
                 className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
                 value={formData.subject}
-                onChange={handleChange}
+                onChange={onChange}
               >
                 <option>General Feedback</option>
                 <option>Content Request</option>
@@ -160,7 +182,7 @@ export default function Contact() {
                   errors.message ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.message}
-                onChange={handleChange}
+                onChange={onChange}
               />
             </Stack>
             <motion.button 

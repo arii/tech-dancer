@@ -3,33 +3,65 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ShoppingBag, BarChart2, BookOpen, User, Home as HomeIcon, PenTool, Menu, X, Mail, FileText, Cpu, Terminal } from 'lucide-react';
+import { ShoppingBag, BarChart2, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal, LucideIcon } from 'lucide-react';
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
+import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { cn } from '@/lib/utils';
+import { routes } from '@/config/routes';
 
-interface NavProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
+const iconMap: Record<string, LucideIcon> = {
+  '/': Home,
+  '/lab': ShoppingBag,
+  '/engine': BarChart2,
+  '/blog': FileText,
+  '/feed': BookOpen,
+  '/systems': Terminal,
+  '/about': User,
+  '/contact': Mail,
+};
+
+function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
+  return (
+    <Box as="li" position="relative" className="group">
+      <NavLink
+        to={to}
+        onClick={onClick}
+        className={({ isActive }) => cn(
+          "flex items-center gap-3 transition-colors relative z-10",
+          isMobile ? "py-3 border-b border-line/50 text-lg" : "py-2 px-1",
+          isActive ? "text-accent-brand" : "text-text-dim group-hover:text-accent-brand"
+        )}
+      >
+        {({ isActive }) => (
+          <>
+            {!isMobile && isActive && (
+              <Box 
+                as={motion.div} 
+                layoutId="nav-indicator"
+                position="absolute"
+                height={4}
+                width={1}
+                surface="accent"
+                className="left-[-20px] bg-accent-brand"
+                transition={{ type: 'spring', damping: 20, stiffness: 250 }}
+              />
+            )}
+            <Icon className="w-5 h-5 md:w-4 md:h-4 stroke-1" />
+            <Text variant={isMobile ? "display" : "mono"} size={isMobile ? "base" : "xs"} weight="font-bold" uppercase tracking="widest" className="text-current">
+              {label}
+            </Text>
+          </>
+        )}
+      </NavLink>
+      {!isMobile && <Box position="absolute" inset surface="accent" opacity={5} className="opacity-0 group-hover:opacity-100 transition-opacity -z-10" />}
+    </Box>
+  );
 }
 
-export default function Navigation({ activeTab, setActiveTab }: NavProps) {
+export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const navItems = [
-    { id: 'home', label: 'Home', icon: HomeIcon },
-    { id: 'lab', label: 'Gear Reviews', icon: ShoppingBag },
-    { id: 'engine', label: 'Dance Analytics', icon: BarChart2 },
-    { id: 'blog', label: 'Blog', icon: FileText },
-    { id: 'feed', label: 'Resources', icon: BookOpen },
-    { id: 'systems', label: 'Systems', icon: Terminal },
-    { id: 'about', label: 'About Ariel', icon: User },
-    { id: 'contact', label: 'Contact', icon: Mail },
-  ];
-
-  const handleNavClick = (id: string) => {
-    setActiveTab(id);
-    setIsOpen(false);
-  };
 
   const containerVariants = {
     closed: { opacity: 0, x: -20 },
@@ -51,11 +83,11 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
   return (
     <>
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface border-b border-line z-[110] flex items-center justify-between px-6">
-        <div className="flex flex-col">
-          <span className="text-xs font-display font-bold tracking-[1px] uppercase text-text-main">Ariel Anders</span>
-          <span className="text-[8px] text-accent-brand uppercase tracking-widest font-bold">MIT Roboticist // WCS</span>
-        </div>
+      <Box layout="mobileHeader">
+        <Stack gap={0}>
+          <Text variant="display" size="xs" color="brand" weight="font-bold" tracking="tight">Ariel Anders</Text>
+          <Text variant="micro" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">MIT Roboticist // WCS</Text>
+        </Stack>
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 text-text-main hover:text-accent-brand transition-colors relative z-[120]"
@@ -72,109 +104,85 @@ export default function Navigation({ activeTab, setActiveTab }: NavProps) {
             </motion.div>
           </AnimatePresence>
         </button>
-      </div>
+      </Box>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <Box 
+            as={motion.div} 
             initial={{ opacity: 0, x: '-100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="md:hidden fixed inset-0 bg-bg z-[100] pt-24 px-8 overflow-y-auto"
+            position="fixed"
+            inset
+            surface="bg"
+            zIndex="top"
+            padding="nav"
+            overflow="y-auto"
+            className="md:hidden pt-24"
           >
-            <motion.ul 
-              variants={containerVariants}
-              initial="closed"
-              animate="open"
-              className="space-y-6"
-            >
-              {navItems.map((item) => (
-                <motion.li
-                  key={item.id}
-                  variants={itemVariants}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-4 py-3 border-b border-line/50 transition-colors ${
-                    activeTab === item.id ? 'text-accent-brand' : 'text-text-main'
-                  }`}
-                >
-                  <item.icon className="w-6 h-6" />
-                  <span className="text-lg font-display font-bold uppercase tracking-tight">{item.label}</span>
-                </motion.li>
+            <Box as={motion.ul} variants={containerVariants} initial="closed" animate="open" className="space-y-6">
+              {routes.map((item) => (
+                <motion.div key={item.path} variants={itemVariants}>
+                  <NavItem 
+                    to={item.path} 
+                    label={item.label} 
+                    icon={iconMap[item.path] || Terminal} 
+                    onClick={() => setIsOpen(false)} 
+                    isMobile 
+                  />
+                </motion.div>
               ))}
-            </motion.ul>
+            </Box>
             
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-12 p-6 bg-accent/5 border border-accent/20"
-            >
-              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent mb-2">Find Me</div>
-              <div className="text-sm font-display font-bold text-text-main uppercase">Wednesdays @ Mission City Swing</div>
-              <div className="text-[10px] text-text-dim mt-1 font-mono uppercase tracking-widest">San Francisco, CA</div>
-            </motion.div>
-          </motion.div>
+            <Box as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-12">
+              <Box border surface="accent" padding="card" className="bg-accent/5">
+                <Text variant="micro" size="micro" color="brand" uppercase tracking="widest" className="mb-2">Find Me</Text>
+                <Text variant="display" size="sm" uppercase>Wednesdays @ Mission City Swing</Text>
+                <Text variant="micro" size="micro" color="dim" className="mt-1">San Francisco, CA</Text>
+              </Box>
+            </Box>
+          </Box>
         )}
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <nav className="nav-rail flex-col justify-between">
-        <div className="space-y-12">
-          <div className="logo-area">
-            <div className="text-sm font-display font-black tracking-[1px] uppercase text-text-main">
+      <Box layout="navRail">
+        <Stack gap={12}>
+          <Box>
+            <Text variant="display" size="sm" color="brand" weight="font-black" tracking="tight">
               ARIEL ANDERS
-            </div>
-            <div className="text-[9px] text-accent mt-1 uppercase tracking-[0.2em] font-bold">
+            </Text>
+            <Text variant="micro" size="micro" color="brand" weight="font-bold" tracking="widest" className="mt-1">
               MIT ROBOTICIST // WCS
-            </div>
-          </div>
+            </Text>
+          </Box>
 
-          <ul className="space-y-2">
-            {navItems.map((item) => (
-              <li
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`group flex items-center gap-3 cursor-pointer py-2 px-1 relative`}
-              >
-                {activeTab === item.id && (
-                  <motion.div 
-                    layoutId="nav-indicator"
-                    className="absolute left-[-20px] w-1 h-4 bg-accent-brand"
-                    transition={{ type: 'spring', damping: 20, stiffness: 250 }}
-                  />
-                )}
-                <item.icon className={`w-4 h-4 stroke-1 transition-colors ${activeTab === item.id ? 'text-accent-brand' : 'text-text-dim group-hover:text-accent-brand'}`} />
-                <span className={`text-[11px] font-mono font-bold uppercase tracking-widest transition-colors ${activeTab === item.id ? 'text-accent-brand' : 'text-text-dim group-hover:text-accent-brand'}`}>
-                  {item.label}
-                </span>
-                
-                {/* Micro-interaction highlight */}
-                <motion.div 
-                  className="absolute inset-x-0 inset-y-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity -z-10"
-                />
-              </li>
+          <Stack as="ul" gap={2}>
+            {routes.map((item) => (
+              <NavItem key={item.path} to={item.path} label={item.label} icon={iconMap[item.path] || Terminal} />
             ))}
-          </ul>
+          </Stack>
 
-          <div className="pt-8 space-y-4">
-            <div className="p-4 bg-accent/5 border border-accent/20">
-              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-accent mb-2 underline underline-offset-4">Location_Log</div>
-              <div className="text-[11px] font-display font-bold text-text-main uppercase leading-tight">Wednesdays @ Mission City Swing</div>
-              <div className="text-[9px] font-mono text-text-dim mt-1 uppercase tracking-widest">SF // CA</div>
-            </div>
-          </div>
-        </div>
+          <Box paddingTop={8}>
+            <Box border surface="default" padding="compact" className="bg-accent-brand/5 border-accent-brand/20">
+              <Text variant="micro" size="micro" color="brand" className="mb-2 underline underline-offset-4">Location_Log</Text>
+              <Text variant="display" size="xs" uppercase>Wednesdays @ Mission City Swing</Text>
+              <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" className="mt-1">SF // CA</Text>
+            </Box>
+          </Box>
+        </Stack>
 
-        <div className="pt-8 border-t border-line">
-          <div className="text-[9px] font-mono text-text-dim uppercase tracking-widest leading-relaxed">
+        <Box border="t" paddingTop={8}>
+          <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" className="leading-relaxed">
             SYSTEM_PROTOCOL: 2026_V1.0
             <br />
             STATUS: ACTIVE_OPTIMIZATION
-          </div>
-        </div>
-      </nav>
+          </Text>
+        </Box>
+      </Box>
     </>
   );
 }

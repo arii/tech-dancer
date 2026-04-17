@@ -23,6 +23,10 @@ export const spacing = {
   card: "p-8",
   compact: "p-4",
   nav: "p-8",
+  emailBar: "py-4 px-6 md:px-12",
+  hero: "py-20",
+  comfort: "py-12",
+  shell: "pb-32",
 };
 
 export const animation = {
@@ -35,6 +39,9 @@ export const animation = {
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
 export const layout = {
+  appShell: "flex min-h-screen bg-bg",
+  navRail: "nav-rail hidden md:flex flex-col justify-between h-screen sticky top-0",
+  mobileHeader: "md:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-6 border-b",
   panel: "panel h-full overflow-y-auto",
   card: "bg-surface border border-line rounded-none transition-all duration-300",
   interactive: "scanline-hover cursor-pointer",
@@ -55,8 +62,33 @@ export const buttons = {
   tab: "px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all",
 };
 
+export const shadows = {
+  topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
+  industrial: "shadow-sm",
+};
+
 export const typography = {
   headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
+  display: "font-display font-bold uppercase tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
-  mono: "font-mono text-[10px] tracking-widest uppercase",
+  mono: "font-mono tracking-widest uppercase",
+  system: "font-mono tracking-[3px] uppercase",
+  label: "font-mono font-bold uppercase tracking-[2px]",
+  micro: "font-mono uppercase tracking-widest",
+};
+
+export const typeSizes = {
+  micro: "text-[8px]",
+  sys: "text-[10px]",
+  xs: "text-[11px]",
+  sm: "text-xs",
+  base: "text-sm",
+  lg: "text-base",
+  xl: "text-lg",
+  "2xl": "text-xl",
+  "3xl": "text-2xl",
+  "4xl": "text-3xl",
+  "7xl": "text-5xl md:text-7xl",
+  "8xl": "text-6xl md:text-8xl",
+  "9xl": "text-7xl md:text-9xl",
 };
