@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Space+Mono&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* New Typography Identity */
+  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  /* Standard Industrial Colors - Elevated Minimalism Edition */
+  --color-bg: #FFFFFF;
+  --color-surface: #F8F9FA;
+  --color-line: #E5E7EB;
+  --color-accent: #001F3F; /* Navy */
+  --color-accent-brand: #D4AF37; /* Gold */
+  --color-text-main: #001F3F; /* Navy */
+  --color-text-body: #1F2937;
+  --color-text-dim: #6B7280;
+  --color-card-bg: #F3F4F6; /* Light Grey */
+
+  /* Layout Scale */
+  --gap-base: clamp(1rem, 2vw, 2rem);
+  --padding-canvas: clamp(1.5rem, 5vw, 4rem);
+
+  /* Principled Easing - Technical & Responsive */
+  --ease-mechanical: steps(4, end);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer utilities {
+  .scanline-hover {
+    @apply relative overflow-hidden;
+  }
+  .scanline-hover::after {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-b from-transparent via-accent-brand/5 to-transparent -translate-y-full opacity-0 pointer-events-none;
+    transition: transform 1.5s var(--ease-out-expo), opacity 0.3s ease;
+  }
+  .scanline-hover:hover::after {
+    @apply -translate-y-0 opacity-100;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-body font-sans antialiased;
+  }
+
+  /* Modular Type Scale using Clamp for Fluidity */
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    @apply font-bold uppercase text-text-main;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    @apply font-bold uppercase text-text-main;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    line-height: 1.2;
+    @apply font-bold uppercase text-text-main;
+  }
+
+  h4 {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    @apply font-bold uppercase text-text-main;
+  }
+
+  p {
+    max-width: 65ch;
+    line-height: 1.6;
+    @apply text-text-body;
+  }
+}
+
+.panel {
+  @apply bg-bg p-6 md:p-12 relative overflow-hidden;
+}
+
+.nav-rail {
+  @apply hidden md:flex w-[260px] border-r border-line flex-col p-8 justify-between h-screen sticky top-0 bg-surface z-50;
+}
+
+.main-grid {
+  @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line;
+}
+
+.stats-widget {
+  @apply bg-surface p-6 border border-line shadow-none rounded-none;
+}
+
+.tech-specs-code {
+  @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none;
+}
+
+.experience-chip {
+  @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+}
+
+.product-card {
+  @apply bg-surface border border-line p-6 rounded-none transition-all duration-300;
+}
+
+.content-card {
+  @apply bg-card-bg p-8 rounded-none border border-line;
+}
