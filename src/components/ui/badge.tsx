@@ -20,7 +20,7 @@ function Badge({
         "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all",
         variants.intent[intent],
         variants.emphasis[emphasis],
-        variants.radius.sm,
+        variants.radius.industrial,
         className
       )}
       {...props}

@@ -1,7 +1,6 @@
 import React from "react"
-import { motion } from "motion/react"
 import { cn, composeStyles } from "@/lib/utils"
-import { typography, spacing, layout as layoutTokens, typeSizes, shadows, zIndices } from "@/styles/design-tokens"
+import { typography, spacing, layout as layoutTokens, typeSizes, shadows } from "@/styles/design-tokens"
 import { variants } from "@/styles/variants"
 
 type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T }
@@ -47,12 +46,6 @@ interface BaseProps {
   shadow?: keyof typeof shadows
   position?: "fixed" | "sticky" | "absolute" | "relative"
   inset?: boolean | "top" | "bottom" | "left" | "right" | "x" | "y"
-  insetTop?: ResponsiveProp<number | string>
-  insetRight?: ResponsiveProp<number | string>
-  insetBottom?: ResponsiveProp<number | string>
-  insetLeft?: ResponsiveProp<number | string>
-  insetX?: ResponsiveProp<number | string>
-  insetY?: ResponsiveProp<number | string>
   height?: "full" | "screen" | "auto" | "min" | "fit" | number
   width?: "full" | "screen" | "auto" | "min" | "fit" | number
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl"
@@ -100,12 +93,6 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     shadow,
     position,
     inset,
-    insetTop,
-    insetRight,
-    insetBottom,
-    insetLeft,
-    insetX,
-    insetY,
     height,
     width,
     maxWidth,
@@ -121,16 +108,18 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     cursor,
     ...props 
   }, ref) => {
+    const pMapper = (val: any) => typeof val === "string" && spacing[val as keyof typeof spacing] ? spacing[val as keyof typeof spacing] : val
+
     return (
       <Component
         ref={ref}
         className={composeStyles(
           panel && layoutTokens.panel,
           layout && layoutTokens[layout],
-          shadow && shadows[shadow as keyof typeof shadows],
-          typeof surface === "string" ? variants.surface[surface as keyof typeof variants.surface] : (surface && "bg-surface"),
-          emphasis && variants.emphasis[emphasis as keyof typeof variants.emphasis],
-          radiusProp && variants.radius[radiusProp as keyof typeof variants.radius],
+          shadow && shadows[shadow],
+          typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
+          emphasis && variants.emphasis[emphasis],
+          radiusProp && variants.radius[radiusProp],
           border === true && "border border-line",
           border === "t" && "border-t border-line",
           border === "b" && "border-b border-line",
@@ -139,7 +128,8 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           border === "x" && "border-x border-line",
           border === "y" && "border-y border-line",
           getResponsiveClasses(gap, "gap-"),
-          getResponsiveClasses(padding, "p-"),
+          getResponsiveClasses(padding, "p-", (v) => spacing[v as keyof typeof spacing] ? "" : v),
+          padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
           getResponsiveClasses(paddingTop, "pt-"),
           getResponsiveClasses(paddingBottom, "pb-"),
           getResponsiveClasses(paddingLeft, "pl-"),
@@ -161,12 +151,6 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           inset === "right" && "top-0 bottom-0 right-0",
           inset === "x" && "left-0 right-0",
           inset === "y" && "top-0 bottom-0",
-          getResponsiveClasses(insetTop, "top-"),
-          getResponsiveClasses(insetRight, "right-"),
-          getResponsiveClasses(insetBottom, "bottom-"),
-          getResponsiveClasses(insetLeft, "left-"),
-          getResponsiveClasses(insetX, "inset-x-"),
-          getResponsiveClasses(insetY, "inset-y-"),
           height && (typeof height === "number" ? `h-${height}` : `h-${height}`),
           width && (typeof width === "number" ? `w-${width}` : `w-${width}`),
           maxWidth && `max-w-${maxWidth}`,
@@ -178,7 +162,9 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           overflow === "x-auto" && "overflow-x-auto",
           overflow === "y-auto" && "overflow-y-auto",
           overflow === "y-hidden" && "overflow-y-hidden",
-          zIndex !== undefined && (typeof zIndex === "string" ? `z-${zIndices[zIndex as keyof typeof zIndices] || zIndex}` : `z-${zIndex}`),
+          zIndex === "top" && "z-[100]",
+          zIndex === "max" && "z-[999]",
+          zIndex !== undefined && typeof zIndex === "number" && `z-${zIndex}`,
           opacity !== undefined && (typeof opacity === "string" ? `opacity-${opacity}` : `opacity-${opacity}`),
           getResponsiveClasses(display, ""),
           aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
@@ -195,45 +181,6 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
   }
 )
 Box.displayName = "Box"
-
-export const Container = React.forwardRef<HTMLDivElement, BoxProps>(
-  ({ maxWidth = "7xl", marginX = "auto", paddingX = { base: "md", md: "lg" }, ...props }, ref) => (
-    <Box ref={ref} maxWidth={maxWidth} marginX={marginX} paddingX={paddingX} {...props} />
-  )
-)
-Container.displayName = "Container"
-
-export const Inline = React.forwardRef<HTMLDivElement, StackProps>(
-  ({ direction = "row", align = "center", gap = 2, ...props }, ref) => (
-    <Stack ref={ref} direction={direction} align={align} gap={gap} {...props} />
-  )
-)
-Inline.displayName = "Inline"
-
-interface IconProps extends React.SVGAttributes<SVGElement> {
-  icon: any
-  size?: keyof typeof typeSizes | number
-  color?: "main" | "dim" | "accent" | "brand" | "contrast"
-}
-
-export const Icon = ({ icon: LucideIcon, size = "base", color = "main", className, ...props }: IconProps) => (
-  <LucideIcon 
-    className={cn(
-      color === "main" && "text-text-main",
-      color === "dim" && "text-text-dim",
-      color === "accent" && "text-accent",
-      color === "brand" && "text-accent-brand",
-      color === "contrast" && "text-bg",
-      typeof size === "string" ? typeSizes[size as keyof typeof typeSizes] : `w-${size} h-${size}`,
-      !size && "w-5 h-5",
-      className
-    )} 
-    {...props} 
-  />
-)
-Icon.displayName = "Icon"
-
-export const Motion = motion(Box);
 
 interface StackProps extends BoxProps {
   direction?: ResponsiveProp<"row" | "col">
@@ -297,9 +244,7 @@ export const Text = React.forwardRef<HTMLSpanElement, TextProps>(
     // BaseProps for filtering
     padding, paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     marginTop, marginBottom, marginX, marginY, gap, border, surface, emphasis, radius,
-    panel, flex, wrap, layout, shadow, position, inset, 
-    insetTop, insetRight, insetBottom, insetLeft, insetX, insetY,
-    height, width, maxWidth,
+    panel, flex, wrap, layout, shadow, position, inset, height, width, maxWidth,
     minHeight, minWidth, overflow, zIndex, opacity, display, aspect, shrink, span, cursor,
     ...props 
   }, ref) => {
@@ -329,9 +274,7 @@ export const Text = React.forwardRef<HTMLSpanElement, TextProps>(
         marginTop={marginTop} marginBottom={marginBottom} marginX={marginX} marginY={marginY}
         gap={gap} border={border} surface={surface} emphasis={emphasis} radius={radius}
         panel={panel} flex={flex} wrap={wrap} layout={layout} shadow={shadow}
-        position={position} inset={inset} 
-        insetTop={insetTop} insetRight={insetRight} insetBottom={insetBottom} insetLeft={insetLeft} insetX={insetX} insetY={insetY}
-        height={height} width={width} maxWidth={maxWidth}
+        position={position} inset={inset} height={height} width={width} maxWidth={maxWidth}
         minHeight={minHeight} minWidth={minWidth} overflow={overflow} zIndex={zIndex}
         opacity={opacity} display={display} aspect={aspect} shrink={shrink} span={span} cursor={cursor}
         {...props}
@@ -359,63 +302,6 @@ export const Grid = React.forwardRef<HTMLDivElement, BoxProps & {
   }
 )
 Grid.displayName = "Grid"
-
-interface InputProps extends BaseProps, Omit<React.InputHTMLAttributes<HTMLInputElement>, 'height' | 'width' | 'size'> {
-  [key: string]: any
-}
-
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, ...props }, ref) => (
-    <Box
-      as="input"
-      ref={ref as any}
-      className={cn(
-        "bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all placeholder:text-text-dim/50",
-        className
-      )}
-      {...props}
-    />
-  )
-)
-Input.displayName = "Input"
-
-interface SelectProps extends BaseProps, Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'height' | 'width' | 'size'> {
-  [key: string]: any
-}
-
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, ...props }, ref) => (
-    <Box
-      as="select"
-      ref={ref as any}
-      className={cn(
-        "bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all",
-        className
-      )}
-      {...props}
-    />
-  )
-)
-Select.displayName = "Select"
-
-interface TextareaProps extends BaseProps, Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'height' | 'width' | 'wrap'> {
-  [key: string]: any
-}
-
-export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => (
-    <Box
-      as="textarea"
-      ref={ref as any}
-      className={cn(
-        "bg-bg border border-line px-4 py-3 text-sm font-mono focus:outline-none focus:border-accent transition-all resize-none",
-        className
-      )}
-      {...props}
-    />
-  )
-)
-Textarea.displayName = "Textarea"
 
 interface ButtonProps extends BaseProps, React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof variants.emphasis
