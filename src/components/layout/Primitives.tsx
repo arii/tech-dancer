@@ -1,25 +1,30 @@
 import React from "react"
 import { cn } from "@/lib/utils"
 import { typography, spacing, layout as layoutTokens } from "@/styles/design-tokens"
+import { variants } from "@/styles/variants"
 
 interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   as?: any
   padding?: keyof typeof spacing
   gap?: number
   border?: boolean
-  surface?: boolean
+  surface?: keyof typeof variants.surface | boolean
+  emphasis?: keyof typeof variants.emphasis
+  radius?: keyof typeof variants.radius
   panel?: boolean
   [key: string]: any
 }
 
 export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
-  ({ className, as: Component = "div", padding, gap, border, surface, panel, ...props }, ref) => {
+  ({ className, as: Component = "div", padding, gap, border, surface, emphasis, radius: radiusProp, panel, ...props }, ref) => {
     return (
       <Component
         ref={ref}
         className={cn(
           panel && layoutTokens.panel,
-          surface && "bg-surface",
+          typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
+          emphasis && variants.emphasis[emphasis],
+          radiusProp && variants.radius[radiusProp],
           border && "border border-line",
           gap && `gap-${gap}`,
           padding && {
@@ -67,6 +72,7 @@ Stack.displayName = "Stack"
 interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   as?: any
   variant?: keyof typeof typography
+  intent?: keyof typeof variants.intent
   color?: "main" | "body" | "dim" | "accent" | "brand"
   size?: string
   weight?: string
@@ -74,17 +80,18 @@ interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 export const Text = React.forwardRef<HTMLSpanElement, TextProps>(
-  ({ className, as: Component = "span", variant, color = "main", size, weight, ...props }, ref) => {
+  ({ className, as: Component = "span", variant, intent, color = "main", size, weight, ...props }, ref) => {
     return (
       <Component
         ref={ref}
         className={cn(
           variant && typography[variant],
-          color === "main" && "text-text-main",
-          color === "body" && "text-text-body",
-          color === "dim" && "text-text-dim",
-          color === "accent" && "text-accent",
-          color === "brand" && "text-accent-brand",
+          intent && variants.intent[intent],
+          !intent && color === "main" && "text-text-main",
+          !intent && color === "body" && "text-text-body",
+          !intent && color === "dim" && "text-text-dim",
+          !intent && color === "accent" && "text-accent",
+          !intent && color === "brand" && "text-accent-brand",
           size,
           weight,
           className

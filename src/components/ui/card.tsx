@@ -1,24 +1,20 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
-
-import { radius, borders, spacing } from "@/styles/design-tokens"
+import { Box, Stack, Text } from "@/components/layout/Primitives"
 
 function Card({
   className,
   size = "default",
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: React.ComponentProps<typeof Box> & { size?: "default" | "sm" }) {
   return (
-    <div
-      data-slot="card"
-      data-size={size}
+    <Box
+      border
+      radius="none"
+      surface="default"
       className={cn(
-        "group/card flex flex-col gap-4 overflow-hidden bg-bg text-sm text-text-body",
-        radius.none,
-        borders.default,
-        "has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0",
-        spacing.card,
+        "group/card flex flex-col overflow-hidden text-sm",
+        size === "default" ? "gap-4 p-8" : "gap-3 p-4",
         className
       )}
       {...props}
@@ -26,12 +22,11 @@ function Card({
   )
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+function CardHeader({ className, ...props }: React.ComponentProps<typeof Box>) {
   return (
-    <div
-      data-slot="card-header"
+    <Box
       className={cn(
-        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 px-0 group-data-[size=sm]/card:px-0 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3",
+        "group/card-header grid auto-rows-min items-start gap-1",
         className
       )}
       {...props}
@@ -39,33 +34,33 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+function CardTitle({ className, ...props }: React.ComponentProps<typeof Text>) {
   return (
-    <div
-      data-slot="card-title"
-      className={cn(
-        "text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
-        className
-      )}
+    <Text
+      as="div"
+      variant="headline"
+      size="text-xl"
+      className={cn("leading-snug", className)}
       {...props}
     />
   )
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+function CardDescription({ className, ...props }: React.ComponentProps<typeof Text>) {
   return (
-    <div
-      data-slot="card-description"
-      className={cn("text-sm text-muted-foreground", className)}
+    <Text
+      as="p"
+      color="dim"
+      size="text-xs"
+      className={cn("uppercase tracking-wider", className)}
       {...props}
     />
   )
 }
 
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+function CardAction({ className, ...props }: React.ComponentProps<typeof Box>) {
   return (
-    <div
-      data-slot="card-action"
+    <Box
       className={cn(
         "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
         className
@@ -75,22 +70,21 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+function CardContent({ className, ...props }: React.ComponentProps<typeof Box>) {
   return (
-    <div
-      data-slot="card-content"
-      className={cn("px-4 group-data-[size=sm]/card:px-3", className)}
+    <Box
+      className={cn("flex-1", className)}
       {...props}
     />
   )
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+function CardFooter({ className, ...props }: React.ComponentProps<typeof Box>) {
   return (
-    <div
-      data-slot="card-footer"
+    <Box
+      surface="muted"
       className={cn(
-        "flex items-center border-t bg-surface p-4 group-data-[size=sm]/card:p-3",
+        "flex items-center border-t border-line p-4 -mx-8 -mb-8 mt-4",
         className
       )}
       {...props}

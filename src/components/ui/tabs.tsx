@@ -1,9 +1,6 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
-import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@/lib/utils"
-
-import { radius, borders, spacing } from "@/styles/design-tokens"
+import { Box, Stack, Text } from "@/components/layout/Primitives"
 
 function Tabs({
   className,
@@ -15,7 +12,7 @@ function Tabs({
       data-slot="tabs"
       data-orientation={orientation}
       className={cn(
-        "group/tabs flex gap-4 data-horizontal:flex-col",
+        "group/tabs flex gap-8 data-horizontal:flex-col",
         className
       )}
       {...props}
@@ -23,37 +20,16 @@ function Tabs({
   )
 }
 
-const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center p-[2px] text-text-dim group-data-horizontal/tabs:h-10 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col",
-  {
-    variants: {
-      variant: {
-        default: "bg-surface border border-line",
-        line: "gap-4 bg-transparent",
-      },
-      radius: {
-        none: radius.none,
-        industrial: radius.industrial,
-      }
-    },
-    defaultVariants: {
-      variant: "default",
-      radius: "none",
-    },
-  }
-)
-
 function TabsList({
   className,
-  variant = "default",
-  radius = "none",
   ...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
+}: TabsPrimitive.List.Props) {
   return (
     <TabsPrimitive.List
-      data-slot="tabs-list"
-      data-variant={variant}
-      className={cn(tabsListVariants({ variant, radius }), className)}
+      className={cn(
+        "group/tabs-list border-b border-line w-full flex flex-row items-stretch gap-0",
+        className
+      )}
       {...props}
     />
   )
@@ -62,11 +38,9 @@ function TabsList({
 function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
   return (
     <TabsPrimitive.Tab
-      data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex h-full flex-1 items-center justify-center gap-2 px-6 py-2 text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap text-text-dim transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-text-main focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-brand disabled:pointer-events-none disabled:opacity-50",
-        "data-active:bg-bg data-active:text-text-main data-active:shadow-none",
-        "group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:text-accent-brand",
+        "relative inline-flex h-full items-center justify-center gap-2 px-6 py-4 text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap text-text-dim transition-all hover:text-text-main focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-brand disabled:pointer-events-none disabled:opacity-50",
+        "data-active:text-accent-brand data-active:after:content-[''] data-active:after:absolute data-active:after:bottom-0 data-active:after:left-0 data-active:after:w-full data-active:after:h-[2px] data-active:after:bg-accent-brand",
         className
       )}
       {...props}
@@ -78,10 +52,10 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-content"
-      className={cn("flex-1 text-sm outline-none", className)}
+      className={cn("flex-1 text-sm outline-none pt-8", className)}
       {...props}
     />
   )
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+export { Tabs, TabsList, TabsTrigger, TabsContent }
