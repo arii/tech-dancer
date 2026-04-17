@@ -204,7 +204,7 @@ export default function Engine() {
             </button>
 
             <div className="flex items-center gap-4 mb-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">
+              <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-none">
                 {selectedStudy.category}
               </span>
               <div className="flex items-center gap-2 text-text-dim text-xs font-medium">
