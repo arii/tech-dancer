@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Zap, ArrowRight, Home as HomeIcon, Shield, Calendar } from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { Box, Stack, Text, Grid } from '../../components/layout/Primitives';
+import { Box, Stack, Text, Grid, Motion, Icon } from '../../components/layout/Primitives';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -45,15 +43,15 @@ export default function Home() {
   ];
 
   return (
-    <Box as="section" panel>
-      <Stack justify="center" padding="hero" className="min-h-full">
-        <Text variant="mono" color="brand" weight="font-bold" className="mb-4 block">
+    <Box as="section" panel height="full" overflow="y-auto">
+      <Stack justify="center" paddingTop="xl" paddingBottom="3xl" paddingX="lg">
+        <Text variant="mono" color="brand" weight="font-bold" marginBottom="md" display="block">
           // WELCOME_TO_THE_REGISTRY
         </Text>
         
-        <Stack gap={6} className="mb-24 px-4 md:px-0">
+        <Stack gap="xl" marginBottom="3xl">
           <Text 
-            as={motion.h1}
+            as={Motion}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
@@ -62,38 +60,37 @@ export default function Home() {
           >
             The Roboticist's Guide to WCS.
           </Text>
-          <Stack direction={{ base: "col", md: "row" }} gap={8} align={{ base: "start", md: "end" }} justify="between" className="mt-12">
+          <Stack direction={{ base: "col", md: "row" }} gap="lg" align={{ base: "start", md: "end" }} justify="between" marginTop="xl">
             <Text 
-              as={motion.p}
+              as={Motion}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
               variant="body"
               size="3xl"
-              className="max-w-[75ch]"
+              maxWidth="prose"
             >
               Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis to maximize your West Coast Swing trajectory.
             </Text>
-            <Box 
-              as={motion.div}
+            <Motion 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
               surface="default"
               border
-              padding="compact"
-              shadow="industrial"
-              className="stats-widget !m-0 shrink-0 relative"
+              padding="md"
+              shadow="sm"
+              position="relative"
+              shrink={0}
             >
-              <Text variant="micro" size="micro" className="absolute top-1 right-1 select-none">REF_ID: STATUS_001</Text>
-              <Text variant="mono" size="micro" color="brand" className="mb-1">Status: Optimized</Text>
+              <Text variant="micro" size="micro" position="absolute" insetTop={1} insetRight={1} cursor="default">REF_ID: STATUS_001</Text>
+              <Text variant="mono" size="micro" color="brand" marginBottom="xs">Status: Optimized</Text>
               <Text variant="display" size="base">BOUGIE ON A BUDGET</Text>
-            </Box>
+            </Motion>
           </Stack>
         </Stack>
         
-        <Box
-          as={motion.div}
+        <Motion
           initial="hidden"
           animate="visible"
           variants={{
@@ -105,107 +102,125 @@ export default function Home() {
               }
             }
           }}
-          className="border-y border-line"
+          border="y"
         >
-          <Grid cols={1} lg={12} gap={0}>
+          <Grid cols={{ base: 1, lg: 12 }} gap={0}>
             {/* Main Feature */}
-            <Box 
-              as={motion.div}
+            <Motion 
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 }
               }}
               onClick={() => navigate('/lab')}
-              className="col-span-1 lg:col-span-8 border-b lg:border-b-0 lg:border-r border-line p-8 md:p-16 hover:bg-card-bg transition-colors cursor-pointer group"
+              span={{ base: 1, lg: 8 }}
+              border={{ base: "b", lg: "r" }}
+              padding={{ base: "lg", md: "xl" }}
+              cursor="pointer"
+              surface="default"
+              className="hover:bg-card-bg transition-colors group"
             >
-              <Box className="aspect-[16/9] overflow-hidden bg-line">
-                <motion.img 
+              <Box aspect="video" overflow="hidden" surface="muted">
+                <Motion 
+                  as="img"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
                   src="https://picsum.photos/seed/gear-stack/1200/675" 
                   alt="Hardware & Shell" 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  width="full"
+                  height="full"
+                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
               </Box>
-              <Stack gap={6} className="mt-12">
-                <Text as="h3" size="8xl" weight="font-bold" className="uppercase leading-none">Hardware & Shell</Text>
-                <Text variant="body" size="2xl" className="max-w-xl">
+              <Stack gap="lg" marginTop="xl">
+                <Text as="h3" size="8xl" weight="font-bold" uppercase>Hardware & Shell</Text>
+                <Text variant="body" size="2xl" maxWidth="lg">
                   Stress-tested apparel and footwear for the 3:00 AM social floor. From friction-reduction DIYs to sustainable packing manifests.
                 </Text>
-                <Box 
-                  as={motion.div}
+                <Motion 
                   whileHover={{ x: 5 }}
-                  className="flex items-center gap-2"
+                  display="flex"
+                  alignItems="center"
+                  gap="sm"
                 >
-                  <Text variant="label" size="sm" color="accent">Explore The Lab</Text> <ArrowRight className="w-4 h-4 text-accent" />
-                </Box>
+                  <Text variant="label" size="sm" color="accent">Explore The Lab</Text> 
+                  <Icon icon={ArrowRight} size="xs" color="accent" />
+                </Motion>
               </Stack>
-            </Box>
+            </Motion>
             
             {/* Side Stack */}
-            <Box className="col-span-1 lg:col-span-4 flex flex-col">
-              <Box 
-                as={motion.div}
+            <Box span={{ base: 1, lg: 4 }} display="flex" flexDirection="column">
+              <Motion 
                 variants={{
                   hidden: { opacity: 0, x: 20 },
                   visible: { opacity: 1, x: 0 }
                 }}
                 onClick={() => navigate('/feed')}
-                className="flex-1 p-8 md:p-12 border-b border-line bg-accent text-white hover:bg-accent-orange transition-colors cursor-pointer group"
+                flex
+                padding={{ base: "lg", md: "xl" }}
+                border="b"
+                surface="contrast"
+                cursor="pointer"
+                className="hover:opacity-90 transition-opacity group"
               >
-                <Text variant="micro" size="micro" className="mb-8 opacity-60 text-white">COLLECTION: 01</Text>
-                <Text as="h3" variant="display" size="4xl" className="mb-4 text-white">Logistics Logic</Text>
-                <Text variant="body" size="sm" className="mb-8 leading-relaxed text-white/80">
+                <Text variant="micro" size="micro" marginBottom="lg" opacity="60" color="contrast">COLLECTION: 01</Text>
+                <Text as="h3" variant="display" size="4xl" marginBottom="md" color="contrast">Logistics Logic</Text>
+                <Text variant="body" size="sm" marginBottom="lg" color="contrast" opacity="80">
                   High-efficiency travel protocols. Hotel block arbitrage, flight matrix optimization, and status stacking.
                 </Text>
-                <Box 
-                  as={motion.div} 
+                <Motion 
                   whileHover={{ x: 5 }}
-                  className="inline-flex items-center gap-2"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap="sm"
                 >
-                  <Text variant="label" size="sm" className="text-white">Access Systems</Text> <ArrowRight className="w-4 h-4 text-white" />
-                </Box>
-              </Box>
-              <Box 
-                as={motion.div}
+                  <Text variant="label" size="sm" color="contrast">Access Systems</Text> <Icon icon={ArrowRight} size="xs" color="contrast" />
+                </Motion>
+              </Motion>
+              <Motion 
                 variants={{
                   hidden: { opacity: 0, x: 20 },
                   visible: { opacity: 1, x: 0 }
                 }}
                 onClick={() => navigate('/engine')}
-                className="flex-1 p-8 md:p-12 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
+                flex
+                padding={{ base: "lg", md: "xl" }}
+                surface="default"
+                cursor="pointer"
+                className="hover:bg-card-bg transition-colors group"
               >
-                <Text variant="micro" size="micro" color="brand" className="mb-8">ANALYSIS: 02</Text>
-                <Text as="h3" variant="display" size="4xl" className="mb-4 text-text-main">Predictive Engine</Text>
-                <Text variant="body" size="sm" className="mb-8 leading-relaxed">
+                <Text variant="micro" size="micro" color="brand" marginBottom="lg">ANALYSIS: 02</Text>
+                <Text as="h3" variant="display" size="4xl" marginBottom="md">Predictive Engine</Text>
+                <Text variant="body" size="sm" marginBottom="lg" opacity="80">
                   The physics of momentum and connection. Quantifying judge variance and heat density.
                 </Text>
-                <Box 
-                  as={motion.div} 
+                <Motion 
                   whileHover={{ x: 5 }}
-                  className="inline-flex items-center gap-2"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap="sm"
                 >
-                  <Text variant="label" size="sm" color="brand">View Data</Text> <ArrowRight className="w-4 h-4 text-accent-brand" />
-                </Box>
-              </Box>
+                  <Text variant="label" size="sm" color="brand">View Data</Text> <Icon icon={ArrowRight} size="xs" color="brand" />
+                </Motion>
+              </Motion>
             </Box>
           </Grid>
-        </Box>
+        </Motion>
 
         {/* Latest Updates Section */}
-        <Box className="mt-24 space-y-8">
-          <Stack as={motion.div} 
+        <Box marginTop="3xl">
+          <Stack as={Motion} 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            direction="row" align="center" justify="between" className="border-b border-line pb-4 mb-8"
+            direction="row" align="center" justify="between" border="b" paddingBottom="md" marginBottom="xl"
           >
-            <Text variant="label" size="sm" className="text-text-main">Latest Updates</Text>
+            <Text variant="label" size="sm">Latest Updates</Text>
             <Text variant="micro" size="micro">System Time: 2026.04.15</Text>
           </Stack>
           
-          <Grid as={motion.div} 
+          <Grid as={Motion} 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -218,62 +233,61 @@ export default function Home() {
                 }
               }
             }}
-            cols={1} md={12} gap={8}
+            cols={{ base: 1, md: 12 }} gap="lg"
           >
             {latestUpdates.map((update, idx) => {
               const isFirst = idx === 0;
               return (
-                <Box
-                  as={motion.div}
+                <Motion
                   key={update.title}
                   variants={{
                     hidden: { opacity: 0, y: 10 },
                     visible: { opacity: 1, y: 0 }
                   }}
-                  whileHover={{ y: -5, borderColor: 'var(--color-accent-brand)' }}
+                  whileHover={{ y: -5 }}
                   onClick={() => navigate(update.link)}
+                  span={{ base: 12, md: isFirst ? 7 : 5 }}
                   border surface="default"
-                  className={cn(
-                    "p-8 cursor-pointer group",
-                    isFirst ? 'md:col-span-7' : 'md:col-span-5'
-                  )}
+                  padding="lg"
+                  cursor="pointer"
+                  className="group hover:border-accent-brand transition-colors"
                 >
-                  <Stack direction="row" justify="between" align="start" className="mb-6">
-                    <Box className="border border-accent-brand/20 px-3 py-1">
+                  <Stack direction="row" justify="between" align="start" marginBottom="lg">
+                    <Box border="accent" paddingX="sm" paddingY="xs">
                       <Text variant="mono" size="micro" color="brand" weight="font-bold">
                         {update.type}
                       </Text>
                     </Box>
                     <Text variant="mono" size="micro" color="dim">{update.date}</Text>
                   </Stack>
-                  <Text variant="headline" size="4xl" className="group-hover:text-accent-brand transition-colors mb-4">
+                  <Text variant="headline" size="4xl" marginBottom="md" className="group-hover:text-accent-brand transition-colors">
                     {update.title}
                   </Text>
-                  <Text variant="body" size="lg" className="line-clamp-2 opacity-80">
+                  <Text variant="body" size="lg" opacity="80" className="line-clamp-2">
                     {update.desc}
                   </Text>
-                  <Box className="mt-8 flex items-center gap-3 group-hover:translate-x-1 transition-transform">
-                    <Text variant="label" size="sm" color="brand">Inspect Report</Text> <ArrowRight className="w-3 h-3 text-accent-brand" />
-                  </Box>
-                </Box>
+                  <Stack direction="row" align="center" gap="sm" marginTop="xl" className="group-hover:translate-x-1 transition-transform">
+                    <Text variant="label" size="sm" color="brand">Inspect Report</Text> <Icon icon={ArrowRight} size="xs" color="brand" />
+                  </Stack>
+                </Motion>
               );
             })}
           </Grid>
         </Box>
 
         {/* WSDC Registry Ledger Section */}
-        <Box className="mt-24 space-y-8">
-          <Box as={motion.div} 
+        <Box marginTop="3xl">
+          <Motion 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex justify-between items-baseline border-b border-line pb-4 mb-8"
+            display="flex" justify="between" alignItems="baseline" border="b" paddingBottom="md" marginBottom="xl"
           >
-            <Text variant="label" size="sm" className="text-text-main">WSDC Registry Ledger</Text>
+            <Text variant="label" size="sm">WSDC Registry Ledger</Text>
             <Text variant="label" size="sm" color="brand" className="animate-pulse">● Live Itinerary</Text>
-          </Box>
+          </Motion>
           
-          <Grid as={motion.div} 
+          <Grid as={Motion} 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -286,41 +300,46 @@ export default function Home() {
                 }
               }
             }}
-            cols={1} md={2} lg={3}
-            className="bg-line border border-line"
+            cols={{ base: 1, md: 2, lg: 3 }}
+            surface="muted"
+            border
           >
             {upcomingEvents.map((event) => (
-              <Stack 
-                as={motion.div}
+              <Motion 
                 key={event.name} 
                 direction="row"
-                gap={4}
+                gap="md"
                 variants={{
                   hidden: { opacity: 0 },
                   visible: { opacity: 1 }
                 }}
-                className="bg-bg p-6 flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default"
+                surface="default"
+                padding="lg"
+                display="flex"
+                alignItems="start"
+                cursor="default"
+                className="hover:bg-accent/5 transition-colors group"
               >
-                <Box className="w-10 h-10 border border-line bg-line flex items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
-                  <event.icon className="w-5 h-5 stroke-1" />
+                <Box width={10} height={10} border surface="muted" display="flex" alignItems="center" justifyContent="center" shrink={0} className="group-hover:border-accent transition-colors">
+                  <Icon icon={event.icon} size="sm" color="accent" className="stroke-1" />
                 </Box>
-                <Stack gap={1}>
+                <Stack gap="xs">
                   <Text variant="mono" size="micro" color="brand" weight="font-bold">{event.status}</Text>
-                  <Text variant="display" size="xl" className="leading-tight">{event.name}</Text>
-                  <Box className="flex items-center gap-2">
-                    <Calendar className="w-3 h-3 text-text-dim" />
-                    <Text variant="micro" size="micro" className="text-text-dim opacity-100 uppercase">{event.date}</Text>
-                  </Box>
+                  <Text variant="display" size="xl" weight="font-bold">{event.name}</Text>
+                  <Stack direction="row" align="center" gap="sm">
+                    <Icon icon={Calendar} size="xs" color="dim" />
+                    <Text variant="micro" size="micro" color="dim" uppercase>{event.date}</Text>
+                  </Stack>
                 </Stack>
-              </Stack>
+              </Motion>
             ))}
           </Grid>
         </Box>
 
-        <Box border surface="default" padding="card" className="mt-24 w-fit relative">
-          <Text variant="micro" size="micro" className="absolute top-2 right-2 select-none">DATA_REF: 099</Text>
+        <Box border surface="default" padding="lg" marginTop="3xl" width="fit" position="relative">
+          <Text variant="micro" size="micro" position="absolute" insetTop={2} insetRight={2} cursor="default">DATA_REF: 099</Text>
           <Text variant="headline" size="4xl" color="brand">Registry Calibration</Text>
-          <Text variant="mono" size="sm" color="dim" className="mt-2 text-wrap">
+          <Text variant="mono" size="sm" color="dim" marginTop="sm">
             Currently Obsessed: Hypervolt Mini & Motown Monday
           </Text>
         </Box>

@@ -1,4 +1,4 @@
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid, Inline, Icon } from '@/components/layout/Primitives';
 import { Github, Linkedin, Database } from 'lucide-react';
 
 export function Footer() {
@@ -15,10 +15,10 @@ export function Footer() {
   ];
 
   return (
-    <Box as="footer" border="t" paddingTop={12} paddingX={8} surface="default" opacity={80} marginTop={24}>
-      <Stack gap={12}>
-        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={12}>
-          <Stack gap={4}>
+    <Box as="footer" border="t" paddingTop="2xl" paddingX="xl" surface="default" opacity="80" marginTop="3xl">
+      <Stack gap="2xl">
+        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap="xl">
+          <Stack gap="md">
             <Text variant="display" size="sm" weight="font-black" uppercase tracking="widest">
               Ariel Anders
             </Text>
@@ -27,30 +27,32 @@ export function Footer() {
             </Text>
           </Stack>
 
-          <Stack gap={6}>
+          <Stack gap="lg">
             <Text variant="system" size="micro" color="brand" uppercase tracking="widest">CON_CHANNELS</Text>
-            <Stack gap={3}>
+            <Stack gap="sm">
               {socialLinks.map((link) => (
-                <Box 
+                <Inline 
                   key={link.label}
                   as="a"
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-text-dim hover:text-accent-brand transition-colors group"
+                  gap="md"
+                  align="center"
+                  className="group"
                 >
-                  <link.icon className="w-4 h-4" />
-                  <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
+                  <Icon icon={link.icon} size="sm" color="dim" className="group-hover:text-accent-brand transition-colors" />
+                  <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="wider" className="group-hover:text-accent-brand transition-colors">
                     {link.label}
                   </Text>
-                </Box>
+                </Inline>
               ))}
             </Stack>
           </Stack>
 
-          <Stack gap={6}>
+          <Stack gap="lg">
             <Text variant="system" size="micro" color="brand" uppercase tracking="widest">SYSTEM_INFO</Text>
-            <Stack gap={3}>
+            <Stack gap="sm">
               <Text variant="mono" size="xs" color="dim">LOCATION: SF // CA</Text>
               <Text variant="mono" size="xs" color="dim">STATUS: OPTIMIZED</Text>
               <Text variant="mono" size="xs" color="dim">LAST_UPDATE: 2026.04.17</Text>
@@ -58,12 +60,12 @@ export function Footer() {
           </Stack>
         </Grid>
 
-        <Box border="t" paddingTop={8}>
-          <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
+        <Box border="t" paddingTop="lg">
+          <Box display="flex" flexDirection={{ base: "column", sm: "row" }} justifyContent="between" alignItems="center" gap="lg">
             <Text variant="micro" color="dim" uppercase tracking="widest">
               © 2026 ARIEL_ANDERS // ALL_SYSTEMS_OPERATIONAL
             </Text>
-            <Stack direction="row" gap={6}>
+            <Inline gap="xl">
               {legalLinks.map((link) => (
                 <Text 
                   key={link.label}
@@ -79,8 +81,8 @@ export function Footer() {
                   {link.label}
                 </Text>
               ))}
-            </Stack>
-          </Stack>
+            </Inline>
+          </Box>
         </Box>
       </Stack>
     </Box>

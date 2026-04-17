@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from 'motion/react';
 import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, Activity, Shield } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { getAllContent, ContentItem } from '@/lib/content';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
-
-import { cn } from '@/lib/utils';
-import { typography } from '@/styles/design-tokens';
+import { Box, Stack, Text, Grid, Motion, Icon, Inline } from '@/components/layout/Primitives';
 
 export default function Feed() {
   const [resources, setResources] = useState<ContentItem[]>([]);
@@ -31,29 +27,44 @@ export default function Feed() {
 
 function ResourceDetails({ resource, onBack }: { resource: ContentItem; onBack: () => void }) {
   return (
-    <Box as="section" panel>
-      <motion.button 
+    <Box as="section" panel height="full" overflow="y-auto">
+      <Motion 
+        as="button"
         whileHover={{ x: -4 }}
         onClick={onBack}
-        className="flex items-center gap-2 text-accent-brand font-bold uppercase tracking-widest text-[10px] font-mono mb-8"
+        display="flex"
+        alignItems="center"
+        gap="sm"
+        color="brand"
+        weight="font-bold"
+        uppercase
+        tracking="widest"
+        size="sys"
+        variant="mono"
+        marginBottom="lg"
+        cursor="pointer"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <Icon icon={ArrowLeft} size="sm" />
         Back to Resources
-      </motion.button>
+      </Motion>
 
-      <Stack gap={12} className="max-w-4xl mx-auto">
-        <Stack direction="row" align="center" gap={4} className="relative">
-          <Text variant="micro" className="absolute -top-4 right-0 select-none uppercase tracking-widest">ASSET_REF: {resource.slug?.toUpperCase()}</Text>
-          <Text variant="mono" color="brand" className="border border-accent-brand/20 px-3 py-1 font-bold">
-            {resource.category}
+      <Stack gap="xl" maxWidth="4xl" marginX="auto" paddingBottom="3xl">
+        <Box position="relative" display="flex" alignItems="center" gap="md">
+          <Text variant="micro" position="absolute" insetTop={-4} insetRight={0} tracking="widest">
+            ASSET_REF: {resource.slug?.toUpperCase()}
           </Text>
-          <Stack direction="row" align="center" gap={2}>
-            <Calendar className="w-3 h-3 text-text-dim" />
+          <Box border="accent" paddingX="sm" paddingY="xs">
+            <Text variant="mono" color="brand" weight="font-bold">
+              {resource.category}
+            </Text>
+          </Box>
+          <Inline gap="xs">
+            <Icon icon={Calendar} size="xs" color="dim" />
             <Text variant="mono" color="dim">{resource.date}</Text>
-          </Stack>
-        </Stack>
+          </Inline>
+        </Box>
 
-        <Text as="h1" variant="headline" size="text-4xl md:text-7xl">
+        <Text as="h1" variant="headline" size="7xl">
           {resource.title}
         </Text>
 
@@ -78,36 +89,36 @@ function ResourceList({ resources, onSelect }: { resources: ContentItem[]; onSel
   };
 
   return (
-    <Box as="section" panel>
-      <Stack gap={8} className="mb-16 px-4 md:px-0">
-        <Text variant="headline" size="text-5xl md:text-8xl">Resources.</Text>
-        <Text variant="body" size="text-lg md:text-xl">
+    <Box as="section" panel height="full" overflow="y-auto">
+      <Stack gap="lg" marginBottom="2xl" paddingX={{ base: "md", md: 0 }}>
+        <Text variant="headline" size="8xl">Resources.</Text>
+        <Text variant="body" size="xl">
           The Toolbox: Resources for the Road. Curated systems for travel, gear, and lifestyle optimization.
         </Text>
       </Stack>
 
-      <Box border className="mb-16 overflow-hidden bg-surface">
-        <Box className="aspect-[21/7] bg-line overflow-hidden">
-          <img 
+      <Box border marginBottom="2xl" overflow="hidden" surface="default">
+        <Box aspect="video" surface="muted" overflow="hidden">
+          <Box 
+            as="img"
             src="https://picsum.photos/seed/dance-resources/1200/500" 
             alt="Dance Resources" 
-            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+            width="full"
+            height="full"
+            className="object-cover grayscale hover:grayscale-0 transition-all duration-1000"
             referrerPolicy="no-referrer"
           />
         </Box>
-        <Stack padding="nav" gap={6} className="p-12">
-          <Text as="h3" variant="display" size="text-4xl">Optimized Assets.</Text>
-          <Text variant="body" size="text-lg" className="max-w-3xl">
+        <Stack padding="2xl" gap="lg" maxWidth="4xl">
+          <Text as="h3" variant="display" size="4xl">Optimized Assets.</Text>
+          <Text variant="body" size="lg">
             These are the protocols and hardware I use to maintain a high-performance WSDC Registry lifestyle. 
             From friction-coefficient mods to Titanium-status stacking, these systems are verified by 20+ weekends on the competition cycle annually.
           </Text>
         </Stack>
       </Box>
 
-      <Grid 
-        cols={1} 
-        md={12} 
-        as={motion.div}
+      <Motion 
         initial="hidden"
         animate="visible"
         variants={{
@@ -117,51 +128,71 @@ function ResourceList({ resources, onSelect }: { resources: ContentItem[]; onSel
             transition: { staggerChildren: 0.05 }
           }
         }}
-        className="bg-line border-t border-l border-line"
+        display="grid"
+        cols={{ base: 1, md: 12 }}
+        surface="muted"
+        border="t"
+        borderLeft
       >
         {resources.map((resource, index) => {
-          const Icon = getIcon(resource.category);
+          const LucideIcon = getIcon(resource.category);
           const isWide = index % 2 === 0;
           return (
-            <motion.div
+            <Motion
               key={resource.slug}
               variants={{
                 hidden: { opacity: 0, y: 10 },
                 visible: { opacity: 1, y: 0 }
               }}
-              whileHover={{ scale: 1.002, x: 2 }}
+              whileHover={{ x: 2 }}
               onClick={() => onSelect(resource)}
-              className={cn(
-                "bg-bg p-8 md:p-12 group cursor-pointer hover:bg-card-bg transition-colors flex flex-col h-full border-r border-b border-line relative overflow-hidden",
-                isWide ? 'md:col-span-7' : 'md:col-span-5'
-              )}
+              surface="default"
+              padding={{ base: "xl", md: "2xl" }}
+              display="flex"
+              flexDirection="column"
+              height="full"
+              borderRight
+              borderBottom
+              position="relative"
+              overflow="hidden"
+              cursor="pointer"
+              span={{ base: 12, md: isWide ? 7 : 5 }}
+              className="group hover:bg-card-bg transition-colors"
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-accent-brand scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-500" />
-              <Stack direction="row" justify="between" align="start" className="mb-8">
-                <Icon className="w-8 h-8 stroke-1 text-accent-brand group-hover:scale-110 transition-transform" />
+              <Box 
+                position="absolute" 
+                insetTop={0} 
+                insetLeft={0} 
+                width={1} 
+                height="full" 
+                surface="accent" 
+                className="bg-accent-brand scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-500" 
+              />
+              <Inline justify="between" align="start" marginBottom="xl">
+                <Icon icon={LucideIcon} size="lg" color="brand" className="group-hover:scale-110 transition-transform" />
                 <Text variant="micro">REF_{index.toString().padStart(3, '0')}</Text>
-              </Stack>
-              <Stack gap={4} className="flex-1">
-                <Stack direction="row" align="center" gap={4}>
+              </Inline>
+              <Stack gap="lg" flex="full">
+                <Inline gap="md">
                   <Text variant="mono" color="brand" weight="font-bold">{resource.category}</Text>
-                  <Box border className="border-accent-brand/30 px-2 py-0.5">
-                    <Text variant="mono" color="brand" weight="font-bold" size="text-[9px]">PROTOCOL</Text>
+                  <Box border paddingX="xs" paddingY="0.5" className="border-accent-brand/30">
+                    <Text variant="mono" color="brand" weight="font-bold" size="micro">PROTOCOL</Text>
                   </Box>
-                </Stack>
-                <Text as="h4" variant="headline" size="text-2xl" className="group-hover:text-accent-brand transition-colors">
+                </Inline>
+                <Text as="h4" variant="headline" size="2xl" className="group-hover:text-accent-brand transition-colors">
                   {resource.title}
                 </Text>
-                <Text variant="body" size="text-sm" className="line-clamp-3 opacity-80">
+                <Text variant="body" size="sm" opacity="80" className="line-clamp-3">
                   {resource.excerpt}
                 </Text>
               </Stack>
-              <Box className="mt-10 flex items-center gap-3 transition-transform group-hover:translate-x-1">
-                <Text variant="label" color="brand">Access System</Text> <ArrowRight className="w-3 h-3 text-accent-brand" />
-              </Box>
-            </motion.div>
+              <Inline marginTop="2xl" gap="md" className="group-hover:translate-x-1 transition-transform">
+                <Text variant="label" color="brand" size="micro">Access System</Text> <Icon icon={ArrowRight} size="xs" color="brand" />
+              </Inline>
+            </Motion>
           );
         })}
-      </Grid>
+      </Motion>
     </Box>
   );
- }
+}

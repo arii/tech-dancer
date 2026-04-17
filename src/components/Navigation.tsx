@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ShoppingBag, BarChart2, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal, LucideIcon } from 'lucide-react';
+import { ShoppingBag, BarChart2, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/components/layout/Primitives';
-import { cn } from '@/lib/utils';
+import { AnimatePresence } from 'motion/react';
+import { Box, Stack, Text, Motion, Icon, Inline } from '@/components/layout/Primitives';
 import { routes } from '@/config/routes';
 
-const iconMap: Record<string, LucideIcon> = {
+const iconMap: Record<string, any> = {
   '/': Home,
   '/lab': ShoppingBag,
   '/engine': BarChart2,
@@ -22,40 +21,69 @@ const iconMap: Record<string, LucideIcon> = {
   '/contact': Mail,
 };
 
-function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
+function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
   return (
     <Box as="li" position="relative" className="group">
       <NavLink
         to={to}
         onClick={onClick}
-        className={({ isActive }) => cn(
-          "flex items-center gap-3 transition-colors relative z-10",
-          isMobile ? "py-3 border-b border-line/50 text-lg" : "py-2 px-1",
-          isActive ? "text-accent-brand" : "text-text-dim group-hover:text-accent-brand"
-        )}
+        style={{ display: 'block' }}
       >
         {({ isActive }) => (
-          <>
+          <Box 
+            paddingY={isMobile ? "md" : "xs"} 
+            paddingX={isMobile ? 0 : "xs"}
+            border={isMobile ? "b" : false}
+            display="flex"
+            alignItems="center"
+            gap="md"
+            position="relative"
+            zIndex="sys"
+            cursor="pointer"
+            className="transition-colors"
+          >
             {!isMobile && isActive && (
-              <Box 
-                as={motion.div} 
+              <Motion 
                 layoutId="nav-indicator"
                 position="absolute"
                 height={4}
                 width={1}
                 surface="accent"
-                className="left-[-20px] bg-accent-brand"
+                insetLeft={-20}
+                className="bg-accent-brand"
                 transition={{ type: 'spring', damping: 20, stiffness: 250 }}
               />
             )}
-            <Icon className="w-5 h-5 md:w-4 md:h-4 stroke-1" />
-            <Text variant={isMobile ? "display" : "mono"} size={isMobile ? "base" : "xs"} weight="font-bold" uppercase tracking="widest" className="text-current">
+            <Icon 
+              icon={icon} 
+              size={isMobile ? "md" : "sm"} 
+              color={isActive ? "brand" : "dim"}
+              className="group-hover:text-accent-brand transition-colors"
+            />
+            <Text 
+              variant={isMobile ? "display" : "mono"} 
+              size={isMobile ? "base" : "xs"} 
+              weight="font-bold" 
+              uppercase 
+              tracking="widest"
+              color={isActive ? "brand" : "dim"}
+              className="group-hover:text-accent-brand transition-colors"
+            >
               {label}
             </Text>
-          </>
+            {!isMobile && (
+              <Box 
+                position="absolute" 
+                inset 
+                surface="accent" 
+                opacity="0" 
+                zIndex="hide"
+                className="group-hover:opacity-10 transition-opacity" 
+              />
+            )}
+          </Box>
         )}
       </NavLink>
-      {!isMobile && <Box position="absolute" inset surface="accent" opacity={5} className="opacity-0 group-hover:opacity-100 transition-opacity -z-10" />}
     </Box>
   );
 }
@@ -82,50 +110,53 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Mobile Header */}
       <Box layout="mobileHeader">
         <Stack gap={0}>
           <Text variant="display" size="xs" color="brand" weight="font-bold" tracking="tight">Ariel Anders</Text>
           <Text variant="micro" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">MIT Roboticist // WCS</Text>
         </Stack>
-        <button 
+        <Motion 
+          as="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 text-text-main hover:text-accent-brand transition-colors relative z-[120]"
+          padding="sm"
+          cursor="pointer"
+          position="relative"
+          zIndex="top"
+          className="hover:text-accent-brand transition-colors"
         >
           <AnimatePresence mode="wait">
-            <motion.div
+            <Motion
               key={isOpen ? 'close' : 'menu'}
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.15 }}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.div>
+              <Icon icon={isOpen ? X : Menu} size="lg" />
+            </Motion>
           </AnimatePresence>
-        </button>
+        </Motion>
       </Box>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <Box 
-            as={motion.div} 
+          <Motion 
             initial={{ opacity: 0, x: '-100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             position="fixed"
             inset
-            surface="bg"
-            zIndex="top"
-            padding="nav"
+            surface="default"
+            zIndex="max"
+            padding="xl"
             overflow="y-auto"
-            className="md:hidden pt-24"
+            display={{ base: "block", md: "none" }}
+            paddingTop="3xl"
           >
-            <Box as={motion.ul} variants={containerVariants} initial="closed" animate="open" className="space-y-6">
+            <Motion as="ul" variants={containerVariants} initial="closed" animate="open" display="grid" gap="lg">
               {routes.map((item) => (
-                <motion.div key={item.path} variants={itemVariants}>
+                <Motion key={item.path} variants={itemVariants}>
                   <NavItem 
                     to={item.path} 
                     label={item.label} 
@@ -133,49 +164,48 @@ export default function Navigation() {
                     onClick={() => setIsOpen(false)} 
                     isMobile 
                   />
-                </motion.div>
+                </Motion>
               ))}
-            </Box>
+            </Motion>
             
-            <Box as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-12">
-              <Box border surface="accent" padding="card" className="bg-accent/5">
-                <Text variant="micro" size="micro" color="brand" uppercase tracking="widest" className="mb-2">Find Me</Text>
+            <Motion initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} marginTop="2xl">
+              <Box border surface="subsoil" padding="xl" className="bg-accent/5">
+                <Text variant="micro" size="micro" color="brand" uppercase tracking="widest" display="block" marginBottom="sm">Find Me</Text>
                 <Text variant="display" size="sm" uppercase>Wednesdays @ Mission City Swing</Text>
-                <Text variant="micro" size="micro" color="dim" className="mt-1">San Francisco, CA</Text>
+                <Text variant="micro" size="micro" color="dim" display="block" marginTop="xs">San Francisco, CA</Text>
               </Box>
-            </Box>
-          </Box>
+            </Motion>
+          </Motion>
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
       <Box layout="navRail">
-        <Stack gap={12}>
+        <Stack gap="2xl">
           <Box>
             <Text variant="display" size="sm" color="brand" weight="font-black" tracking="tight">
               ARIEL ANDERS
             </Text>
-            <Text variant="micro" size="micro" color="brand" weight="font-bold" tracking="widest" className="mt-1">
+            <Text variant="micro" size="micro" color="brand" weight="font-bold" tracking="widest" display="block" marginTop="xs">
               MIT ROBOTICIST // WCS
             </Text>
           </Box>
 
-          <Stack as="ul" gap={2}>
+          <Stack as="ul" gap="xs">
             {routes.map((item) => (
               <NavItem key={item.path} to={item.path} label={item.label} icon={iconMap[item.path] || Terminal} />
             ))}
           </Stack>
 
-          <Box paddingTop={8}>
-            <Box border surface="default" padding="compact" className="bg-accent-brand/5 border-accent-brand/20">
-              <Text variant="micro" size="micro" color="brand" className="mb-2 underline underline-offset-4">Location_Log</Text>
+          <Box paddingTop="xl">
+            <Box border surface="subsoil" padding="md" className="bg-accent-brand/5 border-accent-brand/20">
+              <Text variant="micro" size="micro" color="brand" display="block" marginBottom="sm" className="underline underline-offset-4">Location_Log</Text>
               <Text variant="display" size="xs" uppercase>Wednesdays @ Mission City Swing</Text>
-              <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" className="mt-1">SF // CA</Text>
+              <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" display="block" marginTop="xs">SF // CA</Text>
             </Box>
           </Box>
         </Stack>
 
-        <Box border="t" paddingTop={8}>
+        <Box border="t" paddingTop="xl">
           <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" className="leading-relaxed">
             SYSTEM_PROTOCOL: 2026_V1.0
             <br />

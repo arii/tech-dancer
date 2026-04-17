@@ -1,8 +1,7 @@
-import { Stack, Box, Text, Button } from '@/components/layout/Primitives';
+import { Stack, Box, Text, Button, Motion, Icon, Input } from '@/components/layout/Primitives';
 import { useEmailCapture } from './useEmailCapture';
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
-import { inputs } from '@/styles/design-tokens';
 
 export function EmailForm() {
   const { email, setEmail, status, handleSubmit } = useEmailCapture();
@@ -10,56 +9,63 @@ export function EmailForm() {
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md">
       <Stack direction="row" gap={0} position="relative">
-        <input
+        <Input
           type="email"
           placeholder="ENTER_EMAIL_FOR_LOGS"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: any) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={inputs.base}
+          flex="full"
         />
         <Button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
           minWidth={60}
+          radius="none"
         >
           <AnimatePresence mode="wait">
             {status === 'loading' ? (
-              <Box
-                as={motion.div}
+              <Motion
                 key="loading"
                 initial={{ opacity: 0, rotate: 0 }}
                 animate={{ opacity: 1, rotate: 360 }}
                 exit={{ opacity: 0 }}
                 transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
               >
-                <Loader2 className="w-4 h-4" />
-              </Box>
+                <Icon icon={Loader2} size="sm" />
+              </Motion>
             ) : status === 'success' ? (
-              <Box
-                as={motion.div}
+              <Motion
                 key="success"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
               >
-                <Check className="w-4 h-4" />
-              </Box>
+                <Icon icon={Check} size="md" />
+              </Motion>
             ) : (
-              <Box
-                as={motion.div}
+              <Motion
                 key="idle"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
               >
-                <ArrowRight className="w-4 h-4" />
-              </Box>
+                <Icon icon={ArrowRight} size="sm" />
+              </Motion>
             )}
           </AnimatePresence>
         </Button>
       </Stack>
       {status === 'success' && (
-        <Text variant="micro" color="brand" marginTop={2} weight="font-bold">
+        <Text variant="micro" color="brand" marginTop="xs" weight="font-bold">
           SYSTEM: TRANSMISSION_RECEIVED // WELCOME_TO_THE_REGISTRY
         </Text>
       )}

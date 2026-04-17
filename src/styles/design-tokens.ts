@@ -6,27 +6,29 @@
 
 export const radius = {
   none: "rounded-none",
-  industrial: "rounded-[2px]", // Subtle 2px radius for a technical feel
-  sm: "rounded-sm",
+  sm: "rounded-[2px]", // Industrial/Technical
   md: "rounded-md",
+  lg: "rounded-lg",
+  full: "rounded-full",
 };
 
 export const borders = {
+  none: "border-0",
   default: "border border-line",
   accent: "border border-accent/20",
-  brand: "border border-accent-brand/30",
+  brand: "border border-accent-brand/20",
   thick: "border-2 border-line",
 };
 
 export const spacing = {
-  container: "p-6 md:p-12",
-  card: "p-8",
-  compact: "p-4",
-  nav: "p-8",
-  emailBar: "py-4 px-6 md:px-12",
-  hero: "py-20",
-  comfort: "py-12",
-  shell: "pb-32",
+  0: "0",
+  xs: "1",
+  sm: "2",
+  md: "4",
+  lg: "8",
+  xl: "12",
+  "2xl": "24",
+  "3xl": "32",
 };
 
 export const animation = {
@@ -63,8 +65,11 @@ export const buttons = {
 };
 
 export const shadows = {
-  topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
-  industrial: "shadow-sm",
+  none: "shadow-none",
+  sm: "shadow-sm",
+  md: "shadow-md",
+  lg: "shadow-lg",
+  overlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
 };
 
 export const typography = {
@@ -83,6 +88,7 @@ export const typeSizes = {
   xs: "text-[11px]",
   sm: "text-xs",
   base: "text-sm",
+  md: "text-[15px]",
   lg: "text-base",
   xl: "text-lg",
   "2xl": "text-xl",
@@ -91,4 +97,12 @@ export const typeSizes = {
   "7xl": "text-5xl md:text-7xl",
   "8xl": "text-6xl md:text-8xl",
   "9xl": "text-7xl md:text-9xl",
+};
+
+export const zIndices = {
+  base: 0,
+  nav: 100,
+  header: 110,
+  overlay: 150,
+  max: 999,
 };

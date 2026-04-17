@@ -1,4 +1,4 @@
-import { typography } from "./design-tokens";
+import { typography, radius } from "./design-tokens";
 
 /**
  * Standardized Variant Contracts for the Systems Console.
@@ -7,15 +7,15 @@ import { typography } from "./design-tokens";
 export const variants = {
   surface: {
     default: "bg-surface text-text-main",
-    muted: "bg-line/50 text-text-dim",
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
-    card: "bg-card-bg border-line",
+    muted: "bg-line/20 text-text-dim",
+    subsoil: "bg-bg text-text-dim",
     contrast: "bg-text-main text-bg",
   },
   intent: {
     default: "text-text-main",
     success: "text-accent-brand", 
-    danger: "text-red-600",
+    danger: "text-red-500",
     warning: "text-accent",
   },
   emphasis: {
@@ -25,6 +25,8 @@ export const variants = {
   },
   radius: {
     none: "rounded-none",
-    industrial: "rounded-[2px]",
+    sm: radius.sm,
+    md: radius.md,
+    lg: radius.lg,
   }
 }

@@ -1,21 +1,19 @@
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Motion, Icon, Inline } from '@/components/layout/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
-import { motion } from 'motion/react';
 
 export function EmailCaptureBar() {
   return (
-    <Box 
-      as={motion.div}
+    <Motion 
       initial={motionTokens.overlay.initial}
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
       surface="default"
       border="t"
-      shadow="topOverlay"
-      padding="emailBar"
+      shadow="lg"
+      padding="xl"
       position="fixed"
       inset="bottom"
       zIndex="top"
@@ -24,24 +22,24 @@ export function EmailCaptureBar() {
         direction={{ base: 'col', md: 'row' }} 
         align="center" 
         justify="between" 
-        gap={{ base: 4, md: 8 }}
+        gap={{ base: "md", md: "xl" }}
       >
-        <Stack direction="row" align="center" gap={4}>
-          <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
-            <Mail className="w-5 h-5 text-accent-brand" />
+        <Inline gap="md">
+          <Box padding="sm" surface="subsoil" border display={{ base: 'none', sm: 'block' }}>
+            <Icon icon={Mail} size="md" color="brand" />
           </Box>
           <Stack gap={0}>
             <Text variant="display" size="base" uppercase tracking="tight">
               Optimize Your Itinerary
             </Text>
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+            <Text variant="micro" size="micro" color="dim" uppercase tracking="widest">
               SYSTEM: WEEKLY_SYNC // TRAVEL_HACKS // DATA_REPORTS
             </Text>
           </Stack>
-        </Stack>
+        </Inline>
         
         <EmailForm />
       </Stack>
-    </Box>
+    </Motion>
   );
 }

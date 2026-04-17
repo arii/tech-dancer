@@ -3,37 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from 'motion/react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 import { Shield, Plane, Hotel, Activity, Code, Server, Music, ArrowRight, User, Calendar, Share2, Bookmark, ArrowLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { affiliateManager } from '@/lib/affiliateManager';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { getAllContent, ContentItem } from '@/lib/content';
-
-import { layout, typography, borders } from '@/styles/design-tokens';
-
-const wcsData = [
-  { month: 'Jan', scores: 45, events: 2 },
-  { month: 'Feb', scores: 52, events: 3 },
-  { month: 'Mar', scores: 48, events: 2 },
-  { month: 'Apr', scores: 61, events: 4 },
-  { month: 'May', scores: 55, events: 3 },
-  { month: 'Jun', scores: 67, events: 5 },
-];
-
-const travelData = [
-  { day: 'Mon', price: 450 },
-  { day: 'Tue', price: 420 },
-  { day: 'Wed', price: 380 },
-  { day: 'Thu', price: 520 },
-  { day: 'Fri', price: 680 },
-  { day: 'Sat', price: 710 },
-  { day: 'Sun', price: 590 },
-];
+import { Box, Stack, Text, Grid, Motion, Icon, Inline } from '@/components/layout/Primitives';
 
 export default function Engine() {
   const [studies, setStudies] = useState<ContentItem[]>([]);
@@ -65,44 +40,94 @@ export default function Engine() {
     }
   ];
 
-  return (
-    <section className={layout.panel}>
-      <div className="space-y-8 mb-16 px-4 md:px-0">
-        <h1 className={typography.headline + " text-5xl md:text-8xl"}>
-          The Engine.
-        </h1>
-        <p className={typography.body + " text-lg md:text-xl"}>
-          Deep-dive analysis on the mechanics of West Coast Swing. From judge variance to the physics of momentum.
-        </p>
-      </div>
+  if (selectedStudy) {
+    return (
+      <Box as="section" panel height="full" overflow="y-auto">
+        <Stack gap="xl" maxWidth="4xl" marginX="auto" paddingBottom="3xl">
+          <Motion 
+            as="button"
+            whileHover={{ x: -4 }}
+            onClick={() => setSelectedStudy(null)}
+            display="flex"
+            alignItems="center"
+            gap="sm"
+            color="accent"
+            weight="font-bold"
+            uppercase
+            tracking="widest"
+            size="sys"
+            variant="mono"
+            marginBottom="lg"
+            cursor="pointer"
+          >
+            <Icon icon={ArrowLeft} size="sm" />
+            Back to Journal
+          </Motion>
 
-      <motion.div 
+          <Inline gap="md" marginBottom="lg">
+            <Box surface="accent" border="accent" paddingX="sm" paddingY="xs">
+              <Text variant="mono" size="micro" color="brand" weight="font-bold" uppercase>{selectedStudy.category}</Text>
+            </Box>
+            <Inline gap="xs">
+              <Icon icon={Calendar} size="xs" color="dim" />
+              <Text variant="mono" size="micro" color="dim">{selectedStudy.date}</Text>
+            </Inline>
+          </Inline>
+
+          <Text as="h1" variant="headline" size="7xl" marginBottom="xl">
+            {selectedStudy.title}
+          </Text>
+
+          <Box className="markdown-body prose prose-invert max-w-none text-text-body leading-relaxed space-y-6">
+            <Markdown>{selectedStudy.content}</Markdown>
+          </Box>
+        </Stack>
+      </Box>
+    );
+  }
+
+  return (
+    <Box as="section" panel height="full" overflow="y-auto">
+      <Stack gap="lg" marginBottom="2xl" paddingX={{ base: "md", md: 0 }}>
+        <Text variant="headline" size="8xl">The Engine.</Text>
+        <Text variant="body" size="xl">
+          Deep-dive analysis on the mechanics of West Coast Swing. From judge variance to the physics of momentum.
+        </Text>
+      </Stack>
+
+      <Motion 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16"
+        display="grid"
+        cols={{ base: 1, md: 12 }}
+        gap="xl"
+        marginBottom="2xl"
       >
-        <div className="md:col-span-7 content-card overflow-hidden !p-0">
-          <div className="aspect-video bg-line overflow-hidden">
-            <motion.img 
+        <Box span={{ base: 1, md: 7 }} surface="default" border overflow="hidden">
+          <Box aspect="video" surface="muted" overflow="hidden">
+            <Motion 
+              as="img"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.8 }}
               src="https://picsum.photos/seed/dance-data/800/450" 
               alt="Dance Data" 
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+              width="full"
+              height="full"
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
               referrerPolicy="no-referrer"
             />
-          </div>
-          <div className="p-8 space-y-4">
-            <h3 className={typography.headline + " text-3xl"}>Data with a Heartbeat.</h3>
-            <p className={typography.body + " text-[15px] opacity-80"}>
+          </Box>
+          <Stack padding="xl" gap="md">
+            <Text variant="headline" size="3xl">Data with a Heartbeat.</Text>
+            <Text variant="body" size="sm" opacity="80">
               I use my robotics background to crack the code of West Coast Swing. 
               From judge consistency to the physics of connection, this is data you can actually use on the floor.
-            </p>
-          </div>
-        </div>
-        <div className="md:col-span-5 space-y-8">
-          <h3 className="text-sm font-sans font-bold uppercase tracking-[3px] text-text-main border-b border-line w-full pb-4 leading-none">Quick Insights</h3>
-          <motion.div 
+            </Text>
+          </Stack>
+        </Box>
+        <Stack span={{ base: 1, md: 5 }} gap="xl">
+          <Text variant="label" size="sm" border="b" paddingBottom="md" display="block">Quick Insights</Text>
+          <Motion 
             initial="hidden"
             animate="visible"
             variants={{
@@ -112,33 +137,42 @@ export default function Engine() {
                 transition: { staggerChildren: 0.1 }
               }
             }}
-            className="grid grid-cols-1 gap-4"
+            display="grid"
+            gap="md"
           >
             {experiencePacks.map((pack) => (
-              <motion.div 
+              <Motion 
                 key={pack.category} 
                 variants={{
                   hidden: { opacity: 0, x: 20 },
                   visible: { opacity: 1, x: 0 }
                 }}
-                whileHover={{ x: 5, borderColor: 'var(--color-accent-brand)' }}
-                className="bg-bg border border-line !p-6 flex items-center gap-6 group hover:border-accent-brand transition-colors cursor-default scanline-hover"
+                whileHover={{ x: 5 }}
+                surface="subsoil"
+                border
+                padding="lg"
+                display="flex"
+                alignItems="center"
+                gap="xl"
+                cursor="default"
+                className="group hover:border-accent-brand transition-colors"
+                position="relative"
               >
-                <div className="w-12 h-12 bg-accent/5 border border-accent/10 flex items-center justify-center text-accent shrink-0">
-                  <pack.icon className="w-6 h-6 stroke-1" />
-                </div>
-                <div className="space-y-1">
-                  <div className={typography.mono + " text-accent-brand font-bold leading-none"}>{pack.category}</div>
-                  <div className={typography.headline + " text-xl leading-tight"}>{pack.focus}</div>
-                  <div className={typography.body + " text-xs italic text-text-dim"}>"{pack.benefit}"</div>
-                </div>
-              </motion.div>
+                <Box width={12} height={12} surface="muted" border display="flex" alignItems="center" justifyContent="center" shrink={0}>
+                  <Icon icon={pack.icon} size="lg" color="accent" />
+                </Box>
+                <Stack gap="xs">
+                  <Text variant="mono" color="brand" weight="font-bold" size="micro">{pack.category}</Text>
+                  <Text variant="headline" size="xl">{pack.focus}</Text>
+                  <Text variant="body" size="micro" italic color="dim">"{pack.benefit}"</Text>
+                </Stack>
+              </Motion>
             ))}
-          </motion.div>
-        </div>
-      </motion.div>
+          </Motion>
+        </Stack>
+      </Motion>
 
-      <motion.div 
+      <Motion 
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
@@ -149,82 +183,58 @@ export default function Engine() {
             transition: { staggerChildren: 0.1 }
           }
         }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+        display="grid"
+        cols={{ base: 1, lg: 2 }}
+        gap="xl"
       >
         {studies.map((paper, index) => (
-          <motion.div
+          <Motion
             key={paper.slug}
             variants={{
               hidden: { opacity: 0, scale: 0.98 },
               visible: { opacity: 1, scale: 1 }
             }}
-            className="relative border border-line p-10 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
+            position="relative"
+            border
+            padding="2xl"
+            surface="default"
+            cursor="pointer"
+            className="group hover:bg-card-bg transition-colors"
             onClick={() => setSelectedStudy(paper)}
           >
-            {/* Replace side-stripe with a top-right index */}
-            <div className={typography.mono + " absolute top-6 right-8 text-accent font-bold opacity-40 group-hover:opacity-100 transition-opacity"}>
+            <Text variant="mono" weight="font-bold" color="accent" position="absolute" insetTop={6} insetRight={8} opacity="40" className="group-hover:opacity-100 transition-opacity">
               REF_ID: 00{index + 1}
-            </div>
+            </Text>
 
-            <div className="flex flex-wrap gap-2 mb-6">
+            <Inline gap="sm" marginBottom="xl">
               {paper.tags?.map(tag => (
-                <span key={tag} className={typography.mono + " border border-line px-2 py-0.5 text-text-dim"}>
-                  {tag}
-                </span>
+                <Box key={tag} border paddingX="xs" paddingY="0.5">
+                  <Text variant="mono" size="micro" color="dim">
+                    {tag}
+                  </Text>
+                </Box>
               ))}
-            </div>
+            </Inline>
 
-            <h4 className={typography.headline + " text-3xl mb-8 leading-tight"}>
+            <Text variant="headline" size="3xl" marginBottom="xl">
               {paper.title}
-            </h4>
+            </Text>
 
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className={typography.mono + " font-bold text-accent tracking-[2px]"}>Abstract</div>
-                <p className={typography.body + " text-sm line-clamp-2"}>
+            <Stack gap="lg">
+              <Stack gap="xs">
+                <Text variant="mono" weight="font-bold" color="accent" tracking="wide">Abstract</Text>
+                <Text variant="body" size="sm" className="line-clamp-2">
                   {paper.excerpt}
-                </p>
-              </div>
+                </Text>
+              </Stack>
               
-              <div className="flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[2px] text-accent group-hover:translate-x-1 transition-transform">
-                Read Full Analysis <ArrowRight className="w-3 h-3" />
-              </div>
-            </div>
-          </motion.div>
+              <Inline gap="sm" size="micro" variant="mono" color="accent" className="group-hover:translate-x-1 transition-transform">
+                Read Full Analysis <Icon icon={ArrowRight} size="xs" />
+              </Inline>
+            </Stack>
+          </Motion>
         ))}
-      </motion.div>
-
-      {selectedStudy && (
-        <div className="fixed inset-0 z-[100] bg-bg overflow-y-auto p-6 md:p-12">
-          <div className="max-w-4xl mx-auto">
-            <button 
-              onClick={() => setSelectedStudy(null)}
-              className="flex items-center gap-2 text-accent font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Journal
-            </button>
-
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-accent bg-accent/10 px-3 py-1 rounded-full">
-                {selectedStudy.category}
-              </span>
-              <div className="flex items-center gap-2 text-text-dim text-xs font-medium">
-                <Calendar className="w-3 h-3" />
-                {selectedStudy.date}
-              </div>
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-text-main mb-12 leading-tight">
-              {selectedStudy.title}
-            </h1>
-
-            <div className="markdown-body prose prose-lg max-w-none text-text-body leading-relaxed space-y-6">
-              <Markdown>{selectedStudy.content}</Markdown>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+      </Motion>
+    </Box>
   );
 }
