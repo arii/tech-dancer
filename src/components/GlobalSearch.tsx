@@ -51,7 +51,7 @@ export function GlobalSearch() {
             left={0}
             width="screen"
             height="screen"
-            zIndex={9999}
+            zIndex="[9999]"
             display="flex"
             justify="center"
             paddingTop={32}
@@ -70,7 +70,7 @@ export function GlobalSearch() {
               className="overflow-hidden bg-white shadow-[0_64px_128px_-16px_rgba(0,0,0,0.3)] border border-accent/20"
             >
               <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
-                <Search className="w-6 h-6 text-accent-brand shrink-0" />
+                <Search className="w-6 h-6 text-accent shrink-0" />
                 <Box 
                   as="input"
                   ref={inputRef}
@@ -90,7 +90,7 @@ export function GlobalSearch() {
                   padding={2}
                   className="group hover:bg-accent/5 transition-colors border border-line/50"
                 >
-                  <X className="w-6 h-6 text-text-dim group-hover:text-accent-brand" />
+                  <X className="w-6 h-6 text-text-dim group-hover:text-accent" />
                 </Box>
               </Box>
 
@@ -110,11 +110,11 @@ export function GlobalSearch() {
                         className="hover:bg-accent/5 bg-white group transition-colors text-left border border-line"
                       >
                          <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
-                            <Hash className="w-4 h-4 text-accent-brand opacity-50" />
+                            <Hash className="w-4 h-4 text-accent opacity-50" />
                          </Box>
                          <Stack gap={1} flex className="min-w-0">
                             <Box display="flex" align="center" justify="between" gap={3}>
-                               <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">{res.title}</Text>
+                               <Text variant="display" size="lg" className="group-hover:text-accent truncate">{res.title}</Text>
                                <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                                   <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                                </Box>

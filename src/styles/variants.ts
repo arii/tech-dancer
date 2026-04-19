@@ -8,13 +8,13 @@ export const variants = {
   surface: {
     default: "bg-surface text-text-main",
     muted: "bg-line/50 text-text-dim",
-    accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
-    card: "bg-card-bg border-line",
+    accent: "bg-accent/5 border-accent/20 text-accent",
+    card: "bg-surface border-line",
     contrast: "bg-text-main text-bg",
   },
   intent: {
     default: "text-text-main",
-    success: "text-accent-brand", 
+    success: "text-accent",
     danger: "text-red-600",
     warning: "text-accent",
   },
