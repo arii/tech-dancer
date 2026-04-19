@@ -7,7 +7,13 @@ export default function BlogFeed() {
 
   return (
     <Box as="section">
-      <FolioGrid items={posts} categoryTitle="Blog Posts" basePath="/blog" />
+      <FolioGrid
+        items={posts}
+        categoryTitle="Blog Posts"
+        label="INSIGHTS"
+        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
+        basePath="/blog"
+      />
     </Box>
   );
 }

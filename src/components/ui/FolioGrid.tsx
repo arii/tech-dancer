@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ContentCard } from '@/components/ui/ContentCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 
-export default function FolioGrid({ items, categoryTitle, basePath }: { items: any[], categoryTitle: string, basePath: string }) {
+export default function FolioGrid({ items, categoryTitle, basePath, label, description }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string }) {
   const [search, setSearch] = useState('');
 
   const filteredItems = items.filter(item => {
@@ -15,9 +16,13 @@ export default function FolioGrid({ items, categoryTitle, basePath }: { items: a
   });
 
   return (
-    <section className="panel h-full">
-      <header className="mb-16 border-b-4 border-line pb-8">
-        <h1 className="text-7xl md:text-9xl tracking-tighter text-text-main">{categoryTitle}</h1>
+    <section className="h-full">
+      <header className="mb-12">
+        <PageHeader
+          label={label || "FOLIO"}
+          title={categoryTitle}
+          description={description}
+        />
         <div className="mt-8 relative max-w-2xl">
           <input
             type="text"
@@ -28,7 +33,7 @@ export default function FolioGrid({ items, categoryTitle, basePath }: { items: a
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-0 border-t border-l border-line">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-0 border-t border-l border-line mt-8">
         {filteredItems.map(item => (
           <div key={item.slug} className="border-r border-b border-line p-8 hover:bg-card-bg transition-colors group">
             <ContentCard
