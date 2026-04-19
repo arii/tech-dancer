@@ -25,6 +25,8 @@ Instead of aiming for a placement, set granular goals:
 
 ### The Variance of Judges
 
-The majority of above-average dancers don’t make it to finals occasionally. This is often a result of judge density and heat distribution. By recording your videos and analyzing them objectively, you can track your *actual* improvement regardless of the final ledger.
+The majority of above-average dancers don’t make it to finals occasionally. This is often a result of judge density and heat distribution.
 
-Focus on the systems, let the scores be the noise.
+By recording your videos and analyzing them objectively, you can track your *actual* improvement regardless of the final ledger. Objective analysis, such as reviewing your video footage to check connection, timing, and footwork, is vastly superior to relying on placement scores which carry high variance.
+
+Focus on the systems and the video review process; let the scores be the noise.

@@ -3,7 +3,6 @@ import { User, Award, Globe, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useProfile } from './useProfile';
-import Contact from './ContactConsole';
 
 export default function ArielProfile() {
   const { bio } = useProfile();
@@ -84,10 +83,6 @@ export default function ArielProfile() {
             </Stack>
           </Box>
         </Grid>
-
-        <Box border="t" paddingTop={16}>
-          <Contact />
-        </Box>
       </Stack>
     </Box>
   );

@@ -6,13 +6,33 @@ interface ContentCardProps {
   slug: string;
   title: string;
   category: string;
+  excerpt?: string;
   date?: string;
   image?: string;
   basePath: string;
   aspect?: "square" | "video";
 }
 
-export function ContentCard({ slug, title, category, date, image, basePath, aspect = "video" }: ContentCardProps) {
+export function ContentCardSkeleton() {
+  return (
+    <Box className="flex flex-col h-full bg-surface border border-line shadow-sm rounded-lg overflow-hidden animate-pulse">
+      <Box className="relative aspect-video bg-line/50" />
+      <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
+        <Stack gap={4}>
+          <Box className="h-4 w-24 bg-line/50 rounded" />
+          <Box className="h-8 w-3/4 bg-line/50 rounded" />
+          <Stack gap={2}>
+            <Box className="h-4 w-full bg-line/50 rounded" />
+            <Box className="h-4 w-5/6 bg-line/50 rounded" />
+          </Stack>
+        </Stack>
+        <Box className="h-4 w-20 bg-line/50 rounded mt-auto" />
+      </Stack>
+    </Box>
+  );
+}
+
+export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect = "video" }: ContentCardProps) {
   return (
     <Box 
       as={NavLink}
@@ -56,7 +76,7 @@ export function ContentCard({ slug, title, category, date, image, basePath, aspe
             {title}
           </Text>
           <Text variant="body" size="base" color="dim" className="line-clamp-2 leading-relaxed">
-             Discover the technical intersections of robotics and dance in this deep dive into {category.toLowerCase()} methodology and engineering principles.
+             {excerpt || `Discover the technical intersections of robotics and dance in this deep dive into ${category.toLowerCase()} methodology and engineering principles.`}
           </Text>
         </Stack>
 

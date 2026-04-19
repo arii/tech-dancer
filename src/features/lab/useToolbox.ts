@@ -6,10 +6,9 @@ export function useToolbox() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const categories = [
-    { id: 'dance', label: 'Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
-    { id: 'fashion', label: 'Fashion', description: 'Bright, fun outfits curated for movement, comfort, and style on the dance floor.' },
-    { id: 'travel', label: 'Travel Related', description: 'Optimized logistics gear for WCS events and travel efficiency.' },
-    { id: 'other', label: 'Other', description: 'Miscellaneous items that support the tech-dancer lifestyle.' }
+    { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
+    { id: 'fashion', label: 'Row 2: Fashion', description: 'Bright, fun outfits curated for movement, comfort, and style on the dance floor.' },
+    { id: 'travel', label: 'Row 3: Travel Related', description: 'Optimized logistics gear for the convention circuit and bougie-on-a-budget travel.' }
   ];
 
   const groupedResources = useMemo(() => {

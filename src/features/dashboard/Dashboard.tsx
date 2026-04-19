@@ -4,7 +4,7 @@ import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
 import { useHome } from './useHome';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
-import { HeroPathCard } from '@/components/ui/HeroPathCard';
+import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 
 export default function Home() {
@@ -34,24 +34,7 @@ export default function Home() {
           </Stack>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 5 }} gap={8}>
-          <HeroPathCard 
-            span={3}
-            title="Are you a dancer?"
-            tag="PATH_01 // DANCER"
-            image=""
-            paths={dancerPaths}
-            icon={Zap}
-            label={""}          />
-          <HeroPathCard 
-            span={2}
-            title="Looking to hire?"
-            tag="PATH_02 // HIRE_ME"
-            image=""
-            paths={hirePaths}
-            icon={Shield}
-            label={""}          />
-        </Grid>
+        <PathSelector />
 
         <Stack gap={12}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">

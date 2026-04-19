@@ -25,9 +25,15 @@ I carry both the American Express Platinum and the World of Hyatt Credit Card.
 
 ### The "Credit-as-Debit" Rule
 
-**This is the most important part:** Always use credit cards as debit cards. Never carry a balance. If you don't have the cash in your checking account to cover the dance fee or the flight, *don't buy it*. 
+<Notice type="warning">
+**Financial Health Disclaimer**
 
-I recommend signing up for a Roth IRA before you start chase referral links. Financial stability allows for better dancing because you're not stressed about the cost of the next workshop.
+This content is a prerequisite for any credit card strategy: always use credit cards as debit cards. Never carry a balance. I strongly recommend signing up for a Roth IRA before you start exploring credit card points. Financial stability is the foundation of your long-term dance journey.
+</Notice>
+
+**This is the most important part:** If you don't have the cash in your checking account to cover the dance fee or the flight, *don't buy it*.
+
+Financial stability allows for better dancing because you're not stressed about the cost of the next workshop.
 
 ### Avoid FOMO
 
