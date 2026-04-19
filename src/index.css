@@ -1,26 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Space+Mono&display=swap');
+@import "./styles/tokens.css";
 @import "tailwindcss";
 
 @theme {
   /* Modern Typography Identity */
-  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
 
   /* Clean Content Palette (60-30-10 Rule) */
-  --color-bg: #F8F9FA;        /* Off-White Primary */
-  --color-surface: #FFFFFF;    /* Surface Secondary */
-  --color-line: #E9ECEF;       /* Muted Borders */
-  --color-accent: #007BFF;     /* Electric Blue Accent */
-  --color-accent-navy: #1A2B3C; /* Deep Navy (Text/Deep Accent) */
-  --color-text-main: #1A2B3C;  /* Deep Navy */
-  --color-text-body: #2D3748;
-  --color-text-dim: #6C757D;   /* Slate Gray */
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-brand: var(--color-accent-brand);
+  --color-accent-navy: var(--color-accent-navy);
+  --color-text-main: var(--color-text-main);
+  --color-text-body: var(--color-text-body);
+  --color-text-dim: var(--color-text-dim);
   
   /* Layout & Spacing */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-none: var(--radius-none);
+  --radius-subtle: var(--radius-subtle);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
   --container-blog: 1100px;
   
   --padding-panel: clamp(1.5rem, 5vw, 4rem);

@@ -1,7 +1,7 @@
 import React from "react"
 import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
+import { ResponsiveProp, getResponsiveClasses } from "@/components/system-utils"
 
 interface GridProps extends BoxProps {
   cols?: ResponsiveProp<number | string>

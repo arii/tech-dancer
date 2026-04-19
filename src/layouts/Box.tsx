@@ -2,7 +2,7 @@ import React from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows } from "@/styles/design-tokens"
 import { variants } from "@/styles/variants"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
+import { ResponsiveProp, getResponsiveClasses } from "@/components/system-utils"
 
 export interface BaseProps {
   padding?: ResponsiveProp<keyof typeof spacing | number | string>

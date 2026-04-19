@@ -1,14 +1,16 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
-import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
-import { useHome } from './useHome';
-import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
-import PathSelector from '@/components/ui/PathSelector';
-import { ContentCard } from '@/components/ui/ContentCard';
+import { ArrowRight } from 'lucide-react';
+import { Box, Stack, Text, Grid } from '@/components/Primitives';
+import { useHome } from '@/features/dashboard/useHome';
+import { SectionHeader } from '@/components/PageHeader';
+import PathSelector from '@/components/PathSelector';
+import { ContentCard } from '@/components/ContentCard';
+import { getHome } from '@/lib/content';
 
 export default function Home() {
-  const { recentPosts, dancerPaths, hirePaths } = useHome();
+  const { recentPosts } = useHome();
+  const content = getHome();
 
   return (
     <Box as="section">
@@ -23,13 +25,13 @@ export default function Home() {
               size="fluid-7"
               className="text-accent-navy leading-tight tracking-tight max-w-4xl"
             >
-              The Roboticist&apos;s Guide to the West Coast Swing
+              {content.hero.title}
             </Text>
             <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
-              Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS lifestyle.
+              {content.hero.subtitle}
             </Text>
             <Text variant="sans" size="base" color="dim" maxWidth="2xl" marginTop={2} className="leading-relaxed">
-              Welcome to tech-dancer. You&apos;re looking at a living portfolio as a platform. Enjoy the west coast swing content or dive into the technical details.
+              {content.hero.welcome}
             </Text>
           </Stack>
         </Stack>
@@ -37,7 +39,7 @@ export default function Home() {
         <PathSelector />
 
         <Stack gap={12}>
-          <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
+          <SectionHeader label={content.sections.blog.label} title={content.sections.blog.title}>
             <Box 
               as={NavLink} 
               to="/blog"
@@ -46,7 +48,7 @@ export default function Home() {
               gap={3} 
               className="text-text-dim hover:text-accent transition-colors"
             >
-              <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
+              <Text variant="mono" size="xs" weight="font-bold">{content.sections.blog.cta}</Text>
               <ArrowRight className="w-4 h-4" />
             </Box>
           </SectionHeader>
@@ -66,14 +68,3 @@ export default function Home() {
     </Box>
   );
 }
-
-const dancerPaths = [
-  { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
-  { label: "Gear reviews", path: "/gear" }
-];
-
-const hirePaths = [
-  { label: "Tech blog posts", path: "/blog?category=Tech" },
-  { label: "Data and Development Lab", path: "/research" },
-  { label: "About/Contact page", path: "/about" }
-];

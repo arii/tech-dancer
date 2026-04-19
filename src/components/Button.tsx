@@ -1,7 +1,7 @@
 import React from "react"
 import { cn } from "@/lib/utils"
 import { variants } from "@/styles/variants"
-import { Box, BaseProps } from "./Box"
+import { Box, BaseProps } from "@/layouts/Box"
 
 interface ButtonProps extends BaseProps, React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof variants.emphasis

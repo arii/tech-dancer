@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
-import { PageHeader } from '@/components/ui/PageHeader';
+import { ContentCard, ContentCardSkeleton } from '@/components/ContentCard';
+import { PageHeader } from '@/components/PageHeader';
 
 export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
   const [search, setSearch] = useState('');

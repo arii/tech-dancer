@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/components/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';

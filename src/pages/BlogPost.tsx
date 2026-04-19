@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/components/Primitives';
 import { getPosts } from '@/lib/content';
 
 export default function BlogPost() {

@@ -4,21 +4,22 @@
  */
 
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'motion/react';
-import { MainLayout } from './components/layout/MainLayout';
+import { AnimatePresence } from 'motion/react';
+import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
+import { Box } from './components/Primitives';
 
-import Home from './features/dashboard/Dashboard';
-import GearReviews from './features/lab/Toolbox';
-import Research from './features/research/ResearchAnalytics';
+import Home from './pages/Home';
+import GearReviews from './pages/Gear';
+import Research from './pages/Research';
 import Resources from './features/resources/ResourceGallery';
-import About from './features/profile/ArielProfile';
-import Blog from './features/journal/BlogFeed';
-import BlogPost from './features/journal/BlogPost';
-import Contact from './features/profile/ContactConsole';
-import ResearchDetail from './features/research/ResearchDetail';
+import About from './pages/About';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import Contact from './pages/Contact';
+import ResearchDetail from './pages/ResearchDetail';
 
-import { Box } from './components/layout/Primitives';
+import { motion } from 'motion/react';
 
 export default function App() {
   const location = useLocation();

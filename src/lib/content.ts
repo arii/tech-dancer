@@ -58,12 +58,12 @@ export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 
 // --- Glob Loaders ---
 
-const postModules = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' });
-const resourceModules = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' });
-const studyModules = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' });
-const eventModules = import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' });
+const postModules = import.meta.glob('/content/posts/*.{md,mdx}', { eager: true, query: '?raw' });
+const resourceModules = import.meta.glob('/content/resources/*.{md,mdx}', { eager: true, query: '?raw' });
+const studyModules = import.meta.glob('/content/studies/*.{md,mdx}', { eager: true, query: '?raw' });
+const eventModules = import.meta.glob('/content/events/*.{md,mdx}', { eager: true, query: '?raw' });
 
-const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
+const slugFrom = (path: string) => path.split('/').pop()?.replace(/\.(md|mdx)$/, '') || '';
 
 function transform<T>(modules: Record<string, any>): T[] {
   return Object.entries(modules)
@@ -98,6 +98,27 @@ export function getStudies(): Study[] {
 
 export function getEvents(): Event[] {
   return transform<Event>(eventModules);
+}
+
+// --- JSON Content Helpers ---
+
+const navigationContent = import.meta.glob('/content/navigation.json', { eager: true });
+const footerContent = import.meta.glob('/content/footer.json', { eager: true });
+const homeContent = import.meta.glob('/content/home.json', { eager: true });
+
+export function getNavigation() {
+  const data = Object.values(navigationContent)[0] as any;
+  return data.default || data;
+}
+
+export function getFooter() {
+  const data = Object.values(footerContent)[0] as any;
+  return data.default || data;
+}
+
+export function getHome() {
+  const data = Object.values(homeContent)[0] as any;
+  return data.default || data;
 }
 
 /**

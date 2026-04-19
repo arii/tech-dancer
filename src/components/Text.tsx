@@ -2,7 +2,7 @@ import React from "react"
 import { composeStyles } from "@/lib/utils"
 import { typography, typeSizes } from "@/styles/design-tokens"
 import { variants } from "@/styles/variants"
-import { Box, BaseProps } from "./Box"
+import { Box, BaseProps } from "@/layouts/Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
 export interface TextProps extends BaseProps, React.HTMLAttributes<HTMLElement> {

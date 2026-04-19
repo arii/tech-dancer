@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '../layout/Primitives';
+import { Box, Stack, Text } from '@/components/Primitives';
 
 interface PageHeaderProps {
   label: string;

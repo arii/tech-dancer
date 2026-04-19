@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "title": "The Roboticist's Guide to the West Coast Swing",
+    "subtitle": "Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS lifestyle.",
+    "welcome": "Welcome to tech-dancer. You're looking at a living portfolio as a platform. Enjoy the west coast swing content or dive into the technical details."
+  },
+  "sections": {
+    "blog": {
+      "label": "LATEST UPDATES",
+      "title": "Recent Blog Posts",
+      "cta": "View full repository"
+    }
+  }
+}

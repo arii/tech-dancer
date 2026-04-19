@@ -1,0 +1,30 @@
+:root {
+  /* Colors - Derived from index.css theme and design-tokens.ts */
+  --color-bg: #F8F9FA;
+  --color-surface: #FFFFFF;
+  --color-line: #E9ECEF;
+  --color-accent: #007BFF;
+  --color-accent-navy: #1A2B3C;
+  --color-text-main: #1A2B3C;
+  --color-text-body: #2D3748;
+  --color-text-dim: #6C757D;
+  --color-accent-brand: var(--color-accent); /* Mapping brand to accent for now */
+
+  /* Radius */
+  --radius-none: 0px;
+  --radius-subtle: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Spacing */
+  --spacing-container: 1.5rem; /* p-6 */
+  --spacing-card: 2rem; /* p-8 */
+  --spacing-compact: 1rem; /* p-4 */
+  --spacing-nav: 2rem; /* p-8 */
+
+  /* Typography Fonts */
+  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "Space Mono", monospace;
+}

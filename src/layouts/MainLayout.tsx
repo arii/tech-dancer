@@ -1,8 +1,6 @@
-import { Box, Stack } from '@/components/layout/Primitives';
+import { Box, Stack } from '@/components/Primitives';
 import Navigation from '@/components/Navigation';
-import { EmailCaptureBar } from '@/features/email-capture/EmailCaptureBar';
-import { Footer } from '@/components/layout/Footer';
-import { AnimatePresence } from 'motion/react';
+import { Footer } from '@/components/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {

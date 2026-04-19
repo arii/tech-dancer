@@ -1,6 +1,6 @@
-import { Box } from '@/components/layout/Primitives';
-import { useToolbox } from './useToolbox';
-import FolioGrid from '@/components/ui/FolioGrid';
+import { Box } from '@/components/Primitives';
+import { useToolbox } from '@/features/lab/useToolbox';
+import FolioGrid from '@/components/FolioGrid';
 
 export default function Toolbox() {
   const { filteredCategories } = useToolbox();

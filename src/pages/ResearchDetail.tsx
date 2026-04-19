@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
-import { useResearch } from './useResearch';
-import { BlogDrafter } from '@/features/lab/BlogDrafter';
+import { Box, Stack, Text, Grid } from '@/components/Primitives';
+import { useResearch } from '@/features/research/useResearch';
+import { BlogDrafter } from '@/components/BlogDrafter';
 
 export default function ResearchDetail() {
   const { id } = useParams();

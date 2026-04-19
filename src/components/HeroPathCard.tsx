@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text, Grid } from '../layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/components/Primitives';
 import { Zap, Shield } from 'lucide-react';
 
 interface HeroPathCardProps {

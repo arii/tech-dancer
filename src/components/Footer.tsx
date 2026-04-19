@@ -1,20 +1,17 @@
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/components/Primitives';
+import { getFooter } from '@/lib/content';
 
 export function Footer() {
-  const legalLinks = [
-    { label: 'Privacy', href: '#' },
-    { label: 'Terms', href: '#' },
-    { label: 'Contact', href: '/contact' },
-  ];
+  const { copyright, links } = getFooter();
 
   return (
     <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-slate-200" marginTop={32}>
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
-          © 2026 TECH-DANCER
+          {copyright}
         </Text>
         <Stack direction="row" gap={8} align="center">
-          {legalLinks.map((link) => (
+          {links.map((link: any) => (
             <Text 
               key={link.label}
               as="a" 

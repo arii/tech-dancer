@@ -2,9 +2,9 @@ import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search 
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/components/Primitives';
 import { cn } from '@/lib/utils';
-import { routes } from '@/config/routes';
+import { getNavigation } from '@/lib/content';
 
 const iconMap: Record<string, any> = {
   '/': Home,
@@ -39,6 +39,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const routes = getNavigation();
 
   return (
     <>
@@ -69,7 +70,7 @@ export default function Navigation() {
             paddingTop={24}
           >
             <Box as="ul" className="space-y-6">
-              {routes.filter(r => r.path !== '/').map((item) => (
+              {routes.filter((r: any) => r.path !== '/').map((item: any) => (
                 <NavItem 
                   key={item.path} 
                   to={item.path} 
@@ -118,7 +119,7 @@ export default function Navigation() {
               <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
             </Box>
 
-            {routes.filter(r => r.path !== '/').map((item) => (
+            {routes.filter((r: any) => r.path !== '/').map((item: any) => (
               <NavItem key={item.path} to={item.path} label={item.label} icon={iconMap[item.path] || Terminal} />
             ))}
           </Stack>

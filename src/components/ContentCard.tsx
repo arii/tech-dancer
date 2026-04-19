@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Box, Stack, Text } from '../layout/Primitives';
+import { Box, Stack, Text } from '@/components/Primitives';
 
 interface ContentCardProps {
   slug: string;

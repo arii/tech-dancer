@@ -1,7 +1,7 @@
-import { Box, Stack } from '@/components/layout/Primitives';
-import { useBlog } from './useBlog';
-import FolioGrid from '@/components/ui/FolioGrid';
-import { FilterBar } from '@/components/ui/FilterBar';
+import { Box, Stack } from '@/components/Primitives';
+import { useBlog } from '@/features/journal/useBlog';
+import FolioGrid from '@/components/FolioGrid';
+import { FilterBar } from '@/components/FilterBar';
 
 export default function BlogFeed() {
   const { posts, categories, activeCategory, setActiveCategory, isLoading } = useBlog();

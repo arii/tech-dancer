@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/components/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
