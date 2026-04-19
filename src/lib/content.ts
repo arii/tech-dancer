@@ -1,53 +1,112 @@
+/// <reference types="vite/client" />
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/// <reference types="vite/client" />
-import { Buffer } from 'buffer';
-if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || Buffer;
-}
 import matter from 'gray-matter';
 
-export interface ContentMetadata {
-  type: 'post' | 'resource' | 'study';
+// --- Typed Interfaces ---
+
+export interface Post {
+  slug: string;
   title: string;
   date: string;
   author: string;
   category: string;
   excerpt: string;
+  content: string;
   image?: string;
   tags?: string[];
   affiliateIds?: string[];
-  slug: string;
 }
 
-export interface ContentItem extends ContentMetadata {
+export interface Resource {
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  image?: string;
+  tags?: string[];
+  affiliateIds?: string[];
+}
+
+export interface Study {
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  tags?: string[];
+}
+
+export interface Event {
+  slug: string;
+  title: string;
+  location: string;
+  city: string;
+  schedule: string;
+  description: string;
+  link?: string;
   content: string;
 }
 
-export function getAllContent(type: 'posts' | 'resources' | 'studies'): ContentItem[] {
-  let files: Record<string, string>;
-  
-  if (type === 'posts') {
-    files = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }) as Record<string, string>;
-  } else if (type === 'resources') {
-    files = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }) as Record<string, string>;
-  } else {
-    files = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }) as Record<string, string>;
-  }
+export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 
-  return Object.entries(files).map(([path, raw]) => {
-    // raw might be the default export if using Vite raw loader
-    const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
-    const { data, content } = matter(contentStr);
-    const slug = path.split('/').pop()?.replace('.md', '') || '';
-    
-    return {
-      ...(data as ContentMetadata),
-      content,
-      slug,
-    };
-  }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+// --- Glob Loaders ---
+
+const postModules = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' });
+const resourceModules = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' });
+const studyModules = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' });
+const eventModules = import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' });
+
+const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
+
+function transform<T>(modules: Record<string, any>): T[] {
+  return Object.entries(modules)
+    .map(([path, raw]) => {
+      const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
+      const { data, content } = matter(contentStr);
+      return {
+        ...data,
+        content,
+        slug: slugFrom(path)
+      } as unknown as T;
+    })
+    .sort((a: any, b: any) => {
+      if (a.date && b.date) return +new Date(b.date) - +new Date(a.date);
+      return 0;
+    });
+}
+
+// --- Public API ---
+
+export function getPosts(): Post[] {
+  return transform<Post>(postModules);
+}
+
+export function getResources(): Resource[] {
+  return transform<Resource>(resourceModules);
+}
+
+export function getStudies(): Study[] {
+  return transform<Study>(studyModules);
+}
+
+export function getEvents(): Event[] {
+  return transform<Event>(eventModules);
+}
+
+/**
+ * Legacy support for ContentItem usage during migration
+ */
+export type ContentItem = Post | Resource | Study | Event;
+export function getAllContent(type: ContentType): ContentItem[] {
+  if (type === 'posts') return getPosts();
+  if (type === 'resources') return getResources();
+  if (type === 'studies') return getStudies();
+  return getEvents();
 }

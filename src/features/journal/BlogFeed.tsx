@@ -1,0 +1,38 @@
+import { Box, Stack, Grid } from '@/components/layout/Primitives';
+import { useBlog } from './useBlog';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { FilterBar } from '@/components/ui/FilterBar';
+import { ContentCard } from '@/components/ui/ContentCard';
+
+export default function BlogFeed() {
+  const { posts, activeCategory, setActiveCategory, categories } = useBlog();
+
+  return (
+    <Box as="section">
+      <Stack gap={12}>
+        <PageHeader
+          label="INSIGHTS"
+          title="Blog Posts"
+          description="Technical analysis and engineering principles applied to the world of West Coast Swing."
+        />
+
+        <FilterBar
+          activeCategory={activeCategory}
+          categories={categories}
+          onSelect={setActiveCategory}
+        />
+
+        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>
+          {posts.map((post) => (
+            <ContentCard
+              key={post.slug}
+              {...post}
+              basePath="/blog"
+              aspect="video"
+            />
+          ))}
+        </Grid>
+      </Stack>
+    </Box>
+  );
+}
