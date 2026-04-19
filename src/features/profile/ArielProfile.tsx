@@ -26,9 +26,9 @@ export default function ArielProfile() {
 
               <Grid cols={1} gap={6}>
                 {bio.details.map((detail) => (
-                  <Box key={detail.label} border="b" paddingBottom={4}>
-                    <Text variant="mono" size="micro" color="dim" display="block">{detail.label}</Text>
-                    <Text variant="display" size="lg" marginTop={1}>{detail.value}</Text>
+                  <Box key={detail.label} paddingBottom={4} className="border-b border-slate-200">
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" display="block" className="tracking-[0.15em] uppercase">{detail.label}</Text>
+                    <Text variant="display" size="lg" marginTop={1} weight="font-bold" className="text-accent-navy">{detail.value}</Text>
                   </Box>
                 ))}
               </Grid>
@@ -36,13 +36,9 @@ export default function ArielProfile() {
               <Box 
                 as="a" 
                 href="#" 
-                variant="mono" 
-                size="sm" 
-                weight="font-bold" 
-                color="brand" 
-                className="hover:underline flex items-center gap-2"
+                className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy"
               >
-                View Full Professional Background
+                <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">VIEW FULL BACKGROUND</Text>
                 <ArrowRight className="w-4 h-4" />
               </Box>
             </Stack>
@@ -52,7 +48,9 @@ export default function ArielProfile() {
             <Stack gap={16}>
               {bio.sections.map((section) => (
                 <Stack key={section.id} gap={4}>
-                  <Text variant="display" size="4xl" weight="font-bold">{section.title}</Text>
+                  <Box paddingBottom={4} className="border-b border-slate-200">
+                    <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">{section.title}</Text>
+                  </Box>
                   <Text variant="body" size="lg" color="body" className="leading-relaxed">
                     {section.content}
                   </Text>
@@ -78,8 +76,8 @@ export default function ArielProfile() {
                     cursor="pointer"
                     className="group hover:border-accent-brand transition-all"
                   >
-                    <item.icon className="w-5 h-5 text-accent group-hover:text-accent-brand transition-colors" />
-                    <Text variant="mono" size="micro" weight="font-bold">{item.label}</Text>
+                    <item.icon className="w-5 h-5 text-accent-navy group-hover:text-accent transition-colors" />
+                    <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">{item.label}</Text>
                   </Box>
                 ))}
               </Grid>

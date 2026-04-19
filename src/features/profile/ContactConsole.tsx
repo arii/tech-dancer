@@ -93,9 +93,11 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
         <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
           <Stack gap={12}>
             <Stack gap={6}>
-              <Text as="h3" variant="display" size="2xl">Inquiries</Text>
+              <Box paddingBottom={4} className="border-b border-slate-200">
+                <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+              </Box>
               <Text variant="body" size="base" maxWidth="md" color="dim">
-                I'm always open to new ideas, questions about my reviews, or just chat about the dance scene.
+                I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
               </Text>
             </Stack>
             
@@ -110,8 +112,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                     <item.icon className="w-6 h-6 stroke-1" />
                   </Box>
                   <Stack gap={1}>
-                    <Text variant="mono" weight="font-bold">{item.label}</Text>
-                    <Text variant="mono" color="dim" size="micro" uppercase>{item.channel}</Text>
+                    <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
+                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-[0.15em] uppercase">{item.channel}</Text>
                   </Stack>
                 </Box>
               ))}
@@ -123,8 +125,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
           <Box as="form" onSubmit={onSubmit} className="space-y-8">
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" variant="mono" weight="font-bold" color="dim">Your Name</Text>
-                {errors.name && <Text variant="mono" weight="font-bold" color="brand" size="micro">{errors.name}</Text>}
+                <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
+                {errors.name && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.name}</Text>}
               </Box>
               <Box as="input" 
                 name="name"
@@ -139,8 +141,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" variant="mono" weight="font-bold" color="dim">Your Email</Text>
-                {errors.email && <Text variant="mono" weight="font-bold" color="brand" size="micro">{errors.email}</Text>}
+                <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
+                {errors.email && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.email}</Text>}
               </Box>
               <Box as="input" 
                 name="email"
@@ -154,7 +156,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
               />
             </Stack>
             <Stack gap={3}>
-              <Text as="label" variant="mono" weight="font-bold" color="dim">Subject</Text>
+              <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
               <Box as="select" 
                 name="subject"
                 className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
@@ -169,8 +171,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" variant="mono" weight="font-bold" color="dim">Message</Text>
-                {errors.message && <Text variant="mono" weight="font-bold" color="brand" size="micro">{errors.message}</Text>}
+                <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
+                {errors.message && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.message}</Text>}
               </Box>
               <Box as="textarea" 
                 name="message"
