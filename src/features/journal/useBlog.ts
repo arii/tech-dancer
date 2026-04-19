@@ -1,34 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { getPosts, Post } from '@/lib/content';
 
 export function useBlog() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get('category') || 'All';
+  const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    // Simulate a brief loading state to show the skeleton and avoid jump
-    const timer = setTimeout(() => {
-      setPosts(getPosts());
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    setPosts(getPosts());
   }, []);
-
-  const setActiveCategory = (category: string) => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 300);
-    if (category === 'All') {
-      searchParams.delete('category');
-    } else {
-      searchParams.set('category', category);
-    }
-    setSearchParams(searchParams);
-  };
 
   const categories = useMemo(() => {
     const cats = posts.map(p => p.category);
@@ -60,7 +40,6 @@ export function useBlog() {
     activeCategory,
     setActiveCategory,
     searchTerm,
-    setSearchTerm,
-    isLoading
+    setSearchTerm
   };
 }

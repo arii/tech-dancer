@@ -9,8 +9,8 @@ interface FilterBarProps {
 
 export function FilterBar({ activeCategory, categories, onSelect }: FilterBarProps) {
   return (
-    <Box className="w-full border-b border-slate-200 bg-surface/80 backdrop-blur-md sticky top-0 z-40 overflow-x-auto no-scrollbar" paddingY={5}>
-      <Stack direction="row" gap={4} className="min-w-max">
+    <Box className="w-full border-b border-line bg-surface/80 backdrop-blur-md sticky top-0 z-40 overflow-x-auto no-scrollbar" paddingY={4}>
+      <Stack direction="row" gap={3} paddingX={6} className="min-w-max">
         {categories.map((cat) => (
           <Box
             key={cat}

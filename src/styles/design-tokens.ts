@@ -40,8 +40,8 @@ export const animation = {
  */
 export const layout = {
   root: "flex min-h-screen bg-bg",
-  navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
-  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-6 border-b border-line",
+  navRail: "nav-rail hidden md:flex flex-col justify-between h-screen sticky top-0",
+  mobileHeader: "md:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-6 border-b",
   panel: "panel h-full overflow-y-auto",
   card: "bg-surface border border-line rounded-none transition-all duration-300",
   interactive: "cursor-pointer",

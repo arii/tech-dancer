@@ -7,7 +7,6 @@ import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
 export interface TextProps extends BaseProps, React.HTMLAttributes<HTMLElement> {
   as?: any
-  className?: string
   variant?: keyof typeof typography
   intent?: keyof typeof variants.intent
   color?: "main" | "body" | "dim" | "accent" | "brand" | "white"

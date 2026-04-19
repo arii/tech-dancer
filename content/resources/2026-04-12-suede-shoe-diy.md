@@ -36,14 +36,6 @@ Instead of paying the $180 "dance shoe tax" for flimsy professional shoes, I use
 2.  **Contact Adhesion**: Apply a thin layer of Barge Cement to both the shoe and the suede. Wait for it to become tacky—physics requires the solvent to evaporate for a primary bond.
 3.  **Pressure Cure**: Press the surfaces together and let cure for 24 hours. The resulting hardware is rugged enough for any social floor.
 
-## Suede Coverage Analysis Diagram
-
-A key to effective traction is selecting the right coverage pattern for your movement style. Here is a comparison:
-
-- **Ball Only:** Offers great spinning capability but minimal breaking control. Slippery on high-speed moves.
-- **Split (Ball and Heel separated):** Adds braking power but can catch the edge of the suede during rolling steps.
-- **Entire Sticker Coverage (My Preferred Method):** The most consistent friction profile across the entire foot, ensuring safety and predictable slip during complex patterns.
-
 ## Performance Notes
 These modification have survived 8+ hour social sets at major conventions. The bond is permanent and the friction is highly consistent.
 
