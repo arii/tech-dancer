@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, Activity, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 
 export default function ResearchAnalytics() {
@@ -9,19 +10,18 @@ export default function ResearchAnalytics() {
   const { studies, tools } = useResearch();
 
   return (
-    <Box as="section" padding="panel">
-      <Stack gap={16}>
-        <Stack gap={1}>
-          <Text variant="mono" color="brand" weight="font-bold">TECHNICAL PORTFOLIO</Text>
-          <Text variant="headline" size="9xl">Data & Development Lab.</Text>
-          <Text variant="body" size="xl" maxWidth="3xl">
-            Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle.
-          </Text>
-        </Stack>
+    <Box as="section">
+      <Stack gap={12}>
+        <PageHeader 
+          label="TECHNICAL PORTFOLIO"
+          title="Data & Development Lab"
+          description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
+        />
 
         <Stack gap={8}>
-          <Box border="b" paddingBottom={4}>
-            <Text variant="mono" color="brand" weight="font-bold">TOOLS_ECOSYSTEM</Text>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -59,8 +59,9 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={8}>
-          <Box border="b" paddingBottom={4}>
-            <Text variant="mono" color="brand" weight="font-bold">STUDIES</Text>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{studies.length} ARTICLES</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={12}>
             {studies.map((study) => (

@@ -95,11 +95,11 @@
 }
 
 .nav-rail {
-  @apply hidden md:flex w-[260px] border-r border-line flex-col p-8 justify-between h-screen sticky top-0 bg-surface z-50;
+  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
 
 .main-grid {
-  @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line;
+  @apply flex-1 grid grid-cols-1 lg:grid-cols-2 gap-[1px] bg-line;
 }
 
 .stats-widget {
