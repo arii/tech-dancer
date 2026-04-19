@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/components/layout/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
+import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 
 const iconMap: Record<string, any> = {
   '/': Home,
@@ -39,6 +40,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { toggleSearch } = useGlobalSearch();
 
   return (
     <>
@@ -104,7 +106,7 @@ export default function Navigation() {
           <Stack as="ul" gap={2}>
             <Box 
               as="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+              onClick={toggleSearch}
               display="flex"
               align="center"
               gap={4}

@@ -2,17 +2,15 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function GlobalSearch() {
-  const { query, setQuery, results } = useGlobalSearch();
-  const [isOpen, setIsOpen] = useState(false);
+  const { query, setQuery, results, isOpen, setIsOpen } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleOpenSearch = () => setIsOpen(true);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsOpen(false);
       if (e.ctrlKey && e.key === 'k') {
@@ -20,13 +18,11 @@ export function GlobalSearch() {
         setIsOpen(true);
       }
     };
-    window.addEventListener('open-search', handleOpenSearch);
     window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('open-search', handleOpenSearch);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [setIsOpen]);
 
   const handleSelect = (result: any) => {
     setIsOpen(false);

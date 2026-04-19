@@ -1,8 +1,24 @@
 import { useState, useMemo } from 'react';
-import { getPosts, getResources, getStudies, ContentItem } from '@/lib/content';
+import { create } from 'zustand';
+import { getPosts, getResources, getStudies } from '@/lib/content';
+
+interface SearchState {
+  isOpen: boolean;
+  toggleSearch: () => void;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+export const useSearchStore = create<SearchState>((set) => ({
+  isOpen: false,
+  toggleSearch: () => set((state) => ({ isOpen: !state.isOpen })),
+  setIsOpen: (isOpen) => set({ isOpen }),
+}));
 
 export function useGlobalSearch() {
   const [query, setQuery] = useState('');
+  const isOpen = useSearchStore(state => state.isOpen);
+  const toggleSearch = useSearchStore(state => state.toggleSearch);
+  const setIsOpen = useSearchStore(state => state.setIsOpen);
   
   const allContent = useMemo(() => {
     return [
@@ -25,6 +41,9 @@ export function useGlobalSearch() {
   return {
     query,
     setQuery,
-    results
+    results,
+    isOpen,
+    setIsOpen,
+    toggleSearch
   };
 }
