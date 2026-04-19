@@ -7,13 +7,13 @@ import { GlobalSearch } from '@/components/GlobalSearch';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Box layout="root" height="screen" position="relative">
+    <Box layout="root" className="min-h-screen relative">
       <GlobalSearch />
       
-      <Box display="flex" height="full">
+      <Box display="flex" className="min-h-screen">
         <Navigation />
-        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg">
-          <Box maxWidth="6xl" margin="auto" paddingX={6} paddingY={12} minHeight="full">
+        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0">
+          <Box paddingX={6} paddingY={12} className="mx-auto min-h-full max-w-[90%]">
             <Stack gap={12}>
               <Box flex={1}>
                 {children}

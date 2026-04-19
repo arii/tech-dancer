@@ -13,7 +13,7 @@ export function useResearch() {
     {
       id: 'seo-analysis',
       name: 'SEO Analysis & Engagement',
-      category: 'Tech-Dancer Analytics',
+      category: 'Analytics',
       status: 'Coming Soon',
       layman: 'Analyzing engagement metrics and search visibility for the tech-dancer platform.'
     },
@@ -22,7 +22,7 @@ export function useResearch() {
       name: 'Blog Post Drafter',
       category: 'Content Generation',
       status: 'Active',
-      layman: 'An AI-assisted tool designed to streamline the research and drafting process for blog content.'
+      layman: 'Drafter tool to generate blog posts using AI with human feedback in the loop.'
     },
     {
       id: 'wcs-scraper',
@@ -36,7 +36,7 @@ export function useResearch() {
       name: 'Event Flight Finder',
       category: 'Logistics',
       status: 'Active',
-      layman: 'Optimizing travel routes and finding the best flights for major West Coast Swing events.'
+      layman: 'Flight finder for WCS events - optimizing travel routes and finding the best deals.'
     }
   ];
 

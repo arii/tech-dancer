@@ -9,20 +9,21 @@ export default function BlogFeed() {
 
   return (
     <Box as="section">
-      <Stack gap={12}>
+      <Stack gap={16}>
         <PageHeader 
           label="INSIGHTS"
           title="Blog Posts"
-          description="Technical analysis and engineering principles applied to the world of West Coast Swing."
+          description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         />
         
-        <FilterBar 
-          activeCategory={activeCategory} 
-          categories={categories} 
-          onSelect={setActiveCategory} 
-        />
- 
-        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>
+        <Stack gap={10}>
+          <FilterBar 
+            activeCategory={activeCategory} 
+            categories={categories} 
+            onSelect={setActiveCategory} 
+          />
+   
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={10}>
           {posts.map((post) => (
             <ContentCard 
               key={post.slug}
@@ -31,7 +32,8 @@ export default function BlogFeed() {
               aspect="video"
             />
           ))}
-        </Grid>
+          </Grid>
+        </Stack>
       </Stack>
     </Box>
   );

@@ -47,14 +47,14 @@
     text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
   }
   .gold-accent {
-    @apply border-accent-brand/30 hover:border-accent-brand transition-colors;
+    @apply border-accent/30 hover:border-accent transition-colors;
   }
   .scanline-hover {
     @apply relative overflow-hidden;
   }
   .scanline-hover::after {
     content: "";
-    @apply absolute inset-0 bg-gradient-to-b from-transparent via-accent-brand/10 to-transparent -translate-y-full opacity-0 pointer-events-none z-20;
+    @apply absolute inset-0 bg-gradient-to-b from-transparent via-accent/10 to-transparent -translate-y-full opacity-0 pointer-events-none z-20;
   }
   .scanline-hover:hover::after {
     @apply opacity-100;
@@ -95,11 +95,11 @@
 }
 
 .nav-rail {
-  @apply hidden md:flex w-[260px] border-r border-line flex-col p-8 justify-between h-screen sticky top-0 bg-surface z-50;
+  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
 
 .main-grid {
-  @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line;
+  @apply flex-1 grid grid-cols-1 lg:grid-cols-2 gap-[1px] bg-line;
 }
 
 .stats-widget {
@@ -119,5 +119,5 @@
 }
 
 .content-card {
-  @apply bg-card-bg p-8 rounded-none border border-line;
+  @apply bg-surface p-8 rounded-none border border-line;
 }
