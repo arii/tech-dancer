@@ -17,7 +17,7 @@ export function ContentCard({ slug, title, category, date, image, basePath, aspe
     <Box 
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 shadow-sm hover:shadow-md rounded-lg overflow-hidden"
+      className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
       <Box className="relative aspect-video overflow-hidden bg-bg">
@@ -33,7 +33,7 @@ export function ContentCard({ slug, title, category, date, image, basePath, aspe
           </Box>
         )}
         <Box className="absolute top-4 left-4">
-          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-full">
+          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-[2px]">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
               {category}
             </Text>
