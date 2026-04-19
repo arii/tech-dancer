@@ -54,7 +54,7 @@
   }
   .scanline-hover::after {
     content: "";
-    @apply absolute inset-0 bg-gradient-to-b from-transparent via-accent/10 to-transparent -translate-y-full opacity-0 pointer-events-none z-20;
+    @apply absolute inset-0 bg-accent/10 -translate-y-full opacity-0 pointer-events-none z-20;
   }
   .scanline-hover:hover::after {
     @apply opacity-100;

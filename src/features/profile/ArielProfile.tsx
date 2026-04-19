@@ -56,7 +56,7 @@ export default function ArielProfile() {
                 </Stack>
               ))}
 
-              <Grid cols={3} gap={4} marginTop={8}>
+              <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={8}>
                 {[
                   { icon: User, label: 'Curriculum Vitae' },
                   { icon: Award, label: 'Publications' },
