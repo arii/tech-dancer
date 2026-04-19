@@ -144,7 +144,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           maxHeight && `max-h-${maxHeight}`,
           minWidth && (typeof minWidth === "number" ? `min-w-[${minWidth}px]` : `min-w-${minWidth}`),
           overflow && `overflow-${overflow}`,
-          zIndex && (String(zIndex).startsWith("[") ? `z-${zIndex}` : `z-${zIndex}`),
+          zIndex && `z-${zIndex}`,
           opacity && `opacity-${opacity}`,
           getResponsiveClasses(display, ""),
           aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
