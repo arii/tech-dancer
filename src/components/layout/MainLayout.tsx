@@ -13,7 +13,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <Box display="flex" height="full">
         <Navigation />
         <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg">
-          <Box maxWidth="6xl" margin="auto" paddingX={6} paddingY={12} minHeight="full">
+          <Box maxWidth="90%" margin="auto" paddingX={6} paddingY={12} minHeight="full">
             <Stack gap={12}>
               <Box flex={1}>
                 {children}
