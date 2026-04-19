@@ -5,7 +5,7 @@ export default function PathSelector() {
     <div className="grid grid-cols-12 gap-0 border-y border-line min-h-[60vh]">
       {/* Dancer Path: Lifestyle & Gear */}
       <motion.div
-        className="col-span-12 lg:col-span-7 relative group cursor-pointer overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900"
+        className="col-span-12 lg:col-span-7 relative group cursor-pointer overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900 bg-[length:200%_200%] animate-gradient"
         whileHover="hover"
       >
 
@@ -28,7 +28,7 @@ export default function PathSelector() {
 
       {/* Tech Path: Robotics & AI */}
       <motion.div
-        className="col-span-12 lg:col-span-5 relative group cursor-pointer overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950"
+        className="col-span-12 lg:col-span-5 relative group cursor-pointer overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950 bg-[length:200%_200%] animate-gradient"
         whileHover="hover"
       >
 
