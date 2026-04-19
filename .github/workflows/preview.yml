@@ -1,0 +1,39 @@
+name: Deploy Branch Preview
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: |
+          export VITE_BASE_PATH="/${{ github.event.repository.name }}/deploy/${{ github.ref_name }}/"
+          npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to Subfolder
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          target-folder: deploy/${{ github.ref_name }}
+          clean: false
