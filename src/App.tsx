@@ -5,17 +5,16 @@
 
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { AppShell } from './components/layout/AppShell';
+import { MainLayout } from './components/layout/MainLayout';
 import { motionTokens } from './styles/motion';
 
 import Home from './features/dashboard/Dashboard';
-import Lab from './features/lab/Toolbox';
-import Engine from './features/engine/TelemetryDashboard';
-import Feed from './features/resources/ResourceGallery';
+import GearReviews from './features/lab/Toolbox';
+import Research from './features/research/ResearchAnalytics';
+import Resources from './features/resources/ResourceGallery';
 import About from './features/profile/ArielProfile';
 import Blog from './features/journal/BlogFeed';
 import Contact from './features/profile/ContactConsole';
-import Drafter from './features/admin/ContentEngine';
 
 import { Box } from './components/layout/Primitives';
 
@@ -23,7 +22,7 @@ export default function App() {
   const location = useLocation();
 
   return (
-    <AppShell>
+    <MainLayout>
       <AnimatePresence mode="wait">
         <Box
           as={motion.div}
@@ -36,17 +35,14 @@ export default function App() {
         >
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/lab" element={<Lab />} />
-            <Route path="/engine" element={<Engine />} />
+            <Route path="/gear" element={<GearReviews />} />
+            <Route path="/research" element={<Research />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/feed" element={<Feed />} />
             <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/systems" element={<Drafter />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Box>
       </AnimatePresence>
-    </AppShell>
+    </MainLayout>
   );
 }

@@ -3,15 +3,13 @@ import { Github, Linkedin, Database } from 'lucide-react';
 
 export function Footer() {
   const socialLinks = [
-    { icon: Github, label: 'CORE_REPO', href: '#' },
-    { icon: Linkedin, label: 'NET_PROTOCOL', href: '#' },
-    { icon: Database, label: 'WSDC_DATA', href: '#' },
+    { icon: Github, label: 'GitHub', href: '#' },
+    { icon: Linkedin, label: 'LinkedIn', href: '#' },
   ];
 
   const legalLinks = [
-    { label: 'PRIVACY_POLICY', href: '#' },
-    { label: 'SYSTEM_TERMS', href: '#' },
-    { label: 'PROTOCOL_V1', href: '#' },
+    { label: 'Privacy Policy', href: '#' },
+    { label: 'Terms of Service', href: '#' },
   ];
 
   return (
@@ -23,12 +21,12 @@ export function Footer() {
               Ariel Anders
             </Text>
             <Text variant="body" size="base" color="dim">
-              Interdisciplinary research at the intersection of robotics, data science, and West Coast Swing. Improving the social dance experience through systems optimization.
+              Interdisciplinary research at the intersection of robotics, data science, and West Coast Swing. Focusing on the social dance experience through technical analysis.
             </Text>
           </Stack>
 
           <Stack gap={6}>
-            <Text variant="system" size="micro" color="brand" uppercase tracking="widest">CON_CHANNELS</Text>
+            <Text variant="mono" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">Connect</Text>
             <Stack gap={3}>
               {socialLinks.map((link) => (
                 <Box 
@@ -49,11 +47,10 @@ export function Footer() {
           </Stack>
 
           <Stack gap={6}>
-            <Text variant="system" size="micro" color="brand" uppercase tracking="widest">SYSTEM_INFO</Text>
+            <Text variant="mono" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">Info</Text>
             <Stack gap={3}>
-              <Text variant="mono" size="xs" color="dim">LOCATION: SF // CA</Text>
-              <Text variant="mono" size="xs" color="dim">STATUS: OPTIMIZED</Text>
-              <Text variant="mono" size="xs" color="dim">LAST_UPDATE: 2026.04.17</Text>
+              <Text variant="mono" size="xs" color="dim">Location: San Francisco, CA</Text>
+              <Text variant="mono" size="xs" color="dim">Last Updated: 2026.04.18</Text>
             </Stack>
           </Stack>
         </Grid>
@@ -61,7 +58,7 @@ export function Footer() {
         <Box border="t" paddingTop={8}>
           <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
             <Text variant="micro" color="dim" uppercase tracking="widest">
-              © 2026 ARIEL_ANDERS // ALL_SYSTEMS_OPERATIONAL
+              © 2026 Ariel Anders
             </Text>
             <Stack direction="row" gap={6}>
               {legalLinks.map((link) => (

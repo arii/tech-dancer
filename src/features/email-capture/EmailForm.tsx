@@ -12,7 +12,7 @@ export function EmailForm() {
       <Stack direction="row" gap={0} position="relative">
         <input
           type="email"
-          placeholder="ENTER_EMAIL_FOR_LOGS"
+          placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -60,7 +60,7 @@ export function EmailForm() {
       </Stack>
       {status === 'success' && (
         <Text variant="micro" color="brand" marginTop={2} weight="font-bold">
-          SYSTEM: TRANSMISSION_RECEIVED // WELCOME_TO_THE_REGISTRY
+          Thank you for joining.
         </Text>
       )}
     </Box>

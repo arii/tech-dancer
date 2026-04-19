@@ -1,53 +1,90 @@
+/// <reference types="vite/client" />
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/// <reference types="vite/client" />
-import { Buffer } from 'buffer';
-if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || Buffer;
-}
 import matter from 'gray-matter';
 
-export interface ContentMetadata {
-  type: 'post' | 'resource' | 'study';
+// --- Typed Interfaces ---
+
+export interface Post {
+  slug: string;
   title: string;
   date: string;
   author: string;
   category: string;
   excerpt: string;
+  content: string;
   image?: string;
   tags?: string[];
-  affiliateIds?: string[];
+}
+
+export interface Resource {
   slug: string;
-}
-
-export interface ContentItem extends ContentMetadata {
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
   content: string;
+  image?: string;
+  tags?: string[];
 }
 
-export function getAllContent(type: 'posts' | 'resources' | 'studies'): ContentItem[] {
-  let files: Record<string, string>;
-  
-  if (type === 'posts') {
-    files = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }) as Record<string, string>;
-  } else if (type === 'resources') {
-    files = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }) as Record<string, string>;
-  } else {
-    files = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }) as Record<string, string>;
-  }
+export interface Study {
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  tags?: string[];
+}
 
-  return Object.entries(files).map(([path, raw]) => {
-    // raw might be the default export if using Vite raw loader
-    const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
-    const { data, content } = matter(contentStr);
-    const slug = path.split('/').pop()?.replace('.md', '') || '';
-    
-    return {
-      ...(data as ContentMetadata),
-      content,
-      slug,
-    };
-  }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+export type ContentType = 'posts' | 'resources' | 'studies';
+
+// --- Glob Loaders ---
+
+const postModules = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' });
+const resourceModules = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' });
+const studyModules = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' });
+
+const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
+
+function transform<T>(modules: Record<string, any>): T[] {
+  return Object.entries(modules)
+    .map(([path, raw]) => {
+      const contentStr = typeof raw === 'string' ? raw : raw.default;
+      const { data, content } = matter(contentStr);
+      return { 
+        ...data, 
+        content, 
+        slug: slugFrom(path) 
+      } as unknown as T;
+    })
+    .sort((a: any, b: any) => +new Date(b.date) - +new Date(a.date));
+}
+
+// --- Public API ---
+
+export function getPosts(): Post[] {
+  return transform<Post>(postModules);
+}
+
+export function getResources(): Resource[] {
+  return transform<Resource>(resourceModules);
+}
+
+export function getStudies(): Study[] {
+  return transform<Study>(studyModules);
+}
+
+/**
+ * Legacy support for ContentItem usage during migration
+ */
+export type ContentItem = Post | Resource | Study;
+export function getAllContent(type: 'posts' | 'resources' | 'studies'): ContentItem[] {
+  if (type === 'posts') return getPosts();
+  if (type === 'resources') return getResources();
+  return getStudies();
 }

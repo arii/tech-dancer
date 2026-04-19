@@ -1,0 +1,49 @@
+import { useState, useEffect } from 'react';
+import { getStudies, Study } from '@/lib/content';
+
+export function useResearch() {
+  const [studies, setStudies] = useState<Study[]>([]);
+  const [selectedTool, setSelectedTool] = useState<string | null>(null);
+
+  useEffect(() => {
+    setStudies(getStudies());
+  }, []);
+
+  const tools = [
+    {
+      id: 'seo-analysis',
+      name: 'SEO Analysis & Engagement',
+      category: 'Tech-Dancer Analytics',
+      status: 'Coming Soon',
+      layman: 'Analyzing engagement metrics and search visibility for the tech-dancer platform.'
+    },
+    {
+      id: 'blog-drafter',
+      name: 'Blog Post Drafter',
+      category: 'Content Generation',
+      status: 'Active',
+      layman: 'An AI-assisted tool designed to streamline the research and drafting process for blog content.'
+    },
+    {
+      id: 'wcs-scraper',
+      name: 'WCS Prelim Scoring Scraper',
+      category: 'Dance Research',
+      status: 'Coming Soon',
+      layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
+    },
+    {
+      id: 'flight-finder',
+      name: 'Event Flight Finder',
+      category: 'Logistics',
+      status: 'Active',
+      layman: 'Optimizing travel routes and finding the best flights for major West Coast Swing events.'
+    }
+  ];
+
+  return {
+    studies,
+    tools,
+    selectedTool,
+    setSelectedTool
+  };
+}

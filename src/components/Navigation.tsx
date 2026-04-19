@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ShoppingBag, BarChart2, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal, Plane, LucideIcon } from 'lucide-react';
+import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal, Plane, LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -13,12 +13,10 @@ import { routes } from '@/config/routes';
 
 const iconMap: Record<string, LucideIcon> = {
   '/': Home,
-  '/lab': ShoppingBag,
-  '/feed': Plane,
+  '/gear': ShoppingBag,
   '/blog': BookOpen,
-  '/engine': BarChart2,
+  '/research': Database,
   '/about': User,
-  '/contact': Mail,
 };
 
 function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
@@ -43,7 +41,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
                 height={4}
                 width={1}
                 surface="accent"
-                className="left-[-20px] bg-accent-brand"
+                className="left-[-20px]"
                 transition={{ type: 'spring', damping: 20, stiffness: 250 }}
               />
             )}
@@ -87,9 +85,13 @@ export default function Navigation() {
           <Text variant="display" size="xs" color="brand" weight="font-bold" tracking="tight">Ariel Anders</Text>
           <Text variant="micro" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">MIT Roboticist // WCS</Text>
         </Stack>
-        <button 
+        <Box 
+          as="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 text-text-main hover:text-accent-brand transition-colors relative z-[120]"
+          padding={2}
+          color="main"
+          className="hover:text-accent-brand transition-colors relative z-[120]"
+          cursor="pointer"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -102,7 +104,7 @@ export default function Navigation() {
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </motion.div>
           </AnimatePresence>
-        </button>
+        </Box>
       </Box>
 
       {/* Mobile Menu Overlay */}
@@ -120,7 +122,8 @@ export default function Navigation() {
             zIndex="top"
             padding="nav"
             overflow="y-auto"
-            className="md:hidden pt-24"
+            className="md:hidden"
+            paddingTop={24}
           >
             <Box as={motion.ul} variants={containerVariants} initial="closed" animate="open" className="space-y-6">
               {routes.map((item) => (
@@ -136,11 +139,13 @@ export default function Navigation() {
               ))}
             </Box>
             
-            <Box as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-12">
-              <Box border surface="accent" padding="card" className="bg-accent/5">
-                <Text variant="micro" size="micro" color="brand" uppercase tracking="widest" className="mb-2">Find Me</Text>
+            <Box as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} marginTop={12}>
+              <Box border surface="accent" padding="card" opacity={5}>
+                <Box marginBottom={2}>
+                  <Text variant="micro" size="micro" color="brand" uppercase tracking="widest">Find Me</Text>
+                </Box>
                 <Text variant="display" size="sm" uppercase>Wednesdays @ Mission City Swing</Text>
-                <Text variant="micro" size="micro" color="dim" className="mt-1">San Francisco, CA</Text>
+                <Text variant="micro" size="micro" color="dim" marginTop={1}>San Francisco, CA</Text>
               </Box>
             </Box>
           </Box>
@@ -154,7 +159,7 @@ export default function Navigation() {
             <Text variant="display" size="sm" color="brand" weight="font-black" tracking="tight">
               ARIEL ANDERS
             </Text>
-            <Text variant="micro" size="micro" color="brand" weight="font-bold" tracking="widest" className="mt-1">
+            <Text variant="micro" size="micro" color="brand" weight="font-bold" tracking="widest" marginTop={1}>
               MIT ROBOTICIST // WCS
             </Text>
           </Box>
@@ -166,19 +171,21 @@ export default function Navigation() {
           </Stack>
 
           <Box paddingTop={8}>
-            <Box border surface="default" padding="compact" className="bg-accent-brand/5 border-accent-brand/20">
-              <Text variant="micro" size="micro" color="brand" className="mb-2 underline underline-offset-4">Location_Log</Text>
-              <Text variant="display" size="xs" uppercase>Wednesdays @ Mission City Swing</Text>
-              <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" className="mt-1">SF // CA</Text>
+            <Box border surface="default" padding="compact" opacity={5} borderAccent>
+              <Box marginBottom={2} className="underline underline-offset-4">
+                <Text variant="micro" size="micro" color="brand">Weekly Class</Text>
+              </Box>
+              <Text variant="display" size="xs">Wednesdays @ Mission City Swing</Text>
+              <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" marginTop={1}>San Francisco // CA</Text>
             </Box>
           </Box>
         </Stack>
 
         <Box border="t" paddingTop={8}>
           <Text variant="micro" size="micro" color="dim" uppercase tracking="widest" className="leading-relaxed">
-            SYSTEM_PROTOCOL: 2026_V1.0
+            v1.0.2026
             <br />
-            STATUS: ACTIVE_OPTIMIZATION
+            SF / CA
           </Text>
         </Box>
       </Box>

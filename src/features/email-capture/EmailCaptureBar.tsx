@@ -32,10 +32,10 @@ export function EmailCaptureBar() {
           </Box>
           <Stack gap={0}>
             <Text variant="display" size="base" uppercase tracking="tight">
-              Optimize Your Itinerary
+              Weekly Insights
             </Text>
             <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
-              SYSTEM: WEEKLY_SYNC // TRAVEL_HACKS // DATA_REPORTS
+              Dance Analytics // Gear Reviews // Community Updates
             </Text>
           </Stack>
         </Stack>

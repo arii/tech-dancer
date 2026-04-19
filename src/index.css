@@ -34,6 +34,11 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
 @layer utilities {
   .scanline-hover {
     @apply relative overflow-hidden;

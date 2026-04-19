@@ -1,12 +1,12 @@
 /**
- * Design Tokens for the Systems Console.
- * Standardizes radius, spacing, and border treatments to ensure "Industrial" 
- * and "Elevated Minimalism" consistency across all components.
+ * Design Tokens for the Portfolio.
+ * Standardizes radius, spacing, and border treatments to ensure
+ * consistency across all components.
  */
 
 export const radius = {
   none: "rounded-none",
-  industrial: "rounded-[2px]", // Subtle 2px radius for a technical feel
+  subtle: "rounded-[2px]", // Subtle 2px radius
   sm: "rounded-sm",
   md: "rounded-md",
 };
@@ -26,12 +26,12 @@ export const spacing = {
   emailBar: "py-4 px-6 md:px-12",
   hero: "py-20",
   comfort: "py-12",
-  shell: "pb-32",
+  endPad: "pb-32",
 };
 
 export const animation = {
   fast: "duration-150",
-  mechanical: "ease-[steps(4,end)]",
+  normal: "duration-300",
   smooth: "ease-[cubic-bezier(0.16,1,0.3,1)]", // ease-out-expo
 };
 
@@ -39,12 +39,12 @@ export const animation = {
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
 export const layout = {
-  appShell: "flex min-h-screen bg-bg",
+  root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden md:flex flex-col justify-between h-screen sticky top-0",
   mobileHeader: "md:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-6 border-b",
   panel: "panel h-full overflow-y-auto",
   card: "bg-surface border border-line rounded-none transition-all duration-300",
-  interactive: "scanline-hover cursor-pointer",
+  interactive: "cursor-pointer",
   grid: "grid grid-cols-1 md:grid-cols-12 gap-8",
   section: "mt-24 space-y-8",
   divider: "border-b border-line pb-4 flex items-end justify-between",
@@ -64,7 +64,7 @@ export const buttons = {
 
 export const shadows = {
   topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
-  industrial: "shadow-sm",
+  standard: "shadow-sm",
 };
 
 export const typography = {
@@ -72,22 +72,24 @@ export const typography = {
   display: "font-display font-bold uppercase tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
-  system: "font-mono tracking-[3px] uppercase",
+  utility: "font-mono tracking-[3px] uppercase",
   label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",
 };
 
 export const typeSizes = {
   micro: "text-[8px]",
-  sys: "text-[10px]",
-  xs: "text-[11px]",
-  sm: "text-xs",
-  base: "text-sm",
-  lg: "text-base",
-  xl: "text-lg",
-  "2xl": "text-xl",
-  "3xl": "text-2xl",
-  "4xl": "text-3xl",
+  tiny: "text-[10px]",
+  xs: "text-xs",
+  sm: "text-sm",
+  base: "text-base",
+  lg: "text-lg",
+  xl: "text-xl",
+  "2xl": "text-2xl",
+  "3xl": "text-3xl",
+  "4xl": "text-4xl",
+  "5xl": "text-5xl",
+  "6xl": "text-6xl",
   "7xl": "text-5xl md:text-7xl",
   "8xl": "text-6xl md:text-8xl",
   "9xl": "text-7xl md:text-9xl",
