@@ -8,8 +8,8 @@ interface PageHeaderProps {
 
 export function PageHeader({ label, title, description }: PageHeaderProps) {
   return (
-    <Box border="b" paddingBottom={8} className="border-slate-200">
-      <Stack gap={3}>
+    <Box paddingBottom={10} className="border-b border-slate-200">
+      <Stack gap={4}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           {label}
         </Text>
@@ -17,7 +17,7 @@ export function PageHeader({ label, title, description }: PageHeaderProps) {
           {title}
         </Text>
         {description && (
-          <Text variant="sans" size="lg" color="dim" maxWidth="3xl" marginTop={2} weight="font-medium" className="leading-relaxed">
+          <Text variant="sans" size="lg" color="dim" maxWidth="3xl" marginTop={4} weight="font-medium" className="leading-relaxed">
             {description}
           </Text>
         )}

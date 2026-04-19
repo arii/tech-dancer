@@ -42,27 +42,27 @@ export function ContentCard({ slug, title, category, date, image, basePath, aspe
       </Box>
 
       {/* Content Area */}
-      <Stack gap={4} padding={6} flex={1} justify="between">
-        <Stack gap={3}>
-          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+      <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
+        <Stack gap={4}>
+          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
             {date}
           </Text>
           <Text 
             variant="display" 
             size="xl" 
             weight="font-black" 
-            className="text-accent-navy leading-tight group-hover:text-accent transition-colors"
+            className="text-accent-navy leading-snug group-hover:text-accent transition-colors"
           >
             {title}
           </Text>
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-80">
+          <Text variant="body" size="base" color="dim" className="line-clamp-2 leading-relaxed">
              Discover the technical intersections of robotics and dance in this deep dive into {category.toLowerCase()} methodology and engineering principles.
           </Text>
         </Stack>
 
-        <Box display="flex" align="center" gap={2} paddingTop={4}>
-          <Text variant="mono" size="micro" className="text-accent font-bold uppercase tracking-widest">
-            Execute Read
+        <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-slate-100 mt-auto">
+          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-[0.15em]">
+            Read More
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />
         </Box>
