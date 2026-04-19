@@ -12,12 +12,12 @@ export function useHome() {
   }, []);
 
   const dancerPaths = [
-    { label: "Lifestyle blog posts", path: "/blog?category=lifestyle" },
-    { label: "Tech blog posts", path: "/blog?category=tech" }
+    { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
+    { label: "Gear reviews", path: "/gear" }
   ];
 
   const hirePaths = [
-    { label: "Gear reviews", path: "/gear" },
+    { label: "Tech blog posts", path: "/blog?category=Tech" },
     { label: "Data and Development Lab", path: "/research" },
     { label: "About/Contact page", path: "/about" }
   ];

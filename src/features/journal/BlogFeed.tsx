@@ -13,7 +13,7 @@ export default function BlogFeed() {
         <PageHeader 
           label="INSIGHTS"
           title="Blog Posts"
-          description="Technical analysis and engineering principles applied to the world of West Coast Swing."
+          description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         />
         
         <FilterBar 

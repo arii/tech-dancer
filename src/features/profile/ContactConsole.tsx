@@ -86,7 +86,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
         <PageHeader 
           label="CONTACT"
           title="Get in Touch"
-          description="Have a question about West Coast Swing or my research? Interested in discussing data science in dance, gear, or community building? I'd love to hear from you."
+          description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
         />
 
         <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={20} overflow="hidden">

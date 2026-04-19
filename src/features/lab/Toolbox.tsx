@@ -13,7 +13,7 @@ export default function Toolbox() {
         <PageHeader 
           label="THE TOOLBOX"
           title="Gear Reviews"
-          description="Curated recommendations for the interdisciplinary roboticist and social dancer."
+          description="An easy searchable format for looking up products I recommend. Every gear review card expands to an actual blog post for sharing products you can purchase."
         />
 
         <Box 
