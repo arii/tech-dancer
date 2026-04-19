@@ -44,9 +44,9 @@ export default function Toolbox() {
         <Stack gap={16}>
           {filteredCategories.map((category) => (
             <Stack key={category.id} gap={8}>
-              <Box border="b" paddingBottom={4} display="flex" justify="between" align="end" borderColor="line">
+              <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
                 <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">{category.label}</Text>
-                <Text variant="mono" size="micro" color="dim" weight="font-bold">{category.items.length} ITEMS FOUND</Text>
+                <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{category.items.length} ITEMS FOUND</Text>
               </Box>
 
               <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>

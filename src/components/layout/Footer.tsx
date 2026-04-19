@@ -8,9 +8,9 @@ export function Footer() {
   ];
 
   return (
-    <Box as="footer" border="t" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-line" marginTop={32}>
+    <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-slate-200" marginTop={32}>
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           © 2026 TECH-DANCER
         </Text>
         <Stack direction="row" gap={8} align="center">
@@ -20,10 +20,11 @@ export function Footer() {
               as="a" 
               href={link.href}
               variant="mono" 
-              size="micro" 
+              size="xs" 
               color="dim"
               uppercase 
-              tracking="widest"
+              weight="font-semibold"
+              className="tracking-[0.15em]"
               className="hover:text-accent transition-colors"
             >
               {link.label}

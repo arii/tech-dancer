@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { Mail, Send, MessageSquare, HelpCircle, Sparkles, BarChart2, Shield } from 'lucide-react';
 import React from 'react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
 
@@ -80,15 +81,15 @@ interface ContactFormProps {
 
 function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
   return (
-    <Box as="section" padding="panel">
-      <Stack gap={8} marginBottom={16}>
-        <Text variant="headline" size="9xl">Get in touch.</Text>
-        <Text variant="body" size="xl" maxWidth="2xl" color="body">
-          Have a question about West Coast Swing or my research? Interested in discussing data science in dance, gear, or community building? I'd love to hear from you.
-        </Text>
-      </Stack>
+    <Box as="section">
+      <Stack gap={12}>
+        <PageHeader 
+          label="CONTACT"
+          title="Get in Touch"
+          description="Have a question about West Coast Swing or my research? Interested in discussing data science in dance, gear, or community building? I'd love to hear from you."
+        />
 
-      <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={20} overflow="hidden">
+        <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={20} overflow="hidden">
         <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
           <Stack gap={12}>
             <Stack gap={6}>
@@ -201,7 +202,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Box>
           </Box>
         </Box>
-      </Grid>
+        </Grid>
+      </Stack>
     </Box>
   );
 }

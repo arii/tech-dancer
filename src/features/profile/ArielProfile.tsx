@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { User, Award, Globe, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useProfile } from './useProfile';
 import Contact from './ContactConsole';
 
@@ -8,13 +9,13 @@ export default function ArielProfile() {
   const { bio } = useProfile();
 
   return (
-    <Box as="section" padding="panel">
-      <Stack gap={16}>
-        <Stack gap={1}>
-          <Text variant="mono" color="brand" weight="font-bold">ABOUT TECH-DANCER</Text>
-          <Text variant="headline" size="9xl">{bio.name}</Text>
-          <Text variant="display" size="2xl" color="brand" weight="font-bold">{bio.role}</Text>
-        </Stack>
+    <Box as="section">
+      <Stack gap={12}>
+        <PageHeader 
+          label="ABOUT TECH-DANCER"
+          title={bio.name}
+          description={bio.role}
+        />
 
         <Grid cols={{ base: 1, lg: 12 }} gap={16}>
           <Box span={{ base: 12, lg: 4 }}>
