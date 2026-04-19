@@ -71,6 +71,20 @@ export default function Navigation() {
             paddingTop={24}
           >
             <Box as="ul" className="space-y-6">
+              <Box as="li" position="relative" className="group">
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    toggleSearch();
+                  }}
+                  className="flex items-center gap-4 transition-all relative z-10 rounded-md py-4 border-b border-line/50 text-xl text-text-dim hover:text-accent hover:bg-bg/50 w-full text-left"
+                >
+                  <Search className="w-6 h-6 stroke-[1.5]" />
+                  <Text variant="sans" size="lg" weight="font-bold">
+                    Search
+                  </Text>
+                </button>
+              </Box>
               {routes.filter(r => r.path !== '/').map((item) => (
                 <NavItem 
                   key={item.path} 
