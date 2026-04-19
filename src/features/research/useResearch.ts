@@ -11,11 +11,11 @@ export function useResearch() {
 
   const tools = [
     {
-      id: 'seo-analysis',
-      name: 'SEO Analysis & Engagement',
-      category: 'Analytics',
+      id: 'wcs-scraper',
+      name: 'WCS Prelim Scoring Scraper',
+      category: 'Dance Research',
       status: 'Coming Soon',
-      layman: 'Analyzing engagement metrics and search visibility for the tech-dancer platform.'
+      layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
     },
     {
       id: 'blog-drafter',
@@ -23,13 +23,6 @@ export function useResearch() {
       category: 'Content Generation',
       status: 'Active',
       layman: 'Drafter tool to generate blog posts using AI with human feedback in the loop.'
-    },
-    {
-      id: 'wcs-scraper',
-      name: 'WCS Prelim Scoring Scraper',
-      category: 'Dance Research',
-      status: 'Coming Soon',
-      layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
     },
     {
       id: 'flight-finder',
