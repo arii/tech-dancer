@@ -30,7 +30,7 @@ export default function Home() {
           </Stack>
         </Stack>
 
-        <Grid cols={{ base: 1, md: 5 }} gap={8}>
+        <Grid cols={{ base: 1, lg: 5 }} gap={8}>
           <HeroPathCard 
             span={3}
             title="Blog Posts"
@@ -82,11 +82,11 @@ export default function Home() {
 
 const dancerPaths = [
   { label: "Lifestyle blog posts", path: "/blog?category=lifestyle" },
-  { label: "Gear reviews", path: "/gear" }
+  { label: "Tech blog posts", path: "/blog?category=tech" }
 ];
 
 const hirePaths = [
-  { label: "Tech blog posts", path: "/blog?category=tech" },
+  { label: "Gear reviews", path: "/gear" },
   { label: "Data and Development Lab", path: "/research" },
   { label: "About/Contact page", path: "/about" }
 ];

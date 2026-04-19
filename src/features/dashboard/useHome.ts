@@ -13,11 +13,11 @@ export function useHome() {
 
   const dancerPaths = [
     { label: "Lifestyle blog posts", path: "/blog?category=lifestyle" },
-    { label: "Gear reviews", path: "/gear" }
+    { label: "Tech blog posts", path: "/blog?category=tech" }
   ];
 
   const hirePaths = [
-    { label: "Tech blog posts", path: "/blog?category=tech" },
+    { label: "Gear reviews", path: "/gear" },
     { label: "Data and Development Lab", path: "/research" },
     { label: "About/Contact page", path: "/about" }
   ];
