@@ -12,9 +12,9 @@ tags:
   - wcs
 ---
 
-## Financial Literacy for the Convention Circuit
+## Financial Literacy for WCS Events
 
-Attending West Coast Swing events shouldn't be a financial burden. Over the years, I've developed a system I call **Bougie on a Budget**. It relies on high-tier travel credits and a strict debit-first philosophy.
+Attending West Coast Swing events shouldn't be a financial burden. Over the years, I've developed a travel optimization system. It relies on high-tier travel credits and a strict debit-first philosophy.
 
 ### The Stack: Amex Platinum & Hyatt Card
 
@@ -37,4 +37,4 @@ Financial stability allows for better dancing because you're not stressed about 
 
 ### Avoid FOMO
 
-Don't attend events outside your means. The WCS community is great, but your financial health is the foundation of your long-term dance journey.
+Don't attend events outside your means. The WCS community is great, but your financial health is the foundation of your long-term dance progression.
