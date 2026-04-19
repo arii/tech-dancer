@@ -1,18 +1,13 @@
 import { motion } from 'motion/react';
-import dancerImg from '@/assets/dancer_hero.png';
-import roboticistImg from '@/assets/roboticist_hero.png';
 
 export default function PathSelector() {
   return (
     <div className="grid grid-cols-12 gap-0 border-y border-line min-h-[60vh]">
       {/* Dancer Path: Lifestyle & Gear */}
       <motion.div
-        className="col-span-12 lg:col-span-7 relative group cursor-pointer overflow-hidden border-r border-line bg-surface"
+        className="col-span-12 lg:col-span-7 relative group cursor-pointer overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900"
         whileHover="hover"
       >
-        <div className="absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-700">
-          <img src={dancerImg} alt="Dancer Path" className="w-full h-full object-cover" />
-        </div>
 
         {/* Scanning Scanline Effect */}
         <motion.div
@@ -33,12 +28,9 @@ export default function PathSelector() {
 
       {/* Tech Path: Robotics & AI */}
       <motion.div
-        className="col-span-12 lg:col-span-5 relative group cursor-pointer overflow-hidden bg-surface"
+        className="col-span-12 lg:col-span-5 relative group cursor-pointer overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950"
         whileHover="hover"
       >
-        <div className="absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-700">
-          <img src={roboticistImg} alt="Tech Path" className="w-full h-full object-cover" />
-        </div>
 
         {/* Scanning Scanline Effect */}
         <motion.div
