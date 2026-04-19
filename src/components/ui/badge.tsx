@@ -4,6 +4,7 @@ import { Text } from "@/components/layout/Primitives"
 import { variants } from "@/styles/variants"
 
 interface BadgeProps extends React.ComponentProps<typeof Text> {
+  className?: string
   intent?: keyof typeof variants.intent
   emphasis?: keyof typeof variants.emphasis
 }

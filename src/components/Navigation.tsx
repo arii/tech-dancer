@@ -47,7 +47,7 @@ export default function Navigation() {
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="display" size="xs" color="brand" weight="font-bold">TECH-DANCER</Text>
         </Box>
-        <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2}>
+        <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2} aria-label={isOpen ? "Close menu" : "Open menu"} aria-expanded={isOpen}>
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </Box>
       </Box>

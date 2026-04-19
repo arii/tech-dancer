@@ -76,6 +76,7 @@ export function GlobalSearch() {
                   ref={inputRef}
                   type="text"
                   placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+                  aria-label="Search repository"
                   value={query}
                   onChange={(e: any) => setQuery(e.target.value)}
                   width="full"
@@ -87,6 +88,7 @@ export function GlobalSearch() {
                 <Box 
                   as="button" 
                   onClick={() => setIsOpen(false)} 
+                  aria-label="Close search"
                   padding={2}
                   className="group hover:bg-accent/5 transition-colors border border-line/50"
                 >

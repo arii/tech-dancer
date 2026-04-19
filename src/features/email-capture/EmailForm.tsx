@@ -13,6 +13,7 @@ export function EmailForm() {
         <input
           type="email"
           placeholder="Email Address"
+          aria-label="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -21,6 +22,7 @@ export function EmailForm() {
         />
         <Button
           type="submit"
+          aria-label="Subscribe"
           disabled={status === 'loading' || status === 'success'}
           minWidth={60}
         >

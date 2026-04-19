@@ -10,8 +10,10 @@
   /* Clean Content Palette (60-30-10 Rule) */
   --color-bg: #F8F9FA;        /* Off-White Primary */
   --color-surface: #FFFFFF;    /* Surface Secondary */
+  --color-card-bg: #FFFFFF;
   --color-line: #E9ECEF;       /* Muted Borders */
   --color-accent: #007BFF;     /* Electric Blue Accent */
+  --color-accent-brand: #007BFF; /* Brand Accent */
   --color-accent-navy: #1A2B3C; /* Deep Navy (Text/Deep Accent) */
   --color-text-main: #1A2B3C;  /* Deep Navy */
   --color-text-body: #2D3748;
