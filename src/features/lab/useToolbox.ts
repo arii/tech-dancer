@@ -8,7 +8,7 @@ export function useToolbox() {
   const categories = [
     { id: 'dance', label: 'Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
     { id: 'fashion', label: 'Fashion', description: 'Bright, fun outfits curated for movement, comfort, and style on the dance floor.' },
-    { id: 'travel', label: 'Travel Related', description: 'Optimized logistics gear for the convention circuit and bougie-on-a-budget travel.' },
+    { id: 'travel', label: 'Travel Related', description: 'Optimized logistics gear for the WSDC Registry events and bougie-on-a-budget travel.' },
     { id: 'other', label: 'Other', description: 'Miscellaneous items that support the tech-dancer lifestyle.' }
   ];
 
