@@ -1,16 +1,17 @@
 name: Deploy Branch Preview
 
 on:
-  push:
+  pull_request:
     branches:
-      - '**'
-      - '!main'
+      - main
+      - develop
 
 permissions:
   contents: write
+  pull-requests: write # Required to post comments on the PR
 
 jobs:
-  deploy:
+  deploy-preview:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,13 +20,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: |
-          export VITE_BASE_PATH="/${{ github.event.repository.name }}/deploy/${{ github.ref_name }}/"
+          export VITE_BASE_PATH="/${{ github.event.repository.name }}/deploy/${{ github.head_ref }}/"
           npm run build
         env:
           NODE_ENV: production
@@ -35,5 +37,26 @@ jobs:
         with:
           folder: dist
           branch: gh-pages
-          target-folder: deploy/${{ github.ref_name }}
-          clean: false
+          target-folder: deploy/${{ github.head_ref }}
+          clean: false # Critical: false prevents deleting 'main' deployment or other previews
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: 'Branch Preview'
+
+      - name: Post/Update PR Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ### 🚀 Branch Preview Deployed
+            A preview of this branch is available at:
+            [https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/deploy/${{ github.head_ref }}/](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/deploy/${{ github.head_ref }}/)
+
+            _Built at ${{ github.event.pull_request.updated_at }}_
+          edit-mode: replace
