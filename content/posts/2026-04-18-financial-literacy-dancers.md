@@ -20,7 +20,7 @@ Attending West Coast Swing events shouldn't be a financial burden. Over the year
 
 I carry both the American Express Platinum and the World of Hyatt Credit Card. 
 
-1. **Amex Platinum:** My entry point to lounges and high-end flight credits. When you're spending 20 weekends a year in airports, lounge access isn't a luxury; it's a mobile office stability requirement.
+1. **Amex Platinum:** My entry point to lounges and high-end flight credits. When you're spending 20 weekends a year in airports, lounge access isn't a luxury; I need a quiet place to work at the airport.
 2. **Hyatt Card:** Hyatt has the most valuable point redemptions in the major hotel chains. Status stacking here ensures late checkouts (critical for social dance recovery) and breakfast credits.
 
 ### The "Credit-as-Debit" Rule

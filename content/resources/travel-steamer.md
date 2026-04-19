@@ -9,4 +9,4 @@ tags: ["travel", "clothing", "competition"]
 
 ## Competition Ready, Anywhere
 
-Wrinkles are the enemy of a clean aesthetic. This travel steamer heats up in 30 seconds and is powerful enough for cotton shirts and delicate dance fabrics.
+Wrinkles ruin your comp outfit. This travel steamer heats up in 30 seconds and is powerful enough for cotton shirts and delicate dance fabrics.

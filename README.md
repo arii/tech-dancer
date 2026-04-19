@@ -3,7 +3,7 @@
 The Roboticist's Guide to the West Coast Swing.
 
 ## Overview
-Tech-Dancer is a high-density, industrial-aesthetic platform documenting the intersection of social dance and engineering. Built with a custom stateful Next.js backend, Material-UI, and WebSockets, it provides real-time monitoring, informed competition analysis, and travel logistics for the modern dancer.
+A gear, tech, and travel guide for West Coast Swing dancers. Built with Next.js to provide real-time comp data and travel logistics.
 
 ## Features
 - **Folio Journal**: Deep dives into technique, engineering, and lifestyle.

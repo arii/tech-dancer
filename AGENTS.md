@@ -1,10 +1,10 @@
 # TSX File System Checklist (For Coding Agents)
 
-This is a **global enforcement checklist** to ensure every `.tsx` file adheres to your design system, architecture, and modern frontend best practices.
+These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adheres to your design system, architecture, and modern frontend best practices.
 
 ## 🧠 Core Principle
 
-> **A `.tsx` file should compose the system — not define it**
+> **A `.tsx` file should Build UI using standard pieces**
 
 ## 1. ❌ No Raw Tailwind in App/Feature Layers
 - No arbitrary values (`text-[11px]`, `tracking-[3px]`, `shadow-[...]`)

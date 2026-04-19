@@ -4,7 +4,7 @@ title: "The role of AI in Dance"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
-excerpt: "Exploring the intersection of computer vision, trajectory analysis, and high-fidelity lead-follow communication."
+excerpt: "Exploring how video analysis helps lead-follow connection. AI can check your frame during a whip or your response time. It's about getting objective video feedback to fix your mechanics."
 image: ""
 tags:
   - ai
@@ -18,6 +18,4 @@ Artificial Intelligence is often seen as a cold, analytical tool, but in the con
 
 ### Computer Vision & Frame Analysis
 
-We are reaching a point where AI can analyze frames in real-time, identifying the physics of body flight in a whip or the response time in a lead-follow connection. This isn't about replacing judges; it's about providing dancers with the objective data they need to fix their mechanics.
-
-I categorize these efforts in my [Data & Development Lab](/engine). The goal is to cross-list these tech insights with actual WCS floor time.
+Exploring how video analysis helps lead-follow connection. AI can check your frame during a whip or your response time. It's about getting objective video feedback to fix your mechanics.

@@ -2,8 +2,8 @@ Desired website content:
 Website format and content
 Home page: 
 The Roboticist's Guide to the West Coast Swing
-Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
-Welcome to tech-dancer.   You’re looking at a living portfolio as a platform. Enjoy the west coast swing content or dive into the technical details. (can use an asymmetrical feature grid to separate these paths transitions to color on hover with a "scanning" scanline effect)
+Tools, travel hacks, and comp data to maximize your WCS weekends. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
+Welcome to tech-dancer.   Enjoy the west coast swing content or dive into the technical details. (can use an asymmetrical feature grid to separate these paths transitions to color on hover with a "scanning" scanline effect)
 Are you a dancer? 
 → Lifestyle blog posts
 → Gear reviews 
@@ -67,7 +67,7 @@ MIT Roboticist // WCS Tech-Dancer
 My Dance Journey
 I started my journey into partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into the swing of things at Lindy in the Park. Seeking a new challenge, I signed up for a series at Mission City Swing—and realized it wasn't Lindy Hop! The music, like 'In Da Club' by 50 Cent, was so much fun that I started dancing both styles. Attending West Coast Swing (WCS) events became a fantastic way for me to travel again after the pandemic. WCS gradually became my primary focus, but you can still find me Lindy Hopping to live Swing music in SF. I'm a competitive Intermediate-level follow (and an occasional lead!) who loves the unique conversation and connection WCS offers.
 Why My PhD Matters
-I believe in building things that actually work. Since 2010, I have dedicated myself to creating robotic systems that stay reliable even in complex situations. From my PhD at MIT to my industry experience, I don't just study data—I engineer real-world systems that deliver results. I consider myself a pragmatic roboticist: I use machine learning, traditional AI, and solid software design to build systems that are functional, robust, and ready to complete the task at hand.
+I build reliable systems, both in tech and for my dance travel.
 Why I Built This Site
 People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I am fortunate to have a strong career, but I have always focused on making my lifestyle as financially efficient as possible. This site is how I share the 'stacks' I've built—everything from curated gear reviews to my travel-hacking systems.
 Financial Strategies for WCS
@@ -136,7 +136,7 @@ Rule 3: Tailwind vs. CSS Modules
 
 Use Tailwind for: Layout (flex, grid), spacing (margin, padding), and simple atomic changes.
 
-Use CSS Modules for: Complex animations, intricate pseudo-element styling (::before, ::after), or when a component requires more than 10-15 utility classes.
+Use CSS Modules for: Complex animations, Complex CSS (::before, ::after), or when a component requires more than 10-15 utility classes.
 
 Strict Prohibition: No more than 3 levels of nested divs with heavy Tailwind classes in a single file. Break them into sub-components.
 

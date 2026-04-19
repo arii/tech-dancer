@@ -18,15 +18,15 @@ In West Coast Swing, we are judged by humans. Humans have bias, variance, and li
 
 ### Set Your Own Metrics
 
-Instead of aiming for a placement, set granular goals:
-- **Connection Integrity:** Did I maintain a consistent "lever" response during the entire heat?
+Instead of aiming for a placement, set specific goals:
+- **Consistent Connection:** Did I maintain a frame during the entire heat?
 - **Timing Accuracy:** Was my 6-beat pattern anchored on the phrase?
-- **Video Record:** Did I capture the performance for post-event telemetry?
+- **Video Record:** Did I capture the performance for Post-comp video review?
 
 ### The Variance of Judges
 
 The majority of above-average dancers don’t make it to finals occasionally. This is often a result of judge density and heat distribution.
 
-By recording your videos and analyzing them objectively, you can track your *actual* improvement regardless of the final ledger. Objective analysis, such as reviewing your video footage to check connection, timing, and footwork, is vastly superior to relying on placement scores which carry high variance.
+By recording your videos and analyzing them objectively, you can track your *actual* improvement regardless of the final scores. Objective analysis, such as reviewing your video footage to check connection, timing, and footwork, is vastly superior to relying on placement scores which carry high variance.
 
 Focus on the systems and the video review process; let the scores be the noise.
