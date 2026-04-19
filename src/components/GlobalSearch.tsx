@@ -125,7 +125,7 @@ export function GlobalSearch() {
                   <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
                     <Stack align="center" gap={4}>
                       <Search className="w-12 h-12 opacity-20" />
-                      <Text variant="mono" size="xs" color="dim">SEARCH FOR POSTS, GEAR, OR RESEARCH</Text>
+                      <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
                     </Stack>
                   </Box>
                 )}

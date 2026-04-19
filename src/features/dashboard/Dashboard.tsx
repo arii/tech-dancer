@@ -4,7 +4,7 @@ import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
 import { useHome } from './useHome';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
-import { HeroPathCard } from '@/components/ui/HeroPathCard';
+import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 
 export default function Home() {
@@ -14,8 +14,7 @@ export default function Home() {
     <Box as="section">
       <Stack gap={24}>
         <Stack gap={12} paddingTop={12}>
-          <Stack gap={2}>
-            <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">Exploring the Intersection of Technical Engineering and West Coast Swing</Text>
+          <Stack gap={4}>
             <Text 
               as={motion.h1}
               initial={{ opacity: 0, y: 20 }}
@@ -24,30 +23,18 @@ export default function Home() {
               size="fluid-7"
               className="text-accent-navy leading-tight tracking-tight max-w-4xl"
             >
-              The Roboticist's Guide to the <br />
-              West Coast Swing
+              The Roboticist&apos;s Guide to the West Coast Swing
+            </Text>
+            <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
+              Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS lifestyle.
+            </Text>
+            <Text variant="sans" size="base" color="dim" maxWidth="2xl" marginTop={2} className="leading-relaxed">
+              Welcome to tech-dancer. You&apos;re looking at a living portfolio as a platform. Enjoy the west coast swing content or dive into the technical details.
             </Text>
           </Stack>
         </Stack>
 
-        <Grid cols={{ base: 1, md: 5 }} gap={8}>
-          <HeroPathCard 
-            span={3}
-            title="Blog Posts"
-            tag="PATH_01 // LATEST_INSIGHTS"
-            image=""
-            paths={dancerPaths}
-            icon={Zap}
-            label={""}          />
-          <HeroPathCard 
-            span={2}
-            title="Gear Reviews"
-            tag="PATH_02 // THE_TOOLBOX"
-            image=""
-            paths={hirePaths}
-            icon={Shield}
-            label={""}          />
-        </Grid>
+        <PathSelector />
 
         <Stack gap={12}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
@@ -81,12 +68,12 @@ export default function Home() {
 }
 
 const dancerPaths = [
-  { label: "Lifestyle blog posts", path: "/blog?category=lifestyle" },
+  { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
   { label: "Gear reviews", path: "/gear" }
 ];
 
 const hirePaths = [
-  { label: "Tech blog posts", path: "/blog?category=tech" },
+  { label: "Tech blog posts", path: "/blog?category=Tech" },
   { label: "Data and Development Lab", path: "/research" },
   { label: "About/Contact page", path: "/about" }
 ];

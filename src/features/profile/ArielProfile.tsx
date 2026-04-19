@@ -1,20 +1,20 @@
 import { motion } from 'motion/react';
 import { User, Award, Globe, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useProfile } from './useProfile';
-import Contact from './ContactConsole';
 
 export default function ArielProfile() {
   const { bio } = useProfile();
 
   return (
-    <Box as="section" padding="panel">
-      <Stack gap={16}>
-        <Stack gap={1}>
-          <Text variant="mono" color="brand" weight="font-bold">ABOUT TECH-DANCER</Text>
-          <Text variant="headline" size="9xl">{bio.name}</Text>
-          <Text variant="display" size="2xl" color="brand" weight="font-bold">{bio.role}</Text>
-        </Stack>
+    <Box as="section">
+      <Stack gap={12}>
+        <PageHeader 
+          label="ABOUT TECH-DANCER"
+          title={bio.name}
+          description={bio.role}
+        />
 
         <Grid cols={{ base: 1, lg: 12 }} gap={16}>
           <Box span={{ base: 12, lg: 4 }}>
@@ -25,9 +25,9 @@ export default function ArielProfile() {
 
               <Grid cols={1} gap={6}>
                 {bio.details.map((detail) => (
-                  <Box key={detail.label} border="b" paddingBottom={4}>
-                    <Text variant="mono" size="micro" color="dim" display="block">{detail.label}</Text>
-                    <Text variant="display" size="lg" marginTop={1}>{detail.value}</Text>
+                  <Box key={detail.label} paddingBottom={4} className="border-b border-slate-200">
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" display="block" className="tracking-[0.15em] uppercase">{detail.label}</Text>
+                    <Text variant="display" size="lg" marginTop={1} weight="font-bold" className="text-accent-navy">{detail.value}</Text>
                   </Box>
                 ))}
               </Grid>
@@ -35,13 +35,9 @@ export default function ArielProfile() {
               <Box 
                 as="a" 
                 href="#" 
-                variant="mono" 
-                size="sm" 
-                weight="font-bold" 
-                color="brand" 
-                className="hover:underline flex items-center gap-2"
+                className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy"
               >
-                View Full Professional Background
+                <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">VIEW FULL BACKGROUND</Text>
                 <ArrowRight className="w-4 h-4" />
               </Box>
             </Stack>
@@ -51,14 +47,16 @@ export default function ArielProfile() {
             <Stack gap={16}>
               {bio.sections.map((section) => (
                 <Stack key={section.id} gap={4}>
-                  <Text variant="display" size="4xl" weight="font-bold">{section.title}</Text>
+                  <Box paddingBottom={4} className="border-b border-slate-200">
+                    <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">{section.title}</Text>
+                  </Box>
                   <Text variant="body" size="lg" color="body" className="leading-relaxed">
                     {section.content}
                   </Text>
                 </Stack>
               ))}
 
-              <Grid cols={3} gap={4} marginTop={8}>
+              <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={8}>
                 {[
                   { icon: User, label: 'Curriculum Vitae' },
                   { icon: Award, label: 'Publications' },
@@ -77,18 +75,14 @@ export default function ArielProfile() {
                     cursor="pointer"
                     className="group hover:border-accent-brand transition-all"
                   >
-                    <item.icon className="w-5 h-5 text-accent group-hover:text-accent-brand transition-colors" />
-                    <Text variant="mono" size="micro" weight="font-bold">{item.label}</Text>
+                    <item.icon className="w-5 h-5 text-accent-navy group-hover:text-accent transition-colors" />
+                    <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">{item.label}</Text>
                   </Box>
                 ))}
               </Grid>
             </Stack>
           </Box>
         </Grid>
-
-        <Box border="t" paddingTop={16}>
-          <Contact />
-        </Box>
       </Stack>
     </Box>
   );

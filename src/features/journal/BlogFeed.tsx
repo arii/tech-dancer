@@ -1,38 +1,29 @@
-import { Box, Stack, Grid } from '@/components/layout/Primitives';
+import { Box, Stack } from '@/components/layout/Primitives';
 import { useBlog } from './useBlog';
-import { PageHeader } from '@/components/ui/PageHeader';
+import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
-import { ContentCard } from '@/components/ui/ContentCard';
 
 export default function BlogFeed() {
-  const { posts, activeCategory, setActiveCategory, categories } = useBlog();
+  const { posts, categories, activeCategory, setActiveCategory, isLoading } = useBlog();
 
   return (
     <Box as="section">
-      <Stack gap={12}>
-        <PageHeader 
-          label="INSIGHTS"
-          title="Blog Posts"
-          description="Technical analysis and engineering principles applied to the world of West Coast Swing."
-        />
-        
-        <FilterBar 
-          activeCategory={activeCategory} 
-          categories={categories} 
-          onSelect={setActiveCategory} 
-        />
- 
-        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>
-          {posts.map((post) => (
-            <ContentCard 
-              key={post.slug}
-              {...post}
-              basePath="/blog"
-              aspect="video"
-            />
-          ))}
-        </Grid>
-      </Stack>
+      <FolioGrid
+        items={posts}
+        loading={isLoading}
+        categoryTitle="Blog Posts"
+        label="INSIGHTS"
+        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
+        basePath="/blog"
+      >
+        <Box marginTop={8}>
+          <FilterBar
+            activeCategory={activeCategory}
+            categories={categories}
+            onSelect={setActiveCategory}
+          />
+        </Box>
+      </FolioGrid>
     </Box>
   );
 }

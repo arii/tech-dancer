@@ -23,14 +23,14 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
         onClick={onClick}
         className={({ isActive }) => cn(
           "flex items-center gap-4 transition-all relative z-10 rounded-md",
-          isMobile ? "py-4 border-b border-line/50 text-xl" : "py-3 px-4",
+          isMobile ? "py-6 border-b border-line/50 text-xl" : "py-6 px-4",
           isActive 
             ? "text-accent bg-bg" 
             : "text-text-dim hover:text-accent hover:bg-bg/50"
         )}
       >
-        <Icon className={cn("w-5 h-5 stroke-[1.5]", isMobile ? "w-6 h-6" : "")} />
-        <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold">
+        <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
+        <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
           {label}
         </Text>
       </NavLink>
@@ -47,7 +47,7 @@ export default function Navigation() {
       {/* Mobile Header */}
       <Box layout="mobileHeader">
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
-          <Text variant="display" size="xs" color="brand" weight="font-bold">TECH-DANCER</Text>
+          <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
         <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2}>
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -67,7 +67,7 @@ export default function Navigation() {
             surface="bg"
             zIndex="top"
             padding="nav"
-            className="md:hidden"
+            className="lg:hidden"
             paddingTop={24}
           >
             <Box as="ul" className="space-y-6">
@@ -89,17 +89,17 @@ export default function Navigation() {
       {/* Desktop Sidebar */}
       <Box 
         layout="navRail" 
-        className="w-[280px] bg-surface border-r border-line hidden md:flex flex-col h-screen sticky top-0"
+        className="w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0"
       >
         <Stack padding={8} gap={10} flex={1}>
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
-              variant="display" 
+              variant="mono" 
               size="lg" 
-              weight="font-black" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-tight leading-none"
+              weight="font-bold" 
+              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
             >
-              Tech-Dancer
+              TECH-DANCER
             </Text>
           </Box>
 
@@ -111,13 +111,13 @@ export default function Navigation() {
               align="center"
               gap={4}
               width="full"
-              paddingY={3}
+              paddingY={6}
               paddingX={4}
               radius="md"
               className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
             >
-              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100" />
-              <Text variant="sans" size="base" weight="font-bold">Search</Text>
+              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+              <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
             </Box>
 
             {routes.filter(r => r.path !== '/').map((item) => (
