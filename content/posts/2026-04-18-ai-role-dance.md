@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
 excerpt: "Exploring the intersection of computer vision, trajectory analysis, and social dance connection."
-image: "https://picsum.photos/seed/ai-dance/1200/600"
+image: ""
 tags:
   - ai
   - analytics

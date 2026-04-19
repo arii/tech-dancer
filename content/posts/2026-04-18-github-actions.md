@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
 excerpt: "Automated deployments and CI/CD pipelines for a roboticist's living portfolio."
-image: "https://picsum.photos/seed/github/1200/600"
+image: ""
 tags:
   - automation
   - cicd

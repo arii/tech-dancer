@@ -14,6 +14,8 @@ export interface BaseProps {
   paddingY?: ResponsiveProp<keyof typeof spacing | number | string>
   marginTop?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginBottom?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
+  marginLeft?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
+  marginRight?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginX?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginY?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   gap?: ResponsiveProp<number | string>
@@ -33,10 +35,9 @@ export interface BaseProps {
   position?: "fixed" | "sticky" | "absolute" | "relative"
   inset?: boolean | "top" | "bottom" | "left" | "right" | "x" | "y"
   height?: "full" | "screen" | "auto" | "min" | "fit" | number | string
-  width?: "full" | "screen" | "auto" | "min" | "fit" | number | string
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl"
-  minHeight?: "0" | "full" | "screen" | "min" | "fit" | number | string
+  maxHeight?: "full" | "screen" | "auto" | "min" | "fit" | number | string
   minWidth?: "0" | "full" | "min" | "fit" | number | string
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl"
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden"
   zIndex?: number | string
   opacity?: number | string
@@ -59,10 +60,10 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     as: Component = "div", 
     padding, 
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
-    marginTop, marginBottom, marginX, marginY,
+    marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
     gap, border, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
-    position, inset, height, width, maxWidth, minHeight, minWidth, 
+    position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, zIndex, opacity, display, aspect, shrink, self, span, cursor,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
@@ -93,6 +94,12 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       getResponsiveClasses(xlBorder, "xl:border-")
     )
 
+    // Remove props that shouldn't be spread to DOM elements
+    const { 
+      // ... already destructured above
+      ...domProps 
+    } = props;
+
     return (
       <Component
         ref={ref}
@@ -115,6 +122,8 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(paddingY, "py-"),
           getResponsiveClasses(marginTop, "mt-"),
           getResponsiveClasses(marginBottom, "mb-"),
+          getResponsiveClasses(marginLeft, "ml-"),
+          getResponsiveClasses(marginRight, "mr-"),
           getResponsiveClasses(marginX, "mx-"),
           getResponsiveClasses(marginY, "my-"),
           flex === true && "flex-1",
@@ -132,6 +141,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           width && (typeof width === "number" ? `w-${width}` : `w-${width}`),
           maxWidth && `max-w-${maxWidth}`,
           minHeight && `min-h-${minHeight}`,
+          maxHeight && `max-h-${maxHeight}`,
           minWidth && (typeof minWidth === "number" ? `min-w-[${minWidth}px]` : `min-w-${minWidth}`),
           overflow && `overflow-${overflow}`,
           zIndex && `z-${zIndex}`,
@@ -147,7 +157,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           className
         )}
         {...motionProps}
-        {...props}
+        {...domProps}
       />
     )
   }

@@ -15,4 +15,5 @@ export const routes: RouteConfig[] = [
   { path: '/gear', label: 'Gear Reviews' },
   { path: '/research', label: 'Data & Development Lab' },
   { path: '/about', label: 'About' },
+  { path: '/contact', label: 'Contact' },
 ];

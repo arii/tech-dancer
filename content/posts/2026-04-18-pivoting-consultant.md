@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech Portfolio"
 excerpt: "A pun-intended look at moving from fixed industry roles to highly specialized project-based consultancy."
-image: "https://picsum.photos/seed/consulting/1200/600"
+image: ""
 tags:
   - career
   - consulting

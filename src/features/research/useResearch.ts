@@ -40,10 +40,13 @@ export function useResearch() {
     }
   ];
 
+  const getTool = (id: string) => tools.find(t => t.id === id);
+  const getStudy = (slug: string) => studies.find(s => s.slug === slug);
+
   return {
     studies,
     tools,
-    selectedTool,
-    setSelectedTool
+    getTool,
+    getStudy
   };
 }

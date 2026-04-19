@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Gear Reviews"
 excerpt: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test."
-image: "https://picsum.photos/seed/costume/1200/600"
+image: ""
 tags:
   - fashion
   - halloween

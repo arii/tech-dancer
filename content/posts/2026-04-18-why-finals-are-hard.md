@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Data & Dev Lab"
 excerpt: "A statistical look at competition heat density and judge variance, explaining why placement is a poor metric for progress."
-image: "https://picsum.photos/seed/variance/1200/600"
+image: ""
 tags:
   - analytics
   - wcs

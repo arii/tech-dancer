@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech Portfolio"
 excerpt: "How I use Jules and other AI tools to generate data analytics and blog posts with a human in the loop."
-image: "https://picsum.photos/seed/ai-content/1200/600"
+image: ""
 tags:
   - ai
   - automation

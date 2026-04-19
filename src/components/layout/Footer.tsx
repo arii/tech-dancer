@@ -1,84 +1,35 @@
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
-import { Github, Linkedin, Database } from 'lucide-react';
+import { Box, Stack, Text } from '@/components/layout/Primitives';
 
 export function Footer() {
-  const socialLinks = [
-    { icon: Github, label: 'GitHub', href: '#' },
-    { icon: Linkedin, label: 'LinkedIn', href: '#' },
-  ];
-
   const legalLinks = [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
+    { label: 'Privacy', href: '#' },
+    { label: 'Terms', href: '#' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   return (
-    <Box as="footer" border="t" paddingTop={12} paddingX={8} surface="default" opacity={80} marginTop={24}>
-      <Stack gap={12}>
-        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={12}>
-          <Stack gap={4}>
-            <Text variant="display" size="sm" weight="font-black" uppercase tracking="widest">
-              Ariel Anders
+    <Box as="footer" border="t" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-line" marginTop={32}>
+      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
+        <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+          © 2026 TECH-DANCER
+        </Text>
+        <Stack direction="row" gap={8} align="center">
+          {legalLinks.map((link) => (
+            <Text 
+              key={link.label}
+              as="a" 
+              href={link.href}
+              variant="mono" 
+              size="micro" 
+              color="dim"
+              uppercase 
+              tracking="widest"
+              className="hover:text-accent transition-colors"
+            >
+              {link.label}
             </Text>
-            <Text variant="body" size="base" color="dim">
-              Interdisciplinary research at the intersection of robotics, data science, and West Coast Swing. Focusing on the social dance experience through technical analysis.
-            </Text>
-          </Stack>
-
-          <Stack gap={6}>
-            <Text variant="mono" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">Connect</Text>
-            <Stack gap={3}>
-              {socialLinks.map((link) => (
-                <Box 
-                  key={link.label}
-                  as="a"
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-text-dim hover:text-accent-brand transition-colors group"
-                >
-                  <link.icon className="w-4 h-4" />
-                  <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
-                    {link.label}
-                  </Text>
-                </Box>
-              ))}
-            </Stack>
-          </Stack>
-
-          <Stack gap={6}>
-            <Text variant="mono" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">Info</Text>
-            <Stack gap={3}>
-              <Text variant="mono" size="xs" color="dim">Location: San Francisco, CA</Text>
-              <Text variant="mono" size="xs" color="dim">Last Updated: 2026.04.18</Text>
-            </Stack>
-          </Stack>
-        </Grid>
-
-        <Box border="t" paddingTop={8}>
-          <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-            <Text variant="micro" color="dim" uppercase tracking="widest">
-              © 2026 Ariel Anders
-            </Text>
-            <Stack direction="row" gap={6}>
-              {legalLinks.map((link) => (
-                <Text 
-                  key={link.label}
-                  as="a" 
-                  href={link.href}
-                  variant="mono" 
-                  size="micro" 
-                  color="dim"
-                  uppercase 
-                  tracking="widest"
-                  className="hover:text-accent transition-colors border-b border-transparent hover:border-accent"
-                >
-                  {link.label}
-                </Text>
-              ))}
-            </Stack>
-          </Stack>
-        </Box>
+          ))}
+        </Stack>
       </Stack>
     </Box>
   );

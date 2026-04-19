@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "All about WCS"
 excerpt: "Setting granular measurable metrics for competitions, recording comp videos, and objective analysis."
-image: "https://picsum.photos/seed/comp-analysis/1200/600"
+image: ""
 tags:
   - competition
   - metrics

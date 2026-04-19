@@ -2,95 +2,90 @@
 @import "tailwindcss";
 
 @theme {
-  /* New Typography Identity */
+  /* Modern Typography Identity */
   --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-mono: "Space Mono", monospace;
 
-  /* Standard Industrial Colors - Elevated Minimalism Edition */
-  --color-bg: #FFFFFF;
-  --color-surface: #F8F9FA;
-  --color-line: #E5E7EB; 
-  --color-accent: #001F3F; /* Navy */
-  --color-accent-brand: #D4AF37; /* Gold */
-  --color-text-main: #001F3F; /* Navy */
-  --color-text-body: #1F2937;
-  --color-text-dim: #6B7280;
-  --color-card-bg: #F3F4F6; /* Light Grey */
+  /* Clean Content Palette (60-30-10 Rule) */
+  --color-bg: #F8F9FA;        /* Off-White Primary */
+  --color-surface: #FFFFFF;    /* Surface Secondary */
+  --color-line: #E9ECEF;       /* Muted Borders */
+  --color-accent: #007BFF;     /* Electric Blue Accent */
+  --color-accent-navy: #1A2B3C; /* Deep Navy (Text/Deep Accent) */
+  --color-text-main: #1A2B3C;  /* Deep Navy */
+  --color-text-body: #2D3748;
+  --color-text-dim: #6C757D;   /* Slate Gray */
   
-  /* Industrial Radius Scale */
-  --radius-none: 0px;
-  --radius-industrial: 2px;
-  --radius-default: var(--radius-none);
+  /* Layout & Spacing */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --container-blog: 1100px;
+  
+  --padding-panel: clamp(1.5rem, 5vw, 4rem);
+  --gap-cards: 2rem;
 
-  /* Layout Scale */
-  --gap-base: clamp(1rem, 2vw, 2rem);
-  --padding-canvas: clamp(1.5rem, 5vw, 4rem);
-
-  /* Principled Easing - Technical & Responsive */
-  --ease-mechanical: steps(4, end);
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Motion Primitives */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100%); }
 }
-
 @layer utilities {
+  /* Premium Industrial Utilities */
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+  }
+  .industrial-gradient {
+    background: linear-gradient(135deg, #001f3f 0%, #000c19 100%);
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+  .gold-accent {
+    @apply border-accent-brand/30 hover:border-accent-brand transition-colors;
+  }
   .scanline-hover {
     @apply relative overflow-hidden;
   }
   .scanline-hover::after {
     content: "";
-    @apply absolute inset-0 bg-gradient-to-b from-transparent via-accent-brand/5 to-transparent -translate-y-full opacity-0 pointer-events-none;
-    transition: transform 1.5s var(--ease-out-expo), opacity 0.3s ease;
+    @apply absolute inset-0 bg-gradient-to-b from-transparent via-accent-brand/10 to-transparent -translate-y-full opacity-0 pointer-events-none z-20;
   }
   .scanline-hover:hover::after {
-    @apply -translate-y-0 opacity-100;
+    @apply opacity-100;
+    animation: scanline 3s linear infinite;
+  }
+  .grid-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }
 
 @layer base {
   body {
     @apply bg-bg text-text-body font-sans antialiased;
+    line-height: 1.6;
   }
 
-  /* Modular Type Scale using Clamp for Fluidity */
-  h1 {
+  h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.04em;
-    @apply font-bold uppercase text-text-main;
-  }
-
-  h2 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    @apply font-bold uppercase text-text-main;
-  }
-
-  h3 {
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    @apply text-accent-navy font-bold tracking-tight;
     line-height: 1.2;
-    @apply font-bold uppercase text-text-main;
   }
 
-  h4 {
-    font-family: var(--font-display);
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
-    @apply font-bold uppercase text-text-main;
-  }
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+  h2 { font-size: clamp(2rem, 4vw, 3rem); }
+  h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
 
   p {
-    max-width: 65ch;
-    line-height: 1.6;
+    max-width: 70ch;
     @apply text-text-body;
   }
 }
