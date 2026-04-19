@@ -88,7 +88,7 @@ function ResourceList({ resources, onSelect }: { resources: Resource[]; onSelect
         <Stack gap={4}>
           <Text variant="headline" size="9xl">Reviews.</Text>
           <Text variant="body" size="xl" maxWidth="2xl" color="body">
-            Shoes, floor conditions, and equipment. Curated assessments for the WSDC Registry.
+            Shoes, floor conditions, and equipment. Curated assessments for WCS Events.
           </Text>
         </Stack>
         
