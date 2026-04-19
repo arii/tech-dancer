@@ -45,13 +45,13 @@ export default function Home() {
   ];
 
   return (
-    <Box as="section" panel>
-      <Stack justify="center" padding="hero" className="min-h-full">
-        <Text variant="mono" color="brand" weight="font-bold" className="mb-4 block">
+    <Box as="section" padding="panel">
+      <Stack justify="center" padding="hero" minHeight="full">
+        <Text variant="mono" color="brand" weight="font-bold" marginBottom={4} display="block">
           // WELCOME_TO_THE_REGISTRY
         </Text>
         
-        <Stack gap={6} className="mb-24 px-4 md:px-0">
+        <Stack gap={6} marginBottom={24} paddingX={{ base: 4, md: 0 }}>
           <Text 
             as={motion.h1}
             initial={{ opacity: 0, x: -20 }}
@@ -60,20 +60,32 @@ export default function Home() {
             variant="headline"
             size="9xl"
           >
-            The Roboticist's Guide to WCS.
+            The Roboticist's Guide to the West Coast Swing.
           </Text>
-          <Stack direction={{ base: "col", md: "row" }} gap={8} align={{ base: "start", md: "end" }} justify="between" className="mt-12">
-            <Text 
-              as={motion.p}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              variant="body"
-              size="3xl"
-              className="max-w-[75ch]"
-            >
-              Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis to maximize your West Coast Swing trajectory.
-            </Text>
+          <Stack direction={{ base: "col", md: "row" }} gap={8} align={{ base: "start", md: "end" }} justify="between" marginTop={12}>
+            <Stack gap={4} maxWidth="4xl">
+              <Text 
+                as={motion.p}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                variant="body"
+                size="3xl"
+              >
+                Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS lifestyle.
+              </Text>
+              <Text 
+                as={motion.p}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                variant="body"
+                size="lg"
+                color="dim"
+              >
+                Welcome to tech-dancer. You’re looking at a living portfolio as a platform. Enjoy the WCS content or dive into the technical details.
+              </Text>
+            </Stack>
             <Box 
               as={motion.div}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -83,10 +95,13 @@ export default function Home() {
               border
               padding="compact"
               shadow="industrial"
-              className="stats-widget !m-0 shrink-0 relative"
+              margin={0}
+              shrink={0}
+              position="relative"
+              className="stats-widget hidden lg:block"
             >
-              <Text variant="micro" size="micro" className="absolute top-1 right-1 select-none">REF_ID: STATUS_001</Text>
-              <Text variant="mono" size="micro" color="brand" className="mb-1">Status: Optimized</Text>
+              <Text variant="micro" size="micro" position="absolute" className="top-1 right-1 select-none">REF_ID: STATUS_001</Text>
+              <Text variant="mono" size="micro" color="brand" marginBottom={1}>Status: Optimized</Text>
               <Text variant="display" size="base">BOUGIE ON A BUDGET</Text>
             </Box>
           </Stack>
@@ -105,103 +120,119 @@ export default function Home() {
               }
             }
           }}
-          className="border-y border-line"
+          border="y"
         >
           <Grid cols={1} lg={12} gap={0}>
-            {/* Main Feature */}
+            {/* Path 1: Are you a dancer? */}
             <Box 
               as={motion.div}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 }
               }}
-              onClick={() => navigate('/lab')}
-              className="col-span-1 lg:col-span-8 border-b lg:border-b-0 lg:border-r border-line p-8 md:p-16 hover:bg-card-bg transition-colors cursor-pointer group"
+              lg={{ span: 7 }}
+              border="b"
+              lgBorder={{ b: 0, r: true }}
+              padding={{ base: 8, md: 16 }}
+              className="bg-surface/30 relative overflow-hidden group scanline-hover"
             >
-              <Box className="aspect-[16/9] overflow-hidden bg-line">
-                <motion.img 
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-                  src="https://picsum.photos/seed/gear-stack/1200/675" 
-                  alt="Hardware & Shell" 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                  referrerPolicy="no-referrer"
-                />
-              </Box>
-              <Stack gap={6} className="mt-12">
-                <Text as="h3" size="8xl" weight="font-bold" className="uppercase leading-none">Hardware & Shell</Text>
-                <Text variant="body" size="2xl" className="max-w-xl">
-                  Stress-tested apparel and footwear for the 3:00 AM social floor. From friction-reduction DIYs to sustainable packing manifests.
-                </Text>
-                <Box 
-                  as={motion.div}
-                  whileHover={{ x: 5 }}
-                  className="flex items-center gap-2"
-                >
-                  <Text variant="label" size="sm" color="accent">Explore The Lab</Text> <ArrowRight className="w-4 h-4 text-accent" />
-                </Box>
+              <Stack gap={12} className="relative z-10">
+                <Stack gap={4}>
+                  <Text variant="mono" color="brand" size="sm" weight="font-bold">// PATH_01: LIFESTYLE_OPT</Text>
+                  <Text as="h2" size="8xl" weight="font-bold" uppercase className="leading-none">Are you a dancer?</Text>
+                </Stack>
+                
+                <Grid cols={1} md={2} gap={8}>
+                  <Box 
+                    onClick={() => navigate('/blog')}
+                    cursor="pointer"
+                    className="group-hover/item"
+                  >
+                    <Box aspect="square" overflow="hidden" surface="dim" marginBottom={4} border>
+                      <img src="https://picsum.photos/seed/dance-life/600/600" alt="Lifestyle" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" referrerPolicy="no-referrer" />
+                    </Box>
+                    <Text variant="label" size="sm" color="accent" display="flex" align="center" gap={2}>
+                      Lifestyle blog posts <ArrowRight className="w-3 h-3" />
+                    </Text>
+                  </Box>
+                  <Box 
+                    onClick={() => navigate('/lab')}
+                    cursor="pointer"
+                  >
+                    <Box aspect="square" overflow="hidden" surface="dim" marginBottom={4} border>
+                      <img src="https://picsum.photos/seed/gear-review/600/600" alt="Gear" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" referrerPolicy="no-referrer" />
+                    </Box>
+                    <Text variant="label" size="sm" color="accent" display="flex" align="center" gap={2}>
+                      Gear reviews <ArrowRight className="w-3 h-3" />
+                    </Text>
+                  </Box>
+                </Grid>
               </Stack>
             </Box>
             
-            {/* Side Stack */}
-            <Box className="col-span-1 lg:col-span-4 flex flex-col">
+            {/* Path 2: Are you looking to hire? */}
+            <Box 
+              as={motion.div}
+              variants={{
+                hidden: { opacity: 0, x: 20 },
+                visible: { opacity: 1, x: 0 }
+              }}
+              lg={{ span: 5 }}
+              display="flex"
+              direction="col"
+              className="bg-bg relative"
+            >
               <Box 
-                as={motion.div}
-                variants={{
-                  hidden: { opacity: 0, x: 20 },
-                  visible: { opacity: 1, x: 0 }
-                }}
-                onClick={() => navigate('/feed')}
-                className="flex-1 p-8 md:p-12 border-b border-line bg-accent text-white hover:bg-accent-orange transition-colors cursor-pointer group"
+                flex={1}
+                padding={{ base: 8, md: 12 }}
+                border="b"
+                className="group scanline-hover"
               >
-                <Text variant="micro" size="micro" className="mb-8 opacity-60 text-white">COLLECTION: 01</Text>
-                <Text as="h3" variant="display" size="4xl" className="mb-4 text-white">Logistics Logic</Text>
-                <Text variant="body" size="sm" className="mb-8 leading-relaxed text-white/80">
-                  High-efficiency travel protocols. Hotel block arbitrage, flight matrix optimization, and status stacking.
-                </Text>
-                <Box 
-                  as={motion.div} 
-                  whileHover={{ x: 5 }}
-                  className="inline-flex items-center gap-2"
-                >
-                  <Text variant="label" size="sm" className="text-white">Access Systems</Text> <ArrowRight className="w-4 h-4 text-white" />
-                </Box>
+                <Stack gap={8}>
+                  <Stack gap={4}>
+                    <Text variant="mono" color="brand" size="sm" weight="font-bold">// PATH_02: TECHNICAL_ARCH</Text>
+                    <Text as="h3" variant="display" size="4xl">Looking to hire a roboticist or AI expert?</Text>
+                  </Stack>
+                  
+                  <Stack gap={4}>
+                    <Box onClick={() => navigate('/blog')} cursor="pointer" className="flex items-center justify-between border-b border-line pb-4 hover:border-accent-brand transition-colors group/link">
+                      <Text variant="body" size="lg">→ Tech blog posts</Text>
+                      <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover/link:translate-x-1" />
+                    </Box>
+                    <Box onClick={() => navigate('/systems')} cursor="pointer" className="flex items-center justify-between border-b border-line pb-4 hover:border-accent-brand transition-colors group/link">
+                      <Text variant="body" size="lg">→ Data & Development Lab</Text>
+                      <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover/link:translate-x-1" />
+                    </Box>
+                    <Box onClick={() => navigate('/about')} cursor="pointer" className="flex items-center justify-between hover:text-accent-brand transition-colors group/link">
+                      <Text variant="body" size="lg">→ About / Contact Page</Text>
+                      <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover/link:translate-x-1" />
+                    </Box>
+                  </Stack>
+                </Stack>
               </Box>
+              
               <Box 
-                as={motion.div}
-                variants={{
-                  hidden: { opacity: 0, x: 20 },
-                  visible: { opacity: 1, x: 0 }
-                }}
-                onClick={() => navigate('/engine')}
-                className="flex-1 p-8 md:p-12 bg-surface hover:bg-card-bg transition-colors cursor-pointer group"
+                padding={{ base: 8, md: 10 }}
+                surface="dim"
+                className="border-t border-line"
               >
-                <Text variant="micro" size="micro" color="brand" className="mb-8">ANALYSIS: 02</Text>
-                <Text as="h3" variant="display" size="4xl" className="mb-4 text-text-main">Predictive Engine</Text>
-                <Text variant="body" size="sm" className="mb-8 leading-relaxed">
-                  The physics of momentum and connection. Quantifying judge variance and heat density.
-                </Text>
-                <Box 
-                  as={motion.div} 
-                  whileHover={{ x: 5 }}
-                  className="inline-flex items-center gap-2"
-                >
-                  <Text variant="label" size="sm" color="brand">View Data</Text> <ArrowRight className="w-4 h-4 text-accent-brand" />
-                </Box>
+                <Text variant="mono" size="micro" color="dim" marginBottom={4}>CURRENT_PROJECT</Text>
+                <Text variant="display" size="xl" marginBottom={2}>Predictive Scoring Engine</Text>
+                <Text variant="body" size="sm" color="dim">Quantifying judge variance through computer vision and trajectory analysis.</Text>
               </Box>
             </Box>
           </Grid>
         </Box>
 
         {/* Latest Updates Section */}
-        <Box className="mt-24 space-y-8">
+        <Stack gap={8} marginTop={24}>
           <Stack as={motion.div} 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            direction="row" align="center" justify="between" className="border-b border-line pb-4 mb-8"
+            direction="row" align="center" justify="between" border="b" paddingBottom={4} marginBottom={8}
           >
-            <Text variant="label" size="sm" className="text-text-main">Latest Updates</Text>
+            <Text variant="label" size="sm">Latest Updates</Text>
             <Text variant="micro" size="micro">System Time: 2026.04.15</Text>
           </Stack>
           
@@ -230,46 +261,46 @@ export default function Home() {
                     hidden: { opacity: 0, y: 10 },
                     visible: { opacity: 1, y: 0 }
                   }}
+                  md={{ span: isFirst ? 7 : 5 }}
                   whileHover={{ y: -5, borderColor: 'var(--color-accent-brand)' }}
                   onClick={() => navigate(update.link)}
                   border surface="default"
-                  className={cn(
-                    "p-8 cursor-pointer group",
-                    isFirst ? 'md:col-span-7' : 'md:col-span-5'
-                  )}
+                  padding={8}
+                  cursor="pointer"
+                  className="group"
                 >
-                  <Stack direction="row" justify="between" align="start" className="mb-6">
-                    <Box className="border border-accent-brand/20 px-3 py-1">
+                  <Stack direction="row" justify="between" align="start" marginBottom={6}>
+                    <Box border paddingX={3} paddingY={1} emphasis="dim">
                       <Text variant="mono" size="micro" color="brand" weight="font-bold">
                         {update.type}
                       </Text>
                     </Box>
                     <Text variant="mono" size="micro" color="dim">{update.date}</Text>
                   </Stack>
-                  <Text variant="headline" size="4xl" className="group-hover:text-accent-brand transition-colors mb-4">
+                  <Text variant="headline" size="4xl" marginBottom={4} className="group-hover:text-accent-brand transition-colors">
                     {update.title}
                   </Text>
-                  <Text variant="body" size="lg" className="line-clamp-2 opacity-80">
+                  <Text variant="body" size="lg" opacity="80" className="line-clamp-2">
                     {update.desc}
                   </Text>
-                  <Box className="mt-8 flex items-center gap-3 group-hover:translate-x-1 transition-transform">
+                  <Stack direction="row" align="center" gap={3} marginTop={8} className="group-hover:translate-x-1 transition-transform">
                     <Text variant="label" size="sm" color="brand">Inspect Report</Text> <ArrowRight className="w-3 h-3 text-accent-brand" />
-                  </Box>
+                  </Stack>
                 </Box>
               );
             })}
           </Grid>
-        </Box>
+        </Stack>
 
         {/* WSDC Registry Ledger Section */}
-        <Box className="mt-24 space-y-8">
+        <Stack gap={8} marginTop={24}>
           <Box as={motion.div} 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex justify-between items-baseline border-b border-line pb-4 mb-8"
+            display="flex" justify="between" align="baseline" border="b" paddingBottom={4} marginBottom={8}
           >
-            <Text variant="label" size="sm" className="text-text-main">WSDC Registry Ledger</Text>
+            <Text variant="label" size="sm">WSDC Registry Ledger</Text>
             <Text variant="label" size="sm" color="brand" className="animate-pulse">● Live Itinerary</Text>
           </Box>
           
@@ -287,40 +318,45 @@ export default function Home() {
               }
             }}
             cols={1} md={2} lg={3}
-            className="bg-line border border-line"
+            surface="dim"
+            border
           >
             {upcomingEvents.map((event) => (
-              <Stack 
+              <Box 
                 as={motion.div}
                 key={event.name} 
-                direction="row"
-                gap={4}
                 variants={{
                   hidden: { opacity: 0 },
                   visible: { opacity: 1 }
                 }}
-                className="bg-bg p-6 flex items-start gap-4 hover:bg-accent/5 transition-colors group cursor-default"
+                surface
+                padding={6}
+                display="flex"
+                align="start"
+                gap={4}
+                cursor="default"
+                className="hover:bg-accent/5 transition-colors group"
               >
-                <Box className="w-10 h-10 border border-line bg-line flex items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
+                <Box width={10} height={10} border surface="dim" display="flex" className="items-center justify-center text-accent shrink-0 group-hover:border-accent transition-colors">
                   <event.icon className="w-5 h-5 stroke-1" />
                 </Box>
                 <Stack gap={1}>
                   <Text variant="mono" size="micro" color="brand" weight="font-bold">{event.status}</Text>
                   <Text variant="display" size="xl" className="leading-tight">{event.name}</Text>
-                  <Box className="flex items-center gap-2">
+                  <Stack direction="row" align="center" gap={2}>
                     <Calendar className="w-3 h-3 text-text-dim" />
-                    <Text variant="micro" size="micro" className="text-text-dim opacity-100 uppercase">{event.date}</Text>
-                  </Box>
+                    <Text variant="micro" size="micro" opacity="100" uppercase color="dim">{event.date}</Text>
+                  </Stack>
                 </Stack>
-              </Stack>
+              </Box>
             ))}
           </Grid>
-        </Box>
+        </Stack>
 
-        <Box border surface="default" padding="card" className="mt-24 w-fit relative">
-          <Text variant="micro" size="micro" className="absolute top-2 right-2 select-none">DATA_REF: 099</Text>
+        <Box border surface="default" padding="card" marginTop={24} width="fit" position="relative">
+          <Text variant="micro" size="micro" position="absolute" className="top-2 right-2 select-none">DATA_REF: 099</Text>
           <Text variant="headline" size="4xl" color="brand">Registry Calibration</Text>
-          <Text variant="mono" size="sm" color="dim" className="mt-2 text-wrap">
+          <Text variant="mono" size="sm" color="dim" marginTop={2} className="text-wrap">
             Currently Obsessed: Hypervolt Mini & Motown Monday
           </Text>
         </Box>

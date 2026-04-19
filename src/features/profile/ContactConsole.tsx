@@ -79,7 +79,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
       <Stack gap={8} className="mb-16 px-4 md:px-0">
         <Text variant="headline" size="text-5xl md:text-8xl">The Network.</Text>
         <Text variant="body" size="text-lg md:text-xl" className="max-w-2xl">
-          Inquiries regarding WCS statistics, mechanical physics, or gear durability analysis. Open channel for system optimization.
+          Have a burning analytical question regarding WCt? Want a lifestyle post about financial literacy or building community? 
+          Or just have feedback on a gear review? I'd love to hear from you.
         </Text>
       </Stack>
 

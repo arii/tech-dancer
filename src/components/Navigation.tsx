@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ShoppingBag, BarChart2, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal, LucideIcon } from 'lucide-react';
+import { ShoppingBag, BarChart2, BookOpen, User, Home, Menu, X, Mail, FileText, Terminal, Plane, LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -14,10 +14,9 @@ import { routes } from '@/config/routes';
 const iconMap: Record<string, LucideIcon> = {
   '/': Home,
   '/lab': ShoppingBag,
+  '/feed': Plane,
+  '/blog': BookOpen,
   '/engine': BarChart2,
-  '/blog': FileText,
-  '/feed': BookOpen,
-  '/systems': Terminal,
   '/about': User,
   '/contact': Mail,
 };

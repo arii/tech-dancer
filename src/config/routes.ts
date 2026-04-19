@@ -12,10 +12,9 @@ export interface RouteConfig {
 export const routes: RouteConfig[] = [
   { path: '/', label: 'Home' },
   { path: '/lab', label: 'Gear Reviews' },
-  { path: '/engine', label: 'Dance Analytics' },
-  { path: '/blog', label: 'Blog' },
-  { path: '/feed', label: 'Resources' },
-  { path: '/systems', label: 'Systems' },
-  { path: '/about', label: 'About Ariel' },
+  { path: '/feed', label: 'Travel/Lifestyle' },
+  { path: '/blog', label: 'WCS Content' },
+  { path: '/engine', label: 'Data & Dev Lab' },
+  { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
 ];

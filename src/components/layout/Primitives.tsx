@@ -36,6 +36,10 @@ interface BaseProps {
   marginY?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   gap?: ResponsiveProp<number | string>
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
+  smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
+  mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
+  lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
+  xlBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   surface?: keyof typeof variants.surface | boolean
   emphasis?: keyof typeof variants.emphasis
   radius?: keyof typeof variants.radius
@@ -57,6 +61,7 @@ interface BaseProps {
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
   aspect?: "square" | "video" | "auto" | string
   shrink?: number | boolean
+  self?: "start" | "center" | "end" | "stretch" | "auto"
   span?: ResponsiveProp<number | string>
   cursor?: "pointer" | "default" | "not-allowed"
 }
@@ -83,13 +88,16 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     marginY,
     gap, 
     border, 
+    smBorder,
+    mdBorder,
+    lgBorder,
+    xlBorder,
     surface, 
     emphasis, 
     radius: radiusProp, 
     panel, 
     flex, 
     wrap, 
-    layout, 
     shadow,
     position,
     inset,
@@ -104,10 +112,38 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     display,
     aspect,
     shrink,
+    self,
     span,
     cursor,
+    // Motion props filtering
+    initial,
+    animate,
+    exit,
+    transition,
+    variants: variantsProp,
+    whileHover,
+    whileTap,
+    whileFocus,
+    whileDrag,
+    whileInView,
+    viewport,
+    layout: layoutProp,
+    layoutId,
+    onAnimationStart,
+    onAnimationComplete,
+    onUpdate,
+    custom,
     ...props 
   }, ref) => {
+    const isMotion = typeof Component !== "string"
+    
+    // Add motion props back if Component is a motion component
+    const motionProps = isMotion ? {
+      initial, animate, exit, transition, variants: variantsProp, whileHover, whileTap,
+      whileFocus, whileDrag, whileInView, viewport, layout: layoutProp,
+      layoutId, onAnimationStart, onAnimationComplete, onUpdate, custom
+    } : {}
+
     const pMapper = (val: any) => typeof val === "string" && spacing[val as keyof typeof spacing] ? spacing[val as keyof typeof spacing] : val
 
     return (
@@ -115,7 +151,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
         ref={ref}
         className={composeStyles(
           panel && layoutTokens.panel,
-          layout && layoutTokens[layout],
+          layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
           shadow && shadows[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
           emphasis && variants.emphasis[emphasis],
@@ -127,6 +163,67 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           border === "r" && "border-r border-line",
           border === "x" && "border-x border-line",
           border === "y" && "border-y border-line",
+          // Responsive borders
+          smBorder === true && "sm:border sm:border-line",
+          smBorder === "t" && "sm:border-t sm:border-line",
+          smBorder === "b" && "sm:border-b sm:border-line",
+          smBorder === "l" && "sm:border-l sm:border-line",
+          smBorder === "r" && "sm:border-r sm:border-line",
+          typeof smBorder === "object" && [
+            smBorder.t === true && "sm:border-t sm:border-line",
+            smBorder.t === false && "sm:border-t-0",
+            smBorder.b === true && "sm:border-b sm:border-line",
+            smBorder.b === false && "sm:border-b-0",
+            smBorder.l === true && "sm:border-l sm:border-line",
+            smBorder.l === false && "sm:border-l-0",
+            smBorder.r === true && "sm:border-r sm:border-line",
+            smBorder.r === false && "sm:border-r-0",
+          ],
+          mdBorder === true && "md:border md:border-line",
+          mdBorder === "t" && "md:border-t md:border-line",
+          mdBorder === "b" && "md:border-b md:border-line",
+          mdBorder === "l" && "md:border-l md:border-line",
+          mdBorder === "r" && "md:border-r md:border-line",
+          typeof mdBorder === "object" && [
+            mdBorder.t === true && "md:border-t md:border-line",
+            mdBorder.t === false && "md:border-t-0",
+            mdBorder.b === true && "md:border-b md:border-line",
+            mdBorder.b === false && "md:border-b-0",
+            mdBorder.l === true && "md:border-l md:border-line",
+            mdBorder.l === false && "md:border-l-0",
+            mdBorder.r === true && "md:border-r md:border-line",
+            mdBorder.r === false && "md:border-r-0",
+          ],
+          lgBorder === true && "lg:border lg:border-line",
+          lgBorder === "t" && "lg:border-t lg:border-line",
+          lgBorder === "b" && "lg:border-b lg:border-line",
+          lgBorder === "l" && "lg:border-l lg:border-line",
+          lgBorder === "r" && "lg:border-r lg:border-line",
+          typeof lgBorder === "object" && [
+            lgBorder.t === true && "lg:border-t lg:border-line",
+            lgBorder.t === false && "lg:border-t-0",
+            lgBorder.b === true && "lg:border-b lg:border-line",
+            lgBorder.b === false && "lg:border-b-0",
+            lgBorder.l === true && "lg:border-l lg:border-line",
+            lgBorder.l === false && "lg:border-l-0",
+            lgBorder.r === true && "lg:border-r lg:border-line",
+            lgBorder.r === false && "lg:border-r-0",
+          ],
+          xlBorder === true && "xl:border xl:border-line",
+          xlBorder === "t" && "xl:border-t xl:border-line",
+          xlBorder === "b" && "xl:border-b xl:border-line",
+          xlBorder === "l" && "xl:border-l xl:border-line",
+          xlBorder === "r" && "xl:border-r xl:border-line",
+          typeof xlBorder === "object" && [
+            xlBorder.t === true && "xl:border-t xl:border-line",
+            xlBorder.t === false && "xl:border-t-0",
+            xlBorder.b === true && "xl:border-b xl:border-line",
+            xlBorder.b === false && "xl:border-b-0",
+            xlBorder.l === true && "xl:border-l xl:border-line",
+            xlBorder.l === false && "xl:border-l-0",
+            xlBorder.r === true && "xl:border-r xl:border-line",
+            xlBorder.r === false && "xl:border-r-0",
+          ],
           getResponsiveClasses(gap, "gap-"),
           getResponsiveClasses(padding, "p-", (v) => spacing[v as keyof typeof spacing] ? "" : v),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
@@ -173,8 +270,10 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,
           getResponsiveClasses(span, "col-span-"),
           cursor && `cursor-${cursor}`,
+          self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           className
         )}
+        {...motionProps}
         {...props}
       />
     )
