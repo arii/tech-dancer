@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { ContentCard } from '@/components/ui/ContentCard';
+import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 
-export default function FolioGrid({ items, categoryTitle, basePath, label, description }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string }) {
+export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
   const [search, setSearch] = useState('');
 
   const filteredItems = items.filter(item => {
@@ -23,6 +23,7 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
           title={categoryTitle}
           description={description}
         />
+        {children}
         <div className="mt-8 relative max-w-2xl">
           <input
             type="text"
@@ -34,15 +35,29 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-0 border-t border-l border-line mt-8">
-        {filteredItems.map(item => (
-          <div key={item.slug} className="border-r border-b border-line p-8 hover:bg-card-bg transition-colors group">
-            <ContentCard
-              {...item}
-              basePath={basePath}
-              aspect="video"
-            />
-          </div>
-        ))}
+        {loading ? (
+          Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className={`border-r border-b border-line p-8 transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
+            >
+              <ContentCardSkeleton />
+            </div>
+          ))
+        ) : (
+          filteredItems.map((item, index) => (
+            <div
+              key={item.slug}
+              className={`border-r border-b border-line p-8 hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
+            >
+              <ContentCard
+                {...item}
+                basePath={basePath}
+                aspect="video"
+              />
+            </div>
+          ))
+        )}
       </div>
     </section>
   );

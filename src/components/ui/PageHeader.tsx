@@ -13,7 +13,7 @@ export function PageHeader({ label, title, description }: PageHeaderProps) {
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           {label}
         </Text>
-        <Text variant="display" size="5xl" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+        <Text variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
           {title}
         </Text>
         {description && (
