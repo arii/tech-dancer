@@ -1,11 +1,12 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 
 export default function PathSelector() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full">
+    <Grid cols={12} gap={0} className="border-y border-line min-h-[60vh] w-full">
       {/* Dancer Path: Lifestyle & Gear */}
-      <div className="md:col-span-12 lg:col-span-7 relative group overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900 bg-[length:200%_200%] animate-gradient w-full">
+      <Box span={{ base: 12, lg: 7 }} position="relative" className="group overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900 bg-[length:200%_200%] animate-gradient w-full">
         {/* Scanning Scanline Effect */}
         <motion.div
            variants={{ hover: { top: '100%', opacity: 1 } }}
@@ -15,25 +16,21 @@ export default function PathSelector() {
            className="absolute left-0 right-0 h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none"
         />
 
-        <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-          <h2 className="text-4xl md:text-6xl font-display font-black mb-4 text-white">ARE YOU A DANCER?</h2>
-          <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold">
-            <li>
-              <NavLink to="/blog?category=Lifestyle" className="hover:text-accent transition-colors flex items-center gap-2">
-                &rarr; Lifestyle blog posts
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/gear" className="hover:text-accent transition-colors flex items-center gap-2">
-                &rarr; Gear reviews
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </div>
+        <Box padding={12} height="full" display="flex" direction="col" justify="end" position="relative" zIndex={20} className="bg-gradient-to-t from-bg via-bg/40 to-transparent">
+          <Text variant="display" size="6xl" weight="font-black" marginBottom={4} className="leading-[0.9]">ARE YOU A DANCER?</Text>
+          <Stack gap={4} marginBottom={6}>
+            <Box as={NavLink} to="/blog?category=Lifestyle" display="flex" align="center" gap={2} className="font-mono text-sm tracking-widest uppercase text-accent font-bold hover:text-white transition-colors">
+              &rarr; Lifestyle blog posts
+            </Box>
+            <Box as={NavLink} to="/gear" display="flex" align="center" gap={2} className="font-mono text-sm tracking-widest uppercase text-accent font-bold hover:text-white transition-colors">
+              &rarr; Gear reviews
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
 
       {/* Tech Path: Robotics & AI */}
-      <div className="md:col-span-12 lg:col-span-5 relative group overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950 bg-[length:200%_200%] animate-gradient w-full">
+      <Box span={{ base: 12, lg: 5 }} position="relative" className="group overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950 bg-[length:200%_200%] animate-gradient w-full">
         {/* Scanning Scanline Effect */}
         <motion.div
            variants={{ hover: { top: '100%', opacity: 1 } }}
@@ -43,22 +40,18 @@ export default function PathSelector() {
            className="absolute left-0 right-0 h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none"
         />
 
-        <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-          <h2 className="text-3xl md:text-5xl font-display font-black mb-4 text-white">HIRING A ROBOTICIST?</h2>
-          <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold">
-            <li>
-              <NavLink to="/blog?category=Tech" className="hover:text-accent transition-colors flex items-center gap-2">
-                &rarr; Tech blog posts
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/research" className="hover:text-accent transition-colors flex items-center gap-2">
-                &rarr; Data & Development Lab
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+        <Box padding={12} height="full" display="flex" direction="col" justify="end" position="relative" zIndex={20} className="bg-gradient-to-t from-bg via-bg/40 to-transparent">
+          <Text variant="display" size="5xl" weight="font-black" marginBottom={4} className="text-accent-navy leading-[0.9]">HIRING A ROBOTICIST?</Text>
+          <Stack gap={4} marginBottom={6}>
+            <Box as={NavLink} to="/blog?category=Tech" display="flex" align="center" gap={2} className="font-mono text-sm tracking-widest uppercase text-accent font-bold hover:text-accent-navy transition-colors">
+              &rarr; Tech blog posts
+            </Box>
+            <Box as={NavLink} to="/research" display="flex" align="center" gap={2} className="font-mono text-sm tracking-widest uppercase text-accent font-bold hover:text-accent-navy transition-colors">
+              &rarr; Data & Development Lab
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
+    </Grid>
   );
 }

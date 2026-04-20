@@ -23,7 +23,7 @@ export function HeroPathCard({ label, title, paths, tag, image, span = 1, icon: 
       padding={8}
       className="group bg-surface border border-slate-200 hover:border-accent transition-all duration-500 rounded-none"
     >
-      <Stack gap={10} height="full" justify="between" position="relative" zIndex={10}>
+      <Stack gap={8} height="full" justify="between" position="relative" zIndex={10}>
         <Stack gap={8}>
           <Box display="flex" align="center" gap={3}>
             <Icon className="w-5 h-5 text-accent" />

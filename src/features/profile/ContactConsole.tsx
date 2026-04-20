@@ -91,7 +91,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
 
         <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={20} overflow="hidden">
         <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
-          <Stack gap={12}>
+          <Stack gap={8}>
             <Stack gap={6}>
               <Box paddingBottom={4} className="border-b border-slate-200">
                 <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>

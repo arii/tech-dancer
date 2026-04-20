@@ -62,7 +62,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       </Box>
 
       {/* Content Area */}
-      <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
+      <Stack gap={6} padding={{ base: 6, lg: 8 }} flex={1} justify="between">
         <Stack gap={4}>
           <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
             {date}

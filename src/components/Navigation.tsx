@@ -93,7 +93,7 @@ export default function Navigation() {
         layout="navRail" 
         className="w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0"
       >
-        <Stack padding={8} gap={10} flex={1}>
+        <Stack padding={8} gap={8} flex={1}>
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
               variant="mono" 

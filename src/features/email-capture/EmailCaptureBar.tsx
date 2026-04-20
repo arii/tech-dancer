@@ -21,13 +21,14 @@ export function EmailCaptureBar() {
       zIndex="top"
       width="full"
     >
-      <Stack 
-        direction={{ base: 'col', md: 'row' }} 
-        align="center" 
-        justify="between" 
-        gap={{ base: 4, md: 8 }}
-        className="w-full"
-      >
+      <Box className="mx-auto max-w-7xl w-full" paddingX={{ base: 6, md: 12 }}>
+        <Stack
+          direction={{ base: 'col', md: 'row' }}
+          align="center"
+          justify="between"
+          gap={{ base: 4, md: 8 }}
+          className="w-full"
+        >
         <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
           <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
             <Mail className="w-5 h-5 text-accent-brand" />
@@ -42,8 +43,9 @@ export function EmailCaptureBar() {
           </Stack>
         </Stack>
         
-        <EmailForm />
-      </Stack>
+          <EmailForm />
+        </Stack>
+      </Box>
     </Box>
   );
 }

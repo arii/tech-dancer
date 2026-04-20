@@ -8,13 +8,13 @@ import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 
 export default function Home() {
-  const { recentPosts, dancerPaths, hirePaths } = useHome();
+  const { recentPosts } = useHome();
 
   return (
     <Box as="section">
       <Stack gap={24}>
-        <Stack gap={12} paddingTop={12}>
-          <Stack gap={4}>
+        <Stack gap={8}>
+          <Stack gap={2}>
             <Text 
               as={motion.h1}
               initial={{ opacity: 0, y: 20 }}
@@ -28,7 +28,7 @@ export default function Home() {
             <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
               Tools, travel hacks, and comp data to maximize your WCS weekends. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
             </Text>
-            <Text variant="sans" size="base" color="dim" maxWidth="2xl" marginTop={2} className="leading-relaxed">
+            <Text variant="sans" size="base" color="dim" maxWidth="2xl" className="leading-relaxed">
               Welcome to tech-dancer. Enjoy the west coast swing content or dive into the technical details.
             </Text>
           </Stack>
@@ -36,7 +36,7 @@ export default function Home() {
 
         <PathSelector />
 
-        <Stack gap={12}>
+        <Stack gap={8}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
             <Box 
               as={NavLink} 

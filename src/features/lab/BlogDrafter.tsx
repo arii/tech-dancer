@@ -9,7 +9,7 @@ export function BlogDrafter() {
   const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
 
   return (
-    <Stack gap={10} height="full">
+    <Stack gap={8} height="full">
       <Stack gap={4}>
         <Box display="flex" align="center" gap={3}>
            <Terminal className="w-5 h-5 text-accent-brand" />
