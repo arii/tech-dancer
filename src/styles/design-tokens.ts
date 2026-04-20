@@ -72,7 +72,7 @@ export const typography = {
   display: "font-display font-bold uppercase tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
-  utility: "font-mono tracking-[3px] uppercase",
+  utility: "font-mono font-bold uppercase tracking-[0.2em] text-text-dim",
   label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",
   system: "font-mono opacity-40 uppercase tracking-widest select-none",
@@ -80,7 +80,6 @@ export const typography = {
 
 export const typeSizes = {
   micro: "text-[10px]",
-  tiny: "text-[10px]",
   xs: "text-xs",
   sm: "text-sm",
   base: "text-base",

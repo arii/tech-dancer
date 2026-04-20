@@ -90,11 +90,6 @@
 }
 
 @layer components {
-  /* TIER 3: Standardized Utility / Micro-copy */
-  .text-utility {
-    @apply font-mono text-xs font-bold uppercase tracking-widest text-text-dim;
-  }
-
   /* TIER 3: Primary CTA Button */
   .btn-primary {
     @apply font-mono text-xs font-bold uppercase tracking-[0.2em] text-bg bg-text-main py-4 px-8 hover:bg-accent transition-colors inline-flex items-center justify-center gap-2;
@@ -123,11 +118,11 @@
 }
 
 .tech-specs-code {
-  @apply font-mono text-xs font-bold uppercase tracking-widest text-text-dim bg-bg p-4 text-accent border border-line rounded-none;
+  @apply font-mono text-xs font-bold uppercase tracking-[0.2em] text-text-dim bg-bg p-4 text-accent border border-line rounded-none;
 }
 
 .experience-chip {
-  @apply font-mono text-xs font-bold uppercase tracking-widest text-text-dim border border-line px-3 py-1 rounded-none bg-surface;
+  @apply font-mono text-xs font-bold uppercase tracking-[0.2em] text-text-dim border border-line px-3 py-1 rounded-none bg-surface;
 }
 
 .product-card {

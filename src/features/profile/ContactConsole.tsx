@@ -125,7 +125,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
           <Box as="form" onSubmit={onSubmit} className="space-y-8">
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <label htmlFor="name" className="text-utility">Personnel_Name</label>
+                <Text as="label" htmlFor="name" variant="utility" size="xs">Personnel_Name</Text>
                 {errors.name && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.name}</Text>}
               </Box>
               <Box as="input" 
@@ -145,7 +145,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <label htmlFor="email" className="text-utility">Transmission_Endpoint</label>
+                <Text as="label" htmlFor="email" variant="utility" size="xs">Transmission_Endpoint</Text>
                 {errors.email && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.email}</Text>}
               </Box>
               <Box as="input" 
@@ -164,7 +164,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
               />
             </Stack>
             <Stack gap={3}>
-              <label htmlFor="subject" className="text-utility">Topic_Category</label>
+              <Text as="label" htmlFor="subject" variant="utility" size="xs">Topic_Category</Text>
               <Box as="select" 
                 id="subject"
                 name="subject"
@@ -180,7 +180,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <label htmlFor="message" className="text-utility">Payload_Data</label>
+                <Text as="label" htmlFor="message" variant="utility" size="xs">Payload_Data</Text>
                 {errors.message && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.message}</Text>}
               </Box>
               <Box as="textarea" 
@@ -198,22 +198,23 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 onChange={onChange}
               />
             </Stack>
-            <button
+            <Box
+              as="button"
               disabled={isSubmitting}
               className="w-full btn-primary disabled:opacity-50"
             >
               {isSubmitting ? (
                 <Stack direction="row" align="center" gap={3}>
                   <div className="w-4 h-4 border-2 border-bg-muted border-t-accent-brand animate-spin" />
-                  <span className="text-utility">Processing...</span>
+                  <Text variant="utility" size="xs" color="white">Processing...</Text>
                 </Stack>
               ) : (
-                <>
+                <Stack direction="row" align="center" gap={3} justify="center">
                   <Send className="w-4 h-4" />
-                  Transmit_Data
-                </>
+                  <Text variant="utility" size="xs" color="white">Transmit_Data</Text>
+                </Stack>
               )}
-            </button>
+            </Box>
           </Box>
         </Box>
         </Grid>
