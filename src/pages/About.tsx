@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { User, Award, Globe, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/Primitives';
 import { PageHeader } from '@/components/PageHeader';
-import { useProfile } from '@/features/profile/useProfile';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function ArielProfile() {
   const { bio } = useProfile();

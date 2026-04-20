@@ -3,7 +3,7 @@ import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, A
 import Markdown from 'react-markdown';
 import { Box, Stack, Text, Grid } from '@/components/Primitives';
 import { Resource } from '@/lib/content';
-import { useResources } from './useResources';
+import { useResources } from '@/hooks/useResources';
 
 export default function ResourceGallery() {
   const { resources, selectedResource, handleSelect, handleClear } = useResources();

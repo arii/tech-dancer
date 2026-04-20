@@ -58,10 +58,10 @@ export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 
 // --- Glob Loaders ---
 
-const postModules = import.meta.glob('/content/posts/*.{md,mdx}', { eager: true, query: '?raw' });
-const resourceModules = import.meta.glob('/content/resources/*.{md,mdx}', { eager: true, query: '?raw' });
-const studyModules = import.meta.glob('/content/studies/*.{md,mdx}', { eager: true, query: '?raw' });
-const eventModules = import.meta.glob('/content/events/*.{md,mdx}', { eager: true, query: '?raw' });
+const postModules = import.meta.glob('/content/posts/*.{md,mdx}', { eager: true, query: '?raw', import: 'default' });
+const resourceModules = import.meta.glob('/content/resources/*.{md,mdx}', { eager: true, query: '?raw', import: 'default' });
+const studyModules = import.meta.glob('/content/studies/*.{md,mdx}', { eager: true, query: '?raw', import: 'default' });
+const eventModules = import.meta.glob('/content/events/*.{md,mdx}', { eager: true, query: '?raw', import: 'default' });
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace(/\.(md|mdx)$/, '') || '';
 
@@ -69,6 +69,9 @@ function transform<T>(modules: Record<string, any>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
+      if (!contentStr || typeof contentStr !== 'string') {
+        return null;
+      }
       const { data, content } = matter(contentStr);
       return { 
         ...data, 
@@ -76,6 +79,7 @@ function transform<T>(modules: Record<string, any>): T[] {
         slug: slugFrom(path) 
       } as unknown as T;
     })
+    .filter((item): item is T => item !== null)
     .sort((a: any, b: any) => {
       if (a.date && b.date) return +new Date(b.date) - +new Date(a.date);
       return 0;

@@ -1,5 +1,5 @@
 import { Stack, Box, Text, Button } from '@/components/Primitives';
-import { useEmailCapture } from '@/features/email-capture/useEmailCapture';
+import { useEmailCapture } from '@/hooks/useEmailCapture';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';

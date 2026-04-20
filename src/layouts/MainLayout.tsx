@@ -2,11 +2,13 @@ import { Box, Stack } from '@/components/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
+import { EmailCaptureBar } from '@/components/EmailCaptureBar';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box layout="root" className="min-h-screen relative">
       <GlobalSearch />
+      <EmailCaptureBar />
       
       <Box display="flex" className="min-h-screen">
         <Navigation />

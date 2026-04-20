@@ -1,5 +1,5 @@
 import { Box } from '@/components/Primitives';
-import { useToolbox } from '@/features/lab/useToolbox';
+import { useToolbox } from '@/hooks/useToolbox';
 import FolioGrid from '@/components/FolioGrid';
 
 export default function Toolbox() {

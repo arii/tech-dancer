@@ -1,5 +1,5 @@
 import { Box, Stack } from '@/components/Primitives';
-import { useBlog } from '@/features/journal/useBlog';
+import { useBlog } from '@/hooks/useBlog';
 import FolioGrid from '@/components/FolioGrid';
 import { FilterBar } from '@/components/FilterBar';
 

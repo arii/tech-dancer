@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/Primitives';
-import { useHome } from '@/features/dashboard/useHome';
+import { useHome } from '@/hooks/useHome';
 import { SectionHeader } from '@/components/PageHeader';
 import PathSelector from '@/components/PathSelector';
 import { ContentCard } from '@/components/ContentCard';

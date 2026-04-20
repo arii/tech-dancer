@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, Activity, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/components/Primitives';
 import { PageHeader } from '@/components/PageHeader';
-import { useResearch } from '@/features/research/useResearch';
+import { useResearch } from '@/hooks/useResearch';
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
