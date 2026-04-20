@@ -1,7 +1,7 @@
 import React from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows } from "@/styles/design-tokens"
-import { variants } from "@/styles/variants"
+import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 
 export interface BaseProps {
