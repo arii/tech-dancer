@@ -45,6 +45,7 @@ export interface Study {
   excerpt: string;
   content: string;
   tags?: string[];
+  author?: string;
 }
 
 export interface Event {

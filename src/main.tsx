@@ -1,6 +1,9 @@
 import { Buffer } from 'buffer';
 
-(window as any).Buffer = (window as any).Buffer || Buffer;
+// polyfilling Buffer for browser environment
+if (typeof window !== 'undefined') {
+  (window as any).Buffer = (window as any).Buffer || Buffer;
+}
 
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';

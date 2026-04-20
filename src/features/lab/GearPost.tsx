@@ -12,7 +12,9 @@ export default function GearPost() {
   const resource = useMemo(() => slug ? getResourceBySlug(slug) : undefined, [slug]);
 
   const affiliateLinks = useMemo(() =>
-    (resource?.affiliateIds || []).map(id => affiliateManager.getLink(id)).filter(Boolean),
+    (resource?.affiliateIds || [])
+      .map(id => affiliateManager.getLink(id))
+      .filter((link): link is NonNullable<typeof link> => !!link),
     [resource]
   );
 
@@ -42,16 +44,16 @@ export default function GearPost() {
             <Box display="flex" flexWrap="wrap" gap={4}>
               {affiliateLinks.map((link) => (
                 <Box
-                  key={link!.id}
+                  key={link.id}
                   as="a"
-                  href={affiliateManager.resolveUrl(link!.id)}
+                  href={affiliateManager.resolveUrl(link.id)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-2 bg-surface border border-line hover:border-accent transition-colors"
                 >
                   <Stack gap={1}>
-                    <Text variant="mono" size="xs" weight="font-bold">{link!.name}</Text>
-                    <Text variant="mono" size="micro" color="dim" className="max-w-xs line-clamp-1">{link!.description}</Text>
+                    <Text variant="mono" size="xs" weight="font-bold">{link.name}</Text>
+                    <Text variant="mono" size="micro" color="dim" className="max-w-xs line-clamp-1">{link.description}</Text>
                   </Stack>
                   <ExternalLink className="w-3 h-3 text-accent" />
                 </Box>

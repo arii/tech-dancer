@@ -14,15 +14,16 @@ interface ContentDetailProps {
 }
 
 export function ContentDetail({ post, onBack, backLabel, children }: ContentDetailProps) {
-  // Use type guards or property checks if necessary, but these common fields exist on ContentItem types
   const title = post.title;
   const content = post.content;
 
-  // Studies and Events might have different metadata structures
-  const date = 'date' in post ? post.date : '';
-  const category = 'category' in post ? post.category : '';
-  const image = 'image' in post ? post.image : undefined;
-  const author = 'author' in post ? post.author : undefined;
+  // Type-safe metadata extraction
+  const date = (post as Post | Resource | Study).date || '';
+  const category = (post as Post | Resource | Study).category || '';
+  const image = (post as Post | Resource).image;
+
+  // Post and Study always have author. Resource doesn't (per interface).
+  const author = (post as Post | Study).author || 'Ariel';
 
   return (
     <Box as="article" padding="panel">
@@ -94,7 +95,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
           <Box border="t" paddingTop={12} display="flex" justify="between" align="center">
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim">PUBLISHED BY</Text>
-              <Text variant="mono" size="xs" weight="font-bold">{author || 'Ariel'}</Text>
+              <Text variant="mono" size="xs" weight="font-bold">{author}</Text>
             </Stack>
             <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
               <Share2 className="w-4 h-4" />
