@@ -13,3 +13,4 @@ __pycache__/
 .venv/
 venv/
 etl/data/*.parquet
+!etl/data/wcs_prelims.parquet

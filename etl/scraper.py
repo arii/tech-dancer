@@ -45,7 +45,6 @@ class EEPROLedgerFeeder:
 
         tables = soup.find_all('table', class_=lambda c: c and 'results-table' in c)
         if not tables:
-            # Fallback to generic if specific class is missing (e.g. mock test)
             tables = soup.find_all('table')
 
         for table in tables:
@@ -55,7 +54,6 @@ class EEPROLedgerFeeder:
                 if len(cells) < 3:
                     continue
 
-                # Find judge marks - they have a TITLE attribute with judge name
                 judge_marks = [c for c in cells if c.has_attr('TITLE') or c.has_attr('title')]
                 if not judge_marks:
                     continue
@@ -71,7 +69,6 @@ class EEPROLedgerFeeder:
                 if name_a:
                     name = name_a.get_text(strip=True)
                 else:
-                    # Specific fallback if data-wsdc missing
                     name_cell = row.find('td', class_='competitor-name')
                     if name_cell:
                         name = name_cell.get_text(strip=True)
@@ -129,9 +126,11 @@ class EEPROLedgerFeeder:
             raise ValueError("No data to process.")
         if not df['Dancer_ID'].is_unique:
             raise ValueError("Duplicate REF_IDs detected in ledger.")
-        legacy_columns = [col for col in df.columns if "points" in col.lower() and "registry" not in col.lower()]
-        if legacy_columns:
-            raise ValueError(f"Legacy terminology detected: {legacy_columns}. Upgrade to 'Registry_Points'.")
+
+        forbidden = {'Points', 'Old_Points'}
+        found = forbidden.intersection(df.columns)
+        if found:
+            raise ValueError(f"Legacy terminology detected: {list(found)}. Upgrade to 'Registry_Points'.")
 
 async def main(url="https://scoring.dance/enCA/events/190/results/2945.html"):
     feeder = EEPROLedgerFeeder()

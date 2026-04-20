@@ -23,8 +23,9 @@ def test_parse_scoring_dance():
     assert 10.0 in john_doe['wsdc_points'].values
     assert 4.5 in john_doe['wsdc_points'].values
 
-def test_data_validation_hygiene():
-    feeder = EEPROLedgerFeeder(ledger_path="etl/tests/test_ledger.parquet")
+def test_data_validation_hygiene(tmp_path):
+    ledger_file = tmp_path / "test_ledger.parquet"
+    feeder = EEPROLedgerFeeder(ledger_path=str(ledger_file))
 
     # Mock data following new schema
     data = {

@@ -45,6 +45,6 @@ jobs:
           git config --global user.name "tech-dancer-bot"
           git config --global user.email "bot@tech-dancer.com"
           git lfs track "*.parquet"
-          git add -f etl/data/*.parquet .gitattributes
+          git add etl/data/wcs_prelims.parquet .gitattributes
 
           git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)
