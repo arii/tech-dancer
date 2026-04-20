@@ -24,7 +24,7 @@ export function Footer() {
               color="dim"
               uppercase 
               weight="font-semibold"
-              className="tracking-[0.15em] hover:text-accent transition-colors touch-target"
+              className="tracking-[0.15em] hover:text-accent transition-colors min-h-[44px] min-w-[44px]"
             >
               {link.label}
             </Text>

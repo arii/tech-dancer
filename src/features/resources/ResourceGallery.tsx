@@ -41,7 +41,7 @@ function ResourceDetails({ resource, onBack }: { resource: Resource; onBack: () 
         color="brand" 
         marginBottom={12}
         cursor="pointer"
-        className="hover:-translate-x-1 transition-transform touch-target"
+        className="hover:-translate-x-1 transition-transform min-h-[44px] min-w-[44px]"
       >
         <ArrowLeft className="w-4 h-4" />
         <Text variant="mono" size="micro" weight="font-bold">Back to Reviews</Text>

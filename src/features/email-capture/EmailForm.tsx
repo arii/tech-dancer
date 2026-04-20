@@ -17,7 +17,7 @@ export function EmailForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={`${inputs.base} min-h-[44px] w-full`}
+          className={`${inputs.base} min-h-[44px] min-w-[44px] w-full`}
         />
         <Button
           type="submit"
