@@ -32,10 +32,18 @@
 }
 
 @keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(800px); /* Adjust this if your container gets taller */
+  }
 }
 @layer utilities {
+  .animate-scanline {
+    animation: scanline 2.5s linear infinite;
+  }
+
   /* Premium Industrial Utilities */
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
