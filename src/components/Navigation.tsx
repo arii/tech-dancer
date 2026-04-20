@@ -28,7 +28,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
             : "text-text-dim hover:text-accent hover:bg-bg/50"
         )}
       >
-        <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} aria-hidden="true" />
+        <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
         <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
           {label}
         </Text>
@@ -55,7 +55,7 @@ export default function Navigation() {
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
-          {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </Box>
       </Box>
 
@@ -119,7 +119,7 @@ export default function Navigation() {
               className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
               aria-label="Open search overlay"
             >
-              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" aria-hidden="true" />
+              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
               <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
             </Box>
 
