@@ -1,29 +1,22 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Text } from "@/layouts/Primitives"
-import { variants } from "@/lib/variants"
+import { badgeVariants } from "@/lib/variants"
+import type { VariantProps } from "class-variance-authority"
 
-interface BadgeProps extends React.ComponentProps<typeof Text> {
-  className?: string
-  intent?: keyof typeof variants.intent
-  emphasis?: keyof typeof variants.emphasis
-}
+export interface BadgeProps
+  extends Omit<React.ComponentProps<typeof Text>, "intent">,
+    VariantProps<typeof badgeVariants> {}
 
 function Badge({
   className,
-  intent = "default",
-  emphasis = "solid",
+  intent,
+  emphasis,
   ...props
 }: BadgeProps) {
   return (
     <Text
-      className={cn(
-        "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all",
-        variants.intent[intent],
-        variants.emphasis[emphasis],
-        variants.radius.industrial,
-        className
-      )}
+      className={cn(badgeVariants({ intent, emphasis }), className)}
       {...props}
     />
   )

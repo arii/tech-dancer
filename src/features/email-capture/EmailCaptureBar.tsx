@@ -1,10 +1,14 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
-import { Mail } from 'lucide-react';
+import { Mail, X } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
 import { motion } from 'motion/react';
+import { useEmailCaptureContext } from './EmailCaptureContext';
+import { Button } from '@/layouts/Primitives';
 
 export function EmailCaptureBar() {
+  const { hideBar } = useEmailCaptureContext();
+
   return (
     <Box 
       as={motion.div}
@@ -18,9 +22,21 @@ export function EmailCaptureBar() {
       padding="emailBar"
       position="fixed"
       inset="bottom"
-      zIndex="top"
+      zIndex="toast"
       width="full"
     >
+      <Box position="absolute" top={2} right={2} zIndex="docked">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={hideBar}
+          aria-label="Dismiss"
+          className="p-1 min-h-0 min-w-0"
+        >
+          <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
+        </Button>
+      </Box>
+
       <Stack 
         direction={{ base: 'col', md: 'row' }} 
         align="center" 
