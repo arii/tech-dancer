@@ -15,7 +15,45 @@ export default defineConfig(({mode}) => {
 
   return {
     base,
-    plugins: [react(), tailwindcss(), ViteImageOptimizer()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      ViteImageOptimizer({
+        webp: {
+          quality: 80,
+        },
+        png: {
+          quality: 80,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        jpg: {
+          quality: 80,
+        },
+        tiff: {
+          quality: 80,
+        },
+        gif: {},
+        svg: {
+          plugins: [
+            {
+              name: 'removeViewBox',
+              active: false,
+            },
+            {
+              name: 'addAttributesToSVGElement',
+              params: {
+                attributes: [{ xmlns: 'http://www.w3.org/2000/svg' }],
+              },
+            },
+          ],
+        },
+        avif: {
+          quality: 70,
+        },
+      }),
+    ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
