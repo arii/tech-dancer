@@ -6,11 +6,10 @@ from playwright.async_api import async_playwright
 import asyncio
 import re
 
-# --- MECHANICAL DELIGHT: System Logs ---
-logging.basicConfig(level=logging.INFO, format='[SYSTEM_HEALTH: OPTIMAL] %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 class EEPROLedgerFeeder:
-    def __init__(self, ledger_path: str = "etl/data/registry_ledger.parquet"):
+    def __init__(self, ledger_path: str = "etl/data/wcs_prelims.parquet"):
         self.ledger_path = ledger_path
         self.points_mapping = {
             'Yes': 10.0, 'Alt1': 4.5, 'Alt2': 4.3, 'Alt3': 4.2, 'No': 0.0,
@@ -22,12 +21,6 @@ class EEPROLedgerFeeder:
         mark_text = mark_text.strip()
         if mark_text in self.points_mapping:
             return self.points_mapping[mark_text]
-        # Heuristic for variations
-        if 'Yes' in mark_text or mark_text == 'Y': return 10.0
-        if 'Alt1' in mark_text or mark_text == 'A1': return 4.5
-        if 'Alt2' in mark_text or mark_text == 'A2': return 4.3
-        if 'Alt3' in mark_text or mark_text == 'A3': return 4.2
-        if 'No' in mark_text or mark_text == 'N': return 0.0
         return 0.0
 
     async def scrape_scoring_dance(self, url):
@@ -39,11 +32,9 @@ class EEPROLedgerFeeder:
             page = await context.new_page()
             await page.goto(url)
             try:
-                await page.wait_for_selector('table', timeout=10000)
-                await page.wait_for_timeout(1000)
+                await page.wait_for_selector('table.table', state='attached', timeout=10000)
             except Exception as e:
-                logging.warning(f"Timeout or selector not found for {url}: {e}")
-                pass
+                logging.warning(f"Failed to load table for {url}: {e}")
             content = await page.content()
             await browser.close()
             logging.info(f"Playwright finished for {url}.")
@@ -107,33 +98,9 @@ class EEPROLedgerFeeder:
 
         return pd.DataFrame(results)
 
-    def extract_eepro_table(self, url_or_html: str, round_type: str) -> pd.DataFrame:
-        """Reads the raw HTML table from an EEPRO results page (Mocked)."""
-        logging.info("Calibrating Variance... Syncing WSDC Registry Ledger from EEPRO")
-        if round_type == 'prelims':
-            data = {
-                'Dancer_ID': ['REF_ID: 001', 'REF_ID: 002', 'REF_ID: 003'],
-                'J1': ['Y', 'A1', 'N'],
-                'J2': ['Y', 'Y', 'N'],
-                'Counts_Y_A_N': ['2-0-0', '1-1-0', '0-0-2'],
-                'Registry_Points_Sum': [20.0, 14.5, 0.0],
-                'Status': ['Promote', 'Promote', 'Cut']
-            }
-        else:
-            data = {
-                'Dancer_ID': ['REF_ID: 001', 'REF_ID: 002', 'REF_ID: 003'],
-                'J1': [1, 2, 3],
-                'J2': [2, 1, 3],
-                'J3': [1, 2, 3],
-                'Result_Rank': [1, 2, 3]
-            }
-        df = pd.DataFrame(data)
-        logging.info(f"Data Scan complete. Retrieved {len(df)} records for {round_type.upper()}.")
-        return df
-
     async def extract_scoring_dance_table(self, url: str) -> pd.DataFrame:
         """Scrapes and formats Scoring.Dance data for the Registry Ledger."""
-        logging.info(f"Calibrating Variance... Syncing WSDC Registry Ledger from Scoring.Dance URL: {url}")
+        logging.info(f"Syncing WSDC Registry Ledger from Scoring.Dance URL: {url}")
         raw_df = await self.scrape_scoring_dance(url)
 
         if raw_df.empty:
@@ -155,13 +122,6 @@ class EEPROLedgerFeeder:
         """Aggregates new data, drops duplicates, and verifies hygiene."""
         if os.path.exists(self.ledger_path):
             existing_ledger = pd.read_parquet(self.ledger_path)
-            # Align columns
-            for col in existing_ledger.columns:
-                if col not in new_data.columns:
-                    new_data[col] = pd.NA
-            for col in new_data.columns:
-                if col not in existing_ledger.columns:
-                    existing_ledger[col] = pd.NA
             combined = pd.concat([existing_ledger, new_data], ignore_index=True)
             logging.info("Existing ledger found. Aggregating data...")
         else:
@@ -177,11 +137,11 @@ class EEPROLedgerFeeder:
         return final_ledger
 
     def _verify_hygiene(self, df: pd.DataFrame):
-        """Hardened verification step to ensure no slop enters the warehouse."""
-        assert not df.empty, "404: Dancer out of slot. No data to process."
-        assert df['Dancer_ID'].is_unique, "Hardware Fault: Duplicate REF_IDs detected in ledger."
+        """Verification step."""
+        assert not df.empty, "No data to process."
+        assert df['Dancer_ID'].is_unique, "Duplicate REF_IDs detected in ledger."
         legacy_columns = [col for col in df.columns if "points" in col.lower() and "registry" not in col.lower()]
-        assert not legacy_columns, f"Terminology Slop Detected: {legacy_columns}. Upgrade to 'Registry_Points'."
+        assert not legacy_columns, f"Legacy terminology detected: {legacy_columns}. Upgrade to 'Registry_Points'."
 
 async def main():
     feeder = EEPROLedgerFeeder()

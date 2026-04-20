@@ -37,12 +37,16 @@ jobs:
         run: |
           python etl/scraper.py
 
+      - name: Validate Output
+        run: |
+          python -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
+
       - name: Commit via Git LFS
         run: |
           git config --global user.name "tech-dancer-bot"
           git config --global user.email "bot@tech-dancer.com"
           git lfs track "*.parquet"
-          git add etl/data/*.parquet .gitattributes
+          git add -f etl/data/*.parquet .gitattributes
 
           # Only push if there are data changes
           git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)

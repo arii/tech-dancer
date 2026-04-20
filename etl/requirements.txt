@@ -4,3 +4,4 @@ pandas
 pyarrow
 pytest
 pytest-asyncio
+pytest-mock

@@ -52,11 +52,24 @@ def test_data_validation_hygiene():
         'Points': [10.0]
     }
     slop_df = pd.DataFrame(slop_data)
-    with pytest.raises(AssertionError, match="Terminology Slop Detected"):
+    with pytest.raises(AssertionError, match="Legacy terminology detected"):
         feeder._verify_hygiene(slop_df)
 
 @pytest.mark.asyncio
-async def test_extract_scoring_dance_table():
-    # This would normally hit the network, but we can't easily mock async_playwright content here without complex fixtures
-    # Instead we verify the structure of the returned dataframe from mock data if we had it.
-    pass
+async def test_extract_scoring_dance_table_mocked(mocker):
+    # Use pytest-mock to patch the scraper's network call
+    mock_data = pd.DataFrame({
+        'competitor_bib': [101, 101, 102],
+        'competitor_name': ['John Doe', 'John Doe', 'Jane Smith'],
+        'wsdc_points': [10.0, 4.5, 0.0]
+    })
+    mocker.patch('scraper.EEPROLedgerFeeder.scrape_scoring_dance', return_value=mock_data)
+
+    feeder = EEPROLedgerFeeder()
+    df = await feeder.extract_scoring_dance_table("http://dummy.url")
+
+    assert not df.empty
+    assert len(df) == 2
+    assert 'Dancer_ID' in df.columns
+    assert 'Registry_Points_Sum' in df.columns
+    assert df[df['Dancer_ID'] == 'REF_ID: 101']['Registry_Points_Sum'].values[0] == 14.5
