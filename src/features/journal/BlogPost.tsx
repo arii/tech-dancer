@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 
 export default function BlogPost() {
@@ -26,7 +26,7 @@ export default function BlogPost() {
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto">
+      <Stack gap={12} maxWidth="5xl" marginX="auto" className="w-full">
         <Box 
           as="button" 
           onClick={() => navigate('/blog')}

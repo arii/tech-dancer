@@ -1,6 +1,6 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cn } from "@/lib/utils"
-import { Box, Stack, Text } from "@/components/layout/Primitives"
+import { Box, Stack, Text } from "@/layouts/Primitives"
 
 function Tabs({
   className,

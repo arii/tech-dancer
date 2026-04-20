@@ -1,4 +1,4 @@
-import { Box, Stack } from '@/components/layout/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';

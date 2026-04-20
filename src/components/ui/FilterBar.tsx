@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '../layout/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
 interface FilterBarProps {

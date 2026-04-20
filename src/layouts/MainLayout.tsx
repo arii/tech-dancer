@@ -1,7 +1,7 @@
-import { Box, Stack } from '@/components/layout/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { EmailCaptureBar } from '@/features/email-capture/EmailCaptureBar';
-import { Footer } from '@/components/layout/Footer';
+import { Footer } from '@/layouts/Footer';
 import { AnimatePresence } from 'motion/react';
 import { GlobalSearch } from '@/components/GlobalSearch';
 
@@ -13,7 +13,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <Box display="flex" className="min-h-screen">
         <Navigation />
         <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0">
-          <Box paddingX={6} paddingY={12} className="mx-auto min-h-full max-w-[90%]">
+          <Box paddingX={6} paddingY={12} className="mx-auto min-h-full max-w-7xl w-full">
             <Stack gap={12}>
               <Box flex={1}>
                 {children}

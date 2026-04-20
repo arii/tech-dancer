@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';

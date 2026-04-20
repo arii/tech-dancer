@@ -5,20 +5,20 @@
 
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { MainLayout } from './components/layout/MainLayout';
+import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
 
-import Home from './features/dashboard/Dashboard';
-import GearReviews from './features/lab/Toolbox';
-import Research from './features/research/ResearchAnalytics';
-import Resources from './features/resources/ResourceGallery';
-import About from './features/profile/ArielProfile';
-import Blog from './features/journal/BlogFeed';
-import BlogPost from './features/journal/BlogPost';
-import Contact from './features/profile/ContactConsole';
-import ResearchDetail from './features/research/ResearchDetail';
+import Home from './pages/Home';
+import GearReviews from './pages/Gear';
+import Research from './pages/Research';
+import Resources from './pages/Resources';
+import About from './pages/About';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import Contact from './pages/Contact';
+import ResearchDetail from './pages/ResearchDetail';
 
-import { Box } from './components/layout/Primitives';
+import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
@@ -42,6 +42,7 @@ export default function App() {
             <Route path="/research/:id" element={<ResearchDetail />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<Home />} />

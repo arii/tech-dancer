@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,15 +47,7 @@ export function GlobalSearch() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             position="fixed"
-            top={0}
-            left={0}
-            width="screen"
-            height="screen"
-            zIndex={9999}
-            display="flex"
-            justify="center"
-            paddingTop={32}
-            className="bg-accent/40 backdrop-blur-md"
+            className="inset-0 z-[9999] flex justify-center pt-40 bg-accent/40 backdrop-blur-md"
             surface={false}
           >
             <Box 
