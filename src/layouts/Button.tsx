@@ -1,9 +1,11 @@
 import React from "react"
 import { cn } from "@/lib/utils"
-import { variants } from "@/styles/variants"
+import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 
 interface ButtonProps extends BaseProps, React.ButtonHTMLAttributes<HTMLButtonElement> {
+  as?: any
+  href?: string
   variant?: keyof typeof variants.emphasis
   intent?: keyof typeof variants.intent
   size?: "sm" | "md" | "lg"
@@ -12,10 +14,10 @@ interface ButtonProps extends BaseProps, React.ButtonHTMLAttributes<HTMLButtonEl
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "solid", intent = "default", size = "md", fullWidth, loading, children, ...props }, ref) => {
+  ({ className, as = "button", variant = "solid", intent = "default", size = "md", fullWidth, loading, children, ...props }, ref) => {
     return (
       <Box
-        as="button"
+        as={as}
         ref={ref as any}
         cursor="pointer"
         className={cn(
