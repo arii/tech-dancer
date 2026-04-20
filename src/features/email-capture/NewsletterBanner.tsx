@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { Button } from '@/layouts/Primitives';
 
-export function EmailCaptureBar() {
+export function NewsletterBanner() {
   const { hideBar } = useEmailCaptureContext();
 
   return (
@@ -25,7 +25,7 @@ export function EmailCaptureBar() {
       zIndex="toast"
       width="full"
     >
-      <Box position="absolute" top={2} right={2} zIndex="docked">
+      <Box position="absolute" className="top-2 right-2" zIndex="docked">
         <Button
           variant="ghost"
           size="sm"
