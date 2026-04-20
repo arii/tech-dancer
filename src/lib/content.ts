@@ -5,6 +5,12 @@
  */
 
 import matter from 'gray-matter';
+import { Buffer } from 'buffer';
+
+// Ensure Buffer is available for gray-matter in some environments
+if (typeof window !== 'undefined') {
+  window.Buffer = window.Buffer || Buffer;
+}
 
 // --- Typed Interfaces ---
 
