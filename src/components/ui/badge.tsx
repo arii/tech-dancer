@@ -1,7 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Text } from "@/layouts/Primitives"
-import { variants } from "@/lib/variants"
 import { badgeVariants } from "@/lib/variants"
 import type { VariantProps } from "class-variance-authority"
 
