@@ -36,7 +36,7 @@ class EEPROLedgerFeeder:
             except Exception as e:
                 logging.error(f"Critical failure: {e}")
                 await browser.close()
-                return pd.DataFrame()
+                raise e
             content = await page.content()
             await browser.close()
             return self.parse_scoring_dance(content)
@@ -93,7 +93,10 @@ class EEPROLedgerFeeder:
 
     async def extract_scoring_dance_table(self, url: str) -> pd.DataFrame:
         logging.info(f"Syncing WSDC Registry Ledger from Scoring.Dance URL: {url}")
-        raw_df = await self.scrape_scoring_dance(url)
+        try:
+            raw_df = await self.scrape_scoring_dance(url)
+        except Exception:
+            return pd.DataFrame()
 
         if raw_df.empty:
             logging.warning(f"No data extracted from Scoring.Dance URL: {url}")
