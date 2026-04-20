@@ -8,6 +8,8 @@ coverage/
 !.env.example
 *.swp
 *.swo
+playwright-report/
+test-results/
 
 # Python / ETL
 __pycache__/
