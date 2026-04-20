@@ -28,6 +28,9 @@ export function EmailForm() {
           type="submit"
           disabled={status !== 'idle'}
           className="min-h-[44px] w-full sm:w-auto min-w-[180px] px-6"
+          variant="primary"
+          disabled={status === 'loading' || status === 'success'}
+          className="w-full sm:w-auto"
         >
           <AnimatePresence mode="wait">
             <motion.div
