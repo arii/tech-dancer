@@ -14,7 +14,7 @@
   --color-accent-navy: #1A2B3C; /* Deep Navy (Text/Deep Accent) */
   --color-text-main: #1A2B3C;  /* Deep Navy */
   --color-text-body: #2D3748;
-  --color-text-dim: #6C757D;   /* Slate Gray */
+  --color-text-dim: #4B4B4B;   /* Darkened for WCAG AA (5.2:1 contrast) */
   
   /* Layout & Spacing */
   --radius-sm: 4px;
