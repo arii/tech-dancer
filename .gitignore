@@ -1,7 +1,7 @@
 node_modules/
 build/
 dist/
-bundle-analysis.html
+*-analysis.html
 coverage/
 .DS_Store
 *.log
