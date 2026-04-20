@@ -8,3 +8,11 @@ coverage/
 !.env.example
 playwright-report/
 test-results/
+
+# Python / ETL
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+etl/data/*.parquet
+!etl/data/wcs_prelims.parquet
