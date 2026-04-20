@@ -18,14 +18,15 @@ function parseFrontmatter(content: string) {
   yaml.split('\n').forEach(line => {
     const [key, ...vals] = line.split(':');
     if (key && vals.length) {
+      const parsedKey = key.trim();
       let value = vals.join(':').trim();
       // Handle arrays
       if (value.startsWith('[') && value.endsWith(']')) {
         const inner = value.slice(1, -1).trim();
         if (inner.length === 0) {
-          data[key.trim()] = [];
+          data[parsedKey] = [];
         } else {
-          data[key.trim()] = inner.split(',').map(v => {
+          data[parsedKey] = inner.split(',').map(v => {
             let item = v.trim();
             if (item.startsWith('"') && item.endsWith('"')) item = item.slice(1, -1);
             else if (item.startsWith("'") && item.endsWith("'")) item = item.slice(1, -1);
@@ -38,9 +39,9 @@ function parseFrontmatter(content: string) {
         else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
 
         if (value.includes(',')) {
-          data[key.trim()] = value.split(',').map(v => v.trim());
+          data[parsedKey] = value.split(',').map(v => v.trim());
         } else {
-          data[key.trim()] = value;
+          data[parsedKey] = value;
         }
       }
     }
