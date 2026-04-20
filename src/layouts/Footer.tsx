@@ -13,26 +13,21 @@ export function Footer() {
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           © 2026 TECH-DANCER
         </Text>
-        <Stack direction="row" gap={2} align="center">
+        <Stack direction="row" gap={4} align="center">
           {legalLinks.map((link) => (
-            <Button
+            <Text
               key={link.label}
               as="a"
               href={link.href}
-              variant="ghost"
-              size="sm"
-              className="text-text-dim hover:text-accent"
+              variant="mono"
+              size="xs"
+              color="dim"
+              uppercase
+              weight="font-semibold"
+              className="tracking-[0.15em] hover:text-accent transition-colors min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-4"
             >
-              <Text
-                variant="mono"
-                size="xs"
-                uppercase
-                weight="font-semibold"
-                className="tracking-[0.15em]"
-              >
-                {link.label}
-              </Text>
-            </Button>
+              {link.label}
+            </Text>
           ))}
         </Stack>
       </Stack>
