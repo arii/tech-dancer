@@ -38,8 +38,6 @@ export default defineConfig(({mode}) => {
           multipass: true,
         },
       }),
-    ],
-      ViteImageOptimizer(),
       analyze && visualizer({
         open: false,
         filename: 'bundle-analysis.html',
