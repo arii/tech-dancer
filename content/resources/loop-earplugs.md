@@ -3,7 +3,7 @@ type: resource
 title: "Loop Experience Earplugs"
 category: "Dance Gear"
 excerpt: "A must-have for protecting your hearing in loud ballroom and social dance settings without sacrificing sound quality."
-affiliateIds: ["amazon"]
+affiliateIds: ["loop-experience"]
 tags: ["safety", "ballroom", "music"]
 ---
 

@@ -12,10 +12,12 @@ import { PageSkeleton } from './components/ui/PageSkeleton';
 import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
 import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
 import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
+
 import { Box } from './layouts/Primitives';
 
 const Home = lazy(() => import('./pages/Home'));
 const GearReviews = lazy(() => import('./pages/Gear'));
+const GearPost = lazy(() => import('./features/lab/GearPost'));
 const Research = lazy(() => import('./pages/Research'));
 const ResearchDetail = lazy(() => import('./pages/ResearchDetail'));
 const Blog = lazy(() => import('./pages/Blog'));
@@ -50,6 +52,7 @@ export default function App() {
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
               <Route path="/gear" element={<GearReviews />} />
+              <Route path="/gear/:slug" element={<GearPost />} />
               <Route path="/research" element={<Research />} />
               <Route path="/research/:id" element={<ResearchDetail />} />
               <Route path="/blog" element={<Blog />} />

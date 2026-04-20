@@ -4,9 +4,51 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import matter from 'gray-matter';
+/**
+ * Lightweight browser-safe frontmatter parser.
+ */
+function parseFrontmatter(content: string) {
+  const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
+  if (!match) return { data: {}, content };
 
-// --- Typed Interfaces ---
+  const yaml = match[1];
+  const body = match[2];
+  const data: Record<string, any> = {};
+
+  yaml.split('\n').forEach(line => {
+    const [key, ...vals] = line.split(':');
+    if (key && vals.length) {
+      const parsedKey = key.trim();
+      let value = vals.join(':').trim();
+      // Handle arrays
+      if (value.startsWith('[') && value.endsWith(']')) {
+        const inner = value.slice(1, -1).trim();
+        if (inner.length === 0) {
+          data[parsedKey] = [];
+        } else {
+          data[parsedKey] = inner.split(',').map(v => {
+            let item = v.trim();
+            if (item.startsWith('"') && item.endsWith('"')) item = item.slice(1, -1);
+            else if (item.startsWith("'") && item.endsWith("'")) item = item.slice(1, -1);
+            return item;
+          });
+        }
+      } else {
+        // Basic type conversion for strings
+        if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+        else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+
+        if (value.includes(',')) {
+          data[parsedKey] = value.split(',').map(v => v.trim());
+        } else {
+          data[parsedKey] = value;
+        }
+      }
+    }
+  });
+
+  return { data, content: body };
+}
 
 export interface Post {
   slug: string;
@@ -41,6 +83,7 @@ export interface Study {
   excerpt: string;
   content: string;
   tags?: string[];
+  author?: string;
 }
 
 export interface Event {
@@ -55,13 +98,14 @@ export interface Event {
 }
 
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
+export type ContentItem = Post | Resource | Study | Event;
 
-// --- Glob Loaders ---
-
-const postModules = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' });
-const resourceModules = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' });
-const studyModules = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' });
-const eventModules = import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' });
+const contentModules = {
+  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
+  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
+  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
+  events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
+};
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
@@ -69,44 +113,34 @@ function transform<T>(modules: Record<string, any>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
-      const { data, content } = matter(contentStr);
-      return { 
-        ...data, 
-        content, 
-        slug: slugFrom(path) 
-      } as unknown as T;
+      const { data, content } = parseFrontmatter(contentStr);
+      return { ...data, content, slug: slugFrom(path) } as unknown as T;
     })
-    .sort((a: any, b: any) => {
-      if (a.date && b.date) return +new Date(b.date) - +new Date(a.date);
-      return 0;
-    });
+    .sort((a: any, b: any) => (a.date && b.date ? +new Date(b.date) - +new Date(a.date) : 0));
 }
 
-// --- Public API ---
+const items = {
+  posts: transform<Post>(contentModules.posts),
+  resources: transform<Resource>(contentModules.resources),
+  studies: transform<Study>(contentModules.studies),
+  events: transform<Event>(contentModules.events)
+};
 
-export function getPosts(): Post[] {
-  return transform<Post>(postModules);
-}
+const maps = {
+  posts: new Map(items.posts.map(i => [i.slug, i])),
+  resources: new Map(items.resources.map(i => [i.slug, i])),
+  studies: new Map(items.studies.map(i => [i.slug, i])),
+  events: new Map(items.events.map(i => [i.slug, i]))
+};
 
-export function getResources(): Resource[] {
-  return transform<Resource>(resourceModules);
-}
+export const getPosts = () => items.posts;
+export const getResources = () => items.resources;
+export const getStudies = () => items.studies;
+export const getEvents = () => items.events;
 
-export function getStudies(): Study[] {
-  return transform<Study>(studyModules);
-}
+export const getPostBySlug = (slug: string) => maps.posts.get(slug);
+export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+export const getStudyBySlug = (slug: string) => maps.studies.get(slug);
+export const getEventBySlug = (slug: string) => maps.events.get(slug);
 
-export function getEvents(): Event[] {
-  return transform<Event>(eventModules);
-}
-
-/**
- * Legacy support for ContentItem usage during migration
- */
-export type ContentItem = Post | Resource | Study | Event;
-export function getAllContent(type: ContentType): ContentItem[] {
-  if (type === 'posts') return getPosts();
-  if (type === 'resources') return getResources();
-  if (type === 'studies') return getStudies();
-  return getEvents();
-}
+export const getAllContent = (type: ContentType): ContentItem[] => items[type];

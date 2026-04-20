@@ -19,3 +19,4 @@ __pycache__/
 venv/
 etl/data/*.parquet
 !etl/data/wcs_prelims.parquet
+package-lock.json
