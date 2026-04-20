@@ -1,6 +1,5 @@
 import { typography } from "@/styles/design-tokens";
 import { cva } from "class-variance-authority";
-import { variants } from "@/styles/variants";
 
 /**
  * Standardized Variant Contracts for the Systems Console.
@@ -29,6 +28,9 @@ export const variants = {
   radius: {
     none: "rounded-none",
     industrial: "rounded-[2px]",
+    standard: "rounded",
+    md: "rounded-md",
+    lg: "rounded-lg",
   }
 };
 export const buttonVariants = cva(
