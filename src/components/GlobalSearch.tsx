@@ -83,7 +83,7 @@ export function GlobalSearch() {
                   as="button" 
                   onClick={() => setIsOpen(false)} 
                   padding={2}
-                  className="group hover:bg-accent/5 transition-colors border border-line/50 min-h-[44px] min-w-[44px]"
+                  className="group hover:bg-accent/5 transition-colors border border-line/50"
                 >
                   <X className="w-6 h-6 text-text-dim group-hover:text-accent-brand" />
                 </Box>
@@ -102,7 +102,7 @@ export function GlobalSearch() {
                         display="flex"
                         align="center"
                         gap={4}
-                        className="hover:bg-accent/5 bg-white group transition-colors text-left border border-line min-h-[44px] min-w-[44px]"
+                        className="hover:bg-accent/5 bg-white group transition-colors text-left border border-line"
                       >
                          <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
                             <Hash className="w-4 h-4 text-accent-brand opacity-50" />

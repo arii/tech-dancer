@@ -89,17 +89,6 @@
   }
 }
 
-@layer components {
-  .btn-primary {
-    @apply bg-accent text-white px-8 py-3 inline-flex items-center justify-center text-[10px] font-mono font-bold uppercase tracking-widest transition-all duration-200 min-h-[44px] min-w-[44px];
-  }
-  .btn-primary:hover {
-    @apply bg-text-main translate-y-[-2px] shadow-[0_4px_12px_rgba(255,127,80,0.3)];
-  }
-  .btn-primary:active {
-    @apply translate-y-[0px];
-  }
-}
 
 .panel {
   @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;

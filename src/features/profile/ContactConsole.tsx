@@ -62,7 +62,7 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           paddingY={4}
           color="accent"
           cursor="pointer"
-          className="hover:bg-accent-brand/5 transition-colors min-h-[44px] min-w-[44px]"
+          className="hover:bg-accent-brand/5 transition-colors"
         >
           Send Another Message
         </Box>
