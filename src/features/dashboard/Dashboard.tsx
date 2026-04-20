@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
@@ -26,10 +26,10 @@ export default function Home() {
               The Roboticist&apos;s Guide to the West Coast Swing
             </Text>
             <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
-              Engineering a better dance weekend. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS lifestyle.
+              Tools, travel hacks, and comp data to maximize your WCS weekends. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
             </Text>
             <Text variant="sans" size="base" color="dim" maxWidth="2xl" marginTop={2} className="leading-relaxed">
-              Welcome to tech-dancer. You&apos;re looking at a living portfolio as a platform. Enjoy the west coast swing content or dive into the technical details.
+              Welcome to tech-dancer. Enjoy the west coast swing content or dive into the technical details.
             </Text>
           </Stack>
         </Stack>

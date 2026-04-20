@@ -1,4 +1,4 @@
-import { Box } from '@/components/layout/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { useToolbox } from './useToolbox';
 import FolioGrid from '@/components/ui/FolioGrid';
 

@@ -21,6 +21,6 @@ Building a "living portfolio" requires a system that handles the mundane tasks o
 Every time I update a gear review or add a data study, the pipeline triggers:
 1. **Linter validation:** Ensuring the code remains clean.
 2. **Build generation:** Compiling the TypeScript assets.
-3. **Synchronous deployment:** Pushing to the edge network.
+3. **Auto-deploying updates instantly.**
 
 This is the same philosophy I apply to robotics: automate the repetitive so you can focus on the complex.

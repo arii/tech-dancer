@@ -22,6 +22,6 @@ I've experimented with several placement strategies for the suede stickers:
 
 1. **Split the sticker:** Some on the ball of the foot and some on the heel. Good for specialized traction but can feel disconnected.
 2. **Just ball of the foot:** Minimalist. Allows for grip on the heel when you need it for stopping power.
-3. **Entire sticker coverage:** My preferred method. I like this best because it provides a uniform, predictable friction response across the entire surface area.
+3. **Entire sticker coverage:** My preferred method. I like this best because it provides a uniform, Consistent grip under your whole foot.
 
-When you're dancing on high-variance hotel carpets or sticky social floors, a consistent "bottom lid" on your shoes is your best hardware defense.
+When you're dancing on high-variance hotel carpets or sticky social floors, it's the Best way to save your knees on a sticky hotel floor.

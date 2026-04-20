@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export function Footer() {
   const legalLinks = [

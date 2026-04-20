@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, Activity, Shield } from 'lucide-react';
 import Markdown from 'react-markdown';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { useResources } from './useResources';
 

@@ -14,13 +14,4 @@ tags:
 
 ## AI with a Human in the Loop
 
-This site is a test-bed for **AI-powered content creation**. By leveraging tools like Jules, I can automate the initial "drafter" phase of my research and writing.
-
-### The System
-
-Data analytics and post generation aren't just "hit a button and hope." It's a feedback loop:
-1. **AI Generation:** Drafting based on raw telemetry.
-2. **Human Feedback:** Refining the voice and ensuring technical accuracy.
-3. **Iteration:** Polishing the final product for deployment.
-
-The goal is to increase output without sacrificing the "MIT-grade" quality my audience expects.
+I use AI to help draft data posts. Raw data goes in, I edit for accuracy, and post it. The goal is to write more without losing quality.

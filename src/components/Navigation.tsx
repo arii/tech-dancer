@@ -2,7 +2,7 @@ import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search 
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/components/layout/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
 
@@ -61,12 +61,12 @@ export default function Navigation() {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             position="fixed"
-            inset
-            surface="bg"
-            zIndex="top"
-            padding="nav"
-            className="lg:hidden"
-            paddingTop={24}
+            inset={true}
+            zIndex={100}
+            paddingX={8}
+            paddingY={24}
+            className="lg:hidden bg-bg"
+            surface={false}
           >
             <Box as="ul" className="space-y-6">
               {routes.filter(r => r.path !== '/').map((item) => (

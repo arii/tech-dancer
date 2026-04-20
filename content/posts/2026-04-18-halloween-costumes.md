@@ -14,7 +14,7 @@ tags:
 
 ## Functional Theming
 
-Halloween social dancing is a logistical nightmare if your costume has a 4-foot wingspan. As a roboticist, I approach costumes as "wearable hardware" that must maintain range of motion.
+Halloween social dancing requires Dance gear that doesn't restrict you.
 
 ### The Pumpkin Outfit
 
@@ -22,6 +22,6 @@ I've stress-tested a specific **Pumpkin outfit** that works perfectly for the so
 - **Headband:** Low profile, doesn't catch on partner's arms during turns.
 - **Jack O' Lantern Stickers:** Lightweight, zero drag.
 
-The key is keeping the "shell" flexible. Avoid anything that restricts the ribcage or the shoulder blades. You want to look like a pumpkin but move like a technical dancer.
+The key is Keeping the costume flexible. Avoid anything that restricts the ribcage or the shoulder blades. You want to look like a pumpkin but move like a technical dancer.
 
 [Check out the Gear specific review here](/lab)

@@ -18,23 +18,23 @@ tags:
 
 There is nothing worse than arriving at a major WSDC convention only to find that the hotel ballroom floor is either a "slip-and-slide" or effectively a sheet of flypaper. When your equipment fails to provide predictable friction, your technique—and your knee health—takes the hit.
 
-## The Solution: DIY Suede Calibration
+## The Solution: How to Suede Your Shoes
 
-Instead of paying the $180 "dance shoe tax" for flimsy professional shoes, I use a systematic $15 DIY approach to convert my favorite comfortable sneakers into high-performance dance hardware.
+Instead of paying the $180 "dance shoe tax" for flimsy professional shoes, I use a $15 DIY approach to convert my favorite comfortable sneakers into dance shoes.
 
-### Required Hardware
+### Required Gear
 
-| Asset | Technical Purpose | ROI |
+| Asset | What it does | Value |
 |---|---|---|
-| Adhesive Suede | Micro-texture for friction control | High |
-| Barge Cement | Permanent bond under shear stress | Critical |
-| Isopropyl Alcohol | Surface de-contamination | Essential |
+| Adhesive Suede | Better grip | High |
+| Barge Cement | Strong glue | Critical |
+| Isopropyl Alcohol | Cleans the sole | Essential |
 
 ### Step-by-Step Protocol
 
-1.  **De-contamination**: Clean the rubber sole with isopropyl alcohol. Any residual oils will compromise the bond during 4:00 AM social sets.
-2.  **Contact Adhesion**: Apply a thin layer of Barge Cement to both the shoe and the suede. Wait for it to become tacky—physics requires the solvent to evaporate for a primary bond.
-3.  **Pressure Cure**: Press the surfaces together and let cure for 24 hours. The resulting hardware is rugged enough for any social floor.
+1.  **Clean the sole**: Clean the rubber sole with isopropyl alcohol. Any oils will mess up the glue during 4:00 AM social sets.
+2.  **Glue it**: Apply a thin layer of Barge Cement to both the shoe and the suede. Wait for it to become tacky.
+3.  **Let it dry**: Press the surfaces together and let cure for 24 hours. They will hold up on any social floor.
 
 ## Suede Coverage Analysis Diagram
 

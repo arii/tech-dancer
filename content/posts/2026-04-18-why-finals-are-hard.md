@@ -18,10 +18,10 @@ In most West Coast Swing competitions, the margin between making a final and bei
 
 ### Heat Density and Variance
 
-If there are 40 dancers in a heat and only 10 make the final, the 11th through 15th dancers are statistically indistinguishable in many cases. Judge bias, split-second focus shifts, and partner pairings introduce a level of noise that placement cannot filter out.
+If there are 40 dancers in a heat and only 10 make the final, the 11th through 15th dancers are Basically tied in many cases. Judge bias, split-second focus shifts, and partner pairings introduce a level of noise that placement cannot filter out.
 
 ### Data Over Drama
 
 I'm building tools in the [Data & Development Lab](/research) to normalize this data across multiple events. By tracking performance relative to the median rather than absolute rank, we can see a much more reliable trajectory of improvement.
 
-Don't let a "no-recall" define your weekend. Look at the telemetry.
+Don't let a "no-recall" define your weekend. Look at your dance videos.

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Mail, Send, MessageSquare, HelpCircle, Sparkles, BarChart2, Shield } from 'lucide-react';
 import React from 'react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';

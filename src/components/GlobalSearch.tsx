@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,15 +47,7 @@ export function GlobalSearch() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             position="fixed"
-            top={0}
-            left={0}
-            width="screen"
-            height="screen"
-            zIndex={9999}
-            display="flex"
-            justify="center"
-            paddingTop={32}
-            className="bg-accent/40 backdrop-blur-md"
+            className="inset-0 z-[9999] flex justify-center pt-40 bg-accent/40 backdrop-blur-md"
             surface={false}
           >
             <Box 
@@ -136,17 +128,19 @@ export function GlobalSearch() {
               </Box>
 
               <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center" className="bg-surface/50">
-                 <Box display="flex" gap={6}>
+                 <Box display="flex" align="center" gap={6}>
                     <Box display="flex" align="center" gap={2}>
-                       <Box border paddingX={1} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono">ESC</Box>
-                       <Text variant="mono" size="micro" color="dim">CLOSE</Text>
+                       <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">ESC</Box>
+                       <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
                     </Box>
                     <Box display="flex" align="center" gap={2}>
-                       <Box border paddingX={1} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono">↵</Box>
-                       <Text variant="mono" size="micro" color="dim">SELECT</Text>
+                       <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">↵</Box>
+                       <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
                     </Box>
                  </Box>
-                  <Text variant="mono" size="micro" color="dim" weight="font-bold">{results.length} RESULTS FOUND</Text>
+                  <Text variant="mono" size="micro" color="dim" weight="font-bold" className="tracking-widest">
+                    {results.length} RESULTS FOUND
+                  </Text>
               </Box>
             </Box>
           </Box>

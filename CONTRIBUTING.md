@@ -43,7 +43,7 @@ The workflow fires automatically. Within ~60 seconds, a PR will appear linking b
 ## Content Templates
 
 ### Template 1 — Blog Post (`content/posts/`)
-Use for long-form editorial: technique breakdowns, travel stories, opinion pieces.
+Use for: technique hacks, travel tips, and gear reviews.
 
 \```markdown
 ---
@@ -60,7 +60,7 @@ tags:
 ---
 
 ## The Hook
-Open with a scene, a problem, or a bold claim.
+Start directly with the tip, data point, or gear fix.
 
 ## The Science / Story
 Explain the idea.

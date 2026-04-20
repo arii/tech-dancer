@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, Activity, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/components/layout/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 
