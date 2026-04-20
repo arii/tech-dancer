@@ -47,7 +47,10 @@ export function GlobalSearch() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             position="fixed"
-            className="inset-0 z-[9999] flex justify-center pt-40 bg-accent/40 backdrop-blur-md"
+            className="inset-0 z-[9999] bg-accent/40 backdrop-blur-md"
+            display="flex"
+            justify="center"
+            paddingTop={40}
             surface={false}
           >
             <Box 
