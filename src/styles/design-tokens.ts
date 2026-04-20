@@ -10,6 +10,7 @@ export const radius = {
   standard: "rounded", // 4px
   md: "rounded-md", // 6px
   lg: "rounded-lg", // 8px
+  xl: "rounded-xl", // 12px
 };
 
 export const borders = {
@@ -44,7 +45,7 @@ export const layout = {
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
   mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-6 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
-  card: "bg-surface border border-line rounded-none transition-all duration-300 w-full",
+  card: "bg-surface border border-slate-100 rounded-xl shadow-md transition-all duration-300 w-full",
   interactive: "cursor-pointer",
   grid: "grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 w-full",
   section: "mt-24 space-y-8",
@@ -66,6 +67,8 @@ export const buttons = {
 export const shadows = {
   topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
   standard: "shadow-sm",
+  md: "shadow-md",
+  lg: "shadow-lg",
 };
 
 export const zIndex = {

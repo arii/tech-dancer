@@ -27,7 +27,7 @@ export function BlogDrafter() {
   };
 
   return (
-    <Stack gap={10} height="full">
+    <Stack gap={6} height="full">
       {/* Header Section */}
       <Stack gap={4}>
         <Stack direction="row" align="center" justify="between">
@@ -46,255 +46,259 @@ export function BlogDrafter() {
             <Text variant="mono" size="xs">BACK TO LAB</Text>
           </Box>
         </Stack>
-        
-        <Box surface="accent" padding="compact" radius="standard" border>
-          <Stack gap={2} direction="row" align="start">
-            <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-            <Text variant="body" size="xs" color="brand">
-              This tool preparing your blog post for the Tech-Dancer automated pipeline. 
-              Complete the metadata and commentary below to generate a pre-formatted GitHub Issue draft.
-            </Text>
-          </Stack>
-        </Box>
       </Stack>
 
-      {/* Main Grid Layout */}
-      <Grid cols={{ base: 1, lg: 12 }} gap={8}>
-        {/* Left Column: Metadata (Narrower) */}
-        <Box span={{ base: 1, lg: 4 }}>
-          <Stack gap={6}>
-            <Box border="b" paddingBottom={2}>
-              <Text variant="mono" size="tiny" color="accent" tracking="widest">METADATA_INPUT</Text>
+      <Box surface="card" padding={8} radius="xl">
+        <Stack gap={10}>
+          <Box border="b" paddingBottom={4} borderColor="slate-100">
+             <Text variant="display" size="3xl" color="main" tracking="normal">Drafting Tool</Text>
+          </Box>
+
+          <Grid cols={{ base: 1, lg: 12 }} gap={12}>
+            {/* Left Column: Metadata */}
+            <Box span={{ base: 1, lg: 4 }}>
+              <Stack gap={8}>
+                <Box border="b" paddingBottom={2}>
+                  <Text variant="mono" size="tiny" color="accent" tracking="widest">METADATA_INPUT</Text>
+                </Box>
+
+                <Stack gap={6}>
+                  <Stack gap={2}>
+                    <Text variant="label" size="micro" color="dim">POST_TITLE</Text>
+                    <Box 
+                      as="input"
+                      variant="mono"
+                      paddingX={4}
+                      paddingY={3}
+                      surface="default"
+                      radius="lg"
+                      border
+                      width="full"
+                      value={data.title}
+                      onChange={(e: any) => updateField('title', e.target.value)}
+                      placeholder="The Future of WCS..."
+                      className="focus:border-accent ring-accent/5 focus:ring-4 transition-all duration-200 outline-none"
+                    />
+                  </Stack>
+
+                  <Grid cols={2} gap={4}>
+                    <Stack gap={2}>
+                      <Text variant="label" size="micro" color="dim">CATEGORY</Text>
+                      <Box 
+                        as="select"
+                        variant="mono"
+                        paddingX={4}
+                        paddingY={3}
+                        surface="default"
+                        radius="lg"
+                        border
+                        width="full"
+                        value={data.category}
+                        onChange={(e: any) => updateField('category', e.target.value)}
+                        className="focus:border-accent ring-accent/5 focus:ring-4 transition-all duration-200 outline-none appearance-none"
+                      >
+                        {CONTENT_CATEGORIES.map(cat => (
+                          <option key={cat.id} value={cat.id}>{cat.label}</option>
+                        ))}
+                      </Box>
+                    </Stack>
+                    <Stack gap={2}>
+                      <Text variant="label" size="micro" color="dim">DATE</Text>
+                      <Box 
+                        as="input"
+                        type="date"
+                        variant="mono"
+                        paddingX={4}
+                        paddingY={3}
+                        surface="default"
+                        radius="lg"
+                        border
+                        width="full"
+                        value={data.date}
+                        onChange={(e: any) => updateField('date', e.target.value)}
+                        className="focus:border-accent ring-accent/5 focus:ring-4 transition-all duration-200 outline-none"
+                      />
+                    </Stack>
+                  </Grid>
+
+                  <Stack gap={2}>
+                    <Text variant="label" size="micro" color="dim">EXCERPT_SUMMARY</Text>
+                    <Box 
+                      as="textarea"
+                      variant="mono"
+                      paddingX={4}
+                      paddingY={3}
+                      surface="default"
+                      radius="lg"
+                      border
+                      width="full"
+                      height={24}
+                      value={data.excerpt}
+                      onChange={(e: any) => updateField('excerpt', e.target.value)}
+                      placeholder="A brief overview..."
+                      className="focus:border-accent ring-accent/5 focus:ring-4 transition-all duration-200 outline-none resize-none"
+                    />
+                  </Stack>
+
+                  <Stack gap={2}>
+                    <Text variant="label" size="micro" color="dim">AMAZON_AFFILIATE_LINK</Text>
+                    <Box 
+                      as="input"
+                      variant="mono"
+                      paddingX={4}
+                      paddingY={3}
+                      surface="default"
+                      radius="lg"
+                      border
+                      width="full"
+                      value={data.affiliateLink}
+                      onChange={(e: any) => updateField('affiliateLink', e.target.value)}
+                      placeholder="https://amazon.com/..."
+                      className="focus:border-accent ring-accent/5 focus:ring-4 transition-all duration-200 outline-none"
+                    />
+                  </Stack>
+                </Stack>
+              </Stack>
             </Box>
 
-            <Stack gap={5}>
-              <Stack gap={1.5}>
-                <Text variant="label" size="micro" color="dim">POST_TITLE</Text>
-                <Box 
-                  as="input"
-                  variant="mono"
-                  padding={3}
-                  surface="default"
-                  radius="standard"
-                  border
-                  width="full"
-                  value={data.title}
-                  onChange={(e: any) => updateField('title', e.target.value)}
-                  placeholder="The Future of WCS..."
-                  className="focus:border-accent ring-accent/10 focus:ring-4 transition-all outline-none"
-                />
-              </Stack>
-
-              <Grid cols={2} gap={4}>
-                <Stack gap={1.5}>
-                  <Text variant="label" size="micro" color="dim">CATEGORY</Text>
-                  <Box 
-                    as="select"
-                    variant="mono"
-                    padding={3}
-                    surface="default"
-                    radius="standard"
-                    border
-                    width="full"
-                    value={data.category}
-                    onChange={(e: any) => updateField('category', e.target.value)}
-                    className="focus:border-accent ring-accent/10 focus:ring-4 transition-all outline-none appearance-none"
-                  >
-                    {CONTENT_CATEGORIES.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.label}</option>
-                    ))}
+            {/* Right Column: Interaction and Preview */}
+            <Box span={{ base: 1, lg: 8 }}>
+              <Stack gap={10}>
+                {/* Main Content Area */}
+                <Stack gap={6}>
+                  <Box border="b" paddingBottom={2}>
+                    <Text variant="mono" size="tiny" color="accent" tracking="widest">BODY_COMMENTARY</Text>
                   </Box>
-                </Stack>
-                <Stack gap={1.5}>
-                  <Text variant="label" size="micro" color="dim">DATE</Text>
-                  <Box 
-                    as="input"
-                    type="date"
-                    variant="mono"
-                    padding={3}
-                    surface="default"
-                    radius="standard"
-                    border
-                    width="full"
-                    value={data.date}
-                    onChange={(e: any) => updateField('date', e.target.value)}
-                    className="focus:border-accent ring-accent/10 focus:ring-4 transition-all outline-none"
-                  />
-                </Stack>
-              </Grid>
-
-              <Stack gap={1.5}>
-                <Text variant="label" size="micro" color="dim">EXCERPT_SUMMARY</Text>
-                <Box 
-                  as="textarea"
-                  variant="mono"
-                  padding={3}
-                  surface="default"
-                  radius="standard"
-                  border
-                  width="full"
-                  height={24}
-                  value={data.excerpt}
-                  onChange={(e: any) => updateField('excerpt', e.target.value)}
-                  placeholder="A brief overview..."
-                  className="focus:border-accent ring-accent/10 focus:ring-4 transition-all outline-none resize-none"
-                />
-              </Stack>
-
-              <Stack gap={1.5}>
-                <Text variant="label" size="micro" color="dim">AMAZON_AFFILIATE_LINK</Text>
-                <Box 
-                  as="input"
-                  variant="mono"
-                  padding={3}
-                  surface="default"
-                  radius="standard"
-                  border
-                  width="full"
-                  value={data.affiliateLink}
-                  onChange={(e: any) => updateField('affiliateLink', e.target.value)}
-                  placeholder="https://amazon.com/..."
-                  className="focus:border-accent ring-accent/10 focus:ring-4 transition-all outline-none"
-                />
-              </Stack>
-            </Stack>
-          </Stack>
-        </Box>
-
-        {/* Right Column: Interaction and Preview (Wider) */}
-        <Box span={{ base: 1, lg: 8 }}>
-          <Stack gap={8}>
-            {/* Main Content Area */}
-            <Stack gap={6}>
-              <Box border="b" paddingBottom={2}>
-                <Text variant="mono" size="tiny" color="accent" tracking="widest">BODY_COMMENTARY</Text>
-              </Box>
-              <Box 
-                as="textarea"
-                variant="mono"
-                padding={4}
-                surface="default"
-                radius="standard"
-                border
-                width="full"
-                height={64}
-                value={data.commentary}
-                onChange={(e: any) => updateField('commentary', e.target.value)}
-                placeholder="Write your main content here..."
-                className="focus:border-accent ring-accent/10 focus:ring-4 transition-all outline-none resize-none"
-              />
-            </Stack>
-
-            {/* AI Interaction Section */}
-            <Stack gap={4}>
-              <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-                <Text variant="mono" size="tiny" color="accent" tracking="widest">AI_INTEGRATION</Text>
-                {showAppliedSuccess && (
-                  <Box display="flex" align="center" gap={2}>
-                    <CheckCircle2 className="w-3 h-3 text-accent" />
-                    <Text variant="mono" size="micro" color="brand" weight="bold">APPLIED_SUCCESSFULLY</Text>
-                  </Box>
-                )}
-              </Box>
-              
-              <Grid cols={{ base: 1, md: 2 }} gap={4}>
-                <Stack gap={4}>
                   <Box 
                     as="textarea"
                     variant="mono"
-                    padding={3}
-                    surface="muted"
-                    radius="standard"
+                    padding={4}
+                    surface="default"
+                    radius="lg"
                     border
                     width="full"
-                    height={32}
-                    value={aiInput}
-                    onChange={(e: any) => setAiInput(e.target.value)}
-                    placeholder="Paste AI JSON response here..."
-                    className="focus:border-accent transition-all outline-none resize-none opacity-80 focus:opacity-100"
+                    height={72}
+                    value={data.commentary}
+                    onChange={(e: any) => updateField('commentary', e.target.value)}
+                    placeholder="Write your main content here..."
+                    className="focus:border-accent ring-accent/5 focus:ring-4 transition-all duration-200 outline-none resize-none shadow-inner"
                   />
-                  <Box 
-                    as="button"
-                    onClick={handleApply}
-                    display="flex"
-                    align="center"
-                    justify="center"
-                    gap={2}
-                    surface="contrast"
-                    radius="standard"
-                    paddingY={3}
-                    className="hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
-                  >
-                    <Text variant="mono" size="xs" weight="bold">APPLY_RESPONSE</Text>
-                  </Box>
                 </Stack>
 
-                <Box surface="muted" padding={6} radius="standard" border display="flex" align="center" justify="center">
-                   <Stack gap={4} align="center">
-                      <Terminal className="w-8 h-8 text-accent/40" />
-                      <Text variant="body" size="xs" color="dim" align="center">
-                        Need help expanding your draft? Copy the prompt below and paste into Gemini or Claude.
-                      </Text>
+                {/* AI Interaction Section */}
+                <Stack gap={6}>
+                  <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
+                    <Text variant="mono" size="tiny" color="accent" tracking="widest">AI_INTEGRATION</Text>
+                    {showAppliedSuccess && (
+                      <Box display="flex" align="center" gap={2}>
+                        <CheckCircle2 className="w-3 h-3 text-accent" />
+                        <Text variant="mono" size="micro" color="brand" weight="bold">APPLIED_SUCCESSFULLY</Text>
+                      </Box>
+                    )}
+                  </Box>
+                  
+                  <Grid cols={{ base: 1, md: 2 }} gap={6}>
+                    <Stack gap={4}>
+                      <Box 
+                        as="textarea"
+                        variant="mono"
+                        padding={4}
+                        surface="muted"
+                        radius="lg"
+                        border
+                        width="full"
+                        height={40}
+                        value={aiInput}
+                        onChange={(e: any) => setAiInput(e.target.value)}
+                        placeholder="Paste AI JSON response here..."
+                        className="focus:border-accent transition-all duration-200 outline-none resize-none opacity-90 focus:opacity-100"
+                      />
                       <Box 
                         as="button"
-                        onClick={() => {
-                          const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.\nJSON Data: ${JSON.stringify(data, null, 2)}\nRespond ONLY with a valid JSON object matching the keys.`;
-                          navigator.clipboard.writeText(prompt);
-                          alert("AI Prompt Copied!");
-                        }}
-                        paddingX={6}
-                        paddingY={2}
-                        border
-                        radius="standard"
-                        variant="ghost"
-                        className="hover:border-accent hover:text-accent transition-all cursor-pointer"
+                        onClick={handleApply}
+                        display="flex"
+                        align="center"
+                        justify="center"
+                        gap={3}
+                        surface="contrast"
+                        radius="lg"
+                        paddingY={4}
+                        className="hover:opacity-90 active:scale-[0.98] transition-all duration-200 cursor-pointer shadow-sm font-bold uppercase tracking-widest text-xs"
                       >
-                         <Text variant="mono" size="micro" weight="bold">COPY_PROMPT</Text>
+                        <Send className="w-4 h-4" />
+                        APPLY_RESPONSE
                       </Box>
-                   </Stack>
-                </Box>
-              </Grid>
-            </Stack>
+                    </Stack>
 
-            {/* Preview and Final Action */}
-            <Stack gap={4}>
-               <Box border="b" paddingBottom={2}>
-                 <Text variant="mono" size="tiny" color="accent" tracking="widest">MARKDOWN_PREVIEW</Text>
-               </Box>
-               <Box 
-                 surface="muted" 
-                 padding={6} 
-                 radius="standard"
-                 border 
-                 maxHeight="400px"
-                 overflow="y-auto"
-                 className="prose prose-sm prose-invert max-w-none bg-black/5"
-               >
-                 <ReactMarkdown>{markdownPreview}</ReactMarkdown>
-               </Box>
+                    <Box border surface="muted" padding={6} radius="lg" display="flex" align="center" justify="center">
+                       <Stack gap={4} align="center">
+                          <Terminal className="w-8 h-8 text-accent/30" />
+                          <Text variant="body" size="xs" color="dim" align="center">
+                            Need help expanding your draft? Copy the prompt below and paste into Gemini or Claude.
+                          </Text>
+                          <Box 
+                            as="button"
+                            onClick={() => {
+                              const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.\nJSON Data: ${JSON.stringify(data, null, 2)}\nRespond ONLY with a valid JSON object matching the keys.`;
+                              navigator.clipboard.writeText(prompt);
+                              alert("AI Prompt Copied!");
+                            }}
+                            paddingX={8}
+                            paddingY={3}
+                            border
+                            radius="lg"
+                            surface="default"
+                            className="hover:border-accent hover:text-accent transition-all duration-200 cursor-pointer shadow-sm"
+                          >
+                             <Text variant="mono" size="micro" weight="bold">COPY_PROMPT</Text>
+                          </Box>
+                       </Stack>
+                    </Box>
+                  </Grid>
+                </Stack>
 
-               <Box 
-                 as="a"
-                 href={githubIssueUrl}
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 surface="contrast"
-                 radius="standard"
-                 padding={4}
-                 display="flex"
-                 align="center"
-                 justify="center"
-                 gap={3}
-                 className="hover:bg-accent-brand hover:text-bg transition-all group cursor-pointer shadow-lg active:scale-[0.99]"
-               >
-                 <Github className="w-5 h-5" />
-                 <Text variant="display" size="base" weight="bold">SUBMIT_DRAFT_TO_GITHUB</Text>
-                 <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-               </Box>
-            </Stack>
-          </Stack>
-        </Box>
-      </Grid>
+                {/* Preview and Final Action */}
+                <Stack gap={6}>
+                   <Box border="b" paddingBottom={2}>
+                     <Text variant="mono" size="tiny" color="accent" tracking="widest">MARKDOWN_PREVIEW</Text>
+                   </Box>
+                   <Box 
+                     surface="muted" 
+                     padding={8} 
+                     radius="lg"
+                     border 
+                     maxHeight="500px"
+                     overflow="y-auto"
+                     className="prose prose-sm prose-invert max-w-none bg-black/5"
+                   >
+                     <ReactMarkdown>{markdownPreview}</ReactMarkdown>
+                   </Box>
+
+                   <Box 
+                     as="a"
+                     href={githubIssueUrl}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     surface="contrast"
+                     radius="lg"
+                     padding={4}
+                     display="flex"
+                     align="center"
+                     justify="center"
+                     gap={3}
+                     className="hover:bg-accent-brand hover:text-bg transition-all duration-300 group cursor-pointer shadow-lg active:scale-[0.99]"
+                   >
+                     <Github className="w-5 h-5" />
+                     <Text variant="display" size="lg" weight="bold">SUBMIT_DRAFT_TO_GITHUB</Text>
+                     <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                   </Box>
+                </Stack>
+              </Stack>
+            </Box>
+          </Grid>
+        </Stack>
+      </Box>
     </Stack>
+
   );
 }
