@@ -81,7 +81,7 @@ interface ContactFormProps {
 
 function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
   return (
-    <Box as="section">
+    <Box as="section" minHeight="[calc(100vh-64px)]">
       <Stack gap={12}>
         <PageHeader 
           label="CONTACT"
@@ -89,7 +89,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
           description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
         />
 
-        <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={20} overflow="hidden">
+        <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={{ base: 40, md: 20 }} overflow="hidden" radius="lg">
         <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
           <Stack gap={12}>
             <Stack gap={6}>
@@ -108,7 +108,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 { label: 'General', channel: 'Discussion', icon: MessageSquare },
               ].map((item) => (
                 <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                  <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
+                  <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors" radius="lg">
                     <item.icon className="w-6 h-6 stroke-1" />
                   </Box>
                   <Stack gap={1}>
@@ -122,53 +122,56 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
         </Box>
 
         <Box surface="default" padding={{ base: 8, md: 12 }}>
-          <Box as="form" onSubmit={onSubmit} className="space-y-8">
-            <Stack gap={3}>
+          <Box maxWidth="xl" marginX="auto">
+          <Box as="form" onSubmit={onSubmit} className="space-y-6">
+            <Stack gap={2} marginBottom={6}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
+                <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase ml-1">Your Name</Text>
                 {errors.name && <Text id="name-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.name}</Text>}
               </Box>
               <Box as="input" 
                 id="contact-name"
                 name="name"
                 type="text" 
+                placeholder="Jane Doe"
                 aria-required="true"
                 aria-invalid={!!errors.name}
                 aria-describedby={errors.name ? "name-error" : undefined}
                 className={cn(
-                  "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
+                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10",
                   errors.name ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.name}
                 onChange={onChange}
               />
             </Stack>
-            <Stack gap={3}>
+            <Stack gap={2} marginBottom={6}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
+                <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase ml-1">Your Email</Text>
                 {errors.email && <Text id="email-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.email}</Text>}
               </Box>
               <Box as="input" 
                 id="contact-email"
                 name="email"
                 type="email" 
+                placeholder="jane@example.com"
                 aria-required="true"
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? "email-error" : undefined}
                 className={cn(
-                  "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
+                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10",
                   errors.email ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.email}
                 onChange={onChange}
               />
             </Stack>
-            <Stack gap={3}>
-              <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
+            <Stack gap={2} marginBottom={6}>
+              <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase ml-1">Subject</Text>
               <Box as="select" 
                 id="contact-subject"
                 name="subject"
-                className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
+                className="w-full bg-bg border border-line px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10"
                 value={formData.subject}
                 onChange={onChange}
               >
@@ -178,20 +181,21 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 <option>Dance Statistics</option>
               </Box>
             </Stack>
-            <Stack gap={3}>
+            <Stack gap={2} marginBottom={6}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
+                <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase ml-1">Message</Text>
                 {errors.message && <Text id="message-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.message}</Text>}
               </Box>
               <Box as="textarea" 
                 id="contact-message"
                 name="message"
                 rows={5}
+                placeholder="How can I help you?"
                 aria-required="true"
                 aria-invalid={!!errors.message}
                 aria-describedby={errors.message ? "message-error" : undefined}
                 className={cn(
-                  "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors resize-none",
+                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10 resize-none",
                   errors.message ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.message}
@@ -200,22 +204,24 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Button
               type="submit"
-              variant="primary"
+              variant="professional"
               disabled={isSubmitting}
               fullWidth
+              className="py-4 font-semibold text-base"
             >
               {isSubmitting ? (
                 <Stack direction="row" align="center" gap={3}>
-                  <div className="w-4 h-4 border-2 border-bg-muted border-t-accent-brand animate-spin" />
-                  <Text variant="mono" color="dim" size="micro">Sending...</Text>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent animate-spin" />
+                  <Text variant="sans" color="white" size="sm" weight="font-semibold">Sending...</Text>
                 </Stack>
               ) : (
                 <>
-                  <Send className="w-4 h-4" />
-                  Send Message
+                  <Send className="w-4 h-4 text-white" />
+                  <span className="text-white">Send Message</span>
                 </>
               )}
             </Button>
+          </Box>
           </Box>
         </Box>
         </Grid>

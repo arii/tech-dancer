@@ -25,10 +25,12 @@ export const variants = {
     outline: "border border-line bg-transparent",
     ghost: "bg-transparent hover:bg-line/10",
     primary: "bg-accent text-white font-mono tracking-widest text-[10px] px-8 hover:bg-text-main active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)]",
+    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
   },
   radius: {
     none: "rounded-none",
     industrial: "rounded-[2px]",
+    lg: "rounded-lg",
   }
 };
 export const buttonVariants = cva(

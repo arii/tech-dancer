@@ -9,6 +9,7 @@ export const radius = {
   subtle: "rounded-[2px]", // Subtle 2px radius
   sm: "rounded-sm",
   md: "rounded-md",
+  lg: "rounded-lg",
 };
 
 export const borders = {
