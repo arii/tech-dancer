@@ -32,12 +32,12 @@ export function EmailCaptureBar() {
           <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
             <Mail className="w-5 h-5 text-accent-brand" />
           </Box>
-          <Stack gap={0}>
-            <Text variant="display" size="base" uppercase tracking="tight">
-              Weekly Insights
+          <Stack gap={1}>
+            <Text variant="system" size="nano">
+              // SYS.OP.01
             </Text>
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
-              Dance Analytics // Gear Reviews // Community Updates
+            <Text variant="valueProp" size="sm">
+              Get the WCS_PACKING_LIST + Weekly Intel.
             </Text>
           </Stack>
         </Stack>

@@ -75,10 +75,13 @@ export const typography = {
   utility: "font-mono tracking-[3px] uppercase",
   label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",
+  system: "font-mono opacity-40 uppercase tracking-widest select-none",
+  valueProp: "font-display font-bold uppercase tracking-wide",
 };
 
 export const typeSizes = {
   micro: "text-[8px]",
+  nano: "text-[9px]",
   tiny: "text-[10px]",
   xs: "text-xs",
   sm: "text-sm",

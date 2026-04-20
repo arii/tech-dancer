@@ -21,6 +21,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               <Footer />
             </Stack>
           </Box>
+          <EmailCaptureBar />
         </Box>
       </Box>
     </Box>
