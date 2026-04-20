@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -310,24 +310,21 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                      </div>
                    </Box>
 
-                   <Box 
+                   <Button 
                      as="a"
                      href={githubIssueUrl}
                      target="_blank"
                      rel="noopener noreferrer"
-                     surface="contrast"
+                     variant="solid"
                      radius="lg"
-                     padding={4}
-                     display="flex"
-                     align="center"
-                     justify="center"
-                     gap={3}
-                     className="hover:bg-accent-brand hover:text-bg transition-all duration-300 group cursor-pointer shadow-lg active:scale-[0.99]"
+                     size="lg"
+                     fullWidth
+                     className="hover:bg-accent-brand hover:text-bg transition-all duration-300 group cursor-pointer shadow-lg active:scale-[0.99] !bg-[#24292e]"
                    >
-                     <Github className="w-5 h-5" />
-                     <Text variant="display" size="lg" weight="bold">SUBMIT_DRAFT_TO_GITHUB</Text>
-                     <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-                   </Box>
+                     <Github className="w-5 h-5 text-bg" />
+                     <Text weight="bold" color="bg">Submit Draft to GitHub</Text>
+                     <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity text-bg" />
+                   </Button>
                 </Stack>
               </Stack>
             </Box>
