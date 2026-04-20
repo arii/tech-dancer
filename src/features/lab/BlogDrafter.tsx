@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
-  const { data, updateField, applyAIResponse, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const { data, updateField, applyAIResponse, markdownPreview, markdownBody, githubIssueUrl } = useBlogDrafter();
   const [aiInput, setAiInput] = useState('');
   const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
 
@@ -239,7 +239,14 @@ export function BlogDrafter() {
                           <Box 
                             as="button"
                             onClick={() => {
-                              const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.\nJSON Data: ${JSON.stringify(data, null, 2)}\nRespond ONLY with a valid JSON object matching the keys.`;
+                              const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.
+Requirements:
+1. Respond ONLY with a valid JSON object.
+2. DO NOT include any explanatory text, commentary, or markdown markers (like [cite:x] or [cite_start]) outside or inside the JSON values.
+3. Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.
+4. The 'commentary' should be rich markdown content.
+
+Draft Data: ${JSON.stringify(data, null, 2)}`;
                               navigator.clipboard.writeText(prompt);
                               alert("AI Prompt Copied!");
                             }}
@@ -267,11 +274,40 @@ export function BlogDrafter() {
                      padding={8} 
                      radius="lg"
                      border 
-                     maxHeight="500px"
+                     maxHeight="600px"
                      overflow="y-auto"
-                     className="prose prose-sm prose-invert max-w-none bg-black/5"
+                     className="bg-black/5"
                    >
-                     <ReactMarkdown>{markdownPreview}</ReactMarkdown>
+                     {/* Visual Metadata Header */}
+                     <Stack gap={4} marginBottom={8} border="b" paddingBottom={6} borderColor="slate-200/5">
+                        <Stack gap={1}>
+                          <Text variant="mono" size="micro" color="accent" uppercase>Title</Text>
+                          <Text weight="bold" size="2xl">{data.title || 'Untitled Draft'}</Text>
+                        </Stack>
+                        <Grid cols={3} gap={4}>
+                           <Stack gap={0.5}>
+                              <Text variant="mono" size="micro" color="dim" uppercase>Date</Text>
+                              <Text size="xs">{data.date}</Text>
+                           </Stack>
+                           <Stack gap={0.5}>
+                              <Text variant="mono" size="micro" color="dim" uppercase>Category</Text>
+                              <Text size="xs">{data.category}</Text>
+                           </Stack>
+                           <Stack gap={0.5}>
+                              <Text variant="mono" size="micro" color="dim" uppercase>Author</Text>
+                              <Text size="xs">{data.author}</Text>
+                           </Stack>
+                        </Grid>
+                        <Stack gap={1}>
+                          <Text variant="mono" size="micro" color="dim" uppercase>Excerpt</Text>
+                          <Text size="sm" italic color="body" className="leading-relaxed">{data.excerpt || 'No excerpt provided...'}</Text>
+                        </Stack>
+                     </Stack>
+
+                     {/* Markdown Content */}
+                     <div className="prose prose-sm prose-invert max-w-none">
+                        <ReactMarkdown>{markdownBody}</ReactMarkdown>
+                     </div>
                    </Box>
 
                    <Box 

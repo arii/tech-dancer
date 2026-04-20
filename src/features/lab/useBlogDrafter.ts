@@ -22,6 +22,10 @@ export function useBlogDrafter() {
     commentary: ''
   });
 
+  const markdownBody = useMemo(() => {
+    return `${data.commentary || '[Your commentary/content goes here]'}${data.affiliateLink ? `\n\n[Buy on Amazon](${data.affiliateLink})` : ''}`;
+  }, [data.commentary, data.affiliateLink]);
+
   const markdownPreview = useMemo(() => {
     return `---
 title: ${data.title || '[Title]'}
@@ -31,11 +35,8 @@ category: ${data.category}
 excerpt: ${data.excerpt || '[Excerpt]'}
 ---
 
-${data.commentary || '[Your commentary/content goes here]'}
-
-${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
-`;
-  }, [data]);
+${markdownBody}`;
+  }, [data, markdownBody]);
 
   const githubIssueUrl = useMemo(() => {
     const repoOwner = SITE_METADATA.repo.owner; 
@@ -79,6 +80,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     updateField,
     applyAIResponse,
     markdownPreview,
+    markdownBody,
     githubIssueUrl
   };
 }
