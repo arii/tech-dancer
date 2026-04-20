@@ -10,7 +10,7 @@ import { motionTokens } from './styles/motion';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
-import GearPost from './pages/GearPost';
+import GearPost from './features/lab/GearPost';
 import Research from './pages/Research';
 import Resources from './pages/Resources';
 import About from './pages/About';

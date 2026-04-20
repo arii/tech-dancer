@@ -9,7 +9,7 @@ import { Buffer } from 'buffer';
 
 // Local polyfill for Buffer to ensure gray-matter works during eager loading
 if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || Buffer;
+  (window as any).Buffer = (window as any).Buffer || Buffer;
 }
 
 export interface Post {
@@ -90,28 +90,36 @@ const resources = transform<Resource>(resourceModules);
 const studies = transform<Study>(studyModules);
 const events = transform<Event>(eventModules);
 
-const postsMap = new Map(posts.map(p => [p.slug, p]));
-const resourcesMap = new Map(resources.map(r => [r.slug, r]));
-const studiesMap = new Map(studies.map(s => [s.slug, s]));
-const eventsMap = new Map(events.map(e => [e.slug, e]));
+const postsMap = new Map<string, Post>(posts.map(p => [p.slug, p]));
+const resourcesMap = new Map<string, Resource>(resources.map(r => [r.slug, r]));
+const studiesMap = new Map<string, Study>(studies.map(s => [s.slug, s]));
+const eventsMap = new Map<string, Event>(events.map(e => [e.slug, e]));
 
-export function getPosts(): Post[] { return posts; }
-export function getResources(): Resource[] { return resources; }
-export function getStudies(): Study[] { return studies; }
-export function getEvents(): Event[] { return events; }
+export const getPosts = () => posts;
+export const getResources = () => resources;
+export const getStudies = () => studies;
+export const getEvents = () => events;
 
-export function getPostBySlug(slug: string): Post | undefined { return postsMap.get(slug); }
-export function getResourceBySlug(slug: string): Resource | undefined { return resourcesMap.get(slug); }
-export function getStudyBySlug(slug: string): Study | undefined { return studiesMap.get(slug); }
-export function getEventBySlug(slug: string): Event | undefined { return eventsMap.get(slug); }
+export const getPostBySlug = (slug: string) => postsMap.get(slug);
+export const getResourceBySlug = (slug: string) => resourcesMap.get(slug);
+export const getStudyBySlug = (slug: string) => studiesMap.get(slug);
+export const getEventBySlug = (slug: string) => eventsMap.get(slug);
 
-const contentTypeMap: Record<ContentType, () => ContentItem[]> = {
-  posts: getPosts,
-  resources: getResources,
-  studies: getStudies,
-  events: getEvents
+const collectionMaps = {
+  posts: postsMap,
+  resources: resourcesMap,
+  studies: studiesMap,
+  events: eventsMap
 };
 
-export function getAllContent(type: ContentType): ContentItem[] {
-  return contentTypeMap[type]();
-}
+export const getAllContent = (type: ContentType): ContentItem[] => {
+  const map = collectionMaps[type];
+  if (type === 'posts') return Array.from((map as Map<string, Post>).values());
+  if (type === 'resources') return Array.from((map as Map<string, Resource>).values());
+  if (type === 'studies') return Array.from((map as Map<string, Study>).values());
+  return Array.from((map as Map<string, Event>).values());
+};
+
+export const getContentByTypeAndSlug = (type: ContentType, slug: string): ContentItem | undefined => {
+  return collectionMaps[type].get(slug);
+};

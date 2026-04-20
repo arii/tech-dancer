@@ -1,13 +1,15 @@
+import { Buffer } from 'buffer';
+
+// polyfilling Buffer for browser environment
+(window as any).Buffer = (window as any).Buffer || Buffer;
+
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
-import { Buffer } from 'buffer';
 import { HashRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 
 console.log("[SYSTEM_HEALTH: OPTIMAL] - Tech-Dancer OS initialized.");
-
-window.Buffer = window.Buffer || Buffer;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,15 +1,15 @@
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { getPosts } from '@/lib/content';
+import { getPostBySlug } from '@/lib/content';
 
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const posts = getPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const post = useMemo(() => slug ? getPostBySlug(slug) : undefined, [slug]);
 
   if (!post) {
     return (
@@ -45,7 +45,7 @@ export default function BlogPost() {
           <Box display="flex" align="center" gap={4}>
             <Box display="flex" align="center" gap={2} color="brand">
               <Tag className="w-3 h-3" />
-              <Text variant="mono" size="micro" weight="font-bold">{post.category.toUpperCase()}</Text>
+              <Text variant="mono" size="micro" weight="font-bold" className="uppercase">{post.category}</Text>
             </Box>
             <Box display="flex" align="center" gap={2} color="dim">
               <Clock className="w-3 h-3" />
@@ -71,13 +71,18 @@ export default function BlogPost() {
                 src={post.image} 
                 alt={post.title} 
                 className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
               />
             </Box>
           )}
 
           <Box className="prose prose-sm md:prose-base prose-slate max-w-none w-full overflow-hidden break-words prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
           </Box>
 
           <Box border="t" paddingTop={12} display="flex" justify="between" align="center">
@@ -87,7 +92,7 @@ export default function BlogPost() {
             </Stack>
             <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
               <Share2 className="w-4 h-4" />
-              <Text variant="mono" size="xs">Share Study</Text>
+              <Text variant="mono" size="xs">Share Post</Text>
             </Box>
           </Box>
         </Stack>
