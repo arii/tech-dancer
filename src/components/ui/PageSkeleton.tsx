@@ -1,8 +1,12 @@
 import { Box, Stack } from '../../layouts/Primitives';
 
-export function PageSkeleton() {
+interface PageSkeletonProps {
+  className?: string;
+}
+
+export function PageSkeleton({ className }: PageSkeletonProps) {
   return (
-    <Stack gap={12} className="w-full opacity-50">
+    <Stack gap={12} className={`w-full opacity-50 ${className || ''}`}>
       <Box paddingBottom={10} className="border-b border-line/30">
         <Stack gap={4}>
           <Box className="h-4 w-24 bg-line/10 rounded animate-pulse" />
