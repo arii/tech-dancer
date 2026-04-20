@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
 import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
-import { EmailCaptureOverlay } from './features/email-capture/EmailCaptureOverlay';
+import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
+import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
@@ -25,23 +25,13 @@ import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
-  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>('idle');
-  const [showEmailBar, setShowEmailBar] = useState(true);
-
-  const handleSubmit = (email: string) => {
-    console.log(`[SYSTEM_ACTION: CAPTURING_EMAIL] ${email}`);
-    setFormStatus('loading');
-    setTimeout(() => {
-      setFormStatus('success');
-      setTimeout(() => setShowEmailBar(false), 2000);
-    }, 800);
-  };
+  const { status, showEmailBar, submitForm, setShowEmailBar } = useEmailCaptureLogic();
 
   return (
     <EmailCaptureProvider
-      status={formStatus}
+      status={status}
       showEmailBar={showEmailBar}
-      submitForm={handleSubmit}
+      submitForm={submitForm}
       setShowEmailBar={setShowEmailBar}
     >
       <MainLayout>
@@ -70,7 +60,9 @@ export default function App() {
           </Box>
         </AnimatePresence>
       </MainLayout>
-      <EmailCaptureOverlay />
+      <AnimatePresence>
+        {showEmailBar && <EmailCaptureBar />}
+      </AnimatePresence>
     </EmailCaptureProvider>
   );
 }

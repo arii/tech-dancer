@@ -37,7 +37,7 @@ export function EmailForm() {
         <Button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          minWidth={status === 'idle' ? 60 : 180}
+          minWidth={180}
           className="min-h-[44px] w-full sm:w-auto"
         >
           <AnimatePresence mode="wait">
