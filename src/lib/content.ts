@@ -69,6 +69,7 @@ function transform<T>(modules: Record<string, any>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
+      console.log(`[DEBUG: CONTENT] - Processing ${path}, length: ${contentStr?.length || 0}`);
       const { data, content } = matter(contentStr);
       return { 
         ...data, 

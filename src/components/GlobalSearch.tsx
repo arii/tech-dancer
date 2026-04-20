@@ -136,17 +136,19 @@ export function GlobalSearch() {
               </Box>
 
               <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center" className="bg-surface/50">
-                 <Box display="flex" gap={6}>
+                 <Box display="flex" align="center" gap={6}>
                     <Box display="flex" align="center" gap={2}>
-                       <Box border paddingX={1} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono">ESC</Box>
-                       <Text variant="mono" size="micro" color="dim">CLOSE</Text>
+                       <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">ESC</Box>
+                       <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
                     </Box>
                     <Box display="flex" align="center" gap={2}>
-                       <Box border paddingX={1} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono">↵</Box>
-                       <Text variant="mono" size="micro" color="dim">SELECT</Text>
+                       <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">↵</Box>
+                       <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
                     </Box>
                  </Box>
-                  <Text variant="mono" size="micro" color="dim" weight="font-bold">{results.length} RESULTS FOUND</Text>
+                  <Text variant="mono" size="micro" color="dim" weight="font-bold" className="tracking-widest">
+                    {results.length} RESULTS FOUND
+                  </Text>
               </Box>
             </Box>
           </Box>

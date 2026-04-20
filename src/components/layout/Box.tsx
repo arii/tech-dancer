@@ -45,8 +45,8 @@ export interface BaseProps {
   aspect?: "square" | "video" | "auto" | string
   shrink?: number | boolean
   self?: "start" | "center" | "end" | "stretch" | "auto"
-  span?: ResponsiveProp<number | string>
-  cursor?: "pointer" | "default" | "not-allowed"
+  justify?: "start" | "center" | "end" | "between" | "around" | "evenly"
+  align?: "start" | "center" | "end" | "baseline" | "stretch"
 }
 
 export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
@@ -65,6 +65,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, zIndex, opacity, display, aspect, shrink, self, span, cursor,
+    justify, align,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -99,6 +100,16 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       // ... already destructured above
       ...domProps 
     } = props;
+
+    const getVal = (val: any, prefix: string) => {
+      if (val === undefined) return ""
+      if (typeof val === "number") return `${prefix}-${val}`
+      // Check if it's a standard Tailwind token (letters, numbers, dashes)
+      if (/^[a-z0-9-]+$/.test(val) && !val.includes('vh') && !val.includes('vw') && !val.includes('%') && !val.includes('px')) {
+        return `${prefix}-${val}`
+      }
+      return `${prefix}-[${val}]`
+    }
 
     return (
       <Component
@@ -137,15 +148,15 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           inset === "right" && "top-0 bottom-0 right-0",
           inset === "x" && "left-0 right-0",
           inset === "y" && "top-0 bottom-0",
-          height && (typeof height === "number" ? `h-${height}` : `h-${height}`),
-          width && (typeof width === "number" ? `w-${width}` : `w-${width}`),
-          maxWidth && `max-w-${maxWidth}`,
-          minHeight && `min-h-${minHeight}`,
-          maxHeight && `max-h-${maxHeight}`,
-          minWidth && (typeof minWidth === "number" ? `min-w-[${minWidth}px]` : `min-w-${minWidth}`),
+          height && getVal(height, "h"),
+          width && getVal(width, "w"),
+          maxWidth && getVal(maxWidth, "max-w"),
+          minHeight && getVal(minHeight, "min-h"),
+          maxHeight && getVal(maxHeight, "max-h"),
+          minWidth && getVal(minWidth, "min-w"),
           overflow && `overflow-${overflow}`,
-          zIndex && `z-${zIndex}`,
-          opacity && `opacity-${opacity}`,
+          zIndex && getVal(zIndex, "z"),
+          opacity && getVal(opacity, "opacity"),
           getResponsiveClasses(display, ""),
           aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
           shrink === true && "shrink",
@@ -154,6 +165,8 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(span, "col-span-"),
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
+          justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
+          align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
           className
         )}
         {...motionProps}
