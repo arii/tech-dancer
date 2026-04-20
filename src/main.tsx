@@ -5,15 +5,11 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 
-console.log("[SYSTEM_HEALTH: OPTIMAL] - Tech-Dancer OS initialized.");
-
 window.Buffer = window.Buffer || Buffer;
-
-const basename = import.meta.env.BASE_URL || '/';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename={basename}>
+    <BrowserRouter basename={import.meta.env.BASE_URL || '/'}>
       <App />
     </BrowserRouter>
   </StrictMode>,
