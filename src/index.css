@@ -14,7 +14,7 @@
   --color-accent-navy: #1A2B3C; /* Deep Navy (Text/Deep Accent) */
   --color-text-main: #1A2B3C;  /* Deep Navy */
   --color-text-body: #2D3748;
-  --color-text-dim: #4B4B4B;   /* Darkened for WCAG AA (5.2:1 contrast) */
+  --color-text-dim: #6C757D;   /* Slate Gray */
   
   /* Layout & Spacing */
   --radius-sm: 4px;
@@ -93,12 +93,6 @@
 
 .panel {
   @apply bg-bg p-6 md:p-12 relative overflow-hidden;
-}
-
-.panel-stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-group, 1.5rem);
 }
 
 .nav-rail {

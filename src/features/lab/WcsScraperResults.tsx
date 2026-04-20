@@ -39,7 +39,7 @@ export function WcsScraperResults() {
                 <td className="p-4"><Text variant="sans" size="sm" weight="font-bold">{row.Dancer_Name}</Text></td>
                 <td className="p-4">
                   <Box display="flex" align="center" gap={2}>
-                    <Text variant="mono" size="sm" weight="font-bold">{row.Registry_Points_Sum.toFixed(1)}</Text>
+                    <Text variant="mono" size="sm" weight="font-bold">{row.Registry_Points_Sum?.toFixed(1) ?? '0.0'}</Text>
                     <Box paddingX={2} paddingY={0.5} surface="accent" opacity={10} className="bg-accent/10">
                       <Text variant="mono" size="micro" className="text-accent-brand">PTS</Text>
                     </Box>

@@ -125,16 +125,12 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
           <Box as="form" onSubmit={onSubmit} className="space-y-8">
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
-                {errors.name && <Text id="name-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.name}</Text>}
+                <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
+                {errors.name && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.name}</Text>}
               </Box>
               <Box as="input" 
-                id="contact-name"
                 name="name"
                 type="text" 
-                aria-required="true"
-                aria-invalid={!!errors.name}
-                aria-describedby={errors.name ? "name-error" : undefined}
                 className={cn(
                   "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
                   errors.name ? 'border-accent-brand' : 'border-line'
@@ -145,16 +141,12 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
-                {errors.email && <Text id="email-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.email}</Text>}
+                <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
+                {errors.email && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.email}</Text>}
               </Box>
               <Box as="input" 
-                id="contact-email"
                 name="email"
                 type="email" 
-                aria-required="true"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? "email-error" : undefined}
                 className={cn(
                   "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
                   errors.email ? 'border-accent-brand' : 'border-line'
@@ -164,9 +156,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
               />
             </Stack>
             <Stack gap={3}>
-              <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
+              <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
               <Box as="select" 
-                id="contact-subject"
                 name="subject"
                 className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
                 value={formData.subject}
@@ -180,16 +171,12 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
-                {errors.message && <Text id="message-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.message}</Text>}
+                <Text as="label" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
+                {errors.message && <Text variant="mono" weight="font-semibold" color="brand" size="xs">{errors.message}</Text>}
               </Box>
               <Box as="textarea" 
-                id="contact-message"
                 name="message"
                 rows={5}
-                aria-required="true"
-                aria-invalid={!!errors.message}
-                aria-describedby={errors.message ? "message-error" : undefined}
                 className={cn(
                   "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors resize-none",
                   errors.message ? 'border-accent-brand' : 'border-line'

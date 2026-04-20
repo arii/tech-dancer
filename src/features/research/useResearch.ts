@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getStudies, Study } from '@/lib/content';
 
+export type ToolStatus = 'Active' | 'Coming Soon' | 'Deprecated';
+
 export function useResearch() {
   const [studies, setStudies] = useState<Study[]>([]);
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
@@ -9,7 +11,13 @@ export function useResearch() {
     setStudies(getStudies());
   }, []);
 
-  const tools = [
+  const tools: Array<{
+    id: string;
+    name: string;
+    category: string;
+    status: ToolStatus;
+    layman: string;
+  }> = [
     {
       id: 'wcs-scraper',
       name: 'WCS Prelim Scoring Scraper',
