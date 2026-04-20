@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { variants } from "@/styles/variants";
 
 export const buttonVariants = cva(
@@ -20,6 +20,20 @@ export const buttonVariants = cva(
       variant: "solid",
       intent: "default",
       size: "md",
+    },
+  }
+);
+
+export const badgeVariants = cva(
+  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
+  {
+    variants: {
+      emphasis: variants.emphasis,
+      intent: variants.intent,
+    },
+    defaultVariants: {
+      emphasis: "solid",
+      intent: "default",
     },
   }
 );

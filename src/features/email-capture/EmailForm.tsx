@@ -1,11 +1,16 @@
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
-import { useEmailCapture } from './useEmailCapture';
+import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
 
 export function EmailForm() {
-  const { email, setEmail, status, handleSubmit } = useEmailCapture();
+  const { status, submitForm, email, setEmail } = useEmailCaptureContext();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitForm(email);
+  };
 
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
@@ -23,47 +28,39 @@ export function EmailForm() {
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          className="w-full sm:w-auto"
+          className="min-h-[44px] w-full sm:w-auto min-w-[180px] px-6"
         >
           <AnimatePresence mode="wait">
-            {status === 'loading' ? (
-              <Box
-                as={motion.div}
-                key="loading"
-                initial={{ opacity: 0, rotate: 0 }}
-                animate={{ opacity: 1, rotate: 360 }}
-                exit={{ opacity: 0 }}
-                transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-              >
-                <Loader2 className="w-4 h-4" />
-              </Box>
-            ) : status === 'success' ? (
-              <Box
-                as={motion.div}
-                key="success"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-              >
-                <Check className="w-4 h-4" />
-              </Box>
-            ) : (
-              <Box
-                as={motion.div}
-                key="idle"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <ArrowRight className="w-4 h-4" />
-              </Box>
-            )}
+            <motion.div
+              key={status}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center justify-center gap-2"
+            >
+              {status === 'loading' && (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-bg" />
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
+                </>
+              )}
+              {status === 'success' && (
+                <>
+                  <Check className="w-4 h-4 text-bg" />
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
+                </>
+              )}
+              {status === 'idle' && (
+                <>
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">SUBSCRIBE</Text>
+                  <ArrowRight className="w-4 h-4 text-bg" />
+                </>
+              )}
+            </motion.div>
           </AnimatePresence>
         </Button>
       </Stack>
-      {status === 'success' && (
-        <Text variant="micro" color="brand" marginTop={2} weight="font-bold">
-          Thank you for joining.
-        </Text>
-      )}
     </Box>
   );
 }

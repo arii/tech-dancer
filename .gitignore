@@ -1,11 +1,14 @@
 node_modules/
 build/
 dist/
+*-analysis.html
 coverage/
 .DS_Store
 *.log
 .env*
 !.env.example
+playwright-report/
+test-results/
 
 # Python / ETL
 __pycache__/
@@ -14,3 +17,4 @@ __pycache__/
 venv/
 etl/data/*.parquet
 !etl/data/wcs_prelims.parquet
+package-lock.json
