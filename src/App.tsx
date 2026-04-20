@@ -37,7 +37,7 @@ export default function App() {
           height="full"
         >
           <Suspense fallback={<PageSkeleton />}>
-            <Routes>
+            <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
               <Route path="/gear" element={<GearReviews />} />
               <Route path="/research" element={<Research />} />
