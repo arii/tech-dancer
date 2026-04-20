@@ -67,6 +67,20 @@ export const shadows = {
   standard: "shadow-sm",
 };
 
+export const zIndex = {
+  hide: -1,
+  base: 0,
+  docked: 10,
+  dropdown: 20,
+  sticky: 30,
+  overlay: 40,
+  modal: 50,
+  popover: 60,
+  skipLink: 70,
+  toast: 80,
+  top: 100,
+};
+
 export const typography = {
   headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
   display: "font-display font-bold uppercase tracking-tight leading-none",
