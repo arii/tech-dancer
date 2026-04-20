@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  /* Modern Typography Identity */
+  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  /* Clean Content Palette (60-30-10 Rule) */
+  --color-bg: #F8F9FA;        /* Off-White Primary */
+  --color-surface: #FFFFFF;    /* Surface Secondary */
+  --color-line: #E9ECEF;       /* Muted Borders */
+  --color-accent: #007BFF;
+  --color-accent-shadow: rgba(255, 127, 80, 0.3);
+  --color-accent-navy: #1A2B3C;
+  --color-text-main: #1A2B3C;  /* Deep Navy */
+  --color-text-body: #2D3748;
+  --color-text-dim: #4B4B4B;   /* Darkened for WCAG AA (5.2:1 contrast) */
+  
+  /* Layout & Spacing */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --container-blog: 1100px;
+  
+  --padding-panel: clamp(1.5rem, 5vw, 4rem);
+  --gap-cards: 2rem;
+
+  /* Motion Primitives */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@layer utilities {
+  /* Premium Industrial Utilities */
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+  }
+  .industrial-gradient {
+    background: linear-gradient(135deg, #001f3f 0%, #000c19 100%);
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+  .gold-accent {
+    @apply border-accent/30 hover:border-accent transition-colors;
+  }
+  .scanline-hover {
+    @apply relative overflow-hidden;
+  }
+  .scanline-hover::after {
+    content: "";
+    @apply absolute inset-0 bg-accent/10 -translate-y-full opacity-0 pointer-events-none z-20;
+  }
+  .scanline-hover:hover::after {
+    @apply opacity-100;
+    animation: scanline 3s linear infinite;
+  }
+  .grid-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    @apply text-accent-navy font-bold tracking-tight;
+    line-height: 1.2;
+  }
+
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+  h2 { font-size: clamp(2rem, 4vw, 3rem); }
+  h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+
+  p {
+    max-width: 65ch;
+    @apply text-text-body break-words;
+  }
+}
+
+
+.panel {
+  @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;
+}
+
+.nav-rail {
+  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
+}
+
+.main-grid {
+  @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full;
+}
+
+.stats-widget {
+  @apply bg-surface p-6 border border-line shadow-none rounded-none;
+}
+
+.tech-specs-code {
+  @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none;
+}
+
+.experience-chip {
+  @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+}
+
+.product-card {
+  @apply bg-surface border border-line p-6 rounded-none transition-all duration-300;
+}
+
+.content-card {
+  @apply bg-surface p-8 rounded-none border border-line;
+}
