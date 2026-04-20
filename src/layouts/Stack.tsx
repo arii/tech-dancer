@@ -3,7 +3,7 @@ import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 
-interface StackProps extends BoxProps {
+interface StackProps extends Omit<BoxProps, "align" | "justify"> {
   direction?: ResponsiveProp<"row" | "col">
   align?: ResponsiveProp<"start" | "center" | "end" | "stretch" | "baseline">
   justify?: ResponsiveProp<"start" | "center" | "end" | "between" | "around" | "evenly">

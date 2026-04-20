@@ -5,7 +5,7 @@ import { variants } from "@/styles/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
-export interface TextProps extends BaseProps, React.HTMLAttributes<HTMLElement> {
+export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttributes<HTMLElement>, "color"> {
   as?: any
   className?: string
   variant?: keyof typeof typography
