@@ -17,7 +17,8 @@ export default defineConfig(({mode}) => {
     base,
     plugins: [react(), tailwindcss(), ViteImageOptimizer()],
     define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+      'process.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY),
+      'process.env.VITE_APP_URL': JSON.stringify(env.VITE_APP_URL),
     },
     resolve: {
       alias: {
