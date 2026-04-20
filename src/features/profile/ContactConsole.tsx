@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Mail, Send, MessageSquare, HelpCircle, Sparkles, BarChart2, Shield } from 'lucide-react';
 import React from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
@@ -198,10 +198,11 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 onChange={onChange}
               />
             </Stack>
-            <Box as="button" 
+            <Button
+              type="submit"
+              variant="primary"
               disabled={isSubmitting}
-              className="w-full bg-text-main text-bg py-5 font-bold uppercase tracking-[3px] text-xs hover:bg-accent-brand transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-              cursor="pointer"
+              fullWidth
             >
               {isSubmitting ? (
                 <Stack direction="row" align="center" gap={3}>
@@ -214,7 +215,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                   Send Message
                 </>
               )}
-            </Box>
+            </Button>
           </Box>
         </Box>
         </Grid>
