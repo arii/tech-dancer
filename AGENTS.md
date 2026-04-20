@@ -70,3 +70,8 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 ## 20. 🚫 No System Bypass via `className`
 - `className` should NOT introduce new design decisions
+
+## 21. 🏗 Modular Architecture
+- Layout primitives (`Box`, `Grid`, `Stack`) MUST reside in `src/layouts/`
+- Page-level compositors MUST reside in `src/pages/`
+- Component imports MUST use the `@/layouts/` or `@/pages/` alias
