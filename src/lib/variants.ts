@@ -12,6 +12,7 @@ export const variants = {
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
     card: "bg-surface border-slate-100 shadow-md",
     contrast: "bg-text-main text-bg",
+    github: "bg-[#24292e] text-bg",
   },
   intent: {
     default: "text-text-main",

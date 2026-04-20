@@ -50,7 +50,7 @@ export function BlogDrafter() {
 
       <Box surface="card" padding={8} radius="xl">
         <Stack gap={10}>
-          <Box border="b" paddingBottom={4} borderColor="slate-100">
+          <Box border="b" paddingBottom={4} borderColor="line">
              <Text variant="display" size="3xl" color="main" tracking="normal">Drafting Tool</Text>
           </Box>
 
@@ -223,7 +223,8 @@ export function BlogDrafter() {
                         surface="contrast"
                         radius="lg"
                         paddingY={4}
-                        className="hover:opacity-90 active:scale-[0.98] transition-all duration-200 cursor-pointer shadow-sm font-bold uppercase tracking-widest text-xs"
+                        shadow="standard"
+                        className="hover:opacity-90 active:scale-[0.98] transition-all duration-200 cursor-pointer font-bold uppercase tracking-widest text-xs"
                       >
                         <Send className="w-4 h-4" />
                         APPLY_RESPONSE
@@ -255,7 +256,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                             border
                             radius="lg"
                             surface="default"
-                            className="hover:border-accent hover:text-accent transition-all duration-200 cursor-pointer shadow-sm"
+                            shadow="standard"
+                            className="hover:border-accent hover:text-accent transition-all duration-200 cursor-pointer"
                           >
                              <Text variant="mono" size="micro" weight="bold">COPY_PROMPT</Text>
                           </Box>
@@ -276,10 +278,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                      border 
                      maxHeight="600px"
                      overflow="y-auto"
-                     className="bg-black/5"
                    >
                      {/* Visual Metadata Header */}
-                     <Stack gap={4} marginBottom={8} border="b" paddingBottom={6} borderColor="slate-200/5">
+                     <Stack gap={4} marginBottom={8} border="b" paddingBottom={6} borderColor="line">
                         <Stack gap={1}>
                           <Text variant="mono" size="micro" color="accent" uppercase>Title</Text>
                           <Text weight="bold" size="2xl">{data.title || 'Untitled Draft'}</Text>
@@ -316,10 +317,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                      target="_blank"
                      rel="noopener noreferrer"
                      variant="solid"
+                     surface="github"
                      radius="lg"
                      size="lg"
                      fullWidth
-                     className="hover:bg-accent-brand hover:text-bg transition-all duration-300 group cursor-pointer shadow-lg active:scale-[0.99] !bg-[#24292e]"
+                     shadow="lg"
+                     className="hover:bg-accent-brand hover:text-bg transition-all duration-300 group cursor-pointer active:scale-[0.99]"
                    >
                      <Github className="w-5 h-5 text-bg" />
                      <Text weight="bold" color="bg">Submit Draft to GitHub</Text>
