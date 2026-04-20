@@ -12,6 +12,7 @@ export default defineConfig(({mode}) => {
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const isProd = mode === 'production';
+  const analyze = process.env.ANALYZE === 'true';
   const base = isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/');
 
   return {
@@ -20,11 +21,10 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       ViteImageOptimizer(),
-      isProd && visualizer({
+      analyze && visualizer({
         open: false,
         filename: 'bundle-analysis.html',
         gzipSize: true,
-        brotliSize: true,
       }),
     ].filter(Boolean),
     define: {
