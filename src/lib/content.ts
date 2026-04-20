@@ -116,6 +116,10 @@ export function getEventBySlug(slug: string): Event | undefined {
   return getEvents().find(e => e.slug === slug);
 }
 
+export function getContentBySlug(slug: string): ContentItem | undefined {
+  return getPostBySlug(slug) || getResourceBySlug(slug) || getStudyBySlug(slug) || getEventBySlug(slug);
+}
+
 /**
  * Legacy support for ContentItem usage during migration
  */
