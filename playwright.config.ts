@@ -2,8 +2,6 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright configuration for Headless Smoke Testing.
- * This configures a local web server to run the production preview
- * before executing the tests.
  */
 export default defineConfig({
   testDir: './tests',
@@ -13,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:4173/tech-dancer/',
+    baseURL: process.env.BASE_URL || 'http://localhost:4173/tech-dancer/',
     trace: 'on-first-retry',
   },
   projects: [
@@ -28,6 +26,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
-    timeout: 120 * 1000,
+    timeout: 60 * 1000,
   },
 });

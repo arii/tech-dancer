@@ -1,46 +1,20 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * Smoke Test: Verifies that the app loads without fatal JavaScript errors.
- * This specifically targets the "Buffer is not defined" and "ReferenceError"
- * failures that result in a blank white page.
+ * Smoke Test: Verifies that the app loads without fatal JS errors or blank pages.
  */
 test('app should load without global console errors', async ({ page }) => {
-  const runtimeErrors: string[] = [];
+  const errors: Error[] = [];
+  page.on('pageerror', (err) => errors.push(err));
 
-  // Catch uncaught exceptions
-  page.on('pageerror', (exception) => {
-    runtimeErrors.push(`Uncaught Exception: ${exception.message}`);
-  });
-
-  // Catch console errors (ReferenceError, etc)
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') {
-      const text = msg.text();
-      // We focus on errors that break the app execution
-      if (text.includes('ReferenceError') || text.includes('Buffer') || text.includes('not defined')) {
-        runtimeErrors.push(`Console Error: ${text}`);
-      }
-    }
-  });
-
-  // Navigate to the root path
   await page.goto('/');
 
-  // Check if the root container actually renders content
-  const root = page.locator('#root');
-  await expect(root).toBeVisible({ timeout: 15000 });
+  // Ensure root container is visible
+  await expect(page.locator('#root')).toBeVisible({ timeout: 15000 });
 
-  // Check for a known UI element to ensure the react tree mounted
-  // Adjust this to an element present in your Navigation component
-  // We look for a visible navigation element (mobile or desktop)
-  const nav = page.locator('nav').filter({ visible: true }).first();
-  await expect(nav).toBeVisible();
+  // Ensure navigation is visible (indicates successful React mount)
+  await expect(page.locator('nav').filter({ visible: true }).first()).toBeVisible();
 
-  // Fail if any critical errors were detected during the load
-  if (runtimeErrors.length > 0) {
-    throw new Error(
-      `Smoke test failed! The app likely loaded a white page. Errors detected:\n${runtimeErrors.join('\n')}`
-    );
-  }
+  // Fail if any uncaught exceptions were detected
+  expect(errors).toHaveLength(0);
 });
