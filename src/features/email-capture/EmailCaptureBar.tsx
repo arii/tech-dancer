@@ -33,10 +33,10 @@ export function EmailCaptureBar() {
             <Mail className="w-5 h-5 text-accent-brand" />
           </Box>
           <Stack gap={1}>
-            <Text variant="system" size="nano">
-              // SYS.OP.01
+            <Text className="text-utility">
+              Mailing_List
             </Text>
-            <Text variant="valueProp" size="sm">
+            <Text variant="display" size="sm" weight="font-bold" className="uppercase tracking-wide">
               Get the WCS_PACKING_LIST + Weekly Intel.
             </Text>
           </Stack>

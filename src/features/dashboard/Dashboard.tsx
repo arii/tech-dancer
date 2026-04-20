@@ -44,9 +44,9 @@ export default function Home() {
               display="flex" 
               align="center" 
               gap={3} 
-              className="text-text-dim hover:text-accent transition-colors"
+              className="text-utility hover:text-accent transition-colors"
             >
-              <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
+              <span>View full repository</span>
               <ArrowRight className="w-4 h-4" />
             </Box>
           </SectionHeader>

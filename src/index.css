@@ -89,6 +89,23 @@
   }
 }
 
+@layer components {
+  /* TIER 3: Standardized Utility / Micro-copy */
+  .text-utility {
+    @apply font-mono text-xs font-bold uppercase tracking-widest text-text-dim;
+  }
+
+  /* TIER 3: Primary CTA Button */
+  .btn-primary {
+    @apply font-mono text-xs font-bold uppercase tracking-[0.2em] text-bg bg-text-main py-4 px-8 hover:bg-accent transition-colors inline-flex items-center justify-center gap-2;
+  }
+
+  /* TIER 3: Ghost/Secondary CTA */
+  .btn-ghost {
+    @apply font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent border border-line py-4 px-8 hover:bg-accent/5 transition-colors inline-flex items-center justify-center gap-2;
+  }
+}
+
 .panel {
   @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;
 }
@@ -106,11 +123,11 @@
 }
 
 .tech-specs-code {
-  @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none;
+  @apply font-mono text-xs font-bold uppercase tracking-widest text-text-dim bg-bg p-4 text-accent border border-line rounded-none;
 }
 
 .experience-chip {
-  @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+  @apply font-mono text-xs font-bold uppercase tracking-widest text-text-dim border border-line px-3 py-1 rounded-none bg-surface;
 }
 
 .product-card {
