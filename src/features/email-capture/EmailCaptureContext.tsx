@@ -15,17 +15,27 @@ export function EmailCaptureProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [showEmailBar, setShowEmailBar] = useState(true);
 
+  const [loadingTimer, setLoadingTimer] = useState<NodeJS.Timeout | null>(null);
+  const [successTimer, setSuccessTimer] = useState<NodeJS.Timeout | null>(null);
+
   const submitForm = (email: string) => {
-    // In a real app, you would send the email here.
-    // For this simulation, we follow the requested timing logic.
     console.log(`[SYSTEM_ACTION: CAPTURING_EMAIL] ${email}`);
     setStatus('loading');
 
-    setTimeout(() => {
+    const lt = setTimeout(() => {
       setStatus('success');
-      setTimeout(() => setShowEmailBar(false), 2000);
+      const st = setTimeout(() => setShowEmailBar(false), 2000);
+      setSuccessTimer(st);
     }, 800);
+    setLoadingTimer(lt);
   };
+
+  React.useEffect(() => {
+    return () => {
+      if (loadingTimer) clearTimeout(loadingTimer);
+      if (successTimer) clearTimeout(successTimer);
+    };
+  }, [loadingTimer, successTimer]);
 
   return (
     <EmailCaptureContext.Provider value={{ status, showEmailBar, submitForm, setShowEmailBar }}>

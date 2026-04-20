@@ -8,8 +8,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
-import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
-import { EmailCaptureProvider, useEmailCaptureContext } from './features/email-capture/EmailCaptureContext';
+import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
+import { EmailCaptureOverlay } from './features/email-capture/EmailCaptureOverlay';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
@@ -29,43 +29,33 @@ export default function App() {
   return (
     <EmailCaptureProvider>
       <MainLayout>
-      <AnimatePresence mode="wait">
-        <Box
-          as={motion.div}
-          key={location.pathname}
-          initial={motionTokens.page.initial}
-          animate={motionTokens.page.animate}
-          exit={motionTokens.page.exit}
-          transition={motionTokens.page.transition}
-          height="full"
-        >
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/gear" element={<GearReviews />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/research/:id" element={<ResearchDetail />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </Box>
-      </AnimatePresence>
+        <AnimatePresence mode="wait">
+          <Box
+            as={motion.div}
+            key={location.pathname}
+            initial={motionTokens.page.initial}
+            animate={motionTokens.page.animate}
+            exit={motionTokens.page.exit}
+            transition={motionTokens.page.transition}
+            height="full"
+          >
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/gear" element={<GearReviews />} />
+              <Route path="/research" element={<Research />} />
+              <Route path="/research/:id" element={<ResearchDetail />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </Box>
+        </AnimatePresence>
 
-      <EmailCaptureOverlay />
+        <EmailCaptureOverlay />
       </MainLayout>
     </EmailCaptureProvider>
-  );
-}
-
-function EmailCaptureOverlay() {
-  const { status, showEmailBar } = useEmailCaptureContext();
-
-  return (
-    <AnimatePresence>
-      {showEmailBar && <EmailCaptureBar status={status} />}
-    </AnimatePresence>
   );
 }

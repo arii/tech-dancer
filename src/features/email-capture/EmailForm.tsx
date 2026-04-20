@@ -6,20 +6,12 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
 
-interface EmailFormProps {
-  status?: 'idle' | 'loading' | 'success';
-}
-
-export function EmailForm({ status: propsStatus }: EmailFormProps) {
-  const { status: contextStatus, submitForm } = useEmailCaptureContext();
+export function EmailForm() {
+  const { status, submitForm } = useEmailCaptureContext();
   const [email, setEmail] = useState('');
-
-  const status = propsStatus || contextStatus;
 
   useEffect(() => {
     if (status === 'success') {
-      // MECHANICAL_NOTE: Resetting email on success ensures a clean UI
-      // and prevents duplicate accidental submissions during the exit animation.
       setEmail('');
     }
   }, [status]);

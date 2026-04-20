@@ -4,11 +4,7 @@ import { Mail } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
 import { motion } from 'motion/react';
 
-interface EmailCaptureBarProps {
-  status?: 'idle' | 'loading' | 'success';
-}
-
-export function EmailCaptureBar({ status }: EmailCaptureBarProps) {
+export function EmailCaptureBar() {
   return (
     <Box 
       as={motion.div}
@@ -46,7 +42,7 @@ export function EmailCaptureBar({ status }: EmailCaptureBarProps) {
           </Stack>
         </Stack>
         
-        <EmailForm status={status} />
+        <EmailForm />
       </Stack>
     </Box>
   );
