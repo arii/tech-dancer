@@ -1,0 +1,30 @@
+[
+  {
+    "Dancer_ID": "WSDC-001",
+    "Dancer_Name": "Ariel Anders",
+    "Registry_Points_Sum": 45.5,
+    "Status": "Verified",
+    "Last_Sync": "2024-05-20"
+  },
+  {
+    "Dancer_ID": "WSDC-102",
+    "Dancer_Name": "John Doe",
+    "Registry_Points_Sum": 12.0,
+    "Status": "Verified",
+    "Last_Sync": "2024-05-20"
+  },
+  {
+    "Dancer_ID": "WSDC-205",
+    "Dancer_Name": "Jane Smith",
+    "Registry_Points_Sum": 8.5,
+    "Status": "Pending",
+    "Last_Sync": "2024-05-19"
+  },
+  {
+    "Dancer_ID": "WSDC-088",
+    "Dancer_Name": "Bob Johnson",
+    "Registry_Points_Sum": 22.3,
+    "Status": "Verified",
+    "Last_Sync": "2024-05-20"
+  }
+]

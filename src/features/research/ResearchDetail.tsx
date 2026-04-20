@@ -4,6 +4,7 @@ import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
+import { WcsScraperResults } from '@/features/lab/WcsScraperResults';
 
 export default function ResearchDetail() {
   const { id } = useParams();
@@ -47,6 +48,8 @@ export default function ResearchDetail() {
           <Stack gap={12}>
             {tool.id === 'blog-drafter' ? (
               <BlogDrafter />
+            ) : tool.id === 'wcs-scraper' ? (
+              <WcsScraperResults />
             ) : (
               <Stack gap={12}>
                 <Stack gap={4}>

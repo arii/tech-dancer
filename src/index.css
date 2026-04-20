@@ -93,9 +93,12 @@
 
 .panel {
   @apply bg-bg p-6 md:p-12 relative overflow-hidden;
+}
+
+.panel-stack {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--gap-group, 1.5rem);
 }
 
 .nav-rail {

@@ -13,25 +13,23 @@ export default function Home() {
   return (
     <Box as="section">
       <Stack gap={24}>
-        <Stack gap={8}>
-          <Stack gap={2}>
-            <Text 
-              as={motion.h1}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              variant="headline" 
-              size="fluid-7"
-              className="text-accent-navy leading-tight tracking-tight max-w-4xl"
-            >
-              The Roboticist&apos;s Guide to the West Coast Swing
-            </Text>
-            <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
-              Tools, travel hacks, and comp data to maximize your WCS weekends. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
-            </Text>
-            <Text variant="sans" size="base" color="dim" maxWidth="2xl" className="leading-relaxed">
-              Welcome to tech-dancer. Enjoy the west coast swing content or dive into the technical details.
-            </Text>
-          </Stack>
+        <Stack gap={4}>
+          <Text
+            as={motion.h1}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            variant="headline"
+            size="fluid-7"
+            className="text-accent-navy leading-tight tracking-tight max-w-4xl"
+          >
+            The Roboticist&apos;s Guide to the West Coast Swing
+          </Text>
+          <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
+            Tools, travel hacks, and comp data to maximize your WCS weekends. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
+          </Text>
+          <Text variant="sans" size="base" color="dim" maxWidth="2xl" className="leading-relaxed">
+            Welcome to tech-dancer. Enjoy the west coast swing content or dive into the technical details.
+          </Text>
         </Stack>
 
         <PathSelector />

@@ -21,12 +21,13 @@ export function EmailCaptureBar() {
       zIndex="top"
       width="full"
     >
-      <Box className="mx-auto max-w-7xl w-full" paddingX={{ base: 6, md: 12 }}>
+      <Box className="mx-auto max-w-7xl w-full">
         <Stack
           direction={{ base: 'col', md: 'row' }}
           align="center"
           justify="between"
           gap={{ base: 4, md: 8 }}
+          paddingX={{ base: 6, md: 12 }}
           className="w-full"
         >
         <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">

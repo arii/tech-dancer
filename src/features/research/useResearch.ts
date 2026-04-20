@@ -14,7 +14,7 @@ export function useResearch() {
       id: 'wcs-scraper',
       name: 'WCS Prelim Scoring Scraper',
       category: 'Dance Research',
-      status: 'Coming Soon',
+      status: 'Active',
       layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
     },
     {
