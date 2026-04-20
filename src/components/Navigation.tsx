@@ -47,7 +47,14 @@ export default function Navigation() {
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
-        <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
+        <Box
+          as="button"
+          onClick={() => setIsOpen(!isOpen)}
+          padding={2}
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
+        >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </Box>
       </Box>
@@ -99,20 +106,22 @@ export default function Navigation() {
           </Box>
 
           <Stack as="ul" gap={2}>
-            <Box 
-              as="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
-              display="flex"
-              align="center"
-              gap={4}
-              width="full"
-              paddingY={6}
-              paddingX={4}
-              radius="md"
-              className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
-            >
-              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-              <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
+            <Box as="li">
+              <Box
+                as="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+                display="flex"
+                align="center"
+                gap={4}
+                width="full"
+                paddingY={6}
+                paddingX={4}
+                radius="md"
+                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+              >
+                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
+              </Box>
             </Box>
 
             {routes.filter(r => r.path !== '/').map((item) => (
