@@ -61,10 +61,12 @@ export interface Event {
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
-const postModules = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' });
-const resourceModules = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' });
-const studyModules = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' });
-const eventModules = import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' });
+const contentModules: Record<ContentType, Record<string, any>> = {
+  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
+  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
+  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
+  events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
+};
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
@@ -85,41 +87,28 @@ function transform<T>(modules: Record<string, any>): T[] {
     });
 }
 
-const posts = transform<Post>(postModules);
-const resources = transform<Resource>(resourceModules);
-const studies = transform<Study>(studyModules);
-const events = transform<Event>(eventModules);
-
-const postsMap = new Map<string, Post>(posts.map(p => [p.slug, p]));
-const resourcesMap = new Map<string, Resource>(resources.map(r => [r.slug, r]));
-const studiesMap = new Map<string, Study>(studies.map(s => [s.slug, s]));
-const eventsMap = new Map<string, Event>(events.map(e => [e.slug, e]));
-
-export const getPosts = () => posts;
-export const getResources = () => resources;
-export const getStudies = () => studies;
-export const getEvents = () => events;
-
-export const getPostBySlug = (slug: string) => postsMap.get(slug);
-export const getResourceBySlug = (slug: string) => resourcesMap.get(slug);
-export const getStudyBySlug = (slug: string) => studiesMap.get(slug);
-export const getEventBySlug = (slug: string) => eventsMap.get(slug);
-
-const collectionMaps = {
-  posts: postsMap,
-  resources: resourcesMap,
-  studies: studiesMap,
-  events: eventsMap
+const registry = {
+  posts: transform<Post>(contentModules.posts),
+  resources: transform<Resource>(contentModules.resources),
+  studies: transform<Study>(contentModules.studies),
+  events: transform<Event>(contentModules.events)
 };
 
-export const getAllContent = (type: ContentType): ContentItem[] => {
-  const map = collectionMaps[type];
-  if (type === 'posts') return Array.from((map as Map<string, Post>).values());
-  if (type === 'resources') return Array.from((map as Map<string, Resource>).values());
-  if (type === 'studies') return Array.from((map as Map<string, Study>).values());
-  return Array.from((map as Map<string, Event>).values());
+const contentMaps = {
+  posts: new Map<string, Post>(registry.posts.map(p => [p.slug, p])),
+  resources: new Map<string, Resource>(registry.resources.map(r => [r.slug, r])),
+  studies: new Map<string, Study>(registry.studies.map(s => [s.slug, s])),
+  events: new Map<string, Event>(registry.events.map(e => [e.slug, e]))
 };
 
-export const getContentByTypeAndSlug = (type: ContentType, slug: string): ContentItem | undefined => {
-  return collectionMaps[type].get(slug);
-};
+export const getPosts = () => registry.posts;
+export const getResources = () => registry.resources;
+export const getStudies = () => registry.studies;
+export const getEvents = () => registry.events;
+
+export const getPostBySlug = (slug: string) => contentMaps.posts.get(slug);
+export const getResourceBySlug = (slug: string) => contentMaps.resources.get(slug);
+export const getStudyBySlug = (slug: string) => contentMaps.studies.get(slug);
+export const getEventBySlug = (slug: string) => contentMaps.events.get(slug);
+
+export const getAllContent = (type: ContentType): ContentItem[] => registry[type];
