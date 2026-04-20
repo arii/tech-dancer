@@ -32,7 +32,7 @@ class EEPROLedgerFeeder:
             page = await context.new_page()
             await page.goto(url)
             try:
-                await page.wait_for_selector('table.table', state='attached', timeout=10000)
+                await page.wait_for_selector('table.results-table', state='attached', timeout=10000)
             except Exception as e:
                 logging.warning(f"Failed to load table for {url}: {e}")
             content = await page.content()
@@ -45,7 +45,11 @@ class EEPROLedgerFeeder:
         soup = BeautifulSoup(html_content, 'html.parser')
         results = []
 
-        tables = soup.find_all('table')
+        tables = soup.find_all('table', class_=lambda c: c and 'results-table' in c)
+        if not tables:
+            # Fallback to generic if specific class is missing (e.g. mock test)
+            tables = soup.find_all('table')
+
         for table in tables:
             rows = table.find_all('tr')
             for row in rows:
