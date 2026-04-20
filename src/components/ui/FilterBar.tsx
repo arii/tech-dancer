@@ -20,7 +20,7 @@ export function FilterBar({ activeCategory, categories, onSelect }: FilterBarPro
             paddingY={2.5}
             radius="full"
             className={cn(
-              "transition-all duration-300 border text-sm font-bold tracking-tight",
+              "transition-all duration-300 border text-sm font-bold tracking-tight min-h-[44px] min-w-[44px]",
               activeCategory === cat
                 ? "bg-accent text-white border-accent shadow-sm"
                 : "bg-bg text-text-dim border-line hover:border-accent hover:text-accent"
