@@ -26,45 +26,37 @@ export function EmailForm() {
         />
         <Button
           type="submit"
-          disabled={status === 'loading' || status === 'success'}
-          className="min-h-[44px] w-full sm:w-auto min-w-[140px] sm:min-w-[180px] px-6"
+          disabled={status !== 'idle'}
+          className="min-h-[44px] w-full sm:w-auto min-w-[180px] px-6"
         >
           <AnimatePresence mode="wait">
-            {status === 'loading' ? (
-              <motion.div
-                key="loading"
-                className="flex items-center gap-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                >
-                  <Loader2 className="w-4 h-4 text-bg" />
-                </motion.div>
-                <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
-              </motion.div>
-            ) : status === 'success' ? (
-              <motion.div
-                key="success"
-                className="flex items-center gap-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <Check className="w-4 h-4 text-bg" />
-                <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="idle"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <ArrowRight className="w-4 h-4 text-bg" />
-              </motion.div>
-            )}
+            <motion.div
+              key={status}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center justify-center gap-2"
+            >
+              {status === 'loading' && (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-bg" />
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
+                </>
+              )}
+              {status === 'success' && (
+                <>
+                  <Check className="w-4 h-4 text-bg" />
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
+                </>
+              )}
+              {status === 'idle' && (
+                <>
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">SUBSCRIBE</Text>
+                  <ArrowRight className="w-4 h-4 text-bg" />
+                </>
+              )}
+            </motion.div>
           </AnimatePresence>
         </Button>
       </Stack>

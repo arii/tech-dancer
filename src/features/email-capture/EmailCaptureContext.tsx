@@ -8,6 +8,7 @@ interface EmailCaptureContextType {
   setEmail: (email: string) => void;
   submitForm: (email: string) => void;
   setShowEmailBar: (show: boolean) => void;
+  hideBar: () => void;
 }
 
 const EmailCaptureContext = createContext<EmailCaptureContextType | undefined>(undefined);

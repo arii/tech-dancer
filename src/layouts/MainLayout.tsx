@@ -3,8 +3,11 @@ import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { AnimatePresence } from 'motion/react';
 import { GlobalSearch } from '@/components/GlobalSearch';
+import { useEmailCaptureContext } from '@/features/email-capture/EmailCaptureContext';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
+  const { showEmailBar } = useEmailCaptureContext();
+
   return (
     <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
       <GlobalSearch />
@@ -15,8 +18,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           <Box
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
-            paddingBottom={32}
-            className="mx-auto min-h-full max-w-7xl w-full"
+            paddingBottom={showEmailBar ? { base: 48, md: 32 } : 12}
+            className="mx-auto min-h-full max-w-7xl w-full transition-all duration-300"
           >
             <Stack gap={12} className="w-full">
               <Box flex={1} className="w-full">

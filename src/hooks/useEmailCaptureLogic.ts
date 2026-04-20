@@ -7,6 +7,10 @@ export function useEmailCaptureLogic() {
   const [showEmailBar, setShowEmailBar] = useState(true);
   const [email, setEmail] = useState('');
 
+  const hideBar = useCallback(() => {
+    setShowEmailBar(false);
+  }, []);
+
   const submitForm = useCallback((emailToSubmit: string) => {
     if (!emailToSubmit) return;
     setStatus('loading');
@@ -31,6 +35,7 @@ export function useEmailCaptureLogic() {
     email,
     setEmail,
     submitForm,
-    setShowEmailBar
+    setShowEmailBar,
+    hideBar
   };
 }
