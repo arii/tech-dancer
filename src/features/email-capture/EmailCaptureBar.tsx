@@ -18,7 +18,7 @@ export function EmailCaptureBar() {
       padding="emailBar"
       position="fixed"
       inset="bottom"
-      zIndex="top"
+      zIndex={50}
       width="full"
     >
       <Stack 

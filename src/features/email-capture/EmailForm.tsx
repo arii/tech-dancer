@@ -57,9 +57,9 @@ export function EmailForm() {
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
                 >
-                  <Loader2 className="w-4 h-4" />
+                  <Loader2 className="w-4 h-4 text-bg" />
                 </Box>
-                <Text variant="mono" size="micro" weight="font-bold">AUTHENTICATING...</Text>
+                <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
               </Stack>
             ) : status === 'success' ? (
               <Stack
@@ -71,8 +71,8 @@ export function EmailForm() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <Check className="w-4 h-4" />
-                <Text variant="mono" size="micro" weight="font-bold">ACCESS_GRANTED</Text>
+                <Check className="w-4 h-4 text-bg" />
+                <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
               </Stack>
             ) : (
               <Box
@@ -81,17 +81,12 @@ export function EmailForm() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-bg" />
               </Box>
             )}
           </AnimatePresence>
         </Button>
       </Stack>
-      {status === 'success' && (
-        <Text variant="micro" color="brand" marginTop={2} weight="font-bold">
-          Thank you for joining.
-        </Text>
-      )}
     </Box>
   );
 }

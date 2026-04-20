@@ -25,9 +25,25 @@ import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [showEmailBar, setShowEmailBar] = useState(true);
+
+  const handleSubmit = (email: string) => {
+    console.log(`[SYSTEM_ACTION: CAPTURING_EMAIL] ${email}`);
+    setFormStatus('loading');
+    setTimeout(() => {
+      setFormStatus('success');
+      setTimeout(() => setShowEmailBar(false), 2000);
+    }, 800);
+  };
 
   return (
-    <EmailCaptureProvider>
+    <EmailCaptureProvider
+      status={formStatus}
+      showEmailBar={showEmailBar}
+      submitForm={handleSubmit}
+      setShowEmailBar={setShowEmailBar}
+    >
       <MainLayout>
         <AnimatePresence mode="wait">
           <Box
@@ -53,9 +69,8 @@ export default function App() {
             </Routes>
           </Box>
         </AnimatePresence>
-
-        <EmailCaptureOverlay />
       </MainLayout>
+      <EmailCaptureOverlay />
     </EmailCaptureProvider>
   );
 }
