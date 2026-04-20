@@ -1,10 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Playwright configuration for Headless Smoke Testing.
- * This configures a local web server to run the production preview
- * before executing the tests.
- */
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,

@@ -87,28 +87,21 @@ function transform<T>(modules: Record<string, any>): T[] {
     });
 }
 
-const registry = {
-  posts: transform<Post>(contentModules.posts),
-  resources: transform<Resource>(contentModules.resources),
-  studies: transform<Study>(contentModules.studies),
-  events: transform<Event>(contentModules.events)
-};
+const registry = (Object.keys(contentModules) as ContentType[]).reduce((acc, type) => {
+  const items = transform<ContentItem>(contentModules[type]);
+  acc.items[type] = items;
+  acc.maps[type] = new Map(items.map(i => [i.slug, i]));
+  return acc;
+}, { items: {} as Record<ContentType, ContentItem[]>, maps: {} as Record<ContentType, Map<string, ContentItem>> });
 
-const contentMaps = {
-  posts: new Map<string, Post>(registry.posts.map(p => [p.slug, p])),
-  resources: new Map<string, Resource>(registry.resources.map(r => [r.slug, r])),
-  studies: new Map<string, Study>(registry.studies.map(s => [s.slug, s])),
-  events: new Map<string, Event>(registry.events.map(e => [e.slug, e]))
-};
+export const getPosts = () => registry.items.posts as Post[];
+export const getResources = () => registry.items.resources as Resource[];
+export const getStudies = () => registry.items.studies as Study[];
+export const getEvents = () => registry.items.events as Event[];
 
-export const getPosts = () => registry.posts;
-export const getResources = () => registry.resources;
-export const getStudies = () => registry.studies;
-export const getEvents = () => registry.events;
+export const getPostBySlug = (slug: string) => registry.maps.posts.get(slug) as Post | undefined;
+export const getResourceBySlug = (slug: string) => registry.maps.resources.get(slug) as Resource | undefined;
+export const getStudyBySlug = (slug: string) => registry.maps.studies.get(slug) as Study | undefined;
+export const getEventBySlug = (slug: string) => registry.maps.events.get(slug) as Event | undefined;
 
-export const getPostBySlug = (slug: string) => contentMaps.posts.get(slug);
-export const getResourceBySlug = (slug: string) => contentMaps.resources.get(slug);
-export const getStudyBySlug = (slug: string) => contentMaps.studies.get(slug);
-export const getEventBySlug = (slug: string) => contentMaps.events.get(slug);
-
-export const getAllContent = (type: ContentType): ContentItem[] => registry[type];
+export const getAllContent = (type: ContentType) => registry.items[type];

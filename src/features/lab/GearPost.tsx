@@ -13,7 +13,7 @@ export default function GearPost() {
 
   const affiliateLinks = useMemo(() =>
     (resource?.affiliateIds || []).map(id => affiliateManager.getLink(id)).filter(Boolean),
-    [resource?.affiliateIds?.join(',')]
+    [resource]
   );
 
   if (!resource) {
