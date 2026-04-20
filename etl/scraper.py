@@ -7,18 +7,19 @@ import asyncio
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
+POINTS_MAPPING = {
+    'Yes': 10.0, 'Alt1': 4.5, 'Alt2': 4.3, 'Alt3': 4.2, 'No': 0.0,
+    'Y': 10.0, 'A1': 4.5, 'A2': 4.3, 'A3': 4.2, 'N': 0.0
+}
+
 class EEPROLedgerFeeder:
     def __init__(self, ledger_path: str = "etl/data/wcs_prelims.parquet"):
         self.ledger_path = ledger_path
-        self.points_mapping = {
-            'Yes': 10.0, 'Alt1': 4.5, 'Alt2': 4.3, 'Alt3': 4.2, 'No': 0.0,
-            'Y': 10.0, 'A1': 4.5, 'A2': 4.3, 'A3': 4.2, 'N': 0.0
-        }
 
     def standardize_mark(self, mark_text):
         mark_text = mark_text.strip()
-        if mark_text in self.points_mapping:
-            return self.points_mapping[mark_text]
+        if mark_text in POINTS_MAPPING:
+            return POINTS_MAPPING[mark_text]
         logging.warning(f"Unknown mark encountered: {mark_text}")
         return 0.0
 
@@ -31,7 +32,9 @@ class EEPROLedgerFeeder:
             try:
                 await page.wait_for_selector('table.results-table', state='attached', timeout=10000)
             except Exception as e:
-                logging.warning(f"Failed to load table for {url}: {e}")
+                logging.error(f"Critical failure: {e}")
+                await browser.close()
+                return pd.DataFrame()
             content = await page.content()
             await browser.close()
             return self.parse_scoring_dance(content)
@@ -105,24 +108,20 @@ class EEPROLedgerFeeder:
         processed_df = processed_df[['Dancer_ID', 'Registry_Points_Sum', 'competitor_name']]
         processed_df.rename(columns={'competitor_name': 'Dancer_Name'}, inplace=True)
 
-        logging.info(f"Data Scan complete. Retrieved {len(processed_df)} unique dancers from Scoring.Dance.")
         return processed_df
 
     def verify_and_append(self, new_data: pd.DataFrame) -> pd.DataFrame:
         if os.path.exists(self.ledger_path):
             existing_ledger = pd.read_parquet(self.ledger_path)
             combined = pd.concat([existing_ledger, new_data], ignore_index=True)
-            logging.info("Existing ledger found. Aggregating data...")
         else:
             combined = new_data
-            logging.info("No existing ledger. Initializing new Parquet sequence.")
 
         final_ledger = combined.drop_duplicates(subset=['Dancer_ID'], keep='last')
         self._verify_hygiene(final_ledger)
 
         os.makedirs(os.path.dirname(self.ledger_path), exist_ok=True)
         final_ledger.to_parquet(self.ledger_path, index=False)
-        logging.info(f"Ledger Synced. {len(final_ledger)} unique slots verified.")
         return final_ledger
 
     def _verify_hygiene(self, df: pd.DataFrame):
