@@ -1,6 +1,6 @@
 import React from "react"
 import { cn } from "@/lib/utils"
-import { variants } from "@/styles/variants"
+import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 
 interface ButtonProps extends BaseProps, React.ButtonHTMLAttributes<HTMLButtonElement> {

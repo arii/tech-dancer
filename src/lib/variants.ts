@@ -1,4 +1,4 @@
-import { typography } from "./design-tokens";
+import { typography } from "@/styles/design-tokens";
 
 /**
  * Standardized Variant Contracts for the Systems Console.
