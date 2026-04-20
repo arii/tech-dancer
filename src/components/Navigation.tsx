@@ -28,7 +28,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
             : "text-text-dim hover:text-accent hover:bg-bg/50"
         )}
       >
-        <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
+        <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} aria-hidden="true" />
         <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
           {label}
         </Text>
@@ -47,8 +47,15 @@ export default function Navigation() {
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
-        <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        <Box
+          as="button"
+          onClick={() => setIsOpen(!isOpen)}
+          padding={2}
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
+        >
+          {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
         </Box>
       </Box>
 
@@ -110,8 +117,9 @@ export default function Navigation() {
               paddingX={4}
               radius="md"
               className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+              aria-label="Open search overlay"
             >
-              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" aria-hidden="true" />
               <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
             </Box>
 
