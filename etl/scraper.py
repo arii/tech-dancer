@@ -4,7 +4,6 @@ import os
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 import asyncio
-import re
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -17,15 +16,12 @@ class EEPROLedgerFeeder:
         }
 
     def standardize_mark(self, mark_text):
-        """Map categorical marks to WSDC standardized points."""
         mark_text = mark_text.strip()
         if mark_text in self.points_mapping:
             return self.points_mapping[mark_text]
         return 0.0
 
     async def scrape_scoring_dance(self, url):
-        """Scrape data from Scoring.Dance using Playwright."""
-        logging.info(f"Initiating Playwright for {url}...")
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
@@ -37,11 +33,9 @@ class EEPROLedgerFeeder:
                 logging.warning(f"Failed to load table for {url}: {e}")
             content = await page.content()
             await browser.close()
-            logging.info(f"Playwright finished for {url}.")
             return self.parse_scoring_dance(content)
 
     def parse_scoring_dance(self, html_content):
-        """Parse HTML from Scoring.Dance and extract competition results."""
         soup = BeautifulSoup(html_content, 'html.parser')
         results = []
 
@@ -62,16 +56,10 @@ class EEPROLedgerFeeder:
                 if not judge_marks:
                     continue
 
-                # Find bib
-                bib = None
-                for cell in cells:
-                    txt = cell.get_text(strip=True)
-                    clean_txt = re.sub(r'\D', '', txt)
-                    if clean_txt.isdigit():
-                        bib = int(clean_txt)
-                        break
-
-                if bib is None:
+                bib_cell = cells[0].get_text(strip=True)
+                if bib_cell.isdigit():
+                    bib = int(bib_cell)
+                else:
                     continue
 
                 # Find name
@@ -141,19 +129,18 @@ class EEPROLedgerFeeder:
         return final_ledger
 
     def _verify_hygiene(self, df: pd.DataFrame):
-        """Verification step."""
         assert not df.empty, "No data to process."
         assert df['Dancer_ID'].is_unique, "Duplicate REF_IDs detected in ledger."
         legacy_columns = [col for col in df.columns if "points" in col.lower() and "registry" not in col.lower()]
         assert not legacy_columns, f"Legacy terminology detected: {legacy_columns}. Upgrade to 'Registry_Points'."
 
-async def main():
+async def main(url="https://scoring.dance/enCA/events/190/results/2945.html"):
     feeder = EEPROLedgerFeeder()
-    urls = ["https://scoring.dance/enCA/events/190/results/2945.html"]
-    for url in urls:
-        results = await feeder.extract_scoring_dance_table(url)
-        if not results.empty:
-            feeder.verify_and_append(results)
+    results = await feeder.extract_scoring_dance_table(url)
+    if not results.empty:
+        feeder.verify_and_append(results)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import sys
+    url = sys.argv[1] if len(sys.argv) > 1 else "https://scoring.dance/enCA/events/190/results/2945.html"
+    asyncio.run(main(url))
