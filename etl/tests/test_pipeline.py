@@ -43,7 +43,7 @@ def test_data_validation_hygiene():
         'Registry_Points_Sum': [10.0, 10.0]
     }
     bad_df = pd.DataFrame(bad_data)
-    with pytest.raises(AssertionError, match="Duplicate REF_IDs detected"):
+    with pytest.raises(ValueError, match="Duplicate REF_IDs detected"):
         feeder._verify_hygiene(bad_df)
 
     # Test failure: Legacy terminology
@@ -52,7 +52,7 @@ def test_data_validation_hygiene():
         'Points': [10.0]
     }
     slop_df = pd.DataFrame(slop_data)
-    with pytest.raises(AssertionError, match="Legacy terminology detected"):
+    with pytest.raises(ValueError, match="Legacy terminology detected"):
         feeder._verify_hygiene(slop_df)
 
 @pytest.mark.asyncio

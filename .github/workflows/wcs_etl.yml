@@ -5,8 +5,6 @@ on:
     - cron: '0 10 * * 3'
   workflow_dispatch:
 
-permissions: read-all
-
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -22,6 +20,7 @@ jobs:
         uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install Tools & Dependencies
         run: |
@@ -48,5 +47,4 @@ jobs:
           git lfs track "*.parquet"
           git add -f etl/data/*.parquet .gitattributes
 
-          # Only push if there are data changes
           git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)

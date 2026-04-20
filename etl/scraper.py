@@ -19,6 +19,7 @@ class EEPROLedgerFeeder:
         mark_text = mark_text.strip()
         if mark_text in self.points_mapping:
             return self.points_mapping[mark_text]
+        logging.warning(f"Unknown mark encountered: {mark_text}")
         return 0.0
 
     async def scrape_scoring_dance(self, url):
@@ -62,17 +63,15 @@ class EEPROLedgerFeeder:
                 else:
                     continue
 
-                # Find name
                 name = ""
                 name_a = row.find('a', attrs={'data-wsdc': True})
                 if name_a:
                     name = name_a.get_text(strip=True)
                 else:
-                    for cell in cells[1:3]: # check relevant cells for name
-                        txt = cell.get_text(strip=True)
-                        if txt and not txt.isdigit() and not any(m in txt for m in ['Yes', 'No', 'Alt']):
-                            name = txt
-                            break
+                    # Specific fallback if data-wsdc missing
+                    name_cell = row.find('td', class_='competitor-name')
+                    if name_cell:
+                        name = name_cell.get_text(strip=True)
 
                 for j_mark in judge_marks:
                     judge_name = j_mark.get('TITLE') or j_mark.get('title')
@@ -91,7 +90,6 @@ class EEPROLedgerFeeder:
         return pd.DataFrame(results)
 
     async def extract_scoring_dance_table(self, url: str) -> pd.DataFrame:
-        """Scrapes and formats Scoring.Dance data for the Registry Ledger."""
         logging.info(f"Syncing WSDC Registry Ledger from Scoring.Dance URL: {url}")
         raw_df = await self.scrape_scoring_dance(url)
 
@@ -111,7 +109,6 @@ class EEPROLedgerFeeder:
         return processed_df
 
     def verify_and_append(self, new_data: pd.DataFrame) -> pd.DataFrame:
-        """Aggregates new data, drops duplicates, and verifies hygiene."""
         if os.path.exists(self.ledger_path):
             existing_ledger = pd.read_parquet(self.ledger_path)
             combined = pd.concat([existing_ledger, new_data], ignore_index=True)
@@ -129,10 +126,13 @@ class EEPROLedgerFeeder:
         return final_ledger
 
     def _verify_hygiene(self, df: pd.DataFrame):
-        assert not df.empty, "No data to process."
-        assert df['Dancer_ID'].is_unique, "Duplicate REF_IDs detected in ledger."
+        if df.empty:
+            raise ValueError("No data to process.")
+        if not df['Dancer_ID'].is_unique:
+            raise ValueError("Duplicate REF_IDs detected in ledger.")
         legacy_columns = [col for col in df.columns if "points" in col.lower() and "registry" not in col.lower()]
-        assert not legacy_columns, f"Legacy terminology detected: {legacy_columns}. Upgrade to 'Registry_Points'."
+        if legacy_columns:
+            raise ValueError(f"Legacy terminology detected: {legacy_columns}. Upgrade to 'Registry_Points'.")
 
 async def main(url="https://scoring.dance/enCA/events/190/results/2945.html"):
     feeder = EEPROLedgerFeeder()
