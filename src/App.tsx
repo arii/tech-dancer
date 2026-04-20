@@ -7,9 +7,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
-import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
-import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
-import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
+import { EmailCaptureFeature } from './features/email-capture/EmailCaptureFeature';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
@@ -25,15 +23,9 @@ import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
-  const { status, showEmailBar, submitForm, setShowEmailBar } = useEmailCaptureLogic();
 
   return (
-    <EmailCaptureProvider
-      status={status}
-      showEmailBar={showEmailBar}
-      submitForm={submitForm}
-      setShowEmailBar={setShowEmailBar}
-    >
+    <>
       <MainLayout>
         <AnimatePresence mode="wait">
           <Box
@@ -60,9 +52,7 @@ export default function App() {
           </Box>
         </AnimatePresence>
       </MainLayout>
-      <AnimatePresence>
-        {showEmailBar && <EmailCaptureBar />}
-      </AnimatePresence>
-    </EmailCaptureProvider>
+      <EmailCaptureFeature />
+    </>
   );
 }

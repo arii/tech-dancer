@@ -1,43 +1,35 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-export type FormStatus = 'idle' | 'loading' | 'success';
+export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function useEmailCaptureLogic() {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [showEmailBar, setShowEmailBar] = useState(true);
-  const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const successTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [email, setEmail] = useState('');
 
-  const submitForm = useCallback((email: string) => {
-    // Basic validation could go here
-    if (!email) return;
-
+  const submitForm = useCallback((emailToSubmit: string) => {
+    if (!emailToSubmit) return;
     setStatus('loading');
 
-    // Clear any existing timers
-    if (loadingTimerRef.current) clearTimeout(loadingTimerRef.current);
-    if (successTimerRef.current) clearTimeout(successTimerRef.current);
-
-    loadingTimerRef.current = setTimeout(() => {
+    // Simulate API delay
+    setTimeout(() => {
       setStatus('success');
-
-      successTimerRef.current = setTimeout(() => {
-        setShowEmailBar(false);
-      }, 2000);
+      setEmail('');
     }, 800);
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
-    return () => {
-      if (loadingTimerRef.current) clearTimeout(loadingTimerRef.current);
-      if (successTimerRef.current) clearTimeout(successTimerRef.current);
-    };
-  }, []);
+    if (status === 'success') {
+      const timer = setTimeout(() => setShowEmailBar(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   return {
     status,
     showEmailBar,
+    email,
+    setEmail,
     submitForm,
     setShowEmailBar
   };

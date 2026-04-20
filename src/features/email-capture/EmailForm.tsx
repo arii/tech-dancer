@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
@@ -7,18 +5,10 @@ import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
 
 export function EmailForm() {
-  const { status, submitForm } = useEmailCaptureContext();
-  const [email, setEmail] = useState('');
-
-  useEffect(() => {
-    if (status === 'success') {
-      setEmail('');
-    }
-  }, [status]);
+  const { status, submitForm, email, setEmail } = useEmailCaptureContext();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
     submitForm(email);
   };
 
@@ -37,52 +27,43 @@ export function EmailForm() {
         <Button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          minWidth={180}
-          className="min-h-[44px] w-full sm:w-auto"
+          className="min-h-[44px] w-full sm:w-auto min-w-[140px] sm:min-w-[180px] px-6"
         >
           <AnimatePresence mode="wait">
             {status === 'loading' ? (
-              <Stack
-                as={motion.div}
+              <motion.div
                 key="loading"
-                direction="row"
-                align="center"
-                gap={2}
+                className="flex items-center gap-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <Box
-                  as={motion.div}
+                <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
                 >
                   <Loader2 className="w-4 h-4 text-bg" />
-                </Box>
+                </motion.div>
                 <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
-              </Stack>
+              </motion.div>
             ) : status === 'success' ? (
-              <Stack
-                as={motion.div}
+              <motion.div
                 key="success"
-                direction="row"
-                align="center"
-                gap={2}
+                className="flex items-center gap-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
                 <Check className="w-4 h-4 text-bg" />
                 <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
-              </Stack>
+              </motion.div>
             ) : (
-              <Box
-                as={motion.div}
+              <motion.div
                 key="idle"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
                 <ArrowRight className="w-4 h-4 text-bg" />
-              </Box>
+              </motion.div>
             )}
           </AnimatePresence>
         </Button>

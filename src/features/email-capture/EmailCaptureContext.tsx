@@ -1,33 +1,24 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-type FormStatus = 'idle' | 'loading' | 'success';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { FormStatus } from '@/hooks/useEmailCaptureLogic';
 
 interface EmailCaptureContextType {
   status: FormStatus;
   showEmailBar: boolean;
+  email: string;
+  setEmail: (email: string) => void;
   submitForm: (email: string) => void;
   setShowEmailBar: (show: boolean) => void;
 }
 
 const EmailCaptureContext = createContext<EmailCaptureContextType | undefined>(undefined);
 
-interface EmailCaptureProviderProps {
+interface EmailCaptureProviderProps extends EmailCaptureContextType {
   children: ReactNode;
-  status: FormStatus;
-  showEmailBar: boolean;
-  submitForm: (email: string) => void;
-  setShowEmailBar: (show: boolean) => void;
 }
 
-export function EmailCaptureProvider({
-  children,
-  status,
-  showEmailBar,
-  submitForm,
-  setShowEmailBar
-}: EmailCaptureProviderProps) {
+export function EmailCaptureProvider({ children, ...value }: EmailCaptureProviderProps) {
   return (
-    <EmailCaptureContext.Provider value={{ status, showEmailBar, submitForm, setShowEmailBar }}>
+    <EmailCaptureContext.Provider value={value}>
       {children}
     </EmailCaptureContext.Provider>
   );
