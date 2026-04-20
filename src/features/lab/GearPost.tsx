@@ -47,7 +47,7 @@ export default function GearPost() {
           <Box display="flex" align="center" gap={4}>
             <Box display="flex" align="center" gap={2} color="brand">
               <Tag className="w-3 h-3" />
-              <Text variant="mono" size="micro" weight="font-bold">{resource.category.toUpperCase()}</Text>
+              <Text variant="mono" size="micro" weight="font-bold" className="uppercase">{resource.category}</Text>
             </Box>
             <Box display="flex" align="center" gap={2} color="dim">
               <Clock className="w-3 h-3" />
@@ -73,7 +73,6 @@ export default function GearPost() {
                 src={resource.image}
                 alt={resource.title}
                 className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
               />
             </Box>
           )}
@@ -105,7 +104,13 @@ export default function GearPost() {
           )}
 
           <Box className="prose prose-sm md:prose-base prose-slate max-w-none w-full overflow-hidden break-words prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
-            <ReactMarkdown>{resource.content}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />
+              }}
+            >
+              {resource.content}
+            </ReactMarkdown>
           </Box>
 
           <Box border="t" paddingTop={12} display="flex" justify="between" align="center">

@@ -55,6 +55,7 @@ export interface Event {
 }
 
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
+export type ContentItem = Post | Resource | Study | Event;
 
 // --- Glob Loaders ---
 
@@ -82,48 +83,34 @@ function transform<T>(modules: Record<string, any>): T[] {
     });
 }
 
+// --- Pre-calculated Collections (O(1) lookups) ---
+
+const posts = transform<Post>(postModules);
+const resources = transform<Resource>(resourceModules);
+const studies = transform<Study>(studyModules);
+const events = transform<Event>(eventModules);
+
+const postsMap = new Map(posts.map(p => [p.slug, p]));
+const resourcesMap = new Map(resources.map(r => [r.slug, r]));
+const studiesMap = new Map(studies.map(s => [s.slug, s]));
+const eventsMap = new Map(events.map(e => [e.slug, e]));
+
 // --- Public API ---
 
-export function getPosts(): Post[] {
-  return transform<Post>(postModules);
-}
+export function getPosts(): Post[] { return posts; }
+export function getResources(): Resource[] { return resources; }
+export function getStudies(): Study[] { return studies; }
+export function getEvents(): Event[] { return events; }
 
-export function getResources(): Resource[] {
-  return transform<Resource>(resourceModules);
-}
-
-export function getStudies(): Study[] {
-  return transform<Study>(studyModules);
-}
-
-export function getEvents(): Event[] {
-  return transform<Event>(eventModules);
-}
-
-export function getPostBySlug(slug: string): Post | undefined {
-  return getPosts().find(p => p.slug === slug);
-}
-
-export function getResourceBySlug(slug: string): Resource | undefined {
-  return getResources().find(r => r.slug === slug);
-}
-
-export function getStudyBySlug(slug: string): Study | undefined {
-  return getStudies().find(s => s.slug === slug);
-}
-
-export function getEventBySlug(slug: string): Event | undefined {
-  return getEvents().find(e => e.slug === slug);
-}
+export function getPostBySlug(slug: string): Post | undefined { return postsMap.get(slug); }
+export function getResourceBySlug(slug: string): Resource | undefined { return resourcesMap.get(slug); }
+export function getStudyBySlug(slug: string): Study | undefined { return studiesMap.get(slug); }
+export function getEventBySlug(slug: string): Event | undefined { return eventsMap.get(slug); }
 
 export function getContentBySlug(slug: string): ContentItem | undefined {
   return getPostBySlug(slug) || getResourceBySlug(slug) || getStudyBySlug(slug) || getEventBySlug(slug);
 }
 
-/**
- * Legacy support for ContentItem usage during migration
- */
-export type ContentItem = Post | Resource | Study | Event;
 export function getAllContent(type: ContentType): ContentItem[] {
   if (type === 'posts') return getPosts();
   if (type === 'resources') return getResources();
