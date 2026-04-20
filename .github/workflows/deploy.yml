@@ -26,21 +26,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
       # 1. Always check out the main branch to the root of the site
       - name: Checkout Main Branch
         uses: actions/checkout@v4
         with:
           ref: main
           path: main-source
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: main-source/pnpm-lock.yaml
 
       - name: Install Main Dependencies
         run: pnpm install
