@@ -18,7 +18,24 @@ export default defineConfig(({mode}) => {
     plugins: [
       react(),
       tailwindcss(),
-      ViteImageOptimizer(),
+      ViteImageOptimizer({
+        includePublic: true,
+        webp: {
+          quality: 80,
+        },
+        png: {
+          quality: 90,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        avif: {
+          quality: 70,
+        },
+        svg: {
+          multipass: true,
+        },
+      }),
       analyze && visualizer({
         open: false,
         filename: 'bundle-analysis.html',

@@ -1,7 +1,7 @@
 import React from "react"
 import { composeStyles } from "@/lib/utils"
 import { typography, typeSizes } from "@/styles/design-tokens"
-import { variants } from "@/styles/variants"
+import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
