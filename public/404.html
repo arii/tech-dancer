@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <title>Tech-Dancer // Redirecting...</title>
     <script type="text/javascript">
-      // https://github.com/rafgraph/spa-github-pages
-      const pathSegmentsToKeep = 1;
       const l = window.location;
+      const pathSegmentsToKeep = l.pathname.toLowerCase().startsWith('/tech-dancer') ? 1 : 0;
       l.replace(
         l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
         l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
