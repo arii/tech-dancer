@@ -8,8 +8,8 @@ export function EmailForm() {
   const { email, setEmail, status, handleSubmit } = useEmailCapture();
 
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md">
-      <Stack direction="row" gap={0} position="relative">
+    <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
+      <Stack direction={{ base: 'col', sm: 'row' }} gap={{ base: 2, sm: 0 }} position="relative" className="w-full">
         <input
           type="email"
           placeholder="Email Address"
@@ -17,12 +17,13 @@ export function EmailForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={inputs.base}
+          className={`${inputs.base} min-h-[44px] w-full`}
         />
         <Button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
           minWidth={60}
+          className="min-h-[44px] w-full sm:w-auto"
         >
           <AnimatePresence mode="wait">
             {status === 'loading' ? (

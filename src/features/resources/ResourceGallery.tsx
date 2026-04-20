@@ -62,7 +62,7 @@ function ResourceDetails({ resource, onBack }: { resource: Resource; onBack: () 
           </Stack>
         </Stack>
 
-        <Box className="markdown-body prose prose-invert max-w-none text-text-body space-y-6">
+        <Box className="markdown-body prose prose-sm md:prose-base prose-invert max-w-none w-full overflow-hidden break-words text-text-body space-y-6">
           <Markdown>{resource.content}</Markdown>
         </Box>
       </Stack>
