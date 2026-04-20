@@ -43,7 +43,7 @@ export default function Navigation() {
   return (
     <>
       {/* Mobile Header */}
-      <Box layout="mobileHeader">
+      <Box as="nav" layout="mobileHeader">
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
@@ -90,6 +90,7 @@ export default function Navigation() {
 
       {/* Desktop Sidebar */}
       <Box 
+        as="nav"
         layout="navRail" 
         className="w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0"
       >
