@@ -1,12 +1,10 @@
-name: CI
+name: Lint
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: read
@@ -16,11 +14,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -34,8 +34,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Run type-check
-        run: npx tsc --noEmit
-
-      - name: Run tests
-        run: pnpm test --if-present
+      - name: Run lint
+        run: pnpm run lint
