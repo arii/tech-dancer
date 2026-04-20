@@ -18,15 +18,31 @@ function parseFrontmatter(content: string) {
   yaml.split('\n').forEach(line => {
     const [key, ...vals] = line.split(':');
     if (key && vals.length) {
+      const parsedKey = key.trim();
       let value = vals.join(':').trim();
-      // Basic type conversion
-      if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
-      else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
-
-      if (value.includes(',')) {
-        data[key.trim()] = value.split(',').map(v => v.trim());
+      // Handle arrays
+      if (value.startsWith('[') && value.endsWith(']')) {
+        const inner = value.slice(1, -1).trim();
+        if (inner.length === 0) {
+          data[parsedKey] = [];
+        } else {
+          data[parsedKey] = inner.split(',').map(v => {
+            let item = v.trim();
+            if (item.startsWith('"') && item.endsWith('"')) item = item.slice(1, -1);
+            else if (item.startsWith("'") && item.endsWith("'")) item = item.slice(1, -1);
+            return item;
+          });
+        }
       } else {
-        data[key.trim()] = value;
+        // Basic type conversion for strings
+        if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+        else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+
+        if (value.includes(',')) {
+          data[parsedKey] = value.split(',').map(v => v.trim());
+        } else {
+          data[parsedKey] = value;
+        }
       }
     }
   });
