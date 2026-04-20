@@ -11,7 +11,6 @@ import { motionTokens } from './styles/motion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { Box } from './layouts/Primitives';
 
-// Lazy load page components
 const Home = lazy(() => import('./pages/Home'));
 const GearReviews = lazy(() => import('./pages/Gear'));
 const Research = lazy(() => import('./pages/Research'));
@@ -38,7 +37,7 @@ export default function App() {
           height="full"
         >
           <Suspense fallback={<PageSkeleton />}>
-            <Routes location={location} key={location.pathname}>
+            <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/gear" element={<GearReviews />} />
               <Route path="/research" element={<Research />} />
