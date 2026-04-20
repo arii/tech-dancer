@@ -18,6 +18,16 @@ All content lives under `content/` in the repo root.
 - `content/resources/` ← Dance Resources (gear, travel, recovery guides)
 - `content/studies/` ← Data Analysis Studies (the research journal)
 
+## Routing and SEO Standards
+
+The project uses `BrowserRouter` for clean URLs. To support this on GitHub Pages, the following must be maintained:
+
+1. **BrowserRouter Requirement**: Use `BrowserRouter` in `src/main.tsx`. Do NOT revert to `HashRouter`.
+2. **404 Redirect Hack**: `public/404.html` and `public/.nojekyll` must exist in the `public/` directory. The `404.html` file handles redirects to the main entry point while preserving the requested path.
+3. **Sitemap and Robots.txt**: A sitemap is automatically generated during the build process to help search engines discover pages directly. `public/robots.txt` must point to the `sitemap.xml`.
+
+CI will fail if `404.html` or `.nojekyll` are missing.
+
 ## Submitting Content via GitHub Issue
 
 ### Step 1 — Open a new Issue

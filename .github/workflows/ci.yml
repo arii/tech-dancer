@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
+      - name: Verify SEO redirect files
+        run: |
+          test -f public/404.html || (echo "Missing 404.html for BrowserRouter hack" && exit 1)
+          test -f public/.nojekyll || (echo "Missing .nojekyll for GitHub Pages" && exit 1)
+
       - name: Lint
         run: pnpm run lint
 
