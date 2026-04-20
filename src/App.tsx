@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
+import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
@@ -22,6 +24,16 @@ import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [showEmailBar, setShowEmailBar] = useState(true);
+
+  const handleFormSubmit = () => {
+    setFormStatus('loading');
+    setTimeout(() => {
+      setFormStatus('success');
+      setTimeout(() => setShowEmailBar(false), 2000);
+    }, 800);
+  };
 
   return (
     <MainLayout>
@@ -48,6 +60,12 @@ export default function App() {
             <Route path="*" element={<Home />} />
           </Routes>
         </Box>
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showEmailBar && (
+          <EmailCaptureBar status={formStatus} onSubmit={handleFormSubmit} />
+        )}
       </AnimatePresence>
     </MainLayout>
   );

@@ -1,11 +1,34 @@
+import { useEffect } from 'react';
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { useEmailCapture } from './useEmailCapture';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
 
-export function EmailForm() {
-  const { email, setEmail, status, handleSubmit } = useEmailCapture();
+interface EmailFormProps {
+  status?: 'idle' | 'loading' | 'success';
+  onSubmit?: () => void;
+}
+
+export function EmailForm({ status: propsStatus, onSubmit }: EmailFormProps) {
+  const { email, setEmail, status: internalStatus, handleSubmit: internalHandleSubmit } = useEmailCapture();
+
+  const status = propsStatus || internalStatus;
+
+  useEffect(() => {
+    if (status === 'success') {
+      setEmail('');
+    }
+  }, [status, setEmail]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    if (onSubmit) {
+      e.preventDefault();
+      onSubmit();
+    } else {
+      internalHandleSubmit(e);
+    }
+  };
 
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
@@ -22,30 +45,43 @@ export function EmailForm() {
         <Button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          minWidth={60}
+          minWidth={status === 'idle' ? 60 : 180}
           className="min-h-[44px] w-full sm:w-auto"
         >
           <AnimatePresence mode="wait">
             {status === 'loading' ? (
-              <Box
+              <Stack
                 as={motion.div}
                 key="loading"
-                initial={{ opacity: 0, rotate: 0 }}
-                animate={{ opacity: 1, rotate: 360 }}
+                direction="row"
+                align="center"
+                gap={2}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
               >
-                <Loader2 className="w-4 h-4" />
-              </Box>
+                <Box
+                  as={motion.div}
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                >
+                  <Loader2 className="w-4 h-4" />
+                </Box>
+                <Text variant="mono" size="micro" weight="font-bold">AUTHENTICATING...</Text>
+              </Stack>
             ) : status === 'success' ? (
-              <Box
+              <Stack
                 as={motion.div}
                 key="success"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
+                direction="row"
+                align="center"
+                gap={2}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
               >
                 <Check className="w-4 h-4" />
-              </Box>
+                <Text variant="mono" size="micro" weight="font-bold">ACCESS_GRANTED</Text>
+              </Stack>
             ) : (
               <Box
                 as={motion.div}

@@ -1,6 +1,5 @@
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
-import { EmailCaptureBar } from '@/features/email-capture/EmailCaptureBar';
 import { Footer } from '@/layouts/Footer';
 import { AnimatePresence } from 'motion/react';
 import { GlobalSearch } from '@/components/GlobalSearch';
