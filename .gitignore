@@ -6,3 +6,11 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Python / ETL
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+etl/data/*.parquet
+!etl/data/wcs_prelims.parquet

@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 export function Footer() {
   const legalLinks = [
@@ -13,21 +13,26 @@ export function Footer() {
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           © 2026 TECH-DANCER
         </Text>
-        <Stack direction="row" gap={8} align="center">
+        <Stack direction="row" gap={2} align="center">
           {legalLinks.map((link) => (
-            <Text 
+            <Button
               key={link.label}
-              as="a" 
+              as="a"
               href={link.href}
-              variant="mono" 
-              size="xs" 
-              color="dim"
-              uppercase 
-              weight="font-semibold"
-              className="tracking-[0.15em] hover:text-accent transition-colors"
+              variant="ghost"
+              size="sm"
+              className="text-text-dim hover:text-accent"
             >
-              {link.label}
-            </Text>
+              <Text
+                variant="mono"
+                size="xs"
+                uppercase
+                weight="font-semibold"
+                className="tracking-[0.15em]"
+              >
+                {link.label}
+              </Text>
+            </Button>
           ))}
         </Stack>
       </Stack>
