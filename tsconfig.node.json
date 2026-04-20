@@ -7,8 +7,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "moduleDetection": "force",
-    "allowJs": true,
     "noEmit": true
   },
   "include": ["vite.config.ts", "postcss.config.js", "tailwind.config.js"]
