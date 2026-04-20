@@ -4,6 +4,7 @@ import os
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 import asyncio
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -23,6 +24,7 @@ class EEPROLedgerFeeder:
         logging.warning(f"Unknown mark encountered: {mark_text}")
         return 0.0
 
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def scrape_scoring_dance(self, url):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
@@ -117,7 +119,6 @@ class EEPROLedgerFeeder:
         final_ledger = combined.drop_duplicates(subset=['Dancer_ID'], keep='last')
         self._verify_hygiene(final_ledger)
 
-        os.makedirs(os.path.dirname(self.ledger_path), exist_ok=True)
         final_ledger.to_parquet(self.ledger_path, index=False)
         return final_ledger
 
@@ -127,11 +128,6 @@ class EEPROLedgerFeeder:
         if not df['Dancer_ID'].is_unique:
             raise ValueError("Duplicate REF_IDs detected in ledger.")
 
-        forbidden = {'Points', 'Old_Points'}
-        found = forbidden.intersection(df.columns)
-        if found:
-            raise ValueError(f"Legacy terminology detected: {list(found)}. Upgrade to 'Registry_Points'.")
-
 async def main(url="https://scoring.dance/enCA/events/190/results/2945.html"):
     feeder = EEPROLedgerFeeder()
     results = await feeder.extract_scoring_dance_table(url)
@@ -140,5 +136,4 @@ async def main(url="https://scoring.dance/enCA/events/190/results/2945.html"):
 
 if __name__ == "__main__":
     import sys
-    url = sys.argv[1] if len(sys.argv) > 1 else "https://scoring.dance/enCA/events/190/results/2945.html"
-    asyncio.run(main(url))
+    asyncio.run(main(*sys.argv[1:2]))

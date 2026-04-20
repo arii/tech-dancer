@@ -42,8 +42,8 @@ jobs:
 
       - name: Commit via Git LFS
         run: |
-          git config --global user.name "tech-dancer-bot"
-          git config --global user.email "bot@tech-dancer.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git lfs track "*.parquet"
           git add etl/data/wcs_prelims.parquet .gitattributes
 
