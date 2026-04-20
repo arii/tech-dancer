@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Text } from "@/layouts/Primitives"
-import { variants } from "@/styles/variants"
+import { variants } from "@/lib/variants"
 
 interface BadgeProps extends React.ComponentProps<typeof Text> {
   className?: string
