@@ -20,11 +20,13 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       ViteImageOptimizer(),
-      visualizer({
+      isProd && visualizer({
         open: false,
         filename: 'bundle-analysis.html',
+        gzipSize: true,
+        brotliSize: true,
       }),
-    ],
+    ].filter(Boolean),
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
