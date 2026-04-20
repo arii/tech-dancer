@@ -5,14 +5,6 @@
  */
 
 import matter from 'gray-matter';
-import { Buffer } from 'buffer';
-
-// Ensure Buffer is available for gray-matter in some environments
-if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || Buffer;
-}
-
-// --- Typed Interfaces ---
 
 export interface Post {
   slug: string;
@@ -63,8 +55,6 @@ export interface Event {
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
-// --- Glob Loaders ---
-
 const postModules = import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' });
 const resourceModules = import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' });
 const studyModules = import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' });
@@ -89,8 +79,6 @@ function transform<T>(modules: Record<string, any>): T[] {
     });
 }
 
-// --- Pre-calculated Collections (O(1) lookups) ---
-
 const posts = transform<Post>(postModules);
 const resources = transform<Resource>(resourceModules);
 const studies = transform<Study>(studyModules);
@@ -100,8 +88,6 @@ const postsMap = new Map(posts.map(p => [p.slug, p]));
 const resourcesMap = new Map(resources.map(r => [r.slug, r]));
 const studiesMap = new Map(studies.map(s => [s.slug, s]));
 const eventsMap = new Map(events.map(e => [e.slug, e]));
-
-// --- Public API ---
 
 export function getPosts(): Post[] { return posts; }
 export function getResources(): Resource[] { return resources; }
@@ -113,13 +99,13 @@ export function getResourceBySlug(slug: string): Resource | undefined { return r
 export function getStudyBySlug(slug: string): Study | undefined { return studiesMap.get(slug); }
 export function getEventBySlug(slug: string): Event | undefined { return eventsMap.get(slug); }
 
-export function getContentBySlug(slug: string): ContentItem | undefined {
-  return getPostBySlug(slug) || getResourceBySlug(slug) || getStudyBySlug(slug) || getEventBySlug(slug);
-}
+const contentTypeMap: Record<ContentType, () => ContentItem[]> = {
+  posts: getPosts,
+  resources: getResources,
+  studies: getStudies,
+  events: getEvents
+};
 
 export function getAllContent(type: ContentType): ContentItem[] {
-  if (type === 'posts') return getPosts();
-  if (type === 'resources') return getResources();
-  if (type === 'studies') return getStudies();
-  return getEvents();
+  return contentTypeMap[type]();
 }

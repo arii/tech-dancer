@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, ExternalLink } from 'lucide-react';
@@ -11,6 +12,11 @@ export default function GearPost() {
   const navigate = useNavigate();
   const resource = slug ? getResourceBySlug(slug) : undefined;
 
+  const affiliateLinks = useMemo(() =>
+    resource?.affiliateIds?.map(id => affiliateManager.getLink(id)).filter(Boolean) ?? [],
+    [resource?.affiliateIds]
+  );
+
   if (!resource) {
     return (
       <Box padding="panel" textAlign="center">
@@ -23,8 +29,6 @@ export default function GearPost() {
       </Box>
     );
   }
-
-  const affiliateLinks = resource.affiliateIds?.map(id => affiliateManager.getLink(id)).filter(Boolean);
 
   return (
     <Box as="article" padding="panel">
@@ -77,7 +81,7 @@ export default function GearPost() {
             </Box>
           )}
 
-          {affiliateLinks && affiliateLinks.length > 0 && (
+          {affiliateLinks.length > 0 && (
             <Box border padding={6} className="bg-surface/50 border-accent/20">
               <Stack gap={4}>
                 <Text variant="mono" size="xs" weight="font-bold" color="brand">FEATURED GEAR</Text>
