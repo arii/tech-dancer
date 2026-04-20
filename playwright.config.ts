@@ -1,8 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Playwright configuration for Headless Smoke Testing.
- */
+const PORT = process.env.PORT || 4173;
+const BASE_PATH = '/tech-dancer/';
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -11,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:4173/tech-dancer/',
+    baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
     trace: 'on-first-retry',
   },
   projects: [
@@ -22,7 +22,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm run preview',
-    url: 'http://localhost:4173/tech-dancer/',
+    url: `http://localhost:${PORT}${BASE_PATH}`,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
