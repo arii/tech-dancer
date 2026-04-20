@@ -62,7 +62,7 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           paddingY={4}
           color="accent"
           cursor="pointer"
-          className="hover:bg-accent-brand/5 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="hover:bg-accent-brand/5 transition-colors touch-target"
         >
           Send Another Message
         </Box>
@@ -187,7 +187,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Box as="button" 
               disabled={isSubmitting}
-              className="w-full bg-text-main text-bg py-5 font-bold uppercase tracking-[3px] text-xs hover:bg-accent-brand transition-all flex items-center justify-center gap-3 disabled:opacity-50 min-h-[44px]"
+              className="w-full bg-text-main text-bg py-5 font-bold uppercase tracking-[3px] text-xs hover:bg-accent-brand transition-all flex items-center justify-center gap-3 disabled:opacity-50 touch-target"
               cursor="pointer"
             >
               {isSubmitting ? (

@@ -18,7 +18,7 @@ export default function ResearchDetail() {
         <Stack gap={8} align="center">
           <Search className="w-12 h-12 opacity-20" />
           <Text variant="display" size="2xl">Tool Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent-brand transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
+          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent-brand transition-colors touch-target">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
           </Box>
         </Stack>
@@ -36,7 +36,7 @@ export default function ResearchDetail() {
           align="center" 
           gap={2}
           color="dim"
-          className="hover:text-accent-brand transition-colors min-h-[44px] min-w-[44px]"
+          className="hover:text-accent-brand transition-colors touch-target"
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />

@@ -35,7 +35,7 @@ export default function ArielProfile() {
               <Box 
                 as="a" 
                 href="#" 
-                className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy min-h-[44px] min-w-[44px]"
+                className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy touch-target"
               >
                 <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">VIEW FULL BACKGROUND</Text>
                 <ArrowRight className="w-4 h-4" />
@@ -73,7 +73,7 @@ export default function ArielProfile() {
                     align="center" 
                     gap={3}
                     cursor="pointer"
-                    className="group hover:border-accent-brand transition-all min-h-[44px] min-w-[44px]"
+                    className="group hover:border-accent-brand transition-all touch-target"
                   >
                     <item.icon className="w-5 h-5 text-accent-navy group-hover:text-accent transition-colors" />
                     <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">{item.label}</Text>

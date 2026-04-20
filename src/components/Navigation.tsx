@@ -21,7 +21,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
         to={to}
         onClick={onClick}
         className={({ isActive }) => cn(
-          "flex items-center gap-4 transition-all relative z-10 rounded-md min-h-[44px] min-w-[44px]",
+          "flex items-center gap-4 transition-all relative z-10 rounded-md touch-target",
           isMobile ? "py-6 border-b border-line/50 text-xl" : "py-6 px-4",
           isActive 
             ? "text-accent bg-bg" 
@@ -109,7 +109,7 @@ export default function Navigation() {
               paddingY={6}
               paddingX={4}
               radius="md"
-            className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left min-h-[44px] min-w-[44px]"
+              className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left touch-target"
             >
               <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
               <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>

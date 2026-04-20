@@ -22,6 +22,7 @@ export const variants = {
     solid: "bg-text-main text-bg border-transparent",
     outline: "border border-line bg-transparent",
     ghost: "bg-transparent hover:bg-line/10",
+    primary: "btn-primary",
   },
   radius: {
     none: "rounded-none",
