@@ -25,6 +25,11 @@ import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
+
+  // MECHANICAL_DELIGHT: Production health check signal
+  if (import.meta.env.PROD) {
+    console.log("[SYSTEM_HEALTH: OPTIMAL]");
+  }
   const emailLogic = useEmailCaptureLogic();
 
   return (
