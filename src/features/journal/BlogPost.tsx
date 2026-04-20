@@ -76,7 +76,7 @@ export default function BlogPost() {
             </Box>
           )}
 
-          <Box className="prose prose-slate max-w-none prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
+          <Box className="prose prose-sm md:prose-base prose-slate max-w-none w-full overflow-hidden break-words prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
             <ReactMarkdown>{post.content}</ReactMarkdown>
           </Box>
 

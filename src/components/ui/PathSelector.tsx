@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 export default function PathSelector() {
   return (
-    <div className="grid grid-cols-12 gap-0 border-y border-line min-h-[60vh]">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full">
       {/* Dancer Path: Lifestyle & Gear */}
-      <div className="col-span-12 lg:col-span-7 relative group overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900 bg-[length:200%_200%] animate-gradient">
+      <div className="md:col-span-12 lg:col-span-7 relative group overflow-hidden border-r border-line bg-gradient-to-br from-slate-900 to-blue-900 bg-[length:200%_200%] animate-gradient w-full">
         {/* Scanning Scanline Effect */}
         <motion.div
            variants={{ hover: { top: '100%', opacity: 1 } }}
@@ -33,7 +33,7 @@ export default function PathSelector() {
       </div>
 
       {/* Tech Path: Robotics & AI */}
-      <div className="col-span-12 lg:col-span-5 relative group overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950 bg-[length:200%_200%] animate-gradient">
+      <div className="md:col-span-12 lg:col-span-5 relative group overflow-hidden bg-gradient-to-br from-slate-800 to-blue-950 bg-[length:200%_200%] animate-gradient w-full">
         {/* Scanning Scanline Effect */}
         <motion.div
            variants={{ hover: { top: '100%', opacity: 1 } }}

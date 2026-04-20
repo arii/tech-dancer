@@ -47,7 +47,7 @@ export default function Navigation() {
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
-        <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2}>
+        <Box as="button" onClick={() => setIsOpen(!isOpen)} padding={2} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </Box>
       </Box>
@@ -61,7 +61,7 @@ export default function Navigation() {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             position="fixed"
-            className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden"
+            className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
             padding={8}
             overflow="y-auto"
           >
