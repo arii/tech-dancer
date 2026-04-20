@@ -4,7 +4,35 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import matter from 'gray-matter';
+/**
+ * Lightweight browser-safe frontmatter parser.
+ */
+function parseFrontmatter(content: string) {
+  const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
+  if (!match) return { data: {}, content };
+
+  const yaml = match[1];
+  const body = match[2];
+  const data: Record<string, any> = {};
+
+  yaml.split('\n').forEach(line => {
+    const [key, ...vals] = line.split(':');
+    if (key && vals.length) {
+      let value = vals.join(':').trim();
+      // Basic type conversion
+      if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+      else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+
+      if (value.includes(',')) {
+        data[key.trim()] = value.split(',').map(v => v.trim());
+      } else {
+        data[key.trim()] = value;
+      }
+    }
+  });
+
+  return { data, content: body };
+}
 
 export interface Post {
   slug: string;
@@ -69,7 +97,7 @@ function transform<T>(modules: Record<string, any>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
-      const { data, content } = matter(contentStr);
+      const { data, content } = parseFrontmatter(contentStr);
       return { ...data, content, slug: slugFrom(path) } as unknown as T;
     })
     .sort((a: any, b: any) => (a.date && b.date ? +new Date(b.date) - +new Date(a.date) : 0));
