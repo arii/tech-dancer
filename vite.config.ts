@@ -4,8 +4,6 @@ import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
-const DEFAULT_IMAGE_QUALITY = { quality: 80 };
-
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   
@@ -21,12 +19,25 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       ViteImageOptimizer({
-        webp: DEFAULT_IMAGE_QUALITY,
-        png: DEFAULT_IMAGE_QUALITY,
-        jpeg: DEFAULT_IMAGE_QUALITY,
-        jpg: DEFAULT_IMAGE_QUALITY,
-        avif: { quality: 70 },
+        includePublic: true,
+        logStats: true,
+        webp: {
+          quality: 80,
+        },
+        png: {
+          quality: 90,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        jpg: {
+          quality: 80,
+        },
+        avif: {
+          quality: 70,
+        },
         svg: {
+          multipass: true,
           plugins: [
             {
               name: 'removeViewBox',
