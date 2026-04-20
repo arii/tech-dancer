@@ -18,11 +18,7 @@ class EEPROLedgerFeeder:
         self.ledger_path = ledger_path
 
     def standardize_mark(self, mark_text):
-        mark_text = mark_text.strip()
-        if mark_text in POINTS_MAPPING:
-            return POINTS_MAPPING[mark_text]
-        logging.warning(f"Unknown mark encountered: {mark_text}")
-        return 0.0
+        return POINTS_MAPPING.get(mark_text.strip(), 0.0)
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def scrape_scoring_dance(self, url):
@@ -31,12 +27,7 @@ class EEPROLedgerFeeder:
             context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
             page = await context.new_page()
             await page.goto(url)
-            try:
-                await page.wait_for_selector('table.results-table', state='attached', timeout=10000)
-            except Exception as e:
-                logging.error(f"Critical failure: {e}")
-                await browser.close()
-                raise e
+            await page.wait_for_selector('table.results-table', state='attached', timeout=10000)
             content = await page.content()
             await browser.close()
             return self.parse_scoring_dance(content)
@@ -92,7 +83,6 @@ class EEPROLedgerFeeder:
         return pd.DataFrame(results)
 
     async def extract_scoring_dance_table(self, url: str) -> pd.DataFrame:
-        logging.info(f"Syncing WSDC Registry Ledger from Scoring.Dance URL: {url}")
         try:
             raw_df = await self.scrape_scoring_dance(url)
         except Exception:

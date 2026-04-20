@@ -34,7 +34,7 @@ jobs:
 
       - name: Execute Extraction Script
         run: |
-          python etl/scraper.py
+          python etl/scraper.py "https://scoring.dance/enCA/events/190/results/2945.html"
 
       - name: Validate Output
         run: |
