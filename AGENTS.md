@@ -75,3 +75,8 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 - Layout primitives (`Box`, `Grid`, `Stack`) MUST reside in `src/layouts/`
 - Page-level compositors MUST reside in `src/pages/`
 - Component imports MUST use the `@/layouts/` or `@/pages/` alias
+
+## 22. 🛤 Code Splitting & SPA Routing
+- Application routes MUST be code-split using `React.lazy()` or equivalent dynamic imports to keep bundles small.
+- Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries.
+- Ensure the application maintains single-page application (SPA) characteristics with environment-agnostic routing (e.g., handling base URLs cleanly for GitHub Pages).

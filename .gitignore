@@ -7,6 +7,8 @@ coverage/
 *.log
 .env*
 !.env.example
+*.swp
+*.swo
 playwright-report/
 test-results/
 
