@@ -11,20 +11,6 @@ export function useResearch() {
 
   const tools = [
     {
-      id: 'seo-analysis',
-      name: 'SEO Analysis & Engagement',
-      category: 'Tech-Dancer Analytics',
-      status: 'Coming Soon',
-      layman: 'Analyzing engagement metrics and search visibility for the tech-dancer platform.'
-    },
-    {
-      id: 'blog-drafter',
-      name: 'Blog Post Drafter',
-      category: 'Content Generation',
-      status: 'Active',
-      layman: 'An AI-assisted tool designed to streamline the research and drafting process for blog content.'
-    },
-    {
       id: 'wcs-scraper',
       name: 'WCS Prelim Scoring Scraper',
       category: 'Dance Research',
@@ -32,11 +18,18 @@ export function useResearch() {
       layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
     },
     {
+      id: 'blog-drafter',
+      name: 'Blog Post Drafter',
+      category: 'Content Generation',
+      status: 'Active',
+      layman: 'Drafter tool to generate blog posts using AI with human feedback in the loop.'
+    },
+    {
       id: 'flight-finder',
       name: 'Event Flight Finder',
       category: 'Logistics',
       status: 'Active',
-      layman: 'Optimizing travel routes and finding the best flights for major West Coast Swing events.'
+      layman: 'Flight finder for WCS events - optimizing travel routes and finding the best deals.'
     }
   ];
 
