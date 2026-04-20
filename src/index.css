@@ -24,6 +24,8 @@
   
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
+  --gap-text: 0.5rem;
+  --gap-group: 1rem;
 
   /* Motion Primitives */
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -90,7 +92,10 @@
 }
 
 .panel {
-  @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;
+  @apply bg-bg p-6 md:p-12 relative overflow-hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .nav-rail {
