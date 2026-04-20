@@ -6,6 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+playwright-report/
+test-results/
 
 # Python / ETL
 __pycache__/
