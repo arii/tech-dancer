@@ -106,21 +106,22 @@ export default function Navigation() {
           </Box>
 
           <Stack as="ul" gap={2}>
-            <Box 
-              as="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
-              display="flex"
-              align="center"
-              gap={4}
-              width="full"
-              paddingY={6}
-              paddingX={4}
-              radius="md"
-              className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
-              aria-label="Open search overlay"
-            >
-              <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-              <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
+            <Box as="li">
+              <Box
+                as="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+                display="flex"
+                align="center"
+                gap={4}
+                width="full"
+                paddingY={6}
+                paddingX={4}
+                radius="md"
+                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+              >
+                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
+              </Box>
             </Box>
 
             {routes.filter(r => r.path !== '/').map((item) => (
