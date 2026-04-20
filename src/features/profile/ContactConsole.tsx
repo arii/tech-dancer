@@ -190,6 +190,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
               variant="primary"
               disabled={isSubmitting}
               fullWidth
+              className="tracking-[3px] text-xs"
             >
               {isSubmitting ? (
                 <Stack direction="row" align="center" gap={3}>

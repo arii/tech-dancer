@@ -9,18 +9,19 @@ interface ButtonProps extends BaseProps, React.ButtonHTMLAttributes<HTMLButtonEl
   size?: "sm" | "md" | "lg"
   fullWidth?: boolean
   loading?: boolean
+  disableMinSize?: boolean
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "solid", intent = "default", size = "md", fullWidth, loading, children, ...props }, ref) => {
+  ({ className, variant = "solid", intent = "default", size = "md", fullWidth, loading, disableMinSize, children, ...props }, ref) => {
     return (
       <Box
         as="button"
         ref={ref as any}
         cursor="pointer"
         className={cn(
-          "inline-flex items-center justify-center transition-all duration-300 font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed",
-          "min-h-[44px] min-w-[44px]",
+          "inline-flex items-center justify-center font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed",
+          !disableMinSize && "min-h-[44px] min-w-[44px]",
           variants.emphasis[variant],
           variants.intent[intent],
           size === "sm" && "px-4 py-2 text-[10px]",

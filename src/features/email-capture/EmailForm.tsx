@@ -23,7 +23,6 @@ export function EmailForm() {
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          minWidth={60}
           className="w-full sm:w-auto"
         >
           <AnimatePresence mode="wait">

@@ -22,7 +22,7 @@ export const variants = {
     solid: "bg-text-main text-bg border-transparent",
     outline: "border border-line bg-transparent",
     ghost: "bg-transparent hover:bg-line/10",
-    primary: "bg-accent text-white hover:bg-text-main transition-all duration-200 active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(255,127,80,0.3)]",
+    primary: "bg-accent text-white hover:bg-text-main transition-all duration-300 active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(0,123,255,0.3)]",
   },
   radius: {
     none: "rounded-none",
