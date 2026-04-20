@@ -2,9 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Post, Resource, Study, Event } from '@/lib/content';
-
-type ContentItem = Post | Resource | Study | Event;
+import { ContentItem } from '@/lib/content';
 
 interface ContentDetailProps {
   post: ContentItem;
@@ -17,13 +15,10 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
   const title = post.title;
   const content = post.content;
 
-  // Type-safe metadata extraction
-  const date = (post as Post | Resource | Study).date || '';
-  const category = (post as Post | Resource | Study).category || '';
-  const image = (post as Post | Resource).image;
-
-  // Post and Study always have author. Resource doesn't (per interface).
-  const author = (post as Post | Study).author || 'Ariel';
+  const date = 'date' in post ? post.date : '';
+  const category = 'category' in post ? post.category : '';
+  const image = 'image' in post ? post.image : undefined;
+  const author = 'author' in post ? post.author : 'Ariel';
 
   return (
     <Box as="article" padding="panel">

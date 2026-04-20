@@ -5,12 +5,6 @@
  */
 
 import matter from 'gray-matter';
-import { Buffer } from 'buffer';
-
-// Local polyfill for Buffer to ensure gray-matter works during eager loading
-if (typeof window !== 'undefined') {
-  (window as any).Buffer = (window as any).Buffer || Buffer;
-}
 
 export interface Post {
   slug: string;
@@ -62,7 +56,7 @@ export interface Event {
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
-const contentModules: Record<ContentType, Record<string, any>> = {
+const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
@@ -76,33 +70,33 @@ function transform<T>(modules: Record<string, any>): T[] {
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
       const { data, content } = matter(contentStr);
-      return { 
-        ...data, 
-        content, 
-        slug: slugFrom(path) 
-      } as unknown as T;
+      return { ...data, content, slug: slugFrom(path) } as unknown as T;
     })
-    .sort((a: any, b: any) => {
-      if (a.date && b.date) return +new Date(b.date) - +new Date(a.date);
-      return 0;
-    });
+    .sort((a: any, b: any) => (a.date && b.date ? +new Date(b.date) - +new Date(a.date) : 0));
 }
 
-const registry = (Object.keys(contentModules) as ContentType[]).reduce((acc, type) => {
-  const items = transform<ContentItem>(contentModules[type]);
-  acc.items[type] = items;
-  acc.maps[type] = new Map(items.map(i => [i.slug, i]));
-  return acc;
-}, { items: {} as Record<ContentType, ContentItem[]>, maps: {} as Record<ContentType, Map<string, ContentItem>> });
+const items = {
+  posts: transform<Post>(contentModules.posts),
+  resources: transform<Resource>(contentModules.resources),
+  studies: transform<Study>(contentModules.studies),
+  events: transform<Event>(contentModules.events)
+};
 
-export const getPosts = () => registry.items.posts as Post[];
-export const getResources = () => registry.items.resources as Resource[];
-export const getStudies = () => registry.items.studies as Study[];
-export const getEvents = () => registry.items.events as Event[];
+const maps = {
+  posts: new Map(items.posts.map(i => [i.slug, i])),
+  resources: new Map(items.resources.map(i => [i.slug, i])),
+  studies: new Map(items.studies.map(i => [i.slug, i])),
+  events: new Map(items.events.map(i => [i.slug, i]))
+};
 
-export const getPostBySlug = (slug: string) => registry.maps.posts.get(slug) as Post | undefined;
-export const getResourceBySlug = (slug: string) => registry.maps.resources.get(slug) as Resource | undefined;
-export const getStudyBySlug = (slug: string) => registry.maps.studies.get(slug) as Study | undefined;
-export const getEventBySlug = (slug: string) => registry.maps.events.get(slug) as Event | undefined;
+export const getPosts = () => items.posts;
+export const getResources = () => items.resources;
+export const getStudies = () => items.studies;
+export const getEvents = () => items.events;
 
-export const getAllContent = (type: ContentType) => registry.items[type];
+export const getPostBySlug = (slug: string) => maps.posts.get(slug);
+export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+export const getStudyBySlug = (slug: string) => maps.studies.get(slug);
+export const getEventBySlug = (slug: string) => maps.events.get(slug);
+
+export const getAllContent = (type: ContentType): ContentItem[] => items[type];
