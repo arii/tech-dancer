@@ -4,6 +4,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": false,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
