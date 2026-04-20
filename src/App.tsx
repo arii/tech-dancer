@@ -7,6 +7,9 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
+import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
+import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
+import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
@@ -23,32 +26,43 @@ import { Box } from './layouts/Primitives';
 export default function App() {
   const location = useLocation();
 
+  // MECHANICAL_DELIGHT: Production health check signal
+  if (import.meta.env.PROD) {
+    console.log("[SYSTEM_HEALTH: OPTIMAL]");
+  }
+  const emailLogic = useEmailCaptureLogic();
+
   return (
-    <MainLayout>
-      <AnimatePresence mode="wait">
-        <Box
-          as={motion.div}
-          key={location.pathname}
-          initial={motionTokens.page.initial}
-          animate={motionTokens.page.animate}
-          exit={motionTokens.page.exit}
-          transition={motionTokens.page.transition}
-          height="full"
-        >
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/gear" element={<GearReviews />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/research/:id" element={<ResearchDetail />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </Box>
+    <EmailCaptureProvider {...emailLogic}>
+      <MainLayout>
+        <AnimatePresence mode="wait">
+          <Box
+            as={motion.div}
+            key={location.pathname}
+            initial={motionTokens.page.initial}
+            animate={motionTokens.page.animate}
+            exit={motionTokens.page.exit}
+            transition={motionTokens.page.transition}
+            height="full"
+          >
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/gear" element={<GearReviews />} />
+              <Route path="/research" element={<Research />} />
+              <Route path="/research/:id" element={<ResearchDetail />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </Box>
+        </AnimatePresence>
+      </MainLayout>
+      <AnimatePresence>
+        {emailLogic.showEmailBar && <EmailCaptureBar />}
       </AnimatePresence>
-    </MainLayout>
+    </EmailCaptureProvider>
   );
 }

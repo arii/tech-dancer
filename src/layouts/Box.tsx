@@ -2,6 +2,8 @@ import React from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
+import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
+import { variants } from "@/styles/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 
 export interface BaseProps {
@@ -155,7 +157,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           maxHeight && getVal(maxHeight, "max-h"),
           minWidth && getVal(minWidth, "min-w"),
           overflow && `overflow-${overflow}`,
-          zIndex && getVal(zIndex, "z"),
+          zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
           opacity && getVal(opacity, "opacity"),
           getResponsiveClasses(display, ""),
           aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
