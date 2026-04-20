@@ -60,13 +60,7 @@ export default function Navigation() {
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
-            position="fixed"
-            inset={true}
-            zIndex={100}
-            paddingX={8}
-            paddingY={24}
-            className="lg:hidden bg-bg"
-            surface={false}
+            className="fixed top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden p-8 overflow-y-auto"
           >
             <Box as="ul" className="space-y-6">
               {routes.filter(r => r.path !== '/').map((item) => (
