@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
 import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
+import { EmailCaptureProvider, useEmailCaptureContext } from './features/email-capture/EmailCaptureContext';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
@@ -24,19 +25,10 @@ import { Box } from './layouts/Primitives';
 
 export default function App() {
   const location = useLocation();
-  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>('idle');
-  const [showEmailBar, setShowEmailBar] = useState(true);
-
-  const handleFormSubmit = () => {
-    setFormStatus('loading');
-    setTimeout(() => {
-      setFormStatus('success');
-      setTimeout(() => setShowEmailBar(false), 2000);
-    }, 800);
-  };
 
   return (
-    <MainLayout>
+    <EmailCaptureProvider>
+      <MainLayout>
       <AnimatePresence mode="wait">
         <Box
           as={motion.div}
@@ -62,11 +54,18 @@ export default function App() {
         </Box>
       </AnimatePresence>
 
-      <AnimatePresence>
-        {showEmailBar && (
-          <EmailCaptureBar status={formStatus} onSubmit={handleFormSubmit} />
-        )}
-      </AnimatePresence>
-    </MainLayout>
+      <EmailCaptureOverlay />
+      </MainLayout>
+    </EmailCaptureProvider>
+  );
+}
+
+function EmailCaptureOverlay() {
+  const { status, showEmailBar } = useEmailCaptureContext();
+
+  return (
+    <AnimatePresence>
+      {showEmailBar && <EmailCaptureBar status={status} />}
+    </AnimatePresence>
   );
 }

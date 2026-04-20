@@ -6,10 +6,9 @@ import { motion } from 'motion/react';
 
 interface EmailCaptureBarProps {
   status?: 'idle' | 'loading' | 'success';
-  onSubmit?: () => void;
 }
 
-export function EmailCaptureBar({ status, onSubmit }: EmailCaptureBarProps) {
+export function EmailCaptureBar({ status }: EmailCaptureBarProps) {
   return (
     <Box 
       as={motion.div}
@@ -47,7 +46,7 @@ export function EmailCaptureBar({ status, onSubmit }: EmailCaptureBarProps) {
           </Stack>
         </Stack>
         
-        <EmailForm status={status} onSubmit={onSubmit} />
+        <EmailForm status={status} />
       </Stack>
     </Box>
   );

@@ -1,33 +1,33 @@
 import { useEffect } from 'react';
+import { useState } from 'react';
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
-import { useEmailCapture } from './useEmailCapture';
+import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
 
 interface EmailFormProps {
   status?: 'idle' | 'loading' | 'success';
-  onSubmit?: () => void;
 }
 
-export function EmailForm({ status: propsStatus, onSubmit }: EmailFormProps) {
-  const { email, setEmail, status: internalStatus, handleSubmit: internalHandleSubmit } = useEmailCapture();
+export function EmailForm({ status: propsStatus }: EmailFormProps) {
+  const { status: contextStatus, submitForm } = useEmailCaptureContext();
+  const [email, setEmail] = useState('');
 
-  const status = propsStatus || internalStatus;
+  const status = propsStatus || contextStatus;
 
   useEffect(() => {
     if (status === 'success') {
+      // MECHANICAL_NOTE: Resetting email on success ensures a clean UI
+      // and prevents duplicate accidental submissions during the exit animation.
       setEmail('');
     }
-  }, [status, setEmail]);
+  }, [status]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    if (onSubmit) {
-      e.preventDefault();
-      onSubmit();
-    } else {
-      internalHandleSubmit(e);
-    }
+    e.preventDefault();
+    if (!email) return;
+    submitForm(email);
   };
 
   return (
