@@ -10,6 +10,7 @@ import { motionTokens } from './styles/motion';
 
 import Home from './pages/Home';
 import GearReviews from './pages/Gear';
+import GearPost from './pages/GearPost';
 import Research from './pages/Research';
 import Resources from './pages/Resources';
 import About from './pages/About';
@@ -38,6 +39,7 @@ export default function App() {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
             <Route path="/gear" element={<GearReviews />} />
+            <Route path="/gear/:slug" element={<GearPost />} />
             <Route path="/research" element={<Research />} />
             <Route path="/research/:id" element={<ResearchDetail />} />
             <Route path="/blog" element={<Blog />} />

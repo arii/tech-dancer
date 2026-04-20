@@ -100,6 +100,22 @@ export function getEvents(): Event[] {
   return transform<Event>(eventModules);
 }
 
+export function getPostBySlug(slug: string): Post | undefined {
+  return getPosts().find(p => p.slug === slug);
+}
+
+export function getResourceBySlug(slug: string): Resource | undefined {
+  return getResources().find(r => r.slug === slug);
+}
+
+export function getStudyBySlug(slug: string): Study | undefined {
+  return getStudies().find(s => s.slug === slug);
+}
+
+export function getEventBySlug(slug: string): Event | undefined {
+  return getEvents().find(e => e.slug === slug);
+}
+
 /**
  * Legacy support for ContentItem usage during migration
  */
