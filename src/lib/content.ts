@@ -5,6 +5,12 @@
  */
 
 import matter from 'gray-matter';
+import { Buffer } from 'buffer';
+
+// Local polyfill for Buffer to ensure gray-matter works during eager loading
+if (typeof window !== 'undefined') {
+  window.Buffer = window.Buffer || Buffer;
+}
 
 export interface Post {
   slug: string;
