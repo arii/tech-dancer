@@ -21,9 +21,9 @@ export function EmailForm() {
         />
         <Button
           type="submit"
+          variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          minWidth={60}
-          className="min-h-[44px] w-full sm:w-auto"
+          className="w-full sm:w-auto"
         >
           <AnimatePresence mode="wait">
             {status === 'loading' ? (

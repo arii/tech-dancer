@@ -15,16 +15,16 @@ export default function PathSelector() {
            className="absolute left-0 right-0 h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none"
         />
 
-        <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-bg via-bg/40 to-transparent">
-          <h2 className="text-4xl md:text-6xl font-display font-black mb-4">ARE YOU A DANCER?</h2>
-          <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-accent font-bold">
+        <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+          <h2 className="text-4xl md:text-6xl font-display font-black mb-4 text-white">ARE YOU A DANCER?</h2>
+          <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold">
             <li>
-              <NavLink to="/blog?category=Lifestyle" className="hover:text-white transition-colors flex items-center gap-2">
+              <NavLink to="/blog?category=Lifestyle" className="hover:text-accent transition-colors flex items-center gap-2">
                 &rarr; Lifestyle blog posts
               </NavLink>
             </li>
             <li>
-              <NavLink to="/gear" className="hover:text-white transition-colors flex items-center gap-2">
+              <NavLink to="/gear" className="hover:text-accent transition-colors flex items-center gap-2">
                 &rarr; Gear reviews
               </NavLink>
             </li>
@@ -43,16 +43,16 @@ export default function PathSelector() {
            className="absolute left-0 right-0 h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none"
         />
 
-        <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-bg via-bg/40 to-transparent">
-          <h2 className="text-3xl md:text-5xl font-display font-black mb-4 text-accent-navy">HIRING A ROBOTICIST?</h2>
-          <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-accent font-bold">
+        <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+          <h2 className="text-3xl md:text-5xl font-display font-black mb-4 text-white">HIRING A ROBOTICIST?</h2>
+          <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold">
             <li>
-              <NavLink to="/blog?category=Tech" className="hover:text-accent-navy transition-colors flex items-center gap-2">
+              <NavLink to="/blog?category=Tech" className="hover:text-accent transition-colors flex items-center gap-2">
                 &rarr; Tech blog posts
               </NavLink>
             </li>
             <li>
-              <NavLink to="/research" className="hover:text-accent-navy transition-colors flex items-center gap-2">
+              <NavLink to="/research" className="hover:text-accent transition-colors flex items-center gap-2">
                 &rarr; Data & Development Lab
               </NavLink>
             </li>
