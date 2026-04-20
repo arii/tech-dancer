@@ -10,8 +10,9 @@
   --color-bg: #F8F9FA;        /* Off-White Primary */
   --color-surface: #FFFFFF;    /* Surface Secondary */
   --color-line: #E9ECEF;       /* Muted Borders */
-  --color-accent: #007BFF;     /* Electric Blue Accent */
-  --color-accent-navy: #1A2B3C; /* Deep Navy (Text/Deep Accent) */
+  --color-accent: #007BFF;
+  --color-accent-shadow: rgba(255, 127, 80, 0.3);
+  --color-accent-navy: #1A2B3C;
   --color-text-main: #1A2B3C;  /* Deep Navy */
   --color-text-body: #2D3748;
   --color-text-dim: #4B4B4B;   /* Darkened for WCAG AA (5.2:1 contrast) */
@@ -88,6 +89,7 @@
     @apply text-text-body break-words;
   }
 }
+
 
 .panel {
   @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;
