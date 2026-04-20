@@ -20,7 +20,6 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       ViteImageOptimizer({
         includePublic: true,
-        logStats: true,
         webp: {
           quality: 80,
         },
@@ -30,20 +29,11 @@ export default defineConfig(({mode}) => {
         jpeg: {
           quality: 80,
         },
-        jpg: {
-          quality: 80,
-        },
         avif: {
           quality: 70,
         },
         svg: {
           multipass: true,
-          plugins: [
-            {
-              name: 'removeViewBox',
-              active: false,
-            },
-          ],
         },
       }),
     ],
