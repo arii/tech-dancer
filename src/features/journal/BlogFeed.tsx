@@ -11,7 +11,9 @@ export default function BlogFeed() {
     return (
       <Box as="section" padding="panel" display="flex" align="center" justify="center">
         <Stack gap={4} align="center" textAlign="center">
-          <AlertCircle className="w-12 h-12 text-accent-brand opacity-20" />
+          <Box display="flex" align="center" justify="center" opacity={20} color="brand">
+            <AlertCircle className="w-12 h-12" />
+          </Box>
           <Text variant="display" size="2xl">System Error</Text>
           <Text variant="mono" size="xs" color="dim">{error}</Text>
         </Stack>

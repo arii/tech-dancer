@@ -1,15 +1,26 @@
-import { motion } from 'motion/react';
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
-import React from 'react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { cn } from '@/lib/utils';
 
+interface ContactFormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface ContactFormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
+
 interface ContactFormProps {
-  formData: any;
-  errors: any;
+  formData: ContactFormData;
+  errors: ContactFormErrors;
   isSubmitting: boolean;
-  onChange: (e: React.ChangeEvent<any>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
@@ -47,7 +58,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-[0.15em] uppercase">{item.channel}</Text>
+                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" uppercase tracking="widest">{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}
@@ -59,7 +70,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
             <Box as="form" onSubmit={onSubmit} className="space-y-8">
               <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
-                  <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
+                  <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" uppercase tracking="widest">Your Name</Text>
                   {errors.name && <Text id="name-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.name}</Text>}
                 </Box>
                 <Box as="input"
@@ -79,7 +90,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
               </Stack>
               <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
-                  <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
+                  <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" uppercase tracking="widest">Your Email</Text>
                   {errors.email && <Text id="email-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.email}</Text>}
                 </Box>
                 <Box as="input"
@@ -98,7 +109,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                 />
               </Stack>
               <Stack gap={3}>
-                <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
+                <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" uppercase tracking="widest">Subject</Text>
                 <Box as="select"
                   id="contact-subject"
                   name="subject"
@@ -114,7 +125,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
               </Stack>
               <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
-                  <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
+                  <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" uppercase tracking="widest">Message</Text>
                   {errors.message && <Text id="message-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.message}</Text>}
                 </Box>
                 <Box as="textarea"

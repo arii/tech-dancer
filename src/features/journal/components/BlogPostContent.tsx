@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPostBySlug } from '@/lib/content';
 import { ContentDetail } from '@/layouts/ContentDetail';
@@ -7,7 +6,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 export function BlogPostContent() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const post = useMemo(() => slug ? getPostBySlug(slug) : undefined, [slug]);
+  const post = slug ? getPostBySlug(slug) : undefined;
 
   if (!post) {
     return (

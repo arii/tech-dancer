@@ -1,4 +1,3 @@
-import React from 'react';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { ContactForm } from './components/ContactForm';
 import { ContactSuccess } from './components/ContactSuccess';
