@@ -20,6 +20,20 @@ TOKEN = get_github_token()
 ENV_REPO = os.getenv("GH_REPO")
 REVIEW_LOG = os.path.expanduser("~/.gh_pending_reviews")
 
+# Default structured review body template (anti-slop directives).
+# Agents should replace the placeholder sections with actual findings.
+REVIEW_BODY_TEMPLATE = """\
+## ANTI-AI-SLOP
+<!-- Flag: verbose comments, over-engineering, duplicate patterns, unnecessary abstractions. -->
+<!-- Audit ratio: if additions > 100 lines, find 10+ lines to remove. -->
+
+## FINDINGS
+<!-- Per-file critical feedback. Inline comments cover specific lines. -->
+
+## FINAL RECOMMENDATION
+<!--  Approved | Approved with Minor Changes | Not Approved -->
+"""
+
 # ==========================================
 # API INTERACTION LAYER
 # ==========================================
@@ -110,7 +124,9 @@ class GitHubAPI:
             print(f"[Dry-Run] Would submit review {review_id} as {event}")
             return
         self._request("POST", f"pulls/{pr_num}/reviews/{review_id}/events", {"event": event.upper()})
-        print(f"🚀 Review {review_id} submitted as {event}.")
+        review_url = f"https://github.com/{self.repo}/pull/{pr_num}#pullrequestreview-{review_id}"
+        print(f"🚀 Review submitted as {event}.")
+        print(f"🔗 {review_url}")
 
     def submit_review(self, pr_num, event, review_id=None):
         if not review_id:
@@ -119,7 +135,9 @@ class GitHubAPI:
             review_id = pending['id']
 
         self._request("POST", f"pulls/{pr_num}/reviews/{review_id}/events", {"event": event.upper()})
-        print(f"🚀 Review {review_id} submitted as {event}.")
+        review_url = f"https://github.com/{self.repo}/pull/{pr_num}#pullrequestreview-{review_id}"
+        print(f"🚀 Review submitted as {event}.")
+        print(f"🔗 {review_url}")
 
 
 # ==========================================
