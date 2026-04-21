@@ -9,12 +9,16 @@ export default defineConfig(({mode}) => {
   // Dynamic base path for GitHub Pages vs Vercel
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
-  const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
-  const base = isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/');
+
+  // Base path priority: 1. ENV, 2. Vercel, 3. GH Actions, 4. Local fallback
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction ? '/tech-dancer/' : '/'));
 
   return {
     base,
+    define: {
+      'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),
+    },
     plugins: [
       react(),
       tailwindcss(),
