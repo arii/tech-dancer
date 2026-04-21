@@ -24,7 +24,16 @@ export function PageHeader({
   return (
     <Box paddingBottom={paddingBottom} border={border} marginBottom={marginBottom} as="header">
       <Stack gap={1}>
-        <Text variant="label" size="tiny" color="dim" weight="font-bold" display="block" marginBottom={2}>
+        <Text
+          variant="label"
+          size="xs"
+          color="dim"
+          weight="font-bold"
+          display="block"
+          marginBottom={2}
+          uppercase
+          tracking="widest"
+        >
           {label}
         </Text>
         <Text as="h1" variant="headline" size="4xl" weight="font-black" color="main" marginBottom={1}>
@@ -50,7 +59,7 @@ export function SectionHeader({ label, title, children }: { label: string; title
   return (
     <Box display="flex" justify="between" align="end" border="b" paddingBottom={4}>
       <Stack gap={1}>
-        <Text variant="label" size="xs" color="dim" weight="font-semibold">{label}</Text>
+        <Text variant="label" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{label}</Text>
         <Text as="h2" variant="display" size="3xl" weight="font-black" color="main">{title}</Text>
       </Stack>
       {children}

@@ -35,7 +35,9 @@ export interface BaseProps {
   position?: "fixed" | "sticky" | "absolute" | "relative"
   inset?: boolean | "top" | "bottom" | "left" | "right" | "x" | "y"
   height?: "full" | "screen" | "auto" | "min" | "fit" | number | string
+  width?: "full" | "screen" | "auto" | "min" | "fit" | number | string
   maxHeight?: "full" | "screen" | "auto" | "min" | "fit" | number | string
+  minHeight?: "full" | "screen" | "auto" | "min" | "fit" | number | string
   minWidth?: "0" | "full" | "min" | "fit" | number | string
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl"
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden"
@@ -45,6 +47,8 @@ export interface BaseProps {
   aspect?: "square" | "video" | "auto" | string
   shrink?: number | boolean
   self?: "start" | "center" | "end" | "stretch" | "auto"
+  span?: ResponsiveProp<number | string>
+  cursor?: string
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly"
   align?: "start" | "center" | "end" | "baseline" | "stretch"
 }
@@ -99,7 +103,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
 
     // Remove props that shouldn't be spread to DOM elements
     const {
-      // ... already destructured above
+      // already destructured above
       ...domProps
     } = props;
 
@@ -172,7 +176,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           className
         )}
         {...motionProps}
-        {...props}
+        {...domProps}
       />
     )
   }
