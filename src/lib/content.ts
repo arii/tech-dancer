@@ -15,33 +15,42 @@ function parseFrontmatter(content: string) {
   const body = match[2];
   const data: Record<string, any> = {};
 
+  let currentKey = '';
   yaml.split('\n').forEach(line => {
-    const [key, ...vals] = line.split(':');
-    if (key && vals.length) {
-      const parsedKey = key.trim();
-      let value = vals.join(':').trim();
-      // Handle arrays
-      if (value.startsWith('[') && value.endsWith(']')) {
-        const inner = value.slice(1, -1).trim();
-        if (inner.length === 0) {
-          data[parsedKey] = [];
-        } else {
-          data[parsedKey] = inner.split(',').map(v => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    if (line.startsWith('  - ')) {
+      // List item
+      if (currentKey) {
+        if (!Array.isArray(data[currentKey])) data[currentKey] = [];
+        let val = trimmed.replace(/^- /, '').trim();
+        if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+        else if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+        data[currentKey].push(val);
+      }
+    } else {
+      const colonIdx = line.indexOf(':');
+      if (colonIdx !== -1) {
+        const key = line.slice(0, colonIdx).trim();
+        let value = line.slice(colonIdx + 1).trim();
+        currentKey = key;
+
+        if (value.startsWith('[') && value.endsWith(']')) {
+          const inner = value.slice(1, -1).trim();
+          data[key] = inner ? inner.split(',').map(v => {
             let item = v.trim();
             if (item.startsWith('"') && item.endsWith('"')) item = item.slice(1, -1);
             else if (item.startsWith("'") && item.endsWith("'")) item = item.slice(1, -1);
             return item;
-          });
-        }
-      } else {
-        // Basic type conversion for strings
-        if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
-        else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+          }) : [];
+        } else if (value) {
+          if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+          else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
 
-        if (value.includes(',')) {
-          data[parsedKey] = value.split(',').map(v => v.trim());
-        } else {
-          data[parsedKey] = value;
+          // Basic numeric conversion for rating
+          if (key === 'rating') data[key] = parseFloat(value);
+          else data[key] = value;
         }
       }
     }
@@ -73,6 +82,10 @@ export interface Resource {
   image?: string;
   tags?: string[];
   affiliateIds?: string[];
+  rating?: number;
+  verdict?: string;
+  priceCategory?: string;
+  updatedDate?: string;
 }
 
 export interface Study {
@@ -100,6 +113,10 @@ export interface Event {
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
+interface ContentModule {
+  default: string;
+}
+
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
@@ -109,10 +126,10 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
-function transform<T>(modules: Record<string, any>): T[] {
+function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
-      const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
+      const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
       return {
         ...data,
@@ -126,7 +143,15 @@ function transform<T>(modules: Record<string, any>): T[] {
         slug: slugFrom(path)
       } as unknown as T;
     })
-    .sort((a: any, b: any) => (a.date && b.date ? +new Date(b.date) - +new Date(a.date) : 0));
+    .sort((a, b) => {
+      const timeA = a.date ? new Date(a.date).getTime() : 0;
+      const timeB = b.date ? new Date(b.date).getTime() : 0;
+
+      const safeA = Number.isNaN(timeA) ? 0 : timeA;
+      const safeB = Number.isNaN(timeB) ? 0 : timeB;
+
+      return safeB - safeA;
+    });
 }
 
 const items = {

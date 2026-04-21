@@ -19,7 +19,7 @@ export function BlogDrafter() {
            <Stack gap={2} display="flex" align="start" direction="row">
               <Info className="w-4 h-4 text-accent-brand shrink-0 mt-1" />
               <Text variant="body" size="xs">
-                This tool prepares your blog post for the Tech-Dancer automated pipeline. 
+                This tool prepares your blog post for the Tech-Dancer automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
               </Text>
            </Stack>
@@ -32,11 +32,11 @@ export function BlogDrafter() {
           <Box border="b" paddingBottom={2}>
              <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
           </Box>
-          
+
           <Stack gap={6}>
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim">POST_TITLE</Text>
-              <Box 
+              <Box
                 as="input"
                 type="text"
                 value={data.title}
@@ -55,7 +55,7 @@ export function BlogDrafter() {
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
                 <Text variant="mono" size="micro" color="dim">CATEGORY</Text>
-                <Box 
+                <Box
                   as="select"
                   value={data.category}
                   onChange={(e: any) => updateField('category', e.target.value)}
@@ -74,7 +74,7 @@ export function BlogDrafter() {
               </Stack>
               <Stack gap={2}>
                 <Text variant="mono" size="micro" color="dim">DATE</Text>
-                <Box 
+                <Box
                   as="input"
                   type="date"
                   value={data.date}
@@ -92,7 +92,7 @@ export function BlogDrafter() {
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim">EXCERPT_SUMMARY</Text>
-              <Box 
+              <Box
                 as="textarea"
                 value={data.excerpt}
                 onChange={(e: any) => updateField('excerpt', e.target.value)}
@@ -110,7 +110,7 @@ export function BlogDrafter() {
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
-              <Box 
+              <Box
                 as="input"
                 type="url"
                 value={data.affiliateLink}
@@ -128,7 +128,7 @@ export function BlogDrafter() {
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
-              <Box 
+              <Box
                 as="textarea"
                 value={data.commentary}
                 onChange={(e: any) => updateField('commentary', e.target.value)}
@@ -156,12 +156,12 @@ export function BlogDrafter() {
              </Box>
           </Box>
 
-          <Box 
-            flex 
-            border 
-            surface="muted" 
-            padding={6} 
-            overflow="y-auto" 
+          <Box
+            flex
+            border
+            surface="muted"
+            padding={6}
+            overflow="y-auto"
             maxHeight="600px"
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
@@ -169,7 +169,7 @@ export function BlogDrafter() {
           </Box>
 
           <Grid cols={2} gap={4}>
-            <Box 
+            <Box
               as="button"
               onClick={() => {
                 const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
@@ -191,7 +191,7 @@ export function BlogDrafter() {
               <Text variant="mono" size="xs" weight="font-bold">COPY AI PROMPT</Text>
             </Box>
 
-            <Box 
+            <Box
               as="a"
               href={githubIssueUrl}
               target="_blank"
