@@ -58,10 +58,11 @@ export function GlobalSearch() {
             exit={{ opacity: 0 }}
             position="fixed"
             inset
-            zIndex="overlay"
+            zIndex="top"
             display="flex"
             justify="center"
-            paddingTop={40}
+            align="start"
+            paddingTop={20}
             surface={false}
             className="bg-accent/40 backdrop-blur-md"
             // 2. The Backdrop Escape Hatch: Clicking the background closes the search
@@ -84,7 +85,7 @@ export function GlobalSearch() {
             >
               <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
                 <Search className="w-6 h-6 text-accent-brand shrink-0" />
-                <Box 
+                <Text
                   as="input"
                   ref={inputRef}
                   type="text"
@@ -94,13 +95,16 @@ export function GlobalSearch() {
                   width="full"
                   variant="display"
                   size="2xl"
-                  className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/30 text-text-main"
+                  color="main"
+                  className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
                   autoFocus
                 />
                 <Box 
                   as="button" 
+                  type="button"
                   onClick={close}
                   padding={2}
+                  cursor="pointer"
                   className="group hover:bg-accent/5 transition-colors border border-line/50"
                 >
                   <X className="w-6 h-6 text-text-dim group-hover:text-accent-brand" />
@@ -114,6 +118,7 @@ export function GlobalSearch() {
                       <Box 
                         key={`${res.type}-${res.slug}`}
                         as="button"
+                        type="button"
                         onClick={() => handleSelect(res)}
                         width="full"
                         padding={3}
@@ -122,6 +127,7 @@ export function GlobalSearch() {
                         gap={4}
                         surface="default"
                         border
+                        cursor="pointer"
                         className="hover:bg-accent/5 group transition-colors text-left"
                       >
                          <Box border padding={2} surface="muted" radius="sm" className="shrink-0">

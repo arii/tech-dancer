@@ -78,6 +78,8 @@ export default function Navigation() {
               <Box as="li" position="relative" className="group">
                 <Box
                   as="button"
+                  type="button"
+                  cursor="pointer"
                   onClick={() => {
                     setIsOpen(false);
                     openSearch();
@@ -128,6 +130,8 @@ export default function Navigation() {
             <Box as="li">
               <Box
                 as="button"
+                type="button"
+                cursor="pointer"
                 onClick={openSearch}
                 display="flex"
                 align="center"

@@ -11,8 +11,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <SearchProvider>
       <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
-        <GlobalSearch />
-
         <Box display="flex" className="min-h-screen w-full">
           <Navigation />
           <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
@@ -31,6 +29,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             </Box>
           </Box>
         </Box>
+
+        <GlobalSearch />
       </Box>
     </SearchProvider>
   );
