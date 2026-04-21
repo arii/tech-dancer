@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getPosts, Post } from '@/lib/content';
+import { safeSearch } from '@/lib/utils';
 
 export function useBlog() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -43,11 +44,10 @@ export function useBlog() {
     }
 
     if (searchTerm) {
-      const term = searchTerm.toLowerCase();
       result = result.filter(p => 
-        p.title.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term) ||
-        p.excerpt.toLowerCase().includes(term)
+        safeSearch(p.title, searchTerm) ||
+        safeSearch(p.category, searchTerm) ||
+        safeSearch(p.excerpt, searchTerm)
       );
     }
 
