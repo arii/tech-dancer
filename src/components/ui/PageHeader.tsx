@@ -1,23 +1,43 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { spacing } from '@/styles/design-tokens';
+import { ResponsiveProp } from '@/layouts/system-utils';
 
 interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
+  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | "accent" | "l-accent";
+  paddingBottom?: ResponsiveProp<keyof typeof spacing | number | string>;
+  marginBottom?: ResponsiveProp<keyof typeof spacing | number | string | "auto">;
+  descriptionItalic?: boolean;
 }
 
-export function PageHeader({ label, title, description }: PageHeaderProps) {
+export function PageHeader({
+  label,
+  title,
+  description,
+  border = "b",
+  paddingBottom = 10,
+  marginBottom,
+  descriptionItalic
+}: PageHeaderProps) {
   return (
-    <Box paddingBottom={10} className="border-b border-slate-200">
-      <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.2em]">
+    <Box paddingBottom={paddingBottom} border={border} marginBottom={marginBottom} as="header">
+      <Stack gap={1}>
+        <Text variant="label" size="tiny" color="dim" weight="font-bold" display="block" marginBottom={2}>
           {label}
         </Text>
-        <Text as="h1" variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+        <Text as="h1" variant="headline" size="4xl" weight="font-black" color="main" marginBottom={1}>
           {title}
         </Text>
         {description && (
-          <Text variant="sans" size="lg" color="dim" maxWidth="3xl" marginTop={4} weight="font-medium" className="leading-relaxed">
+          <Text
+            variant="body"
+            size="lg"
+            color="dim"
+            weight="font-medium"
+            italic={descriptionItalic}
+          >
             {description}
           </Text>
         )}
@@ -28,10 +48,10 @@ export function PageHeader({ label, title, description }: PageHeaderProps) {
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4}>
       <Stack gap={1}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.2em]">{label}</Text>
-        <Text as="h2" variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
+        <Text variant="label" size="xs" color="dim" weight="font-semibold">{label}</Text>
+        <Text as="h2" variant="display" size="3xl" weight="font-black" color="main">{title}</Text>
       </Stack>
       {children}
     </Box>

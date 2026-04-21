@@ -19,7 +19,7 @@ export interface BaseProps {
   marginX?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginY?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   gap?: ResponsiveProp<number | string>
-  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
+  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | "accent" | "l-accent"
   smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
@@ -89,17 +89,13 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       border === "r" && "border-r border-line",
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
+      border === "accent" && "border border-accent",
+      border === "l-accent" && "border-l border-accent",
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),
       getResponsiveClasses(xlBorder, "xl:border-")
     )
-
-    // Remove props that shouldn't be spread to DOM elements
-    const { 
-      // ... already destructured above
-      ...domProps 
-    } = props;
 
     const getVal = (val: any, prefix: string) => {
       if (val === undefined) return ""
@@ -170,7 +166,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           className
         )}
         {...motionProps}
-        {...domProps}
+        {...props}
       />
     )
   }
