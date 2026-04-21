@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 
 export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
+const STORAGE_KEY = 'td-newsletter-dismissed';
+
 export function useEmailCaptureLogic() {
   const [status, setStatus] = useState<FormStatus>('idle');
-  const [showEmailBar, setShowEmailBar] = useState(true);
+  const [showEmailBar, setShowEmailBar] = useState(false);
   const [email, setEmail] = useState('');
 
   const hideBar = useCallback(() => {
     setShowEmailBar(false);
+    sessionStorage.setItem(STORAGE_KEY, 'true');
   }, []);
 
   const submitForm = useCallback((emailToSubmit: string) => {
@@ -19,7 +22,19 @@ export function useEmailCaptureLogic() {
     setTimeout(() => {
       setStatus('success');
       setEmail('');
+      sessionStorage.setItem(STORAGE_KEY, 'true');
     }, 800);
+  }, []);
+
+  useEffect(() => {
+    const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';
+    if (isDismissed) return;
+
+    const timer = setTimeout(() => {
+      setShowEmailBar(true);
+    }, 30000); // 30s delay
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {

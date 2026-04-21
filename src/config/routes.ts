@@ -13,6 +13,7 @@ export const routes: RouteConfig[] = [
   { path: '/', label: 'Home' },
   { path: '/blog', label: 'Blog Posts' },
   { path: '/gear', label: 'Gear Reviews' },
+  { path: '/resources', label: 'Resources' },
   { path: '/research', label: 'Data & Development Lab' },
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },

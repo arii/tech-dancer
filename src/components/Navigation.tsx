@@ -9,9 +9,11 @@ import { routes } from '@/config/routes';
 const iconMap: Record<string, any> = {
   '/': Home,
   '/gear': ShoppingBag,
+  '/resources': ShoppingBag,
   '/blog': BookOpen,
   '/research': Database,
   '/about': User,
+  '/contact': Send,
 };
 
 function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
