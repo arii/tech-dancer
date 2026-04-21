@@ -6,25 +6,14 @@ description: review a GitHub pull request with in-depth inline feedback
 
 // turbo-all
 
-1. Fetch the PR diff to understand what changed (replace `PR_NUMBER`):
+1. Generate a structured per-file review plan:
 ```bash
-python3 - <<'EOF'
-import subprocess, os, requests
-def get_token():
-    try: return subprocess.check_output(['env','-u','GITHUB_TOKEN','gh','auth','token'], stderr=subprocess.DEVNULL, text=True).strip()
-    except: pass
-    return os.getenv("GITHUB_TOKEN","")
-token = get_token()
-headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github.v3+json"}
-pr = PR_NUMBER  # <-- set this
-files = requests.get(f"https://api.github.com/repos/arii/tech-dancer/pulls/{pr}/files", headers=headers).json()
-for f in files:
-    print(f"\n[{f['status']}] {f['filename']} +{f['additions']}/-{f['deletions']}")
-    if f.get('patch'): print(f['patch'][:800])
-EOF
+python3 dev-tools/fetch_pr_review_data.py PR_NUMBER
+# Outputs to /tmp/pr-review-PR_NUMBER.md — open and read it
+cat /tmp/pr-review-PR_NUMBER.md
 ```
 
-2. Read the diff output. For EVERY changed file evaluate:
+2. Read the generated plan. For EVERY changed file evaluate:
    - **Dead abstractions** — new class/context/hook that a simpler primitive handles?
    - **Unnecessary indirection** — does this add a layer where a direct call would do?
    - **Responsibility creep** — component taking on logic that belongs in a hook or parent?
@@ -32,7 +21,7 @@ EOF
    - **Token compliance** — raw Tailwind or inline styles bypassing design tokens?
    - **Audit ratio** — if additions > 100 lines, find 10+ lines to remove.
 
-3. Write the review payload to `/tmp` (never commit review files to the repo):
+3. Write the review payload to `/tmp` using the anti-slop structure:
 ```bash
 cat > /tmp/review_payload.json <<'JSON'
 {
@@ -44,8 +33,7 @@ cat > /tmp/review_payload.json <<'JSON'
 JSON
 ```
 
-4. Submit in one step — the link to the review is printed on success:
+4. Submit — the link is printed on success:
 ```bash
 python3 dev-tools/gh_collab.py review PR_NUMBER --file /tmp/review_payload.json
 ```
-
