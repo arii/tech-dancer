@@ -120,7 +120,7 @@ interface ContentModule {
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
-  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
+  studies: import.meta.glob('/content/studies/*.md', { query: '?raw' }),
   events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
 };
 
@@ -154,11 +154,22 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
     });
 }
 
+// Initialize studies as empty, can be fetched if needed
+// For now, we maintain the sync API by allowing transform to handle both eager and lazy glob results
+// but we only use the eager ones for immediate initialization.
+
+const studiesModules = await Promise.all(
+  Object.entries(contentModules.studies).map(async ([path, loader]) => {
+    const raw = await (loader as () => Promise<string | ContentModule>)();
+    return [path, raw] as [string, string | ContentModule];
+  })
+);
+
 const items = {
-  posts: transform<Post>(contentModules.posts),
-  resources: transform<Resource>(contentModules.resources),
-  studies: transform<Study>(contentModules.studies),
-  events: transform<Event>(contentModules.events)
+  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
+  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
+  studies: transform<Study>(Object.fromEntries(studiesModules)),
+  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
 };
 
 const maps = {
