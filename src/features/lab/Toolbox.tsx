@@ -34,7 +34,7 @@ export default function Toolbox() {
             <input
               type="text"
               placeholder="Search gear (e.g. earplugs, shoes)..."
-              className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-xl focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
+              className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />

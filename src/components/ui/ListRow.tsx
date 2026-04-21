@@ -14,7 +14,7 @@ interface ListRowProps {
 }
 
 export function ListRow({ slug, title, category, excerpt, date, basePath, content }: ListRowProps) {
-  const rt = content ? readingTime(content) : Math.max(1, Math.round((excerpt?.split(' ').length ?? 0) / 3));
+  const rt = readingTime(content, excerpt);
 
   return (
     <Box as={NavLink} to={`${basePath}/${slug}`}

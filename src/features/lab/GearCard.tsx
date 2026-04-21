@@ -1,18 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
+import { CATEGORY_GRADIENTS } from '@/config/content';
 
 interface GearCardProps extends Resource {
   basePath: string;
 }
-
-const categoryGradients: Record<string, string> = {
-  'Data & Dev Lab': 'from-[#1A2B3C] to-[#185FA5]',
-  'All about WCS':  'from-[#1A2B3C] to-[#3B6D11]',
-  'Travel/Lifestyle': 'from-[#993C1D] to-[#BA7517]',
-  'Gear Reviews':   'from-[#534AB7] to-[#1D9E75]',
-  'Dance Gear': 'from-[#534AB7] to-[#1D9E75]',
-};
 
 export function GearCard({
   slug,
@@ -26,7 +19,7 @@ export function GearCard({
   priceCategory,
   updatedDate
 }: GearCardProps) {
-  const gradient = categoryGradients[category] || 'from-slate-800 to-slate-900';
+  const gradient = CATEGORY_GRADIENTS[category] || 'from-slate-800 to-slate-900';
 
   return (
     <NavLink

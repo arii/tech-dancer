@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
+import { CATEGORY_GRADIENTS } from '@/config/content';
 
 interface ContentCardProps {
   slug: string;
@@ -34,17 +35,9 @@ export function ContentCardSkeleton() {
   );
 }
 
-const categoryGradients: Record<string, string> = {
-  'Data & Dev Lab': 'from-[#1A2B3C] to-[#185FA5]',
-  'All about WCS':  'from-[#1A2B3C] to-[#3B6D11]',
-  'Travel/Lifestyle': 'from-[#993C1D] to-[#BA7517]',
-  'Gear Reviews':   'from-[#534AB7] to-[#1D9E75]',
-  'General': 'from-[#1A2B3C] to-[#185FA5]',
-};
-
 export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content, aspect = "video" }: ContentCardProps) {
-  const gradient = categoryGradients[category] || 'from-slate-800 to-slate-900';
-  const rt = content ? readingTime(content) : Math.max(1, Math.round((excerpt?.split(' ').length ?? 0) / 3));
+  const gradient = CATEGORY_GRADIENTS[category] || 'from-slate-800 to-slate-900';
+  const rt = readingTime(content, excerpt);
 
   return (
     <Box 

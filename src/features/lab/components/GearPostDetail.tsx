@@ -1,9 +1,8 @@
-import { motion } from 'motion/react';
-import { ArrowLeft, ExternalLink, Shield, Star, DollarSign } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import { ExternalLink, Shield, Star, DollarSign } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Resource, readingTime } from '@/lib/content';
+import { Resource } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { DetailLayout } from '@/components/layout/DetailLayout';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -12,153 +11,115 @@ interface GearPostDetailProps {
 }
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
-  const rt = readingTime(post.content);
-
   const affiliateLinks = (post.affiliateIds || [])
     .map(id => affiliateManager.getLink(id))
     .filter((link): link is NonNullable<typeof link> => !!link);
 
-  return (
-    <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="5xl" marginX="auto" className="w-full">
-        {/* Navigation */}
-        <Box
-          as="button"
-          onClick={onBack}
-          display="flex"
-          align="center"
-          gap={2}
-          color="dim"
-          className="hover:text-accent-brand transition-colors"
-          cursor="pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">{backLabel}</Text>
-        </Box>
-
-        <Stack gap={10}>
-          {/* Header */}
-          <Stack gap={6}>
-            <Box display="flex" align="center" gap={4}>
-              <Box className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-sm">
-                <Text variant="mono" size="micro" weight="font-bold" color="brand" className="uppercase">
-                  {post.category}
-                </Text>
-              </Box>
-              <Text variant="mono" size="micro" color="dim">{post.date} • {rt} min read</Text>
-            </Box>
-
-            <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">
-              {post.title}
-            </Text>
-          </Stack>
-
-          {/* Hero Image */}
-          {post.image && (
-            <Box
-              as={motion.div}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              aspect="video"
-              overflow="hidden"
-              border
-              className="bg-muted"
-            >
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-            </Box>
-          )}
-
-          {/* Score Grid & Verdict */}
-          <Grid cols={{ base: 1, md: 3 }} gap={6}>
-            <Box padding={6} border className="bg-surface/50 border-line flex flex-col items-center justify-center text-center rounded-none">
-              <Star className="w-6 h-6 text-yellow-500 mb-2" />
-              <Text variant="display" size="3xl" weight="font-black">{post.rating || 'N/A'}</Text>
-              <Text variant="mono" size="micro" color="dim" uppercase>Overall Score</Text>
-            </Box>
-            <Box padding={6} border className="bg-surface/50 border-line flex flex-col items-center justify-center text-center rounded-none">
-              <Shield className="w-6 h-6 text-blue-500 mb-2" />
-              <Text variant="display" size="3xl" weight="font-black">{post.durability || '8.5'}</Text>
-              <Text variant="mono" size="micro" color="dim" uppercase>Durability</Text>
-            </Box>
-            <Box padding={6} border className="bg-surface/50 border-line flex flex-col items-center justify-center text-center rounded-none">
-              <DollarSign className="w-6 h-6 text-green-500 mb-2" />
-              <Text variant="display" size="3xl" weight="font-black">{post.value || '9.0'}</Text>
-              <Text variant="mono" size="micro" color="dim" uppercase>Value for Money</Text>
-            </Box>
-          </Grid>
-
-          {/* Verdict Callout */}
-          {post.verdict && (
-            <Box padding={8} className="bg-teal-50 border-l-4 border-teal-500 rounded-none">
-              <Stack gap={2}>
-                <Text variant="mono" size="micro" weight="font-bold" className="text-teal-700 uppercase tracking-widest">The Verdict</Text>
-                <Text variant="display" size="xl" className="text-teal-900">{post.verdict}</Text>
-              </Stack>
-            </Box>
-          )}
-
-          {/* Main Content */}
-          <Grid cols={{ base: 1, lg: 3 }} gap={12}>
-            <Box className="lg:col-span-2">
-              <Box className="prose prose-slate max-w-none prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
-                <ReactMarkdown
-                  components={{
-                    a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />
-                  }}
-                >
-                  {post.content}
-                </ReactMarkdown>
-              </Box>
-            </Box>
-
-            {/* Sidebar: Specs & Affiliate */}
-            <Stack gap={8}>
-              {post.specs && (
-                <Box border padding={6} className="bg-surface/50 rounded-none">
-                  <Text variant="mono" size="xs" weight="font-bold" className="mb-4 block uppercase border-b border-line pb-2">Technical Specs</Text>
-                  <Stack gap={3}>
-                    {Object.entries(post.specs).map(([key, value]) => (
-                      <Box key={key} display="flex" justify="between" align="center">
-                        <Text variant="mono" size="micro" color="dim" uppercase>{key}</Text>
-                        <Text variant="mono" size="micro" weight="font-bold">{value}</Text>
-                      </Box>
-                    ))}
-                  </Stack>
-                </Box>
-              )}
-
-              {affiliateLinks.length > 0 && (
-                <Stack gap={4}>
-                  <Text variant="mono" size="xs" weight="font-bold" className="uppercase tracking-widest">Where to buy</Text>
-                  {affiliateLinks.map((link) => (
-                    <Box
-                      key={link.id}
-                      as="a"
-                      href={affiliateManager.resolveUrl(link.id)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-accent transition-colors rounded-none"
-                    >
-                      <Stack gap={1}>
-                        <Text variant="mono" size="xs" weight="font-bold" className="text-white">{link.name}</Text>
-                        <Text variant="mono" size="micro" className="text-slate-400">{post.priceCategory || '$$$'}</Text>
-                      </Stack>
-                      <ExternalLink className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform" />
-                    </Box>
-                  ))}
-                  <Text variant="mono" size="micro" color="dim" className="opacity-50 italic leading-tight">
-                    * Affiliate link disclosure: I may earn a small commission at no extra cost to you if you purchase through these links.
-                  </Text>
-                </Stack>
-              )}
-            </Stack>
-          </Grid>
+  const headerExtras = (
+    <Box border="y" paddingY={8} className="border-line/50 bg-slate-50/30">
+      <Grid cols={{ base: 1, sm: 2, md: 5 }} gap={8}>
+        <Stack gap={1} align="center" className="sm:border-r border-line/30">
+          <Text variant="mono" size="micro" color="dim" uppercase>Overall</Text>
+          <Box display="flex" align="center" gap={1}>
+            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+            <Text variant="display" size="xl" weight="font-bold">{post.rating || 'N/A'}</Text>
+          </Box>
         </Stack>
-      </Stack>
+
+        <Stack gap={1} align="center" className="md:border-r border-line/30">
+          <Text variant="mono" size="micro" color="dim" uppercase>Durability</Text>
+          <Text variant="display" size="xl" weight="font-bold">{post.durability ? `${post.durability}/5` : '—'}</Text>
+        </Stack>
+
+        <Stack gap={1} align="center" className="sm:border-r border-line/30">
+          <Text variant="mono" size="micro" color="dim" uppercase>Value</Text>
+          <Text variant="display" size="xl" weight="font-bold">{post.value ? `${post.value}/5` : '—'}</Text>
+        </Stack>
+
+        <Stack gap={1} align="center" className="md:border-r border-line/30">
+          <Text variant="mono" size="micro" color="dim" uppercase>Price</Text>
+          <Box display="flex" align="center" gap={0} className="text-amber-600">
+            <Text variant="display" size="xl" weight="font-bold">{post.priceCategory || '$$'}</Text>
+          </Box>
+        </Stack>
+
+        <Stack gap={1} align="center" className="hidden md:flex">
+          <Text variant="mono" size="micro" color="dim" uppercase>Updated</Text>
+          <Text variant="mono" size="micro" weight="font-bold" className="uppercase">{post.updatedDate || post.date}</Text>
+        </Stack>
+      </Grid>
     </Box>
+  );
+
+  const sidebar = (
+    <>
+      <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Technical Specs</Text>
+      <Stack gap={3}>
+        {post.specs ? Object.entries(post.specs).map(([key, value]) => (
+          <Stack key={key} gap={1}>
+            <Text variant="mono" size="micro" color="dim" className="uppercase opacity-50">{key}</Text>
+            <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
+          </Stack>
+        )) : (
+          <Text variant="mono" size="xs" color="dim">No specs provided.</Text>
+        )}
+      </Stack>
+
+      {affiliateLinks.length > 0 && (
+        <Stack gap={4} marginTop={8}>
+          <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Where to Buy</Text>
+          {affiliateLinks.map(link => (
+            <Box
+              key={link.id}
+              as="a"
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              display="flex"
+              align="center"
+              justify="between"
+              padding={4}
+              surface="default"
+              border
+              className="hover:border-accent group transition-all"
+            >
+              <Text variant="mono" size="xs" weight="font-bold">{link.label}</Text>
+              <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+            </Box>
+          ))}
+          <Text variant="mono" size="micro" color="dim" className="leading-tight opacity-50 italic">
+            * Affiliate link support helps maintain this repository.
+          </Text>
+        </Stack>
+      )}
+    </>
+  );
+
+  return (
+    <DetailLayout
+      title={post.title}
+      category={post.category}
+      date={post.date}
+      content={post.content}
+      image={post.image}
+      onBack={onBack}
+      backLabel={backLabel}
+      sidebar={sidebar}
+      headerExtras={headerExtras}
+    >
+      {post.verdict && (
+        <Box border padding={8} surface="muted" marginBottom={12} className="bg-emerald-50/50 border-emerald-100">
+           <Stack gap={3}>
+              <Box display="flex" align="center" gap={3}>
+                 <Shield className="w-6 h-6 text-emerald-600" />
+                 <Text variant="display" size="2xl" weight="font-black" className="text-emerald-900">THE VERDICT</Text>
+              </Box>
+              <Text variant="body" size="lg" className="text-emerald-800 italic leading-relaxed font-medium">
+                "{post.verdict}"
+              </Text>
+           </Stack>
+        </Box>
+      )}
+    </DetailLayout>
   );
 }
