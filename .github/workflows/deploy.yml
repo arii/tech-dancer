@@ -3,11 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
-      - 'feature/*'
-      - 'feat/*'
-      - 'fix/*'
-      - 'ux/*'
+      - '**'
 
 permissions:
   contents: write
@@ -19,6 +15,9 @@ permissions:
 concurrency:
   group: "gh-pages-publish"
   cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build_and_deploy:
