@@ -1,14 +1,15 @@
 import { motion } from 'motion/react';
-import { User, Award, Globe, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useProfile } from './useProfile';
+import ProfileSidebar from './ProfileSidebar';
+import BioContent from './BioContent';
 
 export default function ArielProfile() {
   const { bio } = useProfile();
 
   return (
-    <Box as="section">
+    <Box as="section" maxWidth="screen-2xl" marginX="auto">
       <Stack gap={12}>
         <PageHeader 
           label="ABOUT TECH-DANCER"
@@ -16,71 +17,23 @@ export default function ArielProfile() {
           description={bio.role}
         />
 
-        <Grid cols={{ base: 1, lg: 12 }} gap={16}>
-          <Box span={{ base: 12, lg: 4 }}>
-            <Stack gap={12}>
-              <Box aspect="square" surface="muted" border overflow="hidden" position="relative" display="flex" align="center" justify="center">
-                <User className="w-24 h-24 text-line stroke-[0.5]" />
-              </Box>
-
-              <Grid cols={1} gap={6}>
-                {bio.details.map((detail) => (
-                  <Box key={detail.label} paddingBottom={4} className="border-b border-slate-200">
-                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" display="block" className="tracking-[0.15em] uppercase">{detail.label}</Text>
-                    <Text variant="display" size="lg" marginTop={1} weight="font-bold" className="text-accent-navy">{detail.value}</Text>
-                  </Box>
-                ))}
-              </Grid>
-
-              <Box 
-                as="a" 
-                href="#" 
-                className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy"
-              >
-                <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">VIEW FULL BACKGROUND</Text>
-                <ArrowRight className="w-4 h-4" />
-              </Box>
-            </Stack>
+        <Grid cols={{ base: 1, lg: "1fr 2fr" }} gap={{ base: 8, lg: 20 }}>
+          <Box
+            as={motion.div}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} // ease-out-expo
+          >
+            <ProfileSidebar data={bio} />
           </Box>
 
-          <Box span={{ base: 12, lg: 8 }}>
-            <Stack gap={16}>
-              {bio.sections.map((section) => (
-                <Stack key={section.id} gap={4}>
-                  <Box paddingBottom={4} className="border-b border-slate-200">
-                    <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">{section.title}</Text>
-                  </Box>
-                  <Text variant="body" size="lg" color="body" className="leading-relaxed">
-                    {section.content}
-                  </Text>
-                </Stack>
-              ))}
-
-              <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={8}>
-                {[
-                  { icon: User, label: 'Curriculum Vitae' },
-                  { icon: Award, label: 'Publications' },
-                  { icon: Globe, label: 'Social' },
-                ].map((item) => (
-                  <Box 
-                    key={item.label}
-                    as="button"
-                    border 
-                    surface="default" 
-                    padding="compact" 
-                    display="flex" 
-                    direction="col" 
-                    align="center" 
-                    gap={3}
-                    cursor="pointer"
-                    className="group hover:border-accent-brand transition-all"
-                  >
-                    <item.icon className="w-5 h-5 text-accent-navy group-hover:text-accent transition-colors" />
-                    <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">{item.label}</Text>
-                  </Box>
-                ))}
-              </Grid>
-            </Stack>
+          <Box
+            as={motion.div}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }} // ease-out-expo
+          >
+            <BioContent data={bio} />
           </Box>
         </Grid>
       </Stack>
