@@ -49,7 +49,7 @@ export function GearCard({
       <div className="flex flex-col gap-4 py-8 flex-1 border-b border-line/30 group-last:border-none">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-start gap-4">
-            <h3 className="font-display font-black uppercase tracking-tight leading-[0.9] text-3xl text-accent-navy group-hover:text-accent transition-colors duration-300 flex-1">
+            <h3 className="font-display font-black uppercase tracking-tight leading-none text-3xl text-accent-navy group-hover:text-accent transition-colors duration-300 flex-1">
               {title}
             </h3>
 

@@ -68,7 +68,7 @@ export default function ArielProfile() {
                         variant="display"
                         size="5xl"
                         weight="font-black"
-                        className="text-accent-navy leading-[0.85] uppercase tracking-tighter max-w-[10ch]"
+                        className="text-accent-navy leading-none uppercase tracking-tighter max-w-[10ch]"
                       >
                         {section.title}
                       </Text>

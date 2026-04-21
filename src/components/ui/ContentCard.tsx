@@ -69,7 +69,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           variant="display"
           size="2xl"
           weight="font-black"
-          className="text-accent-navy leading-[1.1] group-hover:text-accent transition-colors"
+          className="text-accent-navy leading-tight group-hover:text-accent transition-colors"
         >
           {title}
         </Text>

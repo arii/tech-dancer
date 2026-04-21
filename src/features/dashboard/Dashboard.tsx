@@ -27,7 +27,7 @@ export default function Home() {
                   animate={{ opacity: 1, x: 0 }}
                   variant="display"
                   size="8xl"
-                  className="text-accent-navy leading-[0.85] tracking-tighter"
+                  className="text-accent-navy leading-none tracking-tighter"
                 >
                   Tech<br />Dancer
                 </Text>

@@ -14,11 +14,19 @@ PAGES = {
 
 async def capture_page(browser, name, path):
     page = await browser.new_page(viewport={'width': 1440, 'height': 900})
-    await page.goto(f"{BASE_URL}{path}")
 
-    # Wait for hydration/animations
-    await page.wait_for_load_state("networkidle")
-    await asyncio.sleep(2)  # Increased sleep for heavy animations
+    # Enhanced navigation with better wait strategy
+    await page.goto(f"{BASE_URL}{path}", wait_until="networkidle")
+
+    # Wait for specific UI elements or stability instead of arbitrary sleep
+    try:
+        await page.wait_for_selector("main", state="visible", timeout=5000)
+    except:
+        pass
+
+    # Ensure output directory exists
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
 
     # 1. Full Page for context
     await page.screenshot(path=f"{OUTPUT_DIR}/{name}_full.png", full_page=True)
@@ -36,9 +44,6 @@ async def capture_page(browser, name, path):
     await page.close()
 
 async def main():
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
-
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         for name, path in PAGES.items():
