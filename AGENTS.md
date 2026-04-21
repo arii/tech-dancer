@@ -42,6 +42,14 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 ## 9. 🧭 Routing Is Declarative
 - Navigation uses route config (not hardcoded)
+- Do NOT use `HashRouter`.
+
+## 23. 🤝 Collaborative GitHub Workflows
+When asked to address PR comments or review code, utilize the `gh-collab` CLI tool (located at `Dev tools/gh_collab.py`):
+1. **Plan:** If raw JSON comment data is present, run `python3 "Dev tools/gh_collab.py" plan ...` to generate a `PR_Plan.md` file. Read this file to understand the requested changes.
+2. **Draft Reviews:** As you fix code, use `python3 "Dev tools/gh_collab.py" create <PR_NUMBER> --body "<Your message>"` to draft your responses.
+3. **Submit:** Once code changes are pushed, run `python3 "Dev tools/gh_collab.py" submit <PR_NUMBER> COMMENT` to finalize the review.
+*Ensure `GITHUB_TOKEN` is exported in the environment before running.*
 
 ## 10. 🎞 Motion Must Use Tokens
 - Motion values come from `motionTokens`
