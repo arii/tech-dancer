@@ -26,7 +26,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
-    uppercase, lowercase, capitalize,
+    uppercase, lowercase, capitalize, italic,
     ...props 
   }, ref) => {
     return (

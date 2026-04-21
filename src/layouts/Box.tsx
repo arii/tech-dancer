@@ -97,6 +97,12 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       getResponsiveClasses(xlBorder, "xl:border-")
     )
 
+    // Remove props that shouldn't be spread to DOM elements
+    const {
+      // ... already destructured above
+      ...domProps
+    } = props;
+
     const getVal = (val: any, prefix: string) => {
       if (val === undefined) return ""
       if (typeof val === "number") return `${prefix}-${val}`

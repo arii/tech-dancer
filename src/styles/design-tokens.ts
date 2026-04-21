@@ -87,7 +87,7 @@ export const typography = {
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: "font-mono tracking-[3px] uppercase",
-  label: "font-mono font-bold uppercase tracking-[0.2em]",
+  label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",
 };
 
