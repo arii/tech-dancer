@@ -8,7 +8,7 @@ import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 
 export default function Home() {
-  const { recentPosts, dancerPaths, hirePaths } = useHome();
+  const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
 
   return (
     <Box as="section">
@@ -60,6 +60,29 @@ export default function Home() {
                 aspect="video"
               />
             ))}
+
+            {/* Upcoming Events Mini-Cards */}
+            {upcomingEvents.map((event) => (
+              <Box
+                key={event.name}
+                className="flex flex-col h-full bg-surface/50 border border-line p-6 lg:p-8"
+              >
+                <Stack gap={4}>
+                  <Box className="flex items-center gap-3">
+                    <event.icon className="w-5 h-5 text-accent" />
+                    <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
+                      {event.status}
+                    </Text>
+                  </Box>
+                  <Text variant="display" size="xl" weight="font-black" className="text-accent-navy leading-snug">
+                    {event.name}
+                  </Text>
+                  <Text variant="body" size="base" color="dim">
+                    {event.date}
+                  </Text>
+                </Stack>
+              </Box>
+            ))}
           </Grid>
         </Stack>
       </Stack>
@@ -67,13 +90,3 @@ export default function Home() {
   );
 }
 
-const dancerPaths = [
-  { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
-  { label: "Gear reviews", path: "/gear" }
-];
-
-const hirePaths = [
-  { label: "Tech blog posts", path: "/blog?category=Tech" },
-  { label: "Data and Development Lab", path: "/research" },
-  { label: "About/Contact page", path: "/about" }
-];
