@@ -23,6 +23,8 @@ interface ContactFormViewProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
+const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
+
 export function ContactFormView({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormViewProps) {
   return (
     <Box as="section" minHeight="[calc(100vh-64px)]">
@@ -75,7 +77,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     placeholder="Jane Doe"
                     aria-required="true"
                     className={cn(
-                      "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50",
+                      inputClasses,
                       errors.name ? 'border-accent-brand' : 'border-line'
                     )}
                     value={formData.name}
@@ -90,7 +92,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     placeholder="jane@example.com"
                     aria-required="true"
                     className={cn(
-                      "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50",
+                      inputClasses,
                       errors.email ? 'border-accent-brand' : 'border-line'
                     )}
                     value={formData.email}
@@ -101,7 +103,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                 <FormField label="Subject">
                   <Box as="select"
                     name="subject"
-                    className="w-full bg-bg border border-line px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20"
+                    className={cn(inputClasses, "border-line")}
                     value={formData.subject}
                     onChange={onChange}
                   >
@@ -119,7 +121,8 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     placeholder="How can I help you?"
                     aria-required="true"
                     className={cn(
-                      "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 resize-none placeholder:text-text-dim/50",
+                      inputClasses,
+                      "resize-none",
                       errors.message ? 'border-accent-brand' : 'border-line'
                     )}
                     value={formData.message}
