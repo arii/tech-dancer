@@ -112,6 +112,49 @@ class ScoringDanceParser:
     def standardize_mark(mark_text):
         return POINTS_MAPPING.get(mark_text.strip(), 0.0)
 
+    def _extract_competitor_data(self, row):
+        competitor_elem = row.find('td', class_='competitor-name')
+        if not competitor_elem:
+            return None, None
+
+        links = competitor_elem.find_all('a')
+        competitor_names = [a.get_text(strip=True) for a in links]
+        if not competitor_names:
+            competitor_name = competitor_elem.get_text(strip=True)
+        else:
+            competitor_name = " & ".join(competitor_names)
+
+        dancer_ids = []
+        for link in links:
+            d_id = link.get('data-wsdc')
+            if not d_id and link.get('href'):
+                href = link.get('href')
+                path_parts = href.split('/')
+                if path_parts and path_parts[-1].isdigit():
+                    d_id = path_parts[-1]
+                else:
+                    match = re.search(r'/(\d+)$', href)
+                    if match:
+                        d_id = match.group(1)
+
+            if not d_id:
+                d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
+            dancer_ids.append(str(d_id).strip())
+
+        if not dancer_ids:
+            dancer_id = f"TEMP_{competitor_name.replace(' ', '_')}"
+        else:
+            dancer_id = " & ".join(dancer_ids)
+
+        return competitor_name, dancer_id
+
+    def _extract_promoted_status(self, row):
+        promoted_elem = row.find('td', class_='promoted')
+        if promoted_elem:
+            promoted_text = promoted_elem.get_text(strip=True).lower()
+            return promoted_text in ['yes', 'y']
+        return False
+
     def parse_results(self, html_content, url):
         soup = BeautifulSoup(html_content, 'html.parser')
         results = []
@@ -149,47 +192,11 @@ class ScoringDanceParser:
                 else:
                     continue
 
-                competitor_elem = row.find('td', class_='competitor-name')
-                if not competitor_elem:
+                competitor_name, dancer_id = self._extract_competitor_data(row)
+                if not competitor_name:
                     continue
 
-                links = competitor_elem.find_all('a')
-                competitor_names = [a.get_text(strip=True) for a in links]
-                if not competitor_names:
-                    competitor_name = competitor_elem.get_text(strip=True)
-                else:
-                    competitor_name = " & ".join(competitor_names)
-
-                # ✅ CORRECT: Extract permanent WSDC IDs from data attributes or hrefs
-                dancer_ids = []
-                for link in links:
-                    d_id = link.get('data-wsdc')
-                    if not d_id and link.get('href'):
-                        href = link.get('href')
-                        # Path-based extraction: /profile/123 or /dancer/123
-                        path_parts = href.split('/')
-                        if path_parts and path_parts[-1].isdigit():
-                            d_id = path_parts[-1]
-                        else:
-                            # Fallback to regex
-                            match = re.search(r'/(\d+)$', href)
-                            if match:
-                                d_id = match.group(1)
-
-                    if not d_id:
-                        d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
-                    dancer_ids.append(str(d_id).strip())
-
-                if not dancer_ids:
-                    dancer_id = f"TEMP_{competitor_name.replace(' ', '_')}"
-                else:
-                    dancer_id = " & ".join(dancer_ids)
-
-                promoted_elem = row.find('td', class_='promoted')
-                promoted = False
-                if promoted_elem:
-                    promoted_text = promoted_elem.get_text(strip=True).lower()
-                    promoted = promoted_text in ['yes', 'y']
+                promoted = self._extract_promoted_status(row)
 
                 for j_mark in judge_marks:
                     judge_name = j_mark.get('TITLE') or j_mark.get('title')
@@ -198,7 +205,7 @@ class ScoringDanceParser:
 
                     mark_text = j_mark.get_text(strip=True)
                     results.append({
-                        'Dancer_ID': dancer_id,       # Anchored to permanent registry number
+                        'Dancer_ID': dancer_id,
                         'competitor_bib': bib,
                         'competitor_name': competitor_name,
                         'Promoted': promoted,
@@ -269,8 +276,16 @@ slug: "{slug}"
             f.write(md_content)
         logging.info(f"Saved markdown study: {filepath}")
 
+    def _validate_schema(self, df):
+        required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
+        missing_cols = [col for col in required_cols if col not in df.columns]
+        if missing_cols:
+            raise ValueError(f"DataFrame missing required columns: {missing_cols}")
+
     def update_ledger(self, new_data):
         if new_data.empty: return
+
+        self._validate_schema(new_data)
 
         if os.path.exists(self.ledger_path):
             existing_ledger = pd.read_parquet(self.ledger_path)
