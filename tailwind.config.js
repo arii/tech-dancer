@@ -32,6 +32,44 @@ export default {
       }
     },
   },
+  safelist: [
+    {
+      pattern: /grid-cols-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /col-span-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /gap-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /p-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /px-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /py-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /m-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /mx-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      pattern: /my-/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+  ],
   plugins: [
     require('@tailwindcss/typography'),
   ],

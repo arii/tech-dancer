@@ -13,15 +13,15 @@ export default function Home() {
 
   return (
     <Box as="section">
-      <Stack gap={12}>
-        <Stack gap={8} paddingTop={16}>
+      <Stack gap={8}>
+        <Stack gap={6} paddingTop={12}>
           <Stack gap={4}>
             <Text 
               as={motion.h1}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               variant="headline" 
-              size="fluid-7"
+              size={{ base: '5xl', md: '7xl' }}
               className="text-accent-navy leading-tight tracking-tight max-w-4xl"
             >
               The Roboticist&apos;s Guide to the West Coast Swing
@@ -40,7 +40,7 @@ export default function Home() {
           </Text>
         </Box>
 
-        <Stack gap={8}>
+        <Stack gap={6}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
             <Box 
               as={NavLink} 
@@ -69,7 +69,7 @@ export default function Home() {
                 className="group transition-all"
               >
                 {/* Small, fixed-size thumbnail */}
-                <Box width={{ base: 20, md: 24 }} height={{ base: 20, md: 24 }} shrink={0} className="bg-surface-alt border border-line overflow-hidden rounded-md">
+                <Box width={{ base: 20, md: 24 }} height={{ base: 20, md: 24 }} shrink={0} radius="industrial" className="bg-surface-alt border border-line overflow-hidden">
                    {post.image ? (
                      <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                    ) : (
@@ -82,7 +82,7 @@ export default function Home() {
                 <Box flex className="min-w-0">
                   <Stack gap={1}>
                     <Box display="flex" align="center" gap={2}>
-                      <Text variant="mono" size="micro" color="brand" opacity={60}>{post.category}</Text>
+                      <Text variant="mono" size="micro" color="brand" opacity={60} uppercase weight="font-bold">{post.category}</Text>
                       <Text variant="mono" size="micro" color="dim" opacity={60}>• {post.date}</Text>
                     </Box>
                     <Text size="base" weight="font-bold" className="group-hover:text-accent transition-colors truncate">{post.title}</Text>
@@ -95,7 +95,7 @@ export default function Home() {
           </Stack>
 
           {/* Featured Tools Grid */}
-          <Stack gap={8}>
+          <Stack gap={6}>
             <SectionHeader label="LABORATORY" title="Featured Tools">
               <Box
                 as={NavLink}
@@ -109,8 +109,8 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4" />
               </Box>
             </SectionHeader>
-            <Grid cols={{ base: 2, md: 3 }} gap={4}>
-              {tools.map((tool: any) => (
+            <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4}>
+              {tools.slice(0, 6).map((tool: any) => (
                 <ContentCard
                   key={tool.id}
                   slug={tool.id}
@@ -125,7 +125,7 @@ export default function Home() {
           </Stack>
 
           {/* Upcoming Events Section - Now more distinct */}
-          <Stack gap={8}>
+          <Stack gap={6}>
             <SectionHeader label="ON THE CALENDAR" title="Upcoming Events" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (

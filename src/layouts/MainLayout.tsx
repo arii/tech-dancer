@@ -18,7 +18,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           <Box
             paddingX={{ base: 8, md: 16 }}
             paddingTop={32}
-            paddingBottom={20}
+            paddingBottom={showEmailBar ? { base: 48, md: 32 } : 20}
             className="mx-auto min-h-full max-w-[1400px] w-full transition-all duration-300"
           >
             <Box flex={1} className="w-full flex flex-col">

@@ -62,26 +62,28 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       </Box>
 
       {/* Content Area */}
-      <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
-        <Stack gap={4}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {date}
-          </Text>
+      <Stack gap={4} className="p-5 lg:p-6" flex={1} justify="between">
+        <Stack gap={2}>
+          {date && (
+            <Text variant="mono" size="micro" color="dim" uppercase className="tracking-[0.15em]">
+              {date}
+            </Text>
+          )}
           <Text 
             variant="display" 
-            size="xl" 
+            size="lg"
             weight="font-black" 
             className="text-accent-navy leading-snug group-hover:text-accent transition-colors"
           >
             {title}
           </Text>
-          <Text variant="body" size="base" color="dim" className="line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity duration-300">
              {excerpt || `Discover the technical intersections of robotics and dance in this deep dive into ${category.toLowerCase()} methodology and engineering principles.`}
           </Text>
         </Stack>
 
-        <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-slate-100 mt-auto">
-          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-[0.15em]">
+        <Box display="flex" align="center" gap={2} paddingTop={4} className="border-t border-line mt-auto">
+          <Text variant="mono" size="micro" className="text-accent font-semibold uppercase tracking-[0.15em]">
             Read More
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />
