@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useEffect, useRef } from 'react';
@@ -10,13 +10,15 @@ export function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const prevPathname = useRef(location.pathname);
 
   // 1. The Context Reset: Close on route change
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && prevPathname.current !== location.pathname) {
       close();
     }
-  }, [location.pathname, close]);
+    prevPathname.current = location.pathname;
+  }, [location.pathname, isOpen, close]);
 
   useEffect(() => {
     const handleOpenSearch = () => open();
@@ -25,7 +27,7 @@ export function GlobalSearch() {
       if (e.key === 'Escape' && isOpen) {
         close();
       }
-      if (e.ctrlKey && e.key === 'k') {
+      if (e.ctrlKey && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
         open();
       }
@@ -43,8 +45,8 @@ export function GlobalSearch() {
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
-    else if (result.type === 'resource') navigate(`/gear`);
-    else if (result.type === 'study') navigate(`/research`);
+    else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
+    else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
   return (
@@ -80,7 +82,7 @@ export function GlobalSearch() {
               overflow="hidden"
               surface="default"
               border
-              className="shadow-[0_64px_128px_-16px_rgba(0,0,0,0.3)] border-accent/20"
+              className="shadow-2xl border-accent/20"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
