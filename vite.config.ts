@@ -11,13 +11,15 @@ export default defineConfig(({mode}) => {
   // Dynamic base path for GitHub Pages vs Vercel vs Local Override
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
-  const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
   // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,
+    define: {
+      'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),
+    },
     plugins: [
       react(),
       tailwindcss(),
