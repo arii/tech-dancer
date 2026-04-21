@@ -10,8 +10,6 @@ interface ButtonProps
     VariantProps<typeof buttonVariants> {
   as?: any
   href?: string
-  target?: string
-  rel?: string
   loading?: boolean
 }
 
