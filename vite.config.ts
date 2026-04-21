@@ -9,10 +9,8 @@ export default defineConfig(({mode}) => {
   // Dynamic base path for GitHub Pages vs Vercel/Local
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = process.env.ANALYZE === 'true';
-
-  // Use /tech-dancer/ only when building in CI for GitHub Pages
-  // Fallback to / for local dev/preview and other environments
-  const base = process.env.VITE_BASE_PATH || (isGHAction ? '/tech-dancer/' : '/');
+  // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,
