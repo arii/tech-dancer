@@ -36,6 +36,8 @@ export default defineConfig(({ mode }) => {
   };
 
   const staticRoutes = ['/gear', '/research', '/blog', '/resources', '/about', '/contact'];
+  // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     // 2. Base Path logic
