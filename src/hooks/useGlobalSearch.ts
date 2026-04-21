@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { getPosts, getResources, getStudies, ContentItem } from '@/lib/content';
+import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
+import { useSearchContext } from '@/context/SearchContext';
 
 export function useGlobalSearch() {
   const [query, setQuery] = useState('');
+  const { isOpen, open, close } = useSearchContext();
   
   const allContent = useMemo(() => {
     return [
@@ -26,6 +28,9 @@ export function useGlobalSearch() {
   return {
     query,
     setQuery,
-    results
+    results,
+    isOpen,
+    open,
+    close
   };
 }

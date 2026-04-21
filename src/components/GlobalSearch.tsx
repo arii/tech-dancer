@@ -1,23 +1,33 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function GlobalSearch() {
-  const { query, setQuery, results } = useGlobalSearch();
-  const [isOpen, setIsOpen] = useState(false);
+  const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 1. The Context Reset: Close on route change
+  useEffect(() => {
+    if (isOpen) {
+      close();
+    }
+  }, [location.pathname, close, isOpen]);
 
   useEffect(() => {
-    const handleOpenSearch = () => setIsOpen(true);
+    const handleOpenSearch = () => open();
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      // 3. The Keyboard Escape Hatch: Close on ESC key
+      if (e.key === 'Escape' && isOpen) {
+        close();
+      }
       if (e.ctrlKey && e.key === 'k') {
         e.preventDefault();
-        setIsOpen(true);
+        open();
       }
     };
     window.addEventListener('open-search', handleOpenSearch);
@@ -26,10 +36,11 @@ export function GlobalSearch() {
       window.removeEventListener('open-search', handleOpenSearch);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isOpen, open, close]);
 
   const handleSelect = (result: any) => {
-    setIsOpen(false);
+    // 4. Link Click Delegation: Immediate Feedback
+    close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
     else if (result.type === 'resource') navigate(`/gear`);
@@ -38,7 +49,6 @@ export function GlobalSearch() {
 
   return (
     <>
-      {/* Search Modal Overlay */}
       <AnimatePresence>
         {isOpen && (
           <Box 
@@ -54,6 +64,8 @@ export function GlobalSearch() {
             paddingTop={40}
             surface={false}
             className="bg-accent/40 backdrop-blur-md"
+            // 2. The Backdrop Escape Hatch: Clicking the background closes the search
+            onClick={close}
           >
             <Box 
               as={motion.div}
@@ -68,6 +80,7 @@ export function GlobalSearch() {
               surface="default"
               border
               className="shadow-[0_64px_128px_-16px_rgba(0,0,0,0.3)] border-accent/20"
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
                 <Search className="w-6 h-6 text-accent-brand shrink-0" />
@@ -86,7 +99,7 @@ export function GlobalSearch() {
                 />
                 <Box 
                   as="button" 
-                  onClick={() => setIsOpen(false)} 
+                  onClick={close}
                   padding={2}
                   className="group hover:bg-accent/5 transition-colors border border-line/50"
                 >
@@ -94,7 +107,7 @@ export function GlobalSearch() {
                 </Box>
               </Box>
 
-              <Box padding={3} overflow="y-auto" maxHeight="60vh" className="bg-white">
+              <Box padding={3} overflow="y-auto" maxHeight="60vh" surface="default">
                 {results.length > 0 ? (
                   <Stack gap={2}>
                     {results.map((res: any) => (
@@ -137,7 +150,7 @@ export function GlobalSearch() {
                 )}
               </Box>
 
-              <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center" className="bg-surface/50">
+              <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center">
                  <Box display="flex" align="center" gap={6}>
                     <Box display="flex" align="center" gap={2}>
                        <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">ESC</Box>
