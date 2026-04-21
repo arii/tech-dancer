@@ -12,6 +12,9 @@ coverage/
 playwright-report/
 test-results/
 
+# AI Debugger
+ai-fix-prompt.txt
+
 # Python / ETL
 __pycache__/
 *.py[cod]

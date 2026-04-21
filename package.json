@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "audit": "node scripts/detect-antipatterns.mjs",
+    "audit:fix": "node scripts/ai-debugger.js",
+    "audit:fix:gallery": "node scripts/ai-debugger.js http://localhost:3000/public/antipattern-examples/cardocalypse.html '.card'"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
@@ -25,6 +28,7 @@
     "express": "^4.21.2",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
+    "playwright": "^1.59.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
