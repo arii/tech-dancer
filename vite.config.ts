@@ -11,6 +11,7 @@ export default defineConfig(({mode}) => {
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
+  // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
