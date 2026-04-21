@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 
@@ -87,25 +88,11 @@ export function GearCard({
         </div>
 
         <div className="flex items-center gap-3 pt-4 mt-auto">
-          <span className="font-mono tracking-[0.3em] uppercase text-accent-navy font-bold text-[10px] group-hover:text-accent transition-colors">
+          <Text variant="mono" size="micro" weight="font-bold" className="tracking-[0.3em] uppercase text-accent-navy group-hover:text-accent transition-colors">
             ACCESS CASE STUDY
-          </span>
+          </Text>
           <div className="group-hover:translate-x-2 transition-transform duration-500 ease-out-expo">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-accent"
-            >
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
+            <ArrowRight className="w-3.5 h-3.5 text-accent stroke-[3]" />
           </div>
         </div>
       </div>
