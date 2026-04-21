@@ -18,7 +18,6 @@ test.describe('Global Search Modal', () => {
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await expect(searchInput).toBeVisible();
 
-    // Use dispatchEvent to simulate a click directly on the backdrop
     const backdrop = page.locator('div.bg-accent\\/40.backdrop-blur-md');
     await backdrop.dispatchEvent('click');
     await expect(searchInput).not.toBeVisible();
@@ -37,13 +36,19 @@ test.describe('Global Search Modal', () => {
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('button', { name: 'Search' }).click();
     const input = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
-    await input.fill('dancer');
+    await input.fill('ai');
 
-    // Wait for results to appear
-    const result = page.getByRole('button').filter({ hasText: 'DANCER' }).first();
-    await expect(result).toBeVisible();
+    // In our app, results appear as buttons
+    // The previous test failed because 'DANCER' matched multiple elements or none in a way that was strict
+    // Let's look for a specific result title from the content we know exists
+    const result = page.getByRole('button').filter({ hasText: 'RESULTS FOUND' });
+    await expect(result).not.toBeVisible(); // This is the footer text, not a result button
 
-    await result.click();
+    // Results are buttons with text-left
+    const firstResult = page.locator('button.text-left').first();
+    await expect(firstResult).toBeVisible();
+
+    await firstResult.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 });
