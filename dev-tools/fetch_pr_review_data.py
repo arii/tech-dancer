@@ -3,30 +3,9 @@ import os
 import requests
 import sys
 
-# ── Project review standards embedded here so the document is self-contained ──
-REVIEW_STANDARDS = """\
-## 📐 Review Standards (Anti-Bloat)
-
-You are a Principal Software Engineer performing a deep technical audit.
-Evaluate EVERY changed file against the following criteria:
-
-1. **Dead abstractions** — new class/context/hook that a simpler primitive already handles?
-2. **Unnecessary indirection** — adds a layer where a direct call would do?
-3. **Responsibility creep** — component taking on logic that belongs in a hook or parent?
-4. **Import bloat** — `import React` added unnecessarily? (Not needed in React 17+)
-5. **Token compliance** — raw Tailwind classes or magic pixel values bypassing `design-tokens.ts`?
-6. **No arbitrary Tailwind** — values like `text-[11px]`, `max-w-[1400px]` are explicitly banned.
-7. **Audit ratio** — if additions > 100 lines, find 10+ lines to cut.
-
-### Mandatory Response Sections
-- `## ANTI-AI-SLOP` — what verbose/over-engineered patterns were found or confirmed absent
-- `## FINDINGS` — per-file critical feedback (reference specific line numbers)
-- `## FINAL RECOMMENDATION` — one of: `Approved` | `Approved with Minor Changes` | `Not Approved`
-"""
-
 
 def get_token():
-    """Retrieves the GitHub token via gh CLI (strips conflicting GITHUB_TOKEN env), falls back to env var."""
+    """Retrieves the GitHub token via gh CLI, falls back to env var."""
     try:
         out = subprocess.check_output(
             ['env', '-u', 'GITHUB_TOKEN', 'gh', 'auth', 'token'],
@@ -66,11 +45,10 @@ def main():
         "Accept": "application/vnd.github.v3+json"
     }
 
-    # ── 1. Fetch PR Metadata and Files ────────────────────────────────────────
+    # ── Fetch PR metadata and file list ───────────────────────────────────────
     try:
         pr_resp = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pr_num}", headers=headers).json()
         files_resp = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pr_num}/files", headers=headers).json()
-
         if 'message' in pr_resp and pr_resp['message'] == 'Not Found':
             print(f"Error: PR #{pr_num} not found in {repo}.")
             sys.exit(1)
@@ -83,93 +61,56 @@ def main():
     additions = pr_resp.get('additions', 0)
     deletions = pr_resp.get('deletions', 0)
     changed_files = pr_resp.get('changed_files', 0)
-    pr_url = f"https://github.com/{repo}/pull/{pr_num}"
 
-    # ── 2. Build document sections ────────────────────────────────────────────
     file_list_lines = []
-    per_file_blocks = []
-
     for f in files_resp:
-        status = f['status']
-        fname = f['filename']
-        add = f['additions']
-        delt = f['deletions']
+        pr_url = f"https://github.com/{repo}/pull/{pr_num}"
+        file_list_lines.append(
+            f"- `[{f['status'][0].upper()}]` [{f['filename']}]({pr_url}/files) `+{f['additions']}/-{f['deletions']}`"
+        )
+
+    # ── Load template ─────────────────────────────────────────────────────────
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.dirname(script_dir)
+    template_path = os.path.join(repo_root, ".github", "PULL_REQUEST_REVIEW_TEMPLATE.md")
+
+    if not os.path.exists(template_path):
+        print(f"Error: Template not found at {template_path}")
+        sys.exit(1)
+
+    with open(template_path, 'r') as t:
+        template = t.read()
+
+    # ── Extract and iterate the per-file template block ───────────────────────
+    start_marker = "{{FOR_EACH_FILE}}"
+    end_marker = "{{END_FOR_EACH}}"
+
+    if start_marker not in template or end_marker not in template:
+        print("Error: Template is missing {{FOR_EACH_FILE}} / {{END_FOR_EACH}} markers.")
+        sys.exit(1)
+
+    before, rest = template.split(start_marker, 1)
+    file_template, after = rest.split(end_marker, 1)
+
+    per_file_rendered = []
+    for f in files_resp:
         patch = f.get('patch', '_Binary file or no textual diff available._')
+        block = file_template
+        block = block.replace("{{FILENAME}}", f['filename'])
+        block = block.replace("{{FILE_STATS}}", f"+{f['additions']}/-{f['deletions']}")
+        block = block.replace("{{FILE_STATUS}}", f['status'])
+        block = block.replace("{{DIFF}}", patch)
+        per_file_rendered.append(block)
 
-        file_list_lines.append(f"- `[{status[0].upper()}]` [{fname}]({pr_url}/files) `+{add}/-{delt}`")
+    # ── Populate top-level placeholders ───────────────────────────────────────
+    content = before + "\n".join(per_file_rendered) + after
+    content = content.replace("{{NUMBER}}", pr_num)
+    content = content.replace("{{TITLE}}", title)
+    content = content.replace("{{STATS}}", f"+{additions}/-{deletions} across {changed_files} file(s)")
+    content = content.replace("{{DESCRIPTION}}", description)
+    content = content.replace("{{FILES_CHANGES}}", "\n".join(file_list_lines))
 
-        block = f"""---
-
-### `{fname}` `+{add}/-{delt}` ({status})
-
-**Full diff:**
-```diff
-{patch}
-```
-
-**Audit checklist:**
-- [ ] Architecture: Logic belongs in this layer, no leaky abstractions
-- [ ] Design System: Uses design tokens, no magic numbers or arbitrary Tailwind
-- [ ] Types: Strict — no `any`, no implicit types
-- [ ] React: No unnecessary `import React` (React 17+)
-
-**Proposed inline comment** _(fill in `line` and `body` before submitting)_:
-```json
-{{
-  "path": "{fname}",
-  "line": 1,
-  "body": "<FILL IN: critical feedback for the most important line in this file>"
-}}
-```"""
-        per_file_blocks.append(block)
-
-    # ── 3. Assemble the full self-contained document ──────────────────────────
-    content = f"""# PR Review: #{pr_num} — {title}
-
-**Repo:** [{repo}](https://github.com/{repo})
-**PR:** [{pr_url}]({pr_url})
-**Stats:** +{additions}/-{deletions} across {changed_files} file(s)
-
-## Description
-
-{description}
-
-{REVIEW_STANDARDS}
-
----
-
-## 📂 Files Changed
-
-{chr(10).join(file_list_lines)}
-
----
-
-## 🔍 Per-File Audit
-
-{chr(10).join(per_file_blocks)}
-
----
-
-## 🚀 Submission Steps
-
-After completing every `Proposed inline comment` block above, collect them into `/tmp/review_payload.json`:
-
-```json
-{{
-  "body": "## ANTI-AI-SLOP\\n<your slop findings>\\n\\n## FINDINGS\\n<per-file summary>\\n\\n## FINAL RECOMMENDATION\\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
-  "comments": [
-    {{ "path": "src/example.tsx", "line": 10, "body": "Feedback here" }}
-  ]
-}}
-```
-
-Then submit:
-```bash
-python3 dev-tools/gh_collab.py review {pr_num} --file /tmp/review_payload.json
-```
-"""
-
-    # ── 4. Write to /tmp ──────────────────────────────────────────────────────
+    # ── Write to /tmp ──────────────────────────────────────────────────────────
     out_path = f"/tmp/pr-review-{pr_num}.md"
     with open(out_path, "w") as out:
         out.write(content)
