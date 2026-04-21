@@ -48,11 +48,11 @@ jobs:
 
           # Route to the right folder
           folder_map = {
-              'post': 'content/blog',
-              'resource': 'content/gear',
-              'study': 'content/research',
+              'post': 'content/posts',
+              'resource': 'content/resources',
+              'study': 'content/studies',
           }
-          folder = folder_map.get(content_type, 'content/blog')
+          folder = folder_map.get(content_type, 'content/posts')
 
           date_str = datetime.now().strftime('%Y-%m-%d')
           safe_title = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
