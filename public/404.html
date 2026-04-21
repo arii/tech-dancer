@@ -4,32 +4,49 @@
     <meta charset="utf-8">
     <title>Tech-Dancer // Redirecting...</title>
     <script type="text/javascript">
-      // This script checks if the current URL is a deep-link and
-      // redirects the browser to index.html with the path encoded
-      // as a query string, so the router can pick it up.
+      // This script handles deep-linking for SPAs hosted on GitHub Pages subdirectories.
+      // It identifies the base path by finding the last segment of the path that is NOT a known route.
 
       var l = window.location;
       var repoName = 'tech-dancer';
+      var knownRoutes = ['gear', 'research', 'blog', 'resources', 'about', 'contact'];
 
       var path = l.pathname;
-      var segments = path.split('/');
+      var segments = path.split('/').filter(Boolean);
       var pathSegmentsToKeep = 0;
 
-      if (segments[1] === repoName) {
-        pathSegmentsToKeep = 1;
-        // Check if we are in a branch subdirectory (e.g., /tech-dancer/fix/branch-name/...)
-        // Supporting fix, feat, feature, ux, and any other subfolders
-        if (['fix', 'feat', 'feature', 'ux'].indexOf(segments[2]) !== -1) {
-          pathSegmentsToKeep = 3;
+      // Find where the app "root" is.
+      // It should be either /repo-name/ or /repo-name/branch-name/ or /repo-name/prefix/branch-name/
+      // We look for the first segment that matches a known route and assume everything before it is the base path.
+      for (var i = 0; i < segments.length; i++) {
+        if (knownRoutes.indexOf(segments[i]) !== -1) {
+          pathSegmentsToKeep = i;
+          break;
+        }
+        // If we reach the end and haven't found a route, we assume the whole path is a deep link
+        // and the base is determined by the repo name.
+        if (i === segments.length - 1) {
+          // Fallback logic if no known route is found
+          var repoIdx = segments.indexOf(repoName);
+          if (repoIdx !== -1) {
+            // Check if there's a branch structure after repo name
+            // e.g. /tech-dancer/fix/my-branch/some-unknown-route
+            // We assume 1 segment for main (/tech-dancer/) or 3 for prefixes (/tech-dancer/fix/branch/)
+            if (['fix', 'feat', 'feature', 'ux'].indexOf(segments[repoIdx + 1]) !== -1) {
+              pathSegmentsToKeep = repoIdx + 3;
+            } else {
+              pathSegmentsToKeep = repoIdx + 1;
+            }
+          }
         }
       }
 
-      var redirectPath = segments.slice(0, 1 + pathSegmentsToKeep).join('/') + '/index.html';
-      var queryPath = segments.slice(1 + pathSegmentsToKeep).join('/').replace(/&/g, '~and~');
+      var redirectPath = '/' + segments.slice(0, pathSegmentsToKeep).join('/') + '/index.html';
+      var queryPath = '/' + segments.slice(pathSegmentsToKeep).join('/');
 
       l.replace(
         l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        redirectPath + '?p=/' + queryPath +
+        redirectPath + '?p=' + queryPath.replace(/&/g, '~and~') +
         (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
         l.hash
       );

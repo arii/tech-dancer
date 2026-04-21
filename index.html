@@ -16,13 +16,13 @@
             // Reconstruct the path by removing "index.html" if present at the end of pathname
             var base = l.pathname.replace(/\/index\.html$/, '');
             // Ensure no double slashes when joining base and q.p
-            var newPath = (base.endsWith('/') ? base.slice(0, -1) : base) + (q.p || '');
+            // base is like /tech-dancer/fix/branch
+            // q.p is like /blog
+            var cleanBase = base.replace(/\/$/, '');
+            var cleanPath = q.p.startsWith('/') ? q.p : '/' + q.p;
+            var newUrl = cleanBase + cleanPath + (q.q ? ('?' + q.q) : '') + l.hash;
 
-            window.history.replaceState(null, null,
-              newPath +
-              (q.q ? ('?' + q.q) : '') +
-              l.hash
-            );
+            window.history.replaceState(null, null, newUrl);
           }
         }
       }(window.location))
