@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { Search, X, Hash, ArrowRight, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useState, useEffect, useRef } from 'react';
@@ -15,7 +15,7 @@ export function GlobalSearch() {
     const handleOpenSearch = () => setIsOpen(true);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsOpen(false);
-      if (e.ctrlKey && e.key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         setIsOpen(true);
       }
@@ -97,41 +97,76 @@ export function GlobalSearch() {
               <Box padding={3} overflow="y-auto" maxHeight="60vh" className="bg-white">
                 {results.length > 0 ? (
                   <Stack gap={2}>
-                    {results.map((res: any) => (
-                      <Box 
-                        key={`${res.type}-${res.slug}`}
-                        as="button"
-                        onClick={() => handleSelect(res)}
-                        width="full"
-                        padding={3}
-                        display="flex"
-                        align="center"
-                        gap={4}
-                        surface="default"
-                        border
-                        className="hover:bg-accent/5 group transition-colors text-left"
-                      >
-                         <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
-                            <Hash className="w-4 h-4 text-accent-brand opacity-50" />
-                         </Box>
-                         <Stack gap={1} flex className="min-w-0">
-                            <Box display="flex" align="center" justify="between" gap={3}>
-                               <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">{res.title}</Text>
-                               <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
-                                  <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
-                               </Box>
-                            </Box>
-                            <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{res.excerpt}</Text>
-                         </Stack>
-                         <CornerDownLeft className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
-                      </Box>
-                    ))}
+                    {results.map((res: any) => {
+                      const highlight = (text: string) => {
+                        if (!query) return text;
+                        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+                        return parts.map((part, i) =>
+                          part.toLowerCase() === query.toLowerCase()
+                            ? <span key={i} className="text-accent bg-accent/10 rounded-sm px-0.5">{part}</span>
+                            : part
+                        );
+                      };
+
+                      return (
+                        <Box
+                          key={`${res.type}-${res.slug}`}
+                          as="button"
+                          onClick={() => handleSelect(res)}
+                          width="full"
+                          padding={3}
+                          display="flex"
+                          align="center"
+                          gap={4}
+                          surface="default"
+                          border
+                          className="hover:bg-accent/5 group transition-colors text-left"
+                        >
+                          <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
+                              <Hash className="w-4 h-4 text-accent-brand opacity-50" />
+                          </Box>
+                          <Stack gap={1} flex className="min-w-0">
+                              <Box display="flex" align="center" justify="between" gap={3}>
+                                <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">
+                                  {highlight(res.title)}
+                                </Text>
+                                <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
+                                    <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
+                                </Box>
+                              </Box>
+                              <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">
+                                {highlight(res.excerpt)}
+                              </Text>
+                          </Stack>
+                          <CornerDownLeft className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
+                        </Box>
+                      );
+                    })}
                   </Stack>
                 ) : (
-                  <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
-                    <Stack align="center" gap={4}>
-                      <Search className="w-12 h-12 opacity-20" />
-                      <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
+                  <Box paddingY={20} display="flex" align="center" justify="center">
+                    <Stack align="center" gap={6} className="text-center">
+                      <Box className="relative">
+                        <Search className="w-16 h-16 text-line" strokeWidth={1} />
+                        <Sparkles className="w-6 h-6 text-accent-brand absolute -top-2 -right-2 animate-pulse" />
+                      </Box>
+                      <Stack gap={2}>
+                        <Text variant="display" size="xl">No Matches Found</Text>
+                        <Text variant="body" size="sm" color="dim" className="max-w-xs">
+                          Your query did not return any components from the tech-dancer repository.
+                        </Text>
+                      </Stack>
+                      <Box 
+                        as="button"
+                        onClick={() => setQuery('')}
+                        paddingX={4}
+                        paddingY={2}
+                        radius="md"
+                        border
+                        className="text-xs font-mono font-bold hover:bg-bg transition-colors"
+                      >
+                        RESET FILTERS
+                      </Box>
                     </Stack>
                   </Box>
                 )}

@@ -33,7 +33,7 @@ export const variants = {
 };
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+  "inline-flex items-center justify-center font-sans font-semibold tracking-tight transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
   {
     variants: {
       variant: variants.emphasis,

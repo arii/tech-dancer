@@ -9,6 +9,10 @@ export const radius = {
   subtle: "rounded-[2px]", // Subtle 2px radius
   sm: "rounded-sm",
   md: "rounded-md",
+  lg: "rounded-lg",
+  xl: "rounded-xl",
+  "2xl": "rounded-2xl",
+  full: "rounded-full",
 };
 
 export const borders = {
@@ -65,6 +69,13 @@ export const buttons = {
 export const shadows = {
   topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
   standard: "shadow-sm",
+  md: "shadow-md",
+  lg: "shadow-lg",
+  xl: "shadow-xl",
+  "2xl": "shadow-2xl",
+  // Layered shadows for depth
+  layered: "shadow-[0_1px_1px_rgba(0,0,0,0.05),0_2px_2px_rgba(0,0,0,0.05),0_4px_4px_rgba(0,0,0,0.05),0_8px_8px_rgba(0,0,0,0.05)]",
+  premium: "shadow-[0_20px_50px_rgba(0,0,0,0.1)]",
 };
 
 export const zIndex = {
@@ -107,4 +118,6 @@ export const typeSizes = {
   "7xl": "text-5xl md:text-7xl",
   "8xl": "text-6xl md:text-8xl",
   "9xl": "text-7xl md:text-9xl",
+  "fluid-7": "text-4xl md:text-5xl lg:text-7xl",
+  "fluid-8": "text-5xl md:text-6xl lg:text-8xl",
 };

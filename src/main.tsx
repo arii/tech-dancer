@@ -7,6 +7,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { routes } from './App.tsx';
+import "@fontsource-variable/inter";
+import "@fontsource/fraunces/index.css";
 import './index.css';
 
 const router = createBrowserRouter(routes, {
