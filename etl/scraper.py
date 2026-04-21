@@ -12,6 +12,10 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 from urllib.parse import urljoin
 from tqdm import tqdm
+try:
+    from .processor import DataProcessor
+except ImportError:
+    from processor import DataProcessor
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -162,9 +166,15 @@ class ScoringDanceParser:
                     d_id = link.get('data-wsdc')
                     if not d_id and link.get('href'):
                         href = link.get('href')
-                        match = re.search(r'/(\d+)$', href)
-                        if match:
-                            d_id = match.group(1)
+                        # Path-based extraction: /profile/123 or /dancer/123
+                        path_parts = href.split('/')
+                        if path_parts and path_parts[-1].isdigit():
+                            d_id = path_parts[-1]
+                        else:
+                            # Fallback to regex
+                            match = re.search(r'/(\d+)$', href)
+                            if match:
+                                d_id = match.group(1)
 
                     if not d_id:
                         d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
@@ -201,21 +211,6 @@ class ScoringDanceParser:
                     })
 
         return pd.DataFrame(results)
-
-class DataProcessor:
-    """Handles data transformation and aggregation."""
-    @staticmethod
-    def process_for_ledger(raw_df):
-        if raw_df.empty:
-            return pd.DataFrame()
-
-        # Group by the new Dancer_ID and other metadata
-        processed_df = raw_df.groupby(['Dancer_ID', 'competitor_name', 'result_id', 'event_title', 'event_date']).agg(
-            Registry_Points_Sum=('wsdc_points', 'sum'),
-            Promoted=('Promoted', 'any')
-        ).reset_index()
-
-        return processed_df
 
 class OutputManager:
     """Handles saving data to various formats."""

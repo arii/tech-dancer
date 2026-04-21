@@ -7,10 +7,10 @@ from bs4 import BeautifulSoup
 from scraper import (
     ScoringDanceCrawler,
     ScoringDanceParser,
-    DataProcessor,
     OutputManager,
     BASE_URL
 )
+from processor import DataProcessor
 
 def test_wsdc_id_extraction():
     parser = ScoringDanceParser()

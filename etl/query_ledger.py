@@ -1,19 +1,35 @@
 import pandas as pd
 import argparse
 import os
+import logging
 
 def query_dancer(path, identity):
     if not os.path.exists(path):
         print(f"❌ Ledger file not found at: {path}")
         return
 
-    df = pd.read_parquet(path)
+    try:
+        df = pd.read_parquet(path)
+    except Exception as e:
+        print(f"❌ Failed to read ledger file: {e}")
+        return
+
+    # Robust schema validation
+    required_cols = ['Dancer_ID', 'competitor_name']
+    missing_cols = [col for col in required_cols if col not in df.columns]
+    if missing_cols:
+        print(f"❌ Ledger schema mismatch. Missing columns: {', '.join(missing_cols)}")
+        return
 
     # Search by WSDC ID or Name
-    result = df[
-        (df['Dancer_ID'].astype(str) == str(identity)) |
-        (df['competitor_name'].str.contains(str(identity), case=False, na=False))
-    ]
+    try:
+        result = df[
+            (df['Dancer_ID'].astype(str) == str(identity)) |
+            (df['competitor_name'].str.contains(str(identity), case=False, na=False))
+        ]
+    except Exception as e:
+        print(f"❌ Error during query execution: {e}")
+        return
 
     if result.empty:
         print(f"❌ No records found for '{identity}'")
