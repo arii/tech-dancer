@@ -3,14 +3,33 @@ import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
+import { ContentItem } from '@/lib/content';
 
-export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
+interface FolioGridProps {
+  items: ContentItem[];
+  categoryTitle: string;
+  basePath: string;
+  label?: string;
+  description?: string;
+  children?: React.ReactNode;
+  loading?: boolean;
+}
+
+export default function FolioGrid({
+  items,
+  categoryTitle,
+  basePath,
+  label,
+  description,
+  children,
+  loading
+}: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
   const filteredItems = items.filter(item => {
     return (
       safeSearch(item.title, search) ||
-      item.tags?.some((t: string) => safeSearch(t, search)) ||
+      (item as any).tags?.some((t: string) => safeSearch(t, search)) ||
       safeSearch(item.category, search) ||
       safeSearch(item.excerpt, search)
     );
@@ -67,7 +86,7 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
               className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
             >
               <ContentCard
-                {...item}
+                {...(item as any)}
                 basePath={basePath}
                 aspect="video"
               />
