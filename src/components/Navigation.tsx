@@ -75,6 +75,21 @@ export default function Navigation() {
             overflow="y-auto"
           >
             <Box as="ul" className="space-y-6">
+              <Box as="li" position="relative" className="group">
+                <Box
+                  as="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    openSearch();
+                  }}
+                  className="flex items-center gap-4 transition-all relative z-10 rounded-md py-6 border-b border-line/50 text-xl w-full text-text-dim hover:text-accent hover:bg-bg/50"
+                >
+                  <Search className="w-6 h-6 stroke-[1.5] flex-shrink-0" />
+                  <Text variant="sans" size="lg" weight="font-bold" className="leading-none">
+                    Search
+                  </Text>
+                </Box>
+              </Box>
               {routes.filter(r => r.path !== '/').map((item) => (
                 <NavItem 
                   key={item.path} 

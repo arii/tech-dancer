@@ -16,7 +16,7 @@ export function GlobalSearch() {
     if (isOpen) {
       close();
     }
-  }, [location.pathname, close, isOpen]);
+  }, [location.pathname, close]);
 
   useEffect(() => {
     const handleOpenSearch = () => open();
