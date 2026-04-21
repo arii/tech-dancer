@@ -100,7 +100,8 @@ export function GlobalSearch() {
                     {results.map((res: any) => {
                       const highlight = (text: string) => {
                         if (!query) return text;
-                        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+                        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
                         return parts.map((part, i) =>
                           part.toLowerCase() === query.toLowerCase()
                             ? <span key={i} className="text-accent bg-accent/10 rounded-sm px-0.5">{part}</span>

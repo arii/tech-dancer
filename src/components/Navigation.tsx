@@ -93,7 +93,7 @@ export default function Navigation() {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={motionTokens.arielTransition}
             position="fixed"
             className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
             padding={8}
@@ -125,7 +125,7 @@ export default function Navigation() {
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
-        <Stack padding={8} gap={10} flex={1}>
+        <Stack padding={8} gap={10} flex={1} className={cn("transition-all duration-500", scrolled && "gap-6 pt-6")}>
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
               variant="mono" 

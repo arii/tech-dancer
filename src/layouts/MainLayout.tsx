@@ -19,7 +19,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
             paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
-            className="mx-auto min-h-full max-w-7xl w-full transition-all duration-300"
+            className="mx-auto min-h-full max-w-screen-2xl w-full transition-all duration-300"
           >
             <Stack gap={12} className="w-full">
               <Box flex={1} className="w-full">
