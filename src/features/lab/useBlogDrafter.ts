@@ -52,27 +52,30 @@ ${markdownBody}`;
   };
 
   const applyAIResponse = (jsonString: string) => {
-    try {
-      let cleanJson = jsonString.trim();
-      if (cleanJson.startsWith('```json')) cleanJson = cleanJson.substring(7);
-      if (cleanJson.startsWith('```')) cleanJson = cleanJson.substring(3);
-      if (cleanJson.endsWith('```')) cleanJson = cleanJson.substring(0, cleanJson.length - 3);
-      cleanJson = cleanJson.trim();
+    const cleanAndParseJSON = (str: string) => {
+      try {
+        let clean = str.trim();
+        // Remove markdown code blocks if present
+        clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
+        clean = clean.trim();
+        return JSON.parse(clean);
+      } catch (e) {
+        console.error("JSON Clean/Parse Error:", e);
+        return null;
+      }
+    };
 
-      const parsed = JSON.parse(cleanJson);
-      
-      setData(prev => ({
-        ...prev,
-        title: parsed.title || prev.title,
-        excerpt: parsed.excerpt || parsed.description || prev.excerpt,
-        affiliateLink: parsed.affiliateLink || prev.affiliateLink,
-        commentary: parsed.commentary || prev.commentary
-      }));
-      return true;
-    } catch (e) {
-      console.error("JSON Parsing Error:", e);
-      return false;
-    }
+    const parsed = cleanAndParseJSON(jsonString);
+    if (!parsed) return false;
+
+    setData(prev => ({
+      ...prev,
+      title: parsed.title || prev.title,
+      excerpt: parsed.excerpt || parsed.description || prev.excerpt,
+      affiliateLink: parsed.affiliateLink || prev.affiliateLink,
+      commentary: parsed.commentary || prev.commentary
+    }));
+    return true;
   };
 
   return {
