@@ -66,30 +66,31 @@ File: {{FILENAME}}
 
 [ ] Side effects are correctly managed in hooks
 
-[ ] Proposed Comment:
-
+- [ ] **Proposed Comment:**
+```json
 {
   "path": "{{FILENAME}}",
-  "line": 1, 
-  "body": "Feedback here"
+  "line": 1,
+  "body": "<FILL IN: critical feedback for this file>"
 }
+```
 
 
 {{END_FOR_EACH}}
 
-🚀 Final Payload Generation
+## 🚀 Submission Steps
 
-Combine the validated comments above into this block and save as review_payload.json
-
+1. Collect all `Proposed Comment` blocks above into `/tmp/review_payload.json`:
+```json
 {
-  "body": "Overall review summary text here",
-  "event": "COMMENT",
+  "body": "## ANTI-AI-SLOP\n<overall summary>\n\n## FINDINGS\n<key findings>\n\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
   "comments": [
     { "path": "src/example.tsx", "line": 10, "body": "Inline feedback here" }
   ]
 }
+```
 
-
-📟 Submission Command
-
-python3 dev-tools/gh_collab.py review {{NUMBER}} --file review_payload.json
+2. Submit:
+```bash
+python3 dev-tools/gh_collab.py review {{NUMBER}} --file /tmp/review_payload.json
+```
