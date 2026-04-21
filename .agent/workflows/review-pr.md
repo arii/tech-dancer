@@ -6,7 +6,7 @@ description: review a GitHub pull request with in-depth inline feedback
 
 // turbo-all
 
-1. Fetch the PR diff to understand what changed:
+1. Fetch the PR diff to understand what changed (replace `PR_NUMBER`):
 ```bash
 python3 - <<'EOF'
 import subprocess, os, requests
@@ -24,24 +24,28 @@ for f in files:
 EOF
 ```
 
-2. Read the output and examine each file changed. For every file, evaluate:
-   - **Dead abstractions** — new class/context/hook that a simpler primitive already handles?
+2. Read the diff output. For EVERY changed file evaluate:
+   - **Dead abstractions** — new class/context/hook that a simpler primitive handles?
    - **Unnecessary indirection** — does this add a layer where a direct call would do?
-   - **Responsibility creep** — component taking on logic for a hook or parent?
-   - **Import bloat** — unnecessary `import React` (not needed in React 17+)?
-   - **Token compliance** — raw Tailwind or inline styles leaking past design tokens?
+   - **Responsibility creep** — component taking on logic that belongs in a hook or parent?
+   - **Import bloat** — `import React` not needed in React 17+?
+   - **Token compliance** — raw Tailwind or inline styles bypassing design tokens?
+   - **Audit ratio** — if additions > 100 lines, find 10+ lines to remove.
 
-3. Write `review_payload.json` with an inline comment targeting the most critical line of each changed file:
-```json
+3. Write the review payload to `/tmp` (never commit review files to the repo):
+```bash
+cat > /tmp/review_payload.json <<'JSON'
 {
-  "body": "Overall review summary text here",
+  "body": "## ANTI-AI-SLOP\n<!-- Flag verbose comments, over-engineering, duplicate patterns. -->\n\n## FINDINGS\n<!-- Per-file feedback. Inline comments cover specific lines. -->\n\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
   "comments": [
-    { "path": "src/example.tsx", "line": 10, "body": "Inline feedback here" }
+    { "path": "src/example.tsx", "line": 10, "body": "Inline feedback targeting the most critical line of this file." }
   ]
 }
+JSON
 ```
 
-4. Submit the review in one step:
+4. Submit in one step — the link to the review is printed on success:
 ```bash
-python3 dev-tools/gh_collab.py review PR_NUMBER --file review_payload.json
+python3 dev-tools/gh_collab.py review PR_NUMBER --file /tmp/review_payload.json
 ```
+
