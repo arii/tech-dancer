@@ -44,7 +44,7 @@ export default defineConfig(({mode}) => {
         gzipSize: true,
       }),
       Sitemap({
-        hostname: 'https://arii.github.io/tech-dancer/',
+        hostname: 'https://arii.github.io',
         outDir: 'dist',
         exclude: ['/404'],
         generateRobotsTxt: true,
@@ -52,8 +52,8 @@ export default defineConfig(({mode}) => {
           userAgent: '*',
           allow: '/',
         }],
+        basePath: '/tech-dancer',
         dynamicRoutes: [
-          '/',
           '/gear',
           '/research',
           '/blog',
@@ -63,10 +63,10 @@ export default defineConfig(({mode}) => {
           ...(() => {
             const routes: string[] = [];
             const contentDirs = [
-              { dir: 'posts', prefix: '/blog/' },
-              { dir: 'resources', prefix: '/gear/' },
+              { dir: 'blog', prefix: '/blog/' },
+              { dir: 'gear', prefix: '/gear/' },
               { dir: 'events', prefix: '/events/' },
-              { dir: 'studies', prefix: '/research/' },
+              { dir: 'research', prefix: '/research/' },
             ];
 
             contentDirs.forEach(({ dir, prefix }) => {

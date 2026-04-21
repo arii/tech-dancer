@@ -14,9 +14,9 @@ The workflow file lives at `.github/workflows/issue_to_pr.yml`.
 
 All content lives under `content/` in the repo root.
 
-- `content/posts/` ← Blog posts
-- `content/resources/` ← Dance Resources (gear, travel, recovery guides)
-- `content/studies/` ← Data Analysis Studies (the research journal)
+- `content/blog/` ← Blog posts
+- `content/gear/` ← Dance Resources (gear, travel, recovery guides)
+- `content/research/` ← Data Analysis Studies (the research journal)
 
 ## Routing and SEO Standards
 
@@ -52,7 +52,7 @@ The workflow fires automatically. Within ~60 seconds, a PR will appear linking b
 
 ## Content Templates
 
-### Template 1 — Blog Post (`content/posts/`)
+### Template 1 — Blog Post (`content/blog/`)
 Use for: technique hacks, travel tips, and gear reviews.
 
 \```markdown
@@ -79,7 +79,7 @@ Explain the idea.
 End with a practical action.
 \```
 
-### Template 2 — Dance Resource / Gear Guide (`content/resources/`)
+### Template 2 — Dance Resource / Gear Guide (`content/gear/`)
 Use for gear reviews, travel hacks, DIY tutorials.
 
 \```markdown
@@ -107,7 +107,7 @@ Detailed instructions.
 One paragraph summary.
 \```
 
-### Template 3 — Data Analysis Study (`content/studies/`)
+### Template 3 — Data Analysis Study (`content/research/`)
 Use for the research journal entries in the Dance Analytics section.
 
 \```markdown
