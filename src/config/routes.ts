@@ -14,7 +14,6 @@ export const routes: RouteConfig[] = [
   { path: '/blog', label: 'Blog Posts' },
   { path: '/gear', label: 'Gear Reviews' },
   { path: '/research', label: 'Data & Development Lab' },
-  { path: '/ux-auditor', label: 'UX Auditor' },
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
 ];

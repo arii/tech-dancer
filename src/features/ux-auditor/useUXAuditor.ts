@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 
@@ -49,7 +49,7 @@ export function useUXAuditor() {
   // Firebase Init
   useEffect(() => {
     if (!firebaseConfig) return;
-    const app = initializeApp(firebaseConfig);
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
     const auth = getAuth(app);
     // getFirestore(app);
 
@@ -85,33 +85,58 @@ export function useUXAuditor() {
   }, [user]);
 
   const runUXAudit = async () => {
-    if (!url || !user) return;
+    if (!url) return;
     setIsAnalyzing(true);
 
     try {
-      const db = getFirestore();
-      const newReportRef = await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'), {
+      let reportId = Date.now().toString();
+
+      const newReport: UXReport = {
+        id: reportId,
         url,
         timestamp: Date.now(),
         status: 'processing',
-      });
+      };
 
-      for (const vp of VIEWPORTS) {
-        // Mock image for simulation if real agent isn't running
-        const mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
+      // Add to local state immediately for optimistic UI
+      setReports(prev => [newReport, ...prev].sort((a, b) => b.timestamp - a.timestamp));
+      setActiveReport(newReport);
 
-        // Analyze using the multimodal prompt
-        const analysis = await analyzeViewport(vp, url);
-
-        await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', newReportRef.id), {
-          [`findings_${vp.name.toLowerCase()}`]: analysis,
-          [`image_${vp.name.toLowerCase()}`]: mockImg
-        });
+      if (user && firebaseConfig) {
+        const db = getFirestore();
+        const newReportRef = await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'), newReport);
+        reportId = newReportRef.id;
+        newReport.id = reportId;
       }
 
-      await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', newReportRef.id), {
-        status: 'completed'
-      });
+      for (const vp of VIEWPORTS) {
+        const mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
+        const analysis = await analyzeViewport(vp, url);
+
+        newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
+        newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
+
+        setReports(prev => prev.map(r => r.id === reportId ? { ...newReport } : r));
+
+        if (user && firebaseConfig) {
+          const db = getFirestore();
+          await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+            [`findings_${vp.name.toLowerCase()}`]: analysis,
+            [`image_${vp.name.toLowerCase()}`]: mockImg
+          });
+        }
+      }
+
+      newReport.status = 'completed';
+      setReports(prev => prev.map(r => r.id === reportId ? { ...newReport } : r));
+      setActiveReport({ ...newReport });
+
+      if (user && firebaseConfig) {
+        const db = getFirestore();
+        await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+          status: 'completed'
+        });
+      }
     } catch (error) {
       console.error("Audit failed", error);
     } finally {
@@ -156,7 +181,18 @@ export function useUXAuditor() {
       const result = await response.json();
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
     } catch (err) {
-      return { summary: "Analysis fallback", improvements: [] } as ViewportAnalysis;
+      // Provide a populated prompt if API fails, as requested
+      return {
+        summary: "API Key missing or fetch failed. Manual analysis required. Use the prompt below with an LLM of your choice.",
+        improvements: [
+          {
+            element: "Manual Audit Required",
+            issue: "No automated analysis generated.",
+            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.`,
+            severity: 5
+          }
+        ]
+      } as ViewportAnalysis;
     }
   };
 

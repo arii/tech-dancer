@@ -1,4 +1,4 @@
-import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search, Eye } from 'lucide-react';
+import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -11,7 +11,6 @@ const iconMap: Record<string, any> = {
   '/gear': ShoppingBag,
   '/blog': BookOpen,
   '/research': Database,
-  '/ux-auditor': Eye,
   '/about': User,
 };
 

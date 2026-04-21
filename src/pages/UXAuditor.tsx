@@ -1,5 +1,5 @@
 import {
-  Camera, CheckCircle, RefreshCw, Eye,
+  Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
   ChevronRight, Github
 } from 'lucide-react';
@@ -15,7 +15,6 @@ const viewportIcons = {
 
 export default function UXAuditor() {
   const {
-    user,
     reports,
     isAnalyzing,
     activeReport,
@@ -57,7 +56,7 @@ export default function UXAuditor() {
           />
           <button
             onClick={runUXAudit}
-            disabled={isAnalyzing || !user}
+            disabled={isAnalyzing}
             className="bg-accent hover:opacity-90 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-all disabled:opacity-50"
           >
             {isAnalyzing ? <RefreshCw className="animate-spin w-4 h-4" /> : <Camera className="w-4 h-4" />}

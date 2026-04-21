@@ -28,7 +28,7 @@ export default function ResearchAnalytics() {
               <Box 
                 key={tool.id}
                 as="button"
-                onClick={() => navigate(`/research/${tool.id}`)}
+                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 surface="default"
                 border
                 padding="card"
