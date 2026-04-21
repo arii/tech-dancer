@@ -118,9 +118,9 @@ interface ContentModule {
 }
 
 const contentModules = {
-  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
-  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
-  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
+  posts: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
+  resources: import.meta.glob('/content/gear/*.md', { eager: true, query: '?raw' }),
+  studies: import.meta.glob('/content/research/*.md', { eager: true, query: '?raw' }),
   events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
 };
 

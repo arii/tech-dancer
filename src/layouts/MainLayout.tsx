@@ -9,20 +9,22 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const { showEmailBar } = useEmailCaptureContext();
 
   return (
-    <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
+    <Box layout="root" minHeight="screen" position="relative" overflowX="hidden" width="full">
       <GlobalSearch />
       
-      <Box display="flex" className="min-h-screen w-full">
+      <Box display="flex" minHeight="screen" width="full">
         <Navigation />
-        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full">
+        <Box as="main" flex={1} position="relative" overflowY="auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full">
           <Box
+            marginX="auto"
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
             paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
-            className="mx-auto min-h-full max-w-7xl w-full transition-all duration-300"
+            minHeight="full"
+            className="max-w-7xl w-full transition-all duration-300"
           >
-            <Stack gap={12} className="w-full">
-              <Box flex={1} className="w-full">
+            <Stack gap={12} width="full">
+              <Box flex={1} width="full">
                 {children}
               </Box>
               <Footer />
