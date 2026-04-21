@@ -15,7 +15,9 @@ export function useToolbox() {
   const groupedResources = useMemo(() => {
     return categories.map(cat => ({
       ...cat,
-      items: resources.filter(r => safeSearch(r.category, cat.id))
+      items: [...resources]
+        .filter(r => safeSearch(r.category, cat.id))
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     }));
   }, [resources]);
 

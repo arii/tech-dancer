@@ -51,7 +51,7 @@ export function useBlog() {
       );
     }
 
-    return result;
+    return [...result].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [posts, activeCategory, searchTerm]);
 
   return {

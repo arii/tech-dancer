@@ -18,32 +18,51 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
 
   return (
     <Box as="section" height="full">
-      <Box as="header" marginBottom={12}>
-        <PageHeader
-          label={label || "FOLIO"}
-          title={categoryTitle}
-          description={description}
-        />
-        {children}
-        <Box marginTop={8} position="relative" maxWidth="2xl">
-          <Box
-            as="input"
-            type="text"
-            placeholder="SEARCH_THE_ENGINE..."
-            width="full"
-            surface="default"
-            border
-            paddingX={6}
-            paddingY={4}
-            variant="mono"
-            size="sm"
-            className="focus:border-accent-brand outline-none focus:ring-0"
-            onChange={(e: any) => setSearch(e.target.value)}
-          />
-        </Box>
-      </Box>
+      <details className="group" open>
+        <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer">
+          <Box as="div" display="flex" items="start" justify="between">
+            <PageHeader
+              label={label || "FOLIO"}
+              title={categoryTitle}
+              description={description}
+            />
+            <Box padding={4} className="group-open:rotate-180 transition-transform duration-300">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </Box>
+          </Box>
+        </summary>
 
-      <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={0} border="t" className="border-l border-line mt-8">
+        <div className="pt-8">
+          {children}
+          <Box marginTop={8} position="relative" maxWidth="2xl">
+            <Box
+              as="input"
+              type="text"
+              placeholder="SEARCH_THE_ENGINE..."
+              width="full"
+              surface="default"
+              border
+              paddingX={6}
+              paddingY={4}
+              variant="mono"
+              size="sm"
+              className="focus:border-accent-brand outline-none focus:ring-0"
+              onChange={(e: any) => setSearch(e.target.value)}
+            />
+          </Box>
+
+          <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={0} border="t" className="border-l border-line mt-8">
         {loading ? (
           Array.from({ length: 6 }).map((_, index) => (
             <Box
@@ -73,7 +92,9 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
             </Box>
           ))
         )}
-      </Grid>
+          </Grid>
+        </div>
+      </details>
     </Box>
   );
 }
