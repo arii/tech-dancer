@@ -1,6 +1,5 @@
 import { typography } from "@/styles/design-tokens";
 import { cva } from "class-variance-authority";
-import { variants } from "@/styles/variants";
 
 /**
  * Standardized Variant Contracts for the Systems Console.
