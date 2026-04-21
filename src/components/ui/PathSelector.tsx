@@ -1,15 +1,22 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 export default function PathSelector() {
+  const [hoveredPath, setHoveredPath] = useState<'dancer' | 'roboticist' | null>(null);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full bg-black">
       {/* --- DANCER PATH --- */}
-      <div className="lg:col-span-7 relative group overflow-hidden cursor-pointer border-r border-line/20">
-        {/* Background: Grayscale by default, colored on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-neutral-800/40 to-black group-hover:from-accent/30 group-hover:to-black transition-all duration-700 ease-in-out opacity-60 group-hover:opacity-100"></div>
+      <div
+        className="lg:col-span-7 relative group overflow-hidden cursor-pointer border-r border-line/20"
+        onMouseEnter={() => setHoveredPath('dancer')}
+        onMouseLeave={() => setHoveredPath(null)}
+      >
+        {/* Background: Colored by default, grayscales if other is hovered */}
+        <div className={`absolute inset-0 bg-gradient-to-br from-accent/30 to-black transition-all duration-700 ease-in-out ${hoveredPath === 'roboticist' ? 'grayscale opacity-60' : 'opacity-100'}`}></div>
 
-        {/* Scanline: Hidden by default, visible and scanning on hover */}
-        <div className="absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] opacity-0 group-hover:opacity-100 animate-scanline z-10 pointer-events-none transition-opacity duration-500"></div>
+        {/* Scanline: Hidden by default, visible and scanning ONLY when hovered */}
+        <div className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] pointer-events-none transition-opacity duration-500 ${hoveredPath === 'dancer' ? 'opacity-100 animate-scanline' : 'opacity-0'}`}></div>
 
         {/* Content Container */}
         <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
@@ -32,12 +39,16 @@ export default function PathSelector() {
       </div>
 
       {/* --- ROBOTICIST PATH --- */}
-      <div className="lg:col-span-5 relative group overflow-hidden cursor-pointer">
-        {/* Background: Grayscale by default, colored on hover */}
-        <div className="absolute inset-0 bg-gradient-to-bl from-neutral-800/40 to-black group-hover:from-accent/30 group-hover:to-black transition-all duration-700 ease-in-out opacity-60 group-hover:opacity-100"></div>
+      <div
+        className="lg:col-span-5 relative group overflow-hidden cursor-pointer"
+        onMouseEnter={() => setHoveredPath('roboticist')}
+        onMouseLeave={() => setHoveredPath(null)}
+      >
+        {/* Background: Colored by default, grayscales if other is hovered */}
+        <div className={`absolute inset-0 bg-gradient-to-bl from-accent/30 to-black transition-all duration-700 ease-in-out ${hoveredPath === 'dancer' ? 'grayscale opacity-60' : 'opacity-100'}`}></div>
 
-        {/* Scanline: Hidden by default, visible and scanning on hover */}
-        <div className="absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] opacity-0 group-hover:opacity-100 animate-scanline z-10 pointer-events-none transition-opacity duration-500 delay-100"></div>
+        {/* Scanline: Hidden by default, visible and scanning ONLY when hovered */}
+        <div className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${hoveredPath === 'roboticist' ? 'opacity-100 animate-scanline delay-100' : 'opacity-0'}`}></div>
 
         {/* Content Container */}
         <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
