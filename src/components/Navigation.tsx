@@ -1,4 +1,4 @@
-import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search } from 'lucide-react';
+import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search, Send } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
