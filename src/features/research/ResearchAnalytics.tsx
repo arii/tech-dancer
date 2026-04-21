@@ -21,7 +21,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{tools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.2em]">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -61,7 +61,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{studies.length} ARTICLES</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.2em]">{studies.length} ARTICLES</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={12}>
             {studies.map((study) => (

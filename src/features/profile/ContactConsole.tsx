@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Send, MessageSquare, HelpCircle, Sparkles, BarChart2, Shield } from 'lucide-react';
+import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import React from 'react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
+import { staggerContainer, staggerItem, fadeInUp } from '@/lib/animations';
 
 export default function Contact() {
   const { 
@@ -43,35 +44,13 @@ export default function Contact() {
 }
 
 function SuccessState({ onReset }: { onReset: () => void }) {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 30 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    }
-  };
-
   return (
     <Box
       as={motion.div}
-      variants={container}
+      variants={staggerContainer}
       initial="hidden"
       animate="show"
+      exit="exit"
       display="flex"
       direction="col"
       align="center"
@@ -82,20 +61,20 @@ function SuccessState({ onReset }: { onReset: () => void }) {
       <Stack gap="12" align="center">
         <Box
           as={motion.div}
-          variants={item}
+          variants={staggerItem}
           width="24" height="24" border surface="muted" radius="lg" display="flex" align="center" justify="center" color="brand"
         >
           <Sparkles className="w-12 h-12 stroke-1" />
         </Box>
         <Stack gap="4">
-          <Text as={motion.h2} variants={item} variant="headline" size={{ base: "4xl", lg: "6xl" }}>Message Received.</Text>
-          <Text as={motion.p} variants={item} variant="body" maxWidth="65ch" marginX="auto" size={{ base: "base", lg: "lg" }}>
+          <Text as={motion.h2} variants={staggerItem} variant="headline" size={{ base: "4xl", lg: "6xl" }}>Message Received.</Text>
+          <Text as={motion.p} variants={staggerItem} variant="body" maxWidth="65ch" marginX="auto" size={{ base: "base", lg: "lg" }}>
             Thank you for reaching out. I&apos;ve received your message and will get back to you as soon as possible.
           </Text>
         </Stack>
         <Box 
           as={motion.button} 
-          variants={item}
+          variants={staggerItem}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onReset}
@@ -128,10 +107,10 @@ interface ContactFormProps {
 function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      variants={fadeInUp}
+      initial="initial"
+      animate="animate"
+      exit="exit"
     >
       <Stack gap="16">
         <PageHeader 
@@ -159,7 +138,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                   { label: 'Gear Review', channel: 'Product Feedback', icon: Sparkles },
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
-                  <Box key={item.label} display="flex" align="center" gap="6" className="group">
+                  <Box key={item.label} display="flex" align="center" gap="6" width="full" className="group">
                     <Box
                       width={12}
                       height={12}
@@ -175,7 +154,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                     >
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
-                    <Stack gap={1} shrink={1}>
+                    <Stack gap={1} flex={1} width="full">
                       <Text variant="sans" size="base" weight="font-bold">{item.label}</Text>
                       <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="!tracking-[0.2em] uppercase">{item.channel}</Text>
                     </Stack>
