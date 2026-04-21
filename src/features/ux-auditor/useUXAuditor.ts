@@ -35,7 +35,7 @@ export interface UXReport {
   url: string;
   timestamp: number;
   status: 'processing' | 'completed';
-  [key: string]: any; // Allow dynamic keys like findings_mobile, image_mobile
+  [key: string]: string | number | ViewportAnalysis | undefined; // Allow dynamic keys like findings_mobile, image_mobile
 }
 
 export function useUXAuditor() {

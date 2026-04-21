@@ -29,9 +29,12 @@ export default function UXAuditor() {
 
   return (
     <Stack gap={8} className="w-full">
-      <Box
-        display="flex"
-        className="flex-col md:flex-row md:items-center justify-between gap-6 border-b border-line pb-6"
+      <Stack
+        direction={{ base: 'col', md: 'row' }}
+        align={{ base: 'start', md: 'center' }}
+        justify="between"
+        gap={6}
+        className="border-b border-line pb-6"
       >
         <Box>
           <PageHeader
@@ -208,7 +211,7 @@ export default function UXAuditor() {
                                       {imp.issue}
                                     </Text>
                                     <Box className="bg-bg p-3 rounded-lg border border-line flex items-start gap-2">
-                                      <span className="text-accent text-[10px] font-bold mt-0.5">FIX</span>
+                                      <Text variant="sans" size="xs" weight="font-bold" className="text-accent mt-0.5">FIX</Text>
                                       <Box className="flex-1 min-w-0">
                                         <Text variant="sans" size="xs" weight="font-bold" className="text-text break-words whitespace-pre-wrap line-clamp-4">
                                           {imp.suggestion}
