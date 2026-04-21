@@ -10,7 +10,7 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
     const term = search.toLowerCase();
     return (
       item.title?.toLowerCase().includes(term) ||
-      item.tags?.some((t: string) => t.toLowerCase().includes(term)) ||
+      item.tags?.some((t: string) => String(t || '').toLowerCase().includes(term)) ||
       item.category?.toLowerCase().includes(term) ||
       item.excerpt?.toLowerCase().includes(term)
     );

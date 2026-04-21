@@ -14,7 +14,7 @@ export function useToolbox() {
   const groupedResources = useMemo(() => {
     return categories.map(cat => ({
       ...cat,
-      items: resources.filter(r => r.category.toLowerCase().includes(cat.id))
+      items: resources.filter(r => r.category?.toLowerCase().includes(cat.id))
     }));
   }, [resources]);
 
@@ -24,9 +24,9 @@ export function useToolbox() {
     return groupedResources.map(cat => ({
       ...cat,
       items: cat.items.filter(item => 
-        item.title.toLowerCase().includes(term) ||
-        item.category.toLowerCase().includes(term) ||
-        item.excerpt.toLowerCase().includes(term)
+        item.title?.toLowerCase().includes(term) ||
+        item.category?.toLowerCase().includes(term) ||
+        item.excerpt?.toLowerCase().includes(term)
       )
     })).filter(cat => cat.items.length > 0);
   }, [groupedResources, searchTerm]);

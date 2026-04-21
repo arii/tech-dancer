@@ -16,9 +16,9 @@ export function useGlobalSearch() {
     if (!query.trim()) return [];
     const term = query.toLowerCase();
     return allContent.filter(item => 
-      item.title.toLowerCase().includes(term) ||
-      item.excerpt.toLowerCase().includes(term) ||
-      item.content.toLowerCase().includes(term) ||
+      (item.title?.toLowerCase().includes(term)) ||
+      (item.excerpt?.toLowerCase().includes(term)) ||
+      (item.content?.toLowerCase().includes(term)) ||
       (item.tags && item.tags.some(t => t.toLowerCase().includes(term)))
     );
   }, [allContent, query]);

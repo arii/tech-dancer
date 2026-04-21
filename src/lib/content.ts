@@ -114,7 +114,17 @@ function transform<T>(modules: Record<string, any>): T[] {
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
       const { data, content } = parseFrontmatter(contentStr);
-      return { ...data, content, slug: slugFrom(path) } as unknown as T;
+      return {
+        ...data,
+        title: String(data.title || 'Untitled'),
+        category: String(data.category || 'General'),
+        excerpt: String(data.excerpt || ''),
+        date: String(data.date || ''),
+        author: String(data.author || ''),
+        tags: Array.isArray(data.tags) ? data.tags : [],
+        content: content || '',
+        slug: slugFrom(path)
+      } as unknown as T;
     })
     .sort((a: any, b: any) => (a.date && b.date ? +new Date(b.date) - +new Date(a.date) : 0));
 }

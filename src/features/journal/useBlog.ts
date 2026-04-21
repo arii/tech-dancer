@@ -45,9 +45,9 @@ export function useBlog() {
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter(p => 
-        p.title.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term) ||
-        p.excerpt.toLowerCase().includes(term)
+        p.title?.toLowerCase().includes(term) ||
+        p.category?.toLowerCase().includes(term) ||
+        p.excerpt?.toLowerCase().includes(term)
       );
     }
 
