@@ -23,19 +23,12 @@ export function useToolbox() {
     if (!searchTerm) return groupedResources;
     return groupedResources.map(cat => ({
       ...cat,
-      items: cat.items.filter(item => {
-        const query = searchTerm.toLowerCase();
-        const title = String(item.title || "").toLowerCase();
-        const category = String(item.category || "").toLowerCase();
-        const excerpt = String(item.excerpt || "").toLowerCase();
-        
-        return (
-          title.includes(query) ||
-          category.includes(query) ||
-          excerpt.includes(query) ||
-          (item.tags?.some((t: any) => String(t || "").toLowerCase().includes(query)))
-        );
-      })
+      items: cat.items.filter(item => 
+        safeSearch(item.title, searchTerm) ||
+        safeSearch(item.category, searchTerm) ||
+        safeSearch(item.excerpt, searchTerm) ||
+        safeSearch(item.tags, searchTerm)
+      )
     })).filter(cat => cat.items.length > 0);
   }, [groupedResources, searchTerm]);
 

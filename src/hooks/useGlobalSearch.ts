@@ -15,19 +15,12 @@ export function useGlobalSearch() {
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    const searchTerm = query.toLowerCase();
-    return allContent.filter(item => {
-      const title = String(item.title || "").toLowerCase();
-      const excerpt = String(item.excerpt || "").toLowerCase();
-      const content = String(item.content || "").toLowerCase();
-      
-      return (
-        title.includes(searchTerm) ||
-        excerpt.includes(searchTerm) ||
-        content.includes(searchTerm) ||
-        (item.tags?.some((t: any) => String(t || "").toLowerCase().includes(searchTerm)))
-      );
-    });
+    return allContent.filter(item => 
+      safeSearch(item.title, query) ||
+      safeSearch(item.excerpt, query) ||
+      safeSearch(item.content, query) ||
+      safeSearch(item.tags, query)
+    );
   }, [allContent, query]);
 
   return {

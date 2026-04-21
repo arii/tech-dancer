@@ -26,11 +26,19 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
         />
         {children}
         <Box marginTop={8} position="relative" maxWidth="2xl">
-          <input
+          <Box
+            as="input"
             type="text"
             placeholder="SEARCH_THE_ENGINE..."
-            className="w-full bg-surface border-2 border-line px-6 py-4 font-mono text-sm focus:outline-none focus:border-accent text-text-main"
-            onChange={(e) => setSearch(e.target.value)}
+            width="full"
+            surface="default"
+            border
+            paddingX={6}
+            paddingY={4}
+            variant="mono"
+            size="sm"
+            className="focus:border-accent-brand outline-none focus:ring-0"
+            onChange={(e: any) => setSearch(e.target.value)}
           />
         </Box>
       </Box>

@@ -20,6 +20,11 @@ export function composeStyles(...styles: ClassValue[]) {
 export function safeSearch(value: any, term: string): boolean {
   if (!term) return true;
   const normalizedTerm = term.toLowerCase();
+  
+  if (Array.isArray(value)) {
+    return value.some(v => safeSearch(v, term));
+  }
+  
   const normalizedValue = String(value || '').toLowerCase();
   return normalizedValue.includes(normalizedTerm);
 }
