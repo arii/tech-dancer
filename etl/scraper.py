@@ -12,7 +12,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 from urllib.parse import urljoin
 from tqdm import tqdm
-from etl.processor import DataProcessor
+from etl.processor import process_for_ledger
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -292,10 +292,9 @@ slug: "{slug}"
 
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
-    def __init__(self, crawler, parser, processor, output_manager):
+    def __init__(self, crawler, parser, output_manager):
         self.crawler = crawler
         self.parser = parser
-        self.processor = processor
         self.output_manager = output_manager
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
@@ -322,7 +321,7 @@ class ETLPipeline:
             raw_df = self.parser.parse_results(content, url)
             self.output_manager.save_markdown(raw_df, url)
 
-            ledger_df = self.processor.process_for_ledger(raw_df)
+            ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
 
     async def run_historical(self, years=5):
@@ -346,7 +345,7 @@ class ETLPipeline:
                             raw_df = self.parser.parse_results(content, res_url)
                             self.output_manager.save_markdown(raw_df, res_url)
 
-                            ledger_df = self.processor.process_for_ledger(raw_df)
+                            ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
                             await asyncio.sleep(1)
                         except Exception as e:
@@ -366,7 +365,6 @@ async def main():
     pipeline = ETLPipeline(
         ScoringDanceCrawler(),
         ScoringDanceParser(),
-        DataProcessor(),
         OutputManager(args.ledger, args.studies)
     )
 

@@ -10,7 +10,7 @@ from etl.scraper import (
     OutputManager,
     BASE_URL
 )
-from etl.processor import DataProcessor
+from etl.processor import process_for_ledger
 
 def test_wsdc_id_extraction():
     parser = ScoringDanceParser()
@@ -56,7 +56,6 @@ def test_parse_results():
     assert 103 in bob_brown['competitor_bib'].values
 
 def test_process_for_ledger():
-    processor = DataProcessor()
     raw_data = pd.DataFrame({
         'Dancer_ID': ['123', '123', '456'],
         'competitor_bib': [101, 101, 102],
@@ -67,7 +66,7 @@ def test_process_for_ledger():
         'event_title': ['Mock Event', 'Mock Event', 'Mock Event'],
         'event_date': ['01/01/2025', '01/01/2025', '01/01/2025']
     })
-    df = processor.process_for_ledger(raw_data)
+    df = process_for_ledger(raw_data)
     assert len(df) == 2
     assert df[df['Dancer_ID'] == '123']['Registry_Points_Sum'].values[0] == 14.5
     assert df[df['Dancer_ID'] == '123']['Promoted'].values[0] == True
