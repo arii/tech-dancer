@@ -1,55 +1,114 @@
-name: Deploy to GitHub Pages
+name: Deploy Multi-Branch Site
 
 on:
   push:
     branches:
       - main
+      - 'feature/*' # Adjust this pattern to match the branches you want to deploy
+  pull_request:
+    branches:
+      - main
 
+# Required permissions for GITHUB_TOKEN to deploy Pages and post PR comments
 permissions:
   contents: read
   pages: write
   id-token: write
+  pull-requests: write
+  issues: write
 
+# Allow only one concurrent deployment to prevent race conditions
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      # 1. Always check out the main branch to the root of the site
+      - name: Checkout Main Branch
         uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-source
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: main-source/pnpm-lock.yaml
 
-      - name: Install dependencies
+      - name: Install Main Dependencies
         run: pnpm install
+        working-directory: main-source
 
-      - name: Build the app
+      - name: Build Main Branch
         run: pnpm run build
+        working-directory: main-source
         env:
-          NODE_ENV: production
+          VITE_BASE_PATH: /tech-dancer/
 
-      - name: Upload artifact
+      - name: Prepare site-root
+        run: |
+          mkdir site-root
+          cp -r main-source/dist/* site-root/
+
+      # 2. Check out the feature branch into a sub-folder (skip if pushing to main)
+      - name: Checkout Sub-Folder Branch
+        if: github.ref_name != 'main'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          path: feature-source
+
+      - name: Install Feature Dependencies
+        if: github.ref_name != 'main'
+        run: pnpm install
+        working-directory: feature-source
+
+      - name: Build Feature Branch
+        if: github.ref_name != 'main'
+        run: |
+          BRANCH_NAME=${{ github.event.pull_request.head.ref || github.ref_name }}
+          pnpm run build
+          mkdir -p ../site-root/$BRANCH_NAME
+          cp -r dist/* ../site-root/$BRANCH_NAME/
+        working-directory: feature-source
+        env:
+          VITE_BASE_PATH: /tech-dancer/${{ github.event.pull_request.head.ref || github.ref_name }}/
+
+      # 3. Upload the combined folder structure as a single artifact
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: site-root
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+      # 4. Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # 5. Automatically post the live URL to the Pull Request
+      - name: Post Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = "${{ steps.deployment.outputs.page_url }}";
+            // Get the name of the branch that triggered the PR
+            const branchName = context.payload.pull_request.head.ref;
+            const subFolderUrl = url + branchName + "/";
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Deployment Complete!**\n\n- **Main Site:** ${url}\n- **Sub-folder Branch:** ${subFolderUrl}`
+            })
