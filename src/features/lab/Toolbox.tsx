@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
+import { useMemo } from 'react';
+import { Box, Grid, Text } from '@/layouts/Primitives';
 import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
 
