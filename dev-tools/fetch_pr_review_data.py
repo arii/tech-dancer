@@ -110,14 +110,14 @@ def main():
     content = content.replace("{{DESCRIPTION}}", description)
     content = content.replace("{{FILES_CHANGES}}", "\n".join(file_list_lines))
 
-    # ── Write to /tmp ──────────────────────────────────────────────────────────
-    out_path = f"/tmp/pr-review-{pr_num}.md"
+    # ── Write to project root (workspace-accessible by agents) ──────────────────
+    out_path = os.path.join(repo_root, f"plan-pr-review-{pr_num}.md")
     with open(out_path, "w") as out:
         out.write(content)
 
     print(f"✅ Review plan created: {out_path}")
     print(f"   Read with:   cat {out_path}")
-    print(f"   Submit with: python3 dev-tools/gh_collab.py review {pr_num} --file /tmp/review_payload.json")
+    print(f"   Submit with: python3 dev-tools/submit_pr_review_data.py {out_path}")
 
 
 if __name__ == "__main__":

@@ -147,9 +147,9 @@ def main():
 
     print(f"   PR #{pr_number} — {len(inline_comments)} inline comment(s) extracted")
 
-    # ── Build and write payload ────────────────────────────────────────────────
-    payload = {"body": overall_body, "comments": inline_comments}
-    payload_path = "/tmp/review_payload.json"
+    # Write payload next to the review doc (workspace-accessible)
+    payload_path = os.path.join(os.path.dirname(os.path.abspath(doc_path)), "review_payload.json")
+
     with open(payload_path, "w") as f:
         json.dump(payload, f, indent=2)
     print(f"✅ Payload written: {payload_path}")

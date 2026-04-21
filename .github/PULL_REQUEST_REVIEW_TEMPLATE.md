@@ -108,5 +108,5 @@ After completing every file block above, fill in the body below and run the comm
 
 Command:
 ```bash
-python3 dev-tools/submit_pr_review_data.py /tmp/pr-review-{{NUMBER}}.md
+python3 dev-tools/submit_pr_review_data.py plan-pr-review-{{NUMBER}}.md
 ```
