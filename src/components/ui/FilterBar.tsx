@@ -17,10 +17,10 @@ export function FilterBar({ activeCategory, categories, onSelect }: FilterBarPro
             as="button"
             onClick={() => onSelect(cat)}
             paddingX={6}
-            paddingY={2.5}
+            height={12}
             radius="full"
             className={cn(
-              "transition-all duration-300 border text-sm font-bold tracking-tight",
+              "transition-all duration-300 border text-sm font-bold tracking-tight flex items-center justify-center",
               activeCategory === cat
                 ? "bg-accent text-white border-accent shadow-sm"
                 : "bg-bg text-text-dim border-line hover:border-accent hover:text-accent"
