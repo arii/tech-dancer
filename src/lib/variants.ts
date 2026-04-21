@@ -10,8 +10,9 @@ export const variants = {
     default: "bg-surface text-text-main",
     muted: "bg-line/50 text-text-dim",
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
-    card: "bg-card-bg border-line",
+    card: "bg-surface border-slate-100 shadow-md",
     contrast: "bg-text-main text-bg",
+    github: "bg-[#24292e] text-bg",
   },
   intent: {
     default: "text-text-main",
@@ -29,7 +30,10 @@ export const variants = {
   radius: {
     none: "rounded-none",
     industrial: "rounded-[2px]",
+    standard: "rounded",
+    md: "rounded-md",
     lg: "rounded-lg",
+    xl: "rounded-xl",
   }
 };
 export const buttonVariants = cva(
