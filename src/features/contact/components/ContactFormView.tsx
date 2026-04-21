@@ -3,7 +3,7 @@ import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import React from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 
 // Specific types for the data managed by use-contact-form
 interface ContactFormViewProps {
@@ -19,8 +19,8 @@ interface ContactFormViewProps {
     message?: string;
   };
   isSubmitting: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onSubmit: (e: FormEvent) => void;
 }
 
 const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
@@ -59,7 +59,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-[0.15em] uppercase">{item.channel}</Text>
+                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-widest uppercase">{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}
