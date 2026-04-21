@@ -1,31 +1,39 @@
 ---
-type: 'post'
-title: 'Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages'
-date: '2026-04-20'
-author: 'Ariel'
-category: 'Engineering'
-excerpt: 'How to use GitHub actions to preview deployments without Vercel.'
-image: 'https://picsum.photos/seed/deploy/1200/675'
+title: Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages
+date: 2026-04-20
+author: Ariel Anders, PhD
+category: Tech
+excerpt: Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages.
 ---
 
-## Introduction
+### Kill the Vercel Build Grind
 
-Vercel is great for quick deployments, but those credits can disappear fast. If you're hosting on GitHub already, why not use GitHub Actions to deploy every branch for previewing?
+Stop paying for preview deployments. Use this setup to see your changes instantly without the point grind of managed hosting limits.
 
-In this post, we'll walk through the setup.
+### 1. Stop Vercel from Building
 
-## The Problem
+Add this `ignoreCommand` to your `vercel.json`. It forces Vercel to self-select out of non-main branches so you don't waste resources.
 
-Vercel's free tier has limits on build minutes and bandwidth. For a project with many contributors or frequent pushes, these limits can be a bottleneck.
+* **Main branch:** Returns code 1 to trigger the build.
+* **Other branches:** Returns code 0 to cancel immediately.
 
-## The Solution
+### 2. Set GitHub to Action Mode
 
-By leveraging GitHub Actions and GitHub Pages, we can create a similar "preview deployment" experience without the Vercel overhead.
+Fix your repository settings to handle the heavy lifting.
 
-1.  **Configure GitHub Pages**: Set up your repository to deploy from GitHub Actions.
-2.  **Create a Deployment Workflow**: Use a YAML file to define the build and deploy process.
-3.  **Handle Multiple Branches**: Configure the workflow to deploy to different subdirectories or branches for previews.
+* Go to **Settings > Pages**.
+* Change **Source** to **GitHub Actions**.
 
-## Conclusion
+### 3. Build the Multi-Branch Workflow
 
-It's a powerful and cost-effective way to manage your project's deployments.
+Your `.github/workflows/deploy.yml` acts as the lead here. It organizes your branches into one cohesive site.
+
+* **Pull Main:** Moves your production code into `site-root`.
+* **Map Features:** Maps feature branches to specific subdirectories (e.g., `site-root/feature-name`).
+* **Deploy:** Uploads the entire `site-root` to GitHub Pages.
+
+### 4. Get Instant Feedback
+
+Don't follow a broken build off a bridge. The `actions/github-script` posts the direct URL to your Pull Request.
+
+**Next Step:** Check your workflow logs. Is your timing actually on beat, or is your build failing?
