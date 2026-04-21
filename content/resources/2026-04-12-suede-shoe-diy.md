@@ -12,6 +12,10 @@ tags:
   - diy
   - footwear
   - budget
+rating: 4.7
+verdict: "Best Budget Hack"
+priceCategory: "$"
+updatedDate: "Mar 2024"
 ---
 
 ## The Pain Point: Inconsistent Traction
