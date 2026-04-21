@@ -2,7 +2,7 @@ import subprocess
 import os
 import shlex
 import typer
-from typing import Optional, Union
+from typing import Optional
 
 # Orchestrator for scaling multi-branch development.
 # Enables AI Agents and humans to work on GitHub issues in isolated Docker/Worktree environments.
@@ -28,7 +28,7 @@ def resolve_target(target: Optional[str]):
     _, _, current_branch = get_context()
     return target if target and target != "--curr" else current_branch
 
-def run_log(cmd: Union[str, list], verbose: bool = True, check: bool = True):
+def run_log(cmd, verbose: bool = True, check: bool = True):
     if isinstance(cmd, str):
         cmd = shlex.split(cmd)
 
