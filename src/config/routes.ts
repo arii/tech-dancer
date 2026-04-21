@@ -5,16 +5,16 @@
 export interface RouteConfig {
   path: string;
   label: string;
-  icon?: string; // We'll map these to Lucide icons
+  icon?: string; // Lucide icon name
   description?: string;
 }
 
 export const routes: RouteConfig[] = [
-  { path: '/', label: 'Home' },
-  { path: '/blog', label: 'Blog Posts' },
-  { path: '/gear', label: 'Gear Reviews' },
-  { path: '/research', label: 'Data & Development Lab' },
-  { path: '/resources', label: 'Resources' },
-  { path: '/about', label: 'About' },
-  { path: '/contact', label: 'Contact' },
+  { path: '/', label: 'Home', icon: 'Home' },
+  { path: '/blog', label: 'Blog Posts', icon: 'BookOpen' },
+  { path: '/gear', label: 'Gear Reviews', icon: 'ShoppingBag' },
+  { path: '/research', label: 'Data & Development Lab', icon: 'Database' },
+  { path: '/resources', label: 'Resources', icon: 'BookOpen' },
+  { path: '/about', label: 'About', icon: 'User' },
+  { path: '/contact', label: 'Contact', icon: 'Send' },
 ];
