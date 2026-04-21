@@ -11,7 +11,7 @@ export default defineConfig(({mode}) => {
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
-  const base = isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/');
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,
