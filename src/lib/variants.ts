@@ -1,5 +1,6 @@
 import { typography } from "@/styles/design-tokens";
 import { cva } from "class-variance-authority";
+import { variants as styleVariants } from "@/styles/variants";
 
 /**
  * Standardized Variant Contracts for the Systems Console.
@@ -10,9 +11,8 @@ export const variants = {
     default: "bg-surface text-text-main",
     muted: "bg-line/50 text-text-dim",
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
-    card: "bg-surface border-slate-100 shadow-md",
+    card: "bg-card-bg border-line",
     contrast: "bg-text-main text-bg",
-    github: "bg-[#24292e] text-bg",
   },
   intent: {
     default: "text-text-main",
@@ -30,34 +30,38 @@ export const variants = {
   radius: {
     none: "rounded-none",
     industrial: "rounded-[2px]",
-    standard: "rounded",
-    md: "rounded-md",
-    lg: "rounded-lg",
-    xl: "rounded-xl",
   }
 };
+
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center transition-all duration-200 font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] min-w-[44px]",
+  "inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       variant: variants.emphasis,
-      intent: variants.intent,
+      intent: {
+        default: "text-text-main",
+        success: "text-accent-brand",
+        danger: "text-red-600",
+        warning: "text-accent",
+      },
       size: {
-        sm: "px-4 py-2 text-[10px]",
-        md: "px-6 py-3 text-xs",
-        lg: "px-8 py-4 text-sm",
+        default: "h-[40px] px-6 text-xs",
+        sm: "h-8 px-4 text-[10px]",
+        md: "h-[40px] px-6 text-xs",
+        lg: "h-12 px-8 text-sm",
+        icon: "h-[40px] w-[40px]",
       },
       fullWidth: {
         true: "w-full",
       },
     },
     defaultVariants: {
-      variant: "solid",
-      intent: "default",
-      size: "md",
+      variant: "primary",
+      size: "default",
     },
   }
 );
+
 export const badgeVariants = cva(
   "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
   {

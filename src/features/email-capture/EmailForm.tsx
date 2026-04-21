@@ -14,7 +14,7 @@ export function EmailForm() {
 
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
-      <Stack direction={{ base: 'col', sm: 'row' }} gap={{ base: 2, sm: 0 }} position="relative" className="w-full">
+      <Stack direction="row" gap={0} position="relative" className="w-full">
         <input
           type="email"
           placeholder="Email Address"
@@ -28,7 +28,7 @@ export function EmailForm() {
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          className="min-h-[44px] w-full sm:w-auto min-w-[180px] px-6"
+          className="min-h-[44px] w-auto min-w-[140px] sm:min-w-[180px] px-6"
         >
           <AnimatePresence mode="wait">
             <motion.div

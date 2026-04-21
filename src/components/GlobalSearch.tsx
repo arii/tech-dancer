@@ -47,11 +47,13 @@ export function GlobalSearch() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             position="fixed"
-            className="inset-0 z-[9999] bg-accent/40 backdrop-blur-md"
+            inset
+            zIndex="overlay"
             display="flex"
             justify="center"
             paddingTop={40}
             surface={false}
+            className="bg-accent/40 backdrop-blur-md"
           >
             <Box 
               as={motion.div}
@@ -62,7 +64,10 @@ export function GlobalSearch() {
               maxWidth="3xl"
               height="fit"
               maxHeight="85vh"
-              className="overflow-hidden bg-white shadow-[0_64px_128px_-16px_rgba(0,0,0,0.3)] border border-accent/20"
+              overflow="hidden"
+              surface="default"
+              border
+              className="shadow-[0_64px_128px_-16px_rgba(0,0,0,0.3)] border-accent/20"
             >
               <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
                 <Search className="w-6 h-6 text-accent-brand shrink-0" />
@@ -102,7 +107,9 @@ export function GlobalSearch() {
                         display="flex"
                         align="center"
                         gap={4}
-                        className="hover:bg-accent/5 bg-white group transition-colors text-left border border-line"
+                        surface="default"
+                        border
+                        className="hover:bg-accent/5 group transition-colors text-left"
                       >
                          <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
                             <Hash className="w-4 h-4 text-accent-brand opacity-50" />

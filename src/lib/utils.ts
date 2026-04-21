@@ -12,3 +12,19 @@ export function cn(...inputs: ClassValue[]) {
 export function composeStyles(...styles: ClassValue[]) {
   return cn(...styles)
 }
+
+/**
+ * Safely checks if a search term is included in a value.
+ * Handles non-string values by converting them to strings and normalizes to lowercase.
+ */
+export function safeSearch(value: any, term: string): boolean {
+  if (!term) return true;
+  const normalizedTerm = term.toLowerCase();
+  
+  if (Array.isArray(value)) {
+    return value.some(v => safeSearch(v, term));
+  }
+  
+  const normalizedValue = String(value || '').toLowerCase();
+  return normalizedValue.includes(normalizedTerm);
+}

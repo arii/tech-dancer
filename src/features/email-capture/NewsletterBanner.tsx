@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { Button } from '@/layouts/Primitives';
 
-export function EmailCaptureBar() {
+export function NewsletterBanner() {
   const { hideBar } = useEmailCaptureContext();
 
   return (
@@ -16,16 +16,13 @@ export function EmailCaptureBar() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      surface="default"
-      border="t"
-      shadow="topOverlay"
+      className="bg-white/80 backdrop-blur-xl border-t border-line/50 rounded-t-3xl shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05),0_-8px_10px_-6px_rgba(0,0,0,0.05)] mx-auto"
       padding="emailBar"
       position="fixed"
-      inset="bottom"
+      style={{ bottom: 0, left: '1rem', right: '1rem', width: 'calc(100% - 2rem)' }}
       zIndex="toast"
-      width="full"
     >
-      <Box position="absolute" top={2} right={2} zIndex="docked">
+      <Box position="absolute" className="top-2 right-2" zIndex="docked">
         <Button
           variant="ghost"
           size="sm"

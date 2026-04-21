@@ -60,12 +60,14 @@ jobs:
       - name: Build App
         run: pnpm run build
         env:
+          NODE_ENV: production
           VITE_BASE_PATH: /tech-dancer/
 
       - name: Run Playwright Smoke Test
-        run: pnpm exec playwright test
+        run: pnpm run test:e2e
         env:
           CI: true
+          NODE_ENV: production
 
       - name: Upload Test Results
         if: failure()

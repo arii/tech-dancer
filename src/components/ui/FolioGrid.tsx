@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid } from '@/layouts/Primitives';
+import { safeSearch } from '@/lib/utils';
 
 export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
   const [search, setSearch] = useState('');
 
   const filteredItems = items.filter(item => {
-    const term = search.toLowerCase();
     return (
-      item.title?.toLowerCase().includes(term) ||
-      item.tags?.some((t: string) => t.toLowerCase().includes(term)) ||
-      item.category?.toLowerCase().includes(term) ||
-      item.excerpt?.toLowerCase().includes(term)
+      safeSearch(item.title, search) ||
+      item.tags?.some((t: string) => safeSearch(t, search)) ||
+      safeSearch(item.category, search) ||
+      safeSearch(item.excerpt, search)
     );
   });
 
@@ -26,11 +26,19 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
         />
         {children}
         <Box marginTop={8} position="relative" maxWidth="2xl">
-          <input
+          <Box
+            as="input"
             type="text"
             placeholder="SEARCH_THE_ENGINE..."
-            className="w-full bg-surface border-2 border-line px-6 py-4 font-mono text-sm focus:outline-none focus:border-accent text-text-main"
-            onChange={(e) => setSearch(e.target.value)}
+            width="full"
+            surface="default"
+            border
+            paddingX={6}
+            paddingY={4}
+            variant="mono"
+            size="sm"
+            className="focus:border-accent-brand outline-none focus:ring-0"
+            onChange={(e: any) => setSearch(e.target.value)}
           />
         </Box>
       </Box>
