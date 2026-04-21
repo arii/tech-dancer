@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid } from '@/layouts/Primitives';
+import { safeSearch } from '@/lib/utils';
 
 export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
   const [search, setSearch] = useState('');
 
   const filteredItems = items.filter(item => {
-    const term = search.toLowerCase();
     return (
-      item.title?.toLowerCase().includes(term) ||
-      item.tags?.some((t: string) => String(t || '').toLowerCase().includes(term)) ||
-      item.category?.toLowerCase().includes(term) ||
-      item.excerpt?.toLowerCase().includes(term)
+      safeSearch(item.title, search) ||
+      item.tags?.some((t: string) => safeSearch(t, search)) ||
+      safeSearch(item.category, search) ||
+      safeSearch(item.excerpt, search)
     );
   });
 

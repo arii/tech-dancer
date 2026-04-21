@@ -76,7 +76,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             {title}
           </Text>
           <Text variant="body" size="base" color="dim" className="line-clamp-2 leading-relaxed">
-             {excerpt || `Discover the technical intersections of robotics and dance in this deep dive into ${String(category || '').toLowerCase()} methodology and engineering principles.`}
+             {excerpt || `Discover the technical intersections of robotics and dance in this deep dive into ${category.toLowerCase()} methodology and engineering principles.`}
           </Text>
         </Stack>
 
