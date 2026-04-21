@@ -1,7 +1,8 @@
 import subprocess
 import os
+import shlex
 import typer
-from typing import Optional
+from typing import Optional, Union
 
 # Orchestrator for scaling multi-branch development.
 # Enables AI Agents and humans to work on GitHub issues in isolated Docker/Worktree environments.
@@ -27,10 +28,26 @@ def resolve_target(target: Optional[str]):
     _, _, current_branch = get_context()
     return target if target and target != "--curr" else current_branch
 
-def run_log(cmd: str, verbose: bool = True):
+def run_log(cmd: Union[str, list], verbose: bool = True, check: bool = True):
+    if isinstance(cmd, str):
+        cmd = shlex.split(cmd)
+
+    cmd_str = shlex.join(cmd)
     if verbose:
-        typer.secho(f"[vdev] Running: {cmd}", fg=typer.colors.CYAN)
-    return subprocess.run(cmd, shell=True)
+        typer.secho(f"[vdev] Running: {cmd_str}", fg=typer.colors.CYAN)
+
+    try:
+        return subprocess.run(cmd, check=check)
+    except subprocess.CalledProcessError as e:
+        typer.secho(f"[Error] Command failed with exit code {e.returncode}: {cmd_str}", fg=typer.colors.RED)
+        if check:
+            raise typer.Exit(1)
+        return e
+    except FileNotFoundError:
+        typer.secho(f"[Error] Command not found: {cmd[0]}. Please ensure it is installed.", fg=typer.colors.RED)
+        if check:
+            raise typer.Exit(1)
+        return None
 
 @app.command()
 def setup(
@@ -56,23 +73,26 @@ def setup(
     # 1. Isolate Filesystem
     if not os.path.exists(worktree_path):
         typer.echo(f"📁 Creating isolated git worktree at {worktree_path}")
-        run_log(f"git worktree add {worktree_path} {branch}")
+        run_log(["git", "worktree", "add", worktree_path, branch])
     else:
         typer.echo(f"📁 Worktree already exists at {worktree_path}")
 
     # 2. Build Runtime Container
     typer.echo("🐳 Building Docker image...")
-    rebuild = "--no-cache" if force_rebuild else ""
-    run_log(f"docker build {rebuild} -t {image_tag} {worktree_path}")
+    build_cmd = ["docker", "build"]
+    if force_rebuild:
+        build_cmd.append("--no-cache")
+    build_cmd.extend(["-t", image_tag, worktree_path])
+    run_log(build_cmd)
 
     # 3. Start Container
     typer.echo("🟢 Starting isolated container...")
-    run_log(f"docker run -d --name {container_name} {image_tag}")
+    run_log(["docker", "run", "-d", "--name", container_name, image_tag])
 
     # 4. Agent Readiness: Install dependencies
     typer.echo("📦 Installing dependencies (this might take a second)...")
-    run_log(f"docker exec {container_name} npm install")
-    run_log(f"docker exec {container_name} npm run build")
+    run_log(["docker", "exec", container_name, "npm", "install"])
+    run_log(["docker", "exec", container_name, "npm", "run", "build"])
 
     typer.secho(f"✅ All set! Branch '{branch}' is ready for isolated development.", fg=typer.colors.GREEN, bold=True)
 
@@ -81,7 +101,7 @@ def status():
     """Lists all active vdev branch environments on this machine."""
     _, repo_name, _ = get_context()
     typer.secho(f"🔍 Active isolated environments for '{repo_name}':", bold=True, fg=typer.colors.BLUE)
-    run_log(f"docker ps --filter 'name=vdev-{repo_name}' --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}'")
+    run_log(["docker", "ps", "--filter", f"name=vdev-{repo_name}", "--format", "table {{.Names}}\t{{.Status}}\t{{.Image}}"])
 
 @app.command()
 def exec(
@@ -93,7 +113,8 @@ def exec(
     _, repo_name, _ = get_context()
     safe_branch = sanitize_name(branch)
 
-    run_log(f"docker exec vdev-{repo_name}-{safe_branch} {cmd}")
+    exec_cmd = ["docker", "exec", f"vdev-{repo_name}-{safe_branch}"] + shlex.split(cmd)
+    run_log(exec_cmd)
 
 @app.command()
 def shell(target: Optional[str] = typer.Argument(None, help="Target branch container")):
@@ -103,7 +124,7 @@ def shell(target: Optional[str] = typer.Argument(None, help="Target branch conta
     safe_branch = sanitize_name(branch)
 
     typer.secho(f"💻 Dropping you into the shell for '{branch}'...", fg=typer.colors.YELLOW)
-    subprocess.run(f"docker exec -it vdev-{repo_name}-{safe_branch} /bin/sh", shell=True)
+    subprocess.run(["docker", "exec", "-it", f"vdev-{repo_name}-{safe_branch}", "/bin/sh"])
 
 @app.command()
 def cleanup(target: Optional[str] = typer.Argument(None, help="Target branch to clean up")):
@@ -116,10 +137,11 @@ def cleanup(target: Optional[str] = typer.Argument(None, help="Target branch to 
     typer.secho(f"🧹 Tearing down isolated environment for '{branch}'...", fg=typer.colors.YELLOW)
 
     typer.echo("🛑 Stopping and removing Docker container...")
-    run_log(f"docker stop vdev-{repo_name}-{safe_branch} && docker rm vdev-{repo_name}-{safe_branch}", verbose=False)
+    run_log(["docker", "stop", f"vdev-{repo_name}-{safe_branch}"], check=False)
+    run_log(["docker", "rm", f"vdev-{repo_name}-{safe_branch}"], check=False)
 
     typer.echo("✂️ Removing git worktree...")
-    run_log(f"git worktree remove {worktree_path}", verbose=False)
+    run_log(["git", "worktree", "remove", worktree_path], check=False)
 
     typer.secho("✅ Cleanup complete!", fg=typer.colors.GREEN)
 
