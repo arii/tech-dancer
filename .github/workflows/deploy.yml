@@ -58,6 +58,26 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
+      # GitHub Pages only serves the root 404.html for all 404s, regardless of
+      # which subdirectory the request is for. Branch previews deploy their
+      # dist/ to a subdirectory, so their 404.html is never served by GitHub
+      # Pages. This step ensures the root 404.html is always the latest smart
+      # redirect version after any branch push.
+      - name: Update root 404.html on gh-pages for branch previews
+        if: github.ref_name != 'main'
+        run: mkdir -p /tmp/root-404 && cp dist/404.html /tmp/root-404/404.html
+
+      - name: Deploy root 404.html to gh-pages
+        if: github.ref_name != 'main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: /tmp/root-404
+          destination_dir: .
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
       - name: Post or Update Comment on PR
         uses: actions/github-script@v7
         with:
