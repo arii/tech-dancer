@@ -66,7 +66,7 @@ export default function UXAuditor() {
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
           </button>
         </Box>
-      </Box>
+      </Stack>
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
