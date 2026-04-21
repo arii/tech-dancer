@@ -1,96 +1,86 @@
-Plan for reviewing pull request #{{NUMBER}}
+# PR Review: #{{NUMBER}} — {{TITLE}}
 
-{{TITLE}}
+**Repo:** [arii/tech-dancer](https://github.com/arii/tech-dancer)
+**PR:** [https://github.com/arii/tech-dancer/pull/{{NUMBER}}](https://github.com/arii/tech-dancer/pull/{{NUMBER}})
+**Stats:** {{STATS}}
+
+## Description
 
 {{DESCRIPTION}}
 
-📋 Review Progress
+---
 
-[ ] Step 1: Context Gathering
+## 📐 Review Standards (Anti-Bloat)
 
-[ ] Review PR description and linked issues
+You are a Principal Software Engineer performing a deep technical audit.
+Evaluate EVERY changed file against the following criteria:
 
-[ ] Scan full file list and change sizes
+1. **Dead abstractions** — new class/context/hook that a simpler primitive already handles?
+2. **Unnecessary indirection** — adds a layer where a direct call would do?
+3. **Responsibility creep** — component taking on logic that belongs in a hook or parent?
+4. **Import bloat** — `import React` added unnecessarily? (Not needed in React 17+)
+5. **Token compliance** — raw Tailwind classes or magic pixel values bypassing `design-tokens.ts`?
+6. **No arbitrary Tailwind** — values like `text-[11px]`, `max-w-[1400px]` are explicitly banned.
+7. **Audit ratio** — if additions > 100 lines, find 10+ lines to cut.
 
-[ ] Step 2: Holistic Analysis
+### Mandatory Response Sections
+- `## ANTI-AI-SLOP` — verbose/over-engineered patterns found (or confirmed absent)
+- `## FINDINGS` — per-file critical feedback with specific line numbers
+- `## FINAL RECOMMENDATION` — `Approved` | `Approved with Minor Changes` | `Not Approved`
 
-[ ] Check for Dead abstractions (redundant primitives)
+---
 
-[ ] Check for Unnecessary indirection (layer bloat)
-
-[ ] Check for Responsibility creep (logic in wrong place)
-
-[ ] Check for Import bloat (React 17+ compliance)
-
-[ ] Check for Token compliance (raw Tailwind vs design-tokens.ts)
-
-[ ] Step 3: Per-File Audit (See details below)
-
-[ ] Step 4: Finalization
-
-[ ] Draft overall summary
-
-[ ] Generate review_payload.json
-
-[ ] Execute submission command
-
-📂 Files changed
+## 📂 Files Changed
 
 {{FILES_CHANGES}}
 
-🔍 Diffs
+---
 
-{{DIFFS}}
-
-🛠 Per-File Audit Details
+## 🔍 Per-File Audit
 
 {{FOR_EACH_FILE}}
+---
 
-File: {{FILENAME}}
+### `{{FILENAME}}` `{{FILE_STATS}}` ({{FILE_STATUS}})
 
-[ ] Architecture Check
+**Full diff:**
+```diff
+{{DIFF}}
+```
 
-[ ] Logic belongs in this layer
+**Audit checklist:**
+- [ ] Architecture: Logic belongs in this layer, no leaky abstractions, no cross-domain coupling
+- [ ] Design System: Uses design tokens — no magic numbers, no arbitrary Tailwind values
+- [ ] Types: Strict — no `any`, no implicit types
+- [ ] React: No unnecessary `import React` (React 17+)
 
-[ ] No circular dependencies or leaky abstractions
-
-[ ] Design System Check
-
-[ ] Uses spacing/color tokens from src/styles/
-
-[ ] No magic numbers or hardcoded pixel values
-
-[ ] Implementation Check
-
-[ ] Types are strict (no any)
-
-[ ] Side effects are correctly managed in hooks
-
-- [ ] **Proposed Comment:**
+**Proposed inline comment** _(fill in `line` and `body` before submitting)_:
 ```json
 {
   "path": "{{FILENAME}}",
   "line": 1,
-  "body": "<FILL IN: critical feedback for this file>"
+  "body": "<FILL IN: critical feedback for the most important line in this file>"
 }
 ```
-
-
 {{END_FOR_EACH}}
+
+---
 
 ## 🚀 Submission Steps
 
-1. Collect all `Proposed Comment` blocks above into `/tmp/review_payload.json`:
+1. Fill in every `Proposed inline comment` block above with real feedback.
+2. Collect them into `/tmp/review_payload.json`:
+
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<overall summary>\n\n## FINDINGS\n<key findings>\n\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
+  "body": "## ANTI-AI-SLOP\n<slop findings>\n\n## FINDINGS\n<per-file summary>\n\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
   "comments": [
-    { "path": "src/example.tsx", "line": 10, "body": "Inline feedback here" }
+    { "path": "src/example.tsx", "line": 10, "body": "Feedback here" }
   ]
 }
 ```
 
-2. Submit:
+3. Submit (link is printed on success):
 ```bash
 python3 dev-tools/gh_collab.py review {{NUMBER}} --file /tmp/review_payload.json
 ```
