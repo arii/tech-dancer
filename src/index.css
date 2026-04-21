@@ -7,9 +7,9 @@
   --font-mono: "Space Mono", monospace;
 
   /* Clean Content Palette (60-30-10 Rule) */
-  --color-bg: #F8F9FA;        /* Off-White Primary */
-  --color-surface: #FFFFFF;    /* Surface Secondary */
-  --color-line: #E9ECEF;       /* Muted Borders */
+  --color-bg: #F0F4F8;        /* Tinted Cool Off-White Primary */
+  --color-surface: #FDFDFE;    /* Tinted High-Key Surface */
+  --color-line: #D1D9E0;       /* Tinted Muted Borders */
   --color-accent: #007BFF;
   --color-accent-shadow: rgba(255, 127, 80, 0.3);
   --color-accent-navy: #1A2B3C;

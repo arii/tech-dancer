@@ -21,88 +21,90 @@ export function GearCard({
   return (
     <NavLink
       to={`${basePath}/${slug}`}
-      className="group flex flex-col bg-surface rounded-2xl border border-line shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      className="group flex flex-col transition-all duration-500"
     >
-      {/* Image Wrapper */}
-      <div className="aspect-square md:aspect-video relative overflow-hidden bg-bg">
+      {/* Image Wrapper - Grayscale to Color */}
+      <div className="aspect-square relative overflow-hidden bg-bg grayscale group-hover:grayscale-0 transition-all duration-700 ease-out-expo">
         {image ? (
           <img
             src={image}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out-expo"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center opacity-10 bg-accent-navy text-accent-navy">
-             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl">TD</span>
+          <div className="w-full h-full flex items-center justify-center opacity-20 bg-accent-navy text-accent-navy">
+             <span className="font-display font-black uppercase tracking-tight leading-none text-4xl">TD</span>
           </div>
         )}
-        <div className="absolute top-4 left-4">
-          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-full border border-line">
-            <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase">
-              {category}
-            </Text>
-          </div>
+
+        {/* Minimal Category Overlay */}
+        <div className="absolute bottom-4 left-4">
+          <Text variant="mono" size="micro" weight="font-bold" className="text-bg bg-accent-navy px-2 py-1 uppercase tracking-[0.2em]">
+            {category}
+          </Text>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="flex flex-col gap-4 p-6 flex-1">
-        <div className="flex flex-col gap-2">
-          {rating && (
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-yellow-400">
-                {'★'.repeat(Math.floor(rating))}
-                {rating % 1 !== 0 ? '½' : ''}
-              </span>
-              <span className="text-[8px] text-text-dim font-medium">
-                ({rating}/5)
-              </span>
-            </div>
-          )}
+      {/* Content Area - No background, purely typographic */}
+      <div className="flex flex-col gap-4 py-8 flex-1 border-b border-line/30 group-last:border-none">
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-start gap-4">
+            <h3 className="font-display font-black uppercase tracking-tight leading-[0.9] text-3xl text-accent-navy group-hover:text-accent transition-colors duration-300 flex-1">
+              {title}
+            </h3>
 
-          <h3 className="font-display font-bold uppercase tracking-tight leading-tight text-xl text-accent-navy group-hover:text-accent transition-colors">
-            {title}
-          </h3>
+            {rating && (
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <div className="flex text-accent font-bold text-xs tracking-tighter">
+                  {'★'.repeat(Math.floor(rating))}
+                  {rating % 1 !== 0 ? '½' : ''}
+                </div>
+                <span className="text-[8px] text-text-dim font-bold font-mono">
+                  SCORE: {rating}/5
+                </span>
+              </div>
+            )}
+          </div>
 
-          <p className="font-sans leading-relaxed text-text-body text-sm line-clamp-2">
+          <p className="font-sans leading-relaxed text-text-dim text-base max-w-[45ch] line-clamp-3">
              {excerpt}
           </p>
 
-          {(verdict || priceCategory || updatedDate) && (
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-               {verdict && (
-                 <div className="bg-accent/10 px-2 py-0.5 rounded-md">
-                   <span className="text-[8px] font-mono uppercase text-accent font-bold">{verdict}</span>
-                 </div>
-               )}
-               {priceCategory && (
-                 <span className="text-[8px] font-mono uppercase text-text-dim font-bold">{priceCategory}</span>
-               )}
-               {updatedDate && (
-                 <span className="text-[8px] font-mono uppercase text-text-dim">Updated {updatedDate}</span>
-               )}
-            </div>
-          )}
+          <div className="flex flex-wrap items-center gap-6 mt-2">
+             {verdict && (
+               <div className="flex items-center gap-2">
+                 <span className="w-1.5 h-1.5 bg-accent rounded-full" />
+                 <span className="text-[10px] font-mono uppercase text-accent font-bold tracking-widest">{verdict}</span>
+               </div>
+             )}
+             {priceCategory && (
+               <span className="text-[10px] font-mono uppercase text-text-dim font-bold tracking-widest">{priceCategory}</span>
+             )}
+             {updatedDate && (
+               <span className="text-[10px] font-mono uppercase text-text-dim tracking-widest opacity-60">REVISED: {updatedDate}</span>
+             )}
+          </div>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-line/50 mt-auto">
-          <span className="font-mono tracking-wider uppercase text-accent font-bold text-xs">
-            Read Review
+        <div className="flex items-center gap-3 pt-4 mt-auto">
+          <span className="font-mono tracking-[0.3em] uppercase text-accent-navy font-bold text-[10px] group-hover:text-accent transition-colors">
+            ACCESS CASE STUDY
           </span>
-          <div className="group-hover:translate-x-1 transition-transform duration-300">
+          <div className="group-hover:translate-x-2 transition-transform duration-500 ease-out-expo">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="3"
+              strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="text-accent"
             >
-              <polyline points="9 18 15 12 9 6"></polyline>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </div>
         </div>

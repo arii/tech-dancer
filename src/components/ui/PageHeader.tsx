@@ -8,7 +8,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ label, title, description }: PageHeaderProps) {
   return (
-    <Box paddingBottom={10} className="border-b border-slate-200">
+    <Box paddingBottom={10} className="border-b border-line">
       <Stack gap={4}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           {label}
@@ -28,7 +28,7 @@ export function PageHeader({ label, title, description }: PageHeaderProps) {
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-line">
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
