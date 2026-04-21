@@ -1,6 +1,4 @@
-import { motion } from 'motion/react';
 import { User, Award, Globe, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useProfile } from './useProfile';
 
@@ -8,82 +6,72 @@ export default function ArielProfile() {
   const { bio } = useProfile();
 
   return (
-    <Box as="section">
-      <Stack gap={12}>
+    <section>
+      <div className="flex flex-col gap-12">
         <PageHeader 
           label="ABOUT TECH-DANCER"
           title={bio.name}
           description={bio.role}
         />
 
-        <Grid cols={{ base: 1, lg: 12 }} gap={16}>
-          <Box span={{ base: 12, lg: 4 }}>
-            <Stack gap={12}>
-              <Box aspect="square" surface="muted" border overflow="hidden" position="relative" display="flex" align="center" justify="center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+          <div className="col-span-1 lg:col-span-4">
+            <div className="flex flex-col gap-12">
+              <div className="aspect-square bg-muted border border-line overflow-hidden relative flex items-center justify-center">
                 <User className="w-24 h-24 text-line stroke-[0.5]" />
-              </Box>
+              </div>
 
-              <Grid cols={1} gap={6}>
+              <div className="grid grid-cols-1 gap-6">
                 {bio.details.map((detail) => (
-                  <Box key={detail.label} paddingBottom={4} className="border-b border-slate-200">
-                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" display="block" className="tracking-[0.15em] uppercase">{detail.label}</Text>
-                    <Text variant="display" size="lg" marginTop={1} weight="font-bold" className="text-accent-navy">{detail.value}</Text>
-                  </Box>
+                  <div key={detail.label} className="pb-4 border-b border-slate-200">
+                    <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold block uppercase">{detail.label}</span>
+                    <span className="font-display font-bold uppercase tracking-tight leading-none text-lg mt-1 font-bold text-accent-navy">{detail.value}</span>
+                  </div>
                 ))}
-              </Grid>
+              </div>
 
-              <Box 
-                as="a" 
+              <a
                 href="#" 
                 className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy"
               >
-                <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">VIEW FULL BACKGROUND</Text>
+                <span className="font-mono tracking-[0.15em] text-xs font-semibold">VIEW FULL BACKGROUND</span>
                 <ArrowRight className="w-4 h-4" />
-              </Box>
-            </Stack>
-          </Box>
+              </a>
+            </div>
+          </div>
 
-          <Box span={{ base: 12, lg: 8 }}>
-            <Stack gap={16}>
+          <div className="col-span-1 lg:col-span-8">
+            <div className="flex flex-col gap-16">
               {bio.sections.map((section) => (
-                <Stack key={section.id} gap={4}>
-                  <Box paddingBottom={4} className="border-b border-slate-200">
-                    <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">{section.title}</Text>
-                  </Box>
-                  <Text variant="body" size="lg" color="body" className="leading-relaxed">
+                <div key={section.id} className="flex flex-col gap-4">
+                  <div className="pb-4 border-b border-slate-200">
+                    <span className="font-display font-bold uppercase tracking-tight leading-none text-2xl font-black text-accent-navy">{section.title}</span>
+                  </div>
+                  <p className="font-sans leading-relaxed text-text-body text-lg text-text-body leading-relaxed">
                     {section.content}
-                  </Text>
-                </Stack>
+                  </p>
+                </div>
               ))}
 
-              <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={8}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
                 {[
                   { icon: User, label: 'Curriculum Vitae' },
                   { icon: Award, label: 'Publications' },
                   { icon: Globe, label: 'Social' },
                 ].map((item) => (
-                  <Box 
+                  <button
                     key={item.label}
-                    as="button"
-                    border 
-                    surface="default" 
-                    padding="compact" 
-                    display="flex" 
-                    direction="col" 
-                    align="center" 
-                    gap={3}
-                    cursor="pointer"
-                    className="group hover:border-accent-brand transition-all"
+                    className="group hover:border-accent-brand transition-all border border-line bg-surface p-4 flex flex-col items-center gap-3 cursor-pointer"
                   >
                     <item.icon className="w-5 h-5 text-accent-navy group-hover:text-accent transition-colors" />
-                    <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em]">{item.label}</Text>
-                  </Box>
+                    <span className="font-mono tracking-[0.15em] text-xs font-semibold">{item.label}</span>
+                  </button>
                 ))}
-              </Grid>
-            </Stack>
-          </Box>
-        </Grid>
-      </Stack>
-    </Box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

@@ -13,8 +13,6 @@ import { EmailCaptureProvider } from './features/email-capture/EmailCaptureConte
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
 
-import { Box } from './layouts/Primitives';
-
 const Home = lazy(() => import('./pages/Home'));
 const GearReviews = lazy(() => import('./pages/Gear'));
 const GearPost = lazy(() => import('./features/lab/GearPost'));
@@ -34,19 +32,18 @@ export function RootLayout() {
     <EmailCaptureProvider {...emailLogic}>
       <MainLayout>
         <AnimatePresence mode="wait">
-          <Box
-            as={motion.div}
+          <motion.div
             key={location.pathname}
             initial={motionTokens.page.initial}
             animate={motionTokens.page.animate}
             exit={motionTokens.page.exit}
             transition={motionTokens.page.transition}
-            height="full"
+            className="h-full"
           >
             <Suspense fallback={<PageSkeleton />}>
               <Outlet />
             </Suspense>
-          </Box>
+          </motion.div>
         </AnimatePresence>
       </MainLayout>
       <AnimatePresence>

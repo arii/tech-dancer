@@ -1,4 +1,3 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon } from 'lucide-react';
 
 interface EventCardProps {
@@ -10,23 +9,23 @@ interface EventCardProps {
 
 export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
   return (
-    <Box
+    <div
       className="flex flex-col h-full bg-surface/50 border border-line p-6 lg:p-8"
     >
-      <Stack gap={4}>
-        <Box className="flex items-center gap-3">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
           <Icon className="w-5 h-5 text-accent" />
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
+          <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">
             {status}
-          </Text>
-        </Box>
-        <Text variant="display" size="xl" weight="font-black" className="text-accent-navy leading-snug">
+          </span>
+        </div>
+        <span className="font-display font-bold uppercase tracking-tight leading-snug text-xl text-accent-navy font-black">
           {name}
-        </Text>
-        <Text variant="body" size="base" color="dim">
+        </span>
+        <span className="font-sans leading-relaxed text-text-body text-base text-text-dim">
           {date}
-        </Text>
-      </Stack>
-    </Box>
+        </span>
+      </div>
+    </div>
   );
 }

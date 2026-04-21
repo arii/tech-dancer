@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Box, Grid } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 
 export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
@@ -17,63 +16,49 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
   });
 
   return (
-    <Box as="section" height="full">
-      <Box as="header" marginBottom={12}>
+    <section className="h-full">
+      <header className="mb-12">
         <PageHeader
           label={label || "FOLIO"}
           title={categoryTitle}
           description={description}
         />
         {children}
-        <Box marginTop={8} position="relative" maxWidth="2xl">
-          <Box
-            as="input"
+        <div className="mt-8 relative max-w-2xl">
+          <input
             type="text"
             placeholder="SEARCH_THE_ENGINE..."
-            width="full"
-            surface="default"
-            border
-            paddingX={6}
-            paddingY={4}
-            variant="mono"
-            size="sm"
-            className="focus:border-accent-brand outline-none focus:ring-0"
+            className="w-full bg-surface border border-line px-6 py-4 font-mono text-sm focus:border-accent-brand outline-none focus:ring-0"
             onChange={(e: any) => setSearch(e.target.value)}
           />
-        </Box>
-      </Box>
+        </div>
+      </header>
 
-      <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={0} border="t" className="border-l border-line mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-0 border-t border-line border-l border-line mt-8">
         {loading ? (
           Array.from({ length: 6 }).map((_, index) => (
-            <Box
+            <div
               key={index}
-              border="r"
-              borderBottom={true}
-              padding={8}
-              className={`transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
+              className={`border-r border-b border-line p-8 transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
             >
               <ContentCardSkeleton />
-            </Box>
+            </div>
           ))
         ) : (
           filteredItems.map((item, index) => (
-            <Box
+            <div
               key={item.slug}
-              border="r"
-              borderBottom={true}
-              padding={8}
-              className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
+              className={`border-r border-b border-line p-8 hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
             >
               <ContentCard
                 {...item}
                 basePath={basePath}
                 aspect="video"
               />
-            </Box>
+            </div>
           ))
         )}
-      </Grid>
-    </Box>
+      </div>
+    </section>
   );
 }

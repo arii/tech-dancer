@@ -1,7 +1,5 @@
-import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { Database, FileText, Search, Activity, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { FileText, Search, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 
@@ -10,91 +8,80 @@ export default function ResearchAnalytics() {
   const { studies, tools } = useResearch();
 
   return (
-    <Box as="section">
-      <Stack gap={12}>
+    <section>
+      <div className="flex flex-col gap-12">
         <PageHeader 
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
           description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
         />
 
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{tools.length} TOOLS</Text>
-          </Box>
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
+        <div className="flex flex-col gap-8">
+          <div className="pb-4 flex justify-between items-end border-b border-slate-200">
+            <span className="font-display font-bold uppercase tracking-tight leading-none text-2xl font-black text-accent-navy">Tools Ecosystem</span>
+            <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">{tools.length} TOOLS</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tools.map((tool) => (
-              <Box 
+              <button
                 key={tool.id}
-                as="button"
                 onClick={() => navigate(`/research/${tool.id}`)}
-                surface="default"
-                border
-                padding="card"
-                cursor="pointer"
-                className="group hover:border-accent-brand transition-all text-left"
+                className="group hover:border-accent-brand transition-all text-left bg-surface border border-line p-8 md:p-12 cursor-pointer"
               >
-                <Stack gap={6} height="full" justify="between">
-                  <Stack gap={4}>
-                    <Box display="flex" justify="between" align="start">
-                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent-brand transition-colors">
+                <div className="flex flex-col gap-6 h-full justify-between">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex justify-between items-start">
+                      <div className="w-10 h-10 bg-muted border border-line flex items-center justify-center text-text-dim group-hover:text-accent-brand transition-colors">
                         <Search className="w-5 h-5" />
-                      </Box>
-                      <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
-                    </Box>
-                    <Stack gap={2}>
-                      <Text variant="display" size="xl" className="group-hover:text-accent-brand transition-colors">{tool.name}</Text>
-                      <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
-                    </Stack>
-                  </Stack>
-                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent-brand transition-colors">
-                    <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
+                      </div>
+                      <span className="font-mono uppercase tracking-widest text-[8px] text-accent-brand font-bold">{tool.status.toUpperCase()}</span>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <span className="font-display font-bold uppercase tracking-tight leading-none text-xl group-hover:text-accent-brand transition-colors">{tool.name}</span>
+                      <p className="font-sans leading-relaxed text-text-body text-sm text-text-dim line-clamp-2">{tool.layman}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-text-dim group-hover:text-accent-brand transition-colors">
+                    <span className="font-mono uppercase tracking-widest text-[8px] font-bold">Launch Console</span>
                     <ArrowRight className="w-3 h-3" />
-                  </Box>
-                </Stack>
-              </Box>
+                  </div>
+                </div>
+              </button>
             ))}
-          </Grid>
-        </Stack>
+          </div>
+        </div>
 
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{studies.length} ARTICLES</Text>
-          </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={12}>
+        <div className="flex flex-col gap-8">
+          <div className="pb-4 flex justify-between items-end border-b border-slate-200">
+            <span className="font-display font-bold uppercase tracking-tight leading-none text-2xl font-black text-accent-navy">Studies</span>
+            <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">{studies.length} ARTICLES</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {studies.map((study) => (
-              <Box key={study.slug} className="group">
-                <Stack gap={4}>
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
-                  </Box>
-                  <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
+              <div key={study.slug} className="group">
+                <div className="flex flex-col gap-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-mono uppercase tracking-widest text-[8px] text-accent-brand uppercase">{study.category}</span>
+                    <span className="font-mono uppercase tracking-widest text-[8px] text-text-dim">{study.date}</span>
+                  </div>
+                  <span className="font-display font-bold uppercase tracking-tight leading-none text-2xl group-hover:text-accent-brand transition-colors">
                     {study.title}
-                  </Text>
-                  <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                  </span>
+                  <p className="font-sans leading-relaxed text-text-body text-sm text-text-dim line-clamp-3">
                     {study.excerpt}
-                  </Text>
-                  <Box 
-                    as={motion.div}
-                    whileHover={{ x: 5 }}
-                    display="flex" 
-                    align="center" 
-                    gap={2} 
-                    color="dim" 
-                    className="group-hover:text-accent-brand transition-colors"
+                  </p>
+                  <div
+                    className="flex items-center gap-2 text-text-dim group-hover:text-accent-brand transition-colors hover:translate-x-1 transition-transform"
                   >
-                    <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
+                    <span className="font-mono tracking-widest uppercase text-xs font-bold">Read Study</span>
                     <FileText className="w-4 h-4" />
-                  </Box>
-                </Stack>
-              </Box>
+                  </div>
+                </div>
+              </div>
             ))}
-          </Grid>
-        </Stack>
-      </Stack>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

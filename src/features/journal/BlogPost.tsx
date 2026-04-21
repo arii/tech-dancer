@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPostBySlug } from '@/lib/content';
 import { ContentDetail } from '@/layouts/ContentDetail';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -11,14 +10,14 @@ export default function BlogPost() {
 
   if (!post) {
     return (
-      <Box padding="panel" textAlign="center">
-        <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">Post Not Found</Text>
-          <Box as="button" onClick={() => navigate('/blog')} className="hover:text-accent-brand transition-colors">
-            <Text variant="mono" size="xs">Back to Journal</Text>
-          </Box>
-        </Stack>
-      </Box>
+      <div className="panel h-full overflow-y-auto w-full text-center py-20">
+        <div className="flex flex-col gap-8 items-center">
+          <h1 className="font-display font-bold uppercase tracking-tight leading-none text-2xl">Post Not Found</h1>
+          <button onClick={() => navigate('/blog')} className="hover:text-accent-brand transition-colors cursor-pointer">
+            <span className="font-mono tracking-widest uppercase text-xs">Back to Journal</span>
+          </button>
+        </div>
+      </div>
     );
   }
 

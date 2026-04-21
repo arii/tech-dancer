@@ -6,26 +6,22 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 > **A `.tsx` file should Build UI using standard pieces**
 
-## 1. ❌ No Raw Tailwind in App/Feature Layers
-- No arbitrary values (`text-[11px]`, `tracking-[3px]`, `shadow-[...]`)
-- No direct layout classes (`flex`, `grid`, `items-center`)
-- No direct spacing (`px-*`, `py-*`)
-- No color classes (`bg-*`, `text-*`) outside tokens
+## 1. ✅ Direct Tailwind & Semantic HTML
+- Use semantic HTML elements (`section`, `article`, `main`, `p`, `span`, etc.)
+- Apply Tailwind utility classes directly to elements.
+- Maintain consistency by using design tokens via Tailwind classes.
 
-## 2. ✅ Only Use Approved Styling Sources
-- Design tokens (`spacing`, `radius`, `typography`, `motion`)
-- CVA variants
-- Primitives (`Box`, `Stack`, `Text`, `Grid`)
-- Composed components (e.g. `Button`, `Card`)
+## 2. 🎨 Use Design Tokens
+- Design tokens (`spacing`, `radius`, `typography`, `motion`) should be accessed via Tailwind classes where possible.
+- Avoid "over-abstracted" UI primitives (like the old `Box`, `Stack`, `Grid`).
 
-## 3. 🧱 Primitives Must Be Used for Layout
-- Layout uses `Stack`, `Grid`, `Box`, etc.
-- No manual flex/grid usage
-- Responsive behavior handled via primitive props (not className)
+## 3. 🧱 Semantic Layout
+- Use standard CSS Flexbox and Grid classes (`flex`, `grid`, `flex-col`, `grid-cols-*`) on semantic elements.
+- Responsive behavior should be handled via Tailwind prefixes (`sm:`, `md:`, `lg:`).
 
-## 4. 🎨 Typography Must Be Tokenized
-- No raw `text-*` classes
-- All text uses `<Text />` or equivalent abstraction
+## 4. 🔠 Standardized Typography
+- Use `<Text />` only as a thin wrapper or prefer semantic tags (`h1`-`h6`, `p`).
+- Apply typography tokens via Tailwind classes defined in `tailwind.config.js`.
 
 ## 5. 🎛 Variants Must Be Standardized
 - Variant names match global system (e.g. `default`, `accent`, `ghost`)
@@ -65,14 +61,14 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 ## 16. 🧩 Avoid “God Components”
 - Components are small and focused
 
-## 18. 📐 Responsive Design via System
-- Responsive handled via props
+## 18. 📐 Responsive Design via Tailwind
+- Use Tailwind responsive prefixes (`sm:`, `md:`, `lg:`, `xl:`) for all layout and styling adjustments.
 
-## 20. 🚫 No System Bypass via `className`
-- `className` should NOT introduce new design decisions
+## 20. 🚫 Clean Class Management
+- Use the `cn()` utility for conditional class merging.
 
 ## 21. 🏗 Modular Architecture
-- Layout primitives (`Box`, `Grid`, `Stack`) MUST reside in `src/layouts/`
+- Core layout components (like `MainLayout`, `Footer`) MUST reside in `src/layouts/`
 - Page-level compositors MUST reside in `src/pages/`
 - Component imports MUST use the `@/layouts/` or `@/pages/` alias
 

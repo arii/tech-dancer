@@ -1,5 +1,3 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
-
 interface PageHeaderProps {
   label: string;
   title: string;
@@ -8,32 +6,32 @@ interface PageHeaderProps {
 
 export function PageHeader({ label, title, description }: PageHeaderProps) {
   return (
-    <Box paddingBottom={10} className="border-b border-slate-200">
-      <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
+    <div className="pb-10 border-b border-slate-200">
+      <div className="flex flex-col gap-4">
+        <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">
           {label}
-        </Text>
-        <Text variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+        </span>
+        <h1 className="font-display font-bold uppercase tracking-tighter leading-tight text-5xl md:text-7xl text-accent-navy text-balance">
           {title}
-        </Text>
+        </h1>
         {description && (
-          <Text variant="sans" size="lg" color="dim" maxWidth="3xl" marginTop={4} weight="font-medium" className="leading-relaxed">
+          <p className="font-sans leading-relaxed text-text-body text-lg text-text-dim max-w-3xl mt-4 font-medium">
             {description}
-          </Text>
+          </p>
         )}
-      </Stack>
-    </Box>
+      </div>
+    </div>
   );
 }
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
-      <Stack gap={1}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{label}</Text>
-        <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
-      </Stack>
+    <div className="flex justify-between items-end border-b border-slate-200 pb-4">
+      <div className="flex flex-col gap-1">
+        <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold">{label}</span>
+        <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl font-black text-accent-navy">{title}</span>
+      </div>
       {children}
-    </Box>
+    </div>
   );
 }

@@ -1,19 +1,15 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Box, Stack, Text } from "@/layouts/Primitives"
 
 function Card({
   className,
   size = "default",
   ...props
-}: React.ComponentProps<typeof Box> & { size?: "default" | "sm" }) {
+}: React.HTMLAttributes<HTMLDivElement> & { size?: "default" | "sm" }) {
   return (
-    <Box
-      border
-      radius="none"
-      surface="default"
+    <div
       className={cn(
-        "group/card flex flex-col overflow-hidden text-sm",
+        "group/card flex flex-col overflow-hidden text-sm border border-line bg-surface rounded-none",
         size === "default" ? "gap-4 p-8" : "gap-3 p-4",
         className
       )}
@@ -22,9 +18,9 @@ function Card({
   )
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <Box
+    <div
       className={cn(
         "group/card-header grid auto-rows-min items-start gap-1",
         className
@@ -34,33 +30,27 @@ function CardHeader({ className, ...props }: React.ComponentProps<typeof Box>) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<typeof Text>) {
+function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <Text
-      as="div"
-      variant="headline"
-      size="text-xl"
-      className={cn("leading-snug", className)}
+    <h3
+      className={cn("font-display font-bold uppercase tracking-tighter leading-snug text-xl", className)}
       {...props}
     />
   )
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<typeof Text>) {
+function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <Text
-      as="p"
-      color="dim"
-      size="text-xs"
-      className={cn("uppercase tracking-wider", className)}
+    <p
+      className={cn("text-text-dim text-[10px] font-mono font-bold uppercase tracking-widest uppercase tracking-wider", className)}
       {...props}
     />
   )
 }
 
-function CardAction({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardAction({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <Box
+    <div
       className={cn(
         "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
         className
@@ -70,21 +60,20 @@ function CardAction({ className, ...props }: React.ComponentProps<typeof Box>) {
   )
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <Box
+    <div
       className={cn("flex-1", className)}
       {...props}
     />
   )
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <Box
-      surface="muted"
+    <div
       className={cn(
-        "flex items-center border-t border-line p-4 -mx-8 -mb-8 mt-4",
+        "flex items-center border-t border-line p-4 -mx-8 -mb-8 mt-4 bg-muted",
         className
       )}
       {...props}

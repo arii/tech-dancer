@@ -1,5 +1,3 @@
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-
 export function Footer() {
   const legalLinks = [
     { label: 'Privacy', href: '#' },
@@ -8,34 +6,25 @@ export function Footer() {
   ];
 
   return (
-    <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-slate-200 mt-auto">
-      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
+    <footer className="py-12 px-4 bg-bg opacity-80 border-t border-slate-200 mt-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <span className="font-mono tracking-[0.15em] text-xs text-text-dim weight-font-semibold uppercase">
           © 2026 TECH-DANCER
-        </Text>
-        <Stack direction="row" gap={2} align="center">
+        </span>
+        <div className="flex flex-row gap-2 items-center">
           {legalLinks.map((link) => (
-            <Button
+            <a
               key={link.label}
-              as="a"
               href={link.href}
-              variant="ghost"
-              size="sm"
-              className="text-text-dim hover:text-accent"
+              className="p-2 border border-line hover:border-accent-brand hover:text-accent-brand transition-colors text-text-dim hover:text-accent rounded-sm"
             >
-              <Text
-                variant="mono"
-                size="xs"
-                uppercase
-                weight="font-semibold"
-                className="tracking-[0.15em]"
-              >
+              <span className="font-mono tracking-[0.15em] text-xs uppercase font-semibold">
                 {link.label}
-              </Text>
-            </Button>
+              </span>
+            </a>
           ))}
-        </Stack>
-      </Stack>
-    </Box>
+        </div>
+      </div>
+    </footer>
   );
 }

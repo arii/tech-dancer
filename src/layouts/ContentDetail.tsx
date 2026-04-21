@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ContentItem } from '@/lib/content';
 
 interface ContentDetailProps {
@@ -21,63 +20,53 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
   const author = 'author' in post ? post.author : 'Ariel';
 
   return (
-    <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="5xl" marginX="auto" className="w-full">
-        <Box
-          as="button"
+    <article className="panel h-full overflow-y-auto w-full">
+      <div className="flex flex-col gap-12 max-w-5xl mx-auto w-full">
+        <button
           onClick={onBack}
-          display="flex"
-          align="center"
-          gap={2}
-          color="dim"
-          className="hover:text-accent-brand transition-colors"
-          cursor="pointer"
+          className="flex items-center gap-2 text-text-dim hover:text-accent-brand transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">{backLabel}</Text>
-        </Box>
+          <span className="font-mono tracking-widest uppercase text-xs font-bold">{backLabel}</span>
+        </button>
 
-        <Stack gap={8}>
-          <Box display="flex" align="center" gap={4}>
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center gap-4">
             {category && (
-              <Box display="flex" align="center" gap={2} color="brand">
+              <div className="flex items-center gap-2 text-accent-brand">
                 <Tag className="w-3 h-3" />
-                <Text variant="mono" size="micro" weight="font-bold" className="uppercase">{category}</Text>
-              </Box>
+                <span className="font-mono uppercase tracking-widest text-[8px] font-bold">{category}</span>
+              </div>
             )}
             {date && (
-              <Box display="flex" align="center" gap={2} color="dim">
+              <div className="flex items-center gap-2 text-text-dim">
                 <Clock className="w-3 h-3" />
-                <Text variant="mono" size="micro">{date}</Text>
-              </Box>
+                <span className="font-mono uppercase tracking-widest text-[8px]">{date}</span>
+              </div>
             )}
-          </Box>
+          </div>
 
-          <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">
+          <h1 className="font-display font-bold uppercase tracking-tighter leading-none text-5xl md:text-7xl">
             {title}
-          </Text>
+          </h1>
 
           {image && (
-            <Box
-              as={motion.div}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              aspect="video"
-              overflow="hidden"
-              border
-              className="bg-muted"
+              className="aspect-video overflow-hidden border border-line bg-muted"
             >
               <img
                 src={image}
                 alt={title}
                 className="w-full h-full object-cover"
               />
-            </Box>
+            </motion.div>
           )}
 
           {children}
 
-          <Box className="prose prose-sm md:prose-base prose-slate max-w-none w-full overflow-hidden break-words prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
+          <div className="prose prose-sm md:prose-base prose-slate max-w-none w-full overflow-hidden break-words prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
             <ReactMarkdown
               components={{
                 a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />
@@ -85,20 +74,20 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
             >
               {content}
             </ReactMarkdown>
-          </Box>
+          </div>
 
-          <Box border="t" paddingTop={12} display="flex" justify="between" align="center">
-            <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">PUBLISHED BY</Text>
-              <Text variant="mono" size="xs" weight="font-bold">{author}</Text>
-            </Stack>
-            <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
+          <div className="border-t border-line pt-12 flex justify-between items-center">
+            <div className="flex flex-col gap-2">
+              <span className="font-mono uppercase tracking-widest text-[8px] text-text-dim">PUBLISHED BY</span>
+              <span className="font-mono tracking-widest uppercase text-xs font-bold">{author}</span>
+            </div>
+            <button className="flex items-center gap-2 text-text-dim hover:text-accent-brand transition-colors">
               <Share2 className="w-4 h-4" />
-              <Text variant="mono" size="xs">Share Content</Text>
-            </Box>
-          </Box>
-        </Stack>
-      </Stack>
-    </Box>
+              <span className="font-mono tracking-widest uppercase text-xs">Share Content</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }

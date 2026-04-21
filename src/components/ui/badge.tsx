@@ -1,11 +1,10 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Text } from "@/layouts/Primitives"
 import { badgeVariants } from "@/lib/variants"
 import type { VariantProps } from "class-variance-authority"
 
 export interface BadgeProps
-  extends Omit<React.ComponentProps<typeof Text>, "intent">,
+  extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
 function Badge({
@@ -15,7 +14,7 @@ function Badge({
   ...props
 }: BadgeProps) {
   return (
-    <Text
+    <span
       className={cn(badgeVariants({ intent, emphasis }), className)}
       {...props}
     />

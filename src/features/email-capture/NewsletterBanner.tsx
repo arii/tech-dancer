@@ -1,62 +1,48 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
 import { motion } from 'motion/react';
 import { useEmailCaptureContext } from './EmailCaptureContext';
-import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {
   const { hideBar } = useEmailCaptureContext();
 
   return (
-    <Box 
-      as={motion.div}
+    <motion.div
       initial={motionTokens.overlay.initial}
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      className="bg-white/80 backdrop-blur-xl border-t border-line/50 rounded-t-3xl shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05),0_-8px_10px_-6px_rgba(0,0,0,0.05)] mx-auto"
-      padding="emailBar"
-      position="fixed"
+      className="bg-white/80 backdrop-blur-xl border-t border-line/50 rounded-t-3xl shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05),0_-8px_10px_-6px_rgba(0,0,0,0.05)] mx-auto py-4 px-6 md:px-12 fixed z-50"
       style={{ bottom: 0, left: '1rem', right: '1rem', width: 'calc(100% - 2rem)' }}
-      zIndex="toast"
     >
-      <Box position="absolute" className="top-2 right-2" zIndex="docked">
-        <Button
-          variant="ghost"
-          size="sm"
+      <div className="absolute top-2 right-2 z-10">
+        <button
           onClick={hideBar}
           aria-label="Dismiss"
-          className="p-1 min-h-0 min-w-0"
+          className="p-1 min-h-0 min-w-0 cursor-pointer border border-line hover:border-accent-brand hover:text-accent-brand transition-colors text-text-dim hover:text-accent rounded-sm p-1"
         >
           <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
-        </Button>
-      </Box>
+        </button>
+      </div>
 
-      <Stack 
-        direction={{ base: 'col', md: 'row' }} 
-        align="center" 
-        justify="between" 
-        gap={{ base: 4, md: 8 }}
-        className="w-full"
-      >
-        <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
-          <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 w-full">
+        <div className="flex flex-row items-center gap-4 w-full md:w-auto">
+          <div className="hidden sm:block p-4 bg-accent/5">
             <Mail className="w-5 h-5 text-accent-brand" />
-          </Box>
-          <Stack gap={0}>
-            <Text variant="display" size="base" uppercase tracking="tight">
+          </div>
+          <div className="flex flex-col gap-0">
+            <span className="font-display font-bold uppercase tracking-tight leading-none text-base uppercase tracking-tight">
               Weekly Insights
-            </Text>
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+            </span>
+            <span className="font-mono uppercase tracking-widest text-[8px] text-text-dim uppercase tracking-widest">
               Dance Analytics // Gear Reviews // Community Updates
-            </Text>
-          </Stack>
-        </Stack>
+            </span>
+          </div>
+        </div>
         
         <EmailForm />
-      </Stack>
-    </Box>
+      </div>
+    </motion.div>
   );
 }

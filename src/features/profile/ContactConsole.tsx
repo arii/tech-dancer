@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
-import { Mail, Send, MessageSquare, HelpCircle, Sparkles, BarChart2, Shield } from 'lucide-react';
+import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import React from 'react';
-import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { cn } from '@/lib/utils';
@@ -37,37 +36,27 @@ export default function Contact() {
 
 function SuccessState({ onReset }: { onReset: () => void }) {
   return (
-    <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" textAlign="center">
-      <Stack gap={12} align="center">
-        <Box width={24} height={24} border surface="dim" display="flex" align="center" justify="center" color="accent">
+    <section className="panel h-full overflow-y-auto w-full flex flex-col items-center justify-center text-center">
+      <div className="flex flex-col gap-12 items-center">
+        <div className="w-24 h-24 border border-line bg-surface-alt flex items-center justify-center text-accent">
           <Sparkles className="w-12 h-12 stroke-1" />
-        </Box>
-        <Stack gap={4}>
-          <Text variant="headline" size="6xl">Message Received.</Text>
-          <Text variant="body" maxWidth="md" marginX="auto">
+        </div>
+        <div className="flex flex-col gap-4">
+          <h1 className="font-display font-bold uppercase tracking-tighter leading-[0.9] text-6xl">Message Received.</h1>
+          <p className="font-sans leading-relaxed text-text-body max-w-md mx-auto">
             Thank you for reaching out. I've received your message and will get back to you as soon as possible.
-          </Text>
-        </Stack>
-        <Box 
-          as={motion.button} 
+          </p>
+        </div>
+        <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onReset}
-          variant="mono"
-          weight="font-bold"
-          uppercase
-          size="micro"
-          border
-          paddingX={8}
-          paddingY={4}
-          color="accent"
-          cursor="pointer"
-          className="hover:bg-accent-brand/5 transition-colors"
+          className="font-mono uppercase tracking-[3px] text-[8px] font-bold border border-line px-8 py-4 text-accent cursor-pointer hover:bg-accent-brand/5 transition-colors"
         >
           Send Another Message
-        </Box>
-      </Stack>
-    </Box>
+        </motion.button>
+      </div>
+    </section>
   );
 }
 
@@ -81,54 +70,54 @@ interface ContactFormProps {
 
 function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
   return (
-    <Box as="section">
-      <Stack gap={12}>
+    <section>
+      <div className="flex flex-col gap-12">
         <PageHeader 
           label="CONTACT"
           title="Get in Touch"
           description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
         />
 
-        <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={20} overflow="hidden">
-        <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
-          <Stack gap={12}>
-            <Stack gap={6}>
-              <Box paddingBottom={4} className="border-b border-slate-200">
-                <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
-              </Box>
-              <Text variant="body" size="base" maxWidth="md" color="dim">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-line max-w-6xl mb-20 overflow-hidden">
+        <div className="bg-surface p-8 md:p-12 border-b md:border-b-0 md:border-r border-line">
+          <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-6">
+              <div className="pb-4 border-b border-slate-200">
+                <h3 className="font-display font-bold uppercase tracking-tight leading-none text-2xl font-black text-accent-navy">Inquiries</h3>
+              </div>
+              <p className="font-sans leading-relaxed text-text-body text-base max-w-md text-text-dim">
                 I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
-              </Text>
-            </Stack>
+              </p>
+            </div>
             
-            <Stack gap={6}>
+            <div className="flex flex-col gap-6">
               {[
                 { label: 'Data Inquiry', channel: 'Dance Stats', icon: BarChart2 },
                 { label: 'Gear Review', channel: 'Product Feedback', icon: Sparkles },
                 { label: 'General', channel: 'Discussion', icon: MessageSquare },
               ].map((item) => (
-                <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                  <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
+                <div key={item.label} className="flex items-center gap-6 group">
+                  <div className="w-12 h-12 border border-line bg-muted flex items-center justify-center text-text-dim group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
                     <item.icon className="w-6 h-6 stroke-1" />
-                  </Box>
-                  <Stack gap={1}>
-                    <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-[0.15em] uppercase">{item.channel}</Text>
-                  </Stack>
-                </Box>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-sans leading-relaxed text-text-body text-base font-bold text-accent-navy">{item.label}</span>
+                    <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">{item.channel}</span>
+                  </div>
+                </div>
               ))}
-            </Stack>
-          </Stack>
-        </Box>
+            </div>
+          </div>
+        </div>
 
-        <Box surface="default" padding={{ base: 8, md: 12 }}>
-          <Box as="form" onSubmit={onSubmit} className="space-y-8">
-            <Stack gap={3}>
-              <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
-                {errors.name && <Text id="name-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.name}</Text>}
-              </Box>
-              <Box as="input" 
+        <div className="bg-surface p-8 md:p-12">
+          <form onSubmit={onSubmit} className="space-y-8">
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center">
+                <label htmlFor="contact-name" className="font-mono tracking-[0.15em] text-xs font-semibold text-text-dim uppercase">Your Name</label>
+                {errors.name && <span id="name-error" className="font-mono font-semibold text-accent-brand text-xs" role="alert">{errors.name}</span>}
+              </div>
+              <input
                 id="contact-name"
                 name="name"
                 type="text" 
@@ -142,13 +131,13 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 value={formData.name}
                 onChange={onChange}
               />
-            </Stack>
-            <Stack gap={3}>
-              <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
-                {errors.email && <Text id="email-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.email}</Text>}
-              </Box>
-              <Box as="input" 
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center">
+                <label htmlFor="contact-email" className="font-mono tracking-[0.15em] text-xs font-semibold text-text-dim uppercase">Your Email</label>
+                {errors.email && <span id="email-error" className="font-mono font-semibold text-accent-brand text-xs" role="alert">{errors.email}</span>}
+              </div>
+              <input
                 id="contact-email"
                 name="email"
                 type="email" 
@@ -162,10 +151,10 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 value={formData.email}
                 onChange={onChange}
               />
-            </Stack>
-            <Stack gap={3}>
-              <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
-              <Box as="select" 
+            </div>
+            <div className="flex flex-col gap-3">
+              <label htmlFor="contact-subject" className="font-mono tracking-[0.15em] text-xs font-semibold text-text-dim uppercase">Subject</label>
+              <select
                 id="contact-subject"
                 name="subject"
                 className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
@@ -176,14 +165,14 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 <option>Content Request</option>
                 <option>Gear Review Request</option>
                 <option>Dance Statistics</option>
-              </Box>
-            </Stack>
-            <Stack gap={3}>
-              <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
-                {errors.message && <Text id="message-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.message}</Text>}
-              </Box>
-              <Box as="textarea" 
+              </select>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center">
+                <label htmlFor="contact-message" className="font-mono tracking-[0.15em] text-xs font-semibold text-text-dim uppercase">Message</label>
+                {errors.message && <span id="message-error" className="font-mono font-semibold text-accent-brand text-xs" role="alert">{errors.message}</span>}
+              </div>
+              <textarea
                 id="contact-message"
                 name="message"
                 rows={5}
@@ -197,29 +186,31 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 value={formData.message}
                 onChange={onChange}
               />
-            </Stack>
-            <Button
+            </div>
+            <button
               type="submit"
-              variant="primary"
               disabled={isSubmitting}
-              fullWidth
+              className={cn(
+                "w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3",
+                isSubmitting && "opacity-70 cursor-not-allowed"
+              )}
             >
               {isSubmitting ? (
-                <Stack direction="row" align="center" gap={3}>
-                  <div className="w-4 h-4 border-2 border-bg-muted border-t-accent-brand animate-spin" />
-                  <Text variant="mono" color="dim" size="micro">Sending...</Text>
-                </Stack>
+                <div className="flex flex-row items-center gap-3">
+                  <div className="w-4 h-4 border-2 border-slate-400 border-t-white animate-spin rounded-full" />
+                  <span className="font-mono text-text-dim text-[8px] uppercase tracking-widest">Sending...</span>
+                </div>
               ) : (
                 <>
                   <Send className="w-4 h-4" />
                   Send Message
                 </>
               )}
-            </Button>
-          </Box>
-        </Box>
-        </Grid>
-      </Stack>
-    </Box>
+            </button>
+          </form>
+        </div>
+        </div>
+      </div>
+    </section>
   );
 }

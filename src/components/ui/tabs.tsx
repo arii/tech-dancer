@@ -1,6 +1,5 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cn } from "@/lib/utils"
-import { Box, Stack, Text } from "@/layouts/Primitives"
 
 function Tabs({
   className,
@@ -39,7 +38,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
   return (
     <TabsPrimitive.Tab
       className={cn(
-        "relative inline-flex h-full items-center justify-center gap-2 px-6 py-4 text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap text-text-dim transition-all hover:text-text-main focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-brand disabled:pointer-events-none disabled:opacity-50",
+        "relative inline-flex h-full items-center justify-center gap-2 px-6 py-4 text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap text-text-dim transition-all hover:text-text-main focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-brand disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
         "data-active:text-accent-brand data-active:after:content-[''] data-active:after:absolute data-active:after:bottom-0 data-active:after:left-0 data-active:after:w-full data-active:after:h-[2px] data-active:after:bg-accent-brand",
         className
       )}

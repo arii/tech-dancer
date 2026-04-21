@@ -1,4 +1,3 @@
-import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
@@ -13,8 +12,8 @@ export function EmailForm() {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
-      <Stack direction="row" gap={0} position="relative" className="w-full">
+    <form onSubmit={handleSubmit} className="w-full md:w-auto max-w-md">
+      <div className="flex flex-row gap-0 relative w-full">
         <input
           type="email"
           placeholder="Email Address"
@@ -24,11 +23,10 @@ export function EmailForm() {
           disabled={status === 'loading' || status === 'success'}
           className={`${inputs.base} min-h-[44px] w-full`}
         />
-        <Button
+        <button
           type="submit"
-          variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          className="min-h-[44px] w-auto min-w-[140px] sm:min-w-[180px] px-6"
+          className="cursor-pointer w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3 min-h-[44px] w-auto min-w-[140px] sm:min-w-[180px] px-6"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -42,25 +40,25 @@ export function EmailForm() {
               {status === 'loading' && (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
+                  <span className="font-mono uppercase tracking-widest text-[8px] font-bold text-bg">AUTHENTICATING...</span>
                 </>
               )}
               {status === 'success' && (
                 <>
                   <Check className="w-4 h-4 text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
+                  <span className="font-mono uppercase tracking-widest text-[8px] font-bold text-bg">ACCESS_GRANTED</span>
                 </>
               )}
               {status === 'idle' && (
                 <>
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">SUBSCRIBE</Text>
+                  <span className="font-mono uppercase tracking-widest text-[8px] font-bold text-bg">SUBSCRIBE</span>
                   <ArrowRight className="w-4 h-4 text-bg" />
                 </>
               )}
             </motion.div>
           </AnimatePresence>
-        </Button>
-      </Stack>
-    </Box>
+        </button>
+      </div>
+    </form>
   );
 }

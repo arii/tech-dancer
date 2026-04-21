@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { Box, Grid, Text } from '@/layouts/Primitives';
 import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
 
@@ -11,20 +10,20 @@ export default function Toolbox() {
   [filteredCategories]);
 
   return (
-    <Box as="section" paddingY={8}>
+    <section className="py-8">
       {/* Header section with modern design */}
       <header className="mb-12 border-b border-line/50 pb-12">
-        <Box marginBottom={4}>
+        <div className="mb-4">
           <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-wider">
             THE TOOLBOX
           </span>
-        </Box>
-        <Text as="h1" variant="display" size="4xl" weight="font-black" className="text-accent-navy mb-4 block">
+        </div>
+        <h1 className="font-display font-bold uppercase tracking-tight leading-none text-4xl font-black text-accent-navy mb-4 block">
           Gear Reviews
-        </Text>
-        <Text as="p" variant="sans" size="lg" color="dim" className="max-w-2xl mb-8 font-medium block">
+        </h1>
+        <p className="font-sans leading-relaxed text-text-body text-lg text-text-dim max-w-2xl mb-8 font-medium block">
           Rigorous testing and honest takes on the gear that keeps you moving.
-        </Text>
+        </p>
 
         {/* Modern Search Bar */}
         <div className="relative max-w-md">
@@ -52,7 +51,7 @@ export default function Toolbox() {
       </header>
 
       {/* Grid: Mobile-first stacking */}
-      <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={{ base: 6, md: 8 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
         {allFilteredItems.map((item) => (
           <GearCard
             key={item.slug}
@@ -60,13 +59,13 @@ export default function Toolbox() {
             basePath="/gear"
           />
         ))}
-      </Grid>
+      </div>
 
       {allFilteredItems.length === 0 && (
-        <Box paddingY={20} className="text-center">
-          <Text color="dim">No gear found matching your search.</Text>
-        </Box>
+        <div className="py-20 text-center">
+          <span className="text-text-dim">No gear found matching your search.</span>
+        </div>
       )}
-    </Box>
+    </section>
   );
 }

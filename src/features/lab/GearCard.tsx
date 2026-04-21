@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 
 interface GearCardProps extends Resource {
@@ -38,9 +37,9 @@ export function GearCard({
         )}
         <div className="absolute top-4 left-4">
           <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-full border border-line">
-            <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase">
+            <span className="font-mono uppercase tracking-widest text-[8px] font-bold text-accent-navy uppercase">
               {category}
-            </Text>
+            </span>
           </div>
         </div>
       </div>

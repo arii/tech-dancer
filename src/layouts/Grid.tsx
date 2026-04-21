@@ -1,24 +1,15 @@
 import React from "react"
-import { composeStyles } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 
-interface GridProps extends BoxProps {
-  cols?: ResponsiveProp<number | string>
-  rows?: ResponsiveProp<number | string>
-}
+export interface GridProps extends BoxProps {}
 
 export const Grid = React.forwardRef<HTMLDivElement, GridProps>(
-  ({ className, cols = 12, rows, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     return (
       <Box
         ref={ref}
-        className={composeStyles(
-          "grid",
-          getResponsiveClasses(cols, "grid-cols-"),
-          getResponsiveClasses(rows, "grid-rows-"),
-          className
-        )}
+        className={cn("grid", className)}
         {...props}
       />
     )

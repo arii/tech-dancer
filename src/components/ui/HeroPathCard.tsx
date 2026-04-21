@@ -1,7 +1,5 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Zap, Shield } from 'lucide-react';
 
 interface HeroPathCardProps {
   label: string;
@@ -13,64 +11,51 @@ interface HeroPathCardProps {
   icon: any;
 }
 
-export function HeroPathCard({ label, title, paths, tag, image, span = 1, icon: Icon }: HeroPathCardProps) {
+export function HeroPathCard({ title, paths, tag, span = 1, icon: Icon }: HeroPathCardProps) {
   return (
-    <Box 
-      as={motion.div}
-      span={{ base: 1, lg: span }}
-      position="relative"
-      overflow="hidden"
-      padding={8}
-      className="group bg-surface border border-slate-200 hover:border-accent transition-all duration-500 rounded-none"
+    <motion.div
+      className={`col-span-1 lg:col-span-${span} relative overflow-hidden p-8 group bg-surface border border-slate-200 hover:border-accent transition-all duration-500 rounded-none`}
     >
-      <Stack gap={10} height="full" justify="between" position="relative" zIndex={10}>
-        <Stack gap={8}>
-          <Box display="flex" align="center" gap={3}>
+      <div className="flex flex-col gap-10 h-full justify-between relative z-10">
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center gap-3">
             <Icon className="w-5 h-5 text-accent" />
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em] uppercase">
+            <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">
               {tag.split(' // ')[0]}
-            </Text>
-          </Box>
+            </span>
+          </div>
           
-          <Stack gap={6}>
-            <Text 
-              variant="display" 
-              size="4xl" 
-              weight="font-black" 
-              className="tracking-tight leading-tight text-accent-navy transition-colors"
+          <div className="flex flex-col gap-6">
+            <span
+              className="font-display font-bold uppercase tracking-tight leading-tight text-4xl font-black text-accent-navy transition-colors"
             >
               {title}
-            </Text>
+            </span>
             
-            <Grid cols={{ base: 1, sm: span > 2 ? 3 : 1 }} gap={3} maxWidth="4xl">
+            <div className={`grid grid-cols-1 ${span > 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-1'} gap-3 max-w-4xl`}>
               {paths.map(item => (
-                <Box 
+                <NavLink
                   key={item.label}
-                  as={NavLink}
                   to={item.path}
-                  paddingX={5}
-                  paddingY={4}
-                  radius="md"
-                  className="flex items-center gap-4 bg-bg/50 hover:bg-accent/5 border border-slate-200 hover:border-accent rounded-[2px] transition-all group/link"
+                  className="flex items-center gap-4 bg-bg/50 hover:bg-accent/5 border border-slate-200 hover:border-accent rounded-[2px] transition-all group/link px-5 py-4"
                 >
-                  {/* MECHANICAL_NOTE: Physics of the hover expansion */}
-                  <Box className="w-2 h-2 bg-accent/20 group-hover/link:bg-accent rounded-[2px] transition-colors flex-shrink-0" />
-                  <Text variant="sans" size="base" weight="font-bold" className="text-text-main group-hover/link:text-accent">
+                  <div className="w-2 h-2 bg-accent/20 group-hover/link:bg-accent rounded-[2px] transition-colors flex-shrink-0" />
+                  <span className="font-sans leading-relaxed text-text-body text-base font-bold text-text-main group-hover/link:text-accent">
                     {item.label}
-                  </Text>
-                </Box>
+                  </span>
+                </NavLink>
               ))}
-            </Grid>
-          </Stack>
-        </Stack>
+            </div>
+          </div>
+        </div>
 
-        <Box display="flex" justify="between" align="center" paddingTop={8} className="border-t border-slate-200">
-          <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em] uppercase">
+        <div className="flex justify-between items-center pt-8 border-t border-slate-200">
+          <span className="font-mono tracking-[0.15em] text-xs text-text-dim font-semibold uppercase">
             {tag}
-          </Text>
-          <Box className="w-8 h-[2px] bg-accent/20 group-hover:w-16 group-hover:bg-accent transition-all duration-500 rounded-[2px]" />
-        </Box>
-      </Stack>
-    </Box>
+          </span>
+          <div className="w-8 h-[2px] bg-accent/20 group-hover:w-16 group-hover:bg-accent transition-all duration-500 rounded-[2px]" />
+        </div>
+      </div>
+    </motion.div>
   );
 }
