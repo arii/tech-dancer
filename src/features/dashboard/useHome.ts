@@ -18,17 +18,6 @@ export function useHome() {
     setRecentPosts(allPosts.slice(0, 3));
   }, []);
 
-  const dancerPaths = [
-    { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
-    { label: "Gear reviews", path: "/gear" }
-  ];
-
-  const hirePaths = [
-    { label: "Tech blog posts", path: "/blog?category=Tech" },
-    { label: "Data and Development Lab", path: "/research" },
-    { label: "About/Contact page", path: "/about" }
-  ];
-
   const handleNavigateToBlog = () => navigate('/blog');
   const handleNavigateToPost = (slug: string) => navigate(`/blog/${slug}`);
   const handleNavigate = (path: string) => navigate(path);
@@ -37,8 +26,6 @@ export function useHome() {
     recentPosts, 
     upcomingEvents,
     tools: tools.slice(0, 6),
-    dancerPaths,
-    hirePaths,
     handleNavigateToBlog,
     handleNavigateToPost,
     handleNavigate

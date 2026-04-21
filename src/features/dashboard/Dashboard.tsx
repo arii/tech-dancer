@@ -118,6 +118,7 @@ export default function Home() {
                   category={tool.category}
                   excerpt={tool.layman}
                   basePath="/research"
+                  aspect="square"
                 />
               ))}
             </Grid>
