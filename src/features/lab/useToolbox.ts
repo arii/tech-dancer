@@ -26,6 +26,7 @@ export function useToolbox() {
       items: cat.items.filter(item => 
         item.title.toLowerCase().includes(term) ||
         item.category.toLowerCase().includes(term) ||
+        item.tags?.some((t: string) => t.toLowerCase().includes(term)) ||
         item.excerpt.toLowerCase().includes(term)
       )
     })).filter(cat => cat.items.length > 0);
