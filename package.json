@@ -12,8 +12,8 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
-    "audit:fix": "node scripts/ai-debugger.js",
-    "audit:fix:gallery": "node scripts/ai-debugger.js http://localhost:3000/public/antipattern-examples/cardocalypse.html '.card'"
+    "audit:fix": "node scripts/ai-debugger.mjs",
+    "audit:fix:gallery": "node scripts/ai-debugger.mjs http://localhost:3000/public/antipattern-examples/cardocalypse.html '.card'"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
