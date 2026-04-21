@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 type PathID = 'dancer' | 'roboticist';
 
@@ -31,12 +31,14 @@ const PATH_DATA = [
 
 export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
+  const [activeId, setActiveId] = useState<PathID | null>(null);
+  const navigate = useNavigate();
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full bg-black">
       {PATH_DATA.map((path) => {
-        const isHovered = hoveredPath === path.id;
-        const isOtherHovered = hoveredPath !== null && !isHovered;
+        const isHovered = hoveredPath === path.id || activeId === path.id;
+        const isOtherHovered = (hoveredPath !== null || activeId !== null) && !isHovered;
 
         return (
           <div
@@ -44,6 +46,13 @@ export default function PathSelector() {
             className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
+            onClick={() => {
+              if (activeId === path.id) {
+                navigate(path.links[0].to);
+              } else {
+                setActiveId(path.id);
+              }
+            }}
           >
             {/* Background */}
             <div

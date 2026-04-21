@@ -32,7 +32,7 @@ export function GlobalSearch() {
     setIsOpen(false);
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
-    else if (result.type === 'resource') navigate(`/gear`);
+    else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research`);
   };
 

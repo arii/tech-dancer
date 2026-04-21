@@ -11,18 +11,11 @@ export function useBlog() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    // Simulate a brief loading state to show the skeleton and avoid jump
-    const timer = setTimeout(() => {
-      setPosts(getPosts());
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    setPosts(getPosts());
+    setIsLoading(false);
   }, []);
 
   const setActiveCategory = (category: string) => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 300);
     if (category === 'All') {
       searchParams.delete('category');
     } else {
