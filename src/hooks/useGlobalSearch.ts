@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getPosts, getResources, getStudies, ContentItem } from '@/lib/content';
+import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
   const [query, setQuery] = useState('');
@@ -14,12 +15,11 @@ export function useGlobalSearch() {
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    const term = query.toLowerCase();
     return allContent.filter(item => 
-      item.title.toLowerCase().includes(term) ||
-      item.excerpt.toLowerCase().includes(term) ||
-      item.content.toLowerCase().includes(term) ||
-      (item.tags && item.tags.some(t => t.toLowerCase().includes(term)))
+      safeSearch(item.title, query) ||
+      safeSearch(item.excerpt, query) ||
+      safeSearch(item.content, query) ||
+      safeSearch(item.tags, query)
     );
   }, [allContent, query]);
 

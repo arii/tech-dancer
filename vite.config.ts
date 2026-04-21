@@ -7,12 +7,14 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
-  const analyze = process.env.ANALYZE === 'true';
-  const isVercel = process.env.VERCEL === '1';
+
+  // Dynamic base path for GitHub Pages vs Vercel vs Local Override
+  const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
+  const analyze = process.env.ANALYZE === 'true';
 
   // 1. Centralized dynamic route discovery
   const getDynamicRoutes = () => {
@@ -43,9 +45,10 @@ export default defineConfig(({ mode }) => {
   const resolvedBase = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
-    // 2. Base Path logic
     base: resolvedBase,
-
+    define: {
+      'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),
+    },
     plugins: [
       react(),
       tailwindcss(),

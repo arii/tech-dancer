@@ -6,9 +6,10 @@ import { useHome } from './useHome';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
+import { EventCard } from './EventCard';
 
 export default function Home() {
-  const { recentPosts, dancerPaths, hirePaths } = useHome();
+  const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
 
   return (
     <Box as="section">
@@ -60,6 +61,11 @@ export default function Home() {
                 aspect="video"
               />
             ))}
+
+            {/* Upcoming Events Mini-Cards */}
+            {upcomingEvents.map((event) => (
+              <EventCard key={event.name} {...event} />
+            ))}
           </Grid>
         </Stack>
       </Stack>
@@ -67,13 +73,3 @@ export default function Home() {
   );
 }
 
-const dancerPaths = [
-  { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
-  { label: "Gear reviews", path: "/gear" }
-];
-
-const hirePaths = [
-  { label: "Tech blog posts", path: "/blog?category=Tech" },
-  { label: "Data and Development Lab", path: "/research" },
-  { label: "About/Contact page", path: "/about" }
-];

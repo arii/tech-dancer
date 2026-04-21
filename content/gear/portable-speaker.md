@@ -5,6 +5,10 @@ category: "Dance Gear"
 excerpt: "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings."
 affiliateIds: ["amazon"]
 tags: ["practice", "music", "travel"]
+rating: 4.8
+verdict: "Best for Travel"
+priceCategory: "$$"
+updatedDate: "Jan 2024"
 ---
 
 ## Practice Anywhere

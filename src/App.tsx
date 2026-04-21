@@ -4,13 +4,13 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
-import { EmailCaptureBar } from './features/email-capture/EmailCaptureBar';
+import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
 
 import { Box } from './layouts/Primitives';
@@ -26,13 +26,8 @@ const Resources = lazy(() => import('./pages/Resources'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 
-export default function App() {
+export function RootLayout() {
   const location = useLocation();
-
-  // MECHANICAL_DELIGHT: Production health check signal
-  if (import.meta.env.PROD) {
-    console.log("[SYSTEM_HEALTH: OPTIMAL]");
-  }
   const emailLogic = useEmailCaptureLogic();
 
   return (
@@ -49,26 +44,34 @@ export default function App() {
             height="full"
           >
             <Suspense fallback={<PageSkeleton />}>
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Home />} />
-              <Route path="/gear" element={<GearReviews />} />
-              <Route path="/gear/:slug" element={<GearPost />} />
-              <Route path="/research" element={<Research />} />
-              <Route path="/research/:id" element={<ResearchDetail />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<Home />} />
-            </Routes>
-          </Suspense>
+              <Outlet />
+            </Suspense>
           </Box>
         </AnimatePresence>
       </MainLayout>
       <AnimatePresence>
-        {emailLogic.showEmailBar && <EmailCaptureBar />}
+        {emailLogic.showEmailBar && <NewsletterBanner />}
       </AnimatePresence>
     </EmailCaptureProvider>
   );
 }
+
+export const routes = [
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: 'gear', element: <GearReviews /> },
+      { path: 'gear/:slug', element: <GearPost /> },
+      { path: 'research', element: <Research /> },
+      { path: 'research/:id', element: <ResearchDetail /> },
+      { path: 'blog', element: <Blog /> },
+      { path: 'blog/:slug', element: <BlogPost /> },
+      { path: 'resources', element: <Resources /> },
+      { path: 'about', element: <About /> },
+      { path: 'contact', element: <Contact /> },
+      { path: '*', element: <Home /> },
+    ],
+  },
+];
