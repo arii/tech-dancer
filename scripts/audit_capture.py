@@ -3,7 +3,7 @@ from playwright.async_api import async_playwright
 import os
 
 # Configuration
-BASE_URL = 'http://localhost:4173/tech-dancer' # Using preview server port and base path
+BASE_URL = 'http://localhost:4173/tech-dancer'
 OUTPUT_DIR = './design_audit'
 PAGES = {
     "home": "/",
@@ -14,40 +14,26 @@ PAGES = {
 
 async def capture_page(browser, name, path):
     page = await browser.new_page(viewport={'width': 1440, 'height': 900})
-
-    # Enhanced navigation with better wait strategy
     await page.goto(f"{BASE_URL}{path}", wait_until="networkidle")
 
-    # Wait for specific UI elements or stability instead of arbitrary sleep
-    try:
-        await page.wait_for_selector("main", state="visible", timeout=5000)
-    except:
-        pass
-
-    # Ensure output directory exists
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
-    # 1. Full Page for context
+    # Core captures for Impeccable Audit
     await page.screenshot(path=f"{OUTPUT_DIR}/{name}_full.png", full_page=True)
-
-    # 2. Hero Section (Anti-pattern: "Purple Gradient Hero" / "Generic Metric Layout")
     await page.screenshot(path=f"{OUTPUT_DIR}/{name}_hero.png", clip={"x": 0, "y": 0, "width": 1440, "height": 600})
 
-    # 3. Card Grids (Anti-pattern: "Cardocalypse" / "Identical Grids")
-    # Tries to find the first grid-like element
     grid = await page.query_selector(".grid, [class*='Grid'], .cards")
     if grid:
         await grid.screenshot(path=f"{OUTPUT_DIR}/{name}_grid.png")
 
-    print(f"✅ Captured {name}")
+    print(f"Captured {name}")
     await page.close()
 
 async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch()
-        for name, path in PAGES.items():
-            await capture_page(browser, name, path)
+        await asyncio.gather(*[capture_page(browser, name, path) for name, path in PAGES.items()])
         await browser.close()
 
 if __name__ == "__main__":

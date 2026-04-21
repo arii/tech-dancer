@@ -48,16 +48,16 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
           Array.from({ length: 6 }).map((_, index) => (
             <Box
               key={index}
-              className={`transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
+              className="transition-colors group"
             >
               <ContentCardSkeleton />
             </Box>
           ))
         ) : (
-          filteredItems.map((item, index) => (
+          filteredItems.map((item) => (
             <Box
               key={item.slug}
-              className={`transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
+              className="transition-colors group"
             >
               <ContentCard
                 {...item}

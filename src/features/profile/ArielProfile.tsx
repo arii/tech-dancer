@@ -46,7 +46,7 @@ export default function ArielProfile() {
                 href="#" 
                 className="group flex items-center justify-between p-6 border border-line hover:border-accent transition-all duration-300"
               >
-                <Text variant="mono" size="xs" weight="font-bold" className="tracking-[0.2em] uppercase">Download Dossier</Text>
+                <Text variant="mono" size="xs" weight="font-bold" className="tracking-[0.2em] uppercase">Download CV</Text>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
               </Box>
             </Stack>
@@ -55,11 +55,11 @@ export default function ArielProfile() {
           {/* Right Column: Narrative Content */}
           <Box span={{ base: 12, lg: 8 }} className="lg:pl-20 pt-12">
             <Stack gap={24}>
-              {bio.sections.map((section, index) => (
+              {bio.sections.map((section) => (
                 <div key={section.id} className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-                  {/* Subtle index for editorial feel */}
+                  {/* Replaced markers with subtle accent divider */}
                   <div className="md:col-span-1 pt-2">
-                    <Text variant="mono" size="xs" weight="font-black" className="text-accent/40">0{index + 1}</Text>
+                    <Box className="w-4 h-[1px] bg-accent/40" />
                   </div>
 
                   <div className="md:col-span-11">
