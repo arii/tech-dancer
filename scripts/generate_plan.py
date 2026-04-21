@@ -13,26 +13,10 @@ class PlanGenerationError(Exception):
     """Custom exception for plan generation failures."""
     pass
 
-def validate_env():
-    """Validates required CLIs and files exist."""
-    missing_dependencies = []
-    if not shutil.which("gh"):
-        missing_dependencies.append("gh")
-    if not shutil.which("llm"):
-        missing_dependencies.append("llm")
-
-    if missing_dependencies:
-        raise PlanGenerationError(f"Missing required CLI tools: {', '.join(missing_dependencies)}")
-
-    template_path = os.path.join(os.path.dirname(__file__), "plan-template.md")
-    if not os.path.exists(template_path):
-        raise PlanGenerationError(f"Template not found at {template_path}")
-
-    instructions_path = os.path.join(os.path.dirname(__file__), "instructions.txt")
-    if not os.path.exists(instructions_path):
-        raise PlanGenerationError(f"Instructions not found at {instructions_path}")
-
-    return template_path, instructions_path
+def get_resource_paths():
+    """Returns the paths for the template and instructions."""
+    base_dir = os.path.dirname(__file__)
+    return os.path.join(base_dir, "plan-template.md"), os.path.join(base_dir, "instructions.txt")
 
 def fetch_issue(issue_number):
     """Fetches issue data from GitHub."""
@@ -86,7 +70,7 @@ def render_plan(issue_data, template_path, instructions_path):
 
 def generate_plan(issue_number):
     try:
-        template_path, instructions_path = validate_env()
+        template_path, instructions_path = get_resource_paths()
         issue_data = fetch_issue(issue_number)
         render_plan(issue_data, template_path, instructions_path)
     except PlanGenerationError as e:
