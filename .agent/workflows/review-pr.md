@@ -19,12 +19,12 @@ python3 dev-tools/fetch_pr_review_data.py PR_NUMBER
    - **Token compliance** — raw Tailwind or inline styles bypassing design tokens?
    - **Audit ratio** — if additions > 100 lines, find 10+ lines to remove.
 
-3. Fill in `/tmp/pr-review-PR_NUMBER.md`:
+3. Fill in `plan-pr-review-PR_NUMBER.md` (in the project root):
    - Mark every audit checklist item `[x]` (or note a violation inline)
    - Replace every `<FILL IN: ...>` in the `Proposed inline comment` JSON with real, line-referenced feedback
-   - Fill in the `body` in the Submission Steps JSON with ANTI-AI-SLOP / FINDINGS / FINAL RECOMMENDATION
+   - Fill in the `body` in the Submission JSON with ANTI-AI-SLOP / FINDINGS / FINAL RECOMMENDATION
 
 4. Parse and submit in one step — the link is printed on success:
 ```bash
-python3 dev-tools/submit_pr_review_data.py /tmp/pr-review-PR_NUMBER.md
+python3 dev-tools/submit_pr_review_data.py plan-pr-review-PR_NUMBER.md
 ```
