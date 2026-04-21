@@ -17,7 +17,7 @@ interface ContentCardProps {
 
 export function ContentCardSkeleton() {
   return (
-    <Box className="flex flex-col h-full bg-surface border border-line shadow-sm rounded-lg overflow-hidden animate-pulse">
+    <Box className="flex flex-col h-full bg-surface border border-line rounded-none overflow-hidden animate-pulse">
       <Box className="relative aspect-video bg-line/50" />
       <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
         <Stack gap={4}>
@@ -68,7 +68,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           </Box>
         )}
         <Box className="absolute top-4 left-4">
-          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-[2px]">
+          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
               {category}
             </Text>
@@ -102,7 +102,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           </Text>
         </Stack>
 
-        <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-slate-100 mt-auto">
+        <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-line mt-auto">
           <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-[0.15em]">
             Read More
           </Text>

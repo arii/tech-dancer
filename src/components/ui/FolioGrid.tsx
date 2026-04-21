@@ -81,7 +81,7 @@ export default function FolioGrid({
                 border="r"
                 borderBottom={true}
                 padding={8}
-                className={`transition-colors group ${index === 0 ? "col-span-full" : ""}`}
+                className={`transition-colors group ${index === 0 ? "md:col-span-full" : ""}`}
               >
                 <ContentCardSkeleton />
               </Box>
@@ -93,7 +93,7 @@ export default function FolioGrid({
                 border="r"
                 borderBottom={true}
                 padding={8}
-                className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full" : ""}`}
+                className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full" : ""}`}
               >
                 <ContentCard
                   {...item}

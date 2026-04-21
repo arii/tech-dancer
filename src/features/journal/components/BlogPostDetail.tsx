@@ -67,7 +67,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
             {/* Byline row */}
             <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
               <Box display="flex" align="center" gap={4}>
-                <Box className="w-10 h-10 rounded-full bg-accent-navy flex items-center justify-center text-white">
+                <Box className="w-10 h-10 rounded-none bg-accent-navy flex items-center justify-center text-white">
                   <User className="w-5 h-5" />
                 </Box>
                 <Stack gap={0}>
@@ -91,7 +91,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
               aspect="video"
               overflow="hidden"
               border
-              className="bg-muted shadow-xl"
+              className="bg-muted"
             >
               <img
                 src={post.image}
@@ -123,7 +123,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                   components={{
                     a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />,
                     blockquote: ({node, ...props}) => (
-                      <Box className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+                      <Box className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-none">
                          <Text variant="mono" size="micro" weight="font-bold" className="text-amber-700 uppercase mb-2 block tracking-widest">Key Takeaway</Text>
                          <blockquote className="m-0 p-0 text-amber-900 font-medium italic" {...props} />
                       </Box>

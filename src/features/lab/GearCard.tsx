@@ -49,7 +49,7 @@ export function GearCard({
           </div>
         )}
         <div className="absolute top-4 left-4">
-          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-sm border border-line">
+          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-none border border-line">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase">
               {category}
             </Text>
@@ -57,7 +57,7 @@ export function GearCard({
         </div>
         {verdict && (
           <div className="absolute top-4 right-4">
-            <div className="bg-accent-brand px-2 py-1 rounded-sm shadow-lg">
+            <div className="bg-accent-brand px-2 py-1 rounded-none">
               <Text variant="mono" size="micro" weight="font-bold" className="text-white uppercase">
                 {verdict}
               </Text>
@@ -92,7 +92,7 @@ export function GearCard({
           {(priceCategory || updatedDate) && (
             <div className="flex flex-wrap items-center gap-3 mt-2">
                {priceCategory && (
-                 <div className="bg-amber-100 px-2 py-0.5 rounded-sm border border-amber-200">
+                 <div className="bg-amber-50 px-2 py-0.5 rounded-none border border-amber-200">
                    <span className="text-[10px] font-mono text-amber-700 font-bold">{priceCategory}</span>
                  </div>
                )}

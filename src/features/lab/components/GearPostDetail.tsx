@@ -62,7 +62,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
               aspect="video"
               overflow="hidden"
               border
-              className="bg-muted shadow-2xl"
+              className="bg-muted"
             >
               <img
                 src={post.image}
@@ -74,17 +74,17 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
           {/* Score Grid & Verdict */}
           <Grid cols={{ base: 1, md: 3 }} gap={6}>
-            <Box padding={6} border className="bg-surface/50 border-accent/10 flex flex-col items-center justify-center text-center">
+            <Box padding={6} border className="bg-surface/50 border-line flex flex-col items-center justify-center text-center rounded-none">
               <Star className="w-6 h-6 text-yellow-500 mb-2" />
               <Text variant="display" size="3xl" weight="font-black">{post.rating || 'N/A'}</Text>
               <Text variant="mono" size="micro" color="dim" uppercase>Overall Score</Text>
             </Box>
-            <Box padding={6} border className="bg-surface/50 border-accent/10 flex flex-col items-center justify-center text-center">
+            <Box padding={6} border className="bg-surface/50 border-line flex flex-col items-center justify-center text-center rounded-none">
               <Shield className="w-6 h-6 text-blue-500 mb-2" />
               <Text variant="display" size="3xl" weight="font-black">{post.durability || '8.5'}</Text>
               <Text variant="mono" size="micro" color="dim" uppercase>Durability</Text>
             </Box>
-            <Box padding={6} border className="bg-surface/50 border-accent/10 flex flex-col items-center justify-center text-center">
+            <Box padding={6} border className="bg-surface/50 border-line flex flex-col items-center justify-center text-center rounded-none">
               <DollarSign className="w-6 h-6 text-green-500 mb-2" />
               <Text variant="display" size="3xl" weight="font-black">{post.value || '9.0'}</Text>
               <Text variant="mono" size="micro" color="dim" uppercase>Value for Money</Text>
@@ -93,7 +93,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
           {/* Verdict Callout */}
           {post.verdict && (
-            <Box padding={8} className="bg-teal-50 border-l-4 border-teal-500 rounded-r-lg">
+            <Box padding={8} className="bg-teal-50 border-l-4 border-teal-500 rounded-none">
               <Stack gap={2}>
                 <Text variant="mono" size="micro" weight="font-bold" className="text-teal-700 uppercase tracking-widest">The Verdict</Text>
                 <Text variant="display" size="xl" className="text-teal-900">{post.verdict}</Text>
@@ -118,7 +118,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
             {/* Sidebar: Specs & Affiliate */}
             <Stack gap={8}>
               {post.specs && (
-                <Box border padding={6} className="bg-surface/50">
+                <Box border padding={6} className="bg-surface/50 rounded-none">
                   <Text variant="mono" size="xs" weight="font-bold" className="mb-4 block uppercase border-b border-line pb-2">Technical Specs</Text>
                   <Stack gap={3}>
                     {Object.entries(post.specs).map(([key, value]) => (
@@ -141,7 +141,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
                       href={affiliateManager.resolveUrl(link.id)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-accent transition-colors"
+                      className="group flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-accent transition-colors rounded-none"
                     >
                       <Stack gap={1}>
                         <Text variant="mono" size="xs" weight="font-bold" className="text-white">{link.name}</Text>
