@@ -16,7 +16,7 @@ export function ToolHeader() {
         LABORATORY_ACCESS // {tool.category.toUpperCase()}
       </Text>
       <Text variant="headline" size="fluid-7">{tool.name}</Text>
-      <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
+      <Box border surface="accent" padding="compact" opacity={10} className="bg-accent/5">
         <Text variant="body" size="lg" color="body">{tool.layman}</Text>
       </Box>
     </Stack>
