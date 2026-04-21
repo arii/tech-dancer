@@ -1,24 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { getPosts, Post } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useBlog() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get('category') || 'All';
-  const searchTerm = searchParams.get('search') || '';
+  const [activeCategory] = useSearchParam('category', 'All');
+  const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [isLoading, setIsLoading] = useState(true);
-
-  const setSearchTerm = (term: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set('search', term);
-    } else {
-      params.delete('search');
-    }
-    setSearchParams(params, { replace: true });
-  };
 
   useEffect(() => {
     setIsLoading(true);

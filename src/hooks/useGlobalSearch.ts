@@ -1,21 +1,10 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from './useSearchParam';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('q') || '';
-
-  const setQuery = (newQuery: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (newQuery) {
-      params.set('q', newQuery);
-    } else {
-      params.delete('q');
-    }
-    setSearchParams(params, { replace: true });
-  };
+  const [query, setQuery] = useSearchParam('q');
   
   const allContent = useMemo(() => {
     return [

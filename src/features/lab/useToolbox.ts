@@ -1,22 +1,11 @@
 import { getResources } from '@/lib/content';
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { safeSearch } from '@/lib/utils';
 
 export function useToolbox() {
   const resources = getResources();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchTerm = searchParams.get('search') || '';
-
-  const setSearchTerm = (term: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set('search', term);
-    } else {
-      params.delete('search');
-    }
-    setSearchParams(params, { replace: true });
-  };
+  const [searchTerm, setSearchTerm] = useSearchParam('search');
 
   const categories = [
     { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },

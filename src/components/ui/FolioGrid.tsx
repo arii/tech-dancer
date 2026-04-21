@@ -1,22 +1,11 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 
 export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const search = searchParams.get('search') || '';
-
-  const setSearch = (term: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set('search', term);
-    } else {
-      params.delete('search');
-    }
-    setSearchParams(params, { replace: true });
-  };
+  const [search, setSearch] = useSearchParam('search');
 
   const filteredItems = items.filter(item => {
     return (

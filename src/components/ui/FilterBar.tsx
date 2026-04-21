@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
@@ -7,18 +7,7 @@ interface FilterBarProps {
 }
 
 export function FilterBar({ categories }: FilterBarProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get('category') || 'All';
-
-  const onSelect = (category: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (category === 'All') {
-      params.delete('category');
-    } else {
-      params.set('category', category);
-    }
-    setSearchParams(params, { replace: true });
-  };
+  const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
 
   return (
     <Box className="w-full border-b border-slate-200 bg-surface/80 backdrop-blur-md sticky top-0 z-40 overflow-x-auto no-scrollbar" paddingY={5}>
@@ -27,7 +16,7 @@ export function FilterBar({ categories }: FilterBarProps) {
           <Box
             key={cat}
             as="button"
-            onClick={() => onSelect(cat)}
+            onClick={() => setActiveCategory(cat)}
             paddingX={6}
             paddingY={2.5}
             radius="full"
