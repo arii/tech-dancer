@@ -35,8 +35,24 @@ const PATH_DATA = [
 export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
+  const handleVibrate = () => {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      navigator.vibrate(15);
+    }
+  };
+
   return (
-    <Grid cols={{ base: 1, lg: 12 }} gap={0} border="y" minHeight="30vh" width="full" className="bg-black">
+    <Grid
+      as="section"
+      role="img"
+      aria-label="Interactive generative tech-dancer visualization: Choose between Dancer and Roboticist paths"
+      cols={{ base: 1, lg: 12 }}
+      gap={0}
+      border="y"
+      minHeight="30vh"
+      width="full"
+      className="bg-black touch-manipulation"
+    >
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
@@ -49,9 +65,10 @@ export default function PathSelector() {
             position="relative"
             overflow="hidden"
             cursor="pointer"
-            className="group"
+            className="group touch-manipulation"
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
+            onClick={handleVibrate}
           >
             {/* Background */}
             <Box
