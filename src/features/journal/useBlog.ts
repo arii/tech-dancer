@@ -9,13 +9,22 @@ export function useBlog() {
   const activeCategory = searchParams.get('category') || 'All';
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
+    setError(null);
     // Simulate a brief loading state to show the skeleton and avoid jump
     const timer = setTimeout(() => {
-      setPosts(getPosts());
-      setIsLoading(false);
+      try {
+        const data = getPosts();
+        if (!data) throw new Error('FAILED_TO_FETCH_JOURNAL_DATA');
+        setPosts(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setIsLoading(false);
+      }
     }, 500);
     return () => clearTimeout(timer);
   }, []);
@@ -61,6 +70,7 @@ export function useBlog() {
     setActiveCategory,
     searchTerm,
     setSearchTerm,
-    isLoading
+    isLoading,
+    error
   };
 }

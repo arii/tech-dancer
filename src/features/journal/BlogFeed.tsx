@@ -1,10 +1,23 @@
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
+import { AlertCircle } from 'lucide-react';
 
 export default function BlogFeed() {
-  const { posts, categories, activeCategory, setActiveCategory, isLoading } = useBlog();
+  const { posts, categories, activeCategory, setActiveCategory, isLoading, error } = useBlog();
+
+  if (error) {
+    return (
+      <Box as="section" padding="panel" display="flex" align="center" justify="center">
+        <Stack gap={4} align="center" textAlign="center">
+          <AlertCircle className="w-12 h-12 text-accent-brand opacity-20" />
+          <Text variant="display" size="2xl">System Error</Text>
+          <Text variant="mono" size="xs" color="dim">{error}</Text>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <Box as="section">

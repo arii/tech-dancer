@@ -1,12 +1,24 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, Activity, Shield } from 'lucide-react';
+import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, Activity, Shield, AlertCircle } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { useResources } from './useResources';
 
 export default function ResourceGallery() {
-  const { resources, selectedResource, handleSelect, handleClear } = useResources();
+  const { resources, selectedResource, handleSelect, handleClear, isLoading, error } = useResources();
+
+  if (error) {
+    return (
+      <Box as="section" padding="panel" display="flex" align="center" justify="center">
+        <Stack gap={4} align="center" textAlign="center">
+          <AlertCircle className="w-12 h-12 text-accent-brand opacity-20" />
+          <Text variant="display" size="2xl">Resource Access Failed</Text>
+          <Text variant="mono" size="xs" color="dim">{error}</Text>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <Box as="section" padding="panel">
@@ -21,7 +33,8 @@ export default function ResourceGallery() {
           <ResourceList 
             key="list" 
             resources={resources} 
-            onSelect={handleSelect} 
+            onSelect={handleSelect}
+            isLoading={isLoading}
           />
         )}
       </AnimatePresence>
@@ -70,7 +83,7 @@ function ResourceDetails({ resource, onBack }: { resource: Resource; onBack: () 
   );
 }
 
-function ResourceList({ resources, onSelect }: { resources: Resource[]; onSelect: (resource: Resource) => void }) {
+function ResourceList({ resources, onSelect, isLoading }: { resources: Resource[]; onSelect: (resource: Resource) => void; isLoading: boolean }) {
   const getIcon = (category: string) => {
     switch (category) {
       case 'Travel': return Plane;
@@ -108,51 +121,73 @@ function ResourceList({ resources, onSelect }: { resources: Resource[]; onSelect
       </Stack>
 
       <Grid cols={{ base: 1, md: 12 }} border className="bg-line">
-        {resources.map((resource, i) => {
-          const Icon = getIcon(resource.category);
-          const isWide = i % 2 === 0;
-          return (
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, i) => (
             <Box 
-              key={resource.slug}
-              span={{ base: 12, md: isWide ? 7 : 5 }}
-              as={motion.div}
-              whileHover={{ x: 2, scale: 1.002 }}
-              onClick={() => onSelect(resource)}
+              key={i}
+              span={{ base: 12, md: i % 2 === 0 ? 7 : 5 }}
               surface="default"
               padding="nav"
               border
-              cursor="pointer"
-              className="group hover:bg-surface transition-colors"
+              className="animate-pulse"
             >
               <Stack gap={12} height="full">
-                <Box display="flex" justify="between" align="start">
-                  <Icon className="w-8 h-8 stroke-1 text-accent-brand group-hover:scale-110 transition-transform" />
-                  <Text variant="mono" size="micro" color="dim">REVIEW</Text>
-                </Box>
+                <Box width={8} height={8} surface="muted" />
                 <Stack gap={6}>
-                  <Stack direction="row" align="center" gap={3}>
-                    <Text variant="mono" color="brand" weight="font-bold">{resource.category}</Text>
-                    <Box border className="border-accent-brand/30 px-2 py-0.5">
-                      <Text variant="mono" color="brand" weight="font-bold" size="micro">REVIEW</Text>
-                    </Box>
-                  </Stack>
-                  <Stack gap={2}>
-                    <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
-                      {resource.title}
-                    </Text>
-                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
-                      {resource.excerpt}
-                    </Text>
-                  </Stack>
+                   <Box width={20} height={4} surface="muted" />
+                   <Box width="full" height={8} surface="muted" />
+                   <Box width="3/4" height={4} surface="muted" />
                 </Stack>
-                <Box display="flex" align="center" gap={3} marginTop="auto" color="dim" className="group-hover:text-accent-brand transition-colors">
-                  <Text variant="mono" size="xs" weight="font-bold">Read Review</Text>
-                  <ArrowRight className="w-4 h-4" />
-                </Box>
               </Stack>
             </Box>
-          );
-        })}
+          ))
+        ) : (
+          resources.map((resource, i) => {
+            const Icon = getIcon(resource.category);
+            const isWide = i % 2 === 0;
+            return (
+              <Box
+                key={resource.slug}
+                span={{ base: 12, md: isWide ? 7 : 5 }}
+                as={motion.div}
+                whileHover={{ x: 2, scale: 1.002 }}
+                onClick={() => onSelect(resource)}
+                surface="default"
+                padding="nav"
+                border
+                cursor="pointer"
+                className="group hover:bg-surface transition-colors"
+              >
+                <Stack gap={12} height="full">
+                  <Box display="flex" justify="between" align="start">
+                    <Icon className="w-8 h-8 stroke-1 text-accent-brand group-hover:scale-110 transition-transform" />
+                    <Text variant="mono" size="micro" color="dim">REVIEW</Text>
+                  </Box>
+                  <Stack gap={6}>
+                    <Stack direction="row" align="center" gap={3}>
+                      <Text variant="mono" color="brand" weight="font-bold">{resource.category}</Text>
+                      <Box border className="border-accent-brand/30 px-2 py-0.5">
+                        <Text variant="mono" color="brand" weight="font-bold" size="micro">REVIEW</Text>
+                      </Box>
+                    </Stack>
+                    <Stack gap={2}>
+                      <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
+                        {resource.title}
+                      </Text>
+                      <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                        {resource.excerpt}
+                      </Text>
+                    </Stack>
+                  </Stack>
+                  <Box display="flex" align="center" gap={3} marginTop="auto" color="dim" className="group-hover:text-accent-brand transition-colors">
+                    <Text variant="mono" size="xs" weight="font-bold">Read Review</Text>
+                    <ArrowRight className="w-4 h-4" />
+                  </Box>
+                </Stack>
+              </Box>
+            );
+          })
+        )}
       </Grid>
     </Box>
   );

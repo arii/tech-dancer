@@ -1,16 +1,16 @@
-import { motion } from 'motion/react';
+import { lazy, Suspense } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { useHome } from './useHome';
-import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
-import { ContentCard } from '@/components/ui/ContentCard';
-import { EventCard } from './EventCard';
+import { SectionHeader } from '@/components/ui/PageHeader';
+import { ContentCardSkeleton } from '@/components/ui/ContentCard';
+
+const RecentPosts = lazy(() => import('./components/RecentPosts'));
+const UpcomingEvents = lazy(() => import('./components/UpcomingEvents'));
 
 export default function Home() {
-  const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
-
   return (
     <Box as="section">
       <Stack gap={24}>
@@ -53,19 +53,12 @@ export default function Home() {
           </SectionHeader>
 
           <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
-            {recentPosts.map((post) => (
-              <ContentCard 
-                key={post.slug}
-                {...post}
-                basePath="/blog"
-                aspect="video"
-              />
-            ))}
-
-            {/* Upcoming Events Mini-Cards */}
-            {upcomingEvents.map((event) => (
-              <EventCard key={event.name} {...event} />
-            ))}
+            <Suspense fallback={<RecentPostsSkeleton />}>
+              <RecentPosts />
+            </Suspense>
+            <Suspense fallback={null}>
+              <UpcomingEvents />
+            </Suspense>
           </Grid>
         </Stack>
       </Stack>
@@ -73,3 +66,12 @@ export default function Home() {
   );
 }
 
+function RecentPostsSkeleton() {
+  return (
+    <>
+      {[1, 2, 3].map((i) => (
+        <ContentCardSkeleton key={i} />
+      ))}
+    </>
+  );
+}

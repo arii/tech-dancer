@@ -4,9 +4,24 @@ import { getResources, Resource } from '@/lib/content';
 export function useResources() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setResources(getResources());
+    setIsLoading(true);
+    setError(null);
+    const timer = setTimeout(() => {
+      try {
+        const data = getResources();
+        if (!data) throw new Error('FAILED_TO_LOAD_RESOURCES');
+        setResources(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown resource error');
+      } finally {
+        setIsLoading(false);
+      }
+    }, 600);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSelect = (resource: Resource) => setSelectedResource(resource);
@@ -16,6 +31,8 @@ export function useResources() {
     resources,
     selectedResource,
     handleSelect,
-    handleClear
+    handleClear,
+    isLoading,
+    error
   };
 }
