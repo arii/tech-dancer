@@ -10,9 +10,7 @@ export default defineConfig(({mode}) => {
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = process.env.ANALYZE === 'true';
-
-  // Base path priority: 1. ENV, 2. Vercel, 3. GH Actions, 4. Local fallback
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction ? '/tech-dancer/' : '/'));
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,

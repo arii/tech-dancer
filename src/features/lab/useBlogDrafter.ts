@@ -22,6 +22,10 @@ export function useBlogDrafter() {
     commentary: ''
   });
 
+  const markdownBody = useMemo(() => {
+    return `${data.commentary || '[Your commentary/content goes here]'}${data.affiliateLink ? `\n\n[Buy on Amazon](${data.affiliateLink})` : ''}`;
+  }, [data.commentary, data.affiliateLink]);
+
   const markdownPreview = useMemo(() => {
     return `---
 title: ${data.title || '[Title]'}
@@ -31,11 +35,8 @@ category: ${data.category}
 excerpt: ${data.excerpt || '[Excerpt]'}
 ---
 
-${data.commentary || '[Your commentary/content goes here]'}
-
-${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
-`;
-  }, [data]);
+${markdownBody}`;
+  }, [data, markdownBody]);
 
   const githubIssueUrl = useMemo(() => {
     const repoOwner = SITE_METADATA.repo.owner; 
@@ -50,10 +51,39 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     setData(prev => ({ ...prev, [field]: value }));
   };
 
+  const applyAIResponse = (jsonString: string) => {
+    const cleanAndParseJSON = (str: string) => {
+      try {
+        let clean = str.trim();
+        // Remove markdown code blocks if present
+        clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
+        clean = clean.trim();
+        return JSON.parse(clean);
+      } catch (e) {
+        console.error("JSON Clean/Parse Error:", e);
+        return null;
+      }
+    };
+
+    const parsed = cleanAndParseJSON(jsonString);
+    if (!parsed) return false;
+
+    setData(prev => ({
+      ...prev,
+      title: parsed.title || prev.title,
+      excerpt: parsed.excerpt || parsed.description || prev.excerpt,
+      affiliateLink: parsed.affiliateLink || prev.affiliateLink,
+      commentary: parsed.commentary || prev.commentary
+    }));
+    return true;
+  };
+
   return {
     data,
     updateField,
+    applyAIResponse,
     markdownPreview,
+    markdownBody,
     githubIssueUrl
   };
 }
