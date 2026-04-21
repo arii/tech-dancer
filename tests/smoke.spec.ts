@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('landing page should load without console errors', async ({ page }) => {
+test('landing page should load without console errors or 404s', async ({ page }) => {
   const errors: string[] = [];
   const failedResources: string[] = [];
 
@@ -16,7 +16,15 @@ test('landing page should load without console errors', async ({ page }) => {
     errors.push(`Page Error: ${err.message}`);
   });
 
-  // Monitor for 404s (the specific error you encountered)
+  // Monitor for 4xx/5xx responses (the specific error you encountered)
+  page.on('response', (response) => {
+    const status = response.status();
+    if (status >= 400) {
+      failedResources.push(`${response.url()}: HTTP ${status}`);
+    }
+  });
+
+  // Monitor for network failures (DNS, aborted, etc)
   page.on('requestfailed', (request) => {
     const url = request.url();
     const failure = request.failure();
@@ -31,6 +39,6 @@ test('landing page should load without console errors', async ({ page }) => {
   await expect(page.getByText(/The Roboticist's Guide to the West Coast Swing/i)).toBeVisible();
 
   // Assert that no 404s or console errors occurred
-  expect(failedResources, `Failed to load resources: ${failedResources.join(', ')}`).toHaveLength(0);
-  expect(errors, `Console errors detected: ${errors.join(', ')}`).toHaveLength(0);
+  expect(failedResources, `Failed to load resources:\n${failedResources.join('\n')}`).toHaveLength(0);
+  expect(errors, `Console errors detected:\n${errors.join('\n')}`).toHaveLength(0);
 });
