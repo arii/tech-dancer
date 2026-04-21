@@ -1,5 +1,6 @@
 import { getResources, Resource } from '@/lib/content';
 import { useMemo, useState } from 'react';
+import { safeSearch } from '@/lib/utils';
 
 export function useToolbox() {
   const resources = getResources();
@@ -14,20 +15,19 @@ export function useToolbox() {
   const groupedResources = useMemo(() => {
     return categories.map(cat => ({
       ...cat,
-      items: resources.filter(r => r.category.toLowerCase().includes(cat.id))
+      items: resources.filter(r => safeSearch(r.category, cat.id))
     }));
   }, [resources]);
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) return groupedResources;
-    const term = searchTerm.toLowerCase();
     return groupedResources.map(cat => ({
       ...cat,
       items: cat.items.filter(item => 
-        item.title.toLowerCase().includes(term) ||
-        item.category.toLowerCase().includes(term) ||
-        item.tags?.some((t: string) => t.toLowerCase().includes(term)) ||
-        item.excerpt.toLowerCase().includes(term)
+        safeSearch(item.title, searchTerm) ||
+        safeSearch(item.category, searchTerm) ||
+        safeSearch(item.excerpt, searchTerm) ||
+        safeSearch(item.tags, searchTerm)
       )
     })).filter(cat => cat.items.length > 0);
   }, [groupedResources, searchTerm]);
