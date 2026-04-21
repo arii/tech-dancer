@@ -56,7 +56,7 @@ export default function Home() {
             <Suspense fallback={<RecentPostsSkeleton />}>
               <RecentPosts />
             </Suspense>
-            <Suspense fallback={null}>
+            <Suspense fallback={<Box surface="muted" height={32} animate="pulse" />}>
               <UpcomingEvents />
             </Suspense>
           </Grid>
