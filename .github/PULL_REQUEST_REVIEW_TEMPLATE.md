@@ -1,5 +1,7 @@
 # PR Review Plan: #{{NUMBER}} — {{TITLE}}
 
+<!-- PR_NUMBER: {{NUMBER}} -->
+
 **Repo:** arii/tech-dancer — https://github.com/arii/tech-dancer/pull/{{NUMBER}}
 **Stats:** {{STATS}}
 
@@ -19,8 +21,8 @@ STEPS (in order):
     - Read the diff.
     - Mark each checklist item [x] if clean, or write the violation inline.
     - Replace the "body" value in the Proposed inline comment JSON blocks with specific feedback.
-      You may add additional comment blocks for the same file if there are multiple distinct issues.
-      Each comment must have a real line number from the diff and a non-placeholder body.
+    - Update "line" to the actual diff line number where the issue occurs.
+    - You MUST leave a comment for every file, even if just confirming it is clean.
   Step 3: Verify all items below are complete, then mark each [x].
     [ ] Every audit checklist item is marked [x] or has a violation noted.
     [ ] Every Proposed inline comment has a real line number (not 1) and a real body (not a placeholder).
@@ -65,6 +67,7 @@ Mandatory response sections (fill these in the Submission body below):
 Note: Do NOT skip any file. Leave a comment for every file, even if clean.
 
 {{FOR_EACH_FILE}}
+<!-- BEGIN_FILE_AUDIT: {{FILENAME}} -->
 ---
 
 ### File: `{{FILENAME}}` {{FILE_STATS}} ({{FILE_STATUS}})
@@ -99,6 +102,7 @@ Add additional blocks below for other issues in this file:
   "body": "<optional second comment — delete this block if not needed>"
 }
 ```
+<!-- END_FILE_AUDIT: {{FILENAME}} -->
 {{END_FOR_EACH}}
 
 ---
@@ -107,6 +111,7 @@ Add additional blocks below for other issues in this file:
 
 After completing every file block above, fill in the body below and run the command.
 
+<!-- BEGIN_SUBMISSION_JSON -->
 ```json
 {
   "body": "## ANTI-AI-SLOP\n<findings or confirmed absent>\n\n## FINDINGS\n<per-file summary with line references>\n\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
@@ -115,6 +120,7 @@ After completing every file block above, fill in the body below and run the comm
   ]
 }
 ```
+<!-- END_SUBMISSION_JSON -->
 
 Command:
 ```bash

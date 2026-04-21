@@ -33,8 +33,15 @@ def is_placeholder(text: str) -> bool:
     return any(re.search(p, text) for p in PLACEHOLDER_PATTERNS)
 
 
-def extract_pr_number(lines: list[str]) -> str:
-    """Extract PR number from the title line: # PR Review: #163 — ..."""
+def extract_pr_number(text: str) -> str:
+    """Extract PR number from marker or title line."""
+    # Try marker first
+    m = re.search(r"<!-- PR_NUMBER: (\d+) -->", text)
+    if m:
+        return m.group(1)
+
+    # Fallback to title line
+    lines = text.splitlines()
     for line in lines[:5]:
         m = re.search(r"#PR Review.*?#(\d+)", line.replace(" ", ""))
         if not m:
@@ -47,12 +54,19 @@ def extract_pr_number(lines: list[str]) -> str:
 def extract_json_blocks(text: str) -> list[dict]:
     """Extract all ```json ... ``` blocks from text and parse them."""
     blocks = []
-    for m in re.finditer(r"```json\s*\n(.*?)```", text, re.DOTALL):
+    # More forgiving regex for the fence start
+    for m in re.finditer(r"```json\s*(.*?)```", text, re.DOTALL):
         raw = m.group(1).strip()
         try:
             blocks.append((json.loads(raw), m.start()))
         except json.JSONDecodeError:
-            pass
+            # Try to find the first '{' and last '}' to handle bots adding text inside the fence
+            brace_match = re.search(r"(\{.*\})", raw, re.DOTALL)
+            if brace_match:
+                try:
+                    blocks.append((json.loads(brace_match.group(1)), m.start()))
+                except json.JSONDecodeError:
+                    pass
     return blocks
 
 
@@ -63,23 +77,30 @@ def parse_review_doc(path: str) -> tuple[str, str, list[dict]]:
     """
     with open(path, "r") as f:
         text = f.read()
-    lines = text.splitlines()
 
     # ── PR number ──────────────────────────────────────────────────────────────
-    pr_number = extract_pr_number(lines)
+    pr_number = extract_pr_number(text)
     if not pr_number:
-        raise ValueError("Could not find PR number in the document title line.")
+        raise ValueError("Could not find PR number (checked markers and title line).")
 
-    # ── Overall body from Submission section json block ─────────────────────────
-    # Matches both current (## Submission) and legacy (## 🚀 Submission Steps) formats
-    submission_section_match = re.search(r"## (?:🚀 Submission Steps|Submission)(.*)", text, re.DOTALL)
-    if not submission_section_match:
-        raise ValueError("Document is missing the '## Submission' section.")
+    # ── Overall body from Submission ──────────────────────────────────────────
+    # Try BEGIN_SUBMISSION_JSON marker first
+    submission_match = re.search(
+        r"<!-- BEGIN_SUBMISSION_JSON -->(.*?)<!-- END_SUBMISSION_JSON -->",
+        text, re.DOTALL
+    )
+    if submission_match:
+        submission_text = submission_match.group(1)
+    else:
+        # Fallback to heading-based matching
+        submission_section_match = re.search(r"## (?:🚀 Submission Steps|Submission)(.*)", text, re.DOTALL)
+        if not submission_section_match:
+            raise ValueError("Document is missing the '## Submission' section (and marker).")
+        submission_text = submission_section_match.group(1)
 
-    submission_text = submission_section_match.group(1)
     submission_blocks = extract_json_blocks(submission_text)
     if not submission_blocks:
-        raise ValueError("No JSON block found in the Submission Steps section.")
+        raise ValueError("No valid JSON block found in the Submission section.")
 
     overall_body = submission_blocks[0][0].get("body", "")
     if is_placeholder(overall_body):
@@ -88,40 +109,56 @@ def parse_review_doc(path: str) -> tuple[str, str, list[dict]]:
             "Fill in ANTI-AI-SLOP, FINDINGS, and FINAL RECOMMENDATION before submitting."
         )
 
-    # ── Inline comments from Proposed inline comment blocks ───────────────────
-    # Find each "Proposed inline comment" marker and grab the next json block after it
-    comment_pattern = re.compile(r"\*\*Proposed inline comment\*\*.*?\n(```json\s*\n.*?```)", re.DOTALL)
+    # ── Inline comments ───────────────────────────────────────────────────────
     inline_comments = []
     skipped = []
 
-    for m in comment_pattern.finditer(text):
-        raw_block = m.group(1)
-        json_match = re.search(r"```json\s*\n(.*?)```", raw_block, re.DOTALL)
+    # Strategy: Find all file audit blocks (markers) or use the legacy marker
+    file_audit_blocks = re.finditer(
+        r"<!-- BEGIN_FILE_AUDIT: (.*?) -->(.*?)<!-- END_FILE_AUDIT: \1 -->",
+        text, re.DOTALL
+    )
+
+    found_marker = False
+    for fb in file_audit_blocks:
+        found_marker = True
+        filename = fb.group(1)
+        block_text = fb.group(2)
+        json_match = re.search(r"```json\s*(.*?)```", block_text, re.DOTALL)
         if not json_match:
             continue
-        try:
-            comment = json.loads(json_match.group(1).strip())
-        except json.JSONDecodeError as e:
-            print(f"  ⚠️  Skipping malformed JSON block: {e}")
-            continue
 
-        body = comment.get("body", "")
-        line = comment.get("line", 1)
-        path_str = comment.get("path", "")
+        raw_json = json_match.group(1).strip()
+        # Handle bots putting multiple objects in one block or adding text
+        blocks = extract_json_blocks(f"```json\n{raw_json}\n```")
+        for comment, _ in blocks:
+            body = comment.get("body", "")
+            line = comment.get("line", 1)
+            path_str = comment.get("path", filename) # Use filename from marker if path missing
 
-        if is_placeholder(body):
-            skipped.append(path_str)
-            continue
-        if line == 1:
-            print(f"  ⚠️  Warning: `{path_str}` still has line=1 (default). Ensure this is intentional.")
+            if is_placeholder(body):
+                skipped.append(path_str)
+                continue
 
-        inline_comments.append({"path": path_str, "line": line, "body": body})
+            inline_comments.append({"path": path_str, "line": line, "body": body})
+
+    # Legacy Fallback if NO BEGIN_FILE_AUDIT markers found at all
+    if not found_marker:
+        comment_pattern = re.compile(r"\*\*Proposed inline comment\*\*.*?\n(```json\s*\n.*?```)", re.DOTALL)
+        for m in comment_pattern.finditer(text):
+            raw_block = m.group(1)
+            blocks = extract_json_blocks(raw_block)
+            for comment, _ in blocks:
+                body = comment.get("body", "")
+                line = comment.get("line", 1)
+                path_str = comment.get("path", "")
+                if is_placeholder(body):
+                    skipped.append(path_str or "unknown")
+                    continue
+                inline_comments.append({"path": path_str, "line": line, "body": body})
 
     if skipped:
-        print(f"\n  ⚠️  {len(skipped)} file(s) skipped (unfilled placeholders):")
-        for s in skipped:
-            print(f"       - {s}")
-        print()
+        print(f"\n  ⚠️  {len(skipped)} item(s) skipped (unfilled placeholders).")
 
     return pr_number, overall_body, inline_comments
 
