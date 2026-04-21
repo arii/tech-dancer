@@ -6,25 +6,25 @@
 import { lazy, Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { MainLayout } from './layouts/MainLayout';
-import { motionTokens } from './styles/motion';
-import { PageSkeleton } from './components/ui/PageSkeleton';
+import { MainLayout } from '@/layouts/MainLayout';
+import { motionTokens } from '@/styles/motion';
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { useEmailCaptureLogic } from './hooks/useEmailCaptureLogic';
 
-import { Box } from './layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 
-const Home = lazy(() => import('./pages/Home'));
-const GearReviews = lazy(() => import('./pages/Gear'));
-const GearPost = lazy(() => import('./features/lab/GearPost'));
-const Research = lazy(() => import('./pages/Research'));
-const ResearchDetail = lazy(() => import('./pages/ResearchDetail'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
-const Resources = lazy(() => import('./pages/Resources'));
-const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
+const Home = lazy(() => import('@/pages/Home'));
+const GearReviews = lazy(() => import('@/pages/Gear'));
+const GearPost = lazy(() => import('@/features/lab/GearPost'));
+const Research = lazy(() => import('@/pages/Research'));
+const ResearchDetail = lazy(() => import('@/pages/ResearchDetail'));
+const Blog = lazy(() => import('@/pages/Blog'));
+const BlogPost = lazy(() => import('@/pages/BlogPost'));
+const Resources = lazy(() => import('@/pages/Resources'));
+const About = lazy(() => import('@/pages/About'));
+const Contact = lazy(() => import('@/pages/Contact'));
 
 export function RootLayout() {
   const location = useLocation();
