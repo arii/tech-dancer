@@ -9,12 +9,12 @@ import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents } = useHome();
+  const { recentPosts, upcomingEvents, tools } = useHome();
 
   return (
     <Box as="section">
-      <Stack gap={16}>
-        <Stack gap={8} paddingTop={12}>
+      <Stack gap={12}>
+        <Stack gap={8} paddingTop={16}>
           <Stack gap={4}>
             <Text 
               as={motion.h1}
@@ -64,24 +64,63 @@ export default function Home() {
                 display="flex"
                 gap={4}
                 align="center"
-                paddingY={5}
+                paddingY={4}
                 border="b"
                 className="group transition-all"
               >
+                {/* Small, fixed-size thumbnail */}
+                <Box width={{ base: 20, md: 24 }} height={{ base: 20, md: 24 }} shrink={0} className="bg-surface-alt border border-line overflow-hidden rounded-md">
+                   {post.image ? (
+                     <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                   ) : (
+                     <Box height="full" width="full" display="flex" align="center" justify="center" opacity={10}>
+                       <Text variant="display" size="lg">TD</Text>
+                     </Box>
+                   )}
+                </Box>
                 {/* Compact textual information */}
                 <Box flex className="min-w-0">
-                  <Stack gap={1.5}>
+                  <Stack gap={1}>
                     <Box display="flex" align="center" gap={2}>
                       <Text variant="mono" size="micro" color="brand" opacity={60}>{post.category}</Text>
                       <Text variant="mono" size="micro" color="dim" opacity={60}>• {post.date}</Text>
                     </Box>
-                    <Text size="xl" weight="font-bold" className="group-hover:text-accent transition-colors truncate">{post.title}</Text>
-                    <Text variant="sans" size="sm" color="dim" className="truncate opacity-40">{post.excerpt}</Text>
+                    <Text size="base" weight="font-bold" className="group-hover:text-accent transition-colors truncate">{post.title}</Text>
+                    <Text variant="sans" size="sm" color="dim" className="truncate opacity-60">{post.excerpt}</Text>
                   </Stack>
                 </Box>
                 <ArrowRight className="w-4 h-4 text-text-dim group-hover:text-accent group-hover:translate-x-1 transition-all shrink-0" />
               </Box>
             ))}
+          </Stack>
+
+          {/* Featured Tools Grid */}
+          <Stack gap={8}>
+            <SectionHeader label="LABORATORY" title="Featured Tools">
+              <Box
+                as={NavLink}
+                to="/research"
+                display="flex"
+                align="center"
+                gap={3}
+                className="text-text-dim hover:text-accent transition-colors"
+              >
+                <Text variant="mono" size="xs" weight="font-bold">Explore Lab</Text>
+                <ArrowRight className="w-4 h-4" />
+              </Box>
+            </SectionHeader>
+            <Grid cols={{ base: 2, md: 3 }} gap={4}>
+              {tools.map((tool: any) => (
+                <ContentCard
+                  key={tool.id}
+                  slug={tool.id}
+                  title={tool.name}
+                  category={tool.category}
+                  excerpt={tool.layman}
+                  basePath="/research"
+                />
+              ))}
+            </Grid>
           </Stack>
 
           {/* Upcoming Events Section - Now more distinct */}

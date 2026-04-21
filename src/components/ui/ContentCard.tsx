@@ -64,7 +64,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       {/* Content Area */}
       <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
         <Stack gap={4}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
+          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {date}
           </Text>
           <Text 
@@ -75,7 +75,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           >
             {title}
           </Text>
-          <Text variant="body" size="base" color="dim" className="line-clamp-2 leading-relaxed">
+          <Text variant="body" size="base" color="dim" className="line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300">
              {excerpt || `Discover the technical intersections of robotics and dance in this deep dive into ${category.toLowerCase()} methodology and engineering principles.`}
           </Text>
         </Stack>

@@ -62,14 +62,14 @@ export const buttonVariants = cva(
 );
 
 export const badgeVariants = cva(
-  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
+  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px] opacity-80",
   {
     variants: {
       emphasis: variants.emphasis,
       intent: variants.intent,
     },
     defaultVariants: {
-      emphasis: "solid",
+      emphasis: "outline",
       intent: "default",
     },
   }
