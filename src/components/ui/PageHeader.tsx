@@ -4,20 +4,55 @@ interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
+  paddingBottom?: number | string;
+  border?: boolean | "t" | "b" | "l" | "r";
+  descriptionMaxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | string;
+  titleAs?: "h1" | "h2" | "h3";
 }
 
-export function PageHeader({ label, title, description }: PageHeaderProps) {
+export function PageHeader({
+  label,
+  title,
+  description,
+  paddingBottom = 12,
+  border = "b",
+  descriptionMaxWidth = "65ch",
+  titleAs = "h1"
+}: PageHeaderProps) {
   return (
-    <Box paddingBottom={10} className="border-b border-slate-200">
+    <Box
+      paddingBottom={paddingBottom}
+      border={border}
+    >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
+        <Text
+          variant="mono"
+          size="xs"
+          color="dim"
+          weight="font-semibold"
+          uppercase
+          className="!tracking-[0.2em]"
+        >
           {label}
         </Text>
-        <Text variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+        <Text
+          as={titleAs}
+          variant="headline"
+          size={{ base: "4xl", lg: "6xl" }}
+          weight="font-black"
+          className="text-text-main leading-tight !tracking-tighter uppercase"
+        >
           {title}
         </Text>
         {description && (
-          <Text variant="sans" size="lg" color="dim" maxWidth="3xl" marginTop={4} weight="font-medium" className="leading-relaxed">
+          <Text
+            variant="body"
+            size={{ base: "lg", lg: "xl" }}
+            color="dim"
+            maxWidth={descriptionMaxWidth}
+            marginTop={4}
+            className="leading-relaxed"
+          >
             {description}
           </Text>
         )}
