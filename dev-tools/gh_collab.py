@@ -83,7 +83,6 @@ class GitHubAPI:
             with open(json_file, 'r') as f:
                 data = json.load(f)
         else:
-            # Friendly default message indicating AI/CLI collaboration
             data['body'] = body or "🤖 Automated review session started via collab CLI."
 
         if not data.get('commit_id'):
@@ -92,27 +91,36 @@ class GitHubAPI:
                 data['commit_id'] = commits[-1]['sha']
 
         if not self.dry_run and self.get_pending_review(pr_num):
-            self._error(f"Looks like we already have a pending review for PR #{pr_num}. Let's submit or clear that one first!")
+            self._error(f"Already have a pending review for PR #{pr_num}. Submit or clear it first.")
 
         res = self._request("POST", f"pulls/{pr_num}/reviews", data)
         review_id = res['id']
 
-        # We log this locally so AI agents or subsequent CLI commands can easily pick up where we left off
         os.makedirs(os.path.dirname(REVIEW_LOG), exist_ok=True)
         with open(REVIEW_LOG, "a") as f:
             f.write(f"{datetime.now()}|{self.repo}|PR#{pr_num}|{review_id}\n")
 
-        print(f"✅ Awesome! Pending review {review_id} has been successfully created and logged.")
+        print(f"✅ Pending review {review_id} created.")
         return review_id
+
+    def review_and_submit(self, pr_num, json_file=None, body=None, event="COMMENT"):
+        """Create a pending review and immediately submit it — avoids the two-step race condition."""
+        review_id = self.create_review(pr_num, json_file=json_file, body=body)
+        if self.dry_run:
+            print(f"[Dry-Run] Would submit review {review_id} as {event}")
+            return
+        self._request("POST", f"pulls/{pr_num}/reviews/{review_id}/events", {"event": event.upper()})
+        print(f"🚀 Review {review_id} submitted as {event}.")
 
     def submit_review(self, pr_num, event, review_id=None):
         if not review_id:
             pending = self.get_pending_review(pr_num)
-            if not pending: self._error(f"I couldn't find a pending review for PR #{pr_num} to submit.")
+            if not pending: self._error(f"No pending review found for PR #{pr_num}.")
             review_id = pending['id']
 
         self._request("POST", f"pulls/{pr_num}/reviews/{review_id}/events", {"event": event.upper()})
-        print(f"🚀 All set! Review {review_id} submitted as {event}. The codebase is one step better!")
+        print(f"🚀 Review {review_id} submitted as {event}.")
+
 
 # ==========================================
 # MARKDOWN PLANNER LAYER
@@ -340,6 +348,13 @@ def main():
     p_create.add_argument("--file", help="JSON file with review data")
     p_create.add_argument("--body", help="Simple comment body")
 
+    # Subcommand: review (create + submit in one step)
+    p_review = sub.add_parser("review", help="Create and immediately submit a review in one step")
+    p_review.add_argument("pr", help="PR Number")
+    p_review.add_argument("--file", help="JSON file with review payload (body, comments[])")
+    p_review.add_argument("--body", help="Simple comment body (no inline comments)")
+    p_review.add_argument("--event", choices=["APPROVE", "REQUEST_CHANGES", "COMMENT"], default="COMMENT")
+
     # Subcommand: submit
     p_submit = sub.add_parser("submit", help="Submit a pending review on GitHub")
     p_submit.add_argument("pr", help="PR Number")
@@ -349,7 +364,6 @@ def main():
     args = parser.parse_args()
 
     if args.cmd == "plan":
-        # Load JSON files locally
         def load_json(path):
             with open(path, 'r') as f: return json.load(f)
 
@@ -363,12 +377,14 @@ def main():
             output_path=args.output
         )
     else:
-        # API Commands
         gh = GitHubAPI(repo_override=args.repo, dry_run=args.dry_run)
         if args.cmd == "create":
             gh.create_review(args.pr, json_file=args.file, body=args.body)
+        elif args.cmd == "review":
+            gh.review_and_submit(args.pr, json_file=args.file, body=args.body, event=args.event)
         elif args.cmd == "submit":
             gh.submit_review(args.pr, args.event, review_id=args.id)
 
 if __name__ == "__main__":
     main()
+
