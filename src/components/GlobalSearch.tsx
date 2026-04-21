@@ -2,22 +2,19 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const location = useLocation();
 
   // 1. The Context Reset: Close on route change
-  useEffect(() => {
-    if (isOpen) {
-      close();
-    }
-  }, [location.pathname, close]);
+  // Note: Since isOpen is now derived from URL search params ('search=true'),
+  // navigation to a new URL without the 'search' param will automatically
+  // "close" the modal (isOpen will become false).
 
   // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {

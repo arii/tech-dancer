@@ -1,12 +1,30 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
-import { useSearchContext } from '@/context/SearchContext';
 
 export function useGlobalSearch() {
   const [query, setQuery] = useState('');
-  const { isOpen, open, close } = useSearchContext();
+  const [searchParams, setSearchParams] = useSearchParams();
   
+  const isOpen = searchParams.get('search') === 'true';
+
+  const open = useCallback(() => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.set('search', 'true');
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
+
+  const close = useCallback(() => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.delete('search');
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
+
   const allContent = useMemo(() => {
     return [
       ...getPosts().map(p => ({ ...p, type: 'post' as const })),
