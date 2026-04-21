@@ -48,38 +48,26 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 The `dev-tools/gh_collab.py` script handles all PR review interactions. Auth is automatic via `gh auth token` — no manual `GITHUB_TOKEN` export needed.
 
-**Submitting a Code Review (preferred — one step):**
+**Step 1 — Generate a structured per-file review plan:**
 ```bash
-python3 dev-tools/gh_collab.py review <PR_NUMBER> --file review_payload.json
+python3 dev-tools/fetch_pr_review_data.py <PR_NUMBER>
+# Outputs to /tmp/pr-review-<PR_NUMBER>.md — read it to understand what changed
+cat /tmp/pr-review-<PR_NUMBER>.md
 ```
 
-The `review_payload.json` must contain:
+**Step 2 — Submit a Code Review (one step):**
+```bash
+python3 dev-tools/gh_collab.py review <PR_NUMBER> --file /tmp/review_payload.json
+```
+
+The `/tmp/review_payload.json` must use the anti-slop structure:
 ```json
 {
-  "body": "Overall review summary",
+  "body": "## ANTI-AI-SLOP\n...\n## FINDINGS\n...\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
   "comments": [
     { "path": "src/foo.tsx", "line": 42, "body": "Inline comment text" }
   ]
 }
-```
-
-**Acquiring PR diff to write a review:**
-```bash
-# Fetch changed files + patches
-python3 - <<'EOF'
-import subprocess, os, requests, json
-def get_token():
-    try: return subprocess.check_output(['env','-u','GITHUB_TOKEN','gh','auth','token'], stderr=subprocess.DEVNULL, text=True).strip()
-    except: pass
-    return os.getenv("GITHUB_TOKEN","")
-token = get_token()
-headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github.v3+json"}
-pr = 123  # <-- set PR number
-files = requests.get(f"https://api.github.com/repos/arii/tech-dancer/pulls/{pr}/files", headers=headers).json()
-for f in files:
-    print(f"\n[{f['status']}] {f['filename']} +{f['additions']}/-{f['deletions']}")
-    if f.get('patch'): print(f['patch'][:600])
-EOF
 ```
 
 **Other commands:**
