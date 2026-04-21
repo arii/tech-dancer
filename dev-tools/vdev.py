@@ -43,11 +43,6 @@ def run_log(cmd, verbose: bool = True, check: bool = True):
         if check:
             raise typer.Exit(1)
         return e
-    except FileNotFoundError:
-        typer.secho(f"[Error] Command not found: {cmd[0]}. Please ensure it is installed.", fg=typer.colors.RED)
-        if check:
-            raise typer.Exit(1)
-        return None
 
 @app.command()
 def setup(
