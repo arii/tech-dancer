@@ -74,11 +74,9 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 ## 21. 🏗 Modular Architecture
 - Layout primitives (`Box`, `Grid`, `Stack`) MUST reside in `src/layouts/`
 - Page-level compositors MUST reside in `src/pages/`
-- ALL imports for layouts, pages, and shared features MUST use the `@/` alias (e.g., `@/layouts/MainLayout`).
+- Component imports MUST use the `@/layouts/` or `@/pages/` alias
 
-## 22. 🛤 Code Splitting & Routing
-- Application routes MUST be code-split using `React.lazy()` or equivalent dynamic imports.
-- Routing MUST use `createBrowserRouter` and `RouterProvider` (not `HashRouter`) to support modern SPA characteristics and SEO.
+## 22. 🛤 Code Splitting & SPA Routing
+- Application routes MUST be code-split using `React.lazy()` or equivalent dynamic imports to keep bundles small.
 - Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries.
-- Ensure environment-agnostic routing by handling base URLs via `import.meta.env.BASE_URL`.
-
+- Ensure the application maintains single-page application (SPA) characteristics with environment-agnostic routing (e.g., handling base URLs cleanly for GitHub Pages).
