@@ -100,6 +100,10 @@ export interface Event {
 export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
+interface ContentModule {
+  default: string;
+}
+
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
@@ -109,10 +113,10 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
-function transform<T extends { date?: string }>(modules: Record<string, any>): T[] {
+function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
-      const contentStr = typeof raw === 'string' ? raw : (raw as any).default;
+      const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
       return { ...data, content, slug: slugFrom(path) } as unknown as T;
     })

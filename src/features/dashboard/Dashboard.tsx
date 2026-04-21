@@ -6,6 +6,7 @@ import { useHome } from './useHome';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
+import { EventCard } from './EventCard';
 
 export default function Home() {
   const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
@@ -63,25 +64,7 @@ export default function Home() {
 
             {/* Upcoming Events Mini-Cards */}
             {upcomingEvents.map((event) => (
-              <Box
-                key={event.name}
-                className="flex flex-col h-full bg-surface/50 border border-line p-6 lg:p-8"
-              >
-                <Stack gap={4}>
-                  <Box className="flex items-center gap-3">
-                    <event.icon className="w-5 h-5 text-accent" />
-                    <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
-                      {event.status}
-                    </Text>
-                  </Box>
-                  <Text variant="display" size="xl" weight="font-black" className="text-accent-navy leading-snug">
-                    {event.name}
-                  </Text>
-                  <Text variant="body" size="base" color="dim">
-                    {event.date}
-                  </Text>
-                </Stack>
-              </Box>
+              <EventCard key={event.name} {...event} />
             ))}
           </Grid>
         </Stack>
