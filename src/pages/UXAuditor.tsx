@@ -132,7 +132,7 @@ export default function UXAuditor() {
                   <button
                     onClick={exportToGithub}
                     disabled={activeReport.status !== 'completed'}
-                    className="flex items-center gap-2 px-6 py-2 rounded-xl font-bold bg-text text-surface hover:opacity-90 shadow-lg text-sm transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 rounded-xl font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-lg text-sm transition-all disabled:opacity-50"
                   >
                     <Github className="w-4 h-4" />
                     Export to GitHub Issue
@@ -209,9 +209,20 @@ export default function UXAuditor() {
                                     </Text>
                                     <Box className="bg-bg p-3 rounded-lg border border-line flex items-start gap-2">
                                       <span className="text-accent text-[10px] font-bold mt-0.5">FIX</span>
-                                      <Text variant="sans" size="xs" weight="font-bold" className="text-text">
-                                        {imp.suggestion}
-                                      </Text>
+                                      <Box className="flex-1 min-w-0">
+                                        <Text variant="sans" size="xs" weight="font-bold" className="text-text break-words whitespace-pre-wrap">
+                                          {imp.suggestion}
+                                        </Text>
+                                        {imp.element === "Manual Audit Required" && (
+                                          <button
+                                            onClick={() => navigator.clipboard.writeText(imp.suggestion)}
+                                            className="mt-2 flex items-center gap-1 px-3 py-1 rounded bg-surface border border-line hover:border-accent transition-colors text-xs font-bold text-text-dim hover:text-accent"
+                                          >
+                                            <Copy className="w-3 h-3" />
+                                            Copy Prompt
+                                          </button>
+                                        )}
+                                      </Box>
                                     </Box>
                                   </Box>
                                 ))}

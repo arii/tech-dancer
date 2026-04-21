@@ -110,8 +110,30 @@ export function useUXAuditor() {
       }
 
       for (const vp of VIEWPORTS) {
-        const mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
-        const analysis = await analyzeViewport(vp, url);
+        // Attempt to fetch a real snapshot using a free public proxy API
+        // This is a best effort. If it fails due to CORS, we will handle it.
+        let mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
+        let base64DataUri = "";
+
+        try {
+          // A simple way to get a snapshot (mshots API from WP is free and fast for public URLs)
+          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=${vp.width}&h=${vp.height}`;
+          const res = await fetch(snapshotUrl);
+          if (res.ok) {
+            const blob = await res.blob();
+            // Convert to base64 Data URI
+            base64DataUri = await new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.readAsDataURL(blob);
+            });
+            mockImg = base64DataUri;
+          }
+        } catch (e) {
+          console.error("Failed to fetch realistic snapshot, using placeholder", e);
+        }
+
+        const analysis = await analyzeViewport(vp, url, base64DataUri);
 
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
         newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
@@ -144,7 +166,7 @@ export function useUXAuditor() {
     }
   };
 
-  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string) => {
+  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
     const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
 
@@ -182,13 +204,17 @@ export function useUXAuditor() {
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
     } catch (err) {
       // Provide a populated prompt if API fails, as requested
+      const imgContext = base64DataUri
+        ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
+        : `[Please attach the image from scripts/ux-capture.js here]`;
+
       return {
-        summary: "API Key missing or fetch failed. Manual analysis required. Use the prompt below with an LLM of your choice.",
+        summary: "API Key missing or fetch failed. Manual analysis required. Copy the prompt below.",
         improvements: [
           {
             element: "Manual Audit Required",
             issue: "No automated analysis generated.",
-            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.`,
+            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`,
             severity: 5
           }
         ]

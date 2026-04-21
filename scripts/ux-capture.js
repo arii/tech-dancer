@@ -1,10 +1,17 @@
-const { chromium } = require('playwright');
 const fs = require('fs');
 
 /**
  * CLI Tool for Agents to capture screenshots for the UX Auditor
  * Usage: node scripts/ux-capture.js <url> <outputDir>
  */
+
+let chromium;
+try {
+  chromium = require('playwright').chromium;
+} catch (err) {
+  console.error('Playwright not found. Please install it using "npm install --save-dev playwright".');
+  process.exit(1);
+}
 
 const viewports = [
   { name: 'mobile', width: 375, height: 667 },
@@ -13,7 +20,12 @@ const viewports = [
 ];
 
 async function capture() {
-  const url = process.argv[2] || 'http://localhost:5173';
+  const url = process.argv[2];
+  if (!url) {
+    console.error('Usage: node scripts/ux-capture.js <url> [outputDir]');
+    process.exit(1);
+  }
+
   const outputDir = process.argv[3] || './ux-snapshots';
 
   if (!fs.existsSync(outputDir)) {
