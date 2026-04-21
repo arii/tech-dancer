@@ -86,6 +86,9 @@ export interface Resource {
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
+  durability?: number;
+  value?: number;
+  specs?: Record<string, string>;
 }
 
 export interface Study {
@@ -179,3 +182,6 @@ export const getStudyBySlug = (slug: string) => maps.studies.get(slug);
 export const getEventBySlug = (slug: string) => maps.events.get(slug);
 
 export const getAllContent = (type: ContentType): ContentItem[] => items[type];
+
+export const readingTime = (content: string) =>
+  Math.max(1, Math.round(content.split(/\s+/).length / 200));

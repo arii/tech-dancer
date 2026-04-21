@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { readingTime } from '@/lib/content';
 
 interface ContentCardProps {
   slug: string;
@@ -11,6 +12,7 @@ interface ContentCardProps {
   image?: string;
   basePath: string;
   aspect?: "square" | "video";
+  content?: string;
 }
 
 export function ContentCardSkeleton() {
@@ -32,7 +34,18 @@ export function ContentCardSkeleton() {
   );
 }
 
-export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect = "video" }: ContentCardProps) {
+const categoryGradients: Record<string, string> = {
+  'Data & Dev Lab': 'from-[#1A2B3C] to-[#185FA5]',
+  'All about WCS':  'from-[#1A2B3C] to-[#3B6D11]',
+  'Travel/Lifestyle': 'from-[#993C1D] to-[#BA7517]',
+  'Gear Reviews':   'from-[#534AB7] to-[#1D9E75]',
+  'General': 'from-[#1A2B3C] to-[#185FA5]',
+};
+
+export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content, aspect = "video" }: ContentCardProps) {
+  const gradient = categoryGradients[category] || 'from-slate-800 to-slate-900';
+  const rt = content ? readingTime(content) : Math.max(1, Math.round((excerpt?.split(' ').length ?? 0) / 3));
+
   return (
     <Box 
       as={NavLink}
@@ -48,8 +61,10 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <Box className="w-full h-full flex items-center justify-center opacity-10 bg-accent-navy">
-             <Text variant="display" size="3xl">TD</Text>
+          <Box className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradient}`}>
+             <Text variant="display" size="4xl" className="text-white/20">
+               {category.slice(0, 2).toUpperCase()}
+             </Text>
           </Box>
         )}
         <Box className="absolute top-4 left-4">
@@ -64,9 +79,16 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       {/* Content Area */}
       <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
         <Stack gap={4}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
-            {date}
-          </Text>
+          <Box display="flex" align="center" gap={3}>
+            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
+              {date}
+            </Text>
+            <Box className="w-1 h-1 rounded-full bg-line" />
+            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em] flex items-center gap-1">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              {rt} min read
+            </Text>
+          </Box>
           <Text 
             variant="display" 
             size="xl" 

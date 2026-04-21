@@ -1,9 +1,13 @@
 import { getResources, Resource } from '@/lib/content';
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { safeSearch } from '@/lib/utils';
+import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useToolbox() {
   const resources = getResources();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const view = (searchParams.get('view') as ViewMode) || 'card';
   const [searchTerm, setSearchTerm] = useState('');
 
   const categories = [
@@ -32,9 +36,16 @@ export function useToolbox() {
     })).filter(cat => cat.items.length > 0);
   }, [groupedResources, searchTerm]);
 
+  const setView = (v: ViewMode) => {
+    searchParams.set('view', v);
+    setSearchParams(searchParams);
+  };
+
   return {
     searchTerm,
     setSearchTerm,
-    filteredCategories
+    filteredCategories,
+    view,
+    setView
   };
 }

@@ -1,10 +1,34 @@
 import { useState } from 'react';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Box, Grid } from '@/layouts/Primitives';
+import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
+import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
+import { ListRow } from '@/components/ui/ListRow';
 
-export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
+interface FolioGridProps {
+  items: any[];
+  categoryTitle: string;
+  basePath: string;
+  label?: string;
+  description?: string;
+  children?: React.ReactNode;
+  loading?: boolean;
+  view?: ViewMode;
+  onViewChange?: (v: ViewMode) => void;
+}
+
+export default function FolioGrid({
+  items,
+  categoryTitle,
+  basePath,
+  label,
+  description,
+  children,
+  loading,
+  view = 'card',
+  onViewChange
+}: FolioGridProps) {
   const [search, setSearch] = useState('');
 
   const filteredItems = items.filter(item => {
@@ -25,55 +49,68 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
           description={description}
         />
         {children}
-        <Box marginTop={8} position="relative" maxWidth="2xl">
-          <Box
-            as="input"
-            type="text"
-            placeholder="SEARCH_THE_ENGINE..."
-            width="full"
-            surface="default"
-            border
-            paddingX={6}
-            paddingY={4}
-            variant="mono"
-            size="sm"
-            className="focus:border-accent-brand outline-none focus:ring-0"
-            onChange={(e: any) => setSearch(e.target.value)}
-          />
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+          <Box position="relative" maxWidth="2xl" flex={1}>
+            <Box
+              as="input"
+              type="text"
+              placeholder="SEARCH_THE_ENGINE..."
+              width="full"
+              surface="default"
+              border
+              paddingX={6}
+              paddingY={4}
+              variant="mono"
+              size="sm"
+              className="focus:border-accent-brand outline-none focus:ring-0"
+              onChange={(e: any) => setSearch(e.target.value)}
+            />
+          </Box>
+          {onViewChange && (
+            <ViewToggle view={view} onChange={onViewChange} />
+          )}
         </Box>
       </Box>
 
-      <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={0} border="t" className="border-l border-line mt-8">
-        {loading ? (
-          Array.from({ length: 6 }).map((_, index) => (
-            <Box
-              key={index}
-              border="r"
-              borderBottom={true}
-              padding={8}
-              className={`transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
-            >
-              <ContentCardSkeleton />
-            </Box>
-          ))
-        ) : (
-          filteredItems.map((item, index) => (
-            <Box
-              key={item.slug}
-              border="r"
-              borderBottom={true}
-              padding={8}
-              className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
-            >
-              <ContentCard
-                {...item}
-                basePath={basePath}
-                aspect="video"
-              />
-            </Box>
-          ))
-        )}
-      </Grid>
+      {view === 'card' ? (
+        <Grid cols={{ base: 1, md: 2 }} gap={0} border="t" className="border-l border-line mt-8">
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <Box
+                key={index}
+                border="r"
+                borderBottom={true}
+                padding={8}
+                className={`transition-colors group ${index === 0 ? "col-span-full" : ""}`}
+              >
+                <ContentCardSkeleton />
+              </Box>
+            ))
+          ) : (
+            filteredItems.map((item, index) => (
+              <Box
+                key={item.slug}
+                border="r"
+                borderBottom={true}
+                padding={8}
+                className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full" : ""}`}
+              >
+                <ContentCard
+                  {...item}
+                  basePath={basePath}
+                  aspect="video"
+                />
+              </Box>
+            ))
+          )}
+        </Grid>
+      ) : (
+        <Stack gap={0} border="t" className="border-line mt-8">
+          {filteredItems.map((item) => (
+            <ListRow key={item.slug} {...item} basePath={basePath} />
+          ))}
+        </Stack>
+      )}
     </Box>
   );
 }

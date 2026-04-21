@@ -6,6 +6,14 @@ interface GearCardProps extends Resource {
   basePath: string;
 }
 
+const categoryGradients: Record<string, string> = {
+  'Data & Dev Lab': 'from-[#1A2B3C] to-[#185FA5]',
+  'All about WCS':  'from-[#1A2B3C] to-[#3B6D11]',
+  'Travel/Lifestyle': 'from-[#993C1D] to-[#BA7517]',
+  'Gear Reviews':   'from-[#534AB7] to-[#1D9E75]',
+  'Dance Gear': 'from-[#534AB7] to-[#1D9E75]',
+};
+
 export function GearCard({
   slug,
   title,
@@ -18,10 +26,12 @@ export function GearCard({
   priceCategory,
   updatedDate
 }: GearCardProps) {
+  const gradient = categoryGradients[category] || 'from-slate-800 to-slate-900';
+
   return (
     <NavLink
       to={`${basePath}/${slug}`}
-      className="group flex flex-col bg-surface rounded-2xl border border-line shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      className="group flex flex-col bg-surface border border-line transition-all duration-300 overflow-hidden"
     >
       {/* Image Wrapper */}
       <div className="aspect-square md:aspect-video relative overflow-hidden bg-bg">
@@ -32,17 +42,28 @@ export function GearCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center opacity-10 bg-accent-navy text-accent-navy">
-             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl">TD</span>
+          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradient}`}>
+             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl text-white/20">
+               {category.slice(0, 2).toUpperCase()}
+             </span>
           </div>
         )}
         <div className="absolute top-4 left-4">
-          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-full border border-line">
+          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-sm border border-line">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase">
               {category}
             </Text>
           </div>
         </div>
+        {verdict && (
+          <div className="absolute top-4 right-4">
+            <div className="bg-accent-brand px-2 py-1 rounded-sm shadow-lg">
+              <Text variant="mono" size="micro" weight="font-bold" className="text-white uppercase">
+                {verdict}
+              </Text>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Content Area */}
@@ -68,43 +89,45 @@ export function GearCard({
              {excerpt}
           </p>
 
-          {(verdict || priceCategory || updatedDate) && (
+          {(priceCategory || updatedDate) && (
             <div className="flex flex-wrap items-center gap-3 mt-2">
-               {verdict && (
-                 <div className="bg-accent/10 px-2 py-0.5 rounded-md">
-                   <span className="text-[8px] font-mono uppercase text-accent font-bold">{verdict}</span>
+               {priceCategory && (
+                 <div className="bg-amber-100 px-2 py-0.5 rounded-sm border border-amber-200">
+                   <span className="text-[10px] font-mono text-amber-700 font-bold">{priceCategory}</span>
                  </div>
                )}
-               {priceCategory && (
-                 <span className="text-[8px] font-mono uppercase text-text-dim font-bold">{priceCategory}</span>
-               )}
                {updatedDate && (
-                 <span className="text-[8px] font-mono uppercase text-text-dim">Updated {updatedDate}</span>
+                 <span className="text-[10px] font-mono uppercase text-text-dim">Updated {updatedDate}</span>
                )}
             </div>
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-line/50 mt-auto">
-          <span className="font-mono tracking-wider uppercase text-accent font-bold text-xs">
-            Read Review
-          </span>
-          <div className="group-hover:translate-x-1 transition-transform duration-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-accent"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
+        <div className="flex flex-col gap-3 mt-auto">
+          <div className="flex items-center justify-between pt-4 border-t border-line/50">
+            <span className="font-mono tracking-wider uppercase text-accent font-bold text-xs">
+              Read Review
+            </span>
+            <div className="group-hover:translate-x-1 transition-transform duration-300">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-accent"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
           </div>
+          <Text variant="mono" size="micro" color="dim" className="text-[9px] leading-tight opacity-50 italic">
+            * This post contains affiliate links. I may earn a commission at no extra cost to you.
+          </Text>
         </div>
       </div>
     </NavLink>

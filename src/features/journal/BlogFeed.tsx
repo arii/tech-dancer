@@ -4,7 +4,7 @@ import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 
 export default function BlogFeed() {
-  const { posts, categories, activeCategory, setActiveCategory, isLoading } = useBlog();
+  const { posts, categories, activeCategory, setActiveCategory, view, setView, isLoading } = useBlog();
 
   return (
     <Box as="section">
@@ -15,6 +15,8 @@ export default function BlogFeed() {
         label="INSIGHTS"
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
+        view={view}
+        onViewChange={setView}
       >
         <Box marginTop={8}>
           <FilterBar
