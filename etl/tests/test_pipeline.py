@@ -4,13 +4,13 @@ import os
 import requests
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
-from scraper import (
+from etl.scraper import (
     ScoringDanceCrawler,
     ScoringDanceParser,
     OutputManager,
     BASE_URL
 )
-from processor import DataProcessor
+from etl.processor import DataProcessor
 
 def test_wsdc_id_extraction():
     parser = ScoringDanceParser()
@@ -117,7 +117,7 @@ def test_get_recent_events(mocker):
         </tr>
     </table>
     """
-    mocker.patch('scraper.ScoringDanceCrawler._fetch_page_text', side_effect=[html_text, requests.RequestException("End of pagination")])
+    mocker.patch('etl.scraper.ScoringDanceCrawler._fetch_page_text', side_effect=[html_text, requests.RequestException("End of pagination")])
 
     crawler = ScoringDanceCrawler()
     links = list(crawler.get_recent_events(years=1))

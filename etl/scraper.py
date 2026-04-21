@@ -12,10 +12,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 from urllib.parse import urljoin
 from tqdm import tqdm
-try:
-    from .processor import DataProcessor
-except ImportError:
-    from processor import DataProcessor
+from etl.processor import DataProcessor
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -112,39 +109,33 @@ class ScoringDanceParser:
     def standardize_mark(mark_text):
         return POINTS_MAPPING.get(mark_text.strip(), 0.0)
 
+    def _extract_single_dancer_id(self, link):
+        d_id = link.get('data-wsdc')
+        if not d_id and link.get('href'):
+            href = link.get('href')
+            path_parts = href.split('/')
+            if path_parts and path_parts[-1].isdigit():
+                d_id = path_parts[-1]
+            else:
+                match = re.search(r'/(\d+)$', href)
+                if match:
+                    d_id = match.group(1)
+
+        if not d_id:
+            d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
+        return str(d_id).strip()
+
     def _extract_competitor_data(self, row):
         competitor_elem = row.find('td', class_='competitor-name')
         if not competitor_elem:
             return None, None
 
         links = competitor_elem.find_all('a')
-        competitor_names = [a.get_text(strip=True) for a in links]
-        if not competitor_names:
-            competitor_name = competitor_elem.get_text(strip=True)
-        else:
-            competitor_name = " & ".join(competitor_names)
+        names = [a.get_text(strip=True) for a in links]
+        competitor_name = " & ".join(names) if names else competitor_elem.get_text(strip=True)
 
-        dancer_ids = []
-        for link in links:
-            d_id = link.get('data-wsdc')
-            if not d_id and link.get('href'):
-                href = link.get('href')
-                path_parts = href.split('/')
-                if path_parts and path_parts[-1].isdigit():
-                    d_id = path_parts[-1]
-                else:
-                    match = re.search(r'/(\d+)$', href)
-                    if match:
-                        d_id = match.group(1)
-
-            if not d_id:
-                d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
-            dancer_ids.append(str(d_id).strip())
-
-        if not dancer_ids:
-            dancer_id = f"TEMP_{competitor_name.replace(' ', '_')}"
-        else:
-            dancer_id = " & ".join(dancer_ids)
+        dancer_ids = [self._extract_single_dancer_id(link) for link in links]
+        dancer_id = " & ".join(dancer_ids) if dancer_ids else f"TEMP_{competitor_name.replace(' ', '_')}"
 
         return competitor_name, dancer_id
 

@@ -17,12 +17,15 @@ def _print_results(df, query):
     print(df[available_cols].sort_values('event_date', ascending=False).to_string(index=False))
 
 def query_dancer(path, identity):
-    if not os.path.exists(path):
-        _print_message(f"Ledger file not found at: {path}", "error")
+    # Sanitize and resolve path
+    safe_path = os.path.abspath(path)
+
+    if not os.path.exists(safe_path) or not os.path.isfile(safe_path):
+        _print_message(f"Ledger file not found or invalid: {safe_path}", "error")
         return
 
     try:
-        df = pd.read_parquet(path)
+        df = pd.read_parquet(safe_path)
     except Exception as e:
         _print_message(f"Failed to read ledger file: {e}", "error")
         return
