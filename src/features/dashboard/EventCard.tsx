@@ -16,7 +16,7 @@ export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
       <Stack gap={4}>
         <Box className="flex items-center gap-3">
           <Icon className="w-5 h-5 text-accent" />
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.2em]">
+          <Text variant="mono" size="xs" color="dim" uppercase tracking="wide-editorial">
             {status}
           </Text>
         </Box>

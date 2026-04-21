@@ -26,7 +26,7 @@ export default function ArielProfile() {
               <Grid cols={1} gap={6}>
                 {bio.details.map((detail) => (
                   <Box key={detail.label} paddingBottom={4} className="border-b border-slate-200">
-                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" display="block" className="tracking-[0.2em] uppercase">{detail.label}</Text>
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" display="block" tracking="wide-editorial">{detail.label}</Text>
                     <Text variant="display" size="lg" marginTop={1} weight="font-bold" className="text-accent-navy">{detail.value}</Text>
                   </Box>
                 ))}
@@ -37,7 +37,7 @@ export default function ArielProfile() {
                 href="#" 
                 className="hover:text-accent transition-colors flex items-center gap-2 text-accent-navy"
               >
-                <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.2em]">VIEW FULL BACKGROUND</Text>
+                <Text variant="mono" size="xs" weight="font-semibold" tracking="wide-editorial">VIEW FULL BACKGROUND</Text>
                 <ArrowRight className="w-4 h-4" />
               </Box>
             </Stack>
@@ -76,7 +76,7 @@ export default function ArielProfile() {
                     className="group hover:border-accent-brand transition-all"
                   >
                     <item.icon className="w-5 h-5 text-accent-navy group-hover:text-accent transition-colors" />
-                    <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.2em]">{item.label}</Text>
+                    <Text variant="mono" size="xs" weight="font-semibold" tracking="wide-editorial">{item.label}</Text>
                   </Box>
                 ))}
               </Grid>

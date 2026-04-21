@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
-import React from 'react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
@@ -56,17 +55,18 @@ function SuccessState({ onReset }: { onReset: () => void }) {
       align="center"
       justify="center"
       textAlign="center"
-      minHeight="50vh"
+      height="full"
+      minHeight={400}
     >
-      <Stack gap="12" align="center">
+      <Stack gap={12} align="center">
         <Box
           as={motion.div}
           variants={staggerItem}
-          width="24" height="24" border surface="muted" radius="lg" display="flex" align="center" justify="center" color="brand"
+          width={24} height={24} border surface="muted" radius="lg" display="flex" align="center" justify="center" color="brand"
         >
           <Sparkles className="w-12 h-12 stroke-1" />
         </Box>
-        <Stack gap="4">
+        <Stack gap={4}>
           <Text as={motion.h2} variants={staggerItem} variant="headline" size={{ base: "4xl", lg: "6xl" }}>Message Received.</Text>
           <Text as={motion.p} variants={staggerItem} variant="body" maxWidth="65ch" marginX="auto" size={{ base: "base", lg: "lg" }}>
             Thank you for reaching out. I&apos;ve received your message and will get back to you as soon as possible.
@@ -83,8 +83,8 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           uppercase
           size="micro"
           border
-          paddingX="8"
-          paddingY="4"
+          paddingX={8}
+          paddingY={4}
           color="brand"
           cursor="pointer"
           className="h-12 hover:bg-accent-brand/5 transition-colors"
@@ -112,33 +112,33 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
       animate="animate"
       exit="exit"
     >
-      <Stack gap="16">
+      <Stack gap={16}>
         <PageHeader 
           label="CONTACT"
           title="Get in Touch"
           description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
-          paddingBottom="0"
+          paddingBottom={0}
           border={false}
           descriptionMaxWidth="none"
         />
 
-        <Grid cols={{ base: 1, lg: 2 }} gap="16" width="full" display="grid">
+        <Grid cols={{ base: 1, lg: 2 }} gap={16} width="full" display="grid">
           <Box>
-            <Stack gap="12">
-              <Stack gap="6">
+            <Stack gap={12}>
+              <Stack gap={6}>
                 <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-text-main">Inquiries</Text>
-                <Text variant="body" size="base" color="dim">
+                <Text variant="body" size="base" color="dim" maxWidth="none">
                   I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
                 </Text>
               </Stack>
 
-              <Stack gap="10">
+              <Stack gap={10}>
                 {[
                   { label: 'Data Inquiry', channel: 'Dance Stats', icon: BarChart2 },
                   { label: 'Gear Review', channel: 'Product Feedback', icon: Sparkles },
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
-                  <Box key={item.label} display="flex" align="center" gap="6" width="full" className="group">
+                  <Stack key={item.label} direction="row" align="center" gap={6} width="full" className="group">
                     <Box
                       width={12}
                       height={12}
@@ -154,11 +154,11 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                     >
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
-                    <Stack gap={1} flex={1} width="full">
+                    <Stack gap={1} flex={1}>
                       <Text variant="sans" size="base" weight="font-bold">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="!tracking-[0.2em] uppercase">{item.channel}</Text>
+                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="wide-editorial" uppercase>{item.channel}</Text>
                     </Stack>
-                  </Box>
+                  </Stack>
                 ))}
               </Stack>
             </Stack>
@@ -166,9 +166,9 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
 
           <Box>
             <Box as="form" onSubmit={onSubmit} className="space-y-8">
-              <Stack gap="3">
+              <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
-                  <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="!tracking-[0.2em] uppercase">Your Name</Text>
+                  <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" tracking="wide-editorial" uppercase>Your Name</Text>
                   {errors.name && <Text id="name-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.name}</Text>}
                 </Box>
                 <Box as="input"
@@ -186,9 +186,9 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                   onChange={onChange}
                 />
               </Stack>
-              <Stack gap="3">
+              <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
-                  <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="!tracking-[0.2em] uppercase">Your Email</Text>
+                  <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" tracking="wide-editorial" uppercase>Your Email</Text>
                   {errors.email && <Text id="email-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.email}</Text>}
                 </Box>
                 <Box as="input"
@@ -206,8 +206,8 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                   onChange={onChange}
                 />
               </Stack>
-              <Stack gap="3">
-                <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="!tracking-[0.2em] uppercase">Subject</Text>
+              <Stack gap={3}>
+                <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" tracking="wide-editorial" uppercase>Subject</Text>
                 <Box as="select"
                   id="contact-subject"
                   name="subject"
@@ -221,9 +221,9 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                   <option>Dance Statistics</option>
                 </Box>
               </Stack>
-              <Stack gap="3">
+              <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
-                  <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="!tracking-[0.2em] uppercase">Message</Text>
+                  <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" tracking="wide-editorial" uppercase>Message</Text>
                   {errors.message && <Text id="message-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.message}</Text>}
                 </Box>
                 <Box as="textarea"
@@ -249,12 +249,12 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 className="h-12"
               >
                 {isSubmitting ? (
-                  <Stack direction="row" align="center" gap="3">
+                  <Stack direction="row" align="center" gap={3}>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white animate-spin rounded-full" />
                     <Text variant="mono" size="micro" color="white">Sending...</Text>
                   </Stack>
                 ) : (
-                  <Stack direction="row" align="center" gap="3">
+                  <Stack direction="row" align="center" gap={3}>
                     <Send className="w-4 h-4" />
                     <Text variant="mono" size="xs" weight="font-bold">Send Message</Text>
                   </Stack>

@@ -64,7 +64,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       {/* Content Area */}
       <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
         <Stack gap={4}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.2em]">
+          <Text variant="mono" size="xs" color="dim" uppercase tracking="wide-editorial">
             {date}
           </Text>
           <Text 
@@ -81,7 +81,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         </Stack>
 
         <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-slate-100 mt-auto">
-          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-[0.2em]">
+          <Text variant="mono" size="xs" tracking="wide-editorial">
             Read More
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />

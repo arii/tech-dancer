@@ -104,16 +104,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     const getVal = (val: any, prefix: string) => {
       if (val === undefined) return ""
       if (typeof val === "number") {
-        // Only use standard tailwind classes for common values, otherwise use arbitrary
-        if (prefix === 'z' && [0, 10, 20, 30, 40, 50].includes(val)) return `z-${val}`
-        if (prefix === 'opacity' && [0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 100].includes(val)) return `opacity-${val}`
-
-        // For spacing and layout (w, h, p, m, gap), numbers usually map to the standard scale (e.g. w-4, gap-6)
-        if (['w', 'h', 'p', 'm', 'gap', 'pt', 'pb', 'pl', 'pr', 'px', 'py', 'mt', 'mb', 'ml', 'mr', 'mx', 'my'].some(p => prefix === p || prefix.startsWith(p + '-'))) {
-          return `${prefix}-${val}`
-        }
-
-        return `${prefix}-[${val}]`
+        return `${prefix}-${val}`
       }
       // Check if it's a standard Tailwind token (letters, numbers, dashes)
       if (/^[a-z0-9-]+$/.test(val) && !val.includes('vh') && !val.includes('vw') && !val.includes('%') && !val.includes('px')) {
