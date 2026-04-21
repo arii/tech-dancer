@@ -10,6 +10,8 @@ import Sitemap from 'vite-plugin-sitemap';
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
+  const isVercel = process.env.VERCEL === '1';
+  const isGHAction = process.env.GITHUB_ACTIONS === 'true';
 
   // 1. Centralized dynamic route discovery
   const getDynamicRoutes = () => {
@@ -37,11 +39,11 @@ export default defineConfig(({ mode }) => {
 
   const staticRoutes = ['/gear', '/research', '/blog', '/resources', '/about', '/contact'];
   // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
+  const resolvedBase = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     // 2. Base Path logic
-    base: isProd ? '/tech-dancer/' : '/',
+    base: resolvedBase,
 
     plugins: [
       react(),
