@@ -31,15 +31,16 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(800px); /* Adjust this if your container gets taller */
-  }
-}
 @layer utilities {
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(800px); /* Adjust this if your container gets taller */
+    }
+  }
+
   .animate-scanline {
     animation: scanline 2.5s linear infinite;
   }

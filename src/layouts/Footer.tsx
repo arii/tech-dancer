@@ -8,7 +8,7 @@ export function Footer() {
   ];
 
   return (
-    <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-slate-200">
+    <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-slate-200 mt-auto">
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
           © 2026 TECH-DANCER

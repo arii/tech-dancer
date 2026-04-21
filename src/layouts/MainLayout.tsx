@@ -21,12 +21,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             paddingBottom={showEmailBar ? { base: 48, md: 32 } : 12}
             className="mx-auto min-h-full max-w-7xl w-full transition-all duration-300 flex-1 flex flex-col"
           >
-            <Stack gap={12} className="w-full flex-1">
+            <Box flex={1} className="w-full flex flex-col">
               <Box flex={1} className="w-full">
                 {children}
               </Box>
               <Footer />
-            </Stack>
+            </Box>
           </Box>
         </Box>
       </Box>
