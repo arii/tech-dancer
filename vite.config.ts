@@ -6,12 +6,16 @@ import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default defineConfig(({mode}) => {
-  // Dynamic base path for GitHub Pages vs Vercel
+  const env = loadEnv(mode, process.cwd(), '');
+
+  // Dynamic base path for GitHub Pages vs Vercel vs Local Override
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
-  const base = isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/');
+
+  // Use VITE_BASE_PATH if provided, otherwise fallback to defaults
+  const base = env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,
