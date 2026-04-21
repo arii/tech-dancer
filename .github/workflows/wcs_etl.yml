@@ -34,7 +34,9 @@ jobs:
 
       - name: Execute Extraction Script
         run: |
-          python etl/scraper.py "https://scoring.dance/enCA/events/190/results/2945.html"
+          # Run crawl for a single year in automated workflow to keep it efficient
+          # Markdown files are generated in content/studies/ but ignored by .gitignore
+          python etl/scraper.py --years 1
 
       - name: Validate Output
         run: |
@@ -45,6 +47,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git lfs track "*.parquet"
+          # Only track and add the Parquet ledger; Markdown studies are ignored
           git add etl/data/wcs_prelims.parquet .gitattributes
 
           git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)
