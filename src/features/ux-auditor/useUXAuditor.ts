@@ -186,7 +186,7 @@ export function useUXAuditor() {
     let repoBase = "https://github.com/new";
     try {
       const urlObj = new URL(activeReport.url);
-      if (urlObj.hostname.endsWith('github.io')) {
+      if (urlObj.hostname.endsWith('.github.io')) {
         const userPart = urlObj.hostname.split('.')[0];
         const repo = urlObj.pathname.split('/')[1];
         if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
