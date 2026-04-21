@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 from urllib.parse import urljoin
+from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -144,17 +145,41 @@ class ScoringDanceParser:
                 else:
                     continue
 
-                name_links = row.find_all('a', attrs={'data-wsdc': True})
-                if name_links:
-                    name = " & ".join([a.get_text(strip=True) for a in name_links])
+                competitor_elem = row.find('td', class_='competitor-name')
+                if not competitor_elem:
+                    continue
+
+                links = competitor_elem.find_all('a')
+                competitor_names = [a.get_text(strip=True) for a in links]
+                if not competitor_names:
+                    competitor_name = competitor_elem.get_text(strip=True)
                 else:
-                    name_cell = row.find('td', class_='competitor-name')
-                    if name_cell:
-                        name = name_cell.get_text(strip=True)
-                    elif len(cells) > 1:
-                        name = cells[1].get_text(strip=True)
-                    else:
-                        name = ""
+                    competitor_name = " & ".join(competitor_names)
+
+                # ✅ CORRECT: Extract permanent WSDC IDs from data attributes or hrefs
+                dancer_ids = []
+                for link in links:
+                    d_id = link.get('data-wsdc')
+                    if not d_id and link.get('href'):
+                        href = link.get('href')
+                        match = re.search(r'/(\d+)$', href)
+                        if match:
+                            d_id = match.group(1)
+
+                    if not d_id:
+                        d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
+                    dancer_ids.append(str(d_id).strip())
+
+                if not dancer_ids:
+                    dancer_id = f"TEMP_{competitor_name.replace(' ', '_')}"
+                else:
+                    dancer_id = " & ".join(dancer_ids)
+
+                promoted_elem = row.find('td', class_='promoted')
+                promoted = False
+                if promoted_elem:
+                    promoted_text = promoted_elem.get_text(strip=True).lower()
+                    promoted = promoted_text in ['yes', 'y']
 
                 for j_mark in judge_marks:
                     judge_name = j_mark.get('TITLE') or j_mark.get('title')
@@ -163,8 +188,10 @@ class ScoringDanceParser:
 
                     mark_text = j_mark.get_text(strip=True)
                     results.append({
+                        'Dancer_ID': dancer_id,       # Anchored to permanent registry number
                         'competitor_bib': bib,
-                        'competitor_name': name,
+                        'competitor_name': competitor_name,
+                        'Promoted': promoted,
                         'judge_name': judge_name,
                         'mark': mark_text,
                         'wsdc_points': self.standardize_mark(mark_text),
@@ -182,15 +209,12 @@ class DataProcessor:
         if raw_df.empty:
             return pd.DataFrame()
 
-        processed_df = raw_df.groupby(['competitor_bib', 'competitor_name', 'result_id']).agg(
-            Registry_Points_Sum=('wsdc_points', 'sum')
+        # Group by the new Dancer_ID and other metadata
+        processed_df = raw_df.groupby(['Dancer_ID', 'competitor_name', 'result_id', 'event_title', 'event_date']).agg(
+            Registry_Points_Sum=('wsdc_points', 'sum'),
+            Promoted=('Promoted', 'any')
         ).reset_index()
 
-        processed_df['Dancer_ID'] = processed_df.apply(
-            lambda row: f"REF_ID: {row['competitor_bib']:03d}-{row['result_id']}", axis=1
-        )
-        processed_df = processed_df[['Dancer_ID', 'Registry_Points_Sum', 'competitor_name']]
-        processed_df.rename(columns={'competitor_name': 'Dancer_Name'}, inplace=True)
         return processed_df
 
 class OutputManager:
@@ -260,7 +284,7 @@ slug: "{slug}"
             combined = new_data
 
         # Single authoritative deduplication step
-        final_ledger = combined.drop_duplicates(subset=['Dancer_ID'], keep='last')
+        final_ledger = combined.drop_duplicates(subset=['Dancer_ID', 'result_id'], keep='last')
 
         final_ledger.to_parquet(self.ledger_path, index=False)
         logging.info(f"Updated ledger: {self.ledger_path}")
@@ -301,11 +325,16 @@ class ETLPipeline:
             self.output_manager.update_ledger(ledger_df)
 
     async def run_historical(self, years=5):
+        logging.info(f"Starting historical scrape for past {years} years")
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent="Mozilla/5.0...")
 
-            for event_url in self.crawler.get_recent_events(years=years):
+            # Collect events first so tqdm knows the total count
+            events = list(self.crawler.get_recent_events(years=years))
+            print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
+
+            for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):
                 logging.info(f"Processing event: {event_url}")
                 try:
                     result_links = self.crawler.get_result_links(event_url)
