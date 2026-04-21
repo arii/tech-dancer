@@ -11,9 +11,8 @@ export const variants = {
     default: "bg-surface text-text-main",
     muted: "bg-line/50 text-text-dim",
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
-    card: "bg-surface border-slate-100 shadow-md",
+    card: "bg-card-bg border-line",
     contrast: "bg-text-main text-bg",
-    github: "bg-[#24292e] text-bg",
   },
   intent: {
     default: "text-text-main",
@@ -30,10 +29,6 @@ export const variants = {
   radius: {
     none: "rounded-none",
     industrial: "rounded-[2px]",
-    standard: "rounded",
-    md: "rounded-md",
-    lg: "rounded-lg",
-    xl: "rounded-xl",
   }
 };
 
@@ -41,12 +36,7 @@ export const buttonVariants = cva(
   "inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
-      variant: {
-        primary: "bg-accent text-bg hover:bg-text-main hover:-translate-y-[2px] shadow-[0_4px_12px_var(--color-accent-shadow)]",
-        ghost: "bg-transparent text-text-main hover:bg-line/10",
-        solid: "bg-text-main text-bg border-transparent",
-        outline: "border border-line bg-transparent",
-      },
+      variant: variants.emphasis,
       intent: {
         default: "text-text-main",
         success: "text-accent-brand",
