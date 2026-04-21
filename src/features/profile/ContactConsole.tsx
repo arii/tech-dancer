@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
+import type { FormEvent, ChangeEvent } from 'react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useContactForm } from '@/hooks/use-contact-form';
@@ -17,7 +18,7 @@ export default function Contact() {
     reset 
   } = useContactForm();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     submit();
   };
@@ -100,8 +101,8 @@ interface ContactFormProps {
   formData: any;
   errors: any;
   isSubmitting: boolean;
-  onChange: (e: React.ChangeEvent<any>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onChange: (e: ChangeEvent<any>) => void;
+  onSubmit: (e: FormEvent) => void;
 }
 
 function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {

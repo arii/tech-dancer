@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
