@@ -154,39 +154,49 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
     });
 }
 
-// Initialize studies as empty, can be fetched if needed
-// For now, we maintain the sync API by allowing transform to handle both eager and lazy glob results
-// but we only use the eager ones for immediate initialization.
+// Memoization for lazy content
+let memoizedStudies: Study[] | null = null;
 
-const studiesModules = await Promise.all(
-  Object.entries(contentModules.studies).map(async ([path, loader]) => {
-    const raw = await (loader as () => Promise<string | ContentModule>)();
-    return [path, raw] as [string, string | ContentModule];
-  })
-);
+async function fetchStudies() {
+  if (memoizedStudies) return memoizedStudies;
+
+  const studiesModules = await Promise.all(
+    Object.entries(contentModules.studies).map(async ([path, loader]) => {
+      const raw = await (loader as () => Promise<string | ContentModule>)();
+      return [path, raw] as [string, string | ContentModule];
+    })
+  );
+
+  memoizedStudies = transform<Study>(Object.fromEntries(studiesModules));
+  return memoizedStudies;
+}
 
 const items = {
   posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
   resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
-  studies: transform<Study>(Object.fromEntries(studiesModules)),
   events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
 };
 
 const maps = {
   posts: new Map(items.posts.map(i => [i.slug, i])),
   resources: new Map(items.resources.map(i => [i.slug, i])),
-  studies: new Map(items.studies.map(i => [i.slug, i])),
   events: new Map(items.events.map(i => [i.slug, i]))
 };
 
 export const getPosts = () => items.posts;
 export const getResources = () => items.resources;
-export const getStudies = () => items.studies;
+export const getStudies = async () => await fetchStudies();
 export const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
-export const getStudyBySlug = (slug: string) => maps.studies.get(slug);
+export const getStudyBySlug = async (slug: string) => {
+  const studies = await fetchStudies();
+  return studies.find(s => s.slug === slug);
+};
 export const getEventBySlug = (slug: string) => maps.events.get(slug);
 
-export const getAllContent = (type: ContentType): ContentItem[] => items[type];
+export const getAllContent = async (type: ContentType): Promise<ContentItem[]> => {
+  if (type === 'studies') return await fetchStudies();
+  return items[type];
+};

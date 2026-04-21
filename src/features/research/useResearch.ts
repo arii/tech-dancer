@@ -6,7 +6,7 @@ export function useResearch() {
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
 
   useEffect(() => {
-    setStudies(getStudies());
+    getStudies().then(setStudies);
   }, []);
 
   const tools = [

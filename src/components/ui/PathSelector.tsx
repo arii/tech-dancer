@@ -38,7 +38,7 @@ export default function PathSelector() {
   const navigate = useNavigate();
 
   return (
-    <Grid cols={12} gap={0} border="y" minHeight="60vh" width="full" className="bg-black">
+    <Grid cols={12} gap={0} border="y" minHeight="[60vh]" width="full" className="bg-black">
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id || activeId === path.id;
         const isOtherHovered = (hoveredPath !== null || activeId !== null) && !isHovered;
@@ -89,7 +89,7 @@ export default function PathSelector() {
             <Box
               position="absolute"
               inset="top"
-              height="[2px]"
+              height={0.5}
               zIndex={15}
               opacity={isHovered ? 100 : 0}
               className={cn(
