@@ -44,11 +44,11 @@ export const buttonVariants = cva(
         warning: "text-accent",
       },
       size: {
-        default: "h-[40px] px-6 text-xs",
-        sm: "h-8 px-4 text-[10px]",
-        md: "h-[40px] px-6 text-xs",
+        default: "h-[48px] px-6 text-xs",
+        sm: "h-[48px] px-4 text-[10px]",
+        md: "h-[48px] px-6 text-xs",
         lg: "h-12 px-8 text-sm",
-        icon: "h-[40px] w-[40px]",
+        icon: "h-[48px] w-[48px]",
       },
       fullWidth: {
         true: "w-full",

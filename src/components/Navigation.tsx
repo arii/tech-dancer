@@ -51,7 +51,7 @@ export default function Navigation() {
           as="button"
           onClick={() => setIsOpen(!isOpen)}
           padding={2}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="min-h-[48px] min-w-[48px] flex items-center justify-center"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >

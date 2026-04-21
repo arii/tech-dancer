@@ -73,7 +73,7 @@ export default function PathSelector() {
               className={cn(
                 "bg-accent shadow-[0_0_15px_#FF7F50] pointer-events-none transition-opacity duration-500",
                 path.scanlineDelay,
-                isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'
+                isHovered ? 'opacity-100 motion-safe:animate-scanline' : 'opacity-0'
               )}
             />
 

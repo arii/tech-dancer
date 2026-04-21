@@ -14,8 +14,9 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       
       <Box display="flex" className="min-h-screen w-full">
         <Navigation />
-        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
+        <Box as="div" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
           <Box
+            as="main"
             paddingX={{ base: 8, md: 16 }}
             paddingTop={32}
             paddingBottom={showEmailBar ? { base: 48, md: 32 } : 20}
