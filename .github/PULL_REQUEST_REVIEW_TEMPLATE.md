@@ -18,9 +18,9 @@ STEPS (in order):
   Step 2: For every file block in "Per-File Audit":
     - Read the diff.
     - Mark each checklist item [x] if clean, or write the violation inline.
-    - Replace the "body" value in the Proposed inline comment JSON with specific feedback.
-    - Update "line" to the actual diff line number where the issue occurs.
-    - You MUST leave a comment for every file, even if just confirming it is clean.
+    - Replace the "body" value in the Proposed inline comment JSON blocks with specific feedback.
+      You may add additional comment blocks for the same file if there are multiple distinct issues.
+      Each comment must have a real line number from the diff and a non-placeholder body.
   Step 3: Verify all items below are complete, then mark each [x].
     [ ] Every audit checklist item is marked [x] or has a violation noted.
     [ ] Every Proposed inline comment has a real line number (not 1) and a real body (not a placeholder).
@@ -80,13 +80,23 @@ Audit checklist (mark [x] when confirmed clean, or write the violation inline):
 - [ ] Types: Strict — no `any`, no implicit types
 - [ ] React: No unnecessary `import React` (React 17+)
 
-Proposed inline comment — replace `line` with the actual diff line number and write real feedback in `body`.
+Proposed inline comments — add one block per issue found. Copy the block to add more.
 Do NOT remove the backtick fences. Do NOT leave placeholder text in `body`.
+At minimum one comment per file is required, even if just confirming the file is clean.
 ```json
 {
   "path": "{{FILENAME}}",
   "line": 1,
-  "body": "<FILL IN: critical feedback for the most important line in this file>"
+  "body": "<FILL IN: feedback for this line>"
+}
+```
+
+Add additional blocks below for other issues in this file:
+```json
+{
+  "path": "{{FILENAME}}",
+  "line": 1,
+  "body": "<optional second comment — delete this block if not needed>"
 }
 ```
 {{END_FOR_EACH}}
