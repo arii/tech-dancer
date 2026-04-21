@@ -45,11 +45,58 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 - Do NOT use `HashRouter`.
 
 ## 23. 🤝 Collaborative GitHub Workflows
-When asked to address PR comments or review code, utilize the `gh-collab` CLI tool (located at `Dev tools/gh_collab.py`):
-1. **Plan:** If raw JSON comment data is present, run `python3 "Dev tools/gh_collab.py" plan ...` to generate a `PR_Plan.md` file. Read this file to understand the requested changes.
-2. **Draft Reviews:** As you fix code, use `python3 "Dev tools/gh_collab.py" create <PR_NUMBER> --body "<Your message>"` to draft your responses.
-3. **Submit:** Once code changes are pushed, run `python3 "Dev tools/gh_collab.py" submit <PR_NUMBER> COMMENT` to finalize the review.
-*Ensure `GITHUB_TOKEN` is exported in the environment before running.*
+
+The `dev-tools/gh_collab.py` script handles all PR review interactions. Auth is automatic via `gh auth token` — no manual `GITHUB_TOKEN` export needed.
+
+**Submitting a Code Review (preferred — one step):**
+```bash
+python3 dev-tools/gh_collab.py review <PR_NUMBER> --file review_payload.json
+```
+
+The `review_payload.json` must contain:
+```json
+{
+  "body": "Overall review summary",
+  "comments": [
+    { "path": "src/foo.tsx", "line": 42, "body": "Inline comment text" }
+  ]
+}
+```
+
+**Acquiring PR diff to write a review:**
+```bash
+# Fetch changed files + patches
+python3 - <<'EOF'
+import subprocess, os, requests, json
+def get_token():
+    try: return subprocess.check_output(['env','-u','GITHUB_TOKEN','gh','auth','token'], stderr=subprocess.DEVNULL, text=True).strip()
+    except: pass
+    return os.getenv("GITHUB_TOKEN","")
+token = get_token()
+headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github.v3+json"}
+pr = 123  # <-- set PR number
+files = requests.get(f"https://api.github.com/repos/arii/tech-dancer/pulls/{pr}/files", headers=headers).json()
+for f in files:
+    print(f"\n[{f['status']}] {f['filename']} +{f['additions']}/-{f['deletions']}")
+    if f.get('patch'): print(f['patch'][:600])
+EOF
+```
+
+**Other commands:**
+- `python3 dev-tools/gh_collab.py create <PR> --file payload.json` — create pending review without submitting
+- `python3 dev-tools/gh_collab.py submit <PR> COMMENT|APPROVE|REQUEST_CHANGES` — submit existing pending review
+- `python3 dev-tools/gh_collab.py plan --pr-info ... --inline ... --general ... --reviews ... --output PR_Plan.md`
+- Add `--dry-run` flag to any command to simulate without hitting the API.
+
+**Code Review Standards (anti-bloat):**
+When reviewing, evaluate EVERY changed file against these criteria:
+1. **Dead abstractions** — Is a new class/context/hook solving a problem that a simpler primitive already handles?
+2. **Unnecessary indirection** — Does this add a layer where a direct call would do?
+3. **Responsibility creep** — Is a component taking on logic that belongs in a hook or a parent?
+4. **Import bloat** — Are `React` default imports added unnecessarily (not needed in React 17+)?
+5. **Token compliance** — Are design tokens used, or is raw Tailwind/inline style leaking in?
+6. Post an inline comment on the most critical line of each file changed.
+
 
 ## 10. 🎞 Motion Must Use Tokens
 - Motion values come from `motionTokens`
