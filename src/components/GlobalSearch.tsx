@@ -4,41 +4,31 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const prevPathname = useRef(location.pathname);
 
   // 1. The Context Reset: Close on route change
   useEffect(() => {
-    if (isOpen && prevPathname.current !== location.pathname) {
+    if (isOpen) {
       close();
     }
-    prevPathname.current = location.pathname;
-  }, [location.pathname, isOpen, close]);
+  }, [location.pathname, close]);
 
-  useEffect(() => {
-    const handleOpenSearch = () => open();
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // 3. The Keyboard Escape Hatch: Close on ESC key
-      if (e.key === 'Escape' && isOpen) {
-        close();
-      }
-      if (e.ctrlKey && (e.key === 'k' || e.key === 'K')) {
-        e.preventDefault();
-        open();
-      }
-    };
-    window.addEventListener('open-search', handleOpenSearch);
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('open-search', handleOpenSearch);
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, open, close]);
+  // 3. The Keyboard Escape Hatch: Close on ESC key
+  useHotkeys('Escape', () => {
+    if (isOpen) close();
+  }, [isOpen, close]);
+
+  // Global Shortcut: Ctrl+K or Cmd+K to open search
+  useCommandKey('k', (e) => {
+    e.preventDefault();
+    open();
+  }, [open]);
 
   const handleSelect = (result: any) => {
     // 4. Link Click Delegation: Immediate Feedback
@@ -104,6 +94,7 @@ export function GlobalSearch() {
                 <Box 
                   as="button" 
                   type="button"
+                  aria-label="Close search"
                   onClick={close}
                   padding={2}
                   cursor="pointer"
@@ -121,6 +112,7 @@ export function GlobalSearch() {
                         key={`${res.type}-${res.slug}`}
                         as="button"
                         type="button"
+                        data-testid="search-result"
                         onClick={() => handleSelect(res)}
                         width="full"
                         padding={3}
@@ -140,7 +132,7 @@ export function GlobalSearch() {
                                <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">{res.title}</Text>
                                <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                                   <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
-                               </Box>
+                                </Box>
                             </Box>
                             <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{res.excerpt}</Text>
                          </Stack>

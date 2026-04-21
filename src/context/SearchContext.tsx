@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useMemo } from 'react';
 
 interface SearchContextType {
   isOpen: boolean;
@@ -14,8 +14,14 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
+  const contextValue = useMemo(() => ({
+    isOpen,
+    open,
+    close
+  }), [isOpen, open, close]);
+
   return (
-    <SearchContext.Provider value={{ isOpen, open, close }}>
+    <SearchContext.Provider value={contextValue}>
       {children}
     </SearchContext.Provider>
   );
