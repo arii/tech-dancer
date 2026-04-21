@@ -69,6 +69,10 @@ export const shadows = {
   standard: "shadow-sm",
 };
 
+export const imageSizes = {
+  profile: 400,
+};
+
 export const zIndex = {
   hide: -1,
   base: 0,

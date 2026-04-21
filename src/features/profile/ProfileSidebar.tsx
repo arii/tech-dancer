@@ -1,5 +1,6 @@
 import { User, Instagram, Linkedin, Github, Twitter, Youtube, FileText, Award, LucideIcon } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { imageSizes } from '@/styles/design-tokens';
 import { ProfileData, SocialPlatform } from './types';
 
 const platformIcons: Record<SocialPlatform, LucideIcon> = {
@@ -25,8 +26,8 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
         display="flex"
         align="center"
         justify="center"
-        width={{ base: 'full', md: 400 }}
-        maxWidth={{ base: 'full', md: 400 }}
+        width={{ base: 'full', md: imageSizes.profile }}
+        maxWidth={{ base: 'full', md: imageSizes.profile }}
         shrink={0}
       >
         <User className="w-24 h-24 text-line stroke-[0.5]" />
