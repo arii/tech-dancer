@@ -210,7 +210,7 @@ export default function UXAuditor() {
                                     <Box className="bg-bg p-3 rounded-lg border border-line flex items-start gap-2">
                                       <span className="text-accent text-[10px] font-bold mt-0.5">FIX</span>
                                       <Box className="flex-1 min-w-0">
-                                        <Text variant="sans" size="xs" weight="font-bold" className="text-text break-words whitespace-pre-wrap">
+                                        <Text variant="sans" size="xs" weight="font-bold" className="text-text break-words whitespace-pre-wrap line-clamp-4">
                                           {imp.suggestion}
                                         </Text>
                                         {imp.element === "Manual Audit Required" && (

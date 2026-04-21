@@ -117,7 +117,10 @@ export function useUXAuditor() {
 
         try {
           // A simple way to get a snapshot (mshots API from WP is free and fast for public URLs)
-          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=${vp.width}&h=${vp.height}`;
+          // Reduce the dimensions by 50% to save base64 character count
+          const scaledW = Math.floor(vp.width * 0.5);
+          const scaledH = Math.floor(vp.height * 0.5);
+          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=${scaledW}&h=${scaledH}`;
           const res = await fetch(snapshotUrl);
           if (res.ok) {
             const blob = await res.blob();
