@@ -4,19 +4,11 @@ import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
 
 export default function Toolbox() {
-  const { filteredCategories } = useToolbox();
-  const allItems = filteredCategories.flatMap(cat => cat.items);
-  const [search, setSearch] = useState('');
+  const { filteredCategories, searchTerm, setSearchTerm } = useToolbox();
 
-  const filteredItems = allItems.filter(item => {
-    const term = search.toLowerCase();
-    return (
-      item.title?.toLowerCase().includes(term) ||
-      item.tags?.some((t: string) => t.toLowerCase().includes(term)) ||
-      item.category?.toLowerCase().includes(term) ||
-      item.excerpt?.toLowerCase().includes(term)
-    );
-  });
+  const allFilteredItems = useMemo(() =>
+    filteredCategories.flatMap(cat => cat.items),
+  [filteredCategories]);
 
   return (
     <Box as="section" paddingY={8}>
@@ -40,8 +32,8 @@ export default function Toolbox() {
             type="text"
             placeholder="Search gear (e.g. earplugs, shoes)..."
             className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-xl focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
           />
           <svg
             className="absolute left-3 top-3.5 h-5 w-5 text-text-dim"
@@ -61,7 +53,7 @@ export default function Toolbox() {
 
       {/* Grid: Mobile-first stacking */}
       <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={{ base: 6, md: 8 }}>
-        {filteredItems.map((item) => (
+        {allFilteredItems.map((item) => (
           <GearCard
             key={item.slug}
             {...item}
@@ -70,7 +62,7 @@ export default function Toolbox() {
         ))}
       </Grid>
 
-      {filteredItems.length === 0 && (
+      {allFilteredItems.length === 0 && (
         <Box paddingY={20} className="text-center">
           <Text color="dim">No gear found matching your search.</Text>
         </Box>

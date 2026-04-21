@@ -19,13 +19,12 @@ export function GearCard({
   updatedDate
 }: GearCardProps) {
   return (
-    <Box
-      as={NavLink}
+    <NavLink
       to={`${basePath}/${slug}`}
       className="group flex flex-col bg-surface rounded-2xl border border-line shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
     >
       {/* Image Wrapper */}
-      <Box className="aspect-square md:aspect-video relative overflow-hidden bg-bg">
+      <div className="aspect-square md:aspect-video relative overflow-hidden bg-bg">
         {image ? (
           <img
             src={image}
@@ -33,69 +32,64 @@ export function GearCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <Box className="w-full h-full flex items-center justify-center opacity-10 bg-accent-navy">
-             <Text variant="display" size="3xl">TD</Text>
-          </Box>
+          <div className="w-full h-full flex items-center justify-center opacity-10 bg-accent-navy text-accent-navy">
+             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl">TD</span>
+          </div>
         )}
-        <Box className="absolute top-4 left-4">
-          <Box className="bg-surface/90 backdrop-blur px-3 py-1 rounded-full border border-line">
+        <div className="absolute top-4 left-4">
+          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-full border border-line">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase">
               {category}
             </Text>
-          </Box>
-        </Box>
-      </Box>
+          </div>
+        </div>
+      </div>
 
       {/* Content Area */}
-      <Stack gap={4} className="p-6" flex={1} justify="between">
-        <Stack gap={2}>
+      <div className="flex flex-col gap-4 p-6 flex-1">
+        <div className="flex flex-col gap-2">
           {rating && (
-            <Box display="flex" align="center" gap={1} marginBottom={1}>
-              <Text className="text-yellow-400">
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-yellow-400">
                 {'★'.repeat(Math.floor(rating))}
                 {rating % 1 !== 0 ? '½' : ''}
-              </Text>
-              <Text size="micro" color="dim" weight="font-medium">
+              </span>
+              <span className="text-[8px] text-text-dim font-medium">
                 ({rating}/5)
-              </Text>
-            </Box>
+              </span>
+            </div>
           )}
 
-          <Text
-            variant="display"
-            size="xl"
-            weight="font-black"
-            className="text-accent-navy leading-tight group-hover:text-accent transition-colors"
-          >
+          <h3 className="font-display font-bold uppercase tracking-tight leading-tight text-xl text-accent-navy group-hover:text-accent transition-colors">
             {title}
-          </Text>
+          </h3>
 
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2">
+          <p className="font-sans leading-relaxed text-text-body text-sm line-clamp-2">
              {excerpt}
-          </Text>
+          </p>
 
           {(verdict || priceCategory || updatedDate) && (
-            <Box display="flex" wrap align="center" gap={3} marginTop={2}>
+            <div className="flex flex-wrap items-center gap-3 mt-2">
                {verdict && (
-                 <Box className="bg-accent/10 px-2 py-0.5 rounded-md">
-                   <Text size="micro" className="text-accent font-bold uppercase">{verdict}</Text>
-                 </Box>
+                 <div className="bg-accent/10 px-2 py-0.5 rounded-md">
+                   <span className="text-[8px] font-mono uppercase text-accent font-bold">{verdict}</span>
+                 </div>
                )}
                {priceCategory && (
-                 <Text size="micro" color="dim" weight="font-bold">{priceCategory}</Text>
+                 <span className="text-[8px] font-mono uppercase text-text-dim font-bold">{priceCategory}</span>
                )}
                {updatedDate && (
-                 <Text size="micro" color="dim">Updated {updatedDate}</Text>
+                 <span className="text-[8px] font-mono uppercase text-text-dim">Updated {updatedDate}</span>
                )}
-            </Box>
+            </div>
           )}
-        </Stack>
+        </div>
 
-        <Box display="flex" align="center" justify="between" paddingTop={4} className="border-t border-line/50 mt-auto">
-          <Text variant="mono" size="xs" className="text-accent font-bold uppercase tracking-wider">
+        <div className="flex items-center justify-between pt-4 border-t border-line/50 mt-auto">
+          <span className="font-mono tracking-wider uppercase text-accent font-bold text-xs">
             Read Review
-          </Text>
-          <Box className="group-hover:translate-x-1 transition-transform duration-300">
+          </span>
+          <div className="group-hover:translate-x-1 transition-transform duration-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -110,9 +104,9 @@ export function GearCard({
             >
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
-          </Box>
-        </Box>
-      </Stack>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </NavLink>
   );
 }
