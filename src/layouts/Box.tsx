@@ -103,7 +103,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
 
     // Remove props that shouldn't be spread to DOM elements
     const {
-      // already destructured above
+      // Capture remaining props for DOM after filtering known layout/logic props
       ...domProps
     } = props;
 
