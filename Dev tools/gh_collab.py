@@ -44,12 +44,11 @@ class GitHubAPI:
         }
 
     def _error(self, msg):
-        # Using a friendly but clear error voice for our AI & human collaborators
-        print(f"\033[91m[Oops!] {msg}\033[0m", file=sys.stderr)
+        print(f"Error: {msg}", file=sys.stderr)
         sys.exit(1)
 
     def _info(self, msg):
-        print(f"\033[94m[Heads up] {msg}\033[0m")
+        print(f"Info: {msg}")
 
     def _request(self, method, path, data=None):
         url = f"https://api.github.com/repos/{self.repo}/{path.lstrip('/')}"
@@ -216,7 +215,23 @@ class ReviewPlanner:
         """
         with open(output_path, 'w') as f:
             f.write(doc)
-        print(f"✅ Created a shiny new PR Collab Plan here: {output_path}")
+        print(f"Created PR Collab Plan at: {output_path}")
+
+    @classmethod
+    def _format_comment_list(cls, comments, is_general=False, start_idx=1):
+        lines = []
+        n = start_idx
+        for c in comments:
+            author = c.get('user', {}).get('login', 'unknown')
+            preview = cls.truncate(c.get('body', ''), 60)
+            if is_general:
+                lines.append(f'- [ ] {n}. [general] @{author} — "{preview}"')
+            else:
+                path, line = c.get('path', 'unknown'), c.get('line') or c.get('original_line', '?')
+                lines.append(f'- [ ] {n}. [`{path}:{line}`] @{author} — "{preview}"')
+            c['_global_idx'] = n
+            n += 1
+        return lines, n
 
     @classmethod
     def _build_tracker(cls, inline_top_level, general_comments):
@@ -224,54 +239,53 @@ class ReviewPlanner:
         n = 1
         if inline_top_level:
             lines.append('**Inline Review Comments:**')
-            for c in inline_top_level:
-                path, line = c.get('path', 'unknown'), c.get('line') or c.get('original_line', '?')
-                author = c.get('user', {}).get('login', 'unknown')
-                preview = cls.truncate(c.get('body', ''), 60)
-                lines.append(f'- [ ] {n}. [`{path}:{line}`] @{author} — "{preview}"')
-                c['_global_idx'] = n
-                n += 1
+            inline_lines, n = cls._format_comment_list(inline_top_level, is_general=False, start_idx=n)
+            lines.extend(inline_lines)
 
         if general_comments:
-            lines.append('\n**General PR Comments:**')
-            for c in general_comments:
-                author = c.get('user', {}).get('login', 'unknown')
-                preview = cls.truncate(c.get('body', ''), 60)
-                lines.append(f'- [ ] {n}. [general] @{author} — "{preview}"')
-                c['_global_idx'] = n
-                n += 1
+            if lines: lines.append('')
+            lines.append('**General PR Comments:**')
+            general_lines, n = cls._format_comment_list(general_comments, is_general=True, start_idx=n)
+            lines.extend(general_lines)
 
         return '\n'.join(lines) if lines else '_No comments found._'
 
     @classmethod
-    def _build_inline_section(cls, inline_top_level, replies_by_parent):
-        if not inline_top_level: return '_No inline review comments._\n'
-        parts = []
-        for c in inline_top_level:
-            idx = c['_global_idx']
-            path, line = c.get('path', 'unknown'), c.get('line') or c.get('original_line', '?')
-            author, date = c.get('user', {}).get('login', 'unknown'), cls.format_date(c.get('created_at', ''))
-            body, diff_hunk = c.get('body', '').strip(), c.get('diff_hunk', '').strip()
+    def _format_comment_detail(cls, c, replies_by_parent=None, is_general=False):
+        idx = c.get('_global_idx', '?')
+        author, date = c.get('user', {}).get('login', 'unknown'), cls.format_date(c.get('created_at', ''))
+        body = c.get('body', '').strip()
 
+        if is_general:
+            block = [f'### {idx}. @{author} — {date}\n']
+        else:
+            path, line = c.get('path', 'unknown'), c.get('line') or c.get('original_line', '?')
             block = [f'### {idx}. `{path}` line {line} — @{author}', f'**Date:** {date}\n']
+            diff_hunk = c.get('diff_hunk', '').strip()
             if diff_hunk:
                 hunk_lines = diff_hunk.split('\n')
                 if len(hunk_lines) > 12: hunk_lines = ['...'] + hunk_lines[-12:]
                 block.extend(['**Context:**', '```diff'] + hunk_lines + ['```\n'])
 
-            block.append(cls.quote_body(body) + '\n')
+        block.append(cls.quote_body(body) + '\n')
 
-            for reply in replies_by_parent.get(c['id'], []):
+        if replies_by_parent and c.get('id') in replies_by_parent:
+            for reply in replies_by_parent[c['id']]:
                 r_author, r_date = reply.get('user', {}).get('login', 'unknown'), cls.format_date(reply.get('created_at', ''))
                 block.extend([f'**Reply — @{r_author} ({r_date}):**', cls.quote_body(reply.get('body', '').strip()), '\n'])
 
-            block.extend([
-                '**Response Strategy:**',
-                '<!-- Action: modify-code | add-comment | new-github-issue | disagree | acknowledged | question -->',
-                '<!-- Rationale: [Briefly explain why, applying the best practices above] -->\n',
-                '---'
-            ])
-            parts.append('\n'.join(block))
+        block.extend([
+            '**Response Strategy:**',
+            '<!-- Action: modify-code | add-comment | new-github-issue | disagree | acknowledged | question -->',
+            '<!-- Rationale: [Briefly explain why, applying the best practices above] -->\n',
+            '---'
+        ])
+        return '\n'.join(block)
+
+    @classmethod
+    def _build_inline_section(cls, inline_top_level, replies_by_parent):
+        if not inline_top_level: return '_No inline review comments._\n'
+        parts = [cls._format_comment_detail(c, replies_by_parent=replies_by_parent, is_general=False) for c in inline_top_level]
         return '\n\n'.join(parts)
 
     @classmethod
@@ -288,19 +302,7 @@ class ReviewPlanner:
     @classmethod
     def _build_general_section(cls, general_comments):
         if not general_comments: return '_No general PR comments._\n'
-        parts = []
-        for c in general_comments:
-            idx = c['_global_idx']
-            author, date = c.get('user', {}).get('login', 'unknown'), cls.format_date(c.get('created_at', ''))
-            block = [
-                f'### {idx}. @{author} — {date}\n',
-                cls.quote_body(c.get('body', '').strip()), '\n',
-                '**Response Strategy:**',
-                '<!-- Action: modify-code | add-comment | new-github-issue | disagree | acknowledged | question -->',
-                '<!-- Rationale: [Briefly explain why, applying the best practices above] -->\n',
-                '---'
-            ]
-            parts.append('\n'.join(block))
+        parts = [cls._format_comment_detail(c, is_general=True) for c in general_comments]
         return '\n\n'.join(parts)
 
 # ==========================================
