@@ -1,6 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import dancerHero from '@/assets/dancer_hero.webp';
-import roboticistHero from '@/assets/roboticist_hero.webp';
 
 export default function PathSelector() {
   return (
@@ -8,10 +6,7 @@ export default function PathSelector() {
       {/* --- DANCER PATH --- */}
       <div className="lg:col-span-7 relative group overflow-hidden cursor-pointer border-r border-line/20">
         {/* Background: Grayscale by default, colored on hover */}
-        <div
-          className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-105 group-hover:scale-100 opacity-60 group-hover:opacity-100"
-          style={{ backgroundImage: `url(${dancerHero})` }}
-        ></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-neutral-800/40 to-black group-hover:from-accent/30 group-hover:to-black transition-all duration-700 ease-in-out opacity-60 group-hover:opacity-100"></div>
 
         {/* Scanline: Hidden by default, visible and scanning on hover */}
         <div className="absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] opacity-0 group-hover:opacity-100 animate-scanline z-10 pointer-events-none transition-opacity duration-500"></div>
@@ -39,10 +34,7 @@ export default function PathSelector() {
       {/* --- ROBOTICIST PATH --- */}
       <div className="lg:col-span-5 relative group overflow-hidden cursor-pointer">
         {/* Background: Grayscale by default, colored on hover */}
-        <div
-          className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-105 group-hover:scale-100 opacity-60 group-hover:opacity-100"
-          style={{ backgroundImage: `url(${roboticistHero})` }}
-        ></div>
+        <div className="absolute inset-0 bg-gradient-to-bl from-neutral-800/40 to-black group-hover:from-accent/30 group-hover:to-black transition-all duration-700 ease-in-out opacity-60 group-hover:opacity-100"></div>
 
         {/* Scanline: Hidden by default, visible and scanning on hover */}
         <div className="absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] opacity-0 group-hover:opacity-100 animate-scanline z-10 pointer-events-none transition-opacity duration-500 delay-100"></div>
