@@ -1,6 +1,6 @@
-import { motion } from 'motion/react';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 import ProfileSidebar from './ProfileSidebar';
 import BioContent from './BioContent';
@@ -18,23 +18,13 @@ export default function ArielProfile() {
         />
 
         <Grid cols={{ base: 1, lg: "1fr 2fr" }} gap={{ base: 8, lg: 20 }}>
-          <Box
-            as={motion.div}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} // ease-out-expo
-          >
+          <Reveal direction="right">
             <ProfileSidebar data={bio} />
-          </Box>
+          </Reveal>
 
-          <Box
-            as={motion.div}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }} // ease-out-expo
-          >
+          <Reveal direction="up" delay={0.1}>
             <BioContent data={bio} />
-          </Box>
+          </Reveal>
         </Grid>
       </Stack>
     </Box>

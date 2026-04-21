@@ -11,6 +11,7 @@ export const variants = {
     default: "bg-surface text-text-main",
     muted: "bg-line/50 text-text-dim",
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
+    alt: "bg-surface-alt text-text-main",
     card: "bg-card-bg border-line",
     contrast: "bg-text-main text-bg",
   },
