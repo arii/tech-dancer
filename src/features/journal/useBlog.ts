@@ -14,24 +14,20 @@ export function useBlog() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    // Simulate a brief loading state to show the skeleton and avoid jump
-    const timer = setTimeout(() => {
-      try {
-        const data = getPosts();
-        if (!data) throw new Error('FAILED_TO_FETCH_JOURNAL_DATA');
-        setPosts(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setIsLoading(false);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
+    try {
+      const data = getPosts();
+      if (!data) throw new Error('FAILED_TO_FETCH_JOURNAL_DATA');
+      setPosts(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    } finally {
+      // Small tick to ensure UI doesn't flicker too fast if data is local
+      // but removed the 500ms artificial delay
+      setIsLoading(false);
+    }
   }, []);
 
   const setActiveCategory = (category: string) => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 300);
     if (category === 'All') {
       searchParams.delete('category');
     } else {

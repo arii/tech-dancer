@@ -10,9 +10,11 @@ export default function ResearchDetail() {
   const navigate = useNavigate();
   const { getTool } = useResearch();
   
-  const tool = id ? getTool(id) : null;
+  // We check for existence here to handle 404 state,
+  // but sub-components will independently fetch data for modularity.
+  const toolExists = id ? !!getTool(id) : false;
 
-  if (!tool) {
+  if (!toolExists) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
@@ -45,7 +47,7 @@ export default function ResearchDetail() {
 
         <Box border surface="default" padding={{ base: 8, md: 12 }}>
           <Stack gap={12}>
-            {tool.id === 'blog-drafter' ? (
+            {id === 'blog-drafter' ? (
               <BlogDrafter />
             ) : (
               <ToolView />

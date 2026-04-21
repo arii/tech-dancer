@@ -10,18 +10,15 @@ export function useResources() {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    const timer = setTimeout(() => {
-      try {
-        const data = getResources();
-        if (!data) throw new Error('FAILED_TO_LOAD_RESOURCES');
-        setResources(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown resource error');
-      } finally {
-        setIsLoading(false);
-      }
-    }, 600);
-    return () => clearTimeout(timer);
+    try {
+      const data = getResources();
+      if (!data) throw new Error('FAILED_TO_LOAD_RESOURCES');
+      setResources(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown resource error');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   const handleSelect = (resource: Resource) => setSelectedResource(resource);
