@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { ReactNode } from 'react';
+import { animation } from '@/styles/design-tokens';
 
 interface RevealProps {
   children: ReactNode;
@@ -14,7 +15,7 @@ export function Reveal({
   direction = 'up',
   delay = 0,
   duration = 0.8,
-  distance = 20
+  distance = animation.revealDistance
 }: RevealProps) {
   const variants = {
     hidden: {
@@ -37,7 +38,7 @@ export function Reveal({
       transition={{
         duration,
         delay,
-        ease: [0.16, 1, 0.3, 1], // ease-out-expo
+        ease: animation.ease,
       }}
     >
       {children}

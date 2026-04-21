@@ -33,6 +33,8 @@ export const animation = {
   fast: "duration-150",
   normal: "duration-300",
   smooth: "ease-[cubic-bezier(0.16,1,0.3,1)]", // ease-out-expo
+  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+  revealDistance: 20,
 };
 
 /**
