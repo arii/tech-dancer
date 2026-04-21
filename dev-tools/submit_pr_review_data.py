@@ -151,6 +151,11 @@ def main():
     payload_path = os.path.join(os.path.dirname(os.path.abspath(doc_path)), "review_payload.json")
 
     with open(payload_path, "w") as f:
+        payload = {
+            "event": "COMMENT",
+            "body": overall_body,
+            "comments": inline_comments
+        }
         json.dump(payload, f, indent=2)
     print(f"✅ Payload written: {payload_path}")
 

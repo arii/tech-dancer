@@ -63,7 +63,8 @@ def main():
     changed_files = pr_resp.get('changed_files', 0)
 
     file_list_lines = []
-    for f in files_resp:
+    for f in (files_resp if isinstance(files_resp, list) else []):
+        if not isinstance(f, dict): continue
         pr_url = f"https://github.com/{repo}/pull/{pr_num}"
         file_list_lines.append(
             f"- `[{f['status'][0].upper()}]` [{f['filename']}]({pr_url}/files) `+{f['additions']}/-{f['deletions']}`"
@@ -93,7 +94,8 @@ def main():
     file_template, after = rest.split(end_marker, 1)
 
     per_file_rendered = []
-    for f in files_resp:
+    for f in (files_resp if isinstance(files_resp, list) else []):
+        if not isinstance(f, dict): continue
         patch = f.get('patch', '_Binary file or no textual diff available._')
         block = file_template
         block = block.replace("{{FILENAME}}", f['filename'])
