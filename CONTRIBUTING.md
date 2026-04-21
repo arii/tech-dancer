@@ -20,13 +20,13 @@ All content lives under `content/` in the repo root.
 
 ## Routing and SEO Standards
 
-The project uses `BrowserRouter` for clean URLs. To support this on GitHub Pages, the following must be maintained:
+The project uses `HashRouter` for robust Single Page Application (SPA) routing on GitHub Pages without server-side redirection.
 
-1. **BrowserRouter Requirement**: Use `BrowserRouter` in `src/main.tsx`. Do NOT revert to `HashRouter`.
-2. **404 Redirect Hack**: `public/404.html` and `public/.nojekyll` must exist in the `public/` directory. The `404.html` file handles redirects to the main entry point while preserving the requested path.
-3. **Sitemap and Robots.txt**: A sitemap is automatically generated during the build process to help search engines discover pages directly. `public/robots.txt` must point to the `sitemap.xml`.
+1. **HashRouter Requirement**: Use `HashRouter` in `src/main.tsx`. This avoids the need for a `404.html` redirect hack.
+2. **Mandatory Assets**: `public/.nojekyll` must exist in the `public/` directory to ensure GitHub Pages serves assets correctly.
+3. **Automated SEO**: A sitemap is automatically generated during the build process based on content in `content/`. Configuration lives in `vite.config.ts`.
 
-CI will fail if `404.html` or `.nojekyll` are missing.
+CI will fail if `.nojekyll` is missing.
 
 ## Submitting Content via GitHub Issue
 

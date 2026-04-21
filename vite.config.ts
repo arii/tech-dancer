@@ -1,4 +1,4 @@
-import { defineConfig, PluginOption } from 'vite';
+import { defineConfig, loadEnv, PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
@@ -8,6 +8,7 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 
 export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
   const analyze = process.env.ANALYZE === 'true';
 
@@ -36,12 +37,10 @@ export default defineConfig(({ mode }) => {
   };
 
   const staticRoutes = ['/gear', '/research', '/blog', '/resources', '/about', '/contact'];
-  // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
-    // 2. Base Path logic
-    base: isProd ? '/tech-dancer/' : '/',
+    // 2. Base Path logic from env
+    base: env.VITE_BASE_PATH || '/',
 
     plugins: [
       react(),
@@ -58,11 +57,11 @@ export default defineConfig(({ mode }) => {
       }),
 
       isProd && Sitemap({
-        hostname: 'https://arii.github.io',
-        basePath: '/tech-dancer',
+        hostname: env.VITE_SITE_URL || 'https://arii.github.io',
+        basePath: (env.VITE_BASE_PATH || '/tech-dancer').replace(/\/$/, ''),
         outDir: 'dist',
         exclude: ['/404'],
-        generateRobotsTxt: false,
+        generateRobotsTxt: false, // Managed via public/robots.txt
         dynamicRoutes: [...staticRoutes, ...getDynamicRoutes()],
       }),
 
