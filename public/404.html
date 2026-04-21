@@ -4,15 +4,56 @@
     <meta charset="utf-8">
     <title>Tech-Dancer // Redirecting...</title>
     <script type="text/javascript">
-      const l = window.location;
-      const pathSegmentsToKeep = l.pathname.toLowerCase().startsWith('/tech-dancer') ? 1 : 0;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.split('/').slice(1 + pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      // SPA redirect for GitHub Pages. Works for both the main deployment
+      // (/tech-dancer/) and branch preview deployments
+      // (/tech-dancer/<branch-type>/<branch-name>/).
+      //
+      // GitHub Pages only serves one 404.html (from the repo root), so this
+      // script must handle redirects for all deployment depths. It walks up the
+      // path hierarchy using HEAD requests to find the deepest index.html that
+      // exists, then redirects to that index with the remaining path encoded as
+      // a query string (picked up by the redirect script in index.html).
+      (function () {
+        var l = window.location;
+        var pathParts = l.pathname.split('/').filter(function (p) { return p !== ''; });
+        // e.g. ['tech-dancer', 'fix', 'branch-name', 'blog']
+
+        function redirect(baseDepth) {
+          var basePath = '/' + pathParts.slice(0, baseDepth).join('/') + '/';
+          var routePath = pathParts.slice(baseDepth).join('/').replace(/&/g, '~and~');
+          l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            basePath + '?/' + routePath +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+          );
+        }
+
+        // Fire HEAD requests for every candidate depth in parallel, then pick
+        // the deepest index.html that returns HTTP 200. A branch preview at
+        // depth 3 wins over the main site at depth 1.
+        var checks = pathParts.map(function (_, i) {
+          var depth = i + 1;
+          return fetch(
+            '/' + pathParts.slice(0, depth).join('/') + '/index.html',
+            { method: 'HEAD', cache: 'no-store' }
+          )
+            .then(function (r) { return r.ok ? depth : 0; })
+            .catch(function () { return 0; });
+        });
+
+        Promise.all(checks).then(function (depths) {
+          var best = Math.max.apply(null, depths);
+          if (best > 0) {
+            redirect(best);
+          } else {
+            // All probes failed (network error or no index.html found).
+            // Fall back to the repo root so the user sees something useful.
+            console.error('[404] Could not locate an index.html for', l.pathname, '– falling back to depth 1');
+            redirect(1);
+          }
+        });
+      })();
     </script>
   </head>
   <body>
