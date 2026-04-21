@@ -81,7 +81,7 @@ interface ContactFormProps {
 
 function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
   return (
-    <Box as="section" minHeight="[calc(100vh-64px)]">
+    <Box as="section" minHeight="[calc(100vh-64px)]" paddingBottom={{ base: 64, md: 12 }}>
       <Stack gap={12}>
         <PageHeader 
           label="CONTACT"
@@ -89,7 +89,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
           description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
         />
 
-        <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={{ base: 40, md: 20 }} overflow="hidden" radius="lg">
+        <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={{ base: 40, md: 0 }} overflow="hidden" radius="lg">
         <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
           <Stack gap={12}>
             <Stack gap={6}>
@@ -138,7 +138,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 aria-invalid={!!errors.name}
                 aria-describedby={errors.name ? "name-error" : undefined}
                 className={cn(
-                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10",
+                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20",
                   errors.name ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.name}
@@ -159,7 +159,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? "email-error" : undefined}
                 className={cn(
-                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10",
+                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20",
                   errors.email ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.email}
@@ -171,7 +171,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
               <Box as="select" 
                 id="contact-subject"
                 name="subject"
-                className="w-full bg-bg border border-line px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10"
+                className="w-full bg-bg border border-line px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20"
                 value={formData.subject}
                 onChange={onChange}
               >
@@ -195,7 +195,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                 aria-invalid={!!errors.message}
                 aria-describedby={errors.message ? "message-error" : undefined}
                 className={cn(
-                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-4 focus:ring-accent-brand/10 resize-none",
+                  "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 resize-none",
                   errors.message ? 'border-accent-brand' : 'border-line'
                 )}
                 value={formData.message}
