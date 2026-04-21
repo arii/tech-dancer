@@ -1,0 +1,34 @@
+name: Cleanup Deleted Branch Previews
+
+on:
+  delete:
+
+concurrency:
+  group: "gh-pages-publish"
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    if: github.event.ref_type == 'branch' && (startsWith(github.event.ref, 'feature/') || startsWith(github.event.ref, 'feat/') || startsWith(github.event.ref, 'fix/') || startsWith(github.event.ref, 'ux/'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Remove branch folder
+        run: |
+          if [ -d "${{ github.event.ref }}" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            git rm -r "${{ github.event.ref }}"
+            git commit -m "chore: cleanup preview site for deleted branch ${{ github.event.ref }}"
+            git pull --rebase origin gh-pages
+            git push origin gh-pages
+          else
+            echo "Directory ${{ github.event.ref }} not found. Nothing to clean up."
+          fi

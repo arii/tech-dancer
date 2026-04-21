@@ -4,21 +4,27 @@ on:
   push:
     branches:
       - main
+      - 'feature/*'
+      - 'feat/*'
+      - 'fix/*'
+      - 'ux/*'
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+  pull-requests: write
+  issues: write
 
 concurrency:
-  group: "pages"
+  group: "gh-pages-publish"
   cancel-in-progress: false
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Branch
         uses: actions/checkout@v4
 
       - name: Setup pnpm
@@ -27,29 +33,56 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: pnpm install
 
-      - name: Build the app
-        run: pnpm run build
-        env:
-          NODE_ENV: production
+      - name: Build Site
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            export VITE_BASE_PATH=/tech-dancer/
+          else
+            export VITE_BASE_PATH=/tech-dancer/${{ github.ref_name }}/
+          fi
+          pnpm run build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ./dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: ${{ github.ref_name == 'main' && '.' || github.ref_name }}
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Post Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+
+            if (branchName === 'main') return;
+
+            const { data: pullRequests } = await github.rest.pulls.list({
+              owner,
+              repo,
+              head: `${owner}:${branchName}`,
+              state: 'open'
+            });
+
+            for (const pr of pullRequests) {
+              const baseUrl = `https://${owner}.github.io/${repo}/`;
+              const previewUrl = `${baseUrl}${branchName}/`;
+
+              await github.rest.issues.createComment({
+                issue_number: pr.number,
+                owner: owner,
+                repo: repo,
+                body: `🚀 **Deployment Complete!**\n\n- **Main Site:** ${baseUrl}\n- **Preview URL:** ${previewUrl}`
+              });
+            }
