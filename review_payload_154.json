@@ -1,0 +1,10 @@
+{
+  "body": "## ANTI-AI-SLOP\nMonolithic scope creep and massive PR found (+540 additions over 14 files).\n\n## FINDINGS\nThis PR bundles four completely unrelated architectural and component changes: Dashboard lazy loading, Blog/Resources error state boundaries, Contact console refactoring, and Research routing tweaks. This violates our strict project scoping rules. Please decouple this PR into 4 standalone, distinct pull requests.\n\n## FINAL RECOMMENDATION\nNot Approved",
+  "comments": [
+    {
+      "path": "src/features/dashboard/Dashboard.tsx",
+      "line": 13,
+      "body": "The React.lazy and Suspense boundaries for dashboard components are excellent performance optimizations, but they must be isolated into their own dedicated PR."
+    }
+  ]
+}

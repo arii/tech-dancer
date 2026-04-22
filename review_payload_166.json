@@ -1,0 +1,20 @@
+{
+  "body": "## ANTI-AI-SLOP\nExtensive raw Tailwind classes found.\n\n## FINDINGS\n`UXAuditor.tsx` still contains numerous raw Tailwind classes (`text-sm`, `w-64`, `bg-slate-900`, `shadow-[...]`, etc.), violating the project's strict design token guidelines and primitive-based layout requirements. The PR also bundles unrelated changes like the massive deletion in `plan.md`.\n\n## FINAL RECOMMENDATION\nNot Approved",
+  "comments": [
+    {
+      "path": "src/pages/UXAuditor.tsx",
+      "line": 58,
+      "body": "Violates Rule #1 (Token compliance): `className=\"px-4 py-2 rounded-lg bg-bg border-none focus:ring-2 focus:ring-accent outline-none w-64 text-sm font-mono text-text\"` - avoid raw padding, flex/grid utility layout, and arbitrary text sizing unless mapped directly through primitives or `tokens.css`."
+    },
+    {
+      "path": "src/pages/UXAuditor.tsx",
+      "line": 138,
+      "body": "Violates Rule #1 (Token compliance): `className=\"flex items-center gap-2 px-6 py-2 rounded-xl font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-lg text-sm transition-all disabled:opacity-50\"` - do not use hardcoded colors (`bg-slate-900`) and arbitrary shadow definitions."
+    },
+    {
+      "path": "src/pages/UXAuditor.tsx",
+      "line": 203,
+      "body": "Violates Rule #1 (No arbitrary Tailwind): `<div className={\\`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]' : 'bg-amber-500'}\\`} />` - arbitrary values like `shadow-[0_0_8px_rgba(...)]` and hardcoded `bg-red-500` are banned."
+    }
+  ]
+}

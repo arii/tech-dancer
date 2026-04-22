@@ -25,3 +25,9 @@ venv/
 etl/data/*.parquet
 !etl/data/wcs_prelims.parquet
 package-lock.json
+
+# PR review working files (always written to /tmp, never the repo)
+pr-review-*.md
+review_payload.json
+
+#skipping this for now so files are available to the agent plan-pr-review-*.md
