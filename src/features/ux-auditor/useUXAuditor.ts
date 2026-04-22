@@ -44,7 +44,8 @@ export function useUXAuditor() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeReport, setActiveReport] = useState<UXReport | null>(null);
   const [url, setUrl] = useState('https://arii.github.io/tech-dancer/');
-  const [isExporting, setIsExporting] = useState(false);
+  const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
+  const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 
   // Firebase Init
   useEffect(() => {
@@ -244,8 +245,9 @@ export function useUXAuditor() {
     return md;
   };
 
-  const exportToGithub = () => {
+  const exportToGithub = async () => {
     if (!activeReport) return;
+    setIsExportingToGithub(true);
     const body = encodeURIComponent(getMarkdown());
     const title = encodeURIComponent(`UX Audit Findings: ${activeReport.url}`);
 
@@ -261,6 +263,7 @@ export function useUXAuditor() {
     } catch (e) {}
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
+    setTimeout(() => setIsExportingToGithub(false), 1000);
   };
 
   const copyMarkdown = () => {
@@ -271,8 +274,8 @@ export function useUXAuditor() {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    setIsExporting(true);
-    setTimeout(() => setIsExporting(false), 2000);
+    setIsCopiedMarkdown(true);
+    setTimeout(() => setIsCopiedMarkdown(false), 2000);
   };
 
   return {
@@ -283,7 +286,8 @@ export function useUXAuditor() {
     setActiveReport,
     url,
     setUrl,
-    isExporting,
+    isCopiedMarkdown,
+    isExportingToGithub,
     runUXAudit,
     exportToGithub,
     copyMarkdown,

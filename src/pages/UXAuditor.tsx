@@ -18,29 +18,37 @@ const viewportIcons = {
 
 function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
+  const [isCopying, setIsCopying] = useState(false);
 
   const handleCopy = async () => {
+    setIsCopying(true);
     await navigator.clipboard.writeText(suggestion);
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setCopied(true);
-      });
-    } else {
-      setCopied(true);
-    }
+
+    // Artificial slight delay for visual feedback if copy is instant
     setTimeout(() => {
+      setIsCopying(false);
       if (document.startViewTransition) {
-        document.startViewTransition(() => setCopied(false));
+        document.startViewTransition(() => {
+          setCopied(true);
+        });
       } else {
-        setCopied(false);
+        setCopied(true);
       }
-    }, 2000);
+      setTimeout(() => {
+        if (document.startViewTransition) {
+          document.startViewTransition(() => setCopied(false));
+        } else {
+          setCopied(false);
+        }
+      }, 2000);
+    }, 400);
   };
 
   return (
     <Box
       as="button"
       onClick={handleCopy}
+      disabled={isCopying}
       marginTop={2}
       display="flex"
       align="center"
@@ -52,8 +60,14 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       border={true}
       className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
-      {copied ? <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" /> : <Copy className="w-3 h-3" />}
-      {copied ? <span className="text-[var(--color-success,#16a34a)]">Copied!</span> : <span>Copy Prompt</span>}
+      {isCopying ? (
+        <RefreshCw className="w-3 h-3 animate-spin" />
+      ) : copied ? (
+        <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" />
+      ) : (
+        <Copy className="w-3 h-3" />
+      )}
+      <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
     </Box>
   );
 }
@@ -66,7 +80,8 @@ export default function UXAuditor() {
     setActiveReport,
     url,
     setUrl,
-    isExporting,
+    isCopiedMarkdown,
+    isExportingToGithub,
     runUXAudit,
     exportToGithub,
     copyMarkdown,
@@ -188,21 +203,21 @@ export default function UXAuditor() {
                     className="font-bold hover:text-text transition-all" surface="muted" color="dim"
                     style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
-                    {isExporting ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {isExporting ? 'Copied' : 'Copy MD'}
+                    {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
                   </Box>
                   <Box
                     as="button"
                     onClick={exportToGithub}
-                    disabled={activeReport.status !== 'completed'}
+                    disabled={activeReport.status !== 'completed' || isExportingToGithub}
                     display="flex"
                     align="center"
                     gap={2}
                     className="font-bold bg-text-main text-bg hover:bg-accent hover:text-white shadow-md transition-all disabled:opacity-50"
                     style={{ padding: '0.5rem 1.5rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
-                    <Github className="w-4 h-4" />
-                    <span className="whitespace-nowrap">Export to GitHub Issue</span>
+                    {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
+                    <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
                   </Box>
                 </Box>
               </Box>
@@ -267,8 +282,8 @@ export default function UXAuditor() {
                                         <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
                                         {imp.element}
                                       </Text>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity: ${imp.severity}/10`}>
-                                        LVL {imp.severity}
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10`}>
+                                        SEV {imp.severity}
                                       </Text>
                                     </Box>
                                     <Text variant="sans" size="xs" color="dim" marginBottom={3}>
