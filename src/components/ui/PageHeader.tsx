@@ -25,14 +25,7 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        <Text
-          variant="mono"
-          size="xs"
-          color="dim"
-          weight="font-semibold"
-          uppercase
-          tracking="wide-editorial"
-        >
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest">
           {label}
         </Text>
         <Text
@@ -66,7 +59,7 @@ export function SectionHeader({ label, title, children }: { label: string; title
   return (
     <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
       <Stack gap={1}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="wide-editorial">{label}</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
       </Stack>
       {children}

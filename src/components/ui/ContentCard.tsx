@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { readingTime } from '@/lib/content';
+import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface ContentCardProps {
   slug: string;
@@ -11,11 +13,12 @@ interface ContentCardProps {
   image?: string;
   basePath: string;
   aspect?: "square" | "video";
+  content?: string;
 }
 
 export function ContentCardSkeleton() {
   return (
-    <Box className="flex flex-col h-full bg-surface border border-line shadow-sm rounded-lg overflow-hidden animate-pulse">
+    <Box className="flex flex-col h-full bg-surface border border-line rounded-none overflow-hidden animate-pulse">
       <Box className="relative aspect-video bg-line/50" />
       <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
         <Stack gap={4}>
@@ -32,7 +35,9 @@ export function ContentCardSkeleton() {
   );
 }
 
-export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect = "video" }: ContentCardProps) {
+export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content, aspect = "video" }: ContentCardProps) {
+  const rt = readingTime(content, excerpt);
+
   return (
     <Box 
       as={NavLink}
@@ -40,7 +45,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
-      <Box className="relative aspect-video overflow-hidden bg-bg">
+      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg">
         {image ? (
           <img 
             src={image} 
@@ -48,12 +53,10 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <Box className="w-full h-full flex items-center justify-center opacity-10 bg-accent-navy">
-             <Text variant="display" size="3xl">TD</Text>
-          </Box>
+          <CategoryPlaceholder category={category} />
         )}
         <Box className="absolute top-4 left-4">
-          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-[2px]">
+          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
               {category}
             </Text>
@@ -62,15 +65,22 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       </Box>
 
       {/* Content Area */}
-      <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
+      <Stack gap={5} padding={6} flex={1} justify="between">
         <Stack gap={4}>
-          <Text variant="mono" size="xs" color="dim" uppercase tracking="wide-editorial">
-            {date}
-          </Text>
+          <Box display="flex" align="center" gap={3}>
+            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest">
+              {date}
+            </Text>
+            <Box className="w-1 h-1 rounded-full bg-line" />
+            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest flex items-center gap-1">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              {rt} min read
+            </Text>
+          </Box>
           <Text 
-            variant="display" 
+            variant="body"
             size="xl" 
-            weight="font-black" 
+            weight="font-bold"
             className="text-accent-navy leading-snug group-hover:text-accent transition-colors"
           >
             {title}
@@ -80,8 +90,8 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           </Text>
         </Stack>
 
-        <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-slate-100 mt-auto">
-          <Text variant="mono" size="xs" tracking="wide-editorial">
+        <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-line mt-auto">
+          <Text variant="mono" size="xs" className="text-accent font-semibold tracking-widest underline underline-offset-4 decoration-line hover:decoration-accent">
             Read More
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />

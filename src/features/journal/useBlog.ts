@@ -1,32 +1,17 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
-import { getPosts, Post } from '@/lib/content';
+import { getPosts } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
+import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useBlog() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const posts = useMemo(() => getPosts(), []);
   const [activeCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
-  const [isLoading, setIsLoading] = useState(true);
+  const [viewParam, setViewParam] = useSearchParam('view', 'card');
 
-  useEffect(() => {
-    setIsLoading(true);
-    // Simulate a brief loading state to show the skeleton and avoid jump
-    const timer = setTimeout(() => {
-      setPosts(getPosts());
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Effect to handle loading state during filtering
-  useEffect(() => {
-    if (posts.length > 0) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [activeCategory, searchTerm, posts.length]);
+  const view = viewParam as ViewMode;
+  const setView = (v: ViewMode) => setViewParam(v);
 
   const categories = useMemo(() => {
     const cats = posts.map(p => p.category);
@@ -35,13 +20,13 @@ export function useBlog() {
 
   const filteredPosts = useMemo(() => {
     let result = posts;
-    
+
     if (activeCategory !== 'All') {
       result = result.filter(p => p.category === activeCategory);
     }
 
     if (searchTerm) {
-      result = result.filter(p => 
+      result = result.filter(p =>
         safeSearch(p.title, searchTerm) ||
         safeSearch(p.category, searchTerm) ||
         safeSearch(p.excerpt, searchTerm)
@@ -55,8 +40,9 @@ export function useBlog() {
     posts: filteredPosts,
     categories,
     activeCategory,
+    view,
+    setView,
     searchTerm,
-    setSearchTerm,
-    isLoading
+    setSearchTerm
   };
 }
