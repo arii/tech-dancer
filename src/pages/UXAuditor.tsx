@@ -28,13 +28,13 @@ export default function UXAuditor() {
   } = useUXAuditor();
 
   return (
-    <Stack gap={8} className="w-full">
+    <Stack gap={8} width="full">
       <Stack
         direction={{ base: 'col', md: 'row' }}
         align={{ base: 'start', md: 'center' }}
         justify="between"
         gap={6}
-        className="border-b border-line pb-6"
+        border="b" paddingBottom={6}
       >
         <Box>
           <PageHeader
@@ -48,7 +48,7 @@ export default function UXAuditor() {
           direction="row"
           align="center"
           gap={3}
-          className="bg-surface p-2 rounded-xl shadow-sm border border-line"
+          surface="default" padding={2} radius="xl" shadow="sm" border={true}
         >
           <Box
             as="input"
@@ -77,11 +77,11 @@ export default function UXAuditor() {
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} className="lg:col-span-1">
-          <Text variant="sans" size="xs" weight="font-bold" className="uppercase tracking-widest text-text-dim px-1">
+        <Stack gap={4} span={{ lg: 1 }}>
+          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Box className="bg-surface rounded-2xl shadow-sm border border-line overflow-hidden divide-y divide-line">
+          <Box surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
               <Box padding={10} className="text-center text-text-dim italic text-sm">
                 No snapshots recorded
@@ -102,11 +102,11 @@ export default function UXAuditor() {
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
-                <Box flex={1} className="min-w-0">
-                  <Text variant="sans" size="sm" weight="font-bold" className="text-text truncate">
+                <Box flex={1} minWidth="0">
+                  <Text variant="sans" size="sm" weight="font-bold" className="truncate">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" className="text-text-dim uppercase">
+                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -117,17 +117,17 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} className="lg:col-span-3">
+        <Stack gap={6} span={{ lg: 3 }}>
           {activeReport ? (
             <>
               <Box
-                className="bg-surface p-6 rounded-2xl shadow-sm border border-line flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} className="flex-col md:flex-row"
               >
                 <Box>
-                  <Text variant="sans" size="xs" weight="font-bold" className="text-accent mb-1 uppercase tracking-tighter">
+                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black" className="text-text">
+                  <Text variant="sans" size="xl" weight="font-black">
                     {activeReport.url}
                   </Text>
                 </Box>
@@ -138,7 +138,7 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold bg-bg text-text-dim hover:text-text transition-all"
+                    className="font-bold hover:text-text transition-all" surface="muted" color="dim"
                     style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
                     {isExporting ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -166,23 +166,23 @@ export default function UXAuditor() {
                   const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
 
                   return (
-                    <Box key={vp.name} className="bg-surface rounded-2xl shadow-sm border border-line overflow-hidden">
-                      <Box className="p-4 border-b border-line flex items-center justify-between bg-bg">
+                    <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
+                      <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
-                          <Box className="p-2 bg-surface rounded-lg shadow-sm text-accent">
+                          <Box padding={2} surface="default" radius="lg" shadow="sm" className="text-accent">
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
-                          <Text variant="sans" size="base" weight="font-bold" className="text-text">
+                          <Text variant="sans" size="base" weight="font-bold">
                             {vp.name} Analysis
                           </Text>
                         </Box>
-                        <Text variant="mono" size="xs" weight="font-bold" className="text-text-dim uppercase tracking-widest">
+                        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
                           {vp.width}w × {vp.height}h
                         </Text>
                       </Box>
 
                       <Grid cols={{ base: 1, md: 2 }}>
-                        <Box className="p-8 bg-bg flex items-center justify-center border-r border-line min-h-[400px]">
+                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border="r" minHeight={400}>
                           {imgUrl ? (
                             <img
                               src={imgUrl}
@@ -192,9 +192,9 @@ export default function UXAuditor() {
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Box className="text-center text-text-dim">
+                            <Box className="text-center" color="dim">
                               <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-20" />
-                              <Text variant="sans" size="xs" weight="font-bold" className="uppercase tracking-wider">
+                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
                             </Box>
@@ -204,33 +204,33 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8}>
                           {data ? (
                             <>
-                              <Box className="bg-bg border border-line p-5 rounded-2xl">
-                                <Text variant="sans" size="xs" weight="font-black" className="text-accent uppercase mb-2 tracking-widest">
+                              <Box surface="muted" border={true} padding={5} radius="2xl">
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase marginBottom={2} tracking="widest">
                                   Analysis Summary
                                 </Text>
-                                <Text variant="sans" size="sm" weight="font-medium" className="text-text leading-relaxed">
+                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed">
                                   "{data.summary}"
                                 </Text>
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} className="p-4 rounded-xl border border-line hover:border-accent/30 transition-all bg-surface shadow-sm">
-                                    <Box display="flex" justify="between" align="start" className="mb-2">
-                                      <Text variant="sans" size="sm" weight="font-black" className="text-text flex items-center gap-2">
+                                  <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent/30 transition-all">
+                                    <Box display="flex" justify="between" align="start" marginBottom={2}>
+                                      <Text variant="sans" size="sm" weight="font-black" className="flex items-center gap-2">
                                         <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
                                         {imp.element}
                                       </Text>
-                                      <Text variant="mono" size="xs" weight="font-black" className="px-2 py-0.5 rounded-full bg-bg text-text-dim uppercase">
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase>
                                         LVL {imp.severity}
                                       </Text>
                                     </Box>
-                                    <Text variant="sans" size="xs" className="text-text-dim mb-3">
+                                    <Text variant="sans" size="xs" color="dim" marginBottom={3}>
                                       {imp.issue}
                                     </Text>
-                                    <Box className="bg-bg p-3 rounded-lg border border-line flex items-start gap-2">
-                                      <Text variant="sans" size="xs" weight="font-bold" className="text-accent mt-0.5">FIX</Text>
-                                      <Box className="flex-1 min-w-0">
-                                        <Text variant="sans" size="xs" weight="font-bold" className="text-text break-words whitespace-pre-wrap line-clamp-4">
+                                    <Box surface="muted" padding={3} radius="lg" border={true} display="flex" align="start" gap={2}>
+                                      <Text variant="sans" size="xs" weight="font-bold" color="accent" marginTop={0.5}>FIX</Text>
+                                      <Box flex={1} minWidth="0">
+                                        <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
                                           {imp.suggestion}
                                         </Text>
                                         {imp.element === "Manual Audit Required" && (
@@ -249,9 +249,9 @@ export default function UXAuditor() {
                               </Stack>
                             </>
                           ) : (
-                            <Box className="flex flex-col items-center justify-center py-20 text-text-dim">
+                            <Box display="flex" align="center" justify="center" paddingY={20} className="flex-col text-text-dim">
                               <RefreshCw className="animate-spin mb-3 w-6 h-6" />
-                              <Text variant="sans" size="xs" weight="font-bold" className="tracking-widest uppercase">
+                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
                                 Agent Processing...
                               </Text>
                             </Box>
@@ -264,14 +264,14 @@ export default function UXAuditor() {
               </Stack>
             </>
           ) : (
-            <Box className="h-full flex flex-col items-center justify-center bg-surface rounded-3xl border-2 border-dashed border-line p-20 text-center min-h-[500px]">
-              <Box className="bg-bg p-6 rounded-full mb-6 text-text-dim/50">
+            <Box height="full" display="flex" direction="col" align="center" justify="center" surface="default" radius="3xl" border={true} padding={20} minHeight={500} className="border-2 border-dashed text-center">
+              <Box surface="muted" padding={6} radius="full" marginBottom={6} className="text-text-dim/50">
                 <Camera className="w-16 h-16" />
               </Box>
-              <Text variant="sans" size="xl" weight="font-black" className="text-text mb-2">
+              <Text variant="sans" size="xl" weight="font-black" marginBottom={2}>
                 Ready to Audit
               </Text>
-              <Text variant="sans" size="sm" weight="font-medium" className="text-text-dim max-w-sm mx-auto">
+              <Text variant="sans" size="sm" weight="font-medium" color="dim" maxWidth="sm" marginX="auto">
                 Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop.
               </Text>
             </Box>
