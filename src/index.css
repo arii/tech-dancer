@@ -98,6 +98,12 @@
     max-width: 65ch;
     @apply text-text-body break-words;
   }
+
+  /* Global Focus Styles for Accessibility */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 }
 
 
