@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box } from '@/layouts/Primitives';
-import { useScrollContainer } from '@/context/ScrollContext';
 
-export function ScrollToTopButton() {
+interface ScrollToTopButtonProps {
+  scrollRef: React.RefObject<HTMLElement | null>;
+}
+
+export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const { scrollRef } = useScrollContainer();
 
   useEffect(() => {
     const container = scrollRef.current;
