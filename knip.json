@@ -1,6 +1,21 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "entry": ["src/main.tsx", "src/App.tsx"],
-  "project": ["src/**/*.{ts,tsx}"],
-  "ignore": ["**/*.d.ts"]
+  "entry": ["src/main.tsx", "src/App.tsx", "server.ts"],
+  "project": ["src/**/*.{ts,tsx}", "server.ts"],
+  "ignore": ["**/*.d.ts"],
+  "ignoreBinaries": ["vite"],
+  "ignoreExportsUsedInFile": true,
+  "ignoreDependencies": [
+    "express",
+    "dotenv",
+    "@google/genai",
+    "recharts",
+    "shadcn",
+    "tw-animate-css",
+    "@base-ui/react",
+    "@fontsource-variable/geist",
+    "buffer",
+    "@types/express",
+    "wait-on"
+  ]
 }
