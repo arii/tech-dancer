@@ -9,7 +9,8 @@ const PATH_DATA = [
   {
     id: 'dancer' as PathID,
     title: 'ARE YOU A DANCER?',
-    span: "1 lg:col-span-7" as const,
+    span: { base: 1 } as const,
+    className: "lg:col-span-7",
     lgBorder: { r: true } as const,
     bgGradient: 'bg-gradient-to-br',
     titleSize: { base: '3xl', lg: '5xl' } as const,
@@ -21,7 +22,8 @@ const PATH_DATA = [
   {
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
-    span: "1 lg:col-span-5" as const,
+    span: { base: 1 } as const,
+    className: "lg:col-span-5",
     bgGradient: 'bg-gradient-to-bl',
     titleSize: { base: '2xl', lg: '4xl' } as const,
     scanlineDelay: 'delay-100',
@@ -65,7 +67,7 @@ export default function PathSelector() {
             position="relative"
             overflow="hidden"
             cursor="pointer"
-            className="group touch-manipulation"
+            className={cn("group touch-manipulation", path.className)}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={handleVibrate}
