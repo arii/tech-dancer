@@ -16,7 +16,7 @@ function getContentSlugs(dir: string, prefix: string): string[] {
 }
 
 export default defineConfig(({mode}) => {
-  const _env = loadEnv(mode, process.cwd(), '');
+  const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
 
   // Dynamic base path for GitHub Pages vs Vercel vs Local Override
