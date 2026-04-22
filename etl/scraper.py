@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 from urllib.parse import urljoin
+from tqdm import tqdm
+from etl.processor import process_for_ledger
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -107,6 +109,43 @@ class ScoringDanceParser:
     def standardize_mark(mark_text):
         return POINTS_MAPPING.get(mark_text.strip(), 0.0)
 
+    def _extract_single_dancer_id(self, link):
+        d_id = link.get('data-wsdc')
+        if not d_id and link.get('href'):
+            href = link.get('href')
+            path_parts = href.split('/')
+            if path_parts and path_parts[-1].isdigit():
+                d_id = path_parts[-1]
+            else:
+                match = re.search(r'/(\d+)$', href)
+                if match:
+                    d_id = match.group(1)
+
+        if not d_id:
+            d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
+        return str(d_id).strip()
+
+    def _extract_competitor_data(self, row):
+        competitor_elem = row.find('td', class_='competitor-name')
+        if not competitor_elem:
+            return None, None
+
+        links = competitor_elem.find_all('a')
+        names = [a.get_text(strip=True) for a in links]
+        competitor_name = " & ".join(names) if names else competitor_elem.get_text(strip=True)
+
+        dancer_ids = [self._extract_single_dancer_id(link) for link in links]
+        dancer_id = " & ".join(dancer_ids) if dancer_ids else f"TEMP_{competitor_name.replace(' ', '_')}"
+
+        return competitor_name, dancer_id
+
+    def _extract_promoted_status(self, row):
+        promoted_elem = row.find('td', class_='promoted')
+        if promoted_elem:
+            promoted_text = promoted_elem.get_text(strip=True).lower()
+            return promoted_text in ['yes', 'y']
+        return False
+
     def parse_results(self, html_content, url):
         soup = BeautifulSoup(html_content, 'html.parser')
         results = []
@@ -144,17 +183,11 @@ class ScoringDanceParser:
                 else:
                     continue
 
-                name_links = row.find_all('a', attrs={'data-wsdc': True})
-                if name_links:
-                    name = " & ".join([a.get_text(strip=True) for a in name_links])
-                else:
-                    name_cell = row.find('td', class_='competitor-name')
-                    if name_cell:
-                        name = name_cell.get_text(strip=True)
-                    elif len(cells) > 1:
-                        name = cells[1].get_text(strip=True)
-                    else:
-                        name = ""
+                competitor_name, dancer_id = self._extract_competitor_data(row)
+                if not competitor_name:
+                    continue
+
+                promoted = self._extract_promoted_status(row)
 
                 for j_mark in judge_marks:
                     judge_name = j_mark.get('TITLE') or j_mark.get('title')
@@ -163,8 +196,10 @@ class ScoringDanceParser:
 
                     mark_text = j_mark.get_text(strip=True)
                     results.append({
+                        'Dancer_ID': dancer_id,
                         'competitor_bib': bib,
-                        'competitor_name': name,
+                        'competitor_name': competitor_name,
+                        'Promoted': promoted,
                         'judge_name': judge_name,
                         'mark': mark_text,
                         'wsdc_points': self.standardize_mark(mark_text),
@@ -174,24 +209,6 @@ class ScoringDanceParser:
                     })
 
         return pd.DataFrame(results)
-
-class DataProcessor:
-    """Handles data transformation and aggregation."""
-    @staticmethod
-    def process_for_ledger(raw_df):
-        if raw_df.empty:
-            return pd.DataFrame()
-
-        processed_df = raw_df.groupby(['competitor_bib', 'competitor_name', 'result_id']).agg(
-            Registry_Points_Sum=('wsdc_points', 'sum')
-        ).reset_index()
-
-        processed_df['Dancer_ID'] = processed_df.apply(
-            lambda row: f"REF_ID: {row['competitor_bib']:03d}-{row['result_id']}", axis=1
-        )
-        processed_df = processed_df[['Dancer_ID', 'Registry_Points_Sum', 'competitor_name']]
-        processed_df.rename(columns={'competitor_name': 'Dancer_Name'}, inplace=True)
-        return processed_df
 
 class OutputManager:
     """Handles saving data to various formats."""
@@ -250,8 +267,16 @@ slug: "{slug}"
             f.write(md_content)
         logging.info(f"Saved markdown study: {filepath}")
 
+    def _validate_schema(self, df):
+        required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
+        missing_cols = [col for col in required_cols if col not in df.columns]
+        if missing_cols:
+            raise ValueError(f"DataFrame missing required columns: {missing_cols}")
+
     def update_ledger(self, new_data):
         if new_data.empty: return
+
+        self._validate_schema(new_data)
 
         if os.path.exists(self.ledger_path):
             existing_ledger = pd.read_parquet(self.ledger_path)
@@ -260,17 +285,16 @@ slug: "{slug}"
             combined = new_data
 
         # Single authoritative deduplication step
-        final_ledger = combined.drop_duplicates(subset=['Dancer_ID'], keep='last')
+        final_ledger = combined.drop_duplicates(subset=['Dancer_ID', 'result_id'], keep='last')
 
         final_ledger.to_parquet(self.ledger_path, index=False)
         logging.info(f"Updated ledger: {self.ledger_path}")
 
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
-    def __init__(self, crawler, parser, processor, output_manager):
+    def __init__(self, crawler, parser, output_manager):
         self.crawler = crawler
         self.parser = parser
-        self.processor = processor
         self.output_manager = output_manager
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
@@ -297,15 +321,20 @@ class ETLPipeline:
             raw_df = self.parser.parse_results(content, url)
             self.output_manager.save_markdown(raw_df, url)
 
-            ledger_df = self.processor.process_for_ledger(raw_df)
+            ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
 
     async def run_historical(self, years=5):
+        logging.info(f"Starting historical scrape for past {years} years")
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent="Mozilla/5.0...")
 
-            for event_url in self.crawler.get_recent_events(years=years):
+            # Collect events first so tqdm knows the total count
+            events = list(self.crawler.get_recent_events(years=years))
+            print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
+
+            for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):
                 logging.info(f"Processing event: {event_url}")
                 try:
                     result_links = self.crawler.get_result_links(event_url)
@@ -316,7 +345,7 @@ class ETLPipeline:
                             raw_df = self.parser.parse_results(content, res_url)
                             self.output_manager.save_markdown(raw_df, res_url)
 
-                            ledger_df = self.processor.process_for_ledger(raw_df)
+                            ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
                             await asyncio.sleep(1)
                         except Exception as e:
@@ -336,7 +365,6 @@ async def main():
     pipeline = ETLPipeline(
         ScoringDanceCrawler(),
         ScoringDanceParser(),
-        DataProcessor(),
         OutputManager(args.ledger, args.studies)
     )
 
