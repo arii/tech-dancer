@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface ContentCardProps {
@@ -32,7 +31,7 @@ export function ContentCardSkeleton() {
   );
 }
 
-export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect = "video" }: ContentCardProps) {
+export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect: _aspect = "video" }: ContentCardProps) {
   return (
     <Box 
       as={NavLink}

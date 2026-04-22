@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Zap, Shield } from 'lucide-react';
 
 interface HeroPathCardProps {
   label: string;
@@ -13,7 +12,7 @@ interface HeroPathCardProps {
   icon: any;
 }
 
-export function HeroPathCard({ label, title, paths, tag, image, span = 1, icon: Icon }: HeroPathCardProps) {
+export function HeroPathCard({ label: _label, title, paths, tag, image: _image, span = 1, icon: Icon }: HeroPathCardProps) {
   return (
     <Box 
       as={motion.div}
