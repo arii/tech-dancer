@@ -11,7 +11,6 @@ export function useEmailCaptureLogic() {
   const [email, setEmail] = useState('');
 
   const hideBar = useCallback(() => {
-    sessionStorage.setItem('newsletter-dismissed', '1');
     setShowEmailBar(false);
     sessionStorage.setItem(STORAGE_KEY, 'true');
   }, []);
