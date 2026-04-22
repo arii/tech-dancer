@@ -14,11 +14,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const { pathname, key } = useLocation();
   const navType = useNavigationType();
 
-  // Handle Scroll Restoration (History Only)
+  // Unified Scroll Management: Reset on navigation, Restore on history
   useLayoutEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
+    // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
       if (container) {
         sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
@@ -28,12 +29,23 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     window.addEventListener('beforeunload', handleSaveScroll);
 
     if (navType === 'POP') {
+      // 1. History Navigation: Restore position
       const savedPosition = sessionStorage.getItem(`scroll-${key}`);
       if (savedPosition) {
         requestAnimationFrame(() => {
           if (container) container.scrollTop = parseInt(savedPosition, 10);
         });
       }
+    } else {
+      // 2. New Navigation (PUSH/REPLACE): Reset to top
+      // We use requestAnimationFrame to ensure the scroll happens after the content renders
+      requestAnimationFrame(() => {
+        if (container) {
+          container.scrollTop = 0;
+        }
+      });
+      // Also ensure the window itself is at the top
+      window.scrollTo(0, 0);
     }
 
     return () => {
