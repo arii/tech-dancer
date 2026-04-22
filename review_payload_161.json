@@ -1,4 +1,0 @@
-{
-  "body": "## ANTI-AI-SLOP\nArbitrary Tailwind values found bypassing the very tokens it introduces.\n\n## FINDINGS\nThis PR establishes great design baselines and an auditor tool! Ironically, however, it contains numerous arbitrary Tailwind violations (`text-[8px]`, hardcoded spacing, etc.) within the auditor script/UI itself. Please refactor these usages into strict layout primitives and token values per Rule #1 so we can merge this in as the ultimate design arbiter without corrupting our own repo.\n\n## FINAL RECOMMENDATION\nNot Approved",
-  "comments": []
-}
