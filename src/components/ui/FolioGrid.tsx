@@ -1,16 +1,36 @@
-import { useState } from 'react';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
+import { ContentItem } from '@/lib/content';
 
-export default function FolioGrid({ items, categoryTitle, basePath, label, description, children, loading }: { items: any[], categoryTitle: string, basePath: string, label?: string, description?: string, children?: React.ReactNode, loading?: boolean }) {
-  const [search, setSearch] = useState('');
+interface FolioGridProps {
+  items: ContentItem[];
+  categoryTitle: string;
+  basePath: string;
+  label?: string;
+  description?: string;
+  children?: React.ReactNode;
+  loading?: boolean;
+}
+
+export default function FolioGrid({
+  items,
+  categoryTitle,
+  basePath,
+  label,
+  description,
+  children,
+  loading
+}: FolioGridProps) {
+  const [search, setSearch] = useSearchParam('search');
 
   const filteredItems = items.filter(item => {
+    const tags = 'tags' in item ? item.tags : [];
     return (
       safeSearch(item.title, search) ||
-      item.tags?.some((t: string) => safeSearch(t, search)) ||
+      tags?.some((t: string) => safeSearch(t, search)) ||
       safeSearch(item.category, search) ||
       safeSearch(item.excerpt, search)
     );
@@ -39,6 +59,7 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
             variant="mono"
             size="sm"
             className="focus:border-accent-brand outline-none focus:ring-0"
+            value={search}
             onChange={(e: any) => setSearch(e.target.value)}
           />
         </Box>

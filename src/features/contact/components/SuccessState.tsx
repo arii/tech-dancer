@@ -2,11 +2,11 @@ import { motion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
-interface ContactSuccessProps {
+interface SuccessStateProps {
   onReset: () => void;
 }
 
-export function ContactSuccess({ onReset }: ContactSuccessProps) {
+export function SuccessState({ onReset }: SuccessStateProps) {
   return (
     <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" textAlign="center">
       <Stack gap={12} align="center">

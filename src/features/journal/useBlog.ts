@@ -1,13 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { getPosts, Post } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useBlog() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get('category') || 'All';
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [activeCategory] = useSearchParam('category', 'All');
+  const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,20 +20,18 @@ export function useBlog() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
-      // Small tick to ensure UI doesn't flicker too fast if data is local
-      // but removed the 500ms artificial delay
       setIsLoading(false);
     }
   }, []);
 
-  const setActiveCategory = (category: string) => {
-    if (category === 'All') {
-      searchParams.delete('category');
-    } else {
-      searchParams.set('category', category);
+  // Effect to handle loading state during filtering
+  useEffect(() => {
+    if (posts.length > 0) {
+      setIsLoading(true);
+      const timer = setTimeout(() => setIsLoading(false), 300);
+      return () => clearTimeout(timer);
     }
-    setSearchParams(searchParams);
-  };
+  }, [activeCategory, searchTerm, posts.length]);
 
   const categories = useMemo(() => {
     const cats = posts.map(p => p.category);
@@ -63,7 +60,6 @@ export function useBlog() {
     posts: filteredPosts,
     categories,
     activeCategory,
-    setActiveCategory,
     searchTerm,
     setSearchTerm,
     isLoading,

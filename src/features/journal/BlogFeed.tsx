@@ -5,7 +5,7 @@ import { FilterBar } from '@/components/ui/FilterBar';
 import { AlertCircle } from 'lucide-react';
 
 export default function BlogFeed() {
-  const { posts, categories, activeCategory, setActiveCategory, isLoading, error } = useBlog();
+  const { posts, categories, isLoading, error } = useBlog();
 
   if (error) {
     return (
@@ -33,9 +33,7 @@ export default function BlogFeed() {
       >
         <Box marginTop={8}>
           <FilterBar
-            activeCategory={activeCategory}
             categories={categories}
-            onSelect={setActiveCategory}
           />
         </Box>
       </FolioGrid>
