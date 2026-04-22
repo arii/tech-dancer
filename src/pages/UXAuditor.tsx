@@ -44,28 +44,35 @@ export default function UXAuditor() {
           />
         </Box>
 
-        <Box
-          display="flex"
+        <Stack
+          direction="row"
           align="center"
           gap={3}
           className="bg-surface p-2 rounded-xl shadow-sm border border-line"
         >
-          <input
+          <Box
+            as="input"
             type="text"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            className="px-4 py-2 rounded-lg bg-bg border-none focus:ring-2 focus:ring-accent outline-none w-64 text-sm font-mono text-text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text"
+            style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
             placeholder="https://..."
           />
-          <button
+          <Box
+            as="button"
             onClick={runUXAudit}
             disabled={isAnalyzing}
-            className="bg-accent hover:opacity-90 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-all disabled:opacity-50"
+            display="flex"
+            align="center"
+            gap={2}
+            className="bg-accent hover:opacity-90 text-white font-bold transition-all disabled:opacity-50"
+            style={{ padding: '0.5rem 1.5rem', borderRadius: '0.5rem' }}
           >
             {isAnalyzing ? <RefreshCw className="animate-spin w-4 h-4" /> : <Camera className="w-4 h-4" />}
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
-          </button>
-        </Box>
+          </Box>
+        </Stack>
       </Stack>
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
@@ -91,7 +98,7 @@ export default function UXAuditor() {
                 <Box
                   padding={2}
                   radius="full"
-                  className={report.status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600 animate-pulse'}
+                  className={report.status === 'completed' ? 'bg-[var(--color-success-dim,#dcfce7)] text-[var(--color-success,#16a34a)]' : 'bg-[var(--color-warning-dim,#fef3c7)] text-[var(--color-warning,#d97706)] animate-pulse'}
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
@@ -125,21 +132,31 @@ export default function UXAuditor() {
                   </Text>
                 </Box>
                 <Box display="flex" gap={2}>
-                  <button
+                  <Box
+                    as="button"
                     onClick={copyMarkdown}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold bg-bg text-text-dim hover:text-text transition-all text-sm"
+                    display="flex"
+                    align="center"
+                    gap={2}
+                    className="font-bold bg-bg text-text-dim hover:text-text transition-all"
+                    style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
                     {isExporting ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {isExporting ? 'Copied' : 'Copy MD'}
-                  </button>
-                  <button
+                  </Box>
+                  <Box
+                    as="button"
                     onClick={exportToGithub}
                     disabled={activeReport.status !== 'completed'}
-                    className="flex items-center gap-2 px-6 py-2 rounded-xl font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-lg text-sm transition-all disabled:opacity-50"
+                    display="flex"
+                    align="center"
+                    gap={2}
+                    className="font-bold bg-text text-surface hover:opacity-90 shadow-md transition-all disabled:opacity-50"
+                    style={{ padding: '0.5rem 1.5rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
                     <Github className="w-4 h-4" />
                     Export to GitHub Issue
-                  </button>
+                  </Box>
                 </Box>
               </Box>
 
@@ -200,7 +217,7 @@ export default function UXAuditor() {
                                   <Box key={idx} className="p-4 rounded-xl border border-line hover:border-accent/30 transition-all bg-surface shadow-sm">
                                     <Box display="flex" justify="between" align="start" className="mb-2">
                                       <Text variant="sans" size="sm" weight="font-black" className="text-text flex items-center gap-2">
-                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]' : 'bg-amber-500'}`} />
+                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
                                         {imp.element}
                                       </Text>
                                       <Text variant="mono" size="xs" weight="font-black" className="px-2 py-0.5 rounded-full bg-bg text-text-dim uppercase">
