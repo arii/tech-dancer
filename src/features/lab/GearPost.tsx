@@ -5,6 +5,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { ContentDetail } from '@/layouts/ContentDetail';
+import { SEO } from '@/components/SEO';
 
 export default function GearPost() {
   const { slug } = useParams();
@@ -17,6 +18,26 @@ export default function GearPost() {
       .filter((link): link is NonNullable<typeof link> => !!link),
     [resource]
   );
+
+  const structuredData = useMemo(() => {
+    if (!resource) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": resource.title,
+      "description": resource.excerpt,
+      "image": resource.image,
+      "review": {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": resource.rating || 5,
+          "bestRating": "5"
+        },
+        "author": { "@type": "Person", "name": "Ariel" }
+      }
+    };
+  }, [resource]);
 
   if (!resource) {
     return (
@@ -32,8 +53,20 @@ export default function GearPost() {
   }
 
   return (
-    <ContentDetail
-      post={resource}
+    <>
+      <SEO
+        title={resource.title}
+        description={resource.excerpt}
+        type="article"
+        image={resource.image}
+      />
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
+      <ContentDetail
+        post={resource}
       onBack={() => navigate('/gear')}
       backLabel="Back to Toolbox"
     >
@@ -63,5 +96,6 @@ export default function GearPost() {
         </Box>
       )}
     </ContentDetail>
+    </>
   );
 }

@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
+import { SEO } from '@/components/SEO';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -13,11 +14,15 @@ export default function Home() {
 
   return (
     <Box as="section">
+      <SEO
+        title="Home"
+        description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
+      />
       <Stack gap={24}>
         <Stack gap={12} paddingTop={12}>
           <Stack gap={4}>
             <Text 
-              as={motion.h1}
+              as={motion.div}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               variant="headline" 

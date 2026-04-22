@@ -3,11 +3,25 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getPostBySlug } from '@/lib/content';
 import { ContentDetail } from '@/layouts/ContentDetail';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { SEO } from '@/components/SEO';
 
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const post = useMemo(() => slug ? getPostBySlug(slug) : undefined, [slug]);
+
+  const structuredData = useMemo(() => {
+    if (!post) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "description": post.excerpt,
+      "author": { "@type": "Person", "name": post.author },
+      "datePublished": post.date,
+      "image": post.image
+    };
+  }, [post]);
 
   if (!post) {
     return (
@@ -23,10 +37,23 @@ export default function BlogPost() {
   }
 
   return (
-    <ContentDetail
-      post={post}
+    <>
+      <SEO
+        title={post.title}
+        description={post.excerpt}
+        type="article"
+        image={post.image}
+      />
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
+      <ContentDetail
+        post={post}
       onBack={() => navigate('/blog')}
       backLabel="Back to Folio"
     />
+    </>
   );
 }

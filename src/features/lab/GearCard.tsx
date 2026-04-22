@@ -87,7 +87,7 @@ export function GearCard({
 
         <div className="flex items-center justify-between pt-4 border-t border-line/50 mt-auto">
           <span className="font-mono tracking-wider uppercase text-accent font-bold text-xs">
-            Read Review
+            Read {title} Review
           </span>
           <div className="group-hover:translate-x-1 transition-transform duration-300">
             <svg
