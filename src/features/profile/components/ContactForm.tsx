@@ -1,5 +1,5 @@
 import type { ChangeEvent, FormEvent } from 'react';
-import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
+import { Send, MessageSquare, Sparkles, BarChart2, Loader2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { cn } from '@/lib/utils';
@@ -68,7 +68,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
           </Box>
 
           <Box surface="default" padding={{ base: 8, md: 12 }}>
-            <Box as="form" onSubmit={onSubmit} className="space-y-8">
+            <Stack as="form" onSubmit={onSubmit} gap={8}>
               <Stack gap={3}>
                 <Box display="flex" justify="between" align="center">
                   <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" uppercase tracking="widest">Your Name</Text>
@@ -172,7 +172,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
               >
                 {isSubmitting ? (
                   <Stack direction="row" align="center" gap={3}>
-                    <div className="w-4 h-4 border-2 border-bg-muted border-t-accent-brand animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     <Text variant="mono" color="dim" size="micro">Sending...</Text>
                   </Stack>
                 ) : (
@@ -182,7 +182,7 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                   </>
                 )}
               </Button>
-            </Box>
+            </Stack>
           </Box>
         </Grid>
       </Stack>

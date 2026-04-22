@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ChangeEvent } from 'react';
 import { Box, Grid, Text } from '@/layouts/Primitives';
 import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
@@ -39,7 +39,7 @@ export default function Toolbox() {
             surface="default"
             border
             className="rounded-xl focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
-            onChange={(e: any) => setSearchTerm(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
             value={searchTerm}
           />
           <Box
