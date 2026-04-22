@@ -4,9 +4,10 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
+import { ScrollToTop } from './components/ScrollToTop';
 import { motionTokens } from './styles/motion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
@@ -32,6 +33,8 @@ export function RootLayout() {
 
   return (
     <EmailCaptureProvider {...emailLogic}>
+      <ScrollRestoration />
+      <ScrollToTop />
       <MainLayout>
         <AnimatePresence mode="wait">
           <Box
