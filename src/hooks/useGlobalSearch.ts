@@ -1,11 +1,23 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
-  const [query, setQuery] = useState('q');
   const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('q') || '';
+
+  const setQuery = useCallback((newQuery: string) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      if (newQuery) {
+        next.set('q', newQuery);
+      } else {
+        next.delete('q');
+      }
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
   
   const isOpen = searchParams.get('search') === 'true';
 
