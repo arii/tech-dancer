@@ -49,7 +49,7 @@ export default function FolioGrid({
           <Box
             as="input"
             type="text"
-            placeholder="SEARCH_THE_ENGINE..."
+            placeholder="Search articles, guides, or gear..."
             width="full"
             surface="default"
             border

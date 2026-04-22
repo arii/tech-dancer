@@ -31,24 +31,24 @@ test.describe('Search and Filter URL Persistence', () => {
   test('Blog category filter should persist after reload', async ({ page }) => {
     await page.goto('./blog');
 
-    // Use "Tech Portfolio" category
-    const categoryButton = page.getByRole('button', { name: 'Tech Portfolio', exact: true });
+    // Use "Tech" category
+    const categoryButton = page.getByRole('button', { name: 'Tech', exact: true });
     await categoryButton.click();
 
-    // Check URL (allow for + or %20 for spaces)
-    await expect(page).toHaveURL(/category=Tech[+%20]Portfolio/);
+    // Check URL
+    await expect(page).toHaveURL(/category=Tech/);
 
     // Reload
     await page.reload();
 
     // Verify the button is still active (has the accent class)
-    await expect(page.getByRole('button', { name: 'Tech Portfolio', exact: true })).toHaveClass(/bg-accent/);
+    await expect(page.getByRole('button', { name: 'Tech', exact: true })).toHaveClass(/bg-accent/);
   });
 
   test('Blog search term should persist after reload', async ({ page }) => {
     await page.goto('./blog');
 
-    const searchInput = page.getByPlaceholder(/SEARCH_THE_ENGINE/i);
+    const searchInput = page.getByPlaceholder(/Search articles, guides, or gear/i);
     await searchInput.fill('west');
 
     // Check URL
@@ -57,7 +57,7 @@ test.describe('Search and Filter URL Persistence', () => {
     // Reload
     await page.reload();
 
-    await expect(page.getByPlaceholder(/SEARCH_THE_ENGINE/i)).toHaveValue('west');
+    await expect(page.getByPlaceholder(/Search articles, guides, or gear/i)).toHaveValue('west');
   });
 
   test('Gear search term should persist after reload', async ({ page }) => {
