@@ -20,6 +20,18 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
+  React.useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => {
+      if (document.startViewTransition) {
+        document.startViewTransition(() => setCopied(false));
+      } else {
+        setCopied(false);
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
   const handleCopy = async () => {
     setIsCopying(true);
     try {
@@ -35,13 +47,6 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       } else {
         setCopied(true);
       }
-      setTimeout(() => {
-        if (document.startViewTransition) {
-          document.startViewTransition(() => setCopied(false));
-        } else {
-          setCopied(false);
-        }
-      }, 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     } finally {

@@ -47,6 +47,19 @@ export function useUXAuditor() {
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 
+  // Transient state resets with cleanup
+  useEffect(() => {
+    if (!isCopiedMarkdown) return;
+    const timer = setTimeout(() => setIsCopiedMarkdown(false), 2000);
+    return () => clearTimeout(timer);
+  }, [isCopiedMarkdown]);
+
+  useEffect(() => {
+    if (!isExportingToGithub) return;
+    const timer = setTimeout(() => setIsExportingToGithub(false), 1000);
+    return () => clearTimeout(timer);
+  }, [isExportingToGithub]);
+
   // Firebase Init
   useEffect(() => {
     if (!firebaseConfig) return;
@@ -263,7 +276,6 @@ export function useUXAuditor() {
     } catch (e) {}
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
-    setTimeout(() => setIsExportingToGithub(false), 1000);
   };
 
   const copyMarkdown = async () => {
@@ -271,7 +283,6 @@ export function useUXAuditor() {
     try {
       await navigator.clipboard.writeText(md);
       setIsCopiedMarkdown(true);
-      setTimeout(() => setIsCopiedMarkdown(false), 2000);
     } catch (err) {
       console.error('Failed to copy markdown:', err);
     }
