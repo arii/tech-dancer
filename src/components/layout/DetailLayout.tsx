@@ -48,7 +48,7 @@ export function DetailLayout({
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">{backLabel}</Text>
+          <Text variant="mono" size="xs" weight="font-bold" uppercase={false}>{backLabel}</Text>
         </Box>
 
         <Stack gap={10}>
@@ -63,7 +63,7 @@ export function DetailLayout({
               <Text variant="mono" size="micro" color="dim">{date} • {rt} min read</Text>
             </Box>
 
-            <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">
+            <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none" uppercase={false}>
               {title}
             </Text>
 
@@ -89,7 +89,7 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 4 : 1 }} gap={12}>
+          <Grid cols={{ base: 1, lg: sidebar ? 4 : 1 }} gap={12} className={!sidebar ? "lg:grid-cols-1" : ""}>
             {/* Sidebar */}
             {sidebar && (
               <Box className="hidden lg:block">
@@ -100,9 +100,13 @@ export function DetailLayout({
             )}
 
             {/* Content */}
-            <Box className={sidebar ? "lg:col-span-3" : ""}>
+            <Box className={sidebar ? "lg:col-span-3" : "lg:col-span-1"}>
               {children}
-              <Box className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main" maxWidth="prose">
+              <Box
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main"
+                maxWidth="720px"
+                marginX="auto"
+              >
                 <MarkdownRenderer content={content} />
               </Box>
             </Box>

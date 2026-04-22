@@ -18,9 +18,9 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
   const headerExtras = (
     <ScoreGrid>
-      <ScoreItem label="Overall" value={post.rating || 'N/A'} icon={Star} color="text-yellow-500" />
-      <ScoreItem label="Durability" value={post.durability ? `${post.durability}/5` : '—'} />
-      <ScoreItem label="Value" value={post.value ? `${post.value}/5` : '—'} />
+      <ScoreItem label="Overall" value={post.rating !== undefined ? post.rating : 'N/A'} icon={Star} color="text-yellow-500" />
+      {post.durability !== undefined && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
+      {post.value !== undefined && <ScoreItem label="Value" value={`${post.value}/5`} />}
       <ScoreItem label="Price" value={post.priceCategory || '$$'} color="text-amber-600" />
       <Stack gap={1} align="center" className="hidden md:flex">
         <Text variant="mono" size="tiny" color="dim" uppercase>Updated</Text>
@@ -31,7 +31,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
   const sidebar = (
     <>
-      <SpecsTable specs={post.specs} />
+      {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>
@@ -51,7 +51,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
               border
               className="hover:border-accent group transition-all"
             >
-              <Text variant="mono" size="xs" weight="font-bold">{link.label}</Text>
+              <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
               <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
             </Box>
           ))}

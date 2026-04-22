@@ -28,13 +28,25 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       .slice(0, 2);
   }, [post.category, post.slug]);
 
-  const sidebar = <TOC headings={headings} />;
+  const sidebar = headings.length > 0 ? <TOC headings={headings} /> : undefined;
 
   const headerExtras = (
     <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
       <Box display="flex" align="center" gap={4}>
-        <Box className="w-10 h-10 rounded-none bg-accent-navy flex items-center justify-center text-white">
-          <Text variant="mono" size="xs" weight="font-bold">AA</Text>
+        <Box className="relative w-10 h-10 rounded-full bg-accent-navy flex items-center justify-center text-white overflow-hidden border border-line/20">
+          <Text variant="mono" size="xs" weight="font-bold">
+            {post.author ? post.author.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'AA'}
+          </Text>
+          {post.authorAvatar ? (
+            <img
+              src={post.authorAvatar}
+              alt={post.author}
+              className="absolute inset-0 w-full h-full object-cover bg-accent-navy"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          ) : null}
         </Box>
         <Stack gap={0}>
           <Text variant="mono" size="xs" weight="font-bold">{post.author || 'Ariel Anders, PhD'}</Text>

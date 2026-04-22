@@ -31,18 +31,18 @@ export function ScoreGrid({ children }: { children: React.ReactNode }) {
 }
 
 export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
+  if (!specs || Object.keys(specs).length === 0) return null;
+
   return (
     <Stack gap={4}>
       <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Technical Specs</Text>
       <Stack gap={3}>
-        {specs ? Object.entries(specs).map(([key, value]) => (
+        {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
             <Text variant="mono" size="tiny" color="dim" className="uppercase opacity-50">{key}</Text>
             <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
           </Stack>
-        )) : (
-          <Text variant="mono" size="xs" color="dim">No specs provided.</Text>
-        )}
+        ))}
       </Stack>
     </Stack>
   );

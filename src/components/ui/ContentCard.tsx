@@ -45,7 +45,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
-      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg">
+      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[180px]">
         {image ? (
           <img 
             src={image} 
@@ -53,7 +53,17 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <CategoryPlaceholder category={category} />
+          <Box className="w-full h-full flex flex-col">
+            <Box className="h-2 w-full" surface={
+              (category || '').toLowerCase().includes('tech') ? 'brand' :
+              (category || '').toLowerCase().includes('travel') || (category || '').toLowerCase().includes('wcs') ? 'accent' :
+              (category || '').toLowerCase().includes('gear') ? 'warning' :
+              (category || '').toLowerCase().includes('lifestyle') ? 'danger' : 'muted'
+            } />
+            <Box className="flex-1 flex items-center justify-center bg-muted/20">
+              <CategoryPlaceholder category={category} size="md" />
+            </Box>
+          </Box>
         )}
         <Box className="absolute top-4 left-4">
           <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
