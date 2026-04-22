@@ -19,29 +19,47 @@ const viewportIcons = {
 
 function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
+  const [isCopying, setIsCopying] = useState(false);
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(suggestion);
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setCopied(true);
-      });
-    } else {
-      setCopied(true);
-    }
-    setTimeout(() => {
+  React.useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => {
       if (document.startViewTransition) {
         document.startViewTransition(() => setCopied(false));
       } else {
         setCopied(false);
       }
     }, 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  const handleCopy = async () => {
+    setIsCopying(true);
+    try {
+      await navigator.clipboard.writeText(suggestion);
+
+      // Artificial slight delay for visual feedback if copy is instant
+      await new Promise(resolve => setTimeout(resolve, 400));
+
+      if (document.startViewTransition) {
+        document.startViewTransition(() => {
+          setCopied(true);
+        });
+      } else {
+        setCopied(true);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    } finally {
+      setIsCopying(false);
+    }
   };
 
   return (
     <Box
       as="button"
       onClick={handleCopy}
+      disabled={isCopying}
       marginTop={2}
       display="flex"
       align="center"
@@ -68,7 +86,8 @@ export default function UXAuditor() {
     setActiveReport,
     url,
     setUrl,
-    isExporting,
+    isCopiedMarkdown,
+    isExportingToGithub,
     runUXAudit,
     exportToGithub,
     copyMarkdown,
@@ -101,6 +120,7 @@ export default function UXAuditor() {
             as="input"
             type="text"
             value={url}
+            title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
             width={64}
             paddingX={4}
@@ -108,6 +128,7 @@ export default function UXAuditor() {
             radius="md"
             className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
             placeholder="https://..."
+            aria-label="URL to audit"
           />
           <Box
             as="button"
@@ -180,14 +201,14 @@ export default function UXAuditor() {
                 surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} direction={{ base: "col", md: "row" }}
                 marginBottom={2}
               >
-                <Box>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
+                <Stack gap={1} marginBottom={{ base: 4, md: 0 }} minWidth="0" flex={1}>
+                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black">
+                  <Text variant="sans" size="xl" weight="font-black" className="truncate block" title={activeReport.url}>
                     {activeReport.url}
                   </Text>
-                </Box>
+                </Stack>
                 <Box display="flex" gap={2}>
                   <Box
                     as="button"
@@ -203,13 +224,13 @@ export default function UXAuditor() {
                     cursor="pointer"
                     className="font-bold hover:text-text-main transition-all text-sm"
                   >
-                    {isExporting ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {isExporting ? 'Copied' : 'Copy MD'}
+                    {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
                   </Box>
                   <Box
                     as="button"
                     onClick={exportToGithub}
-                    disabled={activeReport.status !== 'completed'}
+                    disabled={activeReport.status !== 'completed' || isExportingToGithub}
                     display="flex"
                     align="center"
                     gap={2}
@@ -219,8 +240,8 @@ export default function UXAuditor() {
                     cursor="pointer"
                     className="font-bold bg-text-main text-surface hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
                   >
-                    <Github className="w-4 h-4" />
-                    Export to GitHub Issue
+                    {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
+                    <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
                   </Box>
                 </Box>
               </Box>
@@ -246,8 +267,8 @@ export default function UXAuditor() {
                         </Text>
                       </Box>
 
-                      <Grid cols={{ base: 1, md: 12 }}>
-                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border="r" minHeight={400} span={{ base: 1, md: 5 }}>
+                      <Stack direction={{ base: 'col', md: 'row' }} width="full">
+                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
                           {imgUrl ? (
                             <img
                               src={imgUrl}
@@ -268,14 +289,16 @@ export default function UXAuditor() {
                           )}
                         </Box>
 
-                        <Stack gap={6} padding={8} span={{ base: 1, md: 7 }}>
+                        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase marginBottom={2} tracking="widest">
-                                  Analysis Summary
-                                </Text>
-                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed">
+                                <Box marginBottom={3}>
+                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
+                                    Analysis Summary
+                                  </Text>
+                                </Box>
+                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -306,7 +329,7 @@ export default function UXAuditor() {
                                           <CopyPromptButton suggestion={imp.suggestion} />
                                         )}
                                       </Box>
-                                    </Box>
+                                    )}
                                   </Box>
                                 ))}
                               </Stack>
@@ -320,7 +343,7 @@ export default function UXAuditor() {
                             </Box>
                           )}
                         </Stack>
-                      </Grid>
+                      </Stack>
                     </Box>
                   );
                 })}
