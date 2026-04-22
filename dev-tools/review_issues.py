@@ -13,10 +13,35 @@ KEYWORDS = [
     'folio', 'stacks', 'data', 'lab', 'hub', 'ui', 'ux', 'components', 'design'
 ]
 
+import os
+import subprocess
+
+def get_github_token() -> Optional[str]:
+    """Attempts to retrieve a GitHub token from the environment or gh cli."""
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        return token
+    try:
+        # Try to get the token from the gh cli if it is installed
+        result = subprocess.run(
+            ["gh", "auth", "token"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+
 def fetch_issues(url: str) -> List[Dict[str, Any]]:
     """Fetches open issues from the specified GitHub repository URL."""
+    headers = {'User-Agent': 'Python urllib'}
+    token = get_github_token()
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
+
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Python urllib'})
+        req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req) as response:
             if response.status == 200:
                 data = response.read()
