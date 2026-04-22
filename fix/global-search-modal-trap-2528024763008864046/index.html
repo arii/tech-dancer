@@ -3,32 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources." />
     <title>Tech-Dancer // The Roboticist's Guide to WCS</title>
     <script type="text/javascript">
       (function(l) {
-        if (l.search) {
-          var q = {};
-          l.search.slice(1).split('&').forEach(function(v) {
-            var a = v.split('=');
-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-          });
-          if (q.p !== undefined) {
-            // Reconstruct the path by removing "index.html" if present at the end of pathname
-            var base = l.pathname.replace(/\/index\.html$/, '');
-            // Ensure no double slashes when joining base and q.p
-            // base is like /tech-dancer/fix/branch
-            // q.p is like /blog
-            var cleanBase = base.replace(/\/$/, '');
-            var cleanPath = q.p.startsWith('/') ? q.p : '/' + q.p;
-            var newUrl = cleanBase + cleanPath + (q.q ? ('?' + q.q) : '') + l.hash;
+        // If we were redirected from 404.html, the route is encoded in the query string starting with /
+        if (l.search[1] === '/') {
+          var decodedPath = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&')
+          }).join('?');
 
-            window.history.replaceState(null, null, newUrl);
-          }
+          // Calculate the actual base path (where index.html is located)
+          var base = l.pathname.replace(/\/index\.html$/, '');
+          window.__ROUTER_BASENAME__ = base;
+
+          // Restore the intended URL without a page reload
+          // We use base.replace(/\/$/, '') to avoid double slashes when joining with decodedPath
+          window.history.replaceState(null, null, base.replace(/\/$/, '') + decodedPath + l.hash);
         }
       }(window.location))
     </script>
-    <script type="module" crossorigin src="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/index-BeIXv7Fn.js"></script>
-    <link rel="stylesheet" crossorigin href="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/index-CrIi6s-9.css">
+    <script type="module" crossorigin src="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/index-yoK_75AS.js"></script>
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/vendor-react-qDFqdIvJ.js">
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/vendor-markdown-e9PAft-3.js">
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/vendor-recharts-JfjGcoGW.js">
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/vendor-motion-CQhsUiTf.js">
+    <link rel="stylesheet" crossorigin href="/tech-dancer/fix/global-search-modal-trap-2528024763008864046/assets/index-DKAELEE0.css">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
   </head>
   <body>
     <div id="root"></div>
