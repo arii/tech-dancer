@@ -102,7 +102,7 @@ jobs:
                 ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
                 ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`]
               ])
-              .addText(`**Last updated:** ${pstTime} PST`)
+              .addRaw(`**Last updated:** ${pstTime} PST`)
               .write();
 
             if (branchName === 'main') return;
