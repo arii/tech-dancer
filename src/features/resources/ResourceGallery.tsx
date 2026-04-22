@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, Activity, Shield } from 'lucide-react';
+import { BookOpen, ArrowRight, Database, Plane, Scissors, Calendar, ArrowLeft, Activity, Shield, Sparkles } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
@@ -108,7 +108,7 @@ function ResourceList({ resources, onSelect }: { resources: Resource[]; onSelect
       </Stack>
 
       <Grid cols={{ base: 1, md: 12 }} border className="bg-line">
-        {resources.map((resource, i) => {
+        {resources.length > 0 ? resources.map((resource, i) => {
           const Icon = getIcon(resource.category);
           const isWide = i % 2 === 0;
           return (
@@ -152,7 +152,17 @@ function ResourceList({ resources, onSelect }: { resources: Resource[]; onSelect
               </Stack>
             </Box>
           );
-        })}
+        }) : (
+          <Box span="full" paddingY={32} display="flex" align="center" justify="center" surface="default">
+             <Stack align="center" gap={6} className="text-center opacity-40">
+               <Sparkles className="w-12 h-12 text-accent-brand animate-pulse" />
+               <Stack gap={2}>
+                 <Text variant="display" size="2xl">STATION_OFFLINE</Text>
+                 <Text variant="body" size="base">No reviews match your current tactical filters.</Text>
+               </Stack>
+             </Stack>
+          </Box>
+        )}
       </Grid>
     </Box>
   );

@@ -16,13 +16,17 @@ export function NewsletterBanner() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      className="bg-white/80 backdrop-blur-xl border-t border-line/50 rounded-t-3xl shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05),0_-8px_10px_-6px_rgba(0,0,0,0.05)] mx-auto"
+      className="bg-white/80 backdrop-blur-xl border-t border-line/50 mx-auto"
       padding="emailBar"
       position="fixed"
-      style={{ bottom: 0, left: '1rem', right: '1rem', width: 'calc(100% - 2rem)' }}
+      inset="bottom"
+      marginX={4}
+      marginBottom={4}
+      radius="2xl"
+      shadow="topOverlay"
       zIndex="toast"
     >
-      <Box position="absolute" className="top-2 right-2" zIndex="docked">
+      <Box position="absolute" inset="right" padding={2} zIndex="docked">
         <Button
           variant="ghost"
           size="sm"

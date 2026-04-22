@@ -219,3 +219,30 @@ Repo Name: For the Vite base path.
 State: Is this local useState or should it be in the Zustand store?
 
 Follow these rules strictly to maintain project integrity.
+
+---
+
+## Technical Audit & UX Roadmap (Updated 2026-04-21)
+
+### 1. Aesthetic & Visual Polish
+- [x] **Typography & Hierarchy**: Implemented Inter (Sans) and Fraunces (Serif) pairing.
+- [x] **Optical Sizing**: Applied -0.02em tracking for display headings.
+- [x] **Color & Depth**: Integrated layered shadows and glassmorphism.
+- [x] **Consistency**: Standardized `rounded-xl` radii across the system.
+
+### 2. Interaction & Motion
+- [x] **Sticky Headers**: Scroll-aware transitions for mobile and desktop navigation.
+- [x] **Micro-interactions**: Tactile button scaling and card lift effects.
+- [x] **Staggered Reveals**: Entrance animations for grid items.
+- [x] **Mobile Transitions**: Right-to-Left spring animation for menu.
+
+### 3. Usability & Functional Excellence
+- [x] **Global Search**: CMD+K support and results highlighting.
+- [x] **Form Feedback**: Inline validation for email capture.
+- [x] **Category Empty States**: "Coming soon" placeholders for empty content feeds.
+- [x] **Large Viewport Optimization**: Max-width constraints for 4K displays.
+
+### 4. Automation Suite
+- [x] **Linter**: `npm run audit` for design system adherence.
+- [x] **TODO Generator**: Automated task derivation from audit reports.
+- [x] **AI Debugger**: Context-aware prompt generation for UI fixes.
