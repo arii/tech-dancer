@@ -37,7 +37,7 @@ export const variants = {
 };
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center font-sans font-semibold tracking-tight transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
+  "inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
   {
     variants: {
       variant: variants.emphasis,
@@ -64,6 +64,20 @@ export const buttonVariants = cva(
     },
   }
 );
+
+export const highlightVariants = cva("inline text-accent bg-accent/10 rounded-sm px-0.5", {
+  variants: {
+    intent: {
+      default: "text-accent bg-accent/10",
+      success: "text-accent-brand bg-accent-brand/10",
+      danger: "text-red-600 bg-red-600/10",
+      warning: "text-amber-600 bg-amber-600/10",
+    },
+  },
+  defaultVariants: {
+    intent: "default",
+  },
+});
 
 export const badgeVariants = cva(
   "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",

@@ -58,6 +58,7 @@ export const layout = {
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all",
+  error: "border-red-500 focus:border-red-500",
   label: "text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
   select: "bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
 };

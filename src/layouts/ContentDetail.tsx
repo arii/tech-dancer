@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -9,11 +9,11 @@ interface ContentDetailProps {
   post: ContentItem;
   onBack: () => void;
   backLabel: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export function ContentDetail({ post, onBack, backLabel, children }: ContentDetailProps) {
-  const [imgError, setImgError] = React.useState(false);
+  const [imgError, setImgError] = useState(false);
   const title = post.title;
   const content = post.content;
 

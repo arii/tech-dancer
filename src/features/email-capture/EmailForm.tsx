@@ -1,21 +1,21 @@
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check, AlertCircle } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
-import React from 'react';
 
 export function EmailForm() {
   const { status, submitForm, email, setEmail } = useEmailCaptureContext();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     submitForm(email);
   };
 
-  const [isValid, setIsValid] = React.useState(true);
+  const [isValid, setIsValid] = useState(true);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setEmail(val);
     if (val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
@@ -35,7 +35,7 @@ export function EmailForm() {
           onChange={handleEmailChange}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={`${inputs.base} min-h-[44px] w-full ${!isValid ? 'border-red-500 focus:border-red-500' : ''}`}
+          className={`${inputs.base} min-h-[44px] w-full ${!isValid ? inputs.error : ''}`}
         />
         {!isValid && email && (
           <Box position="absolute" className="-bottom-6 left-0 flex items-center gap-1 text-red-500">
