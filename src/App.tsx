@@ -8,6 +8,7 @@ import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { ScrollToTop } from './components/ScrollToTop';
+import { ScrollProvider } from './context/ScrollContext';
 import { motionTokens } from './styles/motion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { EmailCaptureProvider } from './features/email-capture/EmailCaptureContext';
@@ -33,9 +34,10 @@ export function RootLayout() {
 
   return (
     <EmailCaptureProvider {...emailLogic}>
-      <ScrollRestoration />
-      <ScrollToTop />
-      <MainLayout>
+      <ScrollProvider>
+        <ScrollRestoration />
+        <ScrollToTop />
+        <MainLayout>
         <AnimatePresence mode="wait">
           <Box
             as={motion.div}
@@ -51,7 +53,8 @@ export function RootLayout() {
             </Suspense>
           </Box>
         </AnimatePresence>
-      </MainLayout>
+        </MainLayout>
+      </ScrollProvider>
       <AnimatePresence>
         {emailLogic.showEmailBar && <NewsletterBanner />}
       </AnimatePresence>

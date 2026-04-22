@@ -2,14 +2,18 @@ import { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box } from '@/layouts/Primitives';
+import { useScrollContainer } from '@/context/ScrollContext';
 
 export function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const { scrollRef } = useScrollContainer();
 
   useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
     const handleScroll = () => {
-      const main = document.querySelector('main');
-      const scrollTop = main ? main.scrollTop : window.scrollY;
+      const scrollTop = container.scrollTop;
 
       if (scrollTop > 300) {
         setIsVisible(true);
@@ -18,28 +22,20 @@ export function ScrollToTopButton() {
       }
     };
 
-    // Listen on window and document for all scroll events
-    window.addEventListener('scroll', handleScroll, true);
-    document.addEventListener('scroll', handleScroll, true);
+    container.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll, true);
-      document.removeEventListener('scroll', handleScroll, true);
+      container.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [scrollRef]);
 
   const scrollToTop = () => {
-    const mainElement = document.querySelector('main');
-    if (mainElement) {
-      mainElement.scrollTo({
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
         top: 0,
         behavior: 'smooth',
       });
     }
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
   };
 
   return (

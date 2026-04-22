@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useScrollContainer } from '@/context/ScrollContext';
 
 /**
  * Component that ensures the main scrollable container resets to the top
@@ -8,16 +9,14 @@ import { useLocation } from 'react-router-dom';
  */
 export function ScrollToTop() {
   const { pathname } = useLocation();
+  const { scrollRef } = useScrollContainer();
 
   useEffect(() => {
-    // Find the main scrollable element
-    const mainContent = document.querySelector('main');
-    if (mainContent) {
-      mainContent.scrollTo(0, 0);
+    // Reset internal container scroll
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo(0, 0);
     }
-    // Also scroll window just in case
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, scrollRef]);
 
   return null;
 }

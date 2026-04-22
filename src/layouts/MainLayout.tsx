@@ -5,9 +5,11 @@ import { AnimatePresence } from 'motion/react';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailCaptureContext } from '@/features/email-capture/EmailCaptureContext';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
+import { useScrollContainer } from '@/context/ScrollContext';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const { showEmailBar } = useEmailCaptureContext();
+  const { scrollRef } = useScrollContainer();
 
   return (
     <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
@@ -16,7 +18,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <Box display="flex" className="min-h-screen w-full">
         <Navigation />
         <ScrollToTopButton />
-        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
+        <Box as="main" ref={scrollRef} flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
