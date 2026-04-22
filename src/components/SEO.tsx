@@ -19,7 +19,7 @@ export function SEO({
   const { pathname } = useLocation();
 
   // Base URL logic - adjust to match your deployment
-  const baseUrl = 'https://tech-dancer.github.io/tech-dancer'; // Replace with actual domain if different
+  const baseUrl = (typeof process !== 'undefined' && process.env.APP_URL) || 'https://tech-dancer.github.io/tech-dancer';
   const url = canonical || `${baseUrl}${pathname}`;
   const displayTitle = `${title} | TechDancer`;
 

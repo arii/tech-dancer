@@ -76,7 +76,7 @@ export default function ResearchDetail() {
                   <Text variant="mono" color="brand" size="xs" weight="font-bold" uppercase tracking="widest">
                     LABORATORY_ACCESS // {tool.category.toUpperCase()}
                   </Text>
-                  <Text variant="headline" size="fluid-7">{tool.name}</Text>
+                  <Text as="h1" variant="headline" size="fluid-7">{tool.name}</Text>
                   <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
                     <Text variant="body" size="lg" color="body">{tool.layman}</Text>
                   </Box>
