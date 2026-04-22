@@ -20,18 +20,18 @@ const getBasename = () => {
   }
 
   const fullPath = window.location.pathname;
-  // Standardize buildBase to not have a trailing slash
-  const buildBase = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const buildBase = import.meta.env.BASE_URL || '/';
+  const buildBaseClean = buildBase.replace(/\/$/, '');
 
   const segments = fullPath.split('/').filter(Boolean);
-  const baseSegments = buildBase.split('/').filter(Boolean);
+  const baseSegments = buildBaseClean.split('/').filter(Boolean);
 
   // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
   // check if the next segment is a known route.
   if (segments.length > baseSegments.length) {
     const possibleRouteSegment = segments[baseSegments.length];
 
-    // Extract valid top-level paths from the route configuration to distinguish between routes and subdirectories
+    // Extract valid top-level paths from the route configuration
     const children = routes[0].children || [];
     const validTopLevelPaths = new Set<string>();
     for (const route of children) {
@@ -45,12 +45,12 @@ const getBasename = () => {
 
     if (!isStandardRoute && !isIndexHtml) {
       // It's likely a branch deployment. The basename includes this extra segment.
-      return '/' + segments.slice(0, baseSegments.length + 1).join('/');
+      return '/' + segments.slice(0, baseSegments.length + 1).join('/') + '/';
     }
   }
 
   // 3. Fallback: Use the build-time BASE_URL
-  return buildBase || '/';
+  return buildBase;
 };
 
 const router = createBrowserRouter(routes, {

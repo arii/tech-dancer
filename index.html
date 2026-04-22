@@ -13,11 +13,12 @@
           }).join('?');
 
           // Calculate the actual base path (where index.html is located)
-          var base = l.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
-          window.__ROUTER_BASENAME__ = base || '/';
+          var base = l.pathname.replace(/\/index\.html$/, '');
+          window.__ROUTER_BASENAME__ = base;
 
           // Restore the intended URL without a page reload
-          window.history.replaceState(null, null, (base || '') + decodedPath + l.hash);
+          // We use base.replace(/\/$/, '') to avoid double slashes when joining with decodedPath
+          window.history.replaceState(null, null, base.replace(/\/$/, '') + decodedPath + l.hash);
         }
       }(window.location))
     </script>
