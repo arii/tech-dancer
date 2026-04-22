@@ -1,30 +1,29 @@
 ---
-description: review a GitHub pull request with in-depth inline feedback
+description: review a single GitHub pull request with in-depth inline feedback using decoupled files
 ---
 
 # Review a Pull Request
 
 // turbo-all
 
-1. Generate the structured review document:
+1. **Generate the review documents**:
 ```bash
 python3 dev-tools/fetch_pr_review_data.py PR_NUMBER
 ```
+(This creates `pr-context-PR_NUMBER.md` for reading, and `pr-review-PR_NUMBER.md` for writing).
 
-2. Read the generated plan and for EVERY changed file evaluate:
-   - **Dead abstractions** — new class/context/hook that a simpler primitive handles?
-   - **Unnecessary indirection** — does this add a layer where a direct call would do?
-   - **Responsibility creep** — component taking on logic that belongs in a hook or parent?
-   - **Import bloat** — `import React` not needed in React 17+?
-   - **Token compliance** — raw Tailwind or inline styles bypassing design tokens?
-   - **Audit ratio** — if additions > 100 lines, find 10+ lines to remove.
+2. **Read the Context & Instructions**:
+   - Read `.agent/workflows/REVIEW_INSTRUCTIONS.md` to understand the audit criteria.
+   - Read `pr-context-PR_NUMBER.md` to analyze the code diffs and stats.
 
-3. Fill in `plan-pr-review-PR_NUMBER.md` (in the project root):
-   - Mark every audit checklist item `[x]` (or note a violation inline)
-   - Replace every `<FILL IN: ...>` in the `Proposed inline comment` JSON with real, line-referenced feedback
-   - Fill in the `body` in the Submission JSON with ANTI-AI-SLOP / FINDINGS / FINAL RECOMMENDATION
+3. **Draft the Feedback (Output)**:
+   - Open the generated `pr-review-PR_NUMBER.md` file.
+   - Explicitly mark every `- [ ]` checklist item as `- [x]` or note the violation. This step is mandatory.
+   - Fill in the `body` string within the JSON block at the bottom of the file with your overall findings and final recommendation.
+   - Populate the `comments` array within the JSON block with specific inline feedback. Ensure path and line match the diff exactly.
+   - **Do not edit the pr-context file.**
 
-4. Parse and submit in one step — the link is printed on success:
+4. **Submit**: Parse the document and submit the review in one step:
 ```bash
-python3 dev-tools/submit_pr_review_data.py plan-pr-review-PR_NUMBER.md
+python3 dev-tools/submit_pr_review_data.py pr-review-PR_NUMBER.md
 ```
