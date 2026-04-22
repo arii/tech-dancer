@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import type { ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
@@ -15,7 +17,7 @@ const viewportIcons = {
 
 
 function CopyPromptButton({ suggestion }: { suggestion: string }) {
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(suggestion);
@@ -36,13 +38,23 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   };
 
   return (
-    <button
+    <Box
+      as="button"
       onClick={handleCopy}
-      className="mt-2 flex items-center gap-1 px-3 py-1 rounded bg-surface border border-line hover:border-accent transition-colors text-xs font-bold hover:text-accent"
+      marginTop={2}
+      display="flex"
+      align="center"
+      gap={1}
+      paddingX={3}
+      paddingY={1}
+      radius="md"
+      surface="default"
+      border={true}
+      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
       {copied ? <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" /> : <Copy className="w-3 h-3" />}
       {copied ? <span className="text-[var(--color-success,#16a34a)]">Copied!</span> : <span>Copy Prompt</span>}
-    </button>
+    </Box>
   );
 }
 
@@ -87,7 +99,7 @@ export default function UXAuditor() {
             as="input"
             type="text"
             value={url}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
             className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text"
             style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
             placeholder="https://..."
@@ -114,17 +126,18 @@ export default function UXAuditor() {
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Box surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
+          <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
               <Box padding={10} className="italic" color="dim" align="center" size="sm">
                 No audits recorded.
               </Box>
             )}
             {reports.map((report) => (
-              <button
+              <Box
                 key={report.id}
+                as="button"
                 onClick={() => setActiveReport(report)}
-                className={`w-full text-left p-4 hover:bg-surface transition-all flex items-center gap-3 ${
+                width="full" display="flex" align="center" gap={3} padding={4} className={`text-left hover:bg-surface transition-all ${
                   activeReport?.id === report.id ? 'bg-bg border-l-4 border-accent' : 'border-l-4 border-transparent'
                 }`}
               >
@@ -144,9 +157,9 @@ export default function UXAuditor() {
                   </Text>
                 </Box>
                 <ChevronRight className="w-4 h-4 text-text-dim opacity-50" />
-              </button>
+              </Box>
             ))}
-          </Box>
+          </Stack>
         </Stack>
 
         {/* Detailed View */}
@@ -277,7 +290,7 @@ export default function UXAuditor() {
                             </>
                           ) : (
                             <Box display="flex" align="center" justify="center" paddingY={20} direction="col" color="dim">
-                              <RefreshCw className="animate-spin mb-3 w-6 h-6" />
+                              <RefreshCw className="animate-spin w-6 h-6" />
                               <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
                                 Agent Processing...
                               </Text>
@@ -291,7 +304,7 @@ export default function UXAuditor() {
               </Stack>
             </>
           ) : (
-            <Box height="full" display="flex" direction="col" align="center" justify="center" surface="default" radius="3xl" border={true} padding={20} minHeight={500} className="border-2 border-dashed text-center">
+            <Stack height="full" align="center" justify="center" surface="default" radius="3xl" padding={20} minHeight={500} className="border-2 border-dashed text-center">
               <Box surface="muted" padding={6} radius="full" marginBottom={6} className="text-text-dim/50">
                 <Camera className="w-16 h-16" />
               </Box>
@@ -301,7 +314,7 @@ export default function UXAuditor() {
               <Text variant="sans" size="sm" weight="font-medium" color="dim" maxWidth="sm" marginX="auto">
                 Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop.
               </Text>
-            </Box>
+            </Stack>
           )}
         </Stack>
       </Grid>
