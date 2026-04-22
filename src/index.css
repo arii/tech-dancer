@@ -2,8 +2,8 @@
 
 @theme {
   /* Modern Typography Identity */
-  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", serif;
   --font-mono: "Space Mono", monospace;
 
   /* Clean Content Palette (60-30-10 Rule) */
@@ -48,7 +48,10 @@
 
   /* Premium Industrial Utilities */
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+    @apply bg-white/70 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+  }
+  .glass-card {
+    @apply bg-white/40 backdrop-blur-md border border-white/20 rounded-xl shadow-sm transition-all duration-300;
   }
   .industrial-gradient {
     background: linear-gradient(135deg, #001f3f 0%, #000c19 100%);
@@ -58,6 +61,16 @@
   }
   .gold-accent {
     @apply border-accent/30 hover:border-accent transition-colors;
+  }
+  .animated-underline {
+    @apply relative no-underline;
+  }
+  .animated-underline::after {
+    content: "";
+    @apply absolute bottom-0 left-1/2 w-0 h-[1px] bg-current transition-all duration-300 -translate-x-1/2;
+  }
+  .animated-underline:hover::after {
+    @apply w-full;
   }
   .scanline-hover {
     @apply relative overflow-hidden;
@@ -82,12 +95,13 @@
   body {
     @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
     line-height: 1.6;
+    letter-spacing: 0.01em;
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    @apply text-accent-navy font-bold tracking-tight;
-    line-height: 1.2;
+    @apply text-accent-navy font-bold tracking-[-0.02em];
+    line-height: 1.1;
   }
 
   h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
