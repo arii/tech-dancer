@@ -54,8 +54,10 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       cursor="pointer"
       className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
-      {copied ? <CheckCircle className="w-3 h-3" style={{ color: '#16a34a' }} /> : <Copy className="w-3 h-3" />}
-      {copied ? <Text intent="success">Copied!</Text> : <Text>Copy Prompt</Text>}
+      <Box color={copied ? "accent" : "main"} display="flex" align="center" gap={1}>
+        {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+        <Text>{copied ? "Copied!" : "Copy Prompt"}</Text>
+      </Box>
     </Box>
   );
 }
