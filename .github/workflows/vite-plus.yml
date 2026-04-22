@@ -17,6 +17,8 @@ jobs:
   vite-plus:
     name: Vite+ Lint & Security
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,9 +39,7 @@ jobs:
         run: pnpm run lint:ox
 
       - name: Run Snyk to check for vulnerabilities
-        if: ${{ secrets.SNYK_TOKEN }}
+        if: ${{ env.SNYK_TOKEN != '' }}
         uses: snyk/actions/node@0.4.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
