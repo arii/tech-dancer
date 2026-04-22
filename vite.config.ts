@@ -13,11 +13,15 @@ export default defineConfig(({mode}) => {
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = process.env.ANALYZE === 'true';
-  // Use /tech-dancer/ in production unless VITE_BASE_PATH is specified or on Vercel
+  // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,
+    build: {
+      // Ensure assets are also handled correctly
+      assetsDir: 'assets',
+    },
     define: {
       'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),
     },

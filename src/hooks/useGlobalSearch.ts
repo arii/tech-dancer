@@ -4,7 +4,7 @@ import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('q');
   const [searchParams, setSearchParams] = useSearchParams();
   
   const isOpen = searchParams.get('search') === 'true';

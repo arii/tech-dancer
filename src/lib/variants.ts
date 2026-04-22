@@ -11,6 +11,7 @@ export const variants = {
     default: "bg-surface text-text-main",
     muted: "bg-line/50 text-text-dim",
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
+    alt: "bg-surface-alt text-text-main",
     card: "bg-card-bg border-line",
     contrast: "bg-text-main text-bg",
   },
@@ -23,8 +24,9 @@ export const variants = {
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
     outline: "border border-line bg-transparent",
-    ghost: "bg-transparent text-text-main hover:bg-line/10",
-    primary: "bg-accent text-bg hover:bg-text-main hover:-translate-y-[2px] shadow-[0_4px_12px_var(--color-accent-shadow)]",
+    ghost: "bg-transparent hover:bg-line/10",
+    primary: "bg-accent text-white font-mono tracking-widest text-xs px-8 hover:bg-text-main active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)]",
+    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
   },
   radius: {
     none: "rounded-none",
@@ -45,7 +47,7 @@ export const buttonVariants = cva(
       },
       size: {
         default: "h-[40px] px-6 text-xs",
-        sm: "h-8 px-4 text-[10px]",
+        sm: "h-8 px-4 text-xs",
         md: "h-[40px] px-6 text-xs",
         lg: "h-12 px-8 text-sm",
         icon: "h-[40px] w-[40px]",
@@ -62,7 +64,7 @@ export const buttonVariants = cva(
 );
 
 export const badgeVariants = cva(
-  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
+  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
   {
     variants: {
       emphasis: variants.emphasis,
