@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 

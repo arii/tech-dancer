@@ -36,9 +36,8 @@ export function ContentCardSkeleton() {
   );
 }
 
-export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content }: ContentCardProps) {
+export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect: _aspect = "video", content }: ContentCardProps) {
   const rt = readingTime(content, excerpt);
-
   return (
     <Box 
       as={NavLink}

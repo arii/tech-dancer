@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
-import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
@@ -11,7 +11,7 @@ import { EventCard } from './EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
+  const { recentPosts, upcomingEvents, dancerPaths: _dancerPaths, hirePaths: _hirePaths } = useHome();
 
   return (
     <Box as="section">

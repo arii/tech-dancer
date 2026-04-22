@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';

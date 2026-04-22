@@ -14,7 +14,7 @@ interface ButtonProps
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, as = "button", variant, intent, size, fullWidth, loading, children, ...props }, ref) => {
+  ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, ...props }, ref) => {
     return (
       <Box
         as={as}
