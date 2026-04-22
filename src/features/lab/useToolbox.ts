@@ -18,7 +18,7 @@ export function useToolbox() {
       ...cat,
       items: resources.filter(r => safeSearch(r.category, cat.id))
     }));
-  }, [resources]);
+  }, [resources, categories]);
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) return groupedResources;
