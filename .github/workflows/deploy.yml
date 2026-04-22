@@ -116,16 +116,17 @@ jobs:
 
             for (const pr of pullRequests) {
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
-              const body = `
-<details>
-<summary><b>🚀 Deployment Details</b> (Last updated: ${pstTime} PST)</summary>
-
-- **Main Site:** ${baseUrl}
-- **Preview URL:** ${previewUrl}
-
-</details>
-
-${commentTag}`;
+              const body = [
+                '<details>',
+                `<summary><b>🚀 Deployment Details</b> (Last updated: ${pstTime} PST)</summary>`,
+                '',
+                `- **Main Site:** ${baseUrl}`,
+                `- **Preview URL:** ${previewUrl}`,
+                '',
+                '</details>',
+                '',
+                commentTag
+              ].join('\n');
 
               const { data: comments } = await github.rest.issues.listComments({
                 owner,
