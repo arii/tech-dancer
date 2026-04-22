@@ -166,6 +166,12 @@ jobs:
           cd gh-pages-branch
           mkdir -p previews
 
+          # Validation: Ensure the dashboard exists in build artifacts
+          if [ ! -f "../dist/previews/index.html" ]; then
+            echo "Error: dist/previews/index.html not found! Deployment of preview index failed."
+            exit 1
+          fi
+
           # Copy the fancy dashboard from the build
           cp ../dist/previews/index.html previews/index.html
 
