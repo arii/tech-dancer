@@ -1,9 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "entry": ["src/main.tsx", "src/App.tsx", "server.ts?"],
-  "project": ["src/**/*.{ts,tsx}", "server.ts?"],
-  "ignore": ["**/*.d.ts"],
-  "ignoreBinaries": ["vite"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignoreExportsUsedInFile": true,
   "ignoreDependencies": [
     "express",
     "dotenv",
@@ -15,6 +13,7 @@
     "@fontsource-variable/geist",
     "buffer",
     "@types/express",
-    "wait-on"
+    "wait-on",
+    "vite"
   ]
 }
