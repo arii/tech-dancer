@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
-import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
+import { CardImage } from '@/components/ui/CardImage';
 
 interface GearCardProps extends Resource {
   basePath: string;
@@ -23,57 +23,59 @@ export function GearCard({
     <Box
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
+      display="flex"
+      direction="col"
+      surface="default"
+      border={true}
+      className="group transition-all duration-300 overflow-hidden"
     >
-      <CardImagePlaceholder
-        image={image}
-        category={category}
-        date={updatedDate}
-        title={title}
-      />
+      {/* Image Wrapper */}
+      <CardImage image={image} title={title} category={category}>
+        {verdict && (
+          <Box position="absolute" className="top-4 right-4">
+            <Box paddingX={2} paddingY={1} radius="none" className="bg-accent">
+              <Text variant="mono" size="micro" weight="font-bold" color="white" uppercase={true}>
+                {verdict}
+              </Text>
+            </Box>
+          </Box>
+        )}
+      </CardImage>
 
       {/* Content Area */}
-      <Stack gap={4} padding={5} flex={1} justify="between">
-        <Stack gap={3}>
-          <Box display="flex" align="center" justify="between" wrap>
-            {rating && (
-              <Box display="flex" align="center" gap={1}>
-                <span className="text-amber-500 text-xs">
-                  {'★'.repeat(Math.floor(rating))}
-                  {rating % 1 !== 0 ? '½' : ''}
-                </span>
-                <Text variant="mono" size="micro" color="dim">
-                  ({rating}/5)
-                </Text>
-              </Box>
-            )}
+      <Stack gap={4} padding={6} flex={1}>
+        <Stack gap={2}>
+          {rating && (
+            <Box display="flex" align="center" gap={1} marginBottom={1}>
+              <span className="text-yellow-400 drop-shadow-sm">
+                {'★'.repeat(Math.floor(rating))}
+                {rating % 1 !== 0 ? '½' : ''}
+              </span>
+              <Text variant="mono" size="micro" color="dim" emphasis="low">
+                ({rating}/5)
+              </Text>
+            </Box>
+          )}
 
-            {verdict && (
-              <Box surface="brand" className="px-1.5 py-0.5 rounded-none border border-line/10">
-                <Text variant="mono" size="micro" weight="font-bold" className="uppercase">
-                  {verdict}
-                </Text>
-              </Box>
-            )}
-          </Box>
-
-          <Text
-            variant="body"
-            size="lg"
-            weight="font-bold"
-            className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
-          >
+          <Text as="h3" variant="headline" size="xl" color="brand" className="group-hover:text-accent transition-colors">
             {title}
           </Text>
 
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-80">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-2">
              {excerpt}
           </Text>
 
-          {priceCategory && (
-             <Box border className="bg-amber-50/50 px-2 py-0.5 border-amber-200/50 w-fit">
-               <Text variant="mono" size="micro" weight="font-bold" className="text-amber-700">{priceCategory}</Text>
-             </Box>
+          {(priceCategory || updatedDate) && (
+            <Box display="flex" wrap="wrap" align="center" gap={3} marginTop={2}>
+               {priceCategory && (
+                 <Box border={true} paddingX={2} paddingY={0.5} className="bg-accent/10 border-accent/20">
+                   <Text variant="mono" size="tiny" weight="font-bold" color="brand">{priceCategory}</Text>
+                 </Box>
+               )}
+               {updatedDate && (
+                 <Text variant="mono" size="tiny" color="dim">Updated {updatedDate}</Text>
+               )}
+            </Box>
           )}
         </Stack>
 
@@ -88,8 +90,8 @@ export function GearCard({
             <Box className="group-hover:translate-x-1 transition-transform duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
