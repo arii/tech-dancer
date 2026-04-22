@@ -4,6 +4,7 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import Inspect from 'vite-plugin-inspect';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -51,6 +52,7 @@ export default defineConfig(({mode}) => {
         filename: 'bundle-analysis.html',
         gzipSize: true,
       }),
+      Inspect(),
     ].filter(Boolean),
     resolve: {
       alias: {
