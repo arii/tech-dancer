@@ -58,6 +58,7 @@ export default function PathSelector({ dancerLinks, roboticistLinks }: PathSelec
             className="group"
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
+            onClick={() => setHoveredPath(isHovered ? null : path.id)}
           >
             {/* Background */}
             <Box

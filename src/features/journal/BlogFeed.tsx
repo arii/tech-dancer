@@ -5,31 +5,18 @@ import { FilterBar } from '@/components/ui/FilterBar';
 import { AlertCircle } from 'lucide-react';
 
 export default function BlogFeed() {
-  const { posts, categories, isLoading, error } = useBlog();
-
-  if (error) {
-    return (
-      <Box as="section" padding="panel" display="flex" align="center" justify="center">
-        <Stack gap={4} align="center" textAlign="center">
-          <Box display="flex" align="center" justify="center" opacity={25} color="brand">
-            <AlertCircle className="w-12 h-12" />
-          </Box>
-          <Text variant="display" size="2xl">System Error</Text>
-          <Text variant="mono" size="xs" color="dim">{error}</Text>
-        </Stack>
-      </Box>
-    );
-  }
+  const { posts, categories, view, setView } = useBlog();
 
   return (
     <Box as="section">
       <FolioGrid
         items={posts}
-        loading={isLoading}
         categoryTitle="Blog Posts"
         label="INSIGHTS"
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
+        view={view}
+        onViewChange={setView}
       >
         <Box marginTop={8}>
           <FilterBar

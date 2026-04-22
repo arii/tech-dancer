@@ -19,9 +19,9 @@ export default function ResearchAnalytics() {
         />
 
         <Stack gap={8}>
-          <Box paddingBottom={4} border="b" display="flex" justify="between" align="end">
-            <Text variant="display" size="2xl" weight="font-black">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest">{tools.length} TOOLS</Text>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -59,40 +59,56 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} border="b" display="flex" justify="between" align="end">
-            <Text variant="display" size="2xl" weight="font-black">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest">{studies.length} ARTICLES</Text>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={12}>
-            {studies.map((study) => (
-              <Box key={study.slug} className="group">
-                <Stack gap={4}>
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
-                  </Box>
-                  <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
-                    {study.title}
+
+          {studies.length > 0 ? (
+            <Grid cols={{ base: 1, md: 2 }} gap={12}>
+              {studies.map((study) => (
+                <Box key={study.slug} className="group">
+                  <Stack gap={4}>
+                    <Box display="flex" justify="between" align="center">
+                      <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
+                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                    </Box>
+                    <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
+                      {study.title}
+                    </Text>
+                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                      {study.excerpt}
+                    </Text>
+                    <Box
+                      as={motion.div}
+                      whileHover={{ x: 5 }}
+                      display="flex"
+                      align="center"
+                      gap={2}
+                      color="dim"
+                      className="group-hover:text-accent-brand transition-colors"
+                    >
+                      <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
+                      <FileText className="w-4 h-4" />
+                    </Box>
+                  </Stack>
+                </Box>
+              ))}
+            </Grid>
+          ) : (
+            <Box border padding={12} surface="muted" emphasis="low">
+              <Stack align="center" gap={4} className="text-center">
+                <Database className="w-12 h-12 text-slate-300" />
+                <Stack gap={2}>
+                  <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
+                  <Text variant="body" size="sm" color="dim" className="max-w-[40ch]">
+                    Research studies are automatically ingested via the ETL pipeline.
+                    New analysis runs weekly—check back soon for recent data.
                   </Text>
-                  <Text variant="body" size="sm" color="dim" className="line-clamp-3">
-                    {study.excerpt}
-                  </Text>
-                  <Box 
-                    as={motion.div}
-                    whileHover={{ x: 5 }}
-                    display="flex" 
-                    align="center" 
-                    gap={2} 
-                    color="dim" 
-                    className="group-hover:text-accent-brand transition-colors"
-                  >
-                    <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
-                    <FileText className="w-4 h-4" />
-                  </Box>
                 </Stack>
-              </Box>
-            ))}
-          </Grid>
+              </Stack>
+            </Box>
+          )}
         </Stack>
       </Stack>
     </Box>
