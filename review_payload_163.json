@@ -1,4 +1,0 @@
-{
-  "body": "## ANTI-AI-SLOP\nPython script type hints missing.\n\n## FINDINGS\nFunctionally solid tooling here for orchestrating Vite environments. It just needs explicit Python type hints and the system prompt date updated. Get those sorted out and this can be smoothly merged in isolation without merge conflicts.\n\n## FINAL RECOMMENDATION\nApproved with Minor Changes",
-  "comments": []
-}

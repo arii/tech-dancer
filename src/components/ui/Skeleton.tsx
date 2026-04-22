@@ -4,8 +4,8 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
   return (
     <div
       className={cn(
-        'animate-pulse rounded-md bg-line/10 relative overflow-hidden',
-        'after:absolute after:inset-0 after:-translate-x-full after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-accent/5 after:to-transparent',
+        'relative overflow-hidden bg-line/10',
+        'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent',
         className
       )}
       {...props}

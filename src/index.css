@@ -46,6 +46,12 @@
     animation: scanline 2.5s linear infinite;
   }
 
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
   /* Premium Industrial Utilities */
   .glass-panel {
     @apply bg-white/70 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
