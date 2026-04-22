@@ -141,7 +141,9 @@ export function useUXAuditor() {
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
         newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
 
-        setReports(prev => prev.map(r => r.id === reportId ? { ...newReport } : r));
+        const updatedReport = { ...newReport };
+        setReports(prev => prev.map(r => r.id === reportId ? updatedReport : r));
+        setActiveReport(updatedReport);
 
         if (user && firebaseConfig) {
           const db = getFirestore();

@@ -99,8 +99,9 @@ export default function UXAuditor() {
             as="input"
             type="text"
             value={url}
+            title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text"
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text truncate"
             style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
             placeholder="https://..."
           />
@@ -167,13 +168,13 @@ export default function UXAuditor() {
           {activeReport ? (
             <>
               <Box
-                surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} direction={{ base: "col", md: "row" }}
+                surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align={{ base: "start", md: "center" }} gap={4} direction={{ base: "col", md: "row" }}
               >
-                <Box>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
+                <Box marginBottom={{ base: 4, md: 0 }}>
+                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" display="block" marginBottom={2}>
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black">
+                  <Text variant="sans" size="xl" weight="font-black" className="break-all">
                     {activeReport.url}
                   </Text>
                 </Box>
@@ -197,11 +198,11 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold bg-text text-surface hover:opacity-90 shadow-md transition-all disabled:opacity-50"
+                    className="font-bold bg-text-main text-bg hover:bg-accent hover:text-white shadow-md transition-all disabled:opacity-50"
                     style={{ padding: '0.5rem 1.5rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
                     <Github className="w-4 h-4" />
-                    Export to GitHub Issue
+                    <span className="whitespace-nowrap">Export to GitHub Issue</span>
                   </Box>
                 </Box>
               </Box>
@@ -227,8 +228,8 @@ export default function UXAuditor() {
                         </Text>
                       </Box>
 
-                      <Grid cols={{ base: 1, md: 12 }}>
-                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border="r" minHeight={400} span={{ base: 1, md: 5 }}>
+                      <Stack direction={{ base: 'col', md: 'row' }} width="full">
+                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
                           {imgUrl ? (
                             <img
                               src={imgUrl}
@@ -247,14 +248,14 @@ export default function UXAuditor() {
                           )}
                         </Box>
 
-                        <Stack gap={6} padding={8} span={{ base: 1, md: 7 }}>
+                        <Stack gap={6} padding={8} flex={1} minWidth="0">
                           {data ? (
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase marginBottom={2} tracking="widest">
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" marginBottom={2} tracking="widest">
                                   Analysis Summary
                                 </Text>
-                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed">
+                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -266,24 +267,26 @@ export default function UXAuditor() {
                                         <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
                                         {imp.element}
                                       </Text>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase>
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity: ${imp.severity}/10`}>
                                         LVL {imp.severity}
                                       </Text>
                                     </Box>
                                     <Text variant="sans" size="xs" color="dim" marginBottom={3}>
                                       {imp.issue}
                                     </Text>
-                                    <Box surface="muted" padding={3} radius="lg" border={true} display="flex" align="start" gap={2}>
-                                      <Text variant="sans" size="xs" weight="font-bold" color="accent" marginTop={0.5}>FIX</Text>
-                                      <Box flex={1} minWidth="0">
-                                        <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
-                                          {imp.suggestion}
-                                        </Text>
-                                        {imp.element === "Manual Audit Required" && (
-                                          <CopyPromptButton suggestion={imp.suggestion} />
-                                        )}
+                                    {imp.suggestion && (
+                                      <Box surface="muted" padding={3} radius="lg" border={true} display="flex" direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
+                                        <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
+                                        <Box flex={1} minWidth="0">
+                                          <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
+                                            {imp.suggestion}
+                                          </Text>
+                                          {imp.element === "Manual Audit Required" && (
+                                            <CopyPromptButton suggestion={imp.suggestion} />
+                                          )}
+                                        </Box>
                                       </Box>
-                                    </Box>
+                                    )}
                                   </Box>
                                 ))}
                               </Stack>
@@ -297,7 +300,7 @@ export default function UXAuditor() {
                             </Box>
                           )}
                         </Stack>
-                      </Grid>
+                      </Stack>
                     </Box>
                   );
                 })}
