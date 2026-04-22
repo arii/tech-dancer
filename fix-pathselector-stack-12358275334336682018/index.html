@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tech-Dancer // The Roboticist's Guide to WCS</title>
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search) {
+          var q = {};
+          l.search.slice(1).split('&').forEach(function(v) {
+            var a = v.split('=');
+            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+          });
+          if (q.p !== undefined) {
+            // Reconstruct the path by removing "index.html" if present at the end of pathname
+            var base = l.pathname.replace(/\/index\.html$/, '');
+            // Ensure no double slashes when joining base and q.p
+            // base is like /tech-dancer/fix/branch
+            // q.p is like /blog
+            var cleanBase = base.replace(/\/$/, '');
+            var cleanPath = q.p.startsWith('/') ? q.p : '/' + q.p;
+            var newUrl = cleanBase + cleanPath + (q.q ? ('?' + q.q) : '') + l.hash;
+
+            window.history.replaceState(null, null, newUrl);
+          }
+        }
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/tech-dancer/fix-pathselector-stack-12358275334336682018/assets/index-1iL2bHJ8.js"></script>
+    <link rel="stylesheet" crossorigin href="/tech-dancer/fix-pathselector-stack-12358275334336682018/assets/index-JBgZZCxE.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
