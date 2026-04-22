@@ -30,7 +30,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: env.VITE_APP_URL || 'https://tech-dancer.github.io/tech-dancer',
+        hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
         dynamicRoutes: [
           '/blog',
           '/gear',
@@ -39,7 +39,7 @@ export default defineConfig(({mode}) => {
           '/about',
           '/contact'
         ],
-        basePath: base
+        // basePath is handled by hostname + dynamicRoutes
       }),
       ViteImageOptimizer({
         includePublic: true,

@@ -19,7 +19,7 @@ export function SEO({
   const { pathname } = useLocation();
 
   // Base URL logic - adjust to match your deployment
-  const baseUrl = import.meta.env.VITE_APP_URL || 'https://tech-dancer.github.io/tech-dancer';
+  const baseUrl = import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer';
   const url = canonical || `${baseUrl}${pathname}`;
   const displayTitle = `${title} | TechDancer`;
 
