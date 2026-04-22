@@ -44,6 +44,18 @@ export const animation = {
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
+export const colors = {
+  text: {
+    danger: "text-red-500",
+    warning: "text-amber-500",
+    success: "text-accent-brand",
+  },
+  bg: {
+    danger: "bg-red-500/10",
+    warning: "bg-amber-500/10",
+  }
+};
+
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",

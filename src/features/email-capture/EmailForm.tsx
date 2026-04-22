@@ -3,7 +3,7 @@ import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check, AlertCircle } from 'lucide-react';
-import { inputs } from '@/styles/design-tokens';
+import { inputs, colors } from '@/styles/design-tokens';
 
 export function EmailForm() {
   const { status, submitForm, email, setEmail } = useEmailCaptureContext();
@@ -38,7 +38,7 @@ export function EmailForm() {
           className={`${inputs.base} min-h-[44px] w-full ${!isValid ? inputs.error : ''}`}
         />
         {!isValid && email && (
-          <Stack direction="row" align="center" gap={1} position="absolute" className="-bottom-6 left-0 text-red-500">
+          <Stack direction="row" align="center" gap={1} position="absolute" className={`-bottom-6 left-0 ${colors.text.danger}`}>
              <AlertCircle className="w-3 h-3" />
              <Text variant="mono" size="micro">INVALID_ENCODING</Text>
           </Stack>

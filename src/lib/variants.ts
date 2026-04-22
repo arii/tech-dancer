@@ -1,4 +1,4 @@
-import { typography } from "@/styles/design-tokens";
+import { typography, colors } from "@/styles/design-tokens";
 import { cva } from "class-variance-authority";
 import { variants as styleVariants } from "@/styles/variants";
 
@@ -70,8 +70,8 @@ export const highlightVariants = cva("inline text-accent bg-accent/10 rounded-sm
     intent: {
       default: "text-accent bg-accent/10",
       success: "text-accent-brand bg-accent-brand/10",
-      danger: "text-red-600 bg-red-600/10",
-      warning: "text-amber-600 bg-amber-600/10",
+      danger: `${colors.text.danger} ${colors.bg.danger}`,
+      warning: `${colors.text.warning} ${colors.bg.warning}`,
     },
   },
   defaultVariants: {
