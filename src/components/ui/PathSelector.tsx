@@ -9,7 +9,7 @@ const PATH_DATA = [
   {
     id: 'dancer' as PathID,
     title: 'ARE YOU A DANCER?',
-    span: { base: 1, lg: 7 } as const,
+    span: "1 lg:col-span-7" as const,
     lgBorder: { r: true } as const,
     bgGradient: 'bg-gradient-to-br',
     titleSize: { base: '3xl', lg: '5xl' } as const,
@@ -21,7 +21,7 @@ const PATH_DATA = [
   {
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
-    span: { base: 1, lg: 5 } as const,
+    span: "1 lg:col-span-5" as const,
     bgGradient: 'bg-gradient-to-bl',
     titleSize: { base: '2xl', lg: '4xl' } as const,
     scanlineDelay: 'delay-100',
