@@ -20,6 +20,7 @@ const GearReviews = lazy(() => import('./pages/Gear'));
 const GearPost = lazy(() => import('./features/lab/GearPost'));
 const Research = lazy(() => import('./pages/Research'));
 const ResearchDetail = lazy(() => import('./pages/ResearchDetail'));
+const UXAuditor = lazy(() => import('./pages/UXAuditor'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const About = lazy(() => import('./pages/About'));
@@ -65,6 +66,7 @@ export const routes = [
       { path: 'gear/:slug', element: <GearPost /> },
       { path: 'research', element: <Research /> },
       { path: 'research/:id', element: <ResearchDetail /> },
+      { path: 'ux-auditor', element: <UXAuditor /> },
       { path: 'blog', element: <Blog /> },
       { path: 'blog/:slug', element: <BlogPost /> },
       { path: 'about', element: <About /> },
