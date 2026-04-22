@@ -9,6 +9,7 @@ export default {
       colors: {
         bg: 'var(--color-bg)',
         surface: 'var(--color-surface)',
+        'surface-alt': 'var(--color-surface-alt)',
         accent: 'var(--color-accent)',
         'accent-navy': 'var(--color-accent-navy)',
         'text-main': 'var(--color-text-main)',

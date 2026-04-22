@@ -9,6 +9,13 @@ export function useGlobalSearch() {
   useEffect(() => {
     getStudies().then(data => setStudies(data.map(s => ({ ...s, type: 'study' as const }))));
   }, []);
+import { useMemo } from 'react';
+import { useSearchParam } from './useSearchParam';
+import { getPosts, getResources, getStudies } from '@/lib/content';
+import { safeSearch } from '@/lib/utils';
+
+export function useGlobalSearch() {
+  const [query, setQuery] = useSearchParam('q');
   
   const allContent = useMemo(() => {
     return [
