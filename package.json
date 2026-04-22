@@ -11,7 +11,7 @@
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "lint:ox": "oxlint . --deny-warnings"
+    "lint:ox": "oxlint . --deny-warnings",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
