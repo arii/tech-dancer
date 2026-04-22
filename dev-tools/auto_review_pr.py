@@ -87,19 +87,14 @@ def main():
         print(f"🚀 Stage 2: Performing AI-automated audit for PR #{pr_num}...")
         
         # Auditor instructions decoupled from script to reduce duplication
-        audit_instructions = (
-            "1. Read the PR context (diffs and valid line ranges)\n"
-            "2. Read the review template and PROJECT STANDARDS\n"
-            "3. Perform a rigorous technical audit against the standards\n"
-            "4. FILL the final JSON payload block (no placeholders allowed)\n"
-            "CRITICAL: Only use line numbers shown in the 'Valid Comment Ranges' in context."
-        )
-
         prompt = (
-            f"You are the tech-dancer technical auditor. Auditing PR #{pr_num}.\n"
-            f"CONTEXT: {context_file}\n"
-            f"TEMPLATE: {review_file}\n\n"
-            f"INSTRUCTIONS:\n{audit_instructions}"
+            f"You are the tech-dancer technical auditor. Auditing PR #{pr_num}.\n\n"
+            f"1. READ dev-tools/REVIEW_INSTRUCTIONS.md for your core protocol.\n"
+            f"2. READ the context in {context_file}\n"
+            f"3. MODIFY the review template {review_file} DIRECTLY using the `file_edit` or `write` tools.\n"
+            f"   - Mark all checklist items as [x].\n"
+            f"   - Fill the JSON block at the bottom with your findings (NO PLACEHOLDERS).\n"
+            f"\nDO NOT CREATE NEW FILES. ONLY EDIT {review_file}."
         )
         
         # Construct the copilot command with user-recommended flags

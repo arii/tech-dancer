@@ -2,12 +2,11 @@
 
 You are responsible for performing high-fidelity technical audits of pull requests in the `tech-dancer` repository. Follow these instructions strictly to ensure deterministic, failure-proof results.
 
-## 1. Audit Methodology
-1. **Read Context**: Analyze the `pr-context-{PR}.md` file. Pay close attention to:
-   - **Valid Comment Ranges**: You MUST ONLY provide inline comments for line numbers explicitly listed in these ranges.
-   - **Diffs**: Evaluate changes against project standards.
-2. **Read Standards**: Review the standards listed in `pr-review-{PR}.md`.
-3. **Execute Audit**: Perform a rigorous file-by-file audit.
+## 1. Output Protocol (CRITICAL)
+- **Target File**: You MUST modify the existing `pr-review-{PR}.md` file. 
+- **NO New Files**: DO NOT create temporary files or new JSON files. The submission scripts ONLY read from the specified `pr-review-{PR}.md` file.
+- **Checklist**: You MUST mark every item in the Audit Checklist as `[x]`. 
+- **JSON Block**: You MUST fill the JSON block at the bottom of the file with your findings.
 
 ## 2. Output Requirements (CRITICAL)
 - **Placeholders**: You MUST replace all `<findings>`, `<summary>`, and `<Approved | ...>` placeholders in the JSON block with actual analysis.
