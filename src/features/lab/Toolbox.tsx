@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
-import { Box, Grid, Text } from '@/layouts/Primitives';
+import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
+import { ViewToggle } from '@/components/ui/ViewToggle';
+import { ListRow } from '@/components/ui/ListRow';
 
 export default function Toolbox() {
-  const { filteredCategories, searchTerm, setSearchTerm } = useToolbox();
+  const { filteredCategories, searchTerm, setSearchTerm, view, setView } = useToolbox();
 
   const allFilteredItems = useMemo(() =>
     filteredCategories.flatMap(cat => cat.items),
@@ -15,9 +17,9 @@ export default function Toolbox() {
       {/* Header section with modern design */}
       <header className="mb-12 border-b border-line/50 pb-12">
         <Box marginBottom={4}>
-          <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-wider">
-            THE TOOLBOX
-          </span>
+          <Box as="span" radius="full" paddingX={3} paddingY={1} className="inline-block bg-accent/10">
+            <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
+          </Box>
         </Box>
         <Text as="h1" variant="display" size="4xl" weight="font-black" className="text-accent-navy mb-4 block">
           Gear Reviews
@@ -26,41 +28,52 @@ export default function Toolbox() {
           Rigorous testing and honest takes on the gear that keeps you moving.
         </Text>
 
-        {/* Modern Search Bar */}
-        <div className="relative max-w-md">
-          <input
-            type="text"
-            placeholder="Search gear (e.g. earplugs, shoes)..."
-            className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-xl focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            value={searchTerm}
-          />
-          <svg
-            className="absolute left-3 top-3.5 h-5 w-5 text-text-dim"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </div>
+        {/* Modern Search Bar & Toggle */}
+        <Box display="flex" align="center" justify="between" gap={4} flexWrap="wrap">
+          <div className="relative max-w-md flex-1">
+            <input
+              type="text"
+              placeholder="Search gear (e.g. earplugs, shoes)..."
+              className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchTerm}
+            />
+            <svg
+              className="absolute left-3 top-3.5 h-5 w-5 text-text-dim"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <ViewToggle view={view} onChange={setView} />
+        </Box>
       </header>
 
       {/* Grid: Mobile-first stacking */}
-      <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={{ base: 6, md: 8 }}>
-        {allFilteredItems.map((item) => (
-          <GearCard
-            key={item.slug}
-            {...item}
-            basePath="/gear"
-          />
-        ))}
-      </Grid>
+      {view === 'card' ? (
+        <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={{ base: 6, md: 8 }}>
+          {allFilteredItems.map((item) => (
+            <GearCard
+              key={item.slug}
+              {...item}
+              basePath="/gear"
+            />
+          ))}
+        </Grid>
+      ) : (
+        <Stack gap={0} border="t" className="border-line">
+          {allFilteredItems.map((item) => (
+            <ListRow key={item.slug} {...item} basePath="/gear" />
+          ))}
+        </Stack>
+      )}
 
       {allFilteredItems.length === 0 && (
         <Box paddingY={20} className="text-center">

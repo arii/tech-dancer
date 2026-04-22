@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPostBySlug } from '@/lib/content';
-import { ContentDetail } from '@/layouts/ContentDetail';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -23,7 +23,7 @@ export default function BlogPost() {
   }
 
   return (
-    <ContentDetail
+    <BlogPostDetail
       post={post}
       onBack={() => navigate('/blog')}
       backLabel="Back to Folio"
