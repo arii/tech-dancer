@@ -38,7 +38,7 @@ export default function PathSelector() {
   const navigate = useNavigate();
 
   return (
-    <Grid cols={12} gap={0} border="y" minHeight="[60vh]" width="full" className="bg-black">
+    <Grid cols={12} gap={0} border="y" minHeight={{ base: "auto", lg: "[65vh]" }} width="full" className="bg-black">
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id || activeId === path.id;
         const isOtherHovered = (hoveredPath !== null || activeId !== null) && !isHovered;
@@ -130,6 +130,7 @@ export default function PathSelector() {
                   <NavLink
                     className="hover:text-accent transition-colors flex items-center gap-2"
                     to={link.to}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <Text color="accent" className="transition-transform duration-300 group-hover:translate-x-1">
                       →
