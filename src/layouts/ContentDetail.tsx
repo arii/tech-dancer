@@ -80,7 +80,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
           <Box className="prose prose-sm md:prose-base prose-slate max-w-none w-full overflow-hidden break-words prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
             <ReactMarkdown
               components={{
-                a: ({node: _node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />
+                a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />
               }}
             >
               {content}

@@ -3,6 +3,7 @@ import { getStudies, Study } from '@/lib/content';
 
 export function useResearch() {
   const [studies, setStudies] = useState<Study[]>([]);
+  const [selectedTool, setSelectedTool] = useState<string | null>(null);
 
   useEffect(() => {
     setStudies(getStudies());

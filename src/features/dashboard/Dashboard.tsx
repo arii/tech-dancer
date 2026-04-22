@@ -1,15 +1,15 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
-import { SectionHeader } from '@/components/ui/PageHeader';
+import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents, dancerPaths: _dancerPaths, hirePaths: _hirePaths } = useHome();
+  const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
 
   return (
     <Box as="section">

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Text } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 
 interface GearCardProps extends Resource {
