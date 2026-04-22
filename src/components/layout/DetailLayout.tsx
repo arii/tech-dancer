@@ -35,7 +35,7 @@ export function DetailLayout({
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="5xl" marginX="auto" className="w-full">
+      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
         {/* Navigation */}
         <Box
           as="button"
@@ -89,7 +89,7 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 4 : 1 }} gap={12} className={!sidebar ? "lg:grid-cols-1" : ""}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
             {/* Sidebar */}
             {sidebar && (
               <Box className="hidden lg:block">
@@ -100,7 +100,7 @@ export function DetailLayout({
             )}
 
             {/* Content */}
-            <Box className={sidebar ? "lg:col-span-3" : "w-full"}>
+            <Box className={sidebar ? "lg:col-span-2" : "w-full"}>
               {children}
               <Box
                 className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"

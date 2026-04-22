@@ -6,13 +6,14 @@ interface ScoreItemProps {
   value: string | number;
   icon?: LucideIcon;
   color?: string;
+  intent?: "brand" | "accent" | "success" | "warning" | "danger";
 }
 
-export function ScoreItem({ label, value, icon: Icon, color }: ScoreItemProps) {
+export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
-    <Stack gap={1} align="center" className="sm:border-r border-line/30 last:border-0">
+    <Stack gap={1} align="center" className="flex-1 px-4 py-2">
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
-      <Box display="flex" align="center" gap={1} className={color}>
+      <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
         <Text variant="display" size="xl" weight="font-bold">{value}</Text>
       </Box>
@@ -22,14 +23,16 @@ export function ScoreItem({ label, value, icon: Icon, color }: ScoreItemProps) {
 
 export function ScoreGrid({ children }: { children: React.ReactNode }) {
   return (
-    <Box border="y" paddingY={8} surface="muted" emphasis="low" className="border-line/50">
+    <Box
+      border="y"
+      paddingY={6}
+      surface="muted"
+      className="border-line/50 w-full"
+    >
       <Box
         display="flex"
-        flexDirection={{ base: 'column', sm: 'row' }}
-        flexWrap="wrap"
-        justify="center"
-        align="center"
-        gap={8}
+        flexDirection="row"
+        className="w-full divide-x divide-line/30"
       >
         {children}
       </Box>
