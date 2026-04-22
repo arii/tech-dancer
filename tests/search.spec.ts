@@ -49,6 +49,9 @@ test.describe('Global Search Modal', () => {
 
     await resultButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
+  });
+});
+
 test.describe('Search and Filter URL Persistence', () => {
 
   test('Global Search parameter should persist after reload', async ({ page }) => {

@@ -40,7 +40,7 @@ export function GlobalSearch() {
   return (
     <Box
       position="fixed"
-      inset
+      inset="y"
       zIndex="search"
       display="flex"
       justify="center"
@@ -48,7 +48,7 @@ export function GlobalSearch() {
       paddingTop={20}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md"
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-[280px]"
       // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
@@ -60,7 +60,8 @@ export function GlobalSearch() {
         overflow="hidden"
         surface="default"
         border
-        className="shadow-2xl border-accent/20"
+        shadow="topOverlay"
+        className="border-accent/20"
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
@@ -76,7 +77,7 @@ export function GlobalSearch() {
             variant="display"
             size="2xl"
             color="main"
-            className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
+            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
             autoFocus
           />
           <Box 
@@ -105,12 +106,12 @@ export function GlobalSearch() {
                   width="full"
                   padding={3}
                   display="flex"
-                  align="center"
+                  align="start"
                   gap={4}
                   surface="default"
                   border
                   cursor="pointer"
-                  className="hover:bg-accent/5 group transition-colors text-left"
+                  className="hover:bg-accent/5 group transition-colors"
                 >
                    <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
                       <Hash className="w-4 h-4 text-accent-brand opacity-50" />
@@ -141,15 +142,19 @@ export function GlobalSearch() {
         <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center">
            <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">ESC</Box>
+                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
+                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                 </Box>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">↵</Box>
+                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
+                    <Text variant="mono" size="tiny" color="dim" className="leading-none">↵</Text>
+                 </Box>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" className="tracking-widest">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
               {results.length} RESULTS FOUND
             </Text>
         </Box>
