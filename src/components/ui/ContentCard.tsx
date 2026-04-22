@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -34,21 +33,18 @@ export function ContentCardSkeleton() {
 }
 
 export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect = "video" }: ContentCardProps) {
-  const [imgError, setImgError] = React.useState(false);
-
   return (
     <Box 
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-xl overflow-hidden shadow-sm"
+      className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
       <Box className="relative aspect-video overflow-hidden bg-bg">
-        {image && !imgError ? (
+        {image ? (
           <img 
             src={image} 
             alt={title} 
-            onError={() => setImgError(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (

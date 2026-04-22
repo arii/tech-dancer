@@ -2,13 +2,6 @@ import { cn } from '@/lib/utils';
 
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      className={cn(
-        'animate-pulse rounded-md bg-line/10 relative overflow-hidden',
-        'after:absolute after:inset-0 after:-translate-x-full after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-accent/5 after:to-transparent',
-        className
-      )}
-      {...props}
-    />
+    <div className={cn('animate-pulse rounded-md bg-line/20', className)} {...props} />
   );
 }

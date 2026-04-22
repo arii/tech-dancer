@@ -12,11 +12,6 @@ coverage/
 playwright-report/
 test-results/
 
-# AI Debugger
-ai-fix-prompt.txt
-antipattern-report.txt
-TODO_ANTIPATTERNS.md
-
 # Python / ETL
 __pycache__/
 *.py[cod]
