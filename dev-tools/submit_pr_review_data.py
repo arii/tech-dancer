@@ -25,8 +25,7 @@ PLACEHOLDER_PATTERNS = [
     r"Feedback here",
     r"<slop findings>",
     r"<per-file summary>",
-    r"^Approved \| Approved with Minor Changes \| Not Approved$",
-    r"^\s*<!-- Approved \| Approved with Minor Changes \| Not Approved -->\s*$",
+    r"Approved | Approved with Minor Changes | Not Approved",
 ]
 
 
@@ -52,29 +51,22 @@ def extract_pr_number(text: str) -> str:
     return None
 
 
-def extract_json_blocks(text: str) -> list[tuple[dict, int]]:
-    """Extract all ```json ... ``` blocks from text and parse them with fuzzy recovery."""
+def extract_json_blocks(text: str) -> list[dict]:
+    """Extract all ```json ... ``` blocks from text and parse them."""
     blocks = []
-    # Match fences with potential slop inside
+    # More forgiving regex for the fence start
     for m in re.finditer(r"```json\s*(.*?)```", text, re.DOTALL):
         raw = m.group(1).strip()
-        
-        # Strategy 1: Direct parse
         try:
             blocks.append((json.loads(raw), m.start()))
-            continue
         except json.JSONDecodeError:
-            pass
-            
-        # Strategy 2: Fuzzy recovery (find outer braces)
-        brace_match = re.search(r"(\{.*\})", raw, re.DOTALL)
-        if brace_match:
-            try:
-                # Clean up potential Markdown bolding inside the JSON
-                clean_json = brace_match.group(1).replace("**", "")
-                blocks.append((json.loads(clean_json), m.start()))
-            except json.JSONDecodeError:
-                pass
+            # Try to find the first '{' and last '}' to handle bots adding text inside the fence
+            brace_match = re.search(r"(\{.*\})", raw, re.DOTALL)
+            if brace_match:
+                try:
+                    blocks.append((json.loads(brace_match.group(1)), m.start()))
+                except json.JSONDecodeError:
+                    pass
     return blocks
 
 
@@ -111,22 +103,17 @@ def parse_review_doc(path: str) -> tuple[str, str, list[dict]]:
         raise ValueError("No valid JSON block found in the Submission section.")
 
     overall_body = submission_blocks[0][0].get("body", "")
-    submission_comments = submission_blocks[0][0].get("comments", [])
-    
-    skipped = []
-    inline_comments = []
-    
-    # 1. Process submission JSON comments
-    for c in submission_comments:
-        body = c.get("body", "")
-        if is_placeholder(body):
-            skipped.append(c.get("path", "overall-finding"))
-            continue
-        if not c.get("side"):
-            c["side"] = "RIGHT"
-        inline_comments.append(c)
+    if is_placeholder(overall_body):
+        raise ValueError(
+            "Overall review body still contains placeholder text. "
+            "Fill in ANTI-AI-SLOP, FINDINGS, and FINAL RECOMMENDATION before submitting."
+        )
 
-    # 2. Process file audit blocks
+    # ── Inline comments ───────────────────────────────────────────────────────
+    inline_comments = []
+    skipped = []
+
+    # Strategy: Find all file audit blocks (markers) or use the legacy marker
     file_audit_blocks = re.finditer(
         r"<!-- BEGIN_FILE_AUDIT: (.*?) -->(.*?)<!-- END_FILE_AUDIT: \1 -->",
         text, re.DOTALL
@@ -137,35 +124,25 @@ def parse_review_doc(path: str) -> tuple[str, str, list[dict]]:
         found_marker = True
         filename = fb.group(1)
         block_text = fb.group(2)
-        
-        blocks = extract_json_blocks(block_text)
+        json_match = re.search(r"```json\s*(.*?)```", block_text, re.DOTALL)
+        if not json_match:
+            continue
+
+        raw_json = json_match.group(1).strip()
+        # Handle bots putting multiple objects in one block or adding text
+        blocks = extract_json_blocks(f"```json\n{raw_json}\n```")
         for comment, _ in blocks:
             body = comment.get("body", "")
-            if is_placeholder(body):
-                skipped.append(filename)
-                continue
-                
             line = comment.get("line", 1)
-            path_str = comment.get("path", filename)
+            path_str = comment.get("path", filename) # Use filename from marker if path missing
 
-            # Smarter line resolution: if line is 1, try to find the actual first line of the hunk
-            resolved_line = line
-            if line == 1:
-                hunk_match = re.search(r"@@ -\d+,?\d* \+(\d+),?\d* @@", block_text)
-                if hunk_match:
-                    resolved_line = int(hunk_match.group(1))
-                    print(f"     [RESOLVE] line 1 -> {resolved_line} for {path_str}")
-                else:
-                    print(f"     [WARNING] Could not resolve line 1 for {path_str}, using raw line 1")
+            if is_placeholder(body):
+                skipped.append(path_str)
+                continue
 
-            inline_comments.append({
-                "path": path_str,
-                "line": resolved_line,
-                "body": body,
-                "side": comment.get("side", "RIGHT")
-            })
+            inline_comments.append({"path": path_str, "line": line, "body": body})
 
-    # 3. Legacy Fallback if NO markers found
+    # Legacy Fallback if NO BEGIN_FILE_AUDIT markers found at all
     if not found_marker:
         comment_pattern = re.compile(r"\*\*Proposed inline comment\*\*.*?\n(```json\s*\n.*?```)", re.DOTALL)
         for m in comment_pattern.finditer(text):
@@ -173,20 +150,15 @@ def parse_review_doc(path: str) -> tuple[str, str, list[dict]]:
             blocks = extract_json_blocks(raw_block)
             for comment, _ in blocks:
                 body = comment.get("body", "")
-                if is_placeholder(body):
-                    skipped.append(comment.get("path", "unknown"))
-                    continue
                 line = comment.get("line", 1)
                 path_str = comment.get("path", "")
-                inline_comments.append({
-                    "path": path_str,
-                    "line": line,
-                    "body": body,
-                    "side": comment.get("side", "RIGHT")
-                })
+                if is_placeholder(body):
+                    skipped.append(path_str or "unknown")
+                    continue
+                inline_comments.append({"path": path_str, "line": line, "body": body})
 
     if skipped:
-        print(f"\n  ⚠️  {len(skipped)} item(s) skipped (unfilled placeholders or skipped files).")
+        print(f"\n  ⚠️  {len(skipped)} item(s) skipped (unfilled placeholders).")
 
     return pr_number, overall_body, inline_comments
 
@@ -198,14 +170,6 @@ def main():
 
     doc_path = sys.argv[1]
     dry_run = "--dry-run" in sys.argv
-    event = "COMMENT"
-    for arg in sys.argv:
-        if arg.startswith("--event="):
-            event = arg.split("=")[1].upper()
-        elif arg == "--approve":
-            event = "APPROVE"
-        elif arg == "--request-changes":
-            event = "REQUEST_CHANGES"
 
     if not os.path.exists(doc_path):
         print(f"Error: File not found: {doc_path}")
@@ -224,11 +188,6 @@ def main():
     # Write payload next to the review doc (workspace-accessible)
     payload_path = os.path.join(os.path.dirname(os.path.abspath(doc_path)), "review_payload.json")
 
-    payload = {
-        "body": overall_body,
-        "comments": inline_comments
-    }
-
     with open(payload_path, "w") as f:
         json.dump(payload, f, indent=2)
     print(f"✅ Payload written: {payload_path}")
@@ -237,30 +196,11 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     gh_collab = os.path.join(script_dir, "gh_collab.py")
 
-    cmd = ["python3", gh_collab, "review", pr_number, "--file", payload_path, "--event", event]
+    cmd = ["python3", gh_collab, "review", pr_number, "--file", payload_path]
     if dry_run:
         cmd.insert(2, "--dry-run")
 
-    result = subprocess.run(cmd, cwd=os.path.dirname(script_dir), capture_output=True, text=True)
-    
-    # ── Audit Summary Report ────────────────────────────────────────────────
-    print("\n" + "="*60)
-    print("                PR TECHNICAL AUDIT REPORT")
-    print("="*60)
-    print(f"PR Number:    #{pr_number}")
-    print(f"Outcome:      {'SUCCESS' if result.returncode == 0 else 'FAILURE'}")
-    print(f"Comments:     {len(inline_comments)} submitted")
-    
-    if result.returncode != 0:
-        print(f"\n❌ Error Details:\n{result.stderr or result.stdout}")
-        
-        if "422" in (result.stderr or result.stdout):
-            print("\n💡 TIP: GitHub 422 errors usually mean a line number is outside the diff range.")
-            print("   Check that 'line' matches an actual changed line in the PR.")
-    else:
-        print("\n✅ Review submitted successfully.")
-    print("="*60 + "\n")
-    
+    result = subprocess.run(cmd, cwd=os.path.dirname(script_dir))
     sys.exit(result.returncode)
 
 
