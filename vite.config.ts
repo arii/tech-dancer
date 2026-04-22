@@ -27,12 +27,12 @@ export default defineConfig(({mode}) => {
         output: {
           manualChunks: {
             'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-            'vendor-motion': ['motion', 'motion/react'],
-            'vendor-charts': ['recharts'],
+            'vendor-motion': ['motion'],
+            'vendor-recharts': ['recharts'],
             'vendor-markdown': ['react-markdown'],
-          }
-        }
-      }
+          },
+        },
+      },
     },
     define: {
       'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),

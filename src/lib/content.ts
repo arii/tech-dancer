@@ -86,6 +86,9 @@ export interface Resource {
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
+  durability?: number;
+  value?: number;
+  specs?: Record<string, string>;
 }
 
 export interface Study {
@@ -196,7 +199,18 @@ export const getStudyBySlug = async (slug: string) => {
 };
 export const getEventBySlug = (slug: string) => maps.events.get(slug);
 
-export const getAllContent = async (type: ContentType): Promise<ContentItem[]> => {
-  if (type === 'studies') return await fetchStudies();
-  return items[type];
+export const getAllContent = (type: ContentType): ContentItem[] => items[type];
+
+/**
+ * Calculates estimated reading time in minutes.
+ * Uses a standard 200 words per minute for full content,
+ * or a simplified proxy for excerpts.
+ */
+export const readingTime = (content?: string, excerpt?: string) => {
+  if (content && content.trim().length > 0) {
+    return Math.max(1, Math.round(content.split(/\s+/).length / 200));
+  }
+  // Fallback for list views where only excerpt might be available
+  const words = excerpt?.split(/\s+/).length ?? 0;
+  return Math.max(1, Math.round(words / 20)); // sensible proxy for short text
 };

@@ -1,14 +1,23 @@
 import { motion } from 'motion/react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info } from 'lucide-react';
+import { useState } from 'react';
+import { Github, FileText, Send, Terminal, ExternalLink, Info, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
-import ReactMarkdown from 'react-markdown';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
-import { useState } from 'react';
 
 export function BlogDrafter() {
   const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
   const [copied, setCopied] = useState(false);
+
+  const handleCopyPrompt = () => {
+    const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
+      Current Data: ${JSON.stringify(data, null, 2)}
+      Respond ONLY with a valid JSON object matching the keys above. Ensure the 'commentary' field is a full, high-quality Markdown post.`;
+    navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Stack gap={10} height="full">
@@ -167,33 +176,25 @@ export function BlogDrafter() {
             maxHeight="600px"
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
-            <ReactMarkdown>{markdownPreview}</ReactMarkdown>
+            <MarkdownRenderer content={markdownPreview} />
           </Box>
 
           <Grid cols={2} gap={4}>
             <Box
               as="button"
-              onClick={() => {
-                const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
-                  Current Data: ${JSON.stringify(data, null, 2)}
-                  Respond ONLY with a valid JSON object matching the keys above. Ensure the 'commentary' field is a full, high-quality Markdown post.`;
-                navigator.clipboard.writeText(prompt).then(() => {
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 2000);
-                });
-              }}
+              onClick={handleCopyPrompt}
               display="flex"
               align="center"
               justify="center"
               gap={3}
-              surface="muted"
+              surface={copied ? "accent" : "muted"}
               border
               padding={4}
-              className="hover:bg-line transition-all cursor-pointer group"
+              className={`hover:bg-line transition-all cursor-pointer group ${copied ? 'bg-accent/10 border-accent text-accent' : ''}`}
             >
-              <Terminal className="w-5 h-5" />
+              {copied ? <Check className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
               <Text variant="mono" size="xs" weight="font-bold">
-                {copied ? 'COPIED ✓' : 'COPY AI PROMPT'}
+                {copied ? 'PROMPT COPIED ✓' : 'COPY AI PROMPT'}
               </Text>
             </Box>
 

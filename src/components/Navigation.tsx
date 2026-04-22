@@ -8,7 +8,8 @@ import {
   Menu,
   X,
   Terminal,
-  Search
+  Search,
+  LucideIcon
 } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -17,7 +18,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
 
-const ICON_REGISTRY: Record<string, any> = {
+const ICON_REGISTRY: Record<string, LucideIcon> = {
   Home,
   BookOpen,
   ShoppingBag,
