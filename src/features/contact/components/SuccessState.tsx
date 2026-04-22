@@ -11,7 +11,9 @@ export function SuccessState({ onReset }: SuccessStateProps) {
     <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" textAlign="center">
       <Stack gap={12} align="center">
         <Box width={24} height={24} border surface="dim" display="flex" align="center" justify="center" color="accent">
-          <Sparkles className="w-12 h-12 stroke-1" />
+          <Box width={12} height={12} display="flex" align="center" justify="center">
+            <Sparkles size={48} className="stroke-1" />
+          </Box>
         </Box>
         <Stack gap={4}>
           <Text variant="headline" size="6xl">Message Received.</Text>
