@@ -1,6 +1,4 @@
 import { useMemo, type ChangeEvent } from 'react';
-import { Box, Grid, Text } from '@/layouts/Primitives';
-import { useMemo } from 'react';
 import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
@@ -56,7 +54,7 @@ export default function Toolbox() {
           </div>
           <ViewToggle view={view} onChange={setView} />
         </Box>
-      </header>
+      </Box>
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (

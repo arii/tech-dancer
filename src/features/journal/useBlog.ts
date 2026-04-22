@@ -8,31 +8,6 @@ export function useBlog() {
   const posts = useMemo(() => getPosts(), []);
   const [activeCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = getPosts();
-      if (!data) throw new Error('FAILED_TO_FETCH_JOURNAL_DATA');
-      setPosts(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Effect to handle loading state during filtering
-  useEffect(() => {
-    if (posts.length > 0) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [activeCategory, searchTerm, posts.length]);
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
 
   const view = viewParam as ViewMode;
@@ -68,8 +43,6 @@ export function useBlog() {
     view,
     setView,
     searchTerm,
-    setSearchTerm,
-    isLoading,
-    error
+    setSearchTerm
   };
 }
