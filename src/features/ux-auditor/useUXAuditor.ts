@@ -220,7 +220,7 @@ export function useUXAuditor() {
           {
             element: "Manual Audit Required",
             issue: "No automated analysis generated.",
-            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`,
+            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
             severity: 5
           }
         ]
@@ -266,16 +266,15 @@ export function useUXAuditor() {
     setTimeout(() => setIsExportingToGithub(false), 1000);
   };
 
-  const copyMarkdown = () => {
+  const copyMarkdown = async () => {
     const md = getMarkdown();
-    const el = document.createElement('textarea');
-    el.value = md;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    setIsCopiedMarkdown(true);
-    setTimeout(() => setIsCopiedMarkdown(false), 2000);
+    try {
+      await navigator.clipboard.writeText(md);
+      setIsCopiedMarkdown(true);
+      setTimeout(() => setIsCopiedMarkdown(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy markdown:', err);
+    }
   };
 
   return {
