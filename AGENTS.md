@@ -123,3 +123,9 @@ When reviewing, evaluate EVERY changed file against these criteria:
 - Application routes MUST be code-split using `React.lazy()` or equivalent dynamic imports to keep bundles small.
 - Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries.
 - Ensure the application maintains single-page application (SPA) characteristics with environment-agnostic routing (e.g., handling base URLs cleanly for GitHub Pages).
+
+### 🤖 Isolated Development Environments (`vdev`)
+When asked to work on a new feature, bugfix, or isolated task while preserving the current workspace state, use the `vdev` CLI tool:
+* **Isolate:** Run `vdev setup <branch-name>` to create an isolated Docker/Worktree environment automatically.
+* **Execute:** Run tests, builds, or scripts inside that isolated environment using `vdev exec "<command>" --branch <branch-name>`.
+* **Cleanup:** Once the PR is submitted or the environment is no longer needed, clean it up using `vdev cleanup <branch-name>`.
