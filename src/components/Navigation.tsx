@@ -49,7 +49,15 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const { open: openSearch } = useGlobalSearch();
+  const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
+
+  const handleSearchClick = () => {
+    if (isSearchOpen) {
+      closeSearch();
+    } else {
+      openSearch();
+    }
+  };
 
   return (
     <>
@@ -65,7 +73,7 @@ export default function Navigation() {
           display="flex"
           align="center"
           justify="center"
-          className="min-h-[44px] min-w-[44px]"
+          className="min-h-11 min-w-11"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
@@ -94,7 +102,7 @@ export default function Navigation() {
                   cursor="pointer"
                   onClick={() => {
                     setIsOpen(false);
-                    openSearch();
+                    handleSearchClick();
                   }}
                   display="flex"
                   align="center"
@@ -150,7 +158,7 @@ export default function Navigation() {
                 as="button"
                 type="button"
                 cursor="pointer"
-                onClick={openSearch}
+                onClick={handleSearchClick}
                 display="flex"
                 align="center"
                 gap={4}
