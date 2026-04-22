@@ -40,7 +40,7 @@ export default function ResearchAnalytics() {
                 border
                 padding="card"
                 cursor="pointer"
-                className="group hover:border-accent-brand transition-all text-left"
+                className="group hover:border-accent transition-all text-left"
               >
                 <Stack gap={6} height="full" justify="between">
                   <Stack gap={4}>

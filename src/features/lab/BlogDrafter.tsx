@@ -59,7 +59,7 @@ export function BlogDrafter() {
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none"
+                className="focus:border-accent outline-none"
               />
             </Stack>
 
@@ -72,11 +72,11 @@ export function BlogDrafter() {
                   onChange={(e: any) => updateField('category', e.target.value)}
                   width="full"
                   surface="default"
-                  border
+                  border={true}
                   padding={3}
                   variant="mono"
                   size="sm"
-                  className="focus:border-accent-brand outline-none appearance-none"
+                  className="focus:border-accent outline-none appearance-none"
                 >
                   {CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
@@ -92,11 +92,11 @@ export function BlogDrafter() {
                   onChange={(e: any) => updateField('date', e.target.value)}
                   width="full"
                   surface="default"
-                  border
+                  border={true}
                   padding={3}
                   variant="mono"
                   size="sm"
-                  className="focus:border-accent-brand outline-none"
+                  className="focus:border-accent outline-none"
                 />
               </Stack>
             </Grid>
@@ -111,11 +111,11 @@ export function BlogDrafter() {
                 width="full"
                 height={20}
                 surface="default"
-                border
+                border={true}
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none resize-none"
+                className="focus:border-accent outline-none resize-none"
               />
             </Stack>
 
@@ -129,11 +129,11 @@ export function BlogDrafter() {
                 placeholder="https://amazon.com/..."
                 width="full"
                 surface="default"
-                border
+                border={true}
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none"
+                className="focus:border-accent outline-none"
               />
             </Stack>
 
@@ -147,11 +147,11 @@ export function BlogDrafter() {
                 width="full"
                 height={40}
                 surface="default"
-                border
+                border={true}
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none resize-none"
+                className="focus:border-accent outline-none resize-none"
               />
             </Stack>
           </Stack>
