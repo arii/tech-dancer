@@ -30,11 +30,12 @@ jobs:
 
           CHANGES_MADE=false
 
-          for dir in */; do
-            dir=${dir%/}
+          # Find all index.html files to identify deployment directories (including nested ones)
+          for index_file in $(find . -maxdepth 3 -name "index.html"); do
+            dir=$(dirname "$index_file" | sed 's|^\./||')
 
-            # Skip special folders
-            if [[ "$dir" == "assets" || "$dir" == "tmp" || "$dir" == "previews" || ! -f "$dir/index.html" ]]; then
+            # Skip special folders and the root site
+            if [[ "$dir" == "." || "$dir" == "assets" || "$dir" == "tmp" || "$dir" == "previews" ]]; then
               continue
             fi
 
