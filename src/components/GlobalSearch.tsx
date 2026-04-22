@@ -41,7 +41,7 @@ export function GlobalSearch() {
     <Box
       position="fixed"
       inset
-      zIndex="top" // Standard token 'top' maps to z-100
+      zIndex="search"
       display="flex"
       justify="center"
       align="start"

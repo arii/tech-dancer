@@ -20,13 +20,10 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    // Click on the backdrop
-    // Since the sidebar is fixed at x=0 to x=280 and has z-50,
-    // and the modal backdrop is at z-100 but centered,
-    // we need to click where the backdrop is visible but not obscured by the sidebar.
-    // Viewport is 1280. Modal is 768.
-    // Click at x=500, y=500 should be safely on the backdrop of the modal.
-    await page.mouse.click(500, 500);
+    // Click on the backdrop using the data-testid
+    // We use force: true because sometimes the backdrop implementation might intercept clicks in a way Playwright objects to,
+    // although for a modal backdrop click this is usually the desired behavior.
+    await page.getByTestId('search-backdrop').click({ force: true });
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 

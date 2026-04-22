@@ -79,6 +79,7 @@ export const zIndex = {
   skipLink: 70,
   toast: 80,
   top: 100,
+  search: 200,
 };
 
 export const typography = {
