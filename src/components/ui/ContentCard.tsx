@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
-import { getCategoryAbbreviation } from '@/lib/categoryUtils';
+import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface ContentCardProps {
   slug: string;
@@ -53,11 +53,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <Box surface="muted" className="w-full h-full flex items-center justify-center">
-             <Text variant="display" size="4xl" color="dim" className="opacity-50">
-               {getCategoryAbbreviation(category)}
-             </Text>
-          </Box>
+          <CategoryPlaceholder category={category} />
         )}
         <Box className="absolute top-4 left-4">
           <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
@@ -82,9 +78,9 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             </Text>
           </Box>
           <Text 
-            variant="display" 
+            variant="body"
             size="xl" 
-            weight="font-black" 
+            weight="font-bold"
             className="text-accent-navy leading-snug group-hover:text-accent transition-colors"
           >
             {title}
@@ -95,7 +91,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         </Stack>
 
         <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-line mt-auto">
-          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-widest">
+          <Text variant="mono" size="xs" className="text-accent font-semibold tracking-widest underline underline-offset-4 decoration-line hover:decoration-accent">
             Read More
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />

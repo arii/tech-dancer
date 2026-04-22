@@ -48,7 +48,7 @@ test.describe('Search and Filter URL Persistence', () => {
   test('Blog search term should persist after reload', async ({ page }) => {
     await page.goto('./blog');
 
-    const searchInput = page.getByPlaceholder(/SEARCH_THE_ENGINE/i);
+    const searchInput = page.getByPlaceholder(/Search articles, guides, or gear/i);
     await searchInput.fill('west');
 
     // Check URL
@@ -57,7 +57,7 @@ test.describe('Search and Filter URL Persistence', () => {
     // Reload
     await page.reload();
 
-    await expect(page.getByPlaceholder(/SEARCH_THE_ENGINE/i)).toHaveValue('west');
+    await expect(page.getByPlaceholder(/Search articles, guides, or gear/i)).toHaveValue('west');
   });
 
   test('Gear search term should persist after reload', async ({ page }) => {

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
-import { getCategoryAbbreviation } from '@/lib/categoryUtils';
+import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface GearCardProps extends Resource {
   basePath: string;
@@ -33,11 +33,7 @@ export function GearCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <Box surface="muted" className="w-full h-full flex items-center justify-center">
-             <Text variant="display" size="4xl" color="dim" className="opacity-50">
-               {getCategoryAbbreviation(category)}
-             </Text>
-          </Box>
+          <CategoryPlaceholder category={category} />
         )}
         <div className="absolute top-4 left-4">
           <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-none border border-line">
@@ -62,7 +58,7 @@ export function GearCard({
         <div className="flex flex-col gap-2">
           {rating && (
             <div className="flex items-center gap-1 mb-1">
-              <span className="text-yellow-400">
+              <span className="text-amber-500 drop-shadow-sm">
                 {'★'.repeat(Math.floor(rating))}
                 {rating % 1 !== 0 ? '½' : ''}
               </span>
@@ -72,7 +68,7 @@ export function GearCard({
             </div>
           )}
 
-          <h3 className="font-display font-bold uppercase tracking-tight leading-tight text-xl text-accent-navy group-hover:text-accent transition-colors">
+          <h3 className="font-sans font-bold tracking-tight leading-tight text-xl text-accent-navy group-hover:text-accent transition-colors">
             {title}
           </h3>
 
@@ -95,6 +91,9 @@ export function GearCard({
         </div>
 
         <div className="flex flex-col gap-3 mt-auto">
+          <Text variant="mono" size="xs" color="dim" className="leading-tight mb-2">
+            * This post contains affiliate links. I may earn a commission at no extra cost to you.
+          </Text>
           <div className="flex items-center justify-between pt-4 border-t border-line/50">
             <Text variant="mono" size="xs" color="brand" weight="font-bold">
               Read Review
@@ -116,9 +115,6 @@ export function GearCard({
               </svg>
             </div>
           </div>
-          <Text variant="mono" size="micro" color="dim" emphasis="low" italic className="leading-tight">
-            * This post contains affiliate links. I may earn a commission at no extra cost to you.
-          </Text>
         </div>
       </div>
     </NavLink>

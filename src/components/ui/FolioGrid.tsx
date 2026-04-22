@@ -1,11 +1,12 @@
 import { useSearchParam } from '@/hooks/useSearchParam';
-import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
+import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -54,7 +55,7 @@ export default function FolioGrid({
             <Box
               as="input"
               type="text"
-              placeholder="SEARCH_THE_ENGINE..."
+              placeholder="Search articles, guides, or gear..."
               width="full"
               surface="default"
               border
@@ -73,31 +74,49 @@ export default function FolioGrid({
         </Box>
       </Box>
 
-      {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
-          {filteredItems.map((item) => (
-            <Box
-              key={item.slug}
-              border="r"
-              borderBottom={true}
-              padding={{ base: 6, lg: 6 }}
-              className="hover:bg-card-bg transition-colors group"
-            >
-              <ContentCard
-                {...item}
-                basePath={basePath}
-                aspect="video"
-              />
-            </Box>
-          ))}
-        </Grid>
-      ) : (
-        <Stack gap={0} border="t" className="border-line mt-8">
-          {filteredItems.map((item) => (
-            <ListRow key={item.slug} {...item} basePath={basePath} />
-          ))}
-        </Stack>
-      )}
+      <AnimatePresence mode="wait">
+        {view === 'card' ? (
+          <motion.div
+            key="card-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
+              {filteredItems.map((item, index) => (
+                <Box
+                  key={item.slug}
+                  border="r"
+                  borderBottom={true}
+                  padding={{ base: 6, lg: 6 }}
+                  className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
+                >
+                  <ContentCard
+                    {...item}
+                    basePath={basePath}
+                    aspect="video"
+                  />
+                </Box>
+              ))}
+            </Grid>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="list-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Stack gap={0} border="t" className="border-line mt-8">
+              {filteredItems.map((item) => (
+                <ListRow key={item.slug} {...item} basePath={basePath} />
+              ))}
+            </Stack>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }
