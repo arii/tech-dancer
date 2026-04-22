@@ -1,5 +1,5 @@
-import { motion } from 'motion/react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info } from 'lucide-react';
+import type { ChangeEvent } from 'react';
+import { Github, FileText, Terminal, ExternalLink, Info } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import ReactMarkdown from 'react-markdown';
@@ -15,9 +15,9 @@ export function BlogDrafter() {
            <Terminal className="w-5 h-5 text-accent-brand" />
            <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
         </Box>
-        <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
+        <Box border surface="accent" padding="compact" opacity={10} className="bg-accent/5">
            <Stack gap={2} display="flex" align="start" direction="row">
-              <Info className="w-4 h-4 text-accent-brand shrink-0 mt-1" />
+              <Info className="w-4 h-4 shrink-0 mt-1" />
               <Text variant="body" size="xs">
                 This tool prepares your blog post for the Tech-Dancer automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
@@ -40,7 +40,7 @@ export function BlogDrafter() {
                 as="input"
                 type="text"
                 value={data.title}
-                onChange={(e: any) => updateField('title', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
                 placeholder="The Future of WCS..."
                 width="full"
                 surface="default"
@@ -58,7 +58,7 @@ export function BlogDrafter() {
                 <Box
                   as="select"
                   value={data.category}
-                  onChange={(e: any) => updateField('category', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
                   width="full"
                   surface="default"
                   border
@@ -78,7 +78,7 @@ export function BlogDrafter() {
                   as="input"
                   type="date"
                   value={data.date}
-                  onChange={(e: any) => updateField('date', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
                   width="full"
                   surface="default"
                   border
@@ -95,7 +95,7 @@ export function BlogDrafter() {
               <Box
                 as="textarea"
                 value={data.excerpt}
-                onChange={(e: any) => updateField('excerpt', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the post content..."
                 width="full"
                 height={20}
@@ -114,7 +114,7 @@ export function BlogDrafter() {
                 as="input"
                 type="url"
                 value={data.affiliateLink}
-                onChange={(e: any) => updateField('affiliateLink', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
                 placeholder="https://amazon.com/..."
                 width="full"
                 surface="default"
@@ -131,7 +131,7 @@ export function BlogDrafter() {
               <Box
                 as="textarea"
                 value={data.commentary}
-                onChange={(e: any) => updateField('commentary', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
                 placeholder="Write your main content here..."
                 width="full"
                 height={40}

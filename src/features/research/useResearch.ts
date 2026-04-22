@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getStudies, Study } from '@/lib/content';
+import type { LabTool } from './types';
 
 export function useResearch() {
   const [studies, setStudies] = useState<Study[]>([]);
@@ -9,7 +10,7 @@ export function useResearch() {
     setStudies(getStudies());
   }, []);
 
-  const tools = [
+  const tools: LabTool[] = [
     {
       id: 'wcs-scraper',
       name: 'WCS Prelim Scoring Scraper',

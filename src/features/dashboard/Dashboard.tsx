@@ -6,11 +6,14 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import PathSelector from '@/components/ui/PathSelector';
 import { SectionHeader } from '@/components/ui/PageHeader';
 import { ContentCardSkeleton } from '@/components/ui/ContentCard';
+import { useHome } from './useHome';
 
 const RecentPosts = lazy(() => import('./components/RecentPosts'));
 const UpcomingEvents = lazy(() => import('./components/UpcomingEvents'));
 
 export default function Home() {
+  const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
+
   return (
     <Box as="section">
       <Stack gap={24}>
@@ -35,7 +38,7 @@ export default function Home() {
           </Stack>
         </Stack>
 
-        <PathSelector />
+        <PathSelector dancerLinks={dancerPaths} roboticistLinks={hirePaths} />
 
         <Stack gap={12}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
@@ -54,10 +57,10 @@ export default function Home() {
 
           <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
             <Suspense fallback={<RecentPostsSkeleton />}>
-              <RecentPosts />
+              <RecentPosts posts={recentPosts} />
             </Suspense>
             <Suspense fallback={<Box surface="muted" height={32} animate="pulse" />}>
-              <UpcomingEvents />
+              <UpcomingEvents events={upcomingEvents} />
             </Suspense>
           </Grid>
         </Stack>

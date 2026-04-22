@@ -1,12 +1,10 @@
 import { ContentCard } from '@/components/ui/ContentCard';
-import { useHome } from '../useHome';
+import { Post } from '@/lib/content';
 
-export default function RecentPosts() {
-  const { recentPosts } = useHome();
-
+export default function RecentPosts({ posts }: { posts: Post[] }) {
   return (
     <>
-      {recentPosts.map((post) => (
+      {posts.map((post) => (
         <ContentCard
           key={post.slug}
           {...post}

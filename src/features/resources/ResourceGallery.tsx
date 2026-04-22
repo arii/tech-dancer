@@ -12,7 +12,9 @@ export default function ResourceGallery() {
     return (
       <Box as="section" padding="panel" display="flex" align="center" justify="center">
         <Stack gap={4} align="center" textAlign="center">
-          <AlertCircle className="w-12 h-12 text-accent-brand opacity-20" />
+          <Box display="flex" align="center" justify="center" opacity={20} color="brand">
+            <AlertCircle className="w-12 h-12" />
+          </Box>
           <Text variant="display" size="2xl">Resource Access Failed</Text>
           <Text variant="mono" size="xs" color="dim">{error}</Text>
         </Stack>
@@ -60,7 +62,7 @@ function ResourceDetails({ resource, onBack }: { resource: Resource; onBack: () 
         <Text variant="mono" size="micro" weight="font-bold">Back to Reviews</Text>
       </Box>
 
-      <Stack gap={16} maxWidth="4xl" className="mx-auto">
+      <Stack gap={16} maxWidth="4xl" marginX="auto">
         <Stack gap={6}>
           <Box display="flex" justify="between" align="center" border="b" paddingBottom={4}>
             <Text variant="mono" weight="font-bold">ITEM: {resource.slug.toUpperCase()}</Text>
@@ -83,7 +85,33 @@ function ResourceDetails({ resource, onBack }: { resource: Resource; onBack: () 
   );
 }
 
-function ResourceList({ resources, onSelect, isLoading }: { resources: Resource[]; onSelect: (resource: Resource) => void; isLoading: boolean }) {
+function ResourceListSkeleton() {
+  return (
+    <>
+      {Array.from({ length: 4 }).map((_, i) => (
+        <Box
+          key={i}
+          span={{ base: 12, md: i % 2 === 0 ? 7 : 5 }}
+          surface="default"
+          padding="nav"
+          border
+          className="animate-pulse"
+        >
+          <Stack gap={12} height="full">
+            <Box width={8} height={8} surface="muted" />
+            <Stack gap={6}>
+               <Box width={20} height={4} surface="muted" />
+               <Box width="full" height={8} surface="muted" />
+               <Box width="3/4" height={4} surface="muted" />
+            </Stack>
+          </Stack>
+        </Box>
+      ))}
+    </>
+  );
+}
+
+function ResourceListItems({ resources, onSelect }: { resources: Resource[]; onSelect: (resource: Resource) => void }) {
   const getIcon = (category: string) => {
     switch (category) {
       case 'Travel': return Plane;
@@ -95,6 +123,58 @@ function ResourceList({ resources, onSelect, isLoading }: { resources: Resource[
     }
   };
 
+  return (
+    <>
+      {resources.map((resource, i) => {
+        const Icon = getIcon(resource.category);
+        const isWide = i % 2 === 0;
+        return (
+          <Box
+            key={resource.slug}
+            span={{ base: 12, md: isWide ? 7 : 5 }}
+            as={motion.div}
+            whileHover={{ x: 2, scale: 1.002 }}
+            onClick={() => onSelect(resource)}
+            surface="default"
+            padding="nav"
+            border
+            cursor="pointer"
+            className="group hover:bg-surface transition-colors"
+          >
+            <Stack gap={12} height="full">
+              <Box display="flex" justify="between" align="start">
+                <Icon className="w-8 h-8 stroke-1 text-accent-brand group-hover:scale-110 transition-transform" />
+                <Text variant="mono" size="micro" color="dim">REVIEW</Text>
+              </Box>
+              <Stack gap={6}>
+                <Stack direction="row" align="center" gap={3}>
+                  <Text variant="mono" color="brand" weight="font-bold">{resource.category}</Text>
+                  <Box border className="border-accent-brand/30 px-2 py-0.5">
+                    <Text variant="mono" color="brand" weight="font-bold" size="micro">REVIEW</Text>
+                  </Box>
+                </Stack>
+                <Stack gap={2}>
+                  <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
+                    {resource.title}
+                  </Text>
+                  <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                    {resource.excerpt}
+                  </Text>
+                </Stack>
+              </Stack>
+              <Box display="flex" align="center" gap={3} marginTop="auto" color="dim" className="group-hover:text-accent-brand transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold">Read Review</Text>
+                <ArrowRight className="w-4 h-4" />
+              </Box>
+            </Stack>
+          </Box>
+        );
+      })}
+    </>
+  );
+}
+
+function ResourceList({ resources, onSelect, isLoading }: { resources: Resource[]; onSelect: (resource: Resource) => void; isLoading: boolean }) {
   return (
     <Box as={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <Stack gap={12} marginBottom={24}>
@@ -122,71 +202,9 @@ function ResourceList({ resources, onSelect, isLoading }: { resources: Resource[
 
       <Grid cols={{ base: 1, md: 12 }} border className="bg-line">
         {isLoading ? (
-          Array.from({ length: 4 }).map((_, i) => (
-            <Box 
-              key={i}
-              span={{ base: 12, md: i % 2 === 0 ? 7 : 5 }}
-              surface="default"
-              padding="nav"
-              border
-              className="animate-pulse"
-            >
-              <Stack gap={12} height="full">
-                <Box width={8} height={8} surface="muted" />
-                <Stack gap={6}>
-                   <Box width={20} height={4} surface="muted" />
-                   <Box width="full" height={8} surface="muted" />
-                   <Box width="3/4" height={4} surface="muted" />
-                </Stack>
-              </Stack>
-            </Box>
-          ))
+          <ResourceListSkeleton />
         ) : (
-          resources.map((resource, i) => {
-            const Icon = getIcon(resource.category);
-            const isWide = i % 2 === 0;
-            return (
-              <Box
-                key={resource.slug}
-                span={{ base: 12, md: isWide ? 7 : 5 }}
-                as={motion.div}
-                whileHover={{ x: 2, scale: 1.002 }}
-                onClick={() => onSelect(resource)}
-                surface="default"
-                padding="nav"
-                border
-                cursor="pointer"
-                className="group hover:bg-surface transition-colors"
-              >
-                <Stack gap={12} height="full">
-                  <Box display="flex" justify="between" align="start">
-                    <Icon className="w-8 h-8 stroke-1 text-accent-brand group-hover:scale-110 transition-transform" />
-                    <Text variant="mono" size="micro" color="dim">REVIEW</Text>
-                  </Box>
-                  <Stack gap={6}>
-                    <Stack direction="row" align="center" gap={3}>
-                      <Text variant="mono" color="brand" weight="font-bold">{resource.category}</Text>
-                      <Box border className="border-accent-brand/30 px-2 py-0.5">
-                        <Text variant="mono" color="brand" weight="font-bold" size="micro">REVIEW</Text>
-                      </Box>
-                    </Stack>
-                    <Stack gap={2}>
-                      <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
-                        {resource.title}
-                      </Text>
-                      <Text variant="body" size="sm" color="dim" className="line-clamp-3">
-                        {resource.excerpt}
-                      </Text>
-                    </Stack>
-                  </Stack>
-                  <Box display="flex" align="center" gap={3} marginTop="auto" color="dim" className="group-hover:text-accent-brand transition-colors">
-                    <Text variant="mono" size="xs" weight="font-bold">Read Review</Text>
-                    <ArrowRight className="w-4 h-4" />
-                  </Box>
-                </Stack>
-              </Box>
-            );
-          })
+          <ResourceListItems resources={resources} onSelect={onSelect} />
         )}
       </Grid>
     </Box>

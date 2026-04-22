@@ -2,16 +2,9 @@ import { useParams } from 'react-router-dom';
 import { Database, Activity, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from '../useResearch';
+import type { LabTool } from '../types';
 
-interface Tool {
-  id: string;
-  name: string;
-  category: string;
-  status: string;
-  layman: string;
-}
-
-export function ToolHeader({ tool }: { tool: Tool }) {
+export function ToolHeader({ tool }: { tool: LabTool }) {
   return (
     <Stack gap={4}>
       <Text variant="mono" color="brand" size="xs" weight="font-bold" uppercase tracking="widest">
@@ -25,7 +18,7 @@ export function ToolHeader({ tool }: { tool: Tool }) {
   );
 }
 
-export function ToolStatus({ tool }: { tool: Tool }) {
+export function ToolStatus({ tool }: { tool: LabTool }) {
   return (
     <Grid cols={{ base: 1, md: 2 }} gap={12}>
       <Stack gap={4}>
@@ -46,7 +39,7 @@ export function ToolStatus({ tool }: { tool: Tool }) {
   );
 }
 
-export function ToolWipMessage({ tool }: { tool: Tool }) {
+export function ToolWipMessage({ tool }: { tool: LabTool }) {
   if (tool.status !== 'Coming Soon') return null;
 
   return (

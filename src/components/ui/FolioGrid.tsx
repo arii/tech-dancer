@@ -23,6 +23,7 @@ export default function FolioGrid({ items, categoryTitle, basePath, label, descr
           label={label || "FOLIO"}
           title={categoryTitle}
           description={description}
+          border="b"
         />
         {children}
         <Box marginTop={8} position="relative" maxWidth="2xl">

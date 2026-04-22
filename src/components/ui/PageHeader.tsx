@@ -4,13 +4,14 @@ interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
+  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y";
 }
 
-export function PageHeader({ label, title, description }: PageHeaderProps) {
+export function PageHeader({ label, title, description, border }: PageHeaderProps) {
   return (
-    <Box paddingBottom={10} className="border-b border-slate-200">
+    <Box paddingBottom={10} border={border}>
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">
           {label}
         </Text>
         <Text variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
@@ -28,9 +29,9 @@ export function PageHeader({ label, title, description }: PageHeaderProps) {
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4}>
       <Stack gap={1}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{label}</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest">{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
       </Stack>
       {children}

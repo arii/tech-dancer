@@ -13,30 +13,39 @@ export default function Toolbox() {
   return (
     <Box as="section" paddingY={8}>
       {/* Header section with modern design */}
-      <header className="mb-12 border-b border-line/50 pb-12">
+      <Box as="header" marginBottom={12} border="b" paddingBottom={12}>
         <Box marginBottom={4}>
-          <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-wider">
+          <Box as="span" display="inline-block" paddingX={3} paddingY={1} radius="full" opacity={10} color="accent" className="bg-accent/10 text-[10px] font-bold uppercase tracking-widest">
             THE TOOLBOX
-          </span>
+          </Box>
         </Box>
-        <Text as="h1" variant="display" size="4xl" weight="font-black" className="text-accent-navy mb-4 block">
+        <Text as="h1" variant="display" size="4xl" weight="font-black" marginBottom={4} display="block">
           Gear Reviews
         </Text>
-        <Text as="p" variant="sans" size="lg" color="dim" className="max-w-2xl mb-8 font-medium block">
+        <Text as="p" variant="sans" size="lg" color="dim" maxWidth="2xl" marginBottom={8} weight="font-medium" display="block">
           Rigorous testing and honest takes on the gear that keeps you moving.
         </Text>
 
         {/* Modern Search Bar */}
-        <div className="relative max-w-md">
-          <input
+        <Box position="relative" maxWidth="md">
+          <Box
+            as="input"
             type="text"
             placeholder="Search gear (e.g. earplugs, shoes)..."
-            className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-xl focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
-            onChange={(e) => setSearchTerm(e.target.value)}
+            width="full"
+            paddingLeft={10}
+            paddingRight={4}
+            paddingY={3}
+            surface="default"
+            border
+            className="rounded-xl focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
+            onChange={(e: any) => setSearchTerm(e.target.value)}
             value={searchTerm}
           />
-          <svg
-            className="absolute left-3 top-3.5 h-5 w-5 text-text-dim"
+          <Box
+            as="svg"
+            position="absolute"
+            className="left-3 top-3.5 h-5 w-5 text-text-dim"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
