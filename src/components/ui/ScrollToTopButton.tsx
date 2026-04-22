@@ -47,7 +47,9 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           as={motion.button}
           onClick={scrollToTop}
           position="fixed"
-          className="bottom-8 right-8 z-[60] bg-accent-navy text-bg p-3 shadow-lg hover:bg-accent transition-all duration-300"
+          padding={3}
+          zIndex="popover"
+          className="bottom-8 right-8 bg-accent-navy text-bg shadow-lg hover:bg-accent transition-all duration-300"
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}

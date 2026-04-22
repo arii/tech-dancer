@@ -58,24 +58,40 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
       <GlobalSearch />
       
-      <Box display="flex" className="min-h-screen w-full">
+      <Box display="flex" height="min" width="full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
-        <Box as="main" ref={scrollRef} flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
+        <Stack
+          as="main"
+          ref={scrollRef}
+          flex={1}
+          position="relative"
+          overflow="y-auto"
+          paddingTop={{ base: 16, lg: 0 }}
+          maxWidth="full"
+          width="full"
+          surface="default"
+          direction="col"
+          className="transition-all duration-300"
+          style={{ viewTransitionName: 'main-content' }}
+        >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
             paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
             flex={1}
             direction="col"
-            className="flex-col mx-auto max-w-7xl w-full transition-all duration-300"
+            marginX="auto"
+            maxWidth="7xl"
+            width="full"
+            className="transition-all duration-300"
           >
             <Box flex={1} className="w-full">
               {children}
             </Box>
             <Footer />
           </Stack>
-        </Box>
+        </Stack>
       </Box>
     </Box>
   );
