@@ -8,9 +8,10 @@
   --font-mono: "Space Mono", monospace;
 
   /* Clean Content Palette (60-30-10 Rule) */
-  --color-bg: #F8F9FA;        /* Off-White Primary */
-  --color-surface: #FFFFFF;    /* Surface Secondary */
-  --color-line: #E9ECEF;       /* Muted Borders */
+  --color-bg: oklch(98% 0.005 250);   /* Off-White Primary tinted with brand blue */
+  --color-surface: oklch(100% 0 0);    /* Surface Secondary */
+  --color-surface-alt: oklch(95% 0.01 250); /* Brand-aware neutral tint */
+  --color-line: oklch(92% 0.01 250);       /* Muted Borders */
   --color-accent: #007BFF;
   --color-accent-shadow: rgba(255, 127, 80, 0.3);
   --color-accent-navy: #1A2B3C;
@@ -90,7 +91,7 @@
     line-height: 1.2;
   }
 
-  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+  h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
   h2 { font-size: clamp(2rem, 4vw, 3rem); }
   h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
 
