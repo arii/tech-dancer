@@ -27,21 +27,18 @@ const getBasename = () => {
   const baseSegments = buildBase.split('/').filter(Boolean);
 
   // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
-  // check if the next segment is a known route. If not, it's likely a branch name.
+  // check if the next segment is a known top-level route.
   if (segments.length > baseSegments.length) {
     const possibleRouteSegment = segments[baseSegments.length];
 
-    // Extract valid top-level paths from the route configuration to distinguish between routes and subdirectories
-    const validTopLevelPaths = routes[0].children
-      ?.map(r => r.path)
-      .filter((path): path is string => !!path && path !== '*' && path !== '/')
-      .map(path => path.split('/')[0]) || [];
+    // Whitelist of standard top-level routes to avoid misidentifying them as branch names
+    const standardRoutes = ['gear', 'research', 'blog', 'resources', 'about', 'contact', 'ux-auditor'];
 
-    const isStandardRoute = validTopLevelPaths.includes(possibleRouteSegment);
+    const isStandardRoute = standardRoutes.indexOf(possibleRouteSegment) !== -1;
     const isIndexHtml = possibleRouteSegment === 'index.html';
 
     if (!isStandardRoute && !isIndexHtml) {
-      // It's likely a branch deployment. The basename includes this extra segment.
+      // It's likely a branch name. The basename includes this extra segment.
       return '/' + segments.slice(0, baseSegments.length + 1).join('/');
     }
   }
