@@ -10,5 +10,5 @@ test('capture home redesign final', async ({ page }) => {
   // Give it a moment for any animations to settle
   await page.waitForTimeout(2000);
 
-  await page.screenshot({ path: '/home/jules/verification/home_redesign_final.png', fullPage: true });
+  await page.screenshot({ path: 'home_redesign_final.png', fullPage: true });
 });
