@@ -1,5 +1,4 @@
-import { motion } from 'motion/react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info } from 'lucide-react';
+import { Github, FileText, Terminal, ExternalLink, Info } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import ReactMarkdown from 'react-markdown';
@@ -40,7 +39,7 @@ export function BlogDrafter() {
                 as="input"
                 type="text"
                 value={data.title}
-                onChange={(e: any) => updateField('title', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
                 placeholder="The Future of WCS..."
                 width="full"
                 surface="default"
@@ -58,7 +57,7 @@ export function BlogDrafter() {
                 <Box
                   as="select"
                   value={data.category}
-                  onChange={(e: any) => updateField('category', e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
                   width="full"
                   surface="default"
                   border
@@ -78,7 +77,7 @@ export function BlogDrafter() {
                   as="input"
                   type="date"
                   value={data.date}
-                  onChange={(e: any) => updateField('date', e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
                   width="full"
                   surface="default"
                   border
@@ -95,7 +94,7 @@ export function BlogDrafter() {
               <Box
                 as="textarea"
                 value={data.excerpt}
-                onChange={(e: any) => updateField('excerpt', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the post content..."
                 width="full"
                 height={20}
@@ -114,7 +113,7 @@ export function BlogDrafter() {
                 as="input"
                 type="url"
                 value={data.affiliateLink}
-                onChange={(e: any) => updateField('affiliateLink', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
                 placeholder="https://amazon.com/..."
                 width="full"
                 surface="default"
@@ -131,7 +130,7 @@ export function BlogDrafter() {
               <Box
                 as="textarea"
                 value={data.commentary}
-                onChange={(e: any) => updateField('commentary', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
                 placeholder="Write your main content here..."
                 width="full"
                 height={40}

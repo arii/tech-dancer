@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ export function GlobalSearch() {
     };
   }, []);
 
-  const handleSelect = (result: { type: string; slug: string }) => {
+  const handleSelect = (result: any) => {
     setIsOpen(false);
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
