@@ -106,6 +106,10 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       if (typeof val === "number") {
         return `${prefix}-${val}`
       }
+      // If it's already an arbitrary value, don't wrap it again
+      if (typeof val === "string" && val.startsWith("[") && val.endsWith("]")) {
+        return `${prefix}-${val}`
+      }
       // Check if it's a standard Tailwind token (letters, numbers, dashes)
       if (/^[a-z0-9-]+$/.test(val) && !val.includes('vh') && !val.includes('vw') && !val.includes('%') && !val.includes('px')) {
         return `${prefix}-${val}`
