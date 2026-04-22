@@ -1,10 +1,11 @@
-import { getResources, Resource } from '@/lib/content';
-import { useMemo, useState } from 'react';
+import { getResources } from '@/lib/content';
+import { useMemo } from 'react';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { safeSearch } from '@/lib/utils';
 
 export function useToolbox() {
   const resources = getResources();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useSearchParam('search');
 
   const categories = [
     { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },

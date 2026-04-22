@@ -14,7 +14,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       
       <Box display="flex" className="min-h-screen w-full">
         <Navigation />
-        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full">
+        <Box as="main" flex={1} position="relative" overflow="y-auto" className="bg-bg pt-16 lg:pt-0 max-w-full w-full flex flex-col" style={{ viewTransitionName: 'main-content' }}>
           <Box
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
@@ -22,12 +22,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             marginX="auto"
             className="min-h-full max-w-screen-2xl w-full transition-all duration-300"
           >
-            <Stack gap={12} className="w-full">
+            <Box flex={1} className="w-full flex flex-col">
               <Box flex={1} className="w-full">
                 {children}
               </Box>
               <Footer />
-            </Stack>
+            </Box>
           </Box>
         </Box>
       </Box>

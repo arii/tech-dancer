@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
-import { getPosts, getResources, getStudies, ContentItem } from '@/lib/content';
+import { useMemo } from 'react';
+import { useSearchParam } from './useSearchParam';
+import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useSearchParam('q');
   
   const allContent = useMemo(() => {
     return [

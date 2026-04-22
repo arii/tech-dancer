@@ -7,6 +7,7 @@
 export const radius = {
   none: "rounded-none",
   subtle: "rounded-[2px]", // Subtle 2px radius
+  standard: "rounded", // 4px
   sm: "rounded-sm",
   md: "rounded-md",
   lg: "rounded-lg",
@@ -37,6 +38,8 @@ export const animation = {
   fast: "duration-150",
   normal: "duration-300",
   smooth: "ease-[cubic-bezier(0.16,1,0.3,1)]", // ease-out-expo
+  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+  revealDistance: 20,
 };
 
 /**
@@ -76,6 +79,10 @@ export const shadows = {
   // Layered shadows for depth
   layered: "shadow-[0_1px_1px_rgba(0,0,0,0.05),0_2px_2px_rgba(0,0,0,0.05),0_4px_4px_rgba(0,0,0,0.05),0_8px_8px_rgba(0,0,0,0.05)]",
   premium: "shadow-[0_20px_50px_rgba(0,0,0,0.1)]",
+};
+
+export const imageSizes = {
+  profile: 400,
 };
 
 export const zIndex = {

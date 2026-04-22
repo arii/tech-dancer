@@ -7,9 +7,10 @@
   --font-mono: "Space Mono", monospace;
 
   /* Clean Content Palette (60-30-10 Rule) */
-  --color-bg: #F8F9FA;        /* Off-White Primary */
-  --color-surface: #FFFFFF;    /* Surface Secondary */
-  --color-line: #E9ECEF;       /* Muted Borders */
+  --color-bg: oklch(98% 0.005 250);   /* Off-White Primary tinted with brand blue */
+  --color-surface: oklch(100% 0 0);    /* Surface Secondary */
+  --color-surface-alt: oklch(95% 0.01 250); /* Brand-aware neutral tint */
+  --color-line: oklch(92% 0.01 250);       /* Muted Borders */
   --color-accent: #007BFF;
   --color-accent-shadow: rgba(255, 127, 80, 0.3);
   --color-accent-navy: #1A2B3C;
@@ -31,11 +32,20 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
-}
 @layer utilities {
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(800px); /* Adjust this if your container gets taller */
+    }
+  }
+
+  .animate-scanline {
+    animation: scanline 2.5s linear infinite;
+  }
+
   /* Premium Industrial Utilities */
   .glass-panel {
     @apply bg-white/70 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
@@ -94,7 +104,7 @@
     line-height: 1.1;
   }
 
-  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+  h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
   h2 { font-size: clamp(2rem, 4vw, 3rem); }
   h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
 
