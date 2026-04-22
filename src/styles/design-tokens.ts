@@ -92,8 +92,8 @@ export const zIndex = {
 };
 
 export const typography = {
-  headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
-  display: "font-display font-bold uppercase tracking-tight leading-none",
+  headline: "font-display font-bold tracking-tighter leading-[0.9]",
+  display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: "font-mono tracking-[3px] uppercase",
