@@ -14,12 +14,11 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const { pathname, key } = useLocation();
   const navType = useNavigationType();
 
-  // Scroll Restoration Logic for custom container
+  // Handle Scroll Restoration (History Only)
   useLayoutEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
-    // Save scroll position before unmounting/navigation or on route change
     const handleSaveScroll = () => {
       if (container) {
         sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
@@ -28,7 +27,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
     window.addEventListener('beforeunload', handleSaveScroll);
 
-    // Restoration logic
     if (navType === 'POP') {
       const savedPosition = sessionStorage.getItem(`scroll-${key}`);
       if (savedPosition) {
@@ -36,11 +34,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           if (container) container.scrollTop = parseInt(savedPosition, 10);
         });
       }
-    } else {
-      // For PUSH or REPLACE, always start at the top
-      requestAnimationFrame(() => {
-        if (container) container.scrollTop = 0;
-      });
     }
 
     return () => {
