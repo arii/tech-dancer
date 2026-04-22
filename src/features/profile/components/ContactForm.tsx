@@ -1,3 +1,4 @@
+import type { ChangeEvent, FormEvent } from 'react';
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -20,8 +21,8 @@ interface ContactFormProps {
   formData: ContactFormData;
   errors: ContactFormErrors;
   isSubmitting: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  onSubmit: (e: FormEvent) => void;
 }
 
 export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormProps) {
@@ -38,8 +39,8 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
           <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
             <Stack gap={12}>
               <Stack gap={6}>
-                <Box paddingBottom={4} className="border-b border-slate-200">
-                  <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+                <Box border="b" paddingBottom={4}>
+                  <Text as="h3" variant="display" size="2xl" weight="font-black">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
                   I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
@@ -53,11 +54,11 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
+                    <Box width="12" height="12" border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
                     <Stack gap={1}>
-                      <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
+                      <Text variant="sans" size="base" weight="font-bold">{item.label}</Text>
                       <Text variant="mono" color="dim" size="xs" weight="font-semibold" uppercase tracking="widest">{item.channel}</Text>
                     </Stack>
                   </Box>
@@ -80,8 +81,13 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                   aria-required="true"
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? "name-error" : undefined}
+                  width="full"
+                  surface="default"
+                  border
+                  paddingX={4}
+                  paddingY={3}
                   className={cn(
-                    "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
+                    "bg-bg text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
                     errors.name ? 'border-accent-brand' : 'border-line'
                   )}
                   value={formData.name}
@@ -100,8 +106,13 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                   aria-required="true"
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "email-error" : undefined}
+                  width="full"
+                  surface="default"
+                  border
+                  paddingX={4}
+                  paddingY={3}
                   className={cn(
-                    "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
+                    "bg-bg text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors",
                     errors.email ? 'border-accent-brand' : 'border-line'
                   )}
                   value={formData.email}
@@ -113,7 +124,12 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                 <Box as="select"
                   id="contact-subject"
                   name="subject"
-                  className="w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
+                  width="full"
+                  surface="default"
+                  border
+                  paddingX={4}
+                  paddingY={3}
+                  className="bg-bg text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors"
                   value={formData.subject}
                   onChange={onChange}
                 >
@@ -135,8 +151,13 @@ export function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit
                   aria-required="true"
                   aria-invalid={!!errors.message}
                   aria-describedby={errors.message ? "message-error" : undefined}
+                  width="full"
+                  surface="default"
+                  border
+                  paddingX={4}
+                  paddingY={3}
                   className={cn(
-                    "w-full bg-bg border px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors resize-none",
+                    "bg-bg text-sm font-sans focus:outline-none focus:border-accent-brand transition-colors resize-none",
                     errors.message ? 'border-accent-brand' : 'border-line'
                   )}
                   value={formData.message}

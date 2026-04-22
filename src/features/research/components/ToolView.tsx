@@ -3,13 +3,15 @@ import { Database, Activity, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from '../useResearch';
 
-export function ToolHeader() {
-  const { id } = useParams();
-  const { getTool } = useResearch();
-  const tool = id ? getTool(id) : null;
+interface Tool {
+  id: string;
+  name: string;
+  category: string;
+  status: string;
+  layman: string;
+}
 
-  if (!tool) return null;
-
+export function ToolHeader({ tool }: { tool: Tool }) {
   return (
     <Stack gap={4}>
       <Text variant="mono" color="brand" size="xs" weight="font-bold" uppercase tracking="widest">
@@ -23,13 +25,7 @@ export function ToolHeader() {
   );
 }
 
-export function ToolStatus() {
-  const { id } = useParams();
-  const { getTool } = useResearch();
-  const tool = id ? getTool(id) : null;
-
-  if (!tool) return null;
-
+export function ToolStatus({ tool }: { tool: Tool }) {
   return (
     <Grid cols={{ base: 1, md: 2 }} gap={12}>
       <Stack gap={4}>
@@ -50,12 +46,8 @@ export function ToolStatus() {
   );
 }
 
-export function ToolWipMessage() {
-  const { id } = useParams();
-  const { getTool } = useResearch();
-  const tool = id ? getTool(id) : null;
-
-  if (!tool || tool.status !== 'Coming Soon') return null;
+export function ToolWipMessage({ tool }: { tool: Tool }) {
+  if (tool.status !== 'Coming Soon') return null;
 
   return (
     <Box border surface="accent" padding="card" className="bg-accent-brand/5 border-dashed">
@@ -73,11 +65,17 @@ export function ToolWipMessage() {
 }
 
 export function ToolView() {
+  const { id } = useParams();
+  const { getTool } = useResearch();
+  const tool = id ? getTool(id) : null;
+
+  if (!tool) return null;
+
   return (
     <Stack gap={12}>
-      <ToolHeader />
-      <ToolStatus />
-      <ToolWipMessage />
+      <ToolHeader tool={tool} />
+      <ToolStatus tool={tool} />
+      <ToolWipMessage tool={tool} />
     </Stack>
   );
 }

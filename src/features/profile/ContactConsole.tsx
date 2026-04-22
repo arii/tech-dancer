@@ -1,3 +1,4 @@
+import type { FormEvent } from 'react';
 import { useContactForm } from '@/hooks/use-contact-form';
 import { ContactForm } from './components/ContactForm';
 import { ContactSuccess } from './components/ContactSuccess';
@@ -13,7 +14,7 @@ export default function ContactConsole() {
     reset 
   } = useContactForm();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     submit();
   };
