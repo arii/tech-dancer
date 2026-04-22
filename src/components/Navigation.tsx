@@ -1,15 +1,4 @@
-import {
-  Home,
-  BookOpen,
-  ShoppingBag,
-  Database,
-  User,
-  Send,
-  Menu,
-  X,
-  Terminal,
-  Search
-} from 'lucide-react';
+import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -17,17 +6,15 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
 
-const ICON_REGISTRY: Record<string, any> = {
-  Home,
-  BookOpen,
-  ShoppingBag,
-  Database,
-  User,
-  Send,
+const iconMap: Record<string, any> = {
+  '/': Home,
+  '/gear': ShoppingBag,
+  '/blog': BookOpen,
+  '/research': Database,
+  '/about': User,
 };
 
-function NavItem({ to, label, iconName, onClick, isMobile }: { to: string, label: string, iconName?: string, onClick?: () => void, isMobile?: boolean }) {
-  const Icon = (iconName && ICON_REGISTRY[iconName]) || Terminal;
+function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
   return (
     <Box as="li" position="relative" className="group">
       <NavLink
@@ -91,7 +78,7 @@ export default function Navigation() {
                   key={item.path} 
                   to={item.path} 
                   label={item.label} 
-                  iconName={item.icon}
+                  icon={iconMap[item.path] || Terminal}
                   onClick={() => setIsOpen(false)} 
                   isMobile 
                 />
@@ -140,7 +127,7 @@ export default function Navigation() {
             </Box>
 
             {routes.filter(r => r.path !== '/').map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} iconName={item.icon} />
+              <NavItem key={item.path} to={item.path} label={item.label} icon={iconMap[item.path] || Terminal} />
             ))}
           </Stack>
         </Stack>

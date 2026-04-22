@@ -4,11 +4,10 @@ export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function useEmailCaptureLogic() {
   const [status, setStatus] = useState<FormStatus>('idle');
-  const [showEmailBar, setShowEmailBar] = useState(false);
+  const [showEmailBar, setShowEmailBar] = useState(true);
   const [email, setEmail] = useState('');
 
   const hideBar = useCallback(() => {
-    sessionStorage.setItem('newsletter-dismissed', '1');
     setShowEmailBar(false);
   }, []);
 
@@ -21,12 +20,6 @@ export function useEmailCaptureLogic() {
       setStatus('success');
       setEmail('');
     }, 800);
-  }, []);
-
-  useEffect(() => {
-    if (sessionStorage.getItem('newsletter-dismissed')) return;
-    const t = setTimeout(() => setShowEmailBar(true), 30_000);
-    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {

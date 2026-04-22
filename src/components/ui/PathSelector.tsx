@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { cn } from '@/lib/utils';
+import { NavLink } from 'react-router-dom';
 
 type PathID = 'dancer' | 'roboticist';
 
@@ -9,10 +7,9 @@ const PATH_DATA = [
   {
     id: 'dancer' as PathID,
     title: 'ARE YOU A DANCER?',
-    span: { base: 12, lg: 7 } as const,
-    border: 'r' as const,
+    wrapperClass: 'lg:col-span-7 border-r border-line/20',
     bgGradient: 'bg-gradient-to-br',
-    titleSize: { base: '4xl', md: '6xl' } as const,
+    titleClass: 'text-4xl md:text-6xl',
     links: [
       { text: 'Lifestyle blog posts', to: '/blog?category=Lifestyle' },
       { text: 'Gear reviews', to: '/gear' },
@@ -21,9 +18,9 @@ const PATH_DATA = [
   {
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
-    span: { base: 12, lg: 5 } as const,
+    wrapperClass: 'lg:col-span-5',
     bgGradient: 'bg-gradient-to-bl',
-    titleSize: { base: '3xl', md: '5xl' } as const,
+    titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'delay-100',
     links: [
       { text: 'Tech blog posts', to: '/blog?category=Tech' },
@@ -34,115 +31,60 @@ const PATH_DATA = [
 
 export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
-  const [activeId, setActiveId] = useState<PathID | null>(null);
-  const navigate = useNavigate();
 
   return (
-    <Grid cols={12} gap={0} border="y" minHeight={{ base: "auto", lg: "[65vh]" }} width="full" className="bg-black">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full bg-black">
       {PATH_DATA.map((path) => {
-        const isHovered = hoveredPath === path.id || activeId === path.id;
-        const isOtherHovered = (hoveredPath !== null || activeId !== null) && !isHovered;
+        const isHovered = hoveredPath === path.id;
+        const isOtherHovered = hoveredPath !== null && !isHovered;
 
         return (
-          <Stack
+          <div
             key={path.id}
-            span={path.span}
-            border={path.border}
-            position="relative"
-            overflow="hidden"
-            cursor="pointer"
-            padding={12}
-            justify="end"
-            height="full"
-            className="group bg-black transition-all duration-700 ease-in-out"
+            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
-            onClick={() => {
-              if (activeId === path.id) {
-                navigate(path.links[0].to);
-              } else {
-                setActiveId(path.id);
-              }
-            }}
           >
-            {/* Background Color Layer */}
-            <Box
-              position="absolute"
-              inset
-              opacity={isOtherHovered ? 60 : 100}
-              className={cn(
-                path.bgGradient,
-                "from-accent/30 to-black transition-all duration-700 ease-in-out pointer-events-none",
-                isOtherHovered && "grayscale"
-              )}
-            />
-
-            {/* Dark Overlay for Readability */}
-            <Box
-              position="absolute"
-              inset
-              zIndex={10}
-              className="bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"
-            />
+            {/* Background */}
+            <div
+              className={`absolute inset-0 ${path.bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
+                isOtherHovered ? 'grayscale opacity-60' : 'opacity-100'
+              }`}
+            ></div>
 
             {/* Scanline */}
-            <Box
-              position="absolute"
-              inset="top"
-              height={0.5}
-              zIndex={15}
-              opacity={isHovered ? 100 : 0}
-              className={cn(
-                "bg-accent shadow-[0_0_15px_#FF7F50] pointer-events-none transition-opacity duration-500",
-                path.scanlineDelay,
-                isHovered && "animate-scanline"
-              )}
-            />
+            <div
+              className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${
+                path.scanlineDelay || ''
+              } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
+            ></div>
 
-            {/* Content (directly in the parent Stack) */}
-            <Text
-              as="h2"
-              variant="display"
-              size={path.titleSize}
-              weight="font-black"
-              color="white"
-              marginBottom={4}
-              zIndex={20}
-              position="relative"
-              className="transition-transform duration-500 group-hover:translate-x-2"
-            >
-              {path.title}
-            </Text>
-            <Stack
-              as="ul"
-              gap={4}
-              marginBottom={6}
-              opacity={isHovered ? 100 : 0}
-              zIndex={20}
-              position="relative"
-              className={cn(
-                "font-mono text-sm tracking-widest uppercase text-white font-bold transition-opacity duration-500 delay-75",
-                !isHovered && "pointer-events-none"
-              )}
-            >
-              {path.links.map((link) => (
-                <li key={link.text}>
-                  <NavLink
-                    className="hover:text-accent transition-colors flex items-center gap-2"
-                    to={link.to}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Text color="accent" className="transition-transform duration-300 group-hover:translate-x-1">
-                      →
-                    </Text>{' '}
-                    <Text color="white">{link.text}</Text>
-                  </NavLink>
-                </li>
-              ))}
-            </Stack>
-          </Stack>
+            {/* Content Container */}
+            <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+              <h2
+                className={`${path.titleClass} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2`}
+              >
+                {path.title}
+              </h2>
+              <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold opacity-80 group-hover:opacity-100 transition-opacity duration-500 delay-75">
+                {path.links.map((link) => (
+                  <li key={link.text}>
+                    <NavLink
+                      className="hover:text-accent transition-colors flex items-center gap-2"
+                      to={link.to}
+                    >
+                      <span className="text-accent transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>{' '}
+                      {link.text}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         );
       })}
-    </Grid>
+    </div>
   );
 }

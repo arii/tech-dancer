@@ -5,7 +5,7 @@ import { safeSearch } from '@/lib/utils';
 
 export function useBlog() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [activeCategory] = useSearchParam('category', 'All');
+  const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -13,20 +13,6 @@ export function useBlog() {
     setPosts(getPosts());
     setIsLoading(false);
   }, []);
-
-  const setActiveCategory = (category: string) => {
-    if (category === 'All') {
-      searchParams.delete('category');
-    } else {
-      searchParams.set('category', category);
-  // Effect to handle loading state during filtering
-  useEffect(() => {
-    if (posts.length > 0) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [activeCategory, searchTerm, posts.length]);
 
   const categories = useMemo(() => {
     const cats = posts.map(p => p.category);
@@ -55,6 +41,7 @@ export function useBlog() {
     posts: filteredPosts,
     categories,
     activeCategory,
+    setActiveCategory,
     searchTerm,
     setSearchTerm,
     isLoading
