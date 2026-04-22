@@ -38,10 +38,10 @@ export function EmailForm() {
           className={`${inputs.base} min-h-[44px] w-full ${!isValid ? inputs.error : ''}`}
         />
         {!isValid && email && (
-          <Box position="absolute" className="-bottom-6 left-0 flex items-center gap-1 text-red-500">
+          <Stack direction="row" align="center" gap={1} position="absolute" className="-bottom-6 left-0 text-red-500">
              <AlertCircle className="w-3 h-3" />
              <Text variant="mono" size="micro">INVALID_ENCODING</Text>
-          </Box>
+          </Stack>
         )}
         <Button
           type="submit"
