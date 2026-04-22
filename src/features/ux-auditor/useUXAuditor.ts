@@ -44,7 +44,21 @@ export function useUXAuditor() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeReport, setActiveReport] = useState<UXReport | null>(null);
   const [url, setUrl] = useState('https://arii.github.io/tech-dancer/');
-  const [isExporting, setIsExporting] = useState(false);
+  const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
+  const [isExportingToGithub, setIsExportingToGithub] = useState(false);
+
+  // Transient state resets with cleanup
+  useEffect(() => {
+    if (!isCopiedMarkdown) return;
+    const timer = setTimeout(() => setIsCopiedMarkdown(false), 2000);
+    return () => clearTimeout(timer);
+  }, [isCopiedMarkdown]);
+
+  useEffect(() => {
+    if (!isExportingToGithub) return;
+    const timer = setTimeout(() => setIsExportingToGithub(false), 1000);
+    return () => clearTimeout(timer);
+  }, [isExportingToGithub]);
 
   // Firebase Init
   useEffect(() => {
@@ -141,7 +155,9 @@ export function useUXAuditor() {
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
         newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
 
-        setReports(prev => prev.map(r => r.id === reportId ? { ...newReport } : r));
+        const updatedReport = { ...newReport };
+        setReports(prev => prev.map(r => r.id === reportId ? updatedReport : r));
+        setActiveReport(updatedReport);
 
         if (user && firebaseConfig) {
           const db = getFirestore();
@@ -217,7 +233,7 @@ export function useUXAuditor() {
           {
             element: "Manual Audit Required",
             issue: "No automated analysis generated.",
-            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`,
+            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
             severity: 5
           }
         ]
@@ -242,8 +258,9 @@ export function useUXAuditor() {
     return md;
   };
 
-  const exportToGithub = () => {
+  const exportToGithub = async () => {
     if (!activeReport) return;
+    setIsExportingToGithub(true);
     const body = encodeURIComponent(getMarkdown());
     const title = encodeURIComponent(`UX Audit Findings: ${activeReport.url}`);
 
@@ -261,16 +278,14 @@ export function useUXAuditor() {
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
   };
 
-  const copyMarkdown = () => {
+  const copyMarkdown = async () => {
     const md = getMarkdown();
-    const el = document.createElement('textarea');
-    el.value = md;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    setIsExporting(true);
-    setTimeout(() => setIsExporting(false), 2000);
+    try {
+      await navigator.clipboard.writeText(md);
+      setIsCopiedMarkdown(true);
+    } catch (err) {
+      console.error('Failed to copy markdown:', err);
+    }
   };
 
   return {
@@ -281,7 +296,8 @@ export function useUXAuditor() {
     setActiveReport,
     url,
     setUrl,
-    isExporting,
+    isCopiedMarkdown,
+    isExportingToGithub,
     runUXAudit,
     exportToGithub,
     copyMarkdown,
