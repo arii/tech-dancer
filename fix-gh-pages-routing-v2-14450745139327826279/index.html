@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tech-Dancer // The Roboticist's Guide to WCS</title>
+    <script type="text/javascript">
+      (function(l) {
+        // Always calculate the basename based on the current pathname of index.html
+        var base = l.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+        window.__ROUTER_BASENAME__ = base || '/';
+
+        if (l.search[1] === '/') {
+          var decodedPath = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+
+          window.history.replaceState(null, null, (base || '/') + decodedPath + l.hash);
+        }
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/tech-dancer/fix-gh-pages-routing-v2-14450745139327826279/assets/index-B523oSPB.js"></script>
+    <link rel="stylesheet" crossorigin href="/tech-dancer/fix-gh-pages-routing-v2-14450745139327826279/assets/index-Du-n93Tp.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
