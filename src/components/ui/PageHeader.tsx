@@ -11,7 +11,7 @@ export function PageHeader({ label, title, description, as = "h1" }: PageHeaderP
   return (
     <Box paddingBottom={10} className="border-b border-slate-200">
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-[0.15em]">
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest">
           {label}
         </Text>
         <Text as={as} variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
@@ -31,7 +31,7 @@ export function SectionHeader({ label, title, children }: { label: string; title
   return (
     <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
       <Stack gap={1}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{label}</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
       </Stack>
       {children}

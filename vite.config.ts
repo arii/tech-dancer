@@ -22,6 +22,17 @@ export default defineConfig(({mode}) => {
     build: {
       // Ensure assets are also handled correctly
       assetsDir: 'assets',
+      chunkSizeWarningLimit: 400,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-motion': ['motion'],
+            'vendor-recharts': ['recharts'],
+            'vendor-markdown': ['react-markdown'],
+          },
+        },
+      },
     },
     define: {
       'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),

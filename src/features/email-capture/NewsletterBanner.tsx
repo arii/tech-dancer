@@ -16,7 +16,7 @@ export function NewsletterBanner() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      className="bg-white/80 backdrop-blur-xl border-t border-line/50 rounded-t-3xl shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05),0_-8px_10px_-6px_rgba(0,0,0,0.05)] mx-auto"
+      className="bg-white/80 backdrop-blur-xl border border-line/50 rounded-none mx-auto"
       padding="emailBar"
       position="fixed"
       style={{ bottom: 0, left: '1rem', right: '1rem', width: 'calc(100% - 2rem)' }}

@@ -44,6 +44,7 @@ export default function PathSelector() {
             className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
+            onClick={() => setHoveredPath(isHovered ? null : path.id)}
           >
             {/* Background */}
             <div

@@ -78,13 +78,32 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Post or Update Comment on PR
+      - name: Update Deployment Feedback
         uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const branchName = context.ref.replace('refs/heads/', '');
+            const baseUrl = `https://${owner}.github.io/${repo}/`;
+            const previewUrl = branchName === 'main' ? baseUrl : `${baseUrl}${branchName}/`;
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
+            // Update Job Summary
+            await core.summary
+              .addHeading('🚀 Deployment Complete!')
+              .addTable([
+                ['Site', 'URL'],
+                ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
+                ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`]
+              ])
+              .addRaw(`**Last updated:** ${pstTime} PST`)
+              .write();
 
             if (branchName === 'main') return;
 
@@ -96,10 +115,15 @@ jobs:
             });
 
             for (const pr of pullRequests) {
-              const baseUrl = `https://${owner}.github.io/${repo}/`;
-              const previewUrl = `${baseUrl}${branchName}/`;
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
-              const body = `🚀 **Deployment Complete!**\n\n- **Main Site:** ${baseUrl}\n- **Preview URL:** ${previewUrl}\n\n${commentTag}`;
+              const body = [
+                `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
+                '',
+                `- **Main Site:** ${baseUrl}`,
+                `- **Preview URL:** ${previewUrl}`,
+                '',
+                commentTag
+              ].join('\n');
 
               const { data: comments } = await github.rest.issues.listComments({
                 owner,
