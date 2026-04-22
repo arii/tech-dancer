@@ -35,7 +35,7 @@ export function DetailLayout({
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} className="max-w-4xl mx-auto w-full">
+      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
         {/* Navigation */}
         <Box
           as="button"

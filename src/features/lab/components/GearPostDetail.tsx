@@ -18,10 +18,10 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
   const headerExtras = (
     <ScoreGrid>
-      <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} color="text-yellow-500" />
+      <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} intent="warning" />
       {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
       {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
-      <ScoreItem label="Price" value={post.priceCategory || '$$'} color="text-amber-600" />
+      <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
       <ScoreItem label="Updated" value={post.updatedDate || post.date} />
     </ScoreGrid>
   );

@@ -26,7 +26,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 weight="font-bold"
                 className="block mb-2 opacity-50 tracking-[0.2em] before:content-[counter(section,decimal-leading-zero)] before:mr-2"
               />
-              <h2 className="text-3xl font-display font-bold normal-case tracking-tight m-0" {...props} />
+              <Text as="h2" variant="display" size="3xl" weight="font-bold" className="normal-case tracking-tight m-0" {...props} />
               <Box className="h-px w-12 bg-accent mt-4" />
             </Box>
           )
