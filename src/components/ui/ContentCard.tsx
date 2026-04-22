@@ -45,7 +45,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
-      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[180px]">
+      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[160px]">
         {image ? (
           <img 
             src={image} 
@@ -54,13 +54,13 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           />
         ) : (
           <Box className="w-full h-full flex flex-col">
-            <Box className="h-2 w-full" surface={
+            <Box className="h-4 w-full" surface={
               (category || '').toLowerCase().includes('tech') ? 'brand' :
               (category || '').toLowerCase().includes('travel') || (category || '').toLowerCase().includes('wcs') ? 'accent' :
               (category || '').toLowerCase().includes('gear') ? 'warning' :
               (category || '').toLowerCase().includes('lifestyle') ? 'danger' : 'muted'
             } />
-            <Box className="flex-1 flex items-center justify-center bg-muted/20">
+            <Box className="flex-1 flex items-center justify-center bg-muted/10">
               <CategoryPlaceholder category={category} size="md" />
             </Box>
           </Box>

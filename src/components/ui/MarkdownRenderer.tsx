@@ -17,20 +17,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           </Box>
         ),
         h2: ({node, ...props}) => (
-          <Box className="mt-12 mb-6 group counter-increment-h2">
+          <Box className="mt-12 mb-6 group" style={{ counterIncrement: 'section' }}>
             <Text
               variant="mono"
               size="tiny"
               color="accent"
               weight="font-bold"
-              className="block mb-2 opacity-50 tracking-[0.2em] before:content-[counter(h2,decimal-leading-zero)] before:mr-2"
+              className="block mb-2 opacity-50 tracking-[0.2em] before:content-[counter(section,decimal-leading-zero)] before:mr-2"
             />
-            <h2 className="text-3xl font-display font-bold uppercase tracking-tight m-0" {...props} />
+            <h2 className="text-3xl font-display font-bold normal-case tracking-tight m-0" {...props} />
             <Box className="h-px w-12 bg-accent mt-4" />
           </Box>
         )
       }}
-      className="[counter-reset:h2]"
+      className="[counter-reset:section]"
     >
       {content}
     </ReactMarkdown>

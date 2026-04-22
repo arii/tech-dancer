@@ -19,8 +19,8 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
   const headerExtras = (
     <ScoreGrid>
       <ScoreItem label="Overall" value={post.rating !== undefined ? post.rating : 'N/A'} icon={Star} color="text-yellow-500" />
-      {post.durability !== undefined && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
-      {post.value !== undefined && <ScoreItem label="Value" value={`${post.value}/5`} />}
+      {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
+      {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
       <ScoreItem label="Price" value={post.priceCategory || '$$'} color="text-amber-600" />
       <Stack gap={1} align="center" className="hidden md:flex">
         <Text variant="mono" size="tiny" color="dim" uppercase>Updated</Text>
@@ -29,7 +29,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
     </ScoreGrid>
   );
 
-  const sidebar = (
+  const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
     <>
       {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
 
@@ -61,7 +61,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
         </Stack>
       )}
     </>
-  );
+  ) : undefined;
 
   return (
     <DetailLayout
