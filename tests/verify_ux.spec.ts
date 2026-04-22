@@ -4,10 +4,10 @@ test.use({ viewport: { width: 1280, height: 720 } });
 
 test('verify card and layout consistency', async ({ page }) => {
   // Wait for the app to be ready
-  await page.goto('http://localhost:3000/tech-dancer/');
+  await page.goto('./');
 
   // Verify Blog cards
-  await page.goto('http://localhost:3000/tech-dancer/blog');
+  await page.goto('./blog');
   await page.waitForSelector('article, .group');
   await page.screenshot({ path: 'blog_feed.png' });
 
@@ -18,12 +18,12 @@ test('verify card and layout consistency', async ({ page }) => {
   await page.screenshot({ path: 'blog_detail.png' });
 
   // Verify Gear cards
-  await page.goto('http://localhost:3000/tech-dancer/gear');
+  await page.goto('./gear');
   await page.waitForSelector('a[href*="/gear/"]');
   await page.screenshot({ path: 'gear_feed.png' });
 
   // Verify Research page width
-  await page.goto('http://localhost:3000/tech-dancer/research');
+  await page.goto('./research');
   await page.waitForSelector('h1');
   await page.screenshot({ path: 'research_page.png' });
 });
