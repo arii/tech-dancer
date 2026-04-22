@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Developer Tools (`dev-tools/`)
 
 This directory contains unified scripts and command-line tools for managing development workflows, GitHub Pull Request reviews, test automation, and code planning. It seamlessly consolidates offline markdown planning, test automation, and online API interactions.
@@ -37,7 +36,8 @@ AI agents are instructed via `AGENTS.md` to use these tools autonomously to:
 1. Review PR feedback using `gh_collab.py`.
 2. Evaluate visual designs using `audit_capture.py`.
 3. Plan task execution utilizing `generate_plan.py`.
-=======
+
+
 # GitHub Collaborative Dev Tool
 
 A unified command-line tool for managing GitHub Pull Request reviews and collaborative development. It works across any repository by automatically detecting your Git environment. It seamlessly consolidates offline markdown planning and online API interactions.
@@ -111,4 +111,4 @@ When asked to address PR comments or review code, utilize the `gh-collab` CLI to
 ## Global Flags
 - `--repo`: Override the auto-detected repository (e.g., `--repo octocat/Hello-World`).
 - `--dry-run`: Simulate API requests without making actual changes.
->>>>>>> origin/main
+

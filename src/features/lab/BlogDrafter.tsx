@@ -1,19 +1,28 @@
-import React from 'react';
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Copy, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
-import ReactMarkdown from 'react-markdown';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
   const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
 
   const wordCount = data.commentary.trim().split(/\s+/).filter(Boolean).length;
 
   const handleCopyMarkdown = () => {
     navigator.clipboard.writeText(markdownPreview);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCopyPrompt = () => {
+    const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
+      Current Data: ${JSON.stringify(data, null, 2)}
+      Respond ONLY with a valid JSON object matching the keys above. Ensure the 'commentary' field is a full, high-quality Markdown post.`;
+    navigator.clipboard.writeText(prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -191,30 +200,26 @@ export function BlogDrafter() {
             maxHeight="600px"
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
-            <ReactMarkdown>{markdownPreview}</ReactMarkdown>
+            <MarkdownRenderer content={markdownPreview} />
           </Box>
 
           <Grid cols={2} gap={4}>
             <Box
               as="button"
-              onClick={() => {
-                const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
-                  Current Data: ${JSON.stringify(data, null, 2)}
-                  Respond ONLY with a valid JSON object matching the keys above. Ensure the 'commentary' field is a full, high-quality Markdown post.`;
-                navigator.clipboard.writeText(prompt);
-                alert("AI Prompt Copied! Use Gemini or Claude to expand.");
-              }}
+              onClick={handleCopyPrompt}
               display="flex"
               align="center"
               justify="center"
               gap={3}
-              surface="muted"
+              surface={copied ? "accent" : "muted"}
               border
               padding={4}
-              className="hover:bg-line transition-all cursor-pointer group"
+              className={`hover:bg-line transition-all cursor-pointer group ${copied ? 'bg-accent/10 border-accent text-accent' : ''}`}
             >
-              <Terminal className="w-5 h-5" />
-              <Text variant="mono" size="xs" weight="font-bold">COPY AI PROMPT</Text>
+              {copied ? <Check className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
+              <Text variant="mono" size="xs" weight="font-bold">
+                {copied ? 'PROMPT COPIED ✓' : 'COPY AI PROMPT'}
+              </Text>
             </Box>
 
             <Box

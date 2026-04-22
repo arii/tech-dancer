@@ -14,6 +14,8 @@ export const variants = {
     alt: "bg-surface-alt text-text-main",
     card: "bg-card-bg border-line",
     contrast: "bg-text-main text-bg",
+    success: "bg-emerald-50/50 border-emerald-100 text-emerald-900",
+    warning: "bg-amber-50/50 border-amber-200 text-amber-900",
   },
   intent: {
     default: "text-text-main",
