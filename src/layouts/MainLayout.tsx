@@ -1,7 +1,6 @@
 import { Box } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
-import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailCaptureContext } from '@/features/email-capture/EmailCaptureContext';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
