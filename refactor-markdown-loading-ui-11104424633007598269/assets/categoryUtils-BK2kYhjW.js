@@ -1,0 +1,1 @@
+function r(t,e=2){return t?t.slice(0,e).toUpperCase():""}function n(t){const e=(t||"").toLowerCase();return e.includes("tech")?"bg-blue-50 text-blue-500":e.includes("travel")?"bg-emerald-50 text-emerald-500":e.includes("gear")?"bg-amber-50 text-amber-600":e.includes("lifestyle")?"bg-rose-50 text-rose-500":"bg-slate-50 text-slate-500"}export{n as a,r as g};
