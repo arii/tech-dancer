@@ -88,7 +88,10 @@ def main():
             f"2. Read the review template and PROJECT STANDARDS in {review_file}\n"
             f"3. Perform a rigorous technical audit of the diffs against these standards.\n"
             f"4. Update {review_file}: mark checklist items as [x] and fill the final JSON payload block.\n"
-            f"\nCRITICAL: You MUST only provide inline comments for line numbers that are explicitly listed in the '**Valid Comment Ranges**' for each file in the context. Targeting any other lines will cause a GitHub API 422 error and fail the entire review."
+            f"\nCRITICAL RULES:\n"
+            f"- You MUST replace the placeholders `<findings>`, `<summary>`, and `<Approved | ...>` in the JSON block with your actual analysis. Leaving these placeholders will fail the submission.\n"
+            f"- You MUST only provide inline comments for line numbers explicitly listed in the '**Valid Comment Ranges**' in the context file.\n"
+            f"- Use high-contrast, professional technical language. Avoid fluff."
         )
         
         # Construct the copilot command with user-recommended flags
@@ -125,8 +128,13 @@ def main():
         if args.event:
             cmd.append(f"--event={args.event}")
         
-        result = run_command(cmd)
-        print(result)
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"❌ Command failed: {' '.join(cmd)}")
+            print(f"Error: {result.stderr or result.stdout}")
+            sys.exit(1)
+        
+        print(result.stdout)
         print(f"\n✅ Submission complete for PR #{pr_num}.")
 
     else:
