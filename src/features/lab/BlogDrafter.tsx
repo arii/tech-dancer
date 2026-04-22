@@ -4,9 +4,11 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import ReactMarkdown from 'react-markdown';
 import { CONTENT_CATEGORIES } from '@/config/content';
+import { useState } from 'react';
 
 export function BlogDrafter() {
   const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const [copied, setCopied] = useState(false);
 
   return (
     <Stack gap={10} height="full">
@@ -175,8 +177,10 @@ export function BlogDrafter() {
                 const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
                   Current Data: ${JSON.stringify(data, null, 2)}
                   Respond ONLY with a valid JSON object matching the keys above. Ensure the 'commentary' field is a full, high-quality Markdown post.`;
-                navigator.clipboard.writeText(prompt);
-                alert("AI Prompt Copied! Use Gemini or Claude to expand.");
+                navigator.clipboard.writeText(prompt).then(() => {
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                });
               }}
               display="flex"
               align="center"
@@ -188,7 +192,9 @@ export function BlogDrafter() {
               className="hover:bg-line transition-all cursor-pointer group"
             >
               <Terminal className="w-5 h-5" />
-              <Text variant="mono" size="xs" weight="font-bold">COPY AI PROMPT</Text>
+              <Text variant="mono" size="xs" weight="font-bold">
+                {copied ? 'COPIED ✓' : 'COPY AI PROMPT'}
+              </Text>
             </Box>
 
             <Box
