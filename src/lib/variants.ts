@@ -61,18 +61,3 @@ export const buttonVariants = cva(
   }
 );
 
-const badgeVariants = cva(
-  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
-  {
-    variants: {
-      emphasis: variants.emphasis,
-      intent: variants.intent,
-    },
-    defaultVariants: {
-      emphasis: "solid",
-      intent: "default",
-    },
-  }
-);
-
-export { badgeVariants };

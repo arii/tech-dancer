@@ -13,7 +13,7 @@
     "lint": "pnpm run lint:eslint && pnpm run lint:tsc && pnpm run knip",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:tsc": "tsc --noEmit",
-    "knip": "knip"
+    "knip": "knip",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
