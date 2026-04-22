@@ -3,6 +3,7 @@ import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
+import { inputs } from '@/styles/design-tokens';
 import type { ChangeEvent, FormEvent } from 'react';
 
 // Specific types for the data managed by use-contact-form
@@ -23,7 +24,10 @@ interface ContactFormViewProps {
   onSubmit: (e: FormEvent) => void;
 }
 
-const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
+const inputClasses = cn(
+  inputs.base,
+  "rounded-lg focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50"
+);
 
 export function ContactFormView({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormViewProps) {
   return (
@@ -39,8 +43,8 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
           <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
             <Stack gap={12}>
               <Stack gap={6}>
-                <Box paddingBottom={4} className="border-b border-slate-200">
-                  <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+                <Box paddingBottom={4} border="b">
+                  <Text as="h3" variant="display" size="2xl" weight="font-black" color="brand">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
                   I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
@@ -54,11 +58,11 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors" radius="lg">
-                      <item.icon className="w-6 h-6 stroke-1" />
+                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" radius="lg" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
+                      <item.icon size={24} className="stroke-1" />
                     </Box>
                     <Stack gap={1}>
-                      <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
+                      <Text variant="sans" size="base" weight="font-bold" color="brand">{item.label}</Text>
                       <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-widest uppercase">{item.channel}</Text>
                     </Stack>
                   </Box>
@@ -69,7 +73,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
 
           <Box surface="default" padding={{ base: 8, md: 12 }}>
             <Box maxWidth="xl" marginX="auto">
-              <Box as="form" onSubmit={onSubmit} className="space-y-6">
+              <Stack gap={6} as="form" onSubmit={onSubmit}>
                 <FormField label="Your Name" error={errors.name}>
                   <Box as="input"
                     name="name"
@@ -135,11 +139,12 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                   variant="professional"
                   disabled={isSubmitting}
                   fullWidth
-                  className="py-4 font-semibold text-base"
+                  paddingY={4}
+                  size="lg"
                 >
                   {isSubmitting ? (
                     <Stack direction="row" align="center" gap={3}>
-                      <div className="w-4 h-4 border-2 border-current border-t-transparent animate-spin" />
+                      <Box width={4} height={4} className="border-2 border-current border-t-transparent animate-spin" />
                       <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
                     </Stack>
                   ) : (
@@ -149,7 +154,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     </>
                   )}
                 </Button>
-              </Box>
+              </Stack>
             </Box>
           </Box>
         </Grid>
