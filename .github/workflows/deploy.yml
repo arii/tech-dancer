@@ -117,11 +117,13 @@ jobs:
 
             for (const pr of pullRequests) {
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
+              const dashboardUrl = `${baseUrl}previews/index.html`;
               const body = [
                 `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
                 '',
                 `- **Main Site:** ${baseUrl}`,
                 `- **Preview URL:** ${previewUrl}`,
+                `- **Preview Dashboard:** ${dashboardUrl}`,
                 '',
                 commentTag
               ].join('\n');
