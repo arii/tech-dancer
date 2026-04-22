@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, Activity, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 
@@ -11,24 +12,29 @@ export default function ResearchAnalytics() {
 
   return (
     <Box as="section">
+      <SEO
+        title="Research"
+        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
+      />
       <Stack gap={12}>
         <PageHeader 
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
           description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
+          as="h1"
         />
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{tools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
               <Box 
                 key={tool.id}
                 as="button"
-                onClick={() => navigate(`/research/${tool.id}`)}
+                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 surface="default"
                 border
                 padding="card"
@@ -61,38 +67,54 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em]">{studies.length} ARTICLES</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={12}>
-            {studies.map((study) => (
-              <Box key={study.slug} className="group">
-                <Stack gap={4}>
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
-                  </Box>
-                  <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
-                    {study.title}
+
+          {studies.length > 0 ? (
+            <Grid cols={{ base: 1, md: 2 }} gap={12}>
+              {studies.map((study) => (
+                <Box key={study.slug} className="group">
+                  <Stack gap={4}>
+                    <Box display="flex" justify="between" align="center">
+                      <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
+                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                    </Box>
+                    <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
+                      {study.title}
+                    </Text>
+                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                      {study.excerpt}
+                    </Text>
+                    <Box
+                      as={motion.div}
+                      whileHover={{ x: 5 }}
+                      display="flex"
+                      align="center"
+                      gap={2}
+                      color="dim"
+                      className="group-hover:text-accent-brand transition-colors"
+                    >
+                      <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
+                      <FileText className="w-4 h-4" />
+                    </Box>
+                  </Stack>
+                </Box>
+              ))}
+            </Grid>
+          ) : (
+            <Box border padding={12} surface="muted" emphasis="low">
+              <Stack align="center" gap={4} className="text-center">
+                <Database className="w-12 h-12 text-slate-300" />
+                <Stack gap={2}>
+                  <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
+                  <Text variant="body" size="sm" color="dim" className="max-w-[40ch]">
+                    Research studies are automatically ingested via the ETL pipeline.
+                    New analysis runs weekly—check back soon for recent data.
                   </Text>
-                  <Text variant="body" size="sm" color="dim" className="line-clamp-3">
-                    {study.excerpt}
-                  </Text>
-                  <Box 
-                    as={motion.div}
-                    whileHover={{ x: 5 }}
-                    display="flex" 
-                    align="center" 
-                    gap={2} 
-                    color="dim" 
-                    className="group-hover:text-accent-brand transition-colors"
-                  >
-                    <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
-                    <FileText className="w-4 h-4" />
-                  </Box>
                 </Stack>
-              </Box>
-            ))}
-          </Grid>
+              </Stack>
+            </Box>
+          )}
         </Stack>
       </Stack>
     </Box>

@@ -42,6 +42,49 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 ## 9. 🧭 Routing Is Declarative
 - Navigation uses route config (not hardcoded)
+- Do NOT use `HashRouter`.
+
+## 23. 🤝 Collaborative GitHub Workflows
+
+The `dev-tools/gh_collab.py` script handles all PR review interactions. Auth is automatic via `gh auth token` — no manual `GITHUB_TOKEN` export needed.
+
+**Step 1 — Generate a structured per-file review plan:**
+```bash
+python3 dev-tools/fetch_pr_review_data.py <PR_NUMBER>
+# Outputs to /tmp/pr-review-<PR_NUMBER>.md — read it to understand what changed
+cat /tmp/pr-review-<PR_NUMBER>.md
+```
+
+**Step 2 — Submit a Code Review (one step):**
+```bash
+python3 dev-tools/gh_collab.py review <PR_NUMBER> --file /tmp/review_payload.json
+```
+
+The `/tmp/review_payload.json` must use the anti-slop structure:
+```json
+{
+  "body": "## ANTI-AI-SLOP\n...\n## FINDINGS\n...\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
+  "comments": [
+    { "path": "src/foo.tsx", "line": 42, "body": "Inline comment text" }
+  ]
+}
+```
+
+**Other commands:**
+- `python3 dev-tools/gh_collab.py create <PR> --file payload.json` — create pending review without submitting
+- `python3 dev-tools/gh_collab.py submit <PR> COMMENT|APPROVE|REQUEST_CHANGES` — submit existing pending review
+- `python3 dev-tools/gh_collab.py plan --pr-info ... --inline ... --general ... --reviews ... --output PR_Plan.md`
+- Add `--dry-run` flag to any command to simulate without hitting the API.
+
+**Code Review Standards (anti-bloat):**
+When reviewing, evaluate EVERY changed file against these criteria:
+1. **Dead abstractions** — Is a new class/context/hook solving a problem that a simpler primitive already handles?
+2. **Unnecessary indirection** — Does this add a layer where a direct call would do?
+3. **Responsibility creep** — Is a component taking on logic that belongs in a hook or a parent?
+4. **Import bloat** — Are `React` default imports added unnecessarily (not needed in React 17+)?
+5. **Token compliance** — Are design tokens used, or is raw Tailwind/inline style leaking in?
+6. Post an inline comment on the most critical line of each file changed.
+
 
 ## 10. 🎞 Motion Must Use Tokens
 - Motion values come from `motionTokens`

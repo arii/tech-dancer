@@ -4,6 +4,7 @@ import os
 import logging
 import shutil
 import tempfile
+from typing import Tuple
 
 # Configure structured logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -13,12 +14,12 @@ class PlanGenerationError(Exception):
     """Custom exception for plan generation failures."""
     pass
 
-def get_resource_paths():
+def get_resource_paths() -> Tuple[str, str]:
     """Returns the paths for the template and instructions."""
     base_dir = os.path.dirname(__file__)
     return os.path.join(base_dir, "plan-template.md"), os.path.join(base_dir, "instructions.txt")
 
-def fetch_issue(issue_number):
+def fetch_issue(issue_number: int) -> str:
     """Fetches issue data from GitHub."""
     logger.debug(f"Attempting to fetch issue #{issue_number}")
     try:
@@ -34,7 +35,7 @@ def fetch_issue(issue_number):
         logger.debug(f"gh cli error: {error_msg}")
         raise PlanGenerationError(f"Failed to fetch issue #{issue_number}: {error_msg}") from e
 
-def render_plan(issue_data, template_path, instructions_path):
+def render_plan(issue_data: str, template_path: str, instructions_path: str) -> None:
     """Calls the LLM to generate the plan and saves it atomically."""
     with open(template_path, "r") as f:
         template_content = f.read()
@@ -68,10 +69,14 @@ def render_plan(issue_data, template_path, instructions_path):
             os.remove(temp_path)
         raise PlanGenerationError(f"LLM generation failed: {error_msg}") from e
 
-def generate_plan(issue_number):
+def generate_plan(issue_number: str) -> None:
+    if not issue_number.isdigit():
+        logger.error(f"Issue number must be numeric, got: '{issue_number}'")
+        sys.exit(1)
+
     try:
         template_path, instructions_path = get_resource_paths()
-        issue_data = fetch_issue(issue_number)
+        issue_data = fetch_issue(int(issue_number))
         render_plan(issue_data, template_path, instructions_path)
     except PlanGenerationError as e:
         logger.error(str(e))

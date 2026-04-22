@@ -122,7 +122,7 @@
 }
 
 .experience-chip {
-  @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+  @apply text-xs border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
 
 .product-card {
