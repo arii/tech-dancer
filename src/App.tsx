@@ -23,7 +23,6 @@ const ResearchDetail = lazy(() => import('./pages/ResearchDetail'));
 const UXAuditor = lazy(() => import('./pages/UXAuditor'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
-const Resources = lazy(() => import('./pages/Resources'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 
@@ -70,7 +69,6 @@ export const routes = [
       { path: 'ux-auditor', element: <UXAuditor /> },
       { path: 'blog', element: <Blog /> },
       { path: 'blog/:slug', element: <BlogPost /> },
-      { path: 'resources', element: <Resources /> },
       { path: 'about', element: <About /> },
       { path: 'contact', element: <Contact /> },
       { path: '*', element: <Home /> },
