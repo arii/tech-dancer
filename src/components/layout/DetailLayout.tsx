@@ -35,7 +35,7 @@ export function DetailLayout({
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="5xl" marginX="auto" className="w-full">
+      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
         {/* Navigation */}
         <Box
           as="button"
@@ -48,7 +48,7 @@ export function DetailLayout({
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">{backLabel}</Text>
+          <Text variant="mono" size="xs" weight="font-bold" className="normal-case">{backLabel}</Text>
         </Box>
 
         <Stack gap={10}>
@@ -56,7 +56,7 @@ export function DetailLayout({
           <Stack gap={6}>
             <Box display="flex" align="center" gap={4}>
               <Box className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-none">
-                <Text variant="mono" size="micro" weight="font-bold" color="brand" className="uppercase">
+                <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase>
                   {category}
                 </Text>
               </Box>
@@ -89,7 +89,7 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 4 : 1 }} gap={12}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
             {/* Sidebar */}
             {sidebar && (
               <Box className="hidden lg:block">
@@ -100,9 +100,12 @@ export function DetailLayout({
             )}
 
             {/* Content */}
-            <Box className={sidebar ? "lg:col-span-3" : ""}>
+            <Box className={sidebar ? "lg:col-span-2" : "w-full"}>
               {children}
-              <Box className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main" maxWidth="prose">
+              <Box
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
+                style={{ maxWidth: '720px' }}
+              >
                 <MarkdownRenderer content={content} />
               </Box>
             </Box>

@@ -3,6 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface ContentCardProps {
   slug: string;
@@ -44,6 +45,35 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       to={`${basePath}/${slug}`}
       className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
+      {/* Visual Thumbnail */}
+      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[160px]">
+        {image ? (
+          <img 
+            src={image} 
+            alt={title} 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+        ) : (
+          <Box className="w-full h-full flex flex-col">
+            <Box className="h-4 w-full" surface={
+              (category || '').toLowerCase().includes('tech') ? 'brand' :
+              (category || '').toLowerCase().includes('travel') || (category || '').toLowerCase().includes('wcs') ? 'accent' :
+              (category || '').toLowerCase().includes('gear') ? 'warning' :
+              (category || '').toLowerCase().includes('lifestyle') ? 'danger' : 'muted'
+            } />
+            <Box className="flex-1 flex items-center justify-center bg-muted/10">
+              <CategoryPlaceholder category={category} size="md" />
+            </Box>
+          </Box>
+        )}
+        <Box className="absolute top-4 left-4">
+          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
+            <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
+              {category}
+            </Text>
+          </Box>
+        </Box>
+      </Box>
       <CardImagePlaceholder
         image={image}
         category={category}
