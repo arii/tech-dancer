@@ -8,6 +8,7 @@ import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface FolioGridProps {
   items: ContentItem[];
