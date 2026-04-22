@@ -41,8 +41,8 @@ test.describe('Search and Filter URL Persistence', () => {
     // Reload
     await page.reload();
 
-    // Verify the button is still active (has the accent class)
-    await expect(page.getByRole('button', { name: 'Tech Portfolio', exact: true })).toHaveClass(/bg-accent/);
+    // Verify the button is still active (has the text-bg class which indicates active state in the new design)
+    await expect(page.getByRole('button', { name: 'Tech Portfolio', exact: true })).toHaveClass(/bg-text-main/);
   });
 
   test('Blog search term should persist after reload', async ({ page }) => {

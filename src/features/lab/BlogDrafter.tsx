@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
-import ReactMarkdown from 'react-markdown';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
@@ -176,7 +176,7 @@ export function BlogDrafter() {
             maxHeight="600px"
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
-            <ReactMarkdown>{markdownPreview}</ReactMarkdown>
+            <MarkdownRenderer content={markdownPreview} />
           </Box>
 
           <Grid cols={2} gap={4}>

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CATEGORY_GRADIENTS } from '@/config/content';
+import { getCategoryAbbreviation, getCategoryColorClass } from '@/lib/categoryUtils';
 
 interface ContentCardProps {
   slug: string;
@@ -53,9 +54,9 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <Box className="w-full h-full flex items-center justify-center bg-slate-50/50">
-             <Text variant="display" size="4xl" className="text-slate-200/50">
-               {category.slice(0, 2).toUpperCase()}
+          <Box className={`w-full h-full flex items-center justify-center ${getCategoryColorClass(category).split(' ')[0]}`}>
+             <Text variant="display" size="4xl" className={`${getCategoryColorClass(category).split(' ')[1]} opacity-50`}>
+               {getCategoryAbbreviation(category)}
              </Text>
           </Box>
         )}

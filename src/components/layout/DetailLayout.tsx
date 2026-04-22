@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import ReactMarkdown from 'react-markdown';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 
 interface DetailLayoutProps {
@@ -103,19 +103,7 @@ export function DetailLayout({
             <Box className={sidebar ? "lg:col-span-3" : ""}>
               {children}
               <Box className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main" maxWidth="prose">
-                <ReactMarkdown
-                  components={{
-                    a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />,
-                    blockquote: ({node, ...props}) => (
-                      <Box border surface="warning" padding={6} marginY={8} radius="none">
-                         <Text variant="mono" size="tiny" weight="font-bold" intent="warning" className="mb-2 block tracking-widest">Key Takeaway</Text>
-                         <blockquote className="m-0 p-0 font-medium italic" {...props} />
-                      </Box>
-                    )
-                  }}
-                >
-                  {content}
-                </ReactMarkdown>
+                <MarkdownRenderer content={content} />
               </Box>
             </Box>
           </Grid>

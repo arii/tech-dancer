@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { CATEGORY_GRADIENTS } from '@/config/content';
+import { getCategoryAbbreviation, getCategoryColorClass } from '@/lib/categoryUtils';
 
 interface GearCardProps extends Resource {
   basePath: string;
@@ -33,9 +34,9 @@ export function GearCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-slate-50/50">
-             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl text-slate-200/50">
-               {category.slice(0, 2).toUpperCase()}
+          <div className={`w-full h-full flex items-center justify-center ${getCategoryColorClass(category).split(' ')[0]}`}>
+             <span className={`font-display font-bold uppercase tracking-tight leading-none text-3xl opacity-50 ${getCategoryColorClass(category).split(' ')[1]}`}>
+               {getCategoryAbbreviation(category)}
              </span>
           </div>
         )}

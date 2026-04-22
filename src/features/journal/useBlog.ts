@@ -1,20 +1,14 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
-import { getPosts, Post } from '@/lib/content';
+import { getPosts } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useBlog() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const posts = useMemo(() => getPosts(), []);
   const [activeCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setPosts(getPosts());
-    setIsLoading(false);
-  }, []);
 
   const view = viewParam as ViewMode;
   const setView = (v: ViewMode) => setViewParam(v);
@@ -49,7 +43,6 @@ export function useBlog() {
     view,
     setView,
     searchTerm,
-    setSearchTerm,
-    isLoading
+    setSearchTerm
   };
 }

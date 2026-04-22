@@ -14,7 +14,6 @@ interface FolioGridProps {
   label?: string;
   description?: string;
   children?: React.ReactNode;
-  loading?: boolean;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
 }
@@ -26,7 +25,6 @@ export default function FolioGrid({
   label,
   description,
   children,
-  loading,
   view = 'card',
   onViewChange
 }: FolioGridProps) {
@@ -77,35 +75,21 @@ export default function FolioGrid({
 
       {view === 'card' ? (
         <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
-          {loading ? (
-            Array.from({ length: 6 }).map((_, index) => (
-              <Box
-                key={index}
-                border="r"
-                borderBottom={true}
-                padding={{ base: 6, lg: 6 }}
-                className={`transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
-              >
-                <ContentCardSkeleton />
-              </Box>
-            ))
-          ) : (
-            filteredItems.map((item, index) => (
-              <Box
-                key={item.slug}
-                border="r"
-                borderBottom={true}
-                padding={{ base: 6, lg: 6 }}
-                className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
-              >
-                <ContentCard
-                  {...item}
-                  basePath={basePath}
-                  aspect="video"
-                />
-              </Box>
-            ))
-          )}
+          {filteredItems.map((item) => (
+            <Box
+              key={item.slug}
+              border="r"
+              borderBottom={true}
+              padding={{ base: 6, lg: 6 }}
+              className="hover:bg-card-bg transition-colors group"
+            >
+              <ContentCard
+                {...item}
+                basePath={basePath}
+                aspect="video"
+              />
+            </Box>
+          ))}
         </Grid>
       ) : (
         <Stack gap={0} border="t" className="border-line mt-8">
