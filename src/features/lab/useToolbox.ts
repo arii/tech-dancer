@@ -16,18 +16,17 @@ export function useToolbox() {
   const view = viewParam as ViewMode;
   const setView = (v: ViewMode) => setViewParam(v);
 
-  const categories = [
-    { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
-    { id: 'fashion', label: 'Row 2: Fashion', description: 'Bright, fun outfits curated for movement, comfort, and style on the dance floor.' },
-    { id: 'travel', label: 'Row 3: Travel Related', description: 'Optimized logistics gear for the convention circuit and bougie-on-a-budget travel.' }
-  ];
-
   const groupedResources = useMemo(() => {
+    const categories = [
+      { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
+      { id: 'fashion', label: 'Row 2: Fashion', description: 'Bright, fun outfits curated for movement, comfort, and style on the dance floor.' },
+      { id: 'travel', label: 'Row 3: Travel Related', description: 'Optimized logistics gear for the convention circuit and bougie-on-a-budget travel.' }
+    ];
     return categories.map(cat => ({
       ...cat,
       items: resources.filter(r => safeSearch(r.category, cat.id))
     }));
-  }, [resources, categories]);
+  }, [resources]);
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) return groupedResources;
