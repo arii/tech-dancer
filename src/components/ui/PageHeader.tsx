@@ -4,21 +4,10 @@ interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
-  paddingBottom?: number | string;
-  border?: boolean | "t" | "b" | "l" | "r";
-  descriptionMaxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | string;
-  titleAs?: "h1" | "h2" | "h3";
+  as?: keyof JSX.IntrinsicElements;
 }
 
-export function PageHeader({
-  label,
-  title,
-  description,
-  paddingBottom = 12,
-  border = "b",
-  descriptionMaxWidth = "65ch",
-  titleAs = "h1"
-}: PageHeaderProps) {
+export function PageHeader({ label, title, description, as = "h1" }: PageHeaderProps) {
   return (
     <Box
       paddingBottom={paddingBottom}
@@ -28,14 +17,7 @@ export function PageHeader({
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest">
           {label}
         </Text>
-        <Text
-          as={titleAs}
-          variant="headline"
-          size={{ base: "4xl", lg: "6xl" }}
-          weight="font-black"
-          tracking="tighter"
-          className="text-text-main leading-tight uppercase"
-        >
+        <Text as={as} variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
           {title}
         </Text>
         {description && (

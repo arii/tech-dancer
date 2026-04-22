@@ -86,8 +86,8 @@ def setup(
 
     # 4. Agent Readiness: Install dependencies
     typer.echo("📦 Installing dependencies (this might take a second)...")
-    run_log(["docker", "exec", container_name, "npm", "install"])
-    run_log(["docker", "exec", container_name, "npm", "run", "build"])
+    run_log(["docker", "exec", container_name, "pnpm", "install"])
+    run_log(["docker", "exec", container_name, "pnpm", "run", "build"])
 
     typer.secho(f"✅ All set! Branch '{branch}' is ready for isolated development.", fg=typer.colors.GREEN, bold=True)
 
