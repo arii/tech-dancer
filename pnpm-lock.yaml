@@ -73,7 +73,7 @@ importers:
         version: 6.4.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
     devDependencies:
       '@eslint/js':
-        specifier: 10.0.1
+        specifier: ^10.0.1
         version: 10.0.1(eslint@10.2.1(jiti@2.6.1))
       '@playwright/test':
         specifier: ^1.59.1
@@ -91,13 +91,13 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0(postcss@8.5.10)
       eslint:
-        specifier: 10.2.1
+        specifier: ^10.2.1
         version: 10.2.1(jiti@2.6.1)
       eslint-plugin-react-hooks:
-        specifier: 7.1.1
+        specifier: ^7.1.1
         version: 7.1.1(eslint@10.2.1(jiti@2.6.1))
       knip:
-        specifier: 6.6.1
+        specifier: ^6.6.1
         version: 6.6.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.10.0)
       postcss:
         specifier: ^8.5.10
@@ -118,7 +118,7 @@ importers:
         specifier: ~5.8.2
         version: 5.8.3
       typescript-eslint:
-        specifier: 8.59.0
+        specifier: ^8.59.0
         version: 8.59.0(eslint@10.2.1(jiti@2.6.1))(typescript@5.8.3)
       vite-plugin-image-optimizer:
         specifier: ^2.0.3
