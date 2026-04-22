@@ -4,9 +4,6 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  safelist: [
-    { pattern: /^(gap|p|pt|pb|pl|pr|px|py)-/ }
-  ],
   theme: {
     extend: {
       colors: {
