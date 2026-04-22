@@ -1,0 +1,15 @@
+{
+  "body": "## ANTI-AI-SLOP\nSevere visual and structural regressions introduced in layout components.\n\n## FINDINGS\nI am revoking the previous approval. While the Vite optimizations and logic improvements (like the newsletter timeout and clipboard copy) are excellent and should be kept, the layout changes in `MainLayout.tsx` and `ui/PathSelector.tsx` caused massive visual regressions across the application.\n\n1. The hero paths are now vertically stacking on desktop because `PathSelector.tsx` incorrectly mixes Flexbox properties (`Stack`, `span`) inside a CSS Grid without properly applying the `lg:col-span-` behaviors.\n2. The Gear / Verified Equipment page is severely squashed due to the addition of `display=\"flex\"` without `direction=\"col\"` in `MainLayout.tsx`, causing horizontal Flexbox contention with its children.\n\nPlease keep your build optimizations and UX fixes, but **revert the changes to both `MainLayout.tsx` and `PathSelector.tsx`** completely.\n\n## FINAL RECOMMENDATION\nNot Approved",
+  "comments": [
+    {
+      "path": "src/layouts/MainLayout.tsx",
+      "line": 23,
+      "body": "Adding `display=\"flex\"` without specifying `direction=\"col\"` forces this container into a row-based layout by default, which severely squashed wide child components like the Gear/Verified Equipment tables. Please revert the changes in this file."
+    },
+    {
+      "path": "src/components/ui/PathSelector.tsx",
+      "line": 13,
+      "body": "Replacing the explicit `lg:col-span-7` classes with custom `span` properties on `Stack` components broke the grid layout, causing these tiles to stack vertically on desktop. Please revert the layout and markup changes in this file, retaining only the logic additions if necessary."
+    }
+  ]
+}

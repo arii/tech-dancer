@@ -25,4 +25,4 @@ package-lock.json
 pr-review-*.md
 review_payload.json
 
-plan-pr-review-*.md
+#skipping this for now so files are available to the agent plan-pr-review-*.md
