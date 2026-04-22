@@ -17,9 +17,9 @@ export default function Toolbox() {
       {/* Header section with modern design */}
       <header className="mb-12 border-b border-line/50 pb-12">
         <Box marginBottom={4}>
-          <span className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-wider">
-            THE TOOLBOX
-          </span>
+          <Box as="span" radius="full" paddingX={3} paddingY={1} className="inline-block bg-accent/10">
+            <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
+          </Box>
         </Box>
         <Text as="h1" variant="display" size="4xl" weight="font-black" className="text-accent-navy mb-4 block">
           Gear Reviews

@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 const STORAGE_KEY = 'td-newsletter-dismissed';
+const BANNER_DELAY_MS = 30000; // 30s delay
 
 export function useEmailCaptureLogic() {
   const [status, setStatus] = useState<FormStatus>('idle');
@@ -32,7 +33,7 @@ export function useEmailCaptureLogic() {
 
     const timer = setTimeout(() => {
       setShowEmailBar(true);
-    }, 30000); // 30s delay
+    }, BANNER_DELAY_MS);
 
     return () => clearTimeout(timer);
   }, []);

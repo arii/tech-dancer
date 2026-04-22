@@ -68,9 +68,9 @@ export function GearCard({
                 {'★'.repeat(Math.floor(rating))}
                 {rating % 1 !== 0 ? '½' : ''}
               </span>
-              <span className="text-[8px] text-text-dim font-medium">
+              <Text variant="mono" size="micro" color="dim" emphasis="low">
                 ({rating}/5)
-              </span>
+              </Text>
             </div>
           )}
 
@@ -85,12 +85,12 @@ export function GearCard({
           {(priceCategory || updatedDate) && (
             <div className="flex flex-wrap items-center gap-3 mt-2">
                {priceCategory && (
-                 <div className="bg-amber-50 px-2 py-0.5 rounded-none border border-amber-200">
-                   <span className="text-[10px] font-mono text-amber-700 font-bold">{priceCategory}</span>
-                 </div>
+                 <Box border className="bg-amber-50 px-2 py-0.5 border-amber-200">
+                   <Text variant="mono" size="tiny" weight="font-bold" className="text-amber-700">{priceCategory}</Text>
+                 </Box>
                )}
                {updatedDate && (
-                 <span className="text-[10px] font-mono uppercase text-text-dim">Updated {updatedDate}</span>
+                 <Text variant="mono" size="tiny" color="dim">Updated {updatedDate}</Text>
                )}
             </div>
           )}
@@ -98,9 +98,9 @@ export function GearCard({
 
         <div className="flex flex-col gap-3 mt-auto">
           <div className="flex items-center justify-between pt-4 border-t border-line/50">
-            <span className="font-mono tracking-wider uppercase text-accent font-bold text-xs">
+            <Text variant="mono" size="xs" color="brand" weight="font-bold">
               Read Review
-            </span>
+            </Text>
             <div className="group-hover:translate-x-1 transition-transform duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +118,7 @@ export function GearCard({
               </svg>
             </div>
           </div>
-          <Text variant="mono" size="micro" color="dim" className="text-[9px] leading-tight opacity-50 italic">
+          <Text variant="mono" size="micro" color="dim" emphasis="low" italic className="leading-tight">
             * This post contains affiliate links. I may earn a commission at no extra cost to you.
           </Text>
         </div>

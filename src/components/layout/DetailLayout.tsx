@@ -102,14 +102,14 @@ export function DetailLayout({
             {/* Content */}
             <Box className={sidebar ? "lg:col-span-3" : ""}>
               {children}
-              <Box className="prose prose-slate max-w-[70ch] prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main">
+              <Box className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main" maxWidth="prose">
                 <ReactMarkdown
                   components={{
                     a: ({node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />,
                     blockquote: ({node, ...props}) => (
-                      <Box border className="bg-amber-50/50 border-amber-200 p-6 my-8 rounded-none">
-                         <Text variant="mono" size="micro" weight="font-bold" className="text-amber-700 uppercase mb-2 block tracking-widest">Key Takeaway</Text>
-                         <blockquote className="m-0 p-0 text-amber-900 font-medium italic" {...props} />
+                      <Box border surface="warning" padding={6} marginY={8} radius="none">
+                         <Text variant="mono" size="tiny" weight="font-bold" intent="warning" className="mb-2 block tracking-widest">Key Takeaway</Text>
+                         <blockquote className="m-0 p-0 font-medium italic" {...props} />
                       </Box>
                     )
                   }}

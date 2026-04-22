@@ -1,4 +1,4 @@
-import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search, Send } from 'lucide-react';
+import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search, Send, LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -6,7 +6,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   '/': Home,
   '/gear': ShoppingBag,
   '/resources': ShoppingBag,
@@ -16,7 +16,7 @@ const iconMap: Record<string, any> = {
   '/contact': Send,
 };
 
-function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
+function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: LucideIcon, onClick?: () => void, isMobile?: boolean }) {
   return (
     <Box as="li" position="relative" className="group">
       <NavLink

@@ -13,6 +13,8 @@ export const variants = {
     accent: "bg-accent-brand/5 border-accent-brand/20 text-accent-brand",
     card: "bg-card-bg border-line",
     contrast: "bg-text-main text-bg",
+    success: "bg-emerald-50/50 border-emerald-100 text-emerald-900",
+    warning: "bg-amber-50/50 border-amber-200 text-amber-900",
   },
   intent: {
     default: "text-text-main",

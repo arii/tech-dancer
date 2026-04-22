@@ -113,7 +113,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
                   </Box>
                   <Stack gap={1}>
                     <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-[0.15em] uppercase">{item.channel}</Text>
+                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-widest uppercase">{item.channel}</Text>
                   </Stack>
                 </Box>
               ))}
@@ -125,7 +125,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
           <Box as="form" onSubmit={onSubmit} className="space-y-8">
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Name</Text>
+                <Text as="label" htmlFor="contact-name" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-widest uppercase">Your Name</Text>
                 {errors.name && <Text id="name-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.name}</Text>}
               </Box>
               <Box as="input" 
@@ -145,7 +145,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Your Email</Text>
+                <Text as="label" htmlFor="contact-email" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-widest uppercase">Your Email</Text>
                 {errors.email && <Text id="email-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.email}</Text>}
               </Box>
               <Box as="input" 
@@ -164,7 +164,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
               />
             </Stack>
             <Stack gap={3}>
-              <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Subject</Text>
+              <Text as="label" htmlFor="contact-subject" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-widest uppercase">Subject</Text>
               <Box as="select" 
                 id="contact-subject"
                 name="subject"
@@ -180,7 +180,7 @@ function ContactForm({ formData, errors, isSubmitting, onChange, onSubmit }: Con
             </Stack>
             <Stack gap={3}>
               <Box display="flex" justify="between" align="center">
-                <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-[0.15em] uppercase">Message</Text>
+                <Text as="label" htmlFor="contact-message" variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-widest uppercase">Message</Text>
                 {errors.message && <Text id="message-error" variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">{errors.message}</Text>}
               </Box>
               <Box as="textarea" 

@@ -9,6 +9,7 @@ export const radius = {
   subtle: "rounded-[2px]", // Subtle 2px radius
   sm: "rounded-sm",
   md: "rounded-md",
+  full: "rounded-full",
 };
 
 export const borders = {
@@ -89,10 +90,12 @@ export const typography = {
   utility: "font-mono tracking-[3px] uppercase",
   label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",
+  tight: "tracking-[0.15em] uppercase",
+  content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
 };
 
 export const typeSizes = {
-  micro: "text-[8px]",
+  micro: "text-[9px]",
   tiny: "text-[10px]",
   xs: "text-xs",
   sm: "text-sm",

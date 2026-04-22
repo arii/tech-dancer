@@ -73,11 +73,11 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
-            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em]">
+            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest">
               {date}
             </Text>
             <Box className="w-1 h-1 rounded-full bg-line" />
-            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-[0.15em] flex items-center gap-1">
+            <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest flex items-center gap-1">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
               {rt} min read
             </Text>
@@ -96,7 +96,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         </Stack>
 
         <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-line mt-auto">
-          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-[0.15em]">
+          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-widest">
             Read More
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />

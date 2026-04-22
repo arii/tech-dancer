@@ -5,9 +5,10 @@ import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
+import { ContentItem } from '@/lib/content';
 
 interface FolioGridProps {
-  items: any[];
+  items: ContentItem[];
   categoryTitle: string;
   basePath: string;
   label?: string;

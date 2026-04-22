@@ -1,10 +1,10 @@
-import { motion } from 'motion/react';
 import { User, Share2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Post, getPosts } from '@/lib/content';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { useMemo } from 'react';
 import { DetailLayout } from '@/components/layout/DetailLayout';
+import { TOC } from '@/components/layout/DetailElements';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -28,18 +28,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       .slice(0, 2);
   }, [post.category, post.slug]);
 
-  const sidebar = (
-    <>
-      <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">In this post</Text>
-      <Stack gap={2}>
-        {headings.map((h, i) => (
-          <Text key={i} variant="mono" size="micro" className="cursor-pointer hover:text-accent transition-colors">
-            <span className="opacity-30 mr-2">0{i+1}</span> {h}
-          </Text>
-        ))}
-      </Stack>
-    </>
-  );
+  const sidebar = <TOC headings={headings} />;
 
   const headerExtras = (
     <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
@@ -49,7 +38,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         </Box>
         <Stack gap={0}>
           <Text variant="mono" size="xs" weight="font-bold">{post.author || 'Ariel Anders, PhD'}</Text>
-          <Text variant="mono" size="micro" color="dim">Author & Engineer</Text>
+          <Text variant="mono" size="tiny" color="dim">Author & Engineer</Text>
         </Stack>
       </Box>
       <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
