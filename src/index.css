@@ -77,9 +77,6 @@
     background-size: 20px 20px;
   }
 
-  .counter-increment-h2 {
-    counter-increment: h2;
-  }
 }
 
 @layer base {

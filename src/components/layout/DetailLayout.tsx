@@ -48,7 +48,7 @@ export function DetailLayout({
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">{backLabel}</Text>
+          <Text variant="mono" size="xs" weight="font-bold" className="normal-case">{backLabel}</Text>
         </Box>
 
         <Stack gap={10}>

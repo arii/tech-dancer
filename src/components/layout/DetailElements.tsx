@@ -23,9 +23,16 @@ export function ScoreItem({ label, value, icon: Icon, color }: ScoreItemProps) {
 export function ScoreGrid({ children }: { children: React.ReactNode }) {
   return (
     <Box border="y" paddingY={8} surface="muted" emphasis="low" className="border-line/50">
-      <Grid cols={{ base: 1, sm: 2, md: 5 }} gap={8}>
+      <Box
+        display="flex"
+        flexDirection={{ base: 'column', sm: 'row' }}
+        flexWrap="wrap"
+        justify="center"
+        align="center"
+        gap={8}
+      >
         {children}
-      </Grid>
+      </Box>
     </Box>
   );
 }
