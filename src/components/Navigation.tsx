@@ -9,7 +9,6 @@ import { routes } from '@/config/routes';
 const iconMap: Record<string, LucideIcon> = {
   '/': Home,
   '/gear': ShoppingBag,
-  '/resources': ShoppingBag,
   '/blog': BookOpen,
   '/research': Database,
   '/about': User,
