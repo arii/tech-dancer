@@ -117,13 +117,10 @@ jobs:
             for (const pr of pullRequests) {
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
               const body = [
-                '<details>',
-                `<summary><b>🚀 Deployment Details</b> (Last updated: ${pstTime} PST)</summary>`,
+                `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
                 '',
                 `- **Main Site:** ${baseUrl}`,
                 `- **Preview URL:** ${previewUrl}`,
-                '',
-                '</details>',
                 '',
                 commentTag
               ].join('\n');
