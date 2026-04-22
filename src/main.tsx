@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 
 // polyfilling Buffer for browser environment
-(window as any).Buffer = (window as any).Buffer || Buffer;
+window.Buffer = window.Buffer || Buffer;
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -15,8 +15,8 @@ const getBasename = () => {
   const buildBase = import.meta.env.BASE_URL || '/';
 
   // If index.html already calculated a basename, use it
-  if ((window as any).__ROUTER_BASENAME__) {
-      return (window as any).__ROUTER_BASENAME__;
+  if (window.__ROUTER_BASENAME__) {
+      return window.__ROUTER_BASENAME__;
   }
 
   // Check if we are running in a subdirectory deeper than the build-time base (e.g., branch preview)
