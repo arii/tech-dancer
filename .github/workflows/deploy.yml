@@ -88,6 +88,7 @@ jobs:
             const branchName = context.ref.replace('refs/heads/', '');
             const baseUrl = `https://${owner}.github.io/${repo}/`;
             const previewUrl = branchName === 'main' ? baseUrl : `${baseUrl}${branchName}/`;
+            const dashboardUrl = `${baseUrl}previews/index.html`;
 
             const pstTime = new Date().toLocaleString('en-US', {
               timeZone: 'America/Los_Angeles',
@@ -101,7 +102,8 @@ jobs:
               .addTable([
                 ['Site', 'URL'],
                 ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
-                ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`]
+                ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`],
+                ['Preview Dashboard', `<a href="${dashboardUrl}">${dashboardUrl}</a>`]
               ])
               .addRaw(`**Last updated:** ${pstTime} PST`)
               .write();
