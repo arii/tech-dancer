@@ -26,7 +26,7 @@ export function HeroPathCard({ label: _label, title, paths, tag, image: _image, 
         <Stack gap={8}>
           <Box display="flex" align="center" gap={3}>
             <Icon className="w-5 h-5 text-accent" />
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em] uppercase">
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest uppercase">
               {tag.split(' // ')[0]}
             </Text>
           </Box>
@@ -53,7 +53,7 @@ export function HeroPathCard({ label: _label, title, paths, tag, image: _image, 
                   className="flex items-center gap-4 bg-bg/50 hover:bg-accent/5 border border-slate-200 hover:border-accent rounded-[2px] transition-all group/link"
                 >
                   {/* MECHANICAL_NOTE: Physics of the hover expansion */}
-                  <Box className="w-2 h-2 bg-accent/20 group-hover/link:bg-accent rounded-[2px] transition-colors flex-shrink-0" />
+                  <Box className="w-2 h-2 bg-accent/20 group-hover/link:bg-accent rounded-none transition-colors flex-shrink-0" />
                   <Text variant="sans" size="base" weight="font-bold" className="text-text-main group-hover/link:text-accent">
                     {item.label}
                   </Text>
@@ -64,10 +64,10 @@ export function HeroPathCard({ label: _label, title, paths, tag, image: _image, 
         </Stack>
 
         <Box display="flex" justify="between" align="center" paddingTop={8} className="border-t border-slate-200">
-          <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em] uppercase">
+          <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest uppercase">
             {tag}
           </Text>
-          <Box className="w-8 h-[2px] bg-accent/20 group-hover:w-16 group-hover:bg-accent transition-all duration-500 rounded-[2px]" />
+          <Box className="w-8 h-[2px] bg-accent/20 group-hover:w-16 group-hover:bg-accent transition-all duration-500 rounded-none" />
         </Box>
       </Stack>
     </Box>
