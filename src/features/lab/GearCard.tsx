@@ -1,8 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
-import { CATEGORY_GRADIENTS } from '@/config/content';
-import { getCategoryAbbreviation, getCategoryColorClass } from '@/lib/categoryUtils';
+import { getCategoryAbbreviation } from '@/lib/categoryUtils';
 
 interface GearCardProps extends Resource {
   basePath: string;
@@ -34,11 +33,11 @@ export function GearCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className={`w-full h-full flex items-center justify-center ${getCategoryColorClass(category).split(' ')[0]}`}>
-             <span className={`font-display font-bold uppercase tracking-tight leading-none text-3xl opacity-50 ${getCategoryColorClass(category).split(' ')[1]}`}>
+          <Box surface="muted" className="w-full h-full flex items-center justify-center">
+             <Text variant="display" size="4xl" color="dim" className="opacity-50">
                {getCategoryAbbreviation(category)}
-             </span>
-          </div>
+             </Text>
+          </Box>
         )}
         <div className="absolute top-4 left-4">
           <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-none border border-line">
