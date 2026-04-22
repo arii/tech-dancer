@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check } from 'lucide-react';
+=======
+import { Github, FileText, Terminal, ExternalLink, Info } from 'lucide-react';
+>>>>>>> 6d3af94 (feat: implement dead code detection and CI cleanup)
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';

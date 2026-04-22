@@ -5,7 +5,8 @@ export const CONTENT_CATEGORIES = [
   { id: 'Travel', label: 'Travel', description: 'WCS event logistics and travel optimization hacks.' }
 ] as const;
 
-export type CategoryId = typeof CONTENT_CATEGORIES[number]['id'];
+type CategoryId = typeof CONTENT_CATEGORIES[number]['id'];
+export type { CategoryId };
 
 export const SITE_METADATA = {
   title: 'Tech-Dancer',

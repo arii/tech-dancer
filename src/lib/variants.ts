@@ -1,6 +1,4 @@
-import { typography } from "@/styles/design-tokens";
 import { cva } from "class-variance-authority";
-import { variants as styleVariants } from "@/styles/variants";
 
 /**
  * Standardized Variant Contracts for the Systems Console.
@@ -68,7 +66,7 @@ export const buttonVariants = cva(
   }
 );
 
-export const badgeVariants = cva(
+const badgeVariants = cva(
   "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
   {
     variants: {
@@ -81,3 +79,5 @@ export const badgeVariants = cva(
     },
   }
 );
+
+export { badgeVariants };

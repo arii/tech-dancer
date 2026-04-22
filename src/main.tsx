@@ -1,8 +1,7 @@
 import { Buffer } from 'buffer';
 
 // polyfilling Buffer for browser environment
-window.Buffer = window.Buffer || Buffer;
-
+(window as any).Buffer = (window as any).Buffer || Buffer;
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';

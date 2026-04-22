@@ -14,11 +14,11 @@ interface ButtonProps
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, as = "button", variant, intent, size, fullWidth, loading, children, ...props }, ref) => {
+  ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, ...props }, ref) => {
     return (
       <Box
         as={as}
-        ref={ref as React.Ref<HTMLDivElement>}
+        ref={ref as React.Ref<any>}
         cursor="pointer"
         className={cn(buttonVariants({ variant, intent, size, fullWidth }), className)}
         {...props}
