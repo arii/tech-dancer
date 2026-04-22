@@ -42,7 +42,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
     <Box 
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
+      className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       <CardImagePlaceholder
         image={image}
