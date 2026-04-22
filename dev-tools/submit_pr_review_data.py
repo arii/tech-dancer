@@ -19,6 +19,11 @@ def main():
 
     filepath = sys.argv[1]
     dry_run = "--dry-run" in sys.argv
+    cleanup = "--cleanup" in sys.argv
+    event_override = next((arg.split('=')[1] for arg in sys.argv if arg.startswith('--event=')), None)
+
+    # Ensure path is absolute for easier cleanup
+    filepath = os.path.abspath(filepath)
 
     if not os.path.exists(filepath):
         print(f"❌ File not found: {filepath}")
@@ -56,6 +61,54 @@ def main():
         print("❌ Placeholders found in JSON comments. Please complete the review.")
         sys.exit(1)
 
+    # ── Pre-flight Line Validation ───────────────────────────────────────────
+    context_file = filepath.replace(f"pr-review-{pr_number}.md", f"pr-context-{pr_number}.md")
+    if os.path.exists(context_file):
+        print(f"🔍 Validating line numbers against {os.path.basename(context_file)}...")
+        with open(context_file, "r") as f:
+            ctx_content = f.read()
+        
+        # Parse valid ranges per file
+        # Format: ### `filename` (status)\n**Valid Comment Ranges (New File):** 1-10, 20-30
+        file_sections = re.split(r'### `(.*?)` \((.*?)\)', ctx_content)
+        valid_map = {}
+        for i in range(1, len(file_sections), 3):
+            fname = file_sections[i]
+            # Find the range line in this section
+            range_match = re.search(r'\*\*Valid Comment Ranges \(New File\):\*\* (.*)', file_sections[i+2])
+            if range_match:
+                ranges = []
+                for r in range_match.group(1).split(", "):
+                    if "-" in r:
+                        start, end = map(int, r.split("-"))
+                        ranges.append((start, end))
+                valid_map[fname] = ranges
+
+        # Filter comments
+        original_count = len(payload.get("comments", []))
+        valid_comments = []
+        for c in payload.get("comments", []):
+            path = c.get("path")
+            line = c.get("line")
+            
+            if path in valid_map:
+                is_valid = False
+                for start, end in valid_map[path]:
+                    if start <= line <= end:
+                        is_valid = True
+                        break
+                if is_valid:
+                    valid_comments.append(c)
+                else:
+                    print(f"⚠️ Dropping comment on {path}:{line} (Outside hunk context)")
+            else:
+                # If file not in map (e.g. binary), allow it but it might still fail 422
+                valid_comments.append(c)
+        
+        payload["comments"] = valid_comments
+        if len(valid_comments) < original_count:
+            print(f"✅ Filtered {original_count - len(valid_comments)} invalid comments.")
+
     # Write payload to temporary file for gh_collab.py
     payload_path = f"/tmp/review-payload-{pr_number}.json"
     with open(payload_path, "w") as f:
@@ -64,7 +117,9 @@ def main():
 
     # Determine GitHub API Event type
     event = "COMMENT"
-    if "Not Approved" in body_text:
+    if event_override:
+        event = event_override
+    elif "Not Approved" in body_text:
         event = "REQUEST_CHANGES"
     elif "Approved" in body_text:
         event = "APPROVE"
@@ -92,9 +147,33 @@ def main():
         print(f"\n❌ Error Details:\n{result.stderr or result.stdout}")
         if "422" in (result.stderr or result.stdout):
             print("\n💡 TIP: GitHub 422 errors usually mean a line number is outside the diff patch.")
-        sys.exit(1)
+            print("\n💡 Retrying without inline comments (fallback)...")
+            payload["comments"] = []
+            with open(payload_path, 'w') as f:
+                json.dump(payload, f, indent=2)
+            
+            result = subprocess.run(cmd, cwd=os.path.dirname(script_dir), capture_output=True, text=True)
+            if result.returncode == 0:
+                print("✅ Fallback submission successful (body only).")
+            else:
+                print(f"❌ Fallback also failed: {result.stderr or result.stdout}")
+                sys.exit(1)
+        else:
+            sys.exit(1)
     else:
         print("\n✅ Successfully submitted review!")
+        
+        if cleanup:
+            print("\n🧹 Cleaning up review files...")
+            try:
+                os.remove(filepath)
+                # Also try to remove the context file
+                context_file = filepath.replace(f"pr-review-{pr_number}.md", f"pr-context-{pr_number}.md")
+                if os.path.exists(context_file):
+                    os.remove(context_file)
+                print("✅ Cleanup complete.")
+            except Exception as e:
+                print(f"⚠️ Cleanup failed: {e}")
 
 if __name__ == "__main__":
     main()

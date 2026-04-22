@@ -61,6 +61,13 @@ def main():
         files_url = f"{pr_url}/files"
         files_resp = requests.get(files_url, headers=headers).json()
 
+        # Fetch last commit time
+        commits_url = f"{pr_url}/commits"
+        commits_resp = requests.get(commits_url, headers=headers).json()
+        last_commit_time = "Unknown"
+        if commits_resp and len(commits_resp) > 0:
+            last_commit_time = commits_resp[-1].get('commit', {}).get('author', {}).get('date', 'Unknown')
+
     except requests.exceptions.RequestException as e:
         print(f"❌ Failed to fetch PR data: {e}")
         sys.exit(1)
@@ -76,7 +83,8 @@ def main():
     context_lines = []
     context_lines.append(f"# PR Context: #{pr_num} — {title}")
     context_lines.append(f"**Stats:** +{additions}/-{deletions} across {changed_files} files")
-    context_lines.append(f"**Author:** @{author}\n")
+    context_lines.append(f"**Author:** @{author}")
+    context_lines.append(f"**Last Commit:** {last_commit_time}\n")
     context_lines.append(f"## Description\n{description}\n")
     context_lines.append("## Files Changed")
 
@@ -87,12 +95,47 @@ def main():
     context_lines.append("\n## Diffs")
     for f in files_resp:
         context_lines.append(f"\n### `{f['filename']}` ({f['status']})")
-        context_lines.append(f"```diff\n{f.get('patch', '_No textual diff available._')}\n```")
+        patch = f.get('patch', '_No textual diff available._')
+        
+        annotated_diff = []
+        valid_ranges = []
+        if patch != '_No textual diff available._':
+            lines = patch.splitlines()
+            current_hunk_start = 0
+            current_hunk_len = 0
+            new_line_num = 0
+            for line in lines:
+                if line.startswith('@@'):
+                    import re
+                    # Parse hunk header: @@ -old_start,old_count +new_start,new_count @@
+                    match = re.search(r'\+(\d+),?(\d*)', line)
+                    if match:
+                        new_line_num = int(match.group(1))
+                        hunk_len = int(match.group(2)) if match.group(2) else 1
+                        valid_ranges.append(f"{new_line_num}-{new_line_num + hunk_len - 1}")
+                    annotated_diff.append(line)
+                elif line.startswith('+'):
+                    annotated_diff.append(f"{new_line_num:4d} |{line}")
+                    new_line_num += 1
+                elif line.startswith('-'):
+                    annotated_diff.append(f"     |{line}")
+                else:
+                    annotated_diff.append(f"{new_line_num:4d} |{line}")
+                    new_line_num += 1
+            patch = "\n".join(annotated_diff)
+
+        # Inform the AI of valid comment ranges to prevent 422 errors
+        range_str = ", ".join(valid_ranges) if valid_ranges else "None (Binary or too large)"
+        context_lines.append(f"**Valid Comment Ranges (New File):** {range_str}")
+        context_lines.append(f"```diff\n{patch}\n```")
 
     context_content = "\n".join(context_lines)
 
     # ── Generate Review Template (Writeable) ──────────────────────────────────
     review_template = f"""# PR Review: #{pr_num}
+    
+## Context
+- **Last Commit Tracked:** {last_commit_time}
 
 ## Audit Checklist
 For EVERY changed file, verify against these standards. Mark as `- [x]` when verified.
@@ -120,12 +163,13 @@ DO NOT REMOVE THE BACKTICKS.
 }}
 ```
 """
-    # ── Write files to project root ───────────────────────────────────────────
-    # Use current working directory (repo root)
+    # ── Write files to dedicated reviews folder ───────────────────────────────
     repo_root = os.getcwd()
+    output_dir = os.path.join(repo_root, "dev-tools", "logs", "reviews")
+    os.makedirs(output_dir, exist_ok=True)
 
-    ctx_path = os.path.join(repo_root, f"pr-context-{pr_num}.md")
-    rev_path = os.path.join(repo_root, f"pr-review-{pr_num}.md")
+    ctx_path = os.path.join(output_dir, f"pr-context-{pr_num}.md")
+    rev_path = os.path.join(output_dir, f"pr-review-{pr_num}.md")
 
     with open(ctx_path, "w") as f:
         f.write(context_content)

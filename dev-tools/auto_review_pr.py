@@ -87,8 +87,8 @@ def main():
             f"1. Read the PR context in {context_file}\n"
             f"2. Read the review template and PROJECT STANDARDS in {review_file}\n"
             f"3. Perform a rigorous technical audit of the diffs against these standards.\n"
-            f"4. Update {review_file}: mark checklist items as [x] and fill the final JSON payload block at the bottom.\n"
-            f"Be precise, reference line numbers, and ensure design token compliance."
+            f"4. Update {review_file}: mark checklist items as [x] and fill the final JSON payload block.\n"
+            f"\nCRITICAL: You MUST only provide inline comments for line numbers that are explicitly listed in the '**Valid Comment Ranges**' for each file in the context. Targeting any other lines will cause a GitHub API 422 error and fail the entire review."
         )
         
         # Construct the copilot command with user-recommended flags
