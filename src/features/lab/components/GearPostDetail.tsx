@@ -22,9 +22,9 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       <ScoreItem label="Durability" value={post.durability ? `${post.durability}/5` : '—'} />
       <ScoreItem label="Value" value={post.value ? `${post.value}/5` : '—'} />
       <ScoreItem label="Price" value={post.priceCategory || '$$'} color="text-amber-600" />
-      <Stack gap={1} align="center" className="hidden md:flex">
-        <Text variant="mono" size="tiny" color="dim" uppercase>Updated</Text>
-        <Text variant="mono" size="tiny" weight="font-bold" className="uppercase">{post.updatedDate || post.date}</Text>
+      <Stack gap={1} align="center" display={{ base: "none", md: "flex" }}>
+        <Text variant="mono" size="tiny" color="dim" uppercase={true}>Updated</Text>
+        <Text variant="mono" size="tiny" weight="font-bold" uppercase={true}>{post.updatedDate || post.date}</Text>
       </Stack>
     </ScoreGrid>
   );
@@ -37,7 +37,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Where to Buy</Text>
+          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase={true} paddingBottom={2} border="b" className="tracking-widest border-line">Where to Buy</Text>
           {affiliateLinks.map(link => (
             <Box
               key={link.id}

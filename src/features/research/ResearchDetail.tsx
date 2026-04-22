@@ -47,7 +47,7 @@ export default function ResearchDetail() {
         <Stack gap={8} align="center">
           <Search className="w-12 h-12 opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent-brand transition-colors">
+          <Box as="button" onClick={() => navigate('/research')} cursor="pointer" className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
           </Box>
         </Stack>
@@ -75,7 +75,7 @@ export default function ResearchDetail() {
           align="center" 
           gap={2}
           color="dim"
-          className="hover:text-accent-brand transition-colors"
+          className="hover:text-accent transition-colors"
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -93,7 +93,7 @@ export default function ResearchDetail() {
                     LABORATORY_ACCESS // {tool.category.toUpperCase()}
                   </Text>
                   <Text as="h1" variant="headline" size="fluid-7">{tool.name}</Text>
-                  <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
+                  <Box border={true} surface="accent" padding="compact" opacity={5}>
                     <Text variant="body" size="lg" color="body">{tool.layman}</Text>
                   </Box>
                 </Stack>
@@ -101,24 +101,24 @@ export default function ResearchDetail() {
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
-                    <Box border padding="compact" display="flex" align="center" gap={3}>
-                      <Activity className="w-4 h-4 text-accent-brand" />
+                    <Box border={true} padding="compact" display="flex" align="center" gap={3}>
+                      <Activity className="w-4 h-4 text-accent" />
                       <Text variant="mono" size="xs" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                   </Stack>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
-                    <Box border padding="compact" display="flex" align="center" gap={3}>
-                      <Database className="w-4 h-4 text-accent-brand text-dim" />
+                    <Box border={true} padding="compact" display="flex" align="center" gap={3}>
+                      <Database className="w-4 h-4 text-accent opacity-50" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
                     </Box>
                   </Stack>
                 </Grid>
 
                 {tool.status === 'Coming Soon' && (
-                  <Box border surface="accent" padding="card" className="bg-accent-brand/5 border-dashed">
+                  <Box border={true} surface="accent" padding="card" opacity={5} className="border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
-                      <Search className="w-8 h-8 text-accent-brand opacity-50" />
+                      <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">

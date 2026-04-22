@@ -51,10 +51,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       radius="md"
       surface="default"
       border={true}
+      cursor="pointer"
       className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
-      {copied ? <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" /> : <Copy className="w-3 h-3" />}
-      {copied ? <span className="text-[var(--color-success,#16a34a)]">Copied!</span> : <span>Copy Prompt</span>}
+      {copied ? <CheckCircle className="w-3 h-3" style={{ color: '#16a34a' }} /> : <Copy className="w-3 h-3" />}
+      {copied ? <Text intent="success">Copied!</Text> : <Text>Copy Prompt</Text>}
     </Box>
   );
 }
@@ -101,8 +102,11 @@ export default function UXAuditor() {
             type="text"
             value={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text"
-            style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
+            width={64}
+            paddingX={4}
+            paddingY={2}
+            radius="md"
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
             placeholder="https://..."
           />
           <Box
@@ -112,8 +116,11 @@ export default function UXAuditor() {
             display="flex"
             align="center"
             gap={2}
+            paddingX={6}
+            paddingY={2}
+            radius="md"
+            cursor="pointer"
             className="bg-accent hover:opacity-90 text-white font-bold transition-all disabled:opacity-50"
-            style={{ padding: '0.5rem 1.5rem', borderRadius: '0.5rem' }}
           >
             {isAnalyzing ? <RefreshCw className="animate-spin w-4 h-4" /> : <Camera className="w-4 h-4" />}
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
@@ -145,7 +152,9 @@ export default function UXAuditor() {
                 <Box
                   padding={2}
                   radius="full"
-                  className={report.status === 'completed' ? 'bg-[var(--color-success-dim,#dcfce7)] text-[var(--color-success,#16a34a)]' : 'bg-[var(--color-warning-dim,#fef3c7)] text-[var(--color-warning,#d97706)] animate-pulse'}
+                  surface={report.status === 'completed' ? "success" : "warning"}
+                  opacity={report.status === 'completed' ? 100 : 20}
+                  className={report.status === 'completed' ? '' : 'animate-pulse'}
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
@@ -169,6 +178,7 @@ export default function UXAuditor() {
             <>
               <Box
                 surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} direction={{ base: "col", md: "row" }}
+                marginBottom={2}
               >
                 <Box>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
@@ -185,8 +195,13 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text transition-all" surface="muted" color="dim"
-                    style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
+                    paddingX={4}
+                    paddingY={2}
+                    radius="xl"
+                    surface="muted"
+                    color="dim"
+                    cursor="pointer"
+                    className="font-bold hover:text-text-main transition-all text-sm"
                   >
                     {isExporting ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {isExporting ? 'Copied' : 'Copy MD'}
@@ -198,8 +213,11 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold bg-text text-surface hover:opacity-90 shadow-md transition-all disabled:opacity-50"
-                    style={{ padding: '0.5rem 1.5rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
+                    paddingX={6}
+                    paddingY={2}
+                    radius="xl"
+                    cursor="pointer"
+                    className="font-bold bg-text-main text-surface hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
                   >
                     <Github className="w-4 h-4" />
                     Export to GitHub Issue
@@ -239,12 +257,14 @@ export default function UXAuditor() {
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Box className="text-center" color="dim">
-                              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-20" />
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
+                            <Stack gap={2} textAlign="center" color="dim" marginX="auto" padding={1}>
+                              <Box marginX="auto">
+                                <ImageIcon className="w-12 h-12 opacity-20" />
+                              </Box>
+                              <Text variant="sans" size="xs" weight="font-bold" uppercase={true} tracking="wider">
                                 Awaiting Frame...
                               </Text>
-                            </Box>
+                            </Stack>
                           )}
                         </Box>
 
@@ -263,10 +283,12 @@ export default function UXAuditor() {
                                 {data.improvements?.map((imp, idx) => (
                                   <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent/30 transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
-                                      <Text variant="sans" size="sm" weight="font-black" className="flex items-center gap-2">
-                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
-                                        {imp.element}
-                                      </Text>
+                                      <Box as="span" display="flex" align="center" gap={2}>
+                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-red-600 shadow-sm' : 'bg-amber-500'} />
+                                        <Text variant="sans" size="sm" weight="font-black">
+                                          {imp.element}
+                                        </Text>
+                                      </Box>
                                       <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase>
                                         LVL {imp.severity}
                                       </Text>
@@ -275,7 +297,7 @@ export default function UXAuditor() {
                                       {imp.issue}
                                     </Text>
                                     <Box surface="muted" padding={3} radius="lg" border={true} display="flex" align="start" gap={2}>
-                                      <Text variant="sans" size="xs" weight="font-bold" color="accent" marginTop={0.5}>FIX</Text>
+                                      <Text variant="sans" size="xs" weight="font-bold" color="brand" marginTop={0.5}>FIX</Text>
                                       <Box flex={1} minWidth="0">
                                         <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
                                           {imp.suggestion}

@@ -16,7 +16,8 @@ export function NewsletterBanner() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      className="bg-white/80 backdrop-blur-xl border border-line/50 rounded-none mx-auto"
+      className="bg-white/80 backdrop-blur-xl border border-line/50 rounded-none"
+      marginX="auto"
       padding="emailBar"
       position="fixed"
       style={{ bottom: 0, left: '1rem', right: '1rem', width: 'calc(100% - 2rem)' }}
@@ -28,7 +29,9 @@ export function NewsletterBanner() {
           size="sm"
           onClick={hideBar}
           aria-label="Dismiss"
-          className="p-1 min-h-0 min-w-0"
+          padding={1}
+          minHeight={0}
+          minWidth={0}
         >
           <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
         </Button>
@@ -39,11 +42,11 @@ export function NewsletterBanner() {
         align="center" 
         justify="between" 
         gap={{ base: 4, md: 8 }}
-        className="w-full"
+        width="full"
       >
-        <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
+        <Stack direction="row" align="center" gap={4} width={{ base: "full", md: "auto" }}>
           <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
-            <Mail className="w-5 h-5 text-accent-brand" />
+            <Mail className="w-5 h-5 text-accent" />
           </Box>
           <Stack gap={0}>
             <Text variant="display" size="base" uppercase tracking="tight">

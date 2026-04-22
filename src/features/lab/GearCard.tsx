@@ -20,69 +20,74 @@ export function GearCard({
   updatedDate
 }: GearCardProps) {
   return (
-    <NavLink
+    <Box
+      as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group flex flex-col bg-surface border border-line transition-all duration-300 overflow-hidden"
+      display="flex"
+      direction="col"
+      surface="default"
+      border={true}
+      className="group transition-all duration-300 overflow-hidden"
     >
       {/* Image Wrapper */}
       <CardImage image={image} title={title} category={category}>
         {verdict && (
-          <div className="absolute top-4 right-4">
-            <div className="bg-accent-brand px-2 py-1 rounded-none">
-              <Text variant="mono" size="micro" weight="font-bold" className="text-white uppercase">
+          <Box position="absolute" className="top-4 right-4">
+            <Box paddingX={2} paddingY={1} radius="none" className="bg-accent">
+              <Text variant="mono" size="micro" weight="font-bold" color="white" uppercase={true}>
                 {verdict}
               </Text>
-            </div>
-          </div>
+            </Box>
+          </Box>
         )}
       </CardImage>
 
       {/* Content Area */}
-      <div className="flex flex-col gap-4 p-6 flex-1">
-        <div className="flex flex-col gap-2">
+      <Stack gap={4} padding={6} flex={1}>
+        <Stack gap={2}>
           {rating && (
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-amber-500 drop-shadow-sm">
+            <Box display="flex" align="center" gap={1} marginBottom={1}>
+              <span className="text-yellow-400 drop-shadow-sm">
                 {'★'.repeat(Math.floor(rating))}
                 {rating % 1 !== 0 ? '½' : ''}
               </span>
               <Text variant="mono" size="micro" color="dim" emphasis="low">
                 ({rating}/5)
               </Text>
-            </div>
+            </Box>
           )}
 
-          <h3 className="font-sans font-bold tracking-tight leading-tight text-xl text-accent-navy group-hover:text-accent transition-colors">
+          <Text as="h3" variant="headline" size="xl" color="brand" className="group-hover:text-accent transition-colors">
             {title}
-          </h3>
+          </Text>
 
-          <p className="font-sans leading-relaxed text-text-body text-sm line-clamp-2">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-2">
              {excerpt}
-          </p>
+          </Text>
 
           {(priceCategory || updatedDate) && (
-            <div className="flex flex-wrap items-center gap-3 mt-2">
+            <Box display="flex" wrap="wrap" align="center" gap={3} marginTop={2}>
                {priceCategory && (
-                 <Box border className="bg-amber-50 px-2 py-0.5 border-amber-200">
-                   <Text variant="mono" size="tiny" weight="font-bold" className="text-amber-700">{priceCategory}</Text>
+                 <Box border={true} paddingX={2} paddingY={0.5} className="bg-accent/10 border-accent/20">
+                   <Text variant="mono" size="tiny" weight="font-bold" color="brand">{priceCategory}</Text>
                  </Box>
                )}
                {updatedDate && (
                  <Text variant="mono" size="tiny" color="dim">Updated {updatedDate}</Text>
                )}
-            </div>
+            </Box>
           )}
-        </div>
+        </Stack>
 
-        <div className="flex flex-col gap-3 mt-auto">
-          <Text variant="mono" size="xs" color="dim" className="leading-tight mb-2">
+        <Stack gap={3} marginTop="auto">
+          <Text variant="mono" size="xs" color="dim" className="leading-tight" marginBottom={2}>
             * This post contains affiliate links. I may earn a commission at no extra cost to you.
           </Text>
-          <div className="flex items-center justify-between pt-4 border-t border-line/50">
+          <Box display="flex" align="center" justify="between" paddingTop={4} border="t" className="border-line/50">
             <Text variant="mono" size="xs" color="brand" weight="font-bold">
               Read {title} Review
             </Text>
-            <div className="group-hover:translate-x-1 transition-transform duration-300">
+            <Box className="group-hover:translate-x-1 transition-transform duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -97,10 +102,10 @@ export function GearCard({
               >
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    </NavLink>
+            </Box>
+          </Box>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

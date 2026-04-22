@@ -34,7 +34,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const headerExtras = (
     <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
       <Box display="flex" align="center" gap={4}>
-        <Box className="w-10 h-10 rounded-none bg-accent-navy flex items-center justify-center text-white">
+        <Box width={10} height={10} radius="none" surface="accent" display="flex" align="center" justify="center" color="white">
           <Text variant="mono" size="xs" weight="font-bold">AA</Text>
         </Box>
         <Stack gap={0}>
@@ -42,7 +42,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           <Text variant="mono" size="tiny" color="dim">Author & Engineer</Text>
         </Stack>
       </Box>
-      <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
+      <Box as="button" display="flex" align="center" gap={2} color="dim" cursor="pointer" className="hover:text-accent transition-colors">
         <Share2 className="w-4 h-4" />
         <Text variant="mono" size="xs">Share</Text>
       </Box>
@@ -51,7 +51,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   const relatedContent = relatedPosts.length > 0 && (
     <Box border="t" paddingTop={12} marginTop={12}>
-      <Text variant="mono" size="xs" weight="font-bold" className="mb-8 block uppercase tracking-widest">Related Posts</Text>
+      <Text as="span" variant="mono" size="xs" weight="font-bold" display="block" marginBottom={8} uppercase={true} className="tracking-widest">Related Posts</Text>
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         {relatedPosts.map(p => (
           <ContentCard key={p.slug} {...p} basePath="/blog" />

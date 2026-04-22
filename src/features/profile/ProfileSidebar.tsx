@@ -30,7 +30,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
         maxWidth={{ base: 'full', md: imageSizes.profile }}
         shrink={0}
       >
-        <User className="w-24 h-24 text-line stroke-[0.5]" />
+        <User className="w-24 h-24 text-line stroke-1" />
       </Box>
 
       <Box flex={1} className="space-y-8" minWidth={0}>
@@ -43,7 +43,8 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 color="dim"
                 weight="font-semibold"
                 display="block"
-                className="tracking-[0.15em] uppercase"
+                tracking="widest"
+                uppercase={true}
               >
                 {detail.label}
               </Text>
@@ -62,7 +63,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
 
         <Stack gap={6}>
           <Stack gap={3}>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-[0.15em] uppercase">Connect</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase={true}>Connect</Text>
             <Box display="flex" gap={5}>
               {data.socialLinks.map((link) => {
                 const Icon = platformIcons[link.platform];
@@ -97,7 +98,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 className="group text-accent-navy hover:text-accent transition-colors"
               >
                 <item.icon className="w-4 h-4" />
-                <Text variant="mono" size="xs" weight="font-semibold" className="tracking-[0.15em] uppercase">{item.label}</Text>
+                <Text variant="mono" size="xs" weight="font-semibold" tracking="widest" uppercase={true}>{item.label}</Text>
               </Box>
             ))}
           </Box>

@@ -22,22 +22,29 @@ export function EmailForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={`${inputs.base} min-h-[44px] w-full`}
+          className={`${inputs.base} min-h-12 w-full`}
         />
         <Button
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          className="min-h-[44px] w-auto min-w-[140px] sm:min-w-[180px] px-6"
+          minHeight={12}
+          width="auto"
+          minWidth={{ base: 36, sm: 44 }}
+          paddingX={6}
         >
           <AnimatePresence mode="wait">
-            <motion.div
+            <Box
+              as={motion.div}
               key={status}
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.2 }}
-              className="flex items-center justify-center gap-2"
+              display="flex"
+              align="center"
+              justify="center"
+              gap={2}
             >
               {status === 'loading' && (
                 <>
@@ -57,7 +64,7 @@ export function EmailForm() {
                   <ArrowRight className="w-4 h-4 text-bg" />
                 </>
               )}
-            </motion.div>
+            </Box>
           </AnimatePresence>
         </Button>
       </Stack>

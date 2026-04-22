@@ -11,7 +11,11 @@ interface CardImageProps {
 export function CardImage({ image, title, category, children }: CardImageProps) {
   return (
     <Box
-      className="relative overflow-hidden border-b border-line bg-bg"
+      position="relative"
+      overflow="hidden"
+      border="b"
+      surface="bg"
+      className="border-line"
       style={{ aspectRatio: '16/9', maxHeight: '160px' }}
     >
       {image ? (
@@ -25,9 +29,9 @@ export function CardImage({ image, title, category, children }: CardImageProps) 
       )}
 
       {/* Category Badge - Standard for all cards */}
-      <Box className="absolute top-4 left-4">
-        <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
-          <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
+      <Box position="absolute" className="top-4 left-4">
+        <Box paddingX={3} paddingY={1} surface="default" opacity={90} border={true} radius="none" className="backdrop-blur-sm">
+          <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase={true} tracking="wider">
             {category}
           </Text>
         </Box>
