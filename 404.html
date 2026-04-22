@@ -43,7 +43,7 @@
           if (best > 0) {
             redirect(best);
           } else {
-            // Fallback to the known repo base if all probes fail
+            // Fallback to the repo root if all probes fail
             redirect(1);
           }
         });
