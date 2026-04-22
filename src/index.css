@@ -27,6 +27,10 @@
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
 
+  /* Fallback Configuration For Spacing Utilities */
+  --spacing-6: 1.5rem;
+  --spacing-12: 3rem;
+
   /* Motion Primitives */
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
