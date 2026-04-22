@@ -13,7 +13,7 @@ interface FolioGridProps {
   description?: string;
   children?: React.ReactNode;
   loading?: boolean;
-  as?: any;
+  as?: React.ElementType;
 }
 
 export default function FolioGrid({

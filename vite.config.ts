@@ -15,7 +15,7 @@ export default defineConfig(({mode}) => {
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = process.env.ANALYZE === 'true';
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer' : '/'));
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   return {
     base,
@@ -30,7 +30,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: 'https://tech-dancer.github.io/tech-dancer',
+        hostname: env.VITE_APP_URL || 'https://tech-dancer.github.io/tech-dancer',
         dynamicRoutes: [
           '/blog',
           '/gear',

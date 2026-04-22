@@ -4,7 +4,7 @@ interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
-  as?: any;
+  as?: React.ElementType;
 }
 
 export function PageHeader({ label, title, description, as = "h1" }: PageHeaderProps) {
