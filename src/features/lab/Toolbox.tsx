@@ -58,7 +58,7 @@ export default function Toolbox() {
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2, xl: 3 }} gap={{ base: 6, md: 8 }}>
+        <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={{ base: 6, md: 8 }}>
           {allFilteredItems.map((item) => (
             <GearCard
               key={item.slug}

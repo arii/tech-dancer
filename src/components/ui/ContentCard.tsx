@@ -36,7 +36,6 @@ export function ContentCardSkeleton() {
 }
 
 export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content, aspect = "video" }: ContentCardProps) {
-  const gradient = CATEGORY_GRADIENTS[category] || 'from-slate-800 to-slate-900';
   const rt = readingTime(content, excerpt);
 
   return (
@@ -46,7 +45,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
-      <Box className="relative aspect-video overflow-hidden bg-bg">
+      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg">
         {image ? (
           <img 
             src={image} 
@@ -54,8 +53,8 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <Box className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradient}`}>
-             <Text variant="display" size="4xl" className="text-white/20">
+          <Box className="w-full h-full flex items-center justify-center bg-slate-50/50">
+             <Text variant="display" size="4xl" className="text-slate-200/50">
                {category.slice(0, 2).toUpperCase()}
              </Text>
           </Box>
@@ -70,7 +69,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       </Box>
 
       {/* Content Area */}
-      <Stack gap={5} className="p-6 lg:p-8" flex={1} justify="between">
+      <Stack gap={5} padding={6} flex={1} justify="between">
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
             <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest">

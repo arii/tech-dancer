@@ -74,15 +74,15 @@ export default function FolioGrid({
       </Box>
 
       {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2 }} gap={0} border="t" className="border-l border-line mt-8">
+        <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
           {loading ? (
             Array.from({ length: 6 }).map((_, index) => (
               <Box
                 key={index}
                 border="r"
                 borderBottom={true}
-                padding={8}
-                className={`transition-colors group ${index === 0 ? "md:col-span-full" : ""}`}
+                padding={{ base: 6, lg: 6 }}
+                className={`transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
               >
                 <ContentCardSkeleton />
               </Box>
@@ -93,8 +93,8 @@ export default function FolioGrid({
                 key={item.slug}
                 border="r"
                 borderBottom={true}
-                padding={8}
-                className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full" : ""}`}
+                padding={{ base: 6, lg: 6 }}
+                className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
               >
                 <ContentCard
                   {...item}

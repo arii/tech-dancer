@@ -19,15 +19,13 @@ export function GearCard({
   priceCategory,
   updatedDate
 }: GearCardProps) {
-  const gradient = CATEGORY_GRADIENTS[category] || 'from-slate-800 to-slate-900';
-
   return (
     <NavLink
       to={`${basePath}/${slug}`}
       className="group flex flex-col bg-surface border border-line transition-all duration-300 overflow-hidden"
     >
       {/* Image Wrapper */}
-      <div className="aspect-square md:aspect-video relative overflow-hidden bg-bg">
+      <div className="aspect-square md:aspect-video relative overflow-hidden border-b border-line bg-bg">
         {image ? (
           <img
             src={image}
@@ -35,8 +33,8 @@ export function GearCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradient}`}>
-             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl text-white/20">
+          <div className="w-full h-full flex items-center justify-center bg-slate-50/50">
+             <span className="font-display font-bold uppercase tracking-tight leading-none text-3xl text-slate-200/50">
                {category.slice(0, 2).toUpperCase()}
              </span>
           </div>
