@@ -33,7 +33,7 @@ export function GlobalSearch() {
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
-    else if (result.type === 'study') navigate(`/research`);
+    else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
   return (

@@ -65,7 +65,12 @@ export default function ResearchAnalytics() {
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={12}>
             {studies.map((study) => (
-              <Box key={study.slug} className="group">
+              <Box
+                key={study.slug}
+                as="button"
+                onClick={() => navigate(`/research/${study.slug}`)}
+                className="group text-left cursor-pointer"
+              >
                 <Stack gap={4}>
                   <Box display="flex" justify="between" align="center">
                     <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>

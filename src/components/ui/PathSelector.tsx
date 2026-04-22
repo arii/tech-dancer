@@ -117,10 +117,13 @@ export default function PathSelector() {
               as="ul"
               gap={4}
               marginBottom={6}
-              opacity={80}
+              opacity={isHovered ? 100 : 0}
               zIndex={20}
               position="relative"
-              className="font-mono text-sm tracking-widest uppercase text-white font-bold group-hover:opacity-100 transition-opacity duration-500 delay-75"
+              className={cn(
+                "font-mono text-sm tracking-widest uppercase text-white font-bold transition-opacity duration-500 delay-75",
+                !isHovered && "pointer-events-none"
+              )}
             >
               {path.links.map((link) => (
                 <li key={link.text}>
