@@ -11,6 +11,7 @@ import subprocess
 import os
 import requests
 import sys
+import re
 
 def get_token():
     """Retrieves the GitHub token via gh CLI, falls back to env var."""
@@ -106,7 +107,6 @@ def main():
             new_line_num = 0
             for line in lines:
                 if line.startswith('@@'):
-                    import re
                     # Parse hunk header: @@ -old_start,old_count +new_start,new_count @@
                     match = re.search(r'\+(\d+),?(\d*)', line)
                     if match:

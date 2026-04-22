@@ -53,12 +53,16 @@ def main():
 
     # Basic placeholder validation
     body_text = payload.get("body", "")
-    if "<findings>" in body_text or "<summary>" in body_text:
-         print("❌ Placeholders found in JSON body. Please complete the review.")
+    placeholders = ["<findings>", "<summary>", "<Approved | Approved with Minor Changes | Not Approved>"]
+    found_placeholders = [p for p in placeholders if p.lower() in body_text.lower()]
+    
+    if found_placeholders:
+         print(f"❌ Placeholders found in JSON body: {', '.join(found_placeholders)}")
+         print("AI Audit failed to complete the analysis block.")
          sys.exit(1)
 
-    if payload.get("comments") and payload["comments"][0].get("path") == "<filename>":
-        print("❌ Placeholders found in JSON comments. Please complete the review.")
+    if payload.get("comments") and any(c.get("path") == "<filename>" for c in payload["comments"]):
+        print("❌ Placeholders found in JSON comments path.")
         sys.exit(1)
 
     # ── Pre-flight Line Validation ───────────────────────────────────────────
@@ -69,19 +73,27 @@ def main():
             ctx_content = f.read()
         
         # Parse valid ranges per file
-        # Format: ### `filename` (status)\n**Valid Comment Ranges (New File):** 1-10, 20-30
-        file_sections = re.split(r'### `(.*?)` \((.*?)\)', ctx_content)
+        # Format: ### `filename` (status)
+        # OR: ### `filename`
+        file_sections = re.split(r'### `?([^`\n]+)`?.*?\n', ctx_content)
         valid_map = {}
-        for i in range(1, len(file_sections), 3):
-            fname = file_sections[i]
+        # file_sections[0] is prefix
+        # i=1 is fname, i=2 is content
+        for i in range(1, len(file_sections), 2):
+            fname = file_sections[i].strip()
+            section_content = file_sections[i+1]
+            
             # Find the range line in this section
-            range_match = re.search(r'\*\*Valid Comment Ranges \(New File\):\*\* (.*)', file_sections[i+2])
+            range_match = re.search(r'\*\*Valid Comment Ranges \(New File\):\*\* (.*)', section_content)
             if range_match:
                 ranges = []
                 for r in range_match.group(1).split(", "):
                     if "-" in r:
-                        start, end = map(int, r.split("-"))
-                        ranges.append((start, end))
+                        try:
+                            start, end = map(int, r.split("-"))
+                            ranges.append((start, end))
+                        except ValueError:
+                            continue
                 valid_map[fname] = ranges
 
         # Filter comments

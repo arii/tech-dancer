@@ -31,6 +31,8 @@ def main():
     parser.add_argument("--submit", action="store_true", help="Stage 3 only: Submit completed review")
     parser.add_argument("--auto", action="store_true", help="Run Stage 1-3 end-to-end automatically (Default)")
     parser.add_argument("--cleanup", action="store_true", help="Cleanup files after submission")
+    parser.add_argument("--dry-run", action="store_true", help="Perform a dry-run submission")
+    parser.add_argument("--submit-only", action="store_true", help="Skip Fetch/Audit and only try to submit existing review")
     parser.add_argument("--event", help="Override submission event (COMMENT, APPROVE, REQUEST_CHANGES)")
     
     args = parser.parse_args()
@@ -39,6 +41,11 @@ def main():
     review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
     context_file = os.path.join(review_dir, f"pr-context-{pr_num}.md")
     review_file = os.path.join(review_dir, f"pr-review-{pr_num}.md")
+
+    # Handle --submit-only as a special case of bypassing auto
+    if args.submit_only:
+        subprocess.run(["python3", sys.argv[0], pr_num, "--submit"] + (["--cleanup"] if args.cleanup else []) + (["--dry-run"] if args.dry_run else []), check=True)
+        return
 
     # If no specific stage is requested, default to --auto
     is_auto = args.auto or (not args.fetch and not args.audit and not args.submit)
@@ -53,6 +60,8 @@ def main():
         submit_cmd = ["python3", sys.argv[0], pr_num, "--submit"]
         if args.cleanup:
             submit_cmd.append("--cleanup")
+        if args.dry_run:
+            submit_cmd.append("--dry-run")
         if args.event:
             submit_cmd.extend(["--event", args.event])
         else:
@@ -69,11 +78,6 @@ def main():
         print(f"\n✅ Files generated:")
         print(f"  - Context: {context_file}")
         print(f"  - Template: {review_file}")
-        print(f"\n👉 STAGE 2: PERFORM TECHNICAL AUDIT")
-        print(f"   Option A (Automated): Run this script with --audit")
-        print(f"   Option B (Manual): Edit {review_file} manually.")
-        print(f"\n👉 STAGE 3: SUBMIT")
-        print(f"   Run this script with --submit when finished.")
 
     elif args.audit:
         if not os.path.exists(context_file) or not os.path.exists(review_file):
@@ -82,16 +86,20 @@ def main():
             
         print(f"🚀 Stage 2: Performing AI-automated audit for PR #{pr_num}...")
         
+        # Auditor instructions decoupled from script to reduce duplication
+        audit_instructions = (
+            "1. Read the PR context (diffs and valid line ranges)\n"
+            "2. Read the review template and PROJECT STANDARDS\n"
+            "3. Perform a rigorous technical audit against the standards\n"
+            "4. FILL the final JSON payload block (no placeholders allowed)\n"
+            "CRITICAL: Only use line numbers shown in the 'Valid Comment Ranges' in context."
+        )
+
         prompt = (
-            f"You are a technical auditor for the tech-dancer repository. "
-            f"1. Read the PR context in {context_file}\n"
-            f"2. Read the review template and PROJECT STANDARDS in {review_file}\n"
-            f"3. Perform a rigorous technical audit of the diffs against these standards.\n"
-            f"4. Update {review_file}: mark checklist items as [x] and fill the final JSON payload block.\n"
-            f"\nCRITICAL RULES:\n"
-            f"- You MUST replace the placeholders `<findings>`, `<summary>`, and `<Approved | ...>` in the JSON block with your actual analysis. Leaving these placeholders will fail the submission.\n"
-            f"- You MUST only provide inline comments for line numbers explicitly listed in the '**Valid Comment Ranges**' in the context file.\n"
-            f"- Use high-contrast, professional technical language. Avoid fluff."
+            f"You are the tech-dancer technical auditor. Auditing PR #{pr_num}.\n"
+            f"CONTEXT: {context_file}\n"
+            f"TEMPLATE: {review_file}\n\n"
+            f"INSTRUCTIONS:\n{audit_instructions}"
         )
         
         # Construct the copilot command with user-recommended flags
@@ -107,24 +115,26 @@ def main():
         subprocess.call(copilot_cmd)
         
         print(f"\n✅ AI Audit stage complete.")
-        print(f"   Please review the findings in: {review_file}")
-        print(f"   Run with --submit to finalize.")
+        print(f"   Review findings in: {review_file}")
 
     elif args.submit:
         if not os.path.exists(review_file):
             print(f"❌ Review file not found: {review_file}")
-            print("Did you run with --fetch first?")
             sys.exit(1)
             
         # Hardening: Clear any existing pending review first
         print(f"🧹 Clearing any existing pending reviews for PR #{pr_num}...")
-        subprocess.run(["python3", "dev-tools/gh_collab.py", "submit", pr_num, "COMMENT"], 
-                       stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        res = subprocess.run(["python3", "dev-tools/gh_collab.py", "submit", pr_num, "COMMENT"], 
+                       capture_output=True, text=True)
+        if res.returncode != 0 and "No pending review" not in res.stderr:
+            print(f"⚠️ Warning during pending review cleanup: {res.stderr.strip()}")
 
         print(f"🚀 Stage 3: Submitting PR #{pr_num} review...")
         cmd = ["python3", "dev-tools/submit_pr_review_data.py", review_file]
         if args.cleanup:
             cmd.append("--cleanup")
+        if args.dry_run:
+            cmd.append("--dry-run")
         if args.event:
             cmd.append(f"--event={args.event}")
         
@@ -136,20 +146,6 @@ def main():
         
         print(result.stdout)
         print(f"\n✅ Submission complete for PR #{pr_num}.")
-
-    else:
-        # Default behavior: if files don't exist, fetch; if they do, prompt for submission
-        if not os.path.exists(review_file):
-            print(f"No review in progress for PR #{pr_num}. Starting fetch...")
-            # Recurse with fetch
-            subprocess.run(["python3", sys.argv[0], pr_num, "--fetch"])
-        else:
-            print(f"Review file exists for PR #{pr_num}: {review_file}")
-            choice = input("Submit this review now? (y/n): ")
-            if choice.lower() == 'y':
-                subprocess.run(["python3", sys.argv[0], pr_num, "--submit"])
-            else:
-                print("Aborted. You can manually edit the file and run --submit later.")
 
 if __name__ == "__main__":
     main()
