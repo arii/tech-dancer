@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
+@source "./layouts/system-utils.ts";
+
 @theme {
+
   /* Modern Typography Identity */
   --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque", sans-serif;
