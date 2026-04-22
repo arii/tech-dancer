@@ -22,7 +22,7 @@ export default function Home() {
         <Stack gap={12} paddingTop={12}>
           <Stack gap={4}>
             <Text 
-              as={motion.div}
+              as={motion.h1}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               variant="headline" 

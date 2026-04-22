@@ -4,6 +4,7 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import Sitemap from 'vite-plugin-sitemap';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -14,7 +15,7 @@ export default defineConfig(({mode}) => {
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = process.env.ANALYZE === 'true';
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
+  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer' : '/'));
 
   return {
     base,
@@ -28,6 +29,18 @@ export default defineConfig(({mode}) => {
     plugins: [
       react(),
       tailwindcss(),
+      Sitemap({
+        hostname: 'https://tech-dancer.github.io/tech-dancer',
+        dynamicRoutes: [
+          '/blog',
+          '/gear',
+          '/research',
+          '/resources',
+          '/about',
+          '/contact'
+        ],
+        basePath: base
+      }),
       ViteImageOptimizer({
         includePublic: true,
         webp: {

@@ -51,7 +51,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.5(react@19.2.5)
       react-helmet-async:
-        specifier: ^3.0.0
+        specifier: 3.0.0
         version: 3.0.0(react@19.2.5)
       react-markdown:
         specifier: ^10.1.0
@@ -111,6 +111,9 @@ importers:
       vite-plugin-image-optimizer:
         specifier: ^2.0.3
         version: 2.0.3(sharp@0.34.5)(vite@6.4.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0))
+      vite-plugin-sitemap:
+        specifier: ^0.8.2
+        version: 0.8.2
       wait-on:
         specifier: ^9.0.5
         version: 9.0.5
@@ -3261,6 +3264,9 @@ packages:
         optional: true
       svgo:
         optional: true
+
+  vite-plugin-sitemap@0.8.2:
+    resolution: {integrity: sha512-bqIw6NVOXg6je81lzX8Lm0vjf8/QSAp8di8fYQzZ3ZdVicOm8+6idBGALJiy1R1FiXNIK8rgORO6HBqXyHW+iQ==}
 
   vite@6.4.2:
     resolution: {integrity: sha512-2N/55r4JDJ4gdrCvGgINMy+HH3iRpNIz8K6SFwVsA+JbQScLiC+clmAxBgwiSPgcG9U15QmvqCGWzMbqda5zGQ==}
@@ -6572,6 +6578,8 @@ snapshots:
       vite: 6.4.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)
     optionalDependencies:
       sharp: 0.34.5
+
+  vite-plugin-sitemap@0.8.2: {}
 
   vite@6.4.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0):
     dependencies:

@@ -13,6 +13,7 @@ interface FolioGridProps {
   description?: string;
   children?: React.ReactNode;
   loading?: boolean;
+  as?: any;
 }
 
 export default function FolioGrid({
@@ -22,7 +23,8 @@ export default function FolioGrid({
   label,
   description,
   children,
-  loading
+  loading,
+  as
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -43,6 +45,7 @@ export default function FolioGrid({
           label={label || "FOLIO"}
           title={categoryTitle}
           description={description}
+          as={as}
         />
         {children}
         <Box marginTop={8} position="relative" maxWidth="2xl">
