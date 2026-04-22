@@ -7,8 +7,11 @@
 export const radius = {
   none: "rounded-none",
   subtle: "rounded-[2px]", // Subtle 2px radius
+  standard: "rounded", // 4px
   sm: "rounded-sm",
-  md: "rounded-md",
+  md: "rounded-md", // 6px
+  lg: "rounded-lg", // 8px
+  xl: "rounded-xl", // 12px
 };
 
 export const borders = {
