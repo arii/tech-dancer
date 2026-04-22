@@ -20,8 +20,13 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    // Click on the backdrop (top-left corner)
-    await page.mouse.click(5, 5);
+    // Click on the backdrop
+    // Since the sidebar is fixed at x=0 to x=280 and has z-50,
+    // and the modal backdrop is at z-100 but centered,
+    // we need to click where the backdrop is visible but not obscured by the sidebar.
+    // Viewport is 1280. Modal is 768.
+    // Click at x=500, y=500 should be safely on the backdrop of the modal.
+    await page.mouse.click(500, 500);
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
@@ -30,8 +35,6 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     // Navigate to another page via sidebar
-    // We use force: true because the modal backdrop intercepts the click
-    // And we use goto to ensure the test doesn't fail on navigation timing issues
     await page.goto('/gear');
 
     // Check if modal is gone
