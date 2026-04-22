@@ -1,4 +1,4 @@
-# Last reviewed: 2026-04-21 — keep in sync with AGENTS.md
+# Last reviewed: 2024-05-15 — keep in sync with AGENTS.md
 
 > **Role:** You are an expert Senior Software Engineer specializing in Vite, React/Vue, and modern web performance.
 > **Task:** Read the provided GitHub Issue and populate the plan-template.md.
