@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 
 // polyfilling Buffer for browser environment
-(window as any).Buffer = (window as any).Buffer || Buffer;
+window.Buffer = window.Buffer || Buffer;
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -15,8 +15,8 @@ import './index.css';
  */
 const getBasename = () => {
   // 1. Priority: Use the basename detected by index.html during a 404 restoration
-  if ((window as any).__ROUTER_BASENAME__) {
-    return (window as any).__ROUTER_BASENAME__;
+  if (window.__ROUTER_BASENAME__) {
+    return window.__ROUTER_BASENAME__;
   }
 
   const fullPath = window.location.pathname;
@@ -27,18 +27,24 @@ const getBasename = () => {
   const baseSegments = buildBase.split('/').filter(Boolean);
 
   // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
-  // check if the next segment is a known top-level route.
+  // check if the next segment is a known route.
   if (segments.length > baseSegments.length) {
     const possibleRouteSegment = segments[baseSegments.length];
 
-    // Whitelist of standard top-level routes to avoid misidentifying them as branch names
-    const standardRoutes = ['gear', 'research', 'blog', 'resources', 'about', 'contact', 'ux-auditor'];
+    // Extract valid top-level paths from the route configuration to distinguish between routes and subdirectories
+    const children = routes[0].children || [];
+    const validTopLevelPaths = new Set<string>();
+    for (const route of children) {
+      if (route.path && route.path !== '*' && route.path !== '/') {
+        validTopLevelPaths.add(route.path.split('/')[0]);
+      }
+    }
 
-    const isStandardRoute = standardRoutes.indexOf(possibleRouteSegment) !== -1;
+    const isStandardRoute = validTopLevelPaths.has(possibleRouteSegment);
     const isIndexHtml = possibleRouteSegment === 'index.html';
 
     if (!isStandardRoute && !isIndexHtml) {
-      // It's likely a branch name. The basename includes this extra segment.
+      // It's likely a branch deployment. The basename includes this extra segment.
       return '/' + segments.slice(0, baseSegments.length + 1).join('/');
     }
   }
