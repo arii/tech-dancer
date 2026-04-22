@@ -38,7 +38,9 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       }
     } else {
       // For PUSH or REPLACE, always start at the top
-      container.scrollTop = 0;
+      requestAnimationFrame(() => {
+        if (container) container.scrollTop = 0;
+      });
     }
 
     return () => {
