@@ -27,9 +27,10 @@ export default function FolioGrid({
   const [search, setSearch] = useSearchParam('search');
 
   const filteredItems = items.filter(item => {
+    const tags = 'tags' in item ? item.tags : [];
     return (
       safeSearch(item.title, search) ||
-      (item as any).tags?.some((t: string) => safeSearch(t, search)) ||
+      tags?.some((t: string) => safeSearch(t, search)) ||
       safeSearch(item.category, search) ||
       safeSearch(item.excerpt, search)
     );
@@ -86,7 +87,7 @@ export default function FolioGrid({
               className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
             >
               <ContentCard
-                {...(item as any)}
+                {...item}
                 basePath={basePath}
                 aspect="video"
               />
