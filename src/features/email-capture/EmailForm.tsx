@@ -1,8 +1,9 @@
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Loader2, Check } from 'lucide-react';
+import { ArrowRight, Loader2, Check, AlertCircle } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
+import React from 'react';
 
 export function EmailForm() {
   const { status, submitForm, email, setEmail } = useEmailCaptureContext();
@@ -12,18 +13,36 @@ export function EmailForm() {
     submitForm(email);
   };
 
+  const [isValid, setIsValid] = React.useState(true);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setEmail(val);
+    if (val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  };
+
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
+    <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto group">
       <Stack direction="row" gap={0} position="relative" className="w-full">
         <input
           type="email"
           placeholder="Email Address"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={`${inputs.base} min-h-[44px] w-full`}
+          className={`${inputs.base} min-h-[44px] w-full ${!isValid ? 'border-red-500 focus:border-red-500' : ''}`}
         />
+        {!isValid && email && (
+          <Box position="absolute" className="-bottom-6 left-0 flex items-center gap-1 text-red-500">
+             <AlertCircle className="w-3 h-3" />
+             <Text variant="mono" size="micro">INVALID_ENCODING</Text>
+          </Box>
+        )}
         <Button
           type="submit"
           variant="primary"

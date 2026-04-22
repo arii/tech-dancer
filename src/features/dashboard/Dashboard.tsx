@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Zap, ArrowRight, Shield, Calendar } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
+import { motionTokens } from '@/styles/motion';
 import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -52,19 +53,29 @@ export default function Home() {
             </Box>
           </SectionHeader>
 
-          <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
+          <Grid
+            as={motion.div}
+            variants={motionTokens.staggerContainer}
+            initial="initial"
+            animate="animate"
+            cols={{ base: 1, sm: 2, lg: 4 }}
+            gap={4}
+          >
             {recentPosts.map((post) => (
-              <ContentCard 
-                key={post.slug}
-                {...post}
-                basePath="/blog"
-                aspect="video"
-              />
+              <Box as={motion.div} variants={motionTokens.fadeInUp} key={post.slug}>
+                <ContentCard
+                  {...post}
+                  basePath="/blog"
+                  aspect="video"
+                />
+              </Box>
             ))}
 
             {/* Upcoming Events Mini-Cards */}
             {upcomingEvents.map((event) => (
-              <EventCard key={event.name} {...event} />
+              <Box as={motion.div} variants={motionTokens.fadeInUp} key={event.name}>
+                <EventCard {...event} />
+              </Box>
             ))}
           </Grid>
         </Stack>

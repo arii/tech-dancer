@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -12,6 +13,7 @@ interface ContentDetailProps {
 }
 
 export function ContentDetail({ post, onBack, backLabel, children }: ContentDetailProps) {
+  const [imgError, setImgError] = React.useState(false);
   const title = post.title;
   const content = post.content;
 
@@ -57,7 +59,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
             {title}
           </Text>
 
-          {image && (
+          {image && !imgError && (
             <Box
               as={motion.div}
               initial={{ opacity: 0, y: 20 }}
@@ -70,6 +72,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
               <img
                 src={image}
                 alt={title}
+                onError={() => setImgError(true)}
                 className="w-full h-full object-cover"
               />
             </Box>
