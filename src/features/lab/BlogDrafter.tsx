@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'motion/react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Copy, Check } from 'lucide-react';
+import { Github, FileText, Send, Terminal, ExternalLink, Info } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import ReactMarkdown from 'react-markdown';
@@ -8,15 +7,6 @@ import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
   const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
-  const [copied, setCopied] = React.useState(false);
-
-  const wordCount = data.commentary.trim().split(/\s+/).filter(Boolean).length;
-
-  const handleCopyMarkdown = () => {
-    navigator.clipboard.writeText(markdownPreview);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <Stack gap={10} height="full">
@@ -137,10 +127,7 @@ export function BlogDrafter() {
             </Stack>
 
             <Stack gap={2}>
-              <Box display="flex" justify="between">
-                <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
-                <Text variant="mono" size="micro" color="dim">{wordCount} WORDS</Text>
-              </Box>
+              <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
               <Box
                 as="textarea"
                 value={data.commentary}
@@ -163,22 +150,9 @@ export function BlogDrafter() {
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
              <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
-             <Box display="flex" align="center" gap={4}>
-                <Box
-                  as="button"
-                  onClick={handleCopyMarkdown}
-                  display="flex"
-                  align="center"
-                  gap={1}
-                  className="hover:text-accent-brand transition-colors"
-                >
-                   {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                   <Text variant="mono" size="micro">{copied ? 'COPIED' : 'COPY MD'}</Text>
-                </Box>
-                <Box display="flex" align="center" gap={2} color="dim">
-                  <FileText className="w-3 h-3" />
-                  <Text variant="mono" size="micro">v1.2.0</Text>
-                </Box>
+             <Box display="flex" align="center" gap={2} color="dim">
+                <FileText className="w-3 h-3" />
+                <Text variant="mono" size="micro">v1.2.0</Text>
              </Box>
           </Box>
 

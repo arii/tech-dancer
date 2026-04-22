@@ -1,5 +1,5 @@
 import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -22,27 +22,16 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
         onClick={onClick}
         className={({ isActive }) => cn(
           "flex items-center gap-4 transition-all relative z-10 rounded-md",
-          isMobile ? "py-6 border-b border-line/50 text-xl" : "py-4 px-4",
+          isMobile ? "py-6 border-b border-line/50 text-xl" : "py-6 px-4",
           isActive 
-            ? "text-accent bg-accent/5"
+            ? "text-accent bg-bg" 
             : "text-text-dim hover:text-accent hover:bg-bg/50"
         )}
       >
         <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
-        <Box display="flex" align="center" gap={3} flex>
-          <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
-            {label}
-          </Text>
-          <NavLink to={to}>
-            {({ isActive }) => isActive && (
-              <motion.div
-                layoutId="active-nav-indicator"
-                className="w-1.5 h-1.5 rounded-full bg-accent"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            )}
-          </NavLink>
-        </Box>
+        <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
+          {label}
+        </Text>
       </NavLink>
     </Box>
   );
@@ -50,26 +39,11 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <>
       {/* Mobile Header */}
-      <Box
-        as="nav"
-        aria-label="Mobile Navigation"
-        layout="mobileHeader"
-        className={cn(
-          "transition-all duration-300",
-          scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
-        )}
-      >
+      <Box as="nav" aria-label="Mobile Navigation" layout="mobileHeader">
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
@@ -90,10 +64,9 @@ export default function Navigation() {
         {isOpen && (
           <Box 
             as={motion.div} 
-            initial={{ x: '100%' }}
+            initial={{ x: '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={motionTokens.arielTransition}
+            exit={{ x: '-100%' }}
             position="fixed"
             className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
             padding={8}
@@ -120,12 +93,9 @@ export default function Navigation() {
         as="nav"
         aria-label="Main Navigation"
         layout="navRail" 
-        className={cn(
-          "w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-all duration-300",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
-        )}
+        className="w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0"
       >
-        <Stack padding={8} gap={10} flex={1} className={cn("transition-all duration-500", scrolled && "gap-6 pt-6")}>
+        <Stack padding={8} gap={10} flex={1}>
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
               variant="mono" 
