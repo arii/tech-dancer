@@ -1,0 +1,56 @@
+name: Prune Stale Previews
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-branch
+
+      - name: Prune orphaned directories
+        run: |
+          cd gh-pages-branch
+
+          # Get list of all active remote branches
+          ACTIVE_BRANCHES=$(git ls-remote --heads origin | awk -F'refs/heads/' '{print $2}')
+
+          CHANGES_MADE=false
+
+          for dir in */; do
+            dir=${dir%/}
+
+            # Skip special folders
+            if [[ "$dir" == "assets" || "$dir" == "tmp" || "$dir" == "previews" || ! -f "$dir/index.html" ]]; then
+              continue
+            fi
+
+            # Remove folder if it doesn't match an active branch
+            if ! echo "$ACTIVE_BRANCHES" | grep -qx "$dir"; then
+              echo "Branch '$dir' no longer exists. Removing preview..."
+              git rm -r "$dir"
+              CHANGES_MADE=true
+            fi
+          done
+
+          if [ "$CHANGES_MADE" = true ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: prune orphaned branch previews"
+            git push origin gh-pages
+          else
+            echo "No stale previews to prune."
+          fi

@@ -150,3 +150,24 @@ jobs:
                 });
               }
             }
+
+      - name: Checkout gh-pages for index update
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-branch
+
+      - name: Generate and Deploy Previews Index
+        run: |
+          cd gh-pages-branch
+          mkdir -p previews
+
+          # Copy the fancy dashboard from the build
+          cp ../dist/previews/index.html previews/index.html
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add previews/index.html
+          git commit -m "chore: update previews index after deployment" || echo "No changes to commit"
+          git pull --rebase origin gh-pages
+          git push origin gh-pages
