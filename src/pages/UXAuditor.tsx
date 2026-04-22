@@ -13,6 +13,39 @@ const viewportIcons = {
   Desktop: <Monitor className="w-5 h-5" />
 };
 
+
+function CopyPromptButton({ suggestion }: { suggestion: string }) {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(suggestion);
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setCopied(true);
+      });
+    } else {
+      setCopied(true);
+    }
+    setTimeout(() => {
+      if (document.startViewTransition) {
+        document.startViewTransition(() => setCopied(false));
+      } else {
+        setCopied(false);
+      }
+    }, 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="mt-2 flex items-center gap-1 px-3 py-1 rounded bg-surface border border-line hover:border-accent transition-colors text-xs font-bold hover:text-accent"
+    >
+      {copied ? <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" /> : <Copy className="w-3 h-3" />}
+      {copied ? <span className="text-[var(--color-success,#16a34a)]">Copied!</span> : <span>Copy Prompt</span>}
+    </button>
+  );
+}
+
 export default function UXAuditor() {
   const {
     reports,
@@ -55,7 +88,7 @@ export default function UXAuditor() {
             type="text"
             value={url}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="border-none focus:ring-2 focus:ring-accent outline-none font-mono"
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text"
             style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
             placeholder="https://..."
           />
@@ -83,15 +116,15 @@ export default function UXAuditor() {
           </Text>
           <Box surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
-              <Box padding={10} className="text-center text-text-dim italic text-sm">
-                No snapshots recorded
+              <Box padding={10} className="italic" color="dim" align="center" size="sm">
+                No audits recorded.
               </Box>
             )}
             {reports.map((report) => (
               <button
                 key={report.id}
                 onClick={() => setActiveReport(report)}
-                className={`w-full text-left transition-all ${
+                className={`w-full text-left p-4 hover:bg-surface transition-all flex items-center gap-3 ${
                   activeReport?.id === report.id ? 'bg-bg border-l-4 border-accent' : 'border-l-4 border-transparent'
                 }`}
               >
@@ -121,7 +154,7 @@ export default function UXAuditor() {
           {activeReport ? (
             <>
               <Box
-                surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} className="flex-col md:flex-row"
+                surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} direction={{ base: "col", md: "row" }}
               >
                 <Box>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
@@ -169,7 +202,7 @@ export default function UXAuditor() {
                     <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
                       <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm" className="text-accent">
+                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
@@ -181,13 +214,13 @@ export default function UXAuditor() {
                         </Text>
                       </Box>
 
-                      <Grid cols={{ base: 1, md: 2 }}>
-                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border="r" minHeight={400}>
+                      <Grid cols={{ base: 1, md: 12 }}>
+                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border="r" minHeight={400} span={{ base: 1, md: 5 }}>
                           {imgUrl ? (
                             <img
                               src={imgUrl}
                               alt={`${vp.name} snapshot`}
-                              className="w-full h-auto object-contain"
+                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface"
                               style={{ maxHeight: '450px' }}
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
@@ -201,7 +234,7 @@ export default function UXAuditor() {
                           )}
                         </Box>
 
-                        <Stack gap={6} padding={8}>
+                        <Stack gap={6} padding={8} span={{ base: 1, md: 7 }}>
                           {data ? (
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
@@ -234,13 +267,7 @@ export default function UXAuditor() {
                                           {imp.suggestion}
                                         </Text>
                                         {imp.element === "Manual Audit Required" && (
-                                          <button
-                                            onClick={() => navigator.clipboard.writeText(imp.suggestion)}
-                                            className="mt-2 flex items-center gap-1 px-3 py-1 rounded bg-surface border border-line hover:border-accent transition-colors text-xs font-bold hover:text-accent"
-                                          >
-                                            <Copy className="w-3 h-3" />
-                                            Copy Prompt
-                                          </button>
+                                          <CopyPromptButton suggestion={imp.suggestion} />
                                         )}
                                       </Box>
                                     </Box>
@@ -249,7 +276,7 @@ export default function UXAuditor() {
                               </Stack>
                             </>
                           ) : (
-                            <Box display="flex" align="center" justify="center" paddingY={20} className="flex-col text-text-dim">
+                            <Box display="flex" align="center" justify="center" paddingY={20} direction="col" color="dim">
                               <RefreshCw className="animate-spin mb-3 w-6 h-6" />
                               <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
                                 Agent Processing...
