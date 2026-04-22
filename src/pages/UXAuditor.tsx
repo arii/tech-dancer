@@ -55,7 +55,7 @@ export default function UXAuditor() {
             type="text"
             value={url}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text"
+            className="border-none focus:ring-2 focus:ring-accent outline-none font-mono"
             style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
             placeholder="https://..."
           />
@@ -91,7 +91,7 @@ export default function UXAuditor() {
               <button
                 key={report.id}
                 onClick={() => setActiveReport(report)}
-                className={`w-full text-left p-4 hover:bg-bg transition-all flex items-center gap-3 ${
+                className={`w-full text-left transition-all ${
                   activeReport?.id === report.id ? 'bg-bg border-l-4 border-accent' : 'border-l-4 border-transparent'
                 }`}
               >
@@ -187,7 +187,7 @@ export default function UXAuditor() {
                             <img
                               src={imgUrl}
                               alt={`${vp.name} snapshot`}
-                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface"
+                              className="w-full h-auto object-contain"
                               style={{ maxHeight: '450px' }}
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
@@ -236,7 +236,7 @@ export default function UXAuditor() {
                                         {imp.element === "Manual Audit Required" && (
                                           <button
                                             onClick={() => navigator.clipboard.writeText(imp.suggestion)}
-                                            className="mt-2 flex items-center gap-1 px-3 py-1 rounded bg-surface border border-line hover:border-accent transition-colors text-xs font-bold text-text-dim hover:text-accent"
+                                            className="mt-2 flex items-center gap-1 px-3 py-1 rounded bg-surface border border-line hover:border-accent transition-colors text-xs font-bold hover:text-accent"
                                           >
                                             <Copy className="w-3 h-3" />
                                             Copy Prompt
