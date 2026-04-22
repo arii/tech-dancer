@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources." />
+    <title>Tech-Dancer // The Roboticist's Guide to WCS</title>
+    <script type="text/javascript">
+      (function(l) {
+        // If we were redirected from 404.html, the route is encoded in the query string starting with /
+        if (l.search[1] === '/') {
+          var decodedPath = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+
+          // Calculate the actual base path (where index.html is located)
+          var base = l.pathname.replace(/\/index\.html$/, '');
+          window.__ROUTER_BASENAME__ = base;
+
+          // Restore the intended URL without a page reload
+          // We use base.replace(/\/$/, '') to avoid double slashes when joining with decodedPath
+          window.history.replaceState(null, null, base.replace(/\/$/, '') + decodedPath + l.hash);
+        }
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/tech-dancer/fix/gear-page-layout-bugs-12419242474745659722/assets/index-C9TV8v2g.js"></script>
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/gear-page-layout-bugs-12419242474745659722/assets/vendor-react-qDFqdIvJ.js">
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/gear-page-layout-bugs-12419242474745659722/assets/vendor-markdown-e9PAft-3.js">
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/gear-page-layout-bugs-12419242474745659722/assets/vendor-recharts-JfjGcoGW.js">
+    <link rel="modulepreload" crossorigin href="/tech-dancer/fix/gear-page-layout-bugs-12419242474745659722/assets/vendor-motion-CQhsUiTf.js">
+    <link rel="stylesheet" crossorigin href="/tech-dancer/fix/gear-page-layout-bugs-12419242474745659722/assets/index-F8zcghjt.css">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
