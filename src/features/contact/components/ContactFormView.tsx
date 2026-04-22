@@ -58,7 +58,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" radius="lg" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
+                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" radius="lg" shrink={false} marginRight={6} className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors">
                       <item.icon size={24} className="stroke-1" />
                     </Box>
                     <Stack gap={1}>
