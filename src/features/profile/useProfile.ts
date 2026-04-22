@@ -1,5 +1,7 @@
-export function useProfile() {
-  const bio = {
+import { ProfileData } from './types';
+
+export function useProfile(): { bio: ProfileData } {
+  const bio: ProfileData = {
     name: "Ariel Anders, PhD",
     role: "MIT Roboticist // WCS Tech-Dancer",
     sections: [
@@ -28,6 +30,11 @@ export function useProfile() {
       { label: "EDUCATION", value: "PhD in Computer Science, MIT" },
       { label: "FOCUS", value: "Robotics // AI // Data Analytics" },
       { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
+    ],
+    socialLinks: [
+      { platform: 'instagram', url: 'https://instagram.com' },
+      { platform: 'linkedin', url: 'https://linkedin.com' },
+      { platform: 'github', url: 'https://github.com' },
     ]
   };
 

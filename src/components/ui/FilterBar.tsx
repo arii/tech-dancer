@@ -1,13 +1,14 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { useSearchParam } from '@/hooks/useSearchParam';
+import { Box, Stack } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
 interface FilterBarProps {
-  activeCategory: string;
   categories: string[];
-  onSelect: (category: string) => void;
 }
 
-export function FilterBar({ activeCategory, categories, onSelect }: FilterBarProps) {
+export function FilterBar({ categories }: FilterBarProps) {
+  const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
+
   return (
     <Box border="b" className="w-full bg-surface/80 backdrop-blur-md sticky top-0 z-40 overflow-x-auto no-scrollbar" paddingY={5}>
       <Stack direction="row" gap={4} className="min-w-max">
@@ -15,7 +16,7 @@ export function FilterBar({ activeCategory, categories, onSelect }: FilterBarPro
           <Box
             key={cat}
             as="button"
-            onClick={() => onSelect(cat)}
+            onClick={() => setActiveCategory(cat)}
             paddingX={6}
             paddingY={2}
             radius="none"
@@ -26,9 +27,7 @@ export function FilterBar({ activeCategory, categories, onSelect }: FilterBarPro
                 : "bg-bg text-text-dim border-line hover:border-accent hover:text-accent"
             )}
           >
-            <Text variant="mono" size="xs" weight="font-bold">
-              {cat === 'All' ? 'All Posts' : cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-            </Text>
+            {cat === 'All' ? 'All Posts' : cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
           </Box>
         ))}
       </Stack>

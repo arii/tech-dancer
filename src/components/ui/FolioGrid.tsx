@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard, ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid, Stack } from '@/layouts/Primitives';
@@ -30,12 +30,13 @@ export default function FolioGrid({
   view = 'card',
   onViewChange
 }: FolioGridProps) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useSearchParam('search');
 
   const filteredItems = items.filter(item => {
+    const tags = 'tags' in item ? item.tags : [];
     return (
       safeSearch(item.title, search) ||
-      item.tags?.some((t: string) => safeSearch(t, search)) ||
+      tags?.some((t: string) => safeSearch(t, search)) ||
       safeSearch(item.category, search) ||
       safeSearch(item.excerpt, search)
     );
@@ -64,6 +65,7 @@ export default function FolioGrid({
               variant="mono"
               size="sm"
               className="focus:border-accent-brand outline-none focus:ring-0"
+              value={search}
               onChange={(e: any) => setSearch(e.target.value)}
             />
           </Box>

@@ -7,8 +7,11 @@
 export const radius = {
   none: "rounded-none",
   subtle: "rounded-[2px]", // Subtle 2px radius
+  standard: "rounded", // 4px
   sm: "rounded-sm",
-  md: "rounded-md",
+  md: "rounded-md", // 6px
+  lg: "rounded-lg", // 8px
+  xl: "rounded-xl", // 12px
   full: "rounded-full",
 };
 
@@ -34,6 +37,8 @@ export const animation = {
   fast: "duration-150",
   normal: "duration-300",
   smooth: "ease-[cubic-bezier(0.16,1,0.3,1)]", // ease-out-expo
+  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+  revealDistance: 20,
 };
 
 /**
@@ -66,6 +71,10 @@ export const buttons = {
 export const shadows = {
   topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
   standard: "shadow-sm",
+};
+
+export const imageSizes = {
+  profile: 400,
 };
 
 export const zIndex = {

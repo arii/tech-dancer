@@ -1,14 +1,16 @@
-import { getResources, Resource } from '@/lib/content';
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { getResources } from '@/lib/content';
+import { useMemo } from 'react';
+import { useSearchParam } from '@/hooks/useSearchParam';
 import { safeSearch } from '@/lib/utils';
 import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useToolbox() {
   const resources = getResources();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const view = (searchParams.get('view') as ViewMode) || 'card';
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useSearchParam('search');
+  const [viewParam, setViewParam] = useSearchParam('view', 'card');
+
+  const view = viewParam as ViewMode;
+  const setView = (v: ViewMode) => setViewParam(v);
 
   const categories = [
     { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
@@ -27,7 +29,7 @@ export function useToolbox() {
     if (!searchTerm) return groupedResources;
     return groupedResources.map(cat => ({
       ...cat,
-      items: cat.items.filter(item => 
+      items: cat.items.filter(item =>
         safeSearch(item.title, searchTerm) ||
         safeSearch(item.category, searchTerm) ||
         safeSearch(item.excerpt, searchTerm) ||
@@ -35,11 +37,6 @@ export function useToolbox() {
       )
     })).filter(cat => cat.items.length > 0);
   }, [groupedResources, searchTerm]);
-
-  const setView = (v: ViewMode) => {
-    searchParams.set('view', v);
-    setSearchParams(searchParams);
-  };
 
   return {
     searchTerm,

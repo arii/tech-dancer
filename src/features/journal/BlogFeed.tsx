@@ -1,10 +1,10 @@
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 
 export default function BlogFeed() {
-  const { posts, categories, activeCategory, setActiveCategory, view, setView, isLoading } = useBlog();
+  const { posts, categories, view, setView, isLoading } = useBlog();
 
   return (
     <Box as="section">
@@ -20,9 +20,7 @@ export default function BlogFeed() {
       >
         <Box marginTop={8}>
           <FilterBar
-            activeCategory={activeCategory}
             categories={categories}
-            onSelect={setActiveCategory}
           />
         </Box>
       </FolioGrid>
