@@ -1,5 +1,6 @@
 import { User, Share2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { contentWidth } from '@/styles/design-tokens';
 import { Post, getPosts } from '@/lib/content';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { useMemo } from 'react';
@@ -71,6 +72,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       sidebar={sidebar}
       headerExtras={headerExtras}
       relatedContent={relatedContent}
+      proseWidth={contentWidth.article}
     />
   );
 }

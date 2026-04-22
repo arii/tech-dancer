@@ -5,13 +5,14 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
+import { contentWidth } from '@/styles/design-tokens';
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   return (
-    <Box as="section">
+    <Box as="section" className={`${contentWidth.tool} w-full mx-auto`}>
       <SEO
         title="Research"
         description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."

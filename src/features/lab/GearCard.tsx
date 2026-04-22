@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
-import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { CardImage } from '@/components/ui/CardImage';
 
 interface GearCardProps extends Resource {
   basePath: string;
@@ -25,23 +25,7 @@ export function GearCard({
       className="group flex flex-col bg-surface border border-line transition-all duration-300 overflow-hidden"
     >
       {/* Image Wrapper */}
-      <div className="aspect-square md:aspect-video relative overflow-hidden border-b border-line bg-bg">
-        {image ? (
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <CategoryPlaceholder category={category} />
-        )}
-        <div className="absolute top-4 left-4">
-          <div className="bg-surface/90 backdrop-blur px-3 py-1 rounded-none border border-line">
-            <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase">
-              {category}
-            </Text>
-          </div>
-        </div>
+      <CardImage image={image} title={title} category={category}>
         {verdict && (
           <div className="absolute top-4 right-4">
             <div className="bg-accent-brand px-2 py-1 rounded-none">
@@ -51,7 +35,7 @@ export function GearCard({
             </div>
           </div>
         )}
-      </div>
+      </CardImage>
 
       {/* Content Area */}
       <div className="flex flex-col gap-4 p-6 flex-1">

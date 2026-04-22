@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
-import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { CardImage } from '@/components/ui/CardImage';
 
 interface ContentCardProps {
   slug: string;
@@ -45,24 +45,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       className="group cursor-pointer flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       {/* Visual Thumbnail */}
-      <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg">
-        {image ? (
-          <img 
-            src={image} 
-            alt={title} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          />
-        ) : (
-          <CategoryPlaceholder category={category} />
-        )}
-        <Box className="absolute top-4 left-4">
-          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
-            <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
-              {category}
-            </Text>
-          </Box>
-        </Box>
-      </Box>
+      <CardImage image={image} title={title} category={category} />
 
       {/* Content Area */}
       <Stack gap={5} padding={6} flex={1} justify="between">

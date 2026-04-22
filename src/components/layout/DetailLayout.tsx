@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { contentWidth } from '@/styles/design-tokens';
 
 interface DetailLayoutProps {
   title: string;
@@ -16,6 +17,7 @@ interface DetailLayoutProps {
   children?: React.ReactNode;
   headerExtras?: React.ReactNode;
   relatedContent?: React.ReactNode;
+  proseWidth?: string;
 }
 
 export function DetailLayout({
@@ -29,13 +31,14 @@ export function DetailLayout({
   sidebar,
   children,
   headerExtras,
-  relatedContent
+  relatedContent,
+  proseWidth = "max-w-none"
 }: DetailLayoutProps) {
   const rt = readingTime(content);
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="5xl" marginX="auto" className="w-full">
+      <Stack gap={12} className={`${contentWidth.wide} mx-auto w-full`}>
         {/* Navigation */}
         <Box
           as="button"
@@ -102,7 +105,7 @@ export function DetailLayout({
             {/* Content */}
             <Box className={sidebar ? "lg:col-span-3" : ""}>
               {children}
-              <Box className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main" maxWidth="prose">
+              <Box className={`prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main ${proseWidth}`}>
                 <MarkdownRenderer content={content} />
               </Box>
             </Box>

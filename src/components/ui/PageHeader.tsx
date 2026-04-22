@@ -11,7 +11,7 @@ export function PageHeader({ label, title, description, as = "h1" }: PageHeaderP
   return (
     <Box paddingBottom={10} className="border-b border-slate-200">
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest">
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase={true} className="tracking-widest">
           {label}
         </Text>
         <Text as={as} variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">

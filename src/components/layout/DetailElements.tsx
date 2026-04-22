@@ -69,7 +69,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
        <Stack gap={3}>
           <Box display="flex" align="center" gap={3}>
              <Shield className="w-6 h-6 text-emerald-600" />
-             <Text variant="display" size="2xl" weight="font-black" intent="success">THE VERDICT</Text>
+             <Text variant="display" size="2xl" weight="font-black" intent="success" uppercase={true}>THE VERDICT</Text>
           </Box>
           <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">
             "{verdict}"

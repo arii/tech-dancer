@@ -8,6 +8,7 @@ import {
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { contentWidth } from '@/styles/design-tokens';
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
@@ -73,7 +74,7 @@ export default function UXAuditor() {
   } = useUXAuditor();
 
   return (
-    <Stack gap={8} width="full">
+    <Stack gap={8} className={`${contentWidth.tool} w-full mx-auto`}>
       <Stack
         direction={{ base: 'col', md: 'row' }}
         align={{ base: 'start', md: 'center' }}
