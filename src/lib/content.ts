@@ -114,7 +114,6 @@ export interface Event {
   content: string;
 }
 
-export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
 interface ContentModule {
@@ -175,10 +174,10 @@ const maps = {
 export const getPosts = () => items.posts;
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
-const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+<<<<<<< HEAD
 const getStudyBySlug = (slug: string) => maps.studies.get(slug);
 const getEventBySlug = (slug: string) => maps.events.get(slug);
 
@@ -197,3 +196,5 @@ export const readingTime = (content?: string, excerpt?: string) => {
   const words = excerpt?.split(/\s+/).length ?? 0;
   return Math.max(1, Math.round(words / 20)); // sensible proxy for short text
 };
+=======
+>>>>>>> e7f839d (Fix CI pipeline: JSON syntax and dead code (#208))

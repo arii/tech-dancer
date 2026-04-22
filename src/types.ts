@@ -11,20 +11,3 @@ export interface AffiliateLink {
   description: string;
 }
 
-interface GearItem {
-  id: string;
-  title: string;
-  description: string;
-  priceRange: string;
-  affiliateId: string;
-  imageUrl: string;
-  tags: string[];
-}
-
-interface TechSpec {
-  label: string;
-  value: string;
-  description: string;
-}
-
-export type { GearItem, TechSpec };

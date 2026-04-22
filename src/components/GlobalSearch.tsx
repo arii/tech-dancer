@@ -1,10 +1,15 @@
 import { motion, AnimatePresence } from 'motion/react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Search, X, Hash, ArrowRight, CornerDownLeft, Sparkles } from 'lucide-react';
 =======
 import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
 >>>>>>> 6d3af94 (feat: implement dead code detection and CI cleanup)
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+=======
+import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+>>>>>>> e7f839d (Fix CI pipeline: JSON syntax and dead code (#208))
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
