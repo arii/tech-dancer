@@ -49,7 +49,7 @@ function parseFrontmatter(content: string) {
           else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
 
           // Basic numeric conversion for rating
-          if (key === 'rating') data[key] = parseFloat(value);
+          if (['rating', 'durability', 'value'].includes(key)) data[key] = parseFloat(value);
           else data[key] = value;
         }
       }
@@ -64,6 +64,7 @@ export interface Post {
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
   category: string;
   excerpt: string;
   content: string;

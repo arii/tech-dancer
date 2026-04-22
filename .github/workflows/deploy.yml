@@ -46,6 +46,7 @@ jobs:
           else
             export VITE_BASE_PATH=/$REPO_NAME/${{ github.ref_name }}/
           fi
+          export VITE_APP_URL=https://${{ github.repository_owner }}.github.io/$REPO_NAME
           pnpm run build
 
       - name: Deploy to gh-pages branch
@@ -87,6 +88,7 @@ jobs:
             const branchName = context.ref.replace('refs/heads/', '');
             const baseUrl = `https://${owner}.github.io/${repo}/`;
             const previewUrl = branchName === 'main' ? baseUrl : `${baseUrl}${branchName}/`;
+            const dashboardUrl = `${baseUrl}previews/index.html`;
 
             const pstTime = new Date().toLocaleString('en-US', {
               timeZone: 'America/Los_Angeles',
@@ -100,7 +102,8 @@ jobs:
               .addTable([
                 ['Site', 'URL'],
                 ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
-                ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`]
+                ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`],
+                ['Preview Dashboard', `<a href="${dashboardUrl}">${dashboardUrl}</a>`]
               ])
               .addRaw(`**Last updated:** ${pstTime} PST`)
               .write();
@@ -116,11 +119,13 @@ jobs:
 
             for (const pr of pullRequests) {
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
+              const dashboardUrl = `${baseUrl}previews/index.html`;
               const body = [
                 `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
                 '',
                 `- **Main Site:** ${baseUrl}`,
                 `- **Preview URL:** ${previewUrl}`,
+                `- **Preview Dashboard:** ${dashboardUrl}`,
                 '',
                 commentTag
               ].join('\n');
@@ -149,3 +154,30 @@ jobs:
                 });
               }
             }
+
+      - name: Checkout gh-pages for index update
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-branch
+
+      - name: Generate and Deploy Previews Index
+        run: |
+          cd gh-pages-branch
+          mkdir -p previews
+
+          # Validation: Ensure the dashboard exists in build artifacts
+          if [ ! -f "../dist/previews/index.html" ]; then
+            echo "Error: dist/previews/index.html not found! Deployment of preview index failed."
+            exit 1
+          fi
+
+          # Copy the fancy dashboard from the build
+          cp ../dist/previews/index.html previews/index.html
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add previews/index.html
+          git commit -m "chore: update previews index after deployment" || echo "No changes to commit"
+          git pull --rebase origin gh-pages
+          git push origin gh-pages

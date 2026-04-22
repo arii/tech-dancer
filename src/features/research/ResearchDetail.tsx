@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
+import { SEO } from '@/components/SEO';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
@@ -27,6 +29,17 @@ export default function ResearchDetail() {
     );
   }
 
+  const structuredData = useMemo(() => {
+    if (!tool) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": tool.name,
+      "description": tool.layman,
+      "applicationCategory": "EducationalApplication"
+    };
+  }, [tool]);
+
   if (!tool) {
     return (
       <Box padding="panel" textAlign="center">
@@ -43,6 +56,16 @@ export default function ResearchDetail() {
 
   return (
     <Box as="section" padding="panel">
+      <SEO
+        title={tool.name}
+        description={tool.layman}
+        type="website"
+      />
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
       <Stack gap={12}>
         <Box 
           as="button" 
@@ -68,7 +91,7 @@ export default function ResearchDetail() {
                   <Text variant="mono" color="brand" size="xs" weight="font-bold" uppercase tracking="widest">
                     LABORATORY_ACCESS // {tool.category.toUpperCase()}
                   </Text>
-                  <Text variant="headline" size="fluid-7">{tool.name}</Text>
+                  <Text as="h1" variant="headline" size="fluid-7">{tool.name}</Text>
                   <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
                     <Text variant="body" size="lg" color="body">{tool.layman}</Text>
                   </Box>

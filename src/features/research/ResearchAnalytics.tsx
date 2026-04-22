@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Search, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 
@@ -11,11 +12,16 @@ export default function ResearchAnalytics() {
 
   return (
     <Box as="section">
+      <SEO
+        title="Research"
+        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
+      />
       <Stack gap={12}>
         <PageHeader 
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
           description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
+          as="h1"
         />
 
         <Stack gap={8}>
@@ -28,7 +34,7 @@ export default function ResearchAnalytics() {
               <Box 
                 key={tool.id}
                 as="button"
-                onClick={() => navigate(`/research/${tool.id}`)}
+                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 surface="default"
                 border
                 padding="card"
