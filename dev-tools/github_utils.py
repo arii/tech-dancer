@@ -50,10 +50,10 @@ def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
 
         for run in check_runs:
             total_checks += 1
-            if run.conclusion in ['failure', 'error', 'timed_out', 'action_required']:
-                failed_runs.append(run.name)
-            elif run.status in ['in_progress', 'queued']:
+            if run.status in ['in_progress', 'queued']:
                 in_progress += 1
+            elif run.conclusion not in ['success', 'skipped', 'neutral']:
+                failed_runs.append(f"{run.name} ({run.conclusion or 'no conclusion'})")
 
         total_checks += combined_status.total_count
         if combined_status.state in ['failure', 'error']:
