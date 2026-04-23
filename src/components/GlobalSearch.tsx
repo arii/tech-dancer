@@ -48,7 +48,7 @@ export function GlobalSearch() {
       paddingTop={20}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-[280px]"
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72"
       // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
@@ -65,7 +65,7 @@ export function GlobalSearch() {
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
-          <Search className="w-6 h-6 text-accent-brand shrink-0" />
+          <Search className="w-6 h-6 text-accent shrink-0" />
           <Text
             as="input"
             ref={inputRef}
@@ -89,7 +89,7 @@ export function GlobalSearch() {
             cursor="pointer"
             className="group hover:bg-accent/5 transition-colors border border-line/50"
           >
-            <X className="w-6 h-6 text-text-dim group-hover:text-accent-brand" />
+            <X className="w-6 h-6 text-text-dim group-hover:text-accent" />
           </Box>
         </Box>
 
@@ -114,11 +114,11 @@ export function GlobalSearch() {
                   className="hover:bg-accent/5 group transition-colors"
                 >
                    <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
-                      <Hash className="w-4 h-4 text-accent-brand opacity-50" />
+                      <Hash className="w-4 h-4 text-accent opacity-50" />
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
                       <Box display="flex" align="center" justify="between" gap={3}>
-                         <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">{res.title}</Text>
+                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{res.title}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                             <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
