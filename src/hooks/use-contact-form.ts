@@ -63,13 +63,31 @@ export function useContactForm() {
     setErrors({});
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: 'General Feedback', message: '' });
-    return true;
+    try {
+      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) throw new Error('Submission failed');
+      } else {
+        // Simulate form submission if no endpoint is configured
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: 'General Feedback', message: '' });
+      return true;
+    } catch (err) {
+      setErrors({ message: 'System error: Unable to transmit payload. Please try again later.' });
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const reset = () => {

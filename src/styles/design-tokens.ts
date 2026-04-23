@@ -100,8 +100,8 @@ export const zIndex = {
 };
 
 export const typography = {
-  headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
-  display: "font-display font-bold uppercase tracking-tight leading-none",
+  headline: "font-display font-bold tracking-tighter leading-[0.9]",
+  display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: "font-mono tracking-[3px] uppercase",
@@ -109,6 +109,16 @@ export const typography = {
   micro: "font-mono uppercase tracking-widest",
   tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+};
+
+export const tracking = {
+  tighter: "tracking-tighter",
+  tight: "tracking-tight",
+  normal: "tracking-normal",
+  wide: "tracking-wide",
+  wider: "tracking-wider",
+  widest: "tracking-widest",
+  "wide-editorial": "tracking-[0.2em]",
 };
 
 export const typeSizes = {
