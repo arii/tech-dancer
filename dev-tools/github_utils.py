@@ -4,23 +4,29 @@ import subprocess
 import sys
 from typing import Optional, Tuple, List
 try:
-    from github import Github, GithubException, Repository
+    from github import Github, GithubException
+    from github.Repository import Repository
 except ImportError:
     print("Error: PyGithub not installed. Run 'pip install PyGithub'")
     sys.exit(1)
 
 def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token via gh CLI, falls back to env var."""
+    """Retrieves the GitHub token from environment or via gh CLI."""
+    token = os.getenv("GITHUB_TOKEN")
+    if token:
+        return token
     try:
-        out = subprocess.check_output(
-            ['env', '-u', 'GITHUB_TOKEN', 'gh', 'auth', 'token'],
-            stderr=subprocess.DEVNULL, text=True
-        ).strip()
-        if out:
-            return out
-    except Exception:
-        pass
-    return os.getenv("GITHUB_TOKEN")
+        # Try to get the token from the gh cli if it is installed
+        # We avoid 'env -u' to maintain cross-platform compatibility
+        result = subprocess.run(
+            ["gh", "auth", "token"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""
@@ -34,7 +40,7 @@ def get_repo_name() -> Optional[str]:
     except Exception:
         return os.getenv("GH_REPO")
 
-def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
+def get_ci_status(repo: Repository, sha: str) -> Tuple[str, List[str]]:
     """
     Aggregates CI status from Check Runs and Combined Status API for a given SHA.
     Returns (status_summary, failed_runs_list).
@@ -61,8 +67,13 @@ def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
                 if s.state in ['failure', 'error']:
                     failed_runs.append(s.context)
 
-        if failed_runs:
-            return f"FAILURE | FAILED: {', '.join(set(failed_runs))}", list(set(failed_runs))
+        if failed_runs or combined_status.state in ['failure', 'error']:
+            summary = "FAILURE"
+            if failed_runs:
+                summary += f" | FAILED: {', '.join(set(failed_runs))}"
+            else:
+                summary += f" | {combined_status.state.upper()}"
+            return summary, list(set(failed_runs))
         elif in_progress > 0 or combined_status.state == 'pending':
             return f"PENDING | {in_progress} runs in progress", []
         elif total_checks > 0:
