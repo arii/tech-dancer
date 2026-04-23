@@ -17,7 +17,7 @@
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-mono: "Space Mono", monospace;
 
-  /* Radius (Corrected to match original index.css variables) */
+  /* Radius (Corrected to avoid visual regressions) */
   --radius-none: 0px;
   --radius-subtle: 2px;
   --radius-standard: 4px;

@@ -37,9 +37,9 @@ export const animation = {
   fast: "duration-fast",
   normal: "duration-normal",
   smooth: "ease-smooth",
-  // Framer Motion requires numeric arrays or named strings for ease, CSS vars don't resolve automatically in JS
+  // Framer Motion requires numeric arrays for cubic-bezier in JS
   ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-  revealDistance: 20,
+  revealDistance: "var(--reveal-distance)",
 };
 
 /**
@@ -75,15 +75,15 @@ export const shadows = {
 };
 
 export const imageSizes = {
-  profile: 400,
+  profile: "var(--image-profile)",
 };
 
 export const iconSizes = {
-  xs: 12,
-  sm: 16,
-  md: 20,
-  lg: 24,
-  xl: 32,
+  xs: "var(--icon-xs)",
+  sm: "var(--icon-sm)",
+  md: "var(--icon-md)",
+  lg: "var(--icon-lg)",
+  xl: "var(--icon-xl)",
 };
 
 export const zIndex = {
