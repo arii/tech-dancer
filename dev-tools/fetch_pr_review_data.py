@@ -29,73 +29,9 @@ def main():
 
     g = Github(token)
     try:
-<<<<<<< HEAD
         repo = g.get_repo(repo_name)
         pr = repo.get_pull(pr_num)
     except GithubException as e:
-=======
-        pr_url = f"https://api.github.com/repos/{repo}/pulls/{pr_num}"
-        pr_resp = requests.get(pr_url, headers=headers)
-        pr_resp.raise_for_status()
-        pr_data = pr_resp.json()
-
-        # If base_override is provided, we use 'gh pr diff' to get the custom patch
-        # otherwise we use the standard file list from the API
-        files_url = f"{pr_url}/files"
-        files_resp = requests.get(files_url, headers=headers).json()
-
-        # Fetch last commit time and SHA
-        commits_url = f"{pr_url}/commits"
-        commits_resp = requests.get(commits_url, headers=headers).json()
-        last_commit_time = "Unknown"
-        head_sha = None
-        if commits_resp and len(commits_resp) > 0:
-            last_commit = commits_resp[-1]
-            last_commit_time = last_commit.get('commit', {}).get('author', {}).get('date', 'Unknown')
-            head_sha = last_commit.get('sha')
-
-        # ── Fetch CI Status ───────────────────────────────────────────────────
-        ci_summary = "Unknown"
-        if head_sha:
-            try:
-                # 1. Check Runs (GitHub Actions etc.)
-                checks_url = f"https://api.github.com/repos/{repo}/commits/{head_sha}/check-runs"
-                checks_resp = requests.get(checks_url, headers=headers).json()
-
-                # 2. Combined Status (Legacy CI systems)
-                status_url = f"https://api.github.com/repos/{repo}/commits/{head_sha}/status"
-                status_resp = requests.get(status_url, headers=headers).json()
-
-                failed_runs = []
-                in_progress = 0
-
-                if 'check_runs' in checks_resp:
-                    for run in checks_resp['check_runs']:
-                        if run.get('conclusion') == 'failure':
-                            failed_runs.append(run.get('name'))
-                        elif run.get('status') in ['in_progress', 'queued']:
-                            in_progress += 1
-
-                if status_resp.get('state') == 'failure':
-                    for s in status_resp.get('statuses', []):
-                        if s.get('state') == 'failure':
-                            failed_runs.append(s.get('context'))
-                elif status_resp.get('state') in ['pending']:
-                    in_progress += 1
-
-                if failed_runs:
-                    ci_summary = f"🔴 FAILURE (Failed: {', '.join(set(failed_runs))})"
-                elif in_progress > 0:
-                    ci_summary = f"🟡 PENDING ({in_progress} runs in progress)"
-                elif (checks_resp.get('total_count', 0) > 0 or status_resp.get('total_count', 0) > 0):
-                    ci_summary = "🟢 SUCCESS (All checks passed)"
-                else:
-                    ci_summary = "⚪ No checks found"
-            except Exception as e:
-                ci_summary = f"⚠️ Error fetching CI: {str(e)}"
-
-    except requests.exceptions.RequestException as e:
->>>>>>> cf016d3 (feat(dev-tools): add CI check monitoring and commit-aware re-review tracking)
         print(f"❌ Failed to fetch PR data: {e}")
         sys.exit(1)
 
@@ -177,13 +113,37 @@ def main():
     context_content = "\n".join(context_lines)
 
     # ── Generate Review Template (Writeable) ──────────────────────────────────
-    template_path = os.path.join(os.path.dirname(__file__), "review_template.md")
-    if os.path.exists(template_path):
-        with open(template_path, "r") as f:
-            review_template = f.read().format(pr_num=pr_num, head_sha=head_sha)
-    else:
-        # Fallback if template file is missing
-        review_template = f"# PR Review: #{pr_num}\n- SHA: {head_sha}\n"
+    review_template = f"""# PR Review: #{pr_num}
+    
+## Context
+- **Last Commit Tracked (SHA):** {head_sha}
+
+## Audit Checklist
+For EVERY changed file, verify against these standards. Mark as `- [x]` when verified.
+- [ ] Dead abstractions: No new class, context, or hook that a simpler primitive handles.
+- [ ] Unnecessary indirection: No layer of wrapping where a direct function call suffices.
+- [ ] Responsibility creep: Component does not take on state/logic belonging in parent/hook.
+- [ ] Import bloat: No unnecessary `import React from 'react'` (React 17+).
+- [ ] Token compliance: Uses established design tokens (no raw Tailwind values or inline styles).
+- [ ] Audit ratio: If > 100 lines added, identified at least 10 lines to refactor/remove.
+
+## Output JSON
+Provide your findings and inline comments in the JSON block below.
+DO NOT REMOVE THE BACKTICKS.
+
+```json
+{{
+  "body": "## ANTI-AI-SLOP\\n<findings>\\n\\n## FINDINGS\\n<summary>\\n\\n## FINAL RECOMMENDATION\\n<Approved | Approved with Minor Changes | Not Approved>",
+  "comments": [
+    {{
+      "path": "<filename>",
+      "line": 1,
+      "body": "<feedback>"
+    }}
+  ]
+}}
+```
+"""
     repo_root = os.getcwd()
     output_dir = os.path.join(repo_root, "dev-tools", "logs", "reviews")
     os.makedirs(output_dir, exist_ok=True)
