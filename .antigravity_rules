@@ -1,0 +1,1 @@
+Across all branches, when executing terminal commands, always prepend git commits with local identity: git config user.name 'Antigravity Agent' && git config user.email 'ariandersrobotics@gmail.com'. Never push directly to the main branch; always create a new branch if one does not exist. This applies to all work performed in this workspace at all times.
