@@ -159,10 +159,10 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
-  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
-  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
+  posts: transform<Post>(contentModules.posts),
+  resources: transform<Resource>(contentModules.resources),
+  studies: transform<Study>(contentModules.studies),
+  events: transform<Event>(contentModules.events)
 };
 
 const maps = {

@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
