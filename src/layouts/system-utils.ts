@@ -6,7 +6,7 @@ export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T }
 export function getResponsiveClasses(
   prop: ResponsiveProp<string | number | boolean | undefined | null>,
   classPrefix: string,
-  mapper?: (val: any) => string | number | undefined
+  mapper?: (val: string | number | boolean | undefined | null) => string | number | undefined
 ) {
   if (prop === undefined || prop === null) return ""
   if (typeof prop !== "object" || React.isValidElement(prop)) {

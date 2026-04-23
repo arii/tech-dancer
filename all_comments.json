@@ -1,0 +1,968 @@
+[
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987303",
+    "pull_request_review_id": 4152506099,
+    "id": 3121987303,
+    "node_id": "PRRC_kwDOSD1fmM66Fb7n",
+    "diff_hunk": "@@ -6,24 +6,18 @@\n     <title>Tech-Dancer // The Roboticist's Guide to WCS</title>\n     <script type=\"text/javascript\">\n       (function(l) {\n-        if (l.search) {\n-          var q = {};\n-          l.search.slice(1).split('&').forEach(function(v) {\n-            var a = v.split('=');\n-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');\n-          });\n-          if (q.p !== undefined) {\n-            // Reconstruct the path by removing \"index.html\" if present at the end of pathname\n-            var base = l.pathname.replace(/\\/index\\.html$/, '');\n-            // Ensure no double slashes when joining base and q.p\n-            // base is like /tech-dancer/fix/branch\n-            // q.p is like /blog\n-            var cleanBase = base.replace(/\\/$/, '');\n-            var cleanPath = q.p.startsWith('/') ? q.p : '/' + q.p;\n-            var newUrl = cleanBase + cleanPath + (q.q ? ('?' + q.q) : '') + l.hash;\n+        // If we were redirected from 404.html, the route is encoded in the query string starting with /\n+        if (l.search[1] === '/') {\n+          var decodedPath = l.search.slice(1).split('&').map(function(s) {\n+            return s.replace(/~and~/g, '&')\n+          }).join('?');\n \n-            window.history.replaceState(null, null, newUrl);\n-          }\n+          // Calculate the actual base path (where index.html is located)\n+          var base = l.pathname.replace(/\\/index\\.html$/, '').replace(/\\/$/, '');\n+          window.__ROUTER_BASENAME__ = base || '/';\n+\n+          // Restore the intended URL without a page reload",
+    "path": "index.html",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "a45eb2fd0337be4f2b41a58dab7b5f61c34f7b61",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Clean: Sets runtime basename for the SPA. Ensure this global is typed on the window object in src/vite-env.d.ts to avoid 'any' casting later.",
+    "created_at": "2026-04-22T06:31:31Z",
+    "updated_at": "2026-04-22T06:31:58Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987303",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987303"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987303"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987303/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 19,
+    "original_line": 19,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 31,
+    "position": 31,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987307",
+    "pull_request_review_id": 4152506099,
+    "id": 3121987307,
+    "node_id": "PRRC_kwDOSD1fmM66Fb7r",
+    "diff_hunk": "@@ -43,13 +35,15 @@\n         });",
+    "path": "public/404.html",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "a45eb2fd0337be4f2b41a58dab7b5f61c34f7b61",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Clean: Correctly probes for index.html relative to the current path parts. Much better than hardcoding the project name.",
+    "created_at": "2026-04-22T06:31:31Z",
+    "updated_at": "2026-04-22T06:31:58Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987307",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987307"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987307"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987307/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 35,
+    "original_line": 35,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 36,
+    "position": 36,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987309",
+    "pull_request_review_id": 4152506099,
+    "id": 3121987309,
+    "node_id": "PRRC_kwDOSD1fmM66Fb7t",
+    "diff_hunk": "@@ -9,8 +9,46 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';\n import { routes } from './App.tsx';\n import './index.css';\n \n+/**\n+ * Function to calculate the actual basename at runtime.\n+ * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).\n+ */\n+const getBasename = () => {\n+  // 1. Priority: Use the basename detected by index.html during a 404 restoration\n+  if ((window as any).__ROUTER_BASENAME__) {",
+    "path": "src/main.tsx",
+    "commit_id": "a45eb2fd0337be4f2b41a58dab7b5f61c34f7b61",
+    "original_commit_id": "a45eb2fd0337be4f2b41a58dab7b5f61c34f7b61",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "VIOLATION: Rule #9 (No any). Casting window to 'any' to access __ROUTER_BASENAME__ is forbidden. Please add the property to the Window interface in a d.ts file.",
+    "created_at": "2026-04-22T06:31:31Z",
+    "updated_at": "2026-04-22T06:31:58Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987309",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987309"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987309"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987309/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": null,
+    "original_line": 18,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 10,
+    "position": 1,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987312",
+    "pull_request_review_id": 4152506099,
+    "id": 3121987312,
+    "node_id": "PRRC_kwDOSD1fmM66Fb7w",
+    "diff_hunk": "@@ -9,8 +9,46 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';\n import { routes } from './App.tsx';\n import './index.css';\n \n+/**\n+ * Function to calculate the actual basename at runtime.\n+ * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).\n+ */\n+const getBasename = () => {\n+  // 1. Priority: Use the basename detected by index.html during a 404 restoration\n+  if ((window as any).__ROUTER_BASENAME__) {\n+    return (window as any).__ROUTER_BASENAME__;\n+  }\n+\n+  const fullPath = window.location.pathname;\n+  // Standardize buildBase to not have a trailing slash\n+  const buildBase = (import.meta.env.BASE_URL || '/').replace(/\\/$/, '');\n+\n+  const segments = fullPath.split('/').filter(Boolean);\n+  const baseSegments = buildBase.split('/').filter(Boolean);\n+\n+  // 2. Heuristic: If we are in a subdirectory deeper than buildBase,\n+  // check if the next segment is a known top-level route.\n+  if (segments.length > baseSegments.length) {\n+    const possibleRouteSegment = segments[baseSegments.length];\n+\n+    // Whitelist of standard top-level routes to avoid misidentifying them as branch names\n+    const standardRoutes = ['gear', 'research', 'blog', 'resources', 'about', 'contact', 'ux-auditor'];",
+    "path": "src/main.tsx",
+    "commit_id": "a45eb2fd0337be4f2b41a58dab7b5f61c34f7b61",
+    "original_commit_id": "a45eb2fd0337be4f2b41a58dab7b5f61c34f7b61",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Nit: Hardcoding standardRoutes here introduces a maintenance burden. If new top-level routes are added to App.tsx, they must also be added here. Consider deriving this from the routes config or moving it to a shared constant.",
+    "created_at": "2026-04-22T06:31:31Z",
+    "updated_at": "2026-04-22T06:31:58Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987312",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987312"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3121987312"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3121987312/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": null,
+    "original_line": 35,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 27,
+    "position": 1,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146827",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146827,
+    "node_id": "PRRC_kwDOSD1fmM66GC4L",
+    "diff_hunk": "@@ -6,24 +6,18 @@\n     <title>Tech-Dancer // The Roboticist's Guide to WCS</title>\n     <script type=\"text/javascript\">\n       (function(l) {\n-        if (l.search) {\n-          var q = {};\n-          l.search.slice(1).split('&').forEach(function(v) {\n-            var a = v.split('=');\n-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');\n-          });\n-          if (q.p !== undefined) {\n-            // Reconstruct the path by removing \"index.html\" if present at the end of pathname\n-            var base = l.pathname.replace(/\\/index\\.html$/, '');\n-            // Ensure no double slashes when joining base and q.p\n-            // base is like /tech-dancer/fix/branch\n-            // q.p is like /blog\n-            var cleanBase = base.replace(/\\/$/, '');\n-            var cleanPath = q.p.startsWith('/') ? q.p : '/' + q.p;\n-            var newUrl = cleanBase + cleanPath + (q.q ? ('?' + q.q) : '') + l.hash;\n+        // If we were redirected from 404.html, the route is encoded in the query string starting with /\n+        if (l.search[1] === '/') {\n+          var decodedPath = l.search.slice(1).split('&').map(function(s) {\n+            return s.replace(/~and~/g, '&')\n+          }).join('?');\n \n-            window.history.replaceState(null, null, newUrl);\n-          }\n+          // Calculate the actual base path (where index.html is located)\n+          var base = l.pathname.replace(/\\/index\\.html$/, '').replace(/\\/$/, '');\n+          window.__ROUTER_BASENAME__ = base || '/';",
+    "path": "index.html",
+    "commit_id": "fa11aae59c9d26d8bbf97da242deae7a6bf9a382",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "✅ Excellent simplification. The new restoration logic is much cleaner — directly slicing `l.search[1]` instead of parsing `&` separators first. The `__ROUTER_BASENAME__` global is a pragmatic way to communicate the detected base to main.tsx.",
+    "created_at": "2026-04-22T07:06:57Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146827",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146827"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146827"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146827/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": null,
+    "original_line": 17,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 29,
+    "position": 1,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146831",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146831,
+    "node_id": "PRRC_kwDOSD1fmM66GC4P",
+    "diff_hunk": "@@ -43,13 +35,15 @@\n         });\n \n         Promise.all(checks).then(function (depths) {\n-          var best = Math.max.apply(null, depths);\n+          var best = 0;",
+    "path": "public/404.html",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Good defensive fallback. Replacing `Math.max.apply` with a manual loop avoids potential issues with large arrays and is more readable.",
+    "created_at": "2026-04-22T07:06:57Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146831",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146831"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146831"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146831/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 38,
+    "original_line": 38,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 40,
+    "position": 40,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146834",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146834,
+    "node_id": "PRRC_kwDOSD1fmM66GC4S",
+    "diff_hunk": "@@ -1,16 +1,60 @@\n import { Buffer } from 'buffer';\n \n // polyfilling Buffer for browser environment\n-(window as any).Buffer = (window as any).Buffer || Buffer;\n+window.Buffer = window.Buffer || Buffer;",
+    "path": "src/main.tsx",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "✅ Removed unnecessary `(window as any)` cast. Much cleaner.",
+    "created_at": "2026-04-22T07:06:57Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146834",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146834"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146834"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146834/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 4,
+    "original_line": 4,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 5,
+    "position": 5,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146839",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146839,
+    "node_id": "PRRC_kwDOSD1fmM66GC4X",
+    "diff_hunk": "@@ -1,16 +1,60 @@\n import { Buffer } from 'buffer';\n \n // polyfilling Buffer for browser environment\n-(window as any).Buffer = (window as any).Buffer || Buffer;\n+window.Buffer = window.Buffer || Buffer;\n \n import { StrictMode } from 'react';\n import { createRoot } from 'react-dom/client';\n import { createBrowserRouter, RouterProvider } from 'react-router-dom';\n import { routes } from './App.tsx';\n import './index.css';\n \n+/**\n+ * Function to calculate the actual basename at runtime.\n+ * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).\n+ */\n+const getBasename = () => {",
+    "path": "src/main.tsx",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The `getBasename()` logic is well-structured with clear priority order. The heuristic approach (comparing path depth to route config) is a robust solution for detecting branch deployments. Consider extracting `validTopLevelPaths` construction into a memoized constant if routes are static.",
+    "created_at": "2026-04-22T07:06:57Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146839",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146839"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146839"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146839/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 16,
+    "original_line": 16,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 17,
+    "position": 17,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146843",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146843,
+    "node_id": "PRRC_kwDOSD1fmM66GC4b",
+    "diff_hunk": "@@ -0,0 +1,6 @@\n+/// <reference types=\"vite/client\" />\n+\n+interface Window {\n+  __ROUTER_BASENAME__?: string;\n+  Buffer: any;",
+    "path": "src/vite-env.d.ts",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "**Type safety issue:** `Buffer: any` bypasses type checking. Use `Buffer: typeof import('buffer').Buffer` instead to preserve type safety.",
+    "created_at": "2026-04-22T07:06:57Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146843",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146843"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146843"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146843/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 5,
+    "original_line": 5,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 5,
+    "position": 5,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146846",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146846,
+    "node_id": "PRRC_kwDOSD1fmM66GC4e",
+    "diff_hunk": "@@ -6,24 +6,18 @@\n     <title>Tech-Dancer // The Roboticist's Guide to WCS</title>\n     <script type=\"text/javascript\">\n       (function(l) {\n-        if (l.search) {\n-          var q = {};\n-          l.search.slice(1).split('&').forEach(function(v) {\n-            var a = v.split('=');\n-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');\n-          });\n-          if (q.p !== undefined) {\n-            // Reconstruct the path by removing \"index.html\" if present at the end of pathname\n-            var base = l.pathname.replace(/\\/index\\.html$/, '');\n-            // Ensure no double slashes when joining base and q.p\n-            // base is like /tech-dancer/fix/branch\n-            // q.p is like /blog\n-            var cleanBase = base.replace(/\\/$/, '');\n-            var cleanPath = q.p.startsWith('/') ? q.p : '/' + q.p;\n-            var newUrl = cleanBase + cleanPath + (q.q ? ('?' + q.q) : '') + l.hash;\n+        // If we were redirected from 404.html, the route is encoded in the query string starting with /\n+        if (l.search[1] === '/') {\n+          var decodedPath = l.search.slice(1).split('&').map(function(s) {\n+            return s.replace(/~and~/g, '&')\n+          }).join('?');\n \n-            window.history.replaceState(null, null, newUrl);\n-          }\n+          // Calculate the actual base path (where index.html is located)\n+          var base = l.pathname.replace(/\\/index\\.html$/, '').replace(/\\/$/, '');\n+          window.__ROUTER_BASENAME__ = base || '/';",
+    "path": "index.html",
+    "commit_id": "fa11aae59c9d26d8bbf97da242deae7a6bf9a382",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "✅ Excellent simplification. The new restoration logic is much cleaner — directly slicing `l.search[1]` instead of parsing `&` separators first. The `__ROUTER_BASENAME__` global is a pragmatic way to communicate the detected base to main.tsx.",
+    "created_at": "2026-04-22T07:06:58Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146846",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146846"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146846"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146846/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": null,
+    "original_line": 17,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 29,
+    "position": 1,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146849",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146849,
+    "node_id": "PRRC_kwDOSD1fmM66GC4h",
+    "diff_hunk": "@@ -43,13 +35,15 @@\n         });\n \n         Promise.all(checks).then(function (depths) {\n-          var best = Math.max.apply(null, depths);\n+          var best = 0;",
+    "path": "public/404.html",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Good defensive fallback. Replacing `Math.max.apply` with a manual loop avoids potential issues with large arrays and is more readable.",
+    "created_at": "2026-04-22T07:06:58Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146849",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146849"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146849"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146849/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 38,
+    "original_line": 38,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 40,
+    "position": 40,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146853",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146853,
+    "node_id": "PRRC_kwDOSD1fmM66GC4l",
+    "diff_hunk": "@@ -1,16 +1,60 @@\n import { Buffer } from 'buffer';\n \n // polyfilling Buffer for browser environment\n-(window as any).Buffer = (window as any).Buffer || Buffer;\n+window.Buffer = window.Buffer || Buffer;",
+    "path": "src/main.tsx",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "✅ Removed unnecessary `(window as any)` cast. Much cleaner.",
+    "created_at": "2026-04-22T07:06:58Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146853",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146853"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146853"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146853/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 4,
+    "original_line": 4,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 5,
+    "position": 5,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146854",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146854,
+    "node_id": "PRRC_kwDOSD1fmM66GC4m",
+    "diff_hunk": "@@ -1,16 +1,60 @@\n import { Buffer } from 'buffer';\n \n // polyfilling Buffer for browser environment\n-(window as any).Buffer = (window as any).Buffer || Buffer;\n+window.Buffer = window.Buffer || Buffer;\n \n import { StrictMode } from 'react';\n import { createRoot } from 'react-dom/client';\n import { createBrowserRouter, RouterProvider } from 'react-router-dom';\n import { routes } from './App.tsx';\n import './index.css';\n \n+/**\n+ * Function to calculate the actual basename at runtime.\n+ * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).\n+ */\n+const getBasename = () => {",
+    "path": "src/main.tsx",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The `getBasename()` logic is well-structured with clear priority order. The heuristic approach (comparing path depth to route config) is a robust solution for detecting branch deployments. Consider extracting `validTopLevelPaths` construction into a memoized constant if routes are static.",
+    "created_at": "2026-04-22T07:06:58Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146854",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146854"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146854"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146854/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 16,
+    "original_line": 16,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 17,
+    "position": 17,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146856",
+    "pull_request_review_id": 4152677134,
+    "id": 3122146856,
+    "node_id": "PRRC_kwDOSD1fmM66GC4o",
+    "diff_hunk": "@@ -0,0 +1,6 @@\n+/// <reference types=\"vite/client\" />\n+\n+interface Window {\n+  __ROUTER_BASENAME__?: string;\n+  Buffer: any;",
+    "path": "src/vite-env.d.ts",
+    "commit_id": "546833d399a6e15493f4b51cbd303a9fe63b2937",
+    "original_commit_id": "4a93cd7263f99ee81b52f75e702c5130f80dc870",
+    "user": {
+      "login": "arii",
+      "id": 342438,
+      "node_id": "MDQ6VXNlcjM0MjQzOA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/342438?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arii",
+      "html_url": "https://github.com/arii",
+      "followers_url": "https://api.github.com/users/arii/followers",
+      "following_url": "https://api.github.com/users/arii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arii/subscriptions",
+      "organizations_url": "https://api.github.com/users/arii/orgs",
+      "repos_url": "https://api.github.com/users/arii/repos",
+      "events_url": "https://api.github.com/users/arii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arii/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "**Type safety issue:** `Buffer: any` bypasses type checking. Use `Buffer: typeof import('buffer').Buffer` instead to preserve type safety.",
+    "created_at": "2026-04-22T07:06:58Z",
+    "updated_at": "2026-04-22T07:07:00Z",
+    "html_url": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146856",
+    "pull_request_url": "https://api.github.com/repos/arii/tech-dancer/pulls/193",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146856"
+      },
+      "html": {
+        "href": "https://github.com/arii/tech-dancer/pull/193#discussion_r3122146856"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/arii/tech-dancer/pulls/193"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/arii/tech-dancer/pulls/comments/3122146856/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 1
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 5,
+    "original_line": 5,
+    "side": "RIGHT",
+    "author_association": "OWNER",
+    "original_position": 5,
+    "position": 5,
+    "subject_type": "line"
+  }
+]
