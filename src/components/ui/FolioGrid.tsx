@@ -92,8 +92,6 @@ export default function FolioGrid({
               {filteredItems.map((item, index) => (
                 <Box
                   key={item.slug}
-                  as={motion.div}
-                  variants={motionTokens.staggerItem}
                   border="r"
                   borderBottom={true}
                   padding={{ base: 6, lg: 6 }}
