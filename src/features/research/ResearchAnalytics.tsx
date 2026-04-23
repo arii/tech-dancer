@@ -39,22 +39,22 @@ export default function ResearchAnalytics() {
                 border
                 padding="card"
                 cursor="pointer"
-                className="group hover:border-accent-brand transition-all text-left"
+                className="group hover:border-accent transition-all text-left"
               >
                 <Stack gap={6} height="full" justify="between">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="start">
-                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent-brand transition-colors">
+                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
                         <Search className="w-5 h-5" />
                       </Box>
                       <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                     <Stack gap={2}>
-                      <Text variant="display" size="xl" className="group-hover:text-accent-brand transition-colors">{tool.name}</Text>
+                      <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>
                       <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
                     </Stack>
                   </Stack>
-                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent-brand transition-colors">
+                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
                     <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
                     <ArrowRight className="w-3 h-3" />
                   </Box>
@@ -79,7 +79,7 @@ export default function ResearchAnalytics() {
                       <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
                       <Text variant="mono" size="micro" color="dim">{study.date}</Text>
                     </Box>
-                    <Text variant="display" size="2xl" className="group-hover:text-accent-brand transition-colors">
+                    <Text variant="display" size="2xl" className="group-hover:text-accent transition-colors">
                       {study.title}
                     </Text>
                     <Text variant="body" size="sm" color="dim" className="line-clamp-3">
@@ -92,7 +92,7 @@ export default function ResearchAnalytics() {
                       align="center"
                       gap={2}
                       color="dim"
-                      className="group-hover:text-accent-brand transition-colors"
+                      className="group-hover:text-accent transition-colors"
                     >
                       <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
                       <FileText className="w-4 h-4" />
@@ -104,10 +104,10 @@ export default function ResearchAnalytics() {
           ) : (
             <Box border padding={12} surface="muted" emphasis="low">
               <Stack align="center" gap={4} className="text-center">
-                <Database className="w-12 h-12 text-slate-300" />
+                <Database color="dim" className="w-12 h-12 opacity-50" />
                 <Stack gap={2}>
                   <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
-                  <Text variant="body" size="sm" color="dim" className="max-w-[40ch]">
+                  <Text variant="body" size="sm" color="dim" maxWidth="sm">
                     Research studies are automatically ingested via the ETL pipeline.
                     New analysis runs weekly—check back soon for recent data.
                   </Text>
