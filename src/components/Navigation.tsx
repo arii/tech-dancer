@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
+import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 
 function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: string, icon?: LucideIcon, onClick?: () => void, isMobile?: boolean }) {
   if (!icon) {
@@ -17,17 +18,26 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
         to={to}
         onClick={onClick}
         className={({ isActive }) => cn(
-          "flex items-center gap-4 transition-all relative z-10 rounded-md",
-          isMobile ? "py-6 border-b border-line/50 text-xl" : "py-6 px-4",
+          "transition-all relative z-10 rounded-md block",
           isActive 
             ? "text-accent bg-bg" 
             : "text-text-dim hover:text-accent hover:bg-bg/50"
         )}
       >
-        <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
-        <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
-          {label}
-        </Text>
+        <Box
+          display="flex"
+          align="center"
+          gap={4}
+          paddingY={6}
+          paddingX={isMobile ? undefined : 4}
+          border={isMobile ? "b" : undefined}
+          className={isMobile ? "border-line/50" : undefined}
+        >
+          <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
+          <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
+            {label}
+          </Text>
+        </Box>
       </NavLink>
     </Box>
   );
@@ -35,6 +45,15 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
+
+  const handleSearchClick = () => {
+    if (isSearchOpen) {
+      closeSearch();
+    } else {
+      openSearch();
+    }
+  };
 
   return (
     <>
@@ -47,7 +66,10 @@ export default function Navigation() {
           as="button"
           onClick={() => setIsOpen(!isOpen)}
           padding={2}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center"
+          display="flex"
+          align="center"
+          justify="center"
+          className="min-h-11 min-w-11"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
@@ -69,6 +91,29 @@ export default function Navigation() {
             overflow="y-auto"
           >
             <Box as="ul" className="space-y-6">
+              <Box as="li" position="relative" className="group">
+                <Box
+                  as="button"
+                  type="button"
+                  cursor="pointer"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleSearchClick();
+                  }}
+                  display="flex"
+                  align="center"
+                  gap={4}
+                  paddingY={6}
+                  border="b"
+                  width="full"
+                  className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50"
+                >
+                  <Search className="w-6 h-6 stroke-[1.5] flex-shrink-0" />
+                  <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
+                    Search
+                  </Text>
+                </Box>
+              </Box>
               {routes.filter(r => r.path !== '/').map((item) => (
                 <NavItem 
                   key={item.path} 
@@ -107,7 +152,9 @@ export default function Navigation() {
             <Box as="li">
               <Box
                 as="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+                type="button"
+                cursor="pointer"
+                onClick={handleSearchClick}
                 display="flex"
                 align="center"
                 gap={4}
