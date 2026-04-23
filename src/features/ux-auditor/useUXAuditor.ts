@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy } from 'firebase/firestore';
 
 // --- Configuration & Constants ---
 const apiKey = ""; // Provided by environment
@@ -39,10 +40,9 @@ export interface UXReport {
 }
 
 export function useUXAuditor() {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
-  const [reports, setReports] = useState<UXReport[]>([]);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [activeReport, setActiveReport] = useState<UXReport | null>(null);
+  const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState('https://arii.github.io/tech-dancer/');
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
@@ -84,61 +84,73 @@ export function useUXAuditor() {
     return () => unsubscribeAuth();
   }, []);
 
-  // Fetch Reports
+  // Fetch Reports (Real-time with TanStack Query)
+  const { data: reports = [] } = useQuery({
+    queryKey: ['ux-reports', user?.uid],
+    queryFn: () => queryClient.getQueryData(['ux-reports', user?.uid]) ?? [],
+    enabled: !!user && !!firebaseConfig,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+
+  // Real-time listener that updates TanStack Query cache
   useEffect(() => {
     if (!user || !firebaseConfig) return;
     const db = getFirestore();
-    const q = collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports');
+    const q = query(
+      collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'),
+      orderBy('timestamp', 'desc')
+    );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UXReport));
-      setReports(data.sort((a, b) => b.timestamp - a.timestamp));
+      queryClient.setQueryData(['ux-reports', user.uid], data);
     }, (err) => console.error("Firestore error:", err));
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, queryClient]);
 
-  const runUXAudit = async () => {
-    if (!url) return;
-    setIsAnalyzing(true);
-
-    try {
+  const auditMutation = useMutation({
+    mutationFn: async (targetUrl: string) => {
       let reportId = Date.now().toString();
 
       const newReport: UXReport = {
         id: reportId,
-        url,
+        url: targetUrl,
         timestamp: Date.now(),
         status: 'processing',
       };
 
-      // Add to local state immediately for optimistic UI
-      setReports(prev => [newReport, ...prev].sort((a, b) => b.timestamp - a.timestamp));
-      setActiveReport(newReport);
+      setActiveReportId(reportId);
+
+      // Optimistic update for immediate UI feedback
+      queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) => [newReport, ...old]);
 
       if (user && firebaseConfig) {
         const db = getFirestore();
         const newReportRef = await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'), newReport);
-        reportId = newReportRef.id;
-        newReport.id = reportId;
+        const realId = newReportRef.id;
+        newReport.id = realId;
+        setActiveReportId(realId);
+        reportId = realId;
+
+        // Update optimistic item with real ID
+        queryClient.setQueryData(['ux-reports', user.uid], (old: UXReport[] = []) =>
+          old.map(r => r.timestamp === newReport.timestamp ? { ...newReport, id: realId } : r)
+        );
       }
 
       for (const vp of VIEWPORTS) {
-        // Attempt to fetch a real snapshot using a free public proxy API
-        // This is a best effort. If it fails due to CORS, we will handle it.
         let mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
         let base64DataUri = "";
 
         try {
-          // A simple way to get a snapshot (mshots API from WP is free and fast for public URLs)
-          // Reduce the dimensions by 50% to save base64 character count
           const scaledW = Math.floor(vp.width * 0.5);
           const scaledH = Math.floor(vp.height * 0.5);
-          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=${scaledW}&h=${scaledH}`;
+          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
           const res = await fetch(snapshotUrl);
           if (res.ok) {
             const blob = await res.blob();
-            // Convert to base64 Data URI
             base64DataUri = await new Promise<string>((resolve) => {
               const reader = new FileReader();
               reader.onloadend = () => resolve(reader.result as string);
@@ -150,14 +162,15 @@ export function useUXAuditor() {
           console.error("Failed to fetch realistic snapshot, using placeholder", e);
         }
 
-        const analysis = await analyzeViewport(vp, url, base64DataUri);
+        const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
 
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
         newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
 
-        const updatedReport = { ...newReport };
-        setReports(prev => prev.map(r => r.id === reportId ? updatedReport : r));
-        setActiveReport(updatedReport);
+        // Update the report in cache to reflect progress
+        queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+          old.map(r => r.id === reportId ? { ...newReport } : r)
+        );
 
         if (user && firebaseConfig) {
           const db = getFirestore();
@@ -169,8 +182,9 @@ export function useUXAuditor() {
       }
 
       newReport.status = 'completed';
-      setReports(prev => prev.map(r => r.id === reportId ? { ...newReport } : r));
-      setActiveReport({ ...newReport });
+      queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+        old.map(r => r.id === reportId ? { ...newReport } : r)
+      );
 
       if (user && firebaseConfig) {
         const db = getFirestore();
@@ -178,12 +192,15 @@ export function useUXAuditor() {
           status: 'completed'
         });
       }
-    } catch (error) {
-      console.error("Audit failed", error);
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
+
+      return newReport;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ux-reports', user?.uid] });
+    },
+  });
+
+  const runUXAudit = () => auditMutation.mutate(url);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
@@ -241,6 +258,8 @@ export function useUXAuditor() {
     }
   };
 
+  const activeReport = reports.find(r => r.id === activeReportId) || null;
+
   const getMarkdown = () => {
     if (!activeReport) return "";
     let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
@@ -291,9 +310,9 @@ export function useUXAuditor() {
   return {
     user,
     reports,
-    isAnalyzing,
+    isAnalyzing: auditMutation.isPending,
     activeReport,
-    setActiveReport,
+    setActiveReport: (r: UXReport | null) => setActiveReportId(r?.id || null),
     url,
     setUrl,
     isCopiedMarkdown,

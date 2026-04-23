@@ -48,33 +48,80 @@ jobs:
           fi
           export VITE_APP_URL=https://${{ github.repository_owner }}.github.io/$REPO_NAME
           pnpm run build
-
-      - name: Prepare combined deployment
-        run: |
-          mkdir -p /tmp/deploy-combined
-          # 1. Main assets
-          DEST_DIR="${{ github.ref_name == 'main' && '.' || github.ref_name }}"
-          mkdir -p "/tmp/deploy-combined/$DEST_DIR"
-          cp -r dist/* "/tmp/deploy-combined/$DEST_DIR/"
-
-          # 2. Root 404.html (for branch previews)
-          if [ "${{ github.ref_name }}" != "main" ]; then
-            cp dist/404.html /tmp/deploy-combined/404.html
-          fi
-
-          # 3. Previews index
-          mkdir -p /tmp/deploy-combined/previews
-          cp dist/previews/index.html /tmp/deploy-combined/previews/index.html
+          git log -1 --format=%ct > dist/.timestamp
 
       - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /tmp/deploy-combined
-          destination_dir: .
-          keep_files: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Prepare dist assets in a stable location
+          mkdir -p ../dist-assets
+          cp -r dist/* ../dist-assets/
+
+          # Deployment parameters
+          DEST_DIR="${{ github.ref_name == 'main' && '.' || github.ref_name }}"
+          REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          MAX_RETRIES=5
+
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Deployment attempt $i..."
+            rm -rf ../gh-pages-repo
+
+            # 1. Clone or initialize gh-pages
+            if git clone --depth=1 --branch gh-pages "$REPO_URL" ../gh-pages-repo; then
+              cd ../gh-pages-repo
+            else
+              echo "gh-pages branch not found or clone failed. Initializing new repo..."
+              mkdir -p ../gh-pages-repo
+              cd ../gh-pages-repo
+              git init
+              git checkout -b gh-pages
+              git remote add origin "$REPO_URL"
+            fi
+
+            # 2. Sync build artifacts
+            mkdir -p "$DEST_DIR"
+            cp -r ../dist-assets/* "$DEST_DIR/"
+            touch .nojekyll
+
+            # 3. Update root 404.html for redirects
+            if [ "${{ github.ref_name }}" != "main" ]; then
+              cp "$DEST_DIR/404.html" ./404.html
+            fi
+
+            # 4. Update Previews Index and Metadata
+            mkdir -p previews
+            find . -maxdepth 3 -name "index.html" | while read -r index_file; do
+              DIR=$(dirname "$index_file" | sed 's|^\./||')
+              [[ "$DIR" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
+              TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
+              echo "$DIR $TS"
+            done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
+
+            # Use the latest dashboard UI
+            cp "$DEST_DIR/previews/index.html" previews/index.html
+
+            # 5. Commit and Push
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            if git commit -m "deploy: ${{ github.sha }} [skip ci]"; then
+              if git push origin gh-pages; then
+                echo "Push successful!"
+                exit 0
+              fi
+            else
+              echo "No changes to commit."
+              exit 0
+            fi
+
+            echo "Attempt $i failed. Retrying in $((i * 5))s..."
+            sleep $((i * 5))
+            cd -
+          done
+
+          echo "Failed to deploy after $MAX_RETRIES attempts."
+          exit 1
 
       - name: Update Deployment Feedback
         uses: actions/github-script@v7
@@ -116,7 +163,6 @@ jobs:
 
             for (const pr of pullRequests) {
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
-              const dashboardUrl = `${baseUrl}previews/index.html`;
               const body = [
                 `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
                 '',
@@ -151,4 +197,3 @@ jobs:
                 });
               }
             }
-
