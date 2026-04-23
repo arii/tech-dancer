@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -8,6 +8,7 @@ import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
+import { motionTokens } from '@/styles/motion';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -18,7 +19,7 @@ interface FolioGridProps {
   children?: ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 export default function FolioGrid({
@@ -36,11 +37,14 @@ export default function FolioGrid({
 
   const filteredItems = items.filter(item => {
     const tags = 'tags' in item ? item.tags : [];
+    const category = 'category' in item ? item.category : '';
+    const excerpt = 'excerpt' in item ? item.excerpt : '';
+    
     return (
       safeSearch(item.title, search) ||
       tags?.some((t: string) => safeSearch(t, search)) ||
-      safeSearch(item.category, search) ||
-      safeSearch(item.excerpt, search)
+      safeSearch(category, search) ||
+      safeSearch(excerpt, search)
     );
   });
 
@@ -51,7 +55,7 @@ export default function FolioGrid({
           label={label || "FOLIO"}
           title={categoryTitle}
           description={description}
-          as={as}
+          as={as as any}
         />
         {children}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
@@ -69,7 +73,7 @@ export default function FolioGrid({
               size="sm"
               className="focus:border-accent-brand outline-none focus:ring-0"
               value={search}
-              onChange={(e: any) => setSearch(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />
           </Box>
           {onViewChange && (
@@ -82,10 +86,11 @@ export default function FolioGrid({
         {view === 'card' ? (
           <motion.div
             key="card-view"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            variants={motionTokens.staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
+            exit="initial"
           >
             <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
               {filteredItems.map((item, index) => (
@@ -97,9 +102,12 @@ export default function FolioGrid({
                   className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
                 >
                   <ContentCard
-                    {...item}
+                    {...item as any}
+                    category={'category' in item ? (item as any).category : 'Event'}
+                    excerpt={'excerpt' in item ? (item as any).excerpt : (item as any).description || ''}
                     basePath={basePath}
                     aspect="video"
+                    variants={motionTokens.staggerItem}
                   />
                 </Box>
               ))}
@@ -115,7 +123,13 @@ export default function FolioGrid({
           >
             <Stack gap={0} border="t" className="border-line mt-8">
               {filteredItems.map((item) => (
-                <ListRow key={item.slug} {...item} basePath={basePath} />
+                <ListRow 
+                  key={item.slug} 
+                  {...item as any} 
+                  category={'category' in item ? (item as any).category : 'Event'}
+                  excerpt={'excerpt' in item ? (item as any).excerpt : (item as any).description || ''}
+                  basePath={basePath} 
+                />
               ))}
             </Stack>
           </motion.div>

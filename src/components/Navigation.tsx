@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { cn } from '@/lib/utils';
+import { cn, throttle } from '@/lib/utils';
 import { motionTokens } from '@/styles/motion';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -59,7 +59,9 @@ export default function Navigation() {
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = throttle(() => {
+      setScrolled(window.scrollY > 20);
+    }, 100);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -80,7 +82,7 @@ export default function Navigation() {
         aria-label="Mobile Navigation"
         layout="mobileHeader"
         className={cn(
-          "transition-all duration-300",
+          "transition-[background-color,backdrop-filter,border-color] duration-300",
           scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
         )}
       >
@@ -140,14 +142,14 @@ export default function Navigation() {
                   </Text>
                 </Box>
               </Box>
-              {routes.filter(r => r.path !== '/').map((item) => (
-                <NavItem 
-                  key={item.path} 
-                  to={item.path} 
-                  label={item.label} 
+              {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+                <NavItem
+                  key={item.path}
+                  to={item.path}
+                  label={item.label}
                   icon={item.icon}
-                  onClick={() => setIsOpen(false)} 
-                  isMobile 
+                  onClick={() => setIsOpen(false)}
+                  isMobile
                 />
               ))}
             </Box>
@@ -161,7 +163,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-all duration-300",
+          "w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-[background-color,backdrop-filter] duration-300",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -198,7 +200,7 @@ export default function Navigation() {
               </Box>
             </Box>
 
-            {routes.filter(r => r.path !== '/').map((item) => (
+            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
               <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
             ))}
           </Stack>

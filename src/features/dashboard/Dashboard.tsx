@@ -59,26 +59,31 @@ export default function Home() {
           </SectionHeader>
 
           <Grid
+            cols={{ base: 1, sm: 2, lg: 4 }}
+            gap={4}
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"
-            animate="animate"
-            cols={{ base: 1, sm: 2, lg: 4 }}
-            gap={4}
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
           >
             {recentPosts.map((post) => (
-              <Box as={motion.div} variants={motionTokens.fadeInUp} key={post.slug}>
-                <ContentCard
-                  {...post}
-                  basePath="/blog"
-                  aspect="video"
-                />
-              </Box>
+              <ContentCard
+                key={post.slug}
+                {...post}
+                basePath="/blog"
+                aspect="video"
+                variants={motionTokens.staggerItem}
+              />
             ))}
 
             {/* Upcoming Events Mini-Cards */}
             {upcomingEvents.map((event) => (
-              <Box as={motion.div} variants={motionTokens.fadeInUp} key={event.name}>
+              <Box
+                key={event.name}
+                as={motion.div}
+                variants={motionTokens.staggerItem}
+              >
                 <EventCard {...event} />
               </Box>
             ))}
