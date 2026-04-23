@@ -16,6 +16,9 @@
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-mono: "Space Mono", monospace;
 
+  --tracking-wide-editorial: 0.2em;
+  --tracking-editorial-tight: 0.15em;
+
   /* Clean Content Palette (60-30-10 Rule) */
   --color-bg: oklch(98% 0.005 250);   /* Off-White Primary tinted with brand blue */
   --color-surface: oklch(100% 0 0);    /* Surface Secondary */

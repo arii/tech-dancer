@@ -10,7 +10,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   className?: string
   variant?: keyof typeof typography
   intent?: keyof typeof variants.intent
-  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg"
+  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "navy"
   size?: ResponsiveProp<keyof typeof typeSizes>
   weight?: string
   align?: "left" | "center" | "right" | "justify"
@@ -42,6 +42,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           !intent && color === "brand" && "text-accent-brand",
           !intent && color === "white" && "text-white",
           !intent && color === "bg" && "text-bg",
+          !intent && color === "navy" && "text-accent-navy",
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           weight,
           align && `text-${align}`,

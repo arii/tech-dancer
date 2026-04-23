@@ -60,7 +60,7 @@ export default function Navigation() {
       {/* Mobile Header */}
       <Box as="nav" aria-label="Mobile Navigation" layout="mobileHeader">
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
-          <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
+          <Text variant="mono" size="sm" weight="font-bold" color="navy" tracking="wider" uppercase>TECH-DANCER</Text>
         </Box>
         <Box
           as="button"
@@ -142,7 +142,10 @@ export default function Navigation() {
               variant="mono" 
               size="lg" 
               weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
+              color="navy"
+              tracking="wider"
+              uppercase
+              className="group-hover:text-accent transition-colors leading-none"
             >
               TECH-DANCER
             </Text>

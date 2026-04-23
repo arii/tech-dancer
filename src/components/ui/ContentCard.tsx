@@ -68,7 +68,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         )}
         <Box className="absolute top-4 left-4">
           <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
-            <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
+            <Text variant="mono" size="micro" weight="font-bold" color="navy" uppercase tracking="wider">
               {category}
             </Text>
           </Box>
@@ -87,11 +87,11 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           {/* Only show meta row if we have an image (since no-image uses compact header) */}
           {image && (
             <Box display="flex" align="center" gap={3}>
-              <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest">
+              <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
                 {date}
               </Text>
               <Box className="w-1 h-1 rounded-full bg-line" />
-              <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest flex items-center gap-1">
+              <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" display="flex" align="center" gap={1}>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 {rt} min
               </Text>
@@ -104,7 +104,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
 
           {!image && (
              <Box display="flex" align="center" gap={3}>
-                <Text variant="mono" size="xs" color="dim" uppercase className="tracking-widest flex items-center gap-1">
+                <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" display="flex" align="center" gap={1}>
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-30"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                   {rt} min
                 </Text>
@@ -115,7 +115,8 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             variant="body"
             size="lg"
             weight="font-bold"
-            className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
+            color="navy"
+            className="leading-tight group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
@@ -125,7 +126,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         </Stack>
 
         <Box display="flex" align="center" gap={2} paddingTop={4} className="border-t border-line/50 mt-auto">
-          <Text variant="mono" size="xs" weight="font-bold" className="text-accent tracking-wider">
+          <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="wider">
             Read Article
           </Text>
           <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
