@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
@@ -8,7 +9,11 @@ import { GearPostDetail } from './components/GearPostDetail';
 export default function GearPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const resource = useMemo(() => slug ? getResourceBySlug(slug) : undefined, [slug]);
+  const { data: resource } = useQuery({
+    queryKey: ['resources', slug],
+    queryFn: () => slug ? getResourceBySlug(slug) : undefined,
+    enabled: !!slug
+  });
 
   const structuredData = useMemo(() => {
     if (!resource) return null;
