@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
@@ -39,10 +38,5 @@ const PROFILE_DATA: ProfileData = {
 };
 
 export function useProfile(): { bio: ProfileData } {
-  const { data: bio = PROFILE_DATA } = useQuery({
-    queryKey: ['profile'],
-    queryFn: async () => PROFILE_DATA,
-  });
-
-  return { bio };
+  return { bio: PROFILE_DATA };
 }

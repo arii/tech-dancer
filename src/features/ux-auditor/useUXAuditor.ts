@@ -42,7 +42,7 @@ export interface UXReport {
 export function useUXAuditor() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
-  const [activeReport, setActiveReport] = useState<UXReport | null>(null);
+  const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState('https://arii.github.io/tech-dancer/');
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
@@ -87,7 +87,7 @@ export function useUXAuditor() {
   // Fetch Reports (Real-time with TanStack Query)
   const { data: reports = [] } = useQuery({
     queryKey: ['ux-reports', user?.uid],
-    queryFn: () => reports, // Managed by onSnapshot below
+    queryFn: () => queryClient.getQueryData(['ux-reports', user?.uid]) ?? [],
     enabled: !!user && !!firebaseConfig,
     staleTime: Infinity,
     gcTime: Infinity,
@@ -121,7 +121,7 @@ export function useUXAuditor() {
         status: 'processing',
       };
 
-      setActiveReport(newReport);
+      setActiveReportId(reportId);
 
       // Optimistic update for immediate UI feedback
       queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) => [newReport, ...old]);
@@ -129,11 +129,14 @@ export function useUXAuditor() {
       if (user && firebaseConfig) {
         const db = getFirestore();
         const newReportRef = await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'), newReport);
-        reportId = newReportRef.id;
-        newReport.id = reportId;
+        const realId = newReportRef.id;
+        newReport.id = realId;
+        setActiveReportId(realId);
+        reportId = realId;
+
         // Update optimistic item with real ID
         queryClient.setQueryData(['ux-reports', user.uid], (old: UXReport[] = []) =>
-          old.map(r => r.timestamp === newReport.timestamp ? { ...newReport, id: reportId } : r)
+          old.map(r => r.timestamp === newReport.timestamp ? { ...newReport, id: realId } : r)
         );
       }
 
@@ -164,7 +167,10 @@ export function useUXAuditor() {
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
         newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
 
-        setActiveReport({ ...newReport });
+        // Update the report in cache to reflect progress
+        queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+          old.map(r => r.id === reportId ? { ...newReport } : r)
+        );
 
         if (user && firebaseConfig) {
           const db = getFirestore();
@@ -176,7 +182,9 @@ export function useUXAuditor() {
       }
 
       newReport.status = 'completed';
-      setActiveReport({ ...newReport });
+      queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+        old.map(r => r.id === reportId ? { ...newReport } : r)
+      );
 
       if (user && firebaseConfig) {
         const db = getFirestore();
@@ -250,6 +258,8 @@ export function useUXAuditor() {
     }
   };
 
+  const activeReport = reports.find(r => r.id === activeReportId) || null;
+
   const getMarkdown = () => {
     if (!activeReport) return "";
     let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
@@ -302,7 +312,7 @@ export function useUXAuditor() {
     reports,
     isAnalyzing: auditMutation.isPending,
     activeReport,
-    setActiveReport,
+    setActiveReport: (r: UXReport | null) => setActiveReportId(r?.id || null),
     url,
     setUrl,
     isCopiedMarkdown,
