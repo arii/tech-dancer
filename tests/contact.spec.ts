@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/contact');
+    await page.goto('./contact');
   });
 
   test('should show validation errors for empty fields', async ({ page }) => {
