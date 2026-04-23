@@ -15,6 +15,14 @@ function getContentSlugs(dir: string, prefix: string): string[] {
     .map(f => `${prefix}/${f.replace(/\.md$/, '')}`);
 }
 
+function getStaticRoutes(): string[] {
+  const routesPath = path.resolve(__dirname, 'src/config/routes.ts');
+  if (!fs.existsSync(routesPath)) return [];
+  const content = fs.readFileSync(routesPath, 'utf-8');
+  const matches = content.matchAll(/path:\s*['"]([^'"]+)['"]/g);
+  return Array.from(matches).map(m => m[1]);
+}
+
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
@@ -27,14 +35,12 @@ export default defineConfig(({mode}) => {
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   const dynamicRoutes = [
-    '/blog',
-    '/gear',
-    '/research',
-    '/about',
-    '/contact',
+    ...getStaticRoutes(),
     '/ux-auditor',
+
     ...getContentSlugs('content/posts', '/blog'),
     ...getContentSlugs('content/resources', '/gear'),
+    ...getContentSlugs('content/studies', '/research'),
   ];
 
   return {
