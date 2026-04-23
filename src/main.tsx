@@ -28,7 +28,7 @@ const VALID_TOP_LEVEL_PATHS = (() => {
  * Function to calculate the actual basename at runtime.
  * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).
  */
-const getBasename = () => {
+const getBasename = (): string => {
   // 1. Priority: Use the basename detected by index.html during a 404 restoration
   if (window.__ROUTER_BASENAME__) {
     return window.__ROUTER_BASENAME__;

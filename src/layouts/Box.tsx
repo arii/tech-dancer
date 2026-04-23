@@ -59,7 +59,7 @@ export interface BaseProps {
 
 export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
   as?: React.ElementType
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export const Box = React.forwardRef<HTMLDivElement, BoxProps>(

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react"
 
-export function useForm<T extends Record<string, any>>(initialValues: T) {
+export function useForm<T extends Record<string, unknown>>(initialValues: T) {
   const [formData, setFormData] = useState<T>(initialValues)
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

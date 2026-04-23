@@ -18,7 +18,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export const Text = React.forwardRef<HTMLElement, TextProps>(
