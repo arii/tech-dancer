@@ -114,20 +114,16 @@ export default function Navigation() {
                   </Text>
                 </Box>
               </Box>
-              {routes.filter(r => r.path !== '/' && r.label).map((item) => {
-                // Safe check even though filter handles it, keeps TS happy without !
-                if (!item.label) return null;
-                return (
-                  <NavItem
-                    key={item.path}
-                    to={item.path}
-                    label={item.label}
-                    icon={item.icon}
-                    onClick={() => setIsOpen(false)}
-                    isMobile
-                  />
-                );
-              })}
+              {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+                <NavItem
+                  key={item.path}
+                  to={item.path}
+                  label={item.label}
+                  icon={item.icon}
+                  onClick={() => setIsOpen(false)}
+                  isMobile
+                />
+              ))}
             </Box>
           </Box>
         )}
@@ -173,12 +169,9 @@ export default function Navigation() {
               </Box>
             </Box>
 
-            {routes.filter(r => r.path !== '/' && r.label).map((item) => {
-              if (!item.label) return null;
-              return (
-                <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
-              );
-            })}
+            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+            ))}
           </Stack>
         </Stack>
       </Box>
