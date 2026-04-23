@@ -18,7 +18,7 @@ interface FolioGridProps {
   children?: React.ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
-  as?: keyof JSX.IntrinsicElements;
+  titleAs?: "h1" | "h2" | "h3";
 }
 
 export default function FolioGrid({
@@ -30,7 +30,7 @@ export default function FolioGrid({
   children,
   view = 'card',
   onViewChange,
-  as
+  titleAs
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -51,7 +51,7 @@ export default function FolioGrid({
           label={label || "FOLIO"}
           title={categoryTitle}
           description={description}
-          as={as}
+          titleAs={titleAs}
         />
         {children}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">

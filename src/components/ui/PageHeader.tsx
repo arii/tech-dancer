@@ -1,27 +1,48 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import type { BaseProps } from '@/layouts/Box';
 
 interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
-  as?: keyof JSX.IntrinsicElements;
-  paddingBottom?: BaseProps['paddingBottom'];
-  border?: BaseProps['border'];
-  descriptionMaxWidth?: BaseProps['maxWidth'];
+  paddingBottom?: number | string;
+  border?: boolean | "t" | "b" | "l" | "r";
+  descriptionMaxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | string;
+  titleAs?: "h1" | "h2" | "h3";
 }
 
-export function PageHeader({ label, title, description, as = "h1", paddingBottom = 12, border = "b", descriptionMaxWidth = "prose" }: PageHeaderProps) {
+export function PageHeader({
+  label,
+  title,
+  description,
+  paddingBottom = 12,
+  border = "b",
+  descriptionMaxWidth = "65ch",
+  titleAs = "h1"
+}: PageHeaderProps) {
   return (
     <Box
       paddingBottom={paddingBottom}
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
+        <Text
+          variant="mono"
+          size="xs"
+          color="dim"
+          weight="font-semibold"
+          uppercase
+          tracking="wide-editorial"
+        >
           {label}
         </Text>
-        <Text as={as} variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+        <Text
+          as={titleAs}
+          variant="headline"
+          size={{ base: "4xl", lg: "6xl" }}
+          weight="font-black"
+          tracking="tighter"
+          className="text-text-main leading-tight uppercase"
+        >
           {title}
         </Text>
         {description && (
@@ -45,7 +66,7 @@ export function SectionHeader({ label, title, children }: { label: string; title
   return (
     <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
       <Stack gap={1}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>{label}</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="wide-editorial" uppercase>{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
       </Stack>
       {children}

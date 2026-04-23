@@ -21,7 +21,7 @@ export default function ResearchAnalytics() {
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
           description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
-          as="h1"
+          titleAs="h1"
         />
 
         <Stack gap={8}>
