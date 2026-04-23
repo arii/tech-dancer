@@ -10,16 +10,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages-branch
+          fetch-depth: 0
 
       - name: Prune orphaned directories
         run: |
@@ -28,6 +24,8 @@ jobs:
           # Get list of all active remote branches
           ACTIVE_BRANCHES=$(git ls-remote --heads origin | awk -F'refs/heads/' '{print $2}')
 
+          NOW=$(date +%s)
+          GRACE_PERIOD=86400 # 24 hours in seconds
           CHANGES_MADE=false
 
           # Find all index.html files to identify deployment directories (including nested ones)
@@ -39,18 +37,32 @@ jobs:
               continue
             fi
 
-            # Remove folder if it doesn't match an active branch
+            # Check if it doesn't match an active branch
             if ! echo "$ACTIVE_BRANCHES" | grep -qx "$dir"; then
-              echo "Branch '$dir' no longer exists. Removing preview..."
-              git rm -r "$dir"
-              CHANGES_MADE=true
+              # Get the timestamp of the last commit that modified this directory
+              LAST_UPDATE=$(git log -1 --format=%ct -- "$dir")
+
+              if [ -z "$LAST_UPDATE" ]; then
+                # Fallback if git log fails for some reason
+                LAST_UPDATE=0
+              fi
+
+              AGE=$((NOW - LAST_UPDATE))
+
+              if [ "$AGE" -gt "$GRACE_PERIOD" ]; then
+                echo "Branch '$dir' no longer exists and deployment is older than 24h (${AGE}s). Removing preview..."
+                git rm -r "$dir"
+                CHANGES_MADE=true
+              else
+                echo "Branch '$dir' no longer exists but deployment is within 24h grace period (${AGE}s). Skipping..."
+              fi
             fi
           done
 
           if [ "$CHANGES_MADE" = true ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: prune orphaned branch previews"
+            git commit -m "chore: prune orphaned branch previews (grace period enforced)"
             git push origin gh-pages
           else
             echo "No stale previews to prune."
