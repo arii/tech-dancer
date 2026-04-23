@@ -121,6 +121,7 @@ export const tracking = {
   wider: "tracking-wider",
   widest: "tracking-widest",
   "wide-editorial": "tracking-[0.2em]",
+  "editorial-tight": "tracking-[0.15em]",
 };
 
 export const typeSizes = {
