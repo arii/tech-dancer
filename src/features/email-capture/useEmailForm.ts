@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useEmailStore, STORAGE_KEY } from './emailStore';
+import { useEmailStore } from './emailStore';
 
 export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function useEmailForm() {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [email, setEmail] = useState('');
-  const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
+  const hideBar = useEmailStore((state) => state.hideBar);
 
   const submitForm = (emailToSubmit: string) => {
     if (!emailToSubmit) return;
@@ -16,10 +16,10 @@ export function useEmailForm() {
     setTimeout(() => {
       setStatus('success');
       setEmail('');
-      sessionStorage.setItem(STORAGE_KEY, 'true');
 
-      // Auto hide the bar after success
-      setTimeout(() => setShowEmailBar(false), 2000);
+      // Use the centralized dismissal logic from the store
+      // Auto hide the bar after success delay
+      setTimeout(() => hideBar(), 2000);
     }, 800);
   };
 
