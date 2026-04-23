@@ -7,6 +7,7 @@ import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
+import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
   const { recentPosts, upcomingEvents, tools } = useHome();
@@ -133,10 +134,8 @@ export default function Home() {
               ))}
             </Grid>
           </Stack>
-
         </Stack>
       </Stack>
     </Box>
   );
 }
-

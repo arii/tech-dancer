@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@config "../tailwind.config.js";
 @import "./styles/tokens.css";
 
 @theme {
@@ -13,77 +12,90 @@
   --safelist-px: px-0 px-1 px-2 px-3 px-4 px-5 px-6 px-8 px-10 px-12 px-16 px-20 px-24 px-32;
   --safelist-py: py-0 py-1 py-2 py-3 py-4 py-5 py-6 py-8 py-10 py-12 py-16 py-20 py-24 py-32;
 
-  /* Modern Typography Identity */
-  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  /* Colors */
+  --color-bg: var(--raw-color-bg);
+  --color-surface: var(--raw-color-surface);
+  --color-surface-alt: var(--raw-color-surface-alt);
+  --color-line: var(--raw-color-line);
+  --color-accent: var(--raw-color-accent);
+  --color-accent-shadow: var(--raw-color-accent-shadow);
+  --color-accent-navy: var(--raw-color-accent-navy);
+  --color-accent-brand: var(--raw-color-accent-brand);
+  --color-text-main: var(--raw-color-text-main);
+  --color-text-body: var(--raw-color-text-body);
+  --color-text-dim: var(--raw-color-text-dim);
 
-  /* Clean Content Palette (60-30-10 Rule) */
-  --color-bg: oklch(98% 0.005 250);   /* Off-White Primary tinted with brand blue */
-  --color-surface: oklch(100% 0 0);    /* Surface Secondary */
-  --color-surface-alt: oklch(95% 0.01 250); /* Brand-aware neutral tint */
-  --color-line: oklch(92% 0.01 250);       /* Muted Borders */
-  --color-accent: #007BFF;
-  --color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --color-accent-navy: #1A2B3C;
-  --color-text-main: #1A2B3C;  /* Deep Navy */
-  --color-text-body: #2D3748;
-  --color-text-dim: #4B4B4B;   /* Darkened for WCAG AA (5.2:1 contrast) */
-  
-  /* Layout & Spacing */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Fonts */
+  --font-sans: var(--raw-font-sans);
+  --font-display: var(--raw-font-display);
+  --font-mono: var(--raw-font-mono);
+
+  /* Radius */
+  --radius-none: var(--raw-radius-none);
+  --radius-subtle: var(--raw-radius-subtle);
+  --radius-standard: var(--raw-radius-standard);
+  --radius-sm: var(--raw-radius-sm);
+  --radius-md: var(--raw-radius-md);
+  --radius-lg: var(--raw-radius-lg);
+  --radius-xl: var(--raw-radius-xl);
+  --radius-full: var(--raw-radius-full);
+
+  /* Spacing */
+  --spacing-container-sm: var(--raw-spacing-container-sm);
+  --spacing-container-md: var(--raw-spacing-container-md);
+  --spacing-card: var(--raw-spacing-card);
+  --spacing-compact: var(--raw-spacing-compact);
+  --spacing-nav: var(--raw-spacing-nav);
+  --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
+  --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
+  --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
+  --spacing-hero: var(--raw-spacing-hero);
+  --spacing-comfort: var(--raw-spacing-comfort);
+  --spacing-end-pad: var(--raw-spacing-end-pad);
+
+  /* Z-Index */
+  --z-hide: var(--raw-z-hide);
+  --z-base: var(--raw-z-base);
+  --z-docked: var(--raw-z-docked);
+  --z-dropdown: var(--raw-z-dropdown);
+  --z-sticky: var(--raw-z-sticky);
+  --z-overlay: var(--raw-z-overlay);
+  --z-modal: var(--raw-z-modal);
+  --z-popover: var(--raw-z-popover);
+  --z-skip-link: var(--raw-z-skip-link);
+  --z-toast: var(--raw-z-toast);
+  --z-top: var(--raw-z-top);
+  --z-search: var(--raw-z-search);
+
+  /* Shadows */
+  --shadow-top-overlay: var(--raw-shadow-top-overlay);
+
+  /* Animation */
+  --ease-smooth: var(--raw-ease-smooth);
+
+  /* Static Defaults */
   --container-blog: 1100px;
-  
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
-
-  /* Fallback Configuration For Spacing Utilities */
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
-
-  /* Motion Primitives */
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @layer utilities {
   @keyframes scanline {
-    0% {
-      transform: translateY(-100%);
-    }
-    100% {
-      transform: translateY(800px); /* Adjust this if your container gets taller */
-    }
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(800px); }
   }
+  .animate-scanline { animation: scanline 2.5s linear infinite; }
+  @keyframes shimmer { 100% { transform: translateX(100%); } }
 
-  .animate-scanline {
-    animation: scanline 2.5s linear infinite;
-  }
-
-  @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-  /* Premium Industrial Utilities */
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
   }
-  .industrial-gradient {
-    background: linear-gradient(135deg, #001f3f 0%, #000c19 100%);
-  }
-  .text-glow {
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-  }
-  .gold-accent {
-    @apply border-accent/30 hover:border-accent transition-colors;
-  }
-  .scanline-hover {
-    @apply relative overflow-hidden;
-  }
+  .industrial-gradient { background: linear-gradient(135deg, #001f3f 0%, #000c19 100%); }
+  .text-glow { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+  .gold-accent { @apply border-line hover:border-accent transition-colors; }
+  .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
     content: "";
     @apply absolute inset-0 bg-accent/10 -translate-y-full opacity-0 pointer-events-none z-20;
@@ -98,7 +110,6 @@
       linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
     background-size: 20px 20px;
   }
-
 }
 
 @layer base {
@@ -106,17 +117,14 @@
     @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
     line-height: 1.6;
   }
-
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     @apply text-accent-navy font-bold tracking-tight;
     line-height: 1.2;
   }
-
   h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
   h2 { font-size: clamp(2rem, 4vw, 3rem); }
   h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
-
   p {
     max-width: 65ch;
     @apply text-text-body break-words;
@@ -129,35 +137,15 @@
   }
 }
 
-
-.panel {
-  @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;
-}
-
+.panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
 .nav-rail {
   @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
-
-.main-grid {
-  @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full;
-}
-
-.stats-widget {
-  @apply bg-surface p-6 border border-line shadow-none rounded-none;
-}
-
-.tech-specs-code {
-  @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none;
-}
-
+.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
+.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
+.tech-specs-code { @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none; }
 .experience-chip {
   @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
-
-.product-card {
-  @apply bg-surface border border-line p-6 rounded-none transition-all duration-300;
-}
-
-.content-card {
-  @apply bg-surface p-8 rounded-none border border-line;
-}
+.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
+.content-card { @apply bg-surface p-8 rounded-none border border-line; }

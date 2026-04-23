@@ -1,20 +1,21 @@
-import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, X, Terminal, Search, Home, ShoppingBag, BookOpen, Database, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
+import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 
-const iconMap: Record<string, any> = {
-  '/': Home,
-  '/gear': ShoppingBag,
-  '/blog': BookOpen,
-  '/research': Database,
-  '/about': User,
-};
+interface NavItemProps {
+  to: string;
+  label: string;
+  icon: any;
+  onClick?: () => void;
+  isMobile?: boolean;
+}
 
-function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: any, onClick?: () => void, isMobile?: boolean }) {
+function NavItem({ to, label, icon: Icon, onClick, isMobile }: NavItemProps) {
   return (
     <Box as="li" position="relative" className="group">
       <NavLink
@@ -22,7 +23,7 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
         onClick={onClick}
         className={({ isActive }) => cn(
           "flex items-center gap-4 transition-all relative z-10 rounded-md",
-          isMobile ? "py-6 border-b border-line/50 text-xl" : "py-6 px-4",
+          isMobile ? "py-4 border-b border-line/50 text-xl" : "py-4 px-4",
           isActive 
             ? "text-accent bg-bg" 
             : "text-text-dim hover:text-accent hover:bg-bg/50"
@@ -39,11 +40,35 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleSearchClick = () => {
+    if (isSearchOpen) {
+      closeSearch();
+    } else {
+      openSearch();
+    }
+  };
 
   return (
     <>
       {/* Mobile Header */}
-      <Box as="nav" aria-label="Mobile Navigation" layout="mobileHeader">
+      <Box
+        as="nav"
+        aria-label="Mobile Navigation"
+        layout="mobileHeader"
+        className={cn(
+          "transition-all duration-300",
+          scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
+        )}
+      >
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
@@ -73,14 +98,37 @@ export default function Navigation() {
             overflow="y-auto"
           >
             <Box as="ul" className="space-y-6">
-              {routes.filter(r => r.path !== '/').map((item) => (
-                <NavItem 
-                  key={item.path} 
-                  to={item.path} 
-                  label={item.label} 
-                  icon={iconMap[item.path] || Terminal} 
-                  onClick={() => setIsOpen(false)} 
-                  isMobile 
+              <Box as="li" position="relative" className="group">
+                <Box
+                  as="button"
+                  type="button"
+                  cursor="pointer"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleSearchClick();
+                  }}
+                  display="flex"
+                  align="center"
+                  gap={4}
+                  paddingY={4}
+                  border="b"
+                  width="full"
+                  className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50"
+                >
+                  <Search className="w-6 h-6 stroke-[1.5] flex-shrink-0" />
+                  <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
+                    Search
+                  </Text>
+                </Box>
+              </Box>
+              {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+                <NavItem
+                  key={item.path}
+                  to={item.path}
+                  label={item.label}
+                  icon={item.icon}
+                  onClick={() => setIsOpen(false)}
+                  isMobile
                 />
               ))}
             </Box>
@@ -93,9 +141,17 @@ export default function Navigation() {
         as="nav"
         aria-label="Main Navigation"
         layout="navRail" 
-        className="w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0"
+        className={cn(
+          "w-[260px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-all duration-300",
+          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
+        )}
       >
-        <Stack padding={8} gap={10} flex={1}>
+        <Stack
+          padding={scrolled ? 5 : 6}
+          gap={scrolled ? 6 : 8}
+          flex={1}
+          className="transition-all duration-300"
+        >
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
               variant="mono" 
@@ -107,7 +163,7 @@ export default function Navigation() {
             </Text>
           </Box>
 
-          <Stack as="ul" gap={2}>
+          <Stack as="ul" gap={1}>
             <Box as="li">
               <Box
                 as="button"
@@ -116,7 +172,7 @@ export default function Navigation() {
                 align="center"
                 gap={4}
                 width="full"
-                paddingY={6}
+                paddingY={4}
                 paddingX={4}
                 radius="md"
                 className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
@@ -126,8 +182,8 @@ export default function Navigation() {
               </Box>
             </Box>
 
-            {routes.filter(r => r.path !== '/').map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={iconMap[item.path] || Terminal} />
+            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
             ))}
           </Stack>
         </Stack>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* src/styles/tokens.css */
 :root {
   /* Use a 4px or 8px base unit (The 'Golden' scale) */
@@ -5,4 +6,80 @@
   --section-gap: calc(var(--space-unit) * 32); /* 128px */
   --content-gap: calc(var(--space-unit) * 8);  /* 32px */
   --component-padding: calc(var(--space-unit) * 6); /* 24px */
+=======
+:root {
+  /* Colors */
+  --raw-color-bg: oklch(98% 0.005 250);
+  --raw-color-surface: oklch(100% 0 0);
+  --raw-color-surface-alt: oklch(95% 0.01 250);
+  --raw-color-line: oklch(92% 0.01 250);
+  --raw-color-accent: #007BFF;
+  --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
+  --raw-color-accent-navy: #1A2B3C;
+  --raw-color-accent-brand: #007BFF;
+  --raw-color-text-main: #1A2B3C;
+  --raw-color-text-body: #2D3748;
+  --raw-color-text-dim: #4B4B4B;
+
+  /* Typography */
+  --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --raw-font-display: "Bricolage Grotesque", sans-serif;
+  --raw-font-mono: "Space Mono", monospace;
+
+  /* Radius */
+  --raw-radius-none: 0px;
+  --raw-radius-subtle: 2px;
+  --raw-radius-standard: 4px;
+  --raw-radius-sm: 4px;
+  --raw-radius-md: 8px;
+  --raw-radius-lg: 12px;
+  --raw-radius-xl: 12px;
+  --raw-radius-full: 9999px;
+
+  /* Spacing */
+  --raw-spacing-container-sm: 1.5rem;
+  --raw-spacing-container-md: 3rem;
+  --raw-spacing-card: 2rem;
+  --raw-spacing-compact: 1rem;
+  --raw-spacing-nav: 2rem;
+  --raw-spacing-email-bar-y: 1rem;
+  --raw-spacing-email-bar-x-sm: 1.5rem;
+  --raw-spacing-email-bar-x-md: 3rem;
+  --raw-spacing-hero: 5rem;
+  --raw-spacing-comfort: 3rem;
+  --raw-spacing-end-pad: 8rem;
+
+  /* Animation */
+  --raw-duration-fast: 150ms;
+  --raw-duration-normal: 300ms;
+  --raw-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --raw-reveal-distance: 20px;
+
+  /* Icon Sizes */
+  --raw-icon-xs: 12px;
+  --raw-icon-sm: 16px;
+  --raw-icon-md: 20px;
+  --raw-icon-lg: 24px;
+  --raw-icon-xl: 32px;
+
+  /* Image Sizes */
+  --raw-image-profile: 400px;
+
+  /* Z-Index */
+  --raw-z-hide: -1;
+  --raw-z-base: 0;
+  --raw-z-docked: 10;
+  --raw-z-dropdown: 20;
+  --raw-z-sticky: 30;
+  --raw-z-overlay: 40;
+  --raw-z-modal: 50;
+  --raw-z-popover: 60;
+  --raw-z-skip-link: 70;
+  --raw-z-toast: 80;
+  --raw-z-top: 100;
+  --raw-z-search: 200;
+
+  /* Shadows */
+  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+>>>>>>> main
 }

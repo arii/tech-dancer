@@ -289,7 +289,7 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent/30 transition-all">
+                                  <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Text variant="sans" size="sm" weight="font-black" className="flex items-center gap-2">
                                         <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />

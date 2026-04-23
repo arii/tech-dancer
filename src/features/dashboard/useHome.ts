@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { getPosts, Post } from '@/lib/content';
+import { useQuery } from '@tanstack/react-query';
+import { getPosts } from '@/lib/content';
 import { Home as HomeIcon } from 'lucide-react';
 import { useResearch } from '../research/useResearch';
 
@@ -10,13 +10,11 @@ export const upcomingEvents = [
 
 export function useHome() {
   const navigate = useNavigate();
-  const [recentPosts, setRecentPosts] = useState<Post[]>([]);
+  const { data: recentPosts = [] } = useQuery({
+    queryKey: ['posts', 'recent'],
+    queryFn: () => getPosts().slice(0, 3),
+  });
   const { tools } = useResearch();
-
-  useEffect(() => {
-    const allPosts = getPosts();
-    setRecentPosts(allPosts.slice(0, 3));
-  }, []);
 
   const handleNavigateToBlog = () => navigate('/blog');
   const handleNavigateToPost = (slug: string) => navigate(`/blog/${slug}`);

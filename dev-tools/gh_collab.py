@@ -82,8 +82,7 @@ class GitHubAPI:
             return {"id": "MOCK_ID", "state": "PENDING", "sha": "MOCK_SHA"}
 
         resp = requests.request(method, url, headers=self._get_headers(), json=data)
-        if not resp.ok:
-            self._error(f"The GitHub API wasn't happy about that ({resp.status_code}): {resp.text}")
+        resp.raise_for_status()
         return resp.json()
 
     def get_pending_review(self, pr_num):
