@@ -1,31 +1,11 @@
-import { useState } from 'react';
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
-import { useEmailStore, STORAGE_KEY } from './emailStore';
-
-export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
+import { useEmailForm } from './useEmailForm';
 
 export function EmailForm() {
-  const [status, setStatus] = useState<FormStatus>('idle');
-  const [email, setEmail] = useState('');
-  const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
-
-  const submitForm = (emailToSubmit: string) => {
-    if (!emailToSubmit) return;
-    setStatus('loading');
-
-    // Simulate API delay
-    setTimeout(() => {
-      setStatus('success');
-      setEmail('');
-      sessionStorage.setItem(STORAGE_KEY, 'true');
-
-      // Auto hide the bar after success
-      setTimeout(() => setShowEmailBar(false), 2000);
-    }, 800);
-  };
+  const { status, email, setEmail, submitForm } = useEmailForm();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
