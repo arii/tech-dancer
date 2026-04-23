@@ -1,73 +1,75 @@
 :root {
   /* Colors */
-  --color-bg: oklch(98% 0.005 250);
-  --color-surface: oklch(100% 0 0);
-  --color-surface-alt: oklch(95% 0.01 250);
-  --color-line: oklch(92% 0.01 250);
-  --color-accent: #007BFF;
-  --color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --color-accent-navy: #1A2B3C;
-  --color-accent-brand: #007BFF;
-  --color-text-main: #1A2B3C;
-  --color-text-body: #2D3748;
-  --color-text-dim: #4B4B4B;
+  --raw-color-bg: oklch(98% 0.005 250);
+  --raw-color-surface: oklch(100% 0 0);
+  --raw-color-surface-alt: oklch(95% 0.01 250);
+  --raw-color-line: oklch(92% 0.01 250);
+  --raw-color-accent: #007BFF;
+  --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
+  --raw-color-accent-navy: #1A2B3C;
+  --raw-color-accent-brand: #007BFF;
+  --raw-color-text-main: #1A2B3C;
+  --raw-color-text-body: #2D3748;
+  --raw-color-text-dim: #4B4B4B;
 
   /* Typography */
-  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --raw-font-display: "Bricolage Grotesque", sans-serif;
+  --raw-font-mono: "Space Mono", monospace;
 
-  /* Radius (Following Tailwind v4 auto-mapping convention: --radius-*) */
-  --radius-none: 0px;
-  --radius-subtle: 2px;
-  --radius-standard: 4px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 12px;
-  --radius-full: 9999px;
+  /* Radius */
+  --raw-radius-none: 0px;
+  --raw-radius-subtle: 2px;
+  --raw-radius-standard: 4px;
+  --raw-radius-sm: 4px;
+  --raw-radius-md: 8px;
+  --raw-radius-lg: 12px;
+  --raw-radius-xl: 12px;
+  --raw-radius-full: 9999px;
 
-  /* Spacing (Following Tailwind v4 auto-mapping convention: --spacing-*) */
-  --spacing-container-sm: 1.5rem;
-  --spacing-container-md: 3rem;
-  --spacing-card: 2rem;
-  --spacing-compact: 1rem;
-  --spacing-nav: 2rem;
-  --spacing-email-bar-y: 1rem;
-  --spacing-email-bar-x-sm: 1.5rem;
-  --spacing-email-bar-x-md: 3rem;
-  --spacing-hero: 5rem;
-  --spacing-comfort: 3rem;
-  --spacing-end-pad: 8rem;
-
-  /* Z-Index (Following Tailwind v4 auto-mapping convention: --z-index-*) */
-  --z-index-hide: -1;
-  --z-index-base: 0;
-  --z-index-docked: 10;
-  --z-index-dropdown: 20;
-  --z-index-sticky: 30;
-  --z-index-overlay: 40;
-  --z-index-modal: 50;
-  --z-index-popover: 60;
-  --z-index-skip-link: 70;
-  --z-index-toast: 80;
-  --z-index-top: 100;
-  --z-index-search: 200;
+  /* Spacing */
+  --raw-spacing-container-sm: 1.5rem;
+  --raw-spacing-container-md: 3rem;
+  --raw-spacing-card: 2rem;
+  --raw-spacing-compact: 1rem;
+  --raw-spacing-nav: 2rem;
+  --raw-spacing-email-bar-y: 1rem;
+  --raw-spacing-email-bar-x-sm: 1.5rem;
+  --raw-spacing-email-bar-x-md: 3rem;
+  --raw-spacing-hero: 5rem;
+  --raw-spacing-comfort: 3rem;
+  --raw-spacing-end-pad: 8rem;
 
   /* Animation */
-  --duration-fast: 150ms;
-  --duration-normal: 300ms;
-  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-  --reveal-distance: 20px;
+  --raw-duration-fast: 150ms;
+  --raw-duration-normal: 300ms;
+  --raw-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --raw-reveal-distance: 20px;
 
-  /* Icon/Image Sizes (Custom variables for JS reference) */
-  --icon-xs: 12px;
-  --icon-sm: 16px;
-  --icon-md: 20px;
-  --icon-lg: 24px;
-  --icon-xl: 32px;
-  --image-profile: 400px;
+  /* Icon Sizes */
+  --raw-icon-xs: 12px;
+  --raw-icon-sm: 16px;
+  --raw-icon-md: 20px;
+  --raw-icon-lg: 24px;
+  --raw-icon-xl: 32px;
+
+  /* Image Sizes */
+  --raw-image-profile: 400px;
+
+  /* Z-Index */
+  --raw-z-hide: -1;
+  --raw-z-base: 0;
+  --raw-z-docked: 10;
+  --raw-z-dropdown: 20;
+  --raw-z-sticky: 30;
+  --raw-z-overlay: 40;
+  --raw-z-modal: 50;
+  --raw-z-popover: 60;
+  --raw-z-skip-link: 70;
+  --raw-z-toast: 80;
+  --raw-z-top: 100;
+  --raw-z-search: 200;
 
   /* Shadows */
-  --shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
 }

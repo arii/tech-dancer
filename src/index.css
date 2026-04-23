@@ -12,57 +12,66 @@
   --safelist-px: px-0 px-1 px-2 px-3 px-4 px-5 px-6 px-8 px-10 px-12 px-16 px-20 px-24 px-32;
   --safelist-py: py-0 py-1 py-2 py-3 py-4 py-5 py-6 py-8 py-10 py-12 py-16 py-20 py-24 py-32;
 
-  /* Re-mapping to support @apply utilities */
-  --color-bg: var(--color-bg);
-  --color-surface: var(--color-surface);
-  --color-surface-alt: var(--color-surface-alt);
-  --color-line: var(--color-line);
-  --color-accent: var(--color-accent);
-  --color-accent-shadow: var(--color-accent-shadow);
-  --color-accent-navy: var(--color-accent-navy);
-  --color-accent-brand: var(--color-accent-brand);
-  --color-text-main: var(--color-text-main);
-  --color-text-body: var(--color-text-body);
-  --color-text-dim: var(--color-text-dim);
+  /* Colors */
+  --color-bg: var(--raw-color-bg);
+  --color-surface: var(--raw-color-surface);
+  --color-surface-alt: var(--raw-color-surface-alt);
+  --color-line: var(--raw-color-line);
+  --color-accent: var(--raw-color-accent);
+  --color-accent-shadow: var(--raw-color-accent-shadow);
+  --color-accent-navy: var(--raw-color-accent-navy);
+  --color-accent-brand: var(--raw-color-accent-brand);
+  --color-text-main: var(--raw-color-text-main);
+  --color-text-body: var(--raw-color-text-body);
+  --color-text-dim: var(--raw-color-text-dim);
 
-  /* Spacing */
-  --spacing-card: var(--spacing-card);
-  --spacing-compact: var(--spacing-compact);
-  --spacing-nav: var(--spacing-nav);
-  --spacing-email-bar-y: var(--spacing-email-bar-y);
-  --spacing-email-bar-x-sm: var(--spacing-email-bar-x-sm);
-  --spacing-email-bar-x-md: var(--spacing-email-bar-x-md);
-  --spacing-hero: var(--spacing-hero);
-  --spacing-comfort: var(--spacing-comfort);
-  --spacing-end-pad: var(--spacing-end-pad);
-  --spacing-container-sm: var(--spacing-container-sm);
-  --spacing-container-md: var(--spacing-container-md);
+  /* Fonts */
+  --font-sans: var(--raw-font-sans);
+  --font-display: var(--raw-font-display);
+  --font-mono: var(--raw-font-mono);
 
   /* Radius */
-  --radius-subtle: var(--radius-subtle);
-  --radius-standard: var(--radius-standard);
+  --radius-none: var(--raw-radius-none);
+  --radius-subtle: var(--raw-radius-subtle);
+  --radius-standard: var(--raw-radius-standard);
+  --radius-sm: var(--raw-radius-sm);
+  --radius-md: var(--raw-radius-md);
+  --radius-lg: var(--raw-radius-lg);
+  --radius-xl: var(--raw-radius-xl);
+  --radius-full: var(--raw-radius-full);
+
+  /* Spacing */
+  --spacing-container-sm: var(--raw-spacing-container-sm);
+  --spacing-container-md: var(--raw-spacing-container-md);
+  --spacing-card: var(--raw-spacing-card);
+  --spacing-compact: var(--raw-spacing-compact);
+  --spacing-nav: var(--raw-spacing-nav);
+  --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
+  --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
+  --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
+  --spacing-hero: var(--raw-spacing-hero);
+  --spacing-comfort: var(--raw-spacing-comfort);
+  --spacing-end-pad: var(--raw-spacing-end-pad);
 
   /* Z-Index */
-  --z-hide: var(--z-index-hide);
-  --z-base: var(--z-index-base);
-  --z-docked: var(--z-index-docked);
-  --z-dropdown: var(--z-index-dropdown);
-  --z-sticky: var(--z-index-sticky);
-  --z-overlay: var(--z-index-overlay);
-  --z-modal: var(--z-index-modal);
-  --z-popover: var(--z-index-popover);
-  --z-skip-link: var(--z-index-skip-link);
-  --z-toast: var(--z-index-toast);
-  --z-top: var(--z-index-top);
-  --z-search: var(--z-index-search);
+  --z-hide: var(--raw-z-hide);
+  --z-base: var(--raw-z-base);
+  --z-docked: var(--raw-z-docked);
+  --z-dropdown: var(--raw-z-dropdown);
+  --z-sticky: var(--raw-z-sticky);
+  --z-overlay: var(--raw-z-overlay);
+  --z-modal: var(--raw-z-modal);
+  --z-popover: var(--raw-z-popover);
+  --z-skip-link: var(--raw-z-skip-link);
+  --z-toast: var(--raw-z-toast);
+  --z-top: var(--raw-z-top);
+  --z-search: var(--raw-z-search);
 
   /* Shadows */
-  --shadow-top-overlay: var(--shadow-top-overlay);
+  --shadow-top-overlay: var(--raw-shadow-top-overlay);
 
-  /* Typography */
-  --font-sans: var(--font-sans);
-  --font-display: var(--font-display);
-  --font-mono: var(--font-mono);
+  /* Animation */
+  --ease-smooth: var(--raw-ease-smooth);
 
   /* Static Defaults */
   --container-blog: 1100px;
@@ -70,9 +79,6 @@
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
-
-  /* Animation */
-  --ease-smooth: var(--ease-smooth);
 }
 
 @layer utilities {
