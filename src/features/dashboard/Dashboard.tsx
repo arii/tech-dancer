@@ -64,14 +64,14 @@ export default function Home() {
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"
-            animate="animate"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
           >
             {recentPosts.map((post) => (
               <Box
                 key={post.slug}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
-                viewport={{ once: true, margin: "-50px" }}
               >
                 <ContentCard
                   {...post}
@@ -87,7 +87,6 @@ export default function Home() {
                 key={event.name}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
-                viewport={{ once: true, margin: "-50px" }}
               >
                 <EventCard {...event} />
               </Box>
