@@ -23,7 +23,7 @@ export function GearCard({
     <Box
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
+      display="flex" direction="col" height="full" surface="default" border={true} radius="none" overflow="hidden" className="group hover:border-accent transition-all duration-300"
     >
       <CardImagePlaceholder
         image={image}
@@ -38,7 +38,7 @@ export function GearCard({
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
               <Box display="flex" align="center" gap={1}>
-                <span className="text-amber-500 text-xs">
+                <span color="warning" className="text-xs">
                   {'★'.repeat(Math.floor(rating))}
                   {rating % 1 !== 0 ? '½' : ''}
                 </span>
@@ -49,7 +49,7 @@ export function GearCard({
             )}
 
             {verdict && (
-              <Box surface="brand" className="px-1.5 py-0.5 rounded-none border border-line/10">
+              <Box surface="brand" paddingX={1.5} paddingY={0.5} radius="none" border={true} className="border-line/10">
                 <Text variant="mono" size="micro" weight="font-bold" className="uppercase">
                   {verdict}
                 </Text>
@@ -71,8 +71,8 @@ export function GearCard({
           </Text>
 
           {priceCategory && (
-             <Box border className="bg-amber-50/50 px-2 py-0.5 border-amber-200/50 w-fit">
-               <Text variant="mono" size="micro" weight="font-bold" className="text-amber-700">{priceCategory}</Text>
+             <Box border surface="warning" paddingX={2} paddingY={0.5} className="border-warning/50 w-fit">
+               <Text variant="mono" size="micro" weight="font-bold" color="warning">{priceCategory}</Text>
              </Box>
           )}
         </Stack>
@@ -86,8 +86,8 @@ export function GearCard({
             <Text variant="mono" size="xs" weight="font-bold" className="text-accent tracking-wider">
               Read Review
             </Text>
-            <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
-            <Box className="group-hover:translate-x-1 transition-transform duration-300 ml-auto">
+            <Box height="px" className="w-0 bg-accent group-hover:w-6 transition-all duration-500" />
+            <Box marginLeft="auto" className="group-hover:translate-x-1 transition-transform duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"

@@ -9,14 +9,15 @@ import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
+import { Box } from "./layouts/Primitives";
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { routes as routeConfig } from './config/routes';
 
-import { Box } from './layouts/Primitives';
+
 
 import { useEmailStore, STORAGE_KEY } from './features/email-capture/emailStore';
 
-import { Box } from './layouts/Primitives';
+
 
 const Home = lazy(() => import('./pages/Home'));
 const GearReviews = lazy(() => import('./pages/Gear'));

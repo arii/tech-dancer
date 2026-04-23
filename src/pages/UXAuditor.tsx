@@ -73,7 +73,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       {isCopying ? (
         <RefreshCw className="w-3 h-3 animate-spin" />
       ) : copied ? (
-        <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" />
+        <CheckCircle className="w-3 h-3 text-accent" />
       ) : (
         <Copy className="w-3 h-3" />
       )}
@@ -126,7 +126,7 @@ export default function UXAuditor() {
             value={url}
             title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text truncate"
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate"
             style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
             placeholder="https://..."
             aria-label="URL to audit"
@@ -171,7 +171,7 @@ export default function UXAuditor() {
                 <Box
                   padding={2}
                   radius="full"
-                  className={report.status === 'completed' ? 'bg-[var(--color-success-dim,#dcfce7)] text-[var(--color-success,#16a34a)]' : 'bg-[var(--color-warning-dim,#fef3c7)] text-[var(--color-warning,#d97706)] animate-pulse'}
+                  className={report.status === 'completed' ? 'bg-success/10 text-accent' : 'bg-warning/10 text-warning animate-pulse'}
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
@@ -211,7 +211,7 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text transition-all" surface="muted" color="dim"
+                    className="font-bold hover:text-text-main transition-all" surface="muted" color="dim"
                     style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
                     {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -266,7 +266,7 @@ export default function UXAuditor() {
                             />
                           ) : (
                             <Box className="text-center" color="dim">
-                              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-20" />
+                              <ImageIcon marginX="auto" marginBottom={2} className="w-12 h-12 opacity-20" />
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
@@ -291,8 +291,8 @@ export default function UXAuditor() {
                                 {data.improvements?.map((imp, idx) => (
                                   <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
-                                      <Text variant="sans" size="sm" weight="font-black" className="flex items-center gap-2">
-                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
+                                      <Text variant="sans" size="sm" weight="font-black" display="flex" align="center" gap={2}>
+                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-danger shadow-sm' : 'bg-warning'}`} />
                                         {imp.element}
                                       </Text>
                                       <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>

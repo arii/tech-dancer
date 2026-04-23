@@ -179,7 +179,7 @@ export function GlobalSearch() {
                  <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" data-testid="search-results-count">
               {results.length} RESULTS FOUND
             </Text>
         </Box>
