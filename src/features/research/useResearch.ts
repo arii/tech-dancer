@@ -1,12 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getStudies, Study } from '@/lib/content';
 
 export function useResearch() {
   const [studies, setStudies] = useState<Study[]>([]);
-
-  useEffect(() => {
-    setStudies(getStudies());
-  }, []);
 
   const tools = [
     {

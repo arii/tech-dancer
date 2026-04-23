@@ -103,6 +103,16 @@ export const typography = {
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
 };
 
+export const tracking = {
+  tighter: "tracking-tighter",
+  tight: "tracking-tight",
+  normal: "tracking-normal",
+  wide: "tracking-wide",
+  wider: "tracking-wider",
+  widest: "tracking-widest",
+  "wide-editorial": "tracking-[0.2em]",
+};
+
 export const typeSizes = {
   micro: "text-[9px]",
   tiny: "text-[10px]",
