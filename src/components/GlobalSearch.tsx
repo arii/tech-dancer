@@ -1,6 +1,7 @@
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
+import { escapeRegExp } from '@/lib/utils';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
@@ -44,7 +45,7 @@ export function GlobalSearch() {
 
   const highlight = (text: string) => {
     if (!query) return text;
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const escapedQuery = escapeRegExp(query);
     const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
     return parts.map((part, i) =>
       part.toLowerCase() === query.toLowerCase()

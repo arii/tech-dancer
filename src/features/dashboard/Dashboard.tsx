@@ -71,6 +71,7 @@ export default function Home() {
                 key={post.slug}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
+                viewport={{ once: true, margin: "-50px" }}
               >
                 <ContentCard
                   {...post}
@@ -86,6 +87,7 @@ export default function Home() {
                 key={event.name}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
+                viewport={{ once: true, margin: "-50px" }}
               >
                 <EventCard {...event} />
               </Box>
