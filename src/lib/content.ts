@@ -49,7 +49,7 @@ function parseFrontmatter(content: string) {
           else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
 
           // Basic numeric conversion for rating
-          if (key === 'rating') data[key] = parseFloat(value);
+          if (['rating', 'durability', 'value'].includes(key)) data[key] = parseFloat(value);
           else data[key] = value;
         }
       }
@@ -64,6 +64,7 @@ export interface Post {
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
   category: string;
   excerpt: string;
   content: string;
@@ -86,6 +87,9 @@ export interface Resource {
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
+  durability?: number;
+  value?: number;
+  specs?: Record<string, string>;
 }
 
 export interface Study {
@@ -155,10 +159,10 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts),
-  resources: transform<Resource>(contentModules.resources),
-  studies: transform<Study>(contentModules.studies),
-  events: transform<Event>(contentModules.events)
+  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
+  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
+  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
+  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
 };
 
 const maps = {
@@ -179,3 +183,17 @@ export const getStudyBySlug = (slug: string) => maps.studies.get(slug);
 export const getEventBySlug = (slug: string) => maps.events.get(slug);
 
 export const getAllContent = (type: ContentType): ContentItem[] => items[type];
+
+/**
+ * Calculates estimated reading time in minutes.
+ * Uses a standard 200 words per minute for full content,
+ * or a simplified proxy for excerpts.
+ */
+export const readingTime = (content?: string, excerpt?: string) => {
+  if (content && content.trim().length > 0) {
+    return Math.max(1, Math.round(content.split(/\s+/).length / 200));
+  }
+  // Fallback for list views where only excerpt might be available
+  const words = excerpt?.split(/\s+/).length ?? 0;
+  return Math.max(1, Math.round(words / 20)); // sensible proxy for short text
+};

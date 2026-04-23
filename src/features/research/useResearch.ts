@@ -1,13 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getStudies, Study } from '@/lib/content';
 
 export function useResearch() {
-  const [studies, setStudies] = useState<Study[]>([]);
+  const [studies] = useState<Study[]>(() => getStudies());
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
-
-  useEffect(() => {
-    setStudies(getStudies());
-  }, []);
 
   const tools = [
     {
@@ -30,6 +26,13 @@ export function useResearch() {
       category: 'Logistics',
       status: 'Active',
       layman: 'Flight finder for WCS events - optimizing travel routes and finding the best deals.'
+    },
+    {
+      id: 'ux-auditor',
+      name: 'Visual UX Auditor',
+      category: 'Development Tool',
+      status: 'Active',
+      layman: 'Automated visual regression and UX improvement suggestions across viewports.'
     }
   ];
 

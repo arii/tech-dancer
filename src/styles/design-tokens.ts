@@ -12,6 +12,7 @@ export const radius = {
   md: "rounded-md", // 6px
   lg: "rounded-lg", // 8px
   xl: "rounded-xl", // 12px
+  full: "rounded-full",
 };
 
 export const borders = {
@@ -76,6 +77,14 @@ export const imageSizes = {
   profile: 400,
 };
 
+export const iconSizes = {
+  xs: 12,
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 32,
+};
+
 export const zIndex = {
   hide: -1,
   base: 0,
@@ -88,20 +97,33 @@ export const zIndex = {
   skipLink: 70,
   toast: 80,
   top: 100,
+  search: 200,
 };
 
 export const typography = {
-  headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
-  display: "font-display font-bold uppercase tracking-tight leading-none",
+  headline: "font-display font-bold tracking-tighter leading-[0.9]",
+  display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: "font-mono tracking-[3px] uppercase",
   label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",
+  tight: "tracking-[0.15em] uppercase",
+  content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+};
+
+export const tracking = {
+  tighter: "tracking-tighter",
+  tight: "tracking-tight",
+  normal: "tracking-normal",
+  wide: "tracking-wide",
+  wider: "tracking-wider",
+  widest: "tracking-widest",
+  "wide-editorial": "tracking-[0.2em]",
 };
 
 export const typeSizes = {
-  micro: "text-[8px]",
+  micro: "text-[9px]",
   tiny: "text-[10px]",
   xs: "text-xs",
   sm: "text-sm",
