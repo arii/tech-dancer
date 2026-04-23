@@ -45,7 +45,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           weight,
           align && `text-${align}`,
-          tracking && (trackingTokens[tracking as keyof typeof trackingTokens] || `tracking-${tracking}`),
+          tracking && trackingTokens[tracking as keyof typeof trackingTokens],
           uppercase && "uppercase",
           lowercase && "lowercase",
           capitalize && "capitalize",
