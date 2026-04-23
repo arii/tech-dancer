@@ -1,7 +1,6 @@
 import { ProfileData } from './types';
 
-export function useProfile(): { bio: ProfileData } {
-  const bio: ProfileData = {
+const PROFILE_DATA: ProfileData = {
     name: "Ariel Anders, PhD",
     role: "MIT Roboticist // WCS Tech-Dancer",
     sections: [
@@ -36,7 +35,8 @@ export function useProfile(): { bio: ProfileData } {
       { platform: 'linkedin', url: 'https://linkedin.com' },
       { platform: 'github', url: 'https://github.com' },
     ]
-  };
+};
 
-  return { bio };
+export function useProfile(): { bio: ProfileData } {
+  return { bio: PROFILE_DATA };
 }

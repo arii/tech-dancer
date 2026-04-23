@@ -25,11 +25,16 @@ Automates visual testing for the Impeccable Design framework.
 CLI tool for spinning up isolated development environments automatically.
 * Usage: `python3 dev-tools/vdev.py [setup|exec|cleanup] <branch>`
 
+### 5. PR Review Manager (`pr_review_manager.py`)
+Principled tool to track PR review states and clean up obsolete comments.
+* Features: Commit-aware re-review tracking, CI status monitoring, and automated comment cleanup.
+* Usage: `python3 dev-tools/pr_review_manager.py [--execute] [--skip-cleanup]`
+
 ## Prerequisites
 - Python 3.7+
-- `requests` and `playwright` libraries
-- A GitHub Personal Access Token set as `GITHUB_TOKEN` in your environment (for `gh_collab`).
-- `gh` CLI and `llm` CLI installed (for `generate_plan.py`).
+- `requests`, `playwright`, and `PyGithub` libraries
+- A GitHub Personal Access Token set as `GITHUB_TOKEN` in your environment.
+- `gh` CLI (for token retrieval) and `llm` CLI installed.
 
 ## AI Agent Integration
 AI agents are instructed via `AGENTS.md` to use these tools autonomously to:

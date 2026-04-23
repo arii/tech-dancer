@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -8,7 +9,11 @@ import { BlogPostDetail } from './components/BlogPostDetail';
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const post = useMemo(() => slug ? getPostBySlug(slug) : undefined, [slug]);
+  const { data: post } = useQuery({
+    queryKey: ['posts', slug],
+    queryFn: () => slug ? getPostBySlug(slug) : undefined,
+    enabled: !!slug
+  });
 
   const structuredData = useMemo(() => {
     if (!post) return null;

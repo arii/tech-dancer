@@ -1,9 +1,17 @@
 import { useState } from 'react';
+<<<<<<< HEAD
 import { getStudies, Study } from '@/lib/content';
 import type { LabTool } from './types';
+=======
+import { useQuery } from '@tanstack/react-query';
+import { getStudies } from '@/lib/content';
+>>>>>>> main
 
 export function useResearch() {
-  const [studies] = useState<Study[]>(() => getStudies());
+  const { data: studies = [] } = useQuery({
+    queryKey: ['studies'],
+    queryFn: getStudies,
+  });
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
 
   const tools: LabTool[] = [

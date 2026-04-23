@@ -1,11 +1,15 @@
 import { getResources } from '@/lib/content';
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { safeSearch } from '@/lib/utils';
 import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useToolbox() {
-  const resources = getResources();
+  const { data: resources = [] } = useQuery({
+    queryKey: ['resources'],
+    queryFn: getResources,
+  });
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
 

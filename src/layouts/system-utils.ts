@@ -3,14 +3,18 @@ import { cn } from "@/lib/utils"
 
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T }
 
-export function getResponsiveClasses(prop: ResponsiveProp<any>, classPrefix: string, mapper?: (val: any) => string) {
-  if (prop === undefined) return ""
+export function getResponsiveClasses(
+  prop: ResponsiveProp<string | number | boolean | undefined | null>,
+  classPrefix: string,
+  mapper?: (val: string | number | boolean | undefined | null) => string | number | undefined
+) {
+  if (prop === undefined || prop === null) return ""
   if (typeof prop !== "object" || React.isValidElement(prop)) {
     const val = mapper ? mapper(prop) : prop
     return val ? `${classPrefix}${val}` : ""
   }
 
-  const { base, sm, md, lg, xl } = prop as any
+  const { base, sm, md, lg, xl } = prop as Record<string, string | number | boolean | undefined | null>
   return cn(
     base && `${classPrefix}${mapper ? mapper(base) : base}`,
     sm && `sm:${classPrefix}${mapper ? mapper(sm) : sm}`,

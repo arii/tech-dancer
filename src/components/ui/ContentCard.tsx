@@ -19,7 +19,7 @@ interface ContentCardProps {
 
 export function ContentCardSkeleton() {
   return (
-    <Box className="flex flex-col h-full bg-surface border border-line rounded-none overflow-hidden">
+    <Box className="flex flex-col h-full bg-surface border border-line rounded-xl overflow-hidden shadow-sm">
       <Skeleton className="w-full aspect-video max-h-[160px] rounded-none" />
       <Stack gap={4} className="p-5" flex={1} justify="between">
         <Stack gap={3}>
@@ -43,7 +43,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
     <Box 
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
+      className="group flex flex-col h-full bg-surface border border-line hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-xl overflow-hidden shadow-sm"
     >
       {/* Visual Thumbnail */}
       <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[160px]">
@@ -67,7 +67,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           </Box>
         )}
         <Box className="absolute top-4 left-4">
-          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-none">
+          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-sm">
             <Text variant="mono" size="micro" weight="font-bold" className="text-accent-navy uppercase tracking-wider">
               {category}
             </Text>
