@@ -19,6 +19,6 @@ test.describe('Global Search Modal - Mobile', () => {
     await searchButton.click({ force: true });
 
     // Modal should be visible
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+    await expect(page.getByPlaceholder('SEARCH REPOSITORY')).toBeVisible();
   });
 });
