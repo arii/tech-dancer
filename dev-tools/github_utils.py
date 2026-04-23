@@ -16,8 +16,6 @@ def get_github_token() -> Optional[str]:
     if token:
         return token
     try:
-        # Try to get the token from the gh cli if it is installed
-        # We avoid 'env -u' to maintain cross-platform compatibility
         result = subprocess.run(
             ["gh", "auth", "token"],
             capture_output=True,
@@ -68,38 +66,30 @@ def get_ci_status(repo: Repository, sha: str) -> Tuple[str, List[str]]:
                     failed_runs.append(s.context)
 
         if failed_runs or combined_status.state in ['failure', 'error']:
-            summary = "FAILURE"
-            if failed_runs:
-                summary += f" | FAILED: {', '.join(set(failed_runs))}"
-            else:
-                summary += f" | {combined_status.state.upper()}"
+            summary = "FAILURE | FAILED: " + ", ".join(set(failed_runs)) if failed_runs else f"FAILURE | {combined_status.state.upper()}"
             return summary, list(set(failed_runs))
-        elif in_progress > 0 or combined_status.state == 'pending':
+
+        if in_progress > 0 or combined_status.state == 'pending':
             return f"PENDING | {in_progress} runs in progress", []
-        elif total_checks > 0:
+
+        if total_checks > 0:
             return "SUCCESS | All checks passed", []
-        else:
-            return "No checks found", []
+
+        return "No checks found", []
     except Exception as e:
         return f"Error fetching CI: {str(e)}", []
 
 class CIFormatter:
     """Encapsulates CI status icon mapping and string formatting."""
 
-    @staticmethod
-    def get_icon(summary: str) -> str:
-        """Returns a visual icon for the CI status summary."""
-        if "FAILURE" in summary: return "🔴"
-        if "PENDING" in summary: return "🟡"
-        if "SUCCESS" in summary: return "🟢"
-        return "⚪"
+    ICON_MAP = {
+        "FAILURE": "🔴",
+        "PENDING": "🟡",
+        "SUCCESS": "🟢"
+    }
 
     @classmethod
     def format(cls, summary: str) -> str:
         """Returns a standardized string format for CI status."""
-        icon = cls.get_icon(summary)
+        icon = next((icon for key, icon in cls.ICON_MAP.items() if key in summary), "⚪")
         return f"{icon} {summary}"
-
-def get_ci_icon(summary: str) -> str:
-    """Legacy wrapper for get_ci_icon."""
-    return CIFormatter.get_icon(summary)
