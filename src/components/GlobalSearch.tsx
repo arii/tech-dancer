@@ -5,6 +5,13 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
+interface SearchResult {
+  type: 'post' | 'resource' | 'study';
+  slug: string;
+  title: string;
+  excerpt: string;
+}
+
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +33,7 @@ export function GlobalSearch() {
     open();
   }, [open]);
 
-  const handleSelect = (result: any) => {
+  const handleSelect = (result: SearchResult) => {
     // 4. Link Click Delegation: Immediate Feedback
     close();
     setQuery('');
@@ -72,7 +79,7 @@ export function GlobalSearch() {
             type="text"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
             value={query}
-            onChange={(e: any) => setQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             width="full"
             variant="display"
             size="2xl"
@@ -96,7 +103,7 @@ export function GlobalSearch() {
         <Box padding={3} overflow="y-auto" maxHeight="60vh" surface="default">
           {results.length > 0 ? (
             <Stack gap={2}>
-              {results.map((res: any) => (
+              {results.map((res: SearchResult) => (
                 <Box 
                   key={`${res.type}-${res.slug}`}
                   as="button"
