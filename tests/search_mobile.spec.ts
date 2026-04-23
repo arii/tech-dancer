@@ -12,10 +12,10 @@ test.describe('Global Search Modal - Mobile', () => {
     await page.getByLabel('Open menu').click();
 
     // Check if the menu is actually visible
-    await expect(page.locator('nav[aria-label="Mobile Navigation"]').locator('..').locator('div').filter({ hasText: 'Search' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Search' }).first()).toBeVisible();
 
     // Use text selector to find "Search" button
-    const searchButton = page.getByRole('button', { name: 'Search' });
+    const searchButton = page.getByRole('button', { name: 'Search' }).first();
     await searchButton.click({ force: true });
 
     // Modal should be visible

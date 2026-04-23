@@ -44,6 +44,7 @@ export function GlobalSearch() {
         {isOpen && (
           <Box 
             as={motion.div}
+            data-testid="search-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -55,9 +56,13 @@ export function GlobalSearch() {
             paddingTop={40}
             surface={false}
             className="bg-accent/40 backdrop-blur-md"
+            onClick={(e: React.MouseEvent) => {
+              setIsOpen(false);
+            }}
           >
             <Box 
               as={motion.div}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               initial={{ scale: 0.98, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.98, opacity: 0 }}
@@ -87,6 +92,7 @@ export function GlobalSearch() {
                 />
                 <Box 
                   as="button" 
+                  aria-label="Close search"
                   onClick={() => setIsOpen(false)} 
                   padding={2}
                   className="group hover:bg-accent/5 transition-colors border border-line/50"
@@ -114,6 +120,7 @@ export function GlobalSearch() {
                         <Box
                           key={`${res.type}-${res.slug}`}
                           as="button"
+                          data-testid="search-result"
                           onClick={() => handleSelect(res)}
                           width="full"
                           padding={3}

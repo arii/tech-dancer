@@ -102,6 +102,30 @@ export default function Navigation() {
             overflow="y-auto"
           >
             <Box as="ul" className="space-y-6">
+              <Box as="li" position="relative" className="group">
+                <Box
+                  as="button"
+                  type="button"
+                  aria-label="Search"
+                  cursor="pointer"
+                  onClick={() => {
+                    setIsOpen(false);
+                    window.dispatchEvent(new CustomEvent('open-search'));
+                  }}
+                  display="flex"
+                  align="center"
+                  gap={4}
+                  paddingY={6}
+                  border="b"
+                  width="full"
+                  className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50"
+                >
+                  <Search className="w-6 h-6 stroke-[1.5] flex-shrink-0" />
+                  <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
+                    Search
+                  </Text>
+                </Box>
+              </Box>
               {routes.filter(r => r.path !== '/').map((item) => (
                 <NavItem 
                   key={item.path} 
@@ -143,6 +167,7 @@ export default function Navigation() {
             <Box as="li">
               <Box
                 as="button"
+                  aria-label="Search"
                 onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
                 display="flex"
                 align="center"
