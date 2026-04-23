@@ -6,6 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
+import { routes } from './src/config/routes';
 
 function getContentSlugs(dir: string, prefix: string): string[] {
   const fullPath = path.resolve(__dirname, dir);
@@ -13,14 +14,6 @@ function getContentSlugs(dir: string, prefix: string): string[] {
   return fs.readdirSync(fullPath)
     .filter(f => f.endsWith('.md'))
     .map(f => `${prefix}/${f.replace(/\.md$/, '')}`);
-}
-
-function getStaticRoutes(): string[] {
-  const routesPath = path.resolve(__dirname, 'src/config/routes.ts');
-  if (!fs.existsSync(routesPath)) return [];
-  const content = fs.readFileSync(routesPath, 'utf-8');
-  const matches = content.matchAll(/path:\s*['"]([^'"]+)['"]/g);
-  return Array.from(matches).map(m => m[1]);
 }
 
 export default defineConfig(({mode}) => {
@@ -35,7 +28,7 @@ export default defineConfig(({mode}) => {
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
   const dynamicRoutes = [
-    ...getStaticRoutes(),
+    ...routes.map(r => r.path),
     '/ux-auditor',
 
     ...getContentSlugs('content/posts', '/blog'),
