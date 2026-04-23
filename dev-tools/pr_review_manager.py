@@ -45,16 +45,16 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
         pr_title = pr.title
         latest_commit_sha = pr.head.sha
 
-        # 1. Comment Cleanup
+        # 1. Comment Cleanup - Only delete comments with the tool's marker
         if cleanup_comments:
             comments = pr.get_issue_comments()
             for comment in comments:
-                if comment.user.login == current_user_login:
+                if comment.user.login == current_user_login and "<!-- td-review-manager-comment -->" in comment.body:
                     if dry_run:
-                        logger.info(f"[DRY-RUN] Would delete comment {comment.id} on PR #{pr_number}")
+                        logger.info(f"[DRY-RUN] Would delete tool comment {comment.id} on PR #{pr_number}")
                     else:
                         comment.delete()
-                        logger.warning(f"Deleted comment {comment.id} on PR #{pr_number}")
+                        logger.warning(f"Deleted tool comment {comment.id} on PR #{pr_number}")
 
         # 2. Review State Analysis
         # Fetch reviews and find the most recent one from the current user
