@@ -3,7 +3,6 @@ import { useLocation, useNavigationType } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
-import { AnimatePresence } from 'motion/react';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailCaptureContext } from '@/features/email-capture/EmailCaptureContext';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
@@ -55,10 +54,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }, [pathname, key, navType]);
 
   return (
-    <Box layout="root" height="screen" position="relative" overflowX="hidden" width="full">
-      <GlobalSearch />
-      
-      <Box display="flex" height="min" width="full">
+    <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
+      <Box display="flex" className="min-h-screen w-full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -98,6 +95,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           </Stack>
         </Stack>
       </Box>
+
+      <GlobalSearch />
     </Box>
   );
 }
