@@ -49,31 +49,28 @@ jobs:
           export VITE_APP_URL=https://${{ github.repository_owner }}.github.io/$REPO_NAME
           pnpm run build
 
+      - name: Prepare combined deployment
+        run: |
+          mkdir -p /tmp/deploy-combined
+          # 1. Main assets
+          DEST_DIR="${{ github.ref_name == 'main' && '.' || github.ref_name }}"
+          mkdir -p "/tmp/deploy-combined/$DEST_DIR"
+          cp -r dist/* "/tmp/deploy-combined/$DEST_DIR/"
+
+          # 2. Root 404.html (for branch previews)
+          if [ "${{ github.ref_name }}" != "main" ]; then
+            cp dist/404.html /tmp/deploy-combined/404.html
+          fi
+
+          # 3. Previews index
+          mkdir -p /tmp/deploy-combined/previews
+          cp dist/previews/index.html /tmp/deploy-combined/previews/index.html
+
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          destination_dir: ${{ github.ref_name == 'main' && '.' || github.ref_name }}
-          keep_files: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-
-      # GitHub Pages only serves the root 404.html for all 404s, regardless of
-      # which subdirectory the request is for. Branch previews deploy their
-      # dist/ to a subdirectory, so their 404.html is never served by GitHub
-      # Pages. This step ensures the root 404.html is always the latest smart
-      # redirect version after any branch push.
-      - name: Update root 404.html on gh-pages for branch previews
-        if: github.ref_name != 'main'
-        run: mkdir -p /tmp/root-404 && cp dist/404.html /tmp/root-404/404.html
-
-      - name: Deploy root 404.html to gh-pages
-        if: github.ref_name != 'main'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /tmp/root-404
+          publish_dir: /tmp/deploy-combined
           destination_dir: .
           keep_files: true
           user_name: 'github-actions[bot]'
@@ -155,21 +152,3 @@ jobs:
               }
             }
 
-      - name: Prepare Previews Index
-        run: |
-          mkdir -p /tmp/previews-index/previews
-          if [ ! -f "dist/previews/index.html" ]; then
-            echo "Error: dist/previews/index.html not found! Deployment of preview index failed."
-            exit 1
-          fi
-          cp dist/previews/index.html /tmp/previews-index/previews/index.html
-
-      - name: Deploy Previews Index to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /tmp/previews-index
-          destination_dir: .
-          keep_files: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
