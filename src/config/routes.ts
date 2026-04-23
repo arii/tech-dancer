@@ -53,10 +53,6 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default }))
   },
   {
-    path: '/ux-auditor',
-    lazy: () => import('@/pages/UXAuditor').then(m => ({ Component: m.default }))
-  },
-  {
     path: '/about',
     lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
     label: 'About',
@@ -72,5 +68,4 @@ export const routes: RouteConfig[] = [
     path: '*',
     lazy: () => import('@/pages/Home').then(m => ({ Component: m.default }))
   },
-
 ];
