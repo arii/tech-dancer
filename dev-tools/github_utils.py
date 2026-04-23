@@ -2,25 +2,29 @@ import os
 import re
 import subprocess
 import sys
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict
 try:
-    from github import Github, GithubException, Repository
+    from github import Github, GithubException
+    from github.Repository import Repository
 except ImportError:
     print("Error: PyGithub not installed. Run 'pip install PyGithub'")
     sys.exit(1)
 
 def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token via gh CLI, falls back to env var."""
+    """Retrieves the GitHub token from environment or via gh CLI."""
+    token = os.getenv("GITHUB_TOKEN")
+    if token:
+        return token
     try:
-        out = subprocess.check_output(
-            ['env', '-u', 'GITHUB_TOKEN', 'gh', 'auth', 'token'],
-            stderr=subprocess.DEVNULL, text=True
-        ).strip()
-        if out:
-            return out
-    except Exception:
-        pass
-    return os.getenv("GITHUB_TOKEN")
+        result = subprocess.run(
+            ["gh", "auth", "token"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""
@@ -34,7 +38,7 @@ def get_repo_name() -> Optional[str]:
     except Exception:
         return os.getenv("GH_REPO")
 
-def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
+def get_ci_status(repo: Repository, sha: str) -> Tuple[str, List[str]]:
     """
     Aggregates CI status from Check Runs and Combined Status API for a given SHA.
     Returns (status_summary, failed_runs_list).
@@ -50,10 +54,10 @@ def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
 
         for run in check_runs:
             total_checks += 1
-            if run.conclusion in ['failure', 'error', 'timed_out', 'action_required']:
-                failed_runs.append(run.name)
-            elif run.status in ['in_progress', 'queued']:
+            if run.status in ['in_progress', 'queued']:
                 in_progress += 1
+            elif run.conclusion not in ['success', 'skipped', 'neutral']:
+                failed_runs.append(f"{run.name} ({run.conclusion or 'no conclusion'})")
 
         total_checks += combined_status.total_count
         if combined_status.state in ['failure', 'error']:
@@ -61,20 +65,31 @@ def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
                 if s.state in ['failure', 'error']:
                     failed_runs.append(s.context)
 
-        if failed_runs:
-            return f"FAILURE | FAILED: {', '.join(set(failed_runs))}", list(set(failed_runs))
-        elif in_progress > 0 or combined_status.state == 'pending':
+        if failed_runs or combined_status.state in ['failure', 'error']:
+            summary = "FAILURE | FAILED: " + ", ".join(set(failed_runs)) if failed_runs else f"FAILURE | {combined_status.state.upper()}"
+            return summary, list(set(failed_runs))
+
+        if in_progress > 0 or combined_status.state == 'pending':
             return f"PENDING | {in_progress} runs in progress", []
-        elif total_checks > 0:
+
+        if total_checks > 0:
             return "SUCCESS | All checks passed", []
-        else:
-            return "No checks found", []
+
+        return "No checks found", []
     except Exception as e:
         return f"Error fetching CI: {str(e)}", []
 
-def get_ci_icon(summary: str) -> str:
-    """Returns a visual icon for the CI status summary."""
-    if "FAILURE" in summary: return "🔴"
-    if "PENDING" in summary: return "🟡"
-    if "SUCCESS" in summary: return "🟢"
-    return "⚪"
+class CIFormatter:
+    """Encapsulates CI status icon mapping and string formatting."""
+
+    ICON_MAP: Dict[str, str] = {
+        "FAILURE": "🔴",
+        "PENDING": "🟡",
+        "SUCCESS": "🟢"
+    }
+
+    @classmethod
+    def format(cls, summary: str) -> str:
+        """Returns a standardized string format for CI status."""
+        icon = next((icon for key, icon in cls.ICON_MAP.items() if key in summary), "⚪")
+        return f"{icon} {summary}"
