@@ -53,12 +53,16 @@ def main():
     }
 
     # ── Fetch PR metadata and file list ───────────────────────────────────────
+    base_override = sys.argv[2] if len(sys.argv) > 2 else None
+    
     try:
         pr_url = f"https://api.github.com/repos/{repo}/pulls/{pr_num}"
         pr_resp = requests.get(pr_url, headers=headers)
         pr_resp.raise_for_status()
         pr_data = pr_resp.json()
 
+        # If base_override is provided, we use 'gh pr diff' to get the custom patch
+        # otherwise we use the standard file list from the API
         files_url = f"{pr_url}/files"
         files_resp = requests.get(files_url, headers=headers).json()
 
@@ -95,9 +99,24 @@ def main():
 
     context_lines.append("\n## Diffs")
     for f in files_resp:
-        context_lines.append(f"\n### `{f['filename']}` ({f['status']})")
-        patch = f.get('patch', '_No textual diff available._')
+        filename = f['filename']
+        context_lines.append(f"\n### `{filename}` ({f['status']})")
         
+        patch = f.get('patch', '_No textual diff available._')
+        if base_override:
+            try:
+                head_ref = pr_data.get('head', {}).get('ref')
+                # Use git diff to compare main stack against the PR head
+                # We use main...HEAD format to get changes from the common ancestor
+                patch = subprocess.check_output(
+                    ['git', 'diff', f'{base_override}...origin/{head_ref}', '--', filename],
+                    stderr=subprocess.PIPE, text=True
+                )
+                if not patch.strip():
+                    patch = "_No textual diff available against base branch._"
+            except Exception as e:
+                patch = f"_Error fetching custom diff against {base_override}: {str(e)}_"
+
         annotated_diff = []
         valid_ranges = []
         if patch != '_No textual diff available._':

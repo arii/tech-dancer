@@ -7,21 +7,29 @@ The PR review system uses a **Read/Write Decoupled Architecture**.
 
 ## Core Commands (Automated Orchestrator)
 
-The recommended way to review a single PR is via the **End-to-End Orchestrator**:
+### 1. Single PR Audit
+The recommended way to review a single PR:
 
 ```bash
 # ONE COMMAND: Fetch + AI-Audit + Submit + Cleanup (Failure-Proof)
 ./dev-tools/auto-review-pr.sh <PR_NUMBER> --cleanup
 ```
 
-### Granular Flags
-The orchestrator now supports advanced flags for deep control:
+### 2. Bulk PR Audit (Mass Review)
+To audit multiple PRs sequentially with a single command:
+
+```bash
+# Orchestrate fleet-wide audits
+./dev-tools/auto-mass-audit-pr.sh <PR_NUM1> <PR_NUM2> <PR_NUM3> ...
+```
+
+## Advanced Flags
 - `--dry-run`: Performs a full audit and draft submission but does NOT hit the GitHub API.
-- `--submit-only`: Skips Fetch/Audit and attempts to submit an existing review file. Use this for re-submission after manual edits.
+- `--submit-only`: Skips Fetch/Audit and attempts to submit an existing review file.
 - `--cleanup`: Deletes logs and context files after a SUCCESSFUL submission.
 
 ## Failure Prevention
-- **Valid Line Ranges**: The system now provides explicit ranges to prevent GitHub API 422 errors.
+- **Valid Line Ranges**: The system provides explicit ranges to prevent GitHub API 422 errors.
 - **AI Instructions**: Permanent audit rules are stored in `dev-tools/REVIEW_INSTRUCTIONS.md`.
 
 ## Verification Log
@@ -31,7 +39,3 @@ The orchestrator now supports advanced flags for deep control:
 | 2026-04-22 | 223 | SUCCESS | Self-audit (tooling refactor test) |
 | 2026-04-22 | 188 | SUCCESS | AI protocol compliance test (Direct edit) |
 | 2026-04-22 | 154 | SUCCESS | Architectural regression detection test |
-
-## Troubleshooting
-If you hit a PR state error, ensure you are using the latest scripts in `dev-tools/`. 
-Submission errors are now printed to the console (stdout/stderr) for easier debugging.

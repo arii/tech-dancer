@@ -34,6 +34,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Perform a dry-run submission")
     parser.add_argument("--submit-only", action="store_true", help="Skip Fetch/Audit and only try to submit existing review")
     parser.add_argument("--event", help="Override submission event (COMMENT, APPROVE, REQUEST_CHANGES)")
+    parser.add_argument("--base", help="Specify a custom base branch for comparison (e.g., main)")
     
     args = parser.parse_args()
     pr_num = args.pr_number
@@ -53,7 +54,10 @@ def main():
     if is_auto:
         print(f"🔄 END-TO-END AUTOMATION for PR #{pr_num}")
         # Stage 1: Fetch
-        subprocess.run(["python3", sys.argv[0], pr_num, "--fetch"], check=True)
+        fetch_cmd = ["python3", sys.argv[0], pr_num, "--fetch"]
+        if args.base:
+            fetch_cmd.extend(["--base", args.base])
+        subprocess.run(fetch_cmd, check=True)
         # Stage 2: Audit
         subprocess.run(["python3", sys.argv[0], pr_num, "--audit"], check=True)
         # Stage 3: Submit (force COMMENT for safety if own PR)
@@ -73,8 +77,11 @@ def main():
         return
 
     if args.fetch:
-        print(f"🚀 Stage 1: Fetching PR #{pr_num} data...")
-        run_command(["python3", "dev-tools/fetch_pr_review_data.py", pr_num])
+        print(f"🚀 Stage 1: Fetching PR #{pr_num} data (base: {args.base or 'default'})...")
+        cmd = ["python3", "dev-tools/fetch_pr_review_data.py", pr_num]
+        if args.base:
+            cmd.append(args.base)
+        run_command(cmd)
         print(f"\n✅ Files generated:")
         print(f"  - Context: {context_file}")
         print(f"  - Template: {review_file}")
