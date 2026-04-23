@@ -116,6 +116,7 @@ export const tracking = {
   tighter: "tracking-tighter",
   tight: "tracking-tight",
   normal: "tracking-normal",
+  "tight-brand": "tracking-[0.15em]",
   wide: "tracking-wide",
   wider: "tracking-wider",
   widest: "tracking-widest",

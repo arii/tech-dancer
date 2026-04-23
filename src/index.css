@@ -22,6 +22,12 @@
   --color-surface-alt: oklch(95% 0.01 250); /* Brand-aware neutral tint */
   --color-line: oklch(92% 0.01 250);       /* Muted Borders */
   --color-accent: #007BFF;
+  --color-accent-brand: #007BFF;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-success-dim: #dcfce7;
+  --color-warning-dim: #fef3c7;
   --color-accent-shadow: rgba(255, 127, 80, 0.3);
   --color-accent-navy: #1A2B3C;
   --color-text-main: #1A2B3C;  /* Deep Navy */

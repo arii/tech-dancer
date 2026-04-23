@@ -104,10 +104,10 @@ export default function ResearchAnalytics() {
           ) : (
             <Box border padding={12} surface="muted" emphasis="low">
               <Stack align="center" gap={4} className="text-center">
-                <Database className="w-12 h-12 text-slate-300" />
+                <Database className="w-12 h-12" color="dim" />
                 <Stack gap={2}>
                   <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
-                  <Text variant="body" size="sm" color="dim" className="max-w-[40ch]">
+                  <Text variant="body" size="sm" color="dim" maxWidth="prose" marginX="auto">
                     Research studies are automatically ingested via the ETL pipeline.
                     New analysis runs weekly—check back soon for recent data.
                   </Text>

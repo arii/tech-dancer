@@ -33,7 +33,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const headerExtras = (
     <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
       <Box display="flex" align="center" gap={4}>
-        <Box className="relative w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white overflow-hidden border border-line/20">
+        <Box width={10} height={10} display="flex" align="center" justify="center" position="relative" className="rounded-full bg-accent text-white overflow-hidden border border-line/20">
           <Text variant="mono" size="xs" weight="font-bold">
             {post.author ? post.author.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'AA'}
           </Text>
@@ -62,7 +62,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   const relatedContent = relatedPosts.length > 0 && (
     <Box border="t" paddingTop={12} marginTop={12}>
-      <Text variant="mono" size="xs" weight="font-bold" className="mb-8 block uppercase tracking-widest">Related Posts</Text>
+      <Text as="span" variant="mono" size="xs" weight="font-bold" display="block" marginBottom={8} className="uppercase tracking-widest">Related Posts</Text>
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         {relatedPosts.map(p => (
           <ContentCard key={p.slug} {...p} basePath="/blog" />

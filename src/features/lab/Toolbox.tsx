@@ -20,27 +20,34 @@ export default function Toolbox() {
         description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
       />
       {/* Header section with modern design */}
-      <header className="mb-12 border-b border-line/50 pb-12">
+      <Box as="header" marginBottom={12} border="b" paddingBottom={12} className="border-line/50">
         <Box marginBottom={4}>
           <Box as="span" radius="full" paddingX={3} paddingY={1} className="inline-block bg-accent/10">
             <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
           </Box>
         </Box>
-        <Text as="h1" variant="display" size="4xl" weight="font-black" className="text-accent-navy mb-4 block">
+        <Text as="h1" variant="display" size="4xl" weight="font-black" display="block" marginBottom={4} className="text-accent-navy">
           Gear Reviews
         </Text>
-        <Text as="p" variant="sans" size="lg" color="dim" className="max-w-2xl mb-8 font-medium block">
+        <Text as="p" variant="sans" size="lg" color="dim" display="block" marginBottom={8} className="max-w-2xl font-medium">
           Rigorous testing and honest takes on the gear that keeps you moving.
         </Text>
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} flexWrap="wrap">
-          <div className="relative max-w-md flex-1">
-            <input
+        <Box display="flex" align="center" justify="between" gap={4} wrap>
+          <Box position="relative" maxWidth="md" flex={1}>
+            <Box
+              as="input"
               type="text"
               placeholder="Search gear (e.g. earplugs, shoes)..."
-              className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
-              onChange={(e) => setSearchTerm(e.target.value)}
+              width="full"
+              paddingLeft={10}
+              paddingRight={4}
+              paddingY={3}
+              surface="default"
+              border
+              className="rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
+              onChange={(e: any) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
             <svg
@@ -56,10 +63,10 @@ export default function Toolbox() {
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-          </div>
+          </Box>
           <ViewToggle view={view} onChange={setView} />
         </Box>
-      </header>
+      </Box>
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (

@@ -73,7 +73,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       {isCopying ? (
         <RefreshCw className="w-3 h-3 animate-spin" />
       ) : copied ? (
-        <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" />
+        <CheckCircle className="w-3 h-3 text-success" />
       ) : (
         <Copy className="w-3 h-3" />
       )}
@@ -125,9 +125,13 @@ export default function UXAuditor() {
             type="text"
             value={url}
             title={url}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text truncate"
-            style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
+            onChange={(e: any) => setUrl(e.target.value)}
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono truncate"
+            width={64}
+            paddingX={4}
+            paddingY={2}
+            radius="md"
+            size="sm"
             placeholder="https://..."
             aria-label="URL to audit"
           />
@@ -138,8 +142,10 @@ export default function UXAuditor() {
             display="flex"
             align="center"
             gap={2}
+            paddingX={6}
+            paddingY={2}
+            radius="md"
             className="bg-accent hover:opacity-90 text-white font-bold transition-all disabled:opacity-50"
-            style={{ padding: '0.5rem 1.5rem', borderRadius: '0.5rem' }}
           >
             {isAnalyzing ? <RefreshCw className="animate-spin w-4 h-4" /> : <Camera className="w-4 h-4" />}
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
@@ -171,7 +177,7 @@ export default function UXAuditor() {
                 <Box
                   padding={2}
                   radius="full"
-                  className={report.status === 'completed' ? 'bg-[var(--color-success-dim,#dcfce7)] text-[var(--color-success,#16a34a)]' : 'bg-[var(--color-warning-dim,#fef3c7)] text-[var(--color-warning,#d97706)] animate-pulse'}
+                  className={report.status === 'completed' ? 'bg-success-dim text-success' : 'bg-warning-dim text-warning animate-pulse'}
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
@@ -211,8 +217,13 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text transition-all" surface="muted" color="dim"
-                    style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
+                    paddingX={4}
+                    paddingY={2}
+                    radius="xl"
+                    surface="muted"
+                    color="dim"
+                    size="sm"
+                    className="font-bold hover:text-text-main transition-all"
                   >
                     {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -224,8 +235,11 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
+                    paddingX={6}
+                    paddingY={2}
+                    radius="xl"
+                    size="sm"
                     className="font-bold bg-accent text-white hover:opacity-90 shadow-md transition-all disabled:opacity-50"
-                    style={{ padding: '0.5rem 1.5rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
                   >
                     {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
@@ -265,12 +279,12 @@ export default function UXAuditor() {
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Box className="text-center" color="dim">
-                              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-20" />
+                            <Stack align="center" gap={2} color="dim">
+                              <ImageIcon className="w-12 h-12 opacity-20" />
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
-                            </Box>
+                            </Stack>
                           )}
                         </Box>
 
@@ -291,8 +305,8 @@ export default function UXAuditor() {
                                 {data.improvements?.map((imp, idx) => (
                                   <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent/30 transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
-                                      <Text variant="sans" size="sm" weight="font-black" className="flex items-center gap-2">
-                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
+                                      <Text variant="sans" size="sm" weight="font-black" display="flex" align="center" gap={2}>
+                                        <Box height={2} width={2} radius="full" shadow={imp.severity > 7 ? "standard" : undefined} className={imp.severity > 7 ? 'bg-error' : 'bg-warning'} />
                                         {imp.element}
                                       </Text>
                                       <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
@@ -339,10 +353,10 @@ export default function UXAuditor() {
               <Box surface="muted" padding={6} radius="full" marginBottom={6} className="text-text-dim/50">
                 <Camera className="w-16 h-16" />
               </Box>
-              <Text variant="sans" size="xl" weight="font-black" marginBottom={2}>
+              <Text variant="sans" size="xl" weight="font-black" marginBottom={2} display="block">
                 Ready to Audit
               </Text>
-              <Text variant="sans" size="sm" weight="font-medium" color="dim" maxWidth="sm" marginX="auto">
+              <Text variant="sans" size="sm" weight="font-medium" color="dim" maxWidth="prose" marginX="auto" display="block">
                 Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop.
               </Text>
             </Stack>

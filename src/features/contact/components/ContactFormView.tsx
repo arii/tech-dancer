@@ -135,7 +135,8 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                   variant="professional"
                   disabled={isSubmitting}
                   fullWidth
-                  className="py-4 font-semibold text-base"
+                  paddingY={4}
+                  className="font-semibold text-base"
                 >
                   {isSubmitting ? (
                     <Stack direction="row" align="center" gap={3}>
