@@ -78,7 +78,13 @@
                 const branchNames = new Set(branches.map(b => b.name));
                 const folders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
                     .map(i => i.path.replace('/index.html', ''))
-                    .sort((a, b) => (metadata[b] || 0) - (metadata[a] || 0));
+                    .sort((a, b) => {
+                        const activeA = branchNames.has(a) || prs.some(p => p.head.ref === a);
+                        const activeB = branchNames.has(b) || prs.some(p => p.head.ref === b);
+                        if (activeA && !activeB) return -1;
+                        if (!activeA && activeB) return 1;
+                        return (metadata[b] || 0) - (metadata[a] || 0);
+                    });
 
                 if (!folders.length) {
                     grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
