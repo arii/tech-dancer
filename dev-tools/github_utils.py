@@ -83,9 +83,23 @@ def get_ci_status(repo: Repository, sha: str) -> Tuple[str, List[str]]:
     except Exception as e:
         return f"Error fetching CI: {str(e)}", []
 
+class CIFormatter:
+    """Encapsulates CI status icon mapping and string formatting."""
+
+    @staticmethod
+    def get_icon(summary: str) -> str:
+        """Returns a visual icon for the CI status summary."""
+        if "FAILURE" in summary: return "🔴"
+        if "PENDING" in summary: return "🟡"
+        if "SUCCESS" in summary: return "🟢"
+        return "⚪"
+
+    @classmethod
+    def format(cls, summary: str) -> str:
+        """Returns a standardized string format for CI status."""
+        icon = cls.get_icon(summary)
+        return f"{icon} {summary}"
+
 def get_ci_icon(summary: str) -> str:
-    """Returns a visual icon for the CI status summary."""
-    if "FAILURE" in summary: return "🔴"
-    if "PENDING" in summary: return "🟡"
-    if "SUCCESS" in summary: return "🟢"
-    return "⚪"
+    """Legacy wrapper for get_ci_icon."""
+    return CIFormatter.get_icon(summary)
