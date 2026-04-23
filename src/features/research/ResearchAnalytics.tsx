@@ -27,8 +27,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
+            <Text variant="displayLower" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" >{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -51,7 +51,7 @@ export default function ResearchAnalytics() {
                       <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                     <Stack gap={2}>
-                      <Text variant="display" size="xl" color="brand" className="group-hover:text-accent transition-colors">{tool.name}</Text>
+                      <Text variant="displayLower" size="xl" color="brand" className="group-hover:text-accent transition-colors">{tool.name}</Text>
                       <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
                     </Stack>
                   </Stack>
@@ -67,8 +67,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b" className="border-slate-200">
-            <Text variant="display" size="2xl" weight="font-black" color="brand">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
+            <Text variant="displayLower" size="2xl" weight="font-black" color="brand">Studies</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" >{studies.length} ARTICLES</Text>
           </Box>
 
           {studies.length > 0 ? (
@@ -80,7 +80,7 @@ export default function ResearchAnalytics() {
                       <Text variant="mono" size="micro" color="brand" uppercase={true}>{study.category}</Text>
                       <Text variant="mono" size="micro" color="dim">{study.date}</Text>
                     </Box>
-                    <Text variant="display" size="2xl" color="brand" className="group-hover:text-accent transition-colors">
+                    <Text variant="displayLower" size="2xl" color="brand" className="group-hover:text-accent transition-colors">
                       {study.title}
                     </Text>
                     <Text variant="body" size="sm" color="dim" className="line-clamp-3">
@@ -107,7 +107,7 @@ export default function ResearchAnalytics() {
               <Stack align="center" gap={4} textAlign="center">
                 <Database className="w-12 h-12 text-line" />
                 <Stack gap={2}>
-                  <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
+                  <Text variant="displayLower" size="xl">Pipeline Synchronizing...</Text>
                   <Text variant="body" size="sm" color="dim" maxWidth="md">
                     Research studies are automatically ingested via the ETL pipeline.
                     New analysis runs weekly—check back soon for recent data.

@@ -40,7 +40,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
             <Stack gap={12}>
               <Stack gap={6}>
                 <Box paddingBottom={4} className="border-b border-slate-200">
-                  <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+                  <Text as="h3" variant="displayLower" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
                   I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
@@ -59,7 +59,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-widest uppercase">{item.channel}</Text>
+                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" className=" uppercase">{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}

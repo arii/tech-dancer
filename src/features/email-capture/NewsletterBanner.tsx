@@ -49,7 +49,7 @@ export function NewsletterBanner() {
             <Mail className="w-5 h-5 text-accent" />
           </Box>
           <Stack gap={0}>
-            <Text variant="display" size="base" uppercase tracking="tight">
+            <Text variant="display" size="base" tracking="tight">
               Weekly Insights
             </Text>
             <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">

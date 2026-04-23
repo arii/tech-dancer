@@ -27,14 +27,14 @@ export function HeroPathCard({ label, title, paths, tag, image, span = 1, icon: 
         <Stack gap={8}>
           <Box display="flex" align="center" gap={3}>
             <Icon className="w-5 h-5 text-accent" />
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest uppercase">
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" className=" uppercase">
               {tag.split(' // ')[0]}
             </Text>
           </Box>
           
           <Stack gap={6}>
             <Text 
-              variant="display" 
+              variant="displayLower"
               size="4xl" 
               weight="font-black" 
               className="tracking-tight leading-tight text-accent-navy transition-colors"
@@ -65,7 +65,7 @@ export function HeroPathCard({ label, title, paths, tag, image, span = 1, icon: 
         </Stack>
 
         <Box display="flex" justify="between" align="center" paddingTop={8} className="border-t border-slate-200">
-          <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest uppercase">
+          <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" className=" uppercase">
             {tag}
           </Text>
           <Box className="w-8 h-[2px] bg-accent/20 group-hover:w-16 group-hover:bg-accent transition-all duration-500 rounded-none" />

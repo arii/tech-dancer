@@ -45,13 +45,13 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
       )}
     >
       <Box display="flex" align="center" gap={2}>
-        <Text variant="mono" size="micro" weight="font-bold" uppercase className="tracking-widest opacity-80">
+        <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" className=" opacity-80">
           {category}
         </Text>
         {date && (
           <>
             <Box className="w-1 h-1 rounded-full bg-current opacity-30" />
-            <Text variant="mono" size="micro" uppercase className="tracking-widest opacity-60">
+            <Text variant="mono" size="micro" uppercase tracking="widest" className=" opacity-60">
               {date}
             </Text>
           </>

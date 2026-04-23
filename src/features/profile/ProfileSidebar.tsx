@@ -49,7 +49,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 {detail.label}
               </Text>
               <Text
-                variant="display"
+                variant="displayLower"
                 size="lg"
                 marginTop={1}
                 weight="font-bold"

@@ -16,6 +16,7 @@ export const variants = {
     contrast: "bg-text-main text-bg",
     success: "bg-emerald-50/50 border-emerald-100 text-emerald-900",
     warning: "bg-amber-50/50 border-amber-200 text-amber-900",
+    inverted: "bg-text-main text-bg",
   },
   intent: {
     default: "text-text-main",

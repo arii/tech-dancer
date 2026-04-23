@@ -14,7 +14,7 @@ export function ScoreItem({ label, value, icon: Icon, color }: ScoreItemProps) {
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
       <Box display="flex" align="center" gap={1} className={color}>
         {Icon && <Icon className="w-4 h-4" />}
-        <Text variant="display" size="xl" weight="font-bold">{value}</Text>
+        <Text variant="displayLower" size="xl" weight="font-bold">{value}</Text>
       </Box>
     </Stack>
   );
@@ -33,7 +33,7 @@ export function ScoreGrid({ children }: { children: React.ReactNode }) {
 export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Technical Specs</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" className=" border-b border-line pb-2">Technical Specs</Text>
       <Stack gap={3}>
         {specs ? Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
@@ -51,7 +51,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 export function TOC({ headings }: { headings: string[] }) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">In this post</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" className=" border-b border-line pb-2">In this post</Text>
       <Stack gap={2}>
         {headings.map((h, i) => (
           <Text key={i} variant="mono" size="tiny" className="cursor-pointer hover:text-accent transition-colors">
@@ -69,7 +69,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
        <Stack gap={3}>
           <Box display="flex" align="center" gap={3}>
              <Shield className="w-6 h-6 text-emerald-600" />
-             <Text variant="display" size="2xl" weight="font-black" intent="success" uppercase={true}>THE VERDICT</Text>
+             <Text variant="displayLower" size="2xl" weight="font-black" intent="success" uppercase={true}>THE VERDICT</Text>
           </Box>
           <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">
             "{verdict}"

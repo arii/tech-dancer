@@ -26,7 +26,7 @@ export default function Toolbox() {
             <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
           </Box>
         </Box>
-        <Text as="h1" variant="display" size="4xl" weight="font-black" marginBottom={4} display="block" color="main">
+        <Text as="h1" variant="displayLower" size="4xl" weight="font-black" marginBottom={4} display="block" color="main">
           Gear Reviews
         </Text>
         <Text as="p" variant="sans" size="lg" color="dim" maxWidth="2xl" marginBottom={8} weight="font-medium" display="block">

@@ -51,7 +51,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   const relatedContent = relatedPosts.length > 0 && (
     <Box border="t" paddingTop={12} marginTop={12}>
-      <Text as="span" variant="mono" size="xs" weight="font-bold" display="block" marginBottom={8} uppercase={true} className="tracking-widest">Related Posts</Text>
+      <Text as="span" variant="mono" size="xs" weight="font-bold" display="block" marginBottom={8} uppercase={true} >Related Posts</Text>
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         {relatedPosts.map(p => (
           <ContentCard key={p.slug} {...p} basePath="/blog" />

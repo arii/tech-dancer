@@ -26,4 +26,17 @@ test('verify card and layout consistency', async ({ page }) => {
   await page.goto('./research');
   await page.waitForSelector('h1');
   await page.screenshot({ path: 'research_page.png' });
+
+  // Assertions for standardized spacing/typography to catch regressions
+  const h1Font = await page.locator('h1').first().evaluate((el) => {
+    const style = window.getComputedStyle(el);
+    return {
+      fontFamily: style.fontFamily,
+      fontWeight: style.fontWeight,
+      textTransform: style.textTransform,
+    };
+  });
+
+  // Checking computed style matches expected design tokens (e.g. uppercase for display variants)
+  expect(h1Font.textTransform).toBe('uppercase');
 });

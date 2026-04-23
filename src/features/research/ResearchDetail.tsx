@@ -46,7 +46,7 @@ export default function ResearchDetail() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Search className="w-12 h-12 opacity-20" />
-          <Text variant="display" size="2xl">Content Not Found</Text>
+          <Text variant="displayLower" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} cursor="pointer" className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
           </Box>
@@ -120,7 +120,7 @@ export default function ResearchDetail() {
                     <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
-                        <Text variant="display" size="xl">Work in Progress</Text>
+                        <Text variant="displayLower" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
                           This specialized module is currently being integrated into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
                         </Text>

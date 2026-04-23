@@ -15,15 +15,18 @@ export function CardImage({ image, title, category, children }: CardImageProps) 
       overflow="hidden"
       border="b"
       surface="bg"
-      className="border-line"
-      style={{ aspectRatio: '16/9', maxHeight: '160px' }}
+      className="border-line group"
+      aspect="video"
+      maxHeight="160px"
     >
       {image ? (
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-        />
+        <Box width="full" height="full" className="object-cover group-hover:scale-105 transition-transform duration-700">
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover"
+          />
+        </Box>
       ) : (
         <CategoryPlaceholder category={category} />
       )}

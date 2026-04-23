@@ -67,13 +67,13 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       paddingX={3}
       paddingY={1}
       radius="md"
-      surface="default"
+      surface={copied ? "success" : "default"}
       border={true}
       cursor="pointer"
-      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
+      className={`transition-colors font-bold text-xs ${!copied && !isCopying ? "hover:border-accent hover:text-accent" : ""}`}
     >
-      {copied ? <CheckCircle className="w-3 h-3" style={{ color: '#16a34a' }} /> : <Copy className="w-3 h-3" />}
-      {copied ? <Text intent="success">Copied!</Text> : <Text>Copy Prompt</Text>}
+      {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+      <Text intent={copied ? "success" : "default"}>{copied ? "Copied!" : "Copy Prompt"}</Text>
     </Box>
   );
 }
@@ -238,7 +238,8 @@ export default function UXAuditor() {
                     paddingY={2}
                     radius="xl"
                     cursor="pointer"
-                    className="font-bold bg-text-main text-surface hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
+                    surface="inverted"
+                    className="font-bold hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
                   >
                     {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
@@ -329,7 +330,7 @@ export default function UXAuditor() {
                                           <CopyPromptButton suggestion={imp.suggestion} />
                                         )}
                                       </Box>
-                                    )}
+                                    </Box>
                                   </Box>
                                 ))}
                               </Stack>

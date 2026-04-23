@@ -79,7 +79,7 @@ export function GlobalSearch() {
                   value={query}
                   onChange={(e: any) => setQuery(e.target.value)}
                   width="full"
-                  variant="display"
+                  variant="displayLower"
                   size="2xl"
                   className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/30 text-text-main"
                   autoFocus
@@ -116,7 +116,7 @@ export function GlobalSearch() {
                          </Box>
                          <Stack gap={1} flex className="min-w-0">
                             <Box display="flex" align="center" justify="between" gap={3}>
-                               <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">{res.title}</Text>
+                               <Text variant="displayLower" size="lg" className="group-hover:text-accent-brand truncate">{res.title}</Text>
                                <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                                   <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                                </Box>
@@ -148,7 +148,7 @@ export function GlobalSearch() {
                        <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
                     </Box>
                  </Box>
-                  <Text variant="mono" size="micro" color="dim" weight="font-bold" className="tracking-widest">
+                  <Text variant="mono" size="micro" color="dim" weight="font-bold" >
                     {results.length} RESULTS FOUND
                   </Text>
               </Box>

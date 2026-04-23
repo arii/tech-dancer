@@ -20,10 +20,11 @@ export function GearCard({
   updatedDate
 }: GearCardProps) {
   return (
-    <Box
+    <Stack
       as={NavLink}
+      direction="col"
       to={`${basePath}/${slug}`}
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
+      className="group h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
     >
       <CardImagePlaceholder
         image={image}
@@ -38,10 +39,10 @@ export function GearCard({
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
               <Box display="flex" align="center" gap={1}>
-                <span className="text-amber-500 text-xs">
+                <Box as="span" color="warning" className="text-xs">
                   {'★'.repeat(Math.floor(rating))}
                   {rating % 1 !== 0 ? '½' : ''}
-                </span>
+                </Box>
                 <Text variant="mono" size="micro" color="dim">
                   ({rating}/5)
                 </Text>
@@ -49,8 +50,8 @@ export function GearCard({
             )}
 
             {verdict && (
-              <Box surface="brand" className="px-1.5 py-0.5 rounded-none border border-line/10">
-                <Text variant="mono" size="micro" weight="font-bold" className="uppercase">
+              <Box surface="brand" paddingX={1.5} paddingY={0.5} radius="none" border={true} className="border-line/10">
+                <Text variant="mono" size="micro" weight="font-bold" uppercase={true}>
                   {verdict}
                 </Text>
               </Box>
@@ -71,8 +72,8 @@ export function GearCard({
           </Text>
 
           {priceCategory && (
-             <Box border className="bg-amber-50/50 px-2 py-0.5 border-amber-200/50 w-fit">
-               <Text variant="mono" size="micro" weight="font-bold" className="text-amber-700">{priceCategory}</Text>
+             <Box border={true} surface="warning" paddingX={2} paddingY={0.5} width="fit">
+               <Text variant="mono" size="micro" weight="font-bold" intent="warning">{priceCategory}</Text>
              </Box>
           )}
         </Stack>
@@ -104,6 +105,6 @@ export function GearCard({
           </Box>
         </Stack>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
