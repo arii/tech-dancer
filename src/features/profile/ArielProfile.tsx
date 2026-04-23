@@ -21,6 +21,7 @@ export default function ArielProfile() {
           label="ABOUT TECH-DANCER"
           title={bio.name}
           description={bio.role}
+          titleAs="h1"
         />
 
         <Grid cols={{ base: 1, lg: "1fr 2fr" }} gap={{ base: 8, lg: 20 }}>

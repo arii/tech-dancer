@@ -33,6 +33,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
           label="CONTACT"
           title="Get in Touch"
           description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
+          titleAs="h1"
         />
 
         <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={{ base: 40, md: 0 }} overflow="hidden" radius="lg">
