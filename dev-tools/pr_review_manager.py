@@ -2,7 +2,7 @@
 """
 PR Review Manager
 Automatically determines PR review state (Needs Review, Needs Re-Review, Up-to-Date)
-includes CI check outcomes, and cleans up previous bot/user comments on PRs to reduce spam.
+includes CI check outcomes, and cleans up previous tool comments on PRs to reduce spam.
 Uses PyGithub for cross-platform compatibility.
 """
 
@@ -10,7 +10,7 @@ import argparse
 import logging
 import sys
 from github import Github, GithubException
-from github_utils import get_github_token, get_repo_name, get_ci_status
+from github_utils import get_github_token, get_repo_name, get_ci_status, CIFormatter
 
 # Setup Logging
 logging.basicConfig(
@@ -45,16 +45,16 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
         pr_title = pr.title
         latest_commit_sha = pr.head.sha
 
-        # 1. Comment Cleanup
+        # 1. Comment Cleanup - Only delete comments with the tool's marker
         if cleanup_comments:
             comments = pr.get_issue_comments()
             for comment in comments:
-                if comment.user.login == current_user_login:
+                if comment.user.login == current_user_login and "<!-- td-review-manager-comment -->" in comment.body:
                     if dry_run:
-                        logger.info(f"[DRY-RUN] Would delete comment {comment.id} on PR #{pr_number}")
+                        logger.info(f"[DRY-RUN] Would delete tool comment {comment.id} on PR #{pr_number}")
                     else:
                         comment.delete()
-                        logger.warning(f"Deleted comment {comment.id} on PR #{pr_number}")
+                        logger.warning(f"Deleted tool comment {comment.id} on PR #{pr_number}")
 
         # 2. Review State Analysis
         # Fetch reviews and find the most recent one from the current user
@@ -73,10 +73,11 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
 
         # 3. CI Check Outcomes
         ci_summary, _ = get_ci_status(repo, latest_commit_sha)
+        ci_display = CIFormatter.format(ci_summary)
 
         print(f"[PR #{pr_number}] {pr_title}")
         print(f"  ├── {status}")
-        print(f"  └── CI: {ci_summary}\n")
+        print(f"  └── CI: {ci_display}\n")
 
     if not found_any:
         logger.info("No open pull requests found.")
@@ -86,12 +87,12 @@ def main():
     parser.add_argument(
         "--execute",
         action="store_true",
-        help="WARNING: Disables dry-run and permanently deletes previous comments."
+        help="WARNING: Disables dry-run and permanently deletes previous tool comments."
     )
     parser.add_argument(
         "--skip-cleanup",
         action="store_true",
-        help="Skip analyzing and deleting old comments entirely."
+        help="Skip analyzing and deleting old tool comments entirely."
     )
     parser.add_argument(
         "--repo",
