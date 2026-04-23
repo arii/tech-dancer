@@ -96,7 +96,7 @@ jobs:
               [[ "$DIR" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
               TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
               echo "$DIR $TS"
-            done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
+            done | jq -R -n '[inputs | gsub("^\\s+|\\s+$"; "") | select(length > 0) | match("^(.*)\\s+(\\d+)$") | .captures | {(.[0].string): (.[1].string | tonumber)}] | add // {}' > previews/data.json
 
             # Use the latest dashboard UI
             cp "$DEST_DIR/previews/index.html" previews/index.html
