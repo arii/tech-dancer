@@ -1,0 +1,28 @@
+# PR Review Tracking
+
+| #237 | resolve UX consistency playbook... | Reviewed | 2026-04-22 | Not Approved |
+| #236 | address architectural inconsistencies | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #235 | address code quality concerns in UI...| Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #232 | Fix token violations in GlobalSearch... | Reviewed | 2026-04-22 | Approved |
+| #230 | UI Refinement: Detail Pages... | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #229 | Fix PR 137 Feedback... | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #227 | Automated Preview Index... | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #224 | Scroll Restoration Implementation | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #223 | Update PR Review Workflows | Reviewed | 2026-04-22 | Approved |
+| #222 | UX Audit: Fix individual layout bugs | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #219 | Implement UX Playbook | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #217 | Fix PathSelector vertical stacking | Reviewed | 2026-04-22 | Not Approved |
+| #215 | Fix missing gap-6 in contact form | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #213 | fix(layouts): Safelist Box tokens | Reviewed | 2026-04-22 | Approved |
+| #195 | reintroduce #137 (Foundation) | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #191 | Implement Dead Code Detection | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #188 | Vite+ Tooling Improvements | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #157 | Vite Best Practices & Performance | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #154 | Address Page-Specific Layout Debt | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #148 | Contact Page Refactor | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #147 | Home Page UX Consolidation | Reviewed | 2026-04-22 | Approved (Minor Changes) |
+| #146 | Fix Global Search & Sidebar Refinement| Reviewed | 2026-04-22 | Approved (Minor Changes) |
+
+## Audit History
+- **2026-04-22 (23:30Z)**: Comprehensive fleet re-review of 19 updated PRs completed. 100% audit coverage achieved. #217 Not Approved (Core token regression). Baseline stabilized for foundations-first merge.
+- **2026-04-22 (19:30Z)**: Mass audit of 12 PRs completed. Critical regression found in #148 (Box layout). Missing scripts flagged in #195. Baseline infrastructure audited for sequential merge readiness.

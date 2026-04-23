@@ -1,6 +1,6 @@
-import React from "react"
+import * as React from "react"
 import { composeStyles } from "@/lib/utils"
-import { typography, typeSizes } from "@/styles/design-tokens"
+import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
@@ -14,7 +14,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   size?: ResponsiveProp<keyof typeof typeSizes>
   weight?: string
   align?: "left" | "center" | "right" | "justify"
-  tracking?: "tighter" | "tight" | "normal" | "wide" | "wider" | "widest"
+  tracking?: keyof typeof trackingTokens | string
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
@@ -46,7 +46,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           weight,
           align && `text-${align}`,
-          tracking && `tracking-${tracking}`,
+          tracking && trackingTokens[tracking as keyof typeof trackingTokens],
           uppercase && "uppercase",
           lowercase && "lowercase",
           capitalize && "capitalize",

@@ -26,8 +26,11 @@ etl/data/*.parquet
 !etl/data/wcs_prelims.parquet
 package-lock.json
 
-# PR review working files (always written to /tmp, never the repo)
-pr-review-*.md
+# PR review working files
+dev-tools/logs/reviews/
 review_payload.json
 
-#skipping this for now so files are available to the agent plan-pr-review-*.md
+# Cleanup old patterns
+pr-review-*.md
+pr-context-*.md
+plan-pr-review-*.md
