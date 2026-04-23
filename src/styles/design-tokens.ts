@@ -86,6 +86,12 @@ export const iconSizes = {
   xl: 32,
 };
 
+export const contentWidth = {
+  article: "max-w-3xl",   // 720px — readable prose
+  wide: "max-w-5xl",      // sidebar layouts
+  tool: "max-w-7xl",      // data lab / UX auditor
+};
+
 export const zIndex = {
   hide: "hide",
   base: "base",
@@ -102,8 +108,10 @@ export const zIndex = {
 };
 
 export const typography = {
-  headline: "font-display font-bold tracking-tighter leading-[0.9]",
-  display: "font-display font-bold tracking-tight leading-none",
+  headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
+  display: "font-display font-bold uppercase tracking-tight leading-none",
+  displayLower: "font-display font-bold tracking-tight leading-none",
+
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: "font-mono tracking-[3px] uppercase",

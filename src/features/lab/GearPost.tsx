@@ -39,8 +39,8 @@ export default function GearPost() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">Review Not Found</Text>
-          <Box as="button" onClick={() => navigate('/gear')} className="hover:text-accent-brand transition-colors">
+          <Text variant="displayLower" size="2xl">Review Not Found</Text>
+          <Box as="button" onClick={() => navigate('/gear')} cursor="pointer" className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Toolbox</Text>
           </Box>
         </Stack>

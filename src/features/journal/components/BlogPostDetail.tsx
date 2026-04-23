@@ -1,5 +1,6 @@
 import { User, Share2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { contentWidth } from '@/styles/design-tokens';
 import { Post, getPosts } from '@/lib/content';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { useMemo } from 'react';
@@ -47,13 +48,14 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
               }}
             />
           ) : null}
+
         </Box>
         <Stack gap={0}>
           <Text variant="mono" size="xs" weight="font-bold">{post.author || 'Ariel Anders, PhD'}</Text>
           <Text variant="mono" size="tiny" color="dim">Author & Engineer</Text>
         </Stack>
       </Box>
-      <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
+      <Box as="button" display="flex" align="center" gap={2} color="dim" cursor="pointer" className="hover:text-accent transition-colors">
         <Share2 className="w-4 h-4" />
         <Text variant="mono" size="xs">Share</Text>
       </Box>
@@ -62,7 +64,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   const relatedContent = relatedPosts.length > 0 && (
     <Box border="t" paddingTop={12} marginTop={12}>
-      <Text variant="mono" size="xs" weight="font-bold" className="mb-8 block uppercase tracking-widest">Related Posts</Text>
+      <Text as="span" variant="mono" size="xs" weight="font-bold" display="block" marginBottom={8} uppercase={true} >Related Posts</Text>
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         {relatedPosts.map(p => (
           <ContentCard key={p.slug} {...p} basePath="/blog" />
@@ -83,6 +85,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       sidebar={sidebar}
       headerExtras={headerExtras}
       relatedContent={relatedContent}
+      proseWidth={contentWidth.article}
     />
   );
 }

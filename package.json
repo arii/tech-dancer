@@ -10,9 +10,11 @@
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit",
+    "audit:ui": "node dev-tools/detect-antipatterns.mjs",
+    "lint": "tsc --noEmit && pnpm run audit:ui",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs"
+
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

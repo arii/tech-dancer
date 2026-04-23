@@ -18,21 +18,31 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
   const headerExtras = (
     <ScoreGrid>
-      <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} intent="warning" />
-      {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
-      {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
+      <ScoreItem label="Overall" value={post.rating || 'N/A'} icon={Star} intent="warning" />
+      <ScoreItem label="Durability" value={post.durability ? `${post.durability}/5` : '—'} />
+      <ScoreItem label="Value" value={post.value ? `${post.value}/5` : '—'} />
       <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
-      <ScoreItem label="Updated" value={post.updatedDate || post.date} />
+      <Stack gap={1} align="center" display={{ base: "none", md: "flex" }}>
+        <Text variant="mono" size="tiny" color="dim" uppercase={true}>Updated</Text>
+        <Text variant="mono" size="tiny" weight="font-bold" uppercase={true}>{post.updatedDate || post.date}</Text>
+      </Stack>
+
     </ScoreGrid>
   );
 
   const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
     <>
+<<<<<<< HEAD
       {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
+=======
+      {post.specs && Object.keys(post.specs).length > 0 && (
+        <SpecsTable specs={post.specs} />
+      )}
+>>>>>>> 43e155f (feat: implement UX consistency playbook and design system refactor (PR #219))
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Where to Buy</Text>
+          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase={true} paddingBottom={2} border="b" tracking="widest" className=" border-line">Where to Buy</Text>
           {affiliateLinks.map(link => (
             <Box
               key={link.id}

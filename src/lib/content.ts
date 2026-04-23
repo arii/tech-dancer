@@ -130,19 +130,33 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
+/**
+ * Normalizes and validates frontmatter data to ensure UI consistency.
+ * Prevents issues like empty image strings breaking the layout.
+ */
+export function validatePost(data: Record<string, any>): Partial<Post> {
+  return {
+    title: data.title || 'Untitled',
+    date: data.date || new Date().toISOString().split('T')[0],
+    author: data.author || 'Ariel Anders, PhD',
+    category: data.category || 'General',
+    excerpt: data.excerpt || '',
+    image: data.image || undefined,   // Normalize "" or null to undefined
+    tags: Array.isArray(data.tags) ? data.tags : [],
+    affiliateIds: Array.isArray(data.affiliateIds) ? data.affiliateIds : [],
+  };
+}
+
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
+      const validated = validatePost(data);
+
       return {
         ...data,
-        title: String(data.title || 'Untitled'),
-        category: String(data.category || 'General'),
-        excerpt: String(data.excerpt || ''),
-        date: String(data.date || ''),
-        author: String(data.author || ''),
-        tags: Array.isArray(data.tags) ? data.tags : [],
+        ...validated,
         content: content || '',
         slug: slugFrom(path)
       } as unknown as T;

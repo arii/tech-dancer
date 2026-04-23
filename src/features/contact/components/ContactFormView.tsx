@@ -23,7 +23,7 @@ interface ContactFormViewProps {
   onSubmit: (e: FormEvent) => void;
 }
 
-const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
+const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
 
 export function ContactFormView({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormViewProps) {
   return (
@@ -40,7 +40,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
             <Stack gap={12}>
               <Stack gap={6}>
                 <Box paddingBottom={4} className="border-b border-slate-200">
-                  <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+                  <Text as="h3" variant="displayLower" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
                   I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
@@ -54,12 +54,12 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors" radius="lg">
+                    <Box width={12} height={12} border={true} surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent group-hover:bg-accent/5 transition-colors" radius="lg">
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-widest uppercase">{item.channel}</Text>
+                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" className=" uppercase">{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}
@@ -78,7 +78,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.name ? 'border-accent-brand' : 'border-line'
+                      errors.name ? 'border-accent' : 'border-line'
                     )}
                     value={formData.name}
                     onChange={onChange}
@@ -93,7 +93,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.email ? 'border-accent-brand' : 'border-line'
+                      errors.email ? 'border-accent' : 'border-line'
                     )}
                     value={formData.email}
                     onChange={onChange}
@@ -123,7 +123,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     className={cn(
                       inputClasses,
                       "resize-none",
-                      errors.message ? 'border-accent-brand' : 'border-line'
+                      errors.message ? 'border-accent' : 'border-line'
                     )}
                     value={formData.message}
                     onChange={onChange}
@@ -135,7 +135,8 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                   variant="professional"
                   disabled={isSubmitting}
                   fullWidth
-                  className="py-4 font-semibold text-base"
+                  paddingY={4}
+                  className="font-semibold text-base"
                 >
                   {isSubmitting ? (
                     <Stack direction="row" align="center" gap={3}>
