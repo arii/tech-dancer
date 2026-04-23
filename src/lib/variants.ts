@@ -35,6 +35,7 @@ export const variants = {
     none: "rounded-none",
     industrial: "rounded-[2px]",
     lg: "rounded-lg",
+    xl: "rounded-xl",
   }
 };
 

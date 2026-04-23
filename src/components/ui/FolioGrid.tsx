@@ -84,15 +84,14 @@ export default function FolioGrid({
             key="card-view"
             variants={motionTokens.staggerContainer}
             initial="initial"
-            animate="animate"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
             exit="initial"
           >
             <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
               {filteredItems.map((item, index) => (
                 <Box
                   key={item.slug}
-                  as={motion.div}
-                  variants={motionTokens.staggerItem}
                   border="r"
                   borderBottom={true}
                   padding={{ base: 6, lg: 6 }}
@@ -102,6 +101,7 @@ export default function FolioGrid({
                     {...item}
                     basePath={basePath}
                     aspect="video"
+                    variants={motionTokens.staggerItem}
                   />
                 </Box>
               ))}

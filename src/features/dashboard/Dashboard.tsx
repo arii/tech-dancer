@@ -64,20 +64,17 @@ export default function Home() {
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"
-            animate="animate"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
           >
             {recentPosts.map((post) => (
-              <Box
+              <ContentCard
                 key={post.slug}
-                as={motion.div}
+                {...post}
+                basePath="/blog"
+                aspect="video"
                 variants={motionTokens.staggerItem}
-              >
-                <ContentCard
-                  {...post}
-                  basePath="/blog"
-                  aspect="video"
-                />
-              </Box>
+              />
             ))}
 
             {/* Upcoming Events Mini-Cards */}
