@@ -7,7 +7,6 @@ import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
-import { ContentItem } from '@/lib/content';
 import { motionTokens } from '@/styles/motion';
 
 interface FolioGridProps {
@@ -96,6 +95,8 @@ export default function FolioGrid({
               {filteredItems.map((item, index) => (
                 <Box
                   key={item.slug}
+                  as={motion.div}
+                  variants={motionTokens.staggerItem}
                   border="r"
                   borderBottom={true}
                   padding={{ base: 6, lg: 6 }}
