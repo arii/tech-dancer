@@ -1,31 +1,12 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import fs from 'fs';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 import { routes } from './src/config/routes';
-
-const CONTENT_DIR_MAP: Record<string, string> = {
-  '/blog': 'posts',
-  '/gear': 'resources',
-  '/research': 'studies'
-};
-
-function getContentSlugs(dirName: string, prefix: string): string[] {
-  const fullPath = path.resolve(__dirname, 'content', dirName);
-  try {
-    if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isDirectory()) return [];
-    return fs.readdirSync(fullPath)
-      .filter(f => f.endsWith('.md'))
-      .map(f => `${prefix === '/' ? '' : prefix}/${f.replace(/\.md$/, '')}`);
-  } catch (err) {
-    console.warn(`Warning: Could not read content directory ${fullPath}`, err);
-    return [];
-  }
-}
+import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
