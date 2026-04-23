@@ -27,10 +27,9 @@ export const motionTokens = {
     animate: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
         delayChildren: 0.1,
         // Disable stagger on reduced motion
-        staggerDirection: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1
+        staggerDirection: (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 0 : 1
       }
     }
   },
@@ -43,7 +42,7 @@ export const motionTokens = {
         duration: 0.4,
         ease: [0.25, 1, 0.5, 1] as [number, number, number, number],
         // Instant transitions on reduced motion
-        ...(window.matchMedia('(prefers-reduced-motion: reduce)').matches ? { duration: 0 } : {})
+        ...((typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? { duration: 0 } : {})
       }
     }
   }
