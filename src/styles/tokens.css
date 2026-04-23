@@ -17,7 +17,7 @@
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-mono: "Space Mono", monospace;
 
-  /* Radius (Corrected to avoid visual regressions) */
+  /* Radius (Following Tailwind v4 auto-mapping convention: --radius-*) */
   --radius-none: 0px;
   --radius-subtle: 2px;
   --radius-standard: 4px;
@@ -27,7 +27,7 @@
   --radius-xl: 12px;
   --radius-full: 9999px;
 
-  /* Spacing */
+  /* Spacing (Following Tailwind v4 auto-mapping convention: --spacing-*) */
   --spacing-container-sm: 1.5rem;
   --spacing-container-md: 3rem;
   --spacing-card: 2rem;
@@ -40,35 +40,33 @@
   --spacing-comfort: 3rem;
   --spacing-end-pad: 8rem;
 
+  /* Z-Index (Following Tailwind v4 auto-mapping convention: --z-index-*) */
+  --z-index-hide: -1;
+  --z-index-base: 0;
+  --z-index-docked: 10;
+  --z-index-dropdown: 20;
+  --z-index-sticky: 30;
+  --z-index-overlay: 40;
+  --z-index-modal: 50;
+  --z-index-popover: 60;
+  --z-index-skip-link: 70;
+  --z-index-toast: 80;
+  --z-index-top: 100;
+  --z-index-search: 200;
+
   /* Animation */
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --reveal-distance: 20px;
 
-  /* Icon Sizes */
+  /* Icon/Image Sizes (Custom variables for JS reference) */
   --icon-xs: 12px;
   --icon-sm: 16px;
   --icon-md: 20px;
   --icon-lg: 24px;
   --icon-xl: 32px;
-
-  /* Image Sizes */
   --image-profile: 400px;
-
-  /* Z-Index */
-  --z-hide: -1;
-  --z-base: 0;
-  --z-docked: 10;
-  --z-dropdown: 20;
-  --z-sticky: 30;
-  --z-overlay: 40;
-  --z-modal: 50;
-  --z-popover: 60;
-  --z-skip-link: 70;
-  --z-toast: 80;
-  --z-top: 100;
-  --z-search: 200;
 
   /* Shadows */
   --shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);

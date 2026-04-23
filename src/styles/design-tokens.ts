@@ -37,7 +37,7 @@ export const animation = {
   fast: "duration-fast",
   normal: "duration-normal",
   smooth: "ease-smooth",
-  // Framer Motion requires numeric arrays for cubic-bezier in JS
+  // Framer Motion requires numeric arrays for JS-driven easing
   ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
   revealDistance: "var(--reveal-distance)",
 };
@@ -75,15 +75,15 @@ export const shadows = {
 };
 
 export const imageSizes = {
-  profile: "var(--image-profile)",
+  profile: 400, // Keep as number for img attribute compatibility
 };
 
 export const iconSizes = {
-  xs: "var(--icon-xs)",
-  sm: "var(--icon-sm)",
-  md: "var(--icon-md)",
-  lg: "var(--icon-lg)",
-  xl: "var(--icon-xl)",
+  xs: 12,
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 32,
 };
 
 export const zIndex = {

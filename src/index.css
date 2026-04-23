@@ -12,14 +12,67 @@
   --safelist-px: px-0 px-1 px-2 px-3 px-4 px-5 px-6 px-8 px-10 px-12 px-16 px-20 px-24 px-32;
   --safelist-py: py-0 py-1 py-2 py-3 py-4 py-5 py-6 py-8 py-10 py-12 py-16 py-20 py-24 py-32;
 
-  /* Static Defaults / Component Specific Tokens */
+  /* Re-mapping to support @apply utilities */
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-shadow: var(--color-accent-shadow);
+  --color-accent-navy: var(--color-accent-navy);
+  --color-accent-brand: var(--color-accent-brand);
+  --color-text-main: var(--color-text-main);
+  --color-text-body: var(--color-text-body);
+  --color-text-dim: var(--color-text-dim);
+
+  /* Spacing */
+  --spacing-card: var(--spacing-card);
+  --spacing-compact: var(--spacing-compact);
+  --spacing-nav: var(--spacing-nav);
+  --spacing-email-bar-y: var(--spacing-email-bar-y);
+  --spacing-email-bar-x-sm: var(--spacing-email-bar-x-sm);
+  --spacing-email-bar-x-md: var(--spacing-email-bar-x-md);
+  --spacing-hero: var(--spacing-hero);
+  --spacing-comfort: var(--spacing-comfort);
+  --spacing-end-pad: var(--spacing-end-pad);
+  --spacing-container-sm: var(--spacing-container-sm);
+  --spacing-container-md: var(--spacing-container-md);
+
+  /* Radius */
+  --radius-subtle: var(--radius-subtle);
+  --radius-standard: var(--radius-standard);
+
+  /* Z-Index */
+  --z-hide: var(--z-index-hide);
+  --z-base: var(--z-index-base);
+  --z-docked: var(--z-index-docked);
+  --z-dropdown: var(--z-index-dropdown);
+  --z-sticky: var(--z-index-sticky);
+  --z-overlay: var(--z-index-overlay);
+  --z-modal: var(--z-index-modal);
+  --z-popover: var(--z-index-popover);
+  --z-skip-link: var(--z-index-skip-link);
+  --z-toast: var(--z-index-toast);
+  --z-top: var(--z-index-top);
+  --z-search: var(--z-index-search);
+
+  /* Shadows */
+  --shadow-top-overlay: var(--shadow-top-overlay);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  /* Static Defaults */
   --container-blog: 1100px;
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
-
-  /* Fallback Configuration For Spacing Utilities */
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
+
+  /* Animation */
+  --ease-smooth: var(--ease-smooth);
 }
 
 @layer utilities {
@@ -35,7 +88,7 @@
   }
   .industrial-gradient { background: linear-gradient(135deg, #001f3f 0%, #000c19 100%); }
   .text-glow { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-  .gold-accent { @apply border-accent/30 hover:border-accent transition-colors; }
+  .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
     content: "";
