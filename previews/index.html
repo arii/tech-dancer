@@ -47,44 +47,86 @@
     <script>
         const REPO_OWNER = 'arii', REPO_NAME = 'tech-dancer';
         const BASE_URL = `https://${REPO_OWNER}.github.io/${REPO_NAME}`;
+        const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
         const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
         const ICONS = {
             pr: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg>`,
             branch: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`,
-            external: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`
+            external: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`,
+            clock: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
         };
         const escapeHtml = (u) => u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]));
+
+        function timeAgo(seconds) {
+            const diff = Math.floor(Date.now() / 1000) - seconds;
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return `${Math.floor(diff / 86400)}d ago`;
+        }
+
         async function init() {
             const grid = document.getElementById('grid'), loading = document.getElementById('loading'), errorAlert = document.getElementById('error-alert');
             try {
-                const [treeData, prs] = await Promise.all([
+                const [treeData, prs, branches, metadata] = await Promise.all([
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open`).then(r => r.ok ? r.json() : [])
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).then(r => r.ok ? r.json() : []),
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches?per_page=100`).then(r => r.ok ? r.json() : []),
+                    fetch(`${BASE_URL}/previews/data.json`).then(r => r.ok ? r.json() : {}).catch(() => ({}))
                 ]);
                 loading.style.display = 'none';
+                const branchNames = new Set(branches.map(b => b.name));
                 const folders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
                     .map(i => i.path.replace('/index.html', ''))
-                    .sort((a, b) => (prs.find(p => p.head.ref === b) ? 1 : 0) - (prs.find(p => p.head.ref === a) ? 1 : 0) || a.localeCompare(b));
+                    .sort((a, b) => {
+                        const activeA = branchNames.has(a) || prs.some(p => p.head.ref === a);
+                        const activeB = branchNames.has(b) || prs.some(p => p.head.ref === b);
+                        if (activeA && !activeB) return -1;
+                        if (!activeA && activeB) return 1;
+                        return (metadata[b] || 0) - (metadata[a] || 0);
+                    });
+
                 if (!folders.length) {
                     grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
                     return;
                 }
                 folders.forEach(name => {
-                    const pr = prs.find(p => p.head.ref === name), url = `${BASE_URL}/${name}/`;
+                    const pr = prs.find(p => p.head.ref === name), isActive = branchNames.has(name), url = `${BASE_URL}/${name}/`;
+                    const timestamp = metadata[name];
                     const card = document.createElement('div');
-                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
-                    const badge = pr
-                        ? `<span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>`
-                        : `<span class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">Inactive / Merged</span>`;
+                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
+
+                    let badge, typeIcon, typeLabel;
+                    if (pr) {
+                        badge = `<span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>`;
+                        typeIcon = ICONS.pr;
+                        typeLabel = `PR #${pr.number}: ${escapeHtml(pr.title)}`;
+                    } else if (isActive) {
+                        badge = `<span class="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">Active Branch</span>`;
+                        typeIcon = ICONS.branch;
+                        typeLabel = `Deployed Branch`;
+                    } else {
+                        badge = `<span class="bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800 flex items-center gap-1">${ICONS.clock} Recently Deleted</span>`;
+                        typeIcon = ICONS.branch;
+                        typeLabel = `Stale Deployment`;
+                    }
+
                     card.innerHTML = `
                         <div class="flex-1 min-w-0 w-full">
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-                                ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2">${ICONS.branch} Deployed Branch</div>`}
-                                <div class="hidden sm:block">${badge}</div>
+                            <div class="flex items-center justify-between sm:justify-start gap-3 mb-3">
+                                <div class="flex-1 min-w-0">
+                                    ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate w-full">${typeIcon} ${typeLabel}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 truncate w-full">${typeIcon} ${typeLabel}</div>`}
+                                </div>
+                                <div class="hidden sm:block shrink-0">${badge}</div>
                             </div>
-                            <div class="flex items-center gap-2"><span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate">${escapeHtml(name)}</span><div class="sm:hidden">${badge}</div></div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px] sm:max-w-md">${escapeHtml(name)}</span>
+                                ${isActive ? `<a href="${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} View Source</a>` : ''}
+                                ${timestamp ? `<span class="text-xs text-slate-400 flex items-center gap-1">${ICONS.clock} ${timeAgo(timestamp)}</span>` : ''}
+                                <div class="sm:hidden shrink-0">${badge}</div>
+                            </div>
                         </div>
-                        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm">View Deployment ${ICONS.external}</a>`;
+                        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0">View Deployment ${ICONS.external}</a>`;
                     grid.appendChild(card);
                 });
             } catch (err) {
