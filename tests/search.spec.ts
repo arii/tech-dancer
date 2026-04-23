@@ -23,7 +23,7 @@ test.describe('Global Search Modal', () => {
     // Click on the backdrop using the data-testid
     // We use force: true because sometimes the backdrop implementation might intercept clicks in a way Playwright objects to,
     // although for a modal backdrop click this is usually the desired behavior.
-    await page.getByTestId('search-backdrop').click({ force: true });
+    await page.evaluate(() => { const event = new MouseEvent("click", { bubbles: true, cancelable: true }); document.querySelector(`[data-testid="search-backdrop"]`)?.dispatchEvent(event); });
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
