@@ -29,28 +29,17 @@ jobs:
           CHANGES_MADE=false
 
           # Find all index.html files to identify deployment directories (including nested ones)
-          for index_file in $(find . -maxdepth 3 -name "index.html"); do
+          # Use process substitution to avoid subshell variable scope issues
+          while read -r index_file; do
             dir=$(dirname "$index_file" | sed 's|^\./||')
 
-            # Skip special folders and the root site
-            if [[ "$dir" == "." || "$dir" == "assets" || "$dir" == "tmp" || "$dir" == "previews" ]]; then
-              continue
-            fi
+            # Skip root and infra folders
+            [[ "$dir" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
 
             # Check if it doesn't match an active branch
             if ! echo "$ACTIVE_BRANCHES" | grep -Fxq "$dir"; then
               # Get the timestamp of the last update
-              if [ -f "$dir/.timestamp" ]; then
-                LAST_UPDATE=$(cat "$dir/.timestamp")
-              else
-                LAST_UPDATE=$(git log -1 --format=%ct -- "$dir")
-              fi
-
-              if [ -z "$LAST_UPDATE" ]; then
-                # Fallback if git log fails for some reason
-                LAST_UPDATE=0
-              fi
-
+              LAST_UPDATE=$(cat "$dir/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$dir" || echo 0)
               AGE=$((NOW - LAST_UPDATE))
 
               if [ "$AGE" -gt "$GRACE_PERIOD" ]; then
@@ -61,7 +50,7 @@ jobs:
                 echo "Branch '$dir' no longer exists but deployment is within 24h grace period (${AGE}s). Skipping..."
               fi
             fi
-          done
+          done < <(find . -maxdepth 3 -name "index.html")
 
           if [ "$CHANGES_MADE" = true ]; then
             git config user.name "github-actions[bot]"

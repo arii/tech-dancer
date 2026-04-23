@@ -168,33 +168,16 @@ jobs:
           mkdir -p previews
 
           # Generate a metadata JSON with last updated timestamps for each deployment
-          echo "{" > previews/data.json
-          FIRST=true
-          # Find all index.html files to identify deployment directories (including nested ones)
-          for index_file in $(find . -maxdepth 3 -name "index.html"); do
+          # Supports branch/name structure (maxdepth 3)
+          find . -maxdepth 3 -name "index.html" | while read -r index_file; do
             DIR=$(dirname "$index_file" | sed 's|^\./||')
 
-            # Skip special folders and the root site
-            if [[ "$DIR" == "." || "$DIR" == "assets" || "$DIR" == "tmp" || "$DIR" == "previews" ]]; then
-              continue
-            fi
+            # Skip root and infra folders
+            [[ "$DIR" =~ ^(\.|assets|tmp|previews)$ ]] && continue
 
-            # Prefer the .timestamp file (source commit time) over gh-pages commit time
-            if [ -f "$DIR/.timestamp" ]; then
-              TIMESTAMP=$(cat "$DIR/.timestamp")
-            else
-              TIMESTAMP=$(git log -1 --format=%ct -- "$DIR")
-            fi
-            if [ -z "$TIMESTAMP" ]; then TIMESTAMP=$(date +%s); fi
-
-            if [ "$FIRST" = true ]; then
-              FIRST=false
-            else
-              echo "," >> previews/data.json
-            fi
-            echo "  \"$DIR\": $TIMESTAMP" >> previews/data.json
-          done
-          echo "}" >> previews/data.json
+            TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
+            echo "$DIR $TS"
+          done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
 
           # Validation: Ensure the dashboard exists in build artifacts
           if [ ! -f "../dist/previews/index.html" ]; then
