@@ -1,7 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import { ProfileData } from './types';
 
-export function useProfile(): { bio: ProfileData } {
-  const bio: ProfileData = {
+const PROFILE_DATA: ProfileData = {
     name: "Ariel Anders, PhD",
     role: "MIT Roboticist // WCS Tech-Dancer",
     sections: [
@@ -36,7 +36,13 @@ export function useProfile(): { bio: ProfileData } {
       { platform: 'linkedin', url: 'https://linkedin.com' },
       { platform: 'github', url: 'https://github.com' },
     ]
-  };
+};
+
+export function useProfile(): { bio: ProfileData } {
+  const { data: bio = PROFILE_DATA } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => PROFILE_DATA,
+  });
 
   return { bio };
 }
