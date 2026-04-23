@@ -62,7 +62,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
+        hostname: (process.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
         dynamicRoutes,
       }),
       ViteImageOptimizer({
