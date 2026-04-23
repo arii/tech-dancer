@@ -8,17 +8,12 @@ test.describe('Global Search Modal - Mobile', () => {
   });
 
   test('should open search modal via mobile menu', async ({ page }) => {
-    // Open mobile menu
     await page.getByLabel('Open menu').click();
 
-    // Check if the menu is actually visible
-    await expect(page.locator('nav[aria-label="Mobile Navigation"]').locator('..').locator('div').filter({ hasText: 'Search' }).first()).toBeVisible();
-
-    // Use text selector to find "Search" button
     const searchButton = page.getByRole('button', { name: 'Search' });
-    await searchButton.click({ force: true });
+    await expect(searchButton).toBeInViewport({ timeout: 5000 });
+    await searchButton.click();
 
-    // Modal should be visible
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
   });
 });
