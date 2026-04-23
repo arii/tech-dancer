@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { motionTokens } from '@/styles/motion';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
 
