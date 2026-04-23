@@ -45,7 +45,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Technical Specs</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" className="border-b border-line pb-2">Technical Specs</Text>
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
@@ -61,7 +61,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 export function TOC({ headings }: { headings: string[] }) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">In this post</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" className="border-b border-line pb-2">In this post</Text>
       <Stack gap={2}>
         {headings.map((h, i) => (
           <Text key={i} variant="mono" size="tiny" className="cursor-pointer hover:text-accent transition-colors">

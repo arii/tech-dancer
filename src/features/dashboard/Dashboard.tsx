@@ -28,7 +28,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               variant="headline" 
               size="fluid-7"
-              className="text-accent-navy leading-tight tracking-tight max-w-4xl"
+              tracking="tight" className="text-accent-navy leading-tight max-w-4xl"
             >
               The Roboticist&apos;s Guide to the West Coast Swing
             </Text>

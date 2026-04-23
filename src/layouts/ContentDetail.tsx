@@ -53,7 +53,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
             )}
           </Box>
 
-          <Text as="h1" variant="headline" size="fluid-8" className="tracking-tighter leading-none">
+          <Text as="h1" variant="headline" size="fluid-8" tracking="tighter" className="leading-none">
             {title}
           </Text>
 
