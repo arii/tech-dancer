@@ -8,6 +8,7 @@ import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
+import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
   const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
@@ -57,19 +58,34 @@ export default function Home() {
             </Box>
           </SectionHeader>
 
-          <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
+          <Grid
+            cols={{ base: 1, sm: 2, lg: 4 }}
+            gap={4}
+            as={motion.div}
+            variants={motionTokens.staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
+          >
             {recentPosts.map((post) => (
-              <ContentCard 
+              <ContentCard
                 key={post.slug}
                 {...post}
                 basePath="/blog"
                 aspect="video"
+                variants={motionTokens.staggerItem}
               />
             ))}
 
             {/* Upcoming Events Mini-Cards */}
             {upcomingEvents.map((event) => (
-              <EventCard key={event.name} {...event} />
+              <Box
+                key={event.name}
+                as={motion.div}
+                variants={motionTokens.staggerItem}
+              >
+                <EventCard {...event} />
+              </Box>
             ))}
           </Grid>
         </Stack>

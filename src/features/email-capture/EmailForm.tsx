@@ -1,11 +1,11 @@
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
-import { useEmailCaptureContext } from './EmailCaptureContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
+import { useEmailForm } from './useEmailForm';
 
 export function EmailForm() {
-  const { status, submitForm, email, setEmail } = useEmailCaptureContext();
+  const { status, email, setEmail, submitForm } = useEmailForm();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

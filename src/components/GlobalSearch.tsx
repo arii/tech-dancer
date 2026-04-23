@@ -1,14 +1,28 @@
-import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
+import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useRef } from 'react';
+import { escapeRegExp, getHighlightedParts } from '@/lib/utils';
+import { useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
+
+interface SearchResult {
+  type: 'post' | 'resource' | 'study';
+  slug: string;
+  title: string;
+  excerpt: string;
+}
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Memoize the search regex to avoid re-instantiation on every render during query updates.
+  const searchRegex = useMemo(() => {
+    if (!query) return null;
+    return new RegExp(`(${escapeRegExp(query)})`, 'gi');
+  }, [query]);
 
   // 1. The Context Reset: Close on route change
   // Note: Since isOpen is now derived from URL search params ('search=true'),
@@ -26,7 +40,7 @@ export function GlobalSearch() {
     open();
   }, [open]);
 
-  const handleSelect = (result: any) => {
+  const handleSelect = (result: SearchResult) => {
     // 4. Link Click Delegation: Immediate Feedback
     close();
     setQuery('');
@@ -34,6 +48,17 @@ export function GlobalSearch() {
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
+
+  const highlight = useCallback((text: string) => {
+    const parts = getHighlightedParts(text, query, searchRegex);
+    if (parts.length === 1) return text;
+
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase()
+        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} className="text-accent bg-accent/10">{part}</Box>
+        : part
+    );
+  }, [searchRegex, query]);
 
   if (!isOpen) return null;
 
@@ -72,7 +97,7 @@ export function GlobalSearch() {
             type="text"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
             value={query}
-            onChange={(e: any) => setQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             width="full"
             variant="display"
             size="2xl"
@@ -96,7 +121,7 @@ export function GlobalSearch() {
         <Box padding={3} overflow="y-auto" maxHeight="60vh" surface="default">
           {results.length > 0 ? (
             <Stack gap={2}>
-              {results.map((res: any) => (
+              {results.map((res: SearchResult) => (
                 <Box 
                   key={`${res.type}-${res.slug}`}
                   as="button"
@@ -118,12 +143,12 @@ export function GlobalSearch() {
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
                       <Box display="flex" align="center" justify="between" gap={3}>
-                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{res.title}</Text>
+                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                             <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
                       </Box>
-                      <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{res.excerpt}</Text>
+                      <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                    </Stack>
                    <CornerDownLeft className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
                 </Box>
@@ -132,7 +157,7 @@ export function GlobalSearch() {
           ) : (
             <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
               <Stack align="center" gap={4}>
-                <Search className="w-12 h-12 opacity-20" />
+                <Sparkles className="w-12 h-12 opacity-20" />
                 <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
               </Stack>
             </Box>

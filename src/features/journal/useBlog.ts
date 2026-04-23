@@ -1,11 +1,15 @@
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { getPosts } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useBlog() {
-  const posts = useMemo(() => getPosts(), []);
+  const { data: posts = [] } = useQuery({
+    queryKey: ['posts'],
+    queryFn: getPosts,
+  });
   const [activeCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
