@@ -6,7 +6,7 @@ import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
 export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttributes<HTMLElement>, "color"> {
-  as?: any
+  as?: React.ElementType
   className?: string
   variant?: keyof typeof typography
   intent?: keyof typeof variants.intent
@@ -18,7 +18,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export const Text = React.forwardRef<HTMLElement, TextProps>(
@@ -31,7 +31,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
     return (
       <Box
         as={Component}
-        ref={ref as any}
+        ref={ref as React.Ref<HTMLDivElement>}
         className={composeStyles(
           variant && typography[variant],
           intent && variants.intent[intent],

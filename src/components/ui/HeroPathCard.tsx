@@ -10,7 +10,7 @@ interface HeroPathCardProps {
   tag: string;
   image: string;
   span?: number;
-  icon: any;
+  icon: React.ElementType;
 }
 
 export function HeroPathCard({ label, title, paths, tag, image, span = 1, icon: Icon }: HeroPathCardProps) {
