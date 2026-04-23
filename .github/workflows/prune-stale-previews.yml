@@ -39,8 +39,12 @@ jobs:
 
             # Check if it doesn't match an active branch
             if ! echo "$ACTIVE_BRANCHES" | grep -Fxq "$dir"; then
-              # Get the timestamp of the last commit that modified this directory
-              LAST_UPDATE=$(git log -1 --format=%ct -- "$dir")
+              # Get the timestamp of the last update
+              if [ -f "$dir/.timestamp" ]; then
+                LAST_UPDATE=$(cat "$dir/.timestamp")
+              else
+                LAST_UPDATE=$(git log -1 --format=%ct -- "$dir")
+              fi
 
               if [ -z "$LAST_UPDATE" ]; then
                 # Fallback if git log fails for some reason

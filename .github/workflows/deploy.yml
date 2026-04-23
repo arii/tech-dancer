@@ -48,6 +48,7 @@ jobs:
           fi
           export VITE_APP_URL=https://${{ github.repository_owner }}.github.io/$REPO_NAME
           pnpm run build
+          git log -1 --format=%ct > dist/.timestamp
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
@@ -178,8 +179,12 @@ jobs:
               continue
             fi
 
-            # Get the timestamp of the last commit that modified this directory in gh-pages
-            TIMESTAMP=$(git log -1 --format=%ct -- "$DIR")
+            # Prefer the .timestamp file (source commit time) over gh-pages commit time
+            if [ -f "$DIR/.timestamp" ]; then
+              TIMESTAMP=$(cat "$DIR/.timestamp")
+            else
+              TIMESTAMP=$(git log -1 --format=%ct -- "$DIR")
+            fi
             if [ -z "$TIMESTAMP" ]; then TIMESTAMP=$(date +%s); fi
 
             if [ "$FIRST" = true ]; then
