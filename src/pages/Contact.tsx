@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SuccessState } from '@/features/contact/components/SuccessState';
 import { ContactFormView } from '@/features/contact/components/ContactFormView';
 import { contactSchema, type ContactFormData } from '@/features/contact/schemas/contact-schema';
+import { useSubmitContact } from '@/features/contact/hooks/useSubmitContact';
 
 /**
  * Contact Page Container
@@ -13,6 +14,7 @@ import { contactSchema, type ContactFormData } from '@/features/contact/schemas/
  */
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const { submitContact } = useSubmitContact();
 
   const {
     register,
@@ -31,28 +33,14 @@ export default function Contact() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    try {
-      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
-
-      if (endpoint) {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) throw new Error('Submission failed');
-      } else {
-        // Simulate form submission if no endpoint is configured
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-      }
-
+    const result = await submitContact(data);
+    if (result.success) {
       setSubmitted(true);
       reset();
-    } catch (err) {
+    } else if (result.error) {
       setError('message', {
         type: 'manual',
-        message: 'System error: Unable to transmit payload. Please try again later.',
+        message: result.error,
       });
     }
   };
