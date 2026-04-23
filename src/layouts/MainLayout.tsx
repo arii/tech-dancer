@@ -55,7 +55,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }, [pathname, key, navType]);
 
   return (
-    <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
+    <Box layout="root" height="screen" position="relative" overflowX="hidden" width="full">
       <GlobalSearch />
       
       <Box display="flex" height="min" width="full">
@@ -66,14 +66,18 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           ref={scrollRef}
           flex={1}
           position="relative"
-          overflow="y-auto"
+          overflowY="auto"
           paddingTop={{ base: 16, lg: 0 }}
           maxWidth="full"
           width="full"
-          surface="default"
+          surface="bg"
           direction="col"
-          className="transition-all duration-300"
-          style={{ viewTransitionName: 'main-content' }}
+          scrollBehavior="smooth"
+          scrollPaddingTop={64}
+          snap="y"
+          transitionProp="all"
+          duration={300}
+          viewTransitionName="main-content"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
@@ -84,9 +88,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             marginX="auto"
             maxWidth="7xl"
             width="full"
-            className="transition-all duration-300"
+            transitionProp="all"
+            duration={300}
           >
-            <Box flex={1} className="w-full">
+            <Box flex={1} width="full">
               {children}
             </Box>
             <Footer />

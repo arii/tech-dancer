@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Box } from '@/layouts/Primitives';
+import { Button } from '@/layouts/Primitives';
+import { iconSizes } from '@/styles/design-tokens';
 
 interface ScrollToTopButtonProps {
   scrollRef: React.RefObject<HTMLElement | null>;
@@ -43,24 +44,27 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
   return (
     <AnimatePresence>
       {isVisible && (
-        <Box
+        <Button
           as={motion.button}
           onClick={scrollToTop}
           position="fixed"
           padding={3}
           zIndex="popover"
-          className="bottom-8 right-8 bg-accent-navy text-bg shadow-lg hover:bg-accent transition-all duration-300"
+          variant="fab"
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           aria-label="Scroll to top"
-          style={{ borderRadius: '0' }}
+          bottom={8}
+          right={8}
+          transitionProp="all"
+          duration={300}
           data-testid="scroll-to-top-button"
         >
-          <ArrowUp className="w-6 h-6" />
-        </Box>
+          <ArrowUp size={iconSizes.lg} />
+        </Button>
       )}
     </AnimatePresence>
   );

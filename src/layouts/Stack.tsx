@@ -36,9 +36,9 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
 
     return (
       <Box
+        display="flex"
         ref={ref}
         className={composeStyles(
-          "flex",
           getResponsiveClasses(direction, "", directionMapper),
           getResponsiveClasses(align, "", alignMapper),
           getResponsiveClasses(justify, "", justifyMapper),
