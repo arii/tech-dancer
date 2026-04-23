@@ -58,13 +58,8 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
 
         # 2. Review State Analysis
         # Fetch reviews and find the most recent one from the current user
-<<<<<<< HEAD
         # Utilizes .reversed property on the paginated list for efficiency
         last_review = next((r for r in pr.get_reviews().reversed if r.user.login == current_user_login), None)
-=======
-        # reversed(pr.get_reviews()) is an efficient way to find the latest review with PyGithub's PaginatedList
-        last_review = next((r for r in reversed(pr.get_reviews()) if r.user.login == current_user_login), None)
->>>>>>> 2e4fd95 (final refactor of dev-tools with ci health and re-review tracking)
 
         if not last_review:
             status = "ACTION: Needs Initial Review"
