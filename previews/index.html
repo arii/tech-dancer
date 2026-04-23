@@ -61,8 +61,8 @@
             try {
                 const [treeData, prs, branches] = await Promise.all([
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open`).then(r => r.ok ? r.json() : []),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches`).then(r => r.ok ? r.json() : [])
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).then(r => r.ok ? r.json() : []),
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches?per_page=100`).then(r => r.ok ? r.json() : [])
                 ]);
                 loading.style.display = 'none';
                 const branchNames = new Set(branches.map(b => b.name));
@@ -84,7 +84,7 @@
                 folders.forEach(name => {
                     const pr = prs.find(p => p.head.ref === name), isActive = branchNames.has(name), url = `${BASE_URL}/${name}/`;
                     const card = document.createElement('div');
-                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-center sm:items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
+                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
 
                     let badge, typeIcon, typeLabel;
                     if (pr) {
