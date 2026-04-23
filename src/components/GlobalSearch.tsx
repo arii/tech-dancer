@@ -4,6 +4,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { highlightVariants } from '@/lib/variants';
 
 export function GlobalSearch() {
   const { query, setQuery, results } = useGlobalSearch();
@@ -104,7 +105,7 @@ export function GlobalSearch() {
                         const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
                         return parts.map((part, i) =>
                           part.toLowerCase() === query.toLowerCase()
-                            ? <span key={i} className="text-accent bg-accent/10 rounded-sm px-0.5">{part}</span>
+                            ? <span key={i} className={highlightVariants({ intent: 'default' })}>{part}</span>
                             : part
                         );
                       };

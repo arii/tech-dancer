@@ -19,7 +19,6 @@ export function GearCard({
   priceCategory,
   updatedDate
 }: GearCardProps) {
-
   return (
     <Box
       as={NavLink}

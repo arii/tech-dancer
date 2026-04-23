@@ -44,6 +44,18 @@ export const animation = {
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
+export const colors = {
+  text: {
+    danger: "text-red-500",
+    warning: "text-amber-500",
+    success: "text-accent-brand",
+  },
+  bg: {
+    danger: "bg-red-500/10",
+    warning: "bg-amber-500/10",
+  }
+};
+
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
@@ -58,6 +70,7 @@ export const layout = {
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all",
+  error: "border-red-500 focus:border-red-500",
   label: "text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
   select: "bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
 };
