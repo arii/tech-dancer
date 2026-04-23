@@ -10,7 +10,7 @@ import argparse
 import logging
 import sys
 from github import Github, GithubException
-from github_utils import get_github_token, get_repo_name, get_ci_status
+from github_utils import get_github_token, get_repo_name, get_ci_status, get_ci_icon
 
 # Setup Logging
 logging.basicConfig(
@@ -73,10 +73,11 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
 
         # 3. CI Check Outcomes
         ci_summary, _ = get_ci_status(repo, latest_commit_sha)
+        ci_icon = get_ci_icon(ci_summary)
 
         print(f"[PR #{pr_number}] {pr_title}")
         print(f"  ├── {status}")
-        print(f"  └── CI: {ci_summary}\n")
+        print(f"  └── CI: {ci_icon} {ci_summary}\n")
 
     if not found_any:
         logger.info("No open pull requests found.")
