@@ -110,7 +110,6 @@ export interface Event {
   content: string;
 }
 
-export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
 interface ContentModule {
@@ -171,13 +170,6 @@ const maps = {
 export const getPosts = () => items.posts;
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
-const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
-const getStudyBySlug = (slug: string) => maps.studies.get(slug);
-const getEventBySlug = (slug: string) => maps.events.get(slug);
-
-const getAllContent = (type: ContentType): ContentItem[] => items[type];
-
-export { getEvents, getStudyBySlug, getEventBySlug, getAllContent };

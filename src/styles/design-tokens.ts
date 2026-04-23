@@ -4,23 +4,6 @@
  * consistency across all components.
  */
 
-const radius = {
-  none: "rounded-none",
-  subtle: "rounded-[2px]", // Subtle 2px radius
-  standard: "rounded", // 4px
-  sm: "rounded-sm",
-  md: "rounded-md", // 6px
-  lg: "rounded-lg", // 8px
-  xl: "rounded-xl", // 12px
-};
-
-const borders = {
-  default: "border border-line",
-  accent: "border border-accent/20",
-  brand: "border border-accent-brand/30",
-  thick: "border-2 border-line",
-};
-
 export const spacing = {
   container: "p-6 md:p-12",
   card: "p-8",
@@ -61,12 +44,6 @@ export const inputs = {
   select: "bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
 };
 
-const buttons = {
-  primary: "w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3",
-  ghost: "p-2 border border-line hover:border-accent-brand hover:text-accent-brand transition-colors",
-  tab: "px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all",
-};
-
 export const shadows = {
   topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
   standard: "shadow-sm",
@@ -89,8 +66,6 @@ export const zIndex = {
   toast: 80,
   top: 100,
 };
-
-export { radius, borders, buttons };
 
 export const typography = {
   headline: "font-display font-bold uppercase tracking-tighter leading-[0.9]",
