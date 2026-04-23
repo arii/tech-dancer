@@ -7,10 +7,8 @@ import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
-  const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const { data, updateField, markdownPreview, githubIssueUrl, wordCount } = useBlogDrafter();
   const [copied, setCopied] = useState(false);
-
-  const wordCount = data.commentary.trim().split(/\s+/).filter(Boolean).length;
 
   const handleCopyMarkdown = () => {
     navigator.clipboard.writeText(markdownPreview);

@@ -1,4 +1,4 @@
-import React from "react"
+import { isValidElement } from 'react'
 import { cn } from "@/lib/utils"
 
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T }
@@ -9,7 +9,7 @@ export function getResponsiveClasses(
   mapper?: (val: string | number | boolean | undefined | null) => string | number | undefined
 ) {
   if (prop === undefined || prop === null) return ""
-  if (typeof prop !== "object" || React.isValidElement(prop)) {
+  if (typeof prop !== "object" || isValidElement(prop)) {
     const val = mapper ? mapper(prop) : prop
     return val ? `${classPrefix}${val}` : ""
   }

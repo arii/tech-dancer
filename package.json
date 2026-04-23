@@ -11,10 +11,9 @@
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs",
+    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1; node scripts/generate-todo.mjs",
     "audit:fix": "node scripts/ai-debugger.mjs",
-    "audit:fix:gallery": "node scripts/ai-debugger.mjs http://localhost:3000/public/antipattern-examples/cardocalypse.html '.card'",
-    "type-check": "tsc --noEmit"
+        "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
