@@ -5,7 +5,6 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import {defineConfig} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
-import Inspect from 'vite-plugin-inspect';
 import Sitemap from 'vite-plugin-sitemap';
 
 function getContentSlugs(dir: string, prefix: string): string[] {
@@ -60,7 +59,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
+        hostname: (process.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
         dynamicRoutes,
       }),
       ViteImageOptimizer({
@@ -86,7 +85,6 @@ export default defineConfig(({mode}) => {
         filename: 'bundle-analysis.html',
         gzipSize: true,
       }),
-      !isProd && Inspect(),
     ].filter(Boolean),
     resolve: {
       alias: {

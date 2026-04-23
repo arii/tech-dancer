@@ -53,22 +53,27 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box marginTop={8} position="relative" maxWidth="2xl">
-          <Box
-            as="input"
-            type="text"
-            placeholder="Search articles, guides, or gear..."
-            width="full"
-            surface="default"
-            border
-            paddingX={6}
-            paddingY={4}
-            variant="mono"
-            size="sm"
-            className="focus:border-accent-brand outline-none focus:ring-0"
-            value={search}
-            onChange={(e: any) => setSearch(e.target.value)}
-          />
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+          <Box position="relative" maxWidth="2xl" flex={1}>
+            <Box
+              as="input"
+              type="text"
+              placeholder="Search articles, guides, or gear..."
+              width="full"
+              surface="default"
+              border
+              paddingX={6}
+              paddingY={4}
+              variant="mono"
+              size="sm"
+              className="focus:border-accent-brand outline-none focus:ring-0"
+              value={search}
+              onChange={(e: any) => setSearch(e.target.value)}
+            />
+          </Box>
+          {onViewChange && (
+            <ViewToggle view={view} onChange={onViewChange} />
+          )}
         </Box>
       </Box>
 
