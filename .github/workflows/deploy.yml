@@ -155,29 +155,21 @@ jobs:
               }
             }
 
-      - name: Checkout gh-pages for index update
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages-branch
-
-      - name: Generate and Deploy Previews Index
+      - name: Prepare Previews Index
         run: |
-          cd gh-pages-branch
-          mkdir -p previews
-
-          # Validation: Ensure the dashboard exists in build artifacts
-          if [ ! -f "../dist/previews/index.html" ]; then
+          mkdir -p /tmp/previews-index/previews
+          if [ ! -f "dist/previews/index.html" ]; then
             echo "Error: dist/previews/index.html not found! Deployment of preview index failed."
             exit 1
           fi
+          cp dist/previews/index.html /tmp/previews-index/previews/index.html
 
-          # Copy the fancy dashboard from the build
-          cp ../dist/previews/index.html previews/index.html
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add previews/index.html
-          git commit -m "chore: update previews index after deployment" || echo "No changes to commit"
-          git pull --rebase origin gh-pages
-          git push origin gh-pages
+      - name: Deploy Previews Index to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: /tmp/previews-index
+          destination_dir: .
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
