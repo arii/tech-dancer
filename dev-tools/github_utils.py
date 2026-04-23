@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 import sys
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict
 try:
     from github import Github, GithubException
     from github.Repository import Repository
@@ -82,7 +82,7 @@ def get_ci_status(repo: Repository, sha: str) -> Tuple[str, List[str]]:
 class CIFormatter:
     """Encapsulates CI status icon mapping and string formatting."""
 
-    ICON_MAP = {
+    ICON_MAP: Dict[str, str] = {
         "FAILURE": "🔴",
         "PENDING": "🟡",
         "SUCCESS": "🟢"
