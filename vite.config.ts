@@ -1,20 +1,12 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import fs from 'fs';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import {defineConfig, loadEnv} from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 import { routes } from './src/config/routes';
-
-function getContentSlugs(dir: string, prefix: string): string[] {
-  const fullPath = path.resolve(__dirname, dir);
-  if (!fs.existsSync(fullPath)) return [];
-  return fs.readdirSync(fullPath)
-    .filter(f => f.endsWith('.md'))
-    .map(f => `${prefix}/${f.replace(/\.md$/, '')}`);
-}
+import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -27,13 +19,12 @@ export default defineConfig(({mode}) => {
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
-  const dynamicRoutes = [
-    ...routes.map(r => r.path),
-
-    ...getContentSlugs('content/posts', '/blog'),
-    ...getContentSlugs('content/resources', '/gear'),
-    ...getContentSlugs('content/studies', '/research'),
-  ];
+  const dynamicRoutes = routes
+    .filter(r => r.path !== '*' && !r.path.includes(':'))
+    .flatMap(r => {
+      const dirName = CONTENT_DIR_MAP[r.path] || r.path.replace(/^\//, '');
+      return [r.path, ...getContentSlugs(dirName, r.path)];
+    });
 
   return {
     base,
