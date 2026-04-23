@@ -15,7 +15,6 @@ export interface RouteConfig extends Omit<RouteObject, 'children'> {
 }
 
 export const routes: RouteConfig[] = [
-<<<<<<< HEAD
   {
     path: '/',
     index: true,
@@ -73,13 +72,5 @@ export const routes: RouteConfig[] = [
     path: '*',
     lazy: () => import('@/pages/Home').then(m => ({ Component: m.default }))
   },
-=======
-  { path: '/', label: 'Home', icon: Home },
-  { path: '/blog', label: 'Blog Posts', icon: BookOpen },
-  { path: '/gear', label: 'Gear Reviews', icon: ShoppingBag },
-  { path: '/research', label: 'Data & Development Lab', icon: Database },
-  { path: '/ux-auditor', label: 'Visual UX Auditor', icon: Database },
-  { path: '/about', label: 'About', icon: User },
-  { path: '/contact', label: 'Contact', icon: Send },
->>>>>>> 851d022 (chore: automate dynamic routes and optimize PR review manager)
+
 ];
