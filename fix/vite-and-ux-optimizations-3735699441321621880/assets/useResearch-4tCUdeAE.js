@@ -1,6 +1,0 @@
-import{d as i,f as r}from"./index-Crlr3pym.js";import{b as a}from"./vendor-react-Cmd7Bllc.js";/**
- * @license lucide-react v0.546.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const c=[["path",{d:"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z",key:"1rqfz7"}],["path",{d:"M14 2v4a2 2 0 0 0 2 2h4",key:"tnqrlb"}],["path",{d:"M10 9H8",key:"b1mrlr"}],["path",{d:"M16 13H8",key:"t4e002"}],["path",{d:"M16 17H8",key:"z1uh3a"}]],m=i("file-text",c);function p(){const[o,n]=a.useState([]),[d,l]=a.useState(null);a.useEffect(()=>{n(r())},[]);const s=[{id:"wcs-scraper",name:"WCS Prelim Scoring Scraper",category:"Dance Research",status:"Coming Soon",layman:"A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions."},{id:"blog-drafter",name:"Blog Post Drafter",category:"Content Generation",status:"Active",layman:"Drafter tool to generate blog posts using AI with human feedback in the loop."},{id:"flight-finder",name:"Event Flight Finder",category:"Logistics",status:"Active",layman:"Flight finder for WCS events - optimizing travel routes and finding the best deals."}];return{studies:o,tools:s,getTool:t=>s.find(e=>e.id===t),getStudy:t=>o.find(e=>e.slug===t)}}export{m as F,p as u};
