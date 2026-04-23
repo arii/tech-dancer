@@ -166,6 +166,31 @@ jobs:
           cd gh-pages-branch
           mkdir -p previews
 
+          # Generate a metadata JSON with last updated timestamps for each deployment
+          echo "{" > previews/data.json
+          FIRST=true
+          # Find all index.html files to identify deployment directories (including nested ones)
+          for index_file in $(find . -maxdepth 3 -name "index.html"); do
+            DIR=$(dirname "$index_file" | sed 's|^\./||')
+
+            # Skip special folders and the root site
+            if [[ "$DIR" == "." || "$DIR" == "assets" || "$DIR" == "tmp" || "$DIR" == "previews" ]]; then
+              continue
+            fi
+
+            # Get the timestamp of the last commit that modified this directory in gh-pages
+            TIMESTAMP=$(git log -1 --format=%ct -- "$DIR")
+            if [ -z "$TIMESTAMP" ]; then TIMESTAMP=$(date +%s); fi
+
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              echo "," >> previews/data.json
+            fi
+            echo "  \"$DIR\": $TIMESTAMP" >> previews/data.json
+          done
+          echo "}" >> previews/data.json
+
           # Validation: Ensure the dashboard exists in build artifacts
           if [ ! -f "../dist/previews/index.html" ]; then
             echo "Error: dist/previews/index.html not found! Deployment of preview index failed."
@@ -177,7 +202,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add previews/index.html
-          git commit -m "chore: update previews index after deployment" || echo "No changes to commit"
+          git add previews/index.html previews/data.json
+          git commit -m "chore: update previews index and metadata" || echo "No changes to commit"
           git pull --rebase origin gh-pages
           git push origin gh-pages
