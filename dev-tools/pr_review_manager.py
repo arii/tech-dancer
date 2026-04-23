@@ -61,6 +61,7 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
         # Utilizes .reversed property on the paginated list for efficiency
         last_review = next((r for r in pr.get_reviews().reversed if r.user.login == current_user_login), None)
 
+
         if not last_review:
             status = "ACTION: Needs Initial Review"
         else:

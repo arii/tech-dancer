@@ -29,7 +29,6 @@ export default defineConfig(({mode}) => {
 
   const dynamicRoutes = [
     ...routes.map(r => r.path),
-    '/ux-auditor',
 
     ...getContentSlugs('content/posts', '/blog'),
     ...getContentSlugs('content/resources', '/gear'),
