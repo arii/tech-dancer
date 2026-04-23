@@ -8,7 +8,7 @@ interface ButtonProps
   extends BaseProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'>,
     VariantProps<typeof buttonVariants> {
-  as?: any
+  as?: React.ElementType
   href?: string
   loading?: boolean
 }

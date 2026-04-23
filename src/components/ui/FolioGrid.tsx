@@ -68,7 +68,7 @@ export default function FolioGrid({
               size="sm"
               className="focus:border-accent-brand outline-none focus:ring-0"
               value={search}
-              onChange={(e: any) => setSearch(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />
           </Box>
           {onViewChange && (

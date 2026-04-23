@@ -6,7 +6,7 @@ import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
 export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttributes<HTMLElement>, "color"> {
-  as?: any
+  as?: React.ElementType
   className?: string
   variant?: keyof typeof typography
   intent?: keyof typeof variants.intent

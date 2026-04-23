@@ -58,7 +58,7 @@ export interface BaseProps {
 }
 
 export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
-  as?: any
+  as?: React.ElementType
   [key: string]: any
 }
 
@@ -110,7 +110,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       ...domProps 
     } = props;
 
-    const getVal = (val: any, prefix: string) => {
+    const getVal = (val: string | number | undefined, prefix: string) => {
       if (val === undefined) return ""
       if (typeof val === "number") {
         return `${prefix}-${val}`

@@ -8,7 +8,7 @@ export function useForm<T extends Record<string, any>>(initialValues: T) {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }, [])
 
-  const setFieldValue = useCallback((name: keyof T, value: any) => {
+  const setFieldValue = useCallback((name: keyof T, value: T[keyof T]) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }, [])
 
