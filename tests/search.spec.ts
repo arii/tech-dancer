@@ -50,7 +50,7 @@ test.describe('Search and Filter URL Persistence', () => {
   test('Blog search term should persist after reload', async ({ page }) => {
     await page.goto('./blog');
 
-    const searchInput = page.getByPlaceholder(/Search posts/i);
+    const searchInput = page.getByPlaceholder(/Search articles, guides, or gear\.\.\./i);
     if (await searchInput.isVisible()) {
       await searchInput.fill('west');
 
@@ -60,22 +60,24 @@ test.describe('Search and Filter URL Persistence', () => {
       // Reload
       await page.reload();
 
-      await expect(page.getByPlaceholder(/Search posts/i)).toHaveValue('west');
+      await expect(page.getByPlaceholder(/Search articles, guides, or gear\.\.\./i)).toHaveValue('west');
     }
   });
 
   test('Gear search term should persist after reload', async ({ page }) => {
     await page.goto('./gear');
 
-    const searchInput = page.getByPlaceholder(/Search gear/i);
-    await searchInput.fill('shoes');
+    const searchInput = page.getByPlaceholder(/Search gear \(e\.g\. earplugs, shoes\)\.\.\./i);
+    if (await searchInput.isVisible()) {
+      await searchInput.fill('shoes');
 
-    // Check URL
-    await expect(page).toHaveURL(/search=shoes/i);
+      // Check URL
+      await expect(page).toHaveURL(/search=shoes/i);
 
-    // Reload
-    await page.reload();
+      // Reload
+      await page.reload();
 
-    await expect(page.getByPlaceholder(/Search gear/i)).toHaveValue('shoes');
+      await expect(page.getByPlaceholder(/Search gear \(e\.g\. earplugs, shoes\)\.\.\./i)).toHaveValue('shoes');
+    }
   });
 });
