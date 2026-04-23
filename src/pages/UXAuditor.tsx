@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
@@ -19,47 +19,29 @@ const viewportIcons = {
 
 function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
-  const [isCopying, setIsCopying] = useState(false);
 
-  React.useEffect(() => {
-    if (!copied) return;
-    const timer = setTimeout(() => {
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(suggestion);
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setCopied(true);
+      });
+    } else {
+      setCopied(true);
+    }
+    setTimeout(() => {
       if (document.startViewTransition) {
         document.startViewTransition(() => setCopied(false));
       } else {
         setCopied(false);
       }
     }, 2000);
-    return () => clearTimeout(timer);
-  }, [copied]);
-
-  const handleCopy = async () => {
-    setIsCopying(true);
-    try {
-      await navigator.clipboard.writeText(suggestion);
-
-      // Artificial slight delay for visual feedback if copy is instant
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      if (document.startViewTransition) {
-        document.startViewTransition(() => {
-          setCopied(true);
-        });
-      } else {
-        setCopied(true);
-      }
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    } finally {
-      setIsCopying(false);
-    }
   };
 
   return (
     <Box
       as="button"
       onClick={handleCopy}
-      disabled={isCopying}
       marginTop={2}
       display="flex"
       align="center"
@@ -70,10 +52,12 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       surface={copied ? "success" : "default"}
       border={true}
       cursor="pointer"
-      className={`transition-colors font-bold text-xs ${!copied && !isCopying ? "hover:border-accent hover:text-accent" : ""}`}
+      className={`transition-colors font-bold text-xs ${!copied ? "hover:border-accent hover:text-accent" : ""}`}
     >
-      {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-      <Text intent={copied ? "success" : "default"}>{copied ? "Copied!" : "Copy Prompt"}</Text>
+      <Box color={copied ? "accent" : "main"} display="flex" align="center" gap={1}>
+        {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+        <Text>{copied ? "Copied!" : "Copy Prompt"}</Text>
+      </Box>
     </Box>
   );
 }
@@ -86,8 +70,7 @@ export default function UXAuditor() {
     setActiveReport,
     url,
     setUrl,
-    isCopiedMarkdown,
-    isExportingToGithub,
+    isExporting,
     runUXAudit,
     exportToGithub,
     copyMarkdown,
@@ -120,7 +103,6 @@ export default function UXAuditor() {
             as="input"
             type="text"
             value={url}
-            title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
             width={64}
             paddingX={4}
@@ -128,7 +110,6 @@ export default function UXAuditor() {
             radius="md"
             className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
             placeholder="https://..."
-            aria-label="URL to audit"
           />
           <Box
             as="button"
@@ -201,14 +182,14 @@ export default function UXAuditor() {
                 surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align="center" gap={4} direction={{ base: "col", md: "row" }}
                 marginBottom={2}
               >
-                <Stack gap={1} marginBottom={{ base: 4, md: 0 }} minWidth="0" flex={1}>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
+                <Box>
+                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black" className="truncate block" title={activeReport.url}>
+                  <Text variant="sans" size="xl" weight="font-black">
                     {activeReport.url}
                   </Text>
-                </Stack>
+                </Box>
                 <Box display="flex" gap={2}>
                   <Box
                     as="button"
@@ -224,13 +205,13 @@ export default function UXAuditor() {
                     cursor="pointer"
                     className="font-bold hover:text-text-main transition-all text-sm"
                   >
-                    {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
+                    {isExporting ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {isExporting ? 'Copied' : 'Copy MD'}
                   </Box>
                   <Box
                     as="button"
                     onClick={exportToGithub}
-                    disabled={activeReport.status !== 'completed' || isExportingToGithub}
+                    disabled={activeReport.status !== 'completed'}
                     display="flex"
                     align="center"
                     gap={2}
@@ -241,8 +222,8 @@ export default function UXAuditor() {
                     surface="inverted"
                     className="font-bold hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
                   >
-                    {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
-                    <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
+                    <Github className="w-4 h-4" />
+                    Export to GitHub Issue
                   </Box>
                 </Box>
               </Box>
@@ -268,8 +249,8 @@ export default function UXAuditor() {
                         </Text>
                       </Box>
 
-                      <Stack direction={{ base: 'col', md: 'row' }} width="full">
-                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+                      <Grid cols={{ base: 1, md: 12 }}>
+                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border="r" minHeight={400} span={{ base: 1, md: 5 }}>
                           {imgUrl ? (
                             <img
                               src={imgUrl}
@@ -290,16 +271,14 @@ export default function UXAuditor() {
                           )}
                         </Box>
 
-                        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
+                        <Stack gap={6} padding={8} span={{ base: 1, md: 7 }}>
                           {data ? (
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
-                                <Box marginBottom={3}>
-                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
-                                    Analysis Summary
-                                  </Text>
-                                </Box>
-                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block">
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase marginBottom={2} tracking="widest">
+                                  Analysis Summary
+                                </Text>
+                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -344,7 +323,7 @@ export default function UXAuditor() {
                             </Box>
                           )}
                         </Stack>
-                      </Stack>
+                      </Grid>
                     </Box>
                   );
                 })}
