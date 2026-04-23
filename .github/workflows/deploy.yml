@@ -94,10 +94,15 @@ jobs:
             find . -maxdepth 3 -name "index.html" | while read -r index_file; do
               DIR=$(dirname "$index_file" | sed 's|^\./||')
               [[ "$DIR" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
-              TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || true)
-              [ -z "$TS" ] && TS=$(date +%s)
+              TS=$(cat "$DIR/.timestamp" 2>/dev/null)
+              if [ -z "$TS" ]; then
+                TS=$(git log -1 --format=%ct -- "$DIR" 2>/dev/null)
+              fi
+              if [ -z "$TS" ]; then
+                TS=$(date +%s)
+              fi
               echo "$DIR $TS"
-            done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
+            done | jq -R -n '[inputs | select(length > 0) | split(" ") | select(length == 2 and .[1] != "") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
 
             # Use the latest dashboard UI
             cp "$DEST_DIR/previews/index.html" previews/index.html
