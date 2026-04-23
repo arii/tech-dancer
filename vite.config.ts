@@ -30,7 +30,6 @@ export default defineConfig(({mode}) => {
     '/blog',
     '/gear',
     '/research',
-    '/resources',
     '/about',
     '/contact',
     ...getContentSlugs('content/posts', '/blog'),
