@@ -93,6 +93,7 @@ export default function FolioGrid({
                   key={item.slug}
                   as={motion.div}
                   variants={motionTokens.staggerItem}
+                  viewport={{ once: true, margin: "-50px" }}
                   border="r"
                   borderBottom={true}
                   padding={{ base: 6, lg: 6 }}
