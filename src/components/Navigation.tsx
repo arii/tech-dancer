@@ -114,11 +114,11 @@ export default function Navigation() {
                   </Text>
                 </Box>
               </Box>
-              {routes.filter(r => r.path !== '/').map((item) => (
+              {routes.filter(r => r.path !== '/' && r.label).map((item) => (
                 <NavItem 
                   key={item.path} 
                   to={item.path} 
-                  label={item.label} 
+                  label={item.label!}
                   icon={item.icon}
                   onClick={() => setIsOpen(false)} 
                   isMobile 
@@ -169,8 +169,8 @@ export default function Navigation() {
               </Box>
             </Box>
 
-            {routes.filter(r => r.path !== '/').map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+            {routes.filter(r => r.path !== '/' && r.label).map((item) => (
+              <NavItem key={item.path} to={item.path} label={item.label!} icon={item.icon} />
             ))}
           </Stack>
         </Stack>
