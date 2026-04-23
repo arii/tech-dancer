@@ -12,6 +12,12 @@ export const SAFELIST = [
   "xl:col-span-1", "xl:col-span-2", "xl:col-span-3", "xl:col-span-4", "xl:col-span-5", "xl:col-span-6", "xl:col-span-7", "xl:col-span-8", "xl:col-span-9", "xl:col-span-10", "xl:col-span-11", "xl:col-span-12"
 ];
 
+export const gridTrackMapper = (v: string | number) => {
+  if (typeof v === 'number' && v <= 12) return v
+  if (typeof v === 'number') return `[repeat(${v},minmax(0,1fr))]`
+  return v
+}
+
 export function getResponsiveClasses(
   prop: ResponsiveProp<string | number | boolean | undefined | null>,
   classPrefix: string,

@@ -1,3 +1,4 @@
+import React from "react";
 import { Menu, X, Terminal, Search, Home, ShoppingBag, BookOpen, Database, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 interface NavItemProps {
   to: string;
   label: string;
-  icon: any;
+  icon: React.ElementType;
   onClick?: () => void;
   isMobile?: boolean;
 }
@@ -76,7 +77,7 @@ export default function Navigation() {
           as="button"
           onClick={() => setIsOpen(!isOpen)}
           padding={2}
-          className="min-h-[48px] min-w-[48px] flex items-center justify-center"
+          className="min-h-12 min-w-12 flex items-center justify-center"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
@@ -167,7 +168,7 @@ export default function Navigation() {
             <Box as="li">
               <Box
                 as="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+                onClick={() => openSearch()}
                 display="flex"
                 align="center"
                 gap={4}
