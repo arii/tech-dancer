@@ -27,7 +27,7 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
         />
         <Box className="absolute top-3 left-3">
           <Box surface={surfaceVariant} className="px-2 py-0.5 border border-line/20 backdrop-blur-sm bg-opacity-90">
-            <Text variant="mono" size="micro" weight="font-bold" uppercase className="tracking-wider">
+            <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider">
               {category}
             </Text>
           </Box>
@@ -45,13 +45,13 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
       )}
     >
       <Box display="flex" align="center" gap={2}>
-        <Text variant="mono" size="micro" weight="font-bold" uppercase className="tracking-widest opacity-80">
+        <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" className="opacity-80">
           {category}
         </Text>
         {date && (
           <>
             <Box className="w-1 h-1 rounded-full bg-current opacity-30" />
-            <Text variant="mono" size="micro" uppercase className="tracking-widest opacity-60">
+            <Text variant="mono" size="micro" uppercase tracking="widest" className="opacity-60">
               {date}
             </Text>
           </>

@@ -63,7 +63,7 @@ export function DetailLayout({
               <Text variant="mono" size="micro" color="dim">{date} • {rt} min read</Text>
             </Box>
 
-            <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">
+            <Text variant="headline" size="fluid-8" tracking="tighter" className="leading-none">
               {title}
             </Text>
 

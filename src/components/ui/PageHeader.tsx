@@ -1,5 +1,7 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
+import type { ResponsiveProp } from '@/layouts/system-utils';
+import type { typeSizes } from '@/styles/design-tokens';
 
 interface PageHeaderProps {
   label: string;
@@ -9,6 +11,7 @@ interface PageHeaderProps {
   border?: BaseProps['border'];
   descriptionMaxWidth?: BaseProps['maxWidth'];
   titleAs?: "h1" | "h2" | "h3";
+  size?: ResponsiveProp<keyof typeof typeSizes>;
 }
 
 export function PageHeader({
@@ -17,8 +20,9 @@ export function PageHeader({
   description,
   paddingBottom = 12,
   border = "b",
-  descriptionMaxWidth = "65ch",
-  titleAs = "h1"
+  descriptionMaxWidth = "prose",
+  titleAs = "h1",
+  size = { base: "4xl", lg: "6xl" }
 }: PageHeaderProps) {
   return (
     <Box
@@ -39,7 +43,7 @@ export function PageHeader({
         <Text
           as={titleAs}
           variant="headline"
-          size={{ base: "4xl", lg: "6xl" }}
+          size={size}
           weight="font-black"
           tracking="tighter"
           color="main"

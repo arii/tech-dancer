@@ -83,7 +83,7 @@ export function GearCard({
           </Text>
 
           <Box display="flex" align="center" gap={2} paddingTop={4} className="border-t border-line/50">
-            <Text variant="mono" size="xs" weight="font-bold" className="text-accent tracking-wider">
+            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" className="text-accent">
               Read Review
             </Text>
             <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
