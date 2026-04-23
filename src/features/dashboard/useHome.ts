@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { getPosts, Post } from '@/lib/content';
+import { useQuery } from '@tanstack/react-query';
+import { getPosts } from '@/lib/content';
 import { Home as HomeIcon } from 'lucide-react';
 
 export const upcomingEvents = [
@@ -9,12 +9,10 @@ export const upcomingEvents = [
 
 export function useHome() {
   const navigate = useNavigate();
-  const [recentPosts, setRecentPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
-    const allPosts = getPosts();
-    setRecentPosts(allPosts.slice(0, 3));
-  }, []);
+  const { data: recentPosts = [] } = useQuery({
+    queryKey: ['posts', 'recent'],
+    queryFn: () => getPosts().slice(0, 3),
+  });
 
   const dancerPaths = [
     { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },

@@ -6,12 +6,12 @@
 
 export const radius = {
   none: "rounded-none",
-  subtle: "rounded-[2px]", // Subtle 2px radius
-  standard: "rounded", // 4px
+  subtle: "rounded-subtle",
+  standard: "rounded-standard",
   sm: "rounded-sm",
-  md: "rounded-md", // 6px
-  lg: "rounded-lg", // 8px
-  xl: "rounded-xl", // 12px
+  md: "rounded-md",
+  lg: "rounded-lg",
+  xl: "rounded-xl",
   full: "rounded-full",
 };
 
@@ -23,22 +23,23 @@ export const borders = {
 };
 
 export const spacing = {
-  container: "p-6 md:p-12",
-  card: "p-8",
-  compact: "p-4",
-  nav: "p-8",
-  emailBar: "py-4 px-6 md:px-12",
-  hero: "py-20",
-  comfort: "py-12",
-  endPad: "pb-32",
+  container: "p-container-sm md:p-container-md",
+  card: "p-card",
+  compact: "p-compact",
+  nav: "p-nav",
+  emailBar: "py-email-bar-y px-email-bar-x-sm md:px-email-bar-x-md",
+  hero: "py-hero",
+  comfort: "py-comfort",
+  endPad: "pb-end-pad",
 };
 
 export const animation = {
-  fast: "duration-150",
-  normal: "duration-300",
-  smooth: "ease-[cubic-bezier(0.16,1,0.3,1)]", // ease-out-expo
+  fast: "duration-fast",
+  normal: "duration-normal",
+  smooth: "ease-smooth",
+  // Framer Motion requires numeric arrays for JS-driven easing
   ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-  revealDistance: 20,
+  revealDistance: "var(--reveal-distance)",
 };
 
 /**
@@ -69,26 +70,27 @@ export const buttons = {
 };
 
 export const shadows = {
-  topOverlay: "shadow-[0_-10px_40px_rgba(0,0,0,0.1)]",
+  topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
 };
 
 export const imageSizes = {
-  profile: 400,
+  profile: 400, // Keep as number for img attribute compatibility
 };
 
 export const zIndex = {
-  hide: -1,
-  base: 0,
-  docked: 10,
-  dropdown: 20,
-  sticky: 30,
-  overlay: 40,
-  modal: 50,
-  popover: 60,
-  skipLink: 70,
-  toast: 80,
-  top: 100,
+  hide: "hide",
+  base: "base",
+  docked: "docked",
+  dropdown: "dropdown",
+  sticky: "sticky",
+  overlay: "overlay",
+  modal: "modal",
+  popover: "popover",
+  skipLink: "skip-link",
+  toast: "toast",
+  top: "top",
+  search: "search",
 };
 
 export const typography = {

@@ -129,3 +129,31 @@ When asked to work on a new feature, bugfix, or isolated task while preserving t
 * **Isolate:** Run `vdev setup <branch-name>` to create an isolated Docker/Worktree environment automatically.
 * **Execute:** Run tests, builds, or scripts inside that isolated environment using `vdev exec "<command>" --branch <branch-name>`.
 * **Cleanup:** Once the PR is submitted or the environment is no longer needed, clean it up using `vdev cleanup <branch-name>`.
+<<<<<<< HEAD
+=======
+
+## 23. Pull Request & Submission Protocol
+- **Mass Reviewing Allowed**: Agents may perform systematic technical audits of multiple PRs and submit reviews (Comment/Approve/Request Changes) as part of a single task.
+- **Manual Confirmation for Merges**: Every merge command MUST be preceded by a specific `notify_user` request for approval, even if part of a previously discussed plan.
+- **No Autonomous Batch Merging**: Avoid sequential, rebase-based merge strategies that operate autonomously. Every merge transition requires manual verification.
+
+## 24. UI Auditing Workflow
+
+The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) helps maintain design system integrity by identifying arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
+
+### 🧠 Planning Phase
+Before starting a UI task, run the audit to identify existing tech debt in the feature or page you are modifying:
+```bash
+pnpm run audit
+cat TODO_ANTIPATTERNS.md
+```
+Incorporate fixing these anti-patterns into your implementation plan.
+
+### 🧪 Pre-Commit Checklist
+Before submitting any PR that modifies `.tsx` files:
+1. **Run the Audit**: `pnpm run audit`.
+2. **Review the Report**: Check `TODO_ANTIPATTERNS.md` for any new violations introduced by your changes.
+3. **Enforce Compliance**: Fix all identified anti-patterns or use `// impeccable-ignore` for intentional deviations.
+4. **Clean Slate**: Ensure your changes do not increase the total count of violations in the target files.
+
+>>>>>>> main

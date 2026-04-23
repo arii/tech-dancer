@@ -13,7 +13,7 @@ function parseFrontmatter(content: string) {
 
   const yaml = match[1];
   const body = match[2];
-  const data: Record<string, any> = {};
+  const data: Record<string, string | number | string[] | undefined> = {};
 
   let currentKey = '';
   yaml.split('\n').forEach(line => {

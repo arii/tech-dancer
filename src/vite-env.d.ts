@@ -2,5 +2,5 @@
 
 interface Window {
   __ROUTER_BASENAME__?: string;
-  Buffer: any;
+  Buffer: typeof import('buffer').Buffer;
 }
