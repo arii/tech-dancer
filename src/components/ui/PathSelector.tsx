@@ -35,11 +35,6 @@ const PATH_DATA = [
 export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
-  const handleVibrate = () => {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate(15);
-    }
-  };
 
   return (
     <Grid
@@ -49,9 +44,9 @@ export default function PathSelector() {
       cols={{ base: 1, lg: 12 }}
       gap={0}
       border="y"
-      minHeight="30vh"
+
       width="full"
-      className="bg-black touch-manipulation"
+      className="min-h-96 bg-black touch-manipulation"
     >
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
@@ -67,7 +62,6 @@ export default function PathSelector() {
             className={cn(path.spanClasses, "group touch-manipulation")}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
-            onClick={handleVibrate}
           >
             {/* Background */}
             <Box
@@ -84,10 +78,10 @@ export default function PathSelector() {
             <Box
               position="absolute"
               inset="top"
-              height="[2px]"
+
               zIndex={10}
               className={cn(
-                "bg-accent shadow-[0_0_15px_#FF7F50] pointer-events-none transition-opacity duration-500",
+                "h-0.5 bg-accent shadow-[0_0_15px_#FF7F50] pointer-events-none transition-opacity duration-500",
                 path.scanlineDelay,
                 isHovered ? 'opacity-100 motion-safe:animate-scanline' : 'opacity-0'
               )}

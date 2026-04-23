@@ -50,11 +50,11 @@ export const buttonVariants = cva(
         warning: "text-accent",
       },
       size: {
-        default: "h-[48px] px-6 text-xs",
-        sm: "h-[48px] px-4 text-[10px]",
-        md: "h-[48px] px-6 text-xs",
+        default: "h-12 px-6 text-xs",
+        sm: "h-12 px-4 text-[10px]",
+        md: "h-12 px-6 text-xs",
         lg: "h-12 px-8 text-sm",
-        icon: "h-[48px] w-[48px]",
+        icon: "h-12 w-12",
       },
       fullWidth: {
         true: "w-full",
