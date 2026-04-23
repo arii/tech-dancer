@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--
+  PREVIEW DASHBOARD (Infrastructure Tool)
+  This is a standalone DevOps utility deployed independently to gh-pages.
+  EXCEPTION: It uses CDN Tailwind and raw utility classes to remain zero-dependency
+  and lightweight for operational use outside the main React application boundary.
+-->
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Environments | Tech Dancer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'media', theme: { extend: { fontFamily: { sans: ['system-ui', '-apple-system', 'sans-serif'], mono: ['ui-monospace', 'monospace'] } } } }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        @media (prefers-color-scheme: dark) { ::-webkit-scrollbar-thumb { background: #475569; } }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div class="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div class="mb-10 text-center sm:text-left flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl mb-2 flex items-center justify-center sm:justify-start gap-3">
+                    <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    Preview Environments
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg max-w-2xl">Live index of all deployed feature branches and active pull requests.</p>
+            </div>
+            <a href="../" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 h-10 px-4 py-2 shadow-sm">&larr; Back to Main Site</a>
+        </div>
+        <div id="error-alert" class="hidden mb-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-400 px-4 py-4 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span id="error-msg" class="font-medium"></span>
+            </div>
+        </div>
+        <div id="loading" class="flex flex-col items-center justify-center py-20 gap-4">
+            <svg class="animate-spin h-10 w-10 text-blue-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <span class="text-lg text-slate-500 dark:text-slate-400 font-medium animate-pulse">Scanning gh-pages deployments...</span>
+        </div>
+        <div id="grid" class="grid gap-4 flex-col"></div>
+    </div>
+    <script>
+        const REPO_OWNER = 'arii', REPO_NAME = 'tech-dancer';
+        const BASE_URL = `https://${REPO_OWNER}.github.io/${REPO_NAME}`;
+        const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
+        const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
+        const ICONS = {
+            pr: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg>`,
+            branch: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`,
+            external: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`,
+            clock: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+        };
+        const escapeHtml = (u) => u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]));
+        async function init() {
+            const grid = document.getElementById('grid'), loading = document.getElementById('loading'), errorAlert = document.getElementById('error-alert');
+            try {
+                const [treeData, prs, branches] = await Promise.all([
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open`).then(r => r.ok ? r.json() : []),
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches`).then(r => r.ok ? r.json() : [])
+                ]);
+                loading.style.display = 'none';
+                const branchNames = new Set(branches.map(b => b.name));
+                const folders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
+                    .map(i => i.path.replace('/index.html', ''))
+                    .sort((a, b) => {
+                        const prA = prs.find(p => p.head.ref === a), prB = prs.find(p => p.head.ref === b);
+                        if (prA && !prB) return -1;
+                        if (!prA && prB) return 1;
+                        const activeA = branchNames.has(a), activeB = branchNames.has(b);
+                        if (activeA && !activeB) return -1;
+                        if (!activeA && activeB) return 1;
+                        return a.localeCompare(b);
+                    });
+                if (!folders.length) {
+                    grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
+                    return;
+                }
+                folders.forEach(name => {
+                    const pr = prs.find(p => p.head.ref === name), isActive = branchNames.has(name), url = `${BASE_URL}/${name}/`;
+                    const card = document.createElement('div');
+                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-center sm:items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
+
+                    let badge, typeIcon, typeLabel;
+                    if (pr) {
+                        badge = `<span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>`;
+                        typeIcon = ICONS.pr;
+                        typeLabel = `PR #${pr.number}: ${escapeHtml(pr.title)}`;
+                    } else if (isActive) {
+                        badge = `<span class="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">Active Branch</span>`;
+                        typeIcon = ICONS.branch;
+                        typeLabel = `Deployed Branch`;
+                    } else {
+                        badge = `<span class="bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800 flex items-center gap-1">${ICONS.clock} Recently Deleted</span>`;
+                        typeIcon = ICONS.branch;
+                        typeLabel = `Stale Deployment`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="flex-1 min-w-0 w-full">
+                            <div class="flex items-center justify-between sm:justify-start gap-3 mb-3">
+                                <div class="flex-1 min-w-0">
+                                    ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate w-full">${typeIcon} ${typeLabel}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 truncate w-full">${typeIcon} ${typeLabel}</div>`}
+                                </div>
+                                <div class="hidden sm:block shrink-0">${badge}</div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px] sm:max-w-md">${escapeHtml(name)}</span>
+                                ${isActive ? `<a href="${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} View Source</a>` : ''}
+                                <div class="sm:hidden shrink-0">${badge}</div>
+                            </div>
+                        </div>
+                        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0">View Deployment ${ICONS.external}</a>`;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                loading.style.display = 'none';
+                document.getElementById('error-msg').textContent = err.message;
+                errorAlert.classList.remove('hidden');
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
