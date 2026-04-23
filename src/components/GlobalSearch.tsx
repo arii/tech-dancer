@@ -2,7 +2,7 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { escapeRegExp } from '@/lib/utils';
-import { useRef } from 'react';
+import { useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
@@ -17,6 +17,12 @@ export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Memoize the search regex to avoid re-instantiation on every render during query updates.
+  const searchRegex = useMemo(() => {
+    if (!query) return null;
+    return new RegExp(`(${escapeRegExp(query)})`, 'gi');
+  }, [query]);
 
   // 1. The Context Reset: Close on route change
   // Note: Since isOpen is now derived from URL search params ('search=true'),
@@ -43,16 +49,15 @@ export function GlobalSearch() {
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
-  const highlight = (text: string) => {
-    if (!query) return text;
-    const escapedQuery = escapeRegExp(query);
-    const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
+  const highlight = useCallback((text: string) => {
+    if (!searchRegex || !query) return text;
+    const parts = text.split(searchRegex);
     return parts.map((part, i) =>
       part.toLowerCase() === query.toLowerCase()
         ? <span key={i} className="text-accent bg-accent/10 rounded-sm px-0.5">{part}</span>
         : part
     );
-  };
+  }, [searchRegex, query]);
 
   if (!isOpen) return null;
 
