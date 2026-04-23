@@ -59,8 +59,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           aria-label="Scroll to top"
           bottom={8}
           right={8}
-          transitionProp="all"
-          duration={300}
+          className="transition-all duration-300"
           data-testid="scroll-to-top-button"
         >
           <ArrowUp size={iconSizes.lg} />

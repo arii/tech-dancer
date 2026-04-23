@@ -25,7 +25,7 @@ export default function ResearchAnalytics() {
         />
 
         <Stack gap={8}>
-          <Box paddingBottom={4} border="b" display="flex" justify="between" align="end">
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
@@ -65,7 +65,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} border="b" display="flex" justify="between" align="end">
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
@@ -104,10 +104,10 @@ export default function ResearchAnalytics() {
           ) : (
             <Box border padding={12} surface="muted" emphasis="low">
               <Stack align="center" gap={4} className="text-center">
-                <Database className="w-12 h-12" color="dim" />
+                <Database className="w-12 h-12 text-slate-300" />
                 <Stack gap={2}>
                   <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
-                  <Text variant="body" size="sm" color="dim" maxWidth="prose">
+                  <Text variant="body" size="sm" color="dim" className="max-w-[40ch]">
                     Research studies are automatically ingested via the ETL pipeline.
                     New analysis runs weekly—check back soon for recent data.
                   </Text>

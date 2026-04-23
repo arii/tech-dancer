@@ -55,10 +55,6 @@ export interface BaseProps {
   right?: ResponsiveProp<keyof typeof spacing | number | string>
   bottom?: ResponsiveProp<keyof typeof spacing | number | string>
   left?: ResponsiveProp<keyof typeof spacing | number | string>
-  transitionProp?: "all" | "colors" | "opacity" | "shadow" | "transform" | boolean
-  duration?: number
-  snap?: "y" | "x" | "both" | "none"
-  viewTransitionName?: string
 }
 
 export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
@@ -78,7 +74,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
     justify, align, scrollBehavior, scrollPaddingTop,
-    top, right, bottom, left, transitionProp, duration, snap, viewTransitionName,
+    top, right, bottom, left,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -189,19 +185,14 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
-          scrollBehavior && `scroll-${scrollBehavior}`,
           getResponsiveClasses(top, "top-"),
           getResponsiveClasses(right, "right-"),
           getResponsiveClasses(bottom, "bottom-"),
           getResponsiveClasses(left, "left-"),
-          transitionProp === true ? "transition-all" : (transitionProp && `transition-${transitionProp}`),
-          duration && `duration-${duration}`,
-          snap && (snap === "both" ? "snap-both" : `snap-${snap}`),
           className
         )}
         style={{
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
-          ...(viewTransitionName ? { viewTransitionName } : {}),
           ...motionProps.style,
           ...props.style
         }}

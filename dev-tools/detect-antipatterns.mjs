@@ -8,8 +8,8 @@ const ROOT = path.resolve(__dirname, '..');
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
 
 // Allowed tokens or patterns that look like Tailwind but are safe
-const ALLOWED_COLORS = ['bg', 'surface', 'accent', 'accent-navy', 'accent-brand', 'text-main', 'text-body', 'text-dim', 'line', 'white', 'black', 'transparent', 'current', 'yellow-400'];
-const ALLOWED_TEXT_UTILS = ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic', 'whitespace-nowrap'];
+const ALLOWED_COLORS = ['bg', 'surface', 'accent', 'accent-navy', 'text-main', 'text-body', 'text-dim', 'line', 'white', 'black', 'transparent', 'current', 'yellow-400'];
+const ALLOWED_TEXT_UTILS = ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'];
 const ALLOWED_TEXT_SIZES = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'];
 
 function checkFile(filepath) {

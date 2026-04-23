@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
@@ -36,9 +36,9 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
 
     return (
       <Box
-        display="flex"
         ref={ref}
         className={composeStyles(
+          "flex",
           getResponsiveClasses(direction, "", directionMapper),
           getResponsiveClasses(align, "", alignMapper),
           getResponsiveClasses(justify, "", justifyMapper),
