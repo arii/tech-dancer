@@ -1,40 +1,82 @@
-import type { FormEvent } from 'react';
-import { useContactForm } from '@/hooks/use-contact-form';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { SuccessState } from '@/features/contact/components/SuccessState';
 import { ContactFormView } from '@/features/contact/components/ContactFormView';
+import { contactSchema, type ContactFormData } from '@/features/contact/schemas/contact-schema';
 
 /**
  * Contact Page Container
  * Follows separation of concerns by keeping orchestration logic here
  * and presentation logic in the feature components.
+ * Now using react-hook-form and zod for type-safe validation.
  */
 export default function Contact() {
-  const {
-    formData,
-    handleChange,
-    errors,
-    isSubmitting,
-    submitted,
-    submit,
-    reset
-  } = useContactForm();
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    submit();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: 'General Feedback',
+      message: '',
+    },
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setSubmitError(null);
+    try {
+      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) throw new Error('Submission failed');
+      } else {
+        // Simulate form submission if no endpoint is configured
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+      }
+
+      setSubmitted(true);
+      reset();
+    } catch (err) {
+      setSubmitError('System error: Unable to transmit payload. Please try again later.');
+    }
+  };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    setSubmitError(null);
+    reset();
   };
 
   if (submitted) {
-    return <SuccessState onReset={reset} />;
+    return <SuccessState onReset={handleReset} />;
   }
+
+  // Merging validation errors with submission errors if needed
+  const viewErrors = {
+    ...errors,
+    ...(submitError ? { message: { message: submitError } } : {}),
+  } as any;
 
   return (
     <ContactFormView
-      formData={formData}
-      errors={errors}
+      register={register}
+      errors={viewErrors}
       isSubmitting={isSubmitting}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     />
   );
 }
