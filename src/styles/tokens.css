@@ -40,6 +40,11 @@
   --raw-spacing-comfort: 3rem;
   --raw-spacing-end-pad: 8rem;
 
+  /* Editorial Typography */
+  --raw-tracking-wide-editorial: 0.2rem;
+  --raw-tracking-editorial-tight: 0.15rem;
+
+
   /* Animation */
   --raw-duration-fast: 150ms;
   --raw-duration-normal: 300ms;

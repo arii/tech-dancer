@@ -25,6 +25,10 @@
   --color-text-body: var(--raw-color-text-body);
   --color-text-dim: var(--raw-color-text-dim);
 
+  /* Editorial Typography */
+  --tracking-wide-editorial: var(--raw-tracking-wide-editorial);
+  --tracking-editorial-tight: var(--raw-tracking-editorial-tight);
+
   /* Fonts */
   --font-sans: var(--raw-font-sans);
   --font-display: var(--raw-font-display);
@@ -73,7 +77,6 @@
   /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
 
-  /* Static Defaults */
   --container-blog: 1100px;
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
