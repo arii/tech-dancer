@@ -68,17 +68,13 @@ export default function Home() {
             viewport={{ once: true, margin: "-50px" }}
           >
             {recentPosts.map((post) => (
-              <Box
+              <ContentCard
                 key={post.slug}
-                as={motion.div}
+                {...post}
+                basePath="/blog"
+                aspect="video"
                 variants={motionTokens.staggerItem}
-              >
-                <ContentCard
-                  {...post}
-                  basePath="/blog"
-                  aspect="video"
-                />
-              </Box>
+              />
             ))}
 
             {/* Upcoming Events Mini-Cards */}

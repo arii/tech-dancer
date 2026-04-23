@@ -66,3 +66,11 @@ export function throttle<T extends (...args: any[]) => any>(
     }
   };
 }
+
+/**
+ * Splits a text into parts for highlighting based on a query.
+ */
+export function getHighlightedParts(text: string, query: string, regex: RegExp | null) {
+  if (!regex || !query) return [text];
+  return text.split(regex);
+}
