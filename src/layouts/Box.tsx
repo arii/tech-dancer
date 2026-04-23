@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
@@ -104,10 +104,11 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     const getVal = (val: any, prefix: string) => {
       if (val === undefined) return ""
       if (typeof val === "number") {
-        // Only use standard tailwind classes for common values, otherwise use arbitrary
-        if (prefix === 'z' && [0, 10, 20, 30, 40, 50].includes(val)) return `z-${val}`
-        if (prefix === 'opacity' && [0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 100].includes(val)) return `opacity-${val}`
-        return `${prefix}-[${val}]`
+        return `${prefix}-${val}`
+      }
+      // If it's already an arbitrary value, don't wrap it again
+      if (typeof val === "string" && val.startsWith("[") && val.endsWith("]")) {
+        return `${prefix}-${val}`
       }
       // Check if it's a standard Tailwind token (letters, numbers, dashes)
       if (/^[a-z0-9-]+$/.test(val) && !val.includes('vh') && !val.includes('vw') && !val.includes('%') && !val.includes('px')) {
@@ -127,7 +128,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           emphasis && variants.emphasis[emphasis],
           radiusProp && variants.radius[radiusProp],
           borderClasses,
-          getResponsiveClasses(gap, "gap-"),
+          getResponsiveClasses(gap, "gap-", (v) => v) /* safelist: gap-6 gap-12 */ ,
           getResponsiveClasses(padding, "p-", (v) => spacing[v as keyof typeof spacing] ? "" : v),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
           getResponsiveClasses(paddingTop, "pt-"),
