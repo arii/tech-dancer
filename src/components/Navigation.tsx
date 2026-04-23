@@ -1,24 +1,11 @@
-<<<<<<< HEAD
 import { ShoppingBag, Database, BookOpen, User, Home, Menu, X, Terminal, Search, Send, LucideIcon } from 'lucide-react';
-import { useState } from 'react';
-=======
-import { Menu, X, Terminal, Search, LucideIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
->>>>>>> main
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { cn, throttle } from '@/lib/utils';
 import { routes } from '@/config/routes';
-
-const iconMap: Record<string, LucideIcon> = {
-  '/': Home,
-  '/gear': ShoppingBag,
-  '/blog': BookOpen,
-  '/research': Database,
-  '/about': User,
-  '/contact': Send,
-};
+import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 
 function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, label: string, icon: LucideIcon, onClick?: () => void, isMobile?: boolean }) {
   return (
@@ -45,8 +32,6 @@ function NavItem({ to, label, icon: Icon, onClick, isMobile }: { to: string, lab
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-<<<<<<< HEAD
-=======
   const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
@@ -54,7 +39,6 @@ export default function Navigation() {
     const handleScroll = throttle(() => {
       setScrolled(window.scrollY > 20);
     }, 100);
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -66,7 +50,6 @@ export default function Navigation() {
       openSearch();
     }
   };
->>>>>>> main
 
   return (
     <>
@@ -109,16 +92,6 @@ export default function Navigation() {
             overflow="y-auto"
           >
             <Box as="ul" className="space-y-6">
-<<<<<<< HEAD
-              {routes.filter(r => r.path !== '/').map((item) => (
-                <NavItem 
-                  key={item.path} 
-                  to={item.path} 
-                  label={item.label} 
-                  icon={iconMap[item.path] || Terminal}
-                  onClick={() => setIsOpen(false)} 
-                  isMobile 
-=======
               <Box as="li" position="relative" className="group">
                 <Box
                   as="button"
@@ -147,10 +120,9 @@ export default function Navigation() {
                   key={item.path}
                   to={item.path}
                   label={item.label}
-                  icon={item.icon}
+                  icon={item.icon || Terminal}
                   onClick={() => setIsOpen(false)}
                   isMobile
->>>>>>> main
                 />
               ))}
             </Box>
@@ -169,9 +141,10 @@ export default function Navigation() {
         )}
       >
         <Stack
-          padding={8}
-          gap={10}
+          padding={scrolled ? 6 : 8}
+          gap={scrolled ? 8 : 10}
           flex={1}
+          className="transition-all duration-300"
         >
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
@@ -188,7 +161,7 @@ export default function Navigation() {
             <Box as="li">
               <Box
                 as="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+                onClick={handleSearchClick}
                 display="flex"
                 align="center"
                 gap={4}
@@ -203,13 +176,8 @@ export default function Navigation() {
               </Box>
             </Box>
 
-<<<<<<< HEAD
-            {routes.filter(r => r.path !== '/').map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={iconMap[item.path] || Terminal} />
-=======
             {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
->>>>>>> main
+              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon || Terminal} />
             ))}
           </Stack>
         </Stack>
