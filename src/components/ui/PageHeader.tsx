@@ -41,7 +41,9 @@ export function PageHeader({
           size={{ base: "4xl", lg: "6xl" }}
           weight="font-black"
           tracking="tighter"
-          className="text-text-main leading-tight uppercase"
+          color="main"
+          uppercase
+          className="leading-tight"
         >
           {title}
         </Text>
@@ -64,7 +66,7 @@ export function PageHeader({
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4}>
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="wide-editorial" uppercase>{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
