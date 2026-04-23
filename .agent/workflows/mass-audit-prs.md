@@ -4,33 +4,44 @@ description: systematically audit, track, and review multiple GitHub pull reques
 
 # Mass Audit PRs Workflow
 
-This workflow standardizes the process for auditing multiple open Pull Requests, ensuring consistent code quality, tracking current review status, and efficiently submitting inline feedback across a batch of PRs using a decoupled read/write architecture.
+This workflow standardizes the process for auditing multiple open Pull Requests, ensuring consistent code quality, tracking current review status, and efficiently submitting inline feedback across a batch of PRs.
 
 // turbo-all
 
-1. **Fetch open PRs**:
+1. Fetch the list of all open pull requests to identify the scope of the mass audit:
 ```bash
 gh pr list --state open --json number,title,author --jq '.[] | "- #\(.number) \(.title) (@\(.author.login))"'
 ```
 
-2. **Update Tracking**: Create or update `REVIEW_TRACKING.md` in the project root with a summary table tracking PR statuses and the chronological list of PRs to review.
+2. Create or update a central tracking document (e.g., `REVIEW_TRACKING.md` or `UPDATED_REVIEW_TRACKING.md`) in the project root. This file should contain:
+   - A summary table tracking PR statuses (Ready to Merge, Awaiting Updates, Needs Initial Review, etc.)
+   - A chronological list of PRs to review.
+   - Identified overlaps and dependencies to determine the structural order in which PRs should be reviewed and merged.
 
-3. **Generate Review Context & Output Templates**: For a selected batch of PRs, run the fetch script. This will generate a read-only `pr-context-<PR>.md` and a writeable `pr-review-<PR>.md` for each.
+3. For a selected batch of PRs from your tracking document, generate the structured review plans sequentially:
 ```bash
 python3 dev-tools/fetch_pr_review_data.py PR_NUMBER
 ```
+*(Repeat step 3 for each PR number in your target batch.)*
 
-4. **Audit the PRs**: For each PR, READ the instructions in `.agent/workflows/REVIEW_INSTRUCTIONS.md` and the diffs in `pr-context-<PR_NUMBER>.md`.
+4. Systematically audit each generated `plan-pr-review-*.md` document. For EVERY modified file in the PR, evaluate against project standards:
+   - **Dead abstractions** — new class/context/hook that a simpler primitive handles?
+   - **Unnecessary indirection** — does this add a layer where a direct call would do?
+   - **Responsibility creep** — component taking on logic that belongs in a hook or parent?
+   - **Import bloat** — e.g., `import React` not needed in React 17+?
+   - **Design Token compliance** — raw Tailwind classes (`text-[10px]`) or inline styles bypassing design tokens?
+   - **Audit ratio** — if additions > 100 lines, find 10+ lines to remove.
 
-5. **Draft the Review**:
-   - **DO NOT** edit the `pr-context-<PR_NUMBER>.md` markdown file.
-   - **EDIT** the `pr-review-<PR_NUMBER>.md` file.
-   - You **MUST** evaluate the code against the checklist and physically mark each `- [ ]` box as `- [x]`.
-   - Add your general findings, final recommendation, and specific inline comments mapped to exact line numbers into the json block at the bottom of the file.
+5. Update the `plan-pr-review-*.md` document:
+   - Mark all audit checklist items `[x]` (or note explicit violations).
+   - Replace the `body` value in the proposed inline comment JSON blocks with specific feedback (and ensure the `line` property matches the actual diff line number).
+   - Complete the Submission section at the bottom (fill out ANTI-AI-SLOP, FINDINGS, and FINAL RECOMMENDATION).
 
-6. **Submit the Review**: Run the submission script against the populated review file.
+6. Use the submission script to parse the document and submit the review to GitHub:
 ```bash
-python3 dev-tools/submit_pr_review_data.py pr-review-PR_NUMBER.md
+python3 dev-tools/submit_pr_review_data.py plan-pr-review-PR_NUMBER.md
 ```
 
-7. **Track & Repeat**: Update `REVIEW_TRACKING.md` with the outcome ("Approved", "Changes Requested") and proceed to the next PR.
+7. Update your tracking document (`REVIEW_TRACKING.md`) with the outcome of the review (e.g., "Approved", "Not Approved", "Approved with Minor Changes") to provide an updated merge priority.
+
+8. Proceed to the next PR in the batch and repeat steps 3-7 until the mass audit phase is complete.
