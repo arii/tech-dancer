@@ -34,7 +34,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const headerExtras = (
     <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
       <Box display="flex" align="center" gap={4}>
-        <Box className="relative w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white overflow-hidden border border-line/20">
+        <Box display="flex" align="center" justify="center" className="relative w-10 h-10 rounded-full bg-accent text-white overflow-hidden border border-line/20">
           <Text variant="mono" size="xs" weight="font-bold">
             {post.author ? post.author.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'AA'}
           </Text>
