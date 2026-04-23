@@ -32,6 +32,7 @@ export default defineConfig(({mode}) => {
     '/research',
     '/about',
     '/contact',
+    '/ux-auditor',
     ...getContentSlugs('content/posts', '/blog'),
     ...getContentSlugs('content/resources', '/gear'),
   ];

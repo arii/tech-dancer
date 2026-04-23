@@ -10,6 +10,10 @@ import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
+import { routes as routeConfig } from './config/routes';
+
+import { Box } from './layouts/Primitives';
+
 import { useEmailStore, STORAGE_KEY } from './features/email-capture/emailStore';
 
 import { Box } from './layouts/Primitives';
@@ -69,22 +73,19 @@ export function RootLayout() {
   );
 }
 
+/**
+ * Maps centralized absolute route paths to relative paths for children.
+ */
 export const routes = [
   {
     path: '/',
     element: <RootLayout />,
-    children: [
-      { index: true, element: <Home /> },
-      { path: 'gear', element: <GearReviews /> },
-      { path: 'gear/:slug', element: <GearPost /> },
-      { path: 'research', element: <Research /> },
-      { path: 'research/:id', element: <ResearchDetail /> },
-      { path: 'ux-auditor', element: <UXAuditor /> },
-      { path: 'blog', element: <Blog /> },
-      { path: 'blog/:slug', element: <BlogPost /> },
-      { path: 'about', element: <About /> },
-      { path: 'contact', element: <Contact /> },
-      { path: '*', element: <Home /> },
-    ],
+    children: routeConfig.map((route) => ({
+      ...route,
+      // React Router children paths should be relative to parent if they don't start with /
+      // or absolute if they do. Since our parent is '/', absolute paths work fine too,
+      // but to be safe and follow standard patterns, we can make them relative if they are under '/'.
+      path: route.path === '/' ? undefined : route.path.replace(/^\//, ''),
+    })),
   },
 ];
