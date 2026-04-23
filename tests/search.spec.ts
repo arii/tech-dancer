@@ -72,10 +72,6 @@ test.describe('Search and Filter URL Persistence', () => {
     // Reload
     await page.reload();
 
-    // Open search again to verify persistence
-    const searchButtonReload = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButtonReload.click();
-
     await expect(page.getByPlaceholder(/SEARCH REPOSITORY/i)).toHaveValue('swing');
     await expect(page.getByText(/RESULTS FOUND/i)).not.toHaveText('0 RESULTS FOUND');
   });
