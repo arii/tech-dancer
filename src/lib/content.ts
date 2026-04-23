@@ -49,7 +49,7 @@ function parseFrontmatter(content: string) {
           else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
 
           // Basic numeric conversion for rating
-          if (key === 'rating') data[key] = parseFloat(value);
+          if (['rating', 'durability', 'value'].includes(key)) data[key] = parseFloat(value);
           else data[key] = value;
         }
       }
@@ -64,6 +64,7 @@ export interface Post {
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
   category: string;
   excerpt: string;
   content: string;
@@ -108,7 +109,10 @@ export interface Event {
   location: string;
   city: string;
   schedule: string;
+  date: string;
   description: string;
+  category: string;
+  excerpt: string;
   link?: string;
   content: string;
 }
@@ -158,10 +162,10 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts),
-  resources: transform<Resource>(contentModules.resources),
-  studies: transform<Study>(contentModules.studies),
-  events: transform<Event>(contentModules.events)
+  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
+  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
+  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
+  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
 };
 
 const maps = {

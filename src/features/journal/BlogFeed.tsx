@@ -1,5 +1,6 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
+import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 import { AlertCircle } from 'lucide-react';
@@ -9,9 +10,14 @@ export default function BlogFeed() {
 
   return (
     <Box as="section">
+      <SEO
+        title="Blog"
+        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
+      />
       <FolioGrid
         items={posts}
         categoryTitle="Blog Posts"
+        as="h1"
         label="INSIGHTS"
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"

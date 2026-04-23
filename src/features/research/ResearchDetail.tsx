@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { ToolView } from './components/ToolView';
+import { SEO } from '@/components/SEO';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
@@ -28,7 +30,18 @@ export default function ResearchDetail() {
     );
   }
 
-  if (!toolExists) {
+  const structuredData = useMemo(() => {
+    if (!tool) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": tool.name,
+      "description": tool.layman,
+      "applicationCategory": "EducationalApplication"
+    };
+  }, [tool]);
+
+  if (!tool) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
@@ -44,6 +57,16 @@ export default function ResearchDetail() {
 
   return (
     <Box as="section" padding="panel">
+      <SEO
+        title={tool.name}
+        description={tool.layman}
+        type="website"
+      />
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
       <Stack gap={12}>
         <Box 
           as="button" 

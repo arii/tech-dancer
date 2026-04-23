@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -17,6 +18,7 @@ interface FolioGridProps {
   children?: React.ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
+  as?: React.ElementType;
 }
 
 export default function FolioGrid({
@@ -27,7 +29,8 @@ export default function FolioGrid({
   description,
   children,
   view = 'card',
-  onViewChange
+  onViewChange,
+  as
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -49,6 +52,7 @@ export default function FolioGrid({
           title={categoryTitle}
           description={description}
           border="b"
+          as={as}
         />
         {children}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">

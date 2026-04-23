@@ -1,5 +1,6 @@
 import { useMemo, type ChangeEvent } from 'react';
 import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
+import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { GearCard } from './GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
@@ -14,6 +15,10 @@ export default function Toolbox() {
 
   return (
     <Box as="section" paddingY={8}>
+      <SEO
+        title="Toolbox"
+        description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
+      />
       {/* Header section with modern design */}
       <Box as="header" marginBottom={12} border="b" paddingBottom={12}>
         <Box marginBottom={4}>

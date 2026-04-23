@@ -3,10 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import PathSelector from '@/components/ui/PathSelector';
-import { SectionHeader } from '@/components/ui/PageHeader';
-import { ContentCardSkeleton } from '@/components/ui/ContentCard';
 import { useHome } from './useHome';
+import { SEO } from '@/components/SEO';
+import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
+import PathSelector from '@/components/ui/PathSelector';
+import { ContentItem } from '@/lib/content';
+import { ContentCardSkeleton } from '@/components/ui/ContentCard';
 
 const RecentPosts = lazy(() => import('./components/RecentPosts'));
 const UpcomingEvents = lazy(() => import('./components/UpcomingEvents'));
@@ -16,6 +18,10 @@ export default function Home() {
 
   return (
     <Box as="section">
+      <SEO
+        title="Home"
+        description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
+      />
       <Stack gap={24}>
         <Stack gap={12} paddingTop={12}>
           <Stack gap={4}>
