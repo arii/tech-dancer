@@ -88,7 +88,7 @@ export function GlobalSearch() {
             as="input"
             ref={inputRef}
             type="text"
-            placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+            placeholder="SEARCH REPOSITORY"
             value={query}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             width="full"
