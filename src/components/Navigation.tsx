@@ -73,7 +73,7 @@ export default function Navigation() {
         aria-label="Mobile Navigation"
         layout="mobileHeader"
         className={cn(
-          "transition-all duration-300",
+          "transition-[background-color,backdrop-filter,border-color] duration-300",
           scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
         )}
       >
@@ -153,15 +153,14 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-all duration-300",
+          "w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-[background-color,backdrop-filter] duration-300",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
         <Stack
-          padding={scrolled ? 6 : 8}
-          gap={scrolled ? 8 : 10}
+          padding={8}
+          gap={10}
           flex={1}
-          className="transition-all duration-300"
         >
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
