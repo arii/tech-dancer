@@ -4,11 +4,11 @@ import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import { useEmailCaptureContext } from '@/features/email-capture/EmailCaptureContext';
+import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
-  const { showEmailBar } = useEmailCaptureContext();
+  const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const { pathname, key } = useLocation();
   const navType = useNavigationType();

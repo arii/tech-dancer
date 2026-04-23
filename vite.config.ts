@@ -32,6 +32,7 @@ export default defineConfig(({mode}) => {
     '/research',
     '/about',
     '/contact',
+    '/ux-auditor',
     ...getContentSlugs('content/posts', '/blog'),
     ...getContentSlugs('content/resources', '/gear'),
   ];
@@ -62,7 +63,7 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       Sitemap({
         hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
-        dynamicRoutes,
+        dynamicRoutes, generateRobotsTxt: false,
       }),
       ViteImageOptimizer({
         includePublic: true,
