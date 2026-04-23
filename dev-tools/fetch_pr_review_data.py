@@ -12,7 +12,7 @@ import sys
 import re
 import subprocess
 from github import Github, GithubException
-from github_utils import get_github_token, get_repo_name, get_ci_status, get_ci_icon
+from github_utils import get_github_token, get_repo_name, get_ci_status, CIFormatter
 
 def main():
     if len(sys.argv) < 2:
@@ -38,7 +38,7 @@ def main():
     # ── Fetch CI Status ───────────────────────────────────────────────────
     head_sha = pr.head.sha
     ci_summary, _ = get_ci_status(repo, head_sha)
-    ci_display = f"{get_ci_icon(ci_summary)} {ci_summary}"
+    ci_display = CIFormatter.format(ci_summary)
 
     title = pr.title
     description = pr.body or '_No description provided._'
