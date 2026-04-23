@@ -1,4 +1,4 @@
-import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
+import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useRef } from 'react';
@@ -33,6 +33,17 @@ export function GlobalSearch() {
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
+  };
+
+  const highlight = (text: string) => {
+    if (!query) return text;
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase()
+        ? <span key={i} className="text-accent bg-accent/10 rounded-sm px-0.5">{part}</span>
+        : part
+    );
   };
 
   if (!isOpen) return null;
@@ -118,12 +129,12 @@ export function GlobalSearch() {
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
                       <Box display="flex" align="center" justify="between" gap={3}>
-                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{res.title}</Text>
+                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                             <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
                       </Box>
-                      <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{res.excerpt}</Text>
+                      <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                    </Stack>
                    <CornerDownLeft className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
                 </Box>
@@ -132,7 +143,7 @@ export function GlobalSearch() {
           ) : (
             <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
               <Stack align="center" gap={4}>
-                <Search className="w-12 h-12 opacity-20" />
+                <Sparkles className="w-12 h-12 opacity-20" />
                 <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
               </Stack>
             </Box>
