@@ -1,12 +1,13 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import type { BaseProps } from '@/layouts/Box';
 
 interface PageHeaderProps {
   label: string;
   title: string;
   description?: string;
-  paddingBottom?: number | string;
-  border?: boolean | "t" | "b" | "l" | "r";
-  descriptionMaxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | string;
+  paddingBottom?: BaseProps['paddingBottom'];
+  border?: BaseProps['border'];
+  descriptionMaxWidth?: BaseProps['maxWidth'];
   titleAs?: "h1" | "h2" | "h3";
 }
 
