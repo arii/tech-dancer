@@ -29,7 +29,3 @@ review_payload.json
 pr-review-*.md
 pr-context-*.md
 plan-pr-review-*.md
-
-# UI Audit
-antipattern-report.txt
-TODO_ANTIPATTERNS.md
