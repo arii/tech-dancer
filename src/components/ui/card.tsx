@@ -9,11 +9,10 @@ function Card({
 }: React.ComponentProps<typeof Box> & { size?: "default" | "sm" }) {
   return (
     <Box
-      border
       radius="none"
       surface="default"
       className={cn(
-        "group/card flex flex-col overflow-hidden text-sm",
+        "group/card flex flex-col overflow-hidden text-sm border border-line/30 shadow-sm transition-shadow hover:shadow-md",
         size === "default" ? "gap-4 p-8" : "gap-3 p-4",
         className
       )}

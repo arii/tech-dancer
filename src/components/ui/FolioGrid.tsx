@@ -78,21 +78,29 @@ export default function FolioGrid({
             </Box>
           ))
         ) : (
-          filteredItems.map((item, index) => (
-            <Box
-              key={item.slug}
-              border="r"
-              borderBottom={true}
-              padding={8}
-              className={`hover:bg-card-bg transition-colors group ${index === 0 ? "col-span-full xl:col-span-2" : ""}`}
-            >
-              <ContentCard
-                {...item}
-                basePath={basePath}
-                aspect="video"
-              />
-            </Box>
-          ))
+          filteredItems.map((item, index) => {
+            // Implement asymmetric grid logic: every 3rd or 4th item spans two columns on large screens
+            const isAsymmetric = index % 3 === 0 || index % 4 === 0;
+            const spanClass = index === 0
+              ? "col-span-full xl:col-span-2"
+              : (isAsymmetric ? "lg:col-span-2" : "lg:col-span-1");
+
+            return (
+              <Box
+                key={item.slug}
+                border="r"
+                borderBottom={true}
+                padding={8}
+                className={`hover:bg-card-bg transition-colors group ${spanClass}`}
+              >
+                <ContentCard
+                  {...item}
+                  basePath={basePath}
+                  aspect="video"
+                />
+              </Box>
+            );
+          })
         )}
       </Grid>
     </Box>

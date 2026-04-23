@@ -1,0 +1,8 @@
+/* src/styles/tokens.css */
+:root {
+  /* Use a 4px or 8px base unit (The 'Golden' scale) */
+  --space-unit: 4px;
+  --section-gap: calc(var(--space-unit) * 32); /* 128px */
+  --content-gap: calc(var(--space-unit) * 8);  /* 32px */
+  --component-padding: calc(var(--space-unit) * 6); /* 24px */
+}

@@ -10,13 +10,24 @@ interface GridProps extends BoxProps {
 
 export const Grid = React.forwardRef<HTMLDivElement, GridProps>(
   ({ className, cols = 12, rows, ...props }, ref) => {
+    const colMapper = (v: any) => {
+      if (typeof v === 'number' && v <= 12) return v
+      if (typeof v === 'number') return `[repeat(${v},minmax(0,1fr))]`
+      return v
+    }
+    const rowMapper = (v: any) => {
+      if (typeof v === 'number' && v <= 12) return v
+      if (typeof v === 'number') return `[repeat(${v},minmax(0,1fr))]`
+      return v
+    }
+
     return (
       <Box
         ref={ref}
         className={composeStyles(
           "grid",
-          getResponsiveClasses(cols, "grid-cols-"),
-          getResponsiveClasses(rows, "grid-rows-"),
+          getResponsiveClasses(cols, "grid-cols-", colMapper),
+          getResponsiveClasses(rows, "grid-rows-", rowMapper),
           className
         )}
         {...props}

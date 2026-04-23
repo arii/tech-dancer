@@ -46,11 +46,11 @@ export const buttonVariants = cva(
         warning: "text-accent",
       },
       size: {
-        default: "h-[40px] px-6 text-xs",
-        sm: "h-8 px-4 text-xs",
-        md: "h-[40px] px-6 text-xs",
+        default: "h-[48px] px-6 text-xs",
+        sm: "h-[48px] px-4 text-[10px]",
+        md: "h-[48px] px-6 text-xs",
         lg: "h-12 px-8 text-sm",
-        icon: "h-[40px] w-[40px]",
+        icon: "h-[48px] w-[48px]",
       },
       fullWidth: {
         true: "w-full",
@@ -64,14 +64,14 @@ export const buttonVariants = cva(
 );
 
 export const badgeVariants = cva(
-  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px]",
+  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all rounded-[2px] opacity-80",
   {
     variants: {
       emphasis: variants.emphasis,
       intent: variants.intent,
     },
     defaultVariants: {
-      emphasis: "solid",
+      emphasis: "outline",
       intent: "default",
     },
   }
