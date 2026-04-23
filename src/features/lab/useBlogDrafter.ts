@@ -46,6 +46,8 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     return `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
   }, [data, markdownPreview]);
 
+  const wordCount = data.commentary.trim().split(/\s+/).filter(Boolean).length;
+
   const updateField = (field: keyof DraftData, value: string) => {
     setData(prev => ({ ...prev, [field]: value }));
   };
@@ -54,6 +56,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     data,
     updateField,
     markdownPreview,
-    githubIssueUrl
+    githubIssueUrl,
+    wordCount
   };
 }

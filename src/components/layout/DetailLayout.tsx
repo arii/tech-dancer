@@ -35,7 +35,7 @@ export function DetailLayout({
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
+      <Stack gap={12} className="max-w-4xl mx-auto w-full">
         {/* Navigation */}
         <Box
           as="button"
@@ -89,7 +89,7 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10}>
             {/* Sidebar */}
             {sidebar && (
               <Box className="hidden lg:block">

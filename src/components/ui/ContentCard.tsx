@@ -5,6 +5,7 @@ import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { useImage } from '@/hooks/useImage';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
@@ -39,6 +40,7 @@ export function ContentCardSkeleton() {
 
 export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content, ...motionProps }: ContentCardProps) {
   const rt = readingTime(content, excerpt);
+  const { imgError, handleImgError } = useImage();
 
   return (
     <Box 
@@ -48,11 +50,12 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
     >
       {/* Visual Thumbnail */}
       <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[160px]">
-        {image ? (
+        {image && !imgError ? (
           <img 
             src={image} 
             alt={title} 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            onError={handleImgError}
           />
         ) : (
           <Box className="w-full h-full flex flex-col">

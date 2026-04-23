@@ -2,7 +2,7 @@ import { Search, X, Hash, ArrowRight, CornerDownLeft, Sparkles } from 'lucide-re
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useRef, useEffect, useMemo, useCallback } from 'react';
-import { escapeRegExp, getHighlightedParts } from '@/lib/utils';
+import { useSearchHighlight } from '@/hooks/useSearchHighlight';
 import { useNavigate } from 'react-router-dom';
 import { highlightVariants } from '@/lib/variants';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
@@ -19,11 +19,7 @@ export function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Memoize the search regex to avoid re-instantiation on every render during query updates.
-  const searchRegex = useMemo(() => {
-    if (!query) return null;
-    return new RegExp(`(${escapeRegExp(query)})`, 'gi');
-  }, [query]);
+  const { highlight } = useSearchHighlight(query);
   // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {
     if (isOpen) close();
@@ -44,16 +40,6 @@ export function GlobalSearch() {
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
-  const highlight = useCallback((text: string) => {
-    const parts = getHighlightedParts(text, query, searchRegex);
-    if (parts.length <= 1) return text;
-
-    return parts.map((part, i) =>
-      part.toLowerCase() === query.toLowerCase()
-        ? <Box as="span" key={i} radius="sm" paddingX={0.5} className="text-accent bg-accent/10">{part}</Box>
-        : part
-    );
-  }, [searchRegex, query]);
 
   if (!isOpen) return null;
 
