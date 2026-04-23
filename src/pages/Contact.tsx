@@ -13,7 +13,6 @@ import { contactSchema, type ContactFormData } from '@/features/contact/schemas/
  */
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
