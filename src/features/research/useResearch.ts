@@ -26,6 +26,13 @@ export function useResearch() {
       category: 'Logistics',
       status: 'Active',
       layman: 'Flight finder for WCS events - optimizing travel routes and finding the best deals.'
+    },
+    {
+      id: 'ux-auditor',
+      name: 'Visual UX Auditor',
+      category: 'Development Tool',
+      status: 'Active',
+      layman: 'Automated visual regression and UX improvement suggestions across viewports.'
     }
   ];
 

@@ -1,4 +1,5 @@
 import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
@@ -10,6 +11,11 @@ export default function ArielProfile() {
 
   return (
     <Box as="section" maxWidth="screen-2xl" marginX="auto">
+      <SEO
+        title="About"
+        description="Learn more about tech-dancer, the roboticist's guide to the West Coast Swing. Exploring the intersection of dance, physics, and engineering."
+        type="profile"
+      />
       <Stack gap={12}>
         <PageHeader 
           label="ABOUT TECH-DANCER"
