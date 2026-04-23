@@ -38,7 +38,9 @@ export interface BaseProps {
   maxHeight?: "full" | "screen" | "auto" | "min" | "fit" | number | string
   minWidth?: "0" | "full" | "min" | "fit" | number | string
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl"
-  overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden"
+  overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
+  overflowX?: "auto" | "hidden" | "scroll" | "visible"
+  overflowY?: "auto" | "hidden" | "scroll" | "visible"
   zIndex?: number | string
   opacity?: number | string
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
@@ -47,6 +49,12 @@ export interface BaseProps {
   self?: "start" | "center" | "end" | "stretch" | "auto"
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly"
   align?: "start" | "center" | "end" | "baseline" | "stretch"
+  scrollBehavior?: "smooth" | "auto"
+  scrollPaddingTop?: number | string
+  top?: ResponsiveProp<keyof typeof spacing | number | string>
+  right?: ResponsiveProp<keyof typeof spacing | number | string>
+  bottom?: ResponsiveProp<keyof typeof spacing | number | string>
+  left?: ResponsiveProp<keyof typeof spacing | number | string>
 }
 
 export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
@@ -64,8 +72,9 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     gap, border, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
-    overflow, zIndex, opacity, display, aspect, shrink, self, span, cursor,
-    justify, align,
+    overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
+    justify, align, scrollBehavior, scrollPaddingTop,
+    top, right, bottom, left,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -161,6 +170,8 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           maxHeight && getVal(maxHeight, "max-h"),
           minWidth && getVal(minWidth, "min-w"),
           overflow && `overflow-${overflow}`,
+          overflowX && `overflow-x-${overflowX}`,
+          overflowY && `overflow-y-${overflowY}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
           opacity && getVal(opacity, "opacity"),
           getResponsiveClasses(display, ""),
@@ -173,8 +184,17 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
+          getResponsiveClasses(top, "top-"),
+          getResponsiveClasses(right, "right-"),
+          getResponsiveClasses(bottom, "bottom-"),
+          getResponsiveClasses(left, "left-"),
           className
         )}
+        style={{
+          ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
+          ...motionProps.style,
+          ...props.style
+        }}
         {...motionProps}
         {...domProps}
       />
