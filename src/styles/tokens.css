@@ -1,0 +1,75 @@
+:root {
+  /* Colors */
+  --color-bg: oklch(98% 0.005 250);
+  --color-surface: oklch(100% 0 0);
+  --color-surface-alt: oklch(95% 0.01 250);
+  --color-line: oklch(92% 0.01 250);
+  --color-accent: #007BFF;
+  --color-accent-shadow: rgba(255, 127, 80, 0.3);
+  --color-accent-navy: #1A2B3C;
+  --color-accent-brand: #007BFF;
+  --color-text-main: #1A2B3C;
+  --color-text-body: #2D3748;
+  --color-text-dim: #4B4B4B;
+
+  /* Typography */
+  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  /* Radius (Corrected to match original index.css variables) */
+  --radius-none: 0px;
+  --radius-subtle: 2px;
+  --radius-standard: 4px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --spacing-container-sm: 1.5rem;
+  --spacing-container-md: 3rem;
+  --spacing-card: 2rem;
+  --spacing-compact: 1rem;
+  --spacing-nav: 2rem;
+  --spacing-email-bar-y: 1rem;
+  --spacing-email-bar-x-sm: 1.5rem;
+  --spacing-email-bar-x-md: 3rem;
+  --spacing-hero: 5rem;
+  --spacing-comfort: 3rem;
+  --spacing-end-pad: 8rem;
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal-distance: 20px;
+
+  /* Icon Sizes */
+  --icon-xs: 12px;
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+
+  /* Image Sizes */
+  --image-profile: 400px;
+
+  /* Z-Index */
+  --z-hide: -1;
+  --z-base: 0;
+  --z-docked: 10;
+  --z-dropdown: 20;
+  --z-sticky: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-skip-link: 70;
+  --z-toast: 80;
+  --z-top: 100;
+  --z-search: 200;
+
+  /* Shadows */
+  --shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+}

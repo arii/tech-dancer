@@ -33,7 +33,8 @@ export function Reveal({
   return (
     <motion.div
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
+      viewport={{ once: true }}
       variants={variants}
       transition={{
         duration,

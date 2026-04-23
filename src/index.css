@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/tokens.css";
 
 @theme {
   /* Safelist dynamic utilities needed by the Box.tsx responsive scale */
@@ -11,29 +12,55 @@
   --safelist-px: px-0 px-1 px-2 px-3 px-4 px-5 px-6 px-8 px-10 px-12 px-16 px-20 px-24 px-32;
   --safelist-py: py-0 py-1 py-2 py-3 py-4 py-5 py-6 py-8 py-10 py-12 py-16 py-20 py-24 py-32;
 
-  /* Modern Typography Identity */
-  --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  /* Theme mappings for Tailwind v4 */
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-shadow: var(--color-accent-shadow);
+  --color-accent-navy: var(--color-accent-navy);
+  --color-accent-brand: var(--color-accent-brand);
+  --color-text-main: var(--color-text-main);
+  --color-text-body: var(--color-text-body);
+  --color-text-dim: var(--color-text-dim);
 
-  /* Clean Content Palette (60-30-10 Rule) */
-  --color-bg: oklch(98% 0.005 250);   /* Off-White Primary tinted with brand blue */
-  --color-surface: oklch(100% 0 0);    /* Surface Secondary */
-  --color-surface-alt: oklch(95% 0.01 250); /* Brand-aware neutral tint */
-  --color-line: oklch(92% 0.01 250);       /* Muted Borders */
-  --color-accent: #007BFF;
-  --color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --color-accent-navy: #1A2B3C;
-  --color-text-main: #1A2B3C;  /* Deep Navy */
-  --color-text-body: #2D3748;
-  --color-text-dim: #4B4B4B;   /* Darkened for WCAG AA (5.2:1 contrast) */
-  
-  /* Layout & Spacing */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Custom Spacing & Layout Tokens */
+  --spacing-card: var(--spacing-card);
+  --spacing-compact: var(--spacing-compact);
+  --spacing-nav: var(--spacing-nav);
+  --spacing-email-bar-y: var(--spacing-email-bar-y);
+  --spacing-email-bar-x-sm: var(--spacing-email-bar-x-sm);
+  --spacing-email-bar-x-md: var(--spacing-email-bar-x-md);
+  --spacing-hero: var(--spacing-hero);
+  --spacing-comfort: var(--spacing-comfort);
+  --spacing-end-pad: var(--spacing-end-pad);
+  --spacing-container-sm: var(--spacing-container-sm);
+  --spacing-container-md: var(--spacing-container-md);
+
+  /* Custom Radius Tokens */
+  --radius-subtle: var(--radius-subtle);
+  --radius-standard: var(--radius-standard);
+
+  /* Z-Index Tokens */
+  --z-hide: var(--z-hide);
+  --z-base: var(--z-base);
+  --z-docked: var(--z-docked);
+  --z-dropdown: var(--z-dropdown);
+  --z-sticky: var(--z-sticky);
+  --z-overlay: var(--z-overlay);
+  --z-modal: var(--z-modal);
+  --z-popover: var(--z-popover);
+  --z-skip-link: var(--z-skip-link);
+  --z-toast: var(--z-toast);
+  --z-top: var(--z-top);
+  --z-search: var(--z-search);
+
+  /* Shadow Tokens */
+  --shadow-top-overlay: var(--shadow-top-overlay);
+
+  /* Container & Panel Defaults */
   --container-blog: 1100px;
-  
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
 
@@ -41,9 +68,13 @@
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
 
-  /* Motion Primitives */
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  /* Animation */
+  --ease-smooth: var(--ease-smooth);
 }
 
 @layer utilities {
@@ -52,7 +83,7 @@
       transform: translateY(-100%);
     }
     100% {
-      transform: translateY(800px); /* Adjust this if your container gets taller */
+      transform: translateY(800px);
     }
   }
 
@@ -66,7 +97,6 @@
     }
   }
 
-  /* Premium Industrial Utilities */
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
   }
@@ -96,7 +126,6 @@
       linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
     background-size: 20px 20px;
   }
-
 }
 
 @layer base {
@@ -120,7 +149,6 @@
     @apply text-text-body break-words;
   }
 }
-
 
 .panel {
   @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full;
