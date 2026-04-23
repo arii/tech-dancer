@@ -77,6 +77,14 @@ export const imageSizes = {
   profile: 400,
 };
 
+export const iconSizes = {
+  xs: 12,
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 32,
+};
+
 export const zIndex = {
   hide: -1,
   base: 0,
@@ -89,6 +97,7 @@ export const zIndex = {
   skipLink: 70,
   toast: 80,
   top: 100,
+  search: 200,
 };
 
 export const typography = {
@@ -101,6 +110,16 @@ export const typography = {
   micro: "font-mono uppercase tracking-widest",
   tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+};
+
+export const tracking = {
+  tighter: "tracking-tighter",
+  tight: "tracking-tight",
+  normal: "tracking-normal",
+  wide: "tracking-wide",
+  wider: "tracking-wider",
+  widest: "tracking-widest",
+  "wide-editorial": "tracking-[0.2em]",
 };
 
 export const typeSizes = {

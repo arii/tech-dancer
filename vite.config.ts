@@ -39,6 +39,8 @@ export default defineConfig(({mode}) => {
   return {
     base,
     build: {
+      target: 'esnext',
+      // Ensure assets are also handled correctly
       assetsDir: 'assets',
       chunkSizeWarningLimit: 400,
       rollupOptions: {
