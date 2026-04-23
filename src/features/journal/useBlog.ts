@@ -6,7 +6,7 @@ import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useBlog() {
   const posts = useMemo(() => getPosts(), []);
-  const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
+  const [activeCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
 
@@ -40,7 +40,6 @@ export function useBlog() {
     posts: filteredPosts,
     categories,
     activeCategory,
-    setActiveCategory,
     view,
     setView,
     searchTerm,

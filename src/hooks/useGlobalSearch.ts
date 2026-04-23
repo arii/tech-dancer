@@ -1,23 +1,18 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useSearchParam } from './useSearchParam';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
   const [query, setQuery] = useSearchParam('q');
-  const [studies, setStudies] = useState<any[]>([]);
-
-  useEffect(() => {
-    getStudies().then(data => setStudies(data.map(s => ({ ...s, type: 'study' as const }))));
-  }, []);
   
   const allContent = useMemo(() => {
     return [
       ...getPosts().map(p => ({ ...p, type: 'post' as const })),
       ...getResources().map(r => ({ ...r, type: 'resource' as const })),
-      ...studies
+      ...getStudies().map(s => ({ ...s, type: 'study' as const }))
     ];
-  }, [studies]);
+  }, []);
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
