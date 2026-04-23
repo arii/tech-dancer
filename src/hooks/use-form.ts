@@ -1,0 +1,31 @@
+import { useState, useCallback } from "react"
+
+export function useForm<T extends Record<string, unknown>>(initialValues: T) {
+  const [formData, setFormData] = useState<T>(initialValues)
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }, [])
+
+  const setFieldValue = useCallback(<K extends keyof T>(name: K, value: T[K]) => {
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }, [])
+
+  const resetForm = useCallback(() => {
+    setFormData(initialValues)
+  }, [initialValues])
+
+  const setValues = useCallback((values: Partial<T>) => {
+    setFormData((prev) => ({ ...prev, ...values }))
+  }, [])
+
+  return {
+    formData,
+    setFormData,
+    handleChange,
+    setFieldValue,
+    resetForm,
+    setValues,
+  }
+}

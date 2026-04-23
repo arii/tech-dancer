@@ -3,19 +3,29 @@ import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import type { UseFormRegister, FieldErrors } from 'react-hook-form';
-import type { ContactFormData } from '../schemas/contact-schema';
+import type { ChangeEvent, FormEvent } from 'react';
 
+// Specific types for the data managed by use-contact-form
 interface ContactFormViewProps {
-  register: UseFormRegister<ContactFormData>;
-  errors: FieldErrors<ContactFormData>;
+  formData: {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+  };
+  errors: {
+    name?: string;
+    email?: string;
+    message?: string;
+  };
   isSubmitting: boolean;
-  onSubmit: (e: React.FormEvent) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onSubmit: (e: FormEvent) => void;
 }
 
 const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
 
-export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
+export function ContactFormView({ formData, errors, isSubmitting, onChange, onSubmit }: ContactFormViewProps) {
   return (
     <Box as="section" minHeight="[calc(100vh-64px)]">
       <Stack gap={12}>
@@ -59,10 +69,10 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
 
           <Box surface="default" padding={{ base: 8, md: 12 }}>
             <Box maxWidth="xl" marginX="auto">
-              <Box as="form" onSubmit={onSubmit} noValidate className="space-y-6">
-                <FormField label="Your Name" error={errors.name?.message}>
+              <Box as="form" onSubmit={onSubmit} className="space-y-6">
+                <FormField label="Your Name" error={errors.name}>
                   <Box as="input"
-                    {...register('name')}
+                    name="name"
                     type="text"
                     placeholder="Jane Doe"
                     aria-required="true"
@@ -70,12 +80,14 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                       inputClasses,
                       errors.name ? 'border-accent-brand' : 'border-line'
                     )}
+                    value={formData.name}
+                    onChange={onChange}
                   />
                 </FormField>
 
-                <FormField label="Your Email" error={errors.email?.message}>
+                <FormField label="Your Email" error={errors.email}>
                   <Box as="input"
-                    {...register('email')}
+                    name="email"
                     type="email"
                     placeholder="jane@example.com"
                     aria-required="true"
@@ -83,24 +95,28 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                       inputClasses,
                       errors.email ? 'border-accent-brand' : 'border-line'
                     )}
+                    value={formData.email}
+                    onChange={onChange}
                   />
                 </FormField>
 
-                <FormField label="Subject" error={errors.subject?.message}>
+                <FormField label="Subject">
                   <Box as="select"
-                    {...register('subject')}
+                    name="subject"
                     className={cn(inputClasses, "border-line")}
+                    value={formData.subject}
+                    onChange={onChange}
                   >
-                    <option value="General Feedback">General Feedback</option>
-                    <option value="Content Request">Content Request</option>
-                    <option value="Gear Review Request">Gear Review Request</option>
-                    <option value="Dance Statistics">Dance Statistics</option>
+                    <option>General Feedback</option>
+                    <option>Content Request</option>
+                    <option>Gear Review Request</option>
+                    <option>Dance Statistics</option>
                   </Box>
                 </FormField>
 
-                <FormField label="Message" error={errors.message?.message}>
+                <FormField label="Message" error={errors.message}>
                   <Box as="textarea"
-                    {...register('message')}
+                    name="message"
                     rows={5}
                     placeholder="How can I help you?"
                     aria-required="true"
@@ -109,6 +125,8 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                       "resize-none",
                       errors.message ? 'border-accent-brand' : 'border-line'
                     )}
+                    value={formData.message}
+                    onChange={onChange}
                   />
                 </FormField>
 
