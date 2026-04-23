@@ -11,6 +11,20 @@ import { routes } from './App.tsx';
 import './index.css';
 
 /**
+ * Pre-calculate valid top-level paths from the route configuration.
+ */
+const VALID_TOP_LEVEL_PATHS = (() => {
+  const children = routes[0].children || [];
+  const paths = new Set<string>();
+  for (const route of children) {
+    if (route.path && route.path !== '*' && route.path !== '/') {
+      paths.add(route.path.split('/')[0]);
+    }
+  }
+  return paths;
+})();
+
+/**
  * Function to calculate the actual basename at runtime.
  * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).
  */
@@ -32,16 +46,7 @@ const getBasename = () => {
   if (segments.length > baseSegments.length) {
     const possibleRouteSegment = segments[baseSegments.length];
 
-    // Extract valid top-level paths from the route configuration
-    const children = routes[0].children || [];
-    const validTopLevelPaths = new Set<string>();
-    for (const route of children) {
-      if (route.path && route.path !== '*' && route.path !== '/') {
-        validTopLevelPaths.add(route.path.split('/')[0]);
-      }
-    }
-
-    const isStandardRoute = validTopLevelPaths.has(possibleRouteSegment);
+    const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(possibleRouteSegment);
     const isIndexHtml = possibleRouteSegment === 'index.html';
 
     if (!isStandardRoute && !isIndexHtml) {

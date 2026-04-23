@@ -18,7 +18,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Box
         as={as}
-        ref={ref as any}
+        ref={ref as React.Ref<HTMLDivElement>}
         cursor="pointer"
         className={cn(buttonVariants({ variant, intent, size, fullWidth }), className)}
         {...props}

@@ -31,7 +31,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
     return (
       <Box
         as={Component}
-        ref={ref as any}
+        ref={ref as React.Ref<HTMLDivElement>}
         className={composeStyles(
           variant && typography[variant],
           intent && variants.intent[intent],
