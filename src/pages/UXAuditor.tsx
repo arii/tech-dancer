@@ -38,6 +38,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
     }, 2000);
   };
 
+  const buttonContent = copied
+    ? { icon: CheckCircle, text: 'Copied!', color: 'accent' as const, surface: 'success' as const }
+    : { icon: Copy, text: 'Copy Prompt', color: 'main' as const, surface: 'default' as const };
+  const Icon = buttonContent.icon;
+
   return (
     <Box
       as="button"
@@ -49,14 +54,14 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       paddingX={3}
       paddingY={1}
       radius="md"
-      surface={copied ? "success" : "default"}
+      surface={buttonContent.surface}
       border={true}
       cursor="pointer"
       className={`transition-colors font-bold text-xs ${!copied ? "hover:border-accent hover:text-accent" : ""}`}
     >
-      <Box color={copied ? "accent" : "main"} display="flex" align="center" gap={1}>
-        {copied ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-        <Text>{copied ? "Copied!" : "Copy Prompt"}</Text>
+      <Box color={buttonContent.color} display="flex" align="center" gap={1}>
+        <Icon className="w-3 h-3" />
+        <Text>{buttonContent.text}</Text>
       </Box>
     </Box>
   );

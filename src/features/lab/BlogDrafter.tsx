@@ -208,9 +208,9 @@ export function BlogDrafter() {
               justify="center"
               gap={3}
               padding={4}
-              surface="default"
+              intent="primary"
               cursor="pointer"
-              className="bg-text-main text-bg hover:bg-accent transition-all group"
+              className="transition-all group"
             >
               <Github className="w-5 h-5" />
               <Text variant="display" size="base" weight="font-bold" uppercase={true}>SUBMIT DRAFT</Text>

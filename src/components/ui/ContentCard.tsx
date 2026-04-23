@@ -78,7 +78,7 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         </Stack>
 
         <Box display="flex" align="center" gap={2} paddingTop={6} className="border-t border-line mt-auto">
-          <Text variant="mono" size="xs" className="text-accent font-semibold uppercase tracking-[0.15em]">
+          <Text variant="mono" size="xs" uppercase={true} className="text-accent font-semibold  tracking-[0.15em]">
             Read {title}
           </Text>
           <Box className="w-0 h-[1.5px] bg-accent group-hover:w-8 transition-all duration-500" />

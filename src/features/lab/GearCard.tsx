@@ -25,7 +25,6 @@ export function GearCard({
       direction="col"
       to={`${basePath}/${slug}`}
       display="flex"
-      direction="col"
       surface="default"
       border={true}
       className="group transition-all duration-300 overflow-hidden"

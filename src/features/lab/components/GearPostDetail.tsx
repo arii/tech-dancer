@@ -32,13 +32,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
   const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
     <>
-<<<<<<< HEAD
       {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
-=======
-      {post.specs && Object.keys(post.specs).length > 0 && (
-        <SpecsTable specs={post.specs} />
-      )}
->>>>>>> 43e155f (feat: implement UX consistency playbook and design system refactor (PR #219))
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>

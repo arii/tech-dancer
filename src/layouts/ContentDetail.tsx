@@ -42,7 +42,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
             {category && (
               <Box display="flex" align="center" gap={2} color="brand">
                 <Tag className="w-3 h-3" />
-                <Text variant="mono" size="micro" weight="font-bold" className="uppercase">{category}</Text>
+                <Text variant="mono" size="micro" weight="font-bold" uppercase={true}>{category}</Text>
               </Box>
             )}
             {date && (
