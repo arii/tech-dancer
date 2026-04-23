@@ -51,34 +51,63 @@ jobs:
           git log -1 --format=%ct > dist/.timestamp
 
       - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          destination_dir: ${{ github.ref_name == 'main' && '.' || github.ref_name }}
-          keep_files: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+        run: |
+          # Configure Git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # GitHub Pages only serves the root 404.html for all 404s, regardless of
-      # which subdirectory the request is for. Branch previews deploy their
-      # dist/ to a subdirectory, so their 404.html is never served by GitHub
-      # Pages. This step ensures the root 404.html is always the latest smart
-      # redirect version after any branch push.
-      - name: Update root 404.html on gh-pages for branch previews
-        if: github.ref_name != 'main'
-        run: mkdir -p /tmp/root-404 && cp dist/404.html /tmp/root-404/404.html
+          # Prepare dist
+          mkdir -p ../gh-pages-deploy
+          cp -r dist/* ../gh-pages-deploy/
 
-      - name: Deploy root 404.html to gh-pages
-        if: github.ref_name != 'main'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /tmp/root-404
-          destination_dir: .
-          keep_files: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          # Checkout gh-pages
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+          # Sync build artifacts to their destination
+          DEST_DIR="${{ github.ref_name == 'main' && '.' || github.ref_name }}"
+          mkdir -p "$DEST_DIR"
+          cp -r ../gh-pages-deploy/* "$DEST_DIR/"
+
+          # Ensure .nojekyll exists
+          touch .nojekyll
+
+          # Update root 404.html for branch previews
+          if [ "${{ github.ref_name }}" != "main" ]; then
+            cp "$DEST_DIR/404.html" ./404.html
+          fi
+
+          # Update Previews Index and Metadata
+          mkdir -p previews
+          find . -maxdepth 3 -name "index.html" | while read -r index_file; do
+            DIR=$(dirname "$index_file" | sed 's|^\./||')
+            [[ "$DIR" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
+            TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
+            echo "$DIR $TS"
+          done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
+
+          # Use the dashboard from the latest build
+          cp "$DEST_DIR/previews/index.html" previews/index.html
+
+          # Commit and Push with retries
+          git add .
+          git commit -m "deploy: ${{ github.sha }} [skip ci]" || echo "No changes to commit"
+
+          MAX_RETRIES=5
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Pushing to gh-pages (attempt $i)..."
+            if git push origin gh-pages; then
+              echo "Push successful!"
+              exit 0
+            fi
+            echo "Push failed. Fetching and rebasing..."
+            git fetch origin gh-pages
+            git rebase origin/gh-pages
+            sleep $((i * 2))
+          done
+
+          echo "Failed to push to gh-pages after $MAX_RETRIES attempts."
+          exit 1
 
       - name: Update Deployment Feedback
         uses: actions/github-script@v7
@@ -120,7 +149,6 @@ jobs:
 
             for (const pr of pullRequests) {
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
-              const dashboardUrl = `${baseUrl}previews/index.html`;
               const body = [
                 `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
                 '',
@@ -155,42 +183,3 @@ jobs:
                 });
               }
             }
-
-      - name: Checkout gh-pages for index update
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages-branch
-
-      - name: Generate and Deploy Previews Index
-        run: |
-          cd gh-pages-branch
-          mkdir -p previews
-
-          # Generate a metadata JSON with last updated timestamps for each deployment
-          # Supports branch/name structure (maxdepth 3)
-          find . -maxdepth 3 -name "index.html" | while read -r index_file; do
-            DIR=$(dirname "$index_file" | sed 's|^\./||')
-
-            # Skip root and infra folders
-            [[ "$DIR" =~ ^(\.|assets|tmp|previews)$ ]] && continue
-
-            TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
-            echo "$DIR $TS"
-          done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
-
-          # Validation: Ensure the dashboard exists in build artifacts
-          if [ ! -f "../dist/previews/index.html" ]; then
-            echo "Error: dist/previews/index.html not found! Deployment of preview index failed."
-            exit 1
-          fi
-
-          # Copy the fancy dashboard from the build
-          cp ../dist/previews/index.html previews/index.html
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add previews/index.html previews/data.json
-          git commit -m "chore: update previews index and metadata" || echo "No changes to commit"
-          git pull --rebase origin gh-pages
-          git push origin gh-pages
