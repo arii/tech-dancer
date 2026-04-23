@@ -18,7 +18,6 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
-  italic?: boolean
   [key: string]: any
 }
 
@@ -26,7 +25,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
-    uppercase, lowercase, capitalize, italic,
+    uppercase, lowercase, capitalize,
     ...props 
   }, ref) => {
     return (
@@ -50,7 +49,6 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           uppercase && "uppercase",
           lowercase && "lowercase",
           capitalize && "capitalize",
-          italic && "italic",
           className
         )}
         {...props}
