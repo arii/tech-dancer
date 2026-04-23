@@ -19,6 +19,7 @@ export default function Contact() {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -31,7 +32,6 @@ export default function Contact() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    setSubmitError(null);
     try {
       const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
 
@@ -51,13 +51,15 @@ export default function Contact() {
       setSubmitted(true);
       reset();
     } catch (err) {
-      setSubmitError('System error: Unable to transmit payload. Please try again later.');
+      setError('message', {
+        type: 'manual',
+        message: 'System error: Unable to transmit payload. Please try again later.',
+      });
     }
   };
 
   const handleReset = () => {
     setSubmitted(false);
-    setSubmitError(null);
     reset();
   };
 
@@ -65,16 +67,10 @@ export default function Contact() {
     return <SuccessState onReset={handleReset} />;
   }
 
-  // Merging validation errors with submission errors if needed
-  const viewErrors = {
-    ...errors,
-    ...(submitError ? { message: { message: submitError } } : {}),
-  } as any;
-
   return (
     <ContactFormView
       register={register}
-      errors={viewErrors}
+      errors={errors}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
     />
