@@ -56,7 +56,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
       <Box display="flex" className="min-h-screen w-full">
-        <Navigation />
+        <Navigation scrollRef={scrollRef} />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
@@ -78,7 +78,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
-            paddingTop={12}
+            paddingTop={{ base: 24, lg: 12 }}
             paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
             flex={1}
             direction="col"
