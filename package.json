@@ -11,11 +11,11 @@
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
     "lint": "pnpm run lint:eslint && pnpm run lint:tsc && pnpm run knip",
+    "type-check": "tsc --noEmit",
+    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:tsc": "tsc --noEmit",
-    "type-check": "tsc --noEmit",
-    "knip": "knip",
-    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs"
+    "knip": "knip"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
@@ -54,6 +54,7 @@
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "knip": "^6.6.0",
+    "playwright": "^1.59.1",
     "postcss": "^8.5.10",
     "rollup-plugin-visualizer": "^7.0.1",
     "sharp": "^0.34.5",
