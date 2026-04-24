@@ -1,10 +1,10 @@
-import { useId, cloneElement, type ReactElement } from 'react';
+import React, { useId } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface FormFieldProps {
   label: string;
   error?: string;
-  children: ReactElement;
+  children: React.ReactElement;
 }
 
 export function FormField({ label, error, children }: FormFieldProps) {
@@ -14,7 +14,7 @@ export function FormField({ label, error, children }: FormFieldProps) {
   return (
     <Stack gap={2} marginBottom={6}>
       <Box display="flex" justify="between" align="center">
-        <Text as="label" htmlFor={id} variant="mono" size="xs" weight="font-semibold" color="dim" className="tracking-widest uppercase">
+        <Text as="label" htmlFor={id} variant="mono" size="xs" weight="font-semibold" color="dim" tracking="widest" uppercase>
           {label}
         </Text>
         {error && (
@@ -23,7 +23,7 @@ export function FormField({ label, error, children }: FormFieldProps) {
           </Text>
         )}
       </Box>
-      {cloneElement(children, {
+      {React.cloneElement(children, {
         id,
         'aria-describedby': error ? errorId : undefined,
         'aria-invalid': !!error
