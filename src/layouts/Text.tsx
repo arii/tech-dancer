@@ -39,7 +39,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           !intent && color === "body" && "text-text-body",
           !intent && color === "dim" && "text-text-dim",
           !intent && color === "accent" && "text-accent",
-          !intent && color === "brand" && "text-accent-brand",
+          !intent && color === "brand" && "text-accent",
           !intent && color === "white" && "text-white",
           !intent && color === "bg" && "text-bg",
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),

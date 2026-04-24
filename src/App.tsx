@@ -12,8 +12,6 @@ import { PageSkeleton } from './components/ui/PageSkeleton';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { routes as routeConfig } from './config/routes';
 
-import { Box } from './layouts/Primitives';
-
 import { useEmailStore, STORAGE_KEY } from './features/email-capture/emailStore';
 
 import { Box } from './layouts/Primitives';

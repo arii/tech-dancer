@@ -53,7 +53,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           <Text variant="mono" size="tiny" color="dim">Author & Engineer</Text>
         </Stack>
       </Box>
-      <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
+      <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent transition-colors">
         <Share2 className="w-4 h-4" />
         <Text variant="mono" size="xs">Share</Text>
       </Box>

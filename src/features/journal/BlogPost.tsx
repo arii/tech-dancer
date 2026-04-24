@@ -33,7 +33,7 @@ export default function BlogPost() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Post Not Found</Text>
-          <Box as="button" onClick={() => navigate('/blog')} className="hover:text-accent-brand transition-colors">
+          <Box as="button" onClick={() => navigate('/blog')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs" color="inherit">Back to Journal</Text>
           </Box>
         </Stack>
