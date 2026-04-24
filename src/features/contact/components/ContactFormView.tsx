@@ -3,17 +3,24 @@ import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import type { UseFormRegister, FieldErrors } from 'react-hook-form';
-import type { ContactFormData } from '../schemas/contact-schema';
+import React from 'react';
+import { UseFormRegister, FieldErrors } from 'react-hook-form';
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
 
 interface ContactFormViewProps {
   register: UseFormRegister<ContactFormData>;
   errors: FieldErrors<ContactFormData>;
   isSubmitting: boolean;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
-const inputClasses = "w-full bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
+const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
 
 export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (
@@ -44,12 +51,12 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-accent-brand/5 transition-colors" radius="lg">
+                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-bg transition-colors" radius="lg">
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" className="tracking-widest uppercase">{item.channel}</Text>
+                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}
@@ -59,7 +66,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
 
           <Box surface="default" padding={{ base: 8, md: 12 }}>
             <Box maxWidth="xl" marginX="auto">
-              <Box as="form" onSubmit={onSubmit} noValidate className="space-y-6">
+              <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
                 <FormField label="Your Name" error={errors.name?.message}>
                   <Box as="input"
                     {...register('name')}
@@ -112,12 +119,18 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   />
                 </FormField>
 
+                {errors.root && (
+                  <Text color="error" size="sm" className="mt-2 text-center" as="p">
+                    {errors.root.message}
+                  </Text>
+                )}
+
                 <Button
                   type="submit"
                   variant="professional"
                   disabled={isSubmitting}
                   fullWidth
-                  className="py-4 font-semibold text-base"
+                  className=" font-semibold text-base min-h-12"
                 >
                   {isSubmitting ? (
                     <Stack direction="row" align="center" gap={3}>

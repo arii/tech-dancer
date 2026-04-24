@@ -1,29 +1,32 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { SuccessState } from '@/features/contact/components/SuccessState';
 import { ContactFormView } from '@/features/contact/components/ContactFormView';
 import { contactSchema, type ContactFormData } from '@/features/contact/schemas/contact-schema';
 import { useSubmitContact } from '@/features/contact/hooks/useSubmitContact';
 
-/**
- * Contact Page Container
- * Follows separation of concerns by keeping orchestration logic here
- * and presentation logic in the feature components.
- * Now using react-hook-form and zod for type-safe validation.
- */
+const contactFormSchema = z.object({
+  name: z.string().min(1, 'Personnel name required'),
+  email: z.string().min(1, 'Signal destination required').email('Invalid signal coordinate'),
+  subject: z.string().min(1, 'Subject required'),
+  message: z.string().min(1, 'Data payload missing').min(10, 'Payload below minimum threshold (10 chars)'),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
+
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
-  const { submitContact } = useSubmitContact();
 
   const {
     register,
     handleSubmit,
-    reset,
+    reset: resetForm,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(contactFormSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -33,25 +36,31 @@ export default function Contact() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    const result = await submitContact(data);
-    if (result.success) {
+    try {
+      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) throw new Error('Submission failed');
+      } else {
+        // Simulate form submission if no endpoint is configured
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+
       setSubmitted(true);
-      reset();
-    } else if (result.error) {
-      setError('message', {
-        type: 'manual',
-        message: result.error,
-      });
+      resetForm();
+    } catch (err) {
+      setError('root', { message: 'System error: Unable to transmit payload. Please try again later.' });
     }
   };
 
-  const handleReset = () => {
-    setSubmitted(false);
-    reset();
-  };
-
   if (submitted) {
-    return <SuccessState onReset={handleReset} />;
+    return <SuccessState onReset={() => setSubmitted(false)} />;
   }
 
   return (

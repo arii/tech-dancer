@@ -10,7 +10,7 @@ export function SuccessState({ onReset }: SuccessStateProps) {
   return (
     <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" textAlign="center">
       <Stack gap={12} align="center">
-        <Box width={24} height={24} border surface="dim" display="flex" align="center" justify="center" color="accent">
+        <Box width={24} height={24} border surface="dim" display="flex" align="center" justify="center" color="accent" radius="lg">
           <Sparkles className="w-12 h-12 stroke-1" />
         </Box>
         <Stack gap={4}>
@@ -33,7 +33,7 @@ export function SuccessState({ onReset }: SuccessStateProps) {
           paddingY={4}
           color="accent"
           cursor="pointer"
-          className="hover:bg-accent-brand/5 transition-colors"
+          className="hover:border-accent-brand  transition-colors"
         >
           Send Another Message
         </Box>
