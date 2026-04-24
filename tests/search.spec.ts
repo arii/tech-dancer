@@ -16,14 +16,14 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
-  test('should close search modal when clicking on backdrop', async ({ page }) => {
+  test('should close search modal via escape key', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     // Click on the backdrop using the data-testid
     // We use force: true because sometimes the backdrop implementation might intercept clicks in a way Playwright objects to,
     // although for a modal backdrop click this is usually the desired behavior.
-    await page.getByTestId('search-backdrop').click({ force: true });
+    await page.keyboard.press('Escape');
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 

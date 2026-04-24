@@ -3,14 +3,17 @@ import { NavLink } from 'react-router-dom';
 
 type PathID = 'dancer' | 'roboticist';
 
-const PATH_STYLES: Record<PathID, { wrapper: string; bg: string; title: string; scanlineDelay?: string }> = {
+const PATH_LAYOUT: Record<PathID, string> = {
+  dancer: 'lg:col-span-7 border-r border-line/20',
+  roboticist: 'lg:col-span-5'
+};
+
+const PATH_STYLES: Record<PathID, { bg: string; title: string; scanlineDelay?: string }> = {
   dancer: {
-    wrapper: 'lg:col-span-7 border-r border-line/20',
     bg: 'bg-gradient-to-br',
     title: 'text-4xl md:text-6xl',
   },
   roboticist: {
-    wrapper: 'lg:col-span-5',
     bg: 'bg-gradient-to-bl',
     title: 'text-3xl md:text-5xl',
     scanlineDelay: 'delay-100',
@@ -49,7 +52,7 @@ export default function PathSelector() {
         return (
           <div
             key={path.id}
-            className={`${styles.wrapper} relative group overflow-hidden cursor-pointer`}
+            className={`\${PATH_LAYOUT[path.id]} relative group overflow-hidden cursor-pointer`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={() => setHoveredPath(isHovered ? null : path.id)}
