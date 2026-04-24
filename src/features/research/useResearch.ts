@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getStudies } from '@/lib/content';
 
@@ -7,7 +6,6 @@ export function useResearch() {
     queryKey: ['studies'],
     queryFn: getStudies,
   });
-  const [selectedTool, setSelectedTool] = useState<string | null>(null);
 
   const tools = [
     {

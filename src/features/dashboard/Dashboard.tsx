@@ -4,14 +4,14 @@ import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
-import { PageHeader, SectionHeader } from '@/components/ui/PageHeader';
+import { SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents, dancerPaths: _dancerPaths, hirePaths: _hirePaths } = useHome();
+  const { recentPosts, upcomingEvents } = useHome();
 
   return (
     <Box as="section">
@@ -64,19 +64,6 @@ export default function Home() {
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"
-<<<<<<< HEAD
-            whileInView="animate"
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {recentPosts.map((post) => (
-              <ContentCard
-                key={post.slug}
-                {...post}
-                basePath="/blog"
-                aspect="video"
-                variants={motionTokens.staggerItem}
-              />
-=======
             animate="animate"
           >
             {recentPosts.map((post) => (
@@ -91,7 +78,6 @@ export default function Home() {
                   aspect="video"
                 />
               </Box>
->>>>>>> main
             ))}
 
             {/* Upcoming Events Mini-Cards */}
