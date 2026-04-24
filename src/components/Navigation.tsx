@@ -43,19 +43,22 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
   );
 }
 
-export default function Navigation() {
+export default function Navigation({ scrollRef }: { scrollRef?: React.RefObject<HTMLElement | null> }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
   useEffect(() => {
+    const container = scrollRef?.current;
     const handleScroll = throttle(() => {
-      setScrolled(window.scrollY > 20);
+      const scrollY = container ? container.scrollTop : window.scrollY;
+      setScrolled(scrollY > 20);
     }, 100);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const target = container || window;
+    target.addEventListener('scroll', handleScroll, { passive: true });
+    return () => target.removeEventListener('scroll', handleScroll);
+  }, [scrollRef]);
 
   const handleSearchClick = () => {
     if (isSearchOpen) {
