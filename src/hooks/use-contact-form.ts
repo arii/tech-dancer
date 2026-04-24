@@ -82,7 +82,7 @@ export function useContactForm() {
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: 'General Feedback', message: '' });
       return true;
-    } catch (err) {
+    } catch (_err) {
       setErrors({ message: 'System error: Unable to transmit payload. Please try again later.' });
       return false;
     } finally {

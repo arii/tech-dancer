@@ -12,7 +12,8 @@ export function useHotkeys(key: string, handler: HotkeyHandler, deps: React.Depe
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [key, ...deps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [key, ...deps]);
 }
 
 export function useCommandKey(key: string, handler: HotkeyHandler, deps: React.DependencyList = []) {
@@ -25,5 +26,6 @@ export function useCommandKey(key: string, handler: HotkeyHandler, deps: React.D
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [key, ...deps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [key, ...deps]);
 }

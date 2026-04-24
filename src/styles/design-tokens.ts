@@ -1,4 +1,4 @@
-const radius = {
+const _radius = {
   none: "rounded-none",
   subtle: "rounded-subtle",
   standard: "rounded-standard",
@@ -9,7 +9,7 @@ const radius = {
   full: "rounded-full",
 };
 
-const borders = {
+const _borders = {
   default: "border border-line",
   accent: "border border-accent/20",
   brand: "border border-accent-brand/30",

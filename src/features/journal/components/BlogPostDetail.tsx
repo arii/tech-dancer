@@ -1,4 +1,4 @@
-import { User, Share2 } from 'lucide-react';
+import { Share2 } from "lucide-react";
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Post, getPosts } from '@/lib/content';
 import { ContentCard } from '@/components/ui/ContentCard';

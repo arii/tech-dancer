@@ -1,4 +1,4 @@
-import { ExternalLink, Star, Shield } from 'lucide-react';
+import { ExternalLink, Star } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
