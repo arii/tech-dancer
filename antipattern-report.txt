@@ -1,31 +1,3 @@
 [34m🔍 Scanning for UI anti-patterns...[0m
 
-[31m✖ Anti-patterns detected:[0m
-
-[36msrc/features/contact/components/ContactFormView.tsx[0m
-  [90mLine 57:[0m [Non-token Color/Size] [33mgroup-hover:bg-accent-brand/5[0m - Class 'group-hover:bg-accent-brand/5' uses a value that is not a recognized design token.
-  [90mLine 138:[0m [Raw Layout/Spacing] [33mpy-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-
-[36msrc/features/contact/components/SuccessState.tsx[0m
-  [90mLine 36:[0m [Non-token Color/Size] [33mhover:bg-accent-brand/5[0m - Class 'hover:bg-accent-brand/5' uses a value that is not a recognized design token.
-
-[36msrc/features/dashboard/EventCard.tsx[0m
-  [90mLine 14:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 14:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 14:[0m [Raw Layout/Spacing] [33mp-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 14:[0m [Raw Layout/Spacing] [33mlg:p-8[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 17:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 17:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 17:[0m [Raw Layout/Spacing] [33mgap-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-
-[36msrc/features/email-capture/EmailForm.tsx[0m
-  [90mLine 25:[0m [Arbitrary Value] [33m-[44px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
-  [90mLine 31:[0m [Arbitrary Value] [33m-[44px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
-  [90mLine 31:[0m [Arbitrary Value] [33m-[140px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
-  [90mLine 31:[0m [Arbitrary Value] [33m-[180px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
-  [90mLine 31:[0m [Raw Layout/Spacing] [33mpx-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 40:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 40:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 40:[0m [Raw Layout/Spacing] [33mjustify-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 40:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-
+[32m✔ No anti-patterns detected![0m
