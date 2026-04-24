@@ -59,6 +59,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
+          id="main-scroll-container"
           as="main"
           ref={scrollRef}
           flex={1}
