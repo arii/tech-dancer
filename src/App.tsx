@@ -16,7 +16,6 @@ import { Box } from './layouts/Primitives';
 
 import { useEmailStore, STORAGE_KEY } from './features/email-capture/emailStore';
 
-import { Box } from './layouts/Primitives';
 
 const Home = lazy(() => import('./pages/Home'));
 const GearReviews = lazy(() => import('./pages/Gear'));
