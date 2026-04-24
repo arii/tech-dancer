@@ -112,12 +112,13 @@ export function useUXAuditor() {
 
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
-      let reportId = Date.now().toString();
+      const now = new Date().getTime();
+      let reportId = String(now);
 
       const newReport: UXReport = {
         id: reportId,
         url: targetUrl,
-        timestamp: Date.now(),
+        timestamp: now,
         status: 'processing',
       };
 

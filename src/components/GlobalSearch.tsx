@@ -1,15 +1,5 @@
-import { motion, AnimatePresence } from 'motion/react';
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { Search, X, Hash, ArrowRight, CornerDownLeft, Sparkles } from 'lucide-react';
-=======
-import { Search, X, Hash, ArrowRight, CornerDownLeft } from 'lucide-react';
->>>>>>> 6d3af94 (feat: implement dead code detection and CI cleanup)
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-=======
-import { Search, X, Hash, CornerDownLeft } from 'lucide-react';
+import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
->>>>>>> e7f839d (Fix CI pipeline: JSON syntax and dead code (#208))
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { escapeRegExp } from '@/lib/utils';
 import { useRef, useMemo, useCallback } from 'react';
@@ -39,7 +29,6 @@ export function GlobalSearch() {
   // navigation to a new URL without the 'search' param will automatically
   // "close" the modal (isOpen will become false).
 
-<<<<<<< HEAD
   // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {
     if (isOpen) close();
@@ -54,10 +43,6 @@ export function GlobalSearch() {
   const handleSelect = (result: SearchResult) => {
     // 4. Link Click Delegation: Immediate Feedback
     close();
-=======
-  const handleSelect = (result: any) => {
-    setIsOpen(false);
->>>>>>> 6d3af94 (feat: implement dead code detection and CI cleanup)
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);

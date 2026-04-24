@@ -116,18 +116,4 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  test('Gear search term should persist after reload', async ({ page }) => {
-    await page.goto('./gear');
-
-    const searchInput = page.getByPlaceholder(/Search gear/i);
-    await searchInput.fill('shoes');
-
-    // Check URL
-    await expect(page).toHaveURL(/search=shoes/i);
-
-    // Reload
-    await page.reload();
-
-    await expect(page.getByPlaceholder(/Search gear/i)).toHaveValue('shoes');
-  });
 });

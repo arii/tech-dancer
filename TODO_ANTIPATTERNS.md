@@ -30,7 +30,7 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 31: [Raw Layout/Spacing] p-1 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 46: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/journal/BlogPost.tsx
-- [ ] Line 31: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 36: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/journal/components/BlogPostDetail.tsx
 - [ ] Line 36: [Raw Layout/Spacing] flex - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 36: [Raw Layout/Spacing] items-center - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -38,10 +38,10 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 56: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 - [ ] Line 65: [Raw Layout/Spacing] mb-8 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 ## src/features/lab/BlogDrafter.tsx
-- [ ] Line 26: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
-- [ ] Line 31: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
-- [ ] Line 31: [Raw Layout/Spacing] mt-1 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-- [ ] Line 212: [Non-token Color/Size] hover:bg-accent-brand - Class 'hover:bg-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 28: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 33: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 33: [Raw Layout/Spacing] mt-1 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+- [ ] Line 214: [Non-token Color/Size] hover:bg-accent-brand - Class 'hover:bg-accent-brand' uses a value that is not a recognized design token.
 ## src/features/lab/GearCard.tsx
 - [ ] Line 89: [Arbitrary Value] -[1px] - Avoid arbitrary values like -[...]. Use design tokens instead.
 - [ ] Line 26: [Raw Layout/Spacing] flex - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -55,7 +55,7 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 75: [Non-token Color/Size] text-amber-700 - Class 'text-amber-700' uses a value that is not a recognized design token.
 - [ ] Line 90: [Raw Layout/Spacing] ml-auto - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 ## src/features/lab/GearPost.tsx
-- [ ] Line 38: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 43: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/lab/Toolbox.tsx
 - [ ] Line 23: [Raw Layout/Spacing] mb-12 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 23: [Raw Layout/Spacing] pb-12 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -82,13 +82,13 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 95: [Non-token Color/Size] group-hover:text-accent-brand - Class 'group-hover:text-accent-brand' uses a value that is not a recognized design token.
 - [ ] Line 107: [Non-token Color/Size] text-slate-300 - Class 'text-slate-300' uses a value that is not a recognized design token.
 ## src/features/research/ResearchDetail.tsx
-- [ ] Line 50: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
-- [ ] Line 78: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
-- [ ] Line 105: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
-- [ ] Line 112: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
-- [ ] Line 112: [Non-token Color/Size] text-dim - Class 'text-dim' uses a value that is not a recognized design token.
-- [ ] Line 119: [Non-token Color/Size] bg-accent-brand/5 - Class 'bg-accent-brand/5' uses a value that is not a recognized design token.
-- [ ] Line 121: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 49: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 77: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 104: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 111: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 111: [Non-token Color/Size] text-dim - Class 'text-dim' uses a value that is not a recognized design token.
+- [ ] Line 118: [Non-token Color/Size] bg-accent-brand/5 - Class 'bg-accent-brand/5' uses a value that is not a recognized design token.
+- [ ] Line 120: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
 ## src/pages/UXAuditor.tsx
 - [ ] Line 76: [Arbitrary Value] -[var(--color-success,#16a34a)] - Avoid arbitrary values like -[...]. Use design tokens instead.
 - [ ] Line 174: [Arbitrary Value] -[var(--color-success-dim,#dcfce7)] - Avoid arbitrary values like -[...]. Use design tokens instead.
