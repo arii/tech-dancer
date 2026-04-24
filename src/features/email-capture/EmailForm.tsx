@@ -13,7 +13,7 @@ export function EmailForm() {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
+    <Box as="form" onSubmit={handleSubmit} noValidate width="full" maxWidth="md" className="w-full md:w-auto">
       <Stack direction="row" gap={0} position="relative" className="w-full">
         <input
           type="email"
