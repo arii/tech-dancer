@@ -5,7 +5,6 @@ import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailStore } from '@/features/email-capture/emailStore';
-import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);

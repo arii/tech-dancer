@@ -3,16 +3,14 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 interface HeroPathCardProps {
-  label: string;
   title: string;
   paths: { label: string; path: string }[];
   tag: string;
-  image: string;
   span?: number;
   icon: React.ElementType;
 }
 
-export function HeroPathCard({ label: _label, title, paths, tag, image: _image, span = 1, icon: Icon }: HeroPathCardProps) {
+export function HeroPathCard({ title, paths, tag, span = 1, icon: Icon }: HeroPathCardProps) {
   return (
     <Box 
       as={motion.div}

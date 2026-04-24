@@ -91,12 +91,14 @@ jobs:
 
             # 4. Update Previews Index and Metadata
             mkdir -p previews
-            find . -maxdepth 3 -name "index.html" | while read -r index_file; do
-              DIR=$(dirname "$index_file" | sed 's|^\./||')
-              [[ "$DIR" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
-              TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
-              echo "$DIR $TS"
-            done | jq -R -n '[inputs | split(" ") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
+            find . -maxdepth 3 -name "index.html" -not -path "*/previews/*" -not -path "*/assets/*" -not -path "*/tmp/*" -not -path "*/\.*" -printf '%h\n' | sed 's|^\./||' | awk '{print $1}' | while read -r DIR; do
+              if [ -n "$DIR" ] && [ "$DIR" != "." ] && [ "$DIR" != ".." ]; then
+                TS=$(cat "$DIR/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$DIR" || date +%s)
+                if [[ "$TS" =~ ^[0-9]+$ ]]; then
+                  echo "{\"$DIR\": $TS}"
+                fi
+              fi
+            done | jq -s 'add // {}' > previews/data.json
 
             # Use the latest dashboard UI
             cp "$DEST_DIR/previews/index.html" previews/index.html
