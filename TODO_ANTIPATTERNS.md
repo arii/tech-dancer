@@ -2,11 +2,6 @@
 
 This list is automatically generated from the `npm run audit` report. Fix these anti-patterns to adhere to the project design system.
 
-## src/features/contact/components/ContactFormView.tsx
-- [ ] Line 57: [Non-token Color/Size] group-hover:bg-accent-brand/5 - Class 'group-hover:bg-accent-brand/5' uses a value that is not a recognized design token.
-- [ ] Line 138: [Raw Layout/Spacing] py-4 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-## src/features/contact/components/SuccessState.tsx
-- [ ] Line 36: [Non-token Color/Size] hover:bg-accent-brand/5 - Class 'hover:bg-accent-brand/5' uses a value that is not a recognized design token.
 ## src/features/dashboard/EventCard.tsx
 - [ ] Line 14: [Raw Layout/Spacing] flex - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 14: [Raw Layout/Spacing] flex-col - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -30,7 +25,7 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 31: [Raw Layout/Spacing] p-1 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 46: [Non-token Color/Size] text-accent-brand - Class 'text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/journal/BlogPost.tsx
-- [ ] Line 31: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 36: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/journal/components/BlogPostDetail.tsx
 - [ ] Line 36: [Raw Layout/Spacing] flex - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 36: [Raw Layout/Spacing] items-center - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -55,7 +50,7 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 75: [Non-token Color/Size] text-amber-700 - Class 'text-amber-700' uses a value that is not a recognized design token.
 - [ ] Line 90: [Raw Layout/Spacing] ml-auto - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 ## src/features/lab/GearPost.tsx
-- [ ] Line 38: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+- [ ] Line 43: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/lab/Toolbox.tsx
 - [ ] Line 23: [Raw Layout/Spacing] mb-12 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 - [ ] Line 23: [Raw Layout/Spacing] pb-12 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
