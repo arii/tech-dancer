@@ -28,7 +28,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-slate-200">
             <Text variant="displayLower" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" >{tools.length} TOOLS</Text>
+            <Text variant="mono-uppercase" size="xs" color="dim" weight="font-semibold" >{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -48,7 +48,7 @@ export default function ResearchAnalytics() {
                       <Box width={10} height={10} surface="muted" border={true} display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
                         <Search className="w-5 h-5" />
                       </Box>
-                      <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
+                      <Text variant="mono-uppercase" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                     <Stack gap={2}>
                       <Text variant="displayLower" size="xl" color="brand" className="group-hover:text-accent transition-colors">{tool.name}</Text>
@@ -56,7 +56,7 @@ export default function ResearchAnalytics() {
                     </Stack>
                   </Stack>
                   <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
-                    <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
+                    <Text variant="mono-uppercase" size="micro" weight="font-bold">Launch Console</Text>
                     <ArrowRight className="w-3 h-3" />
                   </Box>
                 </Stack>
@@ -68,7 +68,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b" className="border-slate-200">
             <Text variant="displayLower" size="2xl" weight="font-black" color="brand">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" >{studies.length} ARTICLES</Text>
+            <Text variant="mono-uppercase" size="xs" color="dim" weight="font-semibold" >{studies.length} ARTICLES</Text>
           </Box>
 
           {studies.length > 0 ? (
@@ -77,8 +77,8 @@ export default function ResearchAnalytics() {
                 <Box key={study.slug} className="group">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
-                      <Text variant="mono" size="micro" color="brand">{study.category}</Text>
-                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                      <Text variant="mono-uppercase" size="micro" color="brand">{study.category}</Text>
+                      <Text variant="mono-uppercase" size="micro" color="dim">{study.date}</Text>
                     </Box>
                     <Text variant="displayLower" size="2xl" color="brand" className="group-hover:text-accent transition-colors">
                       {study.title}
@@ -95,7 +95,7 @@ export default function ResearchAnalytics() {
                       color="dim"
                       className="group-hover:text-accent transition-colors"
                     >
-                      <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
+                      <Text variant="mono-uppercase" size="xs" weight="font-bold">Read Study</Text>
                       <FileText className="w-4 h-4" />
                     </Box>
                   </Stack>

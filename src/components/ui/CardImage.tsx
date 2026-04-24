@@ -35,7 +35,7 @@ export function CardImage({ image, title, category, aspect = "video", children }
       {/* Category Badge - Standard for all cards */}
       <Box position="absolute" className="top-4 left-4">
         <Box paddingX={3} paddingY={1} surface="default" opacity={90} border={true} radius="none" className="backdrop-blur-sm">
-          <Text variant="mono" size="micro" weight="font-bold" color="brand" tracking="wider">
+          <Text variant="mono-uppercase" size="micro" weight="font-bold" color="brand">
             {category}
           </Text>
         </Box>

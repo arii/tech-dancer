@@ -41,12 +41,12 @@ export function BlogDrafter() {
         {/* Form Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2}>
-             <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
+             <Text variant="mono-uppercase" size="micro" color="brand">METADATA_INPUT</Text>
           </Box>
 
           <Stack gap={6}>
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">POST_TITLE</Text>
+              <Text variant="mono-uppercase" size="micro" color="dim">POST_TITLE</Text>
               <Box
                 as="input"
                 type="text"
@@ -57,7 +57,7 @@ export function BlogDrafter() {
                 surface="default"
                 border
                 padding={3}
-                variant="mono"
+                variant="mono-uppercase"
                 size="sm"
                 className="focus:border-accent outline-none"
               />
@@ -65,7 +65,7 @@ export function BlogDrafter() {
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim">CATEGORY</Text>
+                <Text variant="mono-uppercase" size="micro" color="dim">CATEGORY</Text>
                 <Box
                   as="select"
                   value={data.category}
@@ -74,7 +74,7 @@ export function BlogDrafter() {
                   surface="default"
                   border={true}
                   padding={3}
-                  variant="mono"
+                  variant="mono-uppercase"
                   size="sm"
                   className="focus:border-accent outline-none appearance-none"
                 >
@@ -84,7 +84,7 @@ export function BlogDrafter() {
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim">DATE</Text>
+                <Text variant="mono-uppercase" size="micro" color="dim">DATE</Text>
                 <Box
                   as="input"
                   type="date"
@@ -94,7 +94,7 @@ export function BlogDrafter() {
                   surface="default"
                   border={true}
                   padding={3}
-                  variant="mono"
+                  variant="mono-uppercase"
                   size="sm"
                   className="focus:border-accent outline-none"
                 />
@@ -102,7 +102,7 @@ export function BlogDrafter() {
             </Grid>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">EXCERPT_SUMMARY</Text>
+              <Text variant="mono-uppercase" size="micro" color="dim">EXCERPT_SUMMARY</Text>
               <Box
                 as="textarea"
                 value={data.excerpt}
@@ -113,14 +113,14 @@ export function BlogDrafter() {
                 surface="default"
                 border={true}
                 padding={3}
-                variant="mono"
+                variant="mono-uppercase"
                 size="sm"
                 className="focus:border-accent outline-none resize-none"
               />
             </Stack>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
+              <Text variant="mono-uppercase" size="micro" color="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
               <Box
                 as="input"
                 type="url"
@@ -131,14 +131,14 @@ export function BlogDrafter() {
                 surface="default"
                 border={true}
                 padding={3}
-                variant="mono"
+                variant="mono-uppercase"
                 size="sm"
                 className="focus:border-accent outline-none"
               />
             </Stack>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
+              <Text variant="mono-uppercase" size="micro" color="dim">BODY_COMMENTARY</Text>
               <Box
                 as="textarea"
                 value={data.commentary}
@@ -149,7 +149,7 @@ export function BlogDrafter() {
                 surface="default"
                 border={true}
                 padding={3}
-                variant="mono"
+                variant="mono-uppercase"
                 size="sm"
                 className="focus:border-accent outline-none resize-none"
               />
@@ -160,10 +160,10 @@ export function BlogDrafter() {
         {/* Preview Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
+             <Text variant="mono-uppercase" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
              <Box display="flex" align="center" gap={2} color="dim">
                 <FileText className="w-3 h-3" />
-                <Text variant="mono" size="micro">v1.2.0</Text>
+                <Text variant="mono-uppercase" size="micro">v1.2.0</Text>
              </Box>
           </Box>
 
@@ -193,7 +193,7 @@ export function BlogDrafter() {
               className={`hover:bg-line transition-all cursor-pointer group ${copied ? 'bg-accent/10 border-accent text-accent' : ''}`}
             >
               {copied ? <Check className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
-              <Text variant="mono" size="xs" weight="font-bold">
+              <Text variant="mono-uppercase" size="xs" weight="font-bold">
                 {copied ? 'PROMPT COPIED ✓' : 'COPY AI PROMPT'}
               </Text>
             </Box>

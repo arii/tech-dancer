@@ -65,7 +65,7 @@ export default function FolioGrid({
               border
               paddingX={6}
               paddingY={4}
-              variant="mono"
+              variant="mono-uppercase"
               size="sm"
               className="focus:border-accent-brand outline-none focus:ring-0"
               value={search}

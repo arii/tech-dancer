@@ -24,9 +24,9 @@ export function SuccessState({ onReset }: SuccessStateProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onReset}
-          variant="mono"
+          variant="mono-uppercase"
           weight="font-bold"
-          uppercase
+
           size="micro"
           border
           paddingX={8}

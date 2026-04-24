@@ -138,7 +138,7 @@ export default function UXAuditor() {
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
         <Stack gap={4} span={{ lg: 1 }}>
-          <Text variant="sans" size="xs" weight="font-bold" tracking="widest" color="dim" paddingX={1}>
+          <Text variant="sans" size="xs" weight="font-bold" color="dim" paddingX={1}>
             Audit History
           </Text>
           <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
@@ -169,7 +169,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim">
+                  <Text variant="mono-uppercase" size="xs" weight="font-medium" color="dim">
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -249,7 +249,7 @@ export default function UXAuditor() {
                             {vp.name} Analysis
                           </Text>
                         </Box>
-                        <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest">
+                        <Text variant="mono-uppercase" size="xs" weight="font-bold" color="dim">
                           {vp.width}w × {vp.height}h
                         </Text>
                       </Box>
@@ -268,7 +268,7 @@ export default function UXAuditor() {
                               <Box marginX="auto">
                                 <ImageIcon className="w-12 h-12 opacity-20" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" tracking="wider">
+                              <Text variant="sans" size="xs" weight="font-bold">
                                 Awaiting Frame...
                               </Text>
                             </Stack>
@@ -279,7 +279,7 @@ export default function UXAuditor() {
                           {data ? (
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginBottom={2} tracking="widest">
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginBottom={2}>
                                   Analysis Summary
                                 </Text>
                                 <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed">
@@ -296,7 +296,7 @@ export default function UXAuditor() {
                                           {imp.element}
                                         </Text>
                                       </Box>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim">
+                                      <Text variant="mono-uppercase" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim">
                                         LVL {imp.severity}
                                       </Text>
                                     </Box>
@@ -321,7 +321,7 @@ export default function UXAuditor() {
                           ) : (
                             <Box display="flex" align="center" justify="center" paddingY={20} direction="col" color="dim">
                               <RefreshCw className="animate-spin w-6 h-6" />
-                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest">
+                              <Text variant="sans" size="xs" weight="font-bold">
                                 Agent Processing...
                               </Text>
                             </Box>

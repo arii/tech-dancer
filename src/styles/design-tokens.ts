@@ -113,7 +113,8 @@ export const typography = {
   displayLower: "font-display font-bold tracking-tight leading-none",
 
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
-  mono: "font-mono tracking-widest uppercase",
+  mono: "font-mono",
+  "mono-uppercase": "font-mono tracking-widest uppercase",
   utility: "font-mono tracking-[3px] uppercase",
   label: "font-mono font-bold uppercase tracking-[2px]",
   micro: "font-mono uppercase tracking-widest",

@@ -53,7 +53,7 @@ export default function Home() {
               gap={3} 
               className="text-text-dim hover:text-accent transition-colors"
             >
-              <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
+              <Text variant="mono-uppercase" size="xs" weight="font-bold">View full repository</Text>
               <ArrowRight className="w-4 h-4" />
             </Box>
           </SectionHeader>

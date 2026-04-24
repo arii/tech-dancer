@@ -34,7 +34,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">{backLabel}</Text>
+          <Text variant="mono-uppercase" size="xs" weight="font-bold">{backLabel}</Text>
         </Box>
 
         <Stack gap={8}>
@@ -42,13 +42,13 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
             {category && (
               <Box display="flex" align="center" gap={2} color="brand">
                 <Tag className="w-3 h-3" />
-                <Text variant="mono" size="micro" weight="font-bold">{category}</Text>
+                <Text variant="mono-uppercase" size="micro" weight="font-bold">{category}</Text>
               </Box>
             )}
             {date && (
               <Box display="flex" align="center" gap={2} color="dim">
                 <Clock className="w-3 h-3" />
-                <Text variant="mono" size="micro">{date}</Text>
+                <Text variant="mono-uppercase" size="micro">{date}</Text>
               </Box>
             )}
           </Box>
@@ -89,12 +89,12 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
 
           <Box border="t" paddingTop={12} display="flex" justify="between" align="center">
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">PUBLISHED BY</Text>
-              <Text variant="mono" size="xs" weight="font-bold">{author}</Text>
+              <Text variant="mono-uppercase" size="micro" color="dim">PUBLISHED BY</Text>
+              <Text variant="mono-uppercase" size="xs" weight="font-bold">{author}</Text>
             </Stack>
             <Box as="button" display="flex" align="center" gap={2} color="dim" className="hover:text-accent-brand transition-colors">
               <Share2 className="w-4 h-4" />
-              <Text variant="mono" size="xs">Share Content</Text>
+              <Text variant="mono-uppercase" size="xs">Share Content</Text>
             </Box>
           </Box>
         </Stack>

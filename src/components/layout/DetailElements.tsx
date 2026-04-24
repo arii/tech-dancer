@@ -12,7 +12,7 @@ interface ScoreItemProps {
 export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
     <Stack gap={1} align="center" className="flex-1 px-4 py-2">
-      <Text variant="mono" size="tiny" color="dim">{label}</Text>
+      <Text variant="mono-uppercase" size="tiny" color="dim">{label}</Text>
       <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
         <Text variant="displayLower" size="xl" weight="font-bold">{value}</Text>
@@ -45,12 +45,12 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" tracking="widest" className=" border-b border-line pb-2">Technical Specs</Text>
+      <Text variant="mono-uppercase" size="tiny" weight="font-bold" color="dim" className=" border-b border-line pb-2">Technical Specs</Text>
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" className=" opacity-50">{key}</Text>
-            <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
+            <Text variant="mono-uppercase" size="tiny" color="dim" className=" opacity-50">{key}</Text>
+            <Text variant="mono-uppercase" size="xs" weight="font-bold">{value}</Text>
           </Stack>
         ))}
       </Stack>
@@ -61,10 +61,10 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 export function TOC({ headings }: { headings: string[] }) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" tracking="widest" className=" border-b border-line pb-2">In this post</Text>
+      <Text variant="mono-uppercase" size="tiny" weight="font-bold" color="dim" className=" border-b border-line pb-2">In this post</Text>
       <Stack gap={2}>
         {headings.map((h, i) => (
-          <Text key={i} variant="mono" size="tiny" className="cursor-pointer hover:text-accent transition-colors">
+          <Text key={i} variant="mono-uppercase" size="tiny" className="cursor-pointer hover:text-accent transition-colors">
             <span className="opacity-30 mr-2">0{i+1}</span> {h}
           </Text>
         ))}

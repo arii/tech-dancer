@@ -35,7 +35,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     <Box display="flex" align="center" justify="between" border="y" paddingY={6} className="border-line/50">
       <Box display="flex" align="center" gap={4}>
         <Box display="flex" align="center" justify="center" className="relative w-10 h-10 rounded-full bg-accent text-white overflow-hidden border border-line/20">
-          <Text variant="mono" size="xs" weight="font-bold">
+          <Text variant="mono-uppercase" size="xs" weight="font-bold">
             {post.author ? post.author.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'AA'}
           </Text>
           {post.authorAvatar ? (
@@ -51,20 +51,20 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
         </Box>
         <Stack gap={0}>
-          <Text variant="mono" size="xs" weight="font-bold">{post.author || 'Ariel Anders, PhD'}</Text>
-          <Text variant="mono" size="tiny" color="dim">Author & Engineer</Text>
+          <Text variant="mono-uppercase" size="xs" weight="font-bold">{post.author || 'Ariel Anders, PhD'}</Text>
+          <Text variant="mono-uppercase" size="tiny" color="dim">Author & Engineer</Text>
         </Stack>
       </Box>
       <Box as="button" display="flex" align="center" gap={2} color="dim" cursor="pointer" className="hover:text-accent transition-colors">
         <Share2 className="w-4 h-4" />
-        <Text variant="mono" size="xs">Share</Text>
+        <Text variant="mono-uppercase" size="xs">Share</Text>
       </Box>
     </Box>
   );
 
   const relatedContent = relatedPosts.length > 0 && (
     <Box border="t" paddingTop={12} marginTop={12}>
-      <Text as="span" variant="mono" size="xs" weight="font-bold" display="block" marginBottom={8} >Related Posts</Text>
+      <Text as="span" variant="mono-uppercase" size="xs" weight="font-bold" display="block" marginBottom={8} >Related Posts</Text>
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         {relatedPosts.map(p => (
           <ContentCard key={p.slug} {...p} basePath="/blog" />

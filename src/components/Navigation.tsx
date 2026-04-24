@@ -76,7 +76,7 @@ export default function Navigation() {
         )}
       >
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
-          <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
+          <Text variant="mono-uppercase" size="sm" weight="font-bold" className="text-accent-navy tracking-wider">TECH-DANCER</Text>
         </Box>
         <Box
           as="button"
@@ -163,10 +163,10 @@ export default function Navigation() {
         >
           <Box as={NavLink} to="/" className="group block mb-4">
             <Text 
-              variant="mono" 
+              variant="mono-uppercase"
               size="lg" 
               weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
+              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none"
             >
               TECH-DANCER
             </Text>

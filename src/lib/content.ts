@@ -3,6 +3,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
+import { PostSchema } from '@/schemas/post';
 
 /**
  * Lightweight browser-safe frontmatter parser.
@@ -134,24 +135,8 @@ const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || 
  * Normalizes and validates frontmatter data to ensure UI consistency.
  * Prevents issues like empty image strings breaking the layout.
  */
-import { z } from 'zod';
-
-export const PostSchema = z.object({
-  title: z.string().optional().default('Untitled'),
-  date: z.string().optional().default(() => new Date().toISOString().split('T')[0]),
-  author: z.string().optional().default('Ariel Anders, PhD'),
-  category: z.string().optional().default('General'),
-  excerpt: z.string().optional().default(''),
-  image: z.string().optional().transform(val => val === "" ? undefined : val),
-  tags: z.array(z.string()).optional().default([]),
-  affiliateIds: z.array(z.string()).optional().default([]),
-});
-
-export function validatePost(data: Record<string, any>): Partial<Post> {
-  // Use safeParse to ensure we don't throw runtime errors on completely malformed data,
-  // falling back to defaults if parsing totally fails.
-  const parsed = PostSchema.safeParse(data);
-  return parsed.success ? parsed.data : PostSchema.parse({});
+export function validatePost(data: unknown): Post {
+  return PostSchema.parse(data) as Post;
 }
 
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
@@ -159,14 +144,25 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
-      const validated = validatePost(data);
 
-      return {
+      const combinedData = {
         ...data,
-        ...validated,
         content: content || '',
         slug: slugFrom(path)
-      } as unknown as T;
+      };
+
+      try {
+        // Only validate if we are dealing with Posts
+        if (path.includes('/posts/')) {
+          const validated = validatePost(combinedData);
+          return validated as unknown as T;
+        } else {
+          return combinedData as unknown as T;
+        }
+      } catch (error) {
+        console.warn(`Failed to validate post at ${path}:`, error);
+        return combinedData as unknown as T;
+      }
     })
     .sort((a, b) => {
       const timeA = a.date ? new Date(a.date).getTime() : 0;

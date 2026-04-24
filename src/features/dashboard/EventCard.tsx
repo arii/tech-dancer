@@ -23,7 +23,7 @@ export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
       <Stack gap={4}>
         <Box display="flex" align="center" gap={3}>
           <Icon className="w-5 h-5 text-accent" />
-          <Text variant="mono" size="xs" color="dim" >
+          <Text variant="mono-uppercase" size="xs" color="dim" >
             {status}
           </Text>
         </Box>

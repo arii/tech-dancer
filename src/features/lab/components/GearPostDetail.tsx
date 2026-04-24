@@ -23,8 +23,8 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       <ScoreItem label="Value" value={post.value ? `${post.value}/5` : '—'} />
       <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
       <Stack gap={1} align="center" display={{ base: "none", md: "flex" }}>
-        <Text variant="mono" size="tiny" color="dim">Updated</Text>
-        <Text variant="mono" size="tiny" weight="font-bold">{post.updatedDate || post.date}</Text>
+        <Text variant="mono-uppercase" size="tiny" color="dim">Updated</Text>
+        <Text variant="mono-uppercase" size="tiny" weight="font-bold">{post.updatedDate || post.date}</Text>
       </Stack>
 
     </ScoreGrid>
@@ -36,7 +36,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" paddingBottom={2} border="b" tracking="widest" className=" border-line">Where to Buy</Text>
+          <Text variant="mono-uppercase" size="tiny" weight="font-bold" color="dim" paddingBottom={2} border="b" className=" border-line">Where to Buy</Text>
           {affiliateLinks.map(link => (
             <Box
               key={link.id}
@@ -52,11 +52,11 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
               border
               className="hover:border-accent group transition-all"
             >
-              <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
+              <Text variant="mono-uppercase" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
               <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
             </Box>
           ))}
-          <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight italic">
+          <Text variant="mono-uppercase" size="micro" color="dim" emphasis="low" className="leading-tight italic">
             * Affiliate link support helps maintain this repository.
           </Text>
         </Stack>

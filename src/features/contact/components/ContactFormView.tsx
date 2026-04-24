@@ -59,7 +59,7 @@ export function ContactFormView({ formData, errors, isSubmitting, onChange, onSu
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" className=" ">{item.channel}</Text>
+                      <Text variant="mono-uppercase" color="dim" size="xs" weight="font-semibold" className=" ">{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}

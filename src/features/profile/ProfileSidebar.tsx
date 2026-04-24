@@ -38,12 +38,12 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
           {data.details.map((detail) => (
             <Box key={detail.label} paddingBottom={4} border="b">
               <Text
-                variant="mono"
+                variant="mono-uppercase"
                 size="xs"
                 color="dim"
                 weight="font-semibold"
                 display="block"
-                tracking="widest"
+
               >
                 {detail.label}
               </Text>
@@ -62,7 +62,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
 
         <Stack gap={6}>
           <Stack gap={3}>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest">Connect</Text>
+            <Text variant="mono-uppercase" size="xs" color="dim" weight="font-semibold">Connect</Text>
             <Box display="flex" gap={5}>
               {data.socialLinks.map((link) => {
                 const Icon = platformIcons[link.platform];
@@ -97,7 +97,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 className="group text-accent-navy hover:text-accent transition-colors"
               >
                 <item.icon className="w-4 h-4" />
-                <Text variant="mono" size="xs" weight="font-semibold" tracking="widest">{item.label}</Text>
+                <Text variant="mono-uppercase" size="xs" weight="font-semibold">{item.label}</Text>
               </Box>
             ))}
           </Box>

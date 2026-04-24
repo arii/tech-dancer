@@ -23,7 +23,7 @@ export default function Toolbox() {
       <Box as="header" marginBottom={12} border="b" paddingBottom={12} className="border-line/50">
         <Box marginBottom={4}>
           <Box as="span" radius="full" paddingX={3} paddingY={1} display="inline-block" className="bg-accent/10">
-            <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
+            <Text variant="mono-uppercase" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
           </Box>
         </Box>
         <Text as="h1" variant="displayLower" size="4xl" weight="font-black" marginBottom={4} display="block" color="main">

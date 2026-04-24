@@ -138,7 +138,7 @@ export function GlobalSearch() {
                       <Box display="flex" align="center" justify="between" gap={3}>
                          <Text variant="displayLower" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
-                            <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
+                            <Text variant="mono-uppercase" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
                       </Box>
                       <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
@@ -151,7 +151,7 @@ export function GlobalSearch() {
             <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
               <Stack align="center" gap={4}>
                 <Sparkles className="w-12 h-12 opacity-20" />
-                <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
+                <Text variant="mono-uppercase" size="xs" color="dim">Calibrating Variance...</Text>
               </Stack>
             </Box>
           )}
@@ -161,18 +161,18 @@ export function GlobalSearch() {
            <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                    <Text variant="mono-uppercase" size="tiny" color="dim" className="leading-none">ESC</Text>
                  </Box>
-                 <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
+                 <Text variant="mono-uppercase" size="micro" color="dim" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none">↵</Text>
+                    <Text variant="mono-uppercase" size="tiny" color="dim" className="leading-none">↵</Text>
                  </Box>
-                 <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
+                 <Text variant="mono-uppercase" size="micro" color="dim" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
+            <Text variant="mono-uppercase" size="micro" color="dim" weight="font-bold">
               {results.length} RESULTS FOUND
             </Text>
         </Box>

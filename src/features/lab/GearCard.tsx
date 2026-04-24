@@ -34,7 +34,7 @@ export function GearCard({
         {verdict && (
           <Box position="absolute" className="top-4 right-4">
             <Box paddingX={2} paddingY={1} radius="none" className="bg-accent">
-              <Text variant="mono" size="micro" weight="font-bold" color="white">
+              <Text variant="mono-uppercase" size="micro" weight="font-bold" color="white">
                 {verdict}
               </Text>
             </Box>
@@ -51,7 +51,7 @@ export function GearCard({
                 {'★'.repeat(Math.floor(rating))}
                 {rating % 1 !== 0 ? '½' : ''}
               </Text>
-              <Text variant="mono" size="micro" color="dim" emphasis="low">
+              <Text variant="mono-uppercase" size="micro" color="dim" emphasis="low">
                 ({rating}/5)
               </Text>
             </Box>
@@ -69,22 +69,22 @@ export function GearCard({
             <Box display="flex" wrap="wrap" align="center" gap={3} marginTop={2}>
                {priceCategory && (
                  <Box border={true} paddingX={2} paddingY={0.5} className="bg-accent/10 border-accent/20">
-                   <Text variant="mono" size="tiny" weight="font-bold" color="brand">{priceCategory}</Text>
+                   <Text variant="mono-uppercase" size="tiny" weight="font-bold" color="brand">{priceCategory}</Text>
                  </Box>
                )}
                {updatedDate && (
-                 <Text variant="mono" size="tiny" color="dim">Updated {updatedDate}</Text>
+                 <Text variant="mono-uppercase" size="tiny" color="dim">Updated {updatedDate}</Text>
                )}
             </Box>
           )}
         </Stack>
 
         <Stack gap={3} marginTop="auto">
-          <Text variant="mono" size="xs" color="dim" className="leading-tight" marginBottom={2}>
+          <Text variant="mono-uppercase" size="xs" color="dim" className="leading-tight" marginBottom={2}>
             * This post contains affiliate links. I may earn a commission at no extra cost to you.
           </Text>
           <Box display="flex" align="center" justify="between" paddingTop={4} border="t" className="border-line/50">
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">
+            <Text variant="mono-uppercase" size="xs" color="brand" weight="font-bold">
               Read {title} Review
             </Text>
             <Box className="group-hover:translate-x-1 transition-transform duration-300">

@@ -52,7 +52,7 @@ export function DetailLayout({
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold" className="normal-case">{backLabel}</Text>
+          <Text variant="mono-uppercase" size="xs" weight="font-bold" className="normal-case">{backLabel}</Text>
         </Box>
 
         <Stack gap={10}>
@@ -60,11 +60,11 @@ export function DetailLayout({
           <Stack gap={6}>
             <Box display="flex" align="center" gap={4}>
               <Box className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-none">
-                <Text variant="mono" size="micro" weight="font-bold" color="brand">
+                <Text variant="mono-uppercase" size="micro" weight="font-bold" color="brand">
                   {category}
                 </Text>
               </Box>
-              <Text variant="mono" size="micro" color="dim">{date} • {rt} min read</Text>
+              <Text variant="mono-uppercase" size="micro" color="dim">{date} • {rt} min read</Text>
             </Box>
 
             <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">

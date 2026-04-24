@@ -41,7 +41,7 @@ export default function GearPost() {
         <Stack gap={8} align="center">
           <Text variant="displayLower" size="2xl">Review Not Found</Text>
           <Box as="button" onClick={() => navigate('/gear')} cursor="pointer" className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Toolbox</Text>
+            <Text variant="mono-uppercase" size="xs">Back to Toolbox</Text>
           </Box>
         </Stack>
       </Box>
