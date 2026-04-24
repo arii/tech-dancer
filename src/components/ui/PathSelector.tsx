@@ -3,13 +3,24 @@ import { NavLink } from 'react-router-dom';
 
 type PathID = 'dancer' | 'roboticist';
 
+const PATH_STYLES: Record<PathID, { wrapper: string; bg: string; title: string; scanlineDelay?: string }> = {
+  dancer: {
+    wrapper: 'lg:col-span-7 border-r border-line/20',
+    bg: 'bg-gradient-to-br',
+    title: 'text-4xl md:text-6xl',
+  },
+  roboticist: {
+    wrapper: 'lg:col-span-5',
+    bg: 'bg-gradient-to-bl',
+    title: 'text-3xl md:text-5xl',
+    scanlineDelay: 'delay-100',
+  }
+};
+
 const PATH_DATA = [
   {
     id: 'dancer' as PathID,
     title: 'ARE YOU A DANCER?',
-    wrapperClass: 'lg:col-span-7 border-r border-line/20',
-    bgGradient: 'bg-gradient-to-br',
-    titleClass: 'text-4xl md:text-6xl',
     links: [
       { text: 'Lifestyle blog posts', to: '/blog?category=Lifestyle' },
       { text: 'Gear reviews', to: '/gear' },
@@ -18,10 +29,6 @@ const PATH_DATA = [
   {
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
-    wrapperClass: 'lg:col-span-5',
-    bgGradient: 'bg-gradient-to-bl',
-    titleClass: 'text-3xl md:text-5xl',
-    scanlineDelay: 'delay-100',
     links: [
       { text: 'Tech blog posts', to: '/blog?category=Tech' },
       { text: 'Data & Development Lab', to: '/research' },
@@ -37,18 +44,19 @@ export default function PathSelector() {
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
+        const styles = PATH_STYLES[path.id];
 
         return (
           <div
             key={path.id}
-            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
+            className={`${styles.wrapper} relative group overflow-hidden cursor-pointer`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={() => setHoveredPath(isHovered ? null : path.id)}
           >
             {/* Background */}
             <div
-              className={`absolute inset-0 ${path.bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
+              className={`absolute inset-0 ${styles.bg} from-accent/30 to-black transition-all duration-700 ease-in-out ${
                 isOtherHovered ? 'grayscale opacity-60' : 'opacity-100'
               }`}
             ></div>
@@ -56,14 +64,14 @@ export default function PathSelector() {
             {/* Scanline */}
             <div
               className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${
-                path.scanlineDelay || ''
+                styles.scanlineDelay || ''
               } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
             ></div>
 
             {/* Content Container */}
             <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
               <h2
-                className={`${path.titleClass} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2`}
+                className={`${styles.title} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2`}
               >
                 {path.title}
               </h2>
