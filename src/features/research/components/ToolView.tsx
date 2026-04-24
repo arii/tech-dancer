@@ -1,7 +1,5 @@
-import { useParams } from 'react-router-dom';
 import { Database, Activity, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { useResearch } from '../useResearch';
 import type { LabTool } from '../types';
 
 export function ToolHeader({ tool }: { tool: LabTool }) {
@@ -57,13 +55,7 @@ export function ToolWipMessage({ tool }: { tool: LabTool }) {
   );
 }
 
-export function ToolView() {
-  const { id } = useParams();
-  const { getTool } = useResearch();
-  const tool = id ? getTool(id) : null;
-
-  if (!tool) return null;
-
+export function ToolView({ tool }: { tool: LabTool }) {
   return (
     <Stack gap={12}>
       <ToolHeader tool={tool} />
