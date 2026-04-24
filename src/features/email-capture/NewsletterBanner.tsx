@@ -2,11 +2,13 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { motion } from 'motion/react';
 import { useEmailStore } from './emailStore';
 import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {
+  const shouldReduceMotion = useReducedMotion();
   const hideBar = useEmailStore((state) => state.hideBar);
 
   return (
@@ -15,7 +17,7 @@ export function NewsletterBanner() {
       initial={motionTokens.overlay.initial}
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
-      transition={motionTokens.overlay.transition}
+      transition={shouldReduceMotion ? { duration: 0 } : motionTokens.overlay.transition}
       className="bg-white/80 backdrop-blur-xl border border-line/50 rounded-none mx-auto"
       padding="emailBar"
       position="fixed"

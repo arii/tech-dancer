@@ -8,6 +8,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainLayout } from './layouts/MainLayout';
 import { motionTokens } from './styles/motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { routes as routeConfig } from './config/routes';
@@ -57,7 +58,7 @@ export function RootLayout() {
             initial={motionTokens.page.initial}
             animate={motionTokens.page.animate}
             exit={motionTokens.page.exit}
-            transition={motionTokens.page.transition}
+            transition={shouldReduceMotion ? { duration: 0 } : motionTokens.page.transition}
             height="full"
           >
             <Suspense fallback={<PageSkeleton />}>

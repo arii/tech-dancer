@@ -8,6 +8,7 @@ import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { motionTokens } from '@/styles/motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -33,6 +34,7 @@ export default function FolioGrid({
   as
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
+  const shouldReduceMotion = useReducedMotion();
 
   const filteredItems = items.filter(item => {
     const tags = 'tags' in item ? item.tags : [];
@@ -83,6 +85,7 @@ export default function FolioGrid({
           <motion.div
             key="card-view"
             variants={motionTokens.staggerContainer}
+            custom={shouldReduceMotion}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}
@@ -102,6 +105,7 @@ export default function FolioGrid({
                     basePath={basePath}
                     aspect="video"
                     variants={motionTokens.staggerItem}
+                    custom={shouldReduceMotion}
                   />
                 </Box>
               ))}

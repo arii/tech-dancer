@@ -9,9 +9,11 @@ import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
 import { motionTokens } from '@/styles/motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function Home() {
   const { recentPosts, upcomingEvents, dancerPaths, hirePaths } = useHome();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <Box as="section">
@@ -63,6 +65,7 @@ export default function Home() {
             gap={4}
             as={motion.div}
             variants={motionTokens.staggerContainer}
+            custom={shouldReduceMotion}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}
@@ -74,6 +77,7 @@ export default function Home() {
                 basePath="/blog"
                 aspect="video"
                 variants={motionTokens.staggerItem}
+                custom={shouldReduceMotion}
               />
             ))}
 
@@ -83,6 +87,7 @@ export default function Home() {
                 key={event.name}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
+                custom={shouldReduceMotion}
               >
                 <EventCard {...event} />
               </Box>
