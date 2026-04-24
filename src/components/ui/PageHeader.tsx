@@ -26,7 +26,7 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <Box
-      paddingBottom={paddingBottom}
+      paddingBottom={paddingBottom} marginBottom={8}
       border={border}
     >
       <Stack gap={4}>
@@ -81,7 +81,7 @@ export function SectionHeader({
   paddingBottom?: BaseProps['paddingBottom'];
 }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={paddingBottom}>
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={paddingBottom} marginBottom={8}>
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="wide-editorial" uppercase>{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" color="navy">{title}</Text>

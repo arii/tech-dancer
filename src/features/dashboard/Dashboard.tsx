@@ -20,14 +20,14 @@ export default function Home() {
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
       />
       <Stack gap={24}>
-        <Stack gap={12} paddingTop={12}>
+        <Stack gap={12} paddingTop={{ base: 32, md: 12 }}>
           <Stack gap={4}>
             <Text 
               as={motion.h1}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               variant="headline" 
-              size="fluid-7"
+              size={{ base: "4xl", md: "fluid-7" }}
               tracking="tight" className="text-accent-navy leading-tight max-w-4xl"
             >
               The Roboticist&apos;s Guide to the West Coast Swing
