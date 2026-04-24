@@ -55,6 +55,9 @@ export function useGlobalSearch() {
   return {
     query,
     setQuery,
-    results
+    results,
+    isOpen,
+    open,
+    close
   };
 }

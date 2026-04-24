@@ -6,7 +6,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.goto('./');
 
     // Open search by clicking navigation button
-    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
+    const searchButton = page.locator('button', { hasText: 'Search' }).first();
     await searchButton.click();
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
@@ -20,11 +20,15 @@ test.describe('Search and Filter URL Persistence', () => {
     // Reload
     await page.reload();
 
-    // Open search again to verify persistence
-    const searchButtonReload = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButtonReload.click();
+    // Open search again to verify persistence - if search=true is not set in URL we need to click
+    if (!page.url().includes('search=true')) {
+        const searchButtonReload = page.locator('button', { hasText: 'Search' }).first();
+        await searchButtonReload.click();
+    }
 
-    await expect(page.getByPlaceholder(/SEARCH REPOSITORY/i)).toHaveValue('swing');
+    const searchInputReload = page.getByPlaceholder(/SEARCH REPOSITORY/i);
+    await expect(searchInputReload).toBeVisible();
+    await expect(searchInputReload).toHaveValue('swing');
     await expect(page.getByText(/RESULTS FOUND/i)).not.toHaveText('0 RESULTS FOUND');
   });
 

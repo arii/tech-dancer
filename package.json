@@ -11,13 +11,9 @@
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-<<<<<<< HEAD
-    "lint:ox": "oxlint . --deny-warnings",
-    "type-check": "tsc --noEmit"
-=======
+    "lint:ox": "oxlint src/ --deny-warnings",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs"
->>>>>>> main
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

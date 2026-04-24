@@ -238,7 +238,7 @@ export function useUXAuditor() {
       });
       const result = await response.json();
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch (err) {
+    } catch {
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
@@ -292,7 +292,7 @@ export function useUXAuditor() {
         const repo = urlObj.pathname.split('/')[1];
         if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
       }
-    } catch (e) {}
+    } catch {}
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
   };

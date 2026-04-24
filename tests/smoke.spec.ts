@@ -35,10 +35,13 @@ test('landing page should load without console errors or 404s', async ({ page })
   await page.goto('./');
 
   // Verify the main heading or a specific element exists
-  await expect(page.locator('#root')).toBeVisible({ timeout: 15000 });
-  // The specific text might not be on the first page depending on the seed content.
-  // Instead we'll check that the app mounted successfully by looking for standard app shell elements.
-  await expect(page.locator('body')).toBeVisible({ timeout: 5000 });
+  // We use body because #root might be empty before React hydrates, or Framer Motion
+  // animations might make it difficult for playwright to detect #root visibility natively right away
+  await expect(page.locator('body')).toBeVisible({ timeout: 15000 });
+
+  // Wait for the app shell to fully mount and network idle to catch slow errors
+  await expect(page.locator('main')).toBeVisible({ timeout: 5000 });
+  await page.waitForLoadState('networkidle');
 
   // Assert that no 404s or console errors occurred
   expect(failedResources, `Failed to load resources:\n${failedResources.join('\n')}`).toHaveLength(0);

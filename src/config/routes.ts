@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 import { LucideIcon, Home, BookOpen, ShoppingBag, Database, User, Send } from 'lucide-react';
 import { RouteObject } from 'react-router-dom';
 
->>>>>>> main
 /**
  * Centralized Route Configuration.
  * Single source of truth for routing, navigation labels, and sitemap structure.
@@ -11,26 +8,13 @@ import { RouteObject } from 'react-router-dom';
  */
 export interface RouteConfig extends Omit<RouteObject, 'children'> {
   path: string;
-<<<<<<< HEAD
-  label: string;
-  icon?: string; // We'll map these to Lucide icons
-=======
   label?: string;
   icon?: LucideIcon;
->>>>>>> main
   description?: string;
   children?: RouteConfig[];
 }
 
 export const routes: RouteConfig[] = [
-<<<<<<< HEAD
-  { path: '/', label: 'Home' },
-  { path: '/blog', label: 'Blog Posts' },
-  { path: '/gear', label: 'Gear Reviews' },
-  { path: '/research', label: 'Data & Development Lab' },
-  { path: '/about', label: 'About' },
-  { path: '/contact', label: 'Contact' },
-=======
   {
     path: '/',
     index: true,
@@ -88,5 +72,4 @@ export const routes: RouteConfig[] = [
     path: '*',
     lazy: () => import('@/pages/Home').then(m => ({ Component: m.default }))
   },
->>>>>>> main
 ];

@@ -129,8 +129,6 @@ When asked to work on a new feature, bugfix, or isolated task while preserving t
 * **Isolate:** Run `vdev setup <branch-name>` to create an isolated Docker/Worktree environment automatically.
 * **Execute:** Run tests, builds, or scripts inside that isolated environment using `vdev exec "<command>" --branch <branch-name>`.
 * **Cleanup:** Once the PR is submitted or the environment is no longer needed, clean it up using `vdev cleanup <branch-name>`.
-<<<<<<< HEAD
-=======
 
 ## 23. Pull Request & Submission Protocol
 - **Mass Reviewing Allowed**: Agents may perform systematic technical audits of multiple PRs and submit reviews (Comment/Approve/Request Changes) as part of a single task.
@@ -156,4 +154,3 @@ Before submitting any PR that modifies `.tsx` files:
 3. **Enforce Compliance**: Fix all identified anti-patterns or use `// impeccable-ignore` for intentional deviations.
 4. **Clean Slate**: Ensure your changes do not increase the total count of violations in the target files.
 
->>>>>>> main
