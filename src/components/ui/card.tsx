@@ -1,4 +1,5 @@
-import * as React from "react"
+import { ComponentProps } from "react"
+
 import { cn } from "@/lib/utils"
 import { Box, Stack, Text } from "@/layouts/Primitives"
 
@@ -6,7 +7,7 @@ function Card({
   className,
   size = "default",
   ...props
-}: React.ComponentProps<typeof Box> & { size?: "default" | "sm" }) {
+}: ComponentProps<typeof Box> & { size?: "default" | "sm" }) {
   return (
     <Box
       border
@@ -22,7 +23,7 @@ function Card({
   )
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardHeader({ className, ...props }: ComponentProps<typeof Box>) {
   return (
     <Box
       className={cn(
@@ -34,7 +35,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<typeof Box>) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<typeof Text>) {
+function CardTitle({ className, ...props }: ComponentProps<typeof Text>) {
   return (
     <Text
       as="div"
@@ -46,7 +47,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<typeof Text>) {
   )
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<typeof Text>) {
+function CardDescription({ className, ...props }: ComponentProps<typeof Text>) {
   return (
     <Text
       as="p"
@@ -58,7 +59,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<typeof Te
   )
 }
 
-function CardAction({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardAction({ className, ...props }: ComponentProps<typeof Box>) {
   return (
     <Box
       className={cn(
@@ -70,7 +71,7 @@ function CardAction({ className, ...props }: React.ComponentProps<typeof Box>) {
   )
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardContent({ className, ...props }: ComponentProps<typeof Box>) {
   return (
     <Box
       className={cn("flex-1", className)}
@@ -79,7 +80,7 @@ function CardContent({ className, ...props }: React.ComponentProps<typeof Box>) 
   )
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<typeof Box>) {
+function CardFooter({ className, ...props }: ComponentProps<typeof Box>) {
   return (
     <Box
       surface="muted"

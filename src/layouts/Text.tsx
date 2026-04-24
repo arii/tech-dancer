@@ -1,16 +1,17 @@
-import * as React from "react"
+import { HTMLAttributes, ElementType, forwardRef, Ref } from "react"
+
 import { composeStyles } from "@/lib/utils"
 import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
-export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttributes<HTMLElement>, "color"> {
-  as?: React.ElementType
+export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes<HTMLElement>, "color"> {
+  as?: ElementType
   className?: string
   variant?: keyof typeof typography
   intent?: keyof typeof variants.intent
-  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg"
+  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "navy"
   size?: ResponsiveProp<keyof typeof typeSizes>
   weight?: string
   align?: "left" | "center" | "right" | "justify"
@@ -21,7 +22,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   [key: string]: any
 }
 
-export const Text = React.forwardRef<HTMLElement, TextProps>(
+export const Text = forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
@@ -31,7 +32,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
     return (
       <Box
         as={Component}
-        ref={ref as React.Ref<HTMLDivElement>}
+        ref={ref as Ref<HTMLDivElement>}
         className={composeStyles(
           variant && (typography as any)[variant],
           intent && (variants.intent as any)[intent],
@@ -42,6 +43,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           !intent && color === "brand" && "text-accent-brand",
           !intent && color === "white" && "text-white",
           !intent && color === "bg" && "text-bg",
+          !intent && color === "navy" && "text-accent-navy",
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           weight,
           align && `text-${align}`,

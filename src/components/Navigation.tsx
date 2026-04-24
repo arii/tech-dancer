@@ -59,11 +59,26 @@ export default function Navigation() {
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
   useEffect(() => {
-    const handleScroll = throttle(() => {
-      setScrolled(window.scrollY > 20);
+    const handleScroll = throttle((e: Event) => {
+      const target = e.target as HTMLElement;
+      setScrolled(target.scrollTop > 20);
     }, 100);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // We need to wait a tick for the DOM to render the container
+    const timer = setTimeout(() => {
+      const container = document.getElementById('main-scroll-container');
+      if (container) {
+        container.addEventListener('scroll', handleScroll);
+      }
+    }, 0);
+
+    return () => {
+      clearTimeout(timer);
+      const container = document.getElementById('main-scroll-container');
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, []);
 
   const handleSearchClick = () => {
@@ -87,7 +102,7 @@ export default function Navigation() {
         )}
       >
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
-          <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
+          <Text variant="mono" size="sm" weight="font-bold" color="navy" className="tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
         <Box
           as="button"
@@ -177,8 +192,9 @@ export default function Navigation() {
             <Text 
               variant="mono" 
               size="lg" 
-              weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
+              weight="font-bold"
+              color="navy"
+              className="group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
             >
               TECH-DANCER
             </Text>
