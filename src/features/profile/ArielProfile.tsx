@@ -18,7 +18,7 @@ export default function ArielProfile() {
       />
       <Stack gap={12}>
         <PageHeader 
-          label="ABOUT TECH-DANCER"
+          label="ABOUT tech-dancer"
           title={bio.name}
           description={bio.role}
         />
