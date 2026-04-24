@@ -3,7 +3,6 @@ import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import React from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 
 interface ContactFormData {

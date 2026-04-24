@@ -3,7 +3,6 @@ import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
-import { AlertCircle } from 'lucide-react';
 
 export default function BlogFeed() {
   const { posts, categories, view, setView } = useBlog();

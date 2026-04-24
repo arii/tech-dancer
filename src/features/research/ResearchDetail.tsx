@@ -45,7 +45,7 @@ export default function ResearchDetail() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Search className="w-12 h-12 opacity-20" />
+          <Search className="w-12 h-12 text-text-dim" />
           <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent-brand transition-colors">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
@@ -87,7 +87,7 @@ export default function ResearchDetail() {
             {id === 'blog-drafter' ? (
               <BlogDrafter />
             ) : (
-              <ToolView />
+              <ToolView tool={tool} />
             )}
           </Stack>
         </Box>

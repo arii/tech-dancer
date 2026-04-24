@@ -45,9 +45,6 @@ export default function Contact() {
         });
 
         if (!response.ok) throw new Error('Submission failed');
-      } else {
-        // Simulate form submission if no endpoint is configured
-        await new Promise(resolve => setTimeout(resolve, 1500));
       }
 
       setSubmitted(true);

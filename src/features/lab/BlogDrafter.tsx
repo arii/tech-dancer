@@ -52,11 +52,7 @@ export function BlogDrafter() {
                 as="input"
                 type="text"
                 value={data.title}
-<<<<<<< HEAD
                 onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
-=======
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
->>>>>>> main
                 placeholder="The Future of WCS..."
                 width="full"
                 surface="default"
@@ -74,11 +70,7 @@ export function BlogDrafter() {
                 <Box
                   as="select"
                   value={data.category}
-<<<<<<< HEAD
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
-=======
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
->>>>>>> main
                   width="full"
                   surface="default"
                   border
@@ -98,11 +90,7 @@ export function BlogDrafter() {
                   as="input"
                   type="date"
                   value={data.date}
-<<<<<<< HEAD
                   onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
-=======
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
->>>>>>> main
                   width="full"
                   surface="default"
                   border
@@ -119,11 +107,7 @@ export function BlogDrafter() {
               <Box
                 as="textarea"
                 value={data.excerpt}
-<<<<<<< HEAD
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
-=======
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
->>>>>>> main
                 placeholder="A brief overview of the post content..."
                 width="full"
                 height={20}
@@ -142,11 +126,7 @@ export function BlogDrafter() {
                 as="input"
                 type="url"
                 value={data.affiliateLink}
-<<<<<<< HEAD
                 onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
-=======
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
->>>>>>> main
                 placeholder="https://amazon.com/..."
                 width="full"
                 surface="default"
@@ -163,11 +143,7 @@ export function BlogDrafter() {
               <Box
                 as="textarea"
                 value={data.commentary}
-<<<<<<< HEAD
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
-=======
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
->>>>>>> main
                 placeholder="Write your main content here..."
                 width="full"
                 height={40}
