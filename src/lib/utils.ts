@@ -28,3 +28,18 @@ export function safeSearch(value: unknown, term: string): boolean {
   const normalizedValue = String(value || '').toLowerCase();
   return normalizedValue.includes(normalizedTerm);
 }
+
+/**
+ * Escapes special characters in a string for use in a Regular Expression.
+ */
+export function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Splits a text into parts for highlighting based on a query.
+ */
+export function getHighlightedParts(text: string, query: string, regex: RegExp | null) {
+  if (!regex || !query) return [text];
+  return text.split(regex);
+}

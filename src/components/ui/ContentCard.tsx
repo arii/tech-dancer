@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
+import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
-interface ContentCardProps {
+interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
   category: string;
@@ -19,7 +20,7 @@ interface ContentCardProps {
 
 export function ContentCardSkeleton() {
   return (
-    <Box className="flex flex-col h-full bg-surface border border-line rounded-xl overflow-hidden shadow-sm">
+    <Box radius="xl" shadow="standard" className="flex flex-col h-full bg-surface border border-line overflow-hidden">
       <Skeleton className="w-full aspect-video max-h-[160px] rounded-none" />
       <Stack gap={4} className="p-5" flex={1} justify="between">
         <Stack gap={3}>
@@ -36,14 +37,17 @@ export function ContentCardSkeleton() {
   );
 }
 
-export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content }: ContentCardProps) {
+export function ContentCard({ slug, title, category, excerpt, date, image, basePath, content, ...motionProps }: ContentCardProps) {
   const rt = readingTime(content, excerpt);
 
   return (
     <Box 
-      as={NavLink}
+      as={motion(NavLink)}
       to={`${basePath}/${slug}`}
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-xl overflow-hidden shadow-sm"
+      radius="xl"
+      shadow="standard"
+      className="group flex flex-col h-full bg-surface border border-line hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      {...motionProps}
     >
       {/* Visual Thumbnail */}
       <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[160px]">
