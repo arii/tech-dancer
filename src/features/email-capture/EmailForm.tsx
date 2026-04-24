@@ -15,14 +15,15 @@ export function EmailForm() {
   return (
     <Box as="form" onSubmit={handleSubmit} width="full" maxWidth="md" className="w-full md:w-auto">
       <Stack direction="row" gap={0} position="relative" className="w-full">
-        <input
+        <Box as="input"
           type="email"
           placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={`${inputs.base} min-h-11 w-full`}
+          width="full"
+          className={`${inputs.base} min-h-11`}
         />
         <Button
           type="submit"
