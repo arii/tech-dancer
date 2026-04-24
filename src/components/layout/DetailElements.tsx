@@ -1,5 +1,5 @@
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { LucideIcon, Star, DollarSign, Shield, ExternalLink } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { LucideIcon } from 'lucide-react';
 
 interface ScoreItemProps {
   label: string;

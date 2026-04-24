@@ -1,6 +1,5 @@
-import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check } from 'lucide-react';
+import { Github, FileText, Terminal, ExternalLink, Info, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';

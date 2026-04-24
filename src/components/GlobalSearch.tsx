@@ -1,11 +1,9 @@
-import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-import { escapeRegExp, getHighlightedParts } from '@/lib/utils';
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -19,13 +17,12 @@ export function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Memoize the search regex to avoid re-instantiation on every render during query updates.
-  const searchRegex = useMemo(() => {
-    if (!query) return null;
-    return new RegExp(`(${escapeRegExp(query)})`, 'gi');
-  }, [query]);
+  // 1. The Context Reset: Close on route change
+  // Note: Since isOpen is now derived from URL search params ('search=true'),
+  // navigation to a new URL without the 'search' param will automatically
+  // "close" the modal (isOpen will become false).
 
-  // Keyboard Escape Hatch: Close on ESC key
+  // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {
     if (isOpen) close();
   }, [isOpen, close]);
@@ -37,6 +34,7 @@ export function GlobalSearch() {
   }, [open]);
 
   const handleSelect = (result: SearchResult) => {
+    // 4. Link Click Delegation: Immediate Feedback
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
@@ -44,16 +42,16 @@ export function GlobalSearch() {
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
-  const highlight = useCallback((text: string) => {
-    const parts = getHighlightedParts(text, query, searchRegex);
-    if (parts.length === 1) return text;
-
+  const highlight = (text: string) => {
+    if (!query) return text;
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
     return parts.map((part, i) =>
       part.toLowerCase() === query.toLowerCase()
-        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} className="text-accent bg-accent/10">{part}</Box>
+        ? <span key={i} className="text-accent bg-accent/10 rounded-sm px-0.5">{part}</span>
         : part
     );
-  }, [searchRegex, query]);
+  };
 
   if (!isOpen) return null;
 
@@ -69,12 +67,10 @@ export function GlobalSearch() {
       surface={false}
       data-testid="search-backdrop"
       className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72"
+      // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
       <Box
-        as={motion.div}
-        initial={{ scale: 0.98, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
         width="full"
         maxWidth="3xl"
         height="fit"
@@ -104,8 +100,11 @@ export function GlobalSearch() {
           />
           <Box
             as="button"
+            type="button"
+            aria-label="Close search"
             onClick={close}
             padding={2}
+            cursor="pointer"
             className="group hover:bg-accent/5 transition-colors border border-line/50"
           >
             <X className="w-6 h-6 text-text-dim group-hover:text-accent" />
@@ -115,26 +114,29 @@ export function GlobalSearch() {
         <Box padding={3} overflow="y-auto" maxHeight="60vh" surface="default">
           {results.length > 0 ? (
             <Stack gap={2}>
-              {results.map((res: any) => (
+              {results.map((res: SearchResult) => (
                 <Box
                   key={`${res.type}-${res.slug}`}
                   as="button"
+                  type="button"
+                  data-testid="search-result"
                   onClick={() => handleSelect(res)}
                   width="full"
                   padding={3}
                   display="flex"
-                  align="center"
+                  align="start"
                   gap={4}
                   surface="default"
                   border
-                  className="hover:bg-accent/5 group transition-colors text-left"
+                  cursor="pointer"
+                  className="hover:bg-accent/5 group transition-colors"
                 >
                    <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
-                      <Hash className="w-4 h-4 text-accent-brand opacity-50" />
+                      <Hash className="w-4 h-4 text-accent opacity-50" />
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
                       <Box display="flex" align="center" justify="between" gap={3}>
-                         <Text variant="display" size="lg" className="group-hover:text-accent-brand truncate">{highlight(res.title)}</Text>
+                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                             <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
@@ -155,18 +157,22 @@ export function GlobalSearch() {
           )}
         </Box>
 
-        <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center" className="bg-surface/50">
+        <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center">
            <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">ESC</Box>
+                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
+                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                 </Box>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" className="bg-bg text-text-dim text-[10px] font-mono leading-none flex items-center justify-center">↵</Box>
+                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
+                    <Text variant="mono" size="tiny" color="dim" className="leading-none">↵</Text>
+                 </Box>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" className="tracking-widest">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
               {results.length} RESULTS FOUND
             </Text>
         </Box>
