@@ -74,7 +74,7 @@ export function useUXAuditor() {
         } else {
           await signInAnonymously(auth);
         }
-      } catch (err) {
+      } catch (_err) {
         console.error("Firebase auth error:", err);
       }
     };
@@ -112,12 +112,13 @@ export function useUXAuditor() {
 
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
-      let reportId = Date.now().toString();
+      const now = new Date().getTime();
+      let reportId = String(now);
 
       const newReport: UXReport = {
         id: reportId,
         url: targetUrl,
-        timestamp: Date.now(),
+        timestamp: now,
         status: 'processing',
       };
 
@@ -238,7 +239,7 @@ export function useUXAuditor() {
       });
       const result = await response.json();
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch (err) {
+    } catch (_err) {
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
@@ -292,7 +293,9 @@ export function useUXAuditor() {
         const repo = urlObj.pathname.split('/')[1];
         if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
       }
-    } catch (e) {}
+    } catch (_e) {
+      // Fallback to default repoBase if parsing fails
+    }
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
   };
@@ -302,7 +305,7 @@ export function useUXAuditor() {
     try {
       await navigator.clipboard.writeText(md);
       setIsCopiedMarkdown(true);
-    } catch (err) {
+    } catch (_err) {
       console.error('Failed to copy markdown:', err);
     }
   };

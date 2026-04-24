@@ -1,9 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
-import { Skeleton } from '@/components/ui/Skeleton';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface ContentCardProps {
@@ -16,25 +14,6 @@ interface ContentCardProps {
   basePath: string;
   aspect?: "square" | "video";
   content?: string;
-}
-
-export function ContentCardSkeleton() {
-  return (
-    <Box className="flex flex-col h-full bg-surface border border-line rounded-xl overflow-hidden shadow-sm">
-      <Skeleton className="w-full aspect-video max-h-[160px] rounded-none" />
-      <Stack gap={4} className="p-5" flex={1} justify="between">
-        <Stack gap={3}>
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-6 w-3/4" />
-          <Stack gap={2}>
-            <Skeleton className="h-3 w-full" />
-            <Skeleton className="h-3 w-5/6" />
-          </Stack>
-        </Stack>
-        <Skeleton className="h-3 w-20 mt-auto" />
-      </Stack>
-    </Box>
-  );
 }
 
 export function ContentCard({ slug, title, category, excerpt, date, image, basePath, aspect: _aspect = "video", content }: ContentCardProps) {

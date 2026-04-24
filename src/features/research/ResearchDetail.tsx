@@ -16,6 +16,17 @@ export default function ResearchDetail() {
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
 
+  const structuredData = useMemo(() => {
+    if (!tool) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": tool.name,
+      "description": tool.layman,
+      "applicationCategory": "EducationalApplication"
+    };
+  }, [tool]);
+
   if (study) {
     return (
       <DetailLayout
@@ -28,17 +39,6 @@ export default function ResearchDetail() {
       />
     );
   }
-
-  const structuredData = useMemo(() => {
-    if (!tool) return null;
-    return {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": tool.name,
-      "description": tool.layman,
-      "applicationCategory": "EducationalApplication"
-    };
-  }, [tool]);
 
   if (!tool) {
     return (

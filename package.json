@@ -13,14 +13,9 @@
     "lint": "pnpm run lint:eslint && pnpm run lint:tsc && pnpm run knip",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:tsc": "tsc --noEmit",
-<<<<<<< HEAD
     "type-check": "tsc --noEmit",
     "knip": "knip",
     "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs"
-=======
-    "knip": "knip",
-    "type-check": "tsc --noEmit"
->>>>>>> e7f839d (Fix CI pipeline: JSON syntax and dead code (#208))
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

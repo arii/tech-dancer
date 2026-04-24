@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'node_modules', 'coverage', 'playwright-report', 'scripts'],
+    ignores: ['dist', 'node_modules', 'coverage', 'playwright-report', 'scripts', 'dev-tools'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -24,7 +24,8 @@ export default tseslint.config(
         },
       ],
       '@typescript-eslint/no-explicit-any': 'off',
-      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/exhaustive-deps': 'error',
+      'react-hooks/rules-of-hooks': 'error'
     },
   },
 );

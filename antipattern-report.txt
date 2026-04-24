@@ -35,7 +35,7 @@
   [90mLine 46:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
 
 [36msrc/features/journal/BlogPost.tsx[0m
-  [90mLine 31:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 36:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 
 [36msrc/features/journal/components/BlogPostDetail.tsx[0m
   [90mLine 36:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -45,10 +45,10 @@
   [90mLine 65:[0m [Raw Layout/Spacing] [33mmb-8[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 
 [36msrc/features/lab/BlogDrafter.tsx[0m
-  [90mLine 26:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
-  [90mLine 31:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
-  [90mLine 31:[0m [Raw Layout/Spacing] [33mmt-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-  [90mLine 212:[0m [Non-token Color/Size] [33mhover:bg-accent-brand[0m - Class 'hover:bg-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 28:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 33:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 33:[0m [Raw Layout/Spacing] [33mmt-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 214:[0m [Non-token Color/Size] [33mhover:bg-accent-brand[0m - Class 'hover:bg-accent-brand' uses a value that is not a recognized design token.
 
 [36msrc/features/lab/GearCard.tsx[0m
   [90mLine 89:[0m [Arbitrary Value] [33m-[1px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
@@ -64,7 +64,7 @@
   [90mLine 90:[0m [Raw Layout/Spacing] [33mml-auto[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 
 [36msrc/features/lab/GearPost.tsx[0m
-  [90mLine 38:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 43:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 
 [36msrc/features/lab/Toolbox.tsx[0m
   [90mLine 23:[0m [Raw Layout/Spacing] [33mmb-12[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
@@ -96,13 +96,13 @@
   [90mLine 107:[0m [Non-token Color/Size] [33mtext-slate-300[0m - Class 'text-slate-300' uses a value that is not a recognized design token.
 
 [36msrc/features/research/ResearchDetail.tsx[0m
-  [90mLine 50:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
-  [90mLine 78:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
-  [90mLine 105:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
-  [90mLine 112:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
-  [90mLine 112:[0m [Non-token Color/Size] [33mtext-dim[0m - Class 'text-dim' uses a value that is not a recognized design token.
-  [90mLine 119:[0m [Non-token Color/Size] [33mbg-accent-brand/5[0m - Class 'bg-accent-brand/5' uses a value that is not a recognized design token.
-  [90mLine 121:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 49:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 77:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 104:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 111:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 111:[0m [Non-token Color/Size] [33mtext-dim[0m - Class 'text-dim' uses a value that is not a recognized design token.
+  [90mLine 118:[0m [Non-token Color/Size] [33mbg-accent-brand/5[0m - Class 'bg-accent-brand/5' uses a value that is not a recognized design token.
+  [90mLine 120:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
 
 [36msrc/pages/UXAuditor.tsx[0m
   [90mLine 76:[0m [Arbitrary Value] [33m-[var(--color-success,#16a34a)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.

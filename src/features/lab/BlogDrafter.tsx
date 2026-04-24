@@ -1,11 +1,9 @@
-<<<<<<< HEAD
-import { motion } from 'motion/react';
-import { useState } from 'react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check } from 'lucide-react';
-=======
-import { Github, FileText, Terminal, ExternalLink, Info } from 'lucide-react';
->>>>>>> e7f839d (Fix CI pipeline: JSON syntax and dead code (#208))
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { useState } from "react";
+import { Github, FileText, Terminal, ExternalLink, Info, Check } from "lucide-react";
+import { Box, Stack, Text, Grid } from "@/layouts/Primitives";
+import { useBlogDrafter } from "./useBlogDrafter";
+import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
+import { CONTENT_CATEGORIES } from "@/config/content";
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
