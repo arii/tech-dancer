@@ -69,6 +69,7 @@ export default function Navigation() {
         as="nav"
         aria-label="Mobile Navigation"
         layout="mobileHeader"
+        zIndex={100}
         className={cn(
           "transition-all duration-300",
           scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
@@ -101,7 +102,7 @@ export default function Navigation() {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             position="fixed"
-            className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
+            className="top-16 left-0 right-0 bottom-0 z-[90] bg-bg lg:hidden w-full"
             padding={8}
             overflow="y-auto"
           >
