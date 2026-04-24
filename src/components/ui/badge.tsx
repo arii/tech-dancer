@@ -1,11 +1,12 @@
-import * as React from "react"
+import { ComponentProps } from "react"
+
 import { cn } from "@/lib/utils"
 import { Text } from "@/layouts/Primitives"
 import { badgeVariants } from "@/lib/variants"
 import type { VariantProps } from "class-variance-authority"
 
 export interface BadgeProps
-  extends Omit<React.ComponentProps<typeof Text>, "intent">,
+  extends Omit<ComponentProps<typeof Text>, "intent">,
     VariantProps<typeof badgeVariants> {}
 
 function Badge({
