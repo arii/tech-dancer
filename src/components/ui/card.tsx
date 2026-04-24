@@ -52,7 +52,9 @@ function CardDescription({ className, ...props }: React.ComponentProps<typeof Te
       as="p"
       color="dim"
       size="text-xs"
-      className={cn("uppercase tracking-wider", className)}
+      uppercase
+      tracking="wider"
+      className={className}
       {...props}
     />
   )
