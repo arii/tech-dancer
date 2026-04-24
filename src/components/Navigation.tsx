@@ -69,7 +69,7 @@ export default function Navigation() {
         as="nav"
         aria-label="Mobile Navigation"
         layout="mobileHeader"
-        zIndex={100}
+        zIndex={90}
         className={cn(
           "transition-all duration-300",
           scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
