@@ -34,7 +34,7 @@ export function CardImage({ image, title, category, children }: CardImageProps) 
       {/* Category Badge - Standard for all cards */}
       <Box position="absolute" className="top-4 left-4">
         <Box paddingX={3} paddingY={1} surface="default" opacity={90} border={true} radius="none" className="backdrop-blur-sm">
-          <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase={true} tracking="wider">
+          <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase tracking="wider">
             {category}
           </Text>
         </Box>

@@ -4,6 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { z } from 'zod';
+
+const BasePostSchema = z.object({
+  title: z.string().default('Untitled'),
+  date: z.string().default(() => new Date().toISOString().split('T')[0]),
+  author: z.string().default('Ariel Anders, PhD'),
+  category: z.string().default('General'),
+  excerpt: z.string().default(''),
+  image: z.string().optional().transform(val => val === '' ? undefined : val),
+  tags: z.array(z.string()).default([]),
+  affiliateIds: z.array(z.string()).default([]),
+});
+
 /**
  * Lightweight browser-safe frontmatter parser.
  */
@@ -135,13 +148,14 @@ const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || 
  * Prevents issues like empty image strings breaking the layout.
  */
 export function validatePost(data: Record<string, any>): Partial<Post> {
-  return {
+  const result = BasePostSchema.safeParse(data);
+  return result.success ? result.data : {
     title: data.title || 'Untitled',
     date: data.date || new Date().toISOString().split('T')[0],
     author: data.author || 'Ariel Anders, PhD',
     category: data.category || 'General',
     excerpt: data.excerpt || '',
-    image: data.image || undefined,   // Normalize "" or null to undefined
+    image: data.image || undefined,
     tags: Array.isArray(data.tags) ? data.tags : [],
     affiliateIds: Array.isArray(data.affiliateIds) ? data.affiliateIds : [],
   };

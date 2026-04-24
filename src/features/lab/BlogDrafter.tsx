@@ -24,7 +24,7 @@ export function BlogDrafter() {
       <Stack gap={4}>
         <Box display="flex" align="center" gap={3}>
            <Terminal className="w-5 h-5 text-accent" />
-           <Text variant="display" size="2xl" color="brand" uppercase={true}>CONTENT PIPELINE</Text>
+           <Text variant="display" size="2xl" color="brand" uppercase>CONTENT PIPELINE</Text>
         </Box>
         <Box border={true} surface="accent" padding="compact" opacity={5}>
            <Stack gap={2} display="flex" align="start" direction="row">
@@ -213,7 +213,7 @@ export function BlogDrafter() {
               className="transition-all group"
             >
               <Github className="w-5 h-5" />
-              <Text variant="display" size="base" weight="font-bold" uppercase={true}>SUBMIT DRAFT</Text>
+              <Text variant="display" size="base" weight="font-bold" uppercase>SUBMIT DRAFT</Text>
               <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
             </Box>
           </Grid>

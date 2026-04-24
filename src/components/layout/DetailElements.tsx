@@ -49,7 +49,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" uppercase={true} className=" opacity-50">{key}</Text>
+            <Text variant="mono" size="tiny" color="dim" uppercase className=" opacity-50">{key}</Text>
             <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
           </Stack>
         ))}
@@ -79,7 +79,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
        <Stack gap={3}>
           <Box display="flex" align="center" gap={3}>
              <Shield className="w-6 h-6 text-emerald-600" />
-             <Text variant="displayLower" size="2xl" weight="font-black" intent="success" uppercase={true}>THE VERDICT</Text>
+             <Text variant="displayLower" size="2xl" weight="font-black" intent="success" uppercase>THE VERDICT</Text>
           </Box>
           <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">
             "{verdict}"

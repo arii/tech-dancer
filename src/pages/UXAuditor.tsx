@@ -269,7 +269,7 @@ export default function UXAuditor() {
                               <Box marginX="auto">
                                 <ImageIcon className="w-12 h-12 opacity-20" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase={true} tracking="wider">
+                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
                             </Stack>

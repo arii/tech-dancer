@@ -34,7 +34,7 @@ export function GearCard({
         {verdict && (
           <Box position="absolute" className="top-4 right-4">
             <Box paddingX={2} paddingY={1} radius="none" className="bg-accent">
-              <Text variant="mono" size="micro" weight="font-bold" color="white" uppercase={true}>
+              <Text variant="mono" size="micro" weight="font-bold" color="white" uppercase>
                 {verdict}
               </Text>
             </Box>
