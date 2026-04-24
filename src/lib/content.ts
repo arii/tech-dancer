@@ -92,7 +92,7 @@ export interface Resource {
   specs?: Record<string, string>;
 }
 
-export interface Study {
+interface Study {
   slug: string;
   title: string;
   date: string;
@@ -103,7 +103,7 @@ export interface Study {
   author?: string;
 }
 
-export interface Event {
+interface Event {
   slug: string;
   title: string;
   location: string;
@@ -114,7 +114,7 @@ export interface Event {
   content: string;
 }
 
-export type ContentType = 'posts' | 'resources' | 'studies' | 'events';
+type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
 interface ContentModule {
@@ -175,14 +175,14 @@ const maps = {
 export const getPosts = () => items.posts;
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
-export const getEvents = () => items.events;
+const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
-export const getStudyBySlug = (slug: string) => maps.studies.get(slug);
-export const getEventBySlug = (slug: string) => maps.events.get(slug);
+const getStudyBySlug = (slug: string) => maps.studies.get(slug);
+const getEventBySlug = (slug: string) => maps.events.get(slug);
 
-export const getAllContent = (type: ContentType): ContentItem[] => items[type];
+const getAllContent = (type: ContentType): ContentItem[] => items[type];
 
 /**
  * Calculates estimated reading time in minutes.

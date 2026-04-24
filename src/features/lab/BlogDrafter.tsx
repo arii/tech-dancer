@@ -23,12 +23,12 @@ export function BlogDrafter() {
     <Stack gap={10} height="full">
       <Stack gap={4}>
         <Box display="flex" align="center" gap={3}>
-           <Terminal className="w-5 h-5 text-accent-brand" />
+           <Terminal className="w-5 h-5 text-accent" />
            <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
            <Stack gap={2} display="flex" align="start" direction="row">
-              <Info className="w-4 h-4 text-accent-brand shrink-0 mt-1" />
+              <Info className="w-4 h-4 text-accent shrink-0 mt-1" />
               <Text variant="body" size="xs">
                 This tool prepares your blog post for the Tech-Dancer automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
@@ -59,7 +59,7 @@ export function BlogDrafter() {
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none"
+                className="focus:border-accent outline-none"
               />
             </Stack>
 
@@ -76,7 +76,7 @@ export function BlogDrafter() {
                   padding={3}
                   variant="mono"
                   size="sm"
-                  className="focus:border-accent-brand outline-none appearance-none"
+                  className="focus:border-accent outline-none appearance-none"
                 >
                   {CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
@@ -96,7 +96,7 @@ export function BlogDrafter() {
                   padding={3}
                   variant="mono"
                   size="sm"
-                  className="focus:border-accent-brand outline-none"
+                  className="focus:border-accent outline-none"
                 />
               </Stack>
             </Grid>
@@ -115,7 +115,7 @@ export function BlogDrafter() {
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none resize-none"
+                className="focus:border-accent outline-none resize-none"
               />
             </Stack>
 
@@ -133,7 +133,7 @@ export function BlogDrafter() {
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none"
+                className="focus:border-accent outline-none"
               />
             </Stack>
 
@@ -151,7 +151,7 @@ export function BlogDrafter() {
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent-brand outline-none resize-none"
+                className="focus:border-accent outline-none resize-none"
               />
             </Stack>
           </Stack>
@@ -209,7 +209,7 @@ export function BlogDrafter() {
               gap={3}
               surface="accent"
               padding={4}
-              className="bg-accent text-bg hover:bg-accent-brand transition-all cursor-pointer group"
+              className="bg-accent text-bg hover:bg-accent/80 transition-all cursor-pointer group"
             >
               <Github className="w-5 h-5" />
               <Text variant="display" size="base" weight="font-bold">SUBMIT DRAFT</Text>

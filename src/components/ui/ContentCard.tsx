@@ -17,7 +17,7 @@ interface ContentCardProps {
   content?: string;
 }
 
-export function ContentCardSkeleton() {
+function ContentCardSkeleton() {
   return (
     <Box className="flex flex-col h-full bg-surface border border-line rounded-xl overflow-hidden shadow-sm">
       <Skeleton className="w-full aspect-video max-h-[160px] rounded-none" />

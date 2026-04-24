@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { SITE_METADATA } from '@/config/content';
 
-export interface DraftData {
+interface DraftData {
   title: string;
   category: string;
   excerpt: string;

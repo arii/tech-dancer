@@ -4,7 +4,7 @@
  * consistency across all components.
  */
 
-export const radius = {
+const radius = {
   none: "rounded-none",
   subtle: "rounded-subtle",
   standard: "rounded-standard",
@@ -15,7 +15,7 @@ export const radius = {
   full: "rounded-full",
 };
 
-export const borders = {
+const borders = {
   default: "border border-line",
   accent: "border border-accent/20",
   brand: "border border-accent-brand/30",
@@ -63,7 +63,7 @@ export const inputs = {
   select: "bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
 };
 
-export const buttons = {
+const buttons = {
   primary: "w-full bg-text-main text-bg py-4 font-bold uppercase tracking-[3px] text-xs hover:bg-accent transition-all flex items-center justify-center gap-3",
   ghost: "p-2 border border-line hover:border-accent-brand hover:text-accent-brand transition-colors",
   tab: "px-6 py-3 text-[10px] font-mono font-bold uppercase tracking-widest transition-all",

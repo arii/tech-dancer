@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getPosts } from '@/lib/content';
 import { Home as HomeIcon } from 'lucide-react';
 
-export const upcomingEvents = [
+const upcomingEvents = [
   { name: 'Mission City Swing', date: 'Every Wednesday', status: 'Local Regular', icon: HomeIcon },
 ];
 

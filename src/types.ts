@@ -11,7 +11,7 @@ export interface AffiliateLink {
   description: string;
 }
 
-export interface GearItem {
+interface GearItem {
   id: string;
   title: string;
   description: string;
@@ -21,7 +21,7 @@ export interface GearItem {
   tags: string[];
 }
 
-export interface TechSpec {
+interface TechSpec {
   label: string;
   value: string;
   description: string;

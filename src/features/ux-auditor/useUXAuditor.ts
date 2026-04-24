@@ -19,7 +19,7 @@ export const VIEWPORTS = [
   { name: 'Desktop', width: 1440, height: 900 }
 ];
 
-export interface Improvement {
+interface Improvement {
   element: string;
   issue: string;
   suggestion: string;
@@ -31,7 +31,7 @@ export interface ViewportAnalysis {
   improvements: Improvement[];
 }
 
-export interface UXReport {
+interface UXReport {
   id: string;
   url: string;
   timestamp: number;
@@ -112,12 +112,12 @@ export function useUXAuditor() {
 
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
-      let reportId = Date.now().toString();
+      let reportId = crypto.randomUUID();
 
       const newReport: UXReport = {
         id: reportId,
         url: targetUrl,
-        timestamp: Date.now(),
+        timestamp: new Date().getTime(),
         status: 'processing',
       };
 
@@ -238,7 +238,7 @@ export function useUXAuditor() {
       });
       const result = await response.json();
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch (err) {
+    } catch (_err) {
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
@@ -292,7 +292,9 @@ export function useUXAuditor() {
         const repo = urlObj.pathname.split('/')[1];
         if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
       }
-    } catch (e) {}
+    } catch (_e) {
+      // Ignored
+    }
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
   };

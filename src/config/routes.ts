@@ -6,7 +6,7 @@ import { RouteObject } from 'react-router-dom';
  * Single source of truth for routing, navigation labels, and sitemap structure.
  * Extends React Router's RouteObject to include navigation metadata.
  */
-export interface RouteConfig extends Omit<RouteObject, 'children'> {
+interface RouteConfig extends Omit<RouteObject, 'children'> {
   path: string;
   label?: string;
   icon?: LucideIcon;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEmailStore } from './emailStore';
 
-export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
+type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function useEmailForm() {
   const [status, setStatus] = useState<FormStatus>('idle');
