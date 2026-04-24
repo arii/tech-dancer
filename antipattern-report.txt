@@ -2,13 +2,6 @@
 
 [31m✖ Anti-patterns detected:[0m
 
-[36msrc/features/contact/components/ContactFormView.tsx[0m
-  [90mLine 57:[0m [Non-token Color/Size] [33mgroup-hover:bg-accent-brand/5[0m - Class 'group-hover:bg-accent-brand/5' uses a value that is not a recognized design token.
-  [90mLine 138:[0m [Raw Layout/Spacing] [33mpy-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-
-[36msrc/features/contact/components/SuccessState.tsx[0m
-  [90mLine 36:[0m [Non-token Color/Size] [33mhover:bg-accent-brand/5[0m - Class 'hover:bg-accent-brand/5' uses a value that is not a recognized design token.
-
 [36msrc/features/dashboard/EventCard.tsx[0m
   [90mLine 14:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
   [90mLine 14:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
