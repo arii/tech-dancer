@@ -43,19 +43,20 @@
     "vite": "^6.2.0",
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
-
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
+    "@types/throttle-debounce": "^5.0.2",
     "autoprefixer": "^10.5.0",
     "playwright": "^1.59.1",
     "postcss": "^8.5.10",
     "rollup-plugin-visualizer": "^7.0.1",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.2",
+    "throttle-debounce": "^5.0.2",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",

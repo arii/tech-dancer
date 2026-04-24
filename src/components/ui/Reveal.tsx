@@ -55,7 +55,7 @@ export function Reveal({
       transition={{
         duration,
         delay,
-        ease: animation.ease as any,
+        ease: animation.ease as [number, number, number, number],
       }}
     >
       {children}

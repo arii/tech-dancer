@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { cn, throttle } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 
@@ -49,9 +50,9 @@ export default function Navigation() {
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
   useEffect(() => {
-    const handleScroll = throttle(() => {
+    const handleScroll = throttle(100, () => {
       setScrolled(window.scrollY > 20);
-    }, 100);
+    });
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
