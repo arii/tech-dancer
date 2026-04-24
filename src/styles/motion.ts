@@ -42,5 +42,11 @@ export const motionTokens = {
         ease: [0.25, 1, 0.5, 1] as [number, number, number, number]
       }
     }
+  },
+  fade: {
+    initial: { opacity: 0, y: 5 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -5 },
+    transition: { duration: 0.2 }
   }
 };

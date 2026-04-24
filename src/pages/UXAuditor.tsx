@@ -138,7 +138,7 @@ export default function UXAuditor() {
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
         <Stack gap={4} span={{ lg: 1 }}>
-          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
+          <Text variant="sans" size="xs" weight="font-bold" tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
           <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
@@ -169,7 +169,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                  <Text variant="mono" size="xs" weight="font-medium" color="dim">
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -188,7 +188,7 @@ export default function UXAuditor() {
                 marginBottom={2}
               >
                 <Box>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="tighter" marginBottom={1}>
+                  <Text variant="sans" size="xs" weight="font-bold" color="accent" tracking="tighter" marginBottom={1}>
                     Current Session
                   </Text>
                   <Text variant="sans" size="xl" weight="font-black">
@@ -249,7 +249,7 @@ export default function UXAuditor() {
                             {vp.name} Analysis
                           </Text>
                         </Box>
-                        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                        <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest">
                           {vp.width}w × {vp.height}h
                         </Text>
                       </Box>
@@ -260,8 +260,7 @@ export default function UXAuditor() {
                             <img
                               src={imgUrl}
                               alt={`${vp.name} snapshot`}
-                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface"
-                              style={{ maxHeight: '450px' }}
+                              className="w-full max-h-96 h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface"
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
@@ -269,7 +268,7 @@ export default function UXAuditor() {
                               <Box marginX="auto">
                                 <ImageIcon className="w-12 h-12 opacity-20" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase={true} tracking="wider">
+                              <Text variant="sans" size="xs" weight="font-bold" tracking="wider">
                                 Awaiting Frame...
                               </Text>
                             </Stack>
@@ -280,7 +279,7 @@ export default function UXAuditor() {
                           {data ? (
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase marginBottom={2} tracking="widest">
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginBottom={2} tracking="widest">
                                   Analysis Summary
                                 </Text>
                                 <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed">
@@ -297,7 +296,7 @@ export default function UXAuditor() {
                                           {imp.element}
                                         </Text>
                                       </Box>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase>
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim">
                                         LVL {imp.severity}
                                       </Text>
                                     </Box>
@@ -322,7 +321,7 @@ export default function UXAuditor() {
                           ) : (
                             <Box display="flex" align="center" justify="center" paddingY={20} direction="col" color="dim">
                               <RefreshCw className="animate-spin w-6 h-6" />
-                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
+                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest">
                                 Agent Processing...
                               </Text>
                             </Box>

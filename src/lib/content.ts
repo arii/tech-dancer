@@ -134,17 +134,24 @@ const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || 
  * Normalizes and validates frontmatter data to ensure UI consistency.
  * Prevents issues like empty image strings breaking the layout.
  */
+import { z } from 'zod';
+
+export const PostSchema = z.object({
+  title: z.string().optional().default('Untitled'),
+  date: z.string().optional().default(() => new Date().toISOString().split('T')[0]),
+  author: z.string().optional().default('Ariel Anders, PhD'),
+  category: z.string().optional().default('General'),
+  excerpt: z.string().optional().default(''),
+  image: z.string().optional().transform(val => val === "" ? undefined : val),
+  tags: z.array(z.string()).optional().default([]),
+  affiliateIds: z.array(z.string()).optional().default([]),
+});
+
 export function validatePost(data: Record<string, any>): Partial<Post> {
-  return {
-    title: data.title || 'Untitled',
-    date: data.date || new Date().toISOString().split('T')[0],
-    author: data.author || 'Ariel Anders, PhD',
-    category: data.category || 'General',
-    excerpt: data.excerpt || '',
-    image: data.image || undefined,   // Normalize "" or null to undefined
-    tags: Array.isArray(data.tags) ? data.tags : [],
-    affiliateIds: Array.isArray(data.affiliateIds) ? data.affiliateIds : [],
-  };
+  // Use safeParse to ensure we don't throw runtime errors on completely malformed data,
+  // falling back to defaults if parsing totally fails.
+  const parsed = PostSchema.safeParse(data);
+  return parsed.success ? parsed.data : PostSchema.parse({});
 }
 
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {

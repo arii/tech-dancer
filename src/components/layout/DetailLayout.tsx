@@ -60,7 +60,7 @@ export function DetailLayout({
           <Stack gap={6}>
             <Box display="flex" align="center" gap={4}>
               <Box className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-none">
-                <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase>
+                <Text variant="mono" size="micro" weight="font-bold" color="brand">
                   {category}
                 </Text>
               </Box>

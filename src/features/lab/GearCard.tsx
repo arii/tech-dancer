@@ -34,7 +34,7 @@ export function GearCard({
         {verdict && (
           <Box position="absolute" className="top-4 right-4">
             <Box paddingX={2} paddingY={1} radius="none" className="bg-accent">
-              <Text variant="mono" size="micro" weight="font-bold" color="white" uppercase={true}>
+              <Text variant="mono" size="micro" weight="font-bold" color="white">
                 {verdict}
               </Text>
             </Box>
@@ -47,10 +47,10 @@ export function GearCard({
         <Stack gap={2}>
           {rating && (
             <Box display="flex" align="center" gap={1} marginBottom={1}>
-              <span className="text-yellow-400 drop-shadow-sm">
+              <Text as="span" intent="warning" className="drop-shadow-sm">
                 {'★'.repeat(Math.floor(rating))}
                 {rating % 1 !== 0 ? '½' : ''}
-              </span>
+              </Text>
               <Text variant="mono" size="micro" color="dim" emphasis="low">
                 ({rating}/5)
               </Text>

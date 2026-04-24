@@ -5,10 +5,11 @@ interface CardImageProps {
   image?: string;
   title: string;
   category: string;
+  aspect?: "square" | "video";
   children?: React.ReactNode;
 }
 
-export function CardImage({ image, title, category, children }: CardImageProps) {
+export function CardImage({ image, title, category, aspect = "video", children }: CardImageProps) {
   return (
     <Box
       position="relative"
@@ -16,17 +17,17 @@ export function CardImage({ image, title, category, children }: CardImageProps) 
       border="b"
       surface="bg"
       className="border-line group"
-      aspect="video"
-      maxHeight="160px"
+      aspect={aspect}
     >
       {image ? (
-        <Box width="full" height="full" className="object-cover group-hover:scale-105 transition-transform duration-700">
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover"
-          />
-        </Box>
+        <Box
+          as="img"
+          src={image}
+          alt={title}
+          width="full"
+          height="full"
+          className="object-cover group-hover:scale-105 transition-transform duration-700"
+        />
       ) : (
         <CategoryPlaceholder category={category} />
       )}
@@ -34,7 +35,7 @@ export function CardImage({ image, title, category, children }: CardImageProps) 
       {/* Category Badge - Standard for all cards */}
       <Box position="absolute" className="top-4 left-4">
         <Box paddingX={3} paddingY={1} surface="default" opacity={90} border={true} radius="none" className="backdrop-blur-sm">
-          <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase={true} tracking="wider">
+          <Text variant="mono" size="micro" weight="font-bold" color="brand" tracking="wider">
             {category}
           </Text>
         </Box>

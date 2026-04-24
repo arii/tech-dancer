@@ -12,7 +12,7 @@ interface ScoreItemProps {
 export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
     <Stack gap={1} align="center" className="flex-1 px-4 py-2">
-      <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
+      <Text variant="mono" size="tiny" color="dim">{label}</Text>
       <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
         <Text variant="displayLower" size="xl" weight="font-bold">{value}</Text>
@@ -45,11 +45,11 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" className=" border-b border-line pb-2">Technical Specs</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" tracking="widest" className=" border-b border-line pb-2">Technical Specs</Text>
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" uppercase={true} className=" opacity-50">{key}</Text>
+            <Text variant="mono" size="tiny" color="dim" className=" opacity-50">{key}</Text>
             <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
           </Stack>
         ))}
@@ -61,7 +61,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 export function TOC({ headings }: { headings: string[] }) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" className=" border-b border-line pb-2">In this post</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" tracking="widest" className=" border-b border-line pb-2">In this post</Text>
       <Stack gap={2}>
         {headings.map((h, i) => (
           <Text key={i} variant="mono" size="tiny" className="cursor-pointer hover:text-accent transition-colors">
@@ -79,7 +79,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
        <Stack gap={3}>
           <Box display="flex" align="center" gap={3}>
              <Shield className="w-6 h-6 text-emerald-600" />
-             <Text variant="displayLower" size="2xl" weight="font-black" intent="success" uppercase={true}>THE VERDICT</Text>
+             <Text variant="displayLower" size="2xl" weight="font-black" intent="success">THE VERDICT</Text>
           </Box>
           <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">
             "{verdict}"

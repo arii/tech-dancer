@@ -77,7 +77,7 @@ export default function ResearchAnalytics() {
                 <Box key={study.slug} className="group">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
-                      <Text variant="mono" size="micro" color="brand" uppercase={true}>{study.category}</Text>
+                      <Text variant="mono" size="micro" color="brand">{study.category}</Text>
                       <Text variant="mono" size="micro" color="dim">{study.date}</Text>
                     </Box>
                     <Text variant="displayLower" size="2xl" color="brand" className="group-hover:text-accent transition-colors">

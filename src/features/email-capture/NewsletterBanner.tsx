@@ -52,7 +52,7 @@ export function NewsletterBanner() {
             <Text variant="display" size="base" tracking="tight">
               Weekly Insights
             </Text>
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+            <Text variant="mono" size="micro" color="dim" tracking="widest">
               Dance Analytics // Gear Reviews // Community Updates
             </Text>
           </Stack>

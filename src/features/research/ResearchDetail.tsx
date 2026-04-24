@@ -89,7 +89,7 @@ export default function ResearchDetail() {
             ) : (
               <Stack gap={12}>
                 <Stack gap={4}>
-                  <Text variant="mono" color="brand" size="xs" weight="font-bold" uppercase tracking="widest">
+                  <Text variant="mono" color="brand" size="xs" weight="font-bold" tracking="widest">
                     LABORATORY_ACCESS // {tool.category.toUpperCase()}
                   </Text>
                   <Text as="h1" variant="headline" size="fluid-7">{tool.name}</Text>
@@ -100,14 +100,14 @@ export default function ResearchDetail() {
 
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
+                    <Text variant="mono" size="micro" color="dim" tracking="widest">System Status</Text>
                     <Box border={true} padding="compact" display="flex" align="center" gap={3}>
                       <Activity className="w-4 h-4 text-accent" />
                       <Text variant="mono" size="xs" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                   </Stack>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
+                    <Text variant="mono" size="micro" color="dim" tracking="widest">Database Source</Text>
                     <Box border={true} padding="compact" display="flex" align="center" gap={3}>
                       <Database className="w-4 h-4 text-accent opacity-50" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>

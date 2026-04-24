@@ -24,6 +24,7 @@ package-lock.json
 # PR review working files
 dev-tools/logs/reviews/
 review_payload.json
+antipattern-report.txt
 
 # Cleanup old patterns
 pr-review-*.md

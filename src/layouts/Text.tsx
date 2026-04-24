@@ -15,9 +15,6 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<React.HTMLAttr
   weight?: string
   align?: "left" | "center" | "right" | "justify"
   tracking?: keyof typeof trackingTokens | string
-  uppercase?: boolean
-  lowercase?: boolean
-  capitalize?: boolean
   [key: string]: unknown
 }
 
@@ -25,7 +22,6 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
-    uppercase, lowercase, capitalize,
     ...props 
   }, ref) => {
     return (
@@ -46,9 +42,6 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
           weight,
           align && `text-${align}`,
           tracking && trackingTokens[tracking as keyof typeof trackingTokens],
-          uppercase && "uppercase",
-          lowercase && "lowercase",
-          capitalize && "capitalize",
           className
         )}
         {...props}

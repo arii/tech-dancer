@@ -2,6 +2,7 @@ import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
+import { motionTokens } from '@/styles/motion';
 import { useEmailForm } from './useEmailForm';
 
 export function EmailForm() {
@@ -37,10 +38,10 @@ export function EmailForm() {
             <Box
               as={motion.div}
               key={status}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{ duration: 0.2 }}
+              initial={motionTokens.fade.initial}
+              animate={motionTokens.fade.animate}
+              exit={motionTokens.fade.exit}
+              transition={motionTokens.fade.transition}
               display="flex"
               align="center"
               justify="center"
