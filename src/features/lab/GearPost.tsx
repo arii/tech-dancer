@@ -40,7 +40,7 @@ export default function GearPost() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Review Not Found</Text>
-          <Box as="button" onClick={() => navigate('/gear')} className="hover:text-accent-brand transition-colors">
+          <Box as="button" onClick={() => navigate('/gear')} emphasis="ghost" padding={2} className="transition-colors">
             <Text variant="mono" size="xs">Back to Toolbox</Text>
           </Box>
         </Stack>

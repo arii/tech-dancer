@@ -20,27 +20,31 @@ export default function Toolbox() {
         description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
       />
       {/* Header section with modern design */}
-      <header className="mb-12 border-b border-line/50 pb-12">
+      <Box as="header" marginBottom={12} paddingBottom={12} className="border-b border-line/50">
         <Box marginBottom={4}>
           <Box as="span" radius="full" paddingX={3} paddingY={1} className="inline-block bg-accent/10">
             <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
           </Box>
         </Box>
-        <Text as="h1" variant="display" size="4xl" weight="font-black" className="text-accent-navy mb-4 block">
+        <Text as="h1" variant="display" size="4xl" weight="font-black" marginBottom={4} className="text-accent-navy block">
           Gear Reviews
         </Text>
-        <Text as="p" variant="sans" size="lg" color="dim" className="max-w-2xl mb-8 font-medium block">
+        <Text as="p" variant="sans" size="lg" color="dim" maxWidth="2xl" marginBottom={8} className="font-medium block">
           Rigorous testing and honest takes on the gear that keeps you moving.
         </Text>
 
         {/* Modern Search Bar & Toggle */}
         <Box display="flex" align="center" justify="between" gap={4} flexWrap="wrap">
-          <div className="relative max-w-md flex-1">
-            <input
+          <Box position="relative" maxWidth="md" flex={1}>
+            <Box
+              as="input"
               type="text"
+              paddingLeft={10}
+              paddingRight={4}
+              paddingY={3}
               placeholder="Search gear (e.g. earplugs, shoes)..."
-              className="w-full pl-10 pr-4 py-3 bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
-              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
             <svg

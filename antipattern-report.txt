@@ -1,0 +1,80 @@
+[34m🔍 Scanning for UI anti-patterns...[0m
+
+[31m✖ Anti-patterns detected:[0m
+
+[36msrc/features/contact/components/ContactFormView.tsx[0m
+  [90mLine 123:[0m [Raw Layout/Spacing] [33mmt-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+
+[36msrc/features/dashboard/EventCard.tsx[0m
+  [90mLine 14:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 14:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 14:[0m [Raw Layout/Spacing] [33mp-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 14:[0m [Raw Layout/Spacing] [33mlg:p-8[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 17:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 17:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 17:[0m [Raw Layout/Spacing] [33mgap-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+
+[36msrc/features/email-capture/EmailForm.tsx[0m
+  [90mLine 25:[0m [Arbitrary Value] [33m-[44px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 31:[0m [Arbitrary Value] [33m-[44px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 31:[0m [Arbitrary Value] [33m-[140px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 31:[0m [Arbitrary Value] [33m-[180px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 31:[0m [Raw Layout/Spacing] [33mpx-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 40:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 40:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 40:[0m [Raw Layout/Spacing] [33mjustify-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 40:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+
+[36msrc/features/email-capture/NewsletterBanner.tsx[0m
+  [90mLine 19:[0m [Raw Layout/Spacing] [33mmx-auto[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 31:[0m [Raw Layout/Spacing] [33mp-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 46:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+
+[36msrc/features/journal/BlogPost.tsx[0m
+  [90mLine 36:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+
+[36msrc/features/journal/components/BlogPostDetail.tsx[0m
+  [90mLine 39:[0m [Raw Layout/Spacing] [33mflex-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+
+[36msrc/features/lab/GearCard.tsx[0m
+  [90mLine 46:[0m [Non-token Color/Size] [33mtext-amber-500[0m - Class 'text-amber-500' uses a value that is not a recognized design token.
+
+[36msrc/features/profile/ProfileSidebar.tsx[0m
+  [90mLine 33:[0m [Arbitrary Value] [33m-[0.5][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 46:[0m [Arbitrary Value] [33m-[0.15em][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 65:[0m [Arbitrary Value] [33m-[0.15em][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 100:[0m [Arbitrary Value] [33m-[0.15em][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+
+[36msrc/features/research/ResearchAnalytics.tsx[0m
+  [90mLine 110:[0m [Arbitrary Value] [33m-[40ch][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 47:[0m [Non-token Color/Size] [33mgroup-hover:text-accent-brand[0m - Class 'group-hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 53:[0m [Non-token Color/Size] [33mgroup-hover:text-accent-brand[0m - Class 'group-hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 57:[0m [Non-token Color/Size] [33mgroup-hover:text-accent-brand[0m - Class 'group-hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 82:[0m [Non-token Color/Size] [33mgroup-hover:text-accent-brand[0m - Class 'group-hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 95:[0m [Non-token Color/Size] [33mgroup-hover:text-accent-brand[0m - Class 'group-hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 107:[0m [Non-token Color/Size] [33mtext-slate-300[0m - Class 'text-slate-300' uses a value that is not a recognized design token.
+
+[36msrc/features/research/ResearchDetail.tsx[0m
+  [90mLine 49:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 77:[0m [Non-token Color/Size] [33mhover:text-accent-brand[0m - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 104:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 111:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+  [90mLine 111:[0m [Non-token Color/Size] [33mtext-dim[0m - Class 'text-dim' uses a value that is not a recognized design token.
+  [90mLine 118:[0m [Non-token Color/Size] [33mbg-accent-brand/5[0m - Class 'bg-accent-brand/5' uses a value that is not a recognized design token.
+  [90mLine 120:[0m [Non-token Color/Size] [33mtext-accent-brand[0m - Class 'text-accent-brand' uses a value that is not a recognized design token.
+
+[36msrc/pages/UXAuditor.tsx[0m
+  [90mLine 76:[0m [Arbitrary Value] [33m-[var(--color-success,#16a34a)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 174:[0m [Arbitrary Value] [33m-[var(--color-success-dim,#dcfce7)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 174:[0m [Arbitrary Value] [33m-[var(--color-success,#16a34a)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 174:[0m [Arbitrary Value] [33m-[var(--color-warning-dim,#fef3c7)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 174:[0m [Arbitrary Value] [33m-[var(--color-warning,#d97706)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 295:[0m [Arbitrary Value] [33m-[var(--color-error,#ef4444)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 295:[0m [Arbitrary Value] [33m-[var(--color-warning,#f59e0b)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 129:[0m [Non-token Color/Size] [33mtext-text[0m - Class 'text-text' uses a value that is not a recognized design token.
+  [90mLine 214:[0m [Non-token Color/Size] [33mhover:text-text[0m - Class 'hover:text-text' uses a value that is not a recognized design token.
+  [90mLine 269:[0m [Raw Layout/Spacing] [33mmx-auto[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 269:[0m [Raw Layout/Spacing] [33mmb-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 294:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 294:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 294:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
