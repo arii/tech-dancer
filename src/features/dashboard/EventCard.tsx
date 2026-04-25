@@ -18,7 +18,7 @@ export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
       className="bg-surface/50"
     >
       <Stack direction="row" align="center" gap={3}>
-        <Icon className="w-5 h-5 text-accent" />
+        <Icon size={20} className="text-accent" />
         <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
           {status}
         </Text>
