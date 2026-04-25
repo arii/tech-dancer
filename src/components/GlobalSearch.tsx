@@ -2,7 +2,7 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef } from 'react';
+import { useRef, MouseEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
@@ -71,7 +71,7 @@ export function GlobalSearch() {
         border
         shadow="topOverlay"
         className="border-accent/20"
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
           <Search className="w-6 h-6 text-accent shrink-0" />
@@ -81,7 +81,7 @@ export function GlobalSearch() {
             type="text"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
             value={query}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             width="full"
             variant="display"
             size="2xl"
