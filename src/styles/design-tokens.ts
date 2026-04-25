@@ -57,6 +57,11 @@ export const imageSizes = {
   profile: 400, // Keep as number for img attribute compatibility
 };
 
+export const stroke = {
+  thin: "stroke-[0.5]",
+  thick: "stroke-[1.5]",
+};
+
 export const iconSizes = {
   xs: 12,
   sm: 16,
@@ -100,6 +105,7 @@ export const tracking = {
   wider: "tracking-wider",
   widest: "tracking-widest",
   "wide-editorial": "tracking-[0.2em]",
+  emphasized: "tracking-[0.15em]",
 };
 
 export const typeSizes = {
