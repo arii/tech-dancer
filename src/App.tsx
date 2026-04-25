@@ -3,30 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { lazy, Suspense, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { MainLayout } from './layouts/MainLayout';
-import { motionTokens } from './styles/motion';
+import { Suspense, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { PageSkeleton } from './components/ui/PageSkeleton';
-import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { routes as routeConfig } from './config/routes';
-
+import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
+import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
+import { motionTokens } from './styles/motion';
 
-import { useEmailStore, STORAGE_KEY } from './features/email-capture/emailStore';
-
-
-const Home = lazy(() => import('./pages/Home'));
-const GearReviews = lazy(() => import('./pages/Gear'));
-const GearPost = lazy(() => import('./features/lab/GearPost'));
-const Research = lazy(() => import('./pages/Research'));
-const ResearchDetail = lazy(() => import('./pages/ResearchDetail'));
-const UXAuditor = lazy(() => import('./pages/UXAuditor'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
-const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
+import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
 
 const BANNER_DELAY_MS = 30000; // 30s delay
 

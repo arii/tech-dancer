@@ -1,5 +1,4 @@
 import { chromium } from 'playwright';
-import path from 'path';
 
 const routes = [
   { name: 'home', path: '/' },

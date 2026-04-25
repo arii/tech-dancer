@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
@@ -17,6 +16,17 @@ export default function ResearchDetail() {
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
 
+  const structuredData = useMemo(() => {
+    if (!tool) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": tool.name,
+      "description": tool.layman,
+      "applicationCategory": "EducationalApplication"
+    };
+  }, [tool]);
+
   if (study) {
     return (
       <DetailLayout
@@ -29,17 +39,6 @@ export default function ResearchDetail() {
       />
     );
   }
-
-  const structuredData = useMemo(() => {
-    if (!tool) return null;
-    return {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": tool.name,
-      "description": tool.layman,
-      "applicationCategory": "EducationalApplication"
-    };
-  }, [tool]);
 
   if (!tool) {
     return (
