@@ -44,7 +44,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 weight="font-semibold"
                 display="block"
                 tracking="widest"
-                uppercase={true}
+                uppercase
               >
                 {detail.label}
               </Text>
@@ -63,7 +63,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
 
         <Stack gap={6}>
           <Stack gap={3}>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase={true}>Connect</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>Connect</Text>
             <Box display="flex" gap={5}>
               {data.socialLinks.map((link) => {
                 const Icon = platformIcons[link.platform];
@@ -98,7 +98,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 className="group text-accent-navy hover:text-accent transition-colors"
               >
                 <item.icon className="w-4 h-4" />
-                <Text variant="mono" size="xs" weight="font-semibold" tracking="widest" uppercase={true}>{item.label}</Text>
+                <Text variant="mono" size="xs" weight="font-semibold" tracking="widest" uppercase>{item.label}</Text>
               </Box>
             ))}
           </Box>
