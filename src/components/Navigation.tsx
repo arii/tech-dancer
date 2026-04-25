@@ -127,7 +127,7 @@ export default function Navigation() {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={motionTokens.arielTransition}
+            transition={motionTokens.springTransition}
             position="fixed"
             className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
             padding={8}

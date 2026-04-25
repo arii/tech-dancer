@@ -12,7 +12,6 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1; node scripts/generate-todo.mjs",
-    "audit:fix": "node scripts/ai-debugger.mjs",
         "type-check": "tsc --noEmit"
   },
   "dependencies": {
