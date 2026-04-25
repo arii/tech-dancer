@@ -113,20 +113,21 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     } = props;
 
     const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
-      if (val === undefined || val === null || val === false) return ""
+      if (!val) return ""
       const pfx = prefix ? `${prefix}-` : ""
-      if (typeof val === "number") {
-        return `${pfx}${val}`
-      }
-      // If it's already an arbitrary value, don't wrap it again
-      if (typeof val === "string" && val.startsWith("[") && val.endsWith("]")) {
-        return `${pfx}${val}`
-      }
-      // Check if it's a standard Tailwind token (letters, numbers, dashes)
-      if (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !val.includes('vh') && !val.includes('vw') && !val.includes('%') && !val.includes('px')) {
-        return `${pfx}${val}`
-      }
-      return `${pfx}[${val}]`
+
+      // Standard Tailwind tokens (numbers or specific strings without CSS units)
+      const isToken = typeof val === "number" ||
+        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
+
+      if (isToken) return `${pfx}${val}`
+
+      // Arbitrary values
+      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
+        ? val
+        : `[${val}]`
+
+      return `${pfx}${value}`
     }
 
     return (
