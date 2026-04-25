@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { useImage } from '@/hooks/useImage';
 
 interface DetailLayoutProps {
   title: string;
@@ -32,6 +33,7 @@ export function DetailLayout({
   relatedContent
 }: DetailLayoutProps) {
   const rt = readingTime(content);
+  const { imgError, handleError } = useImage(image);
 
   return (
     <Box as="article" padding="panel">
@@ -71,7 +73,7 @@ export function DetailLayout({
           </Stack>
 
           {/* Hero Image */}
-          {image && (
+          {image && !imgError && (
             <Box
               as={motion.div}
               initial={{ opacity: 0, y: 20 }}
@@ -84,6 +86,7 @@ export function DetailLayout({
               <img
                 src={image}
                 alt={title}
+                onError={handleError}
                 className="w-full h-full object-cover"
               />
             </Box>

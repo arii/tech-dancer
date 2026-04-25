@@ -6,9 +6,18 @@ interface CardImagePlaceholderProps {
   category: string;
   date?: string;
   title: string;
+  onError?: () => void;
+  forcePlaceholder?: boolean;
 }
 
-export function CardImagePlaceholder({ image, category, date, title }: CardImagePlaceholderProps) {
+export function CardImagePlaceholder({
+  image,
+  category,
+  date,
+  title,
+  onError,
+  forcePlaceholder
+}: CardImagePlaceholderProps) {
   const norm = (category || '').toLowerCase();
 
   let surfaceVariant: "brand" | "accent" | "warning" | "danger" | "muted" = 'muted';
@@ -17,12 +26,13 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
   else if (norm.includes('gear')) surfaceVariant = 'warning';
   else if (norm.includes('lifestyle')) surfaceVariant = 'danger';
 
-  if (image) {
+  if (image && !forcePlaceholder) {
     return (
       <Box className="relative w-full aspect-video max-h-[160px] overflow-hidden border-b border-line bg-bg">
         <img
           src={image}
           alt={title}
+          onError={onError}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
         <Box className="absolute top-3 left-3">
