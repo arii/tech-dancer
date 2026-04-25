@@ -38,6 +38,7 @@ jobs:
   snyk:
     name: Snyk Security Scan
     runs-on: ubuntu-latest
+    if: ${{ vars.SNYK_TOKEN != '' || secrets.SNYK_TOKEN != '' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
