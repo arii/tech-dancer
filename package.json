@@ -7,6 +7,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "pnpm run type-check && vite build",
     "build:analyze": "ANALYZE=true vite build",
+    "build:profile": "vite build --profile",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",

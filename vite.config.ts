@@ -16,8 +16,8 @@ export default defineConfig(({mode}) => {
   // Dynamic base path for GitHub Pages vs Vercel vs Local Override
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
-  const analyze = process.env.ANALYZE === 'true';
-  const inspect = process.env.VITE_INSPECT === 'true';
+  const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
+  const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
@@ -74,7 +74,7 @@ export default defineConfig(({mode}) => {
         filename: 'bundle-analysis.html',
         gzipSize: true,
       }),
-      inspect && Inspect(),
+      inspect && !isProd && Inspect(),
     ].filter(Boolean),
     resolve: {
       alias: {
