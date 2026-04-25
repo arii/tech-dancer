@@ -43,7 +43,7 @@ export function NewsletterBanner() {
       >
         <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
           <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
-            <Mail className="w-5 h-5 text-accent-brand" />
+            <Mail className="w-5 h-5 text-accent" />
           </Box>
           <Stack gap={0}>
             <Text variant="display" size="base" uppercase tracking="tight">
