@@ -8,7 +8,7 @@ const fs = require('fs');
 let chromium;
 try {
   chromium = require('playwright').chromium;
-} catch (err) {
+} catch {
   console.error('Playwright not found. Please install it using "npm install --save-dev playwright".');
   process.exit(1);
 }

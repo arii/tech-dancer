@@ -1,4 +1,3 @@
-import { typography } from "@/styles/design-tokens";
 import { cva } from "class-variance-authority";
 
 /**

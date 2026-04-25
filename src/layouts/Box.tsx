@@ -73,7 +73,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
-    justify, align, scrollBehavior, scrollPaddingTop,
+    justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop,
     top, right, bottom, left,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,

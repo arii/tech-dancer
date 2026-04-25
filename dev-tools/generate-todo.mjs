@@ -20,6 +20,7 @@ const generateTodo = () => {
     }
 
     // Clean ANSI escape sequences
+    // oxlint-disable-next-line no-control-regex
     const cleanLine = line.replace(/\x1b\[[0-9;]*m/g, '');
 
     if (cleanLine.startsWith('src/')) {

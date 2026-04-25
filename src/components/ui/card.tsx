@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Box, Stack, Text } from "@/layouts/Primitives"
+import { Box, Text } from "@/layouts/Primitives"
 
 function Card({
   className,

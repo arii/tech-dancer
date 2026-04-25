@@ -18,7 +18,7 @@ export function useSubmitContact() {
         await new Promise((resolve) => setTimeout(resolve, 1500));
       }
       return { success: true };
-    } catch (err) {
+    } catch {
       const message = 'System error: Unable to transmit payload. Please try again later.';
       return { success: false, error: message };
     }
