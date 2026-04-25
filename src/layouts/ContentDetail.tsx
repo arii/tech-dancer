@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useImage } from '@/hooks/useImage';
+
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock, Tag, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -14,7 +14,6 @@ interface ContentDetailProps {
 }
 
 export function ContentDetail({ post, onBack, backLabel, children }: ContentDetailProps) {
-  const { imgError, handleImgError } = useImage();
   const title = post.title;
   const content = post.content;
 
@@ -73,7 +72,7 @@ export function ContentDetail({ post, onBack, backLabel, children }: ContentDeta
               <img
                 src={image}
                 alt={title}
-                onError={handleImgError}
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.style.display = 'none'; }}
                 className="w-full h-full object-cover"
               />
             </Box>

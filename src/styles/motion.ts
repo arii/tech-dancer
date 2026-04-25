@@ -3,14 +3,14 @@
  * Defines "The Ariel Motion" - a high-end, bespoke feel for transitions.
  */
 
-export const arielTransition = {
+export const springTransition = {
   type: "spring",
   damping: 25,
   stiffness: 120,
   mass: 0.8,
 };
 
-export const arielEase = [0.16, 1, 0.3, 1]; // easeOutExpo
+export const easeOutExpo = [0.16, 1, 0.3, 1]; // easeOutExpo
 
 // Reduced motion check (safe for client-side environments)
 const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -19,7 +19,7 @@ export const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.4, ease: arielEase },
+  transition: { duration: 0.4, ease: easeOutExpo },
 };
 
 export const fadeInUp = {
@@ -28,7 +28,7 @@ export const fadeInUp = {
   exit: { opacity: 0, y: 20 },
   transition: { 
     duration: isReducedMotion ? 0 : 0.5, 
-    ease: arielEase 
+    ease: easeOutExpo
   },
 };
 
@@ -50,7 +50,7 @@ export const scaleUp = {
   exit: { opacity: 0, scale: 0.95 },
   transition: { 
     duration: isReducedMotion ? 0 : 0.4, 
-    ease: arielEase 
+    ease: easeOutExpo
   },
 };
 
@@ -58,7 +58,7 @@ export const slideInRight = {
   initial: { opacity: 0, x: 30 },
   animate: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: 30 },
-  transition: { duration: 0.5, ease: arielEase },
+  transition: { duration: 0.5, ease: easeOutExpo },
 };
 
 export const hoverLift = {
@@ -67,8 +67,8 @@ export const hoverLift = {
 };
 
 export const motionTokens = {
-  arielTransition,
-  arielEase,
+  springTransition,
+  easeOutExpo,
   fadeIn,
   fadeInUp,
   staggerContainer,
@@ -81,7 +81,7 @@ export const motionTokens = {
     initial: { y: 100 },
     animate: { y: 0 },
     exit: { y: 100 },
-    transition: { duration: 0.4, ease: arielEase }
+    transition: { duration: 0.4, ease: easeOutExpo }
   },
   staggerItem: fadeInUp,
   hover: {
