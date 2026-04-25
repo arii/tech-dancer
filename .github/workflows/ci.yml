@@ -38,11 +38,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Lint (Oxlint)
-        run: pnpm run lint:ox
-
-      - name: Type-check
-        run: pnpm run type-check
+      - name: Lint & Type-check
+        run: pnpm run check
 
       - name: Run unit tests
         run: pnpm test --if-present
