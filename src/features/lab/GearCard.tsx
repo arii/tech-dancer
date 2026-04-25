@@ -43,10 +43,10 @@ export function GearCard({
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
               <Box display="flex" align="center" gap={1}>
-                <span className="text-amber-500 text-xs">
+                <Box as="span" className="text-yellow-400 text-xs">
                   {'★'.repeat(Math.floor(rating))}
                   {rating % 1 !== 0 ? '½' : ''}
-                </span>
+                </Box>
                 <Text variant="mono" size="micro" color="dim">
                   ({rating}/5)
                 </Text>

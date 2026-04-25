@@ -60,10 +60,10 @@ export default function Toolbox() {
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-          </div>
+          </Box>
           <ViewToggle view={view} onChange={setView} />
         </Box>
-      </header>
+      </Box>
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (

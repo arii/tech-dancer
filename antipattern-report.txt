@@ -36,9 +36,6 @@
 [36msrc/features/journal/components/BlogPostDetail.tsx[0m
   [90mLine 39:[0m [Raw Layout/Spacing] [33mflex-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
 
-[36msrc/features/lab/GearCard.tsx[0m
-  [90mLine 46:[0m [Non-token Color/Size] [33mtext-amber-500[0m - Class 'text-amber-500' uses a value that is not a recognized design token.
-
 [36msrc/features/profile/ProfileSidebar.tsx[0m
   [90mLine 33:[0m [Arbitrary Value] [33m-[0.5][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
   [90mLine 46:[0m [Arbitrary Value] [33m-[0.15em][0m - Avoid arbitrary values like -[...]. Use design tokens instead.

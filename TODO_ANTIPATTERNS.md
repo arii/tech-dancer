@@ -30,8 +30,6 @@ This list is automatically generated from the `npm run audit` report. Fix these 
 - [ ] Line 36: [Non-token Color/Size] hover:text-accent-brand - Class 'hover:text-accent-brand' uses a value that is not a recognized design token.
 ## src/features/journal/components/BlogPostDetail.tsx
 - [ ] Line 39: [Raw Layout/Spacing] flex-1 - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
-## src/features/lab/GearCard.tsx
-- [ ] Line 46: [Non-token Color/Size] text-amber-500 - Class 'text-amber-500' uses a value that is not a recognized design token.
 ## src/features/profile/ProfileSidebar.tsx
 - [ ] Line 33: [Arbitrary Value] -[0.5] - Avoid arbitrary values like -[...]. Use design tokens instead.
 - [ ] Line 46: [Arbitrary Value] -[0.15em] - Avoid arbitrary values like -[...]. Use design tokens instead.
