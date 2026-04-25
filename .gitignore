@@ -1,31 +1,56 @@
+# Dependencies
 node_modules/
-build/
+.pnpm-store/
+
+# Build and Analysis
 dist/
+dist-ssr/
+build/
 *-analysis.html
-coverage/
-.DS_Store
-*.log
-.env*
-!.env.example
-*.swp
-*.swo
+.eslintcache
+.prettiercache
+
+# Testing
 playwright-report/
 test-results/
+coverage/
+blob-report/
+.playwright/
+
+# Environment and Secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs and OS files
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
 
 # Python / ETL
 __pycache__/
 *.py[cod]
+*$py.class
 .venv/
 venv/
+ENV/
+.python-version
 etl/data/*.parquet
 !etl/data/wcs_prelims.parquet
+
+# Package Manager Lockfiles
+# Since you use pnpm, we ignore other manager lockfiles
 package-lock.json
-
-# PR review working files
-dev-tools/logs/reviews/
-review_payload.json
-
-# Cleanup old patterns
-pr-review-*.md
-pr-context-*.md
-plan-pr-review-*.md
+yarn.lock
