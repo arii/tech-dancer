@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { SuccessState } from '@/features/contact/components/SuccessState';
 import { ContactFormView } from '@/features/contact/components/ContactFormView';
-import { contactSchema, type ContactFormData } from '@/features/contact/schemas/contact-schema';
-import { useSubmitContact } from '@/features/contact/hooks/useSubmitContact';
 
 const contactFormSchema = z.object({
   name: z.string().min(1, 'Personnel name required'),
@@ -54,7 +52,7 @@ export default function Contact() {
 
       setSubmitted(true);
       resetForm();
-    } catch (err) {
+    } catch (_err) {
       setError('root', { message: 'System error: Unable to transmit payload. Please try again later.' });
     }
   };

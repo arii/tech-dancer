@@ -35,4 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Run lint
-        run: pnpm run type-check
+        run: pnpm run lint
+
+      - name: Check for dead code
+        run: pnpm run knip

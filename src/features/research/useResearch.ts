@@ -7,7 +7,6 @@ export function useResearch() {
     queryKey: ['studies'],
     queryFn: getStudies,
   });
-  const [selectedTool, setSelectedTool] = useState<string | null>(null);
 
   const tools = [
     {

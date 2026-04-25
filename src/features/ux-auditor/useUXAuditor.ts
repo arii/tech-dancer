@@ -158,8 +158,8 @@ export function useUXAuditor() {
             });
             mockImg = base64DataUri;
           }
-        } catch (e) {
-          console.error("Failed to fetch realistic snapshot, using placeholder", e);
+        } catch (_e) {
+          console.error("Failed to fetch realistic snapshot, using placeholder");
         }
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
@@ -238,7 +238,7 @@ export function useUXAuditor() {
       });
       const result = await response.json();
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch (err) {
+    } catch (_err) {
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
@@ -292,7 +292,7 @@ export function useUXAuditor() {
         const repo = urlObj.pathname.split('/')[1];
         if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
       }
-    } catch (e) {}
+    } catch (_e) {}
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
   };
