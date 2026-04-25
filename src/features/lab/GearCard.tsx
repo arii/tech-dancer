@@ -20,10 +20,17 @@ export function GearCard({
   updatedDate
 }: GearCardProps) {
   return (
-    <Box
+    <Stack
       as={NavLink}
       to={`${basePath}/${slug}`}
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent transition-all duration-300 rounded-none overflow-hidden"
+      direction="col"
+      gap={0}
+      height="full"
+      surface
+      border
+      radius="none"
+      overflow="hidden"
+      className="group hover:border-accent transition-all duration-300"
     >
       <CardImagePlaceholder
         image={image}
@@ -38,10 +45,11 @@ export function GearCard({
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
               <Box display="flex" align="center" gap={1}>
-                <span className="text-amber-500 text-xs">
+                {/* Using className for the stars to maintain amber color while design system intent="warning" is blue */}
+                <Text size="xs" className="text-amber-500">
                   {'★'.repeat(Math.floor(rating))}
                   {rating % 1 !== 0 ? '½' : ''}
-                </span>
+                </Text>
                 <Text variant="mono" size="micro" color="dim">
                   ({rating}/5)
                 </Text>
@@ -49,8 +57,8 @@ export function GearCard({
             )}
 
             {verdict && (
-              <Box surface="brand" className="px-1.5 py-0.5 rounded-none border border-line/10">
-                <Text variant="mono" size="micro" weight="font-bold" className="uppercase">
+              <Box surface="brand" paddingX={1.5} paddingY={0.5} radius="none" border className="border-line/10">
+                <Text variant="mono" size="micro" weight="font-bold" uppercase>
                   {verdict}
                 </Text>
               </Box>
@@ -71,8 +79,8 @@ export function GearCard({
           </Text>
 
           {priceCategory && (
-             <Box border className="bg-amber-50/50 px-2 py-0.5 border-amber-200/50 w-fit">
-               <Text variant="mono" size="micro" weight="font-bold" className="text-amber-700">{priceCategory}</Text>
+             <Box surface="warning" paddingX={2} paddingY={0.5} width="fit">
+               <Text variant="mono" size="micro" weight="font-bold">{priceCategory}</Text>
              </Box>
           )}
         </Stack>
@@ -82,12 +90,12 @@ export function GearCard({
             * Affiliate links — commission earned at no cost to you.
           </Text>
 
-          <Box display="flex" align="center" gap={2} paddingTop={4} className="border-t border-line/50">
-            <Text variant="mono" size="xs" weight="font-bold" className="text-accent tracking-wider">
+          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50">
+            <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="wider">
               Read Review
             </Text>
-            <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
-            <Box className="group-hover:translate-x-1 transition-transform duration-300 ml-auto">
+            <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
+            <Box marginLeft="auto" className="group-hover:translate-x-1 transition-transform duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
@@ -106,6 +114,6 @@ export function GearCard({
           </Box>
         </Stack>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
