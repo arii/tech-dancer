@@ -148,17 +148,7 @@ const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || 
  * Prevents issues like empty image strings breaking the layout.
  */
 export function validatePost(data: Record<string, any>): Partial<Post> {
-  const result = BasePostSchema.safeParse(data);
-  return result.success ? result.data : {
-    title: data.title || 'Untitled',
-    date: data.date || new Date().toISOString().split('T')[0],
-    author: data.author || 'Ariel Anders, PhD',
-    category: data.category || 'General',
-    excerpt: data.excerpt || '',
-    image: data.image || undefined,
-    tags: Array.isArray(data.tags) ? data.tags : [],
-    affiliateIds: Array.isArray(data.affiliateIds) ? data.affiliateIds : [],
-  };
+  return BasePostSchema.parse(data);
 }
 
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
