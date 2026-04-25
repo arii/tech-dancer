@@ -158,7 +158,7 @@ export function useUXAuditor() {
             });
             mockImg = base64DataUri;
           }
-        } catch (_e) {
+        } catch {
           console.error("Failed to fetch realistic snapshot, using placeholder");
         }
 
@@ -238,7 +238,7 @@ export function useUXAuditor() {
       });
       const result = await response.json();
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch (_err) {
+    } catch {
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
@@ -292,7 +292,9 @@ export function useUXAuditor() {
         const repo = urlObj.pathname.split('/')[1];
         if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
       }
-    } catch (_e) {}
+    } catch {
+      // Ignore URL parsing errors
+    }
 
     window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
   };

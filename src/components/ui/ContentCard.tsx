@@ -3,7 +3,6 @@ import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
-import { Skeleton } from '@/components/ui/Skeleton';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {

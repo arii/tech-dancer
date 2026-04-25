@@ -19,8 +19,8 @@ const generateTodo = () => {
       continue;
     }
 
-    // Clean ANSI escape sequences
-    const cleanLine = line.replace(/\x1b\[[0-9;]*m/g, '');
+    // Clean ANSI escape sequences - using string splitting to avoid control character regex
+    const cleanLine = line.split('\x1b').join('').replace(/\[[0-9;]*m/g, '');
 
     if (cleanLine.startsWith('src/')) {
       currentFile = cleanLine;

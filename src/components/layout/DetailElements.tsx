@@ -58,20 +58,6 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
   );
 }
 
-export function TOC({ headings }: { headings: string[] }) {
-  return (
-    <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">In this post</Text>
-      <Stack gap={2}>
-        {headings.map((h, i) => (
-          <Text key={i} variant="mono" size="tiny" className="cursor-pointer hover:text-accent transition-colors">
-            <span className="opacity-30 mr-2">0{i+1}</span> {h}
-          </Text>
-        ))}
-      </Stack>
-    </Stack>
-  );
-}
 
 export function VerdictCallout({ verdict }: { verdict: string }) {
   return (

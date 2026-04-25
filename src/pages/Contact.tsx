@@ -52,7 +52,7 @@ export default function Contact() {
 
       setSubmitted(true);
       resetForm();
-    } catch (_err) {
+    } catch {
       setError('root', { message: 'System error: Unable to transmit payload. Please try again later.' });
     }
   };

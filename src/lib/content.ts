@@ -114,7 +114,6 @@ export interface Event {
   content: string;
 }
 
-type ContentType = 'posts' | 'resources' | 'studies' | 'events';
 export type ContentItem = Post | Resource | Study | Event;
 
 interface ContentModule {

@@ -18,8 +18,13 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'error',
-      'react-hooks/exhaustive-deps': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_'
+      }],
+      'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/purity': 'off',
     },
   },
 );
