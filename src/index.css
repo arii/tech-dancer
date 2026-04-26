@@ -81,6 +81,10 @@
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
+
+  /* Font Sizes */
+  --text-micro: 9px;
+  --text-tiny: 10px;
 }
 
 @layer utilities {
@@ -139,9 +143,9 @@
 }
 .main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
 .stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
-.tech-specs-code { @apply font-mono text-[11px] bg-bg p-4 text-accent border border-line rounded-none; }
+.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
 .experience-chip {
-  @apply text-[10px] border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+  @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }

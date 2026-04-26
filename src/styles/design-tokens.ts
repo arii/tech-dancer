@@ -43,8 +43,8 @@ export const layout = {
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all",
-  label: "text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
-  select: "bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
+  label: "text-tiny font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
+  select: "bg-bg border border-line px-3 py-1 text-tiny font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
   error: "border-error focus:border-error focus:ring-error/20",
 };
 
@@ -110,8 +110,8 @@ export const tracking = {
 };
 
 export const typeSizes = {
-  micro: "text-[9px]",
-  tiny: "text-[10px]",
+  micro: "text-micro",
+  tiny: "text-tiny",
   xs: "text-xs",
   sm: "text-sm",
   base: "text-base",

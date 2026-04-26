@@ -4,7 +4,7 @@ import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import React from 'react';
+import type { BaseSyntheticEvent } from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 
 interface ContactFormData {
@@ -18,7 +18,7 @@ interface ContactFormViewProps {
   register: UseFormRegister<ContactFormData>;
   errors: FieldErrors<ContactFormData>;
   isSubmitting: boolean;
-  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
 }
 
 const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
