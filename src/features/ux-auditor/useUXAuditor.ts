@@ -242,7 +242,7 @@ export function useUXAuditor() {
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
-        : `[Please attach the image from scripts/ux-capture.js here]`;
+        : `[Please attach the image from scripts/ux-capture.cjs here]`;
 
       return {
         summary: "API Key missing or fetch failed. Manual analysis required. Copy the prompt below.",
