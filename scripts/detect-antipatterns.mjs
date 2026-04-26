@@ -9,7 +9,7 @@ const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
 
 // Allowed tokens or patterns that look like Tailwind but are safe
 const ALLOWED_COLORS = [
-  'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
+  'bg', 'surface', 'accent', 'accent-navy',
   'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
   'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
   'amber-500', 'success', 'error', 'warning'

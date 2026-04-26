@@ -1,8 +1,8 @@
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef, MouseEvent, ChangeEvent } from 'react';
+import { getHighlightedParts } from '@/lib/utils';
+import { useRef, MouseEvent, ChangeEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
@@ -15,9 +15,19 @@ interface SearchResult {
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
-  const { highlight } = useSearchHighlight(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  const highlight = useCallback((text: string) => {
+    const parts = getHighlightedParts(text, query);
+    if (parts.length === 1) return text;
+
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase()
+        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} className="text-accent bg-accent/10">{part}</Box>
+        : part
+    );
+  }, [query]);
 
   // 1. The Context Reset: Close on route change
   // Note: Since isOpen is now derived from URL search params ('search=true'),
