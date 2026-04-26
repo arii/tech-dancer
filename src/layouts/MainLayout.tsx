@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, type ReactNode } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
@@ -7,7 +7,7 @@ import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
-export function MainLayout({ children }: { children: React.ReactNode }) {
+export function MainLayout({ children }: { children: ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const { pathname, key } = useLocation();
