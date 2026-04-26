@@ -227,7 +227,7 @@ export default function UXAuditor() {
                   >
                     {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
-                  </Box>
+                  </Text>
                   <Box
                     as="button"
                     onClick={exportToGithub}

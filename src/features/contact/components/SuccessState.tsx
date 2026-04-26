@@ -38,7 +38,7 @@ export function SuccessState({ onReset }: SuccessStateProps) {
           className="hover:border-accent transition-colors"
         >
           Send Another Message
-        </Box>
+        </Text>
       </Stack>
     </Box>
   );

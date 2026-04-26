@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { stroke, zIndex as zTokens } from '@/styles/design-tokens';
+import { stroke } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
