@@ -8,6 +8,7 @@ import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { motionTokens } from '@/styles/motion';
+import { fadeIn } from '@/lib/animations';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -110,10 +111,7 @@ export default function FolioGrid({
         ) : (
           <motion.div
             key="list-view"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            {...fadeIn}
           >
             <Stack gap={0} border="t" className="border-line mt-8">
               {filteredItems.map((item) => (
