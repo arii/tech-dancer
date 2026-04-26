@@ -31,7 +31,7 @@ async function generateAiFixQuery(url, selector = 'body') {
       const el = document.querySelector(sel);
       if (!el) return null;
       return {
-        html: el.outerHTML.substring(0, 2000), // Increased limit slightly
+        html: el.outerHTML, // Removed arbitrary limit to avoid truncating critical DOM structures
         computedStyles: {
           fontSize: window.getComputedStyle(el).fontSize,
           color: window.getComputedStyle(el).color,
