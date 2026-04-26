@@ -1,3 +1,4 @@
+import { type ReactNode, type ChangeEvent } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -8,6 +9,7 @@ import { ListRow } from '@/components/ui/ListRow';
 import type { ContentItem } from '@/lib/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { motionTokens } from '@/styles/motion';
+import { fadeIn } from '@/lib/animations';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -15,7 +17,7 @@ interface FolioGridProps {
   basePath: string;
   label?: string;
   description?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
@@ -69,7 +71,7 @@ export default function FolioGrid({
               size="sm"
               className="focus:border-accent outline-none focus:ring-0"
               value={search}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />
           </Box>
           {onViewChange && (
@@ -83,10 +85,10 @@ export default function FolioGrid({
           <motion.div
             key="card-view"
             variants={motionTokens.staggerContainer}
-            initial="initial"
-            whileInView="animate"
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-50px" }}
-            exit="initial"
+            exit="exit"
           >
             <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
               {filteredItems.map((item, index) => (
@@ -110,10 +112,7 @@ export default function FolioGrid({
         ) : (
           <motion.div
             key="list-view"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            {...fadeIn}
           >
             <Stack gap={0} border="t" className="border-line mt-8">
               {filteredItems.map((item) => (

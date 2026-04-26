@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -12,10 +13,10 @@ interface DetailLayoutProps {
   image?: string;
   onBack: () => void;
   backLabel: string;
-  sidebar?: React.ReactNode;
-  children?: React.ReactNode;
-  headerExtras?: React.ReactNode;
-  relatedContent?: React.ReactNode;
+  sidebar?: ReactNode;
+  children?: ReactNode;
+  headerExtras?: ReactNode;
+  relatedContent?: ReactNode;
 }
 
 export function DetailLayout({

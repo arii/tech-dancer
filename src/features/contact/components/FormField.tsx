@@ -1,5 +1,4 @@
-import { useId, cloneElement } from 'react';
-import type { ReactElement } from 'react';
+import { useId, cloneElement, type ReactElement } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface FormFieldProps {
