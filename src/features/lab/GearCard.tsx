@@ -45,8 +45,7 @@ export function GearCard({
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
               <Box display="flex" align="center" gap={1}>
-                {/* Using className for the stars to maintain amber color while design system intent="warning" is blue */}
-                <Text size="xs" className="text-amber-500">
+                <Text intent="warning" size="xs">
                   {'★'.repeat(Math.floor(rating))}
                   {rating % 1 !== 0 ? '½' : ''}
                 </Text>
