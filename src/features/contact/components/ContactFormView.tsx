@@ -1,5 +1,6 @@
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
+import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
@@ -75,7 +76,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.name ? 'border-accent' : 'border-line'
+                      errors.name ? inputs.error : 'border-line'
                     )}
                   />
                 </FormField>
@@ -88,7 +89,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.email ? 'border-accent' : 'border-line'
+                      errors.email ? inputs.error : 'border-line'
                     )}
                   />
                 </FormField>
@@ -114,7 +115,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     className={cn(
                       inputClasses,
                       "resize-none",
-                      errors.message ? 'border-accent' : 'border-line'
+                      errors.message ? inputs.error : 'border-line'
                     )}
                   />
                 </FormField>
