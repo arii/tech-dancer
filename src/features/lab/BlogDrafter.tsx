@@ -52,7 +52,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             display="flex" 
             align="center" 
             gap={2} 
-            className="text-dim hover:text-accent transition-colors cursor-pointer"
+            className="text-text-dim hover:text-accent transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
@@ -60,7 +60,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
            <Stack gap={2} display="flex" align="start" direction="row">
-              <Info className="w-4 h-4 text-accent shrink-0 mt-1" />
+              <Box marginTop={1} shrink={0} display="flex">
+                <Info className="w-4 h-4 text-accent" />
+              </Box>
               <Text variant="body" size="xs">
                 This tool prepares your blog post for the Tech-Dancer automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
