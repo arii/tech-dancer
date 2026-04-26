@@ -34,10 +34,12 @@ export interface BaseProps {
   shadow?: keyof typeof shadows
   position?: "fixed" | "sticky" | "absolute" | "relative"
   inset?: boolean | "top" | "bottom" | "left" | "right" | "x" | "y"
-  height?: "full" | "screen" | "auto" | "min" | "fit" | number | string
-  maxHeight?: "full" | "screen" | "auto" | "min" | "fit" | number | string
-  minWidth?: "0" | "full" | "min" | "fit" | number | string
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl"
+  width?: ResponsiveProp<"0" | "full" | "min" | "fit" | "auto" | "screen" | number | string>
+  height?: ResponsiveProp<"full" | "screen" | "auto" | "min" | "fit" | number | string>
+  minWidth?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
+  minHeight?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
+  maxWidth?: ResponsiveProp<"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl">
+  maxHeight?: ResponsiveProp<"full" | "screen" | "auto" | "min" | "fit" | number | string>
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
@@ -110,20 +112,22 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       ...domProps 
     } = props;
 
-    const getVal = (val: string | number | undefined, prefix: string) => {
-      if (val === undefined) return ""
-      if (typeof val === "number") {
-        return `${prefix}-${val}`
-      }
-      // If it's already an arbitrary value, don't wrap it again
-      if (typeof val === "string" && val.startsWith("[") && val.endsWith("]")) {
-        return `${prefix}-${val}`
-      }
-      // Check if it's a standard Tailwind token (letters, numbers, dashes)
-      if (/^[a-z0-9-]+$/.test(val) && !val.includes('vh') && !val.includes('vw') && !val.includes('%') && !val.includes('px')) {
-        return `${prefix}-${val}`
-      }
-      return `${prefix}-[${val}]`
+    const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
+      if (!val) return ""
+      const pfx = prefix ? `${prefix}-` : ""
+
+      // Standard Tailwind tokens (numbers or specific strings without CSS units)
+      const isToken = typeof val === "number" ||
+        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
+
+      if (isToken) return `${pfx}${val}`
+
+      // Arbitrary values
+      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
+        ? val
+        : `[${val}]`
+
+      return `${pfx}${value}`
     }
 
     return (
@@ -163,12 +167,12 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           inset === "right" && "top-0 bottom-0 right-0",
           inset === "x" && "left-0 right-0",
           inset === "y" && "top-0 bottom-0",
-          height && getVal(height, "h"),
-          width && getVal(width, "w"),
-          maxWidth && getVal(maxWidth, "max-w"),
-          minHeight && getVal(minHeight, "min-h"),
-          maxHeight && getVal(maxHeight, "max-h"),
-          minWidth && getVal(minWidth, "min-w"),
+          getResponsiveClasses(height, "h-", (v) => getVal(v, "")),
+          getResponsiveClasses(width, "w-", (v) => getVal(v, "")),
+          getResponsiveClasses(maxWidth, "max-w-", (v) => getVal(v, "")),
+          getResponsiveClasses(minHeight, "min-h-", (v) => getVal(v, "")),
+          getResponsiveClasses(maxHeight, "max-h-", (v) => getVal(v, "")),
+          getResponsiveClasses(minWidth, "min-w-", (v) => getVal(v, "")),
           overflow && `overflow-${overflow}`,
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,

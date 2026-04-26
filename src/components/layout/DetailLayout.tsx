@@ -44,7 +44,7 @@ export function DetailLayout({
           align="center"
           gap={2}
           color="dim"
-          className="hover:text-accent-brand transition-colors"
+          className="hover:text-accent transition-colors"
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />

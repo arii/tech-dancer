@@ -33,7 +33,7 @@ export function SuccessState({ onReset }: SuccessStateProps) {
           paddingY={4}
           color="accent"
           cursor="pointer"
-          className="hover:border-accent-brand  transition-colors"
+          className="hover:border-accent  transition-colors"
         >
           Send Another Message
         </Box>

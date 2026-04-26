@@ -38,8 +38,10 @@ export function escapeRegExp(string: string): string {
 
 /**
  * Splits a text into parts for highlighting based on a query.
+ * Centralizes the regex logic to ensure consistent splitting across the app.
  */
-export function getHighlightedParts(text: string, query: string, regex: RegExp | null) {
-  if (!regex || !query) return [text];
+export function getHighlightedParts(text: string, query: string) {
+  if (!query) return [text];
+  const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
   return text.split(regex);
 }
