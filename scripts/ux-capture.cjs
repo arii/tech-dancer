@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getScrollFn } = require('./scroll-helper.cjs');
 let chromium;
 
 try {
@@ -43,19 +44,7 @@ async function capture() {
       await page.setViewportSize({ width: vp.width, height: vp.height });
 
       // Scroll to bottom to trigger lazy loading
-      await page.evaluate(async () => {
-        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-        const scrollHeight = document.body.scrollHeight;
-        let totalHeight = 0;
-        const distance = 100;
-        while (totalHeight < scrollHeight) {
-          window.scrollBy(0, distance);
-          totalHeight += distance;
-          await delay(20);
-        }
-        window.scrollTo(0, 0);
-        await delay(500); // Wait for page to stabilize after returning to top
-      });
+      await page.evaluate(getScrollFn());
 
       await page.screenshot({
         path: path.join(OUTPUT_DIR, `snapshot-${vp.name}.png`),

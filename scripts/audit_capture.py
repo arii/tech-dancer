@@ -1,6 +1,7 @@
 import asyncio
 from playwright.async_api import async_playwright
 import os
+from scroll_helper import get_scroll_fn
 
 # Configuration
 BASE_URL = 'http://localhost:4173/tech-dancer'
@@ -20,19 +21,7 @@ async def capture_page(browser, name, path):
         os.makedirs(OUTPUT_DIR)
 
     # Scroll to bottom to trigger lazy loading
-    await page.evaluate('''async () => {
-        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-        const scrollHeight = document.body.scrollHeight;
-        let totalHeight = 0;
-        const distance = 100;
-        while (totalHeight < scrollHeight) {
-            window.scrollBy(0, distance);
-            totalHeight += distance;
-            await delay(20);
-        }
-        window.scrollTo(0, 0);
-        await delay(500); // Wait for page to stabilize after returning to top
-    }''')
+    await page.evaluate(get_scroll_fn())
 
     # Core captures for Impeccable Audit
     await page.screenshot(path=f"{OUTPUT_DIR}/{name}_full.png", full_page=True)
