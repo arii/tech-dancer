@@ -32,14 +32,12 @@ export function GearCard({
       overflow="hidden"
       className="group hover:border-accent transition-all duration-300"
     >
-      <Box aspect="video" maxHeight="160px" overflow="hidden" border="b" className="relative w-full bg-bg">
-        <CardImagePlaceholder
+      <CardImagePlaceholder
         image={image}
         category={category}
         date={updatedDate}
         title={title}
       />
-      </Box>
 
       {/* Content Area */}
       <Stack gap={4} padding={5} flex={1} justify="between">

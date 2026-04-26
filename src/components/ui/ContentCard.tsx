@@ -3,7 +3,6 @@ import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
-import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
@@ -30,39 +29,9 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       className="group flex flex-col h-full bg-surface border border-line hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       {...motionProps}
     >
-      {/* Visual Thumbnail */}
-      <Box aspect="video" maxHeight="160px" overflow="hidden" border="b" className="relative bg-bg">
-        {image ? (
-          <img 
-            src={image} 
-            alt={title} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          />
-        ) : (
-          <Box className="w-full h-full flex flex-col">
-            <Box className="h-4 w-full" surface={
-              (category || '').toLowerCase().includes('tech') ? 'brand' :
-              (category || '').toLowerCase().includes('travel') || (category || '').toLowerCase().includes('wcs') ? 'accent' :
-              (category || '').toLowerCase().includes('gear') ? 'warning' :
-              (category || '').toLowerCase().includes('lifestyle') ? 'danger' : 'muted'
-            } />
-            <Box className="flex-1 flex items-center justify-center bg-muted/10">
-              <CategoryPlaceholder category={category} size="md" />
-            </Box>
-          </Box>
-        )}
-        <Box className="absolute top-4 left-4">
-          <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-sm">
-            <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-accent-navy">
-              {category}
-            </Text>
-          </Box>
-        </Box>
-      </Box>
       <CardImagePlaceholder
         image={image}
         category={category}
-        date={date}
         title={title}
       />
 

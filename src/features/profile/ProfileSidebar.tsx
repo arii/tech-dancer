@@ -17,7 +17,7 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ data }: ProfileSidebarProps) {
   return (
-    <Box display="flex" direction={{ base: 'col', md: 'row' }} gap={{ base: 8, lg: 12 }} align="start">
+    <Stack direction={{ base: 'col', md: 'row' }} gap={{ base: 8, lg: 12 }} align="start">
       <Box
         aspect="square"
         surface="muted"
@@ -28,12 +28,13 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
         justify="center"
         width={{ base: 'full', md: imageSizes.profile }}
         maxWidth={{ base: 'full', md: imageSizes.profile }}
+        maxHeight={{ base: 300, md: 'none' }}
         shrink={0}
       >
         <User className={`w-24 h-24 text-line ${stroke.thin}`} />
       </Box>
 
-      <Box flex={1} className="space-y-8" minWidth={0}>
+      <Box flex={1} className="space-y-8" minWidth={0} width="full">
         <Grid cols={1} gap={6}>
           {data.details.map((detail) => (
             <Box key={detail.label} paddingBottom={4} border="b">
@@ -104,6 +105,6 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
           </Box>
         </Stack>
       </Box>
-    </Box>
+    </Stack>
   );
 }

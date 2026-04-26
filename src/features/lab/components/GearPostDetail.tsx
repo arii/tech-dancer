@@ -28,7 +28,12 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
   const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
     <>
-      {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
+      {post.specs && Object.keys(post.specs).length > 0 && (
+        <Stack gap={4}>
+          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" border="b" paddingBottom={2}>Technical Specs</Text>
+          <SpecsTable specs={post.specs} />
+        </Stack>
+      )}
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>

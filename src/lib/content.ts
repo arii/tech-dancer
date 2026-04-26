@@ -4,14 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { z } from 'zod';
+
+const postSchema = z.object({
+  title: z.string().default('Untitled'),
+  category: z.string().default('General'),
+  excerpt: z.string().default(''),
+  date: z.string().default(''),
+  author: z.string().default(''),
+  image: z.string().optional().transform(v => v === "" ? undefined : v),
+  tags: z.array(z.string()).default([]),
+  rating: z.number().optional(),
+  verdict: z.string().optional(),
+  priceCategory: z.string().optional(),
+  updatedDate: z.string().optional(),
+  durability: z.number().optional(),
+  value: z.number().optional(),
+  specs: z.record(z.string(), z.string()).default({}),
+}).passthrough();
+
 /**
  * Normalizes and validates post data from frontmatter.
  */
-function validatePost(data: Record<string, unknown>): Record<string, unknown> {
-  return {
-    ...data,
-    image: data.image === "" ? undefined : data.image,
-  };
+function validatePost(data: Record<string, unknown>) {
+  return postSchema.parse(data);
 }
 
 /**
@@ -147,12 +163,6 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
       const data = validatePost(rawData);
       return {
         ...data,
-        title: String(data.title || 'Untitled'),
-        category: String(data.category || 'General'),
-        excerpt: String(data.excerpt || ''),
-        date: String(data.date || ''),
-        author: String(data.author || ''),
-        tags: Array.isArray(data.tags) ? data.tags : [],
         content: content || '',
         slug: slugFrom(path)
       } as unknown as T;

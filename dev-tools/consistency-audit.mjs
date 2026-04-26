@@ -31,8 +31,7 @@ console.log('🔍 Auditing Codebase against Consistency Playbook...\n');
 let allPassed = true;
 
 // Rule 1: Capped image heights
-allPassed &= checkFile('src/components/ui/ContentCard.tsx', /maxHeight:\s*['"]160px['"]|maxHeight=['"]160px['"]/, 'Missing maxHeight: 160px capped primitive');
-allPassed &= checkFile('src/features/lab/GearCard.tsx', /maxHeight:\s*['"]160px['"]|maxHeight=['"]160px['"]/, 'Missing maxHeight: 160px capped primitive');
+allPassed &= checkFile('src/components/ui/CardImagePlaceholder.tsx', /maxHeight[=:]\s*['"]160px['"]/, 'Missing maxHeight: 160px capped primitive');
 
 // Rule 2: Content Width tokens
 allPassed &= checkFile('src/styles/design-tokens.ts', /contentWidth/, 'Missing contentWidth definition');
