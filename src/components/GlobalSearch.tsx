@@ -1,8 +1,8 @@
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { escapeRegExp, getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback } from 'react';
+import { useSearchHighlight } from '@/hooks/useSearchHighlight';
+import { useRef, MouseEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 
@@ -15,14 +15,9 @@ interface SearchResult {
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
+  const { highlight } = useSearchHighlight(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-
-  // Memoize the search regex to avoid re-instantiation on every render during query updates.
-  const searchRegex = useMemo(() => {
-    if (!query) return null;
-    return new RegExp(`(${escapeRegExp(query)})`, 'gi');
-  }, [query]);
 
   // 1. The Context Reset: Close on route change
   // Note: Since isOpen is now derived from URL search params ('search=true'),
@@ -48,17 +43,6 @@ export function GlobalSearch() {
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
-
-  const highlight = useCallback((text: string) => {
-    const parts = getHighlightedParts(text, query, searchRegex);
-    if (parts.length === 1) return text;
-
-    return parts.map((part, i) =>
-      part.toLowerCase() === query.toLowerCase()
-        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} className="text-accent bg-accent/10">{part}</Box>
-        : part
-    );
-  }, [searchRegex, query]);
 
   if (!isOpen) return null;
 
@@ -87,7 +71,7 @@ export function GlobalSearch() {
         border
         shadow="topOverlay"
         className="border-accent/20"
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
           <Search className="w-6 h-6 text-accent shrink-0" />
@@ -97,7 +81,7 @@ export function GlobalSearch() {
             type="text"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
             value={query}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             width="full"
             variant="display"
             size="2xl"

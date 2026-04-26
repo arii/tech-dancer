@@ -20,7 +20,7 @@ interface ContactFormViewProps {
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
-const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent-brand focus:ring-2 focus:ring-accent-brand/20 placeholder:text-text-dim/50";
+const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
 
 export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (
@@ -51,7 +51,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent-brand group-hover:bg-bg transition-colors" radius="lg">
+                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent group-hover:bg-bg transition-colors" radius="lg">
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
                     <Stack gap={1}>
@@ -75,7 +75,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.name ? 'border-accent-brand' : 'border-line'
+                      errors.name ? 'border-accent' : 'border-line'
                     )}
                   />
                 </FormField>
@@ -88,7 +88,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.email ? 'border-accent-brand' : 'border-line'
+                      errors.email ? 'border-accent' : 'border-line'
                     )}
                   />
                 </FormField>
@@ -114,7 +114,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     className={cn(
                       inputClasses,
                       "resize-none",
-                      errors.message ? 'border-accent-brand' : 'border-line'
+                      errors.message ? 'border-accent' : 'border-line'
                     )}
                   />
                 </FormField>

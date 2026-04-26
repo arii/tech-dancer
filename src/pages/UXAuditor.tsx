@@ -73,7 +73,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       {isCopying ? (
         <RefreshCw className="w-3 h-3 animate-spin" />
       ) : copied ? (
-        <CheckCircle className="w-3 h-3 text-[var(--color-success,#16a34a)]" />
+        <CheckCircle className="w-3 h-3 text-emerald-500" />
       ) : (
         <Copy className="w-3 h-3" />
       )}
@@ -126,8 +126,11 @@ export default function UXAuditor() {
             value={url}
             title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text truncate"
-            style={{ width: '16rem', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem' }}
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+            width={64}
+            paddingX={4}
+            paddingY={2}
+            radius="lg"
             placeholder="https://..."
             aria-label="URL to audit"
           />
@@ -139,7 +142,9 @@ export default function UXAuditor() {
             align="center"
             gap={2}
             className="bg-accent hover:opacity-90 text-white font-bold transition-all disabled:opacity-50"
-            style={{ padding: '0.5rem 1.5rem', borderRadius: '0.5rem' }}
+            paddingX={6}
+            paddingY={2}
+            radius="md"
           >
             {isAnalyzing ? <RefreshCw className="animate-spin w-4 h-4" /> : <Camera className="w-4 h-4" />}
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
@@ -171,7 +176,8 @@ export default function UXAuditor() {
                 <Box
                   padding={2}
                   radius="full"
-                  className={report.status === 'completed' ? 'bg-[var(--color-success-dim,#dcfce7)] text-[var(--color-success,#16a34a)]' : 'bg-[var(--color-warning-dim,#fef3c7)] text-[var(--color-warning,#d97706)] animate-pulse'}
+                  surface={report.status === 'completed' ? 'success' : 'warning'}
+                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
@@ -211,8 +217,10 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text transition-all" surface="muted" color="dim"
-                    style={{ padding: '0.5rem 1rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
+                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted" color="dim"
+                    paddingX={4}
+                    paddingY={2}
+                    radius="xl"
                   >
                     {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -224,8 +232,10 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold bg-accent text-white hover:opacity-90 shadow-md transition-all disabled:opacity-50"
-                    style={{ padding: '0.5rem 1.5rem', borderRadius: '0.75rem', fontSize: '0.875rem' }}
+                    className="font-bold bg-accent text-white hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
+                    paddingX={6}
+                    paddingY={2}
+                    radius="xl"
                   >
                     {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
@@ -260,13 +270,14 @@ export default function UXAuditor() {
                             <img
                               src={imgUrl}
                               alt={`${vp.name} snapshot`}
-                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface"
-                              style={{ maxHeight: '450px' }}
+                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Box className="text-center" color="dim">
-                              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-20" />
+                            <Box className="text-center" color="dim" display="flex" direction="col" align="center">
+                              <Box marginBottom={2}>
+                                <ImageIcon className="w-12 h-12 opacity-20" />
+                              </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
@@ -291,10 +302,12 @@ export default function UXAuditor() {
                                 {data.improvements?.map((imp, idx) => (
                                   <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
-                                      <Text variant="sans" size="sm" weight="font-black" className="flex items-center gap-2">
-                                        <div className={`h-2 w-2 rounded-full ${imp.severity > 7 ? 'bg-[var(--color-error,#ef4444)] shadow-sm' : 'bg-[var(--color-warning,#f59e0b)]'}`} />
-                                        {imp.element}
-                                      </Text>
+                                      <Stack direction="row" align="center" gap={2}>
+                                        <Box width={2} height={2} radius="full" surface={imp.severity > 7 ? "error" : "warning"} className={imp.severity > 7 ? 'bg-red-500 shadow-sm' : 'bg-amber-500'} />
+                                        <Text variant="sans" size="sm" weight="font-black">
+                                          {imp.element}
+                                        </Text>
+                                      </Stack>
                                       <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
