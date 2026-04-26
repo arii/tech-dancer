@@ -129,19 +129,29 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
+export function validatePost(data: Record<string, string | number | string[] | undefined>): Record<string, string | number | string[] | undefined> {
+  const result = { ...data };
+  // Convert empty string image to undefined
+  if (result.image === "") {
+    result.image = undefined;
+  }
+  return result;
+}
+
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
+      const validatedData = validatePost(data);
       return {
-        ...data,
-        title: String(data.title || 'Untitled'),
-        category: String(data.category || 'General'),
-        excerpt: String(data.excerpt || ''),
-        date: String(data.date || ''),
-        author: String(data.author || ''),
-        tags: Array.isArray(data.tags) ? data.tags : [],
+        ...validatedData,
+        title: String(validatedData.title || 'Untitled'),
+        category: String(validatedData.category || 'General'),
+        excerpt: String(validatedData.excerpt || ''),
+        date: String(validatedData.date || ''),
+        author: String(validatedData.author || ''),
+        tags: Array.isArray(validatedData.tags) ? validatedData.tags : [],
         content: content || '',
         slug: slugFrom(path)
       } as unknown as T;
