@@ -126,7 +126,8 @@ export default function UXAuditor() {
             value={url}
             title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono truncate text-sm"
+            color="main"
             width={64}
             paddingX={4}
             paddingY={2}
@@ -219,7 +220,7 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted"
+                    className="font-bold hover:opacity-80 transition-all text-sm" surface="muted"
                     color="dim"
                     paddingX={4}
                     paddingY={2}
