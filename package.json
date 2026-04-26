@@ -11,13 +11,14 @@
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "clean": "rm -rf dist",
-    "lint": "run-p lint:*",
+    "lint": "run-p lint:* audit:ui",
     "lint:ox": "oxlint --deny-warnings",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs"
+    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs",
+    "audit:ui": "node dev-tools/consistency-audit.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

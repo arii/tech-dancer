@@ -120,7 +120,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 </FormField>
 
                 {errors.root && (
-                  <Text color="error" size="sm" className="mt-2 text-center" as="p">
+                  <Text color="error" size="sm" marginTop={2} align="center" as="p">
                     {errors.root.message}
                   </Text>
                 )}

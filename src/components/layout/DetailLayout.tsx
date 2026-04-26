@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { layout as layoutTokens } from '@/styles/design-tokens';
 
 interface DetailLayoutProps {
   title: string;
@@ -16,6 +18,7 @@ interface DetailLayoutProps {
   children?: React.ReactNode;
   headerExtras?: React.ReactNode;
   relatedContent?: React.ReactNode;
+  maxWidth?: keyof typeof layoutTokens.contentWidth;
 }
 
 export function DetailLayout({
@@ -29,13 +32,14 @@ export function DetailLayout({
   sidebar,
   children,
   headerExtras,
-  relatedContent
+  relatedContent,
+  maxWidth = 'wide'
 }: DetailLayoutProps) {
   const rt = readingTime(content);
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
+      <Stack gap={12} marginX="auto" className={cn("w-full", layoutTokens.contentWidth[maxWidth])}>
         {/* Navigation */}
         <Box
           as="button"
@@ -103,8 +107,10 @@ export function DetailLayout({
             <Box className={sidebar ? "lg:col-span-2" : "w-full"}>
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
-                style={{ maxWidth: '720px' }}
+                className={cn(
+                  "prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full",
+                  layoutTokens.contentWidth.article
+                )}
               >
                 <MarkdownRenderer content={content} />
               </Box>

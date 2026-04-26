@@ -19,7 +19,7 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
 
   if (image) {
     return (
-      <Box className="relative w-full aspect-video max-h-[160px] overflow-hidden border-b border-line bg-bg">
+      <Box aspect="video" maxHeight="160px" overflow="hidden" border="b" className="relative w-full bg-bg">
         <img
           src={image}
           alt={title}

@@ -5,6 +5,16 @@
  */
 
 /**
+ * Normalizes and validates post data from frontmatter.
+ */
+function validatePost(data: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...data,
+    image: data.image === "" ? undefined : data.image,
+  };
+}
+
+/**
  * Lightweight browser-safe frontmatter parser.
  */
 function parseFrontmatter(content: string) {
@@ -133,7 +143,8 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
   return Object.entries(modules)
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : raw.default;
-      const { data, content } = parseFrontmatter(contentStr);
+      const { data: rawData, content } = parseFrontmatter(contentStr);
+      const data = validatePost(rawData);
       return {
         ...data,
         title: String(data.title || 'Untitled'),

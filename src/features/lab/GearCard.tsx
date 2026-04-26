@@ -32,12 +32,14 @@ export function GearCard({
       overflow="hidden"
       className="group hover:border-accent transition-all duration-300"
     >
-      <CardImagePlaceholder
+      <Box aspect="video" maxHeight="160px" overflow="hidden" border="b" className="relative w-full bg-bg">
+        <CardImagePlaceholder
         image={image}
         category={category}
         date={updatedDate}
         title={title}
       />
+      </Box>
 
       {/* Content Area */}
       <Stack gap={4} padding={5} flex={1} justify="between">
@@ -79,7 +81,7 @@ export function GearCard({
 
           {priceCategory && (
              <Box surface="warning" paddingX={2} paddingY={0.5} width="fit">
-               <Text variant="mono" size="micro" weight="font-bold">{priceCategory}</Text>
+               <Text variant="mono" size="micro" weight="font-bold" uppercase>{priceCategory}</Text>
              </Box>
           )}
         </Stack>

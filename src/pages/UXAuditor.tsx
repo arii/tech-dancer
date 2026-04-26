@@ -8,6 +8,8 @@ import {
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { layout as layoutTokens } from '@/styles/design-tokens';
+import { cn } from '@/lib/utils';
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
@@ -98,7 +100,7 @@ export default function UXAuditor() {
   } = useUXAuditor();
 
   return (
-    <Stack gap={8} width="full">
+    <Stack gap={8} width="full" className={cn("mx-auto", layoutTokens.contentWidth.tool)}>
       <Stack
         direction={{ base: 'col', md: 'row' }}
         align={{ base: 'start', md: 'center' }}
