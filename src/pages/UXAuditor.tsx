@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
@@ -20,7 +20,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!copied) return;
     const timer = setTimeout(() => {
       if (document.startViewTransition) {

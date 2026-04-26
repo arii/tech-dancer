@@ -1,4 +1,3 @@
-import { type ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon, Shield } from 'lucide-react';
 
@@ -22,7 +21,7 @@ export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItem
   );
 }
 
-export function ScoreGrid({ children }: { children: ReactNode }) {
+export function ScoreGrid({ children }: { children: React.ReactNode }) {
   return (
     <Box
       border="y"
