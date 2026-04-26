@@ -1,5 +1,6 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon, Shield } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ScoreItemProps {
   label: string;

@@ -124,6 +124,4 @@ export const typeSizes = {
   "7xl": "text-4xl sm:text-5xl md:text-7xl",
   "8xl": "text-5xl sm:text-6xl md:text-8xl",
   "9xl": "text-6xl sm:text-7xl md:text-9xl",
-  "fluid-7": "text-4xl sm:text-5xl md:text-7xl",
-  "fluid-8": "text-5xl sm:text-6xl md:text-8xl",
 };

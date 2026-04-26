@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { cn } from '@/lib/utils';
 
 interface DetailLayoutProps {
   title: string;
@@ -63,7 +64,7 @@ export function DetailLayout({
               <Text variant="mono" size="micro" color="dim">{date} • {rt} min read</Text>
             </Box>
 
-            <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">
+            <Text variant="headline" size="8xl" className="tracking-tighter leading-none">
               {title}
             </Text>
 

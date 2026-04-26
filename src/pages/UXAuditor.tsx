@@ -189,7 +189,9 @@ export default function UXAuditor() {
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
-                <ChevronRight className="w-4 h-4 text-text-dim opacity-50" />
+                <Text color="dim">
+                  <ChevronRight className="w-4 h-4 opacity-50" />
+                </Text>
               </Box>
             ))}
           </Stack>
@@ -211,13 +213,14 @@ export default function UXAuditor() {
                   </Text>
                 </Stack>
                 <Box display="flex" gap={2}>
-                  <Box
+                  <Text
                     as="button"
                     onClick={copyMarkdown}
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text-main transition-all text-sm text-text-dim" surface="muted"
+                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted"
+                    color="dim"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
@@ -253,9 +256,9 @@ export default function UXAuditor() {
                       <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
                           <Box padding={2} surface="default" radius="lg" shadow="sm">
-                            <Box className="text-accent">
+                            <Text color="accent">
                               {viewportIcons[vp.name as keyof typeof viewportIcons]}
-                            </Box>
+                            </Text>
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
                             {vp.name} Analysis
@@ -277,8 +280,10 @@ export default function UXAuditor() {
                             />
                           ) : (
                             <Box display="flex" direction="col" align="center" className="text-center">
-                              <Box marginBottom={2} className="text-text-dim">
-                                <ImageIcon className="w-12 h-12 opacity-20" />
+                              <Box marginBottom={2}>
+                                <Text color="dim">
+                                  <ImageIcon className="w-12 h-12 opacity-20" />
+                                </Text>
                               </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider" color="dim">
                                 Awaiting Frame...
@@ -336,7 +341,9 @@ export default function UXAuditor() {
                             </>
                           ) : (
                             <Box display="flex" align="center" justify="center" paddingY={20} direction="col">
-                              <RefreshCw className="animate-spin w-6 h-6 text-text-dim" />
+                              <Text color="dim">
+                                <RefreshCw className="animate-spin w-6 h-6" />
+                              </Text>
                               <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
                                 Agent Processing...
                               </Text>
@@ -351,8 +358,10 @@ export default function UXAuditor() {
             </>
           ) : (
             <Stack height="full" align="center" justify="center" surface="default" radius="3xl" padding={20} minHeight={500} className="border-2 border-dashed text-center">
-              <Box surface="muted" padding={6} radius="full" marginBottom={6} className="text-text-dim/50">
-                <Camera className="w-16 h-16" />
+              <Box surface="muted" padding={6} radius="full" marginBottom={6}>
+                <Text color="dim" className="opacity-50">
+                  <Camera className="w-16 h-16" />
+                </Text>
               </Box>
               <Text variant="sans" size="xl" weight="font-black" marginBottom={2}>
                 Ready to Audit

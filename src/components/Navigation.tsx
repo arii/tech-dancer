@@ -106,7 +106,7 @@ export default function Navigation() {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             position="fixed"
-            zIndex={zTokens.modal}
+            zIndex="top"
             className="top-16 left-0 right-0 bottom-0 bg-bg lg:hidden w-full"
             padding={8}
             overflow="y-auto"
@@ -127,7 +127,7 @@ export default function Navigation() {
                   paddingY={6}
                   border="b"
                   width="full"
-                  className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50"
+                  className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-surface-alt border-line/50"
                 >
                   <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
                   <Text variant="sans" size="xl" weight="font-bold" className="leading-none">

@@ -1,0 +1,19 @@
+[34m🔍 Scanning for UI anti-patterns...[0m
+
+[31m✖ Anti-patterns detected:[0m
+
+[36msrc/features/contact/components/ContactFormView.tsx[0m
+  [90mLine 123:[0m [Raw Layout/Spacing] [33mmt-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+
+[36msrc/features/lab/BlogDrafter.tsx[0m
+  [90mLine 38:[0m [Arbitrary Value] [33m-[160px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+  [90mLine 38:[0m [Raw Layout/Spacing] [33mp-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 77:[0m [Raw Layout/Spacing] [33mpb-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 83:[0m [Raw Layout/Spacing] [33mp-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 83:[0m [Non-token Color/Size] [33mhover:bg-muted[0m - Class 'hover:bg-muted' uses a value that is not a recognized design token.
+  [90mLine 86:[0m [Raw Layout/Spacing] [33mp-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+  [90mLine 86:[0m [Non-token Color/Size] [33mhover:bg-muted[0m - Class 'hover:bg-muted' uses a value that is not a recognized design token.
+  [90mLine 103:[0m [Raw Layout/Spacing] [33mml-auto[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+
+[36msrc/features/research/ResearchDetail.tsx[0m
+  [90mLine 111:[0m [Non-token Color/Size] [33mtext-dim[0m - Class 'text-dim' uses a value that is not a recognized design token.
