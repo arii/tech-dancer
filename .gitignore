@@ -50,6 +50,10 @@ ENV/
 etl/data/*.parquet
 !etl/data/wcs_prelims.parquet
 
+# Audit reports
+antipattern-report.txt
+TODO_ANTIPATTERNS.md
+
 # Package Manager Lockfiles
 # Since you use pnpm, we ignore other manager lockfiles
 package-lock.json

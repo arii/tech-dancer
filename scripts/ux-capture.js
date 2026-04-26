@@ -25,7 +25,7 @@ async function capture() {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  const URL = process.env.CAPTURE_URL || 'http://localhost:3000';
+  const URL = process.env.CAPTURE_URL || process.env.BASE_URL || 'http://localhost:3000';
   console.log(`Starting capture for ${URL}...`);
 
   try {

@@ -15,10 +15,12 @@ async function capture() {
   // Standard desktop viewport, high enough to see most content
   await page.setViewportSize({ width: 1280, height: 1200 });
 
+  const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+
   for (const route of routes) {
     try {
-      console.log(`📸 Capturing ${route.name} at http://localhost:3000${route.path}...`);
-      await page.goto(`http://localhost:3000${route.path}`, { waitUntil: 'networkidle', timeout: 30000 });
+      console.log(`📸 Capturing ${route.name} at ${baseUrl}${route.path}...`);
+      await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'networkidle', timeout: 30000 });
       // Give some extra time for animations to settle
       await page.waitForTimeout(1000);
       await page.screenshot({ path: `ux_${route.name}.png`, fullPage: true });

@@ -3,7 +3,7 @@ from playwright.async_api import async_playwright
 import os
 
 # Configuration
-BASE_URL = 'http://localhost:4173/tech-dancer'
+BASE_URL = os.getenv('BASE_URL', 'http://localhost:4173/tech-dancer')
 OUTPUT_DIR = './design_audit'
 PAGES = {
     "home": "/",

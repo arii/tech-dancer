@@ -81,7 +81,7 @@ ${dataUri}
 }
 
 // Example usage: node scripts/ai-debugger.js <url> <selector>
-const targetUrl = process.argv[2] || 'http://localhost:3000/';
+const targetUrl = process.argv[2] || process.env.AUDIT_URL || process.env.BASE_URL || 'http://localhost:3000/';
 const targetSelector = process.argv[3] || 'body';
 
 generateAiFixQuery(targetUrl, targetSelector);

@@ -17,7 +17,7 @@
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1 || true && node scripts/generate-todo.mjs"
+    "audit": "node scripts/detect-antipatterns.mjs > antipattern-report.txt 2>&1; STATUS=$?; node scripts/generate-todo.mjs; exit $STATUS"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
