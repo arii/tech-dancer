@@ -73,6 +73,7 @@ export default function ResearchDetail() {
           display="flex" 
           align="center" 
           gap={2}
+          color="dim"
           className="hover:text-accent transition-colors"
           cursor="pointer"
         >
@@ -100,23 +101,23 @@ export default function ResearchDetail() {
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
-                      <Activity size={16} className="text-accent" />
+                      <Activity className="w-4 h-4 text-accent" />
                       <Text variant="mono" size="xs" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                   </Stack>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
-                      <Database size={16} className="text-text-dim" />
+                      <Database className="w-4 h-4 text-accent text-dim" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
                     </Box>
                   </Stack>
                 </Grid>
 
                 {tool.status === 'Coming Soon' && (
-                  <Box border surface="accent" padding="card" className="border-dashed">
+                  <Box border surface="accent" padding="card" className="bg-accent/5 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
-                      <Search size={32} className="text-accent opacity-50" />
+                      <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
