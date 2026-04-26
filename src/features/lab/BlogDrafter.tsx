@@ -1,4 +1,3 @@
-import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -60,9 +59,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
            <Stack gap={2} display="flex" align="start" direction="row">
-              <Box marginTop={1} shrink={0} display="flex">
-                <Info className="w-4 h-4 text-accent" />
-              </Box>
+              <Info className="w-4 h-4 text-accent shrink-0 mt-1" />
               <Text variant="body" size="xs">
                 This tool prepares your blog post for the Tech-Dancer automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
