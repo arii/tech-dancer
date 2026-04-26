@@ -15,7 +15,7 @@ async function generateAiFixQuery(url, selector = 'body') {
     browser = await chromium.launch();
     const page = await browser.newPage();
 
-    await page.goto(url, { waitUntil: 'networkidle' });
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
 
     // 1. Capture Screenshot as Base64 string
     const element = await page.$(selector);
@@ -29,6 +29,7 @@ async function generateAiFixQuery(url, selector = 'body') {
     // 2. Extract context from the page (computed styles / DOM structure)
     const context = await page.evaluate((sel) => {
       const el = document.querySelector(sel);
+      if (!el) return null;
       return {
         html: el.outerHTML.substring(0, 2000), // Increased limit slightly
         computedStyles: {
@@ -42,6 +43,10 @@ async function generateAiFixQuery(url, selector = 'body') {
         }
       };
     }, selector);
+
+    if (!context) {
+        throw new Error(`Could not extract context for selector "${selector}".`);
+    }
 
     // 3. Format the final "Copy-Paste" output
     const prompt = `
@@ -80,8 +85,13 @@ ${dataUri}
   }
 }
 
-// Example usage: node scripts/ai-debugger.js <url> <selector>
+// Example usage: node dev-tools/ai-debugger.mjs <url> <selector>
 const targetUrl = process.argv[2] || 'http://localhost:3000/';
 const targetSelector = process.argv[3] || 'body';
+
+if (!targetUrl.startsWith('http')) {
+    console.error('\x1b[31m✖ Error:\x1b[0m Target URL must start with http:// or https://');
+    process.exit(1);
+}
 
 generateAiFixQuery(targetUrl, targetSelector);
