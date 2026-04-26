@@ -59,11 +59,7 @@ jobs:
           cp -r dist/* ../dist-assets/
 
           # Deployment parameters
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            DEST_DIR="."
-          else
-            DEST_DIR="${{ github.ref_name }}"
-          fi
+          DEST_DIR="${{ github.ref_name == 'main' && '.' || github.ref_name }}"
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
           MAX_RETRIES=5
 
