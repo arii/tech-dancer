@@ -44,6 +44,10 @@ ai-fix-prompt.txt
 *.swp
 *.swo
 
+# Audit Reports
+antipattern-report.txt
+TODO_ANTIPATTERNS.md
+
 # Python / ETL
 __pycache__/
 *.py[cod]

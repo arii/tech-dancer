@@ -18,16 +18,12 @@ const queryClient = new QueryClient({
 /**
  * Pre-calculate valid top-level paths from the route configuration.
  */
-const VALID_TOP_LEVEL_PATHS = (() => {
-  const children = routes[0].children || [];
-  const paths = new Set<string>();
-  for (const route of children) {
-    if (route.path && route.path !== '*' && route.path !== '/') {
-      paths.add(route.path.split('/')[0]);
-    }
-  }
-  return paths;
-})();
+const VALID_TOP_LEVEL_PATHS = new Set(
+  (routes[0].children || [])
+    .map((route) => route.path)
+    .filter((path): path is string => Boolean(path && path !== '*' && path !== '/'))
+    .map((path) => path.split('/')[0]),
+);
 
 /**
  * Function to calculate the actual basename at runtime.
