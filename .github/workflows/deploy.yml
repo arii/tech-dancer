@@ -59,7 +59,11 @@ jobs:
           cp -r dist/* ../dist-assets/
 
           # Deployment parameters
-          DEST_DIR="${{ github.ref_name == 'main' && '.' || github.ref_name }}"
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            DEST_DIR="."
+          else
+            DEST_DIR="${{ github.ref_name }}"
+          fi
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
           MAX_RETRIES=5
 
@@ -105,7 +109,9 @@ jobs:
             done | jq -R -n '[inputs | select(length > 0) | split(" ") | select(length == 2 and .[1] != "") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
 
             # Use the latest dashboard UI
-            cp "$DEST_DIR/previews/index.html" previews/index.html
+            if [ "$DEST_DIR" != "." ]; then
+              cp "$DEST_DIR/previews/index.html" previews/index.html
+            fi
 
             # 5. Commit and Push
             git config user.name "github-actions[bot]"
