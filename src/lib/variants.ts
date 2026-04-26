@@ -20,7 +20,7 @@ export const variants = {
     default: "text-text-main",
     success: "text-accent",
     danger: "text-red-600",
-    warning: "text-accent",
+    warning: "text-amber-500",
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
