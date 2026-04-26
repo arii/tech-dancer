@@ -7,39 +7,15 @@ const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
 
-// Modularized linting configuration
-const CONFIG = {
-  allowedColors: [
-    'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
-    'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
-    'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-    'amber-500', 'success', 'error', 'warning'
-  ],
-  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
-  allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
-  rules: [
-    {
-      name: 'Arbitrary Value',
-      pattern: /-\[.*?\]/g,
-      message: 'Avoid arbitrary values like -[...]. Use design tokens instead.'
-    },
-    {
-      name: 'Raw Layout/Spacing',
-      pattern: /\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b/,
-      isClassNameRule: true,
-      message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
-    },
-    {
-      name: 'div Layout',
-      pattern: /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g,
-      message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
-    }
-  ]
-};
-
-function getLineNumber(content, index) {
-  return content.substring(0, index).split('\n').length;
-}
+// Allowed tokens or patterns that look like Tailwind but are safe
+const ALLOWED_COLORS = [
+  'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
+  'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
+  'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
+  'amber-500', 'success', 'error', 'warning'
+];
+const ALLOWED_TEXT_UTILS = ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'];
+const ALLOWED_TEXT_SIZES = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'];
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
@@ -50,28 +26,23 @@ function checkFile(filepath) {
     return [];
   }
 
-  // 1. Check for regex patterns defined in rules
-  CONFIG.rules.forEach(rule => {
-    if (rule.isClassNameRule) return; // Handled separately below
-
-    let match;
-    const regex = new RegExp(rule.pattern);
-    while ((match = regex.exec(content)) !== null) {
-      const lineNum = getLineNumber(content, match.index);
-      if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
-
-      violations.push({
-        line: lineNum,
-        pattern: rule.name,
-        value: match[0].length > 50 ? match[0].substring(0, 50) + '...' : match[0],
-        message: rule.message
-      });
-    }
-  });
-
-  // 2. Check for classes in className
-  const classNameRegex = /className=["'](.*?)["']/g;
+  // 1. Check for arbitrary values -[...]
+  const arbitraryRegex = /-\[.*?\]/g;
   let match;
+  while ((match = arbitraryRegex.exec(content)) !== null) {
+    const lineNum = getLineNumber(content, match.index);
+    if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+
+    violations.push({
+      line: lineNum,
+      pattern: 'Arbitrary Value',
+      value: match[0],
+      message: 'Avoid arbitrary values like -[...]. Use design tokens instead.'
+    });
+  }
+
+  // 2. Check for raw Tailwind classes in className
+  const classNameRegex = /className=["'](.*?)["']/g;
   while ((match = classNameRegex.exec(content)) !== null) {
     const lineNum = getLineNumber(content, match.index);
     if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
@@ -80,28 +51,24 @@ function checkFile(filepath) {
     const classes = classStr.split(/\s+/);
 
     classes.forEach(cls => {
-      // Check against Raw Layout/Spacing rule
-      const layoutRule = CONFIG.rules.find(r => r.name === 'Raw Layout/Spacing');
-      if (layoutRule.pattern.test(cls)) {
+      // Layout & Spacing
+      if (/\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b/.test(cls)) {
         violations.push({
           line: lineNum,
-          pattern: layoutRule.name,
+          pattern: 'Raw Layout/Spacing',
           value: cls,
-          message: layoutRule.message
+          message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
         });
       }
 
-      // Colors check
+      // Colors
       if (/\b(bg-|text-)\b/.test(cls)) {
         const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
         if (colorMatch) {
-          const type = colorMatch[1];
           const baseColor = colorMatch[2].split('/')[0];
-          const fullToken = `${type}-${baseColor}`;
-          const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
-                            CONFIG.allowedColors.includes(fullToken) ||
-                            CONFIG.allowedTextUtils.includes(baseColor) ||
-                            CONFIG.allowedTextSizes.includes(baseColor);
+          const isAllowed = ALLOWED_COLORS.includes(baseColor) ||
+                            ALLOWED_TEXT_UTILS.includes(baseColor) ||
+                            ALLOWED_TEXT_SIZES.includes(baseColor);
 
           if (!isAllowed) {
             violations.push({
@@ -116,7 +83,25 @@ function checkFile(filepath) {
     });
   }
 
+  // 3. Check for <div> with layout classes (Rule 3 & 21)
+  const divRegex = /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g;
+  while ((match = divRegex.exec(content)) !== null) {
+      const lineNum = getLineNumber(content, match.index);
+      if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+
+      violations.push({
+          line: lineNum,
+          pattern: 'div Layout',
+          value: '<div> with layout classes',
+          message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
+      });
+  }
+
   return violations;
+}
+
+function getLineNumber(content, index) {
+  return content.substring(0, index).split('\n').length;
 }
 
 function walk(dir, callback) {
@@ -136,21 +121,6 @@ function walk(dir, callback) {
     });
 }
 
-function generateTodoFile(allViolations) {
-  let todoContent = "# UI Anti-Pattern TODO List\n\n";
-  todoContent += "This list is automatically generated from the audit report. Fix these anti-patterns to adhere to the project design system.\n\n";
-
-  for (const [file, violations] of Object.entries(allViolations)) {
-    todoContent += `## ${file}\n`;
-    violations.forEach(v => {
-      todoContent += `- [ ] Line ${v.line}: [${v.pattern}] ${v.value} - ${v.message}\n`;
-    });
-    todoContent += "\n";
-  }
-
-  fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
-}
-
 console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
 
 const allViolations = {};
@@ -168,8 +138,6 @@ CHECK_DIRS.forEach(dir => {
 
 if (Object.keys(allViolations).length === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  // If no violations, we can still update/clear the TODO file
-  generateTodoFile({});
 } else {
   console.log('\x1b[31m✖ Anti-patterns detected:\x1b[0m\n');
   for (const [file, violations] of Object.entries(allViolations)) {
@@ -179,8 +147,5 @@ if (Object.keys(allViolations).length === 0) {
     });
     console.log();
   }
-
-  generateTodoFile(allViolations);
-  console.log("Successfully generated TODO_ANTIPATTERNS.md");
   process.exit(1);
 }

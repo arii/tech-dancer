@@ -16,9 +16,9 @@ Uses the `llm` CLI to generate structured implementation plans from GitHub issue
 * Usage: `python3 dev-tools/generate_plan.py <issue_number>`
 * Reads prompts from `instructions.txt` and `plan-template.md`.
 
-### 3. Visual UX Auditor (`audit_capture.py` & `IMPECCABLE_AUDIT.md`)
+### 3. Visual UX Auditor (`ux-capture.cjs` & `IMPECCABLE_AUDIT.md`)
 Automates visual testing for the Impeccable Design framework.
-* `audit_capture.py`: Uses Playwright to capture UI screenshots.
+* `ux-capture.cjs`: Uses Playwright to capture UI screenshots.
 * `IMPECCABLE_AUDIT.md`: A structured checklist for verifying screenshots against design anti-patterns (Cardocalypse, Centering Sickness, etc).
 
 ### 4. VDev Integration (`vdev.py`)
@@ -39,7 +39,7 @@ Principled tool to track PR review states and clean up obsolete comments.
 ## AI Agent Integration
 AI agents are instructed via `AGENTS.md` to use these tools autonomously to:
 1. Review PR feedback using `gh_collab.py`.
-2. Evaluate visual designs using `audit_capture.py`.
+2. Evaluate visual designs using `ux-capture.cjs`.
 3. Plan task execution utilizing `generate_plan.py`.
 
 

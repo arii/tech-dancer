@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
-import Inspect from 'vite-plugin-inspect';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
@@ -16,8 +15,7 @@ export default defineConfig(({mode}) => {
   // Dynamic base path for GitHub Pages vs Vercel vs Local Override
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
-  const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
-  const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
+  const analyze = process.env.ANALYZE === 'true';
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
@@ -74,7 +72,6 @@ export default defineConfig(({mode}) => {
         filename: 'bundle-analysis.html',
         gzipSize: true,
       }),
-      inspect && !isProd && Inspect(),
     ].filter(Boolean),
     resolve: {
       alias: {

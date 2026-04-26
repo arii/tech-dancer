@@ -9,7 +9,7 @@ export function useSearchHighlight(query: string) {
 
     return parts.map((part, i) =>
       part.toLowerCase() === query.toLowerCase()
-        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} surface="accent" weight="font-bold">{part}</Box>
+        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} className="text-accent bg-accent/10">{part}</Box>
         : part
     );
   }, [query]);

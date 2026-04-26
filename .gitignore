@@ -31,11 +31,6 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Audit Artifacts
-antipattern-report.txt
-TODO_ANTIPATTERNS.md
-ai-fix-prompt.txt
-
 # IDEs
 .vscode/*
 !.vscode/extensions.json

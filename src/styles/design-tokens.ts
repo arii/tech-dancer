@@ -43,9 +43,8 @@ export const layout = {
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all",
-  label: "text-tiny font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
-  select: "bg-bg border border-line px-3 py-1 text-tiny font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
-  error: "border-error focus:border-error focus:ring-error/20",
+  label: "text-[10px] font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
+  select: "bg-bg border border-line px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
 };
 
 
@@ -56,11 +55,6 @@ export const shadows = {
 
 export const imageSizes = {
   profile: 400, // Keep as number for img attribute compatibility
-};
-
-export const stroke = {
-  thin: "stroke-[0.5]",
-  thick: "stroke-[1.5]",
 };
 
 export const iconSizes = {
@@ -106,12 +100,11 @@ export const tracking = {
   wider: "tracking-wider",
   widest: "tracking-widest",
   "wide-editorial": "tracking-[0.2em]",
-  emphasized: "tracking-[0.15em]",
 };
 
 export const typeSizes = {
-  micro: "text-micro",
-  tiny: "text-tiny",
+  micro: "text-[9px]",
+  tiny: "text-[10px]",
   xs: "text-xs",
   sm: "text-sm",
   base: "text-base",

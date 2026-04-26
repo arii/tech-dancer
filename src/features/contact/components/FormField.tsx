@@ -18,7 +18,7 @@ export function FormField({ label, error, children }: FormFieldProps) {
           {label}
         </Text>
         {error && (
-          <Text id={errorId} variant="mono" weight="font-semibold" color="error" size="xs" role="alert">
+          <Text id={errorId} variant="mono" weight="font-semibold" color="brand" size="xs" role="alert">
             {error}
           </Text>
         )}

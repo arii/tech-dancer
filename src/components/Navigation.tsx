@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { stroke } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
@@ -35,7 +34,7 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
           border={isMobile ? "b" : undefined}
           className={isMobile ? "border-line/50" : undefined}
         >
-          <Icon className={cn(`w-5 h-5 ${stroke.thick} flex-shrink-0`, isMobile ? "w-6 h-6" : "")} />
+          <Icon className={cn("w-5 h-5 stroke-[1.5] flex-shrink-0", isMobile ? "w-6 h-6" : "")} />
           <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
             {label}
           </Text>
@@ -128,7 +127,7 @@ export default function Navigation() {
                   width="full"
                   className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50"
                 >
-                  <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
+                  <Search className="w-6 h-6 stroke-[1.5] flex-shrink-0" />
                   <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
                     Search
                   </Text>
