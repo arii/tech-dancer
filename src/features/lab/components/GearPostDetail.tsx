@@ -32,7 +32,9 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Where to Buy</Text>
+          <Box paddingBottom={2} border="b">
+            <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest">Where to Buy</Text>
+          </Box>
           {affiliateLinks.map(link => (
             <Box
               key={link.id}

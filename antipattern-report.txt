@@ -1,0 +1,3 @@
+[34m🔍 Scanning for UI anti-patterns...[0m
+
+[32m✔ No anti-patterns detected![0m

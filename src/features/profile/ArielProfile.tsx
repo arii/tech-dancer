@@ -1,4 +1,6 @@
+import { User } from 'lucide-react';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { stroke } from '@/styles/design-tokens';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
@@ -21,15 +23,33 @@ export default function ArielProfile() {
           label="ABOUT TECH-DANCER"
           title={bio.name}
           description={bio.role}
+          paddingBottom={20}
         />
 
-        <Grid cols={{ base: 1, lg: "1fr 2fr" }} gap={{ base: 8, lg: 20 }}>
-          <Reveal direction="right">
-            <ProfileSidebar data={bio} />
-          </Reveal>
+        <Grid cols={{ base: 1, lg: "2fr 1fr" }} gap={{ base: 8, lg: 20 }}>
+          <Stack gap={12}>
+            <Reveal direction="up">
+              <Box
+                aspect="video"
+                surface="muted"
+                border
+                overflow="hidden"
+                display="flex"
+                align="center"
+                justify="center"
+                width="full"
+              >
+                <User className={`w-24 h-24 text-text-dim ${stroke.thin}`} />
+              </Box>
+            </Reveal>
 
-          <Reveal direction="up" delay={0.1}>
-            <BioContent data={bio} />
+            <Reveal direction="up" delay={0.1}>
+              <BioContent data={bio} />
+            </Reveal>
+          </Stack>
+
+          <Reveal direction="right" delay={0.2}>
+            <ProfileSidebar data={bio} />
           </Reveal>
         </Grid>
       </Stack>
