@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { stroke } from '@/styles/design-tokens';
+import { stroke, zIndex as zTokens } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
@@ -23,7 +23,7 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
           "transition-all relative z-10 rounded-md block",
           isActive 
             ? "text-accent bg-bg" 
-            : "text-text-dim hover:text-accent hover:bg-bg/50"
+            : "text-text-dim hover:text-accent hover:bg-surface-alt"
         )}
       >
         <Box
@@ -106,7 +106,8 @@ export default function Navigation() {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             position="fixed"
-            className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
+            zIndex={zTokens.modal}
+            className="top-16 left-0 right-0 bottom-0 bg-bg lg:hidden w-full"
             padding={8}
             overflow="y-auto"
           >

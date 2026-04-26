@@ -11,9 +11,9 @@ interface ScoreItemProps {
 
 export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
-    <Stack gap={1} align="center" className="flex-1 px-4 py-2">
+    <Stack gap={1} align="center" className={cn("flex-1 px-4 py-2 border-r border-line/30 last:border-r-0", color)}>
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
-      <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
+      <Box display="flex" align="center" gap={1} intent={intent}>
         {Icon && <Icon className="w-4 h-4" />}
         <Text variant="display" size="xl" weight="font-bold">{value}</Text>
       </Box>
@@ -32,7 +32,8 @@ export function ScoreGrid({ children }: { children: React.ReactNode }) {
       <Box
         display="flex"
         flexDirection="row"
-        className="w-full divide-x divide-line/30"
+        wrap
+        className="w-full"
       >
         {children}
       </Box>
@@ -67,7 +68,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
              <Shield className="w-6 h-6 text-emerald-600" />
              <Text variant="display" size="2xl" weight="font-black" intent="success">THE VERDICT</Text>
           </Box>
-          <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">
+          <Text variant="body" size="lg" intent="success" className="leading-relaxed font-medium italic">
             "{verdict}"
           </Text>
        </Stack>

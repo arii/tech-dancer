@@ -79,7 +79,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
-            paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
+            paddingBottom={showEmailBar ? { base: 52, md: 72 } : { base: 20, md: 12 }}
             flex={1}
             direction="col"
             marginX="auto"

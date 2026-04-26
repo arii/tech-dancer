@@ -27,8 +27,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               variant="headline" 
-              size="fluid-7"
-              className="text-accent-navy leading-tight tracking-tight max-w-4xl"
+              className="text-accent-navy leading-tight tracking-tight max-w-4xl text-4xl sm:text-5xl md:text-7xl"
             >
               The Roboticist&apos;s Guide to the West Coast Swing
             </Text>
@@ -83,6 +82,8 @@ export default function Home() {
                 key={event.name}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
+                border
+                className="border-line h-full"
               >
                 <EventCard {...event} />
               </Box>

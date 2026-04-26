@@ -33,7 +33,7 @@ export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full bg-black">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-y border-line min-h-[30vh] lg:min-h-[60vh] w-full bg-black">
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
@@ -41,7 +41,7 @@ export default function PathSelector() {
         return (
           <div
             key={path.id}
-            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
+            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer max-h-[60vh] lg:max-h-none`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={() => setHoveredPath(isHovered ? null : path.id)}

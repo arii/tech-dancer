@@ -4,6 +4,7 @@ import { Resource } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { ScoreGrid, ScoreItem, SpecsTable, VerdictCallout } from '@/components/layout/DetailElements';
+import { ExternalLink as ExternalIcon } from 'lucide-react';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -17,13 +18,42 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
     .filter((link): link is NonNullable<typeof link> => !!link);
 
   const headerExtras = (
-    <ScoreGrid>
-      <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} intent="warning" />
-      {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
-      {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
-      <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
-      <ScoreItem label="Updated" value={post.updatedDate || post.date} />
-    </ScoreGrid>
+    <Stack gap={6}>
+      <ScoreGrid>
+        <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} intent="warning" />
+        {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
+        {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
+        <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
+        <ScoreItem label="Updated" value={post.updatedDate || post.date} />
+      </ScoreGrid>
+
+      {affiliateLinks.length > 0 && (
+        <Box border="b" paddingBottom={6} className="lg:hidden">
+          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase marginBottom={4} display="block" className="tracking-widest">Where to Buy</Text>
+          <Stack gap={2}>
+            {affiliateLinks.map(link => (
+              <Box
+                key={link.id}
+                as="a"
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                display="flex"
+                align="center"
+                justify="between"
+                padding={3}
+                surface="default"
+                border
+                className="hover:border-accent transition-all"
+              >
+                <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || 'View Store'}</Text>
+                <ExternalIcon className="w-4 h-4 text-accent" />
+              </Box>
+            ))}
+          </Stack>
+        </Box>
+      )}
+    </Stack>
   );
 
   const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
@@ -32,7 +62,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
 
       {affiliateLinks.length > 0 && (
         <Stack gap={4} marginTop={8}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Where to Buy</Text>
+          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase border="b" paddingBottom={2} className="tracking-widest">Where to Buy</Text>
           {affiliateLinks.map(link => (
             <Box
               key={link.id}

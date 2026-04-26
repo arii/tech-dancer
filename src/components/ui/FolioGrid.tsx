@@ -2,7 +2,7 @@ import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid, Stack } from '@/layouts/Primitives';
-import { safeSearch } from '@/lib/utils';
+import { safeSearch, cn } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
@@ -54,7 +54,7 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
           <Box position="relative" maxWidth="2xl" flex={1}>
             <Box
               as="input"
@@ -88,14 +88,16 @@ export default function FolioGrid({
             viewport={{ once: true, margin: "-50px" }}
             exit="initial"
           >
-            <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
+            <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="md:border-l border-line mt-8">
               {filteredItems.map((item, index) => (
                 <Box
                   key={item.slug}
-                  border="r"
-                  borderBottom={true}
+                  border="b"
                   padding={{ base: 6, lg: 6 }}
-                  className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
+                  className={cn(
+                    "md:border-r border-line hover:bg-card-bg transition-colors group",
+                    index === 0 ? "md:col-span-full xl:col-span-2 [&_.aspect-video]:max-h-[320px] md:[&_.aspect-video]:max-h-[260px]" : ""
+                  )}
                 >
                   <ContentCard
                     {...item}

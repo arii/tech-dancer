@@ -44,7 +44,7 @@ export default function ResearchAnalytics() {
                 <Stack gap={6} height="full" justify="between">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="start">
-                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
+                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" className="group-hover:text-accent transition-colors text-text-dim">
                         <Search className="w-5 h-5" />
                       </Box>
                       <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
@@ -54,7 +54,7 @@ export default function ResearchAnalytics() {
                       <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
                     </Stack>
                   </Stack>
-                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
+                  <Box display="flex" align="center" gap={2} className="group-hover:text-accent transition-colors text-text-dim">
                     <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
                     <ArrowRight className="w-3 h-3" />
                   </Box>
@@ -91,8 +91,7 @@ export default function ResearchAnalytics() {
                       display="flex"
                       align="center"
                       gap={2}
-                      color="dim"
-                      className="group-hover:text-accent transition-colors"
+                      className="group-hover:text-accent transition-colors text-text-dim"
                     >
                       <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
                       <FileText className="w-4 h-4" />

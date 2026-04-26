@@ -90,25 +90,25 @@ export function DetailLayout({
           )}
 
           <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
-            {/* Sidebar */}
+            {/* Content FIRST in DOM for mobile */}
+            <Box className={sidebar ? "lg:col-span-2 lg:order-2" : "w-full"}>
+              {children}
+              <Box
+                maxWidth="prose"
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
+              >
+                <MarkdownRenderer content={content} />
+              </Box>
+            </Box>
+
+            {/* Sidebar SECOND in DOM — floats to left on lg via order */}
             {sidebar && (
-              <Box className="hidden lg:block">
+              <Box className={cn("hidden lg:block lg:order-1")}>
                 <Stack gap={4} className="sticky top-32">
                    {sidebar}
                 </Stack>
               </Box>
             )}
-
-            {/* Content */}
-            <Box className={sidebar ? "lg:col-span-2" : "w-full"}>
-              {children}
-              <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
-                style={{ maxWidth: '720px' }}
-              >
-                <MarkdownRenderer content={content} />
-              </Box>
-            </Box>
           </Grid>
 
           {relatedContent}

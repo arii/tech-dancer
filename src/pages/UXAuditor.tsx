@@ -160,8 +160,8 @@ export default function UXAuditor() {
           </Text>
           <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
-              <Box padding={10} className="italic" color="dim" align="center" size="sm">
-                No audits recorded.
+              <Box padding={10} align="center">
+                <Text color="dim" size="sm" className="italic">No audits recorded.</Text>
               </Box>
             )}
             {reports.map((report) => (
@@ -217,7 +217,7 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted" color="dim"
+                    className="font-bold hover:text-text-main transition-all text-sm text-text-dim" surface="muted"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
@@ -252,8 +252,10 @@ export default function UXAuditor() {
                     <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
                       <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
-                            {viewportIcons[vp.name as keyof typeof viewportIcons]}
+                          <Box padding={2} surface="default" radius="lg" shadow="sm">
+                            <Box className="text-accent">
+                              {viewportIcons[vp.name as keyof typeof viewportIcons]}
+                            </Box>
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
                             {vp.name} Analysis
@@ -274,11 +276,11 @@ export default function UXAuditor() {
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Box className="text-center" color="dim" display="flex" direction="col" align="center">
-                              <Box marginBottom={2}>
+                            <Box display="flex" direction="col" align="center" className="text-center">
+                              <Box marginBottom={2} className="text-text-dim">
                                 <ImageIcon className="w-12 h-12 opacity-20" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
+                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider" color="dim">
                                 Awaiting Frame...
                               </Text>
                             </Box>
@@ -333,9 +335,9 @@ export default function UXAuditor() {
                               </Stack>
                             </>
                           ) : (
-                            <Box display="flex" align="center" justify="center" paddingY={20} direction="col" color="dim">
-                              <RefreshCw className="animate-spin w-6 h-6" />
-                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
+                            <Box display="flex" align="center" justify="center" paddingY={20} direction="col">
+                              <RefreshCw className="animate-spin w-6 h-6 text-text-dim" />
+                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
                                 Agent Processing...
                               </Text>
                             </Box>
