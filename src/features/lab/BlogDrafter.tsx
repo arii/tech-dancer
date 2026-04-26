@@ -1,13 +1,13 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check } from 'lucide-react';
+import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
-  const { data, updateField, applyAIResponse, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const { data, updateField, applyAIResponse, clearForm, markdownPreview, githubIssueUrl } = useBlogDrafter();
   const [copied, setCopied] = useState(false);
   const [aiInput, setAiInput] = useState('');
   const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
@@ -41,9 +41,22 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   return (
     <Stack gap={10} height="full">
       <Stack gap={4}>
-        <Box display="flex" align="center" gap={3}>
-           <Terminal className="w-5 h-5 text-accent" />
-           <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
+        <Box display="flex" align="center" justify="between" width="full">
+          <Box display="flex" align="center" gap={3}>
+             <Terminal className="w-5 h-5 text-accent" />
+             <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
+          </Box>
+          <Box 
+            as="button" 
+            onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
+            display="flex" 
+            align="center" 
+            gap={2} 
+            className="text-dim hover:text-accent transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-4 h-4" />
+            <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
+          </Box>
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
            <Stack gap={2} display="flex" align="start" direction="row">

@@ -23,12 +23,12 @@ export function useBlogDrafter() {
   });
 
   const markdownPreview = useMemo(() => {
-    return `---
-title: ${data.title || '[Title]'}
-date: ${data.date}
-author: ${data.author}
-category: ${data.category}
-excerpt: ${data.excerpt || '[Excerpt]'}
+    return `# ${data.title || '[Title]'}
+
+> **Category**: ${data.category} | **Date**: ${data.date} | **Author**: ${data.author}
+
+${data.excerpt ? `*${data.excerpt}*` : ''}
+
 ---
 
 ${data.commentary || '[Your commentary/content goes here]'}
@@ -67,20 +67,36 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
+    // Helper to normalize literal \n strings if they exist
+    const normalize = (str: string) => typeof str === 'string' ? str.replace(/\\n/g, '\n') : str;
+
     setData((prev: DraftData) => ({
       ...prev,
-      title: parsed.title || prev.title,
-      excerpt: parsed.excerpt || parsed.description || prev.excerpt,
+      title: normalize(parsed.title) || prev.title,
+      excerpt: normalize(parsed.excerpt || parsed.description) || prev.excerpt,
       affiliateLink: parsed.affiliateLink || prev.affiliateLink,
-      commentary: parsed.commentary || prev.commentary
+      commentary: normalize(parsed.commentary) || prev.commentary
     }));
     return true;
+  };
+
+  const clearForm = () => {
+    setData({
+      title: '',
+      category: 'Lifestyle',
+      excerpt: '',
+      author: SITE_METADATA.author,
+      date: new Date().toISOString().split('T')[0],
+      affiliateLink: '',
+      commentary: ''
+    });
   };
 
   return {
     data,
     updateField,
     applyAIResponse,
+    clearForm,
     markdownPreview,
     githubIssueUrl
   };
