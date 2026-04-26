@@ -36,9 +36,9 @@ if (cardPlaceholder) {
 
   const hasCappedHeight = boxElements.some(el => {
     const maxHeight = el.getAttribute('maxHeight');
-    return maxHeight && maxHeight.getText().includes('160px');
+    return maxHeight && (maxHeight.getText().includes('160px') || maxHeight.getText().includes('layout.cardImage.maxHeight'));
   });
-  report(hasCappedHeight, 'Missing maxHeight="160px" capped primitive', 'src/components/ui/CardImagePlaceholder.tsx');
+  report(hasCappedHeight, 'Missing maxHeight capped primitive (should use layout.cardImage.maxHeight)', 'src/components/ui/CardImagePlaceholder.tsx');
 } else {
   console.log('⚠️  Skipped: src/components/ui/CardImagePlaceholder.tsx (File missing)');
 }

@@ -44,6 +44,9 @@ export const layout = {
     wide: "max-w-5xl",
     tool: "max-w-7xl",
   },
+  cardImage: {
+    maxHeight: "160px",
+  },
 };
 
 export const inputs = {

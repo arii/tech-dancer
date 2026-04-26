@@ -12,9 +12,15 @@ const rule = {
         const componentName = node.name.name;
 
         // Rule 1: One Card Contract - check CardImagePlaceholder or similar for constraints
-        if (componentName === 'CardImagePlaceholder' || componentName === 'ContentCard' || componentName === 'GearCard') {
-          // In a real implementation, we'd check if they are missing the shared primitive
-          // For now, let's check for raw aspect ratio overrides that should be handled by the primitive
+        if (componentName === 'CardImagePlaceholder' || componentName === 'ContentCard' || componentName === 'GearCard' || componentName === 'Box') {
+          const maxHeightAttr = node.attributes.find(attr => attr.name?.name === 'maxHeight');
+          if (maxHeightAttr && maxHeightAttr.value?.type === 'Literal' && maxHeightAttr.value.value === '160px') {
+             context.report({
+               node: maxHeightAttr,
+               message: 'Use "layout.cardImage.maxHeight" token instead of hardcoded "160px".',
+             });
+          }
+
           const aspectAttr = node.attributes.find(attr => attr.name?.name === 'aspect');
           if (aspectAttr && (componentName === 'ContentCard' || componentName === 'GearCard')) {
              context.report({

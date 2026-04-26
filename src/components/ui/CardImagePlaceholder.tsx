@@ -1,5 +1,6 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { layout } from '@/styles/design-tokens';
 
 interface CardImagePlaceholderProps {
   image?: string;
@@ -18,7 +19,7 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
   else if (norm.includes('lifestyle')) surfaceVariant = 'danger';
 
   return (
-    <Box aspect="video" maxHeight="160px" overflow="hidden" border="b" className="relative w-full bg-bg">
+    <Box aspect="video" maxHeight={layout.cardImage.maxHeight} overflow="hidden" border="b" className="relative w-full bg-bg">
       {image ? (
         <img
           src={image}
