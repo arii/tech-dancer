@@ -81,7 +81,7 @@ ${dataUri}
   }
 }
 
-// Example usage: node scripts/ai-debugger.js <url> <selector>
+// Example usage: node scripts/ai-debugger.mjs <url> <selector>
 const targetUrl = process.argv[2] || getTargetUrl();
 const targetSelector = process.argv[3] || 'body';
 
