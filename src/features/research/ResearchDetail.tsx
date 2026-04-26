@@ -44,7 +44,7 @@ export default function ResearchDetail() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Search className="w-12 h-12 opacity-20" />
+          <Search size={48} className="opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
@@ -77,8 +77,8 @@ export default function ResearchDetail() {
           className="hover:text-accent transition-colors"
           cursor="pointer"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold">Back to Lab</Text>
+          <ArrowLeft size={16} />
+          <Text variant="mono" size="xs" weight="font-bold" color="dim">Back to Lab</Text>
         </Box>
 
         <Box border surface="default" padding={{ base: 8, md: 12 }} className="rounded-none">
@@ -92,7 +92,7 @@ export default function ResearchDetail() {
                     LABORATORY_ACCESS // {tool.category.toUpperCase()}
                   </Text>
                   <Text as="h1" variant="headline" size="fluid-7">{tool.name}</Text>
-                  <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
+                  <Box border surface="accent" padding="compact">
                     <Text variant="body" size="lg" color="body">{tool.layman}</Text>
                   </Box>
                 </Stack>

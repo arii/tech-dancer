@@ -13,31 +13,41 @@ export function EmailForm() {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} noValidate width="full" maxWidth="md" className="w-full md:w-auto">
-      <Stack direction="row" gap={0} position="relative" className="w-full">
-        <input
+    <Box as="form" onSubmit={handleSubmit} noValidate width={{ base: "full", md: "auto" }} maxWidth="md">
+      <Stack direction="row" gap={0} position="relative" width="full">
+        <Box
+          as="input"
           type="email"
           placeholder="Email Address"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
-          className={`${inputs.base} min-h-[44px] w-full`}
+          className={inputs.base}
+          minHeight={11}
+          width="full"
         />
         <Button
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          className="min-h-[44px] w-auto min-w-[140px] sm:min-w-[180px] px-6"
+          minHeight={11}
+          width="auto"
+          minWidth={{ base: 36, sm: 44 }}
+          paddingX={6}
         >
           <AnimatePresence mode="wait">
-            <motion.div
+            <Stack
+              as={motion.div}
               key={status}
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.2 }}
-              className="flex items-center justify-center gap-2"
+              direction="row"
+              align="center"
+              justify="center"
+              gap={2}
             >
               {status === 'loading' && (
                 <>
@@ -57,7 +67,7 @@ export function EmailForm() {
                   <ArrowRight className="w-4 h-4 text-bg" />
                 </>
               )}
-            </motion.div>
+            </Stack>
           </AnimatePresence>
         </Button>
       </Stack>
