@@ -47,12 +47,40 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   }, [data, markdownPreview]);
 
   const updateField = (field: keyof DraftData, value: string) => {
-    setData(prev => ({ ...prev, [field]: value }));
+    setData((prev: DraftData) => ({ ...prev, [field]: value }));
+  };
+
+  const applyAIResponse = (jsonString: string) => {
+    const cleanAndParseJSON = (str: string) => {
+      try {
+        let clean = str.trim();
+        // Remove markdown code blocks if present
+        clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
+        clean = clean.trim();
+        return JSON.parse(clean);
+      } catch (e) {
+        console.error("JSON Clean/Parse Error:", e);
+        return null;
+      }
+    };
+
+    const parsed = cleanAndParseJSON(jsonString);
+    if (!parsed) return false;
+
+    setData((prev: DraftData) => ({
+      ...prev,
+      title: parsed.title || prev.title,
+      excerpt: parsed.excerpt || parsed.description || prev.excerpt,
+      affiliateLink: parsed.affiliateLink || prev.affiliateLink,
+      commentary: parsed.commentary || prev.commentary
+    }));
+    return true;
   };
 
   return {
     data,
     updateField,
+    applyAIResponse,
     markdownPreview,
     githubIssueUrl
   };

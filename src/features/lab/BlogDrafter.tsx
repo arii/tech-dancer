@@ -7,13 +7,32 @@ import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
-  const { data, updateField, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const { data, updateField, applyAIResponse, markdownPreview, githubIssueUrl } = useBlogDrafter();
   const [copied, setCopied] = useState(false);
+  const [aiInput, setAiInput] = useState('');
+  const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
+
+  const handleApply = () => {
+    if (!aiInput.trim()) return;
+    const success = applyAIResponse(aiInput);
+    if (success) {
+      setShowAppliedSuccess(true);
+      setAiInput('');
+      setTimeout(() => setShowAppliedSuccess(false), 3000);
+    } else {
+      alert("Invalid JSON format. Please paste a valid JSON object.");
+    }
+  };
 
   const handleCopyPrompt = () => {
-    const prompt = `Task: Review and expand this blog post draft for Tech-Dancer.
-      Current Data: ${JSON.stringify(data, null, 2)}
-      Respond ONLY with a valid JSON object matching the keys above. Ensure the 'commentary' field is a full, high-quality Markdown post.`;
+    const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.
+Requirements:
+1. Respond ONLY with a valid JSON object.
+2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.
+3. Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.
+4. The 'commentary' should be rich markdown content.
+
+Draft Data: ${JSON.stringify(data, null, 2)}`;
     navigator.clipboard.writeText(prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -159,6 +178,47 @@ export function BlogDrafter() {
 
         {/* Preview Column */}
         <Stack gap={8}>
+          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
+             <Text variant="mono" size="micro" color="brand">AI_INTEGRATION</Text>
+             {showAppliedSuccess && (
+                <Box display="flex" align="center" gap={2}>
+                  <Check className="w-3 h-3 text-accent" />
+                  <Text variant="mono" size="micro" color="brand" weight="font-bold">APPLIED_SUCCESSFULLY</Text>
+                </Box>
+             )}
+          </Box>
+
+          <Stack gap={4}>
+            <Box
+              as="textarea"
+              value={aiInput}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
+              placeholder="Paste AI JSON response here..."
+              width="full"
+              height={32}
+              surface="default"
+              border
+              padding={3}
+              variant="mono"
+              size="sm"
+              className="focus:border-accent outline-none resize-none"
+            />
+            <Box
+              as="button"
+              onClick={handleApply}
+              display="flex"
+              align="center"
+              justify="center"
+              gap={3}
+              surface="accent"
+              padding={4}
+              className="bg-accent text-bg hover:bg-accent-brand transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
+            >
+              <Send className="w-4 h-4" />
+              APPLY_RESPONSE
+            </Box>
+          </Stack>
+
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
              <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
              <Box display="flex" align="center" gap={2} color="dim">
