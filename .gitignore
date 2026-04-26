@@ -39,6 +39,10 @@ Thumbs.db
 *.swp
 *.swo
 
+# Audit Reports
+antipattern-report.txt
+TODO_ANTIPATTERNS.md
+
 # Python / ETL
 __pycache__/
 *.py[cod]
