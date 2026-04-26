@@ -83,10 +83,10 @@ export default function FolioGrid({
           <motion.div
             key="card-view"
             variants={motionTokens.staggerContainer}
-            initial="initial"
-            whileInView="animate"
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-50px" }}
-            exit="initial"
+            exit="exit"
           >
             <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
               {filteredItems.map((item, index) => (

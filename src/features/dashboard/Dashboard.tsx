@@ -9,6 +9,7 @@ import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from './EventCard';
 import { motionTokens } from '@/styles/motion';
+import { fadeInUp } from '@/lib/animations';
 
 export default function Home() {
   const { recentPosts, upcomingEvents } = useHome();
@@ -24,8 +25,7 @@ export default function Home() {
           <Stack gap={4}>
             <Text 
               as={motion.h1}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              {...fadeInUp}
               variant="headline" 
               size="fluid-7"
               className="text-accent-navy leading-tight tracking-tight max-w-4xl"
@@ -63,8 +63,8 @@ export default function Home() {
             gap={4}
             as={motion.div}
             variants={motionTokens.staggerContainer}
-            initial="initial"
-            whileInView="animate"
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-50px" }}
           >
             {recentPosts.map((post) => (
