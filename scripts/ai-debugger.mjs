@@ -1,6 +1,7 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { getTargetUrl } from './utils/env.mjs';
 
 /**
  * Captures a screenshot, converts to Base64, and formats a query for an AI Bot.
@@ -81,7 +82,7 @@ ${dataUri}
 }
 
 // Example usage: node scripts/ai-debugger.js <url> <selector>
-const targetUrl = process.argv[2] || process.env.AUDIT_URL || process.env.BASE_URL || 'http://localhost:3000/';
+const targetUrl = process.argv[2] || getTargetUrl();
 const targetSelector = process.argv[3] || 'body';
 
 generateAiFixQuery(targetUrl, targetSelector);

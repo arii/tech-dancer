@@ -1,4 +1,5 @@
 import { chromium } from 'playwright';
+import { getTargetUrl } from '../scripts/utils/env.mjs';
 
 const routes = [
   { name: 'home', path: '/' },
@@ -15,7 +16,7 @@ async function capture() {
   // Standard desktop viewport, high enough to see most content
   await page.setViewportSize({ width: 1280, height: 1200 });
 
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+  const baseUrl = getTargetUrl('http://localhost:3000').replace(/\/$/, '');
 
   for (const route of routes) {
     try {

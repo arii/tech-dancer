@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const fs = require('fs');
-const path = require('path');
-let chromium;
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { chromium } from 'playwright';
+import { getTargetUrl } from './utils/env.mjs';
 
-try {
-  chromium = require('playwright').chromium;
-} catch {
-  console.error('Playwright not found. Please install it using "npm install --save-dev playwright".');
-  process.exit(1);
-}
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = path.join(__dirname, '../test-results/ux-capture');
 
 async function capture() {
@@ -25,7 +21,7 @@ async function capture() {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  const URL = process.env.CAPTURE_URL || process.env.BASE_URL || 'http://localhost:3000';
+  const URL = getTargetUrl('http://localhost:3000');
   console.log(`Starting capture for ${URL}...`);
 
   try {
