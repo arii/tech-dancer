@@ -1,4 +1,4 @@
-import { forwardRef } from "react"
+import * as React from "react"
 import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
@@ -9,7 +9,7 @@ interface StackProps extends Omit<BoxProps, "align" | "justify"> {
   justify?: ResponsiveProp<"start" | "center" | "end" | "between" | "around" | "evenly">
 }
 
-export const Stack = forwardRef<HTMLDivElement, StackProps>(
+export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   ({ className, direction = "col", gap = 4, align, justify, ...props }, ref) => {
     const directionMapper = (d: string) => d === "col" ? "flex-col" : "flex-row"
     const alignMapper = (a: string) => {

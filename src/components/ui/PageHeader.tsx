@@ -1,4 +1,3 @@
-import { type ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
 
@@ -42,7 +41,7 @@ export function PageHeader({ label, title, description, as = "h1", paddingBottom
   );
 }
 
-export function SectionHeader({ label, title, children }: { label: string; title: string; children?: ReactNode }) {
+export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
   return (
     <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
       <Stack gap={1}>

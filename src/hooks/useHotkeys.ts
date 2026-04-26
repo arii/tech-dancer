@@ -1,8 +1,8 @@
-import { useEffect, type DependencyList } from 'react';
+import { useEffect } from 'react';
 
 type HotkeyHandler = (event: KeyboardEvent) => void;
 
-export function useHotkeys(key: string, handler: HotkeyHandler, deps: DependencyList = []) {
+export function useHotkeys(key: string, handler: HotkeyHandler, deps: React.DependencyList = []) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === key) {
@@ -15,7 +15,7 @@ export function useHotkeys(key: string, handler: HotkeyHandler, deps: Dependency
   }, [key, ...deps]);
 }
 
-export function useCommandKey(key: string, handler: HotkeyHandler, deps: DependencyList = []) {
+export function useCommandKey(key: string, handler: HotkeyHandler, deps: React.DependencyList = []) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === key.toLowerCase()) {

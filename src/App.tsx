@@ -40,7 +40,10 @@ export function RootLayout() {
           <Box
             as={motion.div}
             key={location.pathname}
-            {...motionTokens.page}
+            initial={motionTokens.page.initial}
+            animate={motionTokens.page.animate}
+            exit={motionTokens.page.exit}
+            transition={motionTokens.page.transition}
             height="full"
           >
             <Suspense fallback={<PageSkeleton />}>
