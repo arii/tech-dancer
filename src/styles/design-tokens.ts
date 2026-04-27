@@ -53,6 +53,10 @@ export const shadows = {
   standard: "shadow-sm",
 };
 
+export const imageSizes = {
+  profile: 400, // Keep as number for img attribute compatibility
+};
+
 export const stroke = {
   thin: "stroke-[0.5]",
   thick: "stroke-[1.5]",

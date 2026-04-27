@@ -108,7 +108,7 @@ export default function ResearchDetail() {
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
-                      <Database className="w-4 h-4 text-text-dim" />
+                      <Database className="w-4 h-4 text-accent text-dim" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
                     </Box>
                   </Stack>

@@ -20,10 +20,10 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
         to={to}
         onClick={onClick}
         className={({ isActive }) => cn(
-          "transition-all relative z-10 block",
+          "transition-all relative z-10 rounded-md block",
           isActive 
-            ? "text-accent bg-accent/10 border-l-4 border-accent"
-            : "text-text-dim hover:text-accent hover:bg-bg/50 border-l-4 border-transparent"
+            ? "text-accent bg-bg"
+            : "text-text-dim hover:text-accent hover:bg-bg/50"
         )}
       >
         <Box
