@@ -30,47 +30,8 @@
                 </h1>
                 <p class="text-slate-500 dark:text-slate-400 text-lg max-w-2xl">Live index of all deployed feature branches and active pull requests.</p>
             </div>
-            <div class="flex gap-2">
-                <a id="tracking-link" href="#" target="_blank" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 h-10 px-4 py-2 shadow-sm">Review Tracking</a>
-                <a href="../" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 h-10 px-4 py-2 shadow-sm">&larr; Back to Main Site</a>
-            </div>
+            <a href="../" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 h-10 px-4 py-2 shadow-sm">&larr; Back to Main Site</a>
         </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center">
-                <div id="stat-prs" class="text-3xl font-bold text-blue-500">-</div>
-                <div class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Open PRs</div>
-            </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center">
-                <div id="stat-active" class="text-3xl font-bold text-emerald-500">-</div>
-                <div class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Active Branches</div>
-            </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center">
-                <div id="stat-stale" class="text-3xl font-bold text-amber-500">-</div>
-                <div class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Stale Deployments</div>
-            </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-center">
-                <div id="stat-total" class="text-3xl font-bold text-slate-500">-</div>
-                <div class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Total Folders</div>
-            </div>
-        </div>
-
-        <div class="mb-8 flex gap-4 flex-wrap">
-            <input
-              id="search"
-              type="text"
-              placeholder="Filter branches..."
-              class="flex-1 min-w-48 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
-              oninput="filterCards()"
-            />
-            <select id="status-filter" class="border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-900 outline-none" onchange="filterCards()">
-              <option value="all">All Status</option>
-              <option value="pr">Open PRs</option>
-              <option value="active">Active Branches</option>
-              <option value="stale">Stale Deployments</option>
-            </select>
-        </div>
-
         <div id="error-alert" class="hidden mb-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-400 px-4 py-4 rounded-lg shadow-sm" role="alert">
             <div class="flex items-center gap-3">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -81,149 +42,130 @@
             <svg class="animate-spin h-10 w-10 text-blue-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <span class="text-lg text-slate-500 dark:text-slate-400 font-medium animate-pulse">Scanning gh-pages deployments...</span>
         </div>
-        <div id="grid" class="grid gap-4 flex-col"></div>
+        <div id="grid" class="flex flex-col gap-4"></div>
     </div>
     <script>
         const REPO_OWNER = 'arii', REPO_NAME = 'tech-dancer';
         const BASE_URL = `https://${REPO_OWNER}.github.io/${REPO_NAME}`;
-        const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
-        const TRACKING_URL = `${BASE_URL}/REVIEW_TRACKING.md`;
         const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
+
+        // 1. Added new icons for Success, Failure, and Pending statuses
         const ICONS = {
             pr: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg>`,
             branch: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`,
             external: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`,
-            clock: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+            success: `<svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+            failure: `<svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+            pending: `<svg class="w-4 h-4 text-amber-500 animate-spin" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>`
         };
+
         const escapeHtml = (u) => u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]));
 
-        document.getElementById('tracking-link').href = TRACKING_URL;
+        // 2. Helper function to fetch and format the CI check runs status
+        async function fetchCIStatusHtml(sha) {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
+                if (!res.ok) return '';
 
-        function timeAgo(seconds) {
-            const diff = Math.floor(Date.now() / 1000) - seconds;
-            if (diff < 60) return 'just now';
-            if (diff < 3600) {
-                const m = Math.floor(diff / 60);
-                return `${m} minute${m > 1 ? 's' : ''} ago`;
-            }
-            if (diff < 86400) {
-                const h = Math.floor(diff / 3600);
-                return `${h} hour${h > 1 ? 's' : ''} ago`;
-            }
-            const d = Math.floor(diff / 86400);
-            return `${d} day${d > 1 ? 's' : ''} ago`;
-        }
+                const data = await res.json();
+                if (!data.check_runs || data.check_runs.length === 0) return '';
 
-        let allFolders = [];
+                const isPending = data.check_runs.some(cr => cr.status !== 'completed');
+                const isFailure = data.check_runs.some(cr => cr.conclusion === 'failure' || cr.conclusion === 'timed_out' || cr.conclusion === 'cancelled');
 
-        function filterCards() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const status = document.getElementById('status-filter').value;
-            const grid = document.getElementById('grid');
-
-            Array.from(grid.children).forEach(card => {
-                const name = card.dataset.name.toLowerCase();
-                const type = card.dataset.type;
-                const matchesSearch = name.includes(query);
-                const matchesStatus = status === 'all' || status === type;
-
-                if (matchesSearch && matchesStatus) {
-                    card.classList.remove('hidden');
-                    card.classList.add('flex');
-                } else {
-                    card.classList.add('hidden');
-                    card.classList.remove('flex');
+                if (isFailure) {
+                    return `<span class="flex items-center gap-1 text-red-700 dark:text-red-400 text-xs font-semibold bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-md border border-red-200 dark:border-red-800">${ICONS.failure} Checks Failed</span>`;
                 }
-            });
+                if (isPending) {
+                    return `<span class="flex items-center gap-1 text-amber-700 dark:text-amber-400 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md border border-amber-200 dark:border-amber-800">${ICONS.pending} Checks Pending</span>`;
+                }
+
+                return `<span class="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 text-xs font-semibold bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">${ICONS.success} Checks Passed</span>`;
+            } catch (e) {
+                return '';
+            }
         }
 
         async function init() {
             const grid = document.getElementById('grid'), loading = document.getElementById('loading'), errorAlert = document.getElementById('error-alert');
             try {
-                const [treeData, prs, branches, metadata] = await Promise.all([
+                const [treeData, prs] = await Promise.all([
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).then(r => r.ok ? r.json() : []),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches?per_page=100`).then(r => r.ok ? r.json() : []),
-                    fetch(`${BASE_URL}/previews/data.json`).then(r => r.ok ? r.json() : {}).catch(() => ({}))
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open`).then(r => r.ok ? r.json() : [])
                 ]);
+
+                // 3. Fetch CI statuses concurrently for all open PRs
+                const prStatuses = {};
+                await Promise.all(prs.map(async (pr) => {
+                    prStatuses[pr.head.ref] = await fetchCIStatusHtml(pr.head.sha);
+                }));
+
                 loading.style.display = 'none';
-                const branchNames = new Set(branches.map(b => b.name));
-                const folders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
-                    .map(i => i.path.replace('/index.html', ''))
+
+                const allFolders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
+                    .map(i => i.path.replace('/index.html', ''));
+
+                // 4. Update sorting: PRs sorted by `updated_at` descending, branches alphabetical
+                const prFolders = allFolders
+                    .filter(name => prs.some(p => p.head.ref === name))
                     .sort((a, b) => {
-                        const activeA = branchNames.has(a) || prs.some(p => p.head.ref === a);
-                        const activeB = branchNames.has(b) || prs.some(p => p.head.ref === b);
-                        if (activeA && !activeB) return -1;
-                        if (!activeA && activeB) return 1;
-                        return (metadata[b] || 0) - (metadata[a] || 0);
+                        const prA = prs.find(p => p.head.ref === a);
+                        const prB = prs.find(p => p.head.ref === b);
+                        return new Date(prB.updated_at).getTime() - new Date(prA.updated_at).getTime();
                     });
 
-                allFolders = folders;
+                const branchFolders = allFolders
+                    .filter(name => !prs.some(p => p.head.ref === name))
+                    .sort((a, b) => a.localeCompare(b));
 
-                document.getElementById('stat-prs').textContent = prs.length;
-                document.getElementById('stat-active').textContent = branches.length;
-                document.getElementById('stat-stale').textContent = folders.filter(f => !branchNames.has(f) && !prs.some(p => p.head.ref === f)).length;
-                document.getElementById('stat-total').textContent = folders.length;
-
-                if (!folders.length) {
+                if (!allFolders.length) {
                     grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
                     return;
                 }
-                folders.forEach(name => {
-                    const pr = prs.find(p => p.head.ref === name), isActive = branchNames.has(name), url = `${BASE_URL}/${name}/`;
-                    const timestamp = metadata[name];
-                    const card = document.createElement('div');
-                    card.dataset.name = name;
-                    card.dataset.type = pr ? 'pr' : (isActive ? 'active' : 'stale');
-                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
 
-                    let badge, typeIcon, typeLabel, ciBadge = '';
-                    if (pr) {
-                        badge = `<span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>`;
-                        typeIcon = ICONS.pr;
-                        typeLabel = `PR #${pr.number}: ${escapeHtml(pr.title)}`;
+                // 5. Grouped Rendering logic
+                const renderGroup = (title, foldersList, isPr) => {
+                    if (!foldersList.length) return;
 
-                        // CI Badge
-                        const ciStatus = pr.statusCheckRollup?.state || 'UNKNOWN';
-                        ciBadge = {
-                            'SUCCESS': `<span class="text-emerald-500 text-xs font-medium flex items-center gap-1">✓ CI Passing</span>`,
-                            'FAILURE': `<span class="text-red-500 text-xs font-medium flex items-center gap-1">✗ CI Failing</span>`,
-                            'PENDING': `<span class="text-amber-500 text-xs font-medium flex items-center gap-1">⟳ CI Running</span>`,
-                        }[ciStatus] || '';
-                    } else if (isActive) {
-                        badge = `<span class="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">Active Branch</span>`;
-                        typeIcon = ICONS.branch;
-                        typeLabel = `Deployed Branch`;
-                    } else {
-                        badge = `<span class="bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800 flex items-center gap-1">${ICONS.clock} Recently Deleted</span>`;
-                        typeIcon = ICONS.branch;
-                        typeLabel = `Stale Deployment`;
-                    }
+                    const groupContainer = document.createElement('div');
+                    groupContainer.className = 'flex flex-col gap-4 mb-8';
 
-                    const prBody = pr?.body ? escapeHtml(pr.body).slice(0, 200) + (pr.body.length > 200 ? '...' : '') : '';
-                    const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
+                    const heading = document.createElement('h2');
+                    heading.className = 'text-xl font-bold mt-4 mb-2 flex items-center gap-2 text-slate-800 dark:text-slate-200';
+                    heading.innerHTML = `${isPr ? ICONS.pr : ICONS.branch} ${title}`;
+                    groupContainer.appendChild(heading);
 
-                    card.innerHTML = `
-                        <div class="flex-1 min-w-0 w-full">
-                            <div class="flex items-center justify-between sm:justify-start gap-3 mb-1">
-                                <div class="flex-1 min-w-0">
-                                    ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate w-full">${typeIcon} ${typeLabel}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 truncate w-full">${typeIcon} ${typeLabel}</div>`}
+                    foldersList.forEach(name => {
+                        const pr = prs.find(p => p.head.ref === name), url = `${BASE_URL}/${name}/`;
+                        const ciStatusHtml = prStatuses[name] || '';
+
+                        const card = document.createElement('div');
+                        card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
+
+                        const badge = pr
+                            ? `<div class="flex items-center gap-2 flex-wrap">
+                                 <span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>
+                                 ${ciStatusHtml}
+                               </div>`
+                            : `<span class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">Inactive / Merged</span>`;
+
+                        card.innerHTML = `
+                            <div class="flex-1 min-w-0 w-full">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+                                    ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2">${ICONS.branch} Deployed Branch</div>`}
+                                    <div class="hidden sm:block">${badge}</div>
                                 </div>
-                                <div class="hidden sm:block shrink-0">${badge}</div>
+                                <div class="flex items-center gap-2 flex-wrap"><span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate">${escapeHtml(name)}</span><div class="sm:hidden">${badge}</div></div>
                             </div>
-                            ${prBody ? `<p class="text-xs text-slate-500 dark:text-slate-400 mb-3 italic line-clamp-2">${prBody}</p>` : ''}
-                            <div class="flex flex-wrap items-center gap-3">
-                                <span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px] sm:max-w-md">${escapeHtml(name)}</span>
-                                ${isActive ? `<a href="${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Source</a>` : ''}
-                                <a href="${compareUrl}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Compare</a>
-                                ${timestamp ? `<span class="text-xs text-slate-400 flex items-center gap-1">${ICONS.clock} ${timeAgo(timestamp)}</span>` : ''}
-                                ${ciBadge}
-                                <div class="sm:hidden shrink-0">${badge}</div>
-                            </div>
-                        </div>
-                        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0">View Deployment ${ICONS.external}</a>`;
-                    grid.appendChild(card);
-                });
+                            <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm">View Deployment ${ICONS.external}</a>`;
+                        groupContainer.appendChild(card);
+                    });
+                    grid.appendChild(groupContainer);
+                };
+
+                renderGroup('Pull Request Previews', prFolders, true);
+                renderGroup('Other Deployed Branches', branchFolders, false);
+
             } catch (err) {
                 loading.style.display = 'none';
                 document.getElementById('error-msg').textContent = err.message;
