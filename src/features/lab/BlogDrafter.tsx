@@ -37,8 +37,8 @@ export function BlogDrafter() {
             <Box
               as="textarea"
               padding={6}
+              minHeight={40}
               className="w-full bg-surface border border-line font-sans text-sm focus:outline-none focus:border-accent transition-all"
-              style={{ minHeight: '160px' }}
               placeholder="Paste research data, URLs, or abstract concepts here..."
               value={prompt}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
