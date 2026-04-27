@@ -1,20 +1,5 @@
-import { LucideIcon, Home, BookOpen, ShoppingBag, Database, User, Send } from 'lucide-react';
-import { RouteObject } from 'react-router-dom';
-import { SkeletonVariant } from '@/components/ui/PageSkeleton';
-
-/**
- * Centralized Route Configuration.
- * Single source of truth for routing, navigation labels, and sitemap structure.
- * Extends React Router's RouteObject to include navigation metadata.
- */
-export interface RouteConfig extends Omit<RouteObject, 'children'> {
-  path: string;
-  label?: string;
-  icon?: LucideIcon;
-  description?: string;
-  children?: RouteConfig[];
-  skeleton?: SkeletonVariant;
-}
+import { Home, BookOpen, ShoppingBag, Database, User, Send } from 'lucide-react';
+import { RouteConfig } from '@/lib/types/routes';
 
 export const routes: RouteConfig[] = [
   {

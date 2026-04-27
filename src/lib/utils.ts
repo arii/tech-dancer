@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { RouteConfig } from "@/config/routes"
+import { RouteConfig } from "@/lib/types/routes"
 import { SkeletonVariant } from "@/components/ui/PageSkeleton"
 
 export function cn(...inputs: ClassValue[]) {
