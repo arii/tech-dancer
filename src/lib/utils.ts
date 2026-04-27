@@ -51,17 +51,21 @@ export function getHighlightedParts(text: string, query: string) {
  * Centralizes skeleton logic to prevent Layout Shift (CLS).
  */
 export function getSkeletonVariant(pathname: string): 'grid' | 'post' | 'simple' {
-  // Post variants
-  if (pathname.startsWith('/blog/') || pathname.startsWith('/gear/') || pathname.startsWith('/research/')) {
-    return 'post';
-  }
+  // Normalize pathname: remove trailing slash unless it's just "/"
+  const path = pathname.length > 1 && pathname.endsWith('/')
+    ? pathname.slice(0, -1)
+    : pathname;
 
-  // Grid variants
+  // Post variants (e.g., /blog/some-slug)
+  const isPost = ['/blog/', '/gear/', '/research/'].some(prefix => path.startsWith(prefix));
+  if (isPost) return 'post';
+
+  // Grid variants (exact matches)
   const gridPaths = ['/blog', '/gear', '/research', '/ux-auditor'];
-  if (gridPaths.includes(pathname)) {
+  if (gridPaths.includes(path)) {
     return 'grid';
   }
 
-  // Fallback to simple
+  // Fallback to simple (Home, About, Contact, etc.)
   return 'simple';
 }
