@@ -59,7 +59,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
            <Stack gap={2} display="flex" align="start" direction="row">
-              <Info className="w-4 h-4 text-accent shrink-0 mt-1" />
+              <Box as="span" marginTop={1} className="shrink-0">
+                <Info className="w-4 h-4 text-accent" />
+              </Box>
               <Text variant="body" size="xs">
                 This tool prepares your blog post for the Tech-Dancer automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
