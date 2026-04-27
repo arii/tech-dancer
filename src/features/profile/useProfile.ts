@@ -41,9 +41,9 @@ const PROFILE_DATA: ProfileData = {
     timeline: [
       { year: '2019', event: 'Started with Lindy Hop and Fusion', detail: 'First partner dance experiences — Lindy in the Park, SF.', badge: null },
       { year: '2020', event: 'Pandemic pause', detail: 'Two years off. Resumed in 2022 after moving to San Francisco.', badge: null },
-      { year: '2022', event: 'Discovered West Coast Swing', detail: 'Signed up for a series at Mission City Swing — and never looked back. "In Da Club" changed everything.', badge: 'Pivotal' },
-      { year: '2023', event: 'First competitions, built the travel stack', detail: 'Started the convention circuit. Developed credit card and gear systems to make 20+ events/year sustainable.', badge: '20+ events/yr' },
-      { year: '2024', event: 'Competitive intermediate, launched tech-dancer', detail: 'Built this site to share gear reviews, travel systems, and data analytics with the WCS community.', badge: 'This site' },
+      { year: '2022', event: 'Discovered West Coast Swing', detail: 'Signed up for a series at Mission City Swing — and never looked back. "In Da Club" changed everything.', badge: { text: 'Pivotal', type: 'pivotal' } },
+      { year: '2023', event: 'First competitions, built the travel stack', detail: 'Started the convention circuit. Developed credit card and gear systems to make 20+ events/year sustainable.', badge: { text: '20+ events/yr', type: 'events' } },
+      { year: '2024', event: 'Competitive intermediate, launched tech-dancer', detail: 'Built this site to share gear reviews, travel systems, and data analytics with the WCS community.', badge: { text: 'This site', type: 'site' } },
       { year: 'Next', event: 'Advanced division, open-source scoring data', detail: 'Growing the data pipeline and the analytics tooling for the community.', badge: null, future: true },
     ],
     skills: [

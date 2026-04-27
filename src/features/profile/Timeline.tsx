@@ -1,10 +1,16 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { TimelineItem } from './types';
+import { TimelineItem, TimelineBadgeType } from './types';
 import { cn } from '@/lib/utils';
 
 interface TimelineProps {
   items: TimelineItem[];
 }
+
+const BADGE_STYLES: Record<TimelineBadgeType, string> = {
+  pivotal: "bg-brand-green-bg text-brand-green-text",
+  site: "bg-brand-blue-bg text-brand-blue-text",
+  events: "bg-brand-amber-bg text-brand-amber-text",
+};
 
 export default function Timeline({ items }: TimelineProps) {
   return (
@@ -27,12 +33,9 @@ export default function Timeline({ items }: TimelineProps) {
                 className={cn(
                   "z-10",
                   !item.future && idx === items.length - 2 ? "bg-accent-navy border-2 border-accent-navy" : "",
-                  !item.future && idx !== items.length - 2 ? "bg-bg border-line" : "",
-                  item.future ? "bg-surface border-dashed border-line" : ""
+                  !item.future && idx !== items.length - 2 ? "bg-bg border-line border-1.5" : "",
+                  item.future ? "bg-surface border-dashed border-line border-1.5" : ""
                 )}
-                style={{
-                  borderWidth: (!item.future && idx !== items.length - 2) || item.future ? '1.5px' : undefined
-                }}
               />
               {idx < items.length - 1 && (
                 <Box
@@ -63,12 +66,10 @@ export default function Timeline({ items }: TimelineProps) {
                     radius="sm"
                     className={cn(
                       "inline-block",
-                      item.badge === 'Pivotal' && "bg-brand-green-bg text-brand-green-text",
-                      item.badge === 'This site' && "bg-brand-blue-bg text-brand-blue-text",
-                      item.badge.includes('events') && "bg-brand-amber-bg text-brand-amber-text"
+                      BADGE_STYLES[item.badge.type]
                     )}
                   >
-                    {item.badge}
+                    {item.badge.text}
                   </Text>
                 </Box>
               )}

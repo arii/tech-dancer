@@ -25,7 +25,7 @@ export default function ArielProfile() {
 
       <Stack gap={0}>
         <Reveal direction="up">
-          <AboutHero data={bio} />
+          <AboutHero name={bio.name} bio={bio.bio} />
         </Reveal>
 
         <Reveal direction="up" delay={0.1}>

@@ -2,11 +2,12 @@ import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { ProfileData } from './types';
 
 interface AboutHeroProps {
-  data: ProfileData;
+  name: string;
+  bio: string;
 }
 
-export default function AboutHero({ data }: AboutHeroProps) {
-  const initials = data.name.split(' ').map(n => n[0]).join('');
+export default function AboutHero({ name, bio }: AboutHeroProps) {
+  const initials = name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
 
   return (
     <Box
@@ -47,7 +48,7 @@ export default function AboutHero({ data }: AboutHeroProps) {
       <Stack gap={4}>
         <Stack gap={2}>
           <Text variant="display" size="2xl" weight="font-medium" className="text-accent-navy">
-            {data.name}
+            {name}
           </Text>
           <Box display="flex" gap={2} wrap>
             <Text
@@ -83,8 +84,8 @@ export default function AboutHero({ data }: AboutHeroProps) {
           </Box>
         </Stack>
 
-        <Text variant="body" size="base" color="body" style={{ maxWidth: '420px' }}>
-          {data.bio}
+        <Text variant="body" size="base" color="body" className="max-w-prose-narrow">
+          {bio}
         </Text>
 
         <Box display="flex" gap={2} wrap>

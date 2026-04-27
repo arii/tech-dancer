@@ -16,11 +16,16 @@ export interface ProfileSection {
   content: string;
 }
 
+export type TimelineBadgeType = 'pivotal' | 'site' | 'events';
+
 export interface TimelineItem {
   year: string;
   event: string;
   detail: string;
-  badge: string | null;
+  badge: {
+    text: string;
+    type: TimelineBadgeType;
+  } | null;
   future?: boolean;
 }
 

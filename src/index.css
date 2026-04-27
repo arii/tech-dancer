@@ -27,25 +27,6 @@
   --color-error: var(--raw-color-error);
   --color-error-surface: var(--raw-color-error-bg);
 
-  /* Brand Colors for About Page */
-  --color-brand-blue-bg: #E6F1FB;
-  --color-brand-blue-border: #B5D4F4;
-  --color-brand-blue-text: #0C447C;
-  --color-brand-blue-accent: #185FA5;
-  --color-brand-blue-light: #85B7EB;
-
-  --color-brand-green-bg: #E1F5EE;
-  --color-brand-green-border: #5DCAA5;
-  --color-brand-green-text: #085041;
-  --color-brand-green-status: #1D9E75;
-  --color-brand-green-icon: #0F6E56;
-
-  --color-brand-neutral-bg: #F1EFE8;
-  --color-brand-neutral-border: #D3D1C7;
-  --color-brand-neutral-text: #444441;
-  --color-brand-amber-bg: #FAEEDA;
-  --color-brand-amber-text: #633806;
-
   /* Fonts */
   --font-sans: var(--raw-font-sans);
   --font-display: var(--raw-font-display);
