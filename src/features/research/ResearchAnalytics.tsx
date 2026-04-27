@@ -23,7 +23,14 @@ function CompetitionTrendChart() {
             <Text variant="mono" size="micro" color="accent" weight="font-bold">LIVE DATA</Text>
           </Box>
         </Box>
-        <Box height={30} width="full" display="flex" align="end">
+        <Box
+          height={30}
+          width="full"
+          display="flex"
+          align="end"
+          role="img"
+          aria-label="WCS competition trends chart showing an upward index from January to December 2024"
+        >
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -47,10 +54,11 @@ function CompetitionTrendChart() {
             {data.map((d, i) => (
               <circle
                 key={i}
+                tabIndex={0}
                 cx={(i / (data.length - 1)) * width}
                 cy={height - (d / max) * height}
                 r="3"
-                className="fill-bg stroke-accent stroke-2 hover:r-4 transition-all cursor-crosshair"
+                className="fill-bg stroke-accent stroke-2 hover:r-4 focus-visible:r-4 focus-visible:outline-none transition-all cursor-crosshair"
               >
                 <title>{`Index: ${d}`}</title>
               </circle>
