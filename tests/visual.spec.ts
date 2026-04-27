@@ -18,6 +18,15 @@ test.describe('Visual Regression Tests', () => {
       // Ensure the main content is loaded instead of using a manual timeout
       await expect(page.locator('#root')).toBeVisible();
 
+      // Scroll to trigger lazy loading of images
+      await page.evaluate(async () => {
+         const main = document.querySelector('main');
+         if (main) {
+            main.scrollTo(0, main.scrollHeight);
+            await new Promise(r => setTimeout(r, 500));
+            main.scrollTo(0, 0);
+         }
+      });
       // Increased tolerance to 5% to handle minor rendering differences across environments
       // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {

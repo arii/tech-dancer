@@ -1,113 +1,297 @@
-import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Github, FileText, Terminal, ExternalLink, Info, Check } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Button } from '@/layouts/Primitives';
+import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw } from 'lucide-react';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { useBlogDrafter } from './useBlogDrafter';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { CONTENT_CATEGORIES } from '@/config/content';
 
 export function BlogDrafter() {
-  const [prompt, setPrompt] = useState('');
-  const [isDrafting, setIsDrafting] = useState(false);
-  const [draft, setDraft] = useState<string | null>(null);
+  const { data, updateField, applyAIResponse, clearForm, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const [copied, setCopied] = useState(false);
+  const [aiInput, setAiInput] = useState('');
+  const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
 
-  const handleDraft = async () => {
-    if (!prompt.trim()) return;
-    setIsDrafting(true);
-    // Simulation of AI drafting
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setDraft(`## AI Generated Draft for: ${prompt}\n\nThis is a simulated draft based on your technical prompt. In a production environment, this would call the Gemini API via our ETL pipeline.\n\n### Key Technical Points\n- System integration patterns\n- Performance benchmarks\n- Architecture decisions`);
-    setIsDrafting(false);
+  const handleApply = () => {
+    if (!aiInput.trim()) return;
+    const success = applyAIResponse(aiInput);
+    if (success) {
+      setShowAppliedSuccess(true);
+      setAiInput('');
+      setTimeout(() => setShowAppliedSuccess(false), 3000);
+    } else {
+      alert("Invalid JSON format. Please paste a valid JSON object.");
+    }
+  };
+
+  const handleCopyPrompt = () => {
+    const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.
+Requirements:
+1. Respond ONLY with a valid JSON object.
+2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.
+3. Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.
+4. The 'commentary' should be rich markdown content.
+
+Draft Data: ${JSON.stringify(data, null, 2)}`;
+    navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <Stack gap={12}>
+    <Stack gap={10} height="full">
       <Stack gap={4}>
-        <Box display="flex" align="center" gap={3}>
-           <Terminal className="w-6 h-6 text-accent" />
-           <Text variant="display" size="2xl" weight="font-black">Drafting Engine</Text>
+        <Box display="flex" align="center" justify="between" width="full">
+          <Box display="flex" align="center" gap={3}>
+             <Terminal className="w-5 h-5 text-accent" />
+             <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
+          </Box>
+          <Box 
+            as="button" 
+            onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
+            display="flex" 
+            align="center" 
+            gap={2} 
+            className="text-text-dim hover:text-accent transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-4 h-4" />
+            <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
+          </Box>
         </Box>
-        <Text variant="body" color="dim">
-          Input your technical research notes or a raw concept. Our LLM-powered engine will transform them into a structured blog post adhering to our design system and editorial guidelines.
-        </Text>
+        <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
+           <Stack gap={2} display="flex" align="start" direction="row">
+              <Box as="span" marginTop={1} className="shrink-0">
+                <Info className="w-4 h-4 text-accent" />
+              </Box>
+              <Text variant="body" size="xs">
+                This tool prepares your blog post for the Tech-Dancer automated pipeline.
+                Complete the form below to generate a pre-formatted GitHub Issue link.
+              </Text>
+           </Stack>
+        </Box>
       </Stack>
 
-      <Box border padding={8} surface="muted" className="relative overflow-hidden">
-        <Stack gap={6}>
-          <Stack gap={2}>
-            <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest">Input Parameters</Text>
-            <textarea
-              className="w-full bg-surface border border-line p-6 font-sans text-sm focus:outline-none focus:border-accent min-h-[160px] transition-all"
-              placeholder="Paste research data, URLs, or abstract concepts here..."
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-          </Stack>
-
-          <Box display="flex" justify="end" gap={4}>
-             <Button
-               variant="outline"
-               size="md"
-               onClick={() => setPrompt('')}
-               disabled={isDrafting || !prompt}
-             >
-               Clear
-             </Button>
-             <Button
-               variant="primary"
-               size="md"
-               onClick={handleDraft}
-               loading={isDrafting}
-               disabled={!prompt}
-             >
-               {isDrafting ? 'Synthesizing...' : 'Generate Draft'}
-             </Button>
+      <Grid cols={{ base: 1, md: 2 }} gap={12}>
+        {/* Form Column */}
+        <Stack gap={8}>
+          <Box border="b" paddingBottom={2}>
+             <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
           </Box>
+
+          <Stack gap={6}>
+            <Stack gap={2}>
+              <Text variant="mono" size="micro" color="dim">POST_TITLE</Text>
+              <Box
+                as="input"
+                type="text"
+                value={data.title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
+                placeholder="The Future of WCS..."
+                width="full"
+                surface="default"
+                border
+                padding={3}
+                variant="mono"
+                size="sm"
+                className="focus:border-accent outline-none"
+              />
+            </Stack>
+
+            <Grid cols={2} gap={4}>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim">CATEGORY</Text>
+                <Box
+                  as="select"
+                  value={data.category}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
+                  width="full"
+                  surface="default"
+                  border
+                  padding={3}
+                  variant="mono"
+                  size="sm"
+                  className="focus:border-accent outline-none appearance-none"
+                >
+                  {CONTENT_CATEGORIES.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.label}</option>
+                  ))}
+                </Box>
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim">DATE</Text>
+                <Box
+                  as="input"
+                  type="date"
+                  value={data.date}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                  width="full"
+                  surface="default"
+                  border
+                  padding={3}
+                  variant="mono"
+                  size="sm"
+                  className="focus:border-accent outline-none"
+                />
+              </Stack>
+            </Grid>
+
+            <Stack gap={2}>
+              <Text variant="mono" size="micro" color="dim">EXCERPT_SUMMARY</Text>
+              <Box
+                as="textarea"
+                value={data.excerpt}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
+                placeholder="A brief overview of the post content..."
+                width="full"
+                height={20}
+                surface="default"
+                border
+                padding={3}
+                variant="mono"
+                size="sm"
+                className="focus:border-accent outline-none resize-none"
+              />
+            </Stack>
+
+            <Stack gap={2}>
+              <Text variant="mono" size="micro" color="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
+              <Box
+                as="input"
+                type="url"
+                value={data.affiliateLink}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
+                placeholder="https://amazon.com/..."
+                width="full"
+                surface="default"
+                border
+                padding={3}
+                variant="mono"
+                size="sm"
+                className="focus:border-accent outline-none"
+              />
+            </Stack>
+
+            <Stack gap={2}>
+              <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
+              <Box
+                as="textarea"
+                value={data.commentary}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
+                placeholder="Write your main content here..."
+                width="full"
+                height={40}
+                surface="default"
+                border
+                padding={3}
+                variant="mono"
+                size="sm"
+                className="focus:border-accent outline-none resize-none"
+              />
+            </Stack>
+          </Stack>
         </Stack>
-      </Box>
 
-      {draft && (
-        <Box
-          as={motion.div}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          border
-          padding={8}
-          surface="default"
-        >
-          <Stack gap={8}>
-            <Box display="flex" justify="between" align="center" className="border-b border-line pb-4">
-              <Box display="flex" align="center" gap={3}>
-                 <FileText className="w-5 h-5 text-accent" />
-                 <Text variant="mono" size="xs" weight="font-bold">DRAFT_OUTPUT.md</Text>
-              </Box>
-              <Box display="flex" gap={2}>
-                <Box as="button" className="p-2 hover:bg-muted transition-colors rounded-sm" title="Copy to Clipboard">
-                  <Check className="w-4 h-4" />
+        {/* Preview Column */}
+        <Stack gap={8}>
+          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
+             <Text variant="mono" size="micro" color="brand">AI_INTEGRATION</Text>
+             {showAppliedSuccess && (
+                <Box display="flex" align="center" gap={2}>
+                  <Check className="w-3 h-3 text-accent" />
+                  <Text variant="mono" size="micro" color="brand" weight="font-bold">APPLIED_SUCCESSFULLY</Text>
                 </Box>
-                <Box as="button" className="p-2 hover:bg-muted transition-colors rounded-sm" title="Export to GitHub">
-                  <Github className="w-4 h-4" />
-                </Box>
-              </Box>
-            </Box>
+             )}
+          </Box>
 
-            <div className="prose prose-invert max-w-none">
-               <Text variant="body" className="whitespace-pre-wrap font-mono text-sm leading-relaxed">
-                 {draft}
-               </Text>
-            </div>
-
-            <Box border surface="accent" padding={6} display="flex" align="center" gap={4} className="bg-accent/5 border-dashed">
-               <Info className="w-5 h-5 text-accent shrink-0" />
-               <Text variant="body" size="sm" color="dim">
-                 This draft is a starting point. Review for technical accuracy and tone before publishing to the main repository.
-               </Text>
-               <Box as="a" href="#" display="flex" align="center" gap={2} className="ml-auto text-accent hover:underline">
-                  <Text variant="mono" size="micro" weight="font-bold">Guidelines</Text>
-                  <ExternalLink className="w-3 h-3" />
-               </Box>
+          <Stack gap={4}>
+            <Box
+              as="textarea"
+              value={aiInput}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
+              placeholder="Paste AI JSON response here..."
+              width="full"
+              height={32}
+              surface="default"
+              border
+              padding={3}
+              variant="mono"
+              size="sm"
+              className="focus:border-accent outline-none resize-none"
+            />
+            <Box
+              as="button"
+              onClick={handleApply}
+              display="flex"
+              align="center"
+              justify="center"
+              gap={3}
+              surface="accent"
+              padding={4}
+              className="bg-accent text-bg hover:bg-accent-brand transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
+            >
+              <Send className="w-4 h-4" />
+              APPLY_RESPONSE
             </Box>
           </Stack>
-        </Box>
-      )}
+
+          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
+             <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
+             <Box display="flex" align="center" gap={2} color="dim">
+                <FileText className="w-3 h-3" />
+                <Text variant="mono" size="micro">v1.2.0</Text>
+             </Box>
+          </Box>
+
+          <Box
+            flex
+            border
+            surface="muted"
+            padding={6}
+            overflow="y-auto"
+            maxHeight="600px"
+            className="prose prose-sm prose-invert max-w-none bg-black/5"
+          >
+            <MarkdownRenderer content={markdownPreview} />
+          </Box>
+
+          <Grid cols={2} gap={4}>
+            <Box
+              as="button"
+              onClick={handleCopyPrompt}
+              display="flex"
+              align="center"
+              justify="center"
+              gap={3}
+              surface={copied ? "accent" : "muted"}
+              border
+              padding={4}
+              className={`hover:bg-line transition-all cursor-pointer group ${copied ? 'bg-accent/10 border-accent text-accent' : ''}`}
+            >
+              {copied ? <Check className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
+              <Text variant="mono" size="xs" weight="font-bold">
+                {copied ? 'PROMPT COPIED ✓' : 'COPY AI PROMPT'}
+              </Text>
+            </Box>
+
+            <Box
+              as="a"
+              href={githubIssueUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              display="flex"
+              align="center"
+              justify="center"
+              gap={3}
+              surface="accent"
+              padding={4}
+              className="bg-accent text-bg hover:bg-accent transition-all cursor-pointer group"
+            >
+              <Github className="w-5 h-5" />
+              <Text variant="display" size="base" weight="font-bold">SUBMIT DRAFT</Text>
+              <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+            </Box>
+          </Grid>
+        </Stack>
+      </Grid>
     </Stack>
   );
 }
