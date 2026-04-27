@@ -134,6 +134,11 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
     .map(([path, raw]) => {
       const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
+
+      if (data.image === "") {
+        data.image = undefined;
+      }
+
       return {
         ...data,
         title: String(data.title || 'Untitled'),
