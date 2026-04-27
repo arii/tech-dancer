@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import dancerHero from '@/assets/dancer_hero.webp';
 import roboticistHero from '@/assets/roboticist_hero.webp';
