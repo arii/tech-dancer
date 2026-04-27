@@ -39,14 +39,6 @@ export const layout = {
   grid: "grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 w-full",
   section: "mt-24 space-y-8",
   divider: "border-b border-line pb-4 flex items-end justify-between",
-  contentWidth: {
-    article: "max-w-3xl",
-    wide: "max-w-5xl",
-    tool: "max-w-7xl",
-  },
-  cardImage: {
-    maxHeight: "160px",
-  },
 };
 
 export const inputs = {
@@ -98,11 +90,11 @@ export const typography = {
   headline: "font-display font-bold tracking-tighter leading-[0.9]",
   display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
-  mono: "font-mono tracking-widest",
-  utility: "font-mono tracking-[3px]",
-  label: "font-mono font-bold tracking-[2px]",
-  micro: "font-mono tracking-widest",
-  tight: "tracking-[0.15em]",
+  mono: "font-mono tracking-widest uppercase",
+  utility: "font-mono tracking-[3px] uppercase",
+  label: "font-mono font-bold uppercase tracking-[2px]",
+  micro: "font-mono uppercase tracking-widest",
+  tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
 };
 

@@ -23,7 +23,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   return (
     <DetailLayout
-      maxWidth="article"
       title={post.title}
       category={post.category}
       date={post.date}
