@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
-import { safeSearch } from '@/lib/utils';
+import Fuse from 'fuse.js';
 
 export function useGlobalSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,12 +56,38 @@ export function useGlobalSearch() {
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    return allContent.filter(item => 
-      safeSearch(item.title, query) ||
-      safeSearch(item.excerpt, query) ||
-      safeSearch(item.content, query) ||
-      safeSearch(item.tags, query)
+
+    // Direct search for robustness (especially for E2E tests)
+    const normalizedQuery = query.toLowerCase();
+    const simpleMatches = allContent.filter(item =>
+      (item.title || '').toLowerCase().includes(normalizedQuery) ||
+      (item.excerpt || '').toLowerCase().includes(normalizedQuery) ||
+      (item.content || '').toLowerCase().includes(normalizedQuery)
     );
+
+    // Fuse.js for fuzzy matching
+    const fuse = new Fuse(allContent, {
+      keys: [
+        { name: 'title', weight: 0.7 },
+        { name: 'excerpt', weight: 0.3 },
+        { name: 'content', weight: 0.1 },
+        { name: 'tags', weight: 0.5 }
+      ],
+      threshold: 0.4,
+      includeScore: true
+    });
+
+    const fuseMatches = fuse.search(query).map(result => result.item);
+
+    // Combine results, prioritizing direct matches
+    const combined = [...simpleMatches];
+    fuseMatches.forEach(item => {
+      if (!combined.some(c => c.slug === item.slug && c.type === item.type)) {
+        combined.push(item);
+      }
+    });
+
+    return combined;
   }, [allContent, query]);
 
   return {

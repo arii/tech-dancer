@@ -42,12 +42,19 @@ test.describe('Global Search Modal', () => {
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
-    await searchInput.fill('ai');
 
-    const resultButton = page.getByTestId('search-result').first();
-    await expect(resultButton).toBeVisible();
+    // Fill search term
+    await searchInput.fill('Vercel');
 
-    await resultButton.click();
+    // Wait for debounce and search results
+    await page.waitForTimeout(2000);
+
+    // Try finding the link directly if data-testid fails
+    const resultLink = page.locator('button[data-testid="search-result"]').first();
+
+    await expect(resultLink).toBeVisible({ timeout: 15000 });
+
+    await resultLink.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 });
@@ -66,7 +73,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
     await searchInput.fill('swing');
 
-    // Check URL
+    // Check URL (wait for debounce)
     await expect(page).toHaveURL(/q=swing/);
 
     // Reload

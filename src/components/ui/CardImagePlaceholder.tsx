@@ -23,6 +23,7 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
         <img
           src={image}
           alt={title}
+          loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
         <Box className="absolute top-3 left-3">

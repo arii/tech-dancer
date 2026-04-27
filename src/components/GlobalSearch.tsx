@@ -2,9 +2,10 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef, MouseEvent, ChangeEvent } from 'react';
+import { useRef, MouseEvent, ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
+import { debounce } from 'throttle-debounce';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -15,9 +16,28 @@ interface SearchResult {
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
+  const [localQuery, setLocalQuery] = useState(query);
   const { highlight } = useSearchHighlight(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Sync local query with URL query when search opens or URL changes externally
+  useEffect(() => {
+    setLocalQuery(query);
+  }, [query, isOpen]);
+
+  // Debounced sync to URL
+  const debouncedSetQuery = useRef(
+    debounce(300, (q: string) => {
+      setQuery(q);
+    })
+  ).current;
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLocalQuery(value);
+    debouncedSetQuery(value);
+  };
 
   // 1. The Context Reset: Close on route change
   // Note: Since isOpen is now derived from URL search params ('search=true'),
@@ -80,8 +100,8 @@ export function GlobalSearch() {
             ref={inputRef}
             type="text"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
-            value={query}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+            value={localQuery}
+            onChange={handleInputChange}
             width="full"
             variant="display"
             size="2xl"

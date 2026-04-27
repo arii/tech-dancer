@@ -7,7 +7,7 @@ import { SEO } from '@/components/SEO';
 import { SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
-import { EventCard } from './EventCard';
+import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
