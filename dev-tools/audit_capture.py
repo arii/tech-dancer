@@ -1,13 +1,17 @@
 import asyncio
 from playwright.async_api import async_playwright
 import os
-import subprocess
+import json
 
 # Configuration
 def get_base_url():
+    if 'BASE_URL' in os.environ:
+        return os.environ['BASE_URL']
     try:
-        # Fetch standard base URL from shared JS utility
-        return subprocess.check_output(['node', 'scripts/utils/env.mjs']).decode('utf-8').strip()
+        # Fetch standard base URL from shared JSON config
+        with open('scripts/utils/env.json', 'r') as f:
+            config = json.load(f)
+            return config.get('BASE_URL', 'http://localhost:4173/tech-dancer')
     except Exception:
         return 'http://localhost:4173/tech-dancer'
 
