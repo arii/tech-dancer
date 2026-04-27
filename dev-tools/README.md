@@ -2,6 +2,10 @@
 
 This directory contains repository automation scripts and quality gate configurations.
 
+> [!IMPORTANT]
+> The Repository CLI requires the `PyGithub` Python library. Install it with: `pip install PyGithub`.
+> It also requires the `gh` CLI to be authenticated.
+
 ## 🚀 Repository CLI (`td_cli.py`)
 
 The unified entry point for all repository automation. It supports both human-readable terminal output and structured JSON for tool integration.

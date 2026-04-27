@@ -119,18 +119,14 @@ When reviewing, evaluate EVERY changed file against these criteria:
 
 ### Parallel Work Protocol
 When multiple agents work simultaneously:
-1. **Run conflict check first**: `python3 dev-tools/conflict_detector.py`
+1. **Run conflict check first**: `python3 dev-tools/td_cli.py conflicts`
 2. **Stagger feature files**: Agents should not touch the same component file
 3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` to communicate scope
    - ✅ `feat/issue-247-gear-card` (scoped to GearCard)
    - ❌ `feat/issue-247-ui-updates` (ambiguous scope)
 4. **Shared primitives**: Never modify `src/layouts/*.tsx` in a feature branch without coordinating
 
-### 🤖 Isolated Development Environments (`vdev`)
-When asked to work on a new feature, bugfix, or isolated task while preserving the current workspace state, use the `vdev` CLI tool:
-* **Isolate:** Run `vdev setup <branch-name>` to create an isolated Docker/Worktree environment automatically.
-* **Execute:** Run tests, builds, or scripts inside that isolated environment using `vdev exec "<command>" --branch <branch-name>`.
-* **Cleanup:** Once the PR is submitted or the environment is no longer needed, clean it up using `vdev cleanup <branch-name>`.
+
 
 ## 23. Pull Request & Submission Protocol
 - **Mass Reviewing Allowed**: Agents may perform systematic technical audits of multiple PRs and submit reviews (Comment/Approve/Request Changes) as part of a single task.
