@@ -7,7 +7,7 @@ export const getBaseUrl = () => {
     const configPath = path.resolve(process.cwd(), 'scripts/utils/env.json');
     const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     return config.BASE_URL;
-  } catch (error) {
+  } catch {
     return 'http://localhost:4173/tech-dancer';
   }
 };
