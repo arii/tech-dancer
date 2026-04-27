@@ -1,11 +1,6 @@
 import { NavLink } from 'react-router-dom';
-import dancerHero from '@/assets/dancer_hero.webp';
-import roboticistHero from '@/assets/roboticist_hero.webp';
-
-type PathID = 'dancer' | 'roboticist';
 
 interface HeroPathCardProps {
-  id: PathID;
   title: string;
   wrapperClass: string;
   bgGradient: string;
@@ -20,7 +15,6 @@ interface HeroPathCardProps {
 }
 
 export function HeroPathCard({
-  id,
   title,
   wrapperClass,
   bgGradient,
@@ -33,8 +27,6 @@ export function HeroPathCard({
   onMouseLeave,
   onClick
 }: HeroPathCardProps) {
-  const heroImage = id === 'dancer' ? dancerHero : roboticistHero;
-
   return (
     <div
       className={`${wrapperClass} relative group overflow-hidden cursor-pointer h-full min-h-[400px]`}
@@ -42,18 +34,6 @@ export function HeroPathCard({
       onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src={heroImage}
-          alt={title}
-          loading="lazy"
-          className={`w-full h-full object-cover transition-all duration-700 ease-in-out ${
-            isOtherHovered ? 'grayscale opacity-30 scale-100' : 'opacity-60 scale-105'
-          } ${isHovered ? 'opacity-80 scale-110' : ''}`}
-        />
-      </div>
-
       {/* Background Gradient Overlay */}
       <div
         className={`absolute inset-0 z-1 ${bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
