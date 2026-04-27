@@ -62,19 +62,31 @@
 
         const escapeHtml = (u) => u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]));
 
-        // 2. Helper function to check GitHub API Rate Limits
+        // 2. Centralized Fetch Utility
+        async function apiFetch(endpoint) {
+            const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/${endpoint.replace(/^\//, '')}`;
+            const res = await fetch(url);
+            if (res.status === 403) {
+                const rate = await fetch('https://api.github.com/rate_limit').then(r => r.json()).catch(() => null);
+                if (rate && rate.resources.core.remaining === 0) {
+                    throw new Error('RATE_LIMITED');
+                }
+            }
+            if (!res.ok) throw new Error(`API_ERROR_${res.status}`);
+            return res.json();
+        }
+
+        // 3. Helper function to check GitHub API Rate Limits
         async function checkRateLimit() {
             try {
-                const res = await fetch('https://api.github.com/rate_limit');
-                if (!res.ok) return null;
-                const data = await res.json();
+                const data = await apiFetch('rate_limit');
                 return data.resources.core;
             } catch (e) {
                 return null;
             }
         }
 
-        // 3. Helper function to fetch and format the CI check runs status with caching
+        // 4. Helper function to fetch and format the CI check runs status with caching
         async function fetchCIStatusHtml(sha, useCache = true) {
             const cacheKey = `ci_status_${sha}`;
             if (useCache) {
@@ -87,17 +99,7 @@
             }
 
             try {
-                const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
-
-                if (res.status === 403) {
-                    return `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Rate Limited</span>`;
-                }
-
-                if (!res.ok) {
-                    return `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Unavailable</span>`;
-                }
-
-                const data = await res.json();
+                const data = await apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
                 if (!data.check_runs || data.check_runs.length === 0) return '';
 
                 const isPending = data.check_runs.some(cr => cr.status !== 'completed');
@@ -134,11 +136,11 @@
                 }
 
                 const [treeData, prs] = await Promise.all([
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).then(r => r.ok ? r.json() : [])
+                    apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`),
+                    apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).catch(() => [])
                 ]);
 
-                // 4. Fetch CI statuses concurrently for all open PRs
+                // 5. Fetch CI statuses concurrently for all open PRs
                 const prStatuses = {};
                 // Only attempt if we have some rate limit left
                 if (!rateLimit || rateLimit.remaining > 5) {
