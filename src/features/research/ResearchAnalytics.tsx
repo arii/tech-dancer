@@ -45,9 +45,9 @@ export default function ResearchAnalytics() {
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="start">
                       <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" className="group-hover:text-accent transition-colors">
-                        <Text color="dim">
+                        <Box color="dim">
                           <Search className="w-5 h-5" />
-                        </Text>
+                        </Box>
                       </Box>
                       <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
@@ -58,9 +58,9 @@ export default function ResearchAnalytics() {
                   </Stack>
                   <Box display="flex" align="center" gap={2} className="group-hover:text-accent transition-colors">
                     <Text variant="mono" size="micro" weight="font-bold" color="dim">Launch Console</Text>
-                    <Text color="dim">
+                    <Box color="dim">
                       <ArrowRight className="w-3 h-3" />
-                    </Text>
+                    </Box>
                   </Box>
                 </Stack>
               </Box>
@@ -98,9 +98,9 @@ export default function ResearchAnalytics() {
                       className="group-hover:text-accent transition-colors"
                     >
                       <Text variant="mono" size="xs" weight="font-bold" color="dim">Read Study</Text>
-                      <Text color="dim">
+                      <Box color="dim">
                         <FileText className="w-4 h-4" />
-                      </Text>
+                      </Box>
                     </Box>
                   </Stack>
                 </Box>

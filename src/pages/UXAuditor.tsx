@@ -190,9 +190,9 @@ export default function UXAuditor() {
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
-                <Text color="dim">
+                <Box color="dim">
                   <ChevronRight className="w-4 h-4 opacity-50" />
-                </Text>
+                </Box>
               </Box>
             ))}
           </Stack>
@@ -256,10 +256,8 @@ export default function UXAuditor() {
                     <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
                       <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm">
-                            <Text color="accent">
-                              {viewportIcons[vp.name as keyof typeof viewportIcons]}
-                            </Text>
+                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
+                            {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
                             {vp.name} Analysis
@@ -282,9 +280,9 @@ export default function UXAuditor() {
                           ) : (
                             <Box display="flex" direction="col" align="center" className="text-center">
                               <Box marginBottom={2}>
-                                <Text color="dim">
+                                <Box color="dim">
                                   <ImageIcon className="w-12 h-12 opacity-20" />
-                                </Text>
+                                </Box>
                               </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider" color="dim">
                                 Awaiting Frame...
@@ -342,9 +340,9 @@ export default function UXAuditor() {
                             </>
                           ) : (
                             <Box display="flex" align="center" justify="center" paddingY={20} direction="col">
-                              <Text color="dim">
+                              <Box color="dim">
                                 <RefreshCw className="animate-spin w-6 h-6" />
-                              </Text>
+                              </Box>
                               <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
                                 Agent Processing...
                               </Text>
@@ -360,9 +358,9 @@ export default function UXAuditor() {
           ) : (
             <Stack height="full" align="center" justify="center" surface="default" radius="3xl" padding={20} minHeight={500} className="border-2 border-dashed text-center">
               <Box surface="muted" padding={6} radius="full" marginBottom={6}>
-                <Text color="dim" className="opacity-50">
+                <Box color="dim" className="opacity-50">
                   <Camera className="w-16 h-16" />
-                </Text>
+                </Box>
               </Box>
               <Text variant="sans" size="xl" weight="font-black" marginBottom={2}>
                 Ready to Audit

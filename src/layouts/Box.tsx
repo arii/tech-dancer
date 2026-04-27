@@ -45,6 +45,8 @@ export interface BaseProps {
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
   zIndex?: number | string
   opacity?: number | string
+  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "error"
+  intent?: keyof typeof variants.intent
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
   aspect?: "square" | "video" | "auto" | string
   shrink?: number | boolean
@@ -72,7 +74,7 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
     gap, border, smBorder, mdBorder, lgBorder, xlBorder,
-    surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
+    surface, emphasis, color, intent, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop,
@@ -139,6 +141,15 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           shadow && shadows[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
           emphasis && variants.emphasis[emphasis],
+          intent && variants.intent[intent],
+          !intent && color === "main" && "text-text-main",
+          !intent && color === "body" && "text-text-body",
+          !intent && color === "dim" && "text-text-dim",
+          !intent && color === "accent" && "text-accent",
+          !intent && color === "brand" && "text-accent-brand",
+          !intent && color === "white" && "text-white",
+          !intent && color === "bg" && "text-bg",
+          !intent && color === "error" && "text-red-600",
           radiusProp && variants.radius[radiusProp],
           borderClasses,
           getResponsiveClasses(gap, "gap-", (v) => v) /* safelist: gap-6 gap-12 */ ,
