@@ -54,8 +54,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }, [pathname, key, navType]);
 
   return (
-    <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
-      <Box display="flex" className="min-h-screen w-full">
+    <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full" justify="center">
+      <Box display="flex" className="min-h-screen w-full max-w-[1920px] relative">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack

@@ -41,7 +41,7 @@ export default function PathSelector() {
         return (
           <div
             key={path.id}
-            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
+            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer border-r border-line/0 hover:border-accent/50 hover:shadow-2xl hover:z-30 transition-all duration-500`}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={() => setHoveredPath(isHovered ? null : path.id)}
@@ -61,24 +61,25 @@ export default function PathSelector() {
             ></div>
 
             {/* Content Container */}
-            <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+            <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/20 to-transparent backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
               <h2
-                className={`${path.titleClass} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2`}
+                className={`${path.titleClass} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2 drop-shadow-lg`}
               >
                 {path.title}
               </h2>
               <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold opacity-80 group-hover:opacity-100 transition-opacity duration-500 delay-75">
                 {path.links.map((link) => (
-                  <li key={link.text}>
+                  <li key={link.text} className="relative overflow-hidden group/link">
                     <NavLink
-                      className="hover:text-accent transition-colors flex items-center gap-2"
+                      className="hover:text-accent transition-colors flex items-center gap-2 py-1"
                       to={link.to}
                     >
-                      <span className="text-accent transition-transform duration-300 group-hover:translate-x-1">
+                      <span className="text-accent transition-transform duration-300 group-hover/link:translate-x-1">
                         →
                       </span>{' '}
                       {link.text}
                     </NavLink>
+                    <div className="absolute bottom-0 left-6 w-0 h-[1px] bg-accent group-hover/link:w-full transition-all duration-500" />
                   </li>
                 ))}
               </ul>

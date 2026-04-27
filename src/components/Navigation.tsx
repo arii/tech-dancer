@@ -20,10 +20,14 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
         to={to}
         onClick={onClick}
         className={({ isActive }) => cn(
-          "transition-all relative z-10 rounded-md block",
+          "transition-all relative z-10 block",
           isActive 
-            ? "text-accent bg-bg" 
-            : "text-text-dim hover:text-accent hover:bg-bg/50"
+            ? cn(
+                "text-accent bg-accent/5",
+                !isMobile && "border-l-4 border-accent rounded-r-md -ml-[1px]",
+                isMobile && "bg-bg rounded-md"
+              )
+            : "text-text-dim hover:text-accent hover:bg-bg/50 rounded-md"
         )}
       >
         <Box
@@ -75,8 +79,9 @@ export default function Navigation() {
         aria-label="Mobile Navigation"
         layout="mobileHeader"
         className={cn(
-          "transition-[background-color,backdrop-filter,border-color] duration-300",
-          scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
+          "transition-[background-color,backdrop-filter,border-color,transform] duration-500 ease-in-out",
+          scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent",
+          isOpen ? "bg-bg" : ""
         )}
       >
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
