@@ -2,7 +2,7 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef, MouseEvent, ChangeEvent, useState, useEffect } from 'react';
+import { useRef, MouseEvent, ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 import { debounce } from 'throttle-debounce';
@@ -17,14 +17,16 @@ interface SearchResult {
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
   const [localQuery, setLocalQuery] = useState(query);
+  const [prevQuery, setPrevQuery] = useState(query);
   const { highlight } = useSearchHighlight(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Sync local query with URL query when search opens or URL changes externally
-  useEffect(() => {
+  // Sync local query with URL query during render if URL changes externally
+  if (query !== prevQuery) {
     setLocalQuery(query);
-  }, [query, isOpen]);
+    setPrevQuery(query);
+  }
 
   // Debounced sync to URL
   const debouncedSetQuery = useRef(
