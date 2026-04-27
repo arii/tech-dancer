@@ -38,10 +38,12 @@ export default function PathSelector() {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
 
+        const { id, ...pathProps } = path;
+
         return (
           <HeroPathCard
-            key={path.id}
-            {...path}
+            key={id}
+            {...pathProps}
             isHovered={isHovered}
             isOtherHovered={isOtherHovered}
             onMouseEnter={() => setHoveredPath(path.id)}
