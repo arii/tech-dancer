@@ -11,6 +11,8 @@
   --raw-color-text-main: #1A2B3C;
   --raw-color-text-body: #2D3748;
   --raw-color-text-dim: #4B4B4B;
+  --raw-color-error: #dc2626;
+  --raw-color-error-bg: #fef2f2;
 
   /* Typography */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
