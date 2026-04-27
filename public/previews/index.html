@@ -42,7 +42,7 @@
             <svg class="animate-spin h-10 w-10 text-blue-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <span class="text-lg text-slate-500 dark:text-slate-400 font-medium animate-pulse">Scanning gh-pages deployments...</span>
         </div>
-        <div id="grid" class="grid gap-4 flex-col"></div>
+        <div id="grid" class="flex flex-col gap-4"></div>
     </div>
     <script>
         const REPO_OWNER = 'arii', REPO_NAME = 'tech-dancer';
@@ -102,53 +102,70 @@
 
                 loading.style.display = 'none';
 
-                const folders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
-                    .map(i => i.path.replace('/index.html', ''))
-                    // 4. Update sorting: PRs go first, sorted by `updated_at` descending, then fallback to alphabetical
+                const allFolders = treeData.tree.filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
+                    .map(i => i.path.replace('/index.html', ''));
+
+                // 4. Update sorting: PRs sorted by `updated_at` descending, branches alphabetical
+                const prFolders = allFolders
+                    .filter(name => prs.some(p => p.head.ref === name))
                     .sort((a, b) => {
                         const prA = prs.find(p => p.head.ref === a);
                         const prB = prs.find(p => p.head.ref === b);
-
-                        if (prA && prB) {
-                            return new Date(prB.updated_at).getTime() - new Date(prA.updated_at).getTime();
-                        }
-                        if (prA) return -1;
-                        if (prB) return 1;
-
-                        return a.localeCompare(b);
+                        return new Date(prB.updated_at).getTime() - new Date(prA.updated_at).getTime();
                     });
 
-                if (!folders.length) {
+                const branchFolders = allFolders
+                    .filter(name => !prs.some(p => p.head.ref === name))
+                    .sort((a, b) => a.localeCompare(b));
+
+                if (!allFolders.length) {
                     grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
                     return;
                 }
 
-                folders.forEach(name => {
-                    const pr = prs.find(p => p.head.ref === name), url = `${BASE_URL}/${name}/`;
-                    const ciStatusHtml = prStatuses[name] || '';
+                // 5. Grouped Rendering logic
+                const renderGroup = (title, foldersList, isPr) => {
+                    if (!foldersList.length) return;
 
-                    const card = document.createElement('div');
-                    card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
+                    const groupContainer = document.createElement('div');
+                    groupContainer.className = 'flex flex-col gap-4 mb-8';
 
-                    // 5. Inject the CI status right next to the "Open PR" badge
-                    const badge = pr
-                        ? `<div class="flex items-center gap-2 flex-wrap">
-                             <span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>
-                             ${ciStatusHtml}
-                           </div>`
-                        : `<span class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">Inactive / Merged</span>`;
+                    const heading = document.createElement('h2');
+                    heading.className = 'text-xl font-bold mt-4 mb-2 flex items-center gap-2 text-slate-800 dark:text-slate-200';
+                    heading.innerHTML = `${isPr ? ICONS.pr : ICONS.branch} ${title}`;
+                    groupContainer.appendChild(heading);
 
-                    card.innerHTML = `
-                        <div class="flex-1 min-w-0 w-full">
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-                                ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2">${ICONS.branch} Deployed Branch</div>`}
-                                <div class="hidden sm:block">${badge}</div>
+                    foldersList.forEach(name => {
+                        const pr = prs.find(p => p.head.ref === name), url = `${BASE_URL}/${name}/`;
+                        const ciStatusHtml = prStatuses[name] || '';
+
+                        const card = document.createElement('div');
+                        card.className = 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-300 dark:hover:border-blue-700';
+
+                        const badge = pr
+                            ? `<div class="flex items-center gap-2 flex-wrap">
+                                 <span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">Open PR</span>
+                                 ${ciStatusHtml}
+                               </div>`
+                            : `<span class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">Inactive / Merged</span>`;
+
+                        card.innerHTML = `
+                            <div class="flex-1 min-w-0 w-full">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+                                    ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2">${ICONS.branch} Deployed Branch</div>`}
+                                    <div class="hidden sm:block">${badge}</div>
+                                </div>
+                                <div class="flex items-center gap-2 flex-wrap"><span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate">${escapeHtml(name)}</span><div class="sm:hidden">${badge}</div></div>
                             </div>
-                            <div class="flex items-center gap-2 flex-wrap"><span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate">${escapeHtml(name)}</span><div class="sm:hidden">${badge}</div></div>
-                        </div>
-                        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm">View Deployment ${ICONS.external}</a>`;
-                    grid.appendChild(card);
-                });
+                            <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm">View Deployment ${ICONS.external}</a>`;
+                        groupContainer.appendChild(card);
+                    });
+                    grid.appendChild(groupContainer);
+                };
+
+                renderGroup('Pull Request Previews', prFolders, true);
+                renderGroup('Other Deployed Branches', branchFolders, false);
+
             } catch (err) {
                 loading.style.display = 'none';
                 document.getElementById('error-msg').textContent = err.message;
