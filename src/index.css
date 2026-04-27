@@ -20,7 +20,6 @@
   --color-accent: var(--raw-color-accent);
   --color-accent-shadow: var(--raw-color-accent-shadow);
   --color-accent-navy: var(--raw-color-accent-navy);
-  --color-accent-brand: var(--raw-color-accent-brand);
   --color-text-main: var(--raw-color-text-main);
   --color-text-body: var(--raw-color-text-body);
   --color-text-dim: var(--raw-color-text-dim);
@@ -88,28 +87,12 @@
 }
 
 @layer utilities {
-  @keyframes scanline {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(800px); }
-  }
-  .animate-scanline { animation: scanline 2.5s linear infinite; }
-  @keyframes shimmer { 100% { transform: translateX(100%); } }
-
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
   }
   .industrial-gradient { background: linear-gradient(135deg, #001f3f 0%, #000c19 100%); }
   .text-glow { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
-  .scanline-hover { @apply relative overflow-hidden; }
-  .scanline-hover::after {
-    content: "";
-    @apply absolute inset-0 bg-accent/10 -translate-y-full opacity-0 pointer-events-none z-20;
-  }
-  .scanline-hover:hover::after {
-    @apply opacity-100;
-    animation: scanline 3s linear infinite;
-  }
   .grid-pattern {
     background-image: 
       linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),

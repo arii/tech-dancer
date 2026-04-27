@@ -1,9 +1,17 @@
 import asyncio
 from playwright.async_api import async_playwright
 import os
+import subprocess
 
 # Configuration
-BASE_URL = 'http://localhost:4173/tech-dancer'
+def get_base_url():
+    try:
+        # Fetch standard base URL from shared JS utility
+        return subprocess.check_output(['node', 'scripts/utils/env.mjs']).decode('utf-8').strip()
+    except Exception:
+        return 'http://localhost:4173/tech-dancer'
+
+BASE_URL = get_base_url()
 OUTPUT_DIR = './design_audit'
 PAGES = {
     "home": "/",

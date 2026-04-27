@@ -21,7 +21,6 @@ const PATH_DATA = [
     wrapperClass: 'lg:col-span-5',
     bgGradient: 'bg-gradient-to-bl',
     titleClass: 'text-3xl md:text-5xl',
-    scanlineDelay: 'delay-100',
     links: [
       { text: 'Tech blog posts', to: '/blog?category=Tech' },
       { text: 'Data & Development Lab', to: '/research' },
@@ -51,13 +50,6 @@ export default function PathSelector() {
               className={`absolute inset-0 ${path.bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
                 isOtherHovered ? 'grayscale opacity-60' : 'opacity-100'
               }`}
-            ></div>
-
-            {/* Scanline */}
-            <div
-              className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${
-                path.scanlineDelay || ''
-              } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
             ></div>
 
             {/* Content Container */}

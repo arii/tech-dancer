@@ -1,6 +1,7 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { getBaseUrl } from '../scripts/utils/env.mjs';
 
 /**
  * Captures a screenshot, converts to Base64, and formats a query for an AI Bot.
@@ -86,7 +87,7 @@ ${dataUri}
 }
 
 // Example usage: node dev-tools/ai-debugger.mjs <url> <selector>
-const targetUrl = process.argv[2] || 'http://localhost:3000/';
+const targetUrl = process.argv[2] || getBaseUrl();
 const targetSelector = process.argv[3] || 'body';
 
 if (!targetUrl.startsWith('http')) {
