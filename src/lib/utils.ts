@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { routes } from "@/config/routes"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -49,6 +50,7 @@ export function getHighlightedParts(text: string, query: string) {
 /**
  * Maps route pathnames to PageSkeleton variants.
  * Centralizes skeleton logic to prevent Layout Shift (CLS).
+ * Refactored to derive metadata from the centralized route configuration.
  */
 export function getSkeletonVariant(pathname: string): 'grid' | 'post' | 'simple' {
   // Normalize pathname: remove trailing slash unless it's just "/"
@@ -56,16 +58,24 @@ export function getSkeletonVariant(pathname: string): 'grid' | 'post' | 'simple'
     ? pathname.slice(0, -1)
     : pathname;
 
-  // Post variants (e.g., /blog/some-slug)
+  // Helper to check if a path matches a route pattern (handles :slug)
+  const matchRoute = (routePath: string, actualPath: string) => {
+    const pattern = routePath.replace(/:[^\/]+/g, '[^\\/]+');
+    const regex = new RegExp(`^${pattern}$`);
+    return regex.test(actualPath);
+  };
+
+  // Find exact or pattern match in routes
+  const matchedRoute = routes.find(r => matchRoute(r.path, path));
+
+  if (matchedRoute?.skeleton) {
+    return matchedRoute.skeleton;
+  }
+
+  // Fallback to post for nested paths under known sections if not explicitly configured
   const isPost = ['/blog/', '/gear/', '/research/'].some(prefix => path.startsWith(prefix));
   if (isPost) return 'post';
 
-  // Grid variants (exact matches)
-  const gridPaths = ['/blog', '/gear', '/research', '/ux-auditor'];
-  if (gridPaths.includes(path)) {
-    return 'grid';
-  }
-
-  // Fallback to simple (Home, About, Contact, etc.)
+  // Fallback to simple
   return 'simple';
 }

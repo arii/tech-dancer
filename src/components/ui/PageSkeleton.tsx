@@ -77,16 +77,16 @@ function SimpleSkeleton() {
   );
 }
 
-export function PageSkeleton({ className, variant = 'simple' }: PageSkeletonProps) {
-  const Skeletons = {
-    grid: <GridSkeleton />,
-    post: <PostSkeleton />,
-    simple: <SimpleSkeleton />
-  };
+const SKELETON_MAP = {
+  grid: <GridSkeleton />,
+  post: <PostSkeleton />,
+  simple: <SimpleSkeleton />
+};
 
+export function PageSkeleton({ className, variant = 'simple' }: PageSkeletonProps) {
   return (
     <Box className={`w-full opacity-50 ${className || ''}`}>
-      {Skeletons[variant]}
+      {SKELETON_MAP[variant]}
     </Box>
   );
 }
