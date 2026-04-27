@@ -17,7 +17,7 @@
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit": "pnpm run lint:eslint"
+    "audit": "node scripts/detect-antipatterns.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
