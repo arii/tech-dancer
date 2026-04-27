@@ -175,6 +175,26 @@ def main():
     else:
         print("\n✅ Successfully submitted review!")
         
+        # After successful submission, add labels
+        if event == "REQUEST_CHANGES":
+            try:
+                from github_utils import get_github_token, get_repo_name
+                from github import Github
+                token = get_github_token()
+                repo_name = get_repo_name()
+                g = Github(token)
+                repo = g.get_repo(repo_name)
+                pr = repo.get_pull(int(pr_number))
+                existing_labels = [l.name for l in pr.labels]
+                if "needs-design-system-fix" not in existing_labels:
+                    if any(keyword in body_text.lower() for keyword in ['tailwind', 'arbitrary', 'raw layout', 'token']):
+                        pr.add_to_labels("needs-design-system-fix")
+                if "needs-architecture-fix" not in existing_labels:
+                    if any(keyword in body_text.lower() for keyword in ['dead abstraction', 'responsibility creep', 'indirection']):
+                        pr.add_to_labels("needs-architecture-fix")
+            except Exception as e:
+                print(f"⚠️ Could not add labels: {e}")
+
         if cleanup:
             print("\n🧹 Cleaning up review files...")
             try:

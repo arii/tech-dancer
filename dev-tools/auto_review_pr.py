@@ -91,7 +91,52 @@ def main():
             print(f"❌ Missing review files for PR #{pr_num}. Did you run --fetch?")
             sys.exit(1)
             
-        print(f"🚀 Stage 2: Performing AI-automated audit for PR #{pr_num}...")
+        # Stage 2A: Deterministic checks (no LLM needed)
+        print("🔍 Running deterministic checks...")
+
+        # Read context
+        with open(context_file) as f:
+            context = f.read()
+
+        # Extract changed file paths
+        changed_files = re.findall(r'### `([^`]+)`', context)
+
+        auto_findings = []
+
+        for filepath in changed_files:
+            if filepath.endswith('.tsx') and os.path.exists(filepath):
+                with open(filepath) as f:
+                    content = f.read()
+
+                # Check for common violations
+                if re.search(r"import React from 'react'", content):
+                    auto_findings.append({
+                        "path": filepath,
+                        "issue": "Unnecessary `import React from 'react'` — not needed in React 17+",
+                        "severity": "minor"
+                    })
+
+                if re.search(r'HashRouter', content):
+                    auto_findings.append({
+                        "path": filepath,
+                        "issue": "HashRouter usage — banned per AGENTS.md §9. Use createBrowserRouter.",
+                        "severity": "major"
+                    })
+
+                # Check for arbitrary Tailwind
+                for match in re.finditer(r'text-\[\d+px\]|bg-\[#[0-9a-fA-F]+\]', content):
+                    auto_findings.append({
+                        "path": filepath,
+                        "issue": f"Arbitrary Tailwind value: `{match.group()}` — use design tokens",
+                        "severity": "minor"
+                    })
+
+        if auto_findings:
+            print(f"📋 Found {len(auto_findings)} deterministic violations:")
+            for f in auto_findings:
+                print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
+
+        print(f"🚀 Stage 2B: Performing AI-automated audit for PR #{pr_num}...")
         
         # Auditor instructions decoupled from script to reduce duplication
         prompt = (

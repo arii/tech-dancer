@@ -124,6 +124,15 @@ When reviewing, evaluate EVERY changed file against these criteria:
 - Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries.
 - Ensure the application maintains single-page application (SPA) characteristics with environment-agnostic routing (e.g., handling base URLs cleanly for GitHub Pages).
 
+### Parallel Work Protocol
+When multiple agents work simultaneously:
+1. **Run conflict check first**: `python3 dev-tools/conflict_detector.py`
+2. **Stagger feature files**: Agents should not touch the same component file
+3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` to communicate scope
+   - ✅ `feat/issue-247-gear-card` (scoped to GearCard)
+   - ❌ `feat/issue-247-ui-updates` (ambiguous scope)
+4. **Shared primitives**: Never modify `src/layouts/*.tsx` in a feature branch without coordinating
+
 ### 🤖 Isolated Development Environments (`vdev`)
 When asked to work on a new feature, bugfix, or isolated task while preserving the current workspace state, use the `vdev` CLI tool:
 * **Isolate:** Run `vdev setup <branch-name>` to create an isolated Docker/Worktree environment automatically.
@@ -146,6 +155,19 @@ pnpm run audit
 cat TODO_ANTIPATTERNS.md
 ```
 Incorporate fixing these anti-patterns into your implementation plan.
+
+### 🛡️ Pre-Submission Audit Gates
+A local pre-push hook is available to prevent pushing code with anti-patterns.
+To install:
+```bash
+git config core.hooksPath .githooks
+```
+This hook runs a targeted audit on changed `.tsx` files.
+
+Before submitting a PR, it is recommended to run the full pre-submission check:
+```bash
+bash dev-tools/pre-submit-check.sh
+```
 
 ### 🧪 Pre-Commit Checklist
 Before submitting any PR that modifies `.tsx` files:

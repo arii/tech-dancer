@@ -6,6 +6,12 @@ description: review a single GitHub pull request with in-depth inline feedback u
 
 // turbo-all
 
+0. **Pre-flight validation**:
+```bash
+python3 dev-tools/conflict_detector.py --pr PR_NUMBER
+python3 dev-tools/validate_issue.py RELATED_ISSUE_NUMBER
+```
+
 1. **Generate the review documents**:
 ```bash
 python3 dev-tools/fetch_pr_review_data.py PR_NUMBER

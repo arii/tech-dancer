@@ -9,6 +9,7 @@ Uses PyGithub for cross-platform compatibility.
 import argparse
 import logging
 import sys
+from datetime import datetime, timezone, timedelta
 from github import Github, GithubException
 from github_utils import get_github_token, get_repo_name, get_ci_status, CIFormatter
 
@@ -20,7 +21,75 @@ logging.basicConfig(
 )
 logger = logging.getLogger("pr_review_manager")
 
-def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_comments: bool) -> None:
+def check_review_responses(repo, pr, current_user_login: str) -> list[dict]:
+    """
+    For each review comment the bot left, check if:
+    - The author replied (engaged)
+    - A new commit was pushed after the comment
+    - The thread was resolved
+    """
+    unaddressed = []
+    reviews = pr.get_reviews()
+    bot_reviews = [r for r in reviews if r.user.login == current_user_login]
+
+    if not bot_reviews:
+        return []
+
+    # Get inline comments from our reviews
+    review_comments = pr.get_review_comments()
+    our_comments = [c for c in review_comments if c.user.login == current_user_login]
+
+    # Get commits after our last review
+    last_review_time = max(r.submitted_at for r in bot_reviews)
+    commits_after = [c for c in pr.get_commits() if c.commit.author.date > last_review_time]
+
+    for comment in our_comments:
+        # Check for reply in the thread
+        replies = [c for c in review_comments
+                   if c.in_reply_to_id == comment.id
+                   and c.user.login != current_user_login]
+
+        has_commits_after = len(commits_after) > 0
+        has_reply = len(replies) > 0
+
+        if not has_commits_after and not has_reply:
+            unaddressed.append({
+                'comment_id': comment.id,
+                'path': comment.path,
+                'line': comment.position,
+                'body_preview': comment.body[:80],
+                'url': comment.html_url
+            })
+
+    return unaddressed
+
+def check_stale_reviews(repo, current_user_login: str, stale_days: int = 3):
+    """Flag PRs where we requested changes but nothing happened."""
+    stale_prs = []
+    for pr in repo.get_pulls(state='open'):
+        reviews = list(pr.get_reviews())
+        our_reviews = [r for r in reviews if r.user.login == current_user_login]
+
+        if not our_reviews:
+            continue
+
+        last_review = max(our_reviews, key=lambda r: r.submitted_at)
+        if last_review.state != 'CHANGES_REQUESTED':
+            continue
+
+        commits_after = [c for c in pr.get_commits()
+                        if c.commit.author.date > last_review.submitted_at]
+
+        age = datetime.now(timezone.utc) - last_review.submitted_at
+        if age > timedelta(days=stale_days) and not commits_after:
+            stale_prs.append({
+                'number': pr.number,
+                'title': pr.title,
+                'days': age.days
+            })
+    return stale_prs
+
+def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_comments: bool, check_responses: bool = False) -> None:
     g = Github(token)
     try:
         user = g.get_user()
@@ -77,7 +146,21 @@ def process_pull_requests(token: str, repo_name: str, dry_run: bool, cleanup_com
 
         print(f"[PR #{pr_number}] {pr_title}")
         print(f"  ├── {status}")
-        print(f"  └── CI: {ci_display}\n")
+        print(f"  └── CI: {ci_display}")
+
+        if check_responses:
+            unaddressed = check_review_responses(repo, pr, current_user_login)
+            if unaddressed:
+                print(f"  └── ⚠️ UNADDRESSED COMMENTS ({len(unaddressed)}):")
+                for u in unaddressed:
+                    print(f"       - {u['path']}:{u['line']} \"{u['body_preview']}...\" → {u['url']}")
+        print()
+
+    if check_responses:
+        logger.info("Checking for stale reviews...")
+        stale = check_stale_reviews(repo, current_user_login)
+        for s in stale:
+            print(f"⏰ STALE: PR #{s['number']} '{s['title'][:40]}' — Changes requested {s['days']} days ago, no response.")
 
     if not found_any:
         logger.info("No open pull requests found.")
@@ -93,6 +176,11 @@ def main():
         "--skip-cleanup",
         action="store_true",
         help="Skip analyzing and deleting old tool comments entirely."
+    )
+    parser.add_argument(
+        "--check-responses",
+        action="store_true",
+        help="Check if agents addressed review comments and find stale reviews."
     )
     parser.add_argument(
         "--repo",
@@ -124,7 +212,8 @@ def main():
         token=token,
         repo_name=repo_name,
         dry_run=is_dry_run,
-        cleanup_comments=not args.skip_cleanup
+        cleanup_comments=not args.skip_cleanup,
+        check_responses=args.check_responses
     )
 
 if __name__ == "__main__":
