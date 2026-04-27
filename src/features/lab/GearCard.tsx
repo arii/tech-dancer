@@ -79,7 +79,7 @@ export function GearCard({
 
           {priceCategory && (
              <Box surface="warning" paddingX={2} paddingY={0.5} width="fit">
-               <Text variant="mono" size="micro" weight="font-bold" uppercase>{priceCategory}</Text>
+               <Text variant="mono" size="micro" weight="font-bold">{priceCategory}</Text>
              </Box>
           )}
         </Stack>

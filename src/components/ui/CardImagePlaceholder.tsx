@@ -1,6 +1,5 @@
 import { Box, Text } from '@/layouts/Primitives';
-import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
-import { layout } from '@/styles/design-tokens';
+import { cn } from '@/lib/utils';
 
 interface CardImagePlaceholderProps {
   image?: string;
@@ -9,7 +8,7 @@ interface CardImagePlaceholderProps {
   title: string;
 }
 
-export function CardImagePlaceholder({ image, category, title }: CardImagePlaceholderProps) {
+export function CardImagePlaceholder({ image, category, date, title }: CardImagePlaceholderProps) {
   const norm = (category || '').toLowerCase();
 
   let surfaceVariant: "brand" | "accent" | "warning" | "danger" | "muted" = 'muted';
@@ -18,29 +17,45 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
   else if (norm.includes('gear')) surfaceVariant = 'warning';
   else if (norm.includes('lifestyle')) surfaceVariant = 'danger';
 
-  return (
-    <Box aspect="video" maxHeight={layout.cardImage.maxHeight} overflow="hidden" border="b" className="relative w-full bg-bg">
-      {image ? (
+  if (image) {
+    return (
+      <Box className="relative w-full aspect-video max-h-[160px] overflow-hidden border-b border-line bg-bg">
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
-      ) : (
-        <Box className="w-full h-full flex flex-col">
-          <Box height={4} width="full" surface={surfaceVariant} />
-          <Box flex={1} display="flex" align="center" justify="center" className="bg-muted/10">
-            <CategoryPlaceholder category={category} size="md" />
+        <Box className="absolute top-3 left-3">
+          <Box surface={surfaceVariant} className="px-2 py-0.5 border border-line/20 backdrop-blur-sm bg-opacity-90">
+            <Text variant="mono" size="micro" weight="font-bold" uppercase className="tracking-wider">
+              {category}
+            </Text>
           </Box>
         </Box>
-      )}
+      </Box>
+    );
+  }
 
-      <Box className="absolute top-3 left-3">
-        <Box surface={surfaceVariant} paddingX={2} paddingY={0.5} border radius="none" className="border-line/20 backdrop-blur-sm bg-opacity-90">
-          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider">
-            {category}
-          </Text>
-        </Box>
+  return (
+    <Box
+      surface={surfaceVariant}
+      className={cn(
+        "w-full h-10 flex items-center px-4 border-b border-line/10",
+        "bg-opacity-10" // subtle background
+      )}
+    >
+      <Box display="flex" align="center" gap={2}>
+        <Text variant="mono" size="micro" weight="font-bold" uppercase className="tracking-widest opacity-80">
+          {category}
+        </Text>
+        {date && (
+          <>
+            <Box className="w-1 h-1 rounded-full bg-current opacity-30" />
+            <Text variant="mono" size="micro" uppercase className="tracking-widest opacity-60">
+              {date}
+            </Text>
+          </>
+        )}
       </Box>
     </Box>
   );
