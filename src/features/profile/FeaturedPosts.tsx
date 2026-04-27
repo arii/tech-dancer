@@ -1,7 +1,7 @@
-// impeccable-ignore-file
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { FeaturedPost } from './types';
 import { Link } from 'react-router-dom';
+import { COLORS } from './constants';
 
 interface FeaturedPostsProps {
   posts: FeaturedPost[];
@@ -30,7 +30,7 @@ export default function FeaturedPosts({ posts }: FeaturedPostsProps) {
               {post.title}
             </Text>
             <Box marginTop="auto">
-              <Text variant="mono" size="micro" className="text-[#185FA5]">Read post →</Text>
+              <Text variant="mono" size="micro" style={{ color: COLORS.blue.accent }}>Read post →</Text>
             </Box>
           </Box>
         ))}

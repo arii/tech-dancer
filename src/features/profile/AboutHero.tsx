@@ -1,6 +1,6 @@
-// impeccable-ignore-file
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { ProfileData } from './types';
+import { COLORS } from './constants';
 
 interface AboutHeroProps {
   data: ProfileData;
@@ -26,19 +26,19 @@ export default function AboutHero({ data }: AboutHeroProps) {
           align="center"
           justify="center"
           border
-          className="bg-[#E6F1FB] border-[#B5D4F4]"
+          style={{ backgroundColor: COLORS.blue.bg, borderColor: COLORS.blue.border }}
         >
           <Text
             variant="display"
             size="2xl"
             weight="font-medium"
-            className="text-[#0C447C]"
+            style={{ color: COLORS.blue.text }}
           >
             AA
           </Text>
         </Box>
         <Box display="flex" align="center" gap={2}>
-          <Box width={1.5} height={1.5} radius="full" className="bg-[#1D9E75]" />
+          <Box width={1.5} height={1.5} radius="full" style={{ backgroundColor: COLORS.green.status }} />
           <Text variant="mono" size="micro" color="dim">San Francisco</Text>
         </Box>
       </Stack>
@@ -55,7 +55,8 @@ export default function AboutHero({ data }: AboutHeroProps) {
               paddingX={2}
               paddingY={1}
               radius="sm"
-              className="bg-[#E6F1FB] text-[#0C447C] border border-[#85B7EB]"
+              className="border"
+              style={{ backgroundColor: COLORS.blue.bg, color: COLORS.blue.text, borderColor: COLORS.blue.borderLight }}
             >
               MIT Roboticist
             </Text>
@@ -65,7 +66,8 @@ export default function AboutHero({ data }: AboutHeroProps) {
               paddingX={2}
               paddingY={1}
               radius="sm"
-              className="bg-[#E1F5EE] text-[#085041] border border-[#5DCAA5]"
+              className="border"
+              style={{ backgroundColor: COLORS.green.bg, color: COLORS.green.text, borderColor: COLORS.green.border }}
             >
               WCS Competitor
             </Text>
@@ -75,14 +77,15 @@ export default function AboutHero({ data }: AboutHeroProps) {
               paddingX={2}
               paddingY={1}
               radius="sm"
-              className="bg-[#F1EFE8] text-[#444441] border border-[#D3D1C7]"
+              className="border"
+              style={{ backgroundColor: COLORS.neutral.bg, color: COLORS.neutral.text, borderColor: COLORS.neutral.border }}
             >
               Intermediate follow
             </Text>
           </Box>
         </Stack>
 
-        <Text variant="body" size="base" color="body" className="max-w-[420px]">
+        <Text variant="body" size="base" color="body" style={{ maxWidth: '420px' }}>
           {data.bio}
         </Text>
 

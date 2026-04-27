@@ -1,7 +1,7 @@
-// impeccable-ignore-file
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { TimelineItem } from './types';
 import { cn } from '@/lib/utils';
+import { COLORS } from './constants';
 
 interface TimelineProps {
   items: TimelineItem[];
@@ -28,9 +28,12 @@ export default function Timeline({ items }: TimelineProps) {
                 className={cn(
                   "z-10",
                   !item.future && idx === items.length - 2 ? "bg-accent-navy border-2 border-accent-navy" : "",
-                  !item.future && idx !== items.length - 2 ? "bg-bg border-[1.5px] border-line" : "",
-                  item.future ? "bg-surface border-[1.5px] border-dashed border-line" : ""
+                  !item.future && idx !== items.length - 2 ? "bg-bg border-line" : "",
+                  item.future ? "bg-surface border-dashed border-line" : ""
                 )}
+                style={{
+                  borderWidth: (!item.future && idx !== items.length - 2) || item.future ? '1.5px' : undefined
+                }}
               />
               {idx < items.length - 1 && (
                 <Box
@@ -59,15 +62,15 @@ export default function Timeline({ items }: TimelineProps) {
                     paddingX={2}
                     paddingY={0.5}
                     radius="sm"
-                    className={cn(
-                      "inline-block",
-                      // impeccable-ignore
-                      item.badge === 'Pivotal' && "bg-[#E1F5EE] text-[#085041]",
-                      // impeccable-ignore
-                      item.badge === 'This site' && "bg-[#E6F1FB] text-[#0C447C]",
-                      // impeccable-ignore
-                      item.badge.includes('events') && "bg-[#FAEEDA] text-[#633806]"
-                    )}
+                    className="inline-block"
+                    style={{
+                      backgroundColor: item.badge === 'Pivotal' ? COLORS.green.bg :
+                                      item.badge === 'This site' ? COLORS.blue.bg :
+                                      COLORS.neutral.badge.bg,
+                      color: item.badge === 'Pivotal' ? COLORS.green.text :
+                             item.badge === 'This site' ? COLORS.blue.text :
+                             COLORS.neutral.badge.text
+                    }}
                   >
                     {item.badge}
                   </Text>

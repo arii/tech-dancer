@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Box, Text } from '@/layouts/Primitives';
 import { ProfileStats } from './types';
 

@@ -1,7 +1,7 @@
-// impeccable-ignore-file
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Monitor, Music, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { COLORS } from './constants';
 
 export default function IdentityCards() {
   return (
@@ -10,8 +10,16 @@ export default function IdentityCards() {
       <Box display="grid" cols={{ base: 1, md: 2 }} gap={4}>
         {/* Roboticist Card */}
         <Box border radius="lg" padding={6} display="flex" direction="col" gap={4}>
-          <Box width={8} height={8} radius="md" display="flex" align="center" justify="center" className="bg-[#E6F1FB]">
-            <Monitor size={16} className="text-[#185FA5]" />
+          <Box
+            width={8}
+            height={8}
+            radius="md"
+            display="flex"
+            align="center"
+            justify="center"
+            style={{ backgroundColor: COLORS.blue.bg }}
+          >
+            <Monitor size={16} style={{ color: COLORS.blue.accent }} />
           </Box>
           <Text variant="display" size="lg" weight="font-medium" className="text-accent-navy">The roboticist</Text>
           <Text variant="body" size="sm" color="body">
@@ -26,7 +34,8 @@ export default function IdentityCards() {
             marginTop="auto"
             paddingTop={2}
             border="t"
-            className="text-[#185FA5] hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
+            style={{ color: COLORS.blue.accent }}
           >
             <Text variant="mono" size="micro" weight="font-medium">View technical portfolio</Text>
             <ArrowRight size={12} />
@@ -35,8 +44,16 @@ export default function IdentityCards() {
 
         {/* Dancer Card */}
         <Box border radius="lg" padding={6} display="flex" direction="col" gap={4}>
-          <Box width={8} height={8} radius="md" display="flex" align="center" justify="center" className="bg-[#E1F5EE]">
-            <Music size={16} className="text-[#0F6E56]" />
+          <Box
+            width={8}
+            height={8}
+            radius="md"
+            display="flex"
+            align="center"
+            justify="center"
+            style={{ backgroundColor: COLORS.green.bg }}
+          >
+            <Music size={16} style={{ color: COLORS.green.icon }} />
           </Box>
           <Text variant="display" size="lg" weight="font-medium" className="text-accent-navy">The dancer</Text>
           <Text variant="body" size="sm" color="body">
@@ -51,7 +68,8 @@ export default function IdentityCards() {
             marginTop="auto"
             paddingTop={2}
             border="t"
-            className="text-[#0F6E56] hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
+            style={{ color: COLORS.green.icon }}
           >
             <Text variant="mono" size="micro" weight="font-medium">Browse gear & travel guides</Text>
             <ArrowRight size={12} />

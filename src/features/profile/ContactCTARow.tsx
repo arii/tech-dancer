@@ -1,8 +1,7 @@
-// impeccable-ignore-file
 import { Box, Text } from '@/layouts/Primitives';
 import { FileText, MessageSquare, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import { COLORS } from './constants';
 
 export default function ContactCTARow() {
   const items = [
@@ -11,8 +10,8 @@ export default function ContactCTARow() {
       label: "Curriculum vitae",
       sub: "PDF download",
       href: "/cv.pdf",
-      bg: "bg-[#E6F1FB]",
-      color: "text-[#185FA5]",
+      bg: COLORS.blue.bg,
+      color: COLORS.blue.accent,
       external: true
     },
     {
@@ -20,16 +19,16 @@ export default function ContactCTARow() {
       label: "Get in touch",
       sub: "Contact form",
       href: "/contact",
-      bg: "bg-[#E1F5EE]",
-      color: "text-[#0F6E56]"
+      bg: COLORS.green.bg,
+      color: COLORS.green.icon
     },
     {
       icon: Github,
       label: "GitHub",
       sub: "arii",
       href: "https://github.com/arii",
-      bg: "bg-[#F1EFE8]",
-      color: "text-[#444441]",
+      bg: COLORS.neutral.bg,
+      color: COLORS.neutral.text,
       external: true
     },
   ];
@@ -54,6 +53,7 @@ export default function ContactCTARow() {
           <Box
             key={item.label}
             as={Component}
+            // @ts-ignore - dynamic component props
             {...linkProps}
             display="flex"
             direction="col"
@@ -72,9 +72,9 @@ export default function ContactCTARow() {
               display="flex"
               align="center"
               justify="center"
-              className={cn(item.bg)}
+              style={{ backgroundColor: item.bg }}
             >
-              <item.icon size={16} className={item.color} />
+              <item.icon size={16} style={{ color: item.color }} />
             </Box>
             <Text variant="display" size="sm" weight="font-medium" className="text-accent-navy">{item.label}</Text>
             <Text variant="mono" size="micro" color="dim">{item.sub}</Text>
