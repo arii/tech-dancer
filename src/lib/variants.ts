@@ -14,12 +14,13 @@ export const variants = {
     contrast: "bg-text-main text-bg",
     success: "bg-emerald-50/50 border-emerald-100 text-emerald-900",
     warning: "bg-amber-50/50 border-amber-200 text-amber-900",
+    error: "bg-error-surface border-error/20 text-error",
     bg: "bg-bg text-text-body",
   },
   intent: {
     default: "text-text-main",
     success: "text-accent",
-    danger: "text-red-600",
+    danger: "text-error",
     warning: "text-amber-500",
   },
   emphasis: {
@@ -46,7 +47,7 @@ export const buttonVariants = cva(
       intent: {
         default: "text-text-main",
         success: "text-accent",
-        danger: "text-red-600",
+        danger: "text-error",
         warning: "text-accent",
       },
       size: {

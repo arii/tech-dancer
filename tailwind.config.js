@@ -6,6 +6,14 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        error: "var(--color-error)",
+        "error-surface": "var(--color-error-surface)",
+      },
+      fontSize: {
+        micro: "var(--text-micro)",
+        tiny: "var(--text-tiny)",
+      },
       keyframes: {
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },

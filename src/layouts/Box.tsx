@@ -1,4 +1,4 @@
-import { forwardRef, type HTMLAttributes, type ElementType } from "react"
+import * as React from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
@@ -59,12 +59,12 @@ export interface BaseProps {
   left?: ResponsiveProp<keyof typeof spacing | number | string>
 }
 
-export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
-  as?: ElementType
+export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
+  as?: React.ElementType
   [key: string]: unknown
 }
 
-export const Box = forwardRef<HTMLDivElement, BoxProps>(
+export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
   ({ 
     className, 
     as: Component = "div", 
@@ -141,7 +141,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           emphasis && variants.emphasis[emphasis],
           radiusProp && variants.radius[radiusProp],
           borderClasses,
-          getResponsiveClasses(gap, "gap-", (v) => v) /* safelist: gap-6 gap-8 gap-12 */ ,
+          getResponsiveClasses(gap, "gap-", (v) => v) /* safelist: gap-6 gap-12 */ ,
           getResponsiveClasses(padding, "p-", (v) => spacing[v as keyof typeof spacing] ? "" : v),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
           getResponsiveClasses(paddingTop, "pt-"),

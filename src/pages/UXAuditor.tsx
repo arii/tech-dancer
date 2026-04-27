@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
@@ -20,7 +20,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!copied) return;
     const timer = setTimeout(() => {
       if (document.startViewTransition) {
@@ -303,7 +303,7 @@ export default function UXAuditor() {
                                   <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
-                                        <Box width={2} height={2} radius="full" surface={imp.severity > 7 ? "error" : "warning"} className={imp.severity > 7 ? 'bg-red-500 shadow-sm' : 'bg-amber-500'} />
+                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-amber-500'} />
                                         <Text variant="sans" size="sm" weight="font-black">
                                           {imp.element}
                                         </Text>

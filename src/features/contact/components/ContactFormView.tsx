@@ -1,9 +1,10 @@
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
+import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import type { BaseSyntheticEvent } from 'react';
+import React from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 
 interface ContactFormData {
@@ -17,7 +18,7 @@ interface ContactFormViewProps {
   register: UseFormRegister<ContactFormData>;
   errors: FieldErrors<ContactFormData>;
   isSubmitting: boolean;
-  onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
 const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
@@ -36,7 +37,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
             <Stack gap={12}>
               <Stack gap={6}>
-                <Box paddingBottom={4} border="b">
+                <Box paddingBottom={4} className="border-b border-slate-200">
                   <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
@@ -50,7 +51,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   { label: 'Gear Review', channel: 'Product Feedback', icon: Sparkles },
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
-                  <Stack key={item.label} direction="row" align="center" gap={8} className="group">
+                  <Box key={item.label} display="flex" align="center" gap={6} className="group">
                     <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent group-hover:bg-bg transition-colors" radius="lg">
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
@@ -58,7 +59,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
                       <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>{item.channel}</Text>
                     </Stack>
-                  </Stack>
+                  </Box>
                 ))}
               </Stack>
             </Stack>
@@ -75,7 +76,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.name ? 'border-accent' : 'border-line'
+                      errors.name ? inputs.error : 'border-line'
                     )}
                   />
                 </FormField>
@@ -88,7 +89,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     aria-required="true"
                     className={cn(
                       inputClasses,
-                      errors.email ? 'border-accent' : 'border-line'
+                      errors.email ? inputs.error : 'border-line'
                     )}
                   />
                 </FormField>
@@ -114,13 +115,13 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     className={cn(
                       inputClasses,
                       "resize-none",
-                      errors.message ? 'border-accent' : 'border-line'
+                      errors.message ? inputs.error : 'border-line'
                     )}
                   />
                 </FormField>
 
                 {errors.root && (
-                  <Text color="error" size="sm" marginTop={2} align="center" as="p">
+                  <Text color="error" size="sm" className="mt-2 text-center" as="p">
                     {errors.root.message}
                   </Text>
                 )}

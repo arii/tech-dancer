@@ -1,4 +1,4 @@
-import { forwardRef, type ElementType, type ButtonHTMLAttributes, type Ref } from "react"
+import * as React from "react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/lib/variants"
 import { type VariantProps } from "class-variance-authority"
@@ -6,19 +6,19 @@ import { Box, BaseProps } from "./Box"
 
 interface ButtonProps
   extends BaseProps,
-    Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'>,
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'>,
     VariantProps<typeof buttonVariants> {
-  as?: ElementType
+  as?: React.ElementType
   href?: string
   loading?: boolean
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, ...props }, ref) => {
     return (
       <Box
         as={as}
-        ref={ref as Ref<HTMLDivElement>}
+        ref={ref as React.Ref<HTMLDivElement>}
         cursor="pointer"
         className={cn(buttonVariants({ variant, intent, size, fullWidth }), className)}
         {...props}
