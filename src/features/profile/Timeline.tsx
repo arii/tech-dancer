@@ -1,7 +1,6 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { TimelineItem } from './types';
 import { cn } from '@/lib/utils';
-import { COLORS } from './constants';
 
 interface TimelineProps {
   items: TimelineItem[];
@@ -62,15 +61,12 @@ export default function Timeline({ items }: TimelineProps) {
                     paddingX={2}
                     paddingY={0.5}
                     radius="sm"
-                    className="inline-block"
-                    style={{
-                      backgroundColor: item.badge === 'Pivotal' ? COLORS.green.bg :
-                                      item.badge === 'This site' ? COLORS.blue.bg :
-                                      COLORS.neutral.badge.bg,
-                      color: item.badge === 'Pivotal' ? COLORS.green.text :
-                             item.badge === 'This site' ? COLORS.blue.text :
-                             COLORS.neutral.badge.text
-                    }}
+                    className={cn(
+                      "inline-block",
+                      item.badge === 'Pivotal' && "bg-brand-green-bg text-brand-green-text",
+                      item.badge === 'This site' && "bg-brand-blue-bg text-brand-blue-text",
+                      item.badge.includes('events') && "bg-brand-amber-bg text-brand-amber-text"
+                    )}
                   >
                     {item.badge}
                   </Text>

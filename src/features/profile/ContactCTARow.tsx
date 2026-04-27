@@ -1,7 +1,6 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { FileText, MessageSquare, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { COLORS } from './constants';
 
 export default function ContactCTARow() {
   const items = [
@@ -10,8 +9,8 @@ export default function ContactCTARow() {
       label: "Curriculum vitae",
       sub: "PDF download",
       href: "/cv.pdf",
-      bg: COLORS.blue.bg,
-      color: COLORS.blue.accent,
+      bg: "bg-brand-blue-bg",
+      color: "text-brand-blue-accent",
       external: true
     },
     {
@@ -19,16 +18,16 @@ export default function ContactCTARow() {
       label: "Get in touch",
       sub: "Contact form",
       href: "/contact",
-      bg: COLORS.green.bg,
-      color: COLORS.green.icon
+      bg: "bg-brand-green-bg",
+      color: "text-brand-green-icon"
     },
     {
       icon: Github,
       label: "GitHub",
       sub: "arii",
       href: "https://github.com/arii",
-      bg: COLORS.neutral.bg,
-      color: COLORS.neutral.text,
+      bg: "bg-brand-neutral-bg",
+      color: "text-brand-neutral-text",
       external: true
     },
   ];
@@ -53,7 +52,6 @@ export default function ContactCTARow() {
           <Box
             key={item.label}
             as={Component}
-            // @ts-ignore - dynamic component props
             {...linkProps}
             display="flex"
             direction="col"
@@ -72,9 +70,9 @@ export default function ContactCTARow() {
               display="flex"
               align="center"
               justify="center"
-              style={{ backgroundColor: item.bg }}
+              className={item.bg}
             >
-              <item.icon size={16} style={{ color: item.color }} />
+              <item.icon size={16} className={item.color} />
             </Box>
             <Text variant="display" size="sm" weight="font-medium" className="text-accent-navy">{item.label}</Text>
             <Text variant="mono" size="micro" color="dim">{item.sub}</Text>

@@ -1,7 +1,6 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Monitor, Music, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { COLORS } from './constants';
 
 export default function IdentityCards() {
   return (
@@ -17,9 +16,9 @@ export default function IdentityCards() {
             display="flex"
             align="center"
             justify="center"
-            style={{ backgroundColor: COLORS.blue.bg }}
+            className="bg-brand-blue-bg"
           >
-            <Monitor size={16} style={{ color: COLORS.blue.accent }} />
+            <Monitor size={16} className="text-brand-blue-accent" />
           </Box>
           <Text variant="display" size="lg" weight="font-medium" className="text-accent-navy">The roboticist</Text>
           <Text variant="body" size="sm" color="body">
@@ -34,8 +33,7 @@ export default function IdentityCards() {
             marginTop="auto"
             paddingTop={2}
             border="t"
-            className="hover:opacity-80 transition-opacity"
-            style={{ color: COLORS.blue.accent }}
+            className="text-brand-blue-accent hover:opacity-80 transition-opacity"
           >
             <Text variant="mono" size="micro" weight="font-medium">View technical portfolio</Text>
             <ArrowRight size={12} />
@@ -51,9 +49,9 @@ export default function IdentityCards() {
             display="flex"
             align="center"
             justify="center"
-            style={{ backgroundColor: COLORS.green.bg }}
+            className="bg-brand-green-bg"
           >
-            <Music size={16} style={{ color: COLORS.green.icon }} />
+            <Music size={16} className="text-brand-green-icon" />
           </Box>
           <Text variant="display" size="lg" weight="font-medium" className="text-accent-navy">The dancer</Text>
           <Text variant="body" size="sm" color="body">
@@ -68,8 +66,7 @@ export default function IdentityCards() {
             marginTop="auto"
             paddingTop={2}
             border="t"
-            className="hover:opacity-80 transition-opacity"
-            style={{ color: COLORS.green.icon }}
+            className="text-brand-green-icon hover:opacity-80 transition-opacity"
           >
             <Text variant="mono" size="micro" weight="font-medium">Browse gear & travel guides</Text>
             <ArrowRight size={12} />

@@ -1,12 +1,13 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { ProfileData } from './types';
-import { COLORS } from './constants';
 
 interface AboutHeroProps {
   data: ProfileData;
 }
 
 export default function AboutHero({ data }: AboutHeroProps) {
+  const initials = data.name.split(' ').map(n => n[0]).join('');
+
   return (
     <Box
       display="grid"
@@ -26,19 +27,19 @@ export default function AboutHero({ data }: AboutHeroProps) {
           align="center"
           justify="center"
           border
-          style={{ backgroundColor: COLORS.blue.bg, borderColor: COLORS.blue.border }}
+          className="bg-brand-blue-bg border-brand-blue-border"
         >
           <Text
             variant="display"
             size="2xl"
             weight="font-medium"
-            style={{ color: COLORS.blue.text }}
+            className="text-brand-blue-text"
           >
-            AA
+            {initials}
           </Text>
         </Box>
         <Box display="flex" align="center" gap={2}>
-          <Box width={1.5} height={1.5} radius="full" style={{ backgroundColor: COLORS.green.status }} />
+          <Box width={1.5} height={1.5} radius="full" className="bg-brand-green-status" />
           <Text variant="mono" size="micro" color="dim">San Francisco</Text>
         </Box>
       </Stack>
@@ -55,8 +56,7 @@ export default function AboutHero({ data }: AboutHeroProps) {
               paddingX={2}
               paddingY={1}
               radius="sm"
-              className="border"
-              style={{ backgroundColor: COLORS.blue.bg, color: COLORS.blue.text, borderColor: COLORS.blue.borderLight }}
+              className="border bg-brand-blue-bg text-brand-blue-text border-brand-blue-light"
             >
               MIT Roboticist
             </Text>
@@ -66,8 +66,7 @@ export default function AboutHero({ data }: AboutHeroProps) {
               paddingX={2}
               paddingY={1}
               radius="sm"
-              className="border"
-              style={{ backgroundColor: COLORS.green.bg, color: COLORS.green.text, borderColor: COLORS.green.border }}
+              className="border bg-brand-green-bg text-brand-green-text border-brand-green-border"
             >
               WCS Competitor
             </Text>
@@ -77,8 +76,7 @@ export default function AboutHero({ data }: AboutHeroProps) {
               paddingX={2}
               paddingY={1}
               radius="sm"
-              className="border"
-              style={{ backgroundColor: COLORS.neutral.bg, color: COLORS.neutral.text, borderColor: COLORS.neutral.border }}
+              className="border bg-brand-neutral-bg text-brand-neutral-text border-brand-neutral-border"
             >
               Intermediate follow
             </Text>
