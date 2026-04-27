@@ -11,7 +11,6 @@ import os
 import re
 import subprocess
 from datetime import datetime, timezone, timedelta
-from github import Github
 from github_utils import get_github_token, get_repo_name, get_ci_status, CIFormatter
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
@@ -131,6 +130,7 @@ def handle_migrate_tokens(args):
                 else: print(f"  📝 Match in: {filepath}")
 
 def handle_update_issues(args):
+    from github import Github
     token = get_github_token(); repo_name = get_repo_name()
     g = Github(token); repo = g.get_repo(repo_name)
     print(f"🔍 Scanning open issues in {repo_name}...")
@@ -150,6 +150,7 @@ def handle_update_issues(args):
 
 # --- CLI Handlers ---
 def handle_validate_issue(args):
+    from github import Github
     token = get_github_token()
     repo_name = get_repo_name()
     g = Github(token)
@@ -189,6 +190,7 @@ def handle_validate_issue(args):
     if total_findings > 0: sys.exit(1)
 
 def handle_conflicts(args):
+    from github import Github
     token = get_github_token()
     repo_name = get_repo_name()
     g = Github(token)
@@ -205,6 +207,7 @@ def handle_conflicts(args):
         print()
 
 def handle_status_board(args):
+    from github import Github
     token = get_github_token()
     repo_name = get_repo_name()
     g = Github(token)

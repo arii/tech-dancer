@@ -3,13 +3,6 @@ import re
 import subprocess
 import sys
 from typing import Optional, Tuple, List, Dict
-try:
-    from github import Github, GithubException
-    from github.Repository import Repository
-except ImportError:
-    print("Error: PyGithub not installed. Run 'pip install PyGithub'")
-    sys.exit(1)
-
 def get_github_token() -> Optional[str]:
     """Retrieves the GitHub token from environment or via gh CLI."""
     token = os.getenv("GITHUB_TOKEN")
@@ -38,7 +31,7 @@ def get_repo_name() -> Optional[str]:
     except Exception:
         return os.getenv("GH_REPO")
 
-def get_ci_status(repo: Repository, sha: str) -> Tuple[str, List[str]]:
+def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
     """
     Aggregates CI status from Check Runs and Combined Status API for a given SHA.
     Returns (status_summary, failed_runs_list).
