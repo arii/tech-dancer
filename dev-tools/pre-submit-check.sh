@@ -35,8 +35,14 @@ if grep -rn "HashRouter" src --include="*.tsx" --include="*.ts"; then
   exit 1
 fi
 
-# 6. Check for hardcoded colors in new/modified tsx files
-echo "--- Step 6: Token Compliance (modified files) ---"
+# 6. Run CLI conflicts check if GH_TOKEN is present
+if [ -n "$GITHUB_TOKEN" ]; then
+  echo "--- Step 6: Conflict Check ---"
+  python3 dev-tools/td_cli.py conflicts
+fi
+
+# 7. Check for hardcoded colors in new/modified tsx files
+echo "--- Step 7: Token Compliance (modified files) ---"
 MODIFIED=$(git diff --cached --name-only --diff-filter=ACM | grep '\.tsx$' || true)
 if [ -n "$MODIFIED" ]; then
   for file in $MODIFIED; do
