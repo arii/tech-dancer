@@ -45,3 +45,23 @@ export function getHighlightedParts(text: string, query: string) {
   const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
   return text.split(regex);
 }
+
+/**
+ * Maps route pathnames to PageSkeleton variants.
+ * Centralizes skeleton logic to prevent Layout Shift (CLS).
+ */
+export function getSkeletonVariant(pathname: string): 'grid' | 'post' | 'simple' {
+  // Post variants
+  if (pathname.startsWith('/blog/') || pathname.startsWith('/gear/') || pathname.startsWith('/research/')) {
+    return 'post';
+  }
+
+  // Grid variants
+  const gridPaths = ['/blog', '/gear', '/research', '/ux-auditor'];
+  if (gridPaths.includes(pathname)) {
+    return 'grid';
+  }
+
+  // Fallback to simple
+  return 'simple';
+}
