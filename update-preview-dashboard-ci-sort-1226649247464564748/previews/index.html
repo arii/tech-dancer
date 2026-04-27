@@ -74,8 +74,18 @@
             }
         }
 
-        // 3. Helper function to fetch and format the CI check runs status
-        async function fetchCIStatusHtml(sha) {
+        // 3. Helper function to fetch and format the CI check runs status with caching
+        async function fetchCIStatusHtml(sha, useCache = true) {
+            const cacheKey = `ci_status_${sha}`;
+            if (useCache) {
+                try {
+                    const cached = JSON.parse(sessionStorage.getItem(cacheKey));
+                    if (cached && Date.now() - cached.timestamp < 60000) {
+                        return cached.html;
+                    }
+                } catch (e) {}
+            }
+
             try {
                 const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
 
@@ -93,16 +103,21 @@
                 const isPending = data.check_runs.some(cr => cr.status !== 'completed');
                 const isFailure = data.check_runs.some(cr => cr.conclusion === 'failure' || cr.conclusion === 'timed_out' || cr.conclusion === 'cancelled');
 
+                let html = '';
                 if (isFailure) {
-                    return `<span class="flex items-center gap-1 text-red-700 dark:text-red-400 text-xs font-semibold bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-md border border-red-200 dark:border-red-800">${ICONS.failure} Checks Failed</span>`;
-                }
-                if (isPending) {
-                    return `<span class="flex items-center gap-1 text-amber-700 dark:text-amber-400 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md border border-amber-200 dark:border-amber-800">${ICONS.pending} Checks Pending</span>`;
+                    html = `<span class="flex items-center gap-1 text-red-700 dark:text-red-400 text-xs font-semibold bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-md border border-red-200 dark:border-red-800">${ICONS.failure} Checks Failed</span>`;
+                } else if (isPending) {
+                    html = `<span class="flex items-center gap-1 text-amber-700 dark:text-amber-400 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md border border-amber-200 dark:border-amber-800">${ICONS.pending} Checks Pending</span>`;
+                } else {
+                    html = `<span class="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 text-xs font-semibold bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">${ICONS.success} Checks Passed</span>`;
                 }
 
-                return `<span class="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 text-xs font-semibold bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">${ICONS.success} Checks Passed</span>`;
+                sessionStorage.setItem(cacheKey, JSON.stringify({ html, timestamp: Date.now() }));
+                return html;
             } catch (e) {
-                return `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Error</span>`;
+                const errHtml = `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Error</span>`;
+                // Don't cache hard errors to allow retry
+                return errHtml;
             }
         }
 
@@ -120,7 +135,7 @@
 
                 const [treeData, prs] = await Promise.all([
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
-                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open`).then(r => r.ok ? r.json() : [])
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).then(r => r.ok ? r.json() : [])
                 ]);
 
                 // 4. Fetch CI statuses concurrently for all open PRs
