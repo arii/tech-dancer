@@ -56,16 +56,36 @@
             external: `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`,
             success: `<svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
             failure: `<svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
-            pending: `<svg class="w-4 h-4 text-amber-500 animate-spin" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>`
+            pending: `<svg class="w-4 h-4 text-amber-500 animate-spin" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>`,
+            warning: `<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
         };
 
         const escapeHtml = (u) => u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]));
 
-        // 2. Helper function to fetch and format the CI check runs status
+        // 2. Helper function to check GitHub API Rate Limits
+        async function checkRateLimit() {
+            try {
+                const res = await fetch('https://api.github.com/rate_limit');
+                if (!res.ok) return null;
+                const data = await res.json();
+                return data.resources.core;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // 3. Helper function to fetch and format the CI check runs status
         async function fetchCIStatusHtml(sha) {
             try {
                 const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
-                if (!res.ok) return '';
+
+                if (res.status === 403) {
+                    return `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Rate Limited</span>`;
+                }
+
+                if (!res.ok) {
+                    return `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Unavailable</span>`;
+                }
 
                 const data = await res.json();
                 if (!data.check_runs || data.check_runs.length === 0) return '';
@@ -82,23 +102,39 @@
 
                 return `<span class="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 text-xs font-semibold bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">${ICONS.success} Checks Passed</span>`;
             } catch (e) {
-                return '';
+                return `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Error</span>`;
             }
         }
 
         async function init() {
             const grid = document.getElementById('grid'), loading = document.getElementById('loading'), errorAlert = document.getElementById('error-alert');
             try {
+                // Pre-check rate limit to decide how aggressively to fetch
+                const rateLimit = await checkRateLimit();
+                if (rateLimit && rateLimit.remaining < 10) {
+                    const warning = document.createElement('div');
+                    warning.className = 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium';
+                    warning.innerHTML = `${ICONS.warning} GitHub API rate limit is low (${rateLimit.remaining} left). CI statuses may not load correctly.`;
+                    grid.before(warning);
+                }
+
                 const [treeData, prs] = await Promise.all([
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`).then(r => r.ok ? r.json() : Promise.reject(new Error(`API Error: ${r.status}`))),
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open`).then(r => r.ok ? r.json() : [])
                 ]);
 
-                // 3. Fetch CI statuses concurrently for all open PRs
+                // 4. Fetch CI statuses concurrently for all open PRs
                 const prStatuses = {};
-                await Promise.all(prs.map(async (pr) => {
-                    prStatuses[pr.head.ref] = await fetchCIStatusHtml(pr.head.sha);
-                }));
+                // Only attempt if we have some rate limit left
+                if (!rateLimit || rateLimit.remaining > 5) {
+                    await Promise.all(prs.map(async (pr) => {
+                        prStatuses[pr.head.ref] = await fetchCIStatusHtml(pr.head.sha);
+                    }));
+                } else {
+                    prs.forEach(pr => {
+                        prStatuses[pr.head.ref] = `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Paused</span>`;
+                    });
+                }
 
                 loading.style.display = 'none';
 
@@ -123,17 +159,19 @@
                     return;
                 }
 
-                // 5. Grouped Rendering logic
+                // 6. Grouped Rendering logic
                 const renderGroup = (title, foldersList, isPr) => {
                     if (!foldersList.length) return;
 
-                    const groupContainer = document.createElement('div');
-                    groupContainer.className = 'flex flex-col gap-4 mb-8';
+                    const groupContainer = document.createDocumentFragment();
 
                     const heading = document.createElement('h2');
-                    heading.className = 'text-xl font-bold mt-4 mb-2 flex items-center gap-2 text-slate-800 dark:text-slate-200';
+                    heading.className = 'text-xl font-bold mt-8 mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-200';
                     heading.innerHTML = `${isPr ? ICONS.pr : ICONS.branch} ${title}`;
                     groupContainer.appendChild(heading);
+
+                    const stack = document.createElement('div');
+                    stack.className = 'flex flex-col gap-4 mb-10';
 
                     foldersList.forEach(name => {
                         const pr = prs.find(p => p.head.ref === name), url = `${BASE_URL}/${name}/`;
@@ -158,8 +196,9 @@
                                 <div class="flex items-center gap-2 flex-wrap"><span class="text-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate">${escapeHtml(name)}</span><div class="sm:hidden">${badge}</div></div>
                             </div>
                             <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm">View Deployment ${ICONS.external}</a>`;
-                        groupContainer.appendChild(card);
+                        stack.appendChild(card);
                     });
+                    groupContainer.appendChild(stack);
                     grid.appendChild(groupContainer);
                 };
 
