@@ -1,4 +1,3 @@
-import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -52,7 +51,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             display="flex" 
             align="center" 
             gap={2} 
-            className="text-dim hover:text-accent transition-colors cursor-pointer"
+            className="text-text-dim hover:text-accent transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
