@@ -19,8 +19,7 @@ test.describe('Visual Regression Tests', () => {
       // Increased tolerance to 5% to handle minor rendering differences across environments
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
-        maxDiffPixelRatio: 0.05,
-        animations: 'disabled'
+        maxDiffPixelRatio: 0.05
       });
     });
   }
