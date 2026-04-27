@@ -105,7 +105,9 @@ jobs:
             done | jq -R -n '[inputs | select(length > 0) | split(" ") | select(length == 2 and .[1] != "") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
 
             # Use the latest dashboard UI
-            cp "$DEST_DIR/previews/index.html" previews/index.html
+            if [ "$DEST_DIR" != "." ]; then
+              cp "$DEST_DIR/previews/index.html" previews/index.html
+            fi
 
             # 5. Commit and Push
             git config user.name "github-actions[bot]"
