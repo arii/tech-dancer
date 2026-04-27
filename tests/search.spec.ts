@@ -43,18 +43,18 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
 
-    // Fill search term
-    await searchInput.fill('Vercel');
+    // Fill search term using a term guaranteed to be in content/posts
+    await searchInput.fill('swing');
 
-    // Wait for debounce and search results
-    await page.waitForTimeout(2000);
+    // Wait for the specific result to be visible
+    const resultButton = page.getByTestId('search-result').first();
 
-    // Try finding the link directly if data-testid fails
-    const resultLink = page.locator('button[data-testid="search-result"]').first();
+    // We use expect.poll to wait for results to appear, being more resilient than waitForTimeout
+    await expect.poll(async () => {
+      return await resultButton.isVisible();
+    }, { timeout: 15000 }).toBe(true);
 
-    await expect(resultLink).toBeVisible({ timeout: 15000 });
-
-    await resultLink.click();
+    await resultButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 });
@@ -73,7 +73,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
     await searchInput.fill('swing');
 
-    // Check URL (wait for debounce)
+    // Check URL
     await expect(page).toHaveURL(/q=swing/);
 
     // Reload

@@ -2,7 +2,7 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef, MouseEvent, ChangeEvent, useState } from 'react';
+import { useRef, MouseEvent, ChangeEvent, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 import { debounce } from 'throttle-debounce';
@@ -16,35 +16,31 @@ interface SearchResult {
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
-  const [localQuery, setLocalQuery] = useState(query);
+
+  // Track the external query to detect changes
   const [prevQuery, setPrevQuery] = useState(query);
-  const { highlight } = useSearchHighlight(query);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
+  const [localQuery, setLocalQuery] = useState(query);
 
   // Sync local query with URL query during render if URL changes externally
+  // This avoids useEffect setState errors while maintaining sync.
   if (query !== prevQuery) {
     setLocalQuery(query);
     setPrevQuery(query);
   }
 
-  // Debounced sync to URL
-  const debouncedSetQuery = useRef(
-    debounce(300, (q: string) => {
+  // Debounced URL sync to avoid excessive navigation and re-renders
+  const debouncedSetQuery = useMemo(
+    () => debounce(300, (q: string) => {
       setQuery(q);
-    })
-  ).current;
+    }),
+    [setQuery]
+  );
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setLocalQuery(value);
     debouncedSetQuery(value);
   };
-
-  // 1. The Context Reset: Close on route change
-  // Note: Since isOpen is now derived from URL search params ('search=true'),
-  // navigation to a new URL without the 'search' param will automatically
-  // "close" the modal (isOpen will become false).
 
   // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {
@@ -58,13 +54,16 @@ export function GlobalSearch() {
   }, [open]);
 
   const handleSelect = (result: SearchResult) => {
-    // 4. Link Click Delegation: Immediate Feedback
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const { highlight } = useSearchHighlight(query);
 
   if (!isOpen) return null;
 
@@ -80,7 +79,6 @@ export function GlobalSearch() {
       surface={false}
       data-testid="search-backdrop"
       className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72"
-      // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
       <Box

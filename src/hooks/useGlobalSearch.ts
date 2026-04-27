@@ -54,41 +54,18 @@ export function useGlobalSearch() {
     ];
   }, [postsQuery.data, resourcesQuery.data, studiesQuery.data]);
 
-  const results = useMemo(() => {
-    if (!query.trim()) return [];
-
-    // Direct search for robustness (especially for E2E tests)
-    const normalizedQuery = query.toLowerCase();
-    const simpleMatches = allContent.filter(item =>
-      (item.title || '').toLowerCase().includes(normalizedQuery) ||
-      (item.excerpt || '').toLowerCase().includes(normalizedQuery) ||
-      (item.content || '').toLowerCase().includes(normalizedQuery)
-    );
-
-    // Fuse.js for fuzzy matching
-    const fuse = new Fuse(allContent, {
-      keys: [
-        { name: 'title', weight: 0.7 },
-        { name: 'excerpt', weight: 0.3 },
-        { name: 'content', weight: 0.1 },
-        { name: 'tags', weight: 0.5 }
-      ],
-      threshold: 0.4,
+  const fuse = useMemo(() => {
+    return new Fuse(allContent, {
+      keys: ['title', 'excerpt', 'content', 'tags'],
+      threshold: 0.3,
       includeScore: true
     });
+  }, [allContent]);
 
-    const fuseMatches = fuse.search(query).map(result => result.item);
-
-    // Combine results, prioritizing direct matches
-    const combined = [...simpleMatches];
-    fuseMatches.forEach(item => {
-      if (!combined.some(c => c.slug === item.slug && c.type === item.type)) {
-        combined.push(item);
-      }
-    });
-
-    return combined;
-  }, [allContent, query]);
+  const results = useMemo(() => {
+    if (!query.trim()) return [];
+    return fuse.search(query).map(result => result.item);
+  }, [fuse, query]);
 
   return {
     query,
