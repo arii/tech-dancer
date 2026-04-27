@@ -15,7 +15,7 @@ gh pr list --state open --json number,title,author --jq '.[] | "- #\(.number) \(
 
 2. **Check for conflicts**:
 ```bash
-python3 dev-tools/conflict_detector.py
+python3 dev-tools/td_cli.py conflicts
 ```
 Review output and determine safe merge order before proceeding.
 
@@ -23,7 +23,7 @@ Review output and determine safe merge order before proceeding.
 
 4. **Generate Review Context & Output Templates**: For a selected batch of PRs, run the fetch script. This will generate a read-only `pr-context-<PR>.md` and a writeable `pr-review-<PR>.md` for each.
 ```bash
-python3 dev-tools/fetch_pr_review_data.py PR_NUMBER
+python3 dev-tools/td_cli.py fetch-review PR_NUMBER
 ```
 
 5. **Audit the PRs**: For each PR, READ the instructions in `.agent/workflows/REVIEW_INSTRUCTIONS.md` and the diffs in `pr-context-<PR_NUMBER>.md`.
@@ -36,7 +36,7 @@ python3 dev-tools/fetch_pr_review_data.py PR_NUMBER
 
 7. **Submit the Review**: Run the submission script against the populated review file.
 ```bash
-python3 dev-tools/submit_pr_review_data.py pr-review-PR_NUMBER.md
+python3 dev-tools/td_cli.py audit-pr PR_NUMBER --submit
 ```
 
 8. **Track & Repeat**: Update `REVIEW_TRACKING.md` with the outcome ("Approved", "Changes Requested") and proceed to the next PR.

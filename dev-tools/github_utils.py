@@ -1,8 +1,8 @@
 import os
-import re
 import subprocess
 import sys
 from typing import Optional, Tuple, List, Dict
+
 def get_github_token() -> Optional[str]:
     """Retrieves the GitHub token from environment or via gh CLI."""
     token = os.getenv("GITHUB_TOKEN")
@@ -26,6 +26,7 @@ def get_repo_name() -> Optional[str]:
             ['git', 'config', '--get', 'remote.origin.url'],
             stderr=subprocess.DEVNULL, text=True
         ).strip()
+        import re
         match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
         return match.group(1) if match else url
     except Exception:
@@ -35,11 +36,11 @@ def get_ci_status(repo, sha: str) -> Tuple[str, List[str]]:
     """
     Aggregates CI status from Check Runs and Combined Status API for a given SHA.
     Returns (status_summary, failed_runs_list).
+    NOTE: 'repo' should be a github.Repository object.
     """
     try:
-        commit = repo.get_commit(sha)
-        combined_status = commit.get_combined_status()
-        check_runs = commit.get_check_runs()
+        combined_status = repo.get_commit(sha).get_combined_status()
+        check_runs = repo.get_commit(sha).get_check_runs()
 
         failed_runs = []
         in_progress = 0

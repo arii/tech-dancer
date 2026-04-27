@@ -46,35 +46,28 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 ## 23. 🤝 Collaborative GitHub Workflows
 
-The `dev-tools/gh_collab.py` script handles all PR review interactions. Auth is automatic via `gh auth token` — no manual `GITHUB_TOKEN` export needed.
+The `dev-tools/td_cli.py` tool handles repository automation and PR reviews.
 
-**Step 1 — Generate a structured per-file review plan:**
+**Step 1 — Generate a review context:**
 ```bash
-python3 dev-tools/fetch_pr_review_data.py <PR_NUMBER>
-# Outputs to /tmp/pr-review-<PR_NUMBER>.md — read it to understand what changed
-cat /tmp/pr-review-<PR_NUMBER>.md
+python3 dev-tools/td_cli.py fetch-review <PR_NUMBER>
+# Outputs to dev-tools/logs/reviews/pr-context-<PR>.md
 ```
 
-**Step 2 — Submit a Code Review (one step):**
+**Step 2 — Perform an AI Audit:**
 ```bash
-python3 dev-tools/gh_collab.py review <PR_NUMBER> --file /tmp/review_payload.json
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
 ```
 
-The `/tmp/review_payload.json` must use the anti-slop structure:
-```json
-{
-  "body": "## ANTI-AI-SLOP\n...\n## FINDINGS\n...\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
-  "comments": [
-    { "path": "src/foo.tsx", "line": 42, "body": "Inline comment text" }
-  ]
-}
+**Step 3 — Submit the review:**
+```bash
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup
 ```
 
 **Other commands:**
-- `python3 dev-tools/gh_collab.py create <PR> --file payload.json` — create pending review without submitting
-- `python3 dev-tools/gh_collab.py submit <PR> COMMENT|APPROVE|REQUEST_CHANGES` — submit existing pending review
-- `python3 dev-tools/gh_collab.py plan --pr-info ... --inline ... --general ... --reviews ... --output PR_Plan.md`
-- Add `--dry-run` flag to any command to simulate without hitting the API.
+- `python3 dev-tools/td_cli.py conflicts`: Detect merge conflicts.
+- `python3 dev-tools/td_cli.py pre-submit`: Run all quality gates.
+- `python3 dev-tools/td_cli.py status-board`: Active agent dashboard.
 
 **Code Review Standards (anti-bloat):**
 When reviewing, evaluate EVERY changed file against these criteria:
@@ -166,7 +159,7 @@ This hook runs a targeted audit on changed `.tsx` files.
 
 Before submitting a PR, it is recommended to run the full pre-submission check:
 ```bash
-bash dev-tools/pre-submit-check.sh
+python3 dev-tools/td_cli.py pre-submit
 ```
 
 ### 🧪 Pre-Commit Checklist
