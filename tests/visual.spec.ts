@@ -22,9 +22,14 @@ test.describe('Visual Regression Tests', () => {
       await page.evaluate(async () => {
          const main = document.querySelector('main');
          if (main) {
-            main.scrollTo(0, main.scrollHeight);
-            await new Promise(r => setTimeout(r, 500));
+            let lastScrollHeight = 0;
+            while (main.scrollHeight > lastScrollHeight) {
+              lastScrollHeight = main.scrollHeight;
+              main.scrollTo(0, main.scrollHeight);
+              await new Promise(r => setTimeout(r, 500));
+            }
             main.scrollTo(0, 0);
+            await new Promise(r => setTimeout(r, 500)); // wait for scroll to top
          }
       });
       // Increased tolerance to 5% to handle minor rendering differences across environments
