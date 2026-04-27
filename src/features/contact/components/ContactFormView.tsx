@@ -36,7 +36,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
             <Stack gap={12}>
               <Stack gap={6}>
-                <Box paddingBottom={4} className="border-b border-slate-200">
+                <Box paddingBottom={4} className="border-b border-line">
                   <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
