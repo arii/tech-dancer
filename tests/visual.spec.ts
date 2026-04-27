@@ -16,10 +16,9 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForLoadState('networkidle');
       // Give some extra time for animations to settle as in the original script
       await page.waitForTimeout(1000);
-      // Increased tolerance to 5% to handle minor rendering differences across environments
+      // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
-        fullPage: true,
-        maxDiffPixelRatio: 0.05
+        fullPage: true
       });
     });
   }
