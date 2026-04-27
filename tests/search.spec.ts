@@ -43,13 +43,11 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
 
-    // Fill search term using a term guaranteed to be in content/posts
-    await searchInput.fill('swing');
+    // Fill search term
+    await searchInput.fill('Vercel');
 
-    // Wait for the specific result to be visible
+    // Robust poll for results to appear
     const resultButton = page.getByTestId('search-result').first();
-
-    // We use expect.poll to wait for results to appear, being more resilient than waitForTimeout
     await expect.poll(async () => {
       return await resultButton.isVisible();
     }, { timeout: 15000 }).toBe(true);

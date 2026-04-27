@@ -56,8 +56,13 @@ export function useGlobalSearch() {
 
   const fuse = useMemo(() => {
     return new Fuse(allContent, {
-      keys: ['title', 'excerpt', 'content', 'tags'],
-      threshold: 0.3,
+      keys: [
+        { name: 'title', weight: 0.7 },
+        { name: 'excerpt', weight: 0.3 },
+        { name: 'content', weight: 0.1 },
+        { name: 'tags', weight: 0.5 }
+      ],
+      threshold: 0.4,
       includeScore: true
     });
   }, [allContent]);
