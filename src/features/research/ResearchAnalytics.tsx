@@ -24,7 +24,7 @@ function CompetitionTrendChart() {
           </Box>
         </Box>
         <Box
-          height={30}
+          height={48}
           width="full"
           display="flex"
           align="end"
