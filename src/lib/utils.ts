@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { match } from "path-to-regexp"
 import { RouteConfig } from "@/lib/types/routes"
 import { SkeletonVariant } from "@/components/ui/PageSkeleton"
 
@@ -56,20 +57,21 @@ export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[])
     ? pathname.slice(0, -1)
     : pathname;
 
-  const match = routeConfig.find((route: RouteConfig) => {
+  const matchRoute = routeConfig.find((route: RouteConfig) => {
     const routePath = route.path;
     if (!routePath) return false;
+
+    // Exact match
     if (routePath === normalizedPath) return true;
 
-    // Simple regex-based matching for parameterized routes (e.g., /blog/:slug)
-    if (routePath.includes(':')) {
-      const pattern = routePath.replace(/:[^/]+/g, '[^/]+');
-      const regex = new RegExp(`^${pattern}$`);
-      return regex.test(normalizedPath);
+    // Use path-to-regexp for parameterized routes
+    try {
+      const matcher = match(routePath, { decode: decodeURIComponent });
+      return !!matcher(normalizedPath);
+    } catch {
+      return false;
     }
-
-    return false;
   });
 
-  return match?.skeleton || 'grid';
+  return matchRoute?.skeleton || 'grid';
 }
