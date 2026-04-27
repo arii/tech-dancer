@@ -1,6 +1,6 @@
 import { LucideIcon, Home, BookOpen, ShoppingBag, Database, User, Send } from 'lucide-react';
 import { RouteObject } from 'react-router-dom';
-import type { SkeletonVariant } from '@/components/ui/PageSkeleton';
+import { SkeletonVariant } from '@/components/ui/PageSkeleton';
 
 /**
  * Centralized Route Configuration.
@@ -12,8 +12,8 @@ export interface RouteConfig extends Omit<RouteObject, 'children'> {
   label?: string;
   icon?: LucideIcon;
   description?: string;
-  skeleton?: SkeletonVariant;
   children?: RouteConfig[];
+  skeleton?: SkeletonVariant;
 }
 
 export const routes: RouteConfig[] = [
@@ -23,7 +23,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
     label: 'Home',
     icon: Home,
-    skeleton: 'simple'
+    skeleton: 'grid'
   },
   {
     path: '/blog',
@@ -82,6 +82,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '*',
-    lazy: () => import('@/pages/Home').then(m => ({ Component: m.default }))
+    lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
+    skeleton: 'grid'
   },
 ];

@@ -7,12 +7,12 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PageSkeleton } from './components/ui/PageSkeleton';
-import { getSkeletonVariant } from './lib/utils';
 import { routes as routeConfig } from './config/routes';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
+import { getSkeletonVariant } from './lib/utils';
 
 import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
 
@@ -34,6 +34,8 @@ export function RootLayout() {
     return () => clearTimeout(timer);
   }, [setShowEmailBar]);
 
+  const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
+
   return (
     <>
       <MainLayout>
@@ -47,7 +49,7 @@ export function RootLayout() {
             transition={motionTokens.page.transition}
             height="full"
           >
-            <Suspense fallback={<PageSkeleton variant={getSkeletonVariant(location.pathname)} />}>
+            <Suspense fallback={<PageSkeleton variant={skeletonVariant} />}>
               <Outlet />
             </Suspense>
           </Box>

@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { routes } from "@/config/routes"
+import { RouteConfig } from "@/config/routes"
+import { SkeletonVariant } from "@/components/ui/PageSkeleton"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -48,34 +49,27 @@ export function getHighlightedParts(text: string, query: string) {
 }
 
 /**
- * Maps route pathnames to PageSkeleton variants.
- * Centralizes skeleton logic to prevent Layout Shift (CLS).
- * Refactored to derive metadata from the centralized route configuration.
+ * Determines the appropriate skeleton variant for a given pathname based on route config.
  */
-export function getSkeletonVariant(pathname: string): 'grid' | 'post' | 'simple' {
-  // Normalize pathname: remove trailing slash unless it's just "/"
-  const path = pathname.length > 1 && pathname.endsWith('/')
+export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[]): SkeletonVariant {
+  const normalizedPath = pathname.endsWith('/') && pathname !== '/'
     ? pathname.slice(0, -1)
     : pathname;
 
-  // Helper to check if a path matches a route pattern (handles :slug)
-  const matchRoute = (routePath: string, actualPath: string) => {
-    const pattern = routePath.replace(/:[^\/]+/g, '[^\\/]+');
-    const regex = new RegExp(`^${pattern}$`);
-    return regex.test(actualPath);
-  };
+  const match = routeConfig.find((route: RouteConfig) => {
+    const routePath = route.path;
+    if (!routePath) return false;
+    if (routePath === normalizedPath) return true;
 
-  // Find exact or pattern match in routes
-  const matchedRoute = routes.find(r => matchRoute(r.path, path));
+    // Simple regex-based matching for parameterized routes (e.g., /blog/:slug)
+    if (routePath.includes(':')) {
+      const pattern = routePath.replace(/:[^/]+/g, '[^/]+');
+      const regex = new RegExp(`^${pattern}$`);
+      return regex.test(normalizedPath);
+    }
 
-  if (matchedRoute?.skeleton) {
-    return matchedRoute.skeleton;
-  }
+    return false;
+  });
 
-  // Fallback to post for nested paths under known sections if not explicitly configured
-  const isPost = ['/blog/', '/gear/', '/research/'].some(prefix => path.startsWith(prefix));
-  if (isPost) return 'post';
-
-  // Fallback to simple
-  return 'simple';
+  return match?.skeleton || 'grid';
 }

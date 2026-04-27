@@ -1,4 +1,5 @@
-import { Box, Stack, Grid } from '../../layouts/Primitives';
+import { ReactNode } from 'react';
+import { Box, Stack } from '../../layouts/Primitives';
 
 export type SkeletonVariant = 'grid' | 'post' | 'simple';
 
@@ -9,59 +10,44 @@ interface PageSkeletonProps {
 
 function GridSkeleton() {
   return (
-    <Stack gap={12} className="w-full">
-      <Box paddingBottom={12} border="b" className="border-line/30">
-        <Stack gap={4}>
-          <Box className="h-4 w-24 bg-line/10 rounded animate-pulse" />
-          <Box className="h-12 w-1/2 bg-line/10 rounded animate-pulse" />
-          <Box className="h-6 w-2/3 bg-line/5 rounded animate-pulse" />
-        </Stack>
-      </Box>
-
-      <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line/30">
-        {[...Array(6)].map((_, i) => (
-          <Box key={i} border="r" borderBottom padding={6}>
-            <Stack gap={4}>
-              <Box className="aspect-video bg-line/10 animate-pulse" />
-              <Box className="h-4 w-3/4 bg-line/10 rounded animate-pulse" />
-              <Box className="h-3 w-1/2 bg-line/5 rounded animate-pulse" />
-            </Stack>
-          </Box>
+    <Stack gap={8} className="w-full">
+      <Box className="h-10 w-48 bg-line/10 rounded animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <Stack key={i} gap={4} className="p-4 border border-line/10 rounded-lg">
+            <Box className="aspect-video w-full bg-line/10 rounded animate-pulse" />
+            <Box className="h-6 w-3/4 bg-line/10 rounded animate-pulse" />
+            <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
+          </Stack>
         ))}
-      </Grid>
+      </div>
     </Stack>
   );
 }
 
 function PostSkeleton() {
   return (
-    <Box padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
-         <Box className="h-4 w-24 bg-line/10 rounded animate-pulse" />
-
-         <Stack gap={10}>
-            <Stack gap={6}>
-               <Box className="h-4 w-32 bg-line/10 rounded animate-pulse" />
-               <Box className="h-16 w-full bg-line/10 rounded animate-pulse" />
-            </Stack>
-
-            <Box className="aspect-video border border-line/20 bg-line/5 animate-pulse" />
-
-            <Stack gap={4}>
-               <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
-               <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
-               <Box className="h-4 w-5/6 bg-line/5 rounded animate-pulse" />
-            </Stack>
-         </Stack>
+    <Stack gap={10} className="max-w-3xl mx-auto w-full">
+      <Stack gap={4}>
+        <Box className="h-4 w-24 bg-line/10 rounded animate-pulse" />
+        <Box className="h-12 w-full bg-line/10 rounded animate-pulse" />
+        <Box className="h-6 w-1/2 bg-line/5 rounded animate-pulse" />
       </Stack>
-    </Box>
+      <Box className="aspect-video w-full bg-line/10 rounded animate-pulse" />
+      <Stack gap={6}>
+        <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
+        <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
+        <Box className="h-4 w-4/5 bg-line/5 rounded animate-pulse" />
+        <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
+      </Stack>
+    </Stack>
   );
 }
 
 function SimpleSkeleton() {
   return (
-    <Stack gap={12} className="w-full" padding="panel">
-      <Box paddingBottom={10} border="b" className="border-line/30">
+    <Stack gap={12} className="w-full opacity-50">
+      <Box paddingBottom={10} className="border-b border-line/30">
         <Stack gap={4}>
           <Box className="h-4 w-24 bg-line/10 rounded animate-pulse" />
           <Box className="h-10 w-1/2 bg-line/10 rounded animate-pulse" />
@@ -69,7 +55,7 @@ function SimpleSkeleton() {
       </Box>
 
       <Stack gap={8}>
-        <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
+        <Box className="h-48 w-full bg-surface border border-line/20 animate-pulse" />
         <Box className="h-4 w-full bg-line/5 rounded animate-pulse" />
         <Box className="h-4 w-5/6 bg-line/5 rounded animate-pulse" />
       </Stack>
@@ -77,15 +63,15 @@ function SimpleSkeleton() {
   );
 }
 
-const SKELETON_MAP = {
+const SKELETON_MAP: Record<SkeletonVariant, ReactNode> = {
   grid: <GridSkeleton />,
   post: <PostSkeleton />,
-  simple: <SimpleSkeleton />
+  simple: <SimpleSkeleton />,
 };
 
-export function PageSkeleton({ className, variant = 'simple' }: PageSkeletonProps) {
+export function PageSkeleton({ className, variant = 'grid' }: PageSkeletonProps) {
   return (
-    <Box className={`w-full opacity-50 ${className || ''}`}>
+    <Box className={`w-full ${className || ''}`}>
       {SKELETON_MAP[variant]}
     </Box>
   );
