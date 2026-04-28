@@ -152,8 +152,6 @@ jobs:
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true'
         id: resolve
         uses: VeyronSakai/conflict-resolver@7d650534ba240658a381241823f8b4f13861c2ad # pin to v0.5.1
-        with:
-          config-path: .github/conflict-resolver.yml
 
       - name: Commit and create PR
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files == ''
