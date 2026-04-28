@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Global Search Modal', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
   });
 
   test('should open and close search modal via button', async ({ page }) => {
@@ -32,7 +32,7 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     // Navigate to another page via sidebar
-    await page.goto('/gear');
+    await page.goto('./gear');
 
     // Check if modal is gone
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
@@ -77,6 +77,8 @@ test.describe('Search and Filter URL Persistence', () => {
     await searchButtonReload.click();
 
     await expect(page.getByPlaceholder(/SEARCH REPOSITORY/i)).toHaveValue('swing');
+    // The search results might take a moment to load
+    await expect(page.getByText(/RESULTS FOUND/i)).toBeVisible();
     await expect(page.getByText(/RESULTS FOUND/i)).not.toHaveText('0 RESULTS FOUND');
   });
 

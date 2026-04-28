@@ -1,0 +1,38 @@
+name: Merge Conflict Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  conflict-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for merge conflicts with main
+        run: |
+          git fetch origin main
+          if ! git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main | grep -q "^+<<<<<<"; then
+            echo "✅ No merge conflicts detected"
+          else
+            echo "❌ Merge conflicts found with origin/main"
+            git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main | grep -A5 "<<<<<<" | head -50
+            exit 1
+          fi
+
+      - name: Verify clean merge simulation
+        run: |
+          git config user.email "ci@test.com"
+          git config user.name "CI"
+          git checkout -b temp-merge-test
+          if git merge --no-commit --no-ff origin/main; then
+            echo "✅ Branch merges cleanly into main"
+            git merge --abort 2>/dev/null || true
+          else
+            echo "❌ Branch cannot merge cleanly into main"
+            git merge --abort 2>/dev/null || true
+            exit 1
+          fi

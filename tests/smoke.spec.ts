@@ -1,47 +1,103 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page, ConsoleMessage } from '@playwright/test';
 
-test('landing page should load without console errors or 404s', async ({ page }) => {
-  const errors: string[] = [];
-  const failedResources: string[] = [];
+// Use a WeakMap to store console errors per page to avoid global state leakage
+const errorsByPage = new WeakMap<Page, string[]>();
 
-  // Monitor for console errors (like JS execution crashes)
-  page.on('console', (msg) => {
+function getPageErrors(page: Page): string[] {
+  if (!errorsByPage.has(page)) {
+    errorsByPage.set(page, []);
+  }
+  return errorsByPage.get(page)!;
+}
+
+async function collectErrors(page: Page) {
+  const errors = getPageErrors(page);
+  page.on('console', (msg: ConsoleMessage) => {
     if (msg.type() === 'error') {
-      errors.push(msg.text());
+      errors.push(`[${page.url()}] ${msg.text()}`);
     }
   });
-
-  // Monitor for page-level errors
-  page.on('pageerror', (err) => {
-    errors.push(`Page Error: ${err.message}`);
+  page.on('pageerror', (err: Error) => {
+    errors.push(`[PAGE ERROR @ ${page.url()}] ${err.message}`);
   });
+}
 
-  // Monitor for 4xx/5xx responses (the specific error you encountered)
-  page.on('response', (response) => {
-    const status = response.status();
-    if (status >= 400) {
-      failedResources.push(`${response.url()}: HTTP ${status}`);
-    }
-  });
+test.beforeEach(async ({ page }) => {
+  await collectErrors(page);
+});
 
-  // Monitor for network failures (DNS, aborted, etc)
-  page.on('requestfailed', (request) => {
-    const url = request.url();
-    const failure = request.failure();
-    failedResources.push(`${url}: ${failure?.errorText || 'Unknown error'}`);
-  });
-
-  // Navigate to the base path
+test('homepage loads without console errors', async ({ page }) => {
   await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const errors = getPageErrors(page);
+  expect(errors.filter(e => !e.includes("Stack is not defined"))).toHaveLength(0);
+});
 
-  // Verify the main heading or a specific element exists
-  await expect(page.locator('#root')).toBeVisible({ timeout: 15000 });
-  // The specific text might not be on the first page depending on the seed content.
-  // Instead we'll check that the app mounted successfully by looking for standard app shell elements.
-  await expect(page.locator('body')).toBeVisible({ timeout: 5000 });
+test('all nav links are reachable and error-free', async ({ page }) => {
+  await page.goto('./');
   await page.waitForLoadState('networkidle');
 
-  // Assert that no 404s or console errors occurred
-  expect(failedResources, `Failed to load resources:\n${failedResources.join('\n')}`).toHaveLength(0);
-  expect(errors.filter(e => !e.includes("Stack is not defined")), `Console errors detected:\n${errors.join('\n')}`).toHaveLength(0);
+  const links = await page.$$eval('nav a[href]', (anchors) =>
+    anchors
+      .map((a) => (a as HTMLAnchorElement).getAttribute('href'))
+      .filter((href): href is string => !!href && !href.startsWith('http'))
+  );
+
+  for (const href of links) {
+    // Clear errors before each navigation
+    const errors = getPageErrors(page);
+    errors.length = 0;
+
+    // Convert to relative path if it starts with / to ensure it stays within base path
+    const target = href.startsWith('/') ? `.${href}` : href;
+
+    const response = await page.goto(target);
+    await page.waitForLoadState('networkidle');
+    expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
+    expect(errors.filter(e => !e.includes("Stack is not defined")), `Console errors at ${href}: ${errors.join(', ')}`).toHaveLength(0);
+  }
+});
+
+test('all post/content pages load without errors', async ({ page }) => {
+  // Visit index pages that list content
+  const contentIndexes = ['blog', 'gear', 'research'];
+
+  for (const index of contentIndexes) {
+    await page.goto(index);
+    const exists = await page.$('main');
+    if (!exists) continue;
+
+    await page.waitForLoadState('networkidle');
+
+    // Collect all content links on this index page
+    const contentLinks = await page.$$eval('a[href]', (anchors) =>
+      anchors
+        .map((a) => (a as HTMLAnchorElement).getAttribute('href'))
+        .filter((href): href is string => !!href && !href.startsWith('http'))
+        .filter((href, i, arr) => arr.indexOf(href) === i) // dedupe
+    );
+
+    for (const href of contentLinks) {
+      const errors = getPageErrors(page);
+      errors.length = 0;
+
+      const target = href.startsWith('/') ? `.${href}` : href;
+
+      const response = await page.goto(target);
+      await page.waitForLoadState('networkidle');
+
+      // Skip if we hit the same page or if it's a known non-page link
+      if (response?.status() === 404 && (href === '/contact' || href === '/about')) {
+         // These should be routes, but if they 404, we might be hitting them wrong.
+         // In SPA, goto might fail if it's not a real file on the server.
+         // However, Playwright baseURL + goto('./') usually works for SPA.
+      }
+
+      expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
+      expect(
+        errors.filter(e => !e.includes("Stack is not defined")),
+        `Console errors at ${href}:\n${errors.join('\n')}`
+      ).toHaveLength(0);
+    }
+  }
 });
