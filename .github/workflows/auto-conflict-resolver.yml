@@ -51,8 +51,10 @@ jobs:
         if: github.event_name == 'issue_comment'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
         run: |
-          PR_JSON=$(gh pr view ${{ github.event.issue.number }} --repo ${{ github.repository }} --json headRefName,baseRefName)
+          PR_JSON=$(gh pr view "$ISSUE_NUMBER" --repo "$REPO" --json headRefName,baseRefName)
           echo "SOURCE=$(echo "$PR_JSON" | jq -r '.headRefName')" >> $GITHUB_ENV
           echo "TARGET=$(echo "$PR_JSON" | jq -r '.baseRefName')" >> $GITHUB_ENV
 
