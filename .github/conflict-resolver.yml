@@ -1,3 +1,4 @@
 rules:
   - paths: '*.png'
+  - paths: 'pnpm-lock.yaml'
     strategy: 'theirs'
