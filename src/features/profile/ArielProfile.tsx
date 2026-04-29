@@ -1,5 +1,6 @@
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
+import { STATIC_SCHEMAS } from '@/config/constants';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
@@ -15,6 +16,7 @@ export default function ArielProfile() {
         title="About"
         description="Learn more about tech-dancer, the roboticist's guide to the West Coast Swing. Exploring the intersection of dance, physics, and engineering."
         type="profile"
+        schema={STATIC_SCHEMAS.ABOUT(bio.name, bio.role)}
       />
       <Stack gap={12}>
         <PageHeader 

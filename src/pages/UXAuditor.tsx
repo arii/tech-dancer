@@ -8,6 +8,7 @@ import {
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SEO } from '@/components/SEO';
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
@@ -99,6 +100,10 @@ export default function UXAuditor() {
 
   return (
     <Stack gap={8} width="full">
+      <SEO
+        title="Visual UX Auditor"
+        description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
+      />
       <Stack
         direction={{ base: 'col', md: 'row' }}
         align={{ base: 'start', md: 'center' }}

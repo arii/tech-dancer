@@ -5,6 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { SEO } from '@/components/SEO';
+import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
@@ -17,26 +18,54 @@ export default function ResearchDetail() {
   const study = !tool && id ? getStudy(id) : null;
 
   const structuredData = useMemo(() => {
-    if (!tool) return null;
-    return {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": tool.name,
-      "description": tool.layman,
-      "applicationCategory": "EducationalApplication"
-    };
-  }, [tool]);
+    if (tool) {
+      return {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": tool.name,
+        "description": tool.layman,
+        "applicationCategory": "EducationalApplication"
+      };
+    }
+    if (study) {
+      return {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": study.title,
+        "description": study.excerpt,
+        "author": {
+          "@type": "Person",
+          "name": study.author || "Ariel Anders",
+          "url": `${BASE_URL}/about`
+        },
+        "datePublished": study.date,
+        "publisher": {
+          "@type": "Organization",
+          "name": SITE_NAME
+        }
+      };
+    }
+    return null;
+  }, [tool, study]);
 
   if (study) {
     return (
-      <DetailLayout
-        title={study.title}
-        category={study.category}
-        date={study.date}
-        content={study.content}
-        onBack={() => navigate('/research')}
-        backLabel="Back to Lab"
-      />
+      <>
+        <SEO
+          title={study.title}
+          description={study.excerpt}
+          type="article"
+          schema={structuredData}
+        />
+        <DetailLayout
+          title={study.title}
+          category={study.category}
+          date={study.date}
+          content={study.content}
+          onBack={() => navigate('/research')}
+          backLabel="Back to Lab"
+        />
+      </>
     );
   }
 
@@ -60,12 +89,8 @@ export default function ResearchDetail() {
         title={tool.name}
         description={tool.layman}
         type="website"
+        schema={structuredData}
       />
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
       <Stack gap={12}>
         <Box 
           as="button" 
