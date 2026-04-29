@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, type ImgHTMLAttributes } from 'react';
 import { Box } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
-interface ProgressiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface ProgressiveImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   placeholderSrc?: string;
   alt: string;
