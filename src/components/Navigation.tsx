@@ -115,7 +115,7 @@ export default function Navigation() {
         layout="mobileHeader"
         className={cn(
           "transition-[background-color,backdrop-filter,border-color] duration-300",
-          scrolled ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
+          scrolled || isOpen ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
         )}
       >
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
