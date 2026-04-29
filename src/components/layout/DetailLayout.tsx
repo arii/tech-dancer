@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { ProgressiveImage } from '@/components/ui/ProgressiveImage';
 
 interface DetailLayoutProps {
   title: string;
@@ -81,10 +82,10 @@ export function DetailLayout({
               border
               className="bg-muted"
             >
-              <img
+              <ProgressiveImage
                 src={image}
                 alt={title}
-                className="w-full h-full object-cover"
+                aspect="video"
               />
             </Box>
           )}
