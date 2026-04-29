@@ -1,12 +1,1506 @@
 [
   {
-    "Dancer_ID":"123",
-    "competitor_name":"Ariel",
-    "result_id":"5415",
-    "event_title":"Test",
-    "event_date":"01\/01\/2025",
+    "Dancer_ID":"25570",
+    "competitor_name":"Kai Klotz",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25572",
+    "competitor_name":"Janine Sch\u00f6n",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25919",
+    "competitor_name":"Ines Lewandrowski",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25929",
+    "competitor_name":"Joachim F\u00f6rster",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25944",
+    "competitor_name":"Jonathan Busse",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":23.1,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"26972",
+    "competitor_name":"Xheni Vogli",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"26993",
+    "competitor_name":"Derek Murphy",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"27765",
+    "competitor_name":"Alexandra Dembek",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"27776",
+    "competitor_name":"Jan-Niklas Sohn",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"28067",
+    "competitor_name":"Lars Little",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andre_Gilerson",
+    "competitor_name":"Andre Gilerson",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andrea_Heinichen",
+    "competitor_name":"Andrea Heinichen",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andrea_Lenzing",
+    "competitor_name":"Andrea Lenzing",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andrea_Maus",
+    "competitor_name":"Andrea Maus",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Anna_Sophia_Ohde",
+    "competitor_name":"Anna Sophia Ohde",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Antonia_Thieme",
+    "competitor_name":"Antonia Thieme",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Barbara_K\u00f6hler",
+    "competitor_name":"Barbara K\u00f6hler",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Barbara_Schmitz",
+    "competitor_name":"Barbara Schmitz",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Beate_Schmitz",
+    "competitor_name":"Beate Schmitz",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Benjamin_Ihme",
+    "competitor_name":"Benjamin Ihme",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Bernd_Meier",
+    "competitor_name":"Bernd Meier",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Bianca_Milles",
+    "competitor_name":"Bianca Milles",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":34.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Calvin_Bothe",
+    "competitor_name":"Calvin Bothe",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Celin_Schwamborn",
+    "competitor_name":"Celin Schwamborn",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Charlotte_Becker",
+    "competitor_name":"Charlotte Becker",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
     "Registry_Points_Sum":10.0,
-    "Promoted":true
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christian_Haas",
+    "competitor_name":"Christian Haas",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":34.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christian_Schmelzer",
+    "competitor_name":"Christian Schmelzer",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christine_G\u00fcrtesch",
+    "competitor_name":"Christine G\u00fcrtesch",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christopher_Heidenthal",
+    "competitor_name":"Christopher Heidenthal",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Clara_Joswig",
+    "competitor_name":"Clara Joswig",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Conny_Mertens",
+    "competitor_name":"Conny Mertens",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Corinna_Heyde",
+    "competitor_name":"Corinna Heyde",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Dennis_Hildenbrand",
+    "competitor_name":"Dennis Hildenbrand",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Diana_Chahrrour",
+    "competitor_name":"Diana Chahrrour",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Don_Jurghione",
+    "competitor_name":"Don Jurghione",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Ekaterina_Gennrich",
+    "competitor_name":"Ekaterina Gennrich",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Elena_Birk",
+    "competitor_name":"Elena Birk",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Eugene_Sheretov",
+    "competitor_name":"Eugene Sheretov",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Fabian_Jegert",
+    "competitor_name":"Fabian Jegert",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Fabio_Vogt",
+    "competitor_name":"Fabio Vogt",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Farina_H\u00f6pfner",
+    "competitor_name":"Farina H\u00f6pfner",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Farina_M\u00fcller",
+    "competitor_name":"Farina M\u00fcller",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Frank_Beine",
+    "competitor_name":"Frank Beine",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Frauke_Kulike",
+    "competitor_name":"Frauke Kulike",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Harald_Gie\u00dfler",
+    "competitor_name":"Harald Gie\u00dfler",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Haydee_de_Rivo",
+    "competitor_name":"Haydee de Rivo",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Ilka_Baumhoer",
+    "competitor_name":"Ilka Baumhoer",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Jan_Buchsteiner",
+    "competitor_name":"Jan Buchsteiner",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Janera_Kronsbein",
+    "competitor_name":"Janera Kronsbein",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Johanna_Chen",
+    "competitor_name":"Johanna Chen",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Johannes_Kunz",
+    "competitor_name":"Johannes Kunz",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":34.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Johannes_Schultheis",
+    "competitor_name":"Johannes Schultheis",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":12.9,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Julia_Albers",
+    "competitor_name":"Julia Albers",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Juliana_Langen",
+    "competitor_name":"Juliana Langen",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Katharina_Bata",
+    "competitor_name":"Katharina Bata",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Lars_Gr\u00e4dig",
+    "competitor_name":"Lars Gr\u00e4dig",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Laura_Caspers",
+    "competitor_name":"Laura Caspers",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Laura_Khaze",
+    "competitor_name":"Laura Khaze",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Lena_Quindt",
+    "competitor_name":"Lena Quindt",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Luca_Galbusera",
+    "competitor_name":"Luca Galbusera",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Luisa_Jackwerth",
+    "competitor_name":"Luisa Jackwerth",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Luzia_Grunewald",
+    "competitor_name":"Luzia Grunewald",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Maike_Glowik",
+    "competitor_name":"Maike Glowik",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Maksim_Biziuk",
+    "competitor_name":"Maksim Biziuk",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":34.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Manuel_Schweigert",
+    "competitor_name":"Manuel Schweigert",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Manuel_Wustrau",
+    "competitor_name":"Manuel Wustrau",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Max_Malkow",
+    "competitor_name":"Max Malkow",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Michaela_Pfannkuchen",
+    "competitor_name":"Michaela Pfannkuchen",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Mitsuko_Kuehn",
+    "competitor_name":"Mitsuko Kuehn",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Natalie_Wendling",
+    "competitor_name":"Natalie Wendling",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Ottilia_Voigt",
+    "competitor_name":"Ottilia Voigt",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Paula_Orlicek",
+    "competitor_name":"Paula Orlicek",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Rebekka_Stahnke",
+    "competitor_name":"Rebekka Stahnke",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Robert_Schinner",
+    "competitor_name":"Robert Schinner",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Rosa_Charlotte_Zick",
+    "competitor_name":"Rosa Charlotte Zick",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sabrina_Viel",
+    "competitor_name":"Sabrina Viel",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sagnik_Gupta",
+    "competitor_name":"Sagnik Gupta",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Salome_Raskop",
+    "competitor_name":"Salome Raskop",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sara_Pfannkuchen",
+    "competitor_name":"Sara Pfannkuchen",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sarah_Nagy",
+    "competitor_name":"Sarah Nagy",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sebastian_Glowik",
+    "competitor_name":"Sebastian Glowik",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Simon_Kaufmann",
+    "competitor_name":"Simon Kaufmann",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sonja_Di\u00dfmann",
+    "competitor_name":"Sonja Di\u00dfmann",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Stephan_Duell",
+    "competitor_name":"Stephan Duell",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Stephanie_B\u00f6nisch",
+    "competitor_name":"Stephanie B\u00f6nisch",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Swetlana_Frank",
+    "competitor_name":"Swetlana Frank",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Tanja_Berger",
+    "competitor_name":"Tanja Berger",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Theresa_Merckelbach",
+    "competitor_name":"Theresa Merckelbach",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Thorsten_Huhn",
+    "competitor_name":"Thorsten Huhn",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Tobias_Thaller",
+    "competitor_name":"Tobias Thaller",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Torben_Friedrichs",
+    "competitor_name":"Torben Friedrichs",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Torsten_Meyrowitz",
+    "competitor_name":"Torsten Meyrowitz",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Valeria_Gujo",
+    "competitor_name":"Valeria Gujo",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Vivien_Heider",
+    "competitor_name":"Vivien Heider",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Wiebke_Hilmer",
+    "competitor_name":"Wiebke Hilmer",
+    "result_id":"5713",
+    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25570",
+    "competitor_name":"Kai Klotz",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25572",
+    "competitor_name":"Janine Sch\u00f6n",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25919",
+    "competitor_name":"Ines Lewandrowski",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25929",
+    "competitor_name":"Joachim F\u00f6rster",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"25944",
+    "competitor_name":"Jonathan Busse",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"26972",
+    "competitor_name":"Xheni Vogli",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":34.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"26993",
+    "competitor_name":"Derek Murphy",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"27765",
+    "competitor_name":"Alexandra Dembek",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"27776",
+    "competitor_name":"Jan-Niklas Sohn",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andre_Gilerson",
+    "competitor_name":"Andre Gilerson",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andrea_Heinichen",
+    "competitor_name":"Andrea Heinichen",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andrea_Lenzing",
+    "competitor_name":"Andrea Lenzing",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Andrea_Maus",
+    "competitor_name":"Andrea Maus",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Anna_Sophia_Ohde",
+    "competitor_name":"Anna Sophia Ohde",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Antonia_Thieme",
+    "competitor_name":"Antonia Thieme",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Barbara_Schmitz",
+    "competitor_name":"Barbara Schmitz",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Beate_Schmitz",
+    "competitor_name":"Beate Schmitz",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Bernd_Meier",
+    "competitor_name":"Bernd Meier",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Bianca_Milles",
+    "competitor_name":"Bianca Milles",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Calvin_Bothe",
+    "competitor_name":"Calvin Bothe",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Celin_Schwamborn",
+    "competitor_name":"Celin Schwamborn",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christian_Haas",
+    "competitor_name":"Christian Haas",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christine_G\u00fcrtesch",
+    "competitor_name":"Christine G\u00fcrtesch",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Christopher_Heidenthal",
+    "competitor_name":"Christopher Heidenthal",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Corinna_Heyde",
+    "competitor_name":"Corinna Heyde",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":14.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Dennis_Hildenbrand",
+    "competitor_name":"Dennis Hildenbrand",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Diana_Chahrrour",
+    "competitor_name":"Diana Chahrrour",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Ekaterina_Gennrich",
+    "competitor_name":"Ekaterina Gennrich",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Eugene_Sheretov",
+    "competitor_name":"Eugene Sheretov",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Fabian_Jegert",
+    "competitor_name":"Fabian Jegert",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Fabio_Vogt",
+    "competitor_name":"Fabio Vogt",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Frank_Beine",
+    "competitor_name":"Frank Beine",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Frauke_Kulike",
+    "competitor_name":"Frauke Kulike",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Harald_Gie\u00dfler",
+    "competitor_name":"Harald Gie\u00dfler",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Haydee_de_Rivo",
+    "competitor_name":"Haydee de Rivo",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Jan_Buchsteiner",
+    "competitor_name":"Jan Buchsteiner",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Johanna_Chen",
+    "competitor_name":"Johanna Chen",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Johannes_Kunz",
+    "competitor_name":"Johannes Kunz",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Julia_Albers",
+    "competitor_name":"Julia Albers",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Juliana_Langen",
+    "competitor_name":"Juliana Langen",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":28.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Lena_Quindt",
+    "competitor_name":"Lena Quindt",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Luca_Galbusera",
+    "competitor_name":"Luca Galbusera",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Luisa_Jackwerth",
+    "competitor_name":"Luisa Jackwerth",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Luzia_Grunewald",
+    "competitor_name":"Luzia Grunewald",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Maike_Glowik",
+    "competitor_name":"Maike Glowik",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":8.4,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Maksim_Biziuk",
+    "competitor_name":"Maksim Biziuk",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Manuel_Schweigert",
+    "competitor_name":"Manuel Schweigert",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Manuel_Wustrau",
+    "competitor_name":"Manuel Wustrau",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Max_Malkow",
+    "competitor_name":"Max Malkow",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Mitsuko_Kuehn",
+    "competitor_name":"Mitsuko Kuehn",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Natalie_Wendling",
+    "competitor_name":"Natalie Wendling",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Paula_Orlicek",
+    "competitor_name":"Paula Orlicek",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":34.2,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Rebekka_Stahnke",
+    "competitor_name":"Rebekka Stahnke",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":40.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Robert_Schinner",
+    "competitor_name":"Robert Schinner",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Rosa_Charlotte_Zick",
+    "competitor_name":"Rosa Charlotte Zick",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sabrina_Viel",
+    "competitor_name":"Sabrina Viel",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sagnik_Gupta",
+    "competitor_name":"Sagnik Gupta",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sara_Pfannkuchen",
+    "competitor_name":"Sara Pfannkuchen",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sarah_Nagy",
+    "competitor_name":"Sarah Nagy",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sebastian_Glowik",
+    "competitor_name":"Sebastian Glowik",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":30.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Simon_Kaufmann",
+    "competitor_name":"Simon Kaufmann",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Sonja_Di\u00dfmann",
+    "competitor_name":"Sonja Di\u00dfmann",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":4.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Stephan_Duell",
+    "competitor_name":"Stephan Duell",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Stephanie_B\u00f6nisch",
+    "competitor_name":"Stephanie B\u00f6nisch",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Swetlana_Frank",
+    "competitor_name":"Swetlana Frank",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.3,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Tanja_Berger",
+    "competitor_name":"Tanja Berger",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":24.5,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Thorsten_Huhn",
+    "competitor_name":"Thorsten Huhn",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":20.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Tobias_Thaller",
+    "competitor_name":"Tobias Thaller",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Torben_Friedrichs",
+    "competitor_name":"Torben Friedrichs",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Valeria_Gujo",
+    "competitor_name":"Valeria Gujo",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":0.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Vivien_Heider",
+    "competitor_name":"Vivien Heider",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":10.0,
+    "Promoted":false
+  },
+  {
+    "Dancer_ID":"TEMP_Wiebke_Hilmer",
+    "competitor_name":"Wiebke Hilmer",
+    "result_id":"5714",
+    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
+    "event_date":"04\/23\/2026",
+    "Registry_Points_Sum":18.6,
+    "Promoted":false
   },
   {
     "Dancer_ID":"25919",
@@ -7296,1833 +8790,6 @@
     "event_title":"All-Stars Jack&Jill final results - Detonation Dance 2026",
     "event_date":"04\/23\/2026",
     "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"19438",
-    "competitor_name":"Stuart Holloway",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"19440",
-    "competitor_name":"Natasha Holmes",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"21360",
-    "competitor_name":"David Payne",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"22350",
-    "competitor_name":"Yup Ping Mong",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"23994",
-    "competitor_name":"Nimaz Sheik",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"24237",
-    "competitor_name":"Geoff Yang",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"24952",
-    "competitor_name":"Mark McCormack",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25370",
-    "competitor_name":"Leo Turoff",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26302",
-    "competitor_name":"Lee Prowse",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26575",
-    "competitor_name":"Andrew Crossland",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26746",
-    "competitor_name":"Stewart Warren",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"27293",
-    "competitor_name":"Michael De San F\u00e9liciano",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christoph_Weis",
-    "competitor_name":"Christoph Weis",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Gaurav_Pooniwala",
-    "competitor_name":"Gaurav Pooniwala",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Richard_Llopis",
-    "competitor_name":"Richard Llopis",
-    "result_id":"5749",
-    "event_title":"Strictly Novice final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"12323",
-    "competitor_name":"Rostislav Torgovnikov",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"13594",
-    "competitor_name":"Matt Cox",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"14214",
-    "competitor_name":"Jonathan Brownlee",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"15280",
-    "competitor_name":"Chloe Winzar",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"19317",
-    "competitor_name":"Karim Ammour",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"19829",
-    "competitor_name":"Richard Ruff",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"20981",
-    "competitor_name":"Romy Nguyen",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"21182",
-    "competitor_name":"\u00d8yvind Skjelbred",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"22229",
-    "competitor_name":"Giuliano Lehner",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"22952",
-    "competitor_name":"Andrew Holmes",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"23993",
-    "competitor_name":"Clement Darfeuille",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26049",
-    "competitor_name":"Xixuan Zhu",
-    "result_id":"5751",
-    "event_title":"Strictly Intermediate final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"10632",
-    "competitor_name":"Jordan Fox",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"14623",
-    "competitor_name":"Francois Wong",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"16867",
-    "competitor_name":"Max Wakeham",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"17889",
-    "competitor_name":"Bence Szil\u00e1gyi",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"17901",
-    "competitor_name":"Henry Leonard",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"19829",
-    "competitor_name":"Richard Ruff",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"21242",
-    "competitor_name":"Stefan Aworsky",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"7879",
-    "competitor_name":"Lee Bartholomew",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"7880",
-    "competitor_name":"Ekow Oduro",
-    "result_id":"5753",
-    "event_title":"Strictly Open final results - Detonation Dance 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25570",
-    "competitor_name":"Kai Klotz",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25572",
-    "competitor_name":"Janine Sch\u00f6n",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25919",
-    "competitor_name":"Ines Lewandrowski",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25929",
-    "competitor_name":"Joachim F\u00f6rster",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25944",
-    "competitor_name":"Jonathan Busse",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":23.1,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26972",
-    "competitor_name":"Xheni Vogli",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26993",
-    "competitor_name":"Derek Murphy",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"27765",
-    "competitor_name":"Alexandra Dembek",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"27776",
-    "competitor_name":"Jan-Niklas Sohn",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"28067",
-    "competitor_name":"Lars Little",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andre_Gilerson",
-    "competitor_name":"Andre Gilerson",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andrea_Heinichen",
-    "competitor_name":"Andrea Heinichen",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andrea_Lenzing",
-    "competitor_name":"Andrea Lenzing",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andrea_Maus",
-    "competitor_name":"Andrea Maus",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Anna_Sophia_Ohde",
-    "competitor_name":"Anna Sophia Ohde",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Antonia_Thieme",
-    "competitor_name":"Antonia Thieme",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Barbara_K\u00f6hler",
-    "competitor_name":"Barbara K\u00f6hler",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Barbara_Schmitz",
-    "competitor_name":"Barbara Schmitz",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Beate_Schmitz",
-    "competitor_name":"Beate Schmitz",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Benjamin_Ihme",
-    "competitor_name":"Benjamin Ihme",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Bernd_Meier",
-    "competitor_name":"Bernd Meier",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Bianca_Milles",
-    "competitor_name":"Bianca Milles",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":34.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Calvin_Bothe",
-    "competitor_name":"Calvin Bothe",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Celin_Schwamborn",
-    "competitor_name":"Celin Schwamborn",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Charlotte_Becker",
-    "competitor_name":"Charlotte Becker",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christian_Haas",
-    "competitor_name":"Christian Haas",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":34.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christian_Schmelzer",
-    "competitor_name":"Christian Schmelzer",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christine_G\u00fcrtesch",
-    "competitor_name":"Christine G\u00fcrtesch",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christopher_Heidenthal",
-    "competitor_name":"Christopher Heidenthal",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Clara_Joswig",
-    "competitor_name":"Clara Joswig",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Conny_Mertens",
-    "competitor_name":"Conny Mertens",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Corinna_Heyde",
-    "competitor_name":"Corinna Heyde",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Dennis_Hildenbrand",
-    "competitor_name":"Dennis Hildenbrand",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Diana_Chahrrour",
-    "competitor_name":"Diana Chahrrour",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Don_Jurghione",
-    "competitor_name":"Don Jurghione",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Ekaterina_Gennrich",
-    "competitor_name":"Ekaterina Gennrich",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Elena_Birk",
-    "competitor_name":"Elena Birk",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Eugene_Sheretov",
-    "competitor_name":"Eugene Sheretov",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Fabian_Jegert",
-    "competitor_name":"Fabian Jegert",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Fabio_Vogt",
-    "competitor_name":"Fabio Vogt",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Farina_H\u00f6pfner",
-    "competitor_name":"Farina H\u00f6pfner",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Farina_M\u00fcller",
-    "competitor_name":"Farina M\u00fcller",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Frank_Beine",
-    "competitor_name":"Frank Beine",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Frauke_Kulike",
-    "competitor_name":"Frauke Kulike",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Harald_Gie\u00dfler",
-    "competitor_name":"Harald Gie\u00dfler",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Haydee_de_Rivo",
-    "competitor_name":"Haydee de Rivo",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Ilka_Baumhoer",
-    "competitor_name":"Ilka Baumhoer",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Jan_Buchsteiner",
-    "competitor_name":"Jan Buchsteiner",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Janera_Kronsbein",
-    "competitor_name":"Janera Kronsbein",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Johanna_Chen",
-    "competitor_name":"Johanna Chen",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Johannes_Kunz",
-    "competitor_name":"Johannes Kunz",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":34.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Johannes_Schultheis",
-    "competitor_name":"Johannes Schultheis",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":12.9,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Julia_Albers",
-    "competitor_name":"Julia Albers",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Juliana_Langen",
-    "competitor_name":"Juliana Langen",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Katharina_Bata",
-    "competitor_name":"Katharina Bata",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Lars_Gr\u00e4dig",
-    "competitor_name":"Lars Gr\u00e4dig",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Laura_Caspers",
-    "competitor_name":"Laura Caspers",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Laura_Khaze",
-    "competitor_name":"Laura Khaze",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Lena_Quindt",
-    "competitor_name":"Lena Quindt",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Luca_Galbusera",
-    "competitor_name":"Luca Galbusera",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Luisa_Jackwerth",
-    "competitor_name":"Luisa Jackwerth",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Luzia_Grunewald",
-    "competitor_name":"Luzia Grunewald",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Maike_Glowik",
-    "competitor_name":"Maike Glowik",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Maksim_Biziuk",
-    "competitor_name":"Maksim Biziuk",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":34.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Manuel_Schweigert",
-    "competitor_name":"Manuel Schweigert",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Manuel_Wustrau",
-    "competitor_name":"Manuel Wustrau",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Max_Malkow",
-    "competitor_name":"Max Malkow",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Michaela_Pfannkuchen",
-    "competitor_name":"Michaela Pfannkuchen",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Mitsuko_Kuehn",
-    "competitor_name":"Mitsuko Kuehn",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Natalie_Wendling",
-    "competitor_name":"Natalie Wendling",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Ottilia_Voigt",
-    "competitor_name":"Ottilia Voigt",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Paula_Orlicek",
-    "competitor_name":"Paula Orlicek",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Rebekka_Stahnke",
-    "competitor_name":"Rebekka Stahnke",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Robert_Schinner",
-    "competitor_name":"Robert Schinner",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Rosa_Charlotte_Zick",
-    "competitor_name":"Rosa Charlotte Zick",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sabrina_Viel",
-    "competitor_name":"Sabrina Viel",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sagnik_Gupta",
-    "competitor_name":"Sagnik Gupta",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Salome_Raskop",
-    "competitor_name":"Salome Raskop",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sara_Pfannkuchen",
-    "competitor_name":"Sara Pfannkuchen",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sarah_Nagy",
-    "competitor_name":"Sarah Nagy",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sebastian_Glowik",
-    "competitor_name":"Sebastian Glowik",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Simon_Kaufmann",
-    "competitor_name":"Simon Kaufmann",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sonja_Di\u00dfmann",
-    "competitor_name":"Sonja Di\u00dfmann",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Stephan_Duell",
-    "competitor_name":"Stephan Duell",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Stephanie_B\u00f6nisch",
-    "competitor_name":"Stephanie B\u00f6nisch",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Swetlana_Frank",
-    "competitor_name":"Swetlana Frank",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Tanja_Berger",
-    "competitor_name":"Tanja Berger",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Theresa_Merckelbach",
-    "competitor_name":"Theresa Merckelbach",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Thorsten_Huhn",
-    "competitor_name":"Thorsten Huhn",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Tobias_Thaller",
-    "competitor_name":"Tobias Thaller",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Torben_Friedrichs",
-    "competitor_name":"Torben Friedrichs",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Torsten_Meyrowitz",
-    "competitor_name":"Torsten Meyrowitz",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Valeria_Gujo",
-    "competitor_name":"Valeria Gujo",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Vivien_Heider",
-    "competitor_name":"Vivien Heider",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Wiebke_Hilmer",
-    "competitor_name":"Wiebke Hilmer",
-    "result_id":"5713",
-    "event_title":"Newcomer Jack&Jill prelim results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25570",
-    "competitor_name":"Kai Klotz",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25572",
-    "competitor_name":"Janine Sch\u00f6n",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25919",
-    "competitor_name":"Ines Lewandrowski",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25929",
-    "competitor_name":"Joachim F\u00f6rster",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"25944",
-    "competitor_name":"Jonathan Busse",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26972",
-    "competitor_name":"Xheni Vogli",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":34.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"26993",
-    "competitor_name":"Derek Murphy",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"27765",
-    "competitor_name":"Alexandra Dembek",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"27776",
-    "competitor_name":"Jan-Niklas Sohn",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andre_Gilerson",
-    "competitor_name":"Andre Gilerson",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andrea_Heinichen",
-    "competitor_name":"Andrea Heinichen",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andrea_Lenzing",
-    "competitor_name":"Andrea Lenzing",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Andrea_Maus",
-    "competitor_name":"Andrea Maus",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Anna_Sophia_Ohde",
-    "competitor_name":"Anna Sophia Ohde",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Antonia_Thieme",
-    "competitor_name":"Antonia Thieme",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Barbara_Schmitz",
-    "competitor_name":"Barbara Schmitz",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Beate_Schmitz",
-    "competitor_name":"Beate Schmitz",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Bernd_Meier",
-    "competitor_name":"Bernd Meier",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Bianca_Milles",
-    "competitor_name":"Bianca Milles",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Calvin_Bothe",
-    "competitor_name":"Calvin Bothe",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Celin_Schwamborn",
-    "competitor_name":"Celin Schwamborn",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christian_Haas",
-    "competitor_name":"Christian Haas",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christine_G\u00fcrtesch",
-    "competitor_name":"Christine G\u00fcrtesch",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Christopher_Heidenthal",
-    "competitor_name":"Christopher Heidenthal",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Corinna_Heyde",
-    "competitor_name":"Corinna Heyde",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":14.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Dennis_Hildenbrand",
-    "competitor_name":"Dennis Hildenbrand",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Diana_Chahrrour",
-    "competitor_name":"Diana Chahrrour",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Ekaterina_Gennrich",
-    "competitor_name":"Ekaterina Gennrich",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Eugene_Sheretov",
-    "competitor_name":"Eugene Sheretov",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Fabian_Jegert",
-    "competitor_name":"Fabian Jegert",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Fabio_Vogt",
-    "competitor_name":"Fabio Vogt",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Frank_Beine",
-    "competitor_name":"Frank Beine",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Frauke_Kulike",
-    "competitor_name":"Frauke Kulike",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Harald_Gie\u00dfler",
-    "competitor_name":"Harald Gie\u00dfler",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Haydee_de_Rivo",
-    "competitor_name":"Haydee de Rivo",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Jan_Buchsteiner",
-    "competitor_name":"Jan Buchsteiner",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Johanna_Chen",
-    "competitor_name":"Johanna Chen",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Johannes_Kunz",
-    "competitor_name":"Johannes Kunz",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Julia_Albers",
-    "competitor_name":"Julia Albers",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Juliana_Langen",
-    "competitor_name":"Juliana Langen",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":28.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Lena_Quindt",
-    "competitor_name":"Lena Quindt",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Luca_Galbusera",
-    "competitor_name":"Luca Galbusera",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Luisa_Jackwerth",
-    "competitor_name":"Luisa Jackwerth",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Luzia_Grunewald",
-    "competitor_name":"Luzia Grunewald",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Maike_Glowik",
-    "competitor_name":"Maike Glowik",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":8.4,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Maksim_Biziuk",
-    "competitor_name":"Maksim Biziuk",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Manuel_Schweigert",
-    "competitor_name":"Manuel Schweigert",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Manuel_Wustrau",
-    "competitor_name":"Manuel Wustrau",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Max_Malkow",
-    "competitor_name":"Max Malkow",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Mitsuko_Kuehn",
-    "competitor_name":"Mitsuko Kuehn",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Natalie_Wendling",
-    "competitor_name":"Natalie Wendling",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Paula_Orlicek",
-    "competitor_name":"Paula Orlicek",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":34.2,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Rebekka_Stahnke",
-    "competitor_name":"Rebekka Stahnke",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":40.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Robert_Schinner",
-    "competitor_name":"Robert Schinner",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Rosa_Charlotte_Zick",
-    "competitor_name":"Rosa Charlotte Zick",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sabrina_Viel",
-    "competitor_name":"Sabrina Viel",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sagnik_Gupta",
-    "competitor_name":"Sagnik Gupta",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sara_Pfannkuchen",
-    "competitor_name":"Sara Pfannkuchen",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sarah_Nagy",
-    "competitor_name":"Sarah Nagy",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sebastian_Glowik",
-    "competitor_name":"Sebastian Glowik",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":30.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Simon_Kaufmann",
-    "competitor_name":"Simon Kaufmann",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Sonja_Di\u00dfmann",
-    "competitor_name":"Sonja Di\u00dfmann",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":4.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Stephan_Duell",
-    "competitor_name":"Stephan Duell",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Stephanie_B\u00f6nisch",
-    "competitor_name":"Stephanie B\u00f6nisch",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Swetlana_Frank",
-    "competitor_name":"Swetlana Frank",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.3,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Tanja_Berger",
-    "competitor_name":"Tanja Berger",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":24.5,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Thorsten_Huhn",
-    "competitor_name":"Thorsten Huhn",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":20.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Tobias_Thaller",
-    "competitor_name":"Tobias Thaller",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Torben_Friedrichs",
-    "competitor_name":"Torben Friedrichs",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Valeria_Gujo",
-    "competitor_name":"Valeria Gujo",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":0.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Vivien_Heider",
-    "competitor_name":"Vivien Heider",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":10.0,
-    "Promoted":false
-  },
-  {
-    "Dancer_ID":"TEMP_Wiebke_Hilmer",
-    "competitor_name":"Wiebke Hilmer",
-    "result_id":"5714",
-    "event_title":"Newcomer Jack&Jill semi results - SwingIn Festival 2026",
-    "event_date":"04\/23\/2026",
-    "Registry_Points_Sum":18.6,
     "Promoted":false
   }
 ]
