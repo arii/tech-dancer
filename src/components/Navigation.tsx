@@ -120,6 +120,7 @@ export default function Navigation() {
                     setIsOpen(false);
                     handleSearchClick();
                   }}
+                  aria-label="Open global search"
                   display="flex"
                   align="center"
                   gap={4}
@@ -184,6 +185,7 @@ export default function Navigation() {
                 type="button"
                 cursor="pointer"
                 onClick={handleSearchClick}
+                aria-label="Open global search"
                 display="flex"
                 align="center"
                 gap={4}

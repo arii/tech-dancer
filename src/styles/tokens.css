@@ -4,10 +4,10 @@
   --raw-color-surface: oklch(100% 0 0);
   --raw-color-surface-alt: oklch(95% 0.01 250);
   --raw-color-line: oklch(92% 0.01 250);
-  --raw-color-accent: #007BFF;
+  --raw-color-accent: #0059B3;
   --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
   --raw-color-accent-navy: #1A2B3C;
-  --raw-color-accent-brand: #007BFF;
+  --raw-color-accent-brand: #0059B3;
   --raw-color-text-main: #1A2B3C;
   --raw-color-text-body: #2D3748;
   --raw-color-text-dim: #4B4B4B;

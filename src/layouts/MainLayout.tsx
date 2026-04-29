@@ -55,11 +55,16 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <Box display="flex" className="min-h-screen w-full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
+          id="main-content"
+          tabIndex={-1}
           ref={scrollRef}
           flex={1}
           position="relative"

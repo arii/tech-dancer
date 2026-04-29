@@ -135,6 +135,10 @@
     max-width: 65ch;
     @apply text-text-body break-words;
   }
+  *:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 }
 
 .panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
@@ -149,3 +153,11 @@
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }
+
+.skip-link {
+  @apply absolute left-4 top-4 -translate-y-[150%] transition-transform bg-accent text-white px-4 py-2 font-mono font-bold uppercase tracking-widest text-xs;
+  z-index: var(--raw-z-skip-link);
+}
+.skip-link:focus {
+  @apply translate-y-0 outline-none ring-2 ring-accent ring-offset-2;
+}

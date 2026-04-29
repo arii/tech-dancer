@@ -86,7 +86,7 @@ export function GlobalSearch() {
             variant="display"
             size="2xl"
             color="main"
-            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
+            className="border-none focus:ring-0 placeholder:text-text-dim/30"
             autoFocus
           />
           <Box 

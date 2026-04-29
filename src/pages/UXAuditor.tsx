@@ -126,7 +126,7 @@ export default function UXAuditor() {
             value={url}
             title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+            className="bg-bg border-none focus:ring-2 focus:ring-accent font-mono text-text-main truncate text-sm"
             width={64}
             paddingX={4}
             paddingY={2}
@@ -269,7 +269,7 @@ export default function UXAuditor() {
                           {imgUrl ? (
                             <img
                               src={imgUrl}
-                              alt={`${vp.name} snapshot`}
+                              alt={`Website snapshot in ${vp.name} viewport`}
                               className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />

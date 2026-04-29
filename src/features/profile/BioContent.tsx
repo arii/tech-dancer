@@ -12,6 +12,7 @@ export default function BioContent({ data }: BioContentProps) {
         <Stack key={section.id} gap={4}>
           <Box paddingBottom={4} border="b">
             <Text
+              as="h2"
               variant="display"
               size="2xl"
               weight="font-black"

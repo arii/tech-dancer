@@ -21,7 +21,7 @@ interface ContactFormViewProps {
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
-const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
+const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
 
 export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (

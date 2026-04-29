@@ -44,7 +44,7 @@ export default function Toolbox() {
               paddingLeft={10}
               paddingRight={4}
               paddingY={3}
-              className="bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
+              className="bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 transition-all text-base md:text-sm"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />

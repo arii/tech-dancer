@@ -92,7 +92,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent outline-none"
+                className="focus:border-accent"
               />
             </Stack>
 
@@ -109,7 +109,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   padding={3}
                   variant="mono"
                   size="sm"
-                  className="focus:border-accent outline-none appearance-none"
+                  className="focus:border-accent appearance-none"
                 >
                   {CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
@@ -129,7 +129,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   padding={3}
                   variant="mono"
                   size="sm"
-                  className="focus:border-accent outline-none"
+                  className="focus:border-accent"
                 />
               </Stack>
             </Grid>
@@ -148,7 +148,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent outline-none resize-none"
+                className="focus:border-accent resize-none"
               />
             </Stack>
 
@@ -166,7 +166,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent outline-none"
+                className="focus:border-accent"
               />
             </Stack>
 
@@ -184,7 +184,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 padding={3}
                 variant="mono"
                 size="sm"
-                className="focus:border-accent outline-none resize-none"
+                className="focus:border-accent resize-none"
               />
             </Stack>
           </Stack>
@@ -215,7 +215,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               padding={3}
               variant="mono"
               size="sm"
-              className="focus:border-accent outline-none resize-none"
+              className="focus:border-accent resize-none"
             />
             <Box
               as="button"
