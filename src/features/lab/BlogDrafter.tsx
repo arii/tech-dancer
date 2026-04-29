@@ -248,8 +248,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             padding={6}
             overflow="y-auto"
             maxHeight="600px"
-            maxWidth="none"
-            className="prose prose-sm prose-invert bg-black/5"
+            className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
             <MarkdownRenderer content={markdownPreview} />
           </Box>

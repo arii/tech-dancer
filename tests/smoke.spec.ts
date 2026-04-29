@@ -44,7 +44,6 @@ test('all nav links are reachable and error-free', async ({ page }) => {
   );
 
   for (const href of links) {
-    // Clear errors before each navigation
     const errors = getPageErrors(page);
     errors.length = 0;
 
@@ -56,7 +55,6 @@ test('all nav links are reachable and error-free', async ({ page }) => {
 });
 
 test('all post/content pages load without errors', async ({ page }) => {
-  // Visit index pages that list content
   const contentIndexes = ['blog', 'gear', 'research'];
 
   for (const index of contentIndexes) {
@@ -66,7 +64,6 @@ test('all post/content pages load without errors', async ({ page }) => {
 
     await page.waitForLoadState('networkidle');
 
-    // Collect all content links on this index page
     const contentLinks = await page.$$eval('a[href]', (anchors) =>
       anchors
         .map((a) => (a as HTMLAnchorElement).href)
@@ -80,11 +77,6 @@ test('all post/content pages load without errors', async ({ page }) => {
 
       const response = await page.goto(href);
       await page.waitForLoadState('networkidle');
-
-      // Skip if we hit a known non-page link that might 404 in certain environments
-      if (response?.status() === 404 && (href.endsWith('/contact') || href.endsWith('/about'))) {
-         continue;
-      }
 
       expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
       expect(
