@@ -4,8 +4,6 @@ description: systematically review and test UI/UX changes interactively using pl
 
 # Review UX Changes
 
-// turbo-all
-
 0. **Prerequisites**:
 Ensure `playwright-cli` is installed and its skills are available. This tool provides token-efficient browser control for coding agents.
 ```bash
