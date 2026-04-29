@@ -38,7 +38,8 @@ async function main() {
     const content = fs.readFileSync(file, 'utf-8');
 
     // Extract standard markdown links [text](url) - handles potential titles in quotes
-    const linkRegex = /\[.*?\]\((.*?)(\s+".*?")?\)/g;
+    // Negative lookbehind ensures we don't match image tags ![]()
+    const linkRegex = /(?<!\!)\[.*?\]\((.*?)(\s+".*?")?\)/g;
     let match;
     while ((match = linkRegex.exec(content)) !== null) {
       const url = match[1].trim();
@@ -72,11 +73,13 @@ async function main() {
   // 3. Scan affiliate links
   const affiliateLinks: { id: string, url: string }[] = [];
   try {
+    // We use a simplified regex because dynamic import might be complex with tsx
+    // and project structure. But we make it more robust.
     const affiliateContent = fs.readFileSync('src/lib/affiliateManager.ts', 'utf-8');
-    const affRegex = /'([^']+)': \{\s+id: '([^']+)',\s+name: '([^']+)',\s+url: '([^']+)'/g;
+    const affRegex = /['"]([^'"]+)['"]:\s*\{[\s\S]*?url:\s*['"]([^'"]+)['"]/g;
     let affMatch;
     while ((affMatch = affRegex.exec(affiliateContent)) !== null) {
-      affiliateLinks.push({ id: affMatch[2], url: affMatch[4] });
+      affiliateLinks.push({ id: affMatch[1], url: affMatch[2] });
     }
   } catch (err) {
     console.error('Failed to parse affiliate links:', err);
@@ -115,9 +118,18 @@ async function main() {
   console.log(`Validating ${externalToValidate.length} external/affiliate links...`);
 
   for (const link of externalToValidate) {
+    let urlObj: URL;
+    try {
+      urlObj = new URL(link.url);
+    } catch (err) {
+      brokenLinks.push({ ...link, reason: `Invalid URL: ${err instanceof Error ? err.message : String(err)}` });
+      continue;
+    }
+
+    const isAmazon = urlObj.hostname === 'amazon.com' || urlObj.hostname.endsWith('.amazon.com');
+
     // Amazon specific check
-    if (link.url.includes('amazon.com')) {
-      const urlObj = new URL(link.url);
+    if (isAmazon) {
       if (urlObj.pathname === '/' || urlObj.pathname === '') {
         brokenLinks.push({ ...link, reason: 'Generic Amazon placeholder URL' });
         continue;
@@ -147,7 +159,7 @@ async function main() {
 
       if (!response.ok) {
         // Special handling for Amazon which often blocks bots
-        if (link.url.includes('amazon.com') && (response.status === 403 || response.status === 503)) {
+        if (isAmazon && (response.status === 403 || response.status === 503)) {
           console.warn(`[Warning] Amazon might be blocking our bot for ${link.url} (Status ${response.status})`);
           // We don't mark it as broken if it's just a bot block for a likely valid product URL
           continue;
