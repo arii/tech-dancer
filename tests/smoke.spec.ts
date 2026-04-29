@@ -39,8 +39,8 @@ test('all nav links are reachable and error-free', async ({ page }) => {
 
   const links = await page.$$eval('nav a[href]', (anchors) =>
     anchors
-      .map((a) => (a as HTMLAnchorElement).getAttribute('href'))
-      .filter((href): href is string => !!href && !href.startsWith('http'))
+      .map((a) => (a as HTMLAnchorElement).href)
+      .filter((href) => href.startsWith(window.location.origin))
   );
 
   for (const href of links) {
@@ -48,10 +48,7 @@ test('all nav links are reachable and error-free', async ({ page }) => {
     const errors = getPageErrors(page);
     errors.length = 0;
 
-    // Convert to relative path if it starts with / to ensure it stays within base path
-    const target = href.startsWith('/') ? `.${href}` : href;
-
-    const response = await page.goto(target);
+    const response = await page.goto(href);
     await page.waitForLoadState('networkidle');
     expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
     expect(errors.filter(e => !e.includes("Stack is not defined")), `Console errors at ${href}: ${errors.join(', ')}`).toHaveLength(0);
@@ -72,8 +69,8 @@ test('all post/content pages load without errors', async ({ page }) => {
     // Collect all content links on this index page
     const contentLinks = await page.$$eval('a[href]', (anchors) =>
       anchors
-        .map((a) => (a as HTMLAnchorElement).getAttribute('href'))
-        .filter((href): href is string => !!href && !href.startsWith('http'))
+        .map((a) => (a as HTMLAnchorElement).href)
+        .filter((href) => href.startsWith(window.location.origin))
         .filter((href, i, arr) => arr.indexOf(href) === i) // dedupe
     );
 
@@ -81,16 +78,12 @@ test('all post/content pages load without errors', async ({ page }) => {
       const errors = getPageErrors(page);
       errors.length = 0;
 
-      const target = href.startsWith('/') ? `.${href}` : href;
-
-      const response = await page.goto(target);
+      const response = await page.goto(href);
       await page.waitForLoadState('networkidle');
 
       // Skip if we hit the same page or if it's a known non-page link
-      if (response?.status() === 404 && (href === '/contact' || href === '/about')) {
-         // These should be routes, but if they 404, we might be hitting them wrong.
-         // In SPA, goto might fail if it's not a real file on the server.
-         // However, Playwright baseURL + goto('./') usually works for SPA.
+      if (response?.status() === 404 && (href.endsWith('/contact') || href.endsWith('/about'))) {
+         continue;
       }
 
       expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
