@@ -370,7 +370,7 @@ async def main():
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")
     parser.add_argument("--ledger", default="etl/data/wcs_prelims.parquet", help="Path to Parquet ledger")
-    parser.add_argument("--json", default="src/features/research/data/wcs_prelims.json", help="Path to JSON export")
+    parser.add_argument("--json", default="public/data/wcs_prelims.json", help="Path to JSON export")
     parser.add_argument("--studies", default="content/studies", help="Directory for Markdown output")
     args = parser.parse_args()
 

@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search,
   Download,
   BarChart2,
   FileJson,
   FileText,
-  TrendingUp
+  TrendingUp,
+  Loader2
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -25,17 +26,7 @@ import {
   Grid,
   Button
 } from '@/layouts/Primitives';
-import Papa from 'papaparse';
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
-import rawData from '../data/wcs_prelims.json';
-
-// Type augmentation for jspdf-autotable
-declare module 'jspdf' {
-  interface jsPDF {
-    autoTable: (options: unknown) => jsPDF;
-  }
-}
+import { useExport } from '../hooks/useExport';
 
 interface WCSRecord {
   Dancer_ID: string;
@@ -47,11 +38,26 @@ interface WCSRecord {
   Promoted: boolean;
 }
 
-const data = rawData as WCSRecord[];
-
 export function WCSScraperTool() {
+  const [data, setData] = useState<WCSRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPromoted, setFilterPromoted] = useState<'all' | 'promoted' | 'not-promoted'>('all');
+
+  const { exportCSV, exportPDF } = useExport();
+
+  useEffect(() => {
+    fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.json`)
+      .then(res => res.json())
+      .then(json => {
+        setData(json);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to load WCS data:", err);
+        setIsLoading(false);
+      });
+  }, []);
 
   const filteredData = useMemo(() => {
     return data.filter(record => {
@@ -67,7 +73,7 @@ export function WCSScraperTool() {
 
       return matchesSearch && matchesFilter;
     });
-  }, [searchTerm, filterPromoted]);
+  }, [data, searchTerm, filterPromoted]);
 
   const scoreDistribution = useMemo(() => {
     const bins: Record<string, number> = {};
@@ -83,7 +89,7 @@ export function WCSScraperTool() {
   const trendData = useMemo(() => {
     const byDate: Record<string, { total: number, count: number }> = {};
     filteredData.forEach(r => {
-      const date = r.event_date.split('/').slice(1).join('/'); // MM/YYYY or similar
+      const date = r.event_date.split('/').slice(1).join('/');
       if (!byDate[date]) byDate[date] = { total: 0, count: 0 };
       byDate[date].total += r.Registry_Points_Sum;
       byDate[date].count += 1;
@@ -97,29 +103,10 @@ export function WCSScraperTool() {
   }, [filteredData]);
 
   const handleExportCSV = () => {
-    const csv = Papa.unparse(filteredData);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `wcs_prelims_export_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportCSV(filteredData, 'wcs_prelims');
   };
 
   const handleExportPDF = () => {
-    const doc = new jsPDF();
-
-    doc.setFontSize(18);
-    doc.text('WCS Prelim Scoring Analysis', 14, 22);
-
-    doc.setFontSize(11);
-    doc.setTextColor(100);
-    doc.text(`Generated on ${new Date().toLocaleDateString()}`, 14, 30);
-    doc.text(`Records: ${filteredData.length}`, 14, 36);
-
     const tableData = filteredData.map(r => [
       r.event_date,
       r.competitor_name,
@@ -128,21 +115,23 @@ export function WCSScraperTool() {
       r.Promoted ? 'YES' : 'NO'
     ]);
 
-    doc.autoTable({
-      startY: 45,
-      head: [['Date', 'Competitor', 'Event', 'Score', 'Promoted']],
-      body: tableData,
-      theme: 'grid',
-      headStyles: { fillColor: '#1a1a1a', textColor: '#ffffff', fontSize: 10 },
-      bodyStyles: { fontSize: 9 },
-      columnStyles: {
-        3: { halign: 'center' },
-        4: { halign: 'center' }
-      }
+    exportPDF(tableData, {
+      filename: 'wcs_prelims',
+      title: 'WCS Prelim Scoring Analysis',
+      headers: ['Date', 'Competitor', 'Event', 'Score', 'Promoted']
     });
-
-    doc.save(`wcs_prelims_report_${new Date().toISOString().split('T')[0]}.pdf`);
   };
+
+  if (isLoading) {
+    return (
+      <Box padding={12} display="flex" justify="center" align="center">
+        <Stack align="center" gap={4}>
+          <Loader2 className="w-8 h-8 text-accent animate-spin" />
+          <Text variant="mono" size="xs">INGESTING DATASET...</Text>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <Stack gap={8}>
@@ -202,18 +191,18 @@ export function WCSScraperTool() {
                         fontSize={10}
                         tickLine={false}
                         axisLine={false}
-                        tick={{ fill: 'var(--color-dim)' }}
+                        tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
                       />
                       <YAxis hide />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: 'var(--color-surface-default)',
-                          border: '1px solid var(--color-line)',
+                          backgroundColor: 'rgba(var(--color-surface), 1)',
+                          border: '1px solid rgba(var(--color-line), 1)',
                           fontSize: '10px',
                           fontFamily: 'var(--font-mono)'
                         }}
                       />
-                      <Bar dataKey="count" fill="var(--color-brand)" radius={[2, 2, 0, 0]} />
+                      <Bar dataKey="count" fill="var(--color-accent)" radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </Box>
@@ -235,13 +224,13 @@ export function WCSScraperTool() {
                         fontSize={10}
                         tickLine={false}
                         axisLine={false}
-                        tick={{ fill: 'var(--color-dim)' }}
+                        tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
                       />
                       <YAxis hide />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: 'var(--color-surface-default)',
-                          border: '1px solid var(--color-line)',
+                          backgroundColor: 'rgba(var(--color-surface), 1)',
+                          border: '1px solid rgba(var(--color-line), 1)',
                           fontSize: '10px',
                           fontFamily: 'var(--font-mono)'
                         }}
