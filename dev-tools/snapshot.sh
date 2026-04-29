@@ -4,7 +4,7 @@ set -e
 # Ensure we are in the project root
 cd "$(dirname "$0")/.."
 
-echo "=== Starting Minimal Jules Setup ==="
+echo "=== Starting Minimal Jules Setup (Base) ==="
 
 # Force non-interactive frontend to prevent any hanging prompts
 export DEBIAN_FRONTEND=noninteractive
@@ -29,5 +29,5 @@ if ! pnpm install --frozen-lockfile; then
 fi
 
 echo "=== Base Jules Setup Complete! ==="
-echo "Note: Playwright and Python dependencies are not installed by default to keep the snapshot minimal."
-echo "Refer to AGENTS.md for on-demand installation commands."
+echo "Note: Heavy dependencies (Playwright, Python ETL) are decoupled to reduce snapshot size."
+echo "Refer to AGENTS.md for on-demand setup scripts: setup-playwright.sh, setup-python.sh."
