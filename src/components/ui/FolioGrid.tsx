@@ -1,3 +1,4 @@
+import { ChangeEvent, ReactNode } from "react";
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -15,7 +16,7 @@ interface FolioGridProps {
   basePath: string;
   label?: string;
   description?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
@@ -69,7 +70,7 @@ export default function FolioGrid({
               size="sm"
               className="focus:border-accent outline-none focus:ring-0"
               value={search}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />
           </Box>
           {onViewChange && (

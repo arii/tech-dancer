@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from "react";
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
@@ -84,7 +84,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 as="input"
                 type="text"
                 value={data.title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
                 placeholder="The Future of WCS..."
                 width="full"
                 surface="default"
@@ -102,7 +102,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Box
                   as="select"
                   value={data.category}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
                   width="full"
                   surface="default"
                   border
@@ -122,7 +122,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   as="input"
                   type="date"
                   value={data.date}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
                   width="full"
                   surface="default"
                   border
@@ -139,7 +139,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               <Box
                 as="textarea"
                 value={data.excerpt}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the post content..."
                 width="full"
                 height={20}
@@ -158,7 +158,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 as="input"
                 type="url"
                 value={data.affiliateLink}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
                 placeholder="https://amazon.com/..."
                 width="full"
                 surface="default"
@@ -175,7 +175,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               <Box
                 as="textarea"
                 value={data.commentary}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
                 placeholder="Write your main content here..."
                 width="full"
                 height={40}
@@ -206,7 +206,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             <Box
               as="textarea"
               value={aiInput}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
               placeholder="Paste AI JSON response here..."
               width="full"
               height={32}

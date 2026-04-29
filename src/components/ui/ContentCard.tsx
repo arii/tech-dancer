@@ -22,12 +22,17 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
   const rt = readingTime(content, excerpt);
 
   return (
-    <Box 
+    <Stack
       as={motion(NavLink)}
       to={`${basePath}/${slug}`}
       radius="xl"
       shadow="standard"
-      className="group flex flex-col h-full bg-surface border border-line hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      direction="col"
+      gap={0}
+      height="full"
+      surface="default"
+      border
+      className="group hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       {...motionProps}
     >
       {/* Visual Thumbnail */}
@@ -39,17 +44,17 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <Box className="w-full h-full flex flex-col">
-            <Box className="h-4 w-full" surface={
+          <Stack width="full" height="full" direction="col" gap={0}>
+            <Box height={4} width="full" surface={
               (category || '').toLowerCase().includes('tech') ? 'brand' :
               (category || '').toLowerCase().includes('travel') || (category || '').toLowerCase().includes('wcs') ? 'accent' :
               (category || '').toLowerCase().includes('gear') ? 'warning' :
               (category || '').toLowerCase().includes('lifestyle') ? 'danger' : 'muted'
             } />
-            <Box className="flex-1 flex items-center justify-center bg-muted/10">
+            <Box flex={1} display="flex" align="center" justify="center" className="bg-muted/10">
               <CategoryPlaceholder category={category} size="md" />
             </Box>
-          </Box>
+          </Stack>
         )}
         <Box className="absolute top-4 left-4">
           <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-sm">
@@ -113,12 +118,12 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
           <Text variant="mono" size="xs" weight="font-bold" tracking="wider" className="text-accent">
             Read Article
           </Text>
-          <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
+          <Box className="w-0 h-px bg-accent group-hover:w-6 transition-all duration-500" />
           <Text variant="mono" size="xs" className="text-accent ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
             →
           </Text>
         </Box>
       </Stack>
-    </Box>
+    </Stack>
   );
 }

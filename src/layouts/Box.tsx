@@ -1,4 +1,5 @@
-import * as React from "react"
+import { forwardRef, type ElementType, type HTMLAttributes } from "react";
+
 import { cn, composeStyles } from "@/lib/utils"
 import { layout as layoutTokens, spacing, zIndex as zIndexTokens, shadows, contentWidth } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
@@ -59,12 +60,12 @@ export interface BaseProps {
   left?: ResponsiveProp<keyof typeof spacing | number | string>
 }
 
-export interface BoxProps extends BaseProps, React.HTMLAttributes<HTMLDivElement> {
-  as?: React.ElementType
+export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
+  as?: ElementType
   [key: string]: unknown
 }
 
-export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
+export const Box = forwardRef<HTMLDivElement, BoxProps>(
   ({ 
     className, 
     as: Component = "div", 

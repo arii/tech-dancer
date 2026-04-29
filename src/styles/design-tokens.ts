@@ -46,7 +46,7 @@ export const layout = {
   grid: "grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 w-full",
   section: "mt-24 space-y-8",
   divider: "border-b border-line pb-4 flex items-end justify-between",
-  cardImage: { maxHeight: "max-h-[160px]" },
+  cardImage: { maxHeight: "max-h-40" },
 };
 
 export const inputs = {

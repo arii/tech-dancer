@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -12,10 +13,10 @@ interface DetailLayoutProps {
   image?: string;
   onBack: () => void;
   backLabel: string;
-  sidebar?: React.ReactNode;
-  children?: React.ReactNode;
-  headerExtras?: React.ReactNode;
-  relatedContent?: React.ReactNode;
+  sidebar?: ReactNode;
+  children?: ReactNode;
+  headerExtras?: ReactNode;
+  relatedContent?: ReactNode;
 }
 
 export function DetailLayout({
@@ -103,7 +104,7 @@ export function DetailLayout({
             <Box className={sidebar ? "lg:col-span-2" : "w-full"}>
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
+                className="prose prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
                 style={{ maxWidth: '720px' }}
               >
                 <MarkdownRenderer content={content} />

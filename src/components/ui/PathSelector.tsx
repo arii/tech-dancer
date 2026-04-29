@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 type PathID = 'dancer' | 'roboticist';
 
@@ -33,41 +34,51 @@ export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-y border-line min-h-[60vh] w-full bg-black">
+    <Box className="grid grid-cols-1 lg:grid-cols-12" gap={0} border="y" height="[60vh]" width="full" surface="contrast">
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
 
         return (
-          <div
+          <Box
             key={path.id}
-            className={`${path.wrapperClass} relative group overflow-hidden cursor-pointer`}
+            className={`${path.wrapperClass} group cursor-pointer`}
+            position="relative"
+            overflow="hidden"
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={() => setHoveredPath(isHovered ? null : path.id)}
           >
             {/* Background */}
-            <div
-              className={`absolute inset-0 ${path.bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
+            <Box
+              position="absolute"
+              inset
+              className={`${path.bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
                 isOtherHovered ? 'grayscale opacity-60' : 'opacity-100'
               }`}
-            ></div>
+            />
 
             {/* Scanline */}
-            <div
-              className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              width="full"
+              height={0.5}
+              className={`bg-accent shadow-[0_0_15px_var(--color-accent-shadow)] z-10 pointer-events-none transition-opacity duration-500 ${
                 path.scanlineDelay || ''
               } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
-            ></div>
+            />
 
             {/* Content Container */}
-            <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-              <h2
+            <Stack position="relative" zIndex={20} padding={12} height="full" direction="col" justify="end" gap={0} className="bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+              <Text
+                as="h2"
                 className={`${path.titleClass} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2`}
               >
                 {path.title}
-              </h2>
-              <ul className="space-y-4 mb-6 font-mono text-sm tracking-widest uppercase text-white font-bold opacity-80 group-hover:opacity-100 transition-opacity duration-500 delay-75">
+              </Text>
+              <Stack as="ul" gap={4} marginBottom={6} className="font-mono text-sm tracking-widest uppercase text-white font-bold opacity-80 group-hover:opacity-100 transition-opacity duration-500 delay-75">
                 {path.links.map((link) => (
                   <li key={link.text}>
                     <NavLink
@@ -81,11 +92,11 @@ export default function PathSelector() {
                     </NavLink>
                   </li>
                 ))}
-              </ul>
-            </div>
-          </div>
+              </Stack>
+            </Stack>
+          </Box>
         );
       })}
-    </div>
+    </Box>
   );
 }

@@ -1,10 +1,11 @@
+import { BaseSyntheticEvent } from "react";
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
-import React from 'react';
+
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 
 interface ContactFormData {
@@ -18,7 +19,7 @@ interface ContactFormViewProps {
   register: UseFormRegister<ContactFormData>;
   errors: FieldErrors<ContactFormData>;
   isSubmitting: boolean;
-  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
 }
 
 const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
@@ -37,7 +38,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           <Box surface="default" padding={{ base: 8, md: 12 }} border={{ base: "b", md: { b: false, r: true } }}>
             <Stack gap={12}>
               <Stack gap={6}>
-                <Box paddingBottom={4} className="border-b border-slate-200">
+                <Box paddingBottom={4} border="b">
                   <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">

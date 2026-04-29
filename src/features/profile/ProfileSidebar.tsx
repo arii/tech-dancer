@@ -17,7 +17,7 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ data }: ProfileSidebarProps) {
   return (
-    <Box display="flex" direction={{ base: 'col', md: 'row' }} gap={{ base: 8, lg: 12 }} align="start">
+    <Stack direction={{ base: "col", md: "row" }} gap={{ base: 8, lg: 12 }} align="start">
       <Box
         aspect="square"
         surface="muted"
@@ -83,7 +83,7 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
             </Box>
           </Stack>
 
-          <Box display="flex" direction="col" gap={4} marginTop={4}>
+          <Stack direction="col" gap={4} marginTop={4}>
             {[
               { icon: FileText, label: 'Curriculum Vitae' },
               { icon: Award, label: 'Publications' },
@@ -101,9 +101,9 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
                 <Text variant="mono" size="xs" weight="font-semibold" tracking="emphasized" uppercase>{item.label}</Text>
               </Box>
             ))}
-          </Box>
+          </Stack>
         </Stack>
       </Box>
-    </Box>
+    </Stack>
   );
 }
