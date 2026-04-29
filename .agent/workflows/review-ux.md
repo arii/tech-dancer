@@ -5,8 +5,9 @@ description: Systematically review and test UI/UX changes interactively using pl
 # Review UX Changes
 
 0. **Prerequisites**:
-Ensure `playwright-cli` is installed and its skills are available.
+Ensure project dependencies and `playwright-cli` are installed, and its skills are available.
 ```bash
+pnpm install
 npm install -g @playwright/cli@latest
 playwright-cli install --skills
 ```
@@ -54,5 +55,5 @@ playwright-cli screenshot --filename=mobile-home.png
 5. **Cleanup**:
 ```bash
 playwright-cli close-all
-kill $(lsof -t -i :3000) 2>/dev/null || true
+npx kill-port 3000
 ```
