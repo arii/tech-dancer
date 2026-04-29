@@ -1,10 +1,9 @@
 /**
- * Link and Affiliate Validator
+ * Link Validator
  *
  * 1. Crawls internal and external links using AST traversal.
- * 2. Validates Amazon affiliate links from JSON data.
- * 3. Validates image sources.
- * 4. Reports broken links.
+ * 2. Validates image sources.
+ * 3. Reports broken links.
  */
 
 import fs from 'fs';
@@ -14,7 +13,6 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import { visit } from 'unist-util-visit';
 import { CONTENT_DIR_MAP, getContentSlugs } from './content-loader';
-import AFFILIATES from '../src/data/affiliates.json';
 
 async function main() {
   console.log('Starting link validation...');
@@ -73,16 +71,7 @@ async function main() {
 
   console.log(`Extracted ${extractedLinks.length} links/images from markdown.`);
 
-  // 3. Scan affiliate links from JSON
-  const affiliateLinks = Object.values(AFFILIATES).map(link => ({
-    file: 'src/data/affiliates.json',
-    type: 'affiliate',
-    url: link.url
-  }));
-
-  console.log(`Discovered ${affiliateLinks.length} affiliate links from data source.`);
-
-  // 4. Validate everything
+  // 3. Validate everything
   const brokenLinks: { file: string, type: string, url: string, reason: string }[] = [];
 
   // Validate internal links
@@ -95,8 +84,7 @@ async function main() {
 
   // Validate external links and images
   const externalToValidate = [
-    ...extractedLinks.filter(l => l.type === 'external' || (l.type === 'image' && l.url.startsWith('http'))),
-    ...affiliateLinks
+    ...extractedLinks.filter(l => l.type === 'external' || (l.type === 'image' && l.url.startsWith('http')))
   ];
 
   const localImagesToValidate = extractedLinks.filter(l => l.type === 'image' && !l.url.startsWith('http'));
@@ -109,7 +97,7 @@ async function main() {
     }
   });
 
-  console.log(`Validating ${externalToValidate.length} external/affiliate links...`);
+  console.log(`Validating ${externalToValidate.length} external links...`);
 
   for (const link of externalToValidate) {
     let urlObj: URL;
@@ -118,15 +106,6 @@ async function main() {
     } catch (err) {
       brokenLinks.push({ ...link, reason: `Invalid URL: ${err instanceof Error ? err.message : String(err)}` });
       continue;
-    }
-
-    const isAmazon = urlObj.hostname === 'amazon.com' || urlObj.hostname.endsWith('.amazon.com');
-
-    if (isAmazon) {
-      if (urlObj.pathname === '/' || urlObj.pathname === '') {
-        brokenLinks.push({ ...link, reason: 'Generic Amazon placeholder URL' });
-        continue;
-      }
     }
 
     try {
@@ -150,10 +129,6 @@ async function main() {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        if (isAmazon && (response.status === 403 || response.status === 503)) {
-          console.warn(`[Warning] Amazon might be blocking our bot for ${link.url} (Status ${response.status})`);
-          continue;
-        }
         brokenLinks.push({ ...link, reason: `HTTP Status ${response.status}` });
       }
     } catch (err) {
