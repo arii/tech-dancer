@@ -72,24 +72,11 @@ export default defineConfig(({mode}) => {
       }),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
           name: 'Tech-Dancer',
           short_name: 'TechDancer',
           description: "The Roboticist's Guide to WCS",
           theme_color: '#1A2B3C',
-          icons: [
-            {
-              src: 'pwa-192x192.png',
-              sizes: '192x192',
-              type: 'image/png'
-            },
-            {
-              src: 'pwa-512x512.png',
-              sizes: '512x512',
-              type: 'image/png'
-            }
-          ]
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
