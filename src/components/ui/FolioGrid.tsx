@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode } from "react";
+import { type ChangeEvent, type ReactNode } from "react";
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';

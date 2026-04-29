@@ -1,4 +1,4 @@
-import { ReactNode, useLayoutEffect, useRef } from "react";
+import { type ReactNode, useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';

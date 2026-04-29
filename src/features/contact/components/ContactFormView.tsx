@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent } from "react";
+import { type BaseSyntheticEvent } from "react";
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { inputs } from '@/styles/design-tokens';

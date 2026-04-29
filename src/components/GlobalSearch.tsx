@@ -2,7 +2,7 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef, MouseEvent, ChangeEvent } from 'react';
+import { useRef, type MouseEvent, type ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 

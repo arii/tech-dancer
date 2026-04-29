@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from "react";
 import { Box, Stack } from '../../layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 

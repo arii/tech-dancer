@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent } from "react";
+import { type ChangeEvent, type FormEvent } from "react";
 import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
