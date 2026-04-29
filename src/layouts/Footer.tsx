@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
 export function Footer() {
   const legalLinks = [
-    { label: 'Privacy', href: '#' },
-    { label: 'Terms', href: '#' },
-    { label: 'Contact', href: import.meta.env.BASE_URL + 'contact' },
+    { label: 'Privacy', to: '#' },
+    { label: 'Terms', to: '#' },
+    { label: 'Contact', to: '/contact' },
   ];
 
   return (
@@ -17,8 +18,8 @@ export function Footer() {
           {legalLinks.map((link) => (
             <Button
               key={link.label}
-              as="a"
-              href={link.href}
+              as={Link}
+              to={link.to}
               variant="ghost"
               size="sm"
               className="text-text-dim hover:text-accent"

@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 
 interface MarkdownRendererProps {
@@ -10,7 +11,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     <div className="[counter-reset:section]">
       <ReactMarkdown
         components={{
-          a: ({node: _node, ...props}) => <a {...props} rel="noopener noreferrer" target="_blank" />,
+          a: ({node: _node, href, ...props}) => {
+            const isInternal = href?.startsWith('/') || href?.startsWith('#');
+            if (isInternal) {
+              return <Link to={href || '#'} {...props} className="text-accent hover:underline" />;
+            }
+            return <a href={href} {...props} rel="noopener noreferrer" target="_blank" className="text-accent hover:underline" />;
+          },
           blockquote: ({node: _node, ...props}) => (
             <Box border surface="warning" padding={6} marginY={8} radius="none">
                <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" className="mb-2 block">Key Takeaway</Text>

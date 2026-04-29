@@ -51,16 +51,20 @@ const getBasename = (): string => {
   const baseSegments = buildBaseClean.split('/').filter(Boolean);
 
   // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
-  // check if the next segment is a known route.
+  // check if the next segments are known routes.
   if (segments.length > baseSegments.length) {
-    const possibleRouteSegment = segments[baseSegments.length];
+    let branchSegmentsCount = 0;
+    while (baseSegments.length + branchSegmentsCount < segments.length) {
+      const segment = segments[baseSegments.length + branchSegmentsCount];
+      if (VALID_TOP_LEVEL_PATHS.has(segment) || segment === 'index.html') {
+        break;
+      }
+      branchSegmentsCount++;
+    }
 
-    const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(possibleRouteSegment);
-    const isIndexHtml = possibleRouteSegment === 'index.html';
-
-    if (!isStandardRoute && !isIndexHtml) {
-      // It's likely a branch deployment. The basename includes this extra segment.
-      return '/' + segments.slice(0, baseSegments.length + 1).join('/') + '/';
+    if (branchSegmentsCount > 0) {
+      // The basename includes these extra segments.
+      return '/' + segments.slice(0, baseSegments.length + branchSegmentsCount).join('/') + '/';
     }
   }
 
