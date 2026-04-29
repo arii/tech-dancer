@@ -151,12 +151,12 @@ export function WCSScraperTool() {
 
   if (isLoading) {
     return (
-      <Box padding={12} display="flex" justify="center" align="center">
-        <Stack align="center" gap={4}>
+      <div className="p-12 flex justify-center items-center">
+        <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-accent animate-spin" />
           <Text variant="mono" size="xs">INGESTING DATASET...</Text>
-        </Stack>
-      </Box>
+        </div>
+      </div>
     );
   }
 
