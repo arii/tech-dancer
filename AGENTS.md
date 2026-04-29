@@ -133,7 +133,24 @@ When multiple agents work simultaneously:
 - **Manual Confirmation for Merges**: Every merge command MUST be preceded by a specific `notify_user` request for approval, even if part of a previously discussed plan.
 - **No Autonomous Batch Merging**: Avoid sequential, rebase-based merge strategies that operate autonomously. Every merge transition requires manual verification.
 
-## 24. UI Auditing Workflow
+## 24. Setup (Jules Environment Fallback)
+
+If the automated setup script fails or times out, you must manually run these commands to prepare the environment:
+
+```bash
+# 1. Install Node dependencies
+pnpm install --frozen-lockfile
+
+# 2. Install Playwright browser & system deps
+npx playwright install chromium
+sudo npx playwright install-deps chromium
+
+# 3. Install Python ETL dependencies (System)
+export UV_SYSTEM_PYTHON=1
+uv pip install -r etl/requirements.txt
+```
+
+## 25. UI Auditing Workflow
 
 The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) helps maintain design system integrity by identifying arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
 
