@@ -49,24 +49,16 @@ export function GlobalSearch() {
     );
   }, [query]);
 
-  // 1. The Context Reset: Close on route change
-  // Note: Since isOpen is now derived from URL search params ('search=true'),
-  // navigation to a new URL without the 'search' param will automatically
-  // "close" the modal (isOpen will become false).
-
-  // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {
     if (isOpen) close();
   }, [isOpen, close]);
 
-  // Global Shortcut: Ctrl+K or Cmd+K to open search
   useCommandKey('k', (e) => {
     e.preventDefault();
     open();
   }, [open]);
 
   const handleSelect = (result: SearchResult) => {
-    // 4. Link Click Delegation: Immediate Feedback
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
@@ -88,7 +80,6 @@ export function GlobalSearch() {
       surface={false}
       data-testid="search-backdrop"
       className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
-      // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
       <Box

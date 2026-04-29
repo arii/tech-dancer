@@ -3,7 +3,6 @@ import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
-import { ProgressiveImage } from '@/components/ui/ProgressiveImage';
 
 interface DetailLayoutProps {
   title: string;
@@ -58,7 +57,7 @@ export function DetailLayout({
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
               {category} • {date} • {rt} min read
             </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
               {title}
             </Text>
             {headerExtras}
@@ -75,10 +74,11 @@ export function DetailLayout({
               border
               className="bg-muted"
             >
-              <ProgressiveImage
+              <img
                 src={image}
                 alt={title}
-                aspect="video"
+                loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-700"
               />
             </Box>
           )}
