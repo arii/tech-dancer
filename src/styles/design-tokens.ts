@@ -54,9 +54,6 @@ export const shadows = {
   standard: "shadow-sm",
 };
 
-export const imageSizes = {
-  profile: 400, // Keep as number for img attribute compatibility
-};
 
 export const stroke = {
   thin: "stroke-[0.5]",
@@ -96,6 +93,7 @@ export const typography = {
   micro: "font-mono uppercase tracking-widest",
   tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+  headerAccent: "font-mono font-bold tracking-[0.2em] uppercase text-accent",
 };
 
 export const tracking = {

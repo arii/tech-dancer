@@ -3,7 +3,6 @@ import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
-import { ProgressiveImage } from '@/components/ui/ProgressiveImage';
 
 interface DetailLayoutProps {
   title: string;
@@ -54,20 +53,13 @@ export function DetailLayout({
 
         <Stack gap={10}>
           {/* Header */}
-          <Stack gap={6}>
-            <Box display="flex" align="center" gap={4}>
-              <Box className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-none">
-                <Text variant="mono" size="micro" weight="font-bold" color="brand" uppercase>
-                  {category}
-                </Text>
-              </Box>
-              <Text variant="mono" size="micro" color="dim">{date} • {rt} min read</Text>
-            </Box>
-
-            <Text variant="headline" size="fluid-8" className="tracking-tighter leading-none">
+          <Stack gap={4}>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
+              {category} • {date} • {rt} min read
+            </Text>
+            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
               {title}
             </Text>
-
             {headerExtras}
           </Stack>
 
@@ -82,10 +74,11 @@ export function DetailLayout({
               border
               className="bg-muted"
             >
-              <ProgressiveImage
+              <img
                 src={image}
                 alt={title}
-                aspect="video"
+                loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-700"
               />
             </Box>
           )}
