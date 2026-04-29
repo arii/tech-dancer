@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 import random
+import asyncio
 from urllib.parse import urljoin
 from tqdm import tqdm
 from etl.processor import process_for_ledger
@@ -19,6 +20,16 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 BASE_URL = "https://scoring.dance"
 USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/tech-dancer)"
+
+class RateLimiter:
+    """Handles ethical rate limiting with jitter."""
+    def __init__(self, base_delay=1.0, jitter_range=(0.0, 2.0)):
+        self.base_delay = base_delay
+        self.jitter_range = jitter_range
+
+    async def throttle(self):
+        delay = self.base_delay + random.uniform(*self.jitter_range)
+        await asyncio.sleep(delay)
 
 POINTS_MAPPING = {
     'Yes': 10.0, 'Alt1': 4.5, 'Alt2': 4.3, 'Alt3': 4.2, 'No': 0.0,
@@ -306,6 +317,7 @@ class ETLPipeline:
         self.crawler = crawler
         self.parser = parser
         self.output_manager = output_manager
+        self.limiter = RateLimiter()
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def _fetch_page(self, browser_context, url):
@@ -357,8 +369,7 @@ class ETLPipeline:
 
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
-                            # Ethical jittered rate limiting
-                            await asyncio.sleep(1 + random.random() * 2)
+                            await self.limiter.throttle()
                         except Exception as e:
                             logging.error(f"Failed to process {res_url}: {e}")
                 except Exception as e:
