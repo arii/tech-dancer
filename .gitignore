@@ -16,6 +16,7 @@ test-results/
 coverage/
 blob-report/
 .playwright/
+.lighthouseci/
 
 # Environment and Secrets
 .env

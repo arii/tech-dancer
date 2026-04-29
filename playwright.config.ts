@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 4173;
 const BASE_PATH = '/tech-dancer/';
 
 export default defineConfig({
-  testDir: './tests-e2e/functional',
+  testDir: './tests-e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
