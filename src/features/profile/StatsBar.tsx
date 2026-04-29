@@ -6,6 +6,15 @@ interface StatsBarProps {
   stats: ProfileStats;
 }
 
+const getBorderClasses = (idx: number, total: number) => {
+  return cn(
+    "border-line",
+    idx >= total - 2 ? "border-b-0" : "border-b md:border-b-0",
+    idx % 2 !== 0 ? "border-r-0 md:border-r" : "border-r md:border-r",
+    idx === total - 1 ? "md:border-r-0" : ""
+  );
+};
+
 export default function StatsBar({ stats }: StatsBarProps) {
   const items = [
     { value: stats.yearsDancing, label: "Years dancing" },
@@ -34,10 +43,7 @@ export default function StatsBar({ stats }: StatsBarProps) {
           gap={1}
           className={cn(
             "text-center transition-colors hover:bg-surface/50",
-            "border-b border-line md:border-b-0",
-            idx === 1 || idx === 3 ? "border-r-0 md:border-r" : "border-r md:border-r",
-            idx === items.length - 1 ? "md:border-r-0" : "",
-            idx > 1 ? "border-b-0" : ""
+            getBorderClasses(idx, items.length)
           )}
         >
           <Text variant="display" size="3xl" weight="font-bold" className="text-accent-navy leading-tight">
