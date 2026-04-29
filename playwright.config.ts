@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 4173;
 const BASE_PATH = '/tech-dancer/';
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './tests-e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -19,6 +19,14 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
     },
   ],
   webServer: {

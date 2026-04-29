@@ -46,6 +46,9 @@ jobs:
       - name: Type-check
         run: pnpm run type-check
 
+      - name: Run Unit Tests
+        run: pnpm run test:unit
+
       - name: TypeScript `any` Ratchet
         run: python3 dev-tools/td_cli.py ratchet-any --update
 
@@ -141,11 +144,29 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Run Playwright Smoke Test
+      - name: Run Playwright E2E Tests
         run: pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
+
+      - name: Run Accessibility Tests
+        run: pnpm run test:e2e:a11y
+        env:
+          CI: true
+          NODE_ENV: production
+
+      - name: Run Percy Visual Regression
+        run: pnpm run test:visual:percy
+        env:
+          CI: true
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          NODE_ENV: production
+
+      - name: Run Lighthouse Audit
+        run: pnpm run test:perf
+        env:
+          CI: true
 
       - name: Upload Test Results
         if: failure()
