@@ -1,5 +1,6 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
+import { ProgressiveImage } from './ProgressiveImage';
 
 interface CardImagePlaceholderProps {
   image?: string;
@@ -20,10 +21,10 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
   if (image) {
     return (
       <Box className="relative w-full aspect-video max-h-[160px] overflow-hidden border-b border-line bg-bg">
-        <img
+        <ProgressiveImage
           src={image}
           alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          className="group-hover:scale-105"
         />
         <Box className="absolute top-3 left-3">
           <Box surface={surfaceVariant} className="px-2 py-0.5 border border-line/20 backdrop-blur-sm bg-opacity-90">

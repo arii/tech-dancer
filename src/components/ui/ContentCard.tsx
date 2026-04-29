@@ -4,6 +4,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { ProgressiveImage } from '@/components/ui/ProgressiveImage';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
@@ -33,10 +34,11 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
       {/* Visual Thumbnail */}
       <Box className="relative aspect-video overflow-hidden border-b border-line bg-bg max-h-[160px]">
         {image ? (
-          <img 
+          <ProgressiveImage
             src={image} 
             alt={title} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            aspect="video"
+            className="group-hover:scale-105"
           />
         ) : (
           <Box className="w-full h-full flex flex-col">
