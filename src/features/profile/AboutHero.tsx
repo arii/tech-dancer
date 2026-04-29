@@ -1,5 +1,4 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-import { ProfileData } from './types';
 
 interface AboutHeroProps {
   name: string;

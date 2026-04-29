@@ -1,9 +1,19 @@
-import { Box, Text } from '@/layouts/Primitives';
+import { Grid, Stack, Text } from '@/layouts/Primitives';
 import { ProfileStats } from './types';
+import { cn } from '@/lib/utils';
 
 interface StatsBarProps {
   stats: ProfileStats;
 }
+
+const getBorderClasses = (idx: number, total: number) => {
+  return cn(
+    "border-line",
+    idx >= total - 2 ? "border-b-0" : "border-b md:border-b-0",
+    idx % 2 !== 0 ? "border-r-0 md:border-r" : "border-r md:border-r",
+    idx === total - 1 ? "md:border-r-0" : ""
+  );
+};
 
 export default function StatsBar({ stats }: StatsBarProps) {
   const items = [
@@ -14,35 +24,36 @@ export default function StatsBar({ stats }: StatsBarProps) {
   ];
 
   return (
-    <Box
-      display="grid"
+    <Grid
       cols={{ base: 2, md: 4 }}
       border
-      radius="md"
+      radius="lg"
+      shadow="sm"
       overflow="hidden"
       marginBottom={8}
       className="bg-surface"
     >
       {items.map((item, idx) => (
-        <Box
+        <Stack
           key={item.label}
-          padding={4}
-          display="flex"
+          padding={6}
           direction="col"
           align="center"
           justify="center"
-          border={idx % 2 === 0 ? "r" : false}
-          mdBorder={idx < items.length - 1 ? "r" : false}
-          className="text-center"
+          gap={1}
+          className={cn(
+            "text-center transition-colors hover:bg-surface/50",
+            getBorderClasses(idx, items.length)
+          )}
         >
-          <Text variant="display" size="2xl" weight="font-medium" className="text-accent-navy leading-none">
+          <Text variant="display" size="3xl" weight="font-bold" className="text-accent-navy leading-tight">
             {item.value}
           </Text>
-          <Text variant="mono" size="micro" color="dim" marginTop={1} tracking="emphasized">
+          <Text variant="mono" size={{ base: "micro", md: "xs" }} color="dim" tracking="wide-editorial" weight="font-semibold">
             {item.label}
           </Text>
-        </Box>
+        </Stack>
       ))}
-    </Box>
+    </Grid>
   );
 }
