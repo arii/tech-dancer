@@ -2,6 +2,12 @@ import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
+declare module 'jspdf' {
+  interface jsPDF {
+    autoTable: (options: unknown) => jsPDF;
+  }
+}
+
 interface ExportConfig {
   filename: string;
   title: string;
