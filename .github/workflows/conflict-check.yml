@@ -1,0 +1,31 @@
+name: Merge Conflict Check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  conflict-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify clean merge simulation
+        run: |
+          git fetch origin main
+          git config user.email "ci@test.com"
+          git config user.name "CI"
+          git checkout -b temp-merge-test
+          if git merge --no-commit --no-ff origin/main; then
+            echo "✅ Branch merges cleanly into main"
+            git merge --abort 2>/dev/null || true
+          else
+            echo "❌ Branch cannot merge cleanly into main"
+            git merge --abort 2>/dev/null || true
+            exit 1
+          fi
