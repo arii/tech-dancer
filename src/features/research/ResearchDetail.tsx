@@ -4,6 +4,7 @@ import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
+import { WCSScraperTool } from './components/WCSScraperTool';
 import { SEO } from '@/components/SEO';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
@@ -85,6 +86,8 @@ export default function ResearchDetail() {
           <Stack gap={12}>
             {tool.id === 'blog-drafter' ? (
               <BlogDrafter />
+            ) : tool.id === 'wcs-scraper' ? (
+              <WCSScraperTool />
             ) : (
               <Stack gap={12}>
                 <Stack gap={4}>

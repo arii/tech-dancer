@@ -10,6 +10,7 @@ from playwright.async_api import async_playwright, TimeoutError as PlaywrightTim
 from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
+import random
 from urllib.parse import urljoin
 from tqdm import tqdm
 from etl.processor import process_for_ledger
@@ -17,6 +18,7 @@ from etl.processor import process_for_ledger
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 BASE_URL = "https://scoring.dance"
+USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/tech-dancer)"
 
 POINTS_MAPPING = {
     'Yes': 10.0, 'Alt1': 4.5, 'Alt2': 4.3, 'Alt3': 4.2, 'No': 0.0,
@@ -30,7 +32,8 @@ class ScoringDanceCrawler:
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10), reraise=True)
     def _fetch_page_text(self, url):
-        response = requests.get(url, timeout=15)
+        headers = {'User-Agent': USER_AGENT}
+        response = requests.get(url, headers=headers, timeout=15)
         response.raise_for_status()
         return response.text
 
@@ -212,10 +215,13 @@ class ScoringDanceParser:
 
 class OutputManager:
     """Handles saving data to various formats."""
-    def __init__(self, ledger_path, studies_dir):
+    def __init__(self, ledger_path, studies_dir, json_path=None):
         self.ledger_path = ledger_path
         self.studies_dir = studies_dir
+        self.json_path = json_path
         os.makedirs(self.studies_dir, exist_ok=True)
+        if self.json_path:
+            os.makedirs(os.path.dirname(self.json_path), exist_ok=True)
 
     def save_markdown(self, df, url):
         if df.empty: return
@@ -290,6 +296,10 @@ slug: "{slug}"
         final_ledger.to_parquet(self.ledger_path, index=False)
         logging.info(f"Updated ledger: {self.ledger_path}")
 
+        if self.json_path:
+            final_ledger.to_json(self.json_path, orient='records', indent=2)
+            logging.info(f"Updated JSON export: {self.json_path}")
+
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
     def __init__(self, crawler, parser, output_manager):
@@ -314,7 +324,7 @@ class ETLPipeline:
     async def run_single(self, url):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            context = await browser.new_context(user_agent="Mozilla/5.0...")
+            context = await browser.new_context(user_agent=USER_AGENT)
             content = await self._fetch_page(context, url)
             await browser.close()
 
@@ -328,7 +338,7 @@ class ETLPipeline:
         logging.info(f"Starting historical scrape for past {years} years")
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            context = await browser.new_context(user_agent="Mozilla/5.0...")
+            context = await browser.new_context(user_agent=USER_AGENT)
 
             # Collect events first so tqdm knows the total count
             events = list(self.crawler.get_recent_events(years=years))
@@ -347,7 +357,8 @@ class ETLPipeline:
 
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
-                            await asyncio.sleep(1)
+                            # Ethical jittered rate limiting
+                            await asyncio.sleep(1 + random.random() * 2)
                         except Exception as e:
                             logging.error(f"Failed to process {res_url}: {e}")
                 except Exception as e:
@@ -359,13 +370,14 @@ async def main():
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")
     parser.add_argument("--ledger", default="etl/data/wcs_prelims.parquet", help="Path to Parquet ledger")
+    parser.add_argument("--json", default="src/features/research/data/wcs_prelims.json", help="Path to JSON export")
     parser.add_argument("--studies", default="content/studies", help="Directory for Markdown output")
     args = parser.parse_args()
 
     pipeline = ETLPipeline(
         ScoringDanceCrawler(),
         ScoringDanceParser(),
-        OutputManager(args.ledger, args.studies)
+        OutputManager(args.ledger, args.studies, args.json)
     )
 
     if args.url:
