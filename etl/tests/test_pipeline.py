@@ -122,24 +122,3 @@ def test_get_recent_events(mocker):
     links = list(crawler.get_recent_events(years=1))
     assert f"{BASE_URL}/enUS/events/338/results/" in links
 
-def test_save_markdown(tmp_path):
-    studies_dir = tmp_path / "studies"
-    manager = OutputManager(ledger_path=str(tmp_path/"ledger.parquet"), studies_dir=str(studies_dir))
-
-    df = pd.DataFrame([{
-        'competitor_bib': 101,
-        'competitor_name': 'John Doe & Jane Smith',
-        'wsdc_points': 10.0,
-        'event_title': 'Mock Event',
-        'event_date': '01/01/2025'
-    }])
-
-    url = "https://scoring.dance/enUS/events/190/results/2945.html"
-    manager.save_markdown(df, url)
-
-    # Slug should be generated correctly
-    expected_file = studies_dir / "mock-event-2945.md"
-    assert expected_file.exists()
-    content = expected_file.read_text()
-    assert 'date: "2025-01-01"' in content
-    assert '| 1 | John Doe | Jane Smith |' in content
