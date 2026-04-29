@@ -9,6 +9,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { globSync } from 'glob';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import { visit } from 'unist-util-visit';
@@ -34,7 +35,7 @@ async function main() {
   console.log(`Discovered ${validRoutes.size} valid internal routes.`);
 
   // 2. Scan markdown files for links and images using unified/remark AST
-  const markdownFiles = getMarkdownFiles('content');
+  const markdownFiles = globSync('content/**/*.md');
   const extractedLinks: { file: string, type: 'internal' | 'external' | 'image', url: string }[] = [];
 
   const processor = unified().use(remarkParse);
@@ -173,21 +174,6 @@ async function main() {
   }
 
   console.log('Link validation complete.');
-}
-
-function getMarkdownFiles(dir: string): string[] {
-  let results: string[] = [];
-  const list = fs.readdirSync(dir);
-  list.forEach(file => {
-    file = path.join(dir, file);
-    const stat = fs.statSync(file);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getMarkdownFiles(file));
-    } else if (file.endsWith('.md')) {
-      results.push(file);
-    }
-  });
-  return results;
 }
 
 main().catch(err => {
