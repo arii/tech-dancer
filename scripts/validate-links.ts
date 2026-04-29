@@ -1,15 +1,19 @@
 /**
  * Link and Affiliate Validator
  *
- * 1. Crawls internal and external links.
- * 2. Validates Amazon affiliate links.
+ * 1. Crawls internal and external links using AST traversal.
+ * 2. Validates Amazon affiliate links from JSON data.
  * 3. Validates image sources.
  * 4. Reports broken links.
  */
 
 import fs from 'fs';
 import path from 'path';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import { visit } from 'unist-util-visit';
 import { CONTENT_DIR_MAP, getContentSlugs } from './content-loader';
+import AFFILIATES from '../src/data/affiliates.json';
 
 async function main() {
   console.log('Starting link validation...');
@@ -23,76 +27,65 @@ async function main() {
     validRoutes.add(prefix); // The index page for the category
   });
 
-  // Also include /research which might be in CONTENT_DIR_MAP but maybe empty
   validRoutes.add('/research');
   validRoutes.add('/blog');
   validRoutes.add('/gear');
 
   console.log(`Discovered ${validRoutes.size} valid internal routes.`);
 
-  // 2. Scan markdown files for links and images
+  // 2. Scan markdown files for links and images using unified/remark AST
   const markdownFiles = getMarkdownFiles('content');
   const extractedLinks: { file: string, type: 'internal' | 'external' | 'image', url: string }[] = [];
 
-  markdownFiles.forEach(file => {
+  const processor = unified().use(remarkParse);
+
+  for (const file of markdownFiles) {
     const content = fs.readFileSync(file, 'utf-8');
+    const tree = processor.parse(content);
 
-    // Extract standard markdown links [text](url) - handles potential titles in quotes
-    // Negative lookbehind ensures we don't match image tags ![]()
-    const linkRegex = /(?<!!)\[.*?\]\((.*?)(\s+".*?")?\)/g;
-    let match;
-    while ((match = linkRegex.exec(content)) !== null) {
-      const url = match[1].trim();
-      if (url.startsWith('http')) {
-        extractedLinks.push({ file, type: 'external', url });
-      } else if (url.startsWith('/')) {
-        extractedLinks.push({ file, type: 'internal', url });
+    visit(tree, (node) => {
+      if (node.type === 'link') {
+        const url = node.url;
+        if (url.startsWith('http')) {
+          extractedLinks.push({ file, type: 'external', url });
+        } else if (url.startsWith('/')) {
+          extractedLinks.push({ file, type: 'internal', url });
+        }
+      } else if (node.type === 'image') {
+        extractedLinks.push({ file, type: 'image', url: node.url });
+      } else if (node.type === 'html') {
+        // Fallback for HTML images since remark-parse doesn't parse HTML tags into AST by default
+        const htmlImgRegex = /<img.*?src=["'](.*?)["'].*?>/g;
+        let match;
+        while ((match = htmlImgRegex.exec(node.value)) !== null) {
+          extractedLinks.push({ file, type: 'image', url: match[1] });
+        }
       }
-    }
+    });
 
-    // Extract images ![alt](url) or <img src="url" /> - handles potential titles in quotes
-    const imgRegex = /!\[.*?\]\((.*?)(\s+".*?")?\)/g;
-    while ((match = imgRegex.exec(content)) !== null) {
-      extractedLinks.push({ file, type: 'image', url: match[1].trim() });
-    }
-
-    const htmlImgRegex = /<img.*?src=["'](.*?)["'].*?>/g;
-    while ((match = htmlImgRegex.exec(content)) !== null) {
-      extractedLinks.push({ file, type: 'image', url: match[1] });
-    }
-
-    // Extract image from frontmatter
+    // Extract image from frontmatter (not part of AST)
     const frontmatterImgMatch = /image:\s*["']?(.*?)["']?\s*\n/m.exec(content);
     if (frontmatterImgMatch && frontmatterImgMatch[1]) {
       extractedLinks.push({ file, type: 'image', url: frontmatterImgMatch[1] });
     }
-  });
+  }
 
   console.log(`Extracted ${extractedLinks.length} links/images from markdown.`);
 
-  // 3. Scan affiliate links
-  const affiliateLinks: { id: string, url: string }[] = [];
-  try {
-    // We use a simplified regex because dynamic import might be complex with tsx
-    // and project structure. But we make it more robust.
-    const affiliateContent = fs.readFileSync('src/lib/affiliateManager.ts', 'utf-8');
-    const affRegex = /['"]([^'"]+)['"]:\s*\{[\s\S]*?url:\s*['"]([^'"]+)['"]/g;
-    let affMatch;
-    while ((affMatch = affRegex.exec(affiliateContent)) !== null) {
-      affiliateLinks.push({ id: affMatch[1], url: affMatch[2] });
-    }
-  } catch (err) {
-    console.error('Failed to parse affiliate links:', err);
-  }
+  // 3. Scan affiliate links from JSON
+  const affiliateLinks = Object.values(AFFILIATES).map(link => ({
+    file: 'src/data/affiliates.json',
+    type: 'affiliate',
+    url: link.url
+  }));
 
-  console.log(`Discovered ${affiliateLinks.length} affiliate links.`);
+  console.log(`Discovered ${affiliateLinks.length} affiliate links from data source.`);
 
   // 4. Validate everything
   const brokenLinks: { file: string, type: string, url: string, reason: string }[] = [];
 
   // Validate internal links
   extractedLinks.filter(l => l.type === 'internal').forEach(link => {
-    // Remove anchors and query params for validation
     const pathOnly = link.url.split('#')[0].split('?')[0];
     if (!validRoutes.has(pathOnly)) {
       brokenLinks.push({ ...link, reason: 'Internal route not found' });
@@ -102,7 +95,7 @@ async function main() {
   // Validate external links and images
   const externalToValidate = [
     ...extractedLinks.filter(l => l.type === 'external' || (l.type === 'image' && l.url.startsWith('http'))),
-    ...affiliateLinks.map(al => ({ file: 'src/lib/affiliateManager.ts', type: 'affiliate', url: al.url }))
+    ...affiliateLinks
   ];
 
   const localImagesToValidate = extractedLinks.filter(l => l.type === 'image' && !l.url.startsWith('http'));
@@ -128,7 +121,6 @@ async function main() {
 
     const isAmazon = urlObj.hostname === 'amazon.com' || urlObj.hostname.endsWith('.amazon.com');
 
-    // Amazon specific check
     if (isAmazon) {
       if (urlObj.pathname === '/' || urlObj.pathname === '') {
         brokenLinks.push({ ...link, reason: 'Generic Amazon placeholder URL' });
@@ -147,7 +139,6 @@ async function main() {
       });
 
       if (!response.ok) {
-        // Retry with GET if HEAD fails (some sites block HEAD)
         response = await fetch(link.url, {
           method: 'GET',
           headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' },
@@ -158,10 +149,8 @@ async function main() {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        // Special handling for Amazon which often blocks bots
         if (isAmazon && (response.status === 403 || response.status === 503)) {
           console.warn(`[Warning] Amazon might be blocking our bot for ${link.url} (Status ${response.status})`);
-          // We don't mark it as broken if it's just a bot block for a likely valid product URL
           continue;
         }
         brokenLinks.push({ ...link, reason: `HTTP Status ${response.status}` });
@@ -177,7 +166,6 @@ async function main() {
     const report = brokenLinks.map(l => `- [${l.type}] ${l.url} in ${l.file}: ${l.reason}`).join('\n');
     console.error(report);
 
-    // Save report for GitHub Action
     fs.writeFileSync('link-validation-report.md', `### Link Integrity Report\n\nDetected ${brokenLinks.length} broken links:\n\n${report}`);
     process.exit(1);
   } else {
