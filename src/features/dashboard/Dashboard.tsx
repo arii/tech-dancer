@@ -5,10 +5,10 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
-import { SectionHeader } from '@/components/ui/PageHeader';
+import { SectionHeader, PageHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
-import { EventCard } from './EventCard';
+import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
@@ -21,31 +21,24 @@ export default function Home() {
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
         schema={STATIC_SCHEMAS.HOME}
       />
-      <Stack gap={24}>
-        <Stack gap={12} paddingTop={12}>
-          <Stack gap={4}>
-            <Text 
-              as={motion.h1}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              variant="headline" 
-              size="fluid-7"
-              className="text-accent-navy leading-tight tracking-tight max-w-4xl"
-            >
-              The Roboticist&apos;s Guide to the West Coast Swing
-            </Text>
-            <Text variant="sans" size="xl" color="dim" maxWidth="3xl" className="leading-relaxed">
-              Tools, travel hacks, and comp data to maximize your WCS weekends. Providing the systems, travel hacks, and informed competition analysis you need to maximize your WCS (West Coast Swing) lifestyle.
-            </Text>
-            <Text variant="sans" size="base" color="dim" maxWidth="2xl" marginTop={2} className="leading-relaxed">
-              Welcome to tech-dancer. Enjoy the west coast swing content or dive into the technical details.
-            </Text>
-          </Stack>
-        </Stack>
+      <Stack gap={8}>
+        <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
+          <PageHeader
+            label="WELCOME"
+            title="The Roboticist's Guide to West Coast Swing"
+            description="Technical systems and travel hacks for the modern competitive dancer."
+            border="none"
+            paddingBottom={0}
+            titleSize="fluid-7"
+            descriptionMaxWidth="prose"
+          />
+        </Box>
 
-        <PathSelector />
+        <Box width="full" className="border-y border-line">
+          <PathSelector />
+        </Box>
 
-        <Stack gap={12}>
+        <Stack gap={8} paddingX={{ base: 4, md: 6, lg: 12 }}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
             <Box 
               as={NavLink} 
@@ -61,8 +54,8 @@ export default function Home() {
           </SectionHeader>
 
           <Grid
-            cols={{ base: 1, sm: 2, lg: 4 }}
-            gap={4}
+            cols={{ base: 1, md: 2 }}
+            gap={8}
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"
@@ -76,10 +69,13 @@ export default function Home() {
                 basePath="/blog"
                 aspect="video"
                 variants={motionTokens.staggerItem}
+                compact={true}
               />
             ))}
+          </Grid>
 
-            {/* Upcoming Events Mini-Cards */}
+          {/* Upcoming Events Mini-Grid */}
+          <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
             {upcomingEvents.map((event) => (
               <Box
                 key={event.name}

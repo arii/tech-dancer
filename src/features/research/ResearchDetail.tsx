@@ -112,11 +112,13 @@ export default function ResearchDetail() {
               <BlogDrafter />
             ) : (
               <Stack gap={12}>
-                <Stack gap={4}>
-                  <Text variant="mono" color="brand" size="xs" weight="font-bold" uppercase tracking="widest">
-                    LABORATORY_ACCESS // {tool.category.toUpperCase()}
-                  </Text>
-                  <Text as="h1" variant="headline" size="fluid-7">{tool.name}</Text>
+                  <Stack gap={4}>
+                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
+                      LABORATORY_ACCESS // {tool.category}
+                    </Text>
+                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+                      {tool.name}
+                    </Text>
                   <Box border surface="accent" padding="compact">
                     <Text variant="body" size="lg" color="body">{tool.layman}</Text>
                   </Box>
