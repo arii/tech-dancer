@@ -83,7 +83,7 @@ export function DetailLayout({
             >
               <img
                 src={image}
-                alt={`Hero image: ${title}`}
+                alt={title}
                 className="w-full h-full object-cover"
               />
             </Box>

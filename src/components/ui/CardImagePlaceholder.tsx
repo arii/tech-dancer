@@ -22,7 +22,7 @@ export function CardImagePlaceholder({ image, category, date, title }: CardImage
       <Box aspect="video" maxHeight="cardImage" width="full" className="relative overflow-hidden border-b border-line bg-bg">
         <img
           src={image}
-          alt={`Thumbnail for ${title}`}
+          alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
         <Box className="absolute top-3 left-3">
