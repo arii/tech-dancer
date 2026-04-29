@@ -55,12 +55,8 @@ export default function ResearchDetail() {
           title={study.title}
           description={study.excerpt}
           type="article"
+          schema={structuredData}
         />
-        {structuredData && (
-          <script type="application/ld+json">
-            {JSON.stringify(structuredData)}
-          </script>
-        )}
         <DetailLayout
           title={study.title}
           category={study.category}
@@ -93,12 +89,8 @@ export default function ResearchDetail() {
         title={tool.name}
         description={tool.layman}
         type="website"
+        schema={structuredData}
       />
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
       <Stack gap={12}>
         <Box 
           as="button" 

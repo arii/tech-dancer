@@ -36,12 +36,8 @@ export default function ArielProfile() {
         title="About"
         description="Learn more about tech-dancer, the roboticist's guide to the West Coast Swing. Exploring the intersection of dance, physics, and engineering."
         type="profile"
+        schema={structuredData}
       />
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
       <Stack gap={12}>
         <PageHeader 
           label="ABOUT TECH-DANCER"

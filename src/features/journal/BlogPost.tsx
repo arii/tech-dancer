@@ -65,12 +65,8 @@ export default function BlogPost() {
         description={post.excerpt}
         type="article"
         image={post.image}
+        schema={structuredData}
       />
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
       <BlogPostDetail
         post={post}
         onBack={() => navigate('/blog')}

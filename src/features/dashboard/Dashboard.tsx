@@ -34,12 +34,8 @@ export default function Home() {
       <SEO
         title="Home"
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
+        schema={structuredData}
       />
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
       <Stack gap={24}>
         <Stack gap={12} paddingTop={12}>
           <Stack gap={4}>

@@ -70,12 +70,8 @@ export default function GearPost() {
         description={resource.excerpt}
         type="article"
         image={resource.image}
+        schema={structuredData}
       />
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
       <GearPostDetail
         post={resource}
         onBack={() => navigate('/gear')}

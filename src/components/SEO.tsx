@@ -8,6 +8,7 @@ interface SEOProps {
   type?: 'website' | 'article' | 'profile';
   image?: string;
   canonical?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 export function SEO({
@@ -15,7 +16,8 @@ export function SEO({
   description,
   type = 'website',
   image,
-  canonical
+  canonical,
+  schema
 }: SEOProps) {
   const { pathname } = useLocation();
 
@@ -25,8 +27,9 @@ export function SEO({
   const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
 
   // Use a dynamic OG image generator if no specific image is provided for articles
+  // Removed Vercel logos to better align with TechDancer brand
   const seoImage = image || (type === 'article'
-    ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fvercel-triangle-black.svg`
+    ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px`
     : defaultImage);
 
   return (
@@ -49,6 +52,13 @@ export function SEO({
       <meta name="twitter:title" content={displayTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={seoImage} />
+
+      {/* Structured Data */}
+      {schema && (
+        <script type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      )}
     </Helmet>
   );
 }
