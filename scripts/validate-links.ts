@@ -39,7 +39,7 @@ async function main() {
 
     // Extract standard markdown links [text](url) - handles potential titles in quotes
     // Negative lookbehind ensures we don't match image tags ![]()
-    const linkRegex = /(?<!\!)\[.*?\]\((.*?)(\s+".*?")?\)/g;
+    const linkRegex = /(?<!!)\[.*?\]\((.*?)(\s+".*?")?\)/g;
     let match;
     while ((match = linkRegex.exec(content)) !== null) {
       const url = match[1].trim();
