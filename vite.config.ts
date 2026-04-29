@@ -49,8 +49,9 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
-        dynamicRoutes, generateRobotsTxt: false,
+        hostname: (env.VITE_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (isVercel ? 'https://tech-dancer.vercel.app' : 'https://arii.github.io/tech-dancer'))).replace(/\/$/, ''),
+        dynamicRoutes: dynamicRoutes.map(route => base === '/' ? route : base.replace(/\/$/, '') + (route.startsWith('/') ? route : '/' + route)),
+        generateRobotsTxt: false,
       }),
       ViteImageOptimizer({
         includePublic: true,
