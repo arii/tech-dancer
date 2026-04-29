@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { z } from 'zod';
-
 /**
  * Lightweight browser-safe frontmatter parser.
  */
@@ -118,15 +116,6 @@ export interface Event {
 
 export type ContentItem = Post | Resource | Study | Event;
 
-const BaseSchema = z.object({
-  title: z.coerce.string().default('Untitled'),
-  date: z.coerce.string().default(''),
-  category: z.coerce.string().default('General'),
-  excerpt: z.coerce.string().default(''),
-  author: z.coerce.string().default(''),
-  tags: z.array(z.coerce.string()).default([]),
-}).passthrough();
-
 interface ContentModule {
   default: string;
 }
@@ -150,10 +139,14 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         data.image = undefined;
       }
 
-      const parsedData = BaseSchema.parse(data);
-
       return {
-        ...parsedData,
+        ...data,
+        title: String(data.title || 'Untitled'),
+        category: String(data.category || 'General'),
+        excerpt: String(data.excerpt || ''),
+        date: String(data.date || ''),
+        author: String(data.author || ''),
+        tags: Array.isArray(data.tags) ? data.tags : [],
         content: content || '',
         slug: slugFrom(path)
       } as unknown as T;

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn, composeStyles } from "@/lib/utils"
-import { layout as layoutTokens, spacing, zIndex as zIndexTokens, shadows, contentWidth } from "@/styles/design-tokens"
+import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 
@@ -38,7 +38,7 @@ export interface BaseProps {
   height?: ResponsiveProp<"full" | "screen" | "auto" | "min" | "fit" | number | string>
   minWidth?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
   minHeight?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
-  maxWidth?: ResponsiveProp<keyof typeof contentWidth | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl">
+  maxWidth?: ResponsiveProp<"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl">
   maxHeight?: ResponsiveProp<"full" | "screen" | "auto" | "min" | "fit" | number | string>
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
@@ -169,12 +169,9 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
           inset === "y" && "top-0 bottom-0",
           getResponsiveClasses(height, "h-", (v) => getVal(v, "")),
           getResponsiveClasses(width, "w-", (v) => getVal(v, "")),
-          getResponsiveClasses(maxWidth, "", (v) => contentWidth[v as keyof typeof contentWidth] || getVal(v, "max-w-")),
+          getResponsiveClasses(maxWidth, "max-w-", (v) => getVal(v, "")),
           getResponsiveClasses(minHeight, "min-h-", (v) => getVal(v, "")),
-          getResponsiveClasses(maxHeight, "", (v) => {
-            if (v === "cardImage") return layoutTokens.cardImage.maxHeight;
-            return getVal(v, "max-h-");
-          }),
+          getResponsiveClasses(maxHeight, "max-h-", (v) => getVal(v, "")),
           getResponsiveClasses(minWidth, "min-w-", (v) => getVal(v, "")),
           overflow && `overflow-${overflow}`,
           overflowX && `overflow-x-${overflowX}`,
