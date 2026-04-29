@@ -63,6 +63,7 @@ export default function Navigation() {
   }, []);
 
   const handleSearchClick = () => {
+    setIsOpen(false);
     if (isSearchOpen) {
       closeSearch();
     } else {
@@ -113,10 +114,7 @@ export default function Navigation() {
         as="nav"
         aria-label="Mobile Navigation"
         layout="mobileHeader"
-        className={cn(
-          "transition-[background-color,backdrop-filter,border-color] duration-300",
-          scrolled || isOpen ? "bg-surface/90 backdrop-blur-xl border-b border-line" : "bg-transparent border-transparent"
-        )}
+        className="transition-[backdrop-filter] duration-300 bg-surface border-b border-line"
       >
         <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>

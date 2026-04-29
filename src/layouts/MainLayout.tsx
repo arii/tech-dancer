@@ -138,7 +138,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           flex={1}
           position="relative"
           overflowY="auto"
-          paddingTop={{ base: 16, lg: 0 }}
+          className="pt-16 lg:pt-0"
           maxWidth="full"
           width="full"
           surface="bg"
