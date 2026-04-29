@@ -19,8 +19,8 @@
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
     "test:unit": "vitest run",
-    "test:e2e:a11y": "playwright test tests-e2e/a11y.spec.ts",
-    "test:visual:percy": "percy exec -- playwright test tests-e2e/percy.spec.ts",
+    "test:e2e:a11y": "playwright test tests-e2e/a11y",
+    "test:visual:percy": "percy exec -- playwright test tests-e2e/percy",
     "test:perf": "lhci autorun"
   },
   "dependencies": {

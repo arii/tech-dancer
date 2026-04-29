@@ -4,9 +4,9 @@
       "staticDistDir": "./dist",
       "numberOfRuns": 3,
       "url": [
-        "/tech-dancer/",
-        "/tech-dancer/blog",
-        "/tech-dancer/about"
+        "http://localhost:lhci/tech-dancer/",
+        "http://localhost:lhci/tech-dancer/blog",
+        "http://localhost:lhci/tech-dancer/about"
       ]
     },
     "assert": {

@@ -115,6 +115,7 @@ export default function Navigation() {
                 <Box
                   as="button"
                   type="button"
+                  data-testid="mobile-search-button"
                   cursor="pointer"
                   onClick={() => {
                     setIsOpen(false);
@@ -182,6 +183,7 @@ export default function Navigation() {
               <Box
                 as="button"
                 type="button"
+                data-testid="desktop-search-button"
                 cursor="pointer"
                 onClick={handleSearchClick}
                 display="flex"
