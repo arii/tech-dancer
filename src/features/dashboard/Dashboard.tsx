@@ -2,10 +2,9 @@ import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { useMemo } from 'react';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
-import { BASE_URL, SITE_NAME, DEFAULT_DESCRIPTION } from '@/config/constants';
+import { STATIC_SCHEMAS } from '@/config/constants';
 import { SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -15,26 +14,12 @@ import { motionTokens } from '@/styles/motion';
 export default function Home() {
   const { recentPosts, upcomingEvents } = useHome();
 
-  const structuredData = useMemo(() => {
-    return {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": SITE_NAME,
-      "url": BASE_URL,
-      "description": DEFAULT_DESCRIPTION,
-      "publisher": {
-        "@type": "Person",
-        "name": "Ariel Anders"
-      }
-    };
-  }, []);
-
   return (
     <Box as="section">
       <SEO
         title="Home"
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
-        schema={structuredData}
+        schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={24}>
         <Stack gap={12} paddingTop={12}>

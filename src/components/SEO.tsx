@@ -32,6 +32,16 @@ export function SEO({
     ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px`
     : defaultImage);
 
+  const serializedSchema = useMemo(() => {
+    if (!schema) return null;
+    try {
+      return JSON.stringify(schema);
+    } catch (e) {
+      console.error('Failed to serialize Schema.org markup:', e);
+      return null;
+    }
+  }, [schema]);
+
   return (
     <Helmet>
       {/* Standard metadata */}
@@ -54,9 +64,9 @@ export function SEO({
       <meta name="twitter:image" content={seoImage} />
 
       {/* Structured Data */}
-      {schema && (
+      {serializedSchema && (
         <script type="application/ld+json">
-          {JSON.stringify(schema)}
+          {serializedSchema}
         </script>
       )}
     </Helmet>
