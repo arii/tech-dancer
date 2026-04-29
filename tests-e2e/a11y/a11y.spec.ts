@@ -1,14 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-
-const routes = [
-  { name: 'home', path: './' },
-  { name: 'blog', path: './blog' },
-  { name: 'gear', path: './gear' },
-  { name: 'research', path: './research' },
-  { name: 'about', path: './about' },
-  { name: 'contact', path: './contact' }
-];
+import { routes } from '../config/routes';
 
 test.describe('Accessibility audits', () => {
   for (const route of routes) {
@@ -28,7 +20,8 @@ test.describe('Accessibility audits', () => {
         console.log(`A11y violations on ${route.name}:`, JSON.stringify(accessibilityScanResults.violations, null, 2));
       }
 
-      // We allow a small number of existing violations but fail on any significant regression.
+      // We allow up to 5 existing violations mapped to our technical debt backlog.
+      // Do not increase this threshold. Any new regressions must be fixed immediately.
       expect(accessibilityScanResults.violations.length).toBeLessThanOrEqual(5);
     });
   }
