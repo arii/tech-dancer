@@ -7,6 +7,14 @@ const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
 
+const LAYOUT_SUGGESTIONS = {
+  'flex flex-col': '<Stack direction="col">',
+  'flex flex-row': '<Stack direction="row">',
+  'flex items-center': '<Stack align="center">',
+  'flex justify-between': '<Stack justify="between">',
+  'grid grid-cols': '<Grid cols={...}>',
+};
+
 // Modularized linting configuration
 const CONFIG = {
   allowedColors: [
@@ -116,6 +124,21 @@ function checkFile(filepath) {
           }
         }
       }
+
+      // Check for layout suggestions
+      Object.entries(LAYOUT_SUGGESTIONS).forEach(([pattern, suggestion]) => {
+        if (classStr.includes(pattern)) {
+          // Only add once per line if not already added
+          if (!violations.find(v => v.line === lineNum && v.pattern === 'Layout Suggestion')) {
+            violations.push({
+              line: lineNum,
+              pattern: 'Layout Suggestion',
+              value: pattern,
+              message: `Consider replacing '${pattern}' with ${suggestion}`
+            });
+          }
+        }
+      });
     });
   }
 

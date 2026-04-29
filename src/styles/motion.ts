@@ -42,5 +42,9 @@ export const motionTokens = {
         ease: [0.25, 1, 0.5, 1] as [number, number, number, number]
       }
     }
+  },
+  skeleton: {
+    pulse: "animate-pulse",
+    opacity: "opacity-50"
   }
 };

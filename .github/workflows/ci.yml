@@ -19,12 +19,14 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build-and-test:
-    name: Build, Lint & Smoke Test
+  lint-typecheck:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -44,8 +46,85 @@ jobs:
       - name: Type-check
         run: pnpm run type-check
 
-      - name: Run unit tests
-        run: pnpm test --if-present
+      - name: TypeScript `any` Ratchet
+        run: python3 dev-tools/td_cli.py ratchet-any --update
+
+  audit:
+    name: Anti-Pattern Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: UI Anti-Pattern Audit (Gate)
+        run: |
+          pnpm run audit
+          # Fail if TODO_ANTIPATTERNS.md has more violations than baseline
+          BASELINE=$(git show origin/main:TODO_ANTIPATTERNS.md 2>/dev/null | grep -c '\- \[ \]' || echo 0)
+          CURRENT=$(grep -c '\- \[ \]' TODO_ANTIPATTERNS.md || echo 0)
+          echo "Baseline violations: $BASELINE | Current: $CURRENT"
+          if [ "$CURRENT" -gt "$BASELINE" ]; then
+            echo "❌ New anti-pattern violations introduced. Fix before merging."
+            exit 1
+          fi
+          echo "✅ No new violations."
+
+      - name: Design Token Compliance
+        run: |
+          # Check for raw hex colors not in tokens.css
+          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
+            --include="*.tsx" \
+            | grep -v "design-tokens\|tokens.css\|// impeccable-ignore" \
+            | wc -l)
+          if [ "$VIOLATIONS" -gt 0 ]; then
+            echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
+            grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
+            exit 1
+          fi
+          echo "✅ Design token compliance passed."
+
+  test-build:
+    name: Build & E2E
+    needs: lint-typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Build App
+        run: pnpm run build
+        env:
+          NODE_ENV: production
+          VITE_BASE_PATH: /tech-dancer/
+
+      - name: Bundle Size Check
+        run: python3 dev-tools/td_cli.py bundle-size --update
 
       - name: Cache Playwright Browsers
         id: playwright-cache
@@ -61,12 +140,6 @@ jobs:
       - name: Install Playwright Dependencies
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
-
-      - name: Build App
-        run: pnpm run build
-        env:
-          NODE_ENV: production
-          VITE_BASE_PATH: /tech-dancer/
 
       - name: Run Playwright Smoke Test
         run: pnpm run test:e2e
