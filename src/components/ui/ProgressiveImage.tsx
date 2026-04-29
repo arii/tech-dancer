@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface ProgressiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
+  placeholderSrc?: string;
   alt: string;
   aspect?: "square" | "video" | "auto" | string;
   containerClassName?: string;
@@ -11,6 +12,7 @@ interface ProgressiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement
 
 export function ProgressiveImage({
   src,
+  placeholderSrc,
   alt,
   aspect = "video",
   containerClassName,
@@ -18,13 +20,16 @@ export function ProgressiveImage({
   ...props
 }: ProgressiveImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState<string | null>(null);
-  const [prevSrc, setPrevSrc] = useState(src);
+  const [currentSrc, setCurrentSrc] = useState<string | null>(placeholderSrc || null);
 
-  // Reset state when src changes - Pattern for adjusting state when prop changes
+  // Pattern for adjusting state when prop changes during render
+  const [prevSrc, setPrevSrc] = useState(src);
   if (src !== prevSrc) {
     setPrevSrc(src);
     setIsLoaded(false);
+    if (!placeholderSrc) {
+        setCurrentSrc(null);
+    }
   }
 
   useEffect(() => {
@@ -45,11 +50,11 @@ export function ProgressiveImage({
       aspect={aspect}
       className={cn("relative overflow-hidden bg-line/5", containerClassName)}
     >
-      {/* Placeholder / Blur effect */}
+      {/* Blur Placeholder */}
       <Box
         className={cn(
-          "absolute inset-0 transition-opacity duration-500 bg-line/10",
-          isLoaded ? "opacity-0" : "opacity-100"
+          "absolute inset-0 transition-opacity duration-700 bg-line/10 z-10",
+          isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
         )}
         style={{
           backdropFilter: "blur(20px)",
@@ -62,8 +67,8 @@ export function ProgressiveImage({
           src={currentSrc}
           alt={alt}
           className={cn(
-            "w-full h-full object-cover transition-all duration-700",
-            isLoaded ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-105 blur-lg",
+            "w-full h-full object-cover transition-all duration-1000",
+            isLoaded ? "scale-100 blur-0" : "scale-110 blur-xl",
             className
           )}
           loading="lazy"
