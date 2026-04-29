@@ -71,6 +71,27 @@ async function main() {
 
   console.log(`Extracted ${extractedLinks.length} links/images from markdown.`);
 
+  // 2.5 Scan TSX files for links
+  const tsxFiles = globSync('src/**/*.tsx');
+  const tsxLinkRegex = /(?:href|to|src)=["']([^"']+)["']/g;
+
+  for (const file of tsxFiles) {
+    const content = fs.readFileSync(file, 'utf-8');
+    let match;
+    while ((match = tsxLinkRegex.exec(content)) !== null) {
+      const url = match[1];
+      if (url.startsWith('{')) continue; // Skip dynamic bindings
+
+      if (url.startsWith('http')) {
+        extractedLinks.push({ file, type: 'external', url });
+      } else if (url.startsWith('/')) {
+        extractedLinks.push({ file, type: 'internal', url });
+      }
+    }
+  }
+
+  console.log(`Total extracted links/images (Markdown + TSX): ${extractedLinks.length}`);
+
   // 3. Validate everything
   const brokenLinks: { file: string, type: string, url: string, reason: string }[] = [];
 
@@ -83,9 +104,7 @@ async function main() {
   });
 
   // Validate external links and images
-  const externalToValidate = [
-    ...extractedLinks.filter(l => l.type === 'external' || (l.type === 'image' && l.url.startsWith('http')))
-  ];
+  const externalToValidate = extractedLinks.filter(l => l.type === 'external' || (l.type === 'image' && l.url.startsWith('http')));
 
   const localImagesToValidate = extractedLinks.filter(l => l.type === 'image' && !l.url.startsWith('http'));
 
@@ -100,9 +119,8 @@ async function main() {
   console.log(`Validating ${externalToValidate.length} external links...`);
 
   for (const link of externalToValidate) {
-    let urlObj: URL;
     try {
-      urlObj = new URL(link.url);
+      new URL(link.url);
     } catch (err) {
       brokenLinks.push({ ...link, reason: `Invalid URL: ${err instanceof Error ? err.message : String(err)}` });
       continue;

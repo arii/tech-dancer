@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
   const legalLinks = [
-    { label: 'Privacy', to: '#' },
-    { label: 'Terms', to: '#' },
     { label: 'Contact', to: '/contact' },
   ];
 

@@ -1,4 +1,4 @@
-import { User, Instagram, Linkedin, Github, Twitter, Youtube, FileText, Award, LucideIcon } from 'lucide-react';
+import { User, Instagram, Linkedin, Github, Twitter, Youtube, LucideIcon } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { imageSizes, stroke } from '@/styles/design-tokens';
 import { ProfileData, SocialPlatform } from './types';
@@ -83,25 +83,6 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
             </Box>
           </Stack>
 
-          <Box display="flex" direction="col" gap={4} marginTop={4}>
-            {[
-              { icon: FileText, label: 'Curriculum Vitae' },
-              { icon: Award, label: 'Publications' },
-            ].map((item) => (
-              <Box
-                key={item.label}
-                as="a"
-                href="#"
-                display="flex"
-                align="center"
-                gap={3}
-                className="group text-accent-navy hover:text-accent transition-colors"
-              >
-                <item.icon className="w-4 h-4" />
-                <Text variant="mono" size="xs" weight="font-semibold" tracking="emphasized" uppercase>{item.label}</Text>
-              </Box>
-            ))}
-          </Box>
         </Stack>
       </Box>
     </Box>
