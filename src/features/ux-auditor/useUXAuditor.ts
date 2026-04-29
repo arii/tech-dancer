@@ -43,7 +43,12 @@ export function useUXAuditor() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
-  const [url, setUrl] = useState('https://arii.github.io/tech-dancer/');
+  const [url, setUrl] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin + window.location.pathname;
+    }
+    return 'https://arii.github.io/tech-dancer/';
+  });
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 

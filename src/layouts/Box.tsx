@@ -77,6 +77,10 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop,
     top, right, bottom, left,
+    // Layout props that might be passed accidentally
+    flexWrap, flexDirection, alignItems, justifyContent, alignSelf, justifySelf,
+    gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, gridArea,
+    transitionProp, viewTransitionName,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,

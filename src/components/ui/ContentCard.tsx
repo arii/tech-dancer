@@ -32,7 +32,7 @@ export function ContentCard({
 }: ContentCardProps) {
   return (
     <Stack
-      as={motion(NavLink)}
+      as={motion.create(NavLink)}
       to={`${basePath}/${slug}`}
       direction="col"
       gap={0}
@@ -61,7 +61,7 @@ export function ContentCard({
       {/* Content Area */}
       <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
         <Stack gap={compact ? 0.5 : 3}>
-          <Box display="flex" align="center" gap={3} flexWrap="wrap">
+          <Box display="flex" align="center" gap={3} wrap>
             <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
               {category}
             </Text>

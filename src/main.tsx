@@ -56,7 +56,7 @@ const getBasename = (): string => {
     let branchSegmentsCount = 0;
     while (baseSegments.length + branchSegmentsCount < segments.length) {
       const segment = segments[baseSegments.length + branchSegmentsCount];
-      if (VALID_TOP_LEVEL_PATHS.has(segment) || segment === 'index.html') {
+      if (VALID_TOP_LEVEL_PATHS.has(segment) || segment === 'index.html' || segment.includes('.')) {
         break;
       }
       branchSegmentsCount++;
@@ -80,7 +80,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <RouterProvider 
+          router={router} 
+          fallbackElement={<div className="h-screen w-screen bg-surface" />}
+        />
       </QueryClientProvider>
     </HelmetProvider>
   </StrictMode>,

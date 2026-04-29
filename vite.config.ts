@@ -20,13 +20,16 @@ export default defineConfig(({mode}) => {
   const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
+  // Default to /tech-dancer/ to match GitHub Pages structure
+  const base = process.env.VITE_BASE_PATH || '/tech-dancer/';
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
     if (isVercel) return 'https://tech-dancer.vercel.app';
-    // For GitHub Pages, we return the origin and handle the path via base
+    // For local builds/previews, use the default preview port
+    if (!isProd && !isGHAction) return 'http://localhost:4173';
+    // For GitHub Pages production
     return 'https://arii.github.io';
   };
 
@@ -67,7 +70,7 @@ export default defineConfig(({mode}) => {
           const cleanRoute = route.startsWith('/') ? route : '/' + route;
           return (cleanBase + cleanRoute).replace(/\/$/, '') || '/';
         }),
-        generateRobotsTxt: false,
+        generateRobotsTxt: true,
       }),
       ViteImageOptimizer({
         includePublic: true,
