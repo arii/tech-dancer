@@ -19,25 +19,28 @@ export function ProgressiveImage({
   className,
   ...props
 }: ProgressiveImageProps) {
-  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  // State for the source being rendered, to detect prop changes
+  const [renderedSrc, setRenderedSrc] = useState(src);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Derived state: we are "loaded" if the currently loaded image matches the intended src
-  const isLoaded = loadedSrc === src;
+  // Sync state with props during render to avoid cascading renders in useEffect.
+  // This ensures isLoaded is reset immediately when src changes.
+  if (src !== renderedSrc) {
+    setRenderedSrc(src);
+    setIsLoaded(false);
+  }
 
   useEffect(() => {
-    // If already loaded (e.g. from cache or same src), no need to do anything
-    if (loadedSrc === src) return;
-
     const img = new Image();
     img.src = src;
     img.onload = () => {
-      setLoadedSrc(src);
+      setIsLoaded(true);
     };
 
     return () => {
       img.onload = null;
     };
-  }, [src, loadedSrc]);
+  }, [src]);
 
   // Use the intended src, but apply blur if it's not yet recorded as loaded
   // or use the placeholderSrc if provided.
