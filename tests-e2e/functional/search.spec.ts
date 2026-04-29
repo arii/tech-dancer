@@ -1,4 +1,13 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+
+async function openSearch(page: Page, isMobile: boolean) {
+  if (isMobile) {
+    await page.getByLabel('Open menu').click();
+    await page.getByTestId('mobile-search-button').click();
+  } else {
+    await page.getByTestId('desktop-search-button').click();
+  }
+}
 
 test.describe('Global Search Modal', () => {
   test.beforeEach(async ({ page }) => {
@@ -6,57 +15,37 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should open and close search modal via button', async ({ page, isMobile }) => {
-    if (isMobile) {
-      await page.getByLabel('Open menu').click();
-      await page.getByTestId('mobile-search-button').click();
-    } else {
-      await page.getByTestId('desktop-search-button').click();
-    }
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
-
-    await page.waitForTimeout(500);
+    await openSearch(page, isMobile);
+    const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
+    await expect(searchInput).toBeVisible();
 
     const closeButton = page.getByLabel('Close search');
     await closeButton.click({ force: true });
 
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible({ timeout: 10000 });
+    await expect(searchInput).not.toBeVisible({ timeout: 10000 });
   });
 
   test('should close search modal when clicking on backdrop', async ({ page, isMobile }) => {
-    if (isMobile) {
-      await page.getByLabel('Open menu').click();
-      await page.getByTestId('mobile-search-button').click();
-    } else {
-      await page.getByTestId('desktop-search-button').click();
-    }
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+    await openSearch(page, isMobile);
+    const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
+    await expect(searchInput).toBeVisible();
 
-    await page.waitForTimeout(500);
     await page.getByTestId('search-backdrop').click({ force: true });
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible({ timeout: 10000 });
+    await expect(searchInput).not.toBeVisible({ timeout: 10000 });
   });
 
   test('should close search modal on route change', async ({ page, isMobile }) => {
-    if (isMobile) {
-      await page.getByLabel('Open menu').click();
-      await page.getByTestId('mobile-search-button').click();
-    } else {
-      await page.getByTestId('desktop-search-button').click();
-    }
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+    await openSearch(page, isMobile);
+    const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
+    await expect(searchInput).toBeVisible();
 
     await page.goto('./gear');
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible({ timeout: 10000 });
+    await expect(searchInput).not.toBeVisible({ timeout: 10000 });
     await expect(page).toHaveURL(/.*gear/);
   });
 
   test('should close search modal when a search result is clicked', async ({ page, isMobile }) => {
-    if (isMobile) {
-      await page.getByLabel('Open menu').click();
-      await page.getByTestId('mobile-search-button').click();
-    } else {
-      await page.getByTestId('desktop-search-button').click();
-    }
+    await openSearch(page, isMobile);
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await searchInput.fill('ai');
 
@@ -64,7 +53,7 @@ test.describe('Global Search Modal', () => {
     await expect(resultButton).toBeVisible();
 
     await resultButton.click();
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible({ timeout: 10000 });
+    await expect(searchInput).not.toBeVisible({ timeout: 10000 });
   });
 });
 
@@ -73,12 +62,7 @@ test.describe('Search and Filter URL Persistence', () => {
   test('Global Search parameter should persist after reload', async ({ page, isMobile }) => {
     await page.goto('./');
 
-    if (isMobile) {
-      await page.getByLabel('Open menu').click();
-      await page.getByTestId('mobile-search-button').click();
-    } else {
-      await page.getByTestId('desktop-search-button').click();
-    }
+    await openSearch(page, isMobile);
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
     await expect(searchInput).toBeVisible();
@@ -89,12 +73,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
     await page.reload();
 
-    if (isMobile) {
-      await page.getByLabel('Open menu').click();
-      await page.getByTestId('mobile-search-button').click();
-    } else {
-      await page.getByTestId('desktop-search-button').click();
-    }
+    await openSearch(page, isMobile);
 
     await expect(page.getByPlaceholder(/SEARCH REPOSITORY/i)).toHaveValue('swing');
   });
