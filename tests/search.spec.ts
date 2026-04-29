@@ -76,10 +76,14 @@ test.describe('Search and Filter URL Persistence', () => {
     const searchButtonReload = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
     await searchButtonReload.click();
 
-    await expect(page.getByPlaceholder(/SEARCH REPOSITORY/i)).toHaveValue('swing');
+    const searchInputReload = page.getByPlaceholder(/SEARCH REPOSITORY/i);
+    await expect(searchInputReload).toBeVisible();
+    await expect(searchInputReload).toHaveValue('swing');
+
     // The search results might take a moment to load
-    await expect(page.getByText(/RESULTS FOUND/i)).toBeVisible();
-    await expect(page.getByText(/RESULTS FOUND/i)).not.toHaveText('0 RESULTS FOUND');
+    const resultsText = page.getByText(/RESULTS FOUND/i);
+    await expect(resultsText).toBeVisible();
+    await expect(resultsText).not.toHaveText('0 RESULTS FOUND');
   });
 
   test('Blog category filter should persist after reload', async ({ page }) => {
