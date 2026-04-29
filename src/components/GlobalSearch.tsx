@@ -73,7 +73,7 @@ export function GlobalSearch() {
         className="border-accent/20"
         onClick={(e: MouseEvent) => e.stopPropagation()}
       >
-        <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
+        <Stack direction="row" align="center" gap={4} border="b" padding={6} className="relative">
           <Search className="w-6 h-6 text-accent shrink-0" />
           <Text
             as="input"
@@ -100,13 +100,13 @@ export function GlobalSearch() {
           >
             <X className="w-6 h-6 text-text-dim group-hover:text-accent" />
           </Box>
-        </Box>
+        </Stack>
 
         <Box padding={3} overflow="y-auto" maxHeight="60vh" surface="default">
           {results.length > 0 ? (
             <Stack gap={2}>
               {results.map((res: SearchResult) => (
-                <Box 
+                <Stack
                   key={`${res.type}-${res.slug}`}
                   as="button"
                   type="button"
@@ -114,7 +114,7 @@ export function GlobalSearch() {
                   onClick={() => handleSelect(res)}
                   width="full"
                   padding={3}
-                  display="flex"
+                  direction="row"
                   align="start"
                   gap={4}
                   surface="default"
@@ -126,47 +126,47 @@ export function GlobalSearch() {
                       <Hash className="w-4 h-4 text-accent opacity-50" />
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
-                      <Box display="flex" align="center" justify="between" gap={3}>
+                      <Stack direction="row" align="center" justify="between" gap={3}>
                          <Text variant="display" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                             <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
-                      </Box>
+                      </Stack>
                       <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                    </Stack>
                    <CornerDownLeft className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
-                </Box>
+                </Stack>
               ))}
             </Stack>
           ) : (
-            <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
+            <Stack padding={12} align="center" justify="center" opacity={30} gap={0}>
               <Stack align="center" gap={4}>
                 <Sparkles className="w-12 h-12 opacity-20" />
                 <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
               </Stack>
-            </Box>
+            </Stack>
           )}
         </Box>
 
-        <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center">
-           <Box display="flex" align="center" gap={6}>
-              <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
+        <Stack direction="row" justify="between" align="center" gap={0} border="t" paddingX={6} paddingY={3} surface="muted">
+           <Stack direction="row" align="center" gap={6}>
+              <Stack direction="row" align="center" gap={2}>
+                 <Stack border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" align="center" justify="center" gap={0}>
                     <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
-                 </Box>
+                 </Stack>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
-              </Box>
-              <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
+              </Stack>
+              <Stack direction="row" align="center" gap={2}>
+                 <Stack border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" align="center" justify="center" gap={0}>
                     <Text variant="mono" size="tiny" color="dim" className="leading-none">↵</Text>
-                 </Box>
+                 </Stack>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
-              </Box>
-           </Box>
+              </Stack>
+           </Stack>
             <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
               {results.length} RESULTS FOUND
             </Text>
-        </Box>
+        </Stack>
       </Box>
     </Box>
   );

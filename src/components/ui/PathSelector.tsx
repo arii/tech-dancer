@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 type PathID = 'dancer' | 'roboticist';
 
@@ -34,7 +34,7 @@ export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
   return (
-    <Box className="grid grid-cols-1 lg:grid-cols-12" gap={0} border="y" height="[60vh]" width="full" surface="contrast">
+    <Grid cols={{ base: 1, lg: 12 }} gap={0} border="y" height="[60vh]" width="full" surface="contrast">
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
@@ -97,6 +97,6 @@ export default function PathSelector() {
           </Box>
         );
       })}
-    </Box>
+    </Grid>
   );
 }
