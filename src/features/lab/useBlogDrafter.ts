@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { debounce } from 'throttle-debounce';
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
@@ -19,7 +20,7 @@ export interface HistoryEntry {
 
 const STORAGE_KEY = 'tech-dancer-blog-draft';
 const HISTORY_KEY = 'tech-dancer-blog-history';
-const AUTO_SAVE_INTERVAL = 30000; // 30 seconds
+const DEBOUNCE_WAIT = 1000; // 1 second
 
 export function useBlogDrafter() {
   const [data, setData] = useState<DraftData>(() => {
@@ -55,27 +56,25 @@ export function useBlogDrafter() {
   });
 
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const dataRef = useRef(data);
+
+  // Debounced persistence for manual edits
+  const debouncedSave = useMemo(
+    () =>
+      debounce(DEBOUNCE_WAIT, (nextData: DraftData) => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
+        setLastSaved(new Date());
+      }),
+    []
+  );
 
   useEffect(() => {
-    dataRef.current = data;
-  }, [data]);
+    debouncedSave(data);
+  }, [data, debouncedSave]);
 
-  // Periodic Auto-save logic (not debounced)
+  // History persistence
   useEffect(() => {
-    const timer = setInterval(() => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataRef.current));
-      setLastSaved(new Date());
-    }, AUTO_SAVE_INTERVAL);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Immediate save helper
-  const saveDraft = useCallback((draftToSave: DraftData) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(draftToSave));
-    setLastSaved(new Date());
-  }, []);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  }, [history]);
 
   const saveToHistory = useCallback(() => {
     const newEntry: HistoryEntry = {
@@ -83,21 +82,16 @@ export function useBlogDrafter() {
       timestamp: Date.now(),
       data: { ...data }
     };
-    const updatedHistory = [newEntry, ...history].slice(0, 10); // Keep last 10 versions
+    const updatedHistory = [newEntry, ...history].slice(0, 10);
     setHistory(updatedHistory);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
-    saveDraft(data);
-  }, [data, history, saveDraft]);
+  }, [data, history]);
 
   const rollback = (entry: HistoryEntry) => {
     setData(entry.data);
-    saveDraft(entry.data);
   };
 
   const deleteHistoryEntry = (id: string) => {
-    const updatedHistory = history.filter(h => h.id !== id);
-    setHistory(updatedHistory);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+    setHistory(prev => prev.filter(h => h.id !== id));
   };
 
   const markdownPreview = useMemo(() => {
@@ -145,7 +139,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    // Helper to normalize literal \n strings if they exist
     const normalize = (str: string) => typeof str === 'string' ? str.replace(/\\n/g, '\n') : str;
 
     setData((prev: DraftData) => ({
@@ -159,7 +152,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   };
 
   const clearForm = () => {
-    const newData = {
+    setData({
       title: '',
       category: 'Lifestyle',
       excerpt: '',
@@ -167,9 +160,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
       date: new Date().toISOString().split('T')[0],
       affiliateLink: '',
       commentary: ''
-    };
-    setData(newData);
-    localStorage.removeItem(STORAGE_KEY);
+    });
   };
 
   return {
