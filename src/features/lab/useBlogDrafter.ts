@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
@@ -11,16 +11,94 @@ export interface DraftData {
   commentary: string;
 }
 
+export interface HistoryEntry {
+  id: string;
+  timestamp: number;
+  data: DraftData;
+}
+
+const STORAGE_KEY = 'tech-dancer-blog-draft';
+const HISTORY_KEY = 'tech-dancer-blog-history';
+const AUTO_SAVE_INTERVAL = 30000; // 30 seconds
+
 export function useBlogDrafter() {
-  const [data, setData] = useState<DraftData>({
-    title: '',
-    category: 'Lifestyle',
-    excerpt: '',
-    author: SITE_METADATA.author,
-    date: new Date().toISOString().split('T')[0],
-    affiliateLink: '',
-    commentary: ''
+  const [data, setData] = useState<DraftData>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse saved draft", e);
+      }
+    }
+    return {
+      title: '',
+      category: 'Lifestyle',
+      excerpt: '',
+      author: SITE_METADATA.author,
+      date: new Date().toISOString().split('T')[0],
+      affiliateLink: '',
+      commentary: ''
+    };
   });
+
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
+    const saved = localStorage.getItem(HISTORY_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse history", e);
+      }
+    }
+    return [];
+  });
+
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const dataRef = useRef(data);
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
+  // Periodic Auto-save logic (not debounced)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataRef.current));
+      setLastSaved(new Date());
+    }, AUTO_SAVE_INTERVAL);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Immediate save helper
+  const saveDraft = useCallback((draftToSave: DraftData) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(draftToSave));
+    setLastSaved(new Date());
+  }, []);
+
+  const saveToHistory = useCallback(() => {
+    const newEntry: HistoryEntry = {
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      data: { ...data }
+    };
+    const updatedHistory = [newEntry, ...history].slice(0, 10); // Keep last 10 versions
+    setHistory(updatedHistory);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+    saveDraft(data);
+  }, [data, history, saveDraft]);
+
+  const rollback = (entry: HistoryEntry) => {
+    setData(entry.data);
+    saveDraft(entry.data);
+  };
+
+  const deleteHistoryEntry = (id: string) => {
+    const updatedHistory = history.filter(h => h.id !== id);
+    setHistory(updatedHistory);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+  };
 
   const markdownPreview = useMemo(() => {
     return `# ${data.title || '[Title]'}
@@ -81,7 +159,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   };
 
   const clearForm = () => {
-    setData({
+    const newData = {
       title: '',
       category: 'Lifestyle',
       excerpt: '',
@@ -89,14 +167,21 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
       date: new Date().toISOString().split('T')[0],
       affiliateLink: '',
       commentary: ''
-    });
+    };
+    setData(newData);
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   return {
     data,
+    history,
+    lastSaved,
     updateField,
     applyAIResponse,
     clearForm,
+    saveToHistory,
+    rollback,
+    deleteHistoryEntry,
     markdownPreview,
     githubIssueUrl
   };
