@@ -17,7 +17,7 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ data }: ProfileSidebarProps) {
   return (
-    <Box display="flex" direction={{ base: 'col', md: 'row' }} gap={{ base: 8, lg: 12 }} align="start">
+    <Stack direction={{ base: 'col', md: 'row' }} gap={{ base: 8, lg: 12 }} align="start">
       <Box
         aspect="square"
         surface="muted"
@@ -104,6 +104,6 @@ export default function ProfileSidebar({ data }: ProfileSidebarProps) {
           </Box>
         </Stack>
       </Box>
-    </Box>
+    </Stack>
   );
 }
