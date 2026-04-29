@@ -346,7 +346,7 @@ class ETLPipeline:
             await browser.close()
 
             raw_df = self.parser.parse_results(content, url)
-            self.output_manager.save_markdown(raw_df, url)
+            # self.output_manager.save_markdown(raw_df, url)
 
             ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
@@ -371,7 +371,7 @@ class ETLPipeline:
                         try:
                             content = await self._fetch_page(context, res_url)
                             raw_df = self.parser.parse_results(content, res_url)
-                            self.output_manager.save_markdown(raw_df, res_url)
+                            # self.output_manager.save_markdown(raw_df, res_url)
 
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
