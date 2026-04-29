@@ -1,4 +1,4 @@
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Text, Stack } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
 interface CardImagePlaceholderProps {
@@ -27,12 +27,12 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
       ) : (
-        <Box className="w-full h-full flex flex-col">
-          <Box className="h-4 w-full" surface={surfaceVariant} />
-          <Box className="flex-1 flex items-center justify-center bg-muted/10">
+        <Stack height="full" width="full" gap={0}>
+          <Box height={4} width="full" surface={surfaceVariant} />
+          <Box flex={1} display="flex" align="center" justify="center" className="bg-muted/10">
             <CategoryPlaceholder category={category} size="md" />
           </Box>
-        </Box>
+        </Stack>
       )}
       <Box className="absolute top-4 left-4">
         <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-sm">

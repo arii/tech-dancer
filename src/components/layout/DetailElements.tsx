@@ -21,7 +21,7 @@ export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItem
   );
 }
 
-export function ScoreGrid({ children }: { children: React.ReactNode }) {
+export function ScoreGrid({ children }: { children: ReactNode }) {
   return (
     <Box
       border="y"

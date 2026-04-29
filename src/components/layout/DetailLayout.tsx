@@ -12,10 +12,10 @@ interface DetailLayoutProps {
   image?: string;
   onBack: () => void;
   backLabel: string;
-  sidebar?: React.ReactNode;
-  children?: React.ReactNode;
-  headerExtras?: React.ReactNode;
-  relatedContent?: React.ReactNode;
+  sidebar?: ReactNode;
+  children?: ReactNode;
+  headerExtras?: ReactNode;
+  relatedContent?: ReactNode;
 }
 
 export function DetailLayout({

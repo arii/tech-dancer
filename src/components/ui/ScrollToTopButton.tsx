@@ -5,7 +5,7 @@ import { Button } from '@/layouts/Primitives';
 import { iconSizes } from '@/styles/design-tokens';
 
 interface ScrollToTopButtonProps {
-  scrollRef: React.RefObject<HTMLElement | null>;
+  scrollRef: RefObject<HTMLElement | null>;
 }
 
 export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {

@@ -43,7 +43,7 @@ export default function Toolbox() {
               variant="mono"
               size="sm"
               className="focus:border-accent outline-none focus:ring-0"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
             <svg

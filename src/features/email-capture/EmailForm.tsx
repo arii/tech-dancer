@@ -7,7 +7,7 @@ import { useEmailForm } from './useEmailForm';
 export function EmailForm() {
   const { status, email, setEmail, submitForm } = useEmailForm();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     submitForm(email);
   };
@@ -20,7 +20,7 @@ export function EmailForm() {
           type="email"
           placeholder="Email Address"
           value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
