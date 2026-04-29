@@ -239,56 +239,6 @@ class OutputManager:
         if self.json_path:
             os.makedirs(os.path.dirname(self.json_path), exist_ok=True)
 
-    def save_markdown(self, df, url):
-        if df.empty: return
-
-        first_row = df.iloc[0]
-        title = first_row.get('event_title', 'Competition Results')
-        date_raw = first_row.get('event_date')
-
-        if date_raw:
-            try:
-                date_iso = datetime.strptime(date_raw, '%m/%d/%Y').strftime('%Y-%m-%d')
-            except ValueError:
-                logging.warning("Invalid event_date %r for %s; falling back to current date.", date_raw, url)
-                date_iso = datetime.now().strftime('%Y-%m-%d')
-        else:
-            date_iso = "unknown"
-
-        result_id = re.search(r'/results/(\d+)\.html', url)
-        id_suffix = f"-{result_id.group(1)}" if result_id else ""
-        slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-') + id_suffix
-
-        md_df = df.drop_duplicates(subset=['competitor_bib']).reset_index(drop=True)
-
-        md_content = f"""---
-type: study
-title: "{title}"
-date: "{date_iso}"
-author: "Scraper"
-category: "Results"
-excerpt: "Final results for {title}."
-slug: "{slug}"
----
-
-| Rank | Lead | Follow |
-|------|------|--------|
-"""
-        for i, row in md_df.iterrows():
-            name = row['competitor_name']
-            if " & " in name:
-                parts = name.split(" & ")
-                lead, follow = parts[0], parts[1] if len(parts) > 1 else ""
-            else:
-                lead, follow = name, ""
-
-            md_content += f"| {i+1} | {lead} | {follow} |\n"
-
-        filepath = os.path.join(self.studies_dir, f"{slug}.md")
-        with open(filepath, 'w') as f:
-            f.write(md_content)
-        logging.info(f"Saved markdown study: {filepath}")
-
     def _validate_schema(self, df):
         required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
         missing_cols = [col for col in required_cols if col not in df.columns]
@@ -346,8 +296,6 @@ class ETLPipeline:
             await browser.close()
 
             raw_df = self.parser.parse_results(content, url)
-            self.output_manager.save_markdown(raw_df, url)
-
             ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
 
@@ -371,8 +319,6 @@ class ETLPipeline:
                         try:
                             content = await self._fetch_page(context, res_url)
                             raw_df = self.parser.parse_results(content, res_url)
-                            self.output_manager.save_markdown(raw_df, res_url)
-
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
                             await self.limiter.throttle()
