@@ -1,14 +1,28 @@
 import { ExternalLink, Layout } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { DetailLayout } from '@/components/layout/DetailLayout';
-import { DraftData } from '../useBlogDrafter';
 
 interface FullPreviewProps {
-  data: DraftData;
+  title: string;
+  category: string;
+  date: string;
+  author: string;
+  excerpt: string;
+  commentary: string;
+  affiliateLink?: string;
   onClose: () => void;
 }
 
-export function FullPreview({ data, onClose }: FullPreviewProps) {
+export function FullPreview({
+  title,
+  category,
+  date,
+  author,
+  excerpt,
+  commentary,
+  affiliateLink,
+  onClose
+}: FullPreviewProps) {
   return (
     <Box position="relative">
       <Box
@@ -30,34 +44,34 @@ export function FullPreview({ data, onClose }: FullPreviewProps) {
         EXIT_FULL_PREVIEW
       </Box>
       <DetailLayout
-        title={data.title || 'Untitled Post'}
-        category={data.category}
-        date={data.date}
-        content={data.commentary}
+        title={title || 'Untitled Post'}
+        category={category}
+        date={date}
+        content={commentary}
         onBack={onClose}
         backLabel="Back to Editor"
         headerExtras={
           <Stack direction="row" gap={4} marginTop={6}>
             <Stack direction="row" align="center" gap={2} color="dim">
               <Box width={8} height={8} radius="full" surface="muted" />
-              <Text variant="mono" size="xs">{data.author}</Text>
+              <Text variant="mono" size="xs">{author}</Text>
             </Stack>
           </Stack>
         }
       >
-         {data.excerpt && (
+         {excerpt && (
            <Box marginY={8} border="l" paddingLeft={6} className="border-accent">
              <Text variant="body" size="lg" className="italic opacity-80">
-               {data.excerpt}
+               {excerpt}
              </Text>
            </Box>
          )}
-         {data.affiliateLink && (
+         {affiliateLink && (
            <Box marginY={8} border padding={4} surface="muted">
               <Box marginBottom={2}>
                 <Text variant="mono" size="xs" color="brand" weight="font-bold" className="block uppercase">Affiliate Link</Text>
               </Box>
-              <Stack as="a" direction="row" align="center" gap={2} href={data.affiliateLink} target="_blank" className="text-accent hover:underline">
+              <Stack as="a" direction="row" align="center" gap={2} href={affiliateLink} target="_blank" className="text-accent hover:underline">
                 <Text variant="body" size="sm">Buy on Amazon</Text>
                 <ExternalLink className="w-3 h-3" />
               </Stack>

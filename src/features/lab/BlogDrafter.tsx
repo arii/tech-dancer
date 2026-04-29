@@ -53,7 +53,18 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   };
 
   if (previewMode === 'full') {
-    return <FullPreview data={data} onClose={() => setPreviewMode('compact')} />;
+    return (
+      <FullPreview
+        title={data.title}
+        category={data.category}
+        date={data.date}
+        author={data.author}
+        excerpt={data.excerpt}
+        commentary={data.commentary}
+        affiliateLink={data.affiliateLink}
+        onClose={() => setPreviewMode('compact')}
+      />
+    );
   }
 
   return (
