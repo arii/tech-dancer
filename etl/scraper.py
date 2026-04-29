@@ -142,7 +142,12 @@ class ScoringDanceParser:
     def _extract_competitor_data(self, row):
         competitor_elem = row.find('td', class_='competitor-name')
         if not competitor_elem:
-            return None, None
+            # Fallback: Many results use the second cell for the competitor name
+            cells = row.find_all('td')
+            if len(cells) >= 2:
+                competitor_elem = cells[1]
+            else:
+                return None, None
 
         links = competitor_elem.find_all('a')
         names = [a.get_text(strip=True) for a in links]
@@ -353,7 +358,8 @@ class ETLPipeline:
             context = await browser.new_context(user_agent=USER_AGENT)
 
             # Collect events first so tqdm knows the total count
-            events = list(self.crawler.get_recent_events(years=years))
+            # Deduplicate to avoid processing the same event multiple times
+            events = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
             print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
 
             for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):

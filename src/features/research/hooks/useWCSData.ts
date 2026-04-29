@@ -59,17 +59,25 @@ export function useWCSData() {
   const trendData = useMemo(() => {
     const byDate: Record<string, { total: number, count: number }> = {};
     filteredData.forEach(r => {
-      const date = r.event_date.split('/').slice(1).join('/');
-      if (!byDate[date]) byDate[date] = { total: 0, count: 0 };
-      byDate[date].total += r.Registry_Points_Sum;
-      byDate[date].count += 1;
+      // Group by Month/Year for trend analysis
+      const parts = r.event_date.split('/');
+      if (parts.length < 3) return;
+      const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
+      if (!byDate[monthYear]) byDate[monthYear] = { total: 0, count: 0 };
+      byDate[monthYear].total += r.Registry_Points_Sum;
+      byDate[monthYear].count += 1;
     });
+
     return Object.entries(byDate)
       .map(([date, stats]) => ({
         date,
         avg: Number((stats.total / stats.count).toFixed(2))
       }))
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      .sort((a, b) => {
+        const [m1, y1] = a.date.split('/').map(Number);
+        const [m2, y2] = b.date.split('/').map(Number);
+        return y1 !== y2 ? y1 - y2 : m1 - m2;
+      });
   }, [filteredData]);
 
   return {
