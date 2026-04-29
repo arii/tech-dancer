@@ -34,21 +34,18 @@ export function HeroPathCard({
       onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
-      {/* Background Gradient Overlay */}
       <div
         className={`absolute inset-0 z-1 ${bgGradient} from-accent/30 to-black transition-all duration-700 ease-in-out ${
           isOtherHovered ? 'grayscale opacity-60' : 'opacity-100'
         }`}
       ></div>
 
-      {/* Scanline */}
       <div
-        className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_var(--color-accent)] z-10 pointer-events-none transition-opacity duration-500 ${
           scanlineDelay || ''
         } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
       ></div>
 
-      {/* Content Container */}
       <div className="relative z-20 p-12 h-full flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
         <h2
           className={`${titleClass} font-display font-black mb-4 text-white transition-transform duration-500 group-hover:translate-x-2`}

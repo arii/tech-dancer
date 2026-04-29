@@ -39,7 +39,6 @@ export function GlobalSearch() {
     }
   }, [query]);
 
-  // 3. The Keyboard Escape Hatch: Close on ESC key
   useHotkeys('Escape', () => {
     if (isOpen) close();
   }, [isOpen, close]);
@@ -51,7 +50,6 @@ export function GlobalSearch() {
   }, [open]);
 
   const handleSelect = (result: SearchResult) => {
-    // Immediate close and clear
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
@@ -73,7 +71,6 @@ export function GlobalSearch() {
       surface={false}
       data-testid="search-backdrop"
       className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72"
-      // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
       <Box

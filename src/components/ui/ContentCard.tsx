@@ -36,10 +36,8 @@ export function ContentCard({ slug, title, category, excerpt, date, image, baseP
         title={title}
       />
 
-      {/* Content Area */}
       <Stack gap={4} padding={5} flex={1} justify="between">
         <Stack gap={3}>
-          {/* Only show meta row if we have an image (since no-image uses compact header) */}
           {image && (
             <Box display="flex" align="center" gap={3}>
               <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
