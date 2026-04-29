@@ -54,7 +54,6 @@ export function ContentCard({
         <CardImagePlaceholder
           image={image}
           category={category}
-          date={date}
           title={title}
         />
       )}
