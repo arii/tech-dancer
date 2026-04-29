@@ -27,6 +27,6 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           {v === 'card' ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
         </button>
       ))}
-    </div>
+    </Box>
   );
 }
