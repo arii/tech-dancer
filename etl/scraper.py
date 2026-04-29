@@ -10,6 +10,8 @@ from playwright.async_api import async_playwright, TimeoutError as PlaywrightTim
 from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
+import random
+import asyncio
 from urllib.parse import urljoin
 from tqdm import tqdm
 from etl.processor import process_for_ledger
@@ -17,6 +19,12 @@ from etl.processor import process_for_ledger
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 BASE_URL = "https://scoring.dance"
+USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/tech-dancer)"
+
+async def ethical_throttle(base_delay=1.0, jitter_range=(0.0, 2.0)):
+    """Handles ethical rate limiting with jitter."""
+    delay = base_delay + random.uniform(*jitter_range)
+    await asyncio.sleep(delay)
 
 POINTS_MAPPING = {
     'Yes': 10.0, 'Alt1': 4.5, 'Alt2': 4.3, 'Alt3': 4.2, 'No': 0.0,
@@ -30,7 +38,8 @@ class ScoringDanceCrawler:
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10), reraise=True)
     def _fetch_page_text(self, url):
-        response = requests.get(url, timeout=15)
+        headers = {'User-Agent': USER_AGENT}
+        response = requests.get(url, headers=headers, timeout=15)
         response.raise_for_status()
         return response.text
 
@@ -128,7 +137,12 @@ class ScoringDanceParser:
     def _extract_competitor_data(self, row):
         competitor_elem = row.find('td', class_='competitor-name')
         if not competitor_elem:
-            return None, None
+            # Fallback: Many results use the second cell for the competitor name
+            cells = row.find_all('td')
+            if len(cells) >= 2:
+                competitor_elem = cells[1]
+            else:
+                return None, None
 
         links = competitor_elem.find_all('a')
         names = [a.get_text(strip=True) for a in links]
@@ -217,56 +231,6 @@ class OutputManager:
         self.studies_dir = studies_dir
         os.makedirs(self.studies_dir, exist_ok=True)
 
-    def save_markdown(self, df, url):
-        if df.empty: return
-
-        first_row = df.iloc[0]
-        title = first_row.get('event_title', 'Competition Results')
-        date_raw = first_row.get('event_date')
-
-        if date_raw:
-            try:
-                date_iso = datetime.strptime(date_raw, '%m/%d/%Y').strftime('%Y-%m-%d')
-            except ValueError:
-                logging.warning("Invalid event_date %r for %s; falling back to current date.", date_raw, url)
-                date_iso = datetime.now().strftime('%Y-%m-%d')
-        else:
-            date_iso = "unknown"
-
-        result_id = re.search(r'/results/(\d+)\.html', url)
-        id_suffix = f"-{result_id.group(1)}" if result_id else ""
-        slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-') + id_suffix
-
-        md_df = df.drop_duplicates(subset=['competitor_bib']).reset_index(drop=True)
-
-        md_content = f"""---
-type: study
-title: "{title}"
-date: "{date_iso}"
-author: "Scraper"
-category: "Results"
-excerpt: "Final results for {title}."
-slug: "{slug}"
----
-
-| Rank | Lead | Follow |
-|------|------|--------|
-"""
-        for i, row in md_df.iterrows():
-            name = row['competitor_name']
-            if " & " in name:
-                parts = name.split(" & ")
-                lead, follow = parts[0], parts[1] if len(parts) > 1 else ""
-            else:
-                lead, follow = name, ""
-
-            md_content += f"| {i+1} | {lead} | {follow} |\n"
-
-        filepath = os.path.join(self.studies_dir, f"{slug}.md")
-        with open(filepath, 'w') as f:
-            f.write(md_content)
-        logging.info(f"Saved markdown study: {filepath}")
-
     def _validate_schema(self, df):
         required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
         missing_cols = [col for col in required_cols if col not in df.columns]
@@ -314,13 +278,11 @@ class ETLPipeline:
     async def run_single(self, url):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            context = await browser.new_context(user_agent="Mozilla/5.0...")
+            context = await browser.new_context(user_agent=USER_AGENT)
             content = await self._fetch_page(context, url)
             await browser.close()
 
             raw_df = self.parser.parse_results(content, url)
-            self.output_manager.save_markdown(raw_df, url)
-
             ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
 
@@ -328,10 +290,11 @@ class ETLPipeline:
         logging.info(f"Starting historical scrape for past {years} years")
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            context = await browser.new_context(user_agent="Mozilla/5.0...")
+            context = await browser.new_context(user_agent=USER_AGENT)
 
             # Collect events first so tqdm knows the total count
-            events = list(self.crawler.get_recent_events(years=years))
+            # Deduplicate to avoid processing the same event multiple times
+            events = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
             print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
 
             for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):
@@ -343,11 +306,9 @@ class ETLPipeline:
                         try:
                             content = await self._fetch_page(context, res_url)
                             raw_df = self.parser.parse_results(content, res_url)
-                            self.output_manager.save_markdown(raw_df, res_url)
-
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
-                            await asyncio.sleep(1)
+                            await ethical_throttle()
                         except Exception as e:
                             logging.error(f"Failed to process {res_url}: {e}")
                 except Exception as e:
