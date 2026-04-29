@@ -1,55 +1,57 @@
 ---
-description: systematically review and test UI/UX changes interactively using playwright-cli
+description: Systematically review and test UI/UX changes interactively using playwright-cli
 ---
 
 # Review UX Changes
 
 0. **Prerequisites**:
-Ensure `playwright-cli` is installed and its skills are available. This tool provides token-efficient browser control for coding agents.
+Ensure `playwright-cli` is installed and its skills are available.
 ```bash
 npm install -g @playwright/cli@latest
 playwright-cli install --skills
 ```
 
 1. **Pre-flight validation**:
-Run the automated UI anti-pattern audit first to ensure baseline compliance before visual review:
 ```bash
 pnpm run audit
 ```
 
 2. **Start the Application**:
-Start the development server in the background:
 ```bash
 pnpm run dev &
 ```
 
-3. **Open Playwright CLI**:
-Launch the browser in headed mode to observe the changes, and navigate to the local application.
+3. **Desktop Visual Audit (1440x900)**:
 ```bash
-playwright-cli open http://localhost:3000/ --headed
+playwright-cli open http://localhost:3000/ --headed --viewport-size=1440,900
 ```
-
-4. **Navigate and Inspect**:
-Use `playwright-cli` commands to discover elements, navigate, and verify the UX state.
+Verify the following routes and features:
+- `/`
+- `/about`
+- `/blog`
+- `/gear`
+- `/research`
+- Search modal
+Verify: Design consistency, typography, Recharts rendering, and ContentCard/GearCard 16:9 aspect ratio.
 ```bash
-# Capture the page snapshot with element references
 playwright-cli snapshot
-
-# Interact with the UI using references or selectors
-playwright-cli click e15
-playwright-cli click "role=button[name=Submit]"
-playwright-cli type "test query"
+playwright-cli screenshot --filename=desktop-home.png
 ```
 
-5. **Capture Visual Evidence**:
-Take screenshots for scenarios that need manual review or attachment to pull requests.
+4. **Mobile Visual Audit (390x844)**:
 ```bash
-playwright-cli screenshot --filename=review-success.png
-playwright-cli pdf
+playwright-cli open http://localhost:3000/ --headed --viewport-size=390,844
+```
+Verify the same routes and features, plus:
+- Mobile navigation bar (`pb-[safe-area-inset-bottom]`)
+- Mobile spacing and tap targets
+- Search modal overlay and Z-index collisions (ensure no overlap with header/hamburger menu)
+```bash
+playwright-cli snapshot
+playwright-cli screenshot --filename=mobile-home.png
 ```
 
-6. **Cleanup**:
-When finished, close the browser sessions and kill the development server.
+5. **Cleanup**:
 ```bash
 playwright-cli close-all
 kill $(lsof -t -i :3000) 2>/dev/null || true
