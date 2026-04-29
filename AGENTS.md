@@ -135,13 +135,24 @@ When multiple agents work simultaneously:
 
 ## 24. Setup (Jules Environment)
 
-To prepare the environment for Jules, execute the centralized setup script:
+To prepare the base environment (Node.js/pnpm), execute the minimal setup script:
 
 ```bash
 ./dev-tools/snapshot.sh
 ```
 
-If the script fails to automate any part (e.g., `sudo` requirements), you may need to manually follow the steps within `dev-tools/snapshot.sh` to ensure all system dependencies and browser binaries are present.
+### On-Demand Dependencies
+To keep the environment snapshot small, heavy dependencies are installed only when needed using these provided scripts:
+
+**For E2E Testing / Browser Automation:**
+```bash
+./dev-tools/setup-playwright.sh
+```
+
+**For Python ETL / Data Processing:**
+```bash
+./dev-tools/setup-python.sh
+```
 
 ## 25. UI Auditing Workflow
 
