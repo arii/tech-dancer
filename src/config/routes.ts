@@ -5,7 +5,12 @@ export const routes: RouteConfig[] = [
   {
     path: '/',
     index: true,
-    lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
+    lazy: () => {
+      const isMobile = window.innerWidth < 768;
+      return isMobile
+        ? import('@/pages/Home').then(m => ({ Component: m.default }))
+        : import('@/pages/Home').then(m => ({ Component: m.default }));
+    },
     label: 'Home',
     icon: Home,
     skeleton: 'grid'
