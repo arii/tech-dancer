@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 interface SEOProps {
   title: string;
@@ -18,13 +19,15 @@ export function SEO({
 }: SEOProps) {
   const { pathname } = useLocation();
 
-  // Base URL logic - adjust to match your deployment
-  const baseUrl = import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer';
-  const url = canonical || `${baseUrl}${pathname}`;
-  const displayTitle = `${title} | TechDancer`;
+  const url = canonical || `${BASE_URL}${pathname}`;
+  const displayTitle = `${title} | ${SITE_NAME}`;
 
-  const defaultImage = `${baseUrl}/assets/comp_analysis_hero.webp`;
-  const seoImage = image || defaultImage;
+  const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
+
+  // Use a dynamic OG image generator if no specific image is provided for articles
+  const seoImage = image || (type === 'article'
+    ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fvercel-triangle-black.svg`
+    : defaultImage);
 
   return (
     <Helmet>
