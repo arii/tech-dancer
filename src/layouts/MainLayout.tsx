@@ -69,6 +69,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           width="full"
           surface="bg"
           direction="col"
+          gap={0}
           scrollBehavior="smooth"
           scrollPaddingTop={64}
           snap="y"
@@ -82,6 +83,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
             flex={1}
             direction="col"
+            gap={0}
             marginX="auto"
             maxWidth="7xl"
             width="full"
