@@ -1,52 +1,43 @@
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
-
-declare module 'jspdf' {
-  interface jsPDF {
-    autoTable: (options: unknown) => jsPDF;
-  }
-}
-
-interface ExportConfig {
-  filename: string;
-  title: string;
-  headers: string[];
-}
+import autoTable from 'jspdf-autotable';
+import { WCSRecord } from './useWCSData';
 
 export function useExport() {
-  const exportCSV = <T,>(data: T[], filename: string) => {
+  const exportCSV = (data: WCSRecord[], filename: string = 'wcs_prelims') => {
     const csv = Papa.unparse(data);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
 
     link.setAttribute('href', url);
     link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
   };
 
-  const exportPDF = (
-    data: (string | number | boolean)[][],
-    config: ExportConfig
-  ) => {
+  const exportPDF = (data: WCSRecord[], filename: string = 'wcs_prelims') => {
     const doc = new jsPDF();
 
     doc.setFontSize(18);
-    doc.text(config.title, 14, 22);
+    doc.text('WCS Prelim Scoring Analysis', 14, 22);
 
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.text(`Generated on ${new Date().toLocaleDateString()}`, 14, 30);
     doc.text(`Records: ${data.length}`, 14, 36);
 
-    doc.autoTable({
+    const tableData = data.map(r => [
+      r.event_date,
+      r.competitor_name,
+      r.event_title,
+      r.Registry_Points_Sum.toFixed(1),
+      r.Promoted ? 'YES' : 'NO'
+    ]);
+
+    autoTable(doc, {
       startY: 45,
-      head: [config.headers],
-      body: data,
+      head: [['Date', 'Competitor', 'Event', 'Score', 'Promoted']],
+      body: tableData,
       theme: 'grid',
       // Using RGB values to avoid hex color detection and match brand-ish dark gray
       headStyles: { fillColor: [26, 43, 60], textColor: [255, 255, 255], fontSize: 10 },
@@ -57,7 +48,7 @@ export function useExport() {
       }
     });
 
-    doc.save(`${config.filename}_report_${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(`${filename}_report_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   return {
