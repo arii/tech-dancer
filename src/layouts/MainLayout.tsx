@@ -78,14 +78,37 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
     // Horizontal swipe check
     if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Ignore swipe if it originates from a horizontally scrollable element
+      const target = e.target as HTMLElement;
+      const isScrollable = (el: HTMLElement | null): boolean => {
+        if (!el || el === e.currentTarget) return false;
+        const style = window.getComputedStyle(el);
+        const overflowX = style.getPropertyValue('overflow-x');
+        if ((overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth) {
+          return true;
+        }
+        return isScrollable(el.parentElement);
+      };
+
+      if (isScrollable(target)) return;
+
       const currentIndex = MAIN_ROUTES.indexOf(pathname);
       if (currentIndex !== -1) {
+        let targetRoute = '';
         if (deltaX > 0 && currentIndex > 0) {
           // Swipe right -> Previous page
-          navigate(MAIN_ROUTES[currentIndex - 1]);
+          targetRoute = MAIN_ROUTES[currentIndex - 1];
         } else if (deltaX < 0 && currentIndex < MAIN_ROUTES.length - 1) {
           // Swipe left -> Next page
-          navigate(MAIN_ROUTES[currentIndex + 1]);
+          targetRoute = MAIN_ROUTES[currentIndex + 1];
+        }
+
+        if (targetRoute) {
+          navigate(targetRoute);
+          // Optional: announce to screen readers
+          const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
+          const announcer = document.getElementById('route-announcer');
+          if (announcer) announcer.textContent = msg;
         }
       }
     }
@@ -100,6 +123,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      <Box
+        id="route-announcer"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      />
       <Box display="flex" className="min-h-screen w-full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
