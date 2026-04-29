@@ -19,38 +19,36 @@ export function ProgressiveImage({
   className,
   ...props
 }: ProgressiveImageProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState<string | null>(placeholderSrc || null);
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
 
-  // Pattern for adjusting state when prop changes during render
-  const [prevSrc, setPrevSrc] = useState(src);
-  if (src !== prevSrc) {
-    setPrevSrc(src);
-    setIsLoaded(false);
-    if (!placeholderSrc) {
-        setCurrentSrc(null);
-    }
-  }
+  // Derived state: we are "loaded" if the currently loaded image matches the intended src
+  const isLoaded = loadedSrc === src;
 
   useEffect(() => {
+    // If already loaded (e.g. from cache or same src), no need to do anything
+    if (loadedSrc === src) return;
+
     const img = new Image();
     img.src = src;
     img.onload = () => {
-      setCurrentSrc(src);
-      setIsLoaded(true);
+      setLoadedSrc(src);
     };
 
     return () => {
       img.onload = null;
     };
-  }, [src]);
+  }, [src, loadedSrc]);
+
+  // Use the intended src, but apply blur if it's not yet recorded as loaded
+  // or use the placeholderSrc if provided.
+  const displaySrc = (isLoaded || !placeholderSrc) ? src : placeholderSrc;
 
   return (
     <Box
       aspect={aspect}
       className={cn("relative overflow-hidden bg-line/5", containerClassName)}
     >
-      {/* Blur Placeholder */}
+      {/* Blur Overlay - shown when not loaded to provide smooth transition */}
       <Box
         className={cn(
           "absolute inset-0 transition-opacity duration-700 bg-line/10 z-10",
@@ -62,19 +60,17 @@ export function ProgressiveImage({
         }}
       />
 
-      {currentSrc && (
-        <img
-          src={currentSrc}
-          alt={alt}
-          className={cn(
-            "w-full h-full object-cover transition-all duration-1000",
-            isLoaded ? "scale-100 blur-0" : "scale-110 blur-xl",
-            className
-          )}
-          loading="lazy"
-          {...props}
-        />
-      )}
+      <img
+        src={displaySrc}
+        alt={alt}
+        className={cn(
+          "w-full h-full object-cover transition-all duration-1000",
+          isLoaded ? "scale-100 blur-0" : "scale-110 blur-xl",
+          className
+        )}
+        loading="lazy"
+        {...props}
+      />
     </Box>
   );
 }
