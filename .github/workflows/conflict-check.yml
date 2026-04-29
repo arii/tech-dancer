@@ -15,19 +15,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for merge conflicts with main
-        run: |
-          git fetch origin main
-          if ! git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main | grep -q "^+<<<<<<"; then
-            echo "✅ No merge conflicts detected"
-          else
-            echo "❌ Merge conflicts found with origin/main"
-            git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main | grep -A5 "<<<<<<" | head -50
-            exit 1
-          fi
-
       - name: Verify clean merge simulation
         run: |
+          git fetch origin main
           git config user.email "ci@test.com"
           git config user.name "CI"
           git checkout -b temp-merge-test

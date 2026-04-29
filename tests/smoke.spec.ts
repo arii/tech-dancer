@@ -81,7 +81,7 @@ test('all post/content pages load without errors', async ({ page }) => {
       const response = await page.goto(href);
       await page.waitForLoadState('networkidle');
 
-      // Skip if we hit the same page or if it's a known non-page link
+      // Skip if we hit a known non-page link that might 404 in certain environments
       if (response?.status() === 404 && (href.endsWith('/contact') || href.endsWith('/about'))) {
          continue;
       }
