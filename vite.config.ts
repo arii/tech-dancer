@@ -22,6 +22,13 @@ export default defineConfig(({mode}) => {
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
 
+  const resolveHostname = () => {
+    if (env.VITE_APP_URL) return env.VITE_APP_URL;
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    if (isVercel) return 'https://tech-dancer.vercel.app';
+    return 'https://arii.github.io/tech-dancer';
+  };
+
   // Automatically discover dynamic routes from config/routes.ts and content directories
   const dynamicRoutes = [
     // Static routes from config (excluding parameterized and catch-all)
@@ -49,8 +56,9 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
-        dynamicRoutes, generateRobotsTxt: false,
+        hostname: resolveHostname().replace(/\/$/, ''),
+        dynamicRoutes: dynamicRoutes.map(route => base === '/' ? route : base.replace(/\/$/, '') + (route.startsWith('/') ? route : '/' + route)),
+        generateRobotsTxt: false,
       }),
       ViteImageOptimizer({
         includePublic: true,
