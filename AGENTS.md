@@ -133,22 +133,15 @@ When multiple agents work simultaneously:
 - **Manual Confirmation for Merges**: Every merge command MUST be preceded by a specific `notify_user` request for approval, even if part of a previously discussed plan.
 - **No Autonomous Batch Merging**: Avoid sequential, rebase-based merge strategies that operate autonomously. Every merge transition requires manual verification.
 
-## 24. Setup (Jules Environment Fallback)
+## 24. Setup (Jules Environment)
 
-If the automated setup script fails or times out, you must manually run these commands to prepare the environment:
+To prepare the environment for Jules, execute the centralized setup script:
 
 ```bash
-# 1. Install Node dependencies
-pnpm install --frozen-lockfile
-
-# 2. Install Playwright browser & system deps
-npx playwright install chromium
-sudo npx playwright install-deps chromium
-
-# 3. Install Python ETL dependencies (System)
-export UV_SYSTEM_PYTHON=1
-uv pip install -r etl/requirements.txt
+./dev-tools/snapshot.sh
 ```
+
+If the script fails to automate any part (e.g., `sudo` requirements), you may need to manually follow the steps within `dev-tools/snapshot.sh` to ensure all system dependencies and browser binaries are present.
 
 ## 25. UI Auditing Workflow
 
