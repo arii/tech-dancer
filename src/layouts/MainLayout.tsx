@@ -1,5 +1,5 @@
 import { useRef, useLayoutEffect } from 'react';
-import { useLocation, useNavigationType } from 'react-router-dom';
+import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
@@ -7,11 +7,16 @@ import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
+const SWIPE_THRESHOLD = 50;
+const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
+
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const { pathname, key } = useLocation();
   const navType = useNavigationType();
+  const navigate = useNavigate();
 
   // Unified Scroll Management: Reset on navigation, Restore on history
   useLayoutEffect(() => {
@@ -53,8 +58,48 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     };
   }, [pathname, key, navType]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+
+    const touchEnd = {
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
+    };
+
+    const deltaX = touchEnd.x - touchStartRef.current.x;
+    const deltaY = touchEnd.y - touchStartRef.current.y;
+
+    // Horizontal swipe check
+    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+      const currentIndex = MAIN_ROUTES.indexOf(pathname);
+      if (currentIndex !== -1) {
+        if (deltaX > 0 && currentIndex > 0) {
+          // Swipe right -> Previous page
+          navigate(MAIN_ROUTES[currentIndex - 1]);
+        } else if (deltaX < 0 && currentIndex < MAIN_ROUTES.length - 1) {
+          // Swipe left -> Next page
+          navigate(MAIN_ROUTES[currentIndex + 1]);
+        }
+      }
+    }
+
+    touchStartRef.current = null;
+  };
+
   return (
-    <Box layout="root" className="min-h-screen relative overflow-x-hidden w-full">
+    <Box
+      layout="root"
+      className="min-h-screen relative overflow-x-hidden w-full touch-pan-y"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <Box display="flex" className="min-h-screen w-full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
@@ -79,7 +124,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
             paddingTop={12}
-            paddingBottom={showEmailBar ? { base: 48, md: 64 } : 12}
+            paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
             flex={1}
             direction="col"
             marginX="auto"

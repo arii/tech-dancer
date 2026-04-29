@@ -20,7 +20,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         as={as}
         ref={ref as React.Ref<HTMLDivElement>}
         cursor="pointer"
-        className={cn(buttonVariants({ variant, intent, size, fullWidth }), className)}
+        className={cn(buttonVariants({ variant, intent, size, fullWidth }), "min-h-[44px] min-w-[44px]", className)}
         {...props}
       >
         {children}
