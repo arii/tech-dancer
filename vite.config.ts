@@ -26,12 +26,11 @@ export default defineConfig(({mode}) => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
     if (isVercel) return 'https://tech-dancer.vercel.app';
-    // For GitHub Pages, we return the origin and handle the path via base
     return 'https://arii.github.io';
   };
 
   const hostname = resolveHostname().replace(/\/$/, '');
-  const fullAppUrl = hostname + (base === '/' ? '' : (base.startsWith('/') ? base : '/' + base)).replace(/\/$/, '');
+  const fullAppUrl = new URL(base, hostname).href.replace(/\/$/, '');
 
   // Automatically discover dynamic routes from config/routes.ts and content directories
   const dynamicRoutes = [
@@ -62,11 +61,7 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       Sitemap({
         hostname: hostname,
-        dynamicRoutes: dynamicRoutes.map(route => {
-          const cleanBase = base.replace(/\/$/, '');
-          const cleanRoute = route.startsWith('/') ? route : '/' + route;
-          return (cleanBase + cleanRoute).replace(/\/$/, '') || '/';
-        }),
+        dynamicRoutes: dynamicRoutes.map(route => path.posix.join(base, route).replace(/\/$/, '') || '/'),
         generateRobotsTxt: false,
       }),
       ViteImageOptimizer({
