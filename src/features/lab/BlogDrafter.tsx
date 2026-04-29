@@ -10,7 +10,6 @@ export function BlogDrafter() {
   const {
     data,
     history,
-    lastSaved,
     updateField,
     applyAIResponse,
     clearForm,
@@ -75,24 +74,16 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
              <Terminal className="w-5 h-5 text-accent" />
              <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
           </Box>
-          <Box display="flex" align="center" gap={6}>
-            {lastSaved && (
-              <Box display="flex" align="center" gap={2} color="dim">
-                <Save className="w-3 h-3" />
-                <Text variant="mono" size="micro">SAVED: {lastSaved.toLocaleTimeString()}</Text>
-              </Box>
-            )}
-            <Box
-              as="button"
-              onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
-              display="flex"
-              align="center"
-              gap={2}
-              className="text-text-dim hover:text-accent transition-colors cursor-pointer"
-            >
-              <RotateCcw className="w-4 h-4" />
-              <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
-            </Box>
+          <Box
+            as="button"
+            onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
+            display="flex"
+            align="center"
+            gap={2}
+            className="text-text-dim hover:text-accent transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-4 h-4" />
+            <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
           </Box>
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
@@ -352,7 +343,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
              </Box>
              <Box display="flex" align="center" gap={2} color="dim">
                 <FileText className="w-3 h-3" />
-                <Text variant="mono" size="micro">v1.3.0</Text>
+                <Text variant="mono" size="micro">v1.3.1</Text>
              </Box>
           </Box>
 

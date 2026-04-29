@@ -22,14 +22,22 @@ const STORAGE_KEY = 'tech-dancer-blog-draft';
 const HISTORY_KEY = 'tech-dancer-blog-history';
 const DEBOUNCE_WAIT = 1000; // 1 second
 
+// Safe ID generator with fallback for legacy browsers
+const generateId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+};
+
 export function useBlogDrafter() {
   const [data, setData] = useState<DraftData>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved draft", e);
+      } catch {
+        // Silent fail per audit recommendation
       }
     }
     return {
@@ -48,21 +56,18 @@ export function useBlogDrafter() {
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse history", e);
+      } catch {
+        // Silent fail per audit recommendation
       }
     }
     return [];
   });
-
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // Debounced persistence for manual edits
   const debouncedSave = useMemo(
     () =>
       debounce(DEBOUNCE_WAIT, (nextData: DraftData) => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
-        setLastSaved(new Date());
       }),
     []
   );
@@ -78,13 +83,12 @@ export function useBlogDrafter() {
 
   const saveToHistory = useCallback(() => {
     const newEntry: HistoryEntry = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       timestamp: Date.now(),
       data: { ...data }
     };
-    const updatedHistory = [newEntry, ...history].slice(0, 10);
-    setHistory(updatedHistory);
-  }, [data, history]);
+    setHistory(prev => [newEntry, ...prev].slice(0, 10));
+  }, [data]);
 
   const rollback = (entry: HistoryEntry) => {
     setData(entry.data);
@@ -130,8 +134,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
         clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
         clean = clean.trim();
         return JSON.parse(clean);
-      } catch (e) {
-        console.error("JSON Clean/Parse Error:", e);
+      } catch {
         return null;
       }
     };
@@ -166,7 +169,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   return {
     data,
     history,
-    lastSaved,
     updateField,
     applyAIResponse,
     clearForm,
