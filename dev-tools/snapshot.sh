@@ -6,23 +6,30 @@ cd "$(dirname "$0")/.."
 
 echo "=== Starting Custom Jules Setup ==="
 
+# Force non-interactive frontend to prevent any hanging prompts
+export DEBIAN_FRONTEND=noninteractive
+# Suppress uv progress bars and use system python
+export UV_NO_PROGRESS=true
+export UV_SYSTEM_PYTHON=1
+
 # 1. Install Node.js dependencies
 echo "Installing Node dependencies..."
-# Jules pre-installs pnpm 10.x, so we can use it directly
-pnpm install
+# Use --frozen-lockfile to avoid unexpected lockfile prompt freezes
+pnpm install --frozen-lockfile
 
 # 2. Install Playwright browsers
-# Required for Playwright testing and the WCS ETL scraper
-echo "Installing Playwright browsers and dependencies..."
-npx playwright install chromium --with-deps
+echo "Installing Playwright browsers..."
+# Installing ONLY Chromium saves massive bandwidth and time.
+npx playwright install chromium
 
-# 3. Setup Python ETL environment
-# Since `uv` is preinstalled on Jules, we use it for faster setup
-echo "Setting up Python virtual environment..."
-# Remove existing .venv to ensure a clean setup if the script is re-run
-rm -rf .venv
-uv venv
-source .venv/bin/activate
+# 3. Install Playwright system dependencies
+echo "Installing Playwright system dependencies..."
+# This requires sudo. Jules environment handles this typically.
+sudo npx playwright install-deps chromium
+
+# 4. Setup Python ETL environment
+echo "Installing Python dependencies (System)..."
+# Installing to system python directly since Jules environment is isolated
 uv pip install -r etl/requirements.txt
 
 echo "=== Jules Setup Complete! ==="
