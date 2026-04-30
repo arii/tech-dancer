@@ -35,6 +35,8 @@ Thumbs.db
 antipattern-report.txt
 TODO_ANTIPATTERNS.md
 ai-fix-prompt.txt
+.bundle-baseline
+any-count.txt
 
 # IDEs
 .vscode/*

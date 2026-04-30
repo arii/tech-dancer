@@ -5,7 +5,7 @@ import { execFileSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = process.env.AUDIT_ROOT || path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
 
@@ -188,6 +188,9 @@ function generateTodoFile(allViolations) {
   fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
 }
 
+const args = process.argv.slice(2);
+const writeTodo = args.includes('--write');
+
 console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
 
 checkPRScope();
@@ -205,10 +208,13 @@ CHECK_DIRS.forEach(dir => {
     });
 });
 
-if (Object.keys(allViolations).length === 0) {
+let totalViolations = 0;
+for (const violations of Object.values(allViolations)) {
+  totalViolations += violations.length;
+}
+
+if (totalViolations === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  // If no violations, we can still update/clear the TODO file
-  generateTodoFile({});
 } else {
   console.log('\x1b[31m✖ Anti-patterns detected:\x1b[0m\n');
   for (const [file, violations] of Object.entries(allViolations)) {
@@ -218,8 +224,12 @@ if (Object.keys(allViolations).length === 0) {
     });
     console.log();
   }
+}
 
+if (writeTodo) {
   generateTodoFile(allViolations);
   console.log("Successfully generated TODO_ANTIPATTERNS.md");
-  process.exit(1);
 }
+
+console.log(`VIOLATION_COUNT=${totalViolations}`);
+process.exit(0);

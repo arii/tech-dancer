@@ -155,9 +155,26 @@ def handle_status_board(args):
 
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
 
+def update_github_variable(name, value):
+    """Updates a GitHub repository variable using the gh CLI."""
+    # Only update on main branch to avoid cross-PR contention
+    if not os.getenv("GITHUB_ACTIONS") or os.getenv("GITHUB_REF_NAME") != "main":
+        return
+    try:
+        subprocess.run(["gh", "variable", "set", name, "--body", str(value)], check=True)
+        print(f"✅ Updated GitHub variable {name} to {value}")
+    except Exception as e:
+        print(f"⚠️ Failed to update GitHub variable {name}: {e}")
+
 def handle_ratchet_any(args):
-    current = get_any_count(); baseline = 0
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 0)
+    current = get_any_count()
+    baseline_env = os.getenv("ANY_COUNT_BASELINE")
+    if baseline_env and baseline_env.strip():
+        baseline = int(baseline_env)
+    elif os.path.exists(args.baseline_file):
+        baseline = int(open(args.baseline_file).read().strip() or 0)
+    else:
+        baseline = 0
 
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
@@ -168,12 +185,22 @@ def handle_ratchet_any(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update: open(args.baseline_file, 'w').write(str(current))
+    if args.update:
+        if os.getenv("GITHUB_ACTIONS"):
+            update_github_variable("ANY_COUNT_BASELINE", current)
+        else:
+            open(args.baseline_file, 'w').write(str(current))
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
-    size = get_bundle_size(); baseline = 1000
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 1000)
+    size = get_bundle_size()
+    baseline_env = os.getenv("BUNDLE_BASELINE_KB")
+    if baseline_env and baseline_env.strip():
+        baseline = int(baseline_env)
+    elif os.path.exists(args.baseline_file):
+        baseline = int(open(args.baseline_file).read().strip() or 1000)
+    else:
+        baseline = 1000
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -184,7 +211,11 @@ def handle_bundle_size(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update: open(args.baseline_file, 'w').write(str(size))
+    if args.update:
+        if os.getenv("GITHUB_ACTIONS"):
+            update_github_variable("BUNDLE_BASELINE_KB", size)
+        else:
+            open(args.baseline_file, 'w').write(str(size))
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):

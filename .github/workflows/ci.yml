@@ -23,6 +23,8 @@ jobs:
   lint-typecheck:
     name: Lint & Type Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
+      - name: Verify Lockfile Consistency
+        run: git diff --exit-code pnpm-lock.yaml
+
       - name: Lint
         run: pnpm run lint
 
@@ -49,6 +54,9 @@ jobs:
 
       - name: TypeScript `any` Ratchet
         run: python3 dev-tools/td_cli.py ratchet-any --update
+        env:
+          ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
@@ -73,13 +81,26 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
-          pnpm run audit
-          # Fail if TODO_ANTIPATTERNS.md has more violations than baseline
-          BASELINE=$(git show origin/main:TODO_ANTIPATTERNS.md 2>/dev/null | grep -c '\- \[ \]' || echo 0)
-          CURRENT=$(grep -c '\- \[ \]' TODO_ANTIPATTERNS.md || echo 0)
+          # 0. Ensure origin/main is fetched
+          git fetch origin main --depth=1
+
+          # 1. Capture current violations
+          CURRENT_LOG=$(pnpm run audit)
+          echo "$CURRENT_LOG"
+          CURRENT=$(echo "$CURRENT_LOG" | grep "VIOLATION_COUNT=" | cut -d'=' -f2)
+
+          # 2. Capture baseline violations (from main branch)
+          # We check out the source and script from main to a temp area to avoid polluting workspace
+          mkdir -p /tmp/baseline
+          git archive origin/main scripts/detect-antipatterns.mjs src/features src/pages src/App.tsx | tar -x -C /tmp/baseline
+
+          # Run audit on main's files using main's script, pointing it to the temp root
+          BASELINE_LOG=$(AUDIT_ROOT=/tmp/baseline node /tmp/baseline/scripts/detect-antipatterns.mjs)
+          BASELINE=$(echo "$BASELINE_LOG" | grep "VIOLATION_COUNT=" | cut -d'=' -f2)
+
           echo "Baseline violations: $BASELINE | Current: $CURRENT"
           if [ "$CURRENT" -gt "$BASELINE" ]; then
-            echo "❌ New anti-pattern violations introduced. Fix before merging."
+            echo "❌ New anti-pattern violations introduced ($CURRENT > $BASELINE). Fix before merging."
             exit 1
           fi
           echo "✅ No new violations."
@@ -102,6 +123,8 @@ jobs:
     name: Build & E2E
     needs: lint-typecheck
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -126,6 +149,9 @@ jobs:
 
       - name: Bundle Size Check
         run: python3 dev-tools/td_cli.py bundle-size --update
+        env:
+          BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache Playwright Browsers
         id: playwright-cache
