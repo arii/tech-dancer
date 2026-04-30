@@ -59,4 +59,5 @@ etl/data/*.parquet
 # Since you use pnpm, we ignore other manager lockfiles
 package-lock.json
 yarn.lock
+public/data
 link-validation-report.md
