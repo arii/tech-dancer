@@ -68,6 +68,8 @@ export function HeroPathCard({
           variant="headline"
           size="6xl"
           weight="font-black"
+          leading="[0.9]"
+          tracking="tighter"
           className={cn(titleClass, "mb-8 text-white transition-transform duration-500 group-hover:translate-x-2")}
         >
           {title}

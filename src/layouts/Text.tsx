@@ -1,11 +1,11 @@
-import { forwardRef, Ref, ElementType } from "react"
+import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { composeStyles } from "@/lib/utils"
 import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
 
-export interface TextProps extends Omit<BaseProps, "align"> {
+export interface TextProps extends Omit<BaseProps, "align">, HTMLAttributes<HTMLElement> {
   as?: ElementType
   className?: string
   variant?: keyof typeof typography
@@ -15,16 +15,16 @@ export interface TextProps extends Omit<BaseProps, "align"> {
   weight?: string
   align?: "left" | "center" | "right" | "justify"
   tracking?: keyof typeof trackingTokens | string
+  leading?: "none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
-  [key: string]: unknown
 }
 
 export const Text = forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
-    variant, intent, color = "main", size, weight, align, tracking, 
+    variant, intent, color = "main", size, weight, align, tracking, leading,
     uppercase, lowercase, capitalize,
     ...props 
   }, ref) => {
@@ -33,7 +33,6 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         as={Component}
         ref={ref as Ref<HTMLDivElement>}
         className={composeStyles(
-          variant && typography[variant],
           intent && variants.intent[intent],
           !intent && color === "main" && "text-text-main",
           !intent && color === "body" && "text-text-body",
@@ -44,9 +43,11 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           !intent && color === "bg" && "text-bg",
           !intent && color === "error" && "text-error",
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
+          variant && typography[variant],
           weight,
           align && `text-${align}`,
-          tracking && trackingTokens[tracking as keyof typeof trackingTokens],
+          tracking && (trackingTokens[tracking as keyof typeof trackingTokens] || `tracking-${tracking}`),
+          leading && `leading-${leading}`,
           uppercase && "uppercase",
           lowercase && "lowercase",
           capitalize && "capitalize",
