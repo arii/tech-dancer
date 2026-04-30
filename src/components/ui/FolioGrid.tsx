@@ -52,7 +52,7 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
           <Box position="relative" maxWidth="2xl" flex={1}>
             <Box
               as="input"
@@ -97,9 +97,8 @@ export default function FolioGrid({
               <Box
                 key={item.slug}
                 border="r"
-                borderBottom={true}
                 padding={{ base: 6, lg: 6 }}
-                className="hover:bg-card-bg transition-colors group"
+                className="hover:bg-card-bg transition-colors group border-b border-line"
               >
                 <ContentCard
                   {...item}

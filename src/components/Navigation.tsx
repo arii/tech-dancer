@@ -26,23 +26,28 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
             : "text-text-dim hover:text-accent hover:bg-bg/50 border-l-4 border-transparent"
         )}
       >
-        <Box
-          display="flex"
-          align="center"
-          gap={4}
-          paddingY={6}
-          paddingX={isMobile ? undefined : 4}
-          border={isMobile ? "b" : undefined}
-          className={cn(
-            isMobile ? "border-line/50" : undefined,
-            "min-h-[44px]"
-          )}
-        >
+        {({ isActive }) => (
+          <Box
+            display="flex"
+            align="center"
+            gap={4}
+            paddingY={6}
+            paddingX={isMobile ? undefined : 4}
+            border={isMobile ? "b" : undefined}
+            surface={isMobile && isActive ? "accent" : undefined}
+            emphasis={isMobile && isActive ? "high" : undefined}
+            className={cn(
+              isMobile ? "border-line/50" : undefined,
+              "min-h-[44px]",
+              isMobile && isActive && "shadow-sm"
+            )}
+          >
           <Icon className={cn(`w-5 h-5 ${stroke.thick} flex-shrink-0`, isMobile ? "w-6 h-6" : "")} />
           <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
             {label}
           </Text>
         </Box>
+        )}
       </NavLink>
     </Box>
   );
@@ -120,15 +125,16 @@ export default function Navigation() {
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
         <Box
-          as="button"
+          as={motion.create("button")}
           onClick={() => setIsOpen(!isOpen)}
-          padding={2}
+          padding={4}
           display="flex"
           align="center"
           justify="center"
-          className="min-h-11 min-w-11"
+          className="min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
+          whileTap={{ scale: 0.95 }}
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </Box>

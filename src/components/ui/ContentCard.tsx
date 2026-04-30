@@ -32,7 +32,7 @@ export function ContentCard({
 }: ContentCardProps) {
   return (
     <Stack
-      as={motion(NavLink)}
+      as={motion.create(NavLink)}
       to={`${basePath}/${slug}`}
       direction="col"
       gap={0}
@@ -61,7 +61,7 @@ export function ContentCard({
       {/* Content Area */}
       <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
         <Stack gap={compact ? 0.5 : 3}>
-          <Box display="flex" align="center" gap={3} flexWrap="wrap">
+          <Box display="flex" align="center" gap={3} wrap>
             <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
               {category}
             </Text>
@@ -92,12 +92,12 @@ export function ContentCard({
         </Stack>
 
         {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} className="border-t border-line/50 mt-auto">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" className="text-accent">
+          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
+            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
               Read Article
             </Text>
-            <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
-            <Text variant="mono" size="xs" className="text-accent ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+            <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
+            <Text variant="mono" size="xs" color="accent" className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
               →
             </Text>
           </Box>

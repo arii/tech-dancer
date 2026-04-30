@@ -30,7 +30,7 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-bold" className="tracking-[0.2em]" uppercase>
+        <Text variant="mono" size="xs" color="dim" weight="font-bold" tracking="wide-editorial" uppercase>
           {label}
         </Text>
         <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-accent-navy leading-tight tracking-tight">
