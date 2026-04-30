@@ -20,7 +20,7 @@ jobs:
        github.event.comment.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.50.0-noble # Use noble (Ubuntu 24.04) based image
+      image: mcr.microsoft.com/playwright:v1.59.1-noble # Use noble (Ubuntu 24.04) based image
     steps:
       - name: Get PR branch
         id: get-branch
@@ -33,12 +33,14 @@ jobs:
               pull_number: context.issue.number
             });
             core.setOutput('head_ref', pr.data.head.ref);
+            core.setOutput('head_sha', pr.data.head.sha);
 
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.get-branch.outputs.head_ref }}
+          ref: ${{ steps.get-branch.outputs.head_sha }}
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Fix dubious ownership
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -49,11 +51,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Update Playwright Snapshots
         run: pnpm run test:e2e --update-snapshots
@@ -66,3 +68,4 @@ jobs:
         with:
           commit_message: "chore: update playwright snapshots [skip ci]"
           file_pattern: 'tests/**/*.{png,yml}'
+          branch: ${{ steps.get-branch.outputs.head_ref }}

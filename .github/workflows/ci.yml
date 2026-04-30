@@ -35,7 +35,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
@@ -65,7 +65,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
@@ -103,7 +103,7 @@ jobs:
     needs: lint-typecheck
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.50.0-noble
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
     strategy:
       fail-fast: false
       matrix:
@@ -121,7 +121,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
@@ -147,7 +147,7 @@ jobs:
         run: npx playwright install chromium
 
       - name: Run Playwright Smoke Test
-        run: pnpm run test:e2e --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        run: pnpm run test:e2e ${{ github.event_name == 'pull_request' && '--only-changed' || '' }} --shard=${{ matrix.shard }}/${{ strategy.job-total }}
         env:
           CI: true
           NODE_ENV: production
