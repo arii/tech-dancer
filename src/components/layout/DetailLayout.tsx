@@ -85,7 +85,7 @@ export function DetailLayout({
 
           <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
             {/* Content - first on mobile via order classes */}
-            <Box className={sidebar ? "lg:col-span-2 order-1 lg:order-2" : "w-full"}>
+            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
               {children}
               <Box
                 className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"

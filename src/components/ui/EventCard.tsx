@@ -12,7 +12,6 @@ export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
   return (
     <Stack
       height="full"
-      border
       padding={{ base: 6, lg: 8 }}
       gap={4}
       className="bg-surface/50"

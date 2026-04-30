@@ -26,37 +26,42 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
     </ScoreGrid>
   );
 
+  const affiliateLinksView = affiliateLinks.length > 0 && (
+    <Stack gap={4} marginTop={8}>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>Where to Buy</Text>
+      <Box display="grid" gap={3} gridCols={{ base: 1, sm: 2, lg: 1 }}>
+        {affiliateLinks.map(link => (
+          <Box
+            key={link.id}
+            as="a"
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            display="flex"
+            align="center"
+            justify="between"
+            padding={4}
+            surface="default"
+            border
+            className="hover:border-accent group transition-all"
+          >
+            <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
+            <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+          </Box>
+        ))}
+      </Box>
+      <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight italic">
+        * Affiliate link support helps maintain this repository.
+      </Text>
+    </Stack>
+  );
+
   const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
     <>
       {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
-
-      {affiliateLinks.length > 0 && (
-        <Stack gap={4} marginTop={8}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>Where to Buy</Text>
-          {affiliateLinks.map(link => (
-            <Box
-              key={link.id}
-              as="a"
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              display="flex"
-              align="center"
-              justify="between"
-              padding={4}
-              surface="default"
-              border
-              className="hover:border-accent group transition-all"
-            >
-              <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-              <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
-            </Box>
-          ))}
-          <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight italic">
-            * Affiliate link support helps maintain this repository.
-          </Text>
-        </Stack>
-      )}
+      <Box className="hidden lg:block">
+        {affiliateLinksView}
+      </Box>
     </>
   ) : undefined;
 
@@ -73,6 +78,9 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       headerExtras={headerExtras}
     >
       {post.verdict && <VerdictCallout verdict={post.verdict} />}
+      <Box className="lg:hidden">
+        {affiliateLinksView}
+      </Box>
     </DetailLayout>
   );
 }

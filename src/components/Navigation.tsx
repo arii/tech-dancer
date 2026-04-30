@@ -1,53 +1,16 @@
-import { Menu, X, Terminal, Search, LucideIcon } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { stroke } from '@/styles/design-tokens';
-import { cn } from '@/lib/utils';
 import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
-
-function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: string, icon?: LucideIcon, onClick?: () => void, isMobile?: boolean }) {
-  if (!icon) {
-    console.warn(`Navigation icon missing for route: ${label}. Falling back to Terminal icon.`);
-  }
-  const Icon = icon || Terminal;
-  return (
-    <Box as="li" position="relative" className="group">
-      <NavLink
-        to={to}
-        onClick={onClick}
-        className={({ isActive }) => cn(
-          "transition-all relative z-10 rounded-md block",
-          isActive 
-            ? "text-accent bg-accent/10 border-l-4 border-accent"
-            : "text-text-dim hover:text-accent hover:bg-bg/50 border-l-4 border-transparent"
-        )}
-      >
-        <Box
-          display="flex"
-          align="center"
-          gap={4}
-          paddingY={6}
-          paddingX={isMobile ? undefined : 4}
-          border={isMobile ? "b" : undefined}
-          className={cn(
-            isMobile ? "border-line/50" : undefined,
-            "min-h-[44px]"
-          )}
-        >
-          <Icon className={cn(`w-5 h-5 ${stroke.thick} flex-shrink-0`, isMobile ? "w-6 h-6" : "")} />
-          <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
-            {label}
-          </Text>
-        </Box>
-      </NavLink>
-    </Box>
-  );
-}
+import { MobileHeader } from './navigation/MobileHeader';
+import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
+import { NavItem } from './navigation/NavItem';
+import { cn } from '@/lib/utils';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,79 +41,20 @@ export default function Navigation() {
       <MobileBottomNav />
 
       {/* Mobile Header */}
-      <Box
-        as="nav"
-        aria-label="Mobile Navigation"
-        layout="mobileHeader"
-        className="transition-[backdrop-filter] duration-300 bg-surface border-b border-line"
-      >
-        <Box as={NavLink} to="/" onClick={() => setIsOpen(false)}>
-          <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
-        </Box>
-        <Box
-          as="button"
-          onClick={() => setIsOpen(!isOpen)}
-          padding={2}
-          display="flex"
-          align="center"
-          justify="center"
-          className="min-h-11 min-w-11"
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isOpen}
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </Box>
-      </Box>
+      <MobileHeader
+        isOpen={isOpen}
+        onToggle={() => setIsOpen(!isOpen)}
+        onClose={() => setIsOpen(false)}
+      />
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <Box 
-            as={motion.div} 
-            initial={{ x: '-100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-            position="fixed"
-            className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
-            padding={8}
-            overflow="y-auto"
-          >
-            <Box as="ul" className="space-y-6">
-              <Box as="li" position="relative" className="group">
-                <Box
-                  as="button"
-                  type="button"
-                  cursor="pointer"
-                  onClick={() => {
-                    setIsOpen(false);
-                    handleSearchClick();
-                  }}
-                  display="flex"
-                  align="center"
-                  gap={4}
-                  paddingY={6}
-                  border="b"
-                  width="full"
-                  className="transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50 min-h-[44px]"
-                >
-                  <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
-                  <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
-                    Search
-                  </Text>
-                </Box>
-              </Box>
-              {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-                <NavItem
-                  key={item.path}
-                  to={item.path}
-                  label={item.label}
-                  icon={item.icon}
-                  onClick={() => setIsOpen(false)}
-                  isMobile
-                />
-              ))}
-            </Box>
-          </Box>
+          <MobileMenuOverlay
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            onSearchClick={handleSearchClick}
+          />
         )}
       </AnimatePresence>
 
