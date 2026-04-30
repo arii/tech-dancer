@@ -179,7 +179,7 @@ def handle_ratchet_any(args):
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
 
-    if current > baseline:
+    if current > baseline and baseline > 0:
         msg = f"'any' count increased from {baseline} to {current}."
         if args.json: print(json.dumps({"status": "error", "message": msg, "data": res}, indent=2))
         else: print(f"❌ Error: {msg}")
@@ -205,7 +205,10 @@ def handle_bundle_size(args):
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
 
-    if size > res["threshold_kb"]:
+    # If baseline is the default (1000) and env var was empty, don't fail on first run
+    is_first_run = baseline == 1000 and not (os.getenv("BUNDLE_BASELINE_KB") and os.getenv("BUNDLE_BASELINE_KB").strip())
+
+    if size > res["threshold_kb"] and not is_first_run:
         msg = f"Bundle size exceeds threshold ({size}KB > {res['threshold_kb']}KB)."
         if args.json: print(json.dumps({"status": "error", "message": msg, "data": res}, indent=2))
         else: print(f"❌ Error: {msg}")

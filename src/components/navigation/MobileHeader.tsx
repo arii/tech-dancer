@@ -1,5 +1,6 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { Box, Text } from '@/layouts/Primitives';
 
 interface MobileHeaderProps {
@@ -20,15 +21,16 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
       </Box>
       <Box
-        as="button"
+        as={motion.create("button")}
         onClick={onToggle}
-        padding={2}
+        padding={4}
         display="flex"
         align="center"
         justify="center"
-        className="min-h-11 min-w-11"
+        className="min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors"
         aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}
+        whileTap={{ scale: 0.95 }}
       >
         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </Box>
