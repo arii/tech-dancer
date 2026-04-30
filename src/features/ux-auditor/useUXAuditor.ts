@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { jsonrepair } from 'jsonrepair';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy } from 'firebase/firestore';
@@ -189,39 +190,11 @@ export function useUXAuditor() {
 
             let parsed: Partial<ViewportAnalysis> = { ...current };
 
-            // Heuristic-based partial JSON extraction
-            // 1. Extract Summary
-            if (updatedRaw.includes('"summary":')) {
-              // Match content inside "summary": "..." handling some escaped quotes
-              const summaryMatch = updatedRaw.match(/"summary":\s*"((?:[^"\\]|\\.)*)/);
-              if (summaryMatch && summaryMatch[1]) {
-                parsed.summary = summaryMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
-              }
-            }
-
-            // 2. Extract Improvements
-            if (updatedRaw.includes('"improvements":')) {
-              const impPart = updatedRaw.split('"improvements":')[1];
-              // Match individual objects in the array: { ... }
-              const objMatches = impPart.match(/{[^{}]*}/g);
-              if (objMatches) {
-                const improvements = objMatches.map(jsonStr => {
-                  try {
-                    return JSON.parse(jsonStr);
-                  } catch {
-                    return null;
-                  }
-                }).filter(Boolean);
-                if (improvements.length > 0) parsed.improvements = improvements;
-              }
-            }
-
-            // Fallback: Full parse attempt if it looks complete
-            if (updatedRaw.trim().endsWith('}')) {
-              try {
-                const fullParsed = JSON.parse(updatedRaw);
-                parsed = { ...parsed, ...fullParsed };
-              } catch { /* ignore */ }
+            try {
+              const repaired = jsonrepair(updatedRaw);
+              parsed = JSON.parse(repaired);
+            } catch {
+              // If jsonrepair fails (e.g. string not closed), we keep previous state but update raw
             }
 
             return {
@@ -300,7 +273,7 @@ export function useUXAuditor() {
     }
 
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
