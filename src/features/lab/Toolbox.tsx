@@ -2,8 +2,7 @@ import { useMemo } from 'react';
 import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { GearCard } from '@/components/ui/GearCard';
+import { GearCard } from './GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 
@@ -20,34 +19,37 @@ export default function Toolbox() {
         title="Toolbox"
         description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
       />
-      <Box as="header" marginBottom={12}>
-        <PageHeader
-          label="THE TOOLBOX"
-          title="Gear Reviews"
-          description="Rigorous testing and honest takes on the gear that keeps you moving."
-        />
+      {/* Header section with modern design */}
+      <Box as="header" marginBottom={12} paddingBottom={12} className="border-b border-line/50">
+        <Box marginBottom={4}>
+          <Box as="span" radius="full" paddingX={3} paddingY={1} className="inline-block bg-accent/10">
+            <Text variant="mono" size="tiny" color="brand" weight="font-bold">THE TOOLBOX</Text>
+          </Box>
+        </Box>
+        <Text as="h1" variant="display" size="4xl" weight="font-black" marginBottom={4} display="block" className="text-accent-navy">
+          Gear Reviews
+        </Text>
+        <Text as="p" variant="sans" size="lg" color="dim" maxWidth="2xl" marginBottom={8} weight="font-medium" display="block">
+          Rigorous testing and honest takes on the gear that keeps you moving.
+        </Text>
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
-          <Box position="relative" maxWidth="2xl" flex={1}>
+        <Box display="flex" align="center" justify="between" gap={4} flexWrap="wrap">
+          <Box position="relative" maxWidth="md" flex={true}>
             <Box
               as="input"
               type="text"
               placeholder="Search gear (e.g. earplugs, shoes)..."
               width="full"
-              surface="default"
-              border
-              paddingLeft={14}
-              paddingRight={6}
-              paddingY={4}
-              variant="mono"
-              size="sm"
-              className="focus:border-accent outline-none focus:ring-0"
+              paddingLeft={10}
+              paddingRight={4}
+              paddingY={3}
+              className="bg-surface border border-line rounded-none focus:ring-4 focus:ring-accent/10 outline-none transition-all text-base md:text-sm"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
             <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-dim"
+              className="absolute left-3 top-3.5 h-5 w-5 text-text-dim"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"

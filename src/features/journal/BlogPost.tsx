@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -23,25 +22,9 @@ export default function BlogPost() {
       "@type": "BlogPosting",
       "headline": post.title,
       "description": post.excerpt,
-      "author": {
-        "@type": "Person",
-        "name": post.author || "Ariel Anders",
-        "url": `${BASE_URL}/about`
-      },
+      "author": { "@type": "Person", "name": post.author },
       "datePublished": post.date,
-      "image": post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`,
-      "publisher": {
-        "@type": "Organization",
-        "name": SITE_NAME,
-        "logo": {
-          "@type": "ImageObject",
-          "url": `${BASE_URL}/favicon.ico`
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": `${BASE_URL}/blog/${post.slug}`
-      }
+      "image": post.image
     };
   }, [post]);
 
@@ -65,8 +48,12 @@ export default function BlogPost() {
         description={post.excerpt}
         type="article"
         image={post.image}
-        schema={structuredData}
       />
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
       <BlogPostDetail
         post={post}
         onBack={() => navigate('/blog')}
