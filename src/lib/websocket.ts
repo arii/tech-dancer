@@ -15,7 +15,7 @@ export class AIWebSocketClient {
     this.url = url;
   }
 
-  async analyze(payload: any, onUpdate: StreamingCallback): Promise<void> {
+  async analyze(payload: Record<string, unknown>, onUpdate: StreamingCallback): Promise<void> {
     return new Promise((resolve, reject) => {
       // Use MockAIWebSocket if it's our mock URL or no real URL provided
       const isMock = this.url === 'ws://mock-ai-server.local' || !this.url;
@@ -36,7 +36,7 @@ export class AIWebSocketClient {
             this.socket?.close();
             resolve();
           }
-        } catch (err) {
+        } catch {
           reject(new Error('Failed to parse WebSocket message'));
         }
       };
@@ -59,7 +59,7 @@ export class AIWebSocketClient {
 class MockAIWebSocket {
   public onopen: (() => void) | null = null;
   public onmessage: ((event: { data: string }) => void) | null = null;
-  public onerror: ((err: any) => void) | null = null;
+  public onerror: ((err: Event) => void) | null = null;
   public onclose: (() => void) | null = null;
 
   private url: string;

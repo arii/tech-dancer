@@ -184,7 +184,7 @@ export function useUXAuditor() {
         const analysis = await analyzeViewport(vp, targetUrl, (chunk) => {
           setStreamingAnalysis(prev => {
             const current = prev[vp.name.toLowerCase()] || { summary: '', improvements: [] };
-            const nextRaw = (current as any)._raw || '';
+            const nextRaw = (current as ViewportAnalysis & { _raw?: string })._raw || '';
             const updatedRaw = nextRaw + chunk;
 
             let parsed: Partial<ViewportAnalysis> = { ...current };
@@ -226,7 +226,7 @@ export function useUXAuditor() {
 
             return {
               ...prev,
-              [vp.name.toLowerCase()]: { ...parsed, _raw: updatedRaw } as any
+              [vp.name.toLowerCase()]: { ...parsed, _raw: updatedRaw } as ViewportAnalysis
             };
           });
         }, base64DataUri);
