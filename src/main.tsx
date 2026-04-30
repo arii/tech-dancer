@@ -3,8 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { registerSW } from 'virtual:pwa-register';
 import { routes } from './App.tsx';
 import './index.css';
+
+// Register service worker for offline access
+registerSW({ immediate: true });
 
 const queryClient = new QueryClient({
   defaultOptions: {

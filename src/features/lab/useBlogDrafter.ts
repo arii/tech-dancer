@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { debounce } from 'throttle-debounce';
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
@@ -11,16 +12,91 @@ export interface DraftData {
   commentary: string;
 }
 
+export interface HistoryEntry {
+  id: string;
+  timestamp: number;
+  data: DraftData;
+}
+
+const STORAGE_KEY = 'tech-dancer-blog-draft';
+const HISTORY_KEY = 'tech-dancer-blog-history';
+const DEBOUNCE_WAIT = 1000; // 1 second
+
+// Safe ID generator with fallback for legacy browsers
+const generateId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+};
+
 export function useBlogDrafter() {
-  const [data, setData] = useState<DraftData>({
-    title: '',
-    category: 'Lifestyle',
-    excerpt: '',
-    author: SITE_METADATA.author,
-    date: new Date().toISOString().split('T')[0],
-    affiliateLink: '',
-    commentary: ''
+  const [data, setData] = useState<DraftData>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        // Silent fail per audit recommendation
+      }
+    }
+    return {
+      title: '',
+      category: 'Lifestyle',
+      excerpt: '',
+      author: SITE_METADATA.author,
+      date: new Date().toISOString().split('T')[0],
+      affiliateLink: '',
+      commentary: ''
+    };
   });
+
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
+    const saved = localStorage.getItem(HISTORY_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        // Silent fail per audit recommendation
+      }
+    }
+    return [];
+  });
+
+  // Debounced persistence for manual edits
+  const debouncedSave = useMemo(
+    () =>
+      debounce(DEBOUNCE_WAIT, (nextData: DraftData) => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
+      }),
+    []
+  );
+
+  useEffect(() => {
+    debouncedSave(data);
+  }, [data, debouncedSave]);
+
+  // History persistence
+  useEffect(() => {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  }, [history]);
+
+  const saveToHistory = useCallback(() => {
+    const newEntry: HistoryEntry = {
+      id: generateId(),
+      timestamp: Date.now(),
+      data: { ...data }
+    };
+    setHistory(prev => [newEntry, ...prev].slice(0, 10));
+  }, [data]);
+
+  const rollback = (entry: HistoryEntry) => {
+    setData(entry.data);
+  };
+
+  const deleteHistoryEntry = (id: string) => {
+    setHistory(prev => prev.filter(h => h.id !== id));
+  };
 
   const markdownPreview = useMemo(() => {
     return `# ${data.title || '[Title]'}
@@ -58,8 +134,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
         clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
         clean = clean.trim();
         return JSON.parse(clean);
-      } catch (e) {
-        console.error("JSON Clean/Parse Error:", e);
+      } catch {
         return null;
       }
     };
@@ -67,7 +142,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    // Helper to normalize literal \n strings if they exist
     const normalize = (str: string) => typeof str === 'string' ? str.replace(/\\n/g, '\n') : str;
 
     setData((prev: DraftData) => ({
@@ -94,9 +168,13 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
 
   return {
     data,
+    history,
     updateField,
     applyAIResponse,
     clearForm,
+    saveToHistory,
+    rollback,
+    deleteHistoryEntry,
     markdownPreview,
     githubIssueUrl
   };

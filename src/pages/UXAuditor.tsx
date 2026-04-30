@@ -8,6 +8,7 @@ import {
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SEO } from '@/components/SEO';
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
@@ -99,6 +100,10 @@ export default function UXAuditor() {
 
   return (
     <Stack gap={8} width="full">
+      <SEO
+        title="Visual UX Auditor"
+        description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
+      />
       <Stack
         direction={{ base: 'col', md: 'row' }}
         align={{ base: 'start', md: 'center' }}
@@ -270,6 +275,7 @@ export default function UXAuditor() {
                             <img
                               src={imgUrl}
                               alt={`${vp.name} snapshot`}
+                              loading="lazy"
                               className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />

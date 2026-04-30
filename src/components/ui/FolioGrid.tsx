@@ -6,8 +6,6 @@ import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import type { ContentItem } from '@/lib/content';
-import { motion, AnimatePresence } from 'motion/react';
-import { motionTokens } from '@/styles/motion';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -63,7 +61,8 @@ export default function FolioGrid({
               width="full"
               surface="default"
               border
-              paddingX={6}
+              paddingLeft={14}
+              paddingRight={6}
               paddingY={4}
               variant="mono"
               size="sm"
@@ -71,6 +70,19 @@ export default function FolioGrid({
               value={search}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-dim"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
           </Box>
           {onViewChange && (
             <ViewToggle view={view} onChange={onViewChange} />
@@ -78,51 +90,33 @@ export default function FolioGrid({
         </Box>
       </Box>
 
-      <AnimatePresence mode="wait">
+      <Box marginTop={8}>
         {view === 'card' ? (
-          <motion.div
-            key="card-view"
-            variants={motionTokens.staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-50px" }}
-            exit="initial"
-          >
-            <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line mt-8">
-              {filteredItems.map((item, index) => (
-                <Box
-                  key={item.slug}
-                  border="r"
-                  borderBottom={true}
-                  padding={{ base: 6, lg: 6 }}
-                  className={`hover:bg-card-bg transition-colors group ${index === 0 ? "md:col-span-full xl:col-span-2" : ""}`}
-                >
-                  <ContentCard
-                    {...item}
-                    basePath={basePath}
-                    aspect="video"
-                    variants={motionTokens.staggerItem}
-                  />
-                </Box>
-              ))}
-            </Grid>
-          </motion.div>
+          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line">
+            {filteredItems.map((item) => (
+              <Box
+                key={item.slug}
+                border="r"
+                borderBottom={true}
+                padding={{ base: 6, lg: 6 }}
+                className="hover:bg-card-bg transition-colors group"
+              >
+                <ContentCard
+                  {...item}
+                  basePath={basePath}
+                  aspect="video"
+                />
+              </Box>
+            ))}
+          </Grid>
         ) : (
-          <motion.div
-            key="list-view"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Stack gap={0} border="t" className="border-line mt-8">
-              {filteredItems.map((item) => (
-                <ListRow key={item.slug} {...item} basePath={basePath} />
-              ))}
-            </Stack>
-          </motion.div>
+          <Stack gap={0} border="t" className="border-line">
+            {filteredItems.map((item) => (
+              <ListRow key={item.slug} {...item} basePath={basePath} />
+            ))}
+          </Stack>
         )}
-      </AnimatePresence>
+      </Box>
     </Box>
   );
 }
