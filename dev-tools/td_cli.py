@@ -16,8 +16,10 @@ from datetime import datetime, timezone, timedelta
 from github_utils import get_github_token, get_repo_name
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
+sys.path.append(os.path.dirname(__file__))
 
-# --- Configuration & Constants ---
+from scope_check import verify_pr_scope, get_project_config
+PROJECT_CONFIG = get_project_config()
 EXISTING_COMPONENTS = {
     'Box': 'src/layouts/Box.tsx', 'Stack': 'src/layouts/Stack.tsx', 'Grid': 'src/layouts/Grid.tsx',
     'Text': 'src/layouts/Text.tsx', 'Button': 'src/layouts/Button.tsx', 'ContentCard': 'src/components/ui/ContentCard.tsx',
@@ -68,6 +70,7 @@ def detect_conflicts(repo, target_pr_num=None):
         if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
+
 
 # --- CLI Handlers ---
 
@@ -273,6 +276,11 @@ def handle_audit_pr(args):
         if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
         with open(ctx_path) as f: context = f.read()
         changed_files = re.findall(r'### `([^`]+)`', context); auto_findings = []
+
+        scope_warning = verify_pr_scope(changed_files)
+        if scope_warning:
+            auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
+
         for fp in changed_files:
             if fp.endswith('.tsx') and os.path.exists(fp):
                 content = open(fp).read()
@@ -334,6 +342,13 @@ def handle_pre_submit(args):
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"], ignore_failure=True)
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
+
+        # PR Scope Check
+        scope_warning = verify_pr_scope()
+
+        if scope_warning:
+            if not args.json: print(f"  ⚠️ {scope_warning}")
+            results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
 
         react_findings = []
         for fp in walk_tsx():

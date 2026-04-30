@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { Box } from '@/layouts/Primitives';
 
 interface HeroPathCardProps {
   title: string;
@@ -54,11 +55,12 @@ export function HeroPathCard({
       </div>
 
       {/* Scanline */}
-      <div
-        className={`absolute left-0 top-0 w-full h-0.5 bg-accent shadow-[0_0_15px_var(--color-accent-shadow)] z-10 pointer-events-none transition-opacity duration-500 ${
+      <Box
+        shadow="glow"
+        className={`absolute left-0 top-0 w-full h-0.5 bg-accent z-10 pointer-events-none transition-opacity duration-500 ${
           scanlineDelay || ''
         } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
-      ></div>
+      ></Box>
 
       {/* Content Container */}
       <div className="relative z-20 p-8 md:p-16 lg:p-20 h-full flex flex-col justify-end bg-gradient-to-t from-black via-black/40 to-transparent">
