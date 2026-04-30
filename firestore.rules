@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper to check if the document belongs to the authenticated user
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // UX Reports security rules
+    // Path: /artifacts/{appId}/users/{userId}/ux_reports/{reportId}
+    match /artifacts/{appId}/users/{userId}/ux_reports/{reportId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

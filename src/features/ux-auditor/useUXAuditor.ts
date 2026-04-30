@@ -1,8 +1,45 @@
 
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  doc,
+  updateDoc,
+  setDoc,
+  query,
+  orderBy,
+  initializeFirestore,
+  persistentLocalCache
+} from 'firebase/firestore';
+import { throttle } from 'throttle-debounce';
+
+// --- Utilities ---
+
+/**
+ * Exponential backoff wrapper for async operations.
+ */
+async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i <= maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      // Only retry on network errors or transient Firestore errors if we can detect them,
+      // but for simplicity we retry all failed operations up to maxRetries.
+      if (i < maxRetries) {
+        const delay = baseDelay * Math.pow(2, i) + (Math.random() * 100); // add jitter
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  throw lastError;
+}
 
 // --- Configuration & Constants ---
 const apiKey = ""; // Provided by environment
@@ -64,8 +101,17 @@ export function useUXAuditor() {
   useEffect(() => {
     if (!firebaseConfig) return;
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+    // Enable local persistence for offline support
+    try {
+      initializeFirestore(app, {
+        localCache: persistentLocalCache({})
+      });
+    } catch {
+      // ignore if already initialized
+    }
+
     const auth = getAuth(app);
-    // getFirestore(app);
 
     const initAuth = async () => {
       try {
@@ -128,15 +174,9 @@ export function useUXAuditor() {
 
       if (user && firebaseConfig) {
         const db = getFirestore();
-        const newReportRef = await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'), newReport);
-        const realId = newReportRef.id;
-        newReport.id = realId;
-        setActiveReportId(realId);
-        reportId = realId;
-
-        // Update optimistic item with real ID
-        queryClient.setQueryData(['ux-reports', user.uid], (old: UXReport[] = []) =>
-          old.map(r => r.timestamp === newReport.timestamp ? { ...newReport, id: realId } : r)
+        // Use setDoc with a pre-generated ID for idempotency during retries
+        await withRetry(() =>
+          setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
         );
       }
 
@@ -174,10 +214,12 @@ export function useUXAuditor() {
 
         if (user && firebaseConfig) {
           const db = getFirestore();
-          await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-            [`findings_${vp.name.toLowerCase()}`]: analysis,
-            [`image_${vp.name.toLowerCase()}`]: mockImg
-          });
+          await withRetry(() =>
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+              [`findings_${vp.name.toLowerCase()}`]: analysis,
+              [`image_${vp.name.toLowerCase()}`]: mockImg
+            })
+          );
         }
       }
 
@@ -188,9 +230,11 @@ export function useUXAuditor() {
 
       if (user && firebaseConfig) {
         const db = getFirestore();
-        await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-          status: 'completed'
-        });
+        await withRetry(() =>
+          updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+            status: 'completed'
+          })
+        );
       }
 
       return newReport;
@@ -200,7 +244,12 @@ export function useUXAuditor() {
     },
   });
 
-  const runUXAudit = () => auditMutation.mutate(url);
+  const runUXAudit = useMemo(() =>
+    throttle(2000, (targetUrl: string) => {
+      auditMutation.mutate(targetUrl);
+    }, { noTrailing: true }),
+    [] // Stable because auditMutation.mutate is stable
+  );
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
