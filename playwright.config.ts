@@ -28,5 +28,8 @@ export default defineConfig({
     stdout: 'ignore',
     stderr: 'pipe',
     timeout: 60 * 1000,
+    env: {
+      VITE_BASE_PATH: BASE_PATH
+    }
   },
 });

@@ -33,7 +33,7 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
   };
 
   return (
-    <Box surface={surfaceClass} className="w-full h-full flex items-center justify-center">
+    <Box surface={surfaceClass} width="full" height="full" display="flex" align="center" justify="center">
       <Icon className={sizeClasses[size]} strokeWidth={1.5} />
     </Box>
   );

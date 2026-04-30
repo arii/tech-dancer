@@ -123,14 +123,6 @@
     @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
     line-height: 1.6;
   }
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    @apply text-accent-navy font-bold tracking-tight;
-    line-height: 1.2;
-  }
-  h1 { font-size: clamp(2.5rem, 8vw, 4rem); }
-  h2 { font-size: clamp(2rem, 4vw, 3rem); }
-  h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
   p {
     max-width: 65ch;
     @apply text-text-body break-words;

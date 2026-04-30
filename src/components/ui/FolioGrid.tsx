@@ -13,7 +13,7 @@ interface FolioGridProps {
   basePath: string;
   label?: string;
   description?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
@@ -68,7 +68,7 @@ export default function FolioGrid({
               size="sm"
               className="focus:border-accent outline-none focus:ring-0"
               value={search}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />
             <svg
               className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-dim"
