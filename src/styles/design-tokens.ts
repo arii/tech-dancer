@@ -103,10 +103,10 @@ export const tracking = {
   wide: "tracking-wide",
   wider: "tracking-wider",
   widest: "tracking-widest",
-  "wide-editorial": "tracking-[0.2em]",
+  "wide-editorial": "tracking-wide-editorial",
   emphasized: "tracking-[0.15em]",
-  utility: "tracking-[3px]",
-  label: "tracking-[2px]",
+  utility: "tracking-utility",
+  label: "tracking-label",
 };
 
 export const typeSizes = {
