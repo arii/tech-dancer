@@ -24,12 +24,15 @@ jobs:
     steps:
       - name: Get PR branch
         id: get-branch
-        run: |
-          # Fetch PR details to get the head branch name
-          PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}")
-          HEAD_REF=$(echo "$PR_DATA" | jq -r .head.ref)
-          echo "head_ref=$HEAD_REF" >> $GITHUB_OUTPUT
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            core.setOutput('head_ref', pr.data.head.ref);
 
       - name: Checkout PR branch
         uses: actions/checkout@v4
