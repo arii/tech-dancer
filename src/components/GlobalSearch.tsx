@@ -50,14 +50,14 @@ export function GlobalSearch() {
     <Box
       position="fixed"
       inset="y"
-      zIndex="search"
+      zIndex={200}
       display="flex"
       justify="center"
       align="start"
       paddingTop={20}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72"
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72 !z-[200]"
       // 2. The Backdrop Escape Hatch: Clicking the background closes the search
       onClick={close}
     >
