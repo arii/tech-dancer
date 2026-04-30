@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -164,7 +164,7 @@ function walk(dir, callback) {
 function checkPRScope() {
   try {
     const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
-    const output = execSync(`python3 ${scopeCheckScript}`, { encoding: "utf8" }).trim();
+    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
     if (output) {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }

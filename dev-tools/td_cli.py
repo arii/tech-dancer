@@ -19,11 +19,7 @@ from collections import defaultdict
 sys.path.append(os.path.dirname(__file__))
 
 from scope_check import verify_pr_scope, get_project_config
-
-# --- Configuration & Constants ---
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "project_config.json")
-with open(CONFIG_PATH) as f: PROJECT_CONFIG = json.load(f)
-
+PROJECT_CONFIG = get_project_config()
 EXISTING_COMPONENTS = {
     'Box': 'src/layouts/Box.tsx', 'Stack': 'src/layouts/Stack.tsx', 'Grid': 'src/layouts/Grid.tsx',
     'Text': 'src/layouts/Text.tsx', 'Button': 'src/layouts/Button.tsx', 'ContentCard': 'src/components/ui/ContentCard.tsx',
