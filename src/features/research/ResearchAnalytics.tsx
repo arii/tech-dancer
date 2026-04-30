@@ -6,6 +6,8 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 import { cn } from '@/lib/utils';
+import { CHART_CONFIG } from '@/config/constants';
+
 
 function CompetitionTrendChart() {
   const data = [12, 19, 15, 25, 22, 30, 45, 40, 55, 60, 58, 70];
@@ -14,7 +16,7 @@ function CompetitionTrendChart() {
   const height = 100;
   const yAxisTicks = [0, Math.round(max / 2), max];
 
-  const yAxisOffset = 20;
+  const yAxisOffset = CHART_CONFIG.yAxisOffset;
   const chartWidth = width - yAxisOffset;
   const points = data.map((d, i) => `${yAxisOffset + (i / (data.length - 1)) * chartWidth},${height - (d / max) * height}`).join(' ');
 
