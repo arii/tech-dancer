@@ -1,8 +1,10 @@
 
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { AIWebSocketClient } from '@/lib/websocket';
 
 // --- Configuration & Constants ---
 const apiKey = ""; // Provided by environment
@@ -46,6 +48,7 @@ export function useUXAuditor() {
   const [url, setUrl] = useState('https://arii.github.io/tech-dancer/');
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
+  const [streamingAnalysis, setStreamingAnalysis] = useState<Record<string, Partial<ViewportAnalysis>>>({});
 
   // Transient state resets with cleanup
   useEffect(() => {
@@ -162,10 +165,80 @@ export function useUXAuditor() {
           console.error("Failed to fetch realistic snapshot, using placeholder");
         }
 
-        const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
+        // Update image immediately in cache
+        newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
+        queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+          old.map(r => r.id === reportId ? { ...newReport } : r)
+        );
+
+        if (user && firebaseConfig) {
+          const db = getFirestore();
+          await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+            [`image_${vp.name.toLowerCase()}`]: mockImg
+          });
+        }
+
+        // Initialize streaming state for this viewport
+        setStreamingAnalysis(prev => ({ ...prev, [vp.name.toLowerCase()]: { summary: '', improvements: [] } }));
+
+        const analysis = await analyzeViewport(vp, targetUrl, (chunk) => {
+          setStreamingAnalysis(prev => {
+            const current = prev[vp.name.toLowerCase()] || { summary: '', improvements: [] };
+            const nextRaw = (current as any)._raw || '';
+            const updatedRaw = nextRaw + chunk;
+
+            let parsed: Partial<ViewportAnalysis> = { ...current };
+
+            // Heuristic-based partial JSON extraction
+            // 1. Extract Summary
+            if (updatedRaw.includes('"summary":')) {
+              // Match content inside "summary": "..." handling some escaped quotes
+              const summaryMatch = updatedRaw.match(/"summary":\s*"((?:[^"\\]|\\.)*)/);
+              if (summaryMatch && summaryMatch[1]) {
+                parsed.summary = summaryMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
+              }
+            }
+
+            // 2. Extract Improvements
+            if (updatedRaw.includes('"improvements":')) {
+              const impPart = updatedRaw.split('"improvements":')[1];
+              // Match individual objects in the array: { ... }
+              const objMatches = impPart.match(/{[^{}]*}/g);
+              if (objMatches) {
+                const improvements = objMatches.map(jsonStr => {
+                  try {
+                    return JSON.parse(jsonStr);
+                  } catch {
+                    return null;
+                  }
+                }).filter(Boolean);
+                if (improvements.length > 0) parsed.improvements = improvements;
+              }
+            }
+
+            // Fallback: Full parse attempt if it looks complete
+            if (updatedRaw.trim().endsWith('}')) {
+              try {
+                const fullParsed = JSON.parse(updatedRaw);
+                parsed = { ...parsed, ...fullParsed };
+              } catch { /* ignore */ }
+            }
+
+            return {
+              ...prev,
+              [vp.name.toLowerCase()]: { ...parsed, _raw: updatedRaw } as any
+            };
+          });
+        }, base64DataUri);
 
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
-        newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
+
+        // Clear streaming state after completion
+        setStreamingAnalysis(prev => {
+          const next = { ...prev };
+          delete next[vp.name.toLowerCase()];
+          return next;
+        });
 
         // Update the report in cache to reflect progress
         queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
@@ -202,9 +275,29 @@ export function useUXAuditor() {
 
   const runUXAudit = () => auditMutation.mutate(url);
 
-  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
+  const analyzeViewport = async (
+    viewport: { name: string, width: number, height: number },
+    targetUrl: string,
+    onStreamingUpdate?: (chunk: string, isDone: boolean) => void,
+    base64DataUri?: string
+  ) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
     const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
+
+    // If WebSocket is desired and enabled via env or fallback to mock
+    if (onStreamingUpdate) {
+      try {
+        const wsClient = new AIWebSocketClient();
+        let fullText = '';
+        await wsClient.analyze({ viewport: viewport.name, url: targetUrl, base64DataUri }, (chunk, isDone) => {
+          fullText += chunk;
+          onStreamingUpdate(chunk, isDone);
+        });
+        return JSON.parse(fullText) as ViewportAnalysis;
+      } catch (err) {
+        console.warn("WebSocket analysis failed, falling back to Fetch:", err);
+      }
+    }
 
     try {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
@@ -319,6 +412,7 @@ export function useUXAuditor() {
     setUrl,
     isCopiedMarkdown,
     isExportingToGithub,
+    streamingAnalysis,
     runUXAudit,
     exportToGithub,
     copyMarkdown,

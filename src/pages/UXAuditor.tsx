@@ -92,6 +92,7 @@ export default function UXAuditor() {
     setUrl,
     isCopiedMarkdown,
     isExportingToGithub,
+    streamingAnalysis,
     runUXAudit,
     exportToGithub,
     copyMarkdown,
@@ -249,18 +250,20 @@ export default function UXAuditor() {
 
               <Stack gap={8}>
                 {VIEWPORTS.map(vp => {
-                  const data = activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis;
-                  const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
+                  const vpKey = vp.name.toLowerCase();
+                  const data = (activeReport[`findings_${vpKey}`] as ViewportAnalysis) || streamingAnalysis[vpKey];
+                  const isStreaming = !!streamingAnalysis[vpKey];
+                  const imgUrl = activeReport[`image_${vpKey}`];
 
                   return (
                     <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
                       <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
-                            {viewportIcons[vp.name as keyof typeof viewportIcons]}
+                          <Box padding={2} surface="default" radius="lg" shadow="sm" color={isStreaming ? "brand" : "accent"}>
+                            {isStreaming ? <RefreshCw className="w-5 h-5 animate-spin" /> : viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
-                            {vp.name} Analysis
+                            {vp.name} Analysis {isStreaming && "(Live Streaming...)"}
                           </Text>
                         </Box>
                         <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
@@ -293,7 +296,7 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box surface="muted" border={true} padding={5} radius="2xl">
+                              <Box surface="muted" border={true} padding={5} radius="2xl" className={isStreaming ? 'border-accent/30 animate-pulse-subtle' : ''}>
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
