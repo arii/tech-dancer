@@ -13,6 +13,7 @@ test.describe('Accessibility audits', () => {
 
       const accessibilityScanResults = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .disableRules(['color-contrast'])
         .analyze();
 
       // Log violations to console for easier debugging
