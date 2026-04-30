@@ -54,6 +54,7 @@
   --spacing-hero: var(--raw-spacing-hero);
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
+  --spacing-search-icon: var(--raw-spacing-search-icon);
 
   /* Z-Index */
   --z-hide: var(--raw-z-hide);
@@ -149,3 +150,17 @@
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }
+.search-input-padding { padding-left: var(--spacing-search-icon); }
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    -webkit-overflow-scrolling: touch; /* iOS Webkit */
+    scrollbar-width: none;  /* Firefox */
+  }
+}

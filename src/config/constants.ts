@@ -31,3 +31,7 @@ export const STATIC_SCHEMAS = {
     }
   })
 } as const;
+
+export const CHART_CONFIG = {
+  yAxisOffset: 20,
+} as const;

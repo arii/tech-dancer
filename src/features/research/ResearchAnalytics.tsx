@@ -6,6 +6,8 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 import { cn } from '@/lib/utils';
+import { CHART_CONFIG } from '@/config/constants';
+
 
 function CompetitionTrendChart() {
   const data = [12, 19, 15, 25, 22, 30, 45, 40, 55, 60, 58, 70];
@@ -14,9 +16,9 @@ function CompetitionTrendChart() {
   const height = 100;
   const yAxisTicks = [0, Math.round(max / 2), max];
 
-  // Create points for chart taking into account 20px left margin for Y axis
-  const chartWidth = width - 20;
-  const points = data.map((d, i) => `${20 + (i / (data.length - 1)) * chartWidth},${height - (d / max) * height}`).join(' ');
+  const yAxisOffset = CHART_CONFIG.yAxisOffset;
+  const chartWidth = width - yAxisOffset;
+  const points = data.map((d, i) => `${yAxisOffset + (i / (data.length - 1)) * chartWidth},${height - (d / max) * height}`).join(' ');
 
   return (
     <Box surface="muted" padding={6} border className="bg-bg/50 backdrop-blur-sm">
@@ -63,7 +65,7 @@ function CompetitionTrendChart() {
                     {tick}
                   </text>
                   <line
-                    x1="20"
+                    x1={yAxisOffset}
                     y1={yPos}
                     x2={width}
                     y2={yPos}
@@ -86,13 +88,13 @@ function CompetitionTrendChart() {
             />
             <polygon
               fill="url(#gradient)"
-              points={`20,${height} ${points} ${width},${height}`}
+              points={`${yAxisOffset},${height} ${points} ${width},${height}`}
             />
             {data.map((d, i) => (
               <circle
                 key={i}
                 tabIndex={0}
-                cx={20 + (i / (data.length - 1)) * chartWidth}
+                cx={yAxisOffset + (i / (data.length - 1)) * chartWidth}
                 cy={height - (d / max) * height}
                 r="3"
                 className="fill-bg stroke-accent stroke-2 hover:r-4 focus-visible:r-4 focus-visible:outline-none transition-all cursor-crosshair"

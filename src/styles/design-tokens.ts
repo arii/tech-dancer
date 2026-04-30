@@ -15,6 +15,7 @@ export const spacing = {
   hero: "py-hero",
   comfort: "py-comfort",
   endPad: "pb-end-pad",
+  searchIcon: "search-icon",
 };
 
 export const animation = {
