@@ -25,7 +25,12 @@ export function useWCSData() {
 
         const objects = await parquetReadObjects({ file: arrayBuffer });
 
-        setData(objects as unknown as WCSRecord[]);
+        const formattedObjects = objects.map((obj: Record<string, unknown>) => ({
+          ...obj,
+          Registry_Points_Sum: Number(obj.Registry_Points_Sum)
+        }));
+
+        setData(formattedObjects as unknown as WCSRecord[]);
         setIsLoading(false);
       } catch (err) {
         console.error("Failed to load WCS data:", err);
