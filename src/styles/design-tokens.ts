@@ -52,6 +52,7 @@ export const inputs = {
 export const shadows = {
   topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
+  glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
 };
 
 
@@ -93,7 +94,7 @@ export const typography = {
   micro: "font-mono uppercase tracking-widest",
   tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
-  headerAccent: "font-mono font-bold tracking-[0.2em] uppercase text-accent",
+  headerAccent: "font-mono font-bold tracking-wide-editorial uppercase text-accent",
 };
 
 export const tracking = {
@@ -103,7 +104,7 @@ export const tracking = {
   wide: "tracking-wide",
   wider: "tracking-wider",
   widest: "tracking-widest",
-  "wide-editorial": "tracking-[0.2em]",
+  "wide-editorial": "tracking-wide-editorial",
   emphasized: "tracking-[0.15em]",
 };
 
