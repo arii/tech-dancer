@@ -76,7 +76,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --prefer-offline
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
@@ -123,7 +123,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --prefer-offline
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build App
         run: |
