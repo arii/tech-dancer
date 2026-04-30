@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = process.env.PORT || 4173;
-const BASE_PATH = '/tech-dancer/';
+const BASE_PATH = process.env.VITE_BASE_PATH || '/tech-dancer/';
 
 export default defineConfig({
   testDir: './tests',
