@@ -86,11 +86,26 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
   }, ref) => {
     const isMotion = typeof Component !== "string"
     
-    const motionProps = isMotion ? {
-      initial, animate, exit, transition, variants: variantsProp, whileHover, whileTap,
-      whileFocus, whileDrag, whileInView, viewport, layout: layoutProp,
-      layoutId, onAnimationStart, onAnimationComplete, onUpdate, custom
-    } : {}
+    const motionProps: Record<string, unknown> = {}
+    if (isMotion) {
+      if (initial !== undefined) motionProps.initial = initial;
+      if (animate !== undefined) motionProps.animate = animate;
+      if (exit !== undefined) motionProps.exit = exit;
+      if (transition !== undefined) motionProps.transition = transition;
+      if (variantsProp !== undefined) motionProps.variants = variantsProp;
+      if (whileHover !== undefined) motionProps.whileHover = whileHover;
+      if (whileTap !== undefined) motionProps.whileTap = whileTap;
+      if (whileFocus !== undefined) motionProps.whileFocus = whileFocus;
+      if (whileDrag !== undefined) motionProps.whileDrag = whileDrag;
+      if (whileInView !== undefined) motionProps.whileInView = whileInView;
+      if (viewport !== undefined) motionProps.viewport = viewport;
+      if (layoutProp !== undefined) motionProps.layout = layoutProp;
+      if (layoutId !== undefined) motionProps.layoutId = layoutId;
+      if (onAnimationStart !== undefined) motionProps.onAnimationStart = onAnimationStart;
+      if (onAnimationComplete !== undefined) motionProps.onAnimationComplete = onAnimationComplete;
+      if (onUpdate !== undefined) motionProps.onUpdate = onUpdate;
+      if (custom !== undefined) motionProps.custom = custom;
+    }
 
     const borderClasses = cn(
       border === true && "border border-line",
