@@ -70,6 +70,7 @@ export default defineConfig(({mode}) => {
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
       'import.meta.env.VITE_APP_URL': JSON.stringify(fullAppUrl),
+      'import.meta.env.VITE_BASE_PATH': JSON.stringify(base),
     },
     plugins: [
       react(),

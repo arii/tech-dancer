@@ -43,6 +43,12 @@ const getBasename = (): string => {
     return window.__ROUTER_BASENAME__;
   }
 
+  // 2. High Priority: Use the build-time injected VITE_BASE_PATH if it's not the default root
+  // In CI/CD, this is explicitly set for branch deployments.
+  if (import.meta.env.VITE_BASE_PATH && import.meta.env.VITE_BASE_PATH !== '/') {
+    return import.meta.env.VITE_BASE_PATH;
+  }
+
   const fullPath = window.location.pathname;
   const buildBase = import.meta.env.BASE_URL || '/';
   const buildBaseClean = buildBase.replace(/\/$/, '');

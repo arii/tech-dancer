@@ -86,10 +86,6 @@
   --text-micro: 9px;
   --text-tiny: 10px;
 
-  /* Tracking */
-  --tracking-utility: 3px;
-  --tracking-label: 2px;
-  --tracking-wide-editorial: 0.2em;
 }
 
 @layer utilities {

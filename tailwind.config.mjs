@@ -29,6 +29,11 @@ export default {
         micro: "var(--text-micro)",
         tiny: "var(--text-tiny)",
       },
+      letterSpacing: {
+        utility: "3px",
+        label: "2px",
+        "wide-editorial": "0.2em",
+      },
       keyframes: {
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
