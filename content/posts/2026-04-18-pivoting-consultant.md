@@ -18,6 +18,6 @@ In WCS, a pivot requires a clear axis and controlled momentum. In tech, a pivot 
 
 ### specialized Project Work
 
-I've shifted my focus towards **project-based work** as a roboticist and AI expert. This allows me to apply specialized solutions to unique problems without the drag of traditional 9-to-5s.
+I've shifted my focus towards **project-based work** as a roboticist and AI expert. This allows me to apply specialized fixes to unique problems without the drag of traditional 9-to-5s.
 
-If you're looking for an expert to architect a complex system or audit your data pipelines, this living portfolio is my proof-of-work.
+If you're looking for an expert to architect a complex workflow or audit your data pipelines, this living portfolio is my proof-of-work.

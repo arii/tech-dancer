@@ -148,7 +148,7 @@ export default function ResearchDetail() {
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
-                          This specialized module is currently being integrated into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
+                          We are currently integrating this specialized module into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
                         </Text>
                       </Stack>
                     </Stack>

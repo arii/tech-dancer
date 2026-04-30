@@ -6,7 +6,7 @@ author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Loop earplugs, industrial travel steamers, and portable sound. Why these three Pieces of gear are the secret to a better dance weekend."
 image: ""
-tags: ["travel", "gear", "systems"]
+tags: ["travel", "gear", "workflows"]
 ---
 
 ## Elevating Your Dance Weekend
