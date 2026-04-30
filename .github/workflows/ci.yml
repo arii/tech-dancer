@@ -48,7 +48,9 @@ jobs:
         run: pnpm run type-check
 
       - name: TypeScript `any` Ratchet
-        run: python3 dev-tools/td_cli.py ratchet-any --update
+        env:
+          ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
+        run: python3 dev-tools/td_cli.py ratchet-any
 
   audit:
     name: Anti-Pattern Audit
@@ -125,7 +127,9 @@ jobs:
           VITE_BASE_PATH: /tech-dancer/
 
       - name: Bundle Size Check
-        run: python3 dev-tools/td_cli.py bundle-size --update
+        env:
+          BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
+        run: python3 dev-tools/td_cli.py bundle-size
 
       - name: Cache Playwright Browsers
         id: playwright-cache
