@@ -88,8 +88,8 @@ export const typography = {
   display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
-  utility: "font-mono tracking-[3px] uppercase",
-  label: "font-mono font-bold uppercase tracking-[2px]",
+  utility: "font-mono tracking-utility uppercase",
+  label: "font-mono font-bold uppercase tracking-label",
   micro: "font-mono uppercase tracking-widest",
   tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
@@ -105,6 +105,8 @@ export const tracking = {
   widest: "tracking-widest",
   "wide-editorial": "tracking-[0.2em]",
   emphasized: "tracking-[0.15em]",
+  utility: "tracking-[3px]",
+  label: "tracking-[2px]",
 };
 
 export const typeSizes = {

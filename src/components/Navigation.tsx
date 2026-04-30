@@ -75,6 +75,9 @@ export default function Navigation() {
     !!(r.label && r.icon && ['/', '/blog', '/gear', '/research'].includes(r.path))
   );
 
+  const activeLinkStyle = "text-accent bg-accent/10 border-l-4 border-accent";
+  const inactiveLinkStyle = "text-text-dim hover:text-accent hover:bg-bg/50 border-l-4 border-transparent";
+
   return (
     <>
       {/* Mobile Bottom Tabs */}
@@ -120,13 +123,14 @@ export default function Navigation() {
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
         <Box
-          as="button"
+          as={motion.button}
+          whileTap={{ scale: 0.9 }}
           onClick={() => setIsOpen(!isOpen)}
-          padding={2}
+          padding={4}
           display="flex"
           align="center"
           justify="center"
-          className="min-h-11 min-w-11"
+          className="min-h-12 min-w-12 active:bg-accent/10 transition-colors rounded-full"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
@@ -171,16 +175,36 @@ export default function Navigation() {
                   </Text>
                 </Box>
               </Box>
-              {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-                <NavItem
-                  key={item.path}
-                  to={item.path}
-                  label={item.label}
-                  icon={item.icon}
-                  onClick={() => setIsOpen(false)}
-                  isMobile
-                />
-              ))}
+              {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => {
+                const Icon = item.icon || Terminal;
+                return (
+                  <Box as="li" key={item.path} position="relative" className="group">
+                    <NavLink
+                      to={item.path}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) => cn(
+                        "transition-all relative z-10 rounded-md block",
+                        isActive ? activeLinkStyle : inactiveLinkStyle
+                      )}
+                    >
+                      <Box
+                        display="flex"
+                        align="center"
+                        gap={4}
+                        paddingY={6}
+                        paddingX={4}
+                        border="b"
+                        className="border-line/50 min-h-[44px]"
+                      >
+                        <Icon className={cn(`w-6 h-6 ${stroke.thick} flex-shrink-0`)} />
+                        <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
+                          {item.label}
+                        </Text>
+                      </Box>
+                    </NavLink>
+                  </Box>
+                );
+              })}
             </Box>
           </Box>
         )}
