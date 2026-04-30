@@ -1,4 +1,4 @@
-import React, { isValidElement } from "react"
+import { isValidElement } from "react"
 import { cn } from "@/lib/utils"
 
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T }
