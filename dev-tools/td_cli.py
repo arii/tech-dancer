@@ -155,17 +155,6 @@ def handle_status_board(args):
 
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
 
-def update_github_variable(name, value):
-    """Updates a GitHub repository variable using the gh CLI."""
-    # Only update on main branch to avoid cross-PR contention
-    if not os.getenv("GITHUB_ACTIONS") or os.getenv("GITHUB_REF_NAME") != "main":
-        return
-    try:
-        subprocess.run(["gh", "variable", "set", name, "--body", str(value)], check=True)
-        print(f"✅ Updated GitHub variable {name} to {value}")
-    except Exception as e:
-        print(f"⚠️ Failed to update GitHub variable {name}: {e}")
-
 def handle_ratchet_any(args):
     current = get_any_count()
     baseline_env = os.getenv("ANY_COUNT_BASELINE")
@@ -179,17 +168,14 @@ def handle_ratchet_any(args):
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
 
-    if current > baseline and baseline > 0:
+    if current > baseline:
         msg = f"'any' count increased from {baseline} to {current}."
         if args.json: print(json.dumps({"status": "error", "message": msg, "data": res}, indent=2))
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update:
-        if os.getenv("GITHUB_ACTIONS"):
-            update_github_variable("ANY_COUNT_BASELINE", current)
-        else:
-            open(args.baseline_file, 'w').write(str(current))
+    if args.update and not os.getenv("GITHUB_ACTIONS"):
+        open(args.baseline_file, 'w').write(str(current))
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
@@ -214,11 +200,8 @@ def handle_bundle_size(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update:
-        if os.getenv("GITHUB_ACTIONS"):
-            update_github_variable("BUNDLE_BASELINE_KB", size)
-        else:
-            open(args.baseline_file, 'w').write(str(size))
+    if args.update and not os.getenv("GITHUB_ACTIONS"):
+        open(args.baseline_file, 'w').write(str(size))
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):

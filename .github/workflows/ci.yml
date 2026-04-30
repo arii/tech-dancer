@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  variables: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,8 +24,6 @@ jobs:
   lint-typecheck:
     name: Lint & Type Check
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,7 +52,16 @@ jobs:
         run: pnpm run type-check
 
       - name: TypeScript `any` Ratchet
-        run: python3 dev-tools/td_cli.py ratchet-any --update
+        run: |
+          CURRENT_LOG=$(python3 dev-tools/td_cli.py ratchet-any)
+          echo "$CURRENT_LOG"
+          CURRENT=$(echo "$CURRENT_LOG" | grep -o 'Current=[0-9]*' | cut -d'=' -f2)
+
+          python3 dev-tools/td_cli.py ratchet-any --update
+
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            gh variable set ANY_COUNT_BASELINE --body "$CURRENT"
+          fi
         env:
           ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,29 +89,31 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
-          # 0. Ensure origin/main is fetched
-          git fetch origin main --depth=1
-
           # 1. Capture current violations
           CURRENT_LOG=$(pnpm run audit)
           echo "$CURRENT_LOG"
           CURRENT=$(echo "$CURRENT_LOG" | grep "VIOLATION_COUNT=" | cut -d'=' -f2)
 
-          # 2. Capture baseline violations (from main branch)
-          # We check out the source and script from main to a temp area to avoid polluting workspace
-          mkdir -p /tmp/baseline
-          git archive origin/main scripts/detect-antipatterns.mjs src/features src/pages src/App.tsx | tar -x -C /tmp/baseline
-
-          # Run audit on main's files using main's script, pointing it to the temp root
-          BASELINE_LOG=$(AUDIT_ROOT=/tmp/baseline node /tmp/baseline/scripts/detect-antipatterns.mjs)
-          BASELINE=$(echo "$BASELINE_LOG" | grep "VIOLATION_COUNT=" | cut -d'=' -f2)
+          BASELINE=${{ vars.ANTIPATTERN_BASELINE || 0 }}
 
           echo "Baseline violations: $BASELINE | Current: $CURRENT"
           if [ "$CURRENT" -gt "$BASELINE" ]; then
             echo "❌ New anti-pattern violations introduced ($CURRENT > $BASELINE). Fix before merging."
             exit 1
           fi
+
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            gh variable set ANTIPATTERN_BASELINE --body "$CURRENT"
+          fi
           echo "✅ No new violations."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Anti-Pattern Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: anti-pattern-report
+          path: TODO_ANTIPATTERNS.md
 
       - name: Design Token Compliance
         run: |
@@ -123,8 +133,6 @@ jobs:
     name: Build & E2E
     needs: lint-typecheck
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -154,7 +162,16 @@ jobs:
           NODE_ENV: production
 
       - name: Bundle Size Check
-        run: python3 dev-tools/td_cli.py bundle-size --update
+        run: |
+          CURRENT_LOG=$(python3 dev-tools/td_cli.py bundle-size)
+          echo "$CURRENT_LOG"
+          CURRENT=$(echo "$CURRENT_LOG" | grep -o 'Current=[0-9]*' | cut -d'=' -f2)
+
+          python3 dev-tools/td_cli.py bundle-size --update
+
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            gh variable set BUNDLE_BASELINE_KB --body "$CURRENT"
+          fi
         env:
           BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

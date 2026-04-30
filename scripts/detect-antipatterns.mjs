@@ -5,7 +5,7 @@ import { execFileSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const ROOT = process.env.AUDIT_ROOT || path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
 
@@ -188,9 +188,6 @@ function generateTodoFile(allViolations) {
   fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
 }
 
-const args = process.argv.slice(2);
-const writeTodo = args.includes('--write');
-
 console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
 
 checkPRScope();
@@ -226,10 +223,8 @@ if (totalViolations === 0) {
   }
 }
 
-if (writeTodo) {
-  generateTodoFile(allViolations);
-  console.log("Successfully generated TODO_ANTIPATTERNS.md");
-}
+generateTodoFile(allViolations);
+console.log("Successfully generated TODO_ANTIPATTERNS.md");
 
 console.log(`VIOLATION_COUNT=${totalViolations}`);
 process.exit(0);
