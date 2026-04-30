@@ -49,6 +49,7 @@ export function SEO({
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
+      <meta name="google-site-verification" content="FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
