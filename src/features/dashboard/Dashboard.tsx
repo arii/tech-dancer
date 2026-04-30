@@ -18,7 +18,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
+        description="TechDancer: We explore the intersection of dance, movement math, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={8}>
@@ -26,7 +26,7 @@ export default function Home() {
           <PageHeader
             label="WELCOME"
             title="The Roboticist's Guide to West Coast Swing"
-            description="Technical systems and travel hacks for the modern competitive dancer."
+            description="Technical tools and travel hacks for the modern competitive dancer."
             border="none"
             paddingBottom={0}
             titleSize="fluid-7"

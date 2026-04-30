@@ -14,7 +14,7 @@ tags:
 
 ## Reliable Deployments
 
-Building a "living portfolio" requires a system that handles the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform.
+Building a "living portfolio" requires a workflow that handles the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform.
 
 ### The Pipeline
 

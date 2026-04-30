@@ -14,7 +14,7 @@ tags:
 
 ## AI in the Ballroom
 
-Artificial Intelligence is often seen as a cold, analytical tool, but in the context of dance, it can be deeply clarifying. 
+Dancers often see Artificial Intelligence as a cold, analytical tool, but it can deeply clarify movement.
 
 ### Computer Vision & Frame Analysis
 
