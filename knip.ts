@@ -6,6 +6,9 @@ const config: KnipConfig = {
   ignoreDependencies: [
     'tw-animate-css'
   ],
+  ignoreBinaries: [
+    'sitemap-generator-cli'
+  ],
   ignoreExportsUsedInFile: true,
 };
 
