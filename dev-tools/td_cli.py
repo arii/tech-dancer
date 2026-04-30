@@ -16,7 +16,6 @@ from datetime import datetime, timezone, timedelta
 from utils import get_github_token, get_repo_name, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
-sys.path.append(os.path.dirname(__file__))
 
 from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
