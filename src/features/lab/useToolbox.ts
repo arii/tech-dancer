@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { getResources } from '@/lib/content';
 
 import { useQuery } from '@tanstack/react-query';
