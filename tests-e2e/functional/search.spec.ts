@@ -94,7 +94,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(resultsText).not.toHaveText('0 RESULTS FOUND', { timeout: 10000 });
   });
 
-  test('Blog category filter should persist after reload', async ({ page, isMobile }) => {
+  test('Blog category filter should persist after reload', async ({ page, isMobile: _isMobile }) => {
     await page.goto('./blog');
     await expect(page.locator('main')).toBeVisible();
 
@@ -112,7 +112,7 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  test('Blog search term should persist after reload', async ({ page }) => {
+  test('Blog search term should persist after reload', async ({ page, isMobile: _isMobile }) => {
     await page.goto('./blog');
     await expect(page.locator('main')).toBeVisible();
 
@@ -129,7 +129,7 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  test('Gear search term should persist after reload', async ({ page }) => {
+  test('Gear search term should persist after reload', async ({ page, isMobile: _isMobile }) => {
     await page.goto('./gear');
     await expect(page.locator('main')).toBeVisible();
 
