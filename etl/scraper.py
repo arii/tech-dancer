@@ -226,13 +226,10 @@ class ScoringDanceParser:
 
 class OutputManager:
     """Handles saving data to various formats."""
-    def __init__(self, ledger_path, studies_dir, json_path=None):
+    def __init__(self, ledger_path, studies_dir):
         self.ledger_path = ledger_path
         self.studies_dir = studies_dir
-        self.json_path = json_path
         os.makedirs(self.studies_dir, exist_ok=True)
-        if self.json_path:
-            os.makedirs(os.path.dirname(self.json_path), exist_ok=True)
 
     def _validate_schema(self, df):
         required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
@@ -256,10 +253,6 @@ class OutputManager:
 
         final_ledger.to_parquet(self.ledger_path, index=False)
         logging.info(f"Updated ledger: {self.ledger_path}")
-
-        if self.json_path:
-            final_ledger.to_json(self.json_path, orient='records', indent=2)
-            logging.info(f"Updated JSON export: {self.json_path}")
 
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
@@ -327,14 +320,13 @@ async def main():
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")
     parser.add_argument("--ledger", default="etl/data/wcs_prelims.parquet", help="Path to Parquet ledger")
-    parser.add_argument("--json", default="public/data/wcs_prelims.json", help="Path to JSON export")
     parser.add_argument("--studies", default="content/studies", help="Directory for Markdown output")
     args = parser.parse_args()
 
     pipeline = ETLPipeline(
         ScoringDanceCrawler(),
         ScoringDanceParser(),
-        OutputManager(args.ledger, args.studies, args.json)
+        OutputManager(args.ledger, args.studies)
     )
 
     if args.url:

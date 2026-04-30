@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { parquetReadObjects } from 'hyparquet';
 
 export interface WCSRecord {
   Dancer_ID: string;
@@ -17,16 +18,22 @@ export function useWCSData() {
   const [filterPromoted, setFilterPromoted] = useState<'all' | 'promoted' | 'not-promoted'>('all');
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.json`)
-      .then(res => res.json())
-      .then(json => {
-        setData(json);
+    const loadData = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`);
+        const arrayBuffer = await res.arrayBuffer();
+
+        const objects = await parquetReadObjects({ file: arrayBuffer });
+
+        setData(objects as unknown as WCSRecord[]);
         setIsLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error("Failed to load WCS data:", err);
         setIsLoading(false);
-      });
+      }
+    };
+
+    loadData();
   }, []);
 
   const filteredData = useMemo(() => {
