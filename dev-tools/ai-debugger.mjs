@@ -1,6 +1,9 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Captures a screenshot, converts to Base64, and formats a query for an AI Bot.
@@ -73,7 +76,7 @@ ${dataUri}
 **Please provide the refactored React/TypeScript code and Tailwind/CSS classes to fix these issues.**
     `;
 
-    const outputPath = path.resolve(process.cwd(), 'ai-fix-prompt.txt');
+    const outputPath = path.resolve(__dirname, '..', 'ai-fix-prompt.txt');
     fs.writeFileSync(outputPath, prompt);
     console.log(`\x1b[32m✔ Success!\x1b[0m AI fix query generated at: ${outputPath}`);
     console.log('You can now copy the contents of that file directly into your AI chat bot.');
