@@ -61,12 +61,11 @@ export default function FolioGrid({
               width="full"
               surface="default"
               border
-              paddingLeft={14}
               paddingRight={6}
               paddingY={4}
               variant="mono"
               size="sm"
-              className="focus:border-accent outline-none focus:ring-0"
+              className="pl-12 focus:border-accent outline-none focus:ring-0"
               value={search}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             />

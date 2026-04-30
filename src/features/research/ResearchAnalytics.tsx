@@ -5,24 +5,34 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
+import { cn } from '@/lib/utils';
 
 function CompetitionTrendChart() {
   const data = [12, 19, 15, 25, 22, 30, 45, 40, 55, 60, 58, 70];
   const max = Math.max(...data);
   const width = 300;
   const height = 100;
-  const points = data.map((d, i) => `${(i / (data.length - 1)) * width},${height - (d / max) * height}`).join(' ');
+  const yAxisTicks = [0, Math.round(max / 2), max];
+
+  // Create points for chart taking into account 20px left margin for Y axis
+  const chartWidth = width - 20;
+  const points = data.map((d, i) => `${20 + (i / (data.length - 1)) * chartWidth},${height - (d / max) * height}`).join(' ');
 
   return (
     <Box surface="muted" padding={6} border className="bg-bg/50 backdrop-blur-sm">
       <Stack gap={4}>
-        <Box display="flex" justify="between" align="center">
-          <Text variant="mono" size="micro" weight="font-bold">WCS COMPETITION TRENDS (INDEXED)</Text>
-          <Box display="flex" align="center" gap={1.5}>
-            <Box className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <Text variant="mono" size="micro" color="accent" weight="font-bold">LIVE DATA</Text>
+        <Stack gap={1}>
+          <Box display="flex" justify="between" align="center">
+            <Text variant="mono" size="micro" weight="font-bold">WCS COMPETITION TRENDS (INDEXED)</Text>
+            <Box display="flex" align="center" gap={1.5}>
+              <Box className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <Text variant="mono" size="micro" color="accent" weight="font-bold">LIVE DATA</Text>
+            </Box>
           </Box>
-        </Box>
+          <Text variant="body" size="xs" color="dim">
+            Relative growth of global competition attendance. Base 0 indicates typical historical baseline.
+          </Text>
+        </Stack>
         <Box
           height={48}
           width="full"
@@ -38,6 +48,33 @@ function CompetitionTrendChart() {
                 <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
               </linearGradient>
             </defs>
+            {/* Horizontal Grid Lines & Y-Axis Labels */}
+            {yAxisTicks.map((tick, i) => {
+              const yPos = height - (tick / max) * height;
+              return (
+                <g key={i}>
+                  <text
+                    x="0"
+                    y={yPos === height ? yPos : yPos + 4}
+                    fontSize="10"
+                    fill="currentColor"
+                    className="text-text-dim/50 font-mono"
+                  >
+                    {tick}
+                  </text>
+                  <line
+                    x1="20"
+                    y1={yPos}
+                    x2={width}
+                    y2={yPos}
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeDasharray={i === 0 ? "none" : "2,2"}
+                    className={i === 0 ? "text-line" : "text-line/40"}
+                  />
+                </g>
+              );
+            })}
             <polyline
               fill="none"
               stroke="var(--color-accent)"
@@ -49,13 +86,13 @@ function CompetitionTrendChart() {
             />
             <polygon
               fill="url(#gradient)"
-              points={`0,${height} ${points} ${width},${height}`}
+              points={`20,${height} ${points} ${width},${height}`}
             />
             {data.map((d, i) => (
               <circle
                 key={i}
                 tabIndex={0}
-                cx={(i / (data.length - 1)) * width}
+                cx={20 + (i / (data.length - 1)) * chartWidth}
                 cy={height - (d / max) * height}
                 r="3"
                 className="fill-bg stroke-accent stroke-2 hover:r-4 focus-visible:r-4 focus-visible:outline-none transition-all cursor-crosshair"
@@ -65,7 +102,7 @@ function CompetitionTrendChart() {
             ))}
           </svg>
         </Box>
-        <Box display="flex" justify="between" border="t" paddingTop={2} className="border-line/30">
+        <Box display="flex" justify="between" border="t" paddingTop={2} className="border-line/30 ml-[20px]">
           <Text variant="mono" size="micro" color="dim">JAN 2024</Text>
           <Text variant="mono" size="micro" color="dim">DEC 2024</Text>
         </Box>
@@ -118,7 +155,19 @@ export default function ResearchAnalytics() {
                       <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
                         <Search className="w-5 h-5" />
                       </Box>
-                      <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
+                      <Box
+                        paddingX={2}
+                        paddingY={1}
+                        radius="full"
+                        className={cn(
+                          "border",
+                          tool.status === 'active'
+                            ? "bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400"
+                            : "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400"
+                        )}
+                      >
+                        <Text variant="mono" size="micro" weight="font-bold">{tool.status.toUpperCase()}</Text>
+                      </Box>
                     </Box>
                     <Stack gap={2}>
                       <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>
