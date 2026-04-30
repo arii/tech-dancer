@@ -145,22 +145,16 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           direction="col"
           scrollBehavior="smooth"
           scrollPaddingTop={64}
-          snap="y"
-          transitionProp="all"
-          duration={300}
-          viewTransitionName="main-content"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12 }}
-            paddingTop={12}
+            paddingTop={{ base: 16, md: 12 }}
             paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
             flex={1}
             direction="col"
             marginX="auto"
             maxWidth="7xl"
             width="full"
-            transitionProp="all"
-            duration={300}
           >
             <Box flex={1} width="full">
               {children}

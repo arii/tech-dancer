@@ -50,7 +50,7 @@ export default function ArielProfile() {
 
               <Stack gap={6} border="t" paddingTop={8} className="border-line/20">
                 <Text variant="mono" size="xs" color="brand" weight="font-bold">CONNECT & NETWORKING</Text>
-                <Box display="flex" gap={4} flexWrap="wrap">
+                <Box display="flex" gap={4} wrap>
                   {[
                     { label: 'INSTAGRAM', url: 'https://instagram.com' },
                     { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
