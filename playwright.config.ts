@@ -9,6 +9,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
+  maxFailures: process.env.CI ? 10 : 0,
   reporter: 'html',
   use: {
     // Standardize baseURL for local and CI

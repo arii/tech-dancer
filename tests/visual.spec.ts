@@ -10,6 +10,25 @@ const routes = [
 ];
 
 test.describe('Visual Regression Tests', () => {
+  test.beforeEach(async ({ page }) => {
+    // Speed up execution by blocking unnecessary resources
+    await page.route('**/*.{google-analytics.com,doubleclick.net}**', route => route.abort());
+
+    // Disable animations and transitions for consistent snapshots globally
+    await page.addInitScript(() => {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        *, *::before, *::after {
+          animation: none !important;
+          transition: none !important;
+          transition-duration: 0s !important;
+          animation-duration: 0s !important;
+        }
+      `;
+      document.head.appendChild(style);
+    });
+  });
+
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
@@ -42,6 +61,11 @@ test.describe('Visual Regression Tests', () => {
         maxDiffPixelRatio: 0.05,
         animations: 'disabled'
       });
+
+      // Add ARIA snapshot for structural verification on the home page
+      if (route.name === 'home') {
+        await expect(page.locator('body')).toMatchAriaSnapshot();
+      }
     });
   }
 });

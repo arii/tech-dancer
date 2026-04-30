@@ -1,0 +1,63 @@
+- navigation "Main Navigation":
+  - link "TECH-DANCER":
+    - /url: /tech-dancer/
+  - list:
+    - listitem:
+      - button "Search"
+    - listitem:
+      - link "Blog Posts":
+        - /url: /tech-dancer/blog
+    - listitem:
+      - link "Gear Reviews":
+        - /url: /tech-dancer/gear
+    - listitem:
+      - link "Data & Development Lab":
+        - /url: /tech-dancer/research
+    - listitem:
+      - link "About":
+        - /url: /tech-dancer/about
+    - listitem:
+      - link "Contact":
+        - /url: /tech-dancer/contact
+- main:
+  - text: WELCOME
+  - heading "The Roboticist's Guide to West Coast Swing" [level=1]
+  - text: Technical systems and travel hacks for the modern competitive dancer.
+  - heading "ARE YOU A DANCER?" [level=2]
+  - list:
+    - listitem:
+      - link "WCS blog posts →":
+        - /url: /tech-dancer/blog?category=Lifestyle
+    - listitem:
+      - link "Travel & Lifestyle →":
+        - /url: /tech-dancer/blog?category=Travel
+    - listitem:
+      - link "Gear reviews →":
+        - /url: /tech-dancer/gear
+  - heading "HIRING A ROBOTICIST?" [level=2]
+  - list:
+    - listitem:
+      - link "Technical Portfolio →":
+        - /url: https://arii.github.io
+    - listitem:
+      - link "Tech blog posts →":
+        - /url: /tech-dancer/blog?category=Tech
+    - listitem:
+      - link "Data & Development Lab →":
+        - /url: /tech-dancer/research
+  - text: LATEST UPDATES Recent Blog Posts
+  - link "View full repository":
+    - /url: /tech-dancer/blog
+  - 'link /Tech \d+-\d+-\d+ Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages Time is your most precious commodity\. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages\./':
+    - /url: /tech-dancer/blog/2026-04-20-stop-wasting-vercel-credits-deploy-every-branch-to-github-pages
+  - 'link /Travel \d+-\d+-\d+ The WCS Travel Pack: 3 Essentials You’re Forgetting Loop earplugs, industrial travel steamers, and portable sound\. Why these three Pieces of gear are the secret to a better dance weekend\./':
+    - /url: /tech-dancer/blog/2026-04-19-gear-essentials
+  - link /Tech Portfolio \d+-\d+-\d+ AI powered content creation and development How I use Jules and other AI tools to generate data analytics and blog posts with a human in the loop\./:
+    - /url: /tech-dancer/blog/2026-04-18-ai-content-creation
+  - text: /Local Regular Mission City Swing Every Wednesday © \d+ TECH-DANCER/
+  - link "Privacy":
+    - /url: "#"
+  - link "Terms":
+    - /url: "#"
+  - link "Contact":
+    - /url: /tech-dancer/contact

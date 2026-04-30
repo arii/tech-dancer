@@ -39,7 +39,7 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      - run: pnpm run test:e2e
+      - run: pnpm run test:e2e ${{ github.event_name == 'pull_request' && '--only-changed' || '' }}
         env:
           CI: true
           NODE_ENV: production
