@@ -51,21 +51,26 @@ const getBasename = (): string => {
   const baseSegments = buildBaseClean.split('/').filter(Boolean);
 
   // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
-  // check if the next segment is a known route.
-  if (segments.length > baseSegments.length) {
-    const possibleRouteSegment = segments[baseSegments.length];
-
-    const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(possibleRouteSegment);
-    const isIndexHtml = possibleRouteSegment === 'index.html';
-
-    if (!isStandardRoute && !isIndexHtml) {
-      // It's likely a branch deployment. The basename includes this extra segment.
-      return '/' + segments.slice(0, baseSegments.length + 1).join('/') + '/';
+  // find the first segment that matches a known top-level route.
+  // Everything before that is part of the basename.
+  let routeStartIndex = segments.length;
+  for (let i = baseSegments.length; i < segments.length; i++) {
+    if (VALID_TOP_LEVEL_PATHS.has(segments[i]) || segments[i] === 'index.html') {
+      routeStartIndex = i;
+      break;
     }
   }
 
-  // 3. Fallback: Use the build-time BASE_URL
-  return buildBase;
+  let basename = buildBase;
+  if (routeStartIndex > baseSegments.length) {
+    // We found extra segments that are not part of standard routes.
+    // These are likely branch names in a GitHub Pages deployment.
+    basename = '/' + segments.slice(0, routeStartIndex).join('/') + '/';
+  }
+
+  // 3. Ensure no trailing slash for compatibility with current route definitions
+  // Note: Playwright tests might rely on the trailing slash if BASE_URL has it.
+  return basename;
 };
 
 const router = createBrowserRouter(routes, {
