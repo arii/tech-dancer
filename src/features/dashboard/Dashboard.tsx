@@ -22,7 +22,7 @@ export default function Home() {
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={8}>
-        <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
+        <Box paddingX={{ base: 4, md: 16, lg: 20 }}>
           <PageHeader
             label="WELCOME"
             title="The Roboticist's Guide to West Coast Swing"

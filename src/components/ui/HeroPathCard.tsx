@@ -30,18 +30,22 @@ export function HeroPathCard({
   onClick
 }: HeroPathCardProps) {
   return (
-    <div
+    <Box
       className={cn(
         wrapperClass,
-        "relative group overflow-hidden cursor-pointer h-full min-h-[300px] transition-all duration-700 ease-in-out",
-        isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
+        "group cursor-pointer transition-all duration-700 ease-in-out"
       )}
+      position="relative"
+      overflow="hidden"
+      height="full"
+      minHeight={300}
+      opacity={isOtherHovered ? 30 : 100}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
       {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+      <Box position="absolute" inset zIndex={0} className={cn(isOtherHovered && "grayscale scale-[0.98]")}>
         <img
           src={image}
           alt=""
@@ -52,17 +56,26 @@ export function HeroPathCard({
             isHovered ? "scale-105" : "scale-100"
           )}
         />
-      </div>
+      </Box>
 
       {/* Scanline */}
-      <div
-        className={`absolute left-0 top-0 w-full h-0.5 bg-accent shadow-[0_0_15px_var(--color-accent-shadow)] z-10 pointer-events-none transition-opacity duration-500 ${
-          scanlineDelay || ''
-        } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
-      ></div>
+      <Box
+        position="absolute"
+        left={0}
+        top={0}
+        width="full"
+        height="[0.5px]"
+        zIndex={10}
+        shadow="glow"
+        className={cn(
+          "bg-accent pointer-events-none transition-opacity duration-500",
+          scanlineDelay || '',
+          isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'
+        )}
+      />
 
       {/* Content Container */}
-      <Stack justify="end" className="relative z-20 p-8 md:p-16 lg:p-20 h-full bg-gradient-to-t from-black via-black/40 to-transparent">
+      <Stack justify="end" padding={{ base: 8, md: 16, lg: 20 }} position="relative" zIndex={20} className="h-full bg-gradient-to-t from-black via-black/40 to-transparent">
         <Text
           as="h2"
           variant="headline"
@@ -122,6 +135,6 @@ export function HeroPathCard({
           })}
         </Stack>
       </Stack>
-    </div>
+    </Box>
   );
 }

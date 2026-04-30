@@ -52,6 +52,7 @@ export const inputs = {
 export const shadows = {
   topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
+  glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
 };
 
 
