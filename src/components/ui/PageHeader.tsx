@@ -9,19 +9,31 @@ interface PageHeaderProps {
   paddingBottom?: BaseProps['paddingBottom'];
   border?: BaseProps['border'];
   descriptionMaxWidth?: BaseProps['maxWidth'];
+  titleSize?: "fluid-5" | "fluid-6" | "fluid-7" | "fluid-8";
+  cta?: React.ReactNode;
 }
 
-export function PageHeader({ label, title, description, as = "h1", paddingBottom = 12, border = "b", descriptionMaxWidth = "prose" }: PageHeaderProps) {
+export function PageHeader({ 
+  label, 
+  title, 
+  description, 
+  as = "h1", 
+  paddingBottom = 12, 
+  border = "b", 
+  descriptionMaxWidth = "prose",
+  titleSize = "fluid-5",
+  cta
+}: PageHeaderProps) {
   return (
     <Box
       paddingBottom={paddingBottom}
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
+        <Text variant="mono" size="xs" color="dim" weight="font-bold" className="tracking-[0.2em]" uppercase>
           {label}
         </Text>
-        <Text as={as} variant="headline" size="fluid-7" weight="font-black" className="text-accent-navy leading-tight tracking-tight text-balance">
+        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-accent-navy leading-tight tracking-tight">
           {title}
         </Text>
         {description && (
@@ -31,10 +43,15 @@ export function PageHeader({ label, title, description, as = "h1", paddingBottom
             color="dim"
             maxWidth={descriptionMaxWidth}
             marginTop={4}
-            className="leading-relaxed"
+            className="leading-relaxed text-pretty"
           >
             {description}
           </Text>
+        )}
+        {cta && (
+          <Box marginTop={6}>
+            {cta}
+          </Box>
         )}
       </Stack>
     </Box>
