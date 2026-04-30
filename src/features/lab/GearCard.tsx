@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { Star } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
@@ -45,22 +44,13 @@ export function GearCard({
         <Stack gap={3}>
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
-              <Box display="flex" align="center" gap={0.5}>
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={12}
-                    className={
-                      i < Math.floor(rating)
-                        ? "fill-amber-500 text-amber-500"
-                        : i < rating
-                        ? "fill-amber-500/50 text-amber-500"
-                        : "text-line"
-                    }
-                  />
-                ))}
-                <Text variant="mono" size="micro" color="dim" marginLeft={1}>
-                  ({rating})
+              <Box display="flex" align="center" gap={1}>
+                <Text intent="warning" size="xs">
+                  {'★'.repeat(Math.floor(rating))}
+                  {rating % 1 !== 0 ? '½' : ''}
+                </Text>
+                <Text variant="mono" size="micro" color="dim">
+                  ({rating}/5)
                 </Text>
               </Box>
             )}
@@ -87,20 +77,11 @@ export function GearCard({
              {excerpt}
           </Text>
 
-          <Stack direction="row" wrap gap={2}>
-            {category && (
-              <Box surface="accent" paddingX={2} paddingY={0.5} radius="none" border className="border-line/10">
-                <Text variant="mono" size="micro" weight="font-bold" uppercase>
-                  {category}
-                </Text>
-              </Box>
-            )}
-            {priceCategory && (
-              <Box surface="warning" paddingX={2} paddingY={0.5} width="fit">
-                <Text variant="mono" size="micro" weight="font-bold">{priceCategory}</Text>
-              </Box>
-            )}
-          </Stack>
+          {priceCategory && (
+             <Box surface="warning" paddingX={2} paddingY={0.5} width="fit">
+               <Text variant="mono" size="micro" weight="font-bold">{priceCategory}</Text>
+             </Box>
+          )}
         </Stack>
 
         <Stack gap={3} marginTop="auto">
