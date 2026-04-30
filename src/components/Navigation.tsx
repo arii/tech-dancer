@@ -1,6 +1,6 @@
 import { Menu, X, Terminal, Search, LucideIcon } from 'lucide-react';
 import { useState, useEffect } from "react";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
@@ -11,6 +11,9 @@ import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 
 function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: string, icon?: LucideIcon, onClick?: () => void, isMobile?: boolean }) {
+  const { pathname } = useLocation();
+  const isActiveRoute = pathname === to;
+
   if (!icon) {
     console.warn(`Navigation icon missing for route: ${label}. Falling back to Terminal icon.`);
   }
@@ -34,6 +37,8 @@ function NavItem({ to, label, icon, onClick, isMobile }: { to: string, label: st
           paddingY={6}
           paddingX={isMobile ? undefined : 4}
           border={isMobile ? "b" : undefined}
+          surface={isMobile && isActiveRoute ? "accent" : undefined}
+          emphasis={isMobile && isActiveRoute ? "high" : undefined}
           className={cn(
             isMobile ? "border-line/50" : undefined,
             "min-h-[44px]"
@@ -88,9 +93,10 @@ export default function Navigation() {
           <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
         </Box>
         <Box
-          as="button"
+          as={motion.button}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
-          padding={2}
+          padding={4}
           display="flex"
           align="center"
           justify="center"

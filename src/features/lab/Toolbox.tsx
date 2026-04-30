@@ -29,7 +29,7 @@ export default function Toolbox() {
         />
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
           <Box position="relative" maxWidth="2xl" flex={1}>
             <Box
               as="input"
