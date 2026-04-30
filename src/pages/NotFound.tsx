@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 
 export default function NotFound() {
@@ -19,12 +19,11 @@ export default function NotFound() {
             titleSize="fluid-7"
             descriptionMaxWidth="prose"
             cta={
-              <Box
-                as="button"
+              <Button
                 onClick={() => navigate('/')}
-                display="flex"
-                align="center"
-                gap={3}
+                variant="default"
+                padding={0}
+                height="auto"
                 className="group outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 aria-label="Return to Home"
               >
@@ -44,7 +43,7 @@ export default function NotFound() {
                   </Text>
                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Stack>
-              </Box>
+              </Button>
             }
           />
         </Box>
