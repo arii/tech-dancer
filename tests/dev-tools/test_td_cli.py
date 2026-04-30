@@ -5,7 +5,7 @@ import os
 import json
 
 # Add dev-tools to path
-sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../dev-tools')))
 
 import td_cli
 from submit_review import submit_review
