@@ -1,4 +1,4 @@
-import { useMemo, ChangeEvent } from "react";
+import { useMemo } from "react";
 
 import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { GearCard } from '@/components/ui/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
+import { SearchBox } from '@/components/ui/SearchBox';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView } = useToolbox();
@@ -29,38 +30,12 @@ export default function Toolbox() {
         />
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
-          <Box position="relative" maxWidth="2xl" flex={1}>
-            <Box
-              as="input"
-              type="text"
-              placeholder="Search gear (e.g. earplugs, shoes)..."
-              width="full"
-              surface="default"
-              border
-              paddingLeft={14}
-              paddingRight={6}
-              paddingY={4}
-              variant="mono"
-              size="sm"
-              className="focus:border-accent outline-none focus:ring-0"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-              value={searchTerm}
-            />
-            <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-dim"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </Box>
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+          <SearchBox
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search gear (e.g. earplugs, shoes)..."
+          />
           <ViewToggle view={view} onChange={setView} />
         </Box>
       </Box>

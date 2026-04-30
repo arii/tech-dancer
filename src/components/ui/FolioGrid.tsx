@@ -1,12 +1,13 @@
+import { ReactNode } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
+import { SearchBox } from '@/components/ui/SearchBox';
 import { ListRow } from '@/components/ui/ListRow';
-import type { ContentItem } from '@/lib/content';
-import { ReactNode, ChangeEvent } from 'react';
+import { ContentItem } from '@/lib/content';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -53,38 +54,11 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
-          <Box position="relative" maxWidth="2xl" flex={1}>
-            <Box
-              as="input"
-              type="text"
-              placeholder="Search articles, guides, or gear..."
-              width="full"
-              surface="default"
-              border
-              paddingLeft={14}
-              paddingRight={6}
-              paddingY={4}
-              variant="mono"
-              size="sm"
-              className="focus:border-accent outline-none focus:ring-0"
-              value={search}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-            />
-            <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-dim"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </Box>
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+          <SearchBox
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           {onViewChange && (
             <ViewToggle view={view} onChange={onViewChange} />
           )}
@@ -97,9 +71,10 @@ export default function FolioGrid({
             {filteredItems.map((item) => (
               <Box
                 key={item.slug}
-                border="b"
+                border="r"
+                borderBottom={true}
                 padding={{ base: 6, lg: 6 }}
-                className="hover:bg-card-bg transition-colors group border-r border-line"
+                className="hover:bg-card-bg transition-colors group"
               >
                 <ContentCard
                   {...item}
