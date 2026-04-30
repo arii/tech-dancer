@@ -4,7 +4,7 @@ export function Footer() {
   const legalLinks = [
     { label: 'Privacy', href: '#' },
     { label: 'Terms', href: '#' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'Contact', href: import.meta.env.BASE_URL + 'contact' },
   ];
 
   return (

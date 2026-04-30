@@ -1,10 +1,11 @@
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
-import { useSearchHighlight } from '@/hooks/useSearchHighlight';
-import { useRef, MouseEvent, ChangeEvent } from 'react';
+import { getHighlightedParts } from '@/lib/utils';
+import { useRef, MouseEvent, ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
+import { debounce } from 'throttle-debounce';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -15,28 +16,49 @@ interface SearchResult {
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
-  const { highlight } = useSearchHighlight(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // 1. The Context Reset: Close on route change
-  // Note: Since isOpen is now derived from URL search params ('search=true'),
-  // navigation to a new URL without the 'search' param will automatically
-  // "close" the modal (isOpen will become false).
+  // Debounced URL sync to avoid excessive navigation and re-renders
+  const debouncedSetQuery = useMemo(
+    () => debounce(300, (q: string) => {
+      setQuery(q);
+    }),
+    [setQuery]
+  );
 
-  // 3. The Keyboard Escape Hatch: Close on ESC key
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    debouncedSetQuery(e.target.value);
+  };
+
+  // Sync input value with URL query for external changes (back/forward navigation)
+  useEffect(() => {
+    if (inputRef.current && inputRef.current.value !== query) {
+      inputRef.current.value = query;
+    }
+  }, [query]);
+
+  const highlight = useCallback((text: string) => {
+    const parts = getHighlightedParts(text, query);
+    if (parts.length === 1) return text;
+
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase()
+        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} surface="accent" weight="font-bold">{part}</Box>
+        : part
+    );
+  }, [query]);
+
   useHotkeys('Escape', () => {
     if (isOpen) close();
   }, [isOpen, close]);
 
-  // Global Shortcut: Ctrl+K or Cmd+K to open search
   useCommandKey('k', (e) => {
     e.preventDefault();
     open();
   }, [open]);
 
   const handleSelect = (result: SearchResult) => {
-    // 4. Link Click Delegation: Immediate Feedback
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
@@ -54,11 +76,10 @@ export function GlobalSearch() {
       display="flex"
       justify="center"
       align="start"
-      paddingTop={20}
+      paddingTop={{ base: 0, lg: 20 }}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 lg:left-72 !z-[200]"
-      // 2. The Backdrop Escape Hatch: Clicking the background closes the search
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72 !z-[200]"
       onClick={close}
     >
       <Box
@@ -80,8 +101,8 @@ export function GlobalSearch() {
             ref={inputRef}
             type="text"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
-            value={query}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+            defaultValue={query}
+            onChange={handleInputChange}
             width="full"
             variant="display"
             size="2xl"
