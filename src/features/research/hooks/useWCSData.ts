@@ -25,7 +25,7 @@ export function useWCSData() {
 
         const objects = await parquetReadObjects({ file: arrayBuffer });
 
-        const formattedObjects = objects.map((obj: any) => ({
+        const formattedObjects = objects.map((obj: Record<string, unknown>) => ({
           ...obj,
           Registry_Points_Sum: Number(obj.Registry_Points_Sum)
         }));
