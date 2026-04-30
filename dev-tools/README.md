@@ -40,15 +40,6 @@ Runs the full local quality suite: Anti-pattern audit, TypeScript check, Lint, R
   }
   ```
 
-#### `audit-pr <PR_NUMBER>`
-Orchestrates the PR technical audit lifecycle.
-- **Flags**:
-  - `--fetch`: Fetch PR metadata and generate context files.
-  - `--audit`: Run deterministic checks and invoke AI auditor.
-  - `--submit`: Submit the completed review to GitHub.
-  - `--cleanup`: Remove temporary review files on success.
-- **Usage**: `python3 dev-tools/td_cli.py audit-pr 368 --fetch --audit`
-
 #### `validate-issue <ISSUE_NUMBER>`
 Validates GitHub Issues against repo standards.
 - **Flags**:
@@ -74,17 +65,13 @@ Detects potential merge conflicts across all open PRs.
   }
   ```
 
-#### `manage-reviews`
-Tracks agent response engagement and cleans up tool-generated comments.
-- **Flags**:
-  - `--check-responses`: List unaddressed bot comments.
-  - `--cleanup-comments`: Delete old marker comments.
-- **Usage**: `python3 dev-tools/td_cli.py manage-reviews --check-responses`
-
 #### `ratchet-any` / `bundle-size`
-CI gates for tracking technical debt.
+CI gates for tracking technical debt. These commands check the current values against baselines defined in environment variables or local files.
+- **Environment Variables**:
+  - `ANY_COUNT_BASELINE`: Overrides the local `any-count.txt`.
+  - `BUNDLE_BASELINE_KB`: Overrides the local `.bundle-baseline`.
 - **Flags**:
-  - `--update`: Update the baseline file with current values.
+  - `--update`: Update the local baseline file with current values.
 - **Usage**: `python3 dev-tools/td_cli.py bundle-size --update`
 - **Output (Failure)**:
   ```json

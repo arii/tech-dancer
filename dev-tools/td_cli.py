@@ -157,7 +157,11 @@ def handle_status_board(args):
 
 def handle_ratchet_any(args):
     current = get_any_count(); baseline = 0
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 0)
+    env_baseline = os.environ.get("ANY_COUNT_BASELINE")
+    if env_baseline is not None:
+        baseline = int(env_baseline)
+    elif os.path.exists(args.baseline_file):
+        baseline = int(open(args.baseline_file).read().strip() or 0)
 
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
@@ -173,7 +177,11 @@ def handle_ratchet_any(args):
 
 def handle_bundle_size(args):
     size = get_bundle_size(); baseline = 1000
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 1000)
+    env_baseline = os.environ.get("BUNDLE_BASELINE_KB")
+    if env_baseline is not None:
+        baseline = int(env_baseline)
+    elif os.path.exists(args.baseline_file):
+        baseline = int(open(args.baseline_file).read().strip() or 1000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")

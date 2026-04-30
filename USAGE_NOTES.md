@@ -1,41 +1,46 @@
-# PR Review Tooling: USAGE_NOTES
+# CI & Workflow Usage Notes
 
 ## Overview
-The PR review system uses a **Read/Write Decoupled Architecture**.
-- **Read Context**: `dev-tools/logs/reviews/pr-context-{PR}.md` (Diffs, stats, and valid line ranges).
-- **Write Review**: `dev-tools/logs/reviews/pr-review-{PR}.md` (Checklist and JSON output block).
+The repository uses a simplified CI/CD workflow focused on local validation and automated GitHub Actions gates.
 
-## Core Commands (Automated Orchestrator)
+## Core Commands
 
-### 1. Single PR Audit
-The recommended way to review a single PR:
+### 1. Pre-Submission Check
+Before pushing any changes, run the unified quality gate:
 
 ```bash
-# ONE COMMAND: Fetch + AI-Audit + Submit + Cleanup (Failure-Proof)
-./dev-tools/auto-review-pr.sh <PR_NUMBER> --cleanup
+python3 dev-tools/td_cli.py pre-submit
 ```
+This command runs:
+- UI Anti-pattern audit (`pnpm run audit`)
+- TypeScript type-checking (`pnpm run type-check`)
+- ESLint (`pnpm run lint`)
+- Conflict detection across all open PRs
 
-### 2. Bulk PR Audit (Mass Review)
-To audit multiple PRs sequentially with a single command:
+## CI Quality Gates
+
+The CI environment enforces several thresholds to prevent technical debt accumulation. These gates use GitHub Actions Variables for baseline values.
+
+### Technical Debt Baselines
+| Gate | Environment Variable | Fallback File |
+|------|----------------------|---------------|
+| Bundle Size | `BUNDLE_BASELINE_KB` | `.bundle-baseline` (Legacy) |
+| TypeScript `any` | `ANY_COUNT_BASELINE` | `any-count.txt` (Legacy) |
+
+**Note:** Environment variables (GitHub Actions Variables) always take precedence over local files in CI.
+
+## Maintenance
+
+### Updating Baselines
+If a change intentionally increases the bundle size or `any` count, the baseline must be updated in the repository variables using the GitHub CLI:
 
 ```bash
-# Orchestrate fleet-wide audits
-./dev-tools/auto-mass-audit-pr.sh <PR_NUM1> <PR_NUM2> <PR_NUM3> ...
+# Update bundle size baseline
+gh variable set BUNDLE_BASELINE_KB --body 2800
+
+# Update 'any' count baseline
+gh variable set ANY_COUNT_BASELINE --body 15
 ```
 
-## Advanced Flags
-- `--dry-run`: Performs a full audit and draft submission but does NOT hit the GitHub API.
-- `--submit-only`: Skips Fetch/Audit and attempts to submit an existing review file.
-- `--cleanup`: Deletes logs and context files after a SUCCESSFUL submission.
-
-## Failure Prevention
-- **Valid Line Ranges**: The system provides explicit ranges to prevent GitHub API 422 errors.
-- **AI Instructions**: Permanent audit rules are stored in `dev-tools/REVIEW_INSTRUCTIONS.md`.
-
-## Verification Log
-| Date | PR # | Outcome | Notes |
-|------|------|---------|-------|
-| 2026-04-22 | 195 | SUCCESS | Hardened line validation test |
-| 2026-04-22 | 223 | SUCCESS | Self-audit (tooling refactor test) |
-| 2026-04-22 | 188 | SUCCESS | AI protocol compliance test (Direct edit) |
-| 2026-04-22 | 154 | SUCCESS | Architectural regression detection test |
+### UI Anti-Patterns
+The UI audit compares current violations against the `main` branch. No manual baseline update is required for the audit gate; just ensure you haven't introduced *new* violations.
