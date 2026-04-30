@@ -5,6 +5,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import Inspect from 'vite-plugin-inspect';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { VitePWA } from 'vite-plugin-pwa';
 import Sitemap from 'vite-plugin-sitemap';
 import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
 import { routes } from './src/config/routes';
@@ -95,6 +96,30 @@ export default defineConfig(({mode}) => {
         svg: {
           multipass: true,
         },
+      }),
+      VitePWA({
+        registerType: 'autoUpdate',
+        manifest: {
+          name: 'Tech-Dancer',
+          short_name: 'TechDancer',
+          description: "The Roboticist's Guide to WCS",
+          theme_color: '#1A2B3C',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            }
+          ]
+        },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+        }
       }),
       analyze && visualizer({
         open: false,

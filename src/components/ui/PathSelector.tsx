@@ -23,7 +23,7 @@ const PATH_DATA = [
   {
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
-    wrapperClass: 'lg:col-span-5 bg-zinc-900',
+    wrapperClass: 'lg:col-span-5 bg-black',
     image: roboticistHero,
     titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'animation-delay-500',

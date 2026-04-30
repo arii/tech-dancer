@@ -43,7 +43,7 @@ export function GlobalErrorBoundary() {
           <Text variant="h2" weight="bold">
             Application Error
           </Text>
-          <Text color="dim">
+          <Text intent="dim">
             We've encountered an issue while rendering this page.
           </Text>
         </Stack>
@@ -56,7 +56,7 @@ export function GlobalErrorBoundary() {
           maxHeight={80}
           className="text-left border border-line/50 overflow-auto"
         >
-          <Text weight="bold" color="error" className="mb-2 block">
+          <Text weight="bold" intent="danger" className="mb-2 block">
             {errorMessage}
           </Text>
           {!isProduction && errorDetail && (

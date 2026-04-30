@@ -6,7 +6,6 @@ import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import type { ContentItem } from '@/lib/content';
-import { ReactNode, ChangeEvent } from 'react';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -53,7 +52,7 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
           <Box position="relative" maxWidth="2xl" flex={1}>
             <Box
               as="input"
@@ -97,9 +96,10 @@ export default function FolioGrid({
             {filteredItems.map((item) => (
               <Box
                 key={item.slug}
-                border="b"
+                border="r"
+                borderBottom={true}
                 padding={{ base: 6, lg: 6 }}
-                className="hover:bg-card-bg transition-colors group border-r border-line"
+                className="hover:bg-card-bg transition-colors group"
               >
                 <ContentCard
                   {...item}

@@ -8,9 +8,9 @@ interface SuccessStateProps {
 
 export function SuccessState({ onReset }: SuccessStateProps) {
   return (
-    <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" textAlign="center">
+    <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" className="text-center">
       <Stack gap={12} align="center">
-        <Box width={24} height={24} border surface="dim" display="flex" align="center" justify="center" color="accent" radius="lg">
+        <Box width={24} height={24} border surface="muted" display="flex" align="center" justify="center" radius="lg" className="text-accent">
           <Sparkles className="w-12 h-12 stroke-1" />
         </Box>
         <Stack gap={4}>
@@ -24,16 +24,11 @@ export function SuccessState({ onReset }: SuccessStateProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onReset}
-          variant="mono"
-          weight="font-bold"
-          uppercase
-          size="micro"
           border
           paddingX={8}
           paddingY={4}
-          color="accent"
           cursor="pointer"
-          className="hover:border-accent  transition-colors"
+          className="hover:border-accent transition-colors text-accent font-mono text-micro font-bold uppercase tracking-widest"
         >
           Send Another Message
         </Box>

@@ -40,7 +40,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 <Box paddingBottom={4} className="border-b border-line">
                   <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
-                <Text variant="body" size="base" maxWidth="md" color="dim">
+                <Text variant="body" size="base" maxWidth="md" intent="dim">
                   I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
                 </Text>
               </Stack>
@@ -52,12 +52,12 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   { label: 'General', channel: 'Discussion', icon: MessageSquare },
                 ].map((item) => (
                   <Box key={item.label} display="flex" align="center" gap={6} className="group">
-                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" color="dim" className="group-hover:border-accent group-hover:bg-bg transition-colors" radius="lg">
+                    <Box width={12} height={12} border surface="muted" display="flex" align="center" justify="center" intent="dim" className="group-hover:border-accent group-hover:bg-bg transition-colors" radius="lg">
                       <item.icon className="w-6 h-6 stroke-1" />
                     </Box>
                     <Stack gap={1}>
                       <Text variant="sans" size="base" weight="font-bold" className="text-accent-navy">{item.label}</Text>
-                      <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>{item.channel}</Text>
+                      <Text variant="mono" intent="dim" size="xs" weight="font-semibold"  uppercase>{item.channel}</Text>
                     </Stack>
                   </Box>
                 ))}
@@ -121,7 +121,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 </FormField>
 
                 {errors.root && (
-                  <Text color="error" size="sm" align="center" as="p" marginTop={2}>
+                  <Text intent="danger" size="sm" align="center" as="p" marginTop={2}>
                     {errors.root.message}
                   </Text>
                 )}
@@ -136,7 +136,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   {isSubmitting ? (
                     <Stack direction="row" align="center" gap={3}>
                       <div className="w-4 h-4 border-2 border-current border-t-transparent animate-spin" />
-                      <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
+                      <Text variant="sans"  size="sm" weight="font-semibold">Sending...</Text>
                     </Stack>
                   ) : (
                     <>

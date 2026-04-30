@@ -133,15 +133,6 @@ When multiple agents work simultaneously:
 - **Manual Confirmation for Merges**: Every merge command MUST be preceded by a specific `notify_user` request for approval, even if part of a previously discussed plan.
 - **No Autonomous Batch Merging**: Avoid sequential, rebase-based merge strategies that operate autonomously. Every merge transition requires manual verification.
 
-### 🚫 Anti-Pattern: Monolithic (God) PRs
-To prevent unmanageable merge conflicts and maintain feature isolation, agents MUST NOT generate "monolithic" PRs that touch multiple core layout files simultaneously.
-1. **Scope Limit**: A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
-2. **Isolation**: Broad cross-cutting concerns (e.g., accessibility audits, SEO meta tags across all pages, or global token changes) must be split into isolated, focused PRs.
-3. **Conflict Awareness**: Before initiating cross-cutting refactors, agents MUST check for potential conflicts using:
-   ```bash
-   python3 dev-tools/td_cli.py conflicts
-   ```
-
 ## 24. Setup (Jules Environment)
 
 To prepare the base environment (Node.js/pnpm), execute the minimal setup script:

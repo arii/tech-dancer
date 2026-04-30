@@ -37,7 +37,7 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
       )}
       <Box className="absolute top-4 left-4">
         <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-sm">
-          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-accent-navy">
+          <Text variant="mono" size="micro" weight="font-bold" uppercase  className="text-accent-navy">
             {category}
           </Text>
         </Box>

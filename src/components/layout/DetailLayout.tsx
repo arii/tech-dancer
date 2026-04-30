@@ -43,8 +43,7 @@ export function DetailLayout({
           display="flex"
           align="center"
           gap={2}
-          color="dim"
-          className="hover:text-accent transition-colors"
+          className="hover:text-accent transition-colors text-text-dim"
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -54,10 +53,10 @@ export function DetailLayout({
         <Stack gap={10}>
           {/* Header */}
           <Stack gap={4}>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
+            <Text variant="mono" size="xs" intent="dim" weight="font-semibold"  uppercase>
               {category} • {date} • {rt} min read
             </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" leading="tight" tracking="tight" className="text-accent-navy">
+            <Text variant="headline" size="fluid-5" weight="font-black"   className="text-accent-navy">
               {title}
             </Text>
             {headerExtras}
@@ -85,7 +84,7 @@ export function DetailLayout({
 
           <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
             {/* Content - first on mobile via order classes */}
-            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
+            <Box className={sidebar ? "lg:col-span-2 order-1 lg:order-2" : "w-full"}>
               {children}
               <Box
                 maxWidth="3xl"

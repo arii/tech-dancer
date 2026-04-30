@@ -140,7 +140,7 @@ export default function UXAuditor() {
           />
           <Box
             as="button"
-            onClick={() => runUXAudit(url)}
+            onClick={runUXAudit}
             disabled={isAnalyzing}
             display="flex"
             align="center"
@@ -159,12 +159,12 @@ export default function UXAuditor() {
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
         <Stack gap={4} span={{ lg: 1 }}>
-          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
+          <Text variant="sans" size="xs" weight="font-bold" uppercase  intent="dim" paddingX={1}>
             Audit History
           </Text>
           <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
-              <Box padding={10} className="italic" color="dim" align="center" size="sm">
+              <Box padding={10} className="italic" intent="dim" align="center" size="sm">
                 No audits recorded.
               </Box>
             )}
@@ -189,7 +189,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                  <Text variant="mono" size="xs" weight="font-medium" intent="dim" uppercase>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -207,7 +207,7 @@ export default function UXAuditor() {
                 surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align={{ base: "start", md: "center" }} gap={4} direction={{ base: "col", md: "row" }}
               >
                 <Stack gap={1} marginBottom={{ base: 4, md: 0 }} minWidth="0" flex={1}>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
+                  <Text variant="sans" size="xs" weight="font-bold" intent="accent" uppercase  display="block">
                     Current Session
                   </Text>
                   <Text variant="sans" size="xl" weight="font-black" className="truncate block" title={activeReport.url}>
@@ -221,7 +221,7 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted" color="dim"
+                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted" intent="dim"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
@@ -256,14 +256,14 @@ export default function UXAuditor() {
                     <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
                       <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
                         <Box display="flex" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
+                          <Box padding={2} surface="default" radius="lg" shadow="sm" intent="accent">
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
                             {vp.name} Analysis
                           </Text>
                         </Box>
-                        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                        <Text variant="mono" size="xs" weight="font-bold" intent="dim" uppercase >
                           {vp.width}w × {vp.height}h
                         </Text>
                       </Box>
@@ -279,11 +279,11 @@ export default function UXAuditor() {
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Stack align="center" justify="center" color="dim" className="text-center">
+                            <Stack align="center" justify="center" intent="dim" className="text-center">
                               <Box marginBottom={2}>
                                 <ImageIcon className="w-12 h-12 opacity-20" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
+                              <Text variant="sans" size="xs" weight="font-bold" uppercase >
                                 Awaiting Frame...
                               </Text>
                             </Stack>
@@ -295,7 +295,7 @@ export default function UXAuditor() {
                             <>
                               <Box surface="muted" border={true} padding={5} radius="2xl">
                                 <Box marginBottom={3}>
-                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
+                                  <Text variant="sans" size="xs" weight="font-black" intent="accent" uppercase display="block" >
                                     Analysis Summary
                                   </Text>
                                 </Box>
@@ -313,17 +313,17 @@ export default function UXAuditor() {
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" intent="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
                                     </Box>
-                                    <Text variant="sans" size="xs" color="dim" marginBottom={3}>
+                                    <Text variant="sans" size="xs" intent="dim" marginBottom={3}>
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                             <Box surface="muted" padding={3} radius="lg" border={true}>
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
+                                <Text variant="sans" size="xs" weight="font-black" intent="accent" marginTop={0.5} uppercase  className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
                                           <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
                                             {imp.suggestion}
@@ -340,9 +340,9 @@ export default function UXAuditor() {
                               </Stack>
                             </>
                           ) : (
-                            <Stack align="center" justify="center" paddingY={20} color="dim">
+                            <Stack align="center" justify="center" paddingY={20} intent="dim">
                               <RefreshCw className="animate-spin w-6 h-6" />
-                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
+                              <Text variant="sans" size="xs" weight="font-bold"  uppercase>
                                 Agent Processing...
                               </Text>
                             </Stack>
@@ -362,7 +362,7 @@ export default function UXAuditor() {
               <Text variant="sans" size="xl" weight="font-black" marginBottom={2}>
                 Ready to Audit
               </Text>
-              <Text variant="sans" size="sm" weight="font-medium" color="dim" maxWidth="sm" marginX="auto">
+              <Text variant="sans" size="sm" weight="font-medium" intent="dim" maxWidth="sm" marginX="auto">
                 Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop.
               </Text>
             </Stack>

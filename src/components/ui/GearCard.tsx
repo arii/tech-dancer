@@ -59,7 +59,7 @@ export function GearCard({
                     }
                   />
                 ))}
-                <Text variant="mono" size="micro" color="dim" marginLeft={1}>
+                <Text variant="mono" size="micro" intent="dim" marginLeft={1}>
                   ({rating})
                 </Text>
               </Box>
@@ -83,7 +83,7 @@ export function GearCard({
             {title}
           </Text>
 
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-80">
+          <Text variant="body" size="sm" intent="dim" className="line-clamp-2 leading-relaxed opacity-80">
              {excerpt}
           </Text>
 
@@ -104,12 +104,12 @@ export function GearCard({
         </Stack>
 
         <Stack gap={3} marginTop="auto">
-          <Text variant="mono" size="micro" color="dim" className="leading-tight opacity-70 italic">
+          <Text variant="mono" size="micro" intent="dim" className="leading-tight opacity-70 italic">
             * Affiliate links — commission earned at no cost to you.
           </Text>
 
           <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50">
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="wider">
+            <Text variant="mono" size="xs" weight="font-bold" intent="accent" >
               Read Review
             </Text>
             <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />

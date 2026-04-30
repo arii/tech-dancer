@@ -98,12 +98,12 @@ export default function ResearchDetail() {
           display="flex" 
           align="center" 
           gap={2}
-          color="dim"
+          intent="dim"
           className="hover:text-accent transition-colors"
           cursor="pointer"
         >
           <ArrowLeft size={16} />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim">Back to Lab</Text>
+          <Text variant="mono" size="xs" weight="font-bold" intent="dim">Back to Lab</Text>
         </Box>
 
         <Box border surface="default" padding={{ base: 8, md: 12 }} className="rounded-none">
@@ -113,27 +113,27 @@ export default function ResearchDetail() {
             ) : (
               <Stack gap={12}>
                   <Stack gap={4}>
-                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
+                    <Text variant="mono" intent="dim" size="xs" weight="font-semibold"  uppercase>
                       LABORATORY_ACCESS // {tool.category}
                     </Text>
                     <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
                       {tool.name}
                     </Text>
                   <Box border surface="accent" padding="compact">
-                    <Text variant="body" size="lg" color="body">{tool.layman}</Text>
+                    <Text variant="body" size="lg" intent="body">{tool.layman}</Text>
                   </Box>
                 </Stack>
 
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
+                    <Text variant="mono" size="micro" intent="dim" uppercase >System Status</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
                       <Activity className="w-4 h-4 text-accent" />
-                      <Text variant="mono" size="xs" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
+                      <Text variant="mono" size="xs" intent="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                   </Stack>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
+                    <Text variant="mono" size="micro" intent="dim" uppercase >Database Source</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
                       <Database className="w-4 h-4 text-accent" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
@@ -147,7 +147,7 @@ export default function ResearchDetail() {
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
-                        <Text variant="body" size="sm" color="dim" maxWidth="md">
+                        <Text variant="body" size="sm" intent="dim" maxWidth="md">
                           This specialized module is currently being integrated into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
                         </Text>
                       </Stack>

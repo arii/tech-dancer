@@ -52,7 +52,7 @@ export function FullPreview({
         backLabel="Back to Editor"
         headerExtras={
           <Stack direction="row" gap={4} marginTop={6}>
-            <Stack direction="row" align="center" gap={2} color="dim">
+            <Stack direction="row" align="center" gap={2} className="text-text-dim">
               <Box width={8} height={8} radius="full" surface="muted" />
               <Text variant="mono" size="xs">{author}</Text>
             </Stack>
@@ -69,7 +69,7 @@ export function FullPreview({
          {affiliateLink && (
            <Box marginY={8} border padding={4} surface="muted">
               <Box marginBottom={2}>
-                <Text variant="mono" size="xs" color="brand" weight="font-bold" className="block uppercase">Affiliate Link</Text>
+                <Text variant="mono" size="xs" intent="brand" weight="font-bold" className="block uppercase">Affiliate Link</Text>
               </Box>
               <Stack as="a" direction="row" align="center" gap={2} href={affiliateLink} target="_blank" className="text-accent hover:underline">
                 <Text variant="body" size="sm">Buy on Amazon</Text>

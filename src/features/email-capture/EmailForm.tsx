@@ -52,18 +52,18 @@ export function EmailForm() {
               {status === 'loading' && (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
+                  <Text variant="mono" size="micro" weight="font-bold" intent="bg">AUTHENTICATING...</Text>
                 </>
               )}
               {status === 'success' && (
                 <>
                   <Check className="w-4 h-4 text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
+                  <Text variant="mono" size="micro" weight="font-bold" intent="bg">ACCESS_GRANTED</Text>
                 </>
               )}
               {status === 'idle' && (
                 <>
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">SUBSCRIBE</Text>
+                  <Text variant="mono" size="micro" weight="font-bold" intent="bg">SUBSCRIBE</Text>
                   <ArrowRight className="w-4 h-4 text-bg" />
                 </>
               )}

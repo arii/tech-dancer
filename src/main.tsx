@@ -3,8 +3,13 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { registerSW } from 'virtual:pwa-register';
 import { routes } from './App.tsx';
 import './index.css';
+
+// Register service worker for offline access
+// registerType: 'autoUpdate' in vite.config handles updates, immediate: true is optional
+registerSW({ immediate: false });
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,24 +52,16 @@ const getBasename = (): string => {
   const baseSegments = buildBaseClean.split('/').filter(Boolean);
 
   // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
-  // find the last segment that is NOT a known route. This allows for
-  // multi-segment branch names (e.g. fix/ux-nav-errors).
+  // check if the next segment is a known route.
   if (segments.length > baseSegments.length) {
-    let lastBaseSegmentIndex = baseSegments.length - 1;
+    const possibleRouteSegment = segments[baseSegments.length];
 
-    for (let i = baseSegments.length; i < segments.length; i++) {
-      const segment = segments[i];
-      const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(segment);
-      const isIndexHtml = segment === 'index.html';
+    const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(possibleRouteSegment);
+    const isIndexHtml = possibleRouteSegment === 'index.html';
 
-      if (isStandardRoute || isIndexHtml) {
-        break;
-      }
-      lastBaseSegmentIndex = i;
-    }
-
-    if (lastBaseSegmentIndex >= baseSegments.length) {
-      return '/' + segments.slice(0, lastBaseSegmentIndex + 1).join('/') + '/';
+    if (!isStandardRoute && !isIndexHtml) {
+      // It's likely a branch deployment. The basename includes this extra segment.
+      return '/' + segments.slice(0, baseSegments.length + 1).join('/') + '/';
     }
   }
 

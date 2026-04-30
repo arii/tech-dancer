@@ -103,7 +103,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         {/* Form Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
+             <Text variant="mono" size="micro" intent="brand">METADATA_INPUT</Text>
              <Box
                as="button"
                onClick={saveToHistory}
@@ -119,7 +119,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
           <Stack gap={6}>
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">POST_TITLE</Text>
+              <Text variant="mono" size="micro" intent="dim">POST_TITLE</Text>
               <Box
                 as="input"
                 type="text"
@@ -138,7 +138,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim">CATEGORY</Text>
+                <Text variant="mono" size="micro" intent="dim">CATEGORY</Text>
                 <Box
                   as="select"
                   value={data.category}
@@ -157,7 +157,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim">DATE</Text>
+                <Text variant="mono" size="micro" intent="dim">DATE</Text>
                 <Box
                   as="input"
                   type="date"
@@ -175,7 +175,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Grid>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">EXCERPT_SUMMARY</Text>
+              <Text variant="mono" size="micro" intent="dim">EXCERPT_SUMMARY</Text>
               <Box
                 as="textarea"
                 value={data.excerpt}
@@ -193,7 +193,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Stack>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
+              <Text variant="mono" size="micro" intent="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
               <Box
                 as="input"
                 type="url"
@@ -211,7 +211,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Stack>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
+              <Text variant="mono" size="micro" intent="dim">BODY_COMMENTARY</Text>
               <Box
                 as="textarea"
                 value={data.commentary}
@@ -234,7 +234,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             <Stack gap={4} marginTop={4}>
               <Box border="b" paddingBottom={2} display="flex" align="center" gap={2}>
                 <History className="w-3 h-3 text-accent" />
-                <Text variant="mono" size="micro" color="brand">VERSION_HISTORY</Text>
+                <Text variant="mono" size="micro" intent="brand">VERSION_HISTORY</Text>
               </Box>
               <Stack gap={2}>
                 {history.map((entry) => (
@@ -252,7 +252,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                       <Text variant="mono" size="xs" weight="font-bold">
                         {entry.data.title || 'Untitled Snapshot'}
                       </Text>
-                      <Text variant="mono" size="micro" color="dim">
+                      <Text variant="mono" size="micro" intent="dim">
                         {new Date(entry.timestamp).toLocaleString()}
                       </Text>
                     </Stack>
@@ -285,11 +285,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         {/* Preview Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Text variant="mono" size="micro" color="brand">AI_INTEGRATION</Text>
+             <Text variant="mono" size="micro" intent="brand">AI_INTEGRATION</Text>
              {showAppliedSuccess && (
                 <Box display="flex" align="center" gap={2}>
                   <Check className="w-3 h-3 text-accent" />
-                  <Text variant="mono" size="micro" color="brand" weight="font-bold">APPLIED_SUCCESSFULLY</Text>
+                  <Text variant="mono" size="micro" intent="brand" weight="font-bold">APPLIED_SUCCESSFULLY</Text>
                 </Box>
              )}
           </Box>
@@ -327,7 +327,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
              <Box display="flex" align="center" gap={2}>
-               <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
+               <Text variant="mono" size="micro" intent="brand">MARKDOWN_PREVIEW</Text>
                <Box
                  as="button"
                  onClick={() => setPreviewMode('full')}
@@ -341,7 +341,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                  <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>
                </Box>
              </Box>
-             <Box display="flex" align="center" gap={2} color="dim">
+             <Box display="flex" align="center" gap={2} intent="dim">
                 <FileText className="w-3 h-3" />
                 <Text variant="mono" size="micro">v1.3.1</Text>
              </Box>

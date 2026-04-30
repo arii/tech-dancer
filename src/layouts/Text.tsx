@@ -1,21 +1,20 @@
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { composeStyles } from "@/lib/utils"
-import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
-import { variants } from "@/lib/variants"
+import { typeSizes } from "@/styles/design-tokens"
+import { textVariants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
+import type { VariantProps } from "class-variance-authority"
 
-export interface TextProps extends Omit<BaseProps, "align">, HTMLAttributes<HTMLElement> {
+export interface TextProps
+  extends Omit<BaseProps, "align">,
+    HTMLAttributes<HTMLElement>,
+    Omit<VariantProps<typeof textVariants>, "variant"> {
   as?: ElementType
   className?: string
-  variant?: keyof typeof typography
-  intent?: keyof typeof variants.intent
-  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "error"
+  variant?: VariantProps<typeof textVariants>["variant"]
   size?: ResponsiveProp<keyof typeof typeSizes>
   weight?: string
-  align?: "left" | "center" | "right" | "justify"
-  tracking?: keyof typeof trackingTokens | string
-  leading?: "none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
@@ -24,7 +23,8 @@ export interface TextProps extends Omit<BaseProps, "align">, HTMLAttributes<HTML
 export const Text = forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
-    variant, intent, color = "main", size, weight, align, tracking, leading,
+    variant, intent, align, tracking, leading,
+    size, weight,
     uppercase, lowercase, capitalize,
     ...props 
   }, ref) => {
@@ -33,21 +33,9 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         as={Component}
         ref={ref as Ref<HTMLDivElement>}
         className={composeStyles(
-          intent && variants.intent[intent],
-          !intent && color === "main" && "text-text-main",
-          !intent && color === "body" && "text-text-body",
-          !intent && color === "dim" && "text-text-dim",
-          !intent && color === "accent" && "text-accent",
-          !intent && color === "brand" && "text-accent-navy font-bold",
-          !intent && color === "white" && "text-white",
-          !intent && color === "bg" && "text-bg",
-          !intent && color === "error" && "text-error",
+          textVariants({ variant, intent, align, tracking, leading }),
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
-          variant && typography[variant],
           weight,
-          align && `text-${align}`,
-          tracking && (trackingTokens[tracking as keyof typeof trackingTokens] || `tracking-${tracking}`),
-          leading && `leading-${leading}`,
           uppercase && "uppercase",
           lowercase && "lowercase",
           capitalize && "capitalize",

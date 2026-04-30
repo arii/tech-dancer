@@ -28,7 +28,7 @@ export default function ArielProfile() {
                 <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy uppercase tracking-tight">
                   {section.title}
                 </Text>
-                <Text variant="body" size="lg" color="body" className="leading-loose">
+                <Text variant="body" size="lg" intent="body" className="leading-loose">
                   {section.content}
                 </Text>
               </Stack>
@@ -42,14 +42,14 @@ export default function ArielProfile() {
               <Grid cols={{ base: 1, md: 3 }} gap={8}>
                 {bio.details.map((detail) => (
                   <Stack key={detail.label} gap={1}>
-                    <Text variant="mono" size="xs" color="dim" weight="font-bold">{detail.label}</Text>
-                    <Text variant="body" size="sm" color="main" weight="font-semibold" className="break-words">{detail.value}</Text>
+                    <Text variant="mono" size="xs" intent="dim" weight="font-bold">{detail.label}</Text>
+                    <Text variant="body" size="sm" intent="default" weight="font-semibold" className="break-words">{detail.value}</Text>
                   </Stack>
                 ))}
               </Grid>
 
               <Stack gap={6} border="t" paddingTop={8} className="border-line/20">
-                <Text variant="mono" size="xs" color="brand" weight="font-bold">CONNECT & NETWORKING</Text>
+                <Text variant="mono" size="xs" intent="brand" weight="font-bold">CONNECT & NETWORKING</Text>
                 <Box display="flex" gap={4} wrap>
                   {[
                     { label: 'INSTAGRAM', url: 'https://instagram.com' },

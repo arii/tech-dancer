@@ -32,7 +32,7 @@ export function ContentCard({
 }: ContentCardProps) {
   return (
     <Stack
-      as={motion.create(NavLink)}
+      as={motion(NavLink)}
       to={`${basePath}/${slug}`}
       direction="col"
       gap={0}
@@ -61,17 +61,17 @@ export function ContentCard({
       {/* Content Area */}
       <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
         <Stack gap={compact ? 0.5 : 3}>
-          <Box display="flex" align="center" gap={3} wrap>
-            <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
+          <Box display="flex" align="center" gap={3} flexWrap="wrap">
+            <Text variant="mono" size="micro" weight="font-black" intent="brand" uppercase >
               {category}
             </Text>
             {date && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" intent="dim" uppercase >
                 {date}
               </Text>
             )}
             {!compact && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" intent="dim" uppercase >
                 {readingTime(content, excerpt)} MIN
               </Text>
             )}
@@ -86,14 +86,14 @@ export function ContentCard({
             {title}
           </Text>
           
-          <Text variant="body" size="sm" color="dim" className="line-clamp-1 leading-relaxed opacity-70">
+          <Text variant="body" size="sm" intent="dim" className="line-clamp-1 leading-relaxed opacity-70">
              {excerpt}
           </Text>
         </Stack>
 
         {!compact && (
           <Box display="flex" align="center" gap={2} paddingTop={4} className="border-t border-line/50 mt-auto">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" className="text-accent">
+            <Text variant="mono" size="xs" weight="font-bold"  className="text-accent">
               Read Article
             </Text>
             <Box className="w-0 h-px bg-accent group-hover:w-6 transition-all duration-500" />

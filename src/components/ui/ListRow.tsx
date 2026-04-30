@@ -28,11 +28,11 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
       </Box>
       <Stack gap={1} flex className="py-3 min-w-0">
         <Box display="flex" align="center" gap={3}>
-          <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
-          <Text variant="mono" size="micro" color="dim">{date}</Text>
+          <Text variant="mono" size="micro" intent="brand" className="uppercase shrink-0">{category}</Text>
+          <Text variant="mono" size="micro" intent="dim">{date}</Text>
         </Box>
         <Text variant="display" size="sm" weight="font-bold" className="line-clamp-1">{title}</Text>
-        <Text variant="body" size="xs" color="dim" className="truncate">{excerpt}</Text>
+        <Text variant="body" size="xs" intent="dim" className="truncate">{excerpt}</Text>
       </Stack>
       <Box display="flex" align="center" gap={3} padding={4} className="shrink-0 text-text-dim">
         <Text variant="mono" size="micro">{rt} min</Text>

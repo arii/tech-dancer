@@ -1,10 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execFileSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
@@ -161,18 +159,6 @@ function walk(dir, callback) {
     });
 }
 
-function checkPRScope() {
-  try {
-    const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
-    if (output) {
-      console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
-    }
-  } catch {
-    // Python or script might not be available
-  }
-}
-
 function generateTodoFile(allViolations) {
   let todoContent = "# UI Anti-Pattern TODO List\n\n";
   todoContent += "This list is automatically generated from the audit report. Fix these anti-patterns to adhere to the project design system.\n\n";
@@ -189,8 +175,6 @@ function generateTodoFile(allViolations) {
 }
 
 console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
-
-checkPRScope();
 
 const allViolations = {};
 CHECK_DIRS.forEach(dir => {

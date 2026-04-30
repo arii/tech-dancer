@@ -14,11 +14,11 @@ export function FormField({ label, error, children }: FormFieldProps) {
   return (
     <Stack gap={2} marginBottom={6}>
       <Box display="flex" justify="between" align="center">
-        <Text as="label" htmlFor={id} variant="mono" size="xs" weight="font-semibold" color="dim" tracking="widest" uppercase>
+        <Text as="label" htmlFor={id} variant="mono" size="xs" weight="font-semibold" intent="dim"  uppercase>
           {label}
         </Text>
         {error && (
-          <Text id={errorId} variant="mono" weight="font-semibold" color="error" size="xs" role="alert">
+          <Text id={errorId} variant="mono" weight="font-semibold" intent="danger" size="xs" role="alert">
             {error}
           </Text>
         )}

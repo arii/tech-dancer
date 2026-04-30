@@ -29,7 +29,7 @@ export default function Toolbox() {
         />
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
           <Box position="relative" maxWidth="2xl" flex={1}>
             <Box
               as="input"
@@ -86,7 +86,7 @@ export default function Toolbox() {
 
       {allFilteredItems.length === 0 && (
         <Box paddingY={20} className="text-center">
-          <Text color="dim">No gear found matching your search.</Text>
+          <Text intent="dim">No gear found matching your search.</Text>
         </Box>
       )}
     </Box>

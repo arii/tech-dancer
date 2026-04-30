@@ -20,7 +20,7 @@ function CompetitionTrendChart() {
           <Text variant="mono" size="micro" weight="font-bold">WCS COMPETITION TRENDS (INDEXED)</Text>
           <Box display="flex" align="center" gap={1.5}>
             <Box className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <Text variant="mono" size="micro" color="accent" weight="font-bold">LIVE DATA</Text>
+            <Text variant="mono" size="micro" intent="accent" weight="font-bold">LIVE DATA</Text>
           </Box>
         </Box>
         <Box
@@ -66,8 +66,8 @@ function CompetitionTrendChart() {
           </svg>
         </Box>
         <Box display="flex" justify="between" border="t" paddingTop={2} className="border-line/30">
-          <Text variant="mono" size="micro" color="dim">JAN 2024</Text>
-          <Text variant="mono" size="micro" color="dim">DEC 2024</Text>
+          <Text variant="mono" size="micro" intent="dim">JAN 2024</Text>
+          <Text variant="mono" size="micro" intent="dim">DEC 2024</Text>
         </Box>
       </Stack>
     </Box>
@@ -98,7 +98,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" intent="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -115,17 +115,17 @@ export default function ResearchAnalytics() {
                 <Stack gap={6} height="full" justify="between">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="start">
-                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
+                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" intent="dim" className="group-hover:text-accent transition-colors">
                         <Search className="w-5 h-5" />
                       </Box>
-                      <Text variant="mono" size="micro" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
+                      <Text variant="mono" size="micro" intent="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
                     </Box>
                     <Stack gap={2}>
                       <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>
-                      <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
+                      <Text variant="body" size="sm" intent="dim" className="line-clamp-2">{tool.layman}</Text>
                     </Stack>
                   </Stack>
-                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
+                  <Box display="flex" align="center" gap={2} intent="dim" className="group-hover:text-accent transition-colors">
                     <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
                     <ArrowRight className="w-3 h-3" />
                   </Box>
@@ -138,7 +138,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
+            <Text variant="mono" size="xs" intent="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
 
           {studies.length > 0 ? (
@@ -147,13 +147,13 @@ export default function ResearchAnalytics() {
                 <Box key={study.slug} className="group">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
-                      <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
-                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                      <Text variant="mono" size="micro" intent="brand" uppercase>{study.category}</Text>
+                      <Text variant="mono" size="micro" intent="dim">{study.date}</Text>
                     </Box>
                     <Text variant="display" size="2xl" className="group-hover:text-accent transition-colors">
                       {study.title}
                     </Text>
-                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                    <Text variant="body" size="sm" intent="dim" className="line-clamp-3">
                       {study.excerpt}
                     </Text>
                     <Box
@@ -162,7 +162,7 @@ export default function ResearchAnalytics() {
                       display="flex"
                       align="center"
                       gap={2}
-                      color="dim"
+                      intent="dim"
                       className="group-hover:text-accent transition-colors"
                     >
                       <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
@@ -178,7 +178,7 @@ export default function ResearchAnalytics() {
                 <Database className="w-12 h-12 text-line" />
                 <Stack gap={2}>
                   <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
-                  <Text variant="body" size="sm" color="dim" maxWidth="prose">
+                  <Text variant="body" size="sm" intent="dim" maxWidth="prose">
                     Research studies are automatically ingested via the ETL pipeline.
                     New analysis runs weekly—check back soon for recent data.
                   </Text>

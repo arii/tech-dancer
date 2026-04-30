@@ -67,3 +67,61 @@ export const buttonVariants = cva(
     },
   }
 );
+
+export const textVariants = cva("", {
+  variants: {
+    variant: {
+      headline: "font-display font-bold tracking-tighter leading-[0.9]",
+      display: "font-display font-bold tracking-tight leading-none",
+      body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
+      mono: "font-mono tracking-widest uppercase",
+      utility: "font-mono tracking-[3px] uppercase",
+      label: "font-mono font-bold uppercase tracking-[2px]",
+      micro: "font-mono uppercase tracking-widest",
+      tight: "tracking-[0.15em] uppercase",
+      content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+      headerAccent: "font-mono font-bold tracking-[0.2em] uppercase text-accent",
+      sans: "font-sans",
+    },
+    intent: {
+      default: "text-text-main",
+      success: "text-accent",
+      danger: "text-error",
+      warning: "text-amber-500",
+      accent: "text-accent",
+      brand: "text-accent-navy font-bold",
+      dim: "text-text-dim",
+      body: "text-text-body",
+      white: "text-white",
+      bg: "text-bg",
+    },
+    align: {
+      left: "text-left",
+      center: "text-center",
+      right: "text-right",
+      justify: "text-justify",
+    },
+    tracking: {
+      tighter: "tracking-tighter",
+      tight: "tracking-tight",
+      normal: "tracking-normal",
+      wide: "tracking-wide",
+      wider: "tracking-wider",
+      widest: "tracking-widest",
+      "wide-editorial": "tracking-[0.2em]",
+      emphasized: "tracking-[0.15em]",
+    },
+    leading: {
+      none: "leading-none",
+      tight: "leading-tight",
+      snug: "leading-snug",
+      normal: "leading-normal",
+      relaxed: "leading-relaxed",
+      loose: "leading-loose",
+    },
+  },
+  defaultVariants: {
+    variant: "body",
+    intent: "default",
+  },
+});
