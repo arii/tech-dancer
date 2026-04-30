@@ -252,7 +252,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                       <Text variant="mono" size="xs" weight="font-bold">
                         {entry.data.title || 'Untitled Snapshot'}
                       </Text>
-                      <Text variant="mono" size="micro" color="dim">
+                      <Text variant="mono" size="micro" color="dim" data-testid="timestamp">
                         {new Date(entry.timestamp).toLocaleString()}
                       </Text>
                     </Stack>

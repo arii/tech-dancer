@@ -29,7 +29,7 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
       <Stack gap={1} flex className="py-3 min-w-0">
         <Box display="flex" align="center" gap={3}>
           <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
-          <Text variant="mono" size="micro" color="dim">{date}</Text>
+          <Text variant="mono" size="micro" color="dim" data-testid="date">{date}</Text>
         </Box>
         <Text variant="display" size="sm" weight="font-bold" className="line-clamp-1">{title}</Text>
         <Text variant="body" size="xs" color="dim" className="truncate">{excerpt}</Text>

@@ -62,8 +62,8 @@ test.describe('Visual Regression Tests', () => {
         animations: 'disabled',
         // Mask dynamic content like dates and timestamps if they appear
         mask: [
-          page.locator('text=/\\d{1,2}:\\d{2}:\\d{2}/'), // Timestamps
-          page.locator('text=/\\d{1,2}\\/\\d{1,2}\\/\\d{4}/') // Dates
+          page.getByTestId('date'),
+          page.getByTestId('timestamp')
         ]
       });
 

@@ -30,6 +30,7 @@ export default defineConfig({
         storageState: '.auth/user.json',
       },
       dependencies: ['setup'],
+      testIgnore: /auth\.setup\.ts/,
     },
   ],
   webServer: {

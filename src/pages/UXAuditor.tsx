@@ -189,7 +189,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase data-testid="timestamp">
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>

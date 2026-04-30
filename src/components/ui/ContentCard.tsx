@@ -66,7 +66,7 @@ export function ContentCard({
               {category}
             </Text>
             {date && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" data-testid="date">
                 {date}
               </Text>
             )}

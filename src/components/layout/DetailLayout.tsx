@@ -55,7 +55,7 @@ export function DetailLayout({
           {/* Header */}
           <Stack gap={4}>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
-              {category} • {date} • {rt} min read
+              {category} • <span data-testid="date">{date}</span> • {rt} min read
             </Text>
             <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
               {title}

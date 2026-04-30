@@ -148,7 +148,7 @@ export default function ResearchAnalytics() {
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
                       <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
-                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                      <Text variant="mono" size="micro" color="dim" data-testid="date">{study.date}</Text>
                     </Box>
                     <Text variant="display" size="2xl" className="group-hover:text-accent transition-colors">
                       {study.title}
