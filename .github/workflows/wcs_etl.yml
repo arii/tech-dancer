@@ -28,6 +28,7 @@ jobs:
           pip install -r etl/requirements.txt
 
       - name: Cache Playwright Browsers
+        id: cache-playwright
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
@@ -36,6 +37,7 @@ jobs:
             playwright-etl-${{ runner.os }}-chromium-
 
       - name: Install Playwright Chromium
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
         run: playwright install chromium
 
       - name: Run Pytest (Data Validation)
