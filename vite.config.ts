@@ -5,7 +5,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import Inspect from 'vite-plugin-inspect';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
-import { VitePWA } from 'vite-plugin-pwa';
 import Sitemap from 'vite-plugin-sitemap';
 import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
 import { routes } from './src/config/routes';
@@ -21,16 +20,6 @@ export default defineConfig(({mode}) => {
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
   // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
   const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
-
-  const resolveHostname = () => {
-    if (env.VITE_APP_URL) return env.VITE_APP_URL;
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    if (isVercel) return 'https://tech-dancer.vercel.app';
-    return 'https://arii.github.io';
-  };
-
-  const hostname = resolveHostname().replace(/\/$/, '');
-  const fullAppUrl = new URL(base, hostname).href.replace(/\/$/, '');
 
   // Automatically discover dynamic routes from config/routes.ts and content directories
   const dynamicRoutes = [
@@ -53,16 +42,14 @@ export default defineConfig(({mode}) => {
       chunkSizeWarningLimit: 400,
     },
     define: {
-      'process.env.APP_URL': JSON.stringify(fullAppUrl),
-      'import.meta.env.VITE_APP_URL': JSON.stringify(fullAppUrl),
+      'process.env.APP_URL': JSON.stringify(process.env.VITE_APP_URL || ''),
     },
     plugins: [
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: hostname,
-        dynamicRoutes: dynamicRoutes.map(route => path.posix.join(base, route).replace(/\/$/, '') || '/'),
-        generateRobotsTxt: false,
+        hostname: (env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, ''),
+        dynamicRoutes, generateRobotsTxt: false,
       }),
       ViteImageOptimizer({
         includePublic: true,
@@ -81,48 +68,6 @@ export default defineConfig(({mode}) => {
         svg: {
           multipass: true,
         },
-      }),
-      VitePWA({
-        registerType: 'autoUpdate',
-        manifest: {
-          name: 'Tech-Dancer',
-          short_name: 'TechDancer',
-          description: "The Roboticist's Guide to WCS",
-          theme_color: '#1A2B3C',
-        },
-        workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            }
-          ]
-        }
       }),
       analyze && visualizer({
         open: false,

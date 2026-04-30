@@ -46,35 +46,26 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      actions: write
     steps:
-      - name: Resolve PR details
-        if: env.PR_NUMBER && env.PR_NUMBER != '0'
+      - name: Resolve PR details (issue_comment)
+        if: github.event_name == 'issue_comment'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          PR_INFO=$(gh api "repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }}")
+          PR_INFO=$(gh api "repos/${GH_REPO}/pulls/${{ github.event.issue.number }}")
 
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-
-          # Read cleanly via jq and write to environment file securely using randomized EOF
+          # Read cleanly via jq and write to environment file securely using EOF
           {
-            echo "SOURCE<<$EOF"
+            echo 'SOURCE<<EOF'
             echo "$PR_INFO" | jq -r '.head.ref'
-            echo "$EOF"
-            echo "TARGET<<$EOF"
+            echo 'EOF'
+            echo 'TARGET<<EOF'
             echo "$PR_INFO" | jq -r '.base.ref'
-            echo "$EOF"
-            echo "HEAD_REPO<<$EOF"
+            echo 'EOF'
+            echo 'HEAD_REPO<<EOF'
             echo "$PR_INFO" | jq -r '.head.repo.full_name'
-            echo "$EOF"
-            echo "ORIGINAL_TITLE<<$EOF"
-            echo "$PR_INFO" | jq -r '.title'
-            echo "$EOF"
-            echo "ORIGINAL_BODY<<$EOF"
-            echo "$PR_INFO" | jq -r '.body'
-            echo "$EOF"
+            echo 'EOF'
           } >> "$GITHUB_ENV"
 
       - name: Create or update comment
@@ -180,32 +171,14 @@ jobs:
           echo "resolved_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
           # Create a pull request in the base repository against the target branch to suggest the fix
-          if [ "$ORIGINAL_BODY" = "null" ] || [ -z "$ORIGINAL_BODY" ]; then
-            ORIGINAL_BODY="This PR suggests a resolution for the merge conflicts."
-          fi
-
-          PR_TITLE="[Auto-Resolved] ${ORIGINAL_TITLE:-"Auto-resolve merge conflicts from ${TARGET} for ${SOURCE}"}"
-          PR_BODY="$ORIGINAL_BODY
-
-          ---
-          *Note: This PR was automatically generated to resolve merge conflicts from ${TARGET}.*"
-
           PR_URL=$(gh pr create \
             --repo "${{ github.repository }}" \
             --head "$RESOLVE_BRANCH" \
             --base "$TARGET" \
-            --title "$PR_TITLE" \
-            --body "$PR_BODY")
+            --title "Auto-resolve merge conflicts from ${TARGET} for ${SOURCE}" \
+            --body "This PR suggests a resolution for the merge conflicts. Please review and merge it to resolve the conflicts for the original PR.")
 
           echo "pr_url=${PR_URL}" >> $GITHUB_OUTPUT
-
-          # Manually trigger workflows to run on the new PR
-          gh workflow run ci.yml --ref "$RESOLVE_BRANCH" || true
-          gh workflow run lint.yml --ref "$RESOLVE_BRANCH" || true
-          gh workflow run smoke-tests.yml --ref "$RESOLVE_BRANCH" || true
-          gh workflow run codeql.yml --ref "$RESOLVE_BRANCH" || true
-          gh workflow run conflict-check.yml --ref "$RESOLVE_BRANCH" || true
-
         id: commit_push
 
       - name: Update comment on success

@@ -60,4 +60,3 @@ etl/data/*.parquet
 package-lock.json
 yarn.lock
 public/data
-link-validation-report.md

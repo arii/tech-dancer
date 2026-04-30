@@ -1,7 +1,5 @@
-import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 interface SEOProps {
   title: string;
@@ -9,7 +7,6 @@ interface SEOProps {
   type?: 'website' | 'article' | 'profile';
   image?: string;
   canonical?: string;
-  schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 export function SEO({
@@ -17,31 +14,17 @@ export function SEO({
   description,
   type = 'website',
   image,
-  canonical,
-  schema
+  canonical
 }: SEOProps) {
   const { pathname } = useLocation();
 
-  const url = canonical || `${BASE_URL}${pathname}`;
-  const displayTitle = `${title} | ${SITE_NAME}`;
+  // Base URL logic - adjust to match your deployment
+  const baseUrl = import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer';
+  const url = canonical || `${baseUrl}${pathname}`;
+  const displayTitle = `${title} | TechDancer`;
 
-  const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
-
-  // Use a dynamic OG image generator if no specific image is provided for articles
-  // Removed Vercel logos to better align with TechDancer brand
-  const seoImage = image || (type === 'article'
-    ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px`
-    : defaultImage);
-
-  const serializedSchema = useMemo(() => {
-    if (!schema) return null;
-    try {
-      return JSON.stringify(schema);
-    } catch (e) {
-      console.error('Failed to serialize Schema.org markup:', e);
-      return null;
-    }
-  }, [schema]);
+  const defaultImage = `${baseUrl}/assets/comp_analysis_hero.webp`;
+  const seoImage = image || defaultImage;
 
   return (
     <Helmet>
@@ -63,13 +46,6 @@ export function SEO({
       <meta name="twitter:title" content={displayTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={seoImage} />
-
-      {/* Structured Data */}
-      {serializedSchema && (
-        <script type="application/ld+json">
-          {serializedSchema}
-        </script>
-      )}
     </Helmet>
   );
 }

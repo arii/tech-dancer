@@ -29,6 +29,11 @@ const PROFILE_DATA: ProfileData = {
       { label: "EDUCATION", value: "PhD in Computer Science, MIT" },
       { label: "FOCUS", value: "Robotics // AI // Data Analytics" },
       { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
+    ],
+    socialLinks: [
+      { platform: 'instagram', url: 'https://instagram.com' },
+      { platform: 'linkedin', url: 'https://linkedin.com' },
+      { platform: 'github', url: 'https://github.com' },
     ]
 };
 

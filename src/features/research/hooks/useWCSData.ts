@@ -53,29 +53,30 @@ export function useWCSData() {
   }, [data, searchTerm, filterPromoted]);
 
   const { scoreDistribution, trendData } = useMemo(() => {
-    const bins: Record<string, number> = {};
-    const byDate: Record<string, { total: number; count: number }> = {};
+    const bins = new Map<string, number>();
+    const byDate = new Map<string, { total: number; count: number }>();
 
-    filteredData.forEach((r) => {
+    for (const r of filteredData) {
       // Score Distribution
       const bin = Math.floor(r.Registry_Points_Sum).toString();
-      bins[bin] = (bins[bin] || 0) + 1;
+      bins.set(bin, (bins.get(bin) || 0) + 1);
 
       // Trend Analysis
       const parts = r.event_date.split('/');
       if (parts.length >= 3) {
         const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
-        if (!byDate[monthYear]) byDate[monthYear] = { total: 0, count: 0 };
-        byDate[monthYear].total += r.Registry_Points_Sum;
-        byDate[monthYear].count += 1;
+        const stats = byDate.get(monthYear) || { total: 0, count: 0 };
+        stats.total += r.Registry_Points_Sum;
+        stats.count += 1;
+        byDate.set(monthYear, stats);
       }
-    });
+    }
 
-    const calculatedScoreDistribution = Object.entries(bins)
+    const calculatedScoreDistribution = Array.from(bins.entries())
       .map(([score, count]) => ({ score: Number(score), count }))
       .sort((a, b) => a.score - b.score);
 
-    const calculatedTrendData = Object.entries(byDate)
+    const calculatedTrendData = Array.from(byDate.entries())
       .map(([date, stats]) => ({
         date,
         avg: Number((stats.total / stats.count).toFixed(2)),

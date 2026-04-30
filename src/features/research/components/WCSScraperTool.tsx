@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import {
   Search,
   Download,
@@ -73,7 +74,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
 function WCSExportConsole({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
-  const handleExportPDF = () => {
+  const handleExportPDF = useCallback(() => {
     exportPDF({
       title: 'WCS Prelim Scoring Analysis',
       filename: 'wcs_prelims',
@@ -86,7 +87,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
         r.Promoted ? 'YES' : 'NO'
       ])
     });
-  };
+  }, [data, exportPDF]);
 
   return (
     <Box border surface="default" padding="card">
