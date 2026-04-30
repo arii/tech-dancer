@@ -98,7 +98,7 @@ export default function FolioGrid({
                 key={item.slug}
                 border="r"
                 padding={{ base: 6, lg: 6 }}
-                className="hover:bg-card-bg transition-colors group border-b border-line"
+                className="hover:bg-card-bg transition-colors border-b border-line group"
               >
                 <ContentCard
                   {...item}
