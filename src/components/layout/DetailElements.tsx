@@ -32,9 +32,8 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
     >
       <Box
         display="flex"
-        flexDirection="row"
-        flexWrap="wrap"
-        className="w-full divide-x-0 md:divide-x divide-line/30 gap-y-6 md:gap-y-0"
+        wrap
+        className="w-full divide-x-0 md:divide-x divide-line/30 gap-y-6 md:gap-y-0 flex-row"
       >
         {children}
       </Box>

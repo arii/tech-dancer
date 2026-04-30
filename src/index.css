@@ -85,6 +85,9 @@
   /* Font Sizes */
   --text-micro: 9px;
   --text-tiny: 10px;
+
+  /* Letter Spacing */
+  --tracking-wide-editorial: 0.2em;
 }
 
 @layer utilities {
