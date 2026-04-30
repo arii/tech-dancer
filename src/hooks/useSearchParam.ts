@@ -1,5 +1,5 @@
-import { useSearchParams } from 'react-router-dom';
-import { useCallback } from 'react';
+import { useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 
 /**
  * A hook to manage a single URL search parameter.

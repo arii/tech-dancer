@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,

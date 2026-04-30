@@ -1,4 +1,5 @@
 import { useRef, useLayoutEffect } from 'react';
+import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
