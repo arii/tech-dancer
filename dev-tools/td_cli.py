@@ -284,9 +284,17 @@ def handle_audit_pr(args):
         files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
         if files_to_audit:
             try:
-                proc = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--json"] + files_to_audit, capture_output=True, text=True)
+                # Use pnpm run audit as requested, passing targets after --
+                proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, capture_output=True, text=True)
                 if proc.stdout:
-                    audit_data = json.loads(proc.stdout)
+                    # pnpm might add some noise to stdout before/after the actual JSON if not careful,
+                    # but our script uses process.stdout.write for JSON.
+                    # We try to find the JSON part if there's noise.
+                    output = proc.stdout
+                    if "{" in output:
+                        json_start = output.find("{")
+                        json_end = output.rfind("}") + 1
+                        audit_data = json.loads(output[json_start:json_end])
                     for filepath, violations in audit_data.items():
                         for v in violations:
                             auto_findings.append({
@@ -349,7 +357,7 @@ def handle_pre_submit(args):
             if proc.returncode != 0 and not ignore_failure: raise subprocess.CalledProcessError(proc.returncode, cmd)
             return proc
 
-        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"], ignore_failure=True)
+        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
 
