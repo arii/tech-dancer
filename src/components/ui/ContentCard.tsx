@@ -96,7 +96,7 @@ export function ContentCard({
             <Text variant="mono" size="xs" weight="font-bold" tracking="wider" className="text-accent">
               Read Article
             </Text>
-            <Box className="w-0 h-[1px] bg-accent group-hover:w-6 transition-all duration-500" />
+            <Box className="w-0 h-px bg-accent group-hover:w-6 transition-all duration-500" />
             <Text variant="mono" size="xs" className="text-accent ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
               →
             </Text>

@@ -1,5 +1,5 @@
 import { getResources } from '@/lib/content';
-import { useMemo } from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { safeSearch } from '@/lib/utils';

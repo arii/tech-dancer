@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 interface HeroPathCardProps {
   title: string;
   wrapperClass: string;
+  image: string;
   titleClass: string;
   scanlineDelay?: string;
   links: { text: string; to: string }[];
@@ -17,6 +18,7 @@ interface HeroPathCardProps {
 export function HeroPathCard({
   title,
   wrapperClass,
+  image,
   titleClass,
   scanlineDelay,
   links,
@@ -37,9 +39,23 @@ export function HeroPathCard({
       onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className={cn(
+            "w-full h-full object-cover transition-transform duration-700 ease-in-out",
+            isHovered ? "scale-105" : "scale-100"
+          )}
+        />
+      </div>
+
       {/* Scanline */}
       <div
-        className={`absolute left-0 top-0 w-full h-[2px] bg-accent shadow-[0_0_15px_#FF7F50] z-10 pointer-events-none transition-opacity duration-500 ${
+        className={`absolute left-0 top-0 w-full h-0.5 bg-accent shadow-[0_0_15px_var(--color-accent-shadow)] z-10 pointer-events-none transition-opacity duration-500 ${
           scanlineDelay || ''
         } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
       ></div>
@@ -67,7 +83,7 @@ export function HeroPathCard({
               <>
                 <span className="relative">
                   {link.text}
-                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover/link:w-full" />
+                  <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover/link:w-full" />
                 </span>
                 <span className="text-accent opacity-0 -translate-x-2 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300">
                   →

@@ -1,5 +1,6 @@
 import { LayoutGrid, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Box } from '@/layouts/Primitives';
 
 export type ViewMode = 'card' | 'list';
 
@@ -10,7 +11,7 @@ interface ViewToggleProps {
 
 export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
-    <div className="flex border border-line rounded-none overflow-hidden">
+    <Box display="flex" border radius="none" overflow="hidden">
       {(['card', 'list'] as ViewMode[]).map((v) => (
         <button
           key={v}
@@ -26,6 +27,6 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           {v === 'card' ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
         </button>
       ))}
-    </div>
+    </Box>
   );
 }
