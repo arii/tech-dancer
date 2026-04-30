@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon, Shield } from 'lucide-react';
 
@@ -11,7 +12,7 @@ interface ScoreItemProps {
 
 export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
-    <Stack gap={1} align="center" className="flex-1 px-4 py-2">
+    <Stack gap={1} align="center" className="flex-1 px-4 py-2 min-w-[120px]">
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
       <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
@@ -21,7 +22,7 @@ export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItem
   );
 }
 
-export function ScoreGrid({ children }: { children: React.ReactNode }) {
+export function ScoreGrid({ children }: { children: ReactNode }) {
   return (
     <Box
       border="y"
@@ -32,7 +33,8 @@ export function ScoreGrid({ children }: { children: React.ReactNode }) {
       <Box
         display="flex"
         flexDirection="row"
-        className="w-full divide-x divide-line/30"
+        flexWrap="wrap"
+        className="w-full divide-x-0 md:divide-x divide-line/30 gap-y-6 md:gap-y-0"
       >
         {children}
       </Box>

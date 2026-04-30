@@ -19,8 +19,23 @@ export default defineConfig(({mode}) => {
   const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
-  // Use VITE_BASE_PATH if specified (crucial for branch deployments), otherwise fallback to standard paths
-  const base = process.env.VITE_BASE_PATH || (isVercel ? '/' : (isGHAction || isProd ? '/tech-dancer/' : '/'));
+
+  // Determine the GitHub branch for base path constructing
+  const ghBranch = process.env.GITHUB_REF_NAME;
+  const isMainBranch = ghBranch === 'main' || !ghBranch;
+  
+  // Use VITE_BASE_PATH if specified, otherwise construct based on environment
+  let base = process.env.VITE_BASE_PATH;
+  if (!base) {
+    if (isVercel) {
+      base = '/';
+    } else if (isGHAction || isProd) {
+      // If we're on a branch other than main in GH Actions, include the branch name in the base path
+      base = isMainBranch ? '/tech-dancer/' : `/tech-dancer/${ghBranch}/`;
+    } else {
+      base = '/';
+    }
+  }
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
@@ -89,39 +104,21 @@ export default defineConfig(({mode}) => {
           short_name: 'TechDancer',
           description: "The Roboticist's Guide to WCS",
           theme_color: '#1A2B3C',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            }
+          ]
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            }
-          ]
         }
       }),
       analyze && visualizer({
