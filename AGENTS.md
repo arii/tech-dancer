@@ -44,6 +44,41 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 - Navigation uses route config (not hardcoded)
 - Do NOT use `HashRouter`.
 
+## 23. 🤝 Collaborative GitHub Workflows
+
+The `dev-tools/td_cli.py` tool handles repository automation and PR reviews.
+
+**Step 1 — Generate a review context:**
+```bash
+python3 dev-tools/td_cli.py fetch-review <PR_NUMBER>
+# Outputs to dev-tools/logs/reviews/pr-context-<PR>.md
+```
+
+**Step 2 — Perform an AI Audit:**
+```bash
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
+```
+
+**Step 3 — Submit the review:**
+```bash
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup
+```
+
+**Other commands:**
+- `python3 dev-tools/td_cli.py conflicts`: Detect merge conflicts.
+- `python3 dev-tools/td_cli.py pre-submit`: Run all quality gates.
+- `python3 dev-tools/td_cli.py status-board`: Active agent dashboard.
+
+**Code Review Standards (anti-bloat):**
+When reviewing, evaluate EVERY changed file against these criteria:
+1. **Dead abstractions** — Is a new class/context/hook solving a problem that a simpler primitive already handles?
+2. **Unnecessary indirection** — Does this add a layer where a direct call would do?
+3. **Responsibility creep** — Is a component taking on logic that belongs in a hook or a parent?
+4. **Import bloat** — Are `React` default imports added unnecessarily (not needed in React 17+)?
+5. **Token compliance** — Are design tokens used, or is raw Tailwind/inline style leaking in?
+6. Post an inline comment on the most critical line of each file changed.
+
+
 ## 10. 🎞 Motion Must Use Tokens
 - Motion values come from `motionTokens`
 
@@ -87,6 +122,7 @@ To minimize merge conflicts when multiple agents work simultaneously:
 1. **Verify Before Pushing**: Always run `python3 dev-tools/td_cli.py pre-submit` locally. It includes a conflict check against other open PRs.
 2. **Atomic Commits**: Keep changes focused and atomic.
 3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`).
+
 
 ## 23. Pull Request & Submission Protocol
 - **Local Validation**: You MUST run `python3 dev-tools/td_cli.py pre-submit` and ensure it passes before opening a PR.
