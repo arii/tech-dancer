@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { getPosts } from '@/lib/content';

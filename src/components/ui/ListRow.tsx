@@ -23,7 +23,7 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
       className="group hover:bg-surface/50 transition-colors"
     >
       <Box className="w-1 self-stretch bg-accent shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-      <Box className="w-12 h-12 m-3 shrink-0 rounded-none overflow-hidden flex items-center justify-center">
+      <Box width={12} height={12} margin={3} shrink={0} radius="none" overflow="hidden" display="flex" align="center" justify="center">
         <CategoryPlaceholder category={category} size="md" />
       </Box>
       <Stack gap={1} flex className="py-3 min-w-0">
