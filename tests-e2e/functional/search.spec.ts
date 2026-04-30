@@ -1,13 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Global Search Modal', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Mobile search is handled in search_mobile.spec.ts');
     await page.goto('./');
-    await page.waitForLoadState('networkidle');
+    await expect(page.getByRole('navigation', { name: 'Main Navigation' })).toBeVisible();
   });
 
   test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
+    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+
     await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
@@ -17,7 +20,10 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when clicking on backdrop', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
+    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+
+    await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.getByTestId('search-backdrop').click({ force: true });
@@ -25,18 +31,24 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
+    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+
+    await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.goto('./gear');
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('main')).toBeVisible();
 
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
     await expect(page).toHaveURL(/.*gear/);
   });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
+    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+
+    await searchButton.click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await searchInput.fill('ai');
 
@@ -50,12 +62,18 @@ test.describe('Global Search Modal', () => {
 
 test.describe('Search and Filter URL Persistence', () => {
 
-  test('Global Search parameter should persist after reload', async ({ page }) => {
+  test('Global Search parameter should persist after reload', async ({ page, isMobile }) => {
     await page.goto('./');
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#root')).toBeVisible();
 
-    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButton.click();
+    if (isMobile) {
+      // On mobile, the search button is in the menu overlay
+      await page.getByRole('button', { name: /open menu/i }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      const nav = page.getByRole('navigation', { name: 'Main Navigation' });
+      await nav.getByRole('button', { name: 'Search' }).click();
+    }
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
     await expect(searchInput).toBeVisible();
@@ -63,7 +81,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(page).toHaveURL(/q=swing/);
 
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#root')).toBeVisible();
 
     // The modal should open automatically because 'search=true' is in the URL
     // No need to click the search button again.
@@ -76,17 +94,18 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(resultsText).not.toHaveText('0 RESULTS FOUND', { timeout: 10000 });
   });
 
-  test('Blog category filter should persist after reload', async ({ page }) => {
+  test('Blog category filter should persist after reload', async ({ page, isMobile }) => {
     await page.goto('./blog');
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('main')).toBeVisible();
 
+    // On mobile, category buttons might be hidden or in a different container, but they should be visible in FilterBar
     const categoryButton = page.getByRole('button', { name: 'Tech Portfolio', exact: true }).or(page.getByRole('button', { name: 'Tech Portfolio' }).first());
     if (await categoryButton.isVisible()) {
       await categoryButton.click();
       await expect(page).toHaveURL(/category=Tech[+%20]Portfolio/);
 
       await page.reload();
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator('main')).toBeVisible();
 
       const categoryButtonReload = page.getByRole('button', { name: 'Tech Portfolio', exact: true }).or(page.getByRole('button', { name: 'Tech Portfolio' }).first());
       await expect(categoryButtonReload).toHaveClass(/bg-text-main/);
@@ -95,7 +114,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
   test('Blog search term should persist after reload', async ({ page }) => {
     await page.goto('./blog');
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('main')).toBeVisible();
 
     const searchInput = page.getByPlaceholder(/Search posts/i);
     if (await searchInput.isVisible()) {
@@ -103,7 +122,7 @@ test.describe('Search and Filter URL Persistence', () => {
       await expect(page).toHaveURL(/search=west/i);
 
       await page.reload();
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator('main')).toBeVisible();
 
       const searchInputReload = page.getByPlaceholder(/Search posts/i);
       await expect(searchInputReload).toHaveValue('west');
@@ -112,7 +131,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
   test('Gear search term should persist after reload', async ({ page }) => {
     await page.goto('./gear');
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('main')).toBeVisible();
 
     const searchInput = page.getByPlaceholder(/Search gear/i);
     await expect(searchInput).toBeVisible();
@@ -120,7 +139,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(page).toHaveURL(/search=shoes/i);
 
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('main')).toBeVisible();
 
     const searchInputReload = page.getByPlaceholder(/Search gear/i);
     await expect(searchInputReload).toHaveValue('shoes');

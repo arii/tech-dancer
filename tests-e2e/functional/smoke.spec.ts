@@ -28,14 +28,14 @@ test.beforeEach(async ({ page }) => {
 
 test('homepage loads without console errors', async ({ page }) => {
   await page.goto('./');
-  await page.waitForLoadState('networkidle');
+  await expect(page.locator('#root')).toBeVisible();
   const errors = getPageErrors(page);
   expect(errors.filter(e => !e.includes("Stack is not defined"))).toHaveLength(0);
 });
 
 test('all nav links are reachable and error-free', async ({ page }) => {
   await page.goto('./');
-  await page.waitForLoadState('networkidle');
+  await expect(page.locator('#root')).toBeVisible();
 
   const links = await page.$$eval('nav a[href]', (anchors) =>
     anchors
@@ -48,7 +48,7 @@ test('all nav links are reachable and error-free', async ({ page }) => {
     errors.length = 0;
 
     const response = await page.goto(href);
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#root')).toBeVisible();
     expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
     expect(errors.filter(e => !e.includes("Stack is not defined")), `Console errors at ${href}: ${errors.join(', ')}`).toHaveLength(0);
   }
@@ -59,10 +59,7 @@ test('all post/content pages load without errors', async ({ page }) => {
 
   for (const index of contentIndexes) {
     await page.goto(index);
-    const exists = await page.$('main');
-    if (!exists) continue;
-
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('main')).toBeVisible();
 
     const contentLinks = await page.$$eval('a[href]', (anchors) =>
       anchors
@@ -76,7 +73,7 @@ test('all post/content pages load without errors', async ({ page }) => {
       errors.length = 0;
 
       const response = await page.goto(href);
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator('main')).toBeVisible();
 
       expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
       expect(

@@ -6,7 +6,6 @@ test.describe('Visual Regression Tests with Percy', () => {
   for (const route of TEST_ROUTES) {
     test(`visual snapshot for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
-      await page.waitForLoadState('networkidle');
 
       // Ensure the main content is loaded
       await expect(page.locator('#root')).toBeVisible();

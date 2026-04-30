@@ -7,13 +7,12 @@ test.describe('Accessibility audits', () => {
     test(`should not have any detectable accessibility violations on ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
 
-      // Wait for content to be stable
-      await page.waitForLoadState('networkidle');
+      // Ensure the root element is visible before auditing
       await expect(page.locator('#root')).toBeVisible();
 
       const accessibilityScanResults = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        .disableRules(['color-contrast']) // Documented technical debt: Color contrast issues exist in legacy design tokens
+        .disableRules(['color-contrast']) // TODO: Resolve color contrast as per issue #402
         .analyze();
 
       expect(accessibilityScanResults.violations).toEqual([]);
