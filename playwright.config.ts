@@ -17,9 +17,19 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [
+    // Setup project
+    {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts/,
+    },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Use prepared auth state.
+        storageState: '.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
   ],
   webServer: {

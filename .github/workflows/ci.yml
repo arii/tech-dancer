@@ -35,7 +35,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -65,7 +65,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -112,13 +112,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Fix dubious ownership
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -140,16 +143,11 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Install Playwright Dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+      - name: Ensure Playwright Browsers
+        run: npx playwright install chromium
 
       - name: Run Playwright Smoke Test
-        run: pnpm run test:e2e ${{ github.event_name == 'pull_request' && '--only-changed' || '' }} --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        run: pnpm run test:e2e --shard=${{ matrix.shard }}/${{ strategy.job-total }}
         env:
           CI: true
           NODE_ENV: production
