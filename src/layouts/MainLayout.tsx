@@ -1,5 +1,4 @@
 import { useRef, useLayoutEffect } from 'react';
-import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
@@ -11,7 +10,7 @@ import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
 
-export function MainLayout({ children }: { children: ReactNode }) {
+export function MainLayout({ children }: { children: React.ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -59,14 +58,14 @@ export function MainLayout({ children }: { children: ReactNode }) {
     };
   }, [pathname, key, navType]);
 
-  const handleTouchStart = (e: TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
     };
   };
 
-  const handleTouchEnd = (e: TouchEvent) => {
+  const handleTouchEnd = (e: React.TouchEvent) => {
     if (!touchStartRef.current) return;
 
     const touchEnd = {
@@ -81,23 +80,13 @@ export function MainLayout({ children }: { children: ReactNode }) {
     if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
       // Ignore swipe if it originates from a horizontally scrollable element
       const target = e.target as HTMLElement;
-
       const isScrollable = (el: HTMLElement | null): boolean => {
         if (!el || el === e.currentTarget) return false;
-
         const style = window.getComputedStyle(el);
         const overflowX = style.getPropertyValue('overflow-x');
-        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
-
-        if (isScrollableX) {
-          // Check if we are at a boundary to allow swiping to the next page
-          // If swiping right (deltaX > 0), only block if we can scroll left (scrollLeft > 0)
-          // If swiping left (deltaX < 0), only block if we can scroll right (scrollLeft < scrollWidth - clientWidth)
-          if (deltaX > 0 && el.scrollLeft > 0) return true;
-          // Use Math.ceil for scrollWidth/clientWidth to handle fractional pixels on high-DPI screens without magic numbers
-          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
+        if ((overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth) {
+          return true;
         }
-
         return isScrollable(el.parentElement);
       };
 

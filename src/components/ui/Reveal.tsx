@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
 import { motion } from 'motion/react';
+import { ReactNode } from 'react';
 import { animation } from '@/styles/design-tokens';
 
 interface RevealProps {

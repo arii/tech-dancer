@@ -8,8 +8,7 @@ import { routes } from './App.tsx';
 import './index.css';
 
 // Register service worker for offline access
-// registerType: 'autoUpdate' in vite.config handles updates, immediate: true is optional
-registerSW({ immediate: false });
+registerSW({ immediate: true });
 
 const queryClient = new QueryClient({
   defaultOptions: {
