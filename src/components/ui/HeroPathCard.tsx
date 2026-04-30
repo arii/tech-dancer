@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 interface HeroPathCardProps {
   title: string;
   wrapperClass: string;
+  image: string;
   titleClass: string;
   scanlineDelay?: string;
   links: { text: string; to: string }[];
@@ -17,6 +18,7 @@ interface HeroPathCardProps {
 export function HeroPathCard({
   title,
   wrapperClass,
+  image,
   titleClass,
   scanlineDelay,
   links,
@@ -37,6 +39,20 @@ export function HeroPathCard({
       onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className={cn(
+            "w-full h-full object-cover transition-transform duration-700 ease-in-out",
+            isHovered ? "scale-105" : "scale-100"
+          )}
+        />
+      </div>
+
       {/* Scanline */}
       <div
         className={`absolute left-0 top-0 w-full h-0.5 bg-accent shadow-[0_0_15px_var(--color-accent-shadow)] z-10 pointer-events-none transition-opacity duration-500 ${

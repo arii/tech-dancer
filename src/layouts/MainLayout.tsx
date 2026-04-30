@@ -81,13 +81,23 @@ export function MainLayout({ children }: { children: ReactNode }) {
     if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
       // Ignore swipe if it originates from a horizontally scrollable element
       const target = e.target as HTMLElement;
+
       const isScrollable = (el: HTMLElement | null): boolean => {
         if (!el || el === e.currentTarget) return false;
+
         const style = window.getComputedStyle(el);
         const overflowX = style.getPropertyValue('overflow-x');
-        if ((overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth) {
-          return true;
+        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
+
+        if (isScrollableX) {
+          // Check if we are at a boundary to allow swiping to the next page
+          // If swiping right (deltaX > 0), only block if we can scroll left (scrollLeft > 0)
+          // If swiping left (deltaX < 0), only block if we can scroll right (scrollLeft < scrollWidth - clientWidth)
+          if (deltaX > 0 && el.scrollLeft > 0) return true;
+          // Use Math.ceil for scrollWidth/clientWidth to handle fractional pixels on high-DPI screens without magic numbers
+          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
         }
+
         return isScrollable(el.parentElement);
       };
 
