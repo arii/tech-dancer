@@ -1,8 +1,52 @@
 
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  setDoc,
+  query,
+  orderBy,
+  initializeFirestore,
+  persistentLocalCache
+} from 'firebase/firestore';
+import { throttle } from 'throttle-debounce';
+
+// --- Utilities ---
+
+/**
+ * Exponential backoff wrapper for async operations.
+ * Only retries on transient errors (network, timeout, etc.)
+ */
+async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
+  const transientErrorCodes = ['unavailable', 'deadline-exceeded', 'resource-exhausted', 'internal', 'aborted'];
+
+  let lastError: unknown;
+  for (let i = 0; i <= maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error: unknown) {
+      lastError = error;
+
+      // Check if the error is transient
+      const errorCode = (error as { code?: string })?.code;
+      const isTransient = errorCode && transientErrorCodes.includes(errorCode);
+
+      if (isTransient && i < maxRetries) {
+        const delay = baseDelay * Math.pow(2, i) + (Math.random() * 100); // add jitter
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+  throw lastError;
+}
 
 // --- Configuration & Constants ---
 const apiKey = ""; // Provided by environment
@@ -64,8 +108,17 @@ export function useUXAuditor() {
   useEffect(() => {
     if (!firebaseConfig) return;
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+    // Enable local persistence for offline support
+    try {
+      initializeFirestore(app, {
+        localCache: persistentLocalCache({})
+      });
+    } catch {
+      // ignore if already initialized
+    }
+
     const auth = getAuth(app);
-    // getFirestore(app);
 
     const initAuth = async () => {
       try {
@@ -112,7 +165,7 @@ export function useUXAuditor() {
 
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
-      let reportId = Date.now().toString();
+      const reportId = Date.now().toString();
 
       const newReport: UXReport = {
         id: reportId,
@@ -128,15 +181,9 @@ export function useUXAuditor() {
 
       if (user && firebaseConfig) {
         const db = getFirestore();
-        const newReportRef = await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'), newReport);
-        const realId = newReportRef.id;
-        newReport.id = realId;
-        setActiveReportId(realId);
-        reportId = realId;
-
-        // Update optimistic item with real ID
-        queryClient.setQueryData(['ux-reports', user.uid], (old: UXReport[] = []) =>
-          old.map(r => r.timestamp === newReport.timestamp ? { ...newReport, id: realId } : r)
+        // Use setDoc with a pre-generated ID for idempotency during retries
+        await withRetry(() =>
+          setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
         );
       }
 
@@ -174,10 +221,12 @@ export function useUXAuditor() {
 
         if (user && firebaseConfig) {
           const db = getFirestore();
-          await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-            [`findings_${vp.name.toLowerCase()}`]: analysis,
-            [`image_${vp.name.toLowerCase()}`]: mockImg
-          });
+          await withRetry(() =>
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+              [`findings_${vp.name.toLowerCase()}`]: analysis,
+              [`image_${vp.name.toLowerCase()}`]: mockImg
+            })
+          );
         }
       }
 
@@ -188,9 +237,11 @@ export function useUXAuditor() {
 
       if (user && firebaseConfig) {
         const db = getFirestore();
-        await updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-          status: 'completed'
-        });
+        await withRetry(() =>
+          updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+            status: 'completed'
+          })
+        );
       }
 
       return newReport;
@@ -200,7 +251,15 @@ export function useUXAuditor() {
     },
   });
 
-  const runUXAudit = () => auditMutation.mutate(url);
+  const throttledAudit = useRef(
+    throttle(2000, (targetUrl: string) => {
+      auditMutation.mutate(targetUrl);
+    }, { noTrailing: true })
+  );
+
+  const runUXAudit = useCallback((targetUrl: string) => {
+    throttledAudit.current(targetUrl);
+  }, []);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
