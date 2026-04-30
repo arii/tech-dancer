@@ -11,7 +11,13 @@ permissions:
 jobs:
   update-snapshots:
     name: Update Playwright Snapshots
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/update-snapshots')
+    # Only allow owners, members, or collaborators to trigger this
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '/update-snapshots') &&
+      (github.event.comment.author_association == 'OWNER' ||
+       github.event.comment.author_association == 'MEMBER' ||
+       github.event.comment.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.50.0-noble # Use noble (Ubuntu 24.04) based image

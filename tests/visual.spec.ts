@@ -59,7 +59,12 @@ test.describe('Visual Regression Tests', () => {
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.05,
-        animations: 'disabled'
+        animations: 'disabled',
+        // Mask dynamic content like dates and timestamps if they appear
+        mask: [
+          page.locator('text=/\\d{1,2}:\\d{2}:\\d{2}/'), // Timestamps
+          page.locator('text=/\\d{1,2}\\/\\d{1,2}\\/\\d{4}/') // Dates
+        ]
       });
 
       // Add ARIA snapshot for structural verification on the home page
