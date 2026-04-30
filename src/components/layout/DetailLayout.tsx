@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 
