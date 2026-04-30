@@ -45,6 +45,27 @@ REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'e
 
 # --- Shared Logic ---
 
+def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
+    """Resolves a baseline value from CLI argument, environment variable, or default file."""
+    if file_path:
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as f:
+                return int(f.read().strip() or fallback_value)
+        else:
+            # If explicit file path is provided but doesn't exist, we fallback to other sources
+            # but ideally we should probably warn. For now, following requested fallback logic.
+            pass
+
+    env_val = os.environ.get(env_var)
+    if env_val:
+        return int(env_val)
+
+    if os.path.exists(default_file):
+        with open(default_file, 'r') as f:
+            return int(f.read().strip() or fallback_value)
+
+    return fallback_value
+
 def extract_code_blocks(text: str) -> list[str]:
     return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
 
@@ -148,8 +169,8 @@ def handle_status_board(args):
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
 
 def handle_ratchet_any(args):
-    current = get_any_count(); baseline = 0
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 0)
+    current = get_any_count()
+    baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', "any-count.txt", 0)
 
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
@@ -161,15 +182,18 @@ def handle_ratchet_any(args):
         sys.exit(1)
 
     if args.update:
+    if args.update:
+        update_file = args.baseline_file or "any-count.txt"
         if not args.dry_run:
-            open(args.baseline_file, 'w').write(str(current))
+            with open(update_file, 'w') as f:
+                f.write(str(current))
         elif not args.json:
-            print(f"[DRY-RUN] Would update baseline to {current}")
+            print(f"[DRY-RUN] Would update {update_file} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
-    size = get_bundle_size(); baseline = 1000
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 1000)
+    size = get_bundle_size()
+    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 1000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -181,10 +205,13 @@ def handle_bundle_size(args):
         sys.exit(1)
 
     if args.update:
+    if args.update:
+        update_file = args.baseline_file or ".bundle-baseline"
         if not args.dry_run:
-            open(args.baseline_file, 'w').write(str(size))
+            with open(update_file, 'w') as f:
+                f.write(str(size))
         elif not args.json:
-            print(f"[DRY-RUN] Would update baseline to {size}")
+            print(f"[DRY-RUN] Would update {update_file} to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
