@@ -168,7 +168,11 @@ def handle_ratchet_any(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update: open(args.baseline_file, 'w').write(str(current))
+    if args.update:
+        if not args.dry_run:
+            open(args.baseline_file, 'w').write(str(current))
+        elif not args.json:
+            print(f"[DRY-RUN] Would update baseline to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
@@ -184,7 +188,11 @@ def handle_bundle_size(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update: open(args.baseline_file, 'w').write(str(size))
+    if args.update:
+        if not args.dry_run:
+            open(args.baseline_file, 'w').write(str(size))
+        elif not args.json:
+            print(f"[DRY-RUN] Would update baseline to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
@@ -295,38 +303,10 @@ def handle_audit_pr(args):
             subprocess.call(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"])
 
     if args.submit:
-        handle_submit_review_logic(rev_path, args.cleanup, args.dry_run, args.event, args.json)
+        from submit_review import submit_review
+        submit_review(pr_num, rev_path, cleanup=args.cleanup, dry_run=args.dry_run, event_override=args.event, is_json=args.json)
 
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
-
-def handle_submit_review_logic(filepath, cleanup, dry_run, event_override, is_json):
-    from github import Github
-    if not os.path.exists(filepath): raise CLIError(f"Review file missing: {filepath}")
-    with open(filepath) as f: content = f.read()
-    pr_num_match = re.search(r'pr-review-(\d+)\.md', filepath)
-    if not pr_num_match: raise CLIError(f"Could not parse PR number from filename: {filepath}")
-    pr_num = pr_num_match.group(1)
-
-    json_match = re.search(r'```json\n(.*?)\n```', content, re.DOTALL)
-    if not json_match: raise CLIError("Could not find JSON block in review document")
-    payload = json.loads(json_match.group(1))
-
-    token = get_github_token()
-    if not token: raise CLIError("GitHub token not found", code=401)
-    repo = Github(token).get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
-    event = event_override or ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","") else "APPROVE" if "Approved" in payload.get("body","") else "COMMENT")
-
-    if not dry_run:
-        pr.create_review(body=payload.get("body",""), comments=payload.get("comments",[]), event=event)
-        if event == "REQUEST_CHANGES":
-            labels = [l.name for l in pr.labels]
-            if "needs-design-system-fix" not in labels and any(k in payload.get("body","").lower() for k in ['tailwind', 'token']): pr.add_to_labels("needs-design-system-fix")
-        if not is_json: print(f"✅ Submitted {event} for PR #{pr_num}")
-        if cleanup:
-            if os.path.exists(filepath): os.remove(filepath)
-            ctx = filepath.replace('pr-review-','pr-context-')
-            if os.path.exists(ctx): os.remove(ctx)
-    elif not is_json: print(f"[DRY-RUN] Would submit {event} for PR #{pr_num}")
 
 def handle_pre_submit(args):
     if not args.json: print("🔍 Running pre-submission checks...")
@@ -422,20 +402,33 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr)]: # fetch-review is alias for audit-pr --fetch
+                      ("manage-reviews", handle_manage_reviews)]:
         p = subparsers.add_parser(cmd)
-        if cmd == "validate-issue": p.add_argument("--issue-number", type=int); p.add_argument("--all-open", action="store_true"); p.add_argument("--post-comments", action="store_true"); p.add_argument("--dry-run", action="store_true")
+        if cmd == "validate-issue":
+            p.add_argument("--issue-number", type=int)
+            p.add_argument("--all-open", action="store_true")
+            p.add_argument("--post-comments", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "conflicts": p.add_argument("--pr", type=int)
-        elif cmd == "ratchet-any": p.add_argument("--baseline-file", default="any-count.txt"); p.add_argument("--update", action="store_true")
-        elif cmd == "bundle-size": p.add_argument("--baseline-file", default=".bundle-baseline"); p.add_argument("--threshold", type=int, default=50); p.add_argument("--update", action="store_true")
+        elif cmd == "ratchet-any":
+            p.add_argument("--baseline-file", default="any-count.txt")
+            p.add_argument("--update", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
+        elif cmd == "bundle-size":
+            p.add_argument("--baseline-file", default=".bundle-baseline")
+            p.add_argument("--threshold", type=int, default=50)
+            p.add_argument("--update", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "migrate-tokens": p.add_argument("--find"); p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW')); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "update-issues": p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd in ["audit-pr", "fetch-review"]:
+        elif cmd == "audit-pr":
             p.add_argument("pr_number")
-            if cmd == "audit-pr":
-                p.add_argument("--fetch", action="store_true"); p.add_argument("--audit", action="store_true"); p.add_argument("--submit", action="store_true"); p.add_argument("--cleanup", action="store_true"); p.add_argument("--dry-run", action="store_true"); p.add_argument("--event"); p.add_argument("--base")
-            else:
-                p.set_defaults(fetch=True, audit=False, submit=False, cleanup=False, dry_run=False, event=None, base=None)
+            p.add_argument("--fetch", action="store_true"); p.add_argument("--audit", action="store_true"); p.add_argument("--submit", action="store_true"); p.add_argument("--cleanup", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
+            p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         p.set_defaults(func=func)
 
