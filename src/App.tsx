@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PageSkeleton } from './components/ui/PageSkeleton';
+import { GlobalErrorBoundary } from './components/GlobalErrorBoundary';
 import { routes as routeConfig } from './config/routes';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { MainLayout } from './layouts/MainLayout';
@@ -69,6 +70,7 @@ export const routes = [
   {
     path: '/',
     element: <RootLayout />,
+    errorElement: <GlobalErrorBoundary />,
     children: routeConfig.map((route) => ({
       ...route,
       // React Router children paths should be relative to parent if they don't start with /
