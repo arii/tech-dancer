@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'src/**'
-      - 'public/**'
       - 'etl/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
