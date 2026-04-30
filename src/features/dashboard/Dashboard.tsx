@@ -81,6 +81,7 @@ export default function Home() {
                 key={event.name}
                 as={motion.div}
                 variants={motionTokens.staggerItem}
+                border
                 className="border-line h-full"
               >
                 <EventCard {...event} />

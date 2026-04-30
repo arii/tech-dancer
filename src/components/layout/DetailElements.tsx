@@ -12,7 +12,7 @@ interface ScoreItemProps {
 
 export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
-    <Stack gap={1} align="center" className="flex-1 px-4 py-2 min-w-[120px]">
+    <Stack gap={1} align="center" className="flex-1 px-2 md:px-4 py-2 min-w-[100px] sm:min-w-[120px]">
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
       <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
@@ -34,7 +34,8 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
         display="flex"
         flexDirection="row"
         flexWrap="wrap"
-        className="w-full divide-x-0 md:divide-x divide-line/30 gap-y-6 md:gap-y-0"
+        justify="center"
+        className="w-full divide-x-0 md:divide-x divide-line/30 gap-y-4 md:gap-y-0"
       >
         {children}
       </Box>

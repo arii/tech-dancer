@@ -140,7 +140,7 @@ export default function UXAuditor() {
           />
           <Box
             as="button"
-            onClick={runUXAudit}
+            onClick={() => runUXAudit(url)}
             disabled={isAnalyzing}
             display="flex"
             align="center"
