@@ -67,7 +67,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '*',
-    lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
-    skeleton: 'grid'
+    lazy: () => import('@/pages/NotFound').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
   },
 ];
