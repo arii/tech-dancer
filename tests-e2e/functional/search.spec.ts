@@ -73,7 +73,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
     await page.reload();
 
-    await openSearch(page, isMobile);
+    // search should be open since ?search=true is in the URL
 
     await expect(page.getByPlaceholder(/SEARCH REPOSITORY/i)).toHaveValue('swing');
   });
