@@ -17,6 +17,10 @@
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:e2e:a11y": "playwright test tests-e2e/a11y/",
+    "test:visual": "percy exec -- playwright test tests-e2e/percy/",
+    "test:perf": "lhci collect && lhci assert",
     "audit": "node scripts/detect-antipatterns.mjs"
   },
   "dependencies": {
@@ -43,7 +47,11 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
+    "@percy/cli": "^1.31.13",
+    "@percy/playwright": "^1.1.0",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.14.0",
@@ -71,7 +79,9 @@
     "vite": "^6.4.2",
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-inspect": "^11.3.3",
-    "vite-plugin-sitemap": "^0.8.2"
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-sitemap": "^0.8.2",
+    "vitest": "^4.1.5"
   },
   "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264"
 }
