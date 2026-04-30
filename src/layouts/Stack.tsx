@@ -1,4 +1,3 @@
-import * as React from "react"
 import { forwardRef } from "react"
 import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"

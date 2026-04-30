@@ -1,4 +1,3 @@
-import * as React from "react"
 import { forwardRef, ButtonHTMLAttributes, ElementType, Ref } from "react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/lib/variants"

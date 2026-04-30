@@ -25,18 +25,18 @@ export function GlobalErrorBoundary() {
       display="flex"
       align="center"
       justify="center"
-      minHeight="[100vh]"
+      minHeight="screen"
       padding={6}
       surface="main"
     >
-      <Stack gap={8} align="center" maxWidth="[600px]" className="text-center">
+      <Stack gap={8} align="center" maxWidth="2xl" className="text-center">
         <Box
           padding={4}
           radius="full"
           emphasis="low"
           className="bg-error/10 text-error"
         >
-          <Text variant="h1" size="[48px]">⚠️</Text>
+          <Text variant="h1" size="5xl">⚠️</Text>
         </Box>
         
         <Stack gap={3}>
@@ -53,13 +53,14 @@ export function GlobalErrorBoundary() {
           radius="lg"
           surface="sunken"
           width="full"
-          className="text-left border border-line/50 overflow-auto max-h-[300px]"
+          maxHeight="[300px]"
+          className="text-left border border-line/50 overflow-auto"
         >
           <Text weight="bold" color="error" className="mb-2 block">
             {errorMessage}
           </Text>
           {!isProduction && errorDetail && (
-            <pre className="text-[12px] opacity-70 font-mono whitespace-pre-wrap">
+            <pre className="text-xs opacity-70 font-mono whitespace-pre-wrap">
               {errorDetail}
             </pre>
           )}

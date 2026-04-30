@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { Stack, Text, Box } from '@/layouts/Primitives';
 
 interface HeroPathCardProps {
   title: string;
@@ -61,13 +62,17 @@ export function HeroPathCard({
       ></div>
 
       {/* Content Container */}
-      <div className="relative z-20 p-8 md:p-16 lg:p-20 h-full flex flex-col justify-end bg-gradient-to-t from-black via-black/40 to-transparent">
-        <h2
-          className={`${titleClass} font-display font-black mb-8 text-white transition-transform duration-500 group-hover:translate-x-2 leading-[0.9] tracking-tighter`}
+      <Stack justify="end" className="relative z-20 p-8 md:p-16 lg:p-20 h-full bg-gradient-to-t from-black via-black/40 to-transparent">
+        <Text
+          as="h2"
+          variant="headline"
+          size="6xl"
+          weight="font-black"
+          className={cn(titleClass, "mb-8 text-white transition-transform duration-500 group-hover:translate-x-2")}
         >
           {title}
-        </h2>
-        <ul className="flex flex-col gap-5 mb-6 font-sans text-lg tracking-tight text-white">
+        </Text>
+        <Stack as="ul" gap={5} className="mb-6 font-sans text-lg tracking-tight text-white">
           {links.map((link, index) => {
             const isExternal = link.to.startsWith('http') || link.to.startsWith('//');
             const isPrimary = index === 0;
@@ -92,7 +97,7 @@ export function HeroPathCard({
             );
 
             return (
-              <li key={link.text}>
+              <Box as="li" key={link.text} display="flex" align="center">
                 {isExternal ? (
                   <a
                     {...commonProps}
@@ -110,11 +115,11 @@ export function HeroPathCard({
                     {linkContent}
                   </NavLink>
                 )}
-              </li>
+              </Box>
             );
           })}
-        </ul>
-      </div>
+        </Stack>
+      </Stack>
     </div>
   );
 }
