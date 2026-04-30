@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
@@ -21,19 +21,27 @@ import { throttle } from 'throttle-debounce';
 
 /**
  * Exponential backoff wrapper for async operations.
+ * Only retries on transient errors (network, timeout, etc.)
  */
 async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
+  const transientErrorCodes = ['unavailable', 'deadline-exceeded', 'resource-exhausted', 'internal', 'aborted'];
+
   let lastError: unknown;
   for (let i = 0; i <= maxRetries; i++) {
     try {
       return await fn();
-    } catch (error) {
+    } catch (error: unknown) {
       lastError = error;
-      // Only retry on network errors or transient Firestore errors if we can detect them,
-      // but for simplicity we retry all failed operations up to maxRetries.
-      if (i < maxRetries) {
+
+      // Check if the error is transient
+      const errorCode = (error as { code?: string })?.code;
+      const isTransient = errorCode && transientErrorCodes.includes(errorCode);
+
+      if (isTransient && i < maxRetries) {
         const delay = baseDelay * Math.pow(2, i) + (Math.random() * 100); // add jitter
         await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        throw error;
       }
     }
   }
@@ -243,12 +251,15 @@ export function useUXAuditor() {
     },
   });
 
-  const runUXAudit = useMemo(() =>
+  const throttledAudit = useRef(
     throttle(2000, (targetUrl: string) => {
       auditMutation.mutate(targetUrl);
-    }, { noTrailing: true }),
-    [] // Stable because auditMutation.mutate is stable
+    }, { noTrailing: true })
   );
+
+  const runUXAudit = useCallback((targetUrl: string) => {
+    throttledAudit.current(targetUrl);
+  }, []);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
