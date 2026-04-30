@@ -30,7 +30,6 @@ export default function Toolbox() {
         {/* Modern Search Bar & Toggle */}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
           <Box position="relative" maxWidth="2xl" flex={1}>
-            {/* impeccable-ignore */}
             <Box
               as="input"
               type="text"
@@ -42,8 +41,7 @@ export default function Toolbox() {
               paddingY={4}
               variant="mono"
               size="sm"
-              // impeccable-ignore
-              className="pl-12 focus:border-accent outline-none focus:ring-0"
+              className="search-input-padding focus:border-accent outline-none focus:ring-0"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />

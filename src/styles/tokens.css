@@ -74,4 +74,7 @@
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+
+  /* Search Input Spacing */
+  --raw-spacing-search-icon: 3rem;
 }
