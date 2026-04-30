@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { tableFromIPC } from 'apache-arrow';
-import { readParquet } from 'parquet-wasm';
+import { parquetReadObjects } from 'hyparquet';
 
 export interface WCSRecord {
   Dancer_ID: string;
@@ -22,18 +21,11 @@ export function useWCSData() {
     const loadData = async () => {
       try {
         const res = await fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`);
-        const buffer = await res.arrayBuffer();
-        const uint8Array = new Uint8Array(buffer);
-        const wasmTable = readParquet(uint8Array);
-        const table = tableFromIPC(wasmTable.intoIPCStream());
+        const arrayBuffer = await res.arrayBuffer();
 
-        const json = table.toArray().map(row => {
-          if (row && typeof row === 'object' && 'toJSON' in row && typeof row.toJSON === 'function') {
-            return row.toJSON();
-          }
-          return row;
-        });
-        setData(json as unknown as WCSRecord[]);
+        const objects = await parquetReadObjects({ file: arrayBuffer });
+
+        setData(objects as unknown as WCSRecord[]);
         setIsLoading(false);
       } catch (err) {
         console.error("Failed to load WCS data:", err);
