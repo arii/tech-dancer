@@ -89,99 +89,92 @@ function checkFile(filepath) {
     return low;
   };
 
-  // 1. Multi-line and General Rules (Global Scanner)
-  const compiledRules = CONFIG.rules
-    .filter(r => !r.isClassNameRule)
-    .map(r => ({
-      ...r,
-      regex: new RegExp(r.pattern.source, r.name === 'div Layout' ? 'gs' : 'g')
-    }));
-
-  compiledRules.forEach(rule => {
-    const matches = content.matchAll(rule.regex);
-    for (const match of matches) {
-      const lineNum = getLineNumber(match.index);
-
-      // Check for impeccable-ignore on that line
-      const line = content.split('\n')[lineNum - 1];
-      if (line.includes('// impeccable-ignore')) continue;
-
-      violations.push({
-        line: lineNum,
-        pattern: rule.name,
-        severity: rule.severity || 'minor',
-        value: match[0].length > 60 ? match[0].substring(0, 60).replace(/\s+/g, ' ') + '...' : match[0].replace(/\s+/g, ' '),
-        message: rule.message
-      });
-    }
-  });
-
-  // 2. ClassName Specific Rules (Line-by-Line for Granularity)
+  // Pre-compiled rules and helper utilities
   const lines = content.split('\n');
-  lines.forEach((line, lineIdx) => {
-    const lineNum = lineIdx + 1;
-    if (line.includes('// impeccable-ignore')) return;
+  const layoutRule = CONFIG.rules.find(r => r.name === 'Raw Layout/Spacing');
+  const suggestionsEntries = Object.entries(LAYOUT_SUGGESTIONS);
 
-    const classNameMatches = line.matchAll(/className=["'](.*?)["']/g);
-    for (const cnMatch of classNameMatches) {
-      const classStr = cnMatch[1];
-      const classes = classStr.split(/\s+/);
+  // 1. Multi-line and General Rules (Global Scanner)
+  CONFIG.rules
+    .filter(r => !r.isClassNameRule)
+    .forEach(rule => {
+      const regex = new RegExp(rule.pattern.source, rule.name === 'div Layout' ? 'gs' : 'g');
+      const matches = content.matchAll(regex);
 
-      classes.forEach(cls => {
-        // Raw Layout/Spacing
-        const layoutRule = CONFIG.rules.find(r => r.name === 'Raw Layout/Spacing');
-        if (layoutRule.pattern.test(cls)) {
-          violations.push({
-            line: lineNum,
-            pattern: layoutRule.name,
-            severity: layoutRule.severity || 'minor',
-            value: cls,
-            message: layoutRule.message
-          });
-        }
+      for (const match of matches) {
+        const lineNum = getLineNumber(match.index);
+        if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
-        // Colors check
-        if (/\b(bg-|text-)\b/.test(cls)) {
-          const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
-          if (colorMatch) {
-            const prefix = colorMatch[1];
-            const baseColor = colorMatch[2].split('/')[0];
-            const fullToken = `${prefix}-${baseColor}`;
-            const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
-                              CONFIG.allowedColors.includes(fullToken) ||
-                              CONFIG.allowedTextUtils.includes(baseColor) ||
-                              CONFIG.allowedTextSizes.includes(baseColor);
+        violations.push({
+          line: lineNum,
+          pattern: rule.name,
+          severity: rule.severity || 'minor',
+          value: match[0].length > 60 ? match[0].substring(0, 60).replace(/\s+/g, ' ') + '...' : match[0].replace(/\s+/g, ' '),
+          message: rule.message
+        });
+      }
+    });
 
-            // Special case for hex values which are caught by separate rule but should be flagged here too if they leaked
-            if (!isAllowed) {
-              violations.push({
-                line: lineNum,
-                pattern: 'Non-token Color/Size',
-                severity: 'minor',
-                value: cls,
-                message: `Class '${cls}' uses a value that is not a recognized design token.`
-              });
-            }
-          }
-        }
-      });
+  // 2. ClassName Specific Rules (Global Scanner)
+  for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
+    const lineNum = getLineNumber(match.index);
+    if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
-      // Layout Suggestions
-      Object.entries(LAYOUT_SUGGESTIONS).forEach(([pattern, suggestion]) => {
-        if (classStr.includes(pattern)) {
-          if (!violations.find(v => v.line === lineNum && v.pattern === 'Layout Suggestion')) {
+    const classStr = match[1];
+    const classes = classStr.split(/\s+/);
+
+    classes.forEach(cls => {
+      // Raw Layout/Spacing
+      if (layoutRule.pattern.test(cls)) {
+        violations.push({
+          line: lineNum,
+          pattern: layoutRule.name,
+          severity: layoutRule.severity || 'minor',
+          value: cls,
+          message: layoutRule.message
+        });
+      }
+
+      // Colors check
+      if (/\b(bg-|text-)\b/.test(cls)) {
+        const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
+        if (colorMatch) {
+          const prefix = colorMatch[1];
+          const baseColor = colorMatch[2].split('/')[0];
+          const fullToken = `${prefix}-${baseColor}`;
+          const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
+                            CONFIG.allowedColors.includes(fullToken) ||
+                            CONFIG.allowedTextUtils.includes(baseColor) ||
+                            CONFIG.allowedTextSizes.includes(baseColor);
+
+          if (!isAllowed) {
             violations.push({
               line: lineNum,
-              pattern: 'Layout Suggestion',
+              pattern: 'Non-token Color/Size',
               severity: 'minor',
-              value: pattern,
-              message: `Consider replacing '${pattern}' with ${suggestion}`
+              value: cls,
+              message: `Class '${cls}' uses a value that is not a recognized design token.`
             });
           }
         }
-      });
-    }
-  });
+      }
+    });
+
+    // Layout Suggestions
+    suggestionsEntries.forEach(([pattern, suggestion]) => {
+      if (classStr.includes(pattern)) {
+        if (!violations.some(v => v.line === lineNum && v.pattern === 'Layout Suggestion' && v.value === pattern)) {
+          violations.push({
+            line: lineNum,
+            pattern: 'Layout Suggestion',
+            severity: 'minor',
+            value: pattern,
+            message: `Consider replacing '${pattern}' with ${suggestion}`
+          });
+        }
+      }
+    });
+  }
 
   // Sort violations by line number
   return violations.sort((a, b) => a.line - b.line);
@@ -242,11 +235,13 @@ if (isJson) {
   process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
 }
 
-if (Object.keys(allViolations).length === 0) {
+const totalViolations = Object.values(allViolations).flat().length;
+
+if (totalViolations === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
   generateTodoFile({});
 } else {
-  console.log('\x1b[31m✖ Anti-patterns detected:\x1b[0m\n');
+  console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
   for (const [file, violations] of Object.entries(allViolations)) {
     console.log(`\x1b[36m${file}\x1b[0m`);
     violations.forEach(v => {
@@ -255,6 +250,5 @@ if (Object.keys(allViolations).length === 0) {
     console.log();
   }
   generateTodoFile(allViolations);
-  console.log("Successfully generated TODO_ANTIPATTERNS.md");
   process.exit(1);
 }
