@@ -86,11 +86,28 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
   }, ref) => {
     const isMotion = typeof Component !== "string"
     
-    const motionProps = isMotion ? {
-      initial, animate, exit, transition, variants: variantsProp, whileHover, whileTap,
-      whileFocus, whileDrag, whileInView, viewport, layout: layoutProp,
-      layoutId, onAnimationStart, onAnimationComplete, onUpdate, custom
-    } : {}
+    const MOTION_PROPS = [
+      'initial', 'animate', 'exit', 'transition', 'variants',
+      'whileHover', 'whileTap', 'whileFocus', 'whileDrag', 'whileInView',
+      'viewport', 'layout', 'layoutId', 'onAnimationStart',
+      'onAnimationComplete', 'onUpdate', 'custom'
+    ];
+
+    const motionProps: Record<string, unknown> = {}
+    if (isMotion) {
+      const allMotionProps = {
+        initial, animate, exit, transition, variants: variantsProp,
+        whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
+        layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
+        onUpdate, custom
+      };
+
+      Object.entries(allMotionProps).forEach(([key, value]) => {
+        if (value !== undefined && MOTION_PROPS.includes(key)) {
+          motionProps[key] = value;
+        }
+      });
+    }
 
     const borderClasses = cn(
       border === true && "border border-line",
