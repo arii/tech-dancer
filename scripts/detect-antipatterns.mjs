@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -159,6 +160,21 @@ function walk(dir, callback) {
     });
 }
 
+function checkPRScope() {
+  const coreDirs = ['src/layouts/', 'src/components/'];
+  try {
+    const changedFiles = execSync('git diff --name-only HEAD', { encoding: 'utf8' }).split('\n');
+    const coreFiles = changedFiles.filter(f => coreDirs.some(d => f.startsWith(d)));
+
+    if (coreFiles.length > 3) {
+      console.log(`\x1b[33m⚠️  PR Scope Warning: This branch modifies ${coreFiles.length} core files in ${coreDirs.join(', ')}.`);
+      console.log(`   Consider splitting this monolithic PR to maintain isolated features and avoid conflicts (AGENTS.md §23).\x1b[0m\n`);
+    }
+  } catch {
+    // Git might not be available or not a repo
+  }
+}
+
 function generateTodoFile(allViolations) {
   let todoContent = "# UI Anti-Pattern TODO List\n\n";
   todoContent += "This list is automatically generated from the audit report. Fix these anti-patterns to adhere to the project design system.\n\n";
@@ -175,6 +191,8 @@ function generateTodoFile(allViolations) {
 }
 
 console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+
+checkPRScope();
 
 const allViolations = {};
 CHECK_DIRS.forEach(dir => {

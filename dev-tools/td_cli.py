@@ -69,6 +69,14 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
+def verify_pr_scope(file_list):
+    """Checks if a PR touches too many core layout/component files."""
+    core_dirs = ['src/layouts/', 'src/components/']
+    core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]
+    if len(core_files) > 3:
+        return f"PR scope warning: Touching {len(core_files)} core files in {core_dirs}. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23)."
+    return None
+
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
@@ -273,6 +281,11 @@ def handle_audit_pr(args):
         if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
         with open(ctx_path) as f: context = f.read()
         changed_files = re.findall(r'### `([^`]+)`', context); auto_findings = []
+
+        scope_warning = verify_pr_scope(changed_files)
+        if scope_warning:
+            auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
+
         for fp in changed_files:
             if fp.endswith('.tsx') and os.path.exists(fp):
                 content = open(fp).read()
@@ -334,6 +347,16 @@ def handle_pre_submit(args):
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"], ignore_failure=True)
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
+
+        # PR Scope Check
+        changed_files = subprocess.check_output(["git", "diff", "--name-only", "main...HEAD"], text=True).splitlines()
+        if not changed_files: # Fallback if main branch is not available or we are on main
+             changed_files = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True).splitlines()
+
+        scope_warning = verify_pr_scope(changed_files)
+        if scope_warning:
+            if not args.json: print(f"  ⚠️ {scope_warning}")
+            results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
 
         react_findings = []
         for fp in walk_tsx():
