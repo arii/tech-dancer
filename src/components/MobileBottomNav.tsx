@@ -1,15 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { LucideIcon } from 'lucide-react';
 import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
-import { routes } from '@/config/routes';
+import { MOBILE_NAV_ROUTES } from '@/config/routes';
 
 export function MobileBottomNav() {
-  const mobileNavItems = routes.filter((r): r is typeof r & { label: string, icon: LucideIcon } =>
-    !!(r.label && r.icon && ['/', '/blog', '/gear', '/research'].includes(r.path))
-  );
-
   return (
     <Box
       as="nav"
@@ -20,7 +15,7 @@ export function MobileBottomNav() {
       className="lg:hidden bg-surface/90 backdrop-blur-xl border-t border-line pb-[safe-area-inset-bottom]"
     >
       <Box as="ul" display="flex" justify="around" align="center" width="full" className="h-16">
-        {mobileNavItems.map((item) => {
+        {MOBILE_NAV_ROUTES.map((item) => {
           const Icon = item.icon;
           return (
             <Box as="li" key={item.path} flex={1}>

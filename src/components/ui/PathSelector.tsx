@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { HeroPathCard } from './HeroPathCard';
+import dancerHero from '@/assets/dancer_hero.webp';
+import roboticistHero from '@/assets/roboticist_hero.webp';
 
 type PathID = 'dancer' | 'roboticist';
 
@@ -8,7 +10,7 @@ const PATH_DATA = [
     id: 'dancer' as PathID,
     title: 'ARE YOU A DANCER?',
     wrapperClass: 'lg:col-span-7 bg-[#0a0a0a]',
-    bgGradient: '',
+    image: dancerHero,
     titleClass: 'text-4xl md:text-6xl',
     scanlineDelay: 'animation-delay-0',
     links: [
@@ -21,7 +23,7 @@ const PATH_DATA = [
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
     wrapperClass: 'lg:col-span-5 bg-[#111111]',
-    bgGradient: '',
+    image: roboticistHero,
     titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'animation-delay-500',
     links: [

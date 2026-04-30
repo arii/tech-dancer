@@ -89,11 +89,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
 
         if (isScrollableX) {
-          // Additional check: is it actually at a boundary?
-          // If swiping right (deltaX > 0), check if we can scroll left (scrollLeft > 0)
-          // If swiping left (deltaX < 0), check if we can scroll right (scrollLeft < scrollWidth - clientWidth)
+          // Check if we are at a boundary to allow swiping to the next page
+          // If swiping right (deltaX > 0), only block if we can scroll left (scrollLeft > 0)
+          // If swiping left (deltaX < 0), only block if we can scroll right (scrollLeft < scrollWidth - clientWidth)
           if (deltaX > 0 && el.scrollLeft > 0) return true;
-          if (deltaX < 0 && el.scrollLeft < el.scrollWidth - el.clientWidth - 1) return true;
+          // Use Math.ceil for scrollWidth/clientWidth to handle fractional pixels on high-DPI screens without magic numbers
+          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
         }
 
         return isScrollable(el.parentElement);
