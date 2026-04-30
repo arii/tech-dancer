@@ -1,8 +1,10 @@
+import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { cn } from '@/lib/utils';
 
 interface DetailLayoutProps {
   title: string;
