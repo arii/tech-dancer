@@ -6,7 +6,6 @@ import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, 
 import {
   getFirestore,
   collection,
-  addDoc,
   onSnapshot,
   doc,
   updateDoc,
@@ -158,7 +157,7 @@ export function useUXAuditor() {
 
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
-      let reportId = Date.now().toString();
+      const reportId = Date.now().toString();
 
       const newReport: UXReport = {
         id: reportId,
