@@ -74,7 +74,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: hostname,
+        hostname: new URL(hostname).origin,
         dynamicRoutes: dynamicRoutes.map(route => path.posix.join(base, route).replace(/\/$/, '') || '/'),
         generateRobotsTxt: false,
       }),

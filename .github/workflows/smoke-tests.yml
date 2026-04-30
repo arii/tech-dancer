@@ -26,10 +26,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm run build
+      - run: |
+          REPO_NAME=${{ github.event.repository.name }}
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            export VITE_BASE_PATH=/$REPO_NAME/
+          else
+            export VITE_BASE_PATH=/$REPO_NAME/${{ github.ref_name }}/
+          fi
+          pnpm run build
         env:
           NODE_ENV: production
-          VITE_BASE_PATH: /tech-dancer/
 
       - name: Cache Playwright
         uses: actions/cache@v4
@@ -39,7 +45,14 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      - run: pnpm run test:e2e
+      - run: |
+          REPO_NAME=${{ github.event.repository.name }}
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            export VITE_BASE_PATH=/$REPO_NAME/
+          else
+            export VITE_BASE_PATH=/$REPO_NAME/${{ github.ref_name }}/
+          fi
+          pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
