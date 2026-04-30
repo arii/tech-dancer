@@ -20,6 +20,7 @@ export default function Home() {
         title="Home"
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
         schema={STATIC_SCHEMAS.HOME}
+        googleVerification="FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k"
       />
       <Stack gap={8}>
         <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
