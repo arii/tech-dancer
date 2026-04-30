@@ -1,14 +1,6 @@
 import { test } from '@playwright/test';
 import percySnapshot from '@percy/playwright';
-
-const routes = [
-  { name: 'home', path: './' },
-  { name: 'blog', path: './blog' },
-  { name: 'gear', path: './gear' },
-  { name: 'research', path: './research' },
-  { name: 'about', path: './about' },
-  { name: 'contact', path: './contact' }
-];
+import { e2eRoutes as routes } from '../config/routes';
 
 test.describe('Visual Regression Tests with Percy', () => {
   for (const route of routes) {
