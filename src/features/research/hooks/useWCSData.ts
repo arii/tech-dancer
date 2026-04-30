@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
+import { tableFromIPC } from 'apache-arrow';
+import initWasm, { readParquet } from 'parquet-wasm';
 
 export interface WCSRecord {
   Dancer_ID: string;
@@ -17,16 +19,25 @@ export function useWCSData() {
   const [filterPromoted, setFilterPromoted] = useState<'all' | 'promoted' | 'not-promoted'>('all');
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.json`)
-      .then(res => res.json())
-      .then(json => {
-        setData(json);
+    const loadData = async () => {
+      try {
+        await initWasm();
+        const res = await fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`);
+        const buffer = await res.arrayBuffer();
+        const uint8Array = new Uint8Array(buffer);
+        const wasmTable = readParquet(uint8Array);
+        const table = tableFromIPC(wasmTable.intoIPCStream());
+
+        const json = table.toArray().map((row: any) => row.toJSON());
+        setData(json as WCSRecord[]);
         setIsLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error("Failed to load WCS data:", err);
         setIsLoading(false);
-      });
+      }
+    };
+
+    loadData();
   }, []);
 
   const filteredData = useMemo(() => {
