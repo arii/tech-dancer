@@ -48,18 +48,18 @@ describe('utils', () => {
 
   describe('getSkeletonVariant', () => {
     const mockRoutes: RouteConfig[] = [
-      { path: '/', skeleton: 'hero' as any },
-      { path: '/blog', skeleton: 'list' as any },
-      { path: '/blog/:id', skeleton: 'detail' as any },
+      { path: '/', skeleton: 'simple' },
+      { path: '/blog', skeleton: 'grid' },
+      { path: '/blog/:id', skeleton: 'post' },
     ];
 
     it('matches exact routes', () => {
-      expect(getSkeletonVariant('/', mockRoutes)).toBe('hero');
-      expect(getSkeletonVariant('/blog', mockRoutes)).toBe('list');
+      expect(getSkeletonVariant('/', mockRoutes)).toBe('simple');
+      expect(getSkeletonVariant('/blog', mockRoutes)).toBe('grid');
     });
 
     it('matches parameterized routes', () => {
-      expect(getSkeletonVariant('/blog/my-post', mockRoutes)).toBe('detail');
+      expect(getSkeletonVariant('/blog/my-post', mockRoutes)).toBe('post');
     });
 
     it('returns default grid variant if no match', () => {
@@ -67,7 +67,7 @@ describe('utils', () => {
     });
 
     it('handles trailing slashes', () => {
-      expect(getSkeletonVariant('/blog/', mockRoutes)).toBe('list');
+      expect(getSkeletonVariant('/blog/', mockRoutes)).toBe('grid');
     });
   });
 });
