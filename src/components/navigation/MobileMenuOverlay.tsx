@@ -5,6 +5,7 @@ import { Box, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 import { routes } from '@/config/routes';
+import { useEffect, useRef } from 'react';
 
 interface NavItemProps {
   to: string;
@@ -60,11 +61,52 @@ interface MobileMenuOverlayProps {
 }
 
 export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenuOverlayProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const focusableElements = container.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    const originalActiveElement = document.activeElement as HTMLElement;
+    firstElement?.focus();
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      originalActiveElement?.focus();
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <Box
       as={motion.div}
+      ref={containerRef}
       initial={{ x: '-100%' }}
       animate={{ x: 0 }}
       exit={{ x: '-100%' }}
@@ -72,6 +114,9 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
       className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full"
       padding={8}
       overflow="y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
     >
       <Box as="ul" className="space-y-6">
         <Box as="li" position="relative" className="group">
