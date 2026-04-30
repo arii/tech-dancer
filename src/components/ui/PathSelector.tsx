@@ -7,7 +7,7 @@ const PATH_DATA = [
   {
     id: 'dancer' as PathID,
     title: 'ARE YOU A DANCER?',
-    wrapperClass: 'lg:col-span-7 bg-[#0a0a0a]',
+    wrapperClass: 'lg:col-span-7 bg-black',
     bgGradient: '',
     titleClass: 'text-4xl md:text-6xl',
     scanlineDelay: 'animation-delay-0',
@@ -20,7 +20,7 @@ const PATH_DATA = [
   {
     id: 'roboticist' as PathID,
     title: 'HIRING A ROBOTICIST?',
-    wrapperClass: 'lg:col-span-5 bg-[#111111]',
+    wrapperClass: 'lg:col-span-5 bg-zinc-900',
     bgGradient: '',
     titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'animation-delay-500',
@@ -36,7 +36,7 @@ export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-[1px] bg-line border-y border-line min-h-[40vh] w-full">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-px bg-line border-y border-line min-h-[40vh] w-full">
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;

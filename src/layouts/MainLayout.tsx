@@ -1,4 +1,5 @@
 import { useRef, useLayoutEffect } from 'react';
+import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
@@ -10,7 +11,7 @@ import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
 
-export function MainLayout({ children }: { children: React.ReactNode }) {
+export function MainLayout({ children }: { children: ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -58,14 +59,14 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     };
   }, [pathname, key, navType]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
     touchStartRef.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
     };
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: TouchEvent) => {
     if (!touchStartRef.current) return;
 
     const touchEnd = {

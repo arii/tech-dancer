@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
 
@@ -10,7 +11,7 @@ interface PageHeaderProps {
   border?: BaseProps['border'];
   descriptionMaxWidth?: BaseProps['maxWidth'];
   titleSize?: "fluid-5" | "fluid-6" | "fluid-7" | "fluid-8";
-  cta?: React.ReactNode;
+  cta?: ReactNode;
 }
 
 export function PageHeader({ 
@@ -58,9 +59,9 @@ export function PageHeader({
   );
 }
 
-export function SectionHeader({ label, title, children }: { label: string; title: string; children?: React.ReactNode }) {
+export function SectionHeader({ label, title, children }: { label: string; title: string; children?: ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-slate-200">
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-line">
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>{label}</Text>
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
