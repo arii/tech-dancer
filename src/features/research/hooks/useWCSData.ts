@@ -28,6 +28,7 @@ export function useWCSData() {
         const wasmTable = readParquet(uint8Array);
         const table = tableFromIPC(wasmTable.intoIPCStream());
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const json = table.toArray().map((row: any) => row.toJSON());
         setData(json as WCSRecord[]);
         setIsLoading(false);
