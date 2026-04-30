@@ -29,13 +29,6 @@ export const animation = {
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
-export const contentWidth = {
-  article: "max-w-3xl",
-  wide: "max-w-5xl",
-  tool: "max-w-7xl",
-  none: "max-w-none"
-};
-
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
@@ -46,7 +39,6 @@ export const layout = {
   grid: "grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 w-full",
   section: "mt-24 space-y-8",
   divider: "border-b border-line pb-4 flex items-end justify-between",
-  cardImage: { maxHeight: "max-h-[160px]" },
 };
 
 export const inputs = {
@@ -62,9 +54,6 @@ export const shadows = {
   standard: "shadow-sm",
 };
 
-export const imageSizes = {
-  profile: 400, // Keep as number for img attribute compatibility
-};
 
 export const stroke = {
   thin: "stroke-[0.5]",
@@ -104,6 +93,7 @@ export const typography = {
   micro: "font-mono uppercase tracking-widest",
   tight: "tracking-[0.15em] uppercase",
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+  headerAccent: "font-mono font-bold tracking-[0.2em] uppercase text-accent",
 };
 
 export const tracking = {

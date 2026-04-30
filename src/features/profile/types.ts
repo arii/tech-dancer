@@ -1,8 +1,7 @@
-export type SocialPlatform = 'instagram' | 'linkedin' | 'github' | 'twitter' | 'youtube';
-
-export interface SocialLink {
-  platform: SocialPlatform;
-  url: string;
+export interface ProfileSection {
+  id: string;
+  title: string;
+  content: string;
 }
 
 export interface ProfileDetail {
@@ -10,16 +9,10 @@ export interface ProfileDetail {
   value: string;
 }
 
-export interface ProfileSection {
-  id: string;
-  title: string;
-  content: string;
-}
-
 export interface ProfileData {
   name: string;
   role: string;
+  bio?: string;
   sections: ProfileSection[];
   details: ProfileDetail[];
-  socialLinks: SocialLink[];
 }

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { SuccessState } from '@/features/contact/components/SuccessState';
 import { ContactFormView } from '@/features/contact/components/ContactFormView';
+import { SEO } from '@/components/SEO';
 
 const contactFormSchema = z.object({
   name: z.string().min(1, 'Personnel name required'),
@@ -58,15 +59,29 @@ export default function Contact() {
   };
 
   if (submitted) {
-    return <SuccessState onReset={() => setSubmitted(false)} />;
+    return (
+      <>
+        <SEO
+          title="Message Sent"
+          description="Your transmission has been successfully received. We will respond shortly."
+        />
+        <SuccessState onReset={() => setSubmitted(false)} />
+      </>
+    );
   }
 
   return (
-    <ContactFormView
-      register={register}
-      errors={errors}
-      isSubmitting={isSubmitting}
-      onSubmit={handleSubmit(onSubmit)}
-    />
+    <>
+      <SEO
+        title="Contact"
+        description="Get in touch with tech-dancer. Send your feedback, inquiries, or collaboration proposals regarding West Coast Swing and robotics."
+      />
+      <ContactFormView
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+        onSubmit={handleSubmit(onSubmit)}
+      />
+    </>
   );
 }

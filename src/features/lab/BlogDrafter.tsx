@@ -1,15 +1,29 @@
 import { useState } from 'react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw } from 'lucide-react';
+import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
+import { FullPreview } from './components/FullPreview';
 
 export function BlogDrafter() {
-  const { data, updateField, applyAIResponse, clearForm, markdownPreview, githubIssueUrl } = useBlogDrafter();
+  const {
+    data,
+    history,
+    updateField,
+    applyAIResponse,
+    clearForm,
+    saveToHistory,
+    rollback,
+    deleteHistoryEntry,
+    markdownPreview,
+    githubIssueUrl
+  } = useBlogDrafter();
+
   const [copied, setCopied] = useState(false);
   const [aiInput, setAiInput] = useState('');
   const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
+  const [previewMode, setPreviewMode] = useState<'compact' | 'full'>('compact');
 
   const handleApply = () => {
     if (!aiInput.trim()) return;
@@ -37,6 +51,21 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
     setTimeout(() => setCopied(false), 2000);
   };
 
+  if (previewMode === 'full') {
+    return (
+      <FullPreview
+        title={data.title}
+        category={data.category}
+        date={data.date}
+        author={data.author}
+        excerpt={data.excerpt}
+        commentary={data.commentary}
+        affiliateLink={data.affiliateLink}
+        onClose={() => setPreviewMode('compact')}
+      />
+    );
+  }
+
   return (
     <Stack gap={10} height="full">
       <Stack gap={4}>
@@ -45,12 +74,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
              <Terminal className="w-5 h-5 text-accent" />
              <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
           </Box>
-          <Box 
-            as="button" 
+          <Box
+            as="button"
             onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
-            display="flex" 
-            align="center" 
-            gap={2} 
+            display="flex"
+            align="center"
+            gap={2}
             className="text-text-dim hover:text-accent transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
@@ -73,8 +102,19 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
       <Grid cols={{ base: 1, md: 2 }} gap={12}>
         {/* Form Column */}
         <Stack gap={8}>
-          <Box border="b" paddingBottom={2}>
+          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
              <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
+             <Box
+               as="button"
+               onClick={saveToHistory}
+               display="flex"
+               align="center"
+               gap={2}
+               className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+             >
+                <Save className="w-3 h-3" />
+                <Text variant="mono" size="micro" weight="font-bold">SNAPSHOT_NOW</Text>
+             </Box>
           </Box>
 
           <Stack gap={6}>
@@ -188,6 +228,58 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               />
             </Stack>
           </Stack>
+
+          {/* History Section */}
+          {history.length > 0 && (
+            <Stack gap={4} marginTop={4}>
+              <Box border="b" paddingBottom={2} display="flex" align="center" gap={2}>
+                <History className="w-3 h-3 text-accent" />
+                <Text variant="mono" size="micro" color="brand">VERSION_HISTORY</Text>
+              </Box>
+              <Stack gap={2}>
+                {history.map((entry) => (
+                  <Box
+                    key={entry.id}
+                    border
+                    padding={3}
+                    surface="muted"
+                    display="flex"
+                    align="center"
+                    justify="between"
+                    className="hover:border-accent/50 transition-colors"
+                  >
+                    <Stack gap={1}>
+                      <Text variant="mono" size="xs" weight="font-bold">
+                        {entry.data.title || 'Untitled Snapshot'}
+                      </Text>
+                      <Text variant="mono" size="micro" color="dim">
+                        {new Date(entry.timestamp).toLocaleString()}
+                      </Text>
+                    </Stack>
+                    <Box display="flex" gap={2}>
+                      <Box
+                        as="button"
+                        onClick={() => rollback(entry)}
+                        surface="accent"
+                        paddingX={2}
+                        paddingY={1}
+                        className="bg-accent/10 text-accent hover:bg-accent hover:text-bg transition-all cursor-pointer"
+                      >
+                        <Text variant="mono" size="micro" weight="font-bold">ROLLBACK</Text>
+                      </Box>
+                      <Box
+                        as="button"
+                        onClick={() => deleteHistoryEntry(entry.id)}
+                        className="text-dim hover:text-warning transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Box>
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Stack>
+          )}
         </Stack>
 
         {/* Preview Column */}
@@ -234,10 +326,24 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Stack>
 
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
+             <Box display="flex" align="center" gap={2}>
+               <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
+               <Box
+                 as="button"
+                 onClick={() => setPreviewMode('full')}
+                 display="flex"
+                 align="center"
+                 gap={1}
+                 paddingLeft={4}
+                 className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+               >
+                 <Eye className="w-3 h-3" />
+                 <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>
+               </Box>
+             </Box>
              <Box display="flex" align="center" gap={2} color="dim">
                 <FileText className="w-3 h-3" />
-                <Text variant="mono" size="micro">v1.2.0</Text>
+                <Text variant="mono" size="micro">v1.3.1</Text>
              </Box>
           </Box>
 
@@ -248,8 +354,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             padding={6}
             overflow="y-auto"
             maxHeight="600px"
-            maxWidth="none"
-            className="prose prose-sm prose-invert bg-black/5"
+            className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
             <MarkdownRenderer content={markdownPreview} />
           </Box>
