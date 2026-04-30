@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import subprocess
 
 def get_project_config():
     config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
@@ -13,8 +14,23 @@ def get_project_config():
     with open(config_path) as f:
         return json.load(f)
 
-def verify_pr_scope(file_list):
+def get_changed_files():
+    """Returns the list of files changed in the current branch."""
+    config = get_project_config()
+    base = config.get("base_branch", "origin/main")
+    try:
+        return subprocess.check_output(["git", "diff", "--name-only", base], text=True).splitlines()
+    except subprocess.CalledProcessError:
+        try:
+            return subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True).splitlines()
+        except:
+            return []
+
+def verify_pr_scope(file_list=None):
     """Checks if a PR touches too many core layout/component files."""
+    if file_list is None:
+        file_list = get_changed_files()
+
     config = get_project_config()
     core_dirs = config.get("core_dirs", [])
     threshold = config.get("monolithic_pr_threshold", 3)
@@ -26,11 +42,16 @@ def verify_pr_scope(file_list):
 
 if __name__ == "__main__":
     # If run as a script, it expects file names as arguments or via stdin
+    # If no arguments/stdin, it auto-detects changed files in the repo
     files = sys.argv[1:]
     if not files and not sys.stdin.isatty():
         files = sys.stdin.read().splitlines()
 
-    warning = verify_pr_scope(files)
+    if not files:
+        warning = verify_pr_scope()
+    else:
+        warning = verify_pr_scope(files)
+
     if warning:
         print(warning)
         sys.exit(0)

@@ -348,13 +348,8 @@ def handle_pre_submit(args):
         run_step("Lint", ["pnpm", "run", "lint"])
 
         # PR Scope Check
-        base = PROJECT_CONFIG.get("base_branch", "origin/main")
-        try:
-            changed_files = subprocess.check_output(["git", "diff", "--name-only", base], text=True).splitlines()
-        except subprocess.CalledProcessError:
-            changed_files = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True).splitlines()
+        scope_warning = verify_pr_scope()
 
-        scope_warning = verify_pr_scope(changed_files)
         if scope_warning:
             if not args.json: print(f"  ⚠️ {scope_warning}")
             results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})

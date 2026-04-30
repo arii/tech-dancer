@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PROJECT_CONFIG = JSON.parse(fs.readFileSync(path.join(__dirname, "../dev-tools/project_config.json"), "utf8"));
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -163,17 +162,14 @@ function walk(dir, callback) {
 }
 
 function checkPRScope() {
-  const { core_dirs: coreDirs, monolithic_pr_threshold: threshold, base_branch: base } = PROJECT_CONFIG;
   try {
-    const changedFiles = execSync(`git diff --name-only ${base || 'origin/main'}`, { encoding: 'utf8' }).split('\n');
-    const coreFiles = changedFiles.filter(f => coreDirs.some(d => f.startsWith(d)));
-
-    if (coreFiles.length > threshold) {
-      console.log(`\x1b[33m⚠️  PR Scope Warning: This branch modifies ${coreFiles.length} core files in ${coreDirs.join(", ")}.`);
-      console.log(`   Consider splitting this monolithic PR to maintain isolated features and avoid conflicts (AGENTS.md §23).\x1b[0m\n`);
+    const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
+    const output = execSync(`python3 ${scopeCheckScript}`, { encoding: "utf8" }).trim();
+    if (output) {
+      console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
   } catch {
-    // Git might not be available or not a repo
+    // Python or script might not be available
   }
 }
 
