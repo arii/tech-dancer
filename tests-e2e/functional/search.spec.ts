@@ -8,8 +8,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should open and close search modal via button', async ({ page }) => {
-    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
-    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+    const searchButton = page.getByTestId('search-trigger-desktop');
 
     await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
@@ -20,8 +19,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when clicking on backdrop', async ({ page }) => {
-    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
-    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+    const searchButton = page.getByTestId('search-trigger-desktop');
 
     await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
@@ -31,8 +29,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal on route change', async ({ page }) => {
-    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
-    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+    const searchButton = page.getByTestId('search-trigger-desktop');
 
     await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
@@ -45,8 +42,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
-    const searchButton = nav.getByRole('button', { name: 'Search' }).or(nav.locator('button').filter({ has: page.locator('svg.lucide-search') }));
+    const searchButton = page.getByTestId('search-trigger-desktop');
 
     await searchButton.click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
@@ -68,11 +64,10 @@ test.describe('Search and Filter URL Persistence', () => {
 
     if (isMobile) {
       // On mobile, the search button is in the menu overlay
-      await page.getByRole('button', { name: /open menu/i }).click();
-      await page.getByRole('button', { name: 'Search' }).click();
+      await page.getByTestId('mobile-menu-trigger').click();
+      await page.getByTestId('search-trigger-mobile').click();
     } else {
-      const nav = page.getByRole('navigation', { name: 'Main Navigation' });
-      await nav.getByRole('button', { name: 'Search' }).click();
+      await page.getByTestId('search-trigger-desktop').click();
     }
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);

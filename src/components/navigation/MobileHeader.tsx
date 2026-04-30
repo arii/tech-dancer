@@ -1,5 +1,6 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { Box, Text } from '@/layouts/Primitives';
 
 interface MobileHeaderProps {
@@ -20,9 +21,10 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
       </Box>
       <Box
-        as="button"
+        as={motion.create("button")}
         onClick={onToggle}
-        padding={2}
+        data-testid="mobile-menu-trigger"
+        padding={4}
         display="flex"
         align="center"
         justify="center"

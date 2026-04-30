@@ -89,6 +89,7 @@ export default function Navigation() {
               <Box
                 as="button"
                 type="button"
+                data-testid="search-trigger-desktop"
                 cursor="pointer"
                 onClick={handleSearchClick}
                 display="flex"

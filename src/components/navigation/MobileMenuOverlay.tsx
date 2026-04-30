@@ -59,6 +59,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
     <Box
       as={motion.div}
       ref={containerRef}
+      data-testid="mobile-menu"
       initial={{ x: '-100%' }}
       animate={{ x: 0 }}
       exit={{ x: '-100%' }}
@@ -75,6 +76,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
           <Box
             as="button"
             type="button"
+            data-testid="search-trigger-mobile"
             cursor="pointer"
             onClick={onSearchClick}
             display="flex"
