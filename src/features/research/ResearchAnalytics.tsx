@@ -102,7 +102,7 @@ function CompetitionTrendChart() {
             ))}
           </svg>
         </Box>
-        <Box display="flex" justify="between" border="t" paddingTop={2} className="border-line/30 ml-[20px]">
+        <Box display="flex" justify="between" border="t" paddingTop={2} marginLeft={5} className="border-line/30">
           <Text variant="mono" size="micro" color="dim">JAN 2024</Text>
           <Text variant="mono" size="micro" color="dim">DEC 2024</Text>
         </Box>

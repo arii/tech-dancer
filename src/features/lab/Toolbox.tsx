@@ -37,11 +37,12 @@ export default function Toolbox() {
               width="full"
               surface="default"
               border
+              paddingLeft={12}
               paddingRight={6}
               paddingY={4}
               variant="mono"
               size="sm"
-              className="pl-12 focus:border-accent outline-none focus:ring-0"
+              className="focus:border-accent outline-none focus:ring-0"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
