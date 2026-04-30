@@ -31,18 +31,39 @@ const CONFIG = {
     {
       name: 'Arbitrary Value',
       pattern: /-\[.*?\]/g,
+      severity: 'minor',
       message: 'Avoid arbitrary values like -[...]. Use design tokens instead.'
     },
     {
       name: 'Raw Layout/Spacing',
       pattern: /\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b/,
       isClassNameRule: true,
+      severity: 'minor',
       message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
     },
     {
       name: 'div Layout',
       pattern: /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g,
+      severity: 'minor',
       message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
+    },
+    {
+      name: 'HashRouter Usage',
+      pattern: /HashRouter/g,
+      severity: 'major',
+      message: 'HashRouter is banned. Use createBrowserRouter (AGENTS.md §9)'
+    },
+    {
+      name: 'Unnecessary React Import',
+      pattern: /import\s+React\s+from\s+['"]react['"]/g,
+      severity: 'minor',
+      message: 'Unnecessary React import — React 17+ (AGENTS.md §4)'
+    },
+    {
+      name: 'Inline Styles',
+      pattern: /style=\{\{/g,
+      severity: 'major',
+      message: 'Inline styles are banned. Use design tokens (AGENTS.md §11)'
     }
   ]
 };
@@ -73,6 +94,7 @@ function checkFile(filepath) {
       violations.push({
         line: lineNum,
         pattern: rule.name,
+        severity: rule.severity || 'minor',
         value: match[0].length > 50 ? match[0].substring(0, 50) + '...' : match[0],
         message: rule.message
       });
@@ -96,6 +118,7 @@ function checkFile(filepath) {
         violations.push({
           line: lineNum,
           pattern: layoutRule.name,
+          severity: layoutRule.severity || 'minor',
           value: cls,
           message: layoutRule.message
         });
@@ -117,6 +140,7 @@ function checkFile(filepath) {
             violations.push({
               line: lineNum,
               pattern: 'Non-token Color/Size',
+              severity: 'minor',
               value: cls,
               message: `Class '${cls}' uses a value that is not a recognized design token.`
             });
@@ -132,6 +156,7 @@ function checkFile(filepath) {
             violations.push({
               line: lineNum,
               pattern: 'Layout Suggestion',
+              severity: 'minor',
               value: pattern,
               message: `Consider replacing '${pattern}' with ${suggestion}`
             });
@@ -188,15 +213,25 @@ function generateTodoFile(allViolations) {
   fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
 }
 
-console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+// CLI Argument Parsing
+const args = process.argv.slice(2);
+const isJson = args.includes('--json');
+const targets = args.filter(arg => !arg.startsWith('--'));
 
-checkPRScope();
+if (!isJson) {
+  console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+  checkPRScope();
+}
 
+const auditTargets = targets.length > 0 ? targets : CHECK_DIRS;
 const allViolations = {};
-CHECK_DIRS.forEach(dir => {
-    const fullPath = path.resolve(ROOT, dir);
+
+auditTargets.forEach(target => {
+    const fullPath = path.isAbsolute(target) ? target : path.resolve(ROOT, target);
+    if (!fs.existsSync(fullPath)) return;
+
     walk(fullPath, (filepath) => {
-        if (filepath.endsWith('.tsx')) {
+        if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
             const violations = checkFile(filepath);
             if (violations.length > 0) {
                 allViolations[path.relative(ROOT, filepath)] = violations;
@@ -204,6 +239,11 @@ CHECK_DIRS.forEach(dir => {
         }
     });
 });
+
+if (isJson) {
+  process.stdout.write(JSON.stringify(allViolations, null, 2));
+  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+}
 
 if (Object.keys(allViolations).length === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');

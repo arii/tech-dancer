@@ -281,12 +281,22 @@ def handle_audit_pr(args):
         if scope_warning:
             auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
 
-        for fp in changed_files:
-            if fp.endswith('.tsx') and os.path.exists(fp):
-                content = open(fp).read()
-                if "import React from 'react'" in content: auto_findings.append({"path": fp, "issue": "Unnecessary `import React`", "severity": "minor"})
-                if 'HashRouter' in content: auto_findings.append({"path": fp, "issue": "HashRouter usage banned", "severity": "major"})
-                for m in re.finditer(r'text-\[\d+px\]|bg-\[#[0-9a-fA-F]+\]', content): auto_findings.append({"path": fp, "issue": f"Arbitrary Tailwind: `{m.group()}`", "severity": "minor"})
+        files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
+        if files_to_audit:
+            try:
+                proc = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--json"] + files_to_audit, capture_output=True, text=True)
+                if proc.stdout:
+                    audit_data = json.loads(proc.stdout)
+                    for filepath, violations in audit_data.items():
+                        for v in violations:
+                            auto_findings.append({
+                                "path": filepath,
+                                "issue": f"{v['pattern']}: {v['message']} (value: {v['value']})",
+                                "severity": v.get('severity', 'minor')
+                            })
+            except Exception as e:
+                if not args.json: print(f"⚠️  Audit script failed: {e}")
+
         res["auto_findings"] = auto_findings
         if not args.json:
             if auto_findings:
@@ -349,18 +359,6 @@ def handle_pre_submit(args):
         if scope_warning:
             if not args.json: print(f"  ⚠️ {scope_warning}")
             results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
-
-        react_findings = []
-        for fp in walk_tsx():
-            for ln, _, _ in find_patterns_in_file(fp, [(r"^import React from 'react'", "Unnecessary import")]):
-                react_findings.append({"file": fp, "line": ln})
-                if not args.json: print(f"  ⚠️ {fp}:{ln}: Found unnecessary 'import React'")
-        results["react_imports"] = react_findings
-
-        for fp in walk_tsx():
-            if 'HashRouter' in open(fp).read():
-                if args.json: raise CLIError(f"HashRouter usage found in {fp}")
-                else: print(f"❌ HashRouter usage found in {fp}."); sys.exit(1)
 
         token = get_github_token()
         if token:
