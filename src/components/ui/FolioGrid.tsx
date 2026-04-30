@@ -6,6 +6,7 @@ import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import type { ContentItem } from '@/lib/content';
+import { ReactNode, ChangeEvent } from 'react';
 
 interface FolioGridProps {
   items: ContentItem[];
