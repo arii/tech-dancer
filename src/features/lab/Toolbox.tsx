@@ -1,4 +1,4 @@
-
+import { useMemo } from 'react';
 import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
@@ -43,7 +43,7 @@ export default function Toolbox() {
               variant="mono"
               size="sm"
               className="focus:border-accent outline-none focus:ring-0"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
             <svg

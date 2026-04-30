@@ -1,4 +1,5 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState } from 'react';
+import type { ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
@@ -20,7 +21,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!copied) return;
     const timer = setTimeout(() => {
       if (document.startViewTransition) {
@@ -279,14 +280,14 @@ export default function UXAuditor() {
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
-                            <Stack align="center" justify="center" color="dim" className="text-center">
+                            <Box className="text-center" color="dim" display="flex" direction="col" align="center">
                               <Box marginBottom={2}>
                                 <ImageIcon className="w-12 h-12 opacity-20" />
                               </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
-                            </Stack>
+                            </Box>
                           )}
                         </Box>
 
@@ -321,9 +322,8 @@ export default function UXAuditor() {
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
-                            <Box surface="muted" padding={3} radius="lg" border={true}>
-                              <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
+                                      <Box surface="muted" padding={3} radius="lg" border={true} display="flex" direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
+                                        <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
                                           <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
                                             {imp.suggestion}
@@ -332,20 +332,19 @@ export default function UXAuditor() {
                                             <CopyPromptButton suggestion={imp.suggestion} />
                                           )}
                                         </Box>
-                              </Stack>
-                            </Box>
+                                      </Box>
                                     )}
                                   </Box>
                                 ))}
                               </Stack>
                             </>
                           ) : (
-                            <Stack align="center" justify="center" paddingY={20} color="dim">
+                            <Box display="flex" align="center" justify="center" paddingY={20} direction="col" color="dim">
                               <RefreshCw className="animate-spin w-6 h-6" />
                               <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
                                 Agent Processing...
                               </Text>
-                            </Stack>
+                            </Box>
                           )}
                         </Stack>
                       </Stack>

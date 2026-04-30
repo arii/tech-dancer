@@ -85,9 +85,8 @@ ${dataUri}
   }
 }
 
-// Use environment variables for default target if available, otherwise fallback
-const defaultUrl = process.env.VITE_APP_URL || 'http://localhost:3000/';
-const targetUrl = process.argv[2] || defaultUrl;
+// Example usage: node dev-tools/ai-debugger.mjs <url> <selector>
+const targetUrl = process.argv[2] || 'http://localhost:3000/';
 const targetSelector = process.argv[3] || 'body';
 
 if (!targetUrl.startsWith('http')) {

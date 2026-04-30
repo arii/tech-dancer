@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
-import Fuse from 'fuse.js';
+import { safeSearch } from '@/lib/utils';
 
 export function useGlobalSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,18 +54,15 @@ export function useGlobalSearch() {
     ];
   }, [postsQuery.data, resourcesQuery.data, studiesQuery.data]);
 
-  const fuse = useMemo(() => {
-    return new Fuse(allContent, {
-      keys: ['title', 'excerpt', 'content', 'tags'],
-      threshold: 0.3,
-      ignoreLocation: true
-    });
-  }, [allContent]);
-
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    return fuse.search(query).map(result => result.item);
-  }, [fuse, query]);
+    return allContent.filter(item => 
+      safeSearch(item.title, query) ||
+      safeSearch(item.excerpt, query) ||
+      safeSearch(item.content, query) ||
+      safeSearch(item.tags, query)
+    );
+  }, [allContent, query]);
 
   return {
     query,
