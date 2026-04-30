@@ -16,8 +16,14 @@ from datetime import datetime, timezone, timedelta
 from github_utils import get_github_token, get_repo_name
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
+sys.path.append(os.path.dirname(__file__))
+
+from scope_check import verify_pr_scope, get_project_config
 
 # --- Configuration & Constants ---
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "project_config.json")
+with open(CONFIG_PATH) as f: PROJECT_CONFIG = json.load(f)
+
 EXISTING_COMPONENTS = {
     'Box': 'src/layouts/Box.tsx', 'Stack': 'src/layouts/Stack.tsx', 'Grid': 'src/layouts/Grid.tsx',
     'Text': 'src/layouts/Text.tsx', 'Button': 'src/layouts/Button.tsx', 'ContentCard': 'src/components/ui/ContentCard.tsx',
@@ -69,13 +75,6 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
-def verify_pr_scope(file_list):
-    """Checks if a PR touches too many core layout/component files."""
-    core_dirs = ['src/layouts/', 'src/components/']
-    core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]
-    if len(core_files) > 3:
-        return f"PR scope warning: Touching {len(core_files)} core files in {core_dirs}. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23)."
-    return None
 
 # --- CLI Handlers ---
 
@@ -349,9 +348,11 @@ def handle_pre_submit(args):
         run_step("Lint", ["pnpm", "run", "lint"])
 
         # PR Scope Check
-        changed_files = subprocess.check_output(["git", "diff", "--name-only", "main...HEAD"], text=True).splitlines()
-        if not changed_files: # Fallback if main branch is not available or we are on main
-             changed_files = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True).splitlines()
+        base = PROJECT_CONFIG.get("base_branch", "origin/main")
+        try:
+            changed_files = subprocess.check_output(["git", "diff", "--name-only", base], text=True).splitlines()
+        except subprocess.CalledProcessError:
+            changed_files = subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True).splitlines()
 
         scope_warning = verify_pr_scope(changed_files)
         if scope_warning:
