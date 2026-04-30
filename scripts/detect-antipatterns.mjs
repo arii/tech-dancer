@@ -144,8 +144,11 @@ function checkFile(filepath) {
         if (/\b(bg-|text-)\b/.test(cls)) {
           const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
           if (colorMatch) {
+            const prefix = colorMatch[1];
             const baseColor = colorMatch[2].split('/')[0];
+            const fullToken = `${prefix}-${baseColor}`;
             const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
+                              CONFIG.allowedColors.includes(fullToken) ||
                               CONFIG.allowedTextUtils.includes(baseColor) ||
                               CONFIG.allowedTextSizes.includes(baseColor);
 
