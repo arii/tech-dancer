@@ -82,7 +82,8 @@ function checkFile(filepath) {
   let match;
   while ((match = classNameRegex.exec(content)) !== null) {
     const lineNum = getLineNumber(content, match.index);
-    if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+    if (lines[lineNum - 2] && lines[lineNum - 2].includes('// impeccable-ignore')) continue;
+    if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
     const classStr = match[1];
     const classes = classStr.split(/\s+/);
