@@ -6,6 +6,8 @@ import { defineConfig, loadEnv } from 'vite';
 import Inspect from 'vite-plugin-inspect';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await';
 import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
 import { routes } from './src/config/routes';
 
@@ -75,6 +77,8 @@ export default defineConfig(({mode}) => {
         gzipSize: true,
       }),
       inspect && !isProd && Inspect(),
+      wasm(),
+      topLevelAwait()
     ].filter(Boolean),
     resolve: {
       alias: {
