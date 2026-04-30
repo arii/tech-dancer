@@ -15,29 +15,29 @@ export function useExport() {
     link.click();
   };
 
-  const exportPDF = (data: WCSRecord[], filename: string = 'wcs_prelims') => {
+  interface PDFOptions {
+    title?: string;
+    filename?: string;
+    headers: string[][];
+    data: (string | number)[][];
+  }
+
+  const exportPDF = (options: PDFOptions) => {
+    const { title = 'Report', filename = 'export', headers, data } = options;
     const doc = new jsPDF();
 
     doc.setFontSize(18);
-    doc.text('WCS Prelim Scoring Analysis', 14, 22);
+    doc.text(title, 14, 22);
 
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.text(`Generated on ${new Date().toLocaleDateString()}`, 14, 30);
     doc.text(`Records: ${data.length}`, 14, 36);
 
-    const tableData = data.map(r => [
-      r.event_date,
-      r.competitor_name,
-      r.event_title,
-      r.Registry_Points_Sum.toFixed(1),
-      r.Promoted ? 'YES' : 'NO'
-    ]);
-
     autoTable(doc, {
       startY: 45,
-      head: [['Date', 'Competitor', 'Event', 'Score', 'Promoted']],
-      body: tableData,
+      head: headers,
+      body: data,
       theme: 'grid',
       // Using RGB values to avoid hex color detection and match brand-ish dark gray
       headStyles: { fillColor: [26, 43, 60], textColor: [255, 255, 255], fontSize: 10 },

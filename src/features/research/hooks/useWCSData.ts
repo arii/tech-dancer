@@ -52,39 +52,44 @@ export function useWCSData() {
     });
   }, [data, searchTerm, filterPromoted]);
 
-  const scoreDistribution = useMemo(() => {
+  const { scoreDistribution, trendData } = useMemo(() => {
     const bins: Record<string, number> = {};
-    filteredData.forEach(r => {
+    const byDate: Record<string, { total: number; count: number }> = {};
+
+    filteredData.forEach((r) => {
+      // Score Distribution
       const bin = Math.floor(r.Registry_Points_Sum).toString();
       bins[bin] = (bins[bin] || 0) + 1;
+
+      // Trend Analysis
+      const parts = r.event_date.split('/');
+      if (parts.length >= 3) {
+        const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
+        if (!byDate[monthYear]) byDate[monthYear] = { total: 0, count: 0 };
+        byDate[monthYear].total += r.Registry_Points_Sum;
+        byDate[monthYear].count += 1;
+      }
     });
-    return Object.entries(bins)
+
+    const calculatedScoreDistribution = Object.entries(bins)
       .map(([score, count]) => ({ score: Number(score), count }))
       .sort((a, b) => a.score - b.score);
-  }, [filteredData]);
 
-  const trendData = useMemo(() => {
-    const byDate: Record<string, { total: number, count: number }> = {};
-    filteredData.forEach(r => {
-      // Group by Month/Year for trend analysis
-      const parts = r.event_date.split('/');
-      if (parts.length < 3) return;
-      const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
-      if (!byDate[monthYear]) byDate[monthYear] = { total: 0, count: 0 };
-      byDate[monthYear].total += r.Registry_Points_Sum;
-      byDate[monthYear].count += 1;
-    });
-
-    return Object.entries(byDate)
+    const calculatedTrendData = Object.entries(byDate)
       .map(([date, stats]) => ({
         date,
-        avg: Number((stats.total / stats.count).toFixed(2))
+        avg: Number((stats.total / stats.count).toFixed(2)),
       }))
       .sort((a, b) => {
         const [m1, y1] = a.date.split('/').map(Number);
         const [m2, y2] = b.date.split('/').map(Number);
         return y1 !== y2 ? y1 - y2 : m1 - m2;
       });
+
+    return {
+      scoreDistribution: calculatedScoreDistribution,
+      trendData: calculatedTrendData,
+    };
   }, [filteredData]);
 
   return {

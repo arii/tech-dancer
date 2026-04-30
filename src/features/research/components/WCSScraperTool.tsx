@@ -73,6 +73,21 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
 function WCSExportConsole({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
+  const handleExportPDF = () => {
+    exportPDF({
+      title: 'WCS Prelim Scoring Analysis',
+      filename: 'wcs_prelims',
+      headers: [['Date', 'Competitor', 'Event', 'Score', 'Promoted']],
+      data: data.map(r => [
+        r.event_date,
+        r.competitor_name,
+        r.event_title,
+        r.Registry_Points_Sum.toFixed(1),
+        r.Promoted ? 'YES' : 'NO'
+      ])
+    });
+  };
+
   return (
     <Box border surface="default" padding="card">
       <Stack gap={6}>
@@ -97,7 +112,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
           <Button
             variant="secondary"
             className="w-full"
-            onClick={() => exportPDF(data)}
+            onClick={handleExportPDF}
           >
             <Box display="flex" align="center" gap={3} width="full" className="text-left">
               <FileText className="w-4 h-4 shrink-0" />
