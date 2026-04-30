@@ -2,14 +2,7 @@ import os
 import json
 import re
 from github import Github
-from github_utils import get_github_token, get_repo_name
-
-class CLIError(Exception):
-    def __init__(self, message, code=1, data=None):
-        self.message = message
-        self.code = code
-        self.data = data
-        super().__init__(self.message)
+from utils import get_github_token, get_repo_name, CLIError
 
 def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_override=None, is_json=False):
     """

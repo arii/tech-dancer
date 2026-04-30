@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from github_utils import get_github_token, get_repo_name
+from utils import get_github_token, get_repo_name, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 sys.path.append(os.path.dirname(__file__))
@@ -43,13 +43,6 @@ BANNED_PATTERNS = [
 RENAMED_ASSETS = { 'accent-brand': 'accent', 'useSearch': 'useSearchParam' }
 DEPRECATED_PATHS = { 'src/components/common/': 'src/components/ui/' }
 REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'excerpt']
-
-class CLIError(Exception):
-    def __init__(self, message, code=1, data=None):
-        self.message = message
-        self.code = code
-        self.data = data
-        super().__init__(self.message)
 
 # --- Shared Logic ---
 
