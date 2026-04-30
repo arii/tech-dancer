@@ -21,7 +21,7 @@ export class AIWebSocketClient {
       const isMock = this.url === 'ws://mock-ai-server.local' || !this.url;
 
       this.socket = isMock
-        ? new MockAIWebSocket(this.url) as unknown as WebSocket
+        ? new MockAIWebSocket() as unknown as WebSocket
         : new WebSocket(this.url);
 
       this.socket.onopen = () => {
@@ -54,19 +54,12 @@ export class AIWebSocketClient {
 
 /**
  * Mock WebSocket to simulate streaming AI responses.
- * Separated into internal class to facilitate production-ready client.
  */
 class MockAIWebSocket {
   public onopen: (() => void) | null = null;
   public onmessage: ((event: { data: string }) => void) | null = null;
   public onerror: ((err: Event) => void) | null = null;
   public onclose: (() => void) | null = null;
-
-  private url: string;
-
-  constructor(url: string) {
-    this.url = url;
-  }
 
   send(data: string) {
     const payload = JSON.parse(data);
