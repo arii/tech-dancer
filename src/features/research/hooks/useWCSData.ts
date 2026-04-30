@@ -52,39 +52,45 @@ export function useWCSData() {
     });
   }, [data, searchTerm, filterPromoted]);
 
-  const scoreDistribution = useMemo(() => {
-    const bins: Record<string, number> = {};
-    filteredData.forEach(r => {
+  const { scoreDistribution, trendData } = useMemo(() => {
+    const bins = new Map<string, number>();
+    const byDate = new Map<string, { total: number; count: number }>();
+
+    for (const r of filteredData) {
+      // Score Distribution
       const bin = Math.floor(r.Registry_Points_Sum).toString();
-      bins[bin] = (bins[bin] || 0) + 1;
-    });
-    return Object.entries(bins)
+      bins.set(bin, (bins.get(bin) || 0) + 1);
+
+      // Trend Analysis
+      const parts = r.event_date.split('/');
+      if (parts.length >= 3) {
+        const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
+        const stats = byDate.get(monthYear) || { total: 0, count: 0 };
+        stats.total += r.Registry_Points_Sum;
+        stats.count += 1;
+        byDate.set(monthYear, stats);
+      }
+    }
+
+    const calculatedScoreDistribution = Array.from(bins.entries())
       .map(([score, count]) => ({ score: Number(score), count }))
       .sort((a, b) => a.score - b.score);
-  }, [filteredData]);
 
-  const trendData = useMemo(() => {
-    const byDate: Record<string, { total: number, count: number }> = {};
-    filteredData.forEach(r => {
-      // Group by Month/Year for trend analysis
-      const parts = r.event_date.split('/');
-      if (parts.length < 3) return;
-      const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
-      if (!byDate[monthYear]) byDate[monthYear] = { total: 0, count: 0 };
-      byDate[monthYear].total += r.Registry_Points_Sum;
-      byDate[monthYear].count += 1;
-    });
-
-    return Object.entries(byDate)
+    const calculatedTrendData = Array.from(byDate.entries())
       .map(([date, stats]) => ({
         date,
-        avg: Number((stats.total / stats.count).toFixed(2))
+        avg: Number((stats.total / stats.count).toFixed(2)),
       }))
       .sort((a, b) => {
         const [m1, y1] = a.date.split('/').map(Number);
         const [m2, y2] = b.date.split('/').map(Number);
         return y1 !== y2 ? y1 - y2 : m1 - m2;
       });
+
+    return {
+      scoreDistribution: calculatedScoreDistribution,
+      trendData: calculatedTrendData,
+    };
   }, [filteredData]);
 
   return {
