@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, RefObject } from "react";
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/layouts/Primitives';
 import { iconSizes } from '@/styles/design-tokens';
 
 interface ScrollToTopButtonProps {
-  scrollRef: React.RefObject<HTMLElement | null>;
+  scrollRef: RefObject<HTMLElement | null>;
 }
 
 export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {

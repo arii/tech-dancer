@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
