@@ -164,9 +164,9 @@ export default function UXAuditor() {
           </Text>
           <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
-              <Box padding={10} className="italic" color="dim" align="center" size="sm">
+              <Text as={Box} padding={10} className="italic" color="dim" align="center" size="sm" display="block">
                 No audits recorded.
-              </Box>
+              </Text>
             )}
             {reports.map((report) => (
               <Box
