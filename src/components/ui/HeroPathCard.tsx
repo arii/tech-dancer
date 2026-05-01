@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Box } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface HeroPathCardProps {
   title: string;
@@ -30,10 +30,15 @@ export function HeroPathCard({
   onClick
 }: HeroPathCardProps) {
   return (
-    <div
+    <Box
+      position="relative"
+      overflow="hidden"
+      cursor="pointer"
+      height="full"
+      minHeight="[300px]"
       className={cn(
         wrapperClass,
-        "relative group overflow-hidden cursor-pointer h-full min-h-[300px] transition-all duration-700 ease-in-out",
+        "group transition-all duration-700 ease-in-out",
         isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
       )}
       onMouseEnter={onMouseEnter}
@@ -41,7 +46,7 @@ export function HeroPathCard({
       onClick={onClick}
     >
       {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+      <Box position="absolute" inset={true} zIndex={0}>
         <img
           src={image}
           alt=""
@@ -52,24 +57,45 @@ export function HeroPathCard({
             isHovered ? "scale-105" : "scale-100"
           )}
         />
-      </div>
+      </Box>
 
       {/* Scanline */}
       <Box
+        position="absolute"
+        left={0}
+        top={0}
+        width="full"
+        height="0.5"
         shadow="glow"
-        className={`absolute left-0 top-0 w-full h-0.5 bg-accent z-10 pointer-events-none transition-opacity duration-500 ${
-          scanlineDelay || ''
-        } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
+        zIndex={10}
+        className={cn(
+          "bg-accent pointer-events-none transition-opacity duration-500",
+          scanlineDelay,
+          isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'
+        )}
       ></Box>
 
       {/* Content Container */}
-      <div className="relative z-20 p-8 md:p-16 lg:p-20 h-full flex flex-col justify-end bg-gradient-to-t from-black via-black/40 to-transparent">
-        <h2
-          className={`${titleClass} font-display font-black mb-8 text-white transition-transform duration-500 group-hover:translate-x-2 leading-[0.9] tracking-tighter`}
+      <Stack
+        position="relative"
+        zIndex={20}
+        padding={{ base: 8, md: 16, lg: 20 }}
+        height="full"
+        direction="col"
+        justify="end"
+        className="bg-gradient-to-t from-black via-black/40 to-transparent"
+      >
+        <Text
+          as="h2"
+          variant="headline"
+          className={cn(
+            titleClass,
+            "mb-8 text-white transition-transform duration-500 group-hover:translate-x-2"
+          )}
         >
           {title}
-        </h2>
-        <ul className="flex flex-col gap-5 mb-6 font-sans text-lg tracking-tight text-white">
+        </Text>
+        <Stack as="ul" gap={5} marginBottom={6} className="font-sans text-lg tracking-tight text-white">
           {links.map((link, index) => {
             const isExternal = link.to.startsWith('http') || link.to.startsWith('//');
             const isPrimary = index === 0;
@@ -115,8 +141,8 @@ export function HeroPathCard({
               </li>
             );
           })}
-        </ul>
-      </div>
-    </div>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

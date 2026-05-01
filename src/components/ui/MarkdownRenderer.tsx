@@ -8,7 +8,7 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
-    <div className="[counter-reset:section]">
+    <Box className="[counter-reset:section]">
       <ReactMarkdown
         components={{
           a: ({node: _node, href, ...props}) => {
@@ -42,6 +42,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
       >
         {content}
       </ReactMarkdown>
-    </div>
+    </Box>
   );
 }
