@@ -1,6 +1,6 @@
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-
+import { Box, Button, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 export function GlobalErrorBoundary() {
   const error = useRouteError();
   const navigate = useNavigate();

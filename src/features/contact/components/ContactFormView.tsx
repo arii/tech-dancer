@@ -1,11 +1,12 @@
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
-import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
 import { cn } from '@/lib/utils';
 
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
+import { Box, Button, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface ContactFormData {
   name: string;

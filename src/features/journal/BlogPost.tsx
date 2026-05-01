@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getPostBySlug } from '@/lib/content';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { BlogPostDetail } from './components/BlogPostDetail';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function BlogPost() {
   const { slug } = useParams();

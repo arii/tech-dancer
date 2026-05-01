@@ -1,9 +1,10 @@
 import { ExternalLink, Star } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { ScoreGrid, ScoreItem, SpecsTable, VerdictCallout } from '@/components/layout/DetailElements';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface GearPostDetailProps {
   post: Resource;

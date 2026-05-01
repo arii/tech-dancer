@@ -1,10 +1,11 @@
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Box, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
 import { routes } from '@/config/routes';
 import { useEffect, useRef } from 'react';
 import { NavItem } from './NavItem';
+import { Box } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface MobileMenuOverlayProps {
   isOpen: boolean;

@@ -1,7 +1,9 @@
 import { isValidElement } from "react"
 import { cn } from "@/lib/utils"
 
-export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, "2xl"?: T }
+export const BREAKPOINTS = ["sm", "md", "lg", "xl", "2xl"] as const
+export type Breakpoint = (typeof BREAKPOINTS)[number]
+export type ResponsiveProp<T> = T | ({ base?: T } & { [K in Breakpoint]?: T })
 
 export function getResponsiveClasses(
   prop: ResponsiveProp<string | number | boolean | undefined | null>,
@@ -19,14 +21,15 @@ export function getResponsiveClasses(
     return buildClass(prop, classPrefix)
   }
 
-  const { base, sm, md, lg, xl, "2xl": xxl } = prop as Record<string, string | number | boolean | undefined | null>
+  const responsive = prop as Record<string, string | number | boolean | undefined | null>
 
-  return cn(
-    buildClass(base, classPrefix),
-    buildClass(sm, `sm:${classPrefix}`),
-    buildClass(md, `md:${classPrefix}`),
-    buildClass(lg, `lg:${classPrefix}`),
-    buildClass(xl, `xl:${classPrefix}`),
-    buildClass(xxl, `2xl:${classPrefix}`)
-  )
+  const classes = [buildClass(responsive.base, classPrefix)]
+
+  for (const bp of BREAKPOINTS) {
+    if (responsive[bp] !== undefined) {
+      classes.push(buildClass(responsive[bp], `${bp}:${classPrefix}`))
+    }
+  }
+
+  return cn(...classes)
 }

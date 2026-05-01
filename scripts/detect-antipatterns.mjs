@@ -30,7 +30,7 @@ const CONFIG = {
   rules: [
     {
       name: 'Arbitrary Value',
-      pattern: /-\[(?!(?:[0-9.]+|counter\(section,decimal-leading-zero\))\])/g,
+      pattern: /-\[.*?\]/g,
       severity: 'minor',
       message: 'Avoid arbitrary values like -[...]. Use design tokens instead.'
     },

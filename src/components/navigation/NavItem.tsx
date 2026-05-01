@@ -1,8 +1,9 @@
 import { LucideIcon, Terminal } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Box, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
+import { Box } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export interface NavItemProps {
   to: string;

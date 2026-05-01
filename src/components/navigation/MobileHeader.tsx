@@ -1,8 +1,8 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Box, Text } from '@/layouts/Primitives';
-
+import { Box } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 interface MobileHeaderProps {
   isOpen: boolean;
   onToggle: () => void;

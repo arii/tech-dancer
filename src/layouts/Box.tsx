@@ -3,7 +3,9 @@ import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
+import { ResponsiveProp, getResponsiveClasses, BREAKPOINTS } from "./system-utils"
+
+type BorderProp = boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
 
 export interface BaseProps {
   padding?: ResponsiveProp<keyof typeof spacing | number | string>
@@ -20,12 +22,12 @@ export interface BaseProps {
   marginX?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginY?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   gap?: ResponsiveProp<number | string>
-  border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
-  smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
-  mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
-  lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
-  xlBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
-  "2xlBorder"?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
+  border?: BorderProp
+  smBorder?: BorderProp
+  mdBorder?: BorderProp
+  lgBorder?: BorderProp
+  xlBorder?: BorderProp
+  "2xlBorder"?: BorderProp
   surface?: keyof typeof variants.surface | boolean
   emphasis?: keyof typeof variants.emphasis
   radius?: keyof typeof variants.radius
@@ -73,7 +75,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     padding, 
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
-    gap, border, smBorder, mdBorder, lgBorder, xlBorder, "2xlBorder": xxlBorder,
+    gap, border,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
@@ -119,11 +121,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "r" && "border-r border-line",
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
-      getResponsiveClasses(smBorder, "sm:border-"),
-      getResponsiveClasses(mdBorder, "md:border-"),
-      getResponsiveClasses(lgBorder, "lg:border-"),
-      getResponsiveClasses(xlBorder, "xl:border-"),
-      getResponsiveClasses(xxlBorder, "2xl:border-")
+      ...BREAKPOINTS.map(bp => {
+          const val = props[`${bp}Border`] as BorderProp;
+          return val ? getResponsiveClasses({ [bp]: val }, "border-") : "";
+      })
     )
 
     // Remove props that shouldn't be spread to DOM elements

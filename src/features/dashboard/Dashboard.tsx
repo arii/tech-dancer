@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS, GOOGLE_SITE_VERIFICATION } from '@/config/constants';
@@ -10,6 +9,8 @@ import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
+import { Box, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function Home() {
   const { recentPosts, upcomingEvents } = useHome();

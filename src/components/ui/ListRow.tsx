@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface ListRowProps {
   slug: string;

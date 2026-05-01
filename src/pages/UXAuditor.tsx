@@ -5,16 +5,16 @@ import {
   ChevronRight, Github
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
-import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
+import { Box, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
   Tablet: <Tablet className="w-5 h-5" />,
   Desktop: <Monitor className="w-5 h-5" />
 };
-
 
 function CopyPromptButton({ suggestion }: { suggestion: string }) {
   const [copied, setCopied] = useState(false);

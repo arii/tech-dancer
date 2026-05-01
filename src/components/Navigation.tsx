@@ -2,7 +2,6 @@ import { Search } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -11,6 +10,8 @@ import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);

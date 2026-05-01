@@ -1,21 +1,10 @@
 import React, { useCallback } from 'react';
-import {
-  Search,
-  Download,
-  FileJson,
-  FileText,
-  Loader2
-} from 'lucide-react';
-import {
-  Box,
-  Stack,
-  Text,
-  Grid,
-  Button
-} from '@/layouts/Primitives';
+import { Search, Download, FileJson, FileText, Loader2 } from 'lucide-react'; ;
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
+import { Box, Button, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (

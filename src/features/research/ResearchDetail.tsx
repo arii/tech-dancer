@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { WCSScraperTool } from './components/WCSScraperTool';
@@ -9,6 +8,8 @@ import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
+import { Box, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function ResearchDetail() {
   const { id } = useParams();

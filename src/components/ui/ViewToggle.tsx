@@ -1,7 +1,6 @@
 import { LayoutGrid, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Box } from '@/layouts/Primitives';
-
+import { Box } from "@/layouts/Primitives";
 export type ViewMode = 'card' | 'list';
 
 interface ViewToggleProps {

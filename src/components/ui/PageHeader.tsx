@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface PageHeaderProps {
   label: string;

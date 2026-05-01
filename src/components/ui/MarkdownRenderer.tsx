@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown';
-import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
+import { Box } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface MarkdownRendererProps {
   content: string;
@@ -34,7 +35,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 tracking="wide-editorial"
                 display="block"
                 marginBottom={2}
-                className="opacity-50 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
+                className="opacity-50 before:content-[counter(section,decimal-leading-zero)] before:mr-2" // impeccable-ignore
               />
               <Text as="h2" variant="display" size="3xl" weight="font-bold" marginX={0} marginY={0} className="normal-case tracking-tight" {...props} />
               <Box className="h-px w-12 bg-accent" marginTop={4} />

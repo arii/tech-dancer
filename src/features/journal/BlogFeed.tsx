@@ -1,8 +1,8 @@
-import { Box } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
+import { Box } from "@/layouts/Primitives";
 
 export default function BlogFeed() {
   const { posts, categories, view, setView } = useBlog();

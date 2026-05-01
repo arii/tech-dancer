@@ -1,8 +1,8 @@
 import { Share2 } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { Post } from '@/lib/content';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface BlogPostDetailProps {
   post: Post;

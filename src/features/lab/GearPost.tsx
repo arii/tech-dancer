@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function GearPost() {
   const { slug } = useParams();

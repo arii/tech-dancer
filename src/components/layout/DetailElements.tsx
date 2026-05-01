@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon, Shield } from 'lucide-react';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface ScoreItemProps {
   label: string;
@@ -60,7 +61,6 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
     </Stack>
   );
 }
-
 
 export function VerdictCallout({ verdict }: { verdict: string }) {
   return (

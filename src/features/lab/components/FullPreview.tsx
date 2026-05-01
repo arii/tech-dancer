@@ -1,6 +1,7 @@
 import { ExternalLink, Layout } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { DetailLayout } from '@/components/layout/DetailLayout';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface FullPreviewProps {
   title: string;

@@ -1,6 +1,6 @@
 import { useSearchParam } from '@/hooks/useSearchParam';
-import { Box, Stack } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
+import { Box, Stack } from "@/layouts/Primitives";
 
 interface FilterBarProps {
   categories: string[];

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 interface SuccessStateProps {
   onReset: () => void;
 }

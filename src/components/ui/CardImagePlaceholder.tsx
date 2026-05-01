@@ -1,5 +1,6 @@
-import { Box, Text, Stack } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface CardImagePlaceholderProps {
   image?: string;

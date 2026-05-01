@@ -1,11 +1,12 @@
 import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
 import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 import { debounce } from 'throttle-debounce';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';

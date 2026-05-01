@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { Star } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface GearCardProps extends Resource {
   basePath: string;

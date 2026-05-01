@@ -1,12 +1,12 @@
 import { useRef, useLayoutEffect } from 'react';
 import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
-import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
+import { Box, Stack } from "@/layouts/Primitives";
 
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];

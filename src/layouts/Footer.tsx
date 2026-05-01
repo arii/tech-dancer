@@ -1,5 +1,5 @@
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-
+import { Box, Button, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 export function Footer() {
   const legalLinks = [
     { label: 'Privacy', href: '#' },

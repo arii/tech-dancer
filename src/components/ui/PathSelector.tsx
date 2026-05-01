@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Grid } from '@/layouts/Primitives';
 import { HeroPathCard } from './HeroPathCard';
 import dancerHero from '@/assets/dancer_hero.webp';
 import roboticistHero from '@/assets/roboticist_hero.webp';
+import { Grid } from "@/layouts/Primitives";
 
 type PathID = 'dancer' | 'roboticist';
 

@@ -1,6 +1,5 @@
 import { Cpu, Globe, Camera, Heart, HelpCircle, LucideIcon } from 'lucide-react';
-import { Box } from '@/layouts/Primitives';
-
+import { Box } from "@/layouts/Primitives";
 interface CategoryPlaceholderProps {
   category: string;
   size?: 'sm' | 'md' | 'lg';

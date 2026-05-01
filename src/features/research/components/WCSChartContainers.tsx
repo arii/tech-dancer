@@ -1,5 +1,7 @@
 import { BarChart2, TrendingUp } from 'lucide-react';
 import {
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -10,8 +12,6 @@ import {
   LineChart,
   Line
 } from 'recharts';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-
 interface ScoreData {
   score: number;
   count: number;

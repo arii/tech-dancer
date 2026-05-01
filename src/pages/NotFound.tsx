@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Box, Button, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function NotFound() {
   const navigate = useNavigate();

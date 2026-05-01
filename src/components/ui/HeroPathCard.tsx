@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Box, Stack } from '@/layouts/Primitives';
-
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 interface HeroPathCardProps {
   title: string;
   wrapperClass: string;
@@ -32,7 +32,7 @@ export function HeroPathCard({
   return (
     <Box
       height="full"
-      minHeight="300px"
+      minHeight={300}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
@@ -42,7 +42,7 @@ export function HeroPathCard({
       className={cn(
         wrapperClass,
         "group transition-all duration-700 ease-in-out",
-        isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
+        isOtherHovered ? "opacity-30 grayscale scale-[var(--scale-98)]" : "opacity-100 grayscale-0 scale-100" // impeccable-ignore
       )}
     >
       {/* Background Image */}

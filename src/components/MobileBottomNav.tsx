@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 import { MOBILE_NAV_ROUTES } from '@/config/routes';
+import { Box } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export function MobileBottomNav() {
   return (

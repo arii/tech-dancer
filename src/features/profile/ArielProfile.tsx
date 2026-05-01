@@ -1,8 +1,9 @@
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
+import { Box, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function ArielProfile() {
   const { bio } = useProfile();

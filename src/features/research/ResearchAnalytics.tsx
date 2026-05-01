@@ -1,10 +1,11 @@
-import { motion } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
-import { Database, FileText, Search, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { motion } from 'motion/react'; import { useNavigate } from 'react-router-dom'; import { Database, FileText, Search, ArrowRight } from 'lucide-react'; ;
+;;
+;;
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
+import { Box, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();

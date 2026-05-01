@@ -1,5 +1,6 @@
-import { Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon } from 'lucide-react';
+import { Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface EventCardProps {
   name: string;

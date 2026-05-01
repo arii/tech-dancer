@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 import { cn } from '@/lib/utils';
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;

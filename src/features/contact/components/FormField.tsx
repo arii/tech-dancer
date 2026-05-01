@@ -1,6 +1,6 @@
 import { useId, ReactElement, cloneElement } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-
+import { Box, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 interface FormFieldProps {
   label: string;
   error?: string;

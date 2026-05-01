@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 
-import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -8,6 +7,8 @@ import { GearCard } from '@/components/ui/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
+import { Box, Grid, Stack } from "@/layouts/Primitives";
+import { Text } from "@/layouts/Text";
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView } = useToolbox();

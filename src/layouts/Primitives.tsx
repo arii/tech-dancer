@@ -1,6 +1,6 @@
 export * from "./Box"
 export * from "./Stack"
-export * from "./Text"
+export { Text } from "./Text"
 export * from "./Grid"
 export * from "./Button"
 export * from "./system-utils"
