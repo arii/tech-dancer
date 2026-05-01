@@ -41,7 +41,7 @@ export function GearCard({
       />
 
       {/* Content Area */}
-      <Stack gap={4} padding={5} flex={1} justify="between">
+      <Stack gap={4} padding={4} flex={1} justify="between">
         <Stack gap={3}>
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
@@ -76,14 +76,14 @@ export function GearCard({
 
           <Text
             variant="body"
-            size="lg"
-            weight="font-bold"
-            className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
+            size="xl"
+            weight="font-black"
+            className="text-accent-navy leading-none group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
 
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-80">
+          <Text variant="body" size="base" color="dim" className="line-clamp-3 leading-snug opacity-90">
              {excerpt}
           </Text>
 

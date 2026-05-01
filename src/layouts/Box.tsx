@@ -4,6 +4,7 @@ import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
+import { SPACING_MAP, RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
 
 export interface BaseProps {
   padding?: ResponsiveProp<keyof typeof spacing | number | string>
@@ -75,7 +76,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     gap, border, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
-    overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
+    overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop,
     top, right, bottom, left,
     // Motion props filtering
@@ -148,35 +149,41 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       return `${pfx}${value}`
     }
 
+    const s = (prefix: string) => (v: string | number | boolean | undefined | null) => {
+      const token = SPACING_MAP[v as keyof typeof SPACING_MAP];
+      if (token) return `${prefix}-${token}`;
+      return getVal(v, prefix);
+    }
+
     return (
       <Component
         ref={ref}
         className={composeStyles(
           panel && layoutTokens.panel,
           layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
-          shadow && shadows[shadow],
+          shadow && SHADOW_MAP[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
           emphasis && variants.emphasis[emphasis],
-          radiusProp && variants.radius[radiusProp],
+          radiusProp && RADIUS_MAP[radiusProp],
           borderClasses,
-          getResponsiveClasses(gap, "gap-", (v) => v) /* safelist: gap-6 gap-12 */ ,
-          getResponsiveClasses(padding, "p-", (v) => spacing[v as keyof typeof spacing] ? "" : v),
+          getResponsiveClasses(gap, "", s("gap")),
+          getResponsiveClasses(padding, "", s("p")),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
-          getResponsiveClasses(paddingTop, "pt-"),
-          getResponsiveClasses(paddingBottom, "pb-"),
-          getResponsiveClasses(paddingLeft, "pl-"),
-          getResponsiveClasses(paddingRight, "pr-"),
-          getResponsiveClasses(paddingX, "px-"),
-          getResponsiveClasses(paddingY, "py-"),
-          getResponsiveClasses(marginTop, "mt-"),
-          getResponsiveClasses(marginBottom, "mb-"),
-          getResponsiveClasses(marginLeft, "ml-"),
-          getResponsiveClasses(marginRight, "mr-"),
-          getResponsiveClasses(marginX, "mx-"),
-          getResponsiveClasses(marginY, "my-"),
+          getResponsiveClasses(paddingTop, "", s("pt")),
+          getResponsiveClasses(paddingBottom, "", s("pb")),
+          getResponsiveClasses(paddingLeft, "", s("pl")),
+          getResponsiveClasses(paddingRight, "", s("pr")),
+          getResponsiveClasses(paddingX, "", s("px")),
+          getResponsiveClasses(paddingY, "", s("py")),
+          getResponsiveClasses(marginTop, "", s("mt")),
+          getResponsiveClasses(marginBottom, "", s("mb")),
+          getResponsiveClasses(marginLeft, "", s("ml")),
+          getResponsiveClasses(marginRight, "", s("mr")),
+          getResponsiveClasses(marginX, "", s("mx")),
+          getResponsiveClasses(marginY, "", s("my")),
           flex === true && "flex-1",
           flex !== undefined && typeof flex !== "boolean" && (typeof flex === "number" ? `flex-${flex}` : flex),
-          wrap && "flex-wrap",
+          (wrap || flexWrap) && "flex-wrap",
           position,
           inset === true && "inset-0",
           inset === "top" && "top-0 left-0 right-0",
@@ -201,15 +208,15 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           shrink === true && "shrink",
           shrink === false && "shrink-0",
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,
-          getResponsiveClasses(span, "col-span-"),
+          getResponsiveClasses(span, "", (v) => SPAN_MAP[v as keyof typeof SPAN_MAP] || ""),
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
-          getResponsiveClasses(top, "top-"),
-          getResponsiveClasses(right, "right-"),
-          getResponsiveClasses(bottom, "bottom-"),
-          getResponsiveClasses(left, "left-"),
+          getResponsiveClasses(top, "", s("top")),
+          getResponsiveClasses(right, "", s("right")),
+          getResponsiveClasses(bottom, "", s("bottom")),
+          getResponsiveClasses(left, "", s("left")),
           className
         )}
         style={{

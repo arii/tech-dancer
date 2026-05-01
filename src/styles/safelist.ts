@@ -1,5 +1,5 @@
 // Auto-generated safelist to ensure dynamic tailwind classes used in Box.tsx are preserved.
-export const safelist = [
+export const tailwindSafelist = [
   'bottom-0',
   'bottom-8',
   'gap-0',
@@ -101,6 +101,7 @@ export const safelist = [
   'grid-cols-12',
   'sm:grid-cols-2',
   'md:grid-cols-2',
+  'lg:grid-cols-3',
   'lg:grid-cols-4',
   'lg:grid-cols-12',
   'xl:grid-cols-3',
@@ -108,4 +109,8 @@ export const safelist = [
   'col-span-1',
   'lg:col-span-7',
   'lg:col-span-5',
+  'lg:gap-6',
+  'lg:gap-8',
+  'md:gap-6',
+  'md:gap-8',
 ];

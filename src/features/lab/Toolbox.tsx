@@ -19,12 +19,12 @@ export default function Toolbox() {
   [filteredCategories]);
 
   return (
-    <Box as="section" paddingY={8}>
+    <Box as="section" paddingY={4}>
       <SEO
         title="Toolbox"
         description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
       />
-      <Box as="header" marginBottom={12}>
+      <Box as="header" marginBottom={8}>
         <PageHeader
           label="THE TOOLBOX"
           title="Gear Reviews"
@@ -32,7 +32,7 @@ export default function Toolbox() {
         />
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
           <SearchBox
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -44,7 +44,7 @@ export default function Toolbox() {
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={{ base: 6, md: 8 }}>
+        <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 4, md: 6 }}>
           {allFilteredItems.map((item) => (
             <GearCard
               key={item.slug}

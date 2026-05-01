@@ -80,7 +80,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <RouterProvider 
+          router={router} 
+          fallbackElement={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>} 
+        />
       </QueryClientProvider>
     </HelmetProvider>
   </StrictMode>,

@@ -1,9 +1,12 @@
+import { tailwindSafelist } from './src/styles/safelist';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: tailwindSafelist,
   theme: {
     extend: {
       colors: {

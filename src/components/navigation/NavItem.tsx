@@ -25,8 +25,8 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
         className={({ isActive }) => cn(
           "transition-all relative z-10 rounded-md block",
           isActive
-            ? "text-accent bg-accent/10 border-l-4 border-accent"
-            : "text-text-dim hover:text-accent hover:bg-bg/50 border-l-4 border-transparent"
+            ? "text-accent bg-accent/10 border-l-4 border-accent shadow-[inset_0_0_20px_rgba(0,123,255,0.05)]"
+            : "text-text-dim hover:text-accent hover:bg-surface border-l-4 border-transparent hover:border-accent/20 cursor-pointer"
         )}
       >
         {({ isActive }) => (
