@@ -62,7 +62,7 @@ jobs:
         run: pnpm run type-check
 
       - name: Run Unit Tests (Vitest)
-        run: pnpm run test:unit
+        run: pnpm test
 
       - name: Run CLI Unit Tests
         run: |
