@@ -86,7 +86,7 @@ class TestTDCLI(unittest.TestCase):
         mock_env_get.return_value = None
         mock_gha_get.return_value = "42"
 
-        baseline = td_cli.resolve_baseline(None, "FAKE_VAR", "fake.txt", 100)
+        baseline = td_cli.resolve_baseline(None, "FAKE_VAR", 100)
 
         self.assertEqual(baseline, 42)
         mock_gha_get.assert_called_with("FAKE_VAR")

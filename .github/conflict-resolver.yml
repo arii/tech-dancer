@@ -11,5 +11,3 @@ rules:
     strategy: 'theirs'
   - paths: '**/*.webp'
     strategy: 'theirs'
-  - paths: '**/*'
-    strategy: 'ours'
