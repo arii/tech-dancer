@@ -5,6 +5,19 @@ The Roboticist's Guide to the West Coast Swing.
 ## Overview
 A gear, tech, and travel guide for West Coast Swing dancers. Built with Next.js to provide real-time comp data and travel logistics.
 
+## Content Structure
+
+All content lives under `content/` using `YYYY-MM-DD-slug.md` naming. Mandatory frontmatter:
+
+```yaml
+type: post | resource | study
+title: "string"
+date: "YYYY-MM-DD"
+author: "string"
+category: "string"
+excerpt: "string"
+```
+
 ## Features
 - **Folio Journal**: Deep dives into technique, engineering, and lifestyle.
 - **The Stacks**: A curated, searchable gear repository with affiliate integrations.

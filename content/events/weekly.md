@@ -1,6 +1,8 @@
 ---
 type: event
 title: "Weekly Class"
+date: "2024-01-01"
+author: "Ariel Anders, PhD"
 location: "Mission City Swing"
 city: "San Francisco // CA"
 schedule: "Wednesdays"

@@ -77,7 +77,7 @@ export interface Resource {
   slug: string;
   title: string;
   date: string;
-  author?: string;
+  author: string;
   category: string;
   excerpt: string;
   content: string;
@@ -101,14 +101,14 @@ export interface Study {
   excerpt: string;
   content: string;
   tags?: string[];
-  author?: string;
+  author: string;
 }
 
 export interface Event {
   slug: string;
   title: string;
-  date?: string;
-  author?: string;
+  date: string;
+  author: string;
   location: string;
   city: string;
   schedule: string;
