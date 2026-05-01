@@ -4,9 +4,7 @@ description: systematically audit, review, and organize open issues in bulk to d
 
 # Mass Audit Issues Workflow
 
-This workflow standardizes the process for auditing multiple open issues, allowing agents to systematically review the issue backlog, determine if they are still relevant, and act accordingly (keep, update, abandon).
-
-// turbo-all
+This workflow standardizes the process for auditing multiple open issues, allowing agents to systematically review the issue backlog, determine if they are still relevant, and act accordingly (keep, update, abandon). To avoid API abuse and noise, process issues in small batches and include artificial delays if scripting automated actions.
 
 1. **Fetch open issues**:
 ```bash
@@ -17,7 +15,7 @@ gh issue list --limit 100 --json number,title,author,updatedAt,labels,body
 
 3. **Audit the Issues**: For each issue fetched in step 1, analyze the content (`body`), labels, and `updatedAt` to determine its state:
    - **Keep**: The issue is still relevant, actively being worked on, or represents a valid future enhancement/bug.
-   - **Update**: The issue is relevant but lacks information, references deprecated paths/assets, or needs a bump to restart discussion. (You can also run `python3 dev-tools/td_cli.py update-issues` to check for deprecated terms).
+   - **Update**: The issue is relevant but lacks information, references deprecated paths/assets, or needs a bump to restart discussion.
    - **Abandon**: The issue is stale, no longer applicable, resolved implicitly by other PRs, or lacking actionable details.
 
 4. **Take Action**:
