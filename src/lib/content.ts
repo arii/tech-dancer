@@ -155,7 +155,8 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         excerpt: String(data.excerpt || ''),
         date: String(data.date || ''),
         author: String(data.author || ''),
-        tags: Array.isArray(data.tags) ? data.tags : [],
+        tags: (Array.isArray(data.tags) ? data.tags : [])
+          .map(tag => tag.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')),
         content: content || '',
         slug: slugFrom(path)
       } as unknown as T;

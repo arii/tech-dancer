@@ -7,8 +7,8 @@ category: "Travel/Lifestyle"
 excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible credit-as-debit philosophy."
 image: ""
 tags:
-  - financial literacy
-  - travel hacking
+  - financial-literacy
+  - travel-hacking
   - wcs
 ---
 
