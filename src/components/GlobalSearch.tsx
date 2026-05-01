@@ -2,7 +2,7 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
+import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent, KeyboardEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 import { debounce } from 'throttle-debounce';
@@ -16,6 +16,7 @@ interface SearchResult {
 
 export function GlobalSearch() {
   const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
+  const modalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -58,6 +59,30 @@ export function GlobalSearch() {
     open();
   }, [open]);
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Tab') {
+      const focusableElements = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    }
+  };
+
   const handleSelect = (result: SearchResult) => {
     close();
     setQuery('');
@@ -78,11 +103,16 @@ export function GlobalSearch() {
       align="start"
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Global Search"
       data-testid="search-backdrop"
       className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
       onClick={close}
+      onKeyDown={handleKeyDown}
     >
       <Box
+        ref={modalRef}
         width="full"
         maxWidth="3xl"
         height="fit"
@@ -95,11 +125,13 @@ export function GlobalSearch() {
         onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
-          <Search className="w-6 h-6 text-accent shrink-0" />
+          <Search className="w-6 h-6 text-accent shrink-0" aria-hidden="true" />
           <Text
             as="input"
             ref={inputRef}
             type="text"
+            role="searchbox"
+            aria-label="Search repository, blog and gear"
             placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
             defaultValue={query}
             onChange={handleInputChange}
@@ -125,12 +157,13 @@ export function GlobalSearch() {
 
         <Box padding={3} overflow="y-auto" maxHeight="60vh" surface="default">
           {results.length > 0 ? (
-            <Stack gap={2}>
+            <Stack gap={2} role="listbox" aria-label="Search results">
               {results.map((res: SearchResult) => (
                 <Box 
                   key={`${res.type}-${res.slug}`}
                   as="button"
                   type="button"
+                  role="option"
                   data-testid="search-result"
                   onClick={() => handleSelect(res)}
                   width="full"
@@ -160,31 +193,31 @@ export function GlobalSearch() {
               ))}
             </Stack>
           ) : (
-            <Box padding={12} display="flex" align="center" justify="center" opacity={30}>
+            <Box padding={12} display="flex" align="center" justify="center">
               <Stack align="center" gap={4}>
-                <Sparkles className="w-12 h-12 opacity-20" />
-                <Text variant="mono" size="xs" color="dim">Calibrating Variance...</Text>
+                <Sparkles className="w-12 h-12 text-accent opacity-20" aria-hidden="true" />
+                <Text variant="mono" size="xs" color="main" weight="font-bold">Calibrating Variance...</Text>
               </Stack>
             </Box>
           )}
         </Box>
 
-        <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center">
+        <Box border="t" paddingX={6} paddingY={3} surface="muted" display="flex" justify="between" align="center" aria-hidden="true">
            <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                    <Text variant="mono" size="tiny" color="main" className="leading-none">ESC</Text>
                  </Box>
-                 <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
+                 <Text variant="mono" size="micro" color="main" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none">↵</Text>
+                    <Text variant="mono" size="tiny" color="main" className="leading-none">↵</Text>
                  </Box>
-                 <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
+                 <Text variant="mono" size="micro" color="main" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
+            <Text variant="mono" size="micro" color="main" weight="font-bold" tracking="widest">
               {results.length} RESULTS FOUND
             </Text>
         </Box>

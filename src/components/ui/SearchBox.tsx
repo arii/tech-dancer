@@ -33,10 +33,12 @@ export function SearchBox({
       <Search
         size={18}
         className="text-text-dim absolute left-4 pointer-events-none"
+        aria-hidden="true"
       />
       <Box
         as="input"
         type="text"
+        aria-label={placeholder}
         placeholder={placeholder}
         variant="mono"
         size="sm"
