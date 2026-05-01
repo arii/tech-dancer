@@ -21,7 +21,9 @@ export function NewsletterBanner() {
       radius="none"
       marginX="auto"
       position="fixed"
-      style={{ bottom: 0, left: '1rem', right: '1rem', width: 'calc(100% - 2rem)' }}
+      bottom={0}
+      left={4}
+      right={4}
       zIndex="toast"
     >
       <Box position="absolute" className="top-2 right-2" zIndex="docked">

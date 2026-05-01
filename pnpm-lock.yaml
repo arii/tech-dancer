@@ -7281,7 +7281,8 @@ snapshots:
 
   commander@11.1.0: {}
 
-  commander@2.20.3: {}
+  commander@2.20.3:
+    optional: true
 
   common-tags@1.8.2: {}
 
