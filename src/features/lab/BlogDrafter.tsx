@@ -120,6 +120,36 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
 
           <Stack gap={6}>
+            <Grid cols={2} gap={4}>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CONTENT_TYPE</Text>
+                <Box
+                  as="select"
+                  value={data.type}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value)}
+                  className={cn(inputs.base, "appearance-none")}
+                >
+                  <option value="post">Blog Post</option>
+                  <option value="resource">Resource</option>
+                  <option value="study">Study</option>
+                  <option value="event">Event</option>
+                </Box>
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
+                <Box
+                  as="select"
+                  value={data.category}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
+                  className={cn(inputs.base, "appearance-none")}
+                >
+                  {CONTENT_CATEGORIES.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.label}</option>
+                  ))}
+                </Box>
+              </Stack>
+            </Grid>
+
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
               <Box
@@ -134,25 +164,23 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
-                <Box
-                  as="select"
-                  value={data.category}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
-                  className={cn(inputs.base, "appearance-none")}
-                >
-                  {CONTENT_CATEGORIES.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.label}</option>
-                  ))}
-                </Box>
-              </Stack>
-              <Stack gap={2}>
                 <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DATE</Text>
                 <Box
                   as="input"
                   type="date"
                   value={data.date}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                  className={inputs.base}
+                />
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>TAGS (COMMA SEPARATED)</Text>
+                <Box
+                  as="input"
+                  type="text"
+                  value={data.tags}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('tags', e.target.value)}
+                  placeholder="ai, automation, wcs"
                   className={inputs.base}
                 />
               </Stack>
@@ -170,17 +198,30 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               />
             </Stack>
 
-            <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
-              <Box
-                as="input"
-                type="url"
-                value={data.affiliateLink}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
-                placeholder="https://amazon.com/..."
-                className={inputs.base}
-              />
-            </Stack>
+            <Grid cols={2} gap={4}>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>HERO_IMAGE_URL</Text>
+                <Box
+                  as="input"
+                  type="text"
+                  value={data.image}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('image', e.target.value)}
+                  placeholder="https://..."
+                  className={inputs.base}
+                />
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AFFILIATE_LINK</Text>
+                <Box
+                  as="input"
+                  type="url"
+                  value={data.affiliateLink}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
+                  placeholder="https://amazon.com/..."
+                  className={inputs.base}
+                />
+              </Stack>
+            </Grid>
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>BODY_COMMENTARY</Text>

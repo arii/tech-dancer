@@ -3,11 +3,14 @@ import { debounce } from 'throttle-debounce';
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
+  type: 'post' | 'resource' | 'study' | 'event';
   title: string;
   category: string;
   excerpt: string;
   author: string;
   date: string;
+  image: string;
+  tags: string;
   affiliateLink: string;
   commentary: string;
 }
@@ -41,11 +44,14 @@ export function useBlogDrafter() {
       }
     }
     return {
+      type: 'post',
       title: '',
       category: 'Lifestyle',
       excerpt: '',
       author: SITE_METADATA.author,
       date: new Date().toISOString().split('T')[0],
+      image: '',
+      tags: '',
       affiliateLink: '',
       commentary: ''
     };
@@ -101,10 +107,10 @@ export function useBlogDrafter() {
   const markdownPreview = useMemo(() => {
     return `# ${data.title || '[Title]'}
 
-> **Category**: ${data.category} | **Date**: ${data.date} | **Author**: ${data.author}
-
-${data.excerpt ? `*${data.excerpt}*` : ''}
-
+> **Type**: ${data.type} | **Category**: ${data.category} | **Date**: ${data.date} | **Author**: ${data.author}
+${data.tags ? `> **Tags**: ${data.tags}\n` : ''}
+${data.excerpt ? `\n*${data.excerpt}*\n` : ''}
+${data.image ? `\n![Hero Image](${data.image})\n` : ''}
 ---
 
 ${data.commentary || '[Your commentary/content goes here]'}
@@ -117,7 +123,13 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const repoOwner = SITE_METADATA.repo.owner; 
     const repoName = SITE_METADATA.repo.name;
     const issueTitle = `Draft: ${data.title || 'New Post'}`;
-    const issueBody = `### New Blog Post Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownPreview}\n\`\`\``;
+
+    const pipelineData = {
+      ...data,
+      tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+    };
+
+    const issueBody = `### New Content Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(pipelineData, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownPreview}\n\`\`\``;
     
     return `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
   }, [data, markdownPreview]);
@@ -156,11 +168,14 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
 
   const clearForm = () => {
     setData({
+      type: 'post',
       title: '',
       category: 'Lifestyle',
       excerpt: '',
       author: SITE_METADATA.author,
       date: new Date().toISOString().split('T')[0],
+      image: '',
+      tags: '',
       affiliateLink: '',
       commentary: ''
     });

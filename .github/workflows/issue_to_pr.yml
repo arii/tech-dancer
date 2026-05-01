@@ -11,11 +11,17 @@ permissions:
 
 jobs:
   create-pr:
-    if: contains(github.event.issue.title, 'Draft:') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
+    # Security Gate: Only run if the issue title starts with 'Draft:'
+    # AND the author matches the site owner (arii)
+    if: |
+      contains(github.event.issue.title, 'Draft:') &&
+      (github.event.issue.user.login == 'arii')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,59 +29,49 @@ jobs:
           python-version: '3.x'
 
       - name: Parse Issue and Generate Markdown File
+        id: parse
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
-        shell: python
         run: |
-          import re
-          from datetime import datetime
-          import os
+          echo "$ISSUE_BODY" > issue_body.txt
+          python3 dev-tools/content_parser.py issue_body.txt "$ISSUE_TITLE" > parser_output.txt
+          cat parser_output.txt
 
-          body = os.environ['ISSUE_BODY']
-          title = os.environ['ISSUE_TITLE'].replace('Draft: ', '').strip()
+          # Extract variables from parser output
+          FILE_CREATED=$(grep FILE_CREATED parser_output.txt | cut -d'=' -f2)
+          SAFE_TITLE=$(grep SAFE_TITLE parser_output.txt | cut -d'=' -f2)
 
-          match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
-          if not match:
-              print("No markdown block found in issue. Exiting.")
-              exit(1)
+          echo "NEW_FILE=$FILE_CREATED" >> $GITHUB_ENV
+          echo "SAFE_TITLE=$SAFE_TITLE" >> $GITHUB_ENV
 
-          content = match.group(1).strip()
+      - name: Create Pull Request via GitHub CLI
+        env:
+          # Use PAT_TOKEN as requested to bypass branch protections and trigger workflows
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          BRANCH_NAME="content/${{ env.SAFE_TITLE }}"
 
-          # Detect content type from frontmatter
-          type_match = re.search(r'^type:\s*"?(\w+)"?', content, re.MULTILINE)
-          content_type = type_match.group(1) if type_match else 'post'
+          # Configure Git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Route to the right folder
-          folder_map = {
-              'post': 'content/posts',
-              'resource': 'content/resources',
-              'study': 'content/studies',
-          }
-          folder = folder_map.get(content_type, 'content/posts')
+          # Create and switch to branch
+          git checkout -b "$BRANCH_NAME"
 
-          date_str = datetime.now().strftime('%Y-%m-%d')
-          safe_title = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
-          filename = f"{folder}/{date_str}-{safe_title}.md"
+          # Add and commit the new file
+          git add "${{ env.NEW_FILE }}"
+          git commit -m "docs: add content from issue #$ISSUE_NUMBER"
 
-          os.makedirs(folder, exist_ok=True)
+          # Push the branch
+          git push origin "$BRANCH_NAME" --force
 
-          with open(filename, 'w', encoding='utf-8') as f:
-              f.write(content)
-
-          print(f"File created: {filename}")
-
-          with open(os.environ['GITHUB_ENV'], 'a') as f:
-              f.write(f"NEW_FILE={filename}\n")
-              f.write(f"SAFE_TITLE={safe_title}\n")
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "docs: add content from issue #${{ github.event.issue.number }}"
-          title: "Content: ${{ github.event.issue.title }}"
-          body: "This PR was automatically generated from issue #${{ github.event.issue.number }}."
-          branch: "content/${{ env.SAFE_TITLE }}"
-          base: main
-          delete-branch: true
+          # Create Pull Request
+          gh pr create \
+            --title "Content: $ISSUE_TITLE" \
+            --body "This PR was automatically generated from issue #$ISSUE_NUMBER." \
+            --base main \
+            --head "$BRANCH_NAME" \
+            --label "automated-content" || echo "PR already exists or failed to create"
