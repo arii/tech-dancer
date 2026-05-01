@@ -1,6 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
 Sitemap: https://arii.github.io/tech-dancer/sitemap.xml
