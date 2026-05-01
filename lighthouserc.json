@@ -1,9 +1,12 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./dist",
+      "startServerCommand": "pnpm run preview",
+      "startServerReadyPattern": "ready in",
       "numberOfRuns": 3,
-      "url": ["/"]
+      "settings": {
+        "chromeFlags": "--no-sandbox --headless --disable-gpu"
+      }
     },
     "assert": {
       "assertions": {
