@@ -36,15 +36,8 @@ export default defineConfig(({mode}) => {
     }
   }
 
-  const resolveHostname = () => {
-    if (env.VITE_APP_URL) return env.VITE_APP_URL;
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    if (isVercel) return 'https://tech-dancer.vercel.app';
-    return 'https://arii.github.io';
-  };
-
-  const hostname = resolveHostname().replace(/\/$/, '');
-  const fullAppUrl = new URL(base, hostname).href;
+  const appUrl = env.VITE_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : isVercel ? 'https://tech-dancer.vercel.app' : 'https://arii.github.io');
+  const fullAppUrl = new URL(base, appUrl).href;
 
   // Automatically discover dynamic routes from config/routes.ts and content directories
   const dynamicRoutes = [
@@ -74,7 +67,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: hostname,
+        hostname: new URL(fullAppUrl).origin,
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.map(route => route.replace(/\/$/, '') || '/'),
         // Exclude infrastructure pages that are not real app routes
