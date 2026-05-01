@@ -1,14 +1,20 @@
 ---
-type: resource
+type: "resource"
 title: "Travel Steamer Pro"
 category: "Travel"
 excerpt: "Compact, efficient, and dual-voltage. Keep your competition shirts and skirts wrinkle-free on the road."
-affiliateIds: ["amazon"]
-tags: ["travel", "clothing", "competition"]
-rating: 4.5
+affiliateIds:
+  - amazon
+tags:
+  - travel
+  - clothing
+  - competition
+rating: "4.5"
 verdict: "Essential for Competitors"
 priceCategory: "$$$"
 updatedDate: "Nov 2023"
+author: "Ariel Anders, PhD"
+date: "2026-01-01"
 ---
 
 ## Competition Ready, Anywhere

@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "The role of AI in Dance"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

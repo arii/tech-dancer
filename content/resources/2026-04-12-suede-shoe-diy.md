@@ -1,5 +1,5 @@
 ---
-type: resource
+type: "resource"
 title: "How to Suede Your Own Dance Shoes for $15"
 date: "2026-04-12"
 author: "Ariel Anders, PhD"
@@ -12,7 +12,7 @@ tags:
   - diy
   - footwear
   - budget
-rating: 4.7
+rating: "4.7"
 verdict: "Best Budget Hack"
 priceCategory: "$"
 updatedDate: "Mar 2024"

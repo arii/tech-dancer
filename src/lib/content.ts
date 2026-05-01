@@ -106,12 +106,17 @@ export interface Study {
 export interface Event {
   slug: string;
   title: string;
+  date: string;
+  author: string;
+  category: string;
+  excerpt: string;
   location: string;
   city: string;
   schedule: string;
   description: string;
   link?: string;
   content: string;
+  tags?: string[];
 }
 
 export type ContentItem = Post | Resource | Study | Event;
@@ -129,6 +134,17 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
+/**
+ * Normalizes a tag to lowercase kebab-case.
+ */
+function normalizeTag(tag: string) {
+  return tag
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+}
+
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
   return Object.entries(modules)
     .map(([path, raw]) => {
@@ -139,6 +155,10 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         data.image = undefined;
       }
 
+      const tags = Array.isArray(data.tags)
+        ? data.tags.map(t => normalizeTag(String(t)))
+        : [];
+
       return {
         ...data,
         title: String(data.title || 'Untitled'),
@@ -146,7 +166,7 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         excerpt: String(data.excerpt || ''),
         date: String(data.date || ''),
         author: String(data.author || ''),
-        tags: Array.isArray(data.tags) ? data.tags : [],
+        tags,
         content: content || '',
         slug: slugFrom(path)
       } as unknown as T;

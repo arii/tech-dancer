@@ -17,6 +17,7 @@
     "clean": "rm -rf dist",
     "lint": "run-p lint:*",
     "lint:ox": "oxlint --deny-warnings",
+    "lint:content": "tsx scripts/validate-content.ts",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
     "knip": "knip",

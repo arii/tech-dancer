@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "AI powered content creation and development"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

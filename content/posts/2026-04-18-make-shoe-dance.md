@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "Make any shoe a dance shoe"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

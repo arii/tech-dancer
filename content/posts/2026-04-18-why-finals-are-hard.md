@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "The majority of above average dancers don’t make it to finals"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

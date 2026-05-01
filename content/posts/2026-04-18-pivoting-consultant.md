@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "Pivoting to consulting and project based work"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

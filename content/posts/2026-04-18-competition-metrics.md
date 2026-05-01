@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "Ignore scores and focus on your results"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

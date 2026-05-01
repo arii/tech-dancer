@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "Halloween costumes you can dance in"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

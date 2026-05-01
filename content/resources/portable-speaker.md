@@ -1,14 +1,20 @@
 ---
-type: resource
+type: "resource"
 title: "Portable Bluetooth Speaker (UE Wonderboom 4)"
 category: "Dance Gear"
 excerpt: "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings."
-affiliateIds: ["amazon"]
-tags: ["practice", "music", "travel"]
-rating: 4.8
+affiliateIds:
+  - amazon
+tags:
+  - practice
+  - music
+  - travel
+rating: "4.8"
 verdict: "Best for Travel"
 priceCategory: "$$"
 updatedDate: "Jan 2024"
+author: "Ariel Anders, PhD"
+date: "2026-01-01"
 ---
 
 ## Practice Anywhere

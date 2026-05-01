@@ -1,5 +1,5 @@
 ---
-type: post
+type: "post"
 title: "Why I have the Amex Platinum and Hyatt card"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
@@ -7,8 +7,8 @@ category: "Travel/Lifestyle"
 excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible credit-as-debit philosophy."
 image: ""
 tags:
-  - financial literacy
-  - travel hacking
+  - financial-literacy
+  - travel-hacking
   - wcs
 ---
 
