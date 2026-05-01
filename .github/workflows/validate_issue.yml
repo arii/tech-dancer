@@ -12,12 +12,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - run: pip install PyGithub
+      - name: Setup Python Environment
+        run: ./dev-tools/setup-python.sh
       - name: Validate Issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          source .venv/bin/activate
           python3 dev-tools/td_cli.py validate-issue --issue-number ${{ github.event.issue.number }} --post-comments

@@ -16,16 +16,8 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up Python
-        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install Python Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r etl/requirements.txt
+      - name: Setup Python Environment
+        run: ./dev-tools/setup-python.sh
 
       - name: Cache Playwright Browsers
         id: cache-playwright
@@ -42,16 +34,19 @@ jobs:
 
       - name: Run Pytest (Data Validation)
         run: |
+          source .venv/bin/activate
           PYTHONPATH=etl pytest etl/tests/
 
       - name: Execute Extraction Script
         run: |
           # Run crawl for a single year in automated workflow to keep it efficient
           # Markdown files are generated in content/studies/ but ignored by .gitignore
+          source .venv/bin/activate
           python etl/scraper.py --years 1
 
       - name: Validate Output
         run: |
+          source .venv/bin/activate
           python -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
 
       - name: Commit via Git LFS
