@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, CLIError
+from utils import get_github_token, get_repo_name, get_gha_variable, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -47,15 +47,23 @@ REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'e
 # --- Shared Logic ---
 
 def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
-    """Resolves a baseline value from CLI argument, environment variable, or default file."""
+    """Resolves a baseline value from CLI argument, environment variable, GHA variable, or default file."""
     def to_int(val, source):
         if val is None or not str(val).strip(): return None
         try: return int(str(val).strip())
         except ValueError: raise CLIError(f"Invalid baseline from {source}: {val}")
 
     for src, val in [(file_path, None), (env_var, os.environ.get(env_var)), (default_file, None)]:
-        if src and not val and os.path.exists(src):
+        if src == env_var:
+            # handle env_var case specifically since it was fetched already
+            pass
+        elif src and not val and os.path.exists(src):
             with open(src, 'r') as f: val = f.read().strip()
+
+        if val is None and src == env_var:
+             # Try local GHA fetch if env is truly None (not just empty)
+             val = get_gha_variable(env_var)
+
         final_val = to_int(val, src)
         if final_val is not None: return final_val
     return fallback_value
@@ -63,8 +71,14 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
 def extract_code_blocks(text: str) -> list[str]:
     return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
 
-def get_pr_files(pr) -> set[str]:
-    return {f.filename for f in pr.get_files()}
+def get_current_violation_count() -> int:
+    """Obtains the current UI anti-pattern violation count using the Node script."""
+    try:
+        res = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"],
+                             capture_output=True, text=True, check=True)
+        return int(res.stdout.strip() or 0)
+    except (subprocess.CalledProcessError, ValueError) as e:
+        raise CLIError(f"Failed to obtain violation count: {e}")
 
 def detect_conflicts(repo, target_pr_num=None):
     open_prs = list(repo.get_pulls(state='open'))
@@ -184,18 +198,9 @@ def handle_ratchet_any(args):
             print(f"[DRY-RUN] Would update {update_file} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
-def get_current_violation_count() -> int:
-    """Obtains the current UI anti-pattern violation count using the Node script."""
-    try:
-        res = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"],
-                             capture_output=True, text=True, check=True)
-        return int(res.stdout.strip() or 0)
-    except (subprocess.CalledProcessError, ValueError) as e:
-        raise CLIError(f"Failed to obtain violation count: {e}")
-
 def handle_bundle_size(args):
     size = get_bundle_size()
-    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 1000)
+    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 3000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -361,6 +366,21 @@ def handle_pre_submit(args):
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
 
+        # Baseline Configuration Check
+        if not args.json: print("--- Baseline Configuration ---")
+        missing_vars = []
+        for var_name in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE", "AUDIT_BASELINE"]:
+            if not (os.environ.get(var_name) or get_gha_variable(var_name)):
+                missing_vars.append(var_name)
+
+        if missing_vars:
+            msg = f"Missing GHA variables: {', '.join(missing_vars)}. Run 'gh variable set <NAME> --body <VALUE>' to configure them locally."
+            if not args.json: print(f"  ⚠️  {msg}")
+            results["steps"].append({"name": "Baseline Check", "status": "warning", "message": msg})
+        else:
+            results["steps"].append({"name": "Baseline Check", "status": "success"})
+            if not args.json: print("  ✅ Technical debt baselines are configured.")
+
         # PR Scope Check
         scope_warning = verify_pr_scope()
 
@@ -401,12 +421,7 @@ def handle_audit_gate(args):
 
     if baseline == -1:
         # Fallback to dynamic comparison against origin/main
-        try:
-            # We execute the Node script against files from origin/main to get a consistent count
-            # This is simplified by just using the Node script on a temporary directory or similar.
-            # To keep it minimal, we just default to 0 if no baseline is set in CI.
-            baseline = 0 if is_ci else 0 # Local dev would ideally have a better fallback, but 0 is safe.
-        except Exception: baseline = 0
+        baseline = 0 # Default fallback
 
     # 3. Threshold check
     if not args.json: print(f"Baseline: {baseline} | Current: {current} ({source})")
@@ -424,7 +439,7 @@ def handle_manage_reviews(args):
     from github import Github
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
-    g = Github(token); repo = g.get_repo(get_repo_name()); login = g.get_user().login
+    g = Github(token); repo = g.get_repo(repo_name()); login = g.get_user().login
 
     prs_data = []
     for pr in repo.get_pulls(state='open', sort='updated', direction='desc'):

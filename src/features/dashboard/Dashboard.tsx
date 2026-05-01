@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
-import { STATIC_SCHEMAS, GOOGLE_SITE_VERIFICATION } from '@/config/constants';
+import { STATIC_SCHEMAS } from '@/config/constants';
 import { SectionHeader, PageHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -20,7 +20,6 @@ export default function Home() {
         title="Home"
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
         schema={STATIC_SCHEMAS.HOME}
-        googleVerification={GOOGLE_SITE_VERIFICATION}
       />
       <Stack gap={8}>
         <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>

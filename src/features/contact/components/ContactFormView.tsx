@@ -135,7 +135,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 >
                   {isSubmitting ? (
                     <Stack direction="row" align="center" gap={3}>
-                      <div className="w-4 h-4 border-2 border-current border-t-transparent animate-spin" />
+                      <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
                       <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
                     </Stack>
                   ) : (

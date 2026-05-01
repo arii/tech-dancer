@@ -22,7 +22,7 @@ export default defineConfig(({mode}) => {
   // Determine the GitHub branch for base path constructing
   const ghBranch = process.env.GITHUB_REF_NAME;
   const isMainBranch = ghBranch === 'main' || !ghBranch;
-  
+
   // Use VITE_BASE_PATH if specified, otherwise construct based on environment
   let base = process.env.VITE_BASE_PATH;
   if (!base) {
@@ -60,6 +60,12 @@ export default defineConfig(({mode}) => {
 
   return {
     base,
+    test: {
+      globals: false,
+      environment: 'jsdom',
+      setupFiles: [],
+      include: ['src/**/*.{test,spec}.ts'],
+    },
     build: {
       target: 'esnext',
       // Ensure assets are also handled correctly
@@ -73,7 +79,7 @@ export default defineConfig(({mode}) => {
     plugins: [
       react(),
       tailwindcss(),
-      Sitemap({
+      !process.env.VITEST && Sitemap({
         hostname: resolveHostname().replace(/\/$/, ''),
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.map(route => route.replace(/\/$/, '') || '/'),

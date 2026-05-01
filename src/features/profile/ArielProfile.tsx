@@ -42,7 +42,7 @@ export default function ArielProfile() {
               <Grid cols={{ base: 1, md: 3 }} gap={8}>
                 {bio.details.map((detail) => (
                   <Stack key={detail.label} gap={1}>
-                    <Text variant="mono" size="xs" color="dim" weight="font-bold">{detail.label}</Text>
+                    <Text variant="mono" size="xs" color="brand" weight="font-bold">{detail.label}</Text>
                     <Text variant="body" size="sm" color="main" weight="font-semibold" className="break-words">{detail.value}</Text>
                   </Stack>
                 ))}

@@ -130,7 +130,11 @@ export function MainLayout({ children }: { children: ReactNode }) {
   return (
     <Box
       layout="root"
-      className="min-h-screen relative overflow-x-hidden w-full touch-pan-y"
+      position="relative"
+      overflowX="hidden"
+      width="full"
+      minHeight="screen"
+      className="touch-pan-y"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -140,7 +144,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Box display="flex" className="min-h-screen w-full">
+      <Box display="flex" minHeight="screen" width="full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -149,7 +153,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           flex={1}
           position="relative"
           overflowY="auto"
-          className="pt-16 lg:pt-0"
+          paddingTop={{ base: 16, lg: 0 }}
           maxWidth="full"
           width="full"
           surface="bg"

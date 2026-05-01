@@ -3,7 +3,7 @@
 The Roboticist's Guide to the West Coast Swing.
 
 ## Overview
-A gear, tech, and travel guide for West Coast Swing dancers. Built with Next.js to provide real-time comp data and travel logistics.
+A gear, tech, and travel guide for West Coast Swing dancers. Built with Vite + React to provide real-time comp data and travel logistics.
 
 ## Features
 - **Folio Journal**: Deep dives into technique, engineering, and lifestyle.
@@ -16,12 +16,12 @@ A gear, tech, and travel guide for West Coast Swing dancers. Built with Next.js 
 
 ## Development
 ```bash
-npm run dev
+pnpm dev
 ```
 For production:
 ```bash
-npm run build
-npm run start
+pnpm build
+pnpm preview
 ```
 
 ## Firebase Security Rules

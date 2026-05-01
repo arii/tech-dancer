@@ -64,7 +64,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "w-[280px] bg-surface border-r border-line hidden lg:flex flex-col min-h-screen sticky top-0 transition-[background-color,backdrop-filter] duration-300",
+          "transition-[background-color,backdrop-filter] duration-300",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -73,7 +73,7 @@ export default function Navigation() {
           gap={10}
           flex={1}
         >
-          <Box as={NavLink} to="/" className="group block mb-4">
+          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
             <Text 
               variant="mono" 
               size="lg" 

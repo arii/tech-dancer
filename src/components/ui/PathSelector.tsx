@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Grid } from '@/layouts/Primitives';
 import { HeroPathCard } from './HeroPathCard';
 import dancerHero from '@/assets/dancer_hero.webp';
 import roboticistHero from '@/assets/roboticist_hero.webp';
@@ -38,7 +39,15 @@ export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-px bg-line border-y border-line min-h-[40vh] w-full">
+    <Grid
+      cols={{ base: 1, lg: 12 }}
+      gap="px"
+      surface="muted"
+      border="y"
+      minHeight="[40vh]"
+      width="full"
+      className="bg-line"
+    >
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
@@ -55,6 +64,6 @@ export default function PathSelector() {
           />
         );
       })}
-    </div>
+    </Grid>
   );
 }

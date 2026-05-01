@@ -193,6 +193,7 @@ function checkPRScope() {
 }
 
 function generateTodoFile(allViolations) {
+  // Only write if not in count-only or json mode
   let todoContent = "# UI Anti-Pattern TODO List\n\n";
   todoContent += "This list is automatically generated from the audit report. Fix these anti-patterns to adhere to the project design system.\n\n";
 
@@ -233,7 +234,7 @@ files.forEach(filepath => {
 
 if (isCountOnly) {
   console.log(Object.values(allViolations).reduce((sum, v) => sum + v.length, 0));
-  process.exit(0);
+  process.exit(0); // Exit 0 to allow bash capture of stdout
 }
 
 if (isJson) {
