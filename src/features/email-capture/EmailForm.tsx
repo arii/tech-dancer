@@ -52,7 +52,7 @@ export function EmailForm() {
               {status === 'loading' && (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">AUTHENTICATING...</Text>
+                  <Text variant="mono" size="micro" weight="font-bold" color="bg">PROCESSING...</Text>
                 </>
               )}
               {status === 'success' && (
