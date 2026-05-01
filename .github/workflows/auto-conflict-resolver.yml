@@ -200,6 +200,7 @@ jobs:
           echo "pr_url=${PR_URL}" >> $GITHUB_OUTPUT
 
           # Manually trigger workflows to run on the new PR
+          # Note: lint.yml and smoke-tests.yml are consolidated into ci.yml
           gh workflow run ci.yml --ref "$RESOLVE_BRANCH" || true
           gh workflow run codeql.yml --ref "$RESOLVE_BRANCH" || true
           gh workflow run conflict-check.yml --ref "$RESOLVE_BRANCH" || true

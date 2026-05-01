@@ -8,3 +8,4 @@ pytest-mock==3.15.1
 tenacity==8.2.3
 requests==2.33.1
 tqdm==4.67.3
+PyGithub==2.6.0

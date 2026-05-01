@@ -24,7 +24,7 @@ if check_tool uv; then
   fi
   source .venv/bin/activate
   echo "Installing Python dependencies with uv..."
-  if ! uv pip install -r etl/requirements.txt PyGithub; then
+  if ! uv pip install -r etl/requirements.txt; then
     echo "❌ Error: uv pip install failed."
     exit 1
   fi
@@ -36,7 +36,7 @@ elif check_tool python3; then
   fi
   source .venv/bin/activate
   echo "Installing Python dependencies with pip..."
-  if ! pip install -r etl/requirements.txt PyGithub; then
+  if ! pip install -r etl/requirements.txt; then
     echo "❌ Error: pip install failed."
     exit 1
   fi
