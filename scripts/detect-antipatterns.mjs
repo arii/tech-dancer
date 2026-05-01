@@ -209,9 +209,10 @@ function generateTodoFile(allViolations) {
 
 const args = process.argv.slice(2);
 const isJson = args.includes('--json');
+const isCountOnly = args.includes('--count-only');
 const targets = args.filter(arg => !arg.startsWith('--'));
 
-if (!isJson) {
+if (!isJson && !isCountOnly) {
   console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
   checkPRScope();
 }
@@ -229,6 +230,11 @@ files.forEach(filepath => {
     }
   }
 });
+
+if (isCountOnly) {
+  console.log(Object.values(allViolations).reduce((sum, v) => sum + v.length, 0));
+  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+}
 
 if (isJson) {
   process.stdout.write(JSON.stringify(allViolations, null, 2));

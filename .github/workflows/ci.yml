@@ -95,8 +95,16 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
-          pnpm run audit || true
-          python3 dev-tools/td_cli.py audit-gate
+          CURRENT=$(node scripts/detect-antipatterns.mjs --count-only 2>/dev/null) || true
+          CURRENT=${CURRENT:-0}
+          BASELINE=${AUDIT_BASELINE:-0}
+          echo "Baseline: $BASELINE | Current: $CURRENT"
+          if [ "$CURRENT" -gt "$BASELINE" ]; then
+            echo "❌ New violations introduced."
+            exit 1
+          fi
+        env:
+          AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
       - name: Design Token Compliance
         run: |

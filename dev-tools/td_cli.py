@@ -494,12 +494,12 @@ def handle_audit_gate(args):
 
     for dir_path in AUDIT_CHECK_DIRS:
         full_path = os.path.join(os.getcwd(), dir_path)
-        if os.path.isfile(full_path) and full_path.endswith('.tsx'):
+        if os.path.isfile(full_path) and (full_path.endswith('.tsx') or full_path.endswith('.ts')):
             files_to_check.append(dir_path)
         elif os.path.isdir(full_path):
             for root, _, files in os.walk(full_path):
                 for file in files:
-                    if file.endswith('.tsx'):
+                    if file.endswith('.tsx') or file.endswith('.ts'):
                         files_to_check.append(os.path.relpath(os.path.join(root, file), os.getcwd()))
 
     for filepath in files_to_check:
@@ -507,34 +507,41 @@ def handle_audit_gate(args):
             with open(filepath, 'r') as f:
                 current_count += get_violations_count(f.read(), filepath)
 
-    baseline_count = 0
-    try:
-        # Get files from origin/main
-        ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-        main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+    baseline_count = resolve_baseline(args.baseline_file, 'AUDIT_BASELINE', "audit-baseline.txt", -1)
 
-        relevant_main_files = []
-        for mf in main_files:
-            if not mf.endswith('.tsx'):
-                continue
-            for check_dir in AUDIT_CHECK_DIRS:
-                if mf == check_dir or mf.startswith(check_dir + '/'):
-                    relevant_main_files.append(mf)
-                    break
+    if baseline_count == -1:
+        # Fallback to origin/main if no environment variable or file baseline is found
+        baseline_count = 0
+        try:
+            # Get files from origin/main
+            ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
+            main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
 
-        for mf in relevant_main_files:
-            try:
-                show_cmd = ["git", "show", f"origin/main:{mf}"]
-                content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
-                baseline_count += get_violations_count(content, mf)
-            except subprocess.CalledProcessError:
-                continue
-    except subprocess.CalledProcessError:
-        # origin/main might not exist
-        pass
+            relevant_main_files = []
+            for mf in main_files:
+                if not (mf.endswith('.tsx') or mf.endswith('.ts')):
+                    continue
+                for check_dir in AUDIT_CHECK_DIRS:
+                    if mf == check_dir or mf.startswith(check_dir + '/'):
+                        relevant_main_files.append(mf)
+                        break
+
+            for mf in relevant_main_files:
+                try:
+                    show_cmd = ["git", "show", f"origin/main:{mf}"]
+                    content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
+                    baseline_count += get_violations_count(content, mf)
+                except subprocess.CalledProcessError:
+                    continue
+        except subprocess.CalledProcessError:
+            # origin/main might not exist
+            pass
+        source = "origin/main"
+    else:
+        source = "AUDIT_BASELINE"
 
     if not args.json:
-        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} (origin/main)")
+        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} ({source})")
 
     if current_count > baseline_count:
         msg = f"Anti-pattern violations increased from {baseline_count} to {current_count}."
@@ -593,6 +600,8 @@ def main():
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
+        if cmd == "audit-gate":
+            p.add_argument("--baseline-file", default="audit-baseline.txt")
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
             p.add_argument("--all-open", action="store_true")
