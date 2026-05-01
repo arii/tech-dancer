@@ -37,6 +37,7 @@ TODO_ANTIPATTERNS.md
 ai-fix-prompt.txt
 .bundle-baseline
 any-count.txt
+design_audit/*.png
 
 # Tools
 dev-tools/config.json

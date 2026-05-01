@@ -439,6 +439,27 @@ def handle_pre_submit(args):
         else: print(f"❌ Pre-submission checks failed: {e}")
         sys.exit(1)
 
+def handle_visual_audit(args):
+    if not args.json: print("📸 Running visual audit (capturing screenshots)...")
+    script_path = os.path.join(os.path.dirname(__file__), "visual_audit.py")
+    try:
+        # Always capture output so we can report errors even in non-json mode
+        proc = subprocess.run(["python3", script_path], capture_output=True, text=True)
+        if proc.returncode == 0:
+            if not args.json:
+                print(proc.stdout)
+                print("✅ Visual audit complete. See `design_audit/` directory.")
+            if args.json: print(json.dumps({"status": "success", "output_dir": "design_audit/"}))
+        else:
+            error_msg = proc.stderr or proc.stdout or "Unknown error"
+            if not args.json: print(f"❌ Visual audit failed: {error_msg}")
+            if args.json: print(json.dumps({"status": "error", "message": error_msg}))
+            sys.exit(1)
+    except Exception as e:
+        if args.json: print(json.dumps({"status": "error", "message": str(e)}))
+        else: print(f"❌ Error running visual audit: {e}")
+        sys.exit(1)
+
 def handle_audit_gate(args):
     # Current violations count
     proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
@@ -533,7 +554,8 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate)]: # fetch-review is alias for audit-pr --fetch
+                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
+                      ("visual-audit", handle_visual_audit)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
