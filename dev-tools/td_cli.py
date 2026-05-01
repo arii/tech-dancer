@@ -86,19 +86,22 @@ REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'e
 # --- Shared Logic ---
 
 def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
-    """Resolves a baseline value from CLI argument, environment variable, or default file."""
-    if file_path:
-        if os.path.exists(file_path):
-            with open(file_path, 'r') as f:
-                return int(f.read().strip() or fallback_value)
-        else:
-            # If explicit file path is provided but doesn't exist, we fallback to other sources
-            # but ideally we should probably warn. For now, following requested fallback logic.
-            pass
+    """Resolves a baseline value from CLI argument, environment variable, GitHub variable, or default file."""
+    if file_path and os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            return int(f.read().strip() or fallback_value)
 
     env_val = os.environ.get(env_var)
     if env_val:
         return int(env_val)
+
+    # Try fetching from GitHub Variable
+    try:
+        proc = subprocess.run(["gh", "variable", "get", env_var], capture_output=True, text=True)
+        if proc.returncode == 0 and proc.stdout.strip():
+            return int(proc.stdout.strip())
+    except Exception:
+        pass
 
     if os.path.exists(default_file):
         with open(default_file, 'r') as f:
@@ -287,12 +290,18 @@ def handle_ratchet_any(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file or "any-count.txt"
         if not args.dry_run:
-            with open(update_file, 'w') as f:
-                f.write(str(current))
+            try:
+                subprocess.run(["gh", "variable", "set", "ANY_COUNT_BASELINE", "--body", str(current)], check=True)
+                if not args.json: print(f"✅ Updated GitHub variable ANY_COUNT_BASELINE to {current}")
+            except Exception as e:
+                if not args.json: print(f"⚠️ Failed to update GitHub variable: {e}")
+                # Fallback to file update if gh CLI fails (e.g. local dev)
+                update_file = args.baseline_file or "any-count.txt"
+                with open(update_file, 'w') as f:
+                    f.write(str(current))
         elif not args.json:
-            print(f"[DRY-RUN] Would update {update_file} to {current}")
+            print(f"[DRY-RUN] Would update GitHub variable ANY_COUNT_BASELINE to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
@@ -309,12 +318,18 @@ def handle_bundle_size(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file or ".bundle-baseline"
         if not args.dry_run:
-            with open(update_file, 'w') as f:
-                f.write(str(size))
+            try:
+                subprocess.run(["gh", "variable", "set", "BUNDLE_BASELINE_KB", "--body", str(size)], check=True)
+                if not args.json: print(f"✅ Updated GitHub variable BUNDLE_BASELINE_KB to {size}")
+            except Exception as e:
+                if not args.json: print(f"⚠️ Failed to update GitHub variable: {e}")
+                # Fallback to file update if gh CLI fails (e.g. local dev)
+                update_file = args.baseline_file or ".bundle-baseline"
+                with open(update_file, 'w') as f:
+                    f.write(str(size))
         elif not args.json:
-            print(f"[DRY-RUN] Would update {update_file} to {size}")
+            print(f"[DRY-RUN] Would update GitHub variable BUNDLE_BASELINE_KB to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
@@ -490,22 +505,27 @@ def handle_pre_submit(args):
 
 def handle_audit_gate(args):
     current_count = 0
-    files_to_check = []
-
-    for dir_path in AUDIT_CHECK_DIRS:
-        full_path = os.path.join(os.getcwd(), dir_path)
-        if os.path.isfile(full_path) and full_path.endswith('.tsx'):
-            files_to_check.append(dir_path)
-        elif os.path.isdir(full_path):
-            for root, _, files in os.walk(full_path):
-                for file in files:
-                    if file.endswith('.tsx'):
-                        files_to_check.append(os.path.relpath(os.path.join(root, file), os.getcwd()))
-
-    for filepath in files_to_check:
-        if os.path.exists(filepath):
-            with open(filepath, 'r') as f:
-                current_count += get_violations_count(f.read(), filepath)
+    try:
+        proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"], capture_output=True, text=True)
+        if proc.stdout:
+            # pnpm might add noise, so we find the JSON part
+            output = proc.stdout
+            json_start = output.find("{")
+            json_end = output.rfind("}") + 1
+            if json_start != -1 and json_end != -1:
+                audit_data = json.loads(output[json_start:json_end])
+                current_count = sum(len(violations) for violations in audit_data.values())
+            else:
+                # If no JSON found, maybe there are 0 violations and it just printed summary
+                # or it failed. We check return code.
+                if proc.returncode == 0:
+                    current_count = 0
+                else:
+                    # If it failed but no JSON, maybe it's not JSON output?
+                    # Fallback to older count method or raise error
+                    pass
+    except Exception as e:
+        if not args.json: print(f"⚠️ Failed to get current audit count via JS script: {e}")
 
     baseline_count = 0
     try:

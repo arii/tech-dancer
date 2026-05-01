@@ -36,6 +36,10 @@ antipattern-report.txt
 TODO_ANTIPATTERNS.md
 ai-fix-prompt.txt
 
+# Baselines
+.bundle-baseline
+any-count.txt
+
 # IDEs
 .vscode/*
 !.vscode/extensions.json

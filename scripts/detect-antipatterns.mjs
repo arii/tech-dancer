@@ -209,6 +209,7 @@ function generateTodoFile(allViolations) {
 
 const args = process.argv.slice(2);
 const isJson = args.includes('--json');
+const shouldWrite = args.includes('--write');
 const targets = args.filter(arg => !arg.startsWith('--'));
 
 if (!isJson) {
@@ -237,9 +238,17 @@ if (isJson) {
 
 const totalViolations = Object.values(allViolations).flat().length;
 
+if (isJson) {
+  process.stdout.write(JSON.stringify(allViolations, null, 2));
+  process.exit(totalViolations > 0 ? 1 : 0);
+}
+
+// Always output violation count for CI consumption
+console.log(`VIOLATION_COUNT=${totalViolations}`);
+
 if (totalViolations === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  generateTodoFile({});
+  if (shouldWrite) generateTodoFile({});
 } else {
   console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
   for (const [file, violations] of Object.entries(allViolations)) {
@@ -249,6 +258,6 @@ if (totalViolations === 0) {
     });
     console.log();
   }
-  generateTodoFile(allViolations);
+  if (shouldWrite) generateTodoFile(allViolations);
   process.exit(1);
 }
