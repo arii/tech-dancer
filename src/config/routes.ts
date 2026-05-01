@@ -74,6 +74,3 @@ export const routes: RouteConfig[] = [
   },
 ];
 
-export const MOBILE_NAV_ROUTES = routes.filter((r): r is RouteConfig & { label: string, icon: LucideIcon } =>
-  !!(r.label && r.icon && ['/', '/blog', '/gear', '/research'].includes(r.path))
-);
