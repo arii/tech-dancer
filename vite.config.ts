@@ -22,7 +22,7 @@ export default defineConfig(({mode}) => {
   // Determine the GitHub branch for base path constructing
   const ghBranch = process.env.GITHUB_REF_NAME;
   const isMainBranch = ghBranch === 'main' || !ghBranch;
-  
+
   // Use VITE_BASE_PATH if specified, otherwise construct based on environment
   let base = process.env.VITE_BASE_PATH;
   if (!base) {
