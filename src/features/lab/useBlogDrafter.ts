@@ -99,12 +99,13 @@ export function useBlogDrafter() {
   };
 
   const markdownPreview = useMemo(() => {
-    return `# ${data.title || '[Title]'}
-
-> **Category**: ${data.category} | **Date**: ${data.date} | **Author**: ${data.author}
-
-${data.excerpt ? `*${data.excerpt}*` : ''}
-
+    return `---
+type: post
+title: "${data.title || 'Untitled Post'}"
+date: "${data.date}"
+author: "${data.author}"
+category: "${data.category}"
+excerpt: "${data.excerpt || ''}"
 ---
 
 ${data.commentary || '[Your commentary/content goes here]'}

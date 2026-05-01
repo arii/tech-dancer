@@ -60,6 +60,7 @@ function parseFrontmatter(content: string) {
 }
 
 export interface Post {
+  type: 'post';
   slug: string;
   title: string;
   date: string;
@@ -74,6 +75,7 @@ export interface Post {
 }
 
 export interface Resource {
+  type: 'resource';
   slug: string;
   title: string;
   date: string;
@@ -94,6 +96,7 @@ export interface Resource {
 }
 
 export interface Study {
+  type: 'study';
   slug: string;
   title: string;
   date: string;
@@ -105,10 +108,13 @@ export interface Study {
 }
 
 export interface Event {
+  type: 'event';
   slug: string;
   title: string;
   date: string;
   author: string;
+  category: string;
+  excerpt: string;
   location: string;
   city: string;
   schedule: string;
