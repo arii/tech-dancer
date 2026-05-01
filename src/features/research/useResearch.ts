@@ -35,6 +35,13 @@ export function useResearch() {
       category: 'Development Tool',
       status: 'Active',
       layman: 'Automated visual regression and UX improvement suggestions across viewports.'
+    },
+    {
+      id: 'roi-dashboard',
+      name: 'Portfolio Engagement ROI',
+      category: 'Business Analytics',
+      status: 'Active',
+      layman: 'Visualizing Cost Per Engagement vs. Earnings Per Click to demonstrate ROI analytics and business management skills.'
     }
   ];
 
