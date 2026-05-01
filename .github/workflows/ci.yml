@@ -95,16 +95,8 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
-          pnpm run audit
-          # Fail if TODO_ANTIPATTERNS.md has more violations than baseline
-          BASELINE=$(git show origin/main:TODO_ANTIPATTERNS.md 2>/dev/null | grep -c '\- \[ \]' || echo 0)
-          CURRENT=$(grep -c '\- \[ \]' TODO_ANTIPATTERNS.md || echo 0)
-          echo "Baseline violations: $BASELINE | Current: $CURRENT"
-          if [ "$CURRENT" -gt "$BASELINE" ]; then
-            echo "❌ New anti-pattern violations introduced. Fix before merging."
-            exit 1
-          fi
-          echo "✅ No new violations."
+          pnpm run audit || true
+          python3 dev-tools/td_cli.py audit-gate
 
       - name: Design Token Compliance
         run: |

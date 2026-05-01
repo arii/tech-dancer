@@ -29,6 +29,46 @@ EXISTING_COMPONENTS = {
     'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
 }
 
+# --- Anti-Pattern Audit Configuration ---
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
+
+AUDIT_LAYOUT_SUGGESTIONS = {
+    'flex flex-col': '<Stack direction="col">',
+    'flex flex-row': '<Stack direction="row">',
+    'flex items-center': '<Stack align="center">',
+    'flex justify-between': '<Stack justify="between">',
+    'grid grid-cols': '<Grid cols={...}>',
+}
+
+AUDIT_CONFIG = {
+    'allowedColors': [
+        'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
+        'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
+        'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
+        'amber-500', 'success', 'error', 'warning'
+    ],
+    'allowedTextUtils': ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
+    'allowedTextSizes': ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
+    'rules': [
+        {
+            'name': 'Arbitrary Value',
+            'pattern': r'-\[.*?\]',
+            'message': 'Avoid arbitrary values like -[...]. Use design tokens instead.'
+        },
+        {
+            'name': 'Raw Layout/Spacing',
+            'pattern': r'\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b',
+            'isClassNameRule': True,
+            'message': 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
+        },
+        {
+            'name': 'div Layout',
+            'pattern': r'<div\s+[^>]*?className=["\'](.*?(?:flex|grid|p-|m-|gap-).*?)["\']',
+            'message': 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
+        }
+      ]
+}
+
 BANNED_PATTERNS = [
     (r'HashRouter', 'HashRouter is banned. Use createBrowserRouter (AGENTS.md §9)'),
     (r'import React from .react.', 'Unnecessary React import — React 17+ (AGENTS.md §4)'),
@@ -65,6 +105,71 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
             return int(f.read().strip() or fallback_value)
 
     return fallback_value
+
+def get_violations_count(content: str, filepath: str) -> int:
+    if '// impeccable-ignore-file' in content:
+        return 0
+
+    lines = content.split('\n')
+    violations_count = 0
+
+    # 1. Check for regex patterns defined in rules
+    for rule in AUDIT_CONFIG['rules']:
+        if rule.get('isClassNameRule'):
+            continue
+
+        pattern = rule['pattern']
+        for match in re.finditer(pattern, content):
+            line_num = content.count('\n', 0, match.start()) + 1
+            if line_num <= len(lines) and '// impeccable-ignore' in lines[line_num - 1]:
+                continue
+            violations_count += 1
+
+    # 2. Check for classes in className
+    class_name_regex = r'className=["\'](.*?)["\']'
+    for match in re.finditer(class_name_regex, content):
+        line_num = content.count('\n', 0, match.start()) + 1
+        if line_num <= len(lines) and '// impeccable-ignore' in lines[line_num - 1]:
+            continue
+
+        class_str = match.group(1)
+        classes = class_str.split()
+
+        layout_rule = next(r for r in AUDIT_CONFIG['rules'] if r['name'] == 'Raw Layout/Spacing')
+
+        for cls in classes:
+            # Check against Raw Layout/Spacing rule
+            if re.search(layout_rule['pattern'], cls):
+                violations_count += 1
+
+            # Colors check
+            if re.search(r'\b(bg-|text-)\b', cls):
+                color_match = re.search(r'\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b', cls)
+                if color_match:
+                    base_color = color_match.group(2).split('/')[0]
+                    full_token = f"{color_match.group(1)}-{base_color}"
+
+                    is_allowed = (base_color in AUDIT_CONFIG['allowedColors'] or
+                                  full_token in AUDIT_CONFIG['allowedColors'] or
+                                  base_color in AUDIT_CONFIG['allowedTextUtils'] or
+                                  base_color in AUDIT_CONFIG['allowedTextSizes'])
+
+                    if not is_allowed:
+                        violations_count += 1
+
+        # Check for layout suggestions (once per className match)
+        # Mirroring JS logic: Object.entries(LAYOUT_SUGGESTIONS).forEach(([pattern, suggestion]) => { if (classStr.includes(pattern)) { ... } })
+        # Note: JS version only adds once per LINE if not already added for 'Layout Suggestion'
+        # To match exactly, we'd need to track line violations.
+        # But JS adds once per className check effectively because it's inside the className loop.
+        # Wait, JS has `if (!violations.find(v => v.line === lineNum && v.pattern === 'Layout Suggestion'))`
+
+        for pattern, suggestion in AUDIT_LAYOUT_SUGGESTIONS.items():
+            if pattern in class_str:
+                violations_count += 1
+                break # Only count ONE layout suggestion per className match to stay closer to JS "once per line" (usually one className per line)
+
+    return violations_count
 
 def extract_code_blocks(text: str) -> list[str]:
     return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
@@ -383,6 +488,67 @@ def handle_pre_submit(args):
         else: print(f"❌ Pre-submission checks failed: {e}")
         sys.exit(1)
 
+def handle_audit_gate(args):
+    current_count = 0
+    files_to_check = []
+
+    for dir_path in AUDIT_CHECK_DIRS:
+        full_path = os.path.join(os.getcwd(), dir_path)
+        if os.path.isfile(full_path) and full_path.endswith('.tsx'):
+            files_to_check.append(dir_path)
+        elif os.path.isdir(full_path):
+            for root, _, files in os.walk(full_path):
+                for file in files:
+                    if file.endswith('.tsx'):
+                        files_to_check.append(os.path.relpath(os.path.join(root, file), os.getcwd()))
+
+    for filepath in files_to_check:
+        if os.path.exists(filepath):
+            with open(filepath, 'r') as f:
+                current_count += get_violations_count(f.read(), filepath)
+
+    baseline_count = 0
+    try:
+        # Get files from origin/main
+        ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
+        main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+
+        relevant_main_files = []
+        for mf in main_files:
+            if not mf.endswith('.tsx'):
+                continue
+            for check_dir in AUDIT_CHECK_DIRS:
+                if mf == check_dir or mf.startswith(check_dir + '/'):
+                    relevant_main_files.append(mf)
+                    break
+
+        for mf in relevant_main_files:
+            try:
+                show_cmd = ["git", "show", f"origin/main:{mf}"]
+                content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
+                baseline_count += get_violations_count(content, mf)
+            except subprocess.CalledProcessError:
+                continue
+    except subprocess.CalledProcessError:
+        # origin/main might not exist
+        pass
+
+    if not args.json:
+        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} (origin/main)")
+
+    if current_count > baseline_count:
+        msg = f"Anti-pattern violations increased from {baseline_count} to {current_count}."
+        if args.json:
+            print(json.dumps({"status": "error", "message": msg, "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
+        else:
+            print(f"❌ Error: {msg}")
+        sys.exit(1)
+
+    if args.json:
+        print(json.dumps({"status": "success", "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
+    elif not args.json:
+        print("✅ No new violations introduced.")
+
 def handle_manage_reviews(args):
     from github import Github
     token = get_github_token()
@@ -425,7 +591,7 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews)]:
+                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -453,6 +619,7 @@ def main():
             p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
             p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
+        elif cmd == "audit-gate": pass # Uses global --json if provided
         p.set_defaults(func=func)
 
     args = parser.parse_args()
