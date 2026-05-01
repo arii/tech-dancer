@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
@@ -309,20 +310,14 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               size="sm"
               className="focus:border-accent outline-none resize-none"
             />
-            <Box
-              as="button"
+            <PrimaryActionButton
               onClick={handleApply}
-              display="flex"
-              align="center"
-              justify="center"
               gap={3}
-              surface="accent"
               padding={4}
-              className="bg-accent text-bg hover:bg-accent/90 transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
             >
               <Send className="w-4 h-4" />
               APPLY_RESPONSE
-            </Box>
+            </PrimaryActionButton>
           </Stack>
 
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">

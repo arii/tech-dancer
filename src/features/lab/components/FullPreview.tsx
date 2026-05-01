@@ -1,5 +1,6 @@
 import { ExternalLink, Layout } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
 interface FullPreviewProps {
@@ -25,24 +26,20 @@ export function FullPreview({
 }: FullPreviewProps) {
   return (
     <Box position="relative">
-      <Box
+      <PrimaryActionButton
         position="fixed"
         top={4}
         right={4}
         zIndex={50}
-        as="button"
         onClick={onClose}
-        display="flex"
-        align="center"
         gap={2}
-        surface="accent"
         paddingX={4}
         paddingY={2}
-        className="bg-accent text-bg hover:bg-accent/90 transition-all cursor-pointer font-bold uppercase tracking-widest text-xs shadow-xl"
+        className="shadow-xl"
       >
         <Layout className="w-4 h-4" />
         EXIT_FULL_PREVIEW
-      </Box>
+      </PrimaryActionButton>
       <DetailLayout
         title={title || 'Untitled Post'}
         category={category}
