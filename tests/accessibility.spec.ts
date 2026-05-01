@@ -47,10 +47,10 @@ test.describe('accessibility', () => {
 
     // Let's type something to get results
     await searchInput.fill('dance');
-    await page.waitForTimeout(500); // Wait for debounce
+    const firstResult = page.getByRole('option').first();
+    await expect(firstResult).toBeVisible();
 
     const closeButton = page.getByRole('button', { name: /close search/i });
-    const firstResult = page.getByRole('option').first();
 
     // Tab from input to close button
     await page.keyboard.press('Tab');

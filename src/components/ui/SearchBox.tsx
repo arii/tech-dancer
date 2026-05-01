@@ -42,7 +42,8 @@ export function SearchBox({
         placeholder={placeholder}
         variant="mono"
         size="sm"
-        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
+        paddingLeft={10}
+        className="bg-transparent border-none outline-none w-full focus:ring-0"
         value={value}
         onChange={onChange}
       />

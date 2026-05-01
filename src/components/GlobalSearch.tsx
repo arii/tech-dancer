@@ -2,10 +2,11 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent, KeyboardEvent } from "react";
+import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
 import { debounce } from 'throttle-debounce';
+import FocusLock from 'react-focus-lock';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -59,30 +60,6 @@ export function GlobalSearch() {
     open();
   }, [open]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Tab') {
-      const focusableElements = modalRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      if (!focusableElements || focusableElements.length === 0) return;
-
-      const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          lastElement.focus();
-          e.preventDefault();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          firstElement.focus();
-          e.preventDefault();
-        }
-      }
-    }
-  };
-
   const handleSelect = (result: SearchResult) => {
     close();
     setQuery('');
@@ -103,14 +80,11 @@ export function GlobalSearch() {
       align="start"
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Global Search"
       data-testid="search-backdrop"
       className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
       onClick={close}
-      onKeyDown={handleKeyDown}
     >
+      <FocusLock returnFocus>
       <Box
         ref={modalRef}
         width="full"
@@ -121,6 +95,9 @@ export function GlobalSearch() {
         surface="default"
         border
         shadow="topOverlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Global Search"
         className="border-accent/20"
         onClick={(e: MouseEvent) => e.stopPropagation()}
       >
@@ -222,6 +199,7 @@ export function GlobalSearch() {
             </Text>
         </Box>
       </Box>
+      </FocusLock>
     </Box>
   );
 }
