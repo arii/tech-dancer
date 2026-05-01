@@ -1,7 +1,6 @@
 import { Home, BookOpen, ShoppingBag, Database, User, Send } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
-import { LucideIcon } from 'lucide-react';
 
 export const routes: RouteConfig[] = [
   {
