@@ -36,6 +36,9 @@ antipattern-report.txt
 TODO_ANTIPATTERNS.md
 ai-fix-prompt.txt
 
+# Tools
+dev-tools/config.json
+
 # IDEs
 .vscode/*
 !.vscode/extensions.json
