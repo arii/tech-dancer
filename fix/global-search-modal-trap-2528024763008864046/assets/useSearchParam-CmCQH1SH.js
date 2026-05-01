@@ -1,1 +1,0 @@
-import{k as n,r as h}from"./index-BeIXv7Fn.js";function P(r,s=""){const[a,c]=n(),o=a.get(r)||s,m=h.useCallback(e=>{const t=new URLSearchParams(a);e&&e!==s?t.set(r,e):t.delete(r),c(t,{replace:!0})},[r,s,a,c]);return[o,m]}export{P as u};

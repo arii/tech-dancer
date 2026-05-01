@@ -1,1 +1,0 @@
-import{b as r}from"./vendor-react-Ch6pmYmO.js";import{u}from"./useQuery-C2R6B8fr.js";import{e as d}from"./index-BptiOLs7.js";import{t as s}from"./tools-CEwnVbGX.js";function p(){const{data:o=[]}=u({queryKey:["studies"],queryFn:d}),[i,n]=r.useState(null);return{studies:o,tools:s,getTool:t=>s.find(e=>e.id===t),getStudy:t=>o.find(e=>e.slug===t)}}export{p as u};
