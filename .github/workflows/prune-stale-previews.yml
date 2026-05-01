@@ -40,6 +40,9 @@ jobs:
             # Skip root and infra folders
             [[ "$dir" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
 
+            # If the directory was already removed in a previous iteration, skip it
+            [ -d "$dir" ] || continue
+
             # Check if it doesn't match an active branch
             if ! echo "$ACTIVE_BRANCHES" | grep -Fxq "$dir"; then
               # Get the timestamp of the last update
@@ -48,7 +51,7 @@ jobs:
 
               if [ "$AGE" -gt "$GRACE_PERIOD" ]; then
                 echo "Branch '$dir' no longer exists and deployment is older than 24h (${AGE}s). Removing preview..."
-                git rm -r "$dir"
+                git rm -r --ignore-unmatch "$dir"
                 CHANGES_MADE=true
               else
                 echo "Branch '$dir' no longer exists but deployment is within 24h grace period (${AGE}s). Skipping..."
