@@ -89,8 +89,10 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
     """Resolves a baseline value from CLI argument, environment variable, or default file."""
     def to_int(val, source):
         if val is None: return None
+        s_val = str(val).strip()
+        if not s_val: return None
         try:
-            return int(str(val).strip())
+            return int(s_val)
         except ValueError:
             raise CLIError(f"Invalid baseline from {source}: {val}")
 
@@ -100,8 +102,8 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
             if val is not None: return val
 
     env_val = os.environ.get(env_var)
-    if env_val is not None:
-        return to_int(env_val, env_var)
+    val = to_int(env_val, env_var)
+    if val is not None: return val
 
     if os.path.exists(default_file):
         with open(default_file, 'r') as f:
