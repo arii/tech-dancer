@@ -233,7 +233,7 @@ files.forEach(filepath => {
 
 if (isCountOnly) {
   console.log(Object.values(allViolations).reduce((sum, v) => sum + v.length, 0));
-  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+  process.exit(0);
 }
 
 if (isJson) {

@@ -95,9 +95,9 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
-          CURRENT=$(node scripts/detect-antipatterns.mjs --count-only 2>/dev/null) || true
-          CURRENT=${CURRENT:-0}
+          CURRENT=$(node scripts/detect-antipatterns.mjs --count-only 2>/dev/null)
           BASELINE=${AUDIT_BASELINE:-0}
+          [[ "$BASELINE" =~ ^[0-9]+$ ]] || { echo "Invalid baseline: $BASELINE"; exit 1; }
           echo "Baseline: $BASELINE | Current: $CURRENT"
           if [ "$CURRENT" -gt "$BASELINE" ]; then
             echo "❌ New violations introduced."
