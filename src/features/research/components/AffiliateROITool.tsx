@@ -27,7 +27,12 @@ import {
 } from '@/layouts/Primitives';
 import { useAffiliateData } from '../hooks/useAffiliateData';
 
-const COLORS = ['#1A2B3C', '#E63946', '#457B9D', '#A8DADC'];
+const COLORS = [
+  'var(--color-accent-navy)',
+  'var(--color-accent)',
+  'var(--color-text-dim)',
+  'var(--color-line)'
+];
 
 export function AffiliateROITool() {
   const { isLoading, stats } = useAffiliateData();
@@ -114,7 +119,7 @@ export function AffiliateROITool() {
                   <Line
                     type="monotone"
                     dataKey="cost"
-                    stroke="#E63946"
+                    stroke="var(--color-error)"
                     strokeWidth={2}
                     name="Cost"
                   />
