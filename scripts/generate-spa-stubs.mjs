@@ -5,23 +5,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import { CONTENT_DIR_MAP, getContentSlugs } from './content-loader.ts';
-import { routes } from '../src/config/routes.ts';
+import { getAllRoutes } from '../src/lib/routes-discovery.ts';
 
 const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 
-// Automatically discover static routes from configuration, excluding parameterized and catch-all
-const STATIC_ROUTES = routes
-  .map(r => r.path)
-  .filter(path => path !== '*' && !path.includes(':') && path !== '/');
+// Automatically discover all routes
+const { all: STUB_ROUTES } = getAllRoutes();
 
-// Dynamic routes from content
-const DYNAMIC_ROUTES = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
-  getContentSlugs(dir, prefix)
-);
-
-const STUB_ROUTES = [...STATIC_ROUTES, ...DYNAMIC_ROUTES];
+// Filter out root path as it already has index.html
+const filteredRoutes = STUB_ROUTES.filter(route => route !== '/');
 
 async function generateStubs() {
   if (!fs.existsSync(INDEX_HTML)) {
@@ -31,7 +24,7 @@ async function generateStubs() {
 
   const indexContent = fs.readFileSync(INDEX_HTML, 'utf-8');
 
-  for (const route of STUB_ROUTES) {
+  for (const route of filteredRoutes) {
     const dirPath = path.join(DIST_DIR, route);
     
     if (!fs.existsSync(dirPath)) {

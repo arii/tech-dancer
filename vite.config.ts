@@ -6,8 +6,7 @@ import { defineConfig, loadEnv } from 'vite';
 import Inspect from 'vite-plugin-inspect';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
-import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
-import { routes } from './src/config/routes';
+import { getAllRoutes } from './src/lib/routes-discovery';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -46,17 +45,8 @@ export default defineConfig(({mode}) => {
   const hostname = resolveHostname().replace(/\/$/, '');
   const fullAppUrl = new URL(base, hostname).href;
 
-  // Automatically discover dynamic routes from config/routes.ts and content directories
-  const dynamicRoutes = [
-    // Static routes from config (excluding parameterized and catch-all)
-    ...routes
-      .map(r => r.path)
-      .filter(path => path !== '*' && !path.includes(':')),
-    // Dynamic content routes discovered from file system
-    ...Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
-      getContentSlugs(dir, prefix)
-    ),
-  ];
+  // Automatically discover dynamic routes
+  const { all: dynamicRoutes } = getAllRoutes();
 
   return {
     base,
