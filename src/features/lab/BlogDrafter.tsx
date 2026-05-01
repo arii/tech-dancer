@@ -87,8 +87,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
-           <Stack gap={2} display="flex" align="start" direction="row">
-              <Box as="span" marginTop={1} className="shrink-0">
+           <Stack gap={2} display="flex" align="baseline" direction="row">
+              <Box as="span" className="shrink-0">
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
@@ -110,7 +110,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                display="flex"
                align="center"
                gap={2}
-               className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+               className="text-accent hover:opacity-70 transition-all cursor-pointer"
              >
                 <Save className="w-3 h-3" />
                 <Text variant="mono" size="micro" weight="font-bold">SNAPSHOT_NOW</Text>
@@ -318,7 +318,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               gap={3}
               surface="accent"
               padding={4}
-              className="bg-accent text-bg hover:bg-accent-brand transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
+              className="bg-accent text-bg hover:bg-accent/90 transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
             >
               <Send className="w-4 h-4" />
               APPLY_RESPONSE
@@ -335,7 +335,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                  align="center"
                  gap={1}
                  paddingLeft={4}
-                 className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+                 className="text-accent hover:opacity-70 transition-all cursor-pointer"
                >
                  <Eye className="w-3 h-3" />
                  <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>
