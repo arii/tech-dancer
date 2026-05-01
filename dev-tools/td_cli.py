@@ -182,7 +182,6 @@ def handle_ratchet_any(args):
         sys.exit(1)
 
     if args.update:
-    if args.update:
         update_file = args.baseline_file or "any-count.txt"
         if not args.dry_run:
             with open(update_file, 'w') as f:
@@ -204,7 +203,6 @@ def handle_bundle_size(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update:
     if args.update:
         update_file = args.baseline_file or ".bundle-baseline"
         if not args.dry_run:
