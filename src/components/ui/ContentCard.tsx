@@ -86,7 +86,7 @@ export function ContentCard({
             {title}
           </Text>
           
-          <Text variant="body" size="sm" color="dim" className="line-clamp-1 leading-relaxed opacity-70">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-1 leading-relaxed">
              {excerpt}
           </Text>
         </Stack>
@@ -97,7 +97,7 @@ export function ContentCard({
               Read Article
             </Text>
             <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
-            <Text variant="mono" size="xs" color="accent" className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+            <Text variant="mono" size="xs" color="accent" className="ml-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
               →
             </Text>
           </Box>
