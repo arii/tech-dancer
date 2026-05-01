@@ -44,7 +44,7 @@ export default defineConfig(({mode}) => {
   };
 
   const hostname = resolveHostname().replace(/\/$/, '');
-  const fullAppUrl = new URL(base, hostname).href.replace(/\/$/, '');
+  const fullAppUrl = new URL(base, hostname).href;
 
   // Automatically discover dynamic routes from config/routes.ts and content directories
   const dynamicRoutes = [
@@ -74,7 +74,8 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: fullAppUrl,
+        hostname: resolveHostname().replace(/\/$/, ''),
+        basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.map(route => route.replace(/\/$/, '') || '/'),
         generateRobotsTxt: false,
       }),
