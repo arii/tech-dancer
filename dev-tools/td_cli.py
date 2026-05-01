@@ -87,22 +87,26 @@ REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'e
 
 def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
     """Resolves a baseline value from CLI argument, environment variable, or default file."""
-    if file_path:
-        if os.path.exists(file_path):
-            with open(file_path, 'r') as f:
-                return int(f.read().strip() or fallback_value)
-        else:
-            # If explicit file path is provided but doesn't exist, we fallback to other sources
-            # but ideally we should probably warn. For now, following requested fallback logic.
-            pass
+    def to_int(val, source):
+        if val is None: return None
+        try:
+            return int(str(val).strip())
+        except ValueError:
+            raise CLIError(f"Invalid baseline from {source}: {val}")
+
+    if file_path and os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            val = to_int(f.read().strip(), file_path)
+            if val is not None: return val
 
     env_val = os.environ.get(env_var)
-    if env_val:
-        return int(env_val)
+    if env_val is not None:
+        return to_int(env_val, env_var)
 
     if os.path.exists(default_file):
         with open(default_file, 'r') as f:
-            return int(f.read().strip() or fallback_value)
+            val = to_int(f.read().strip(), default_file)
+            if val is not None: return val
 
     return fallback_value
 
@@ -489,56 +493,58 @@ def handle_pre_submit(args):
         sys.exit(1)
 
 def handle_audit_gate(args):
-    current_count = 0
-    files_to_check = []
+    if getattr(args, 'ci', False):
+        if 'AUDIT_BASELINE' not in os.environ:
+            print("⚠️ Warning: AUDIT_BASELINE is not set, defaulting to 0")
 
-    for dir_path in AUDIT_CHECK_DIRS:
-        full_path = os.path.join(os.getcwd(), dir_path)
-        if os.path.isfile(full_path) and (full_path.endswith('.tsx') or full_path.endswith('.ts')):
-            files_to_check.append(dir_path)
-        elif os.path.isdir(full_path):
-            for root, _, files in os.walk(full_path):
-                for file in files:
-                    if file.endswith('.tsx') or file.endswith('.ts'):
-                        files_to_check.append(os.path.relpath(os.path.join(root, file), os.getcwd()))
+        baseline_count = resolve_baseline(args.baseline_file, 'AUDIT_BASELINE', "audit-baseline.txt", 0)
 
-    for filepath in files_to_check:
-        if os.path.exists(filepath):
-            with open(filepath, 'r') as f:
-                current_count += get_violations_count(f.read(), filepath)
+        try:
+            res = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"],
+                                 capture_output=True, text=True, check=True)
+            current_count = int(res.stdout.strip() or 0)
+        except (subprocess.CalledProcessError, ValueError) as e:
+            print(f"❌ Error obtaining violation count: {e}")
+            sys.exit(1)
+
+        print(f"Baseline: {baseline_count} | Current: {current_count}")
+        if current_count > baseline_count:
+            print("❌ New violations introduced.")
+            sys.exit(1)
+
+        if args.json:
+            print(json.dumps({"status": "success", "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
+        else:
+            print("✅ No new violations introduced.")
+        return
+
+    # Local/Standard mode
+    try:
+        res = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"],
+                             capture_output=True, text=True, check=True)
+        current_count = int(res.stdout.strip() or 0)
+    except Exception:
+        current_count = 0
 
     baseline_count = resolve_baseline(args.baseline_file, 'AUDIT_BASELINE', "audit-baseline.txt", -1)
 
     if baseline_count == -1:
-        # Fallback to origin/main if no environment variable or file baseline is found
+        # Fallback to origin/main comparison logic if no specific baseline provided
         baseline_count = 0
         try:
-            # Get files from origin/main
             ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
             main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+            relevant_files = [f for f in main_files if any(f.startswith(d) for d in AUDIT_CHECK_DIRS) and (f.endswith('.tsx') or f.endswith('.ts'))]
 
-            relevant_main_files = []
-            for mf in main_files:
-                if not (mf.endswith('.tsx') or mf.endswith('.ts')):
-                    continue
-                for check_dir in AUDIT_CHECK_DIRS:
-                    if mf == check_dir or mf.startswith(check_dir + '/'):
-                        relevant_main_files.append(mf)
-                        break
-
-            for mf in relevant_main_files:
+            for mf in relevant_files:
                 try:
-                    show_cmd = ["git", "show", f"origin/main:{mf}"]
-                    content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
+                    content = subprocess.check_output(["git", "show", f"origin/main:{mf}"], text=True, stderr=subprocess.DEVNULL)
                     baseline_count += get_violations_count(content, mf)
-                except subprocess.CalledProcessError:
-                    continue
-        except subprocess.CalledProcessError:
-            # origin/main might not exist
-            pass
+                except Exception: continue
+        except Exception: pass
         source = "origin/main"
     else:
-        source = "AUDIT_BASELINE"
+        source = "baseline"
 
     if not args.json:
         print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} ({source})")
@@ -553,7 +559,7 @@ def handle_audit_gate(args):
 
     if args.json:
         print(json.dumps({"status": "success", "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
-    elif not args.json:
+    else:
         print("✅ No new violations introduced.")
 
 def handle_manage_reviews(args):
@@ -602,6 +608,7 @@ def main():
         p = subparsers.add_parser(cmd)
         if cmd == "audit-gate":
             p.add_argument("--baseline-file", default="audit-baseline.txt")
+            p.add_argument("--ci", action="store_true", help="Run in CI mode with specific exit behavior and warnings")
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
             p.add_argument("--all-open", action="store_true")

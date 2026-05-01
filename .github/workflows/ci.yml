@@ -94,16 +94,7 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit (Gate)
-        run: |
-          if [ -z "$AUDIT_BASELINE" ]; then echo '⚠️ Warning: AUDIT_BASELINE is not set, defaulting to 0'; fi
-          CURRENT=$(node scripts/detect-antipatterns.mjs --count-only 2>/dev/null)
-          BASELINE=${AUDIT_BASELINE:-0}
-          [[ "$BASELINE" =~ ^[0-9]+$ ]] || { echo "Invalid baseline"; exit 1; }
-          echo "Baseline: $BASELINE | Current: $CURRENT"
-          if [ "$CURRENT" -gt "$BASELINE" ]; then
-            echo "❌ New violations introduced."
-            exit 1
-          fi
+        run: python3 dev-tools/td_cli.py audit-gate --ci
         env:
           AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
