@@ -1,6 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { execSync } from 'child_process';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 import Inspect from 'vite-plugin-inspect';
@@ -21,6 +22,15 @@ export default defineConfig(({mode}) => {
   // Determine the GitHub branch for base path constructing
   const ghBranch = process.env.GITHUB_REF_NAME;
   const isMainBranch = ghBranch === 'main' || !ghBranch;
+
+  // Generate a dynamic build version
+  const buildVersion = (() => {
+    try {
+      return execSync('git rev-parse --short HEAD').toString().trim();
+    } catch {
+      return new Date().toISOString().split('T')[0];
+    }
+  })();
 
   // Use VITE_BASE_PATH if specified, otherwise construct based on environment
   let base = process.env.VITE_BASE_PATH;
@@ -65,6 +75,7 @@ export default defineConfig(({mode}) => {
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
       'import.meta.env.VITE_APP_URL': JSON.stringify(fullAppUrl),
+      '__BUILD_VERSION__': JSON.stringify(buildVersion),
     },
     plugins: [
       react(),

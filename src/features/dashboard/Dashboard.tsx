@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
-import { STATIC_SCHEMAS } from '@/config/constants';
+import { STATIC_SCHEMAS, BUILD_VERSION } from '@/config/constants';
 import { SectionHeader } from '@/components/ui/PageHeader';
 import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
@@ -31,7 +31,7 @@ export default function Home() {
           className="bg-surface overflow-hidden"
         >
           <Stack gap={12}>
-            <Box>
+            <Box display="flex" justify="between" align="center">
               <Text
                 variant="mono"
                 size="xs"
@@ -42,6 +42,12 @@ export default function Home() {
               >
                 — Welcome
               </Text>
+
+              <Box border="l" paddingLeft={3} className="border-line hidden sm:block">
+                <Text variant="mono" size="micro" color="dim" tracking="utility">
+                  REL {BUILD_VERSION} // 2025
+                </Text>
+              </Box>
             </Box>
 
             <Box position="relative">
@@ -55,19 +61,6 @@ export default function Home() {
                 The Roboticist's Guide <br className="hidden md:block" />
                 <Box as="span" display="inline-block" marginLeft={{ md: "[15%]" }}>to West Coast Swing</Box>
               </Text>
-
-              {/* Floating metadata/accent */}
-              <Box
-                position="absolute"
-                right={0}
-                top={0}
-                display={{ base: "none", xl: "block" }}
-                className="rotate-90 origin-bottom-right translate-x-full"
-              >
-                <Text variant="mono" size="micro" color="dim" tracking="utility">
-                  EST. 2024 // VERSION 2.0
-                </Text>
-              </Box>
             </Box>
 
             <Box
