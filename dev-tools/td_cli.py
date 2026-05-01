@@ -30,7 +30,7 @@ EXISTING_COMPONENTS = {
 }
 
 # --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/App.tsx']
 
 AUDIT_LAYOUT_SUGGESTIONS = {
     'flex flex-col': '<Stack direction="col">',
