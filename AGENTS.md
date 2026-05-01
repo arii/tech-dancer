@@ -158,7 +158,7 @@ To keep the environment snapshot small, heavy dependencies are installed only wh
 ./dev-tools/setup-playwright.sh
 ```
 
-**For Python ETL / Data Processing:**
+**For Python ETL / Data Processing / CLI Tools:**
 ```bash
 ./dev-tools/setup-python.sh
 ```

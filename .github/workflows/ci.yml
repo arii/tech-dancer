@@ -63,7 +63,8 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
-          pip install PyGithub pytest
+          ./dev-tools/setup-python.sh
+          source .venv/bin/activate
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_td_cli.py
 
       - name: Check for dead code

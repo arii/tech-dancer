@@ -74,7 +74,7 @@ export default defineConfig(({mode}) => {
       react(),
       tailwindcss(),
       Sitemap({
-        hostname: resolveHostname().replace(/\/$/, ''),
+        hostname: hostname,
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.map(route => route.replace(/\/$/, '') || '/'),
         // Exclude infrastructure pages that are not real app routes
