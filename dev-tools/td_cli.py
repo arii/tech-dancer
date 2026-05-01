@@ -466,6 +466,21 @@ def handle_pre_submit(args):
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
 
+        # Baseline Configuration Check
+        if not args.json: print("--- Baseline Configuration ---")
+        missing_vars = []
+        for var_name in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"]:
+            if not (os.environ.get(var_name) or get_gha_variable(var_name)):
+                missing_vars.append(var_name)
+
+        if missing_vars:
+            msg = f"Missing GHA variables: {', '.join(missing_vars)}. Run 'gh variable set <NAME> --body <VALUE>' to configure them locally."
+            if not args.json: print(f"  ⚠️  {msg}")
+            results["steps"].append({"name": "Baseline Check", "status": "warning", "message": msg})
+        else:
+            results["steps"].append({"name": "Baseline Check", "status": "success"})
+            if not args.json: print("  ✅ Technical debt baselines are configured.")
+
         # PR Scope Check
         scope_warning = verify_pr_scope()
 
