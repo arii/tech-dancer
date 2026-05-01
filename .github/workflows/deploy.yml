@@ -41,13 +41,37 @@ jobs:
       - name: Build Site
         run: |
           REPO_NAME=${{ github.event.repository.name }}
+          OWNER=${{ github.repository_owner }}
+
+          # 1. Determine Base Path
           if [ "${{ github.ref_name }}" = "main" ]; then
             export VITE_BASE_PATH=/$REPO_NAME/
+            export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"
           else
             export VITE_BASE_PATH=/$REPO_NAME/${{ github.ref_name }}/
+            export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/${{ github.ref_name }}/"
           fi
-          export VITE_APP_URL=https://${{ github.repository_owner }}.github.io/$REPO_NAME
+
+          # 2. Build the Application
           pnpm run build
+
+          # 3. SEO Aggregation (Only on Main)
+          # This ensures arii.github.io/tech-dancer/sitemap.xml is the "Source of Truth"
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "Generating production sitemap for $VITE_APP_URL..."
+
+            # Generate sitemap.xml in the dist folder
+            # We use --clean to ensure no old URLs persist
+            npx sitemap-generator-cli $VITE_APP_URL --output dist/sitemap.xml --clean
+
+            # Generate robots.txt
+            echo "User-agent: *" > dist/robots.txt
+            echo "Allow: /" >> dist/robots.txt
+            echo "Sitemap: ${VITE_APP_URL}sitemap.xml" >> dist/robots.txt
+
+            echo "SEO assets generated successfully."
+          fi
+
           git log -1 --format=%ct > dist/.timestamp
 
       - name: Deploy to gh-pages branch

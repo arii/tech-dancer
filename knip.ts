@@ -8,6 +8,9 @@ const config: KnipConfig = {
     'vite-plugin-pwa',
     'workbox-window'
   ],
+  ignoreBinaries: [
+    'sitemap-generator-cli'
+  ],
   ignoreExportsUsedInFile: true,
 };
 
