@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 
@@ -47,9 +48,7 @@ export default function ResearchAnalytics() {
                       <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
                         <Search className="w-5 h-5" />
                       </Box>
-                      <Box surface="accent" paddingX={2} paddingY={0.5} className="bg-accent/10">
-                        <Text variant="mono" size="xs" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
-                      </Box>
+                      <StatusBadge label={tool.status} />
                     </Box>
                     <Stack gap={2}>
                       <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>

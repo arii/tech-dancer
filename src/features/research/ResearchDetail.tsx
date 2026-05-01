@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { WCSScraperTool } from './components/WCSScraperTool';
@@ -132,9 +133,7 @@ export default function ResearchDetail() {
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
                       <Activity className="w-4 h-4 text-accent" />
-                      <Box surface="accent" paddingX={2} paddingY={0.5} className="bg-accent/10">
-                        <Text variant="mono" size="xs" color="brand" weight="font-bold">{tool.status.toUpperCase()}</Text>
-                      </Box>
+                      <StatusBadge label={tool.status} />
                     </Box>
                   </Stack>
                   <Stack gap={4}>

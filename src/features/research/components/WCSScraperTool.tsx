@@ -13,6 +13,7 @@ import {
   Grid,
   Button
 } from '@/layouts/Primitives';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
@@ -145,9 +146,7 @@ function WCSScraperStats() {
           </Box>
           <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Ethical Backoff</Text>
-            <Box surface="accent" paddingX={2} paddingY={0.5} className="bg-accent/10">
-              <Text variant="mono" size="xs" color="brand" weight="font-bold">ACTIVE</Text>
-            </Box>
+            <StatusBadge label="ACTIVE" />
           </Box>
         </Stack>
       </Stack>
