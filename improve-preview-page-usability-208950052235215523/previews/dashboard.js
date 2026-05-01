@@ -10,6 +10,17 @@ const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const TRACKING_URL = `${BASE_URL}/REVIEW_TRACKING.md`;
 const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
 
+/**
+ * @typedef {Object} Deployment
+ * @property {string} name - Folder name in gh-pages
+ * @property {Object|null} pr - GitHub PR object if it exists
+ * @property {'pr'|'active'} type - Type of deployment
+ * @property {boolean} isAuto - Whether it's an automated PR (e.g. dependabot)
+ * @property {boolean} isDraft - Whether the PR is in draft state
+ * @property {boolean} isStale - Whether the PR/branch is stale (14d+ inactive)
+ * @property {number} updated_at - Timestamp of last update
+ */
+
 const ICONS = {
     pr: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg>`,
     branch: `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`,
@@ -23,6 +34,7 @@ const ICONS = {
 
 // --- State Management ---
 let state = {
+    /** @type {Deployment[]} */
     deployments: [],
     prStatuses: {},
     rateLimitRemaining: null,
@@ -59,8 +71,7 @@ function showToast(message, type = 'info') {
     }
     const colorClass = type === 'error' ? 'bg-red-600' : 'bg-slate-800';
     const toast = el('div', {
-        className: `${colorClass} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in pointer-events-auto`,
-        style: { transition: 'opacity 0.3s' }
+        className: `${colorClass} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in pointer-events-auto transition-opacity duration-300`
     }, [
         el('span', { innerHTML: ICONS.warning }),
         el('span', { className: 'text-sm font-medium' }, [message])
@@ -114,7 +125,7 @@ async function fetchCIStatus(sha, useCache = true) {
         try {
             const cached = JSON.parse(sessionStorage.getItem(cacheKey));
             if (cached && Date.now() - cached.timestamp < 60000) return cached.data;
-        } catch (e) {}
+        } catch { /* ignore cache errors */ }
     }
 
     try {
@@ -171,13 +182,13 @@ function createBadge(text, color) {
     const colorClasses = color === 'blue'
         ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800'
         : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800';
-    return el('span', { className: `${colorClasses} text-xs font-semibold px-2.5 py-1 rounded-full border` }, [text]);
+    return el('span', { className: `${colorClasses} text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border` }, [text]);
 }
 
 function createStatusBadge(status) {
     if (!status) return null;
     if (status === 'ERROR') {
-        return el('span', { className: 'flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800' }, [
+        return el('span', { className: 'flex items-center gap-1 text-slate-600 dark:text-slate-400 text-[10px] sm:text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border border-slate-200 dark:border-slate-800' }, [
             el('span', { innerHTML: ICONS.warning }),
             'Status Error'
         ]);
@@ -189,7 +200,7 @@ function createStatusBadge(status) {
         ? { cls: 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800', icon: ICONS.pending, text: 'Checks Pending' }
         : { cls: 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800', icon: ICONS.success, text: 'Checks Passed' };
 
-    return el('span', { className: `flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md border ${config.cls}` }, [
+    return el('span', { className: `flex items-center gap-1 text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border ${config.cls}` }, [
         el('span', { innerHTML: config.icon }),
         config.text
     ]);
@@ -202,10 +213,10 @@ function renderCard(deployment, isIdxEven) {
     const prStatus = state.prStatuses[name] || null;
 
     const card = el('div', {
-        className: `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow`
+        className: `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-5 hover:border-blue-400 dark:hover:border-blue-600 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow`
     });
 
-    const badgeContainer = el('div', { className: 'flex items-center gap-2 flex-wrap' });
+    const badgeContainer = el('div', { className: 'flex items-center gap-1.5 sm:gap-2 flex-wrap' });
     if (pr) {
         badgeContainer.appendChild(createBadge(isDraft ? 'Draft PR' : 'Open PR', 'blue'));
         const statusBadge = createStatusBadge(prStatus);
@@ -221,42 +232,42 @@ function renderCard(deployment, isIdxEven) {
     }
 
     const titleEl = pr
-        ? el('a', { href: pr.html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate outline-none focus:underline' }, [
+        ? el('a', { href: pr.html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-base sm:text-xl flex items-center gap-2 truncate outline-none focus:underline' }, [
             el('span', { innerHTML: ICONS.pr }),
             `PR #${pr.number}: ${pr.title}`
           ])
-        : el('div', { className: 'text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 text-balance' }, [
+        : el('div', { className: 'text-slate-800 dark:text-slate-200 font-semibold text-base sm:text-xl flex items-center gap-2 text-balance' }, [
             el('span', { innerHTML: ICONS.branch }),
             name
           ]);
 
     const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
-    const infoRow = el('div', { className: 'flex items-center gap-3 flex-wrap' }, [
-        el('span', { className: 'text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px]' }, [name]),
-        el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
+    const infoRow = el('div', { className: 'flex items-center gap-2.5 sm:gap-3 flex-wrap' }, [
+        el('span', { className: 'text-[10px] sm:text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[150px] sm:max-w-[200px]' }, [name]),
+        el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
             el('span', { innerHTML: ICONS.external }),
             'Source'
         ]),
-        el('a', { href: compareUrl, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
+        el('a', { href: compareUrl, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
             el('span', { innerHTML: ICONS.external }),
             'Compare'
         ]),
-        pr && el('span', { className: 'text-xs text-slate-400 flex items-center gap-1' }, [
+        pr && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1' }, [
             el('span', { innerHTML: ICONS.clock }),
             timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))
         ]),
-        el('div', { className: 'sm:hidden' }, [badgeContainer.cloneNode(true)])
+        el('div', { className: 'sm:hidden w-full mt-1' }, [badgeContainer.cloneNode(true)])
     ]);
 
     card.append(
         el('div', { className: 'flex-1 min-w-0 w-full' }, [
-            el('div', { className: 'flex flex-col sm:flex-row sm:items-center gap-3 mb-3' }, [
+            el('div', { className: 'flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3' }, [
                 titleEl,
                 el('div', { className: 'hidden sm:block' }, [badgeContainer])
             ]),
             infoRow
         ]),
-        el('a', { href: deploymentUrl, target: '_blank', rel: 'noopener', className: 'w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500' }, [
+        el('a', { href: deploymentUrl, target: '_blank', rel: 'noopener', className: 'w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2 sm:py-2.5 px-4 sm:px-5 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500' }, [
             'View Deployment ',
             el('span', { innerHTML: ICONS.external })
         ])
@@ -381,4 +392,8 @@ async function init() {
     }
 }
 
-document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
