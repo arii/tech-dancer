@@ -60,8 +60,10 @@ jobs:
           if [ "${{ github.ref_name }}" = "main" ]; then
             # Generate robots.txt pointing at canonical sitemap location
             echo "User-agent: *" > dist/robots.txt
-            echo "Allow: /" >> dist/robots.txt
-            echo "Sitemap: https://$OWNER.github.io/tech-dancer/sitemap.xml" >> dist/robots.txt
+            echo "Allow: /$REPO_NAME/" >> dist/robots.txt
+            echo "Disallow: /$REPO_NAME/previews/" >> dist/robots.txt
+            echo "Disallow: /$REPO_NAME/404.html" >> dist/robots.txt
+            echo "Sitemap: https://$OWNER.github.io/$REPO_NAME/sitemap.xml" >> dist/robots.txt
 
             echo "SEO assets generated successfully."
           fi
