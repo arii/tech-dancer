@@ -233,15 +233,10 @@ files.forEach(filepath => {
 
 if (isJson) {
   process.stdout.write(JSON.stringify(allViolations, null, 2));
-  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+  process.exit(0);
 }
 
 const totalViolations = Object.values(allViolations).flat().length;
-
-if (isJson) {
-  process.stdout.write(JSON.stringify(allViolations, null, 2));
-  process.exit(0); // Exit 0 when JSON is requested so downstream can parse
-}
 
 // Always output violation count for CI consumption
 console.log(`VIOLATION_COUNT=${totalViolations}`);
