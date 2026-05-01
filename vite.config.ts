@@ -77,6 +77,8 @@ export default defineConfig(({mode}) => {
         hostname: resolveHostname().replace(/\/$/, ''),
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.map(route => route.replace(/\/$/, '') || '/'),
+        // Exclude infrastructure pages that are not real app routes
+        exclude: ['/404', '/previews', '/previews/'],
         generateRobotsTxt: false,
       }),
       ViteImageOptimizer({
