@@ -11,7 +11,5 @@ rules:
     strategy: 'theirs'
   - paths: '**/*.webp'
     strategy: 'theirs'
-  - paths: 'pnpm-lock.yaml'
-    strategy: 'theirs'
   - paths: '**/*'
     strategy: 'ours'
