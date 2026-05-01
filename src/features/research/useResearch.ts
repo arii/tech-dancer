@@ -35,6 +35,13 @@ export function useResearch() {
       category: 'Development Tool',
       status: 'Active',
       layman: 'Automated visual regression and UX improvement suggestions across viewports.'
+    },
+    {
+      id: 'affiliate-roi',
+      name: 'Affiliate ROI Analytics',
+      category: 'Business Intelligence',
+      status: 'Active',
+      layman: 'Consolidated reporting and ROI analysis for Amazon and Fuego affiliate networks.'
     }
   ];
 

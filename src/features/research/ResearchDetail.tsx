@@ -6,6 +6,7 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { WCSScraperTool } from './components/WCSScraperTool';
+import { AffiliateROITool } from './components/AffiliateROITool';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 
@@ -114,6 +115,8 @@ export default function ResearchDetail() {
               <BlogDrafter />
             ) : tool.id === 'wcs-scraper' ? (
               <WCSScraperTool />
+            ) : tool.id === 'affiliate-roi' ? (
+              <AffiliateROITool />
             ) : (
               <Stack gap={12}>
                   <Stack gap={4}>
