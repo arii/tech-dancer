@@ -1,42 +1,22 @@
 import { useMemo, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParam } from './useSearchParam';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import Fuse from 'fuse.js';
 
 export function useGlobalSearch() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('q') || '';
-
-  const setQuery = useCallback((newQuery: string) => {
-    setSearchParams(prev => {
-      const next = new URLSearchParams(prev);
-      if (newQuery) {
-        next.set('q', newQuery);
-      } else {
-        next.delete('q');
-      }
-      return next;
-    }, { replace: true });
-  }, [setSearchParams]);
+  const [query, setQuery] = useSearchParam('q');
+  const [searchState, setSearchState] = useSearchParam('modal');
   
-  const isOpen = searchParams.get('search') === 'true';
+  const isOpen = searchState === 'true';
 
   const open = useCallback(() => {
-    setSearchParams(prev => {
-      const next = new URLSearchParams(prev);
-      next.set('search', 'true');
-      return next;
-    }, { replace: true });
-  }, [setSearchParams]);
+    setSearchState('true');
+  }, [setSearchState]);
 
   const close = useCallback(() => {
-    setSearchParams(prev => {
-      const next = new URLSearchParams(prev);
-      next.delete('search');
-      return next;
-    }, { replace: true });
-  }, [setSearchParams]);
+    setSearchState('');
+  }, [setSearchState]);
 
   const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [
