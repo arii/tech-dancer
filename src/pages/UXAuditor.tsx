@@ -327,7 +327,7 @@ export default function UXAuditor() {
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                             <Box surface="muted" padding={3} radius="lg" border={true}>
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" shrink={0}>FIX</Text>
                                         <Box flex={1} minWidth="0">
                                           <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
                                             {imp.suggestion}

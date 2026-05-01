@@ -23,7 +23,7 @@ const CONFIG = {
     'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'emerald-600', 'red-500',
-    'amber-500', 'success', 'error', 'warning', 'muted/10'
+    'amber-500', 'success', 'error', 'warning', 'muted', 'muted/10'
   ],
   allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
   allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
@@ -36,7 +36,7 @@ const CONFIG = {
     },
     {
       name: 'Raw Layout/Spacing',
-      pattern: /\b(flex(-[a-z0-9-]+)?|grid(-[a-z0-9-]+)?|items-[a-z-]+|justify-[a-z-]+|p[xytrbl]?-[0-9.]+|m[xytrbl]?-[0-9.]+|gap-[0-9.]+)\b/,
+      pattern: /\b(flex(-[a-z0-9-]+)?|grid(-[a-z0-9-]+)?|items-[a-z-]+|justify-[a-z-]+|p[xytrbl]?-[0-9.]+|m[xytrbl]?-[0-9.]+|gap-[0-9.]+|shrink(-[0-9]+)?|grow(-[0-9]+)?|basis-[a-z0-9-]+|self-[a-z-]+)\b/,
       isClassNameRule: true,
       severity: 'minor',
       message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'

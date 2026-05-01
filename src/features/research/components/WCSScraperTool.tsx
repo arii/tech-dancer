@@ -104,7 +104,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
             onClick={() => exportCSV(data)}
           >
             <Box display="flex" align="center" gap={3} width="full" className="text-left">
-              <FileJson className="w-4 h-4 shrink-0" />
+              <Box as={FileJson} width={4} height={4} shrink={0} />
               <Stack gap={0}>
                 <Text variant="mono" size="micro" weight="font-bold">EXPORT_CSV</Text>
                 <Text variant="body" size="micro" color="dim">Raw machine-readable data</Text>
@@ -117,7 +117,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
             onClick={handleExportPDF}
           >
             <Box display="flex" align="center" gap={3} width="full" className="text-left">
-              <FileText className="w-4 h-4 shrink-0" />
+              <Box as={FileText} width={4} height={4} shrink={0} />
               <Stack gap={0}>
                 <Text variant="mono" size="micro" weight="font-bold">EXPORT_PDF_REPORT</Text>
                 <Text variant="body" size="micro" color="dim">Formatted analytical brief</Text>
