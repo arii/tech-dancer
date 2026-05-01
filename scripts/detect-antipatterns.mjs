@@ -64,12 +64,43 @@ const CONFIG = {
       pattern: /style=\{\{/g,
       severity: 'major',
       message: 'Inline styles are banned. Use design tokens (AGENTS.md §11)'
+    },
+    {
+      name: 'Arbitrary Pixel Value',
+      pattern: /text-\[\d+px\]/g,
+      severity: 'minor',
+      message: 'Arbitrary px Tailwind value. Use design tokens (AGENTS.md §1)'
+    },
+    {
+      name: 'Raw Hex Color',
+      pattern: /bg-\[#/g,
+      severity: 'minor',
+      message: 'Raw hex color in Tailwind. Use CSS variables from tokens.css'
+    },
+    {
+      name: 'Arbitrary Text Size',
+      pattern: /className=".*?text-\[\d/g,
+      severity: 'minor',
+      message: 'Arbitrary text size. Use typeSizes from design-tokens.ts'
     }
-  ]
+  ],
+  deprecated: {
+    assets: { 'accent-brand': 'accent', 'useSearch': 'useSearchParam' },
+    paths: { 'src/components/common/': 'src/components/ui/' }
+  },
+  existingComponents: {
+    'Box': 'src/layouts/Box.tsx', 'Stack': 'src/layouts/Stack.tsx', 'Grid': 'src/layouts/Grid.tsx',
+    'Text': 'src/layouts/Text.tsx', 'Button': 'src/layouts/Button.tsx', 'ContentCard': 'src/components/ui/ContentCard.tsx',
+    'PageHeader': 'src/components/ui/PageHeader.tsx', 'FilterBar': 'src/components/ui/FilterBar.tsx',
+    'FolioGrid': 'src/components/ui/FolioGrid.tsx', 'Skeleton': 'src/components/ui/Skeleton.tsx',
+    'ViewToggle': 'src/components/ui/ViewToggle.tsx', 'ListRow': 'src/components/ui/ListRow.tsx',
+    'MarkdownRenderer': 'src/components/ui/MarkdownRenderer.tsx', 'DetailLayout': 'src/components/layout/DetailLayout.tsx',
+    'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
+  },
+  requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkFile(filepath) {
-  const content = fs.readFileSync(filepath, 'utf8');
+function checkContent(content) {
   if (content.includes('// impeccable-ignore-file')) return [];
 
   const violations = [];
@@ -103,7 +134,7 @@ function checkFile(filepath) {
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+        if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
         violations.push({
           line: lineNum,
@@ -118,7 +149,7 @@ function checkFile(filepath) {
   // 2. ClassName Specific Rules (Global Scanner)
   for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
     const lineNum = getLineNumber(match.index);
-    if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+    if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
     const classStr = match[1];
     const classes = classStr.split(/\s+/);
@@ -180,6 +211,11 @@ function checkFile(filepath) {
   return violations.sort((a, b) => a.line - b.line);
 }
 
+function checkFile(filepath) {
+  const content = fs.readFileSync(filepath, 'utf8');
+  return checkContent(content);
+}
+
 function checkPRScope() {
   try {
     const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
@@ -209,33 +245,58 @@ function generateTodoFile(allViolations) {
 
 const args = process.argv.slice(2);
 const isJson = args.includes('--json');
+const isCountOnly = args.includes('--count-only');
 const targets = args.filter(arg => !arg.startsWith('--'));
 
-if (!isJson) {
+if (!isJson && !isCountOnly) {
   console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
   checkPRScope();
 }
 
-const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
 const allViolations = {};
 
-const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
-
-files.forEach(filepath => {
-  if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
-    const violations = checkFile(filepath);
-    if (violations.length > 0) {
-      allViolations[path.relative(ROOT, filepath)] = violations;
-    }
+if (targets.includes('-')) {
+  let stdinContent = '';
+  process.stdin.setEncoding('utf8');
+  for await (const chunk of process.stdin) {
+    stdinContent += chunk;
   }
-});
+  const violations = checkContent(stdinContent);
+  if (violations.length > 0) {
+    allViolations['stdin'] = violations;
+  }
+} else {
+  const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
+  const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
 
-if (isJson) {
-  process.stdout.write(JSON.stringify(allViolations, null, 2));
-  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+  files.forEach(filepath => {
+    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
+      const violations = checkFile(filepath);
+      if (violations.length > 0) {
+        allViolations[path.relative(ROOT, filepath)] = violations;
+      }
+    }
+  });
 }
 
 const totalViolations = Object.values(allViolations).flat().length;
+
+if (isCountOnly) {
+  process.stdout.write(totalViolations.toString() + '\n');
+  process.exit(0);
+}
+
+if (isJson) {
+  process.stdout.write(JSON.stringify({
+    violations: allViolations,
+    config: {
+      deprecated: CONFIG.deprecated,
+      existingComponents: CONFIG.existingComponents,
+      requiredContentFields: CONFIG.requiredContentFields
+    }
+  }, null, 2));
+  process.exit(totalViolations > 0 ? 1 : 0);
+}
 
 if (totalViolations === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');

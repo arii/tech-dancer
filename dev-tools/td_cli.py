@@ -19,69 +19,9 @@ from collections import defaultdict
 
 from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
-EXISTING_COMPONENTS = {
-    'Box': 'src/layouts/Box.tsx', 'Stack': 'src/layouts/Stack.tsx', 'Grid': 'src/layouts/Grid.tsx',
-    'Text': 'src/layouts/Text.tsx', 'Button': 'src/layouts/Button.tsx', 'ContentCard': 'src/components/ui/ContentCard.tsx',
-    'PageHeader': 'src/components/ui/PageHeader.tsx', 'FilterBar': 'src/components/ui/FilterBar.tsx',
-    'FolioGrid': 'src/components/ui/FolioGrid.tsx', 'Skeleton': 'src/components/ui/Skeleton.tsx',
-    'ViewToggle': 'src/components/ui/ViewToggle.tsx', 'ListRow': 'src/components/ui/ListRow.tsx',
-    'MarkdownRenderer': 'src/components/ui/MarkdownRenderer.tsx', 'DetailLayout': 'src/components/layout/DetailLayout.tsx',
-    'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
-}
 
 # --- Anti-Pattern Audit Configuration ---
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
-
-AUDIT_LAYOUT_SUGGESTIONS = {
-    'flex flex-col': '<Stack direction="col">',
-    'flex flex-row': '<Stack direction="row">',
-    'flex items-center': '<Stack align="center">',
-    'flex justify-between': '<Stack justify="between">',
-    'grid grid-cols': '<Grid cols={...}>',
-}
-
-AUDIT_CONFIG = {
-    'allowedColors': [
-        'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
-        'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
-        'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-        'amber-500', 'success', 'error', 'warning'
-    ],
-    'allowedTextUtils': ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
-    'allowedTextSizes': ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
-    'rules': [
-        {
-            'name': 'Arbitrary Value',
-            'pattern': r'-\[.*?\]',
-            'message': 'Avoid arbitrary values like -[...]. Use design tokens instead.'
-        },
-        {
-            'name': 'Raw Layout/Spacing',
-            'pattern': r'\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b',
-            'isClassNameRule': True,
-            'message': 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
-        },
-        {
-            'name': 'div Layout',
-            'pattern': r'<div\s+[^>]*?className=["\'](.*?(?:flex|grid|p-|m-|gap-).*?)["\']',
-            'message': 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
-        }
-      ]
-}
-
-BANNED_PATTERNS = [
-    (r'HashRouter', 'HashRouter is banned. Use createBrowserRouter (AGENTS.md §9)'),
-    (r'import React from .react.', 'Unnecessary React import — React 17+ (AGENTS.md §4)'),
-    (r'style=\{\{', 'Inline styles are banned. Use design tokens (AGENTS.md §11)'),
-    (r'text-\[\d+px\]', 'Arbitrary px Tailwind value. Use design tokens (AGENTS.md §1)'),
-    (r'bg-\[#', 'Raw hex color in Tailwind. Use CSS variables from tokens.css'),
-    (r'<div\s+className=".*?(flex|grid|p-|m-)', 'Raw layout div. Use <Box/>, <Stack/>, <Grid/> primitives (AGENTS.md §3)'),
-    (r'className=".*?text-\[\d', 'Arbitrary text size. Use typeSizes from design-tokens.ts'),
-]
-
-RENAMED_ASSETS = { 'accent-brand': 'accent', 'useSearch': 'useSearchParam' }
-DEPRECATED_PATHS = { 'src/components/common/': 'src/components/ui/' }
-REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'excerpt']
 
 # --- Shared Logic ---
 
@@ -109,70 +49,19 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
 
     return fallback_value
 
-def get_violations_count(content: str, filepath: str) -> int:
-    if '// impeccable-ignore-file' in content:
-        return 0
+def get_audit_results(content: str = None, targets: list[str] = None):
+    """Calls the JS audit tool and returns parsed JSON results."""
+    cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
+    if targets:
+        cmd.extend(targets)
+    elif content is not None:
+        cmd.append("-")
 
-    lines = content.split('\n')
-    violations_count = 0
-
-    # 1. Check for regex patterns defined in rules
-    for rule in AUDIT_CONFIG['rules']:
-        if rule.get('isClassNameRule'):
-            continue
-
-        pattern = rule['pattern']
-        for match in re.finditer(pattern, content):
-            line_num = content.count('\n', 0, match.start()) + 1
-            if line_num <= len(lines) and '// impeccable-ignore' in lines[line_num - 1]:
-                continue
-            violations_count += 1
-
-    # 2. Check for classes in className
-    class_name_regex = r'className=["\'](.*?)["\']'
-    for match in re.finditer(class_name_regex, content):
-        line_num = content.count('\n', 0, match.start()) + 1
-        if line_num <= len(lines) and '// impeccable-ignore' in lines[line_num - 1]:
-            continue
-
-        class_str = match.group(1)
-        classes = class_str.split()
-
-        layout_rule = next(r for r in AUDIT_CONFIG['rules'] if r['name'] == 'Raw Layout/Spacing')
-
-        for cls in classes:
-            # Check against Raw Layout/Spacing rule
-            if re.search(layout_rule['pattern'], cls):
-                violations_count += 1
-
-            # Colors check
-            if re.search(r'\b(bg-|text-)\b', cls):
-                color_match = re.search(r'\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b', cls)
-                if color_match:
-                    base_color = color_match.group(2).split('/')[0]
-                    full_token = f"{color_match.group(1)}-{base_color}"
-
-                    is_allowed = (base_color in AUDIT_CONFIG['allowedColors'] or
-                                  full_token in AUDIT_CONFIG['allowedColors'] or
-                                  base_color in AUDIT_CONFIG['allowedTextUtils'] or
-                                  base_color in AUDIT_CONFIG['allowedTextSizes'])
-
-                    if not is_allowed:
-                        violations_count += 1
-
-        # Check for layout suggestions (once per className match)
-        # Mirroring JS logic: Object.entries(LAYOUT_SUGGESTIONS).forEach(([pattern, suggestion]) => { if (classStr.includes(pattern)) { ... } })
-        # Note: JS version only adds once per LINE if not already added for 'Layout Suggestion'
-        # To match exactly, we'd need to track line violations.
-        # But JS adds once per className check effectively because it's inside the className loop.
-        # Wait, JS has `if (!violations.find(v => v.line === lineNum && v.pattern === 'Layout Suggestion'))`
-
-        for pattern, suggestion in AUDIT_LAYOUT_SUGGESTIONS.items():
-            if pattern in class_str:
-                violations_count += 1
-                break # Only count ONE layout suggestion per className match to stay closer to JS "once per line" (usually one className per line)
-
-    return violations_count
+    proc = subprocess.run(cmd, input=content, capture_output=True, text=True)
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return {"violations": {}, "config": {}}
 
 def extract_code_blocks(text: str) -> list[str]:
     return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
@@ -208,22 +97,43 @@ def handle_validate_issue(args):
 
     results = []
     total_findings = 0
+
+    # Get config from audit tool
+    audit_base = get_audit_results(content="")
+    config = audit_base.get("config", {})
+
     for issue in issues:
         findings, warnings = [], []; body = issue.body or ''; title = issue.title or ''
+
+        # 1. Audit code blocks
         for i, block in enumerate(extract_code_blocks(body)):
-            for pattern, msg in BANNED_PATTERNS:
-                if re.search(pattern, block): findings.append(f"Code block {i+1}: {msg}")
-            for comp, path in EXISTING_COMPONENTS.items():
-                if re.search(rf'(create|build|make|add|new)\s+.*{comp}', block, re.IGNORECASE): warnings.append(f"Code block {i+1}: Suggests `{comp}` (exists at `{path}`)")
-        for comp, path in EXISTING_COMPONENTS.items():
-            if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE): warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
+            res = get_audit_results(content=block)
+            violations = res.get("violations", {}).get("stdin", [])
+            for v in violations:
+                val = v.get('value', 'N/A')
+                findings.append(f"Code block {i+1}: {v['message']} (value: {val})")
+
+            for comp, path in config.get('existingComponents', {}).items():
+                if re.search(rf'(create|build|make|add|new)\s+.*{comp}', block, re.IGNORECASE):
+                    warnings.append(f"Code block {i+1}: Suggests `{comp}` (exists at `{path}`)")
+
+        # 2. Global body checks
+        for comp, path in config.get('existingComponents', {}).items():
+            if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
+                warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
+
         if title.startswith('Draft:') and '```markdown' in body:
             md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
             if md_match:
-                for field in REQUIRED_FOR_CONTENT_ISSUES:
-                    if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE): findings.append(f"Missing frontmatter: `{field}`")
-        if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE): warnings.append("No acceptance criteria.")
-        if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE): warnings.append("Mentions Tailwind but not layout primitives.")
+                for field in config.get('requiredContentFields', []):
+                    if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE):
+                        findings.append(f"Missing frontmatter: `{field}`")
+
+        if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
+            warnings.append("No acceptance criteria.")
+
+        if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
+            warnings.append("Mentions Tailwind but not layout primitives.")
 
         issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
         results.append(issue_result)
@@ -352,18 +262,29 @@ def handle_update_issues(args):
 
     updates = []
     if not args.json: print(f"🔍 Scanning open issues in {repo_name}...")
+
+    audit_base = get_audit_results(content="")
+    config = audit_base.get("config", {})
+    deprecated = config.get("deprecated", {})
+
     for issue in repo.get_issues(state='open'):
         body = issue.body or ''; findings = []
-        for old, new in RENAMED_ASSETS.items():
+        for old, new in deprecated.get('assets', {}).items():
             if old in body: findings.append(f"References deprecated name `{old}`. Use `{new}` instead.")
-        for old, new in DEPRECATED_PATHS.items():
+        for old, new in deprecated.get('paths', {}).items():
             if old in body: findings.append(f"References deprecated path `{old}`. New location: `{new}`")
-        for pattern, message in BANNED_PATTERNS:
-            if re.search(pattern, body): findings.append(f"Contains banned pattern: {message}")
+
+        # Audit issue body
+        res = get_audit_results(content=body)
+        violations = res.get("violations", {}).get("stdin", [])
+        for v in violations:
+             val = v.get('value', 'N/A')
+             findings.append(f"Contains banned pattern: {v['message']} (value: {val})")
+
         if findings:
             updates.append({"number": issue.number, "findings": findings})
             comment = "## 🤖 Automated Issue Update\n\n" + "\n".join(f"- {f}" for f in findings) + "\n\n---\n*Generated by `td_cli update-issues`*"
-            if not args.json: print(f"[{'DRY-RUN' if args.dry_run else 'EXECUTE'}] Found {len(findings)} issues in #{issue.number}")
+            if not args.json: print(f"[{'DRY-RUN' if args.dry_run else 'EXECUTE'}] Found {len(findings)} findings in #{issue.number}")
             if not args.dry_run: issue.create_comment(comment); print(f"✅ Posted update comment to #{issue.number}")
             elif not args.json: print(f"Preview for #{issue.number}:\n{comment}\n")
 
@@ -430,9 +351,10 @@ def handle_audit_pr(args):
                         audit_data = json.loads(output[json_start:json_end])
                     for filepath, violations in audit_data.items():
                         for v in violations:
+                            val = v.get('value', 'N/A')
                             auto_findings.append({
                                 "path": filepath,
-                                "issue": f"{v['pattern']}: {v['message']} (value: {v['value']})",
+                                "issue": f"{v['pattern']}: {v['message']} (value: {val})",
                                 "severity": v.get('severity', 'minor')
                             })
             except Exception as e:
@@ -507,23 +429,9 @@ def handle_pre_submit(args):
         sys.exit(1)
 
 def handle_audit_gate(args):
-    current_count = 0
-    files_to_check = []
-
-    for dir_path in AUDIT_CHECK_DIRS:
-        full_path = os.path.join(os.getcwd(), dir_path)
-        if os.path.isfile(full_path) and full_path.endswith('.tsx'):
-            files_to_check.append(dir_path)
-        elif os.path.isdir(full_path):
-            for root, _, files in os.walk(full_path):
-                for file in files:
-                    if file.endswith('.tsx'):
-                        files_to_check.append(os.path.relpath(os.path.join(root, file), os.getcwd()))
-
-    for filepath in files_to_check:
-        if os.path.exists(filepath):
-            with open(filepath, 'r') as f:
-                current_count += get_violations_count(f.read(), filepath)
+    # Current violations count
+    proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
+    current_count = int(proc_current.stdout.strip() or 0)
 
     baseline_count = 0
     try:
@@ -533,7 +441,7 @@ def handle_audit_gate(args):
 
         relevant_main_files = []
         for mf in main_files:
-            if not mf.endswith('.tsx'):
+            if not (mf.endswith('.tsx') or mf.endswith('.ts')):
                 continue
             for check_dir in AUDIT_CHECK_DIRS:
                 if mf == check_dir or mf.startswith(check_dir + '/'):
@@ -544,7 +452,10 @@ def handle_audit_gate(args):
             try:
                 show_cmd = ["git", "show", f"origin/main:{mf}"]
                 content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
-                baseline_count += get_violations_count(content, mf)
+                # Audit the baseline content using stdin
+                proc_baseline = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                               input=content, capture_output=True, text=True)
+                baseline_count += int(proc_baseline.stdout.strip() or 0)
             except subprocess.CalledProcessError:
                 continue
     except subprocess.CalledProcessError:
