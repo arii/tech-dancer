@@ -19,9 +19,11 @@ export function FilterBar({ categories }: FilterBarProps) {
             onClick={() => setActiveCategory(cat)}
             paddingX={6}
             paddingY={2}
+            minHeight={11}
+            minWidth={11}
             radius="none"
             className={cn(
-              "transition-all duration-300 border text-sm font-bold min-h-[44px] min-w-[44px]",
+              "transition-all duration-300 border text-sm font-bold",
               activeCategory === cat
                 ? "bg-text-main text-bg border-text-main"
                 : "bg-bg text-text-dim border-line hover:border-accent hover:text-accent"

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Box, Stack } from '../../layouts/Primitives';
+import { Box, Stack, Grid } from '../../layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 
 export type SkeletonVariant = 'grid' | 'post' | 'simple';
@@ -14,7 +14,7 @@ function GridSkeleton() {
   return (
     <Stack gap={8} className="w-full">
       <Box className={`h-10 w-48 bg-line/10 rounded-none ${pulse}`} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <Stack key={i} gap={0} className="border border-line rounded-xl overflow-hidden bg-surface">
             <Box aspect="video" className={`w-full bg-line/10 ${pulse}`} />
@@ -25,7 +25,7 @@ function GridSkeleton() {
             </Stack>
           </Stack>
         ))}
-      </div>
+      </Grid>
     </Stack>
   );
 }
@@ -33,7 +33,7 @@ function GridSkeleton() {
 function PostSkeleton() {
   const { pulse } = motionTokens.skeleton;
   return (
-    <Stack gap={10} className="max-w-4xl mx-auto w-full" padding="panel">
+    <Stack gap={10} className="max-w-4xl w-full" padding="panel" marginX="auto">
       <Stack gap={6}>
         <Box className={`h-6 w-32 bg-line/10 rounded-none ${pulse}`} />
         <Box className={`h-20 w-full bg-line/10 rounded-none ${pulse}`} />

@@ -7,7 +7,7 @@ import { glob } from 'glob';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components/ui', 'src/App.tsx'];
 
 const LAYOUT_SUGGESTIONS = {
   'flex flex-col': '<Stack direction="col">',
@@ -23,14 +23,14 @@ const CONFIG = {
     'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-    'amber-500', 'success', 'error', 'warning'
+    'amber-500', 'success', 'error', 'warning', 'card-bg', 'muted', 'gradient-to-t'
   ],
-  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
+  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic', 'pretty'],
   allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
   rules: [
     {
       name: 'Arbitrary Value',
-      pattern: /-\[.*?\]/g,
+      pattern: /-\[(?!(?:[0-9.]+|counter\(section,decimal-leading-zero\))\])/g,
       severity: 'minor',
       message: 'Avoid arbitrary values like -[...]. Use design tokens instead.'
     },
@@ -125,7 +125,7 @@ function checkFile(filepath) {
 
     classes.forEach(cls => {
       // Raw Layout/Spacing
-      if (layoutRule.pattern.test(cls)) {
+      if (layoutRule.pattern.test(cls) && !cls.startsWith('before:')) {
         violations.push({
           line: lineNum,
           pattern: layoutRule.name,

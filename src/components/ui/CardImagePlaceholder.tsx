@@ -30,13 +30,13 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
       ) : (
         <Stack height="full" width="full" gap={0}>
           <Box height={4} width="full" surface={surfaceVariant} />
-          <Box flex={1} display="flex" align="center" justify="center" className="bg-muted/10">
+          <Box flex={1} display="flex" align="center" justify="center" surface="muted" opacity={10}>
             <CategoryPlaceholder category={category} size="md" />
           </Box>
         </Stack>
       )}
       <Box className="absolute top-4 left-4">
-        <Box className="px-3 py-1 bg-surface/90 backdrop-blur-sm border border-line rounded-sm">
+        <Box paddingX={3} paddingY={1} className="bg-surface/90 backdrop-blur-sm border border-line rounded-sm">
           <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-accent-navy">
             {category}
           </Text>

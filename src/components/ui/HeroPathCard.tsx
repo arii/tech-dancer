@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Box } from '@/layouts/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 
 interface HeroPathCardProps {
   title: string;
@@ -30,10 +30,13 @@ export function HeroPathCard({
   onClick
 }: HeroPathCardProps) {
   return (
-    <div
+    <Box
+      as="div"
+      height="full"
+      minHeight="300px"
       className={cn(
         wrapperClass,
-        "relative group overflow-hidden cursor-pointer h-full min-h-[300px] transition-all duration-700 ease-in-out",
+        "relative group overflow-hidden cursor-pointer transition-all duration-700 ease-in-out",
         isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
       )}
       onMouseEnter={onMouseEnter}
@@ -41,7 +44,7 @@ export function HeroPathCard({
       onClick={onClick}
     >
       {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+      <Box position="absolute" inset={true} zIndex={0}>
         <img
           src={image}
           alt=""
@@ -52,7 +55,7 @@ export function HeroPathCard({
             isHovered ? "scale-105" : "scale-100"
           )}
         />
-      </div>
+      </Box>
 
       {/* Scanline */}
       <Box
@@ -63,13 +66,23 @@ export function HeroPathCard({
       ></Box>
 
       {/* Content Container */}
-      <div className="relative z-20 p-8 md:p-16 lg:p-20 h-full flex flex-col justify-end bg-gradient-to-t from-black via-black/40 to-transparent">
-        <h2
-          className={`${titleClass} font-display font-black mb-8 text-white transition-transform duration-500 group-hover:translate-x-2 leading-[0.9] tracking-tighter`}
+      <Stack
+        position="relative"
+        zIndex={20}
+        padding={{ base: 8, md: 16, lg: 20 }}
+        height="full"
+        direction="col"
+        justify="end"
+        className="bg-gradient-to-t from-black via-black/40 to-transparent"
+      >
+        <Box
+          as="h2"
+          marginBottom={8}
+          className={`${titleClass} font-display font-black text-white transition-transform duration-500 group-hover:translate-x-2 leading-[0.9] tracking-tighter`}
         >
           {title}
-        </h2>
-        <ul className="flex flex-col gap-5 mb-6 font-sans text-lg tracking-tight text-white">
+        </Box>
+        <Stack as="ul" direction="col" gap={5} marginBottom={6} className="font-sans text-lg tracking-tight text-white">
           {links.map((link, index) => {
             const isExternal = link.to.startsWith('http') || link.to.startsWith('//');
             const isPrimary = index === 0;
@@ -115,8 +128,8 @@ export function HeroPathCard({
               </li>
             );
           })}
-        </ul>
-      </div>
-    </div>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

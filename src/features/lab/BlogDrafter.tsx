@@ -107,10 +107,10 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
              <Box
                as="button"
                onClick={saveToHistory}
-               display="flex"
+               justify="between"
                align="center"
                gap={2}
-               className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+               className="text-accent hover:text-text-main transition-colors cursor-pointer"
              >
                 <Save className="w-3 h-3" />
                 <Text variant="mono" size="micro" weight="font-bold">SNAPSHOT_NOW</Text>
@@ -318,7 +318,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               gap={3}
               surface="accent"
               padding={4}
-              className="bg-accent text-bg hover:bg-accent-brand transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
+              className="bg-accent text-bg hover:bg-text-main transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
             >
               <Send className="w-4 h-4" />
               APPLY_RESPONSE
@@ -335,7 +335,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                  align="center"
                  gap={1}
                  paddingLeft={4}
-                 className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+                 className="text-accent hover:text-text-main transition-colors cursor-pointer"
                >
                  <Eye className="w-3 h-3" />
                  <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>
