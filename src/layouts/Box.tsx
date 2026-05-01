@@ -25,6 +25,7 @@ export interface BaseProps {
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   xlBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
+  "2xlBorder"?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   surface?: keyof typeof variants.surface | boolean
   emphasis?: keyof typeof variants.emphasis
   radius?: keyof typeof variants.radius
@@ -72,7 +73,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     padding, 
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
-    gap, border, smBorder, mdBorder, lgBorder, xlBorder,
+    gap, border, smBorder, mdBorder, lgBorder, xlBorder, "2xlBorder": xxlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor,
@@ -121,7 +122,8 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),
-      getResponsiveClasses(xlBorder, "xl:border-")
+      getResponsiveClasses(xlBorder, "xl:border-"),
+      getResponsiveClasses(xxlBorder, "2xl:border-")
     )
 
     // Remove props that shouldn't be spread to DOM elements
@@ -131,7 +133,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     } = props;
 
     const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
-      if (!val) return ""
+      if (val === undefined || val === null || val === "") return ""
       const pfx = prefix ? `${prefix}-` : ""
 
       // Standard Tailwind tokens (numbers or specific strings without CSS units)

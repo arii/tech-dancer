@@ -39,7 +39,7 @@ test.describe('Visual Regression Tests', () => {
       // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.05,
         animations: 'disabled'
       });
     });

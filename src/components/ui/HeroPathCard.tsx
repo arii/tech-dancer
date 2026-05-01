@@ -31,39 +31,52 @@ export function HeroPathCard({
 }: HeroPathCardProps) {
   return (
     <Box
-      as="div"
       height="full"
       minHeight="300px"
-      className={cn(
-        wrapperClass,
-        "relative group overflow-hidden cursor-pointer transition-all duration-700 ease-in-out",
-        isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
-      )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
+      position="relative"
+      overflow="hidden"
+      cursor="pointer"
+      className={cn(
+        wrapperClass,
+        "group transition-all duration-700 ease-in-out",
+        isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
+      )}
     >
       {/* Background Image */}
-      <Box position="absolute" inset={true} zIndex={0}>
-        <img
-          src={image}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className={cn(
-            "w-full h-full object-cover transition-transform duration-700 ease-in-out",
-            isHovered ? "scale-105" : "scale-100"
-          )}
-        />
-      </Box>
+      <Box as="img"
+        src={image}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        position="absolute"
+        inset={true}
+        zIndex={0}
+        width="full"
+        height="full"
+        className={cn(
+          "object-cover transition-transform duration-700 ease-in-out",
+          isHovered ? "scale-105" : "scale-100"
+        )}
+      />
 
       {/* Scanline */}
       <Box
         shadow="glow"
-        className={`absolute left-0 top-0 w-full h-0.5 bg-accent z-10 pointer-events-none transition-opacity duration-500 ${
-          scanlineDelay || ''
-        } ${isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'}`}
-      ></Box>
+        position="absolute"
+        top={0}
+        left={0}
+        width="full"
+        height="0.5"
+        zIndex={10}
+        className={cn(
+          "bg-accent pointer-events-none transition-opacity duration-500",
+          scanlineDelay,
+          isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'
+        )}
+      />
 
       {/* Content Container */}
       <Stack
@@ -71,19 +84,22 @@ export function HeroPathCard({
         zIndex={20}
         padding={{ base: 8, md: 16, lg: 20 }}
         height="full"
-        direction="col"
         justify="end"
         gap={0}
         className="bg-gradient-to-t from-black via-black/40 to-transparent"
       >
-        <Box
+        <Text
           as="h2"
+          variant="headline"
           marginBottom={8}
-          className={`${titleClass} font-display font-black text-white transition-transform duration-500 group-hover:translate-x-2 leading-[0.9] tracking-tighter`}
+          className={cn(
+            titleClass,
+            "text-white transition-transform duration-500 group-hover:translate-x-2"
+          )}
         >
           {title}
-        </Box>
-        <Stack as="ul" direction="col" gap={5} marginBottom={6} className="font-sans text-lg tracking-tight text-white">
+        </Text>
+        <Stack as="ul" gap={5} marginBottom={6} className="font-sans text-lg tracking-tight text-white">
           {links.map((link, index) => {
             const isExternal = link.to.startsWith('http') || link.to.startsWith('//');
             const isPrimary = index === 0;
