@@ -94,7 +94,7 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
 
     # 1. Environment Variable (High Priority in CI)
     env_val = os.environ.get(env_var)
-    if env_val:
+    if env_val and env_val.strip():
         return int(env_val)
 
     # 2. GitHub Actions Variable (Local Fetch)
