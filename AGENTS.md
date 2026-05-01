@@ -161,6 +161,6 @@ python3 dev-tools/td_cli.py pre-submit
 ### 🧪 Pre-Commit Checklist
 Before submitting any PR that modifies `.tsx` files:
 1. **Run the Audit**: `pnpm run audit`.
-2. **Review the Report**: Check `TODO_ANTIPATTERNS.md` for any new violations introduced by your changes.
+2. **Review the Report**: Audit the output for any new violations introduced by your changes.
 3. **Enforce Compliance**: Fix all identified anti-patterns or use `// impeccable-ignore` for intentional deviations.
 4. **Clean Slate**: Ensure your changes do not increase the total count of violations in the target files.

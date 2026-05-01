@@ -14,8 +14,18 @@ A gear, tech, and travel guide for West Coast Swing dancers. Built with Vite + R
 ## Account Context
 - **GitHub**: All submissions and issue tracking are handled via the [arii](https://github.com/arii) account.
 
+## Tech Stack
+- **Frontend**: React 19, TypeScript, Tailwind CSS v4, Motion (Framer Motion)
+- **Routing**: React Router 7 (SPA with physical stubs for GitHub Pages)
+- **State Management**: Zustand, React Query
+- **Build Tool**: Vite 6
+- **Testing**: Vitest (Unit), Playwright (E2E)
+- **Linting**: ESLint 10, Oxlint
+- **Infrastructure**: GitHub Actions (CI/CD), GitHub Pages (Hosting)
+
 ## Development
 ```bash
+pnpm install
 pnpm dev
 ```
 For production:
