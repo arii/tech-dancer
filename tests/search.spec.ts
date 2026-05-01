@@ -65,7 +65,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.reload();
     await page.waitForLoadState('networkidle');
 
-    // The modal should open automatically because 'search=true' is in the URL
+    // The modal should open automatically because 'modal=true' is in the URL
     // No need to click the search button again.
     const searchInputReload = page.getByPlaceholder(/SEARCH REPOSITORY/i);
     await expect(searchInputReload).toBeVisible({ timeout: 10000 });

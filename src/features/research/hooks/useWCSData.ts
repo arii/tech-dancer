@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { parquetReadObjects } from 'hyparquet';
+import { useSearchParam } from '@/hooks/useSearchParam';
 
 export interface WCSRecord {
   Dancer_ID: string;
@@ -14,8 +15,8 @@ export interface WCSRecord {
 export function useWCSData() {
   const [data, setData] = useState<WCSRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterPromoted, setFilterPromoted] = useState<'all' | 'promoted' | 'not-promoted'>('all');
+  const [searchTerm, setSearchTerm] = useSearchParam('search');
+  const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
 
   useEffect(() => {
     const loadData = async () => {
