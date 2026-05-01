@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && vite --port=3000 --host=0.0.0.0",
     "build": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build",
+    "postbuild": "tsx scripts/generate-spa-stubs.mjs",
     "build:analyze": "ANALYZE=true vite build",
     "build:profile": "vite build --profile",
     "preview": "vite preview",
