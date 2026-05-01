@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, get_gha_variable, CLIError
+from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -25,8 +25,8 @@ AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
 # --- Shared Logic ---
 
-def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
-    """Resolves a baseline value from CLI argument, environment variable, GHA variable, or default file."""
+def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -> int:
+    """Resolves a baseline value from CLI argument, environment variable, or GHA variable."""
     if file_path:
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
@@ -34,18 +34,13 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
 
     # 1. Environment Variable (High Priority in CI)
     env_val = os.environ.get(env_var)
-    if env_val and env_val.strip():
+    if env_val is not None and str(env_val).strip() != "":
         return int(env_val)
 
     # 2. GitHub Actions Variable (Local Fetch)
     gha_val = get_gha_variable(env_var)
-    if gha_val:
+    if gha_val is not None:
         return int(gha_val)
-
-    # 3. Default File (Legacy Fallback)
-    if os.path.exists(default_file):
-        with open(default_file, 'r') as f:
-            return int(f.read().strip() or fallback_value)
 
     return fallback_value
 
@@ -188,7 +183,7 @@ def handle_status_board(args):
 
 def handle_ratchet_any(args):
     current = get_any_count()
-    baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', "", 0)
+    baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', 0)
 
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
@@ -200,22 +195,25 @@ def handle_ratchet_any(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file
-        if not update_file:
-            msg = "Update failed: No baseline file specified for update."
-            if args.json: print(json.dumps({"status": "error", "message": msg}, indent=2))
-            else: print(f"❌ Error: {msg}")
-            sys.exit(1)
         if not args.dry_run:
-            with open(update_file, 'w') as f:
-                f.write(str(current))
+            if args.baseline_file:
+                with open(args.baseline_file, 'w') as f:
+                    f.write(str(current))
+                if not args.json: print(f"✅ Updated {args.baseline_file} to {current}")
+            else:
+                if set_gha_variable('ANY_COUNT_BASELINE', str(current)):
+                    if not args.json: print(f"✅ Updated ANY_COUNT_BASELINE to {current}")
+                else:
+                    if not args.json: print(f"❌ Failed to update ANY_COUNT_BASELINE.")
+                    sys.exit(1)
         elif not args.json:
-            print(f"[DRY-RUN] Would update {update_file} to {current}")
+            target = args.baseline_file if args.baseline_file else "ANY_COUNT_BASELINE"
+            print(f"[DRY-RUN] Would update {target} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
     size = get_bundle_size()
-    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', "", 3000)
+    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', 3000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -227,17 +225,20 @@ def handle_bundle_size(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file
-        if not update_file:
-            msg = "Update failed: No baseline file specified for update."
-            if args.json: print(json.dumps({"status": "error", "message": msg}, indent=2))
-            else: print(f"❌ Error: {msg}")
-            sys.exit(1)
         if not args.dry_run:
-            with open(update_file, 'w') as f:
-                f.write(str(size))
+            if args.baseline_file:
+                with open(args.baseline_file, 'w') as f:
+                    f.write(str(size))
+                if not args.json: print(f"✅ Updated {args.baseline_file} to {size}")
+            else:
+                if set_gha_variable('BUNDLE_BASELINE_KB', str(size)):
+                    if not args.json: print(f"✅ Updated BUNDLE_BASELINE_KB to {size}")
+                else:
+                    if not args.json: print(f"❌ Failed to update BUNDLE_BASELINE_KB.")
+                    sys.exit(1)
         elif not args.json:
-            print(f"[DRY-RUN] Would update {update_file} to {size}")
+            target = args.baseline_file if args.baseline_file else "BUNDLE_BASELINE_KB"
+            print(f"[DRY-RUN] Would update {target} to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
@@ -443,37 +444,39 @@ def handle_audit_gate(args):
     proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
     current_count = int(proc_current.stdout.strip() or 0)
 
-    baseline_count = 0
-    try:
-        # Get files from origin/main
-        ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-        main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+    # 1. Try to get baseline from GHA variable or Environment
+    baseline_count = resolve_baseline(None, 'AUDIT_BASELINE', -1)
 
-        relevant_main_files = []
-        for mf in main_files:
-            if not (mf.endswith('.tsx') or mf.endswith('.ts')):
-                continue
-            for check_dir in AUDIT_CHECK_DIRS:
-                if mf == check_dir or mf.startswith(check_dir + '/'):
-                    relevant_main_files.append(mf)
-                    break
+    # 2. If not set, fallback to origin/main comparison (dynamic baseline)
+    if baseline_count == -1:
+        baseline_count = 0
+        try:
+            ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
+            main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
 
-        for mf in relevant_main_files:
-            try:
-                show_cmd = ["git", "show", f"origin/main:{mf}"]
-                content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
-                # Audit the baseline content using stdin
-                proc_baseline = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
-                                               input=content, capture_output=True, text=True)
-                baseline_count += int(proc_baseline.stdout.strip() or 0)
-            except subprocess.CalledProcessError:
-                continue
-    except subprocess.CalledProcessError:
-        # origin/main might not exist
-        pass
+            relevant_main_files = []
+            for mf in main_files:
+                if not (mf.endswith('.tsx') or mf.endswith('.ts')):
+                    continue
+                for check_dir in AUDIT_CHECK_DIRS:
+                    if mf == check_dir or mf.startswith(check_dir + '/'):
+                        relevant_main_files.append(mf)
+                        break
+
+            for mf in relevant_main_files:
+                try:
+                    show_cmd = ["git", "show", f"origin/main:{mf}"]
+                    content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
+                    proc_baseline = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                                   input=content, capture_output=True, text=True)
+                    baseline_count += int(proc_baseline.stdout.strip() or 0)
+                except subprocess.CalledProcessError:
+                    continue
+        except subprocess.CalledProcessError:
+            pass
 
     if not args.json:
-        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} (origin/main)")
+        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count}")
 
     if current_count > baseline_count:
         msg = f"Anti-pattern violations increased from {baseline_count} to {current_count}."
@@ -552,7 +555,7 @@ def main():
             p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "migrate-tokens": p.add_argument("--find"); p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW')); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "update-issues": p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd == "audit-pr":
+        elif cmd in ["audit-pr", "fetch-review"]:
             p.add_argument("pr_number")
             p.add_argument("--fetch", action="store_true"); p.add_argument("--audit", action="store_true"); p.add_argument("--submit", action="store_true"); p.add_argument("--cleanup", action="store_true")
             p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")

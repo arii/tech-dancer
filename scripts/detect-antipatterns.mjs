@@ -246,6 +246,7 @@ function generateTodoFile(allViolations) {
 const args = process.argv.slice(2);
 const isJson = args.includes('--json');
 const isCountOnly = args.includes('--count-only');
+const shouldGenerateTodo = args.includes('--todo');
 const targets = args.filter(arg => !arg.startsWith('--'));
 
 if (!isJson && !isCountOnly) {
@@ -300,7 +301,7 @@ if (isJson) {
 
 if (totalViolations === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  generateTodoFile({});
+  if (shouldGenerateTodo) generateTodoFile({});
 } else {
   console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
   for (const [file, violations] of Object.entries(allViolations)) {
@@ -310,6 +311,6 @@ if (totalViolations === 0) {
     });
     console.log();
   }
-  generateTodoFile(allViolations);
+  if (shouldGenerateTodo) generateTodoFile(allViolations);
   process.exit(1);
 }
