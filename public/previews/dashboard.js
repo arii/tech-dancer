@@ -21,7 +21,7 @@ const ICONS = {
     clock: `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
 };
 
-const escapeHtml = (u) => u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]));
+let rateLimitRemaining = null;
 
 function timeAgo(seconds) {
     const diff = Math.floor(Date.now() / 1000) - seconds;
@@ -38,60 +38,46 @@ function timeAgo(seconds) {
     return `${d} day${d > 1 ? 's' : ''} ago`;
 }
 
-async function apiFetch(endpoint) {
+/**
+ * Robust GitHub API wrapper with rate limit handling and error normalization.
+ */
+async function fetchGitHub(endpoint) {
+    if (rateLimitRemaining === 0) throw new Error('RATE_LIMITED');
+
     const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/${endpoint.replace(/^\//, '')}`;
     const res = await fetch(url);
-    if (res.status === 403) {
-        const rate = await fetch('https://api.github.com/rate_limit').then(r => r.json()).catch(() => null);
-        if (rate && rate.resources.core.remaining === 0) {
-            throw new Error('RATE_LIMITED');
-        }
-    }
+
+    const remaining = res.headers.get('x-ratelimit-remaining');
+    if (remaining !== null) rateLimitRemaining = parseInt(remaining, 10);
+
+    if (res.status === 403 && remaining === '0') throw new Error('RATE_LIMITED');
     if (!res.ok) throw new Error(`API_ERROR_${res.status}`);
+
     return res.json();
 }
 
-async function checkRateLimit() {
-    try {
-        const data = await apiFetch('rate_limit');
-        return data.resources.core;
-    } catch (e) {
-        return null;
-    }
-}
-
-async function fetchCIStatusHtml(sha, useCache = true) {
+async function fetchCIStatus(sha, useCache = true) {
     const cacheKey = `ci_status_${sha}`;
     if (useCache) {
         try {
             const cached = JSON.parse(sessionStorage.getItem(cacheKey));
-            if (cached && Date.now() - cached.timestamp < 60000) {
-                return cached.html;
-            }
+            if (cached && Date.now() - cached.timestamp < 60000) return cached.data;
         } catch (e) {}
     }
 
     try {
-        const data = await apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
-        if (!data.check_runs || data.check_runs.length === 0) return '';
+        const data = await fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/commits/${sha}/check-runs`);
+        if (!data.check_runs || data.check_runs.length === 0) return null;
 
-        const isPending = data.check_runs.some(cr => cr.status !== 'completed');
-        const isFailure = data.check_runs.some(cr => cr.conclusion === 'failure' || cr.conclusion === 'timed_out' || cr.conclusion === 'cancelled');
+        const result = {
+            isPending: data.check_runs.some(cr => cr.status !== 'completed'),
+            isFailure: data.check_runs.some(cr => cr.conclusion === 'failure' || cr.conclusion === 'timed_out' || cr.conclusion === 'cancelled')
+        };
 
-        let html = '';
-        if (isFailure) {
-            html = `<span class="flex items-center gap-1 text-red-700 dark:text-red-400 text-xs font-semibold bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-md border border-red-200 dark:border-red-800">${ICONS.failure} Checks Failed</span>`;
-        } else if (isPending) {
-            html = `<span class="flex items-center gap-1 text-amber-700 dark:text-amber-400 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md border border-amber-200 dark:border-amber-800">${ICONS.pending} Checks Pending</span>`;
-        } else {
-            html = `<span class="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 text-xs font-semibold bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">${ICONS.success} Checks Passed</span>`;
-        }
-
-        sessionStorage.setItem(cacheKey, JSON.stringify({ html, timestamp: Date.now() }));
-        return html;
+        sessionStorage.setItem(cacheKey, JSON.stringify({ data: result, timestamp: Date.now() }));
+        return result;
     } catch (e) {
-        const errHtml = `<span class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">${ICONS.warning} Status Error</span>`;
-        return errHtml;
+        return 'ERROR';
     }
 }
 
@@ -111,112 +97,133 @@ function filterCards() {
 
     let overallVisibleCount = 0;
     Array.from(grid.children).forEach(container => {
-        if (container.tagName !== 'DIV' || !container.classList.contains('flex-col')) return;
+        if (!container.classList.contains('group-stack')) return;
 
         let visibleCount = 0;
         Array.from(container.querySelectorAll('.preview-card')).forEach(card => {
-            const name = card.dataset.name.toLowerCase();
-            const title = card.dataset.title.toLowerCase();
-            const author = card.dataset.author.toLowerCase();
-            const type = card.dataset.type;
-            const isAuto = card.dataset.isAuto === 'true';
-            const isDraft = card.dataset.isDraft === 'true';
-
-            const matchesSearch = name.includes(query) || title.includes(query) || author.includes(query);
+            const { name, title, author, type, isAuto, isDraft, isStale } = card.dataset;
+            const matchesSearch = [name, title, author].some(v => v?.toLowerCase().includes(query));
 
             let matchesStatus = status === 'all' || status === type;
-            if (status === 'draft') matchesStatus = isDraft;
-            if (status === 'stale') matchesStatus = card.dataset.isStale === 'true';
+            if (status === 'draft') matchesStatus = isDraft === 'true';
+            if (status === 'stale') matchesStatus = isStale === 'true';
 
-            const matchesAuto = showAutomated || !isAuto;
+            const matchesAuto = showAutomated || isAuto !== 'true';
 
-            if (matchesSearch && matchesStatus && matchesAuto) {
-                card.classList.remove('hidden');
-                card.classList.add('flex');
+            const isVisible = matchesSearch && matchesStatus && matchesAuto;
+            card.classList.toggle('hidden', !isVisible);
+            card.classList.toggle('flex', isVisible);
+            if (isVisible) {
                 visibleCount++;
                 overallVisibleCount++;
-            } else {
-                card.classList.add('hidden');
-                card.classList.remove('flex');
             }
         });
 
-        // Hide the whole group if no cards are visible
-        if (visibleCount === 0) {
-            container.classList.add('hidden');
-            container.previousElementSibling.classList.add('hidden'); // Hide the heading
-        } else {
-            container.classList.remove('hidden');
-            container.previousElementSibling.classList.remove('hidden');
-        }
+        // Toggle visibility of group heading and stack
+        container.classList.toggle('hidden', visibleCount === 0);
+        container.previousElementSibling.classList.toggle('hidden', visibleCount === 0);
     });
 
     emptyState.classList.toggle('hidden', overallVisibleCount > 0);
 }
 
-function createBadge(text, color) {
-    const bg = color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30';
-    const txt = color === 'blue' ? 'text-blue-700 dark:text-blue-400' : 'text-emerald-700 dark:text-emerald-400';
-    const border = color === 'blue' ? 'border-blue-200 dark:border-blue-800' : 'border-emerald-200 dark:border-emerald-800';
-    return `<span class="${bg} ${txt} text-xs font-semibold px-2.5 py-1 rounded-full border ${border}">${text}</span>`;
+// --- DOM Construction Helpers ---
+
+function el(tag, props = {}, children = []) {
+    const element = document.createElement(tag);
+    Object.entries(props).forEach(([key, value]) => {
+        if (key === 'className') element.className = value;
+        else if (key === 'dataset') Object.assign(element.dataset, value);
+        else if (key === 'innerHTML') element.innerHTML = value;
+        else element[key] = value;
+    });
+    children.forEach(child => {
+        if (typeof child === 'string') element.appendChild(document.createTextNode(child));
+        else if (child) element.appendChild(child);
+    });
+    return element;
 }
 
-function createLabel(label) {
-    return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border" style="background-color: #${label.color}22; color: #${label.color}; border-color: #${label.color}44">${label.name.toUpperCase()}</span>`;
+function createBadge(text, color) {
+    const colorClasses = color === 'blue'
+        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800'
+        : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800';
+    return el('span', { className: `${colorClasses} text-xs font-semibold px-2.5 py-1 rounded-full border` }, [text]);
+}
+
+function createStatusBadge(status) {
+    if (!status) return null;
+    if (status === 'ERROR') {
+        return el('span', { className: 'flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs font-semibold bg-slate-50 dark:bg-slate-900/30 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800', innerHTML: `${ICONS.warning} Status Error` });
+    }
+    const { isFailure, isPending } = status;
+    const config = isFailure
+        ? { cls: 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800', icon: ICONS.failure, text: 'Checks Failed' }
+        : isPending
+        ? { cls: 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800', icon: ICONS.pending, text: 'Checks Pending' }
+        : { cls: 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800', icon: ICONS.success, text: 'Checks Passed' };
+
+    return el('span', { className: `flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md border ${config.cls}`, innerHTML: `${config.icon} ${config.text}` });
 }
 
 function renderCard(name, pr, prStatus, isIdxEven) {
-    const url = `${BASE_URL}/${name}/`;
-    const isAuto = pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot');
-    const isDraft = pr ? pr.draft : false;
-    const isStale = pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000;
+    const deploymentUrl = `${BASE_URL}/${name}/`;
     const zebraClass = isIdxEven ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/50 dark:bg-slate-900/50';
 
-    const card = document.createElement('div');
-    card.className = `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer group`;
-
-    Object.assign(card.dataset, {
-        name,
-        type: pr ? 'pr' : 'active',
-        isAuto,
-        author: pr ? pr.user.login : '',
-        title: pr ? pr.title : '',
-        isDraft,
-        isStale
+    const card = el('div', {
+        className: `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer group`,
+        dataset: {
+            name,
+            type: pr ? 'pr' : 'active',
+            isAuto: pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot'),
+            author: pr?.user.login || '',
+            title: pr?.title || '',
+            isDraft: pr?.draft || false,
+            isStale: pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000
+        }
     });
 
     card.addEventListener('click', (e) => {
-        if (!e.target.closest('a')) window.open(pr ? pr.html_url : url, '_blank');
+        if (!e.target.closest('a')) window.open(pr ? pr.html_url : deploymentUrl, '_blank');
     });
 
-    const badgeHtml = pr
-        ? `<div class="flex items-center gap-2 flex-wrap">
-             ${createBadge(isDraft ? 'Draft PR' : 'Open PR', 'blue')}
-             ${prStatus}
-             ${(pr.labels || []).map(createLabel).join('')}
-           </div>`
-        : createBadge('Active Branch', 'emerald');
+    const badgeContainer = el('div', { className: 'flex items-center gap-2 flex-wrap' });
+    if (pr) {
+        badgeContainer.appendChild(createBadge(pr.draft ? 'Draft PR' : 'Open PR', 'blue'));
+        const statusBadge = createStatusBadge(prStatus);
+        if (statusBadge) badgeContainer.appendChild(statusBadge);
+        (pr.labels || []).forEach(l => {
+            badgeContainer.appendChild(el('span', {
+                className: 'px-2 py-0.5 rounded-full text-[10px] font-bold border',
+                style: `background-color: #${l.color}22; color: #${l.color}; border-color: #${l.color}44`
+            }, [l.name.toUpperCase()]));
+        });
+    } else {
+        badgeContainer.appendChild(createBadge('Active Branch', 'emerald'));
+    }
 
-    const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
-    const sourceLink = `<a href="${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Source</a>`;
-    const compareLink = `<a href="${compareUrl}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Compare</a>`;
-    const timeAgoHtml = pr ? `<span class="text-xs text-slate-400 flex items-center gap-1">${ICONS.clock} ${timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))}</span>` : '';
+    const titleEl = pr
+        ? el('a', { href: pr.html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate', innerHTML: ICONS.pr }, [`PR #${pr.number}: ${pr.title}`])
+        : el('div', { className: 'text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 text-balance', innerHTML: ICONS.branch }, [name]);
 
-    card.innerHTML = `
-        <div class="flex-1 min-w-0 w-full">
-            <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-                ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 text-balance">${ICONS.branch} ${escapeHtml(name)}</div>`}
-                <div class="hidden sm:block">${badgeHtml}</div>
-            </div>
-            <div class="flex items-center gap-3 flex-wrap">
-                <span class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px]">${escapeHtml(name)}</span>
-                ${sourceLink}
-                ${compareLink}
-                ${timeAgoHtml}
-                <div class="sm:hidden">${badgeHtml}</div>
-            </div>
-        </div>
-        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0">View Deployment ${ICONS.external}</a>`;
+    const infoRow = el('div', { className: 'flex items-center gap-3 flex-wrap' }, [
+        el('span', { className: 'text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px]' }, [name]),
+        el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors', innerHTML: `${ICONS.external} Source` }),
+        el('a', { href: `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors', innerHTML: `${ICONS.external} Compare` }),
+        pr && el('span', { className: 'text-xs text-slate-400 flex items-center gap-1', innerHTML: ICONS.clock }, [timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))]),
+        el('div', { className: 'sm:hidden' }, [badgeContainer.cloneNode(true)])
+    ]);
+
+    card.append(
+        el('div', { className: 'flex-1 min-w-0 w-full' }, [
+            el('div', { className: 'flex flex-col sm:flex-row sm:items-center gap-3 mb-3' }, [
+                titleEl,
+                el('div', { className: 'hidden sm:block' }, [badgeContainer])
+            ]),
+            infoRow
+        ]),
+        el('a', { href: deploymentUrl, target: '_blank', rel: 'noopener', className: 'w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0', innerHTML: `View Deployment ${ICONS.external}` })
+    );
 
     return card;
 }
@@ -227,36 +234,28 @@ async function init() {
     if (trackingLink) trackingLink.href = TRACKING_URL;
 
     // Attach event listeners
-    const controls = {
-        'search': { el: document.getElementById('search'), event: 'input' },
-        'status-filter': { el: document.getElementById('status-filter'), event: 'change' },
-        'show-automated': { el: document.getElementById('show-automated'), event: 'change' },
-        'reset-filters': { el: document.getElementById('reset-filters'), event: 'click', fn: resetFilters }
-    };
-
-    Object.values(controls).forEach(ctrl => {
-        if (ctrl.el) ctrl.el.addEventListener(ctrl.event, ctrl.fn || filterCards);
+    const handlers = { 'search': 'input', 'status-filter': 'change', 'show-automated': 'change', 'reset-filters': 'click' };
+    Object.entries(handlers).forEach(([id, ev]) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener(ev, id === 'reset-filters' ? resetFilters : filterCards);
     });
 
     try {
-        const rateLimit = await checkRateLimit();
-        if (rateLimit && rateLimit.remaining < 10) {
-            const warning = document.createElement('div');
-            warning.className = 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium';
-            warning.innerHTML = `${ICONS.warning} GitHub API rate limit is low (${rateLimit.remaining} left). CI statuses may not load correctly.`;
+        const [treeData, prs, releases] = await Promise.all([
+            fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`),
+            fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).catch(() => []),
+            fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/releases?per_page=1`).catch(() => [])
+        ]);
+
+        if (rateLimitRemaining < 10) {
+            const warning = el('div', { className: 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium', innerHTML: `${ICONS.warning} GitHub API rate limit is low (${rateLimitRemaining} left). CI statuses may not load correctly.` });
             grid.before(warning);
         }
 
-        const [treeData, prs, releases] = await Promise.all([
-            apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`),
-            apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).catch(() => []),
-            apiFetch(`repos/${REPO_OWNER}/${REPO_NAME}/releases?per_page=1`).catch(() => [])
-        ]);
-
         const prStatuses = {};
-        if (!rateLimit || rateLimit.remaining > 5) {
+        if (rateLimitRemaining > 5) {
             await Promise.all(prs.map(async (pr) => {
-                prStatuses[pr.head.ref] = await fetchCIStatusHtml(pr.head.sha);
+                prStatuses[pr.head.ref] = await fetchCIStatus(pr.head.sha);
             }));
         }
 
@@ -266,75 +265,35 @@ async function init() {
             .filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
             .map(i => i.path.replace('/index.html', ''));
 
-        const prFolders = allFoldersRaw
-            .filter(name => prs.some(p => p.head.ref === name))
-            .sort((a, b) => {
-                const prA = prs.find(p => p.head.ref === a);
-                const prB = prs.find(p => p.head.ref === b);
-                return new Date(prB.updated_at).getTime() - new Date(prA.updated_at).getTime();
-            });
+        const prFolders = allFoldersRaw.filter(name => prs.some(p => p.head.ref === name))
+            .sort((a, b) => new Date(prs.find(p => p.head.ref === b).updated_at) - new Date(prs.find(p => p.head.ref === a).updated_at));
 
-        const branchFolders = allFoldersRaw
-            .filter(name => !prs.some(p => p.head.ref === name))
-            .sort((a, b) => a.localeCompare(b));
+        const branchFolders = allFoldersRaw.filter(name => !prs.some(p => p.head.ref === name)).sort((a, b) => a.localeCompare(b));
 
         const stalePrs = prs.filter(p => (Date.now() - new Date(p.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000);
 
-        const stats = {
-            'stat-prs': prs.length,
-            'stat-active': branchFolders.length,
-            'stat-stale': stalePrs.length,
-            'stat-releases': releases.length > 0 ? releases[0].tag_name : '0',
-            'stat-total': allFoldersRaw.length,
-            'last-updated': new Date().toLocaleString()
-        };
-
-        Object.entries(stats).forEach(([id, val]) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = val;
-        });
-
-        if (!allFoldersRaw.length) {
-            grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
-            return;
-        }
+        const statsMap = { 'stat-prs': prs.length, 'stat-active': branchFolders.length, 'stat-stale': stalePrs.length, 'stat-releases': releases[0]?.tag_name || '0', 'stat-total': allFoldersRaw.length, 'last-updated': new Date().toLocaleString() };
+        Object.entries(statsMap).forEach(([id, val]) => { const el = document.getElementById(id); if (el) el.textContent = val; });
 
         const renderGroup = (title, foldersList, isPr) => {
             if (!foldersList.length) return;
-
-            const groupContainer = document.createDocumentFragment();
-            const heading = document.createElement('h2');
-            heading.className = 'text-xl font-bold mt-8 mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-200';
-            heading.innerHTML = `${isPr ? ICONS.pr : ICONS.branch} ${title}`;
-            groupContainer.appendChild(heading);
-
-            const stack = document.createElement('div');
-            stack.className = 'flex flex-col gap-4 mb-10';
-
-            foldersList.forEach((name, idx) => {
-                const pr = prs.find(p => p.head.ref === name);
-                const prStatus = prStatuses[name] || '';
-                stack.appendChild(renderCard(name, pr, prStatus, idx % 2 === 0));
-            });
-            groupContainer.appendChild(stack);
-            grid.appendChild(groupContainer);
+            const fragment = document.createDocumentFragment();
+            fragment.appendChild(el('h2', { className: 'text-xl font-bold mt-8 mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-200', innerHTML: `${isPr ? ICONS.pr : ICONS.branch} ${title}` }));
+            const stack = el('div', { className: 'group-stack flex flex-col gap-4 mb-10' });
+            foldersList.forEach((name, idx) => stack.appendChild(renderCard(name, prs.find(p => p.head.ref === name), prStatuses[name], idx % 2 === 0)));
+            fragment.appendChild(stack);
+            grid.appendChild(fragment);
         };
 
         renderGroup('Pull Request Previews', prFolders, true);
         renderGroup('Other Deployed Branches', branchFolders, false);
-
         filterCards();
 
     } catch (err) {
         loading.style.display = 'none';
-        document.getElementById('error-msg').textContent = err.message;
-        errorAlert.classList.remove('hidden');
+        document.getElementById('error-msg').textContent = err.message === 'RATE_LIMITED' ? 'GitHub API Rate Limited. Please try again later.' : err.message;
+        errorAlert.classList.toggle('hidden', false);
     }
 }
 
-// Initializing on load
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
+document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
