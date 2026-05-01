@@ -7,6 +7,7 @@ const __dirname = path.dirname(__filename);
 
 import { CONTENT_DIR_MAP, getContentSlugs } from './content-loader.ts';
 import { routes } from '../src/config/routes.ts';
+import { RESEARCH_TOOLS } from '../src/config/research-tools.ts';
 
 const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
@@ -21,7 +22,10 @@ const DYNAMIC_ROUTES = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =
   getContentSlugs(dir, prefix)
 );
 
-const STUB_ROUTES = [...STATIC_ROUTES, ...DYNAMIC_ROUTES];
+// Dynamic research tool routes
+const TOOL_ROUTES = RESEARCH_TOOLS.map(tool => `/research/${tool.id}`);
+
+const STUB_ROUTES = [...STATIC_ROUTES, ...DYNAMIC_ROUTES, ...TOOL_ROUTES];
 
 async function generateStubs() {
   if (!fs.existsSync(INDEX_HTML)) {

@@ -8,6 +8,7 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 import { CONTENT_DIR_MAP, getContentSlugs } from './scripts/content-loader';
 import { routes } from './src/config/routes';
+import { RESEARCH_TOOLS } from './src/config/research-tools';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -52,6 +53,8 @@ export default defineConfig(({mode}) => {
     ...routes
       .map(r => r.path)
       .filter(path => path !== '*' && !path.includes(':')),
+    // Dynamic research tool routes
+    ...RESEARCH_TOOLS.map(tool => `/research/${tool.id}`),
     // Dynamic content routes discovered from file system
     ...Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
       getContentSlugs(dir, prefix)
