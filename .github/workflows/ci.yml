@@ -47,6 +47,11 @@ jobs:
       - name: Type-check
         run: pnpm run type-check
 
+      - name: Run CLI Unit Tests
+        run: |
+          pip install PyGithub pytest
+          PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_td_cli.py
+
       - name: TypeScript `any` Ratchet
         run: python3 dev-tools/td_cli.py ratchet-any --update
 

@@ -14,7 +14,7 @@ python3 dev-tools/td_cli.py validate-issue --issue-number RELATED_ISSUE_NUMBER
 
 1. **Generate the review documents**:
 ```bash
-python3 dev-tools/td_cli.py fetch-review PR_NUMBER
+python3 dev-tools/td_cli.py audit-pr PR_NUMBER --fetch
 ```
 (This creates `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` for reading, and `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` for writing).
 

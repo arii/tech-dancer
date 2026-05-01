@@ -23,7 +23,7 @@ Review output and determine safe merge order before proceeding.
 
 4. **Generate Review Context & Output Templates**: For a selected batch of PRs, run the fetch script. This will generate a read-only `pr-context-<PR>.md` and a writeable `pr-review-<PR>.md` for each.
 ```bash
-python3 dev-tools/td_cli.py fetch-review PR_NUMBER
+python3 dev-tools/td_cli.py audit-pr PR_NUMBER --fetch
 ```
 
 5. **Audit the PRs**: For each PR, READ the instructions in `.agent/workflows/REVIEW_INSTRUCTIONS.md` and the diffs in `pr-context-<PR_NUMBER>.md`.
