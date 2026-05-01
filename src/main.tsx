@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GA_MEASUREMENT_ID } from '@/config/constants.ts';
 import { routes } from './App.tsx';
 import './index.css';
 
@@ -75,6 +76,13 @@ const getBasename = (): string => {
 const router = createBrowserRouter(routes, {
   basename: getBasename(),
 });
+
+// Log GA4 initialization status for debugging
+if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== '""') {
+  console.log(`[Analytics] Initializing GA4 with ID: ${GA_MEASUREMENT_ID}`);
+} else {
+  console.log('[Analytics] GA4 Measurement ID missing or empty. Tracking disabled.');
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -23,11 +23,22 @@ export type AnalyticsEvent =
 let lastTrackedPath: string | null = null;
 
 /**
+ * Checks if Google Analytics is fully initialized and ready.
+ */
+const isAnalyticsReady = (): boolean => {
+  return (
+    !!GA_MEASUREMENT_ID &&
+    GA_MEASUREMENT_ID !== '""' &&
+    typeof window.gtag === 'function'
+  );
+};
+
+/**
  * Tracks a page view to Google Analytics 4.
  * Includes a guard to prevent duplicate tracking of the same path.
  */
 export const trackPageView = (path: string) => {
-  if (!GA_MEASUREMENT_ID || typeof window.gtag !== 'function') return;
+  if (!isAnalyticsReady()) return;
   if (path === lastTrackedPath) return;
 
   lastTrackedPath = path;
@@ -40,7 +51,7 @@ export const trackPageView = (path: string) => {
  * Tracks a custom event to Google Analytics 4.
  */
 export const trackEvent = ({ name, params }: AnalyticsEvent) => {
-  if (!GA_MEASUREMENT_ID || typeof window.gtag !== 'function') return;
+  if (!isAnalyticsReady()) return;
 
   window.gtag('event', name, params);
 };
