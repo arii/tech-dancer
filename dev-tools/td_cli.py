@@ -184,6 +184,15 @@ def handle_ratchet_any(args):
             print(f"[DRY-RUN] Would update {update_file} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
+def get_current_violation_count() -> int:
+    """Obtains the current UI anti-pattern violation count using the Node script."""
+    try:
+        res = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"],
+                             capture_output=True, text=True, check=True)
+        return int(res.stdout.strip() or 0)
+    except (subprocess.CalledProcessError, ValueError) as e:
+        raise CLIError(f"Failed to obtain violation count: {e}")
+
 def handle_bundle_size(args):
     size = get_bundle_size()
     baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 1000)
@@ -384,11 +393,7 @@ def handle_audit_gate(args):
         print("⚠️ Warning: AUDIT_BASELINE is not set, defaulting to 0")
 
     # 1. Obtain current violations from Node script
-    try:
-        res = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True, check=True)
-        current = int(res.stdout.strip() or 0)
-    except (subprocess.CalledProcessError, ValueError) as e:
-        raise CLIError(f"Failed to obtain violation count: {e}")
+    current = get_current_violation_count()
 
     # 2. Resolve baseline
     baseline = resolve_baseline(args.baseline_file, 'AUDIT_BASELINE', "audit-baseline.txt", -1)
