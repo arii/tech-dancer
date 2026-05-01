@@ -121,6 +121,33 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
 
           <Stack gap={6}>
+            <Grid cols={2} gap={4}>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CONTENT_TYPE</Text>
+                <Box
+                  as="select"
+                  value={data.type}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value)}
+                  className={cn(inputs.base, "appearance-none")}
+                >
+                  <option value="post">Blog Post</option>
+                  <option value="resource">Gear Resource</option>
+                  <option value="study">Data Study</option>
+                  <option value="event">Event</option>
+                </Box>
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DATE</Text>
+                <Box
+                  as="input"
+                  type="date"
+                  value={data.date}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                  className={inputs.base}
+                />
+              </Stack>
+            </Grid>
+
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
               <Box
@@ -148,12 +175,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DATE</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AUTHOR</Text>
                 <Box
                   as="input"
-                  type="date"
-                  value={data.date}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                  type="text"
+                  value={data.author}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('author', e.target.value)}
                   className={inputs.base}
                 />
               </Stack>
@@ -170,6 +197,31 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 className={cn(inputs.base, "resize-none")}
               />
             </Stack>
+
+            <Grid cols={2} gap={4}>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>TAGS (COMMA SEPARATED)</Text>
+                <Box
+                  as="input"
+                  type="text"
+                  value={data.tags}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('tags', e.target.value)}
+                  placeholder="tag-one, tag-two"
+                  className={inputs.base}
+                />
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>IMAGE_URL</Text>
+                <Box
+                  as="input"
+                  type="text"
+                  value={data.image}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('image', e.target.value)}
+                  placeholder="https://picsum.photos/..."
+                  className={inputs.base}
+                />
+              </Stack>
+            </Grid>
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>

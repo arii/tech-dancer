@@ -3,6 +3,7 @@ import { debounce } from 'throttle-debounce';
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
+  type: string;
   title: string;
   category: string;
   excerpt: string;
@@ -10,6 +11,8 @@ export interface DraftData {
   date: string;
   affiliateLink: string;
   commentary: string;
+  tags: string;
+  image: string;
 }
 
 export interface HistoryEntry {
@@ -41,13 +44,16 @@ export function useBlogDrafter() {
       }
     }
     return {
+      type: 'post',
       title: '',
       category: 'Lifestyle',
       excerpt: '',
       author: SITE_METADATA.author,
       date: new Date().toISOString().split('T')[0],
       affiliateLink: '',
-      commentary: ''
+      commentary: '',
+      tags: '',
+      image: ''
     };
   });
 
@@ -99,18 +105,32 @@ export function useBlogDrafter() {
   };
 
   const markdownPreview = useMemo(() => {
-    return `# ${data.title || '[Title]'}
+    const normalizeTag = (tag: string) => tag.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const tagsArr = data.tags.split(',').map(normalizeTag).filter(Boolean);
 
-> **Category**: ${data.category} | **Date**: ${data.date} | **Author**: ${data.author}
+    const frontmatter = {
+      type: data.type,
+      title: data.title || 'Untitled',
+      date: data.date,
+      author: data.author,
+      category: data.category,
+      excerpt: data.excerpt || 'No excerpt provided.',
+      image: data.image || '',
+      tags: tagsArr,
+      ...(data.affiliateLink ? { affiliateIds: ['amazon'] } : {})
+    };
 
-${data.excerpt ? `*${data.excerpt}*` : ''}
+    const yaml = `---\n${Object.entries(frontmatter)
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          if (value.length === 0) return `${key}: []`;
+          return `${key}:\n${value.map(v => `  - ${v}`).join('\n')}`;
+        }
+        return `${key}: ${JSON.stringify(value)}`;
+      })
+      .join('\n')}\n---`;
 
----
-
-${data.commentary || '[Your commentary/content goes here]'}
-
-${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
-`;
+    return `${yaml}\n\n${data.commentary || '[Your content goes here]'}${data.affiliateLink ? `\n\n[Buy on Amazon](${data.affiliateLink})` : ''}`;
   }, [data]);
 
   const githubIssueUrl = useMemo(() => {
@@ -156,13 +176,16 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
 
   const clearForm = () => {
     setData({
+      type: 'post',
       title: '',
       category: 'Lifestyle',
       excerpt: '',
       author: SITE_METADATA.author,
       date: new Date().toISOString().split('T')[0],
       affiliateLink: '',
-      commentary: ''
+      commentary: '',
+      tags: '',
+      image: ''
     });
   };
 
