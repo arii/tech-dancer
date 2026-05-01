@@ -3,13 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'etl/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/deploy.yml'
+      - '**'
 
 permissions:
   contents: write
