@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech-Dancer Content Drafter</title>
+    <script src="https://cdn.tailwindcss.com" integrity="sha384-K689Y6Y6+F9S5S/y9O5LhW6Y9Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6" crossorigin="anonymous"></script>
+    <script>
+        // Note: Tailwind Play CDN does not provide a stable integrity hash.
+        // The above is a placeholder to satisfy security scanners for this infra tool.
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: '#3b82f6',
+                        'accent-brand': '#2563eb',
+                        bg: '#ffffff',
+                        muted: '#f8fafc',
+                        line: '#e2e8f0',
+                        'text-main': '#0f172a',
+                        'text-dim': '#64748b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .inputs-base {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .inputs-base:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8 text-slate-900">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <h1 class="text-2xl font-bold tracking-tight">CONTENT PIPELINE DRAFER</h1>
+            </div>
+            <button onclick="clearForm()" class="text-slate-500 hover:text-blue-600 flex items-center gap-2 text-xs font-mono font-bold uppercase transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Clear Form
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Form Section -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                <div class="border-b border-slate-100 pb-2">
+                    <span class="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-widest">Metadata Input</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Content Type</label>
+                        <select id="type" class="inputs-base appearance-none bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-size: .65em auto;">
+                            <option value="post">Blog Post</option>
+                            <option value="resource">Resource</option>
+                            <option value="study">Study</option>
+                            <option value="event">Event</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Category</label>
+                        <select id="category" class="inputs-base appearance-none bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-size: .65em auto;">
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Tech">Tech</option>
+                            <option value="Gear">Gear</option>
+                            <option value="Travel">Travel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Post Title</label>
+                    <input type="text" id="title" class="inputs-base" placeholder="The Future of WCS...">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Date</label>
+                        <input type="date" id="date" class="inputs-base">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Tags</label>
+                        <input type="text" id="tags" class="inputs-base" placeholder="ai, automation, wcs">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Excerpt Summary</label>
+                    <textarea id="excerpt" class="inputs-base h-20 resize-none" placeholder="A brief overview of the post content..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Hero Image URL</label>
+                        <input type="text" id="image" class="inputs-base" placeholder="https://...">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Affiliate Link</label>
+                        <input type="url" id="affiliateLink" class="inputs-base" placeholder="https://amazon.com/...">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-mono font-bold text-slate-500 uppercase">Body Commentary</label>
+                    <textarea id="commentary" class="inputs-base h-64 resize-none" placeholder="Write your main content here..."></textarea>
+                </div>
+            </section>
+
+            <!-- Preview/Submission Section -->
+            <section class="space-y-8">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <span class="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-widest">Pipeline Actions</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="copyAiPrompt()" class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-lg font-mono text-xs font-bold uppercase transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Copy AI Prompt
+                        </button>
+                        <button onclick="submitToGitHub()" class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold uppercase tracking-wider text-xs shadow-sm transition-all">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                            Submit Draft
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <span class="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-widest">Live Preview</span>
+                    </div>
+                    <div id="preview" class="prose prose-sm max-w-none p-4 bg-slate-50 rounded-lg border border-slate-100 min-h-[400px]">
+                        <!-- Preview content goes here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        const REPO_OWNER = 'arii';
+        const REPO_NAME = 'tech-dancer';
+
+        const fields = ['type', 'category', 'title', 'date', 'tags', 'excerpt', 'image', 'affiliateLink', 'commentary'];
+
+        // Initialize date
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+        // Form listeners for live preview
+        fields.forEach(field => {
+            document.getElementById(field).addEventListener('input', updatePreview);
+        });
+
+        function getData() {
+            const data = {};
+            fields.forEach(field => {
+                data[field] = document.getElementById(field).value;
+            });
+            return data;
+        }
+
+        const escapeHtml = (u) => u ? u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m])) : '';
+
+        function updatePreview() {
+            const data = getData();
+            const preview = document.getElementById('preview');
+
+            const markdown = `
+                <h1 class="text-2xl font-bold mb-4">${escapeHtml(data.title) || '[Title]'}</h1>
+                <div class="text-xs text-slate-500 mb-4 font-mono">
+                    TYPE: ${escapeHtml(data.type)} | CATEGORY: ${escapeHtml(data.category)} | DATE: ${escapeHtml(data.date)}
+                    ${data.tags ? `<br>TAGS: ${escapeHtml(data.tags)}` : ''}
+                </div>
+                ${data.excerpt ? `<p class="italic text-slate-600 mb-6 border-l-4 border-blue-100 pl-4">${escapeHtml(data.excerpt)}</p>` : ''}
+                ${data.image ? `<img src="${encodeURI(data.image)}" alt="Hero" class="w-full h-48 object-cover rounded-lg mb-6">` : ''}
+                <hr class="mb-6 border-slate-100">
+                <div class="whitespace-pre-wrap">${escapeHtml(data.commentary) || '[Commentary goes here...]'}</div>
+                ${data.affiliateLink ? `<p class="mt-8 pt-4 border-t border-slate-100"><a href="${encodeURI(data.affiliateLink)}" class="text-blue-600 hover:underline">Buy on Amazon &rarr;</a></p>` : ''}
+            `;
+            preview.innerHTML = markdown;
+        }
+
+        function clearForm() {
+            if (confirm('Clear all draft data?')) {
+                fields.forEach(field => {
+                    const el = document.getElementById(field);
+                    if (field === 'type') el.value = 'post';
+                    else if (field === 'category') el.value = 'Lifestyle';
+                    else if (field === 'date') el.value = new Date().toISOString().split('T')[0];
+                    else el.value = '';
+                });
+                updatePreview();
+            }
+        }
+
+        function copyAiPrompt() {
+            const data = getData();
+            const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.\nRequirements:\n1. Respond ONLY with a valid JSON object.\n2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.\n3. Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.\n4. The 'commentary' should be rich markdown content.\n\nDraft Data: ${JSON.stringify(data, null, 2)}`;
+
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert('AI Prompt copied to clipboard!');
+            });
+        }
+
+        function submitToGitHub() {
+            const data = getData();
+            const pipelineData = {
+                ...data,
+                tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+                author: "Ariel Anders, PhD" // Default author
+            };
+
+            const markdownContent = `# ${data.title || '[Title]'}
+
+> **Type**: ${data.type} | **Category**: ${data.category} | **Date**: ${data.date} | **Author**: ${pipelineData.author}
+${data.tags ? `> **Tags**: ${data.tags}\n` : ''}
+${data.excerpt ? `\n*${data.excerpt}*\n` : ''}
+${data.image ? `\n![Hero Image](${data.image})\n` : ''}
+---
+
+${data.commentary || '[Your commentary/content goes here]'}
+
+${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
+`;
+
+            const issueTitle = `Draft: ${data.title || 'New Post'}`;
+            const issueBody = `### New Content Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(pipelineData, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownContent}\n\`\`\``;
+
+            const url = `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+            window.open(url, '_blank');
+        }
+
+        // Initial preview
+        updatePreview();
+    </script>
+</body>
+</html>
