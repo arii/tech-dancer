@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   TrendingUp,
   DollarSign,
@@ -10,8 +9,6 @@ import {
 } from 'lucide-react';
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -185,9 +182,9 @@ export function AffiliateROITool() {
                       paddingX={2}
                       paddingY={0.5}
                       surface="muted"
-                      className="inline-block text-[10px] font-black uppercase tracking-widest text-dim"
+                      className="inline-block font-black uppercase tracking-widest text-dim"
                     >
-                      {asset.network}
+                      <Text variant="mono" size="micro">{asset.network}</Text>
                     </Box>
                   </Box>
                   <Box as="td" padding={4} className="font-mono text-xs text-right text-accent weight-bold">${asset.commission.toFixed(2)}</Box>
