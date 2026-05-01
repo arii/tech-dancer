@@ -16,6 +16,7 @@ import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
 import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
+import { trackPageView } from './lib/analytics';
 
 const BANNER_DELAY_MS = 30000; // 30s delay
 
@@ -23,6 +24,10 @@ export function RootLayout() {
   const location = useLocation();
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';

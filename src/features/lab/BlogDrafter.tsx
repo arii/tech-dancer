@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { trackEvent } from '@/lib/analytics';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
@@ -31,6 +32,7 @@ export function BlogDrafter() {
     if (!aiInput.trim()) return;
     const success = applyAIResponse(aiInput);
     if (success) {
+      trackEvent({ name: 'ai_response_apply', params: { tool_id: 'blog-drafter' } });
       setShowAppliedSuccess(true);
       setAiInput('');
       setTimeout(() => setShowAppliedSuccess(false), 3000);
@@ -108,7 +110,10 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
              <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
              <Box
                as="button"
-               onClick={saveToHistory}
+               onClick={() => {
+                 trackEvent({ name: 'snapshot_create', params: { tool_id: 'blog-drafter' } });
+                 saveToHistory();
+               }}
                display="flex"
                align="center"
                gap={2}
@@ -343,6 +348,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               href={githubIssueUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                trackEvent({ name: 'draft_submit', params: { title: data.title } });
+              }}
               display="flex"
               align="center"
               justify="center"

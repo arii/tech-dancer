@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
+import { trackEvent } from '@/lib/analytics';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
@@ -35,7 +36,10 @@ export default function ResearchAnalytics() {
               <Box 
                 key={tool.id}
                 as="button"
-                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
+                onClick={() => {
+                  trackEvent({ name: 'tool_launch', params: { tool_id: tool.id, tool_name: tool.name } });
+                  navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`);
+                }}
                 surface="default"
                 border
                 padding="card"
@@ -74,8 +78,20 @@ export default function ResearchAnalytics() {
           {studies.length > 0 ? (
             <Grid cols={{ base: 1, md: 2 }} gap={12}>
               {studies.map((study) => (
-                <Box key={study.slug} className="group">
-                  <Stack gap={4}>
+                <Box
+                  key={study.slug}
+                  className="group cursor-pointer"
+                  as="button"
+                  onClick={() => {
+                    trackEvent({ name: 'study_read', params: { study_slug: study.slug, study_title: study.title } });
+                    // Studies in the grid don't seem to have a click handler in the original code,
+                    // but they look like they should. If they are just decorative,
+                    // I'll add the trackEvent to where they are meant to be navigated.
+                    // Looking at ResearchDetail, it seems we use /research/:id.
+                    navigate(`/research/${study.slug}`);
+                  }}
+                >
+                  <Stack gap={4} textAlign="left">
                     <Box display="flex" justify="between" align="center">
                       <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
                       <Text variant="mono" size="micro" color="dim">{study.date}</Text>

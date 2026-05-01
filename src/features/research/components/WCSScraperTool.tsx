@@ -14,6 +14,7 @@ import {
   Button
 } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { trackEvent } from '@/lib/analytics';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
@@ -75,7 +76,13 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
 function WCSExportConsole({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
+  const handleExportCSV = useCallback(() => {
+    trackEvent({ name: 'data_export', params: { export_type: 'csv', tool_id: 'wcs-scraper' } });
+    exportCSV(data);
+  }, [data, exportCSV]);
+
   const handleExportPDF = useCallback(() => {
+    trackEvent({ name: 'data_export', params: { export_type: 'pdf', tool_id: 'wcs-scraper' } });
     exportPDF({
       title: 'WCS Prelim Scoring Analysis',
       filename: 'wcs_prelims',
@@ -101,7 +108,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
           <Button
             variant="secondary"
             className="w-full"
-            onClick={() => exportCSV(data)}
+            onClick={handleExportCSV}
           >
             <Box display="flex" align="center" gap={3} width="full" className="text-left">
               <FileJson className="w-4 h-4 shrink-0" />
@@ -166,6 +173,20 @@ export function WCSScraperTool() {
     trendData
   } = useWCSData();
 
+  // Debounced tracking for search
+  React.useEffect(() => {
+    if (!searchTerm) return;
+    const timer = setTimeout(() => {
+      trackEvent({ name: 'search', params: { search_term: searchTerm, tool_id: 'wcs-scraper' } });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const handleFilterChange = (filter: 'all' | 'promoted' | 'not-promoted') => {
+    trackEvent({ name: 'filter_change', params: { filter_type: 'promoted_status', filter_value: filter, tool_id: 'wcs-scraper' } });
+    setFilterPromoted(filter);
+  };
+
   if (isLoading) {
     return (
       <Box padding={12} display="flex" justify="center" align="center">
@@ -205,7 +226,7 @@ export function WCSScraperTool() {
                 <Box key={filter} flex={1}>
                   <Button
                     variant={filterPromoted === filter ? 'primary' : 'secondary'}
-                    onClick={() => setFilterPromoted(filter)}
+                    onClick={() => handleFilterChange(filter)}
                     className="w-full uppercase text-xs tracking-tighter"
                   >
                     {filter.replace('-', ' ')}
