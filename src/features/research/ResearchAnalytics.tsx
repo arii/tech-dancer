@@ -5,6 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
 
 export default function ResearchAnalytics() {
@@ -103,18 +104,11 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box border padding={12} surface="muted" emphasis="low">
-              <Stack align="center" gap={4} className="text-center">
-                <Database className="w-12 h-12 text-line" />
-                <Stack gap={2}>
-                  <Text variant="display" size="xl">Pipeline Synchronizing...</Text>
-                  <Text variant="body" size="sm" color="dim" maxWidth="prose">
-                    Research studies are automatically ingested via the ETL pipeline.
-                    New analysis runs weekly—check back soon for recent data.
-                  </Text>
-                </Stack>
-              </Stack>
-            </Box>
+            <EmptyState
+              icon={<Database className="w-12 h-12" />}
+              title="Pipeline Synchronizing..."
+              description="Research studies are automatically ingested via the ETL pipeline. New analysis runs weekly—check back soon for recent data."
+            />
           )}
         </Stack>
       </Stack>

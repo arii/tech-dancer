@@ -3,8 +3,7 @@ import {
   Search,
   Download,
   FileJson,
-  FileText,
-  Loader2
+  FileText
 } from 'lucide-react';
 import {
   Box,
@@ -14,6 +13,7 @@ import {
   Button
 } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
@@ -168,12 +168,24 @@ export function WCSScraperTool() {
 
   if (isLoading) {
     return (
-      <Box padding={12} display="flex" justify="center" align="center">
-        <Stack align="center" gap={4}>
-          <Loader2 className="w-8 h-8 text-accent animate-spin" />
-          <Text variant="mono" size="xs">INGESTING DATASET...</Text>
-        </Stack>
-      </Box>
+      <Stack gap={8}>
+        <Box border surface="muted" padding="card">
+          <Skeleton height={10} width="full" />
+        </Box>
+        <Grid cols={{ base: 1, lg: 3 }} gap={8}>
+          <Stack gap={8} className="lg:col-span-2">
+            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+              <Skeleton height={64} width="full" />
+              <Skeleton height={64} width="full" />
+            </Grid>
+            <Skeleton height={96} width="full" />
+          </Stack>
+          <Stack gap={8}>
+            <Skeleton height={48} width="full" />
+            <Skeleton height={32} width="full" />
+          </Stack>
+        </Grid>
+      </Stack>
     );
   }
 

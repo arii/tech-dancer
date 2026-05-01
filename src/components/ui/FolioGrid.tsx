@@ -8,6 +8,8 @@ import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { SearchBox } from '@/components/ui/SearchBox';
 import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
+import { EmptyState } from './EmptyState';
+import { Search } from 'lucide-react';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -66,7 +68,13 @@ export default function FolioGrid({
       </Box>
 
       <Box marginTop={8}>
-        {view === 'card' ? (
+        {filteredItems.length === 0 ? (
+          <EmptyState
+            icon={<Search className="w-12 h-12" />}
+            title="No results found"
+            description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
+          />
+        ) : view === 'card' ? (
           <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line">
             {filteredItems.map((item) => (
               <Box

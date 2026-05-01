@@ -8,6 +8,8 @@ import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
@@ -164,9 +166,11 @@ export default function UXAuditor() {
           </Text>
           <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
             {reports.length === 0 && (
-              <Text as={Box} padding={10} className="italic" color="dim" align="center" size="sm" display="block">
-                No audits recorded.
-              </Text>
+              <EmptyState
+                compact
+                title="No audits recorded"
+                icon={<RefreshCw className="w-8 h-8 opacity-20" />}
+              />
             )}
             {reports.map((report) => (
               <Box
@@ -340,11 +344,13 @@ export default function UXAuditor() {
                               </Stack>
                             </>
                           ) : (
-                            <Stack align="center" justify="center" paddingY={20} color="dim">
-                              <RefreshCw className="animate-spin w-6 h-6" />
-                              <Text variant="sans" size="xs" weight="font-bold" tracking="widest" uppercase>
-                                Agent Processing...
-                              </Text>
+                            <Stack gap={4} width="full">
+                              <Skeleton height={20} width="full" />
+                              <Stack gap={2}>
+                                <Skeleton height={4} width="full" />
+                                <Skeleton height={4} width="full" />
+                                <Skeleton height={4} width="3/4" />
+                              </Stack>
                             </Stack>
                           )}
                         </Stack>
@@ -355,17 +361,12 @@ export default function UXAuditor() {
               </Stack>
             </>
           ) : (
-            <Stack height="full" align="center" justify="center" surface="default" radius="3xl" padding={20} minHeight={500} className="border-2 border-dashed text-center">
-              <Box surface="muted" padding={6} radius="full" marginBottom={6} className="text-text-dim/50">
-                <Camera className="w-16 h-16" />
-              </Box>
-              <Text variant="sans" size="xl" weight="font-black" marginBottom={2}>
-                Ready to Audit
-              </Text>
-              <Text variant="sans" size="sm" weight="font-medium" color="dim" maxWidth="sm" marginX="auto">
-                Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop.
-              </Text>
-            </Stack>
+            <EmptyState
+              minHeight={500}
+              icon={<Camera className="w-16 h-16" />}
+              title="Ready to Audit"
+              description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
+            />
           )}
         </Stack>
       </Grid>

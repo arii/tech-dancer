@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
+import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -8,6 +8,8 @@ import { GearCard } from '@/components/ui/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Search } from 'lucide-react';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView } = useToolbox();
@@ -60,9 +62,11 @@ export default function Toolbox() {
       )}
 
       {allFilteredItems.length === 0 && (
-        <Box paddingY={20} className="text-center">
-          <Text color="dim">No gear found matching your search.</Text>
-        </Box>
+        <EmptyState
+          icon={<Search className="w-12 h-12" />}
+          title="No gear found"
+          description={`No gear found matching "${searchTerm}".`}
+        />
       )}
     </Box>
   );
