@@ -21,7 +21,17 @@ const ICONS = {
     clock: `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
 };
 
-let rateLimitRemaining = null;
+// --- State Management ---
+let state = {
+    deployments: [],
+    prStatuses: {},
+    rateLimitRemaining: null,
+    filters: {
+        query: '',
+        status: 'all',
+        showAutomated: false
+    }
+};
 
 function timeAgo(seconds) {
     const diff = Math.floor(Date.now() / 1000) - seconds;
@@ -42,13 +52,13 @@ function timeAgo(seconds) {
  * Robust GitHub API wrapper with rate limit handling and error normalization.
  */
 async function fetchGitHub(endpoint) {
-    if (rateLimitRemaining === 0) throw new Error('RATE_LIMITED');
+    if (state.rateLimitRemaining === 0) throw new Error('RATE_LIMITED');
 
     const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/${endpoint.replace(/^\//, '')}`;
     const res = await fetch(url);
 
     const remaining = res.headers.get('x-ratelimit-remaining');
-    if (remaining !== null) rateLimitRemaining = parseInt(remaining, 10);
+    if (remaining !== null) state.rateLimitRemaining = parseInt(remaining, 10);
 
     if (res.status === 403 && remaining === '0') throw new Error('RATE_LIMITED');
     if (!res.ok) throw new Error(`API_ERROR_${res.status}`);
@@ -82,49 +92,18 @@ async function fetchCIStatus(sha, useCache = true) {
 }
 
 function resetFilters() {
+    state.filters = { query: '', status: 'all', showAutomated: false };
     document.getElementById('search').value = '';
     document.getElementById('status-filter').value = 'all';
     document.getElementById('show-automated').checked = false;
-    filterCards();
+    renderGrid();
 }
 
-function filterCards() {
-    const query = document.getElementById('search').value.toLowerCase();
-    const status = document.getElementById('status-filter').value;
-    const showAutomated = document.getElementById('show-automated').checked;
-    const grid = document.getElementById('grid');
-    const emptyState = document.getElementById('empty-state');
-
-    let overallVisibleCount = 0;
-    Array.from(grid.children).forEach(container => {
-        if (!container.classList.contains('group-stack')) return;
-
-        let visibleCount = 0;
-        Array.from(container.querySelectorAll('.preview-card')).forEach(card => {
-            const { name, title, author, type, isAuto, isDraft, isStale } = card.dataset;
-            const matchesSearch = [name, title, author].some(v => v?.toLowerCase().includes(query));
-
-            let matchesStatus = status === 'all' || status === type;
-            if (status === 'draft') matchesStatus = isDraft === 'true';
-            if (status === 'stale') matchesStatus = isStale === 'true';
-
-            const matchesAuto = showAutomated || isAuto !== 'true';
-
-            const isVisible = matchesSearch && matchesStatus && matchesAuto;
-            card.classList.toggle('hidden', !isVisible);
-            card.classList.toggle('flex', isVisible);
-            if (isVisible) {
-                visibleCount++;
-                overallVisibleCount++;
-            }
-        });
-
-        // Toggle visibility of group heading and stack
-        container.classList.toggle('hidden', visibleCount === 0);
-        container.previousElementSibling.classList.toggle('hidden', visibleCount === 0);
-    });
-
-    emptyState.classList.toggle('hidden', overallVisibleCount > 0);
+function updateFilters() {
+    state.filters.query = document.getElementById('search').value.toLowerCase();
+    state.filters.status = document.getElementById('status-filter').value;
+    state.filters.showAutomated = document.getElementById('show-automated').checked;
+    renderGrid();
 }
 
 // --- DOM Construction Helpers ---
@@ -133,13 +112,14 @@ function el(tag, props = {}, children = []) {
     const element = document.createElement(tag);
     Object.entries(props).forEach(([key, value]) => {
         if (key === 'className') element.className = value;
-        else if (key === 'dataset') Object.assign(element.dataset, value);
         else if (key === 'innerHTML') element.innerHTML = value;
+        else if (key === 'style' && typeof value === 'object') Object.assign(element.style, value);
         else element[key] = value;
     });
     children.forEach(child => {
+        if (!child) return;
         if (typeof child === 'string') element.appendChild(document.createTextNode(child));
-        else if (child) element.appendChild(child);
+        else element.appendChild(child);
     });
     return element;
 }
@@ -166,30 +146,21 @@ function createStatusBadge(status) {
     return el('span', { className: `flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md border ${config.cls}`, innerHTML: `${config.icon} ${config.text}` });
 }
 
-function renderCard(name, pr, prStatus, isIdxEven) {
+function renderCard(deployment, isIdxEven) {
+    const { name, pr, isDraft } = deployment;
     const deploymentUrl = `${BASE_URL}/${name}/`;
     const zebraClass = isIdxEven ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/50 dark:bg-slate-900/50';
+    const prStatus = state.prStatuses[name] || null;
 
+    // Accessibility: Removed the top-level click listener from the card div.
+    // Instead, we ensure all links within the card are clearly focusable.
     const card = el('div', {
-        className: `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer group`,
-        dataset: {
-            name,
-            type: pr ? 'pr' : 'active',
-            isAuto: pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot'),
-            author: pr?.user.login || '',
-            title: pr?.title || '',
-            isDraft: pr?.draft || false,
-            isStale: pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000
-        }
-    });
-
-    card.addEventListener('click', (e) => {
-        if (!e.target.closest('a')) window.open(pr ? pr.html_url : deploymentUrl, '_blank');
+        className: `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow`
     });
 
     const badgeContainer = el('div', { className: 'flex items-center gap-2 flex-wrap' });
     if (pr) {
-        badgeContainer.appendChild(createBadge(pr.draft ? 'Draft PR' : 'Open PR', 'blue'));
+        badgeContainer.appendChild(createBadge(isDraft ? 'Draft PR' : 'Open PR', 'blue'));
         const statusBadge = createStatusBadge(prStatus);
         if (statusBadge) badgeContainer.appendChild(statusBadge);
         (pr.labels || []).forEach(l => {
@@ -203,13 +174,14 @@ function renderCard(name, pr, prStatus, isIdxEven) {
     }
 
     const titleEl = pr
-        ? el('a', { href: pr.html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate', innerHTML: ICONS.pr }, [`PR #${pr.number}: ${pr.title}`])
+        ? el('a', { href: pr.html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate outline-none focus:underline', innerHTML: ICONS.pr }, [`PR #${pr.number}: ${pr.title}`])
         : el('div', { className: 'text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 text-balance', innerHTML: ICONS.branch }, [name]);
 
+    const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
     const infoRow = el('div', { className: 'flex items-center gap-3 flex-wrap' }, [
         el('span', { className: 'text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px]' }, [name]),
-        el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors', innerHTML: `${ICONS.external} Source` }),
-        el('a', { href: `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors', innerHTML: `${ICONS.external} Compare` }),
+        el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500', innerHTML: `${ICONS.external} Source` }),
+        el('a', { href: compareUrl, target: '_blank', rel: 'noopener', className: 'text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500', innerHTML: `${ICONS.external} Compare` }),
         pr && el('span', { className: 'text-xs text-slate-400 flex items-center gap-1', innerHTML: ICONS.clock }, [timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))]),
         el('div', { className: 'sm:hidden' }, [badgeContainer.cloneNode(true)])
     ]);
@@ -222,10 +194,44 @@ function renderCard(name, pr, prStatus, isIdxEven) {
             ]),
             infoRow
         ]),
-        el('a', { href: deploymentUrl, target: '_blank', rel: 'noopener', className: 'w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0', innerHTML: `View Deployment ${ICONS.external}` })
+        el('a', { href: deploymentUrl, target: '_blank', rel: 'noopener', className: 'w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500', innerHTML: `View Deployment ${ICONS.external}` })
     );
 
     return card;
+}
+
+function renderGrid() {
+    const grid = document.getElementById('grid');
+    const emptyState = document.getElementById('empty-state');
+    const { query, status, showAutomated } = state.filters;
+
+    const filtered = state.deployments.filter(d => {
+        const matchesSearch = [d.name, d.pr?.title, d.pr?.user?.login].some(v => v?.toLowerCase().includes(query));
+        let matchesStatus = status === 'all' || status === d.type;
+        if (status === 'draft') matchesStatus = d.isDraft;
+        if (status === 'stale') matchesStatus = d.isStale;
+        const matchesAuto = showAutomated || !d.isAuto;
+        return matchesSearch && matchesStatus && matchesAuto;
+    });
+
+    grid.innerHTML = '';
+    const prs = filtered.filter(d => d.type === 'pr');
+    const branches = filtered.filter(d => d.type === 'active');
+
+    const renderGroup = (title, list, isPr) => {
+        if (!list.length) return;
+        const fragment = document.createDocumentFragment();
+        fragment.appendChild(el('h2', { className: 'text-xl font-bold mt-8 mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-200', innerHTML: `${isPr ? ICONS.pr : ICONS.branch} ${title}` }));
+        const stack = el('div', { className: 'flex flex-col gap-4 mb-10' });
+        list.forEach((d, idx) => stack.appendChild(renderCard(d, idx % 2 === 0)));
+        fragment.appendChild(stack);
+        grid.appendChild(fragment);
+    };
+
+    renderGroup('Pull Request Previews', prs, true);
+    renderGroup('Other Deployed Branches', branches, false);
+
+    emptyState.classList.toggle('hidden', filtered.length > 0);
 }
 
 async function init() {
@@ -234,10 +240,10 @@ async function init() {
     if (trackingLink) trackingLink.href = TRACKING_URL;
 
     // Attach event listeners
-    const handlers = { 'search': 'input', 'status-filter': 'change', 'show-automated': 'change', 'reset-filters': 'click' };
-    Object.entries(handlers).forEach(([id, ev]) => {
+    const controls = { 'search': 'input', 'status-filter': 'change', 'show-automated': 'change', 'reset-filters': 'click' };
+    Object.entries(controls).forEach(([id, ev]) => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener(ev, id === 'reset-filters' ? resetFilters : filterCards);
+        if (el) el.addEventListener(ev, id === 'reset-filters' ? resetFilters : updateFilters);
     });
 
     try {
@@ -247,47 +253,48 @@ async function init() {
             fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/releases?per_page=1`).catch(() => [])
         ]);
 
-        if (rateLimitRemaining < 10) {
-            const warning = el('div', { className: 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium', innerHTML: `${ICONS.warning} GitHub API rate limit is low (${rateLimitRemaining} left). CI statuses may not load correctly.` });
+        if (state.rateLimitRemaining < 10) {
+            const warning = el('div', { className: 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium', innerHTML: `${ICONS.warning} GitHub API rate limit is low (${state.rateLimitRemaining} left). CI statuses may not load correctly.` });
             grid.before(warning);
         }
-
-        const prStatuses = {};
-        if (rateLimitRemaining > 5) {
-            await Promise.all(prs.map(async (pr) => {
-                prStatuses[pr.head.ref] = await fetchCIStatus(pr.head.sha);
-            }));
-        }
-
-        loading.style.display = 'none';
 
         const allFoldersRaw = treeData.tree
             .filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
             .map(i => i.path.replace('/index.html', ''));
 
-        const prFolders = allFoldersRaw.filter(name => prs.some(p => p.head.ref === name))
-            .sort((a, b) => new Date(prs.find(p => p.head.ref === b).updated_at) - new Date(prs.find(p => p.head.ref === a).updated_at));
+        state.deployments = allFoldersRaw.map(name => {
+            const pr = prs.find(p => p.head.ref === name);
+            return {
+                name,
+                pr,
+                type: pr ? 'pr' : 'active',
+                isAuto: pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot'),
+                isDraft: pr?.draft || false,
+                isStale: pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000,
+                updated_at: pr ? new Date(pr.updated_at).getTime() : 0
+            };
+        }).sort((a, b) => b.updated_at - a.updated_at);
 
-        const branchFolders = allFoldersRaw.filter(name => !prs.some(p => p.head.ref === name)).sort((a, b) => a.localeCompare(b));
+        loading.style.display = 'none';
 
-        const stalePrs = prs.filter(p => (Date.now() - new Date(p.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000);
-
-        const statsMap = { 'stat-prs': prs.length, 'stat-active': branchFolders.length, 'stat-stale': stalePrs.length, 'stat-releases': releases[0]?.tag_name || '0', 'stat-total': allFoldersRaw.length, 'last-updated': new Date().toLocaleString() };
+        const statsMap = {
+            'stat-prs': prs.length,
+            'stat-active': state.deployments.filter(d => d.type === 'active').length,
+            'stat-stale': state.deployments.filter(d => d.isStale).length,
+            'stat-releases': releases[0]?.tag_name || '0',
+            'stat-total': allFoldersRaw.length,
+            'last-updated': new Date().toLocaleString()
+        };
         Object.entries(statsMap).forEach(([id, val]) => { const el = document.getElementById(id); if (el) el.textContent = val; });
 
-        const renderGroup = (title, foldersList, isPr) => {
-            if (!foldersList.length) return;
-            const fragment = document.createDocumentFragment();
-            fragment.appendChild(el('h2', { className: 'text-xl font-bold mt-8 mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-200', innerHTML: `${isPr ? ICONS.pr : ICONS.branch} ${title}` }));
-            const stack = el('div', { className: 'group-stack flex flex-col gap-4 mb-10' });
-            foldersList.forEach((name, idx) => stack.appendChild(renderCard(name, prs.find(p => p.head.ref === name), prStatuses[name], idx % 2 === 0)));
-            fragment.appendChild(stack);
-            grid.appendChild(fragment);
-        };
+        if (state.rateLimitRemaining > 5) {
+            await Promise.all(prs.map(async (pr) => {
+                state.prStatuses[pr.head.ref] = await fetchCIStatus(pr.head.sha);
+                renderGrid(); // Re-render as statuses arrive
+            }));
+        }
 
-        renderGroup('Pull Request Previews', prFolders, true);
-        renderGroup('Other Deployed Branches', branchFolders, false);
-        filterCards();
+        renderGrid();
 
     } catch (err) {
         loading.style.display = 'none';
