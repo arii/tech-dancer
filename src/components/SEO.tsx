@@ -24,7 +24,7 @@ export function SEO({
 }: SEOProps) {
   const { pathname } = useLocation();
 
-  const url = canonical || `${BASE_URL}${pathname}`;
+  const url = canonical || `${BASE_URL.replace(/\/$/, '')}${pathname}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
   const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
