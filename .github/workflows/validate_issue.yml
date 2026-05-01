@@ -19,5 +19,6 @@ jobs:
       - name: Validate Issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          python3 dev-tools/td_cli.py validate-issue --issue-number ${{ github.event.issue.number }} --post-comments
+          python3 dev-tools/td_cli.py validate-issue --issue-number $ISSUE_NUMBER --post-comments

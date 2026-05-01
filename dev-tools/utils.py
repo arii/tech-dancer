@@ -1,6 +1,8 @@
 import os
 import subprocess
+import json
 from typing import Optional
+from gh_client import get_github_token
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):
@@ -9,18 +11,26 @@ class CLIError(Exception):
         self.data = data
         super().__init__(self.message)
 
-import json
-from gh_client import get_github_token
-
 def extract_json(text: str) -> Optional[dict]:
     """Extracts the first JSON object found in a string, even if surrounded by noise."""
     try:
         start = text.find('{')
-        end = text.rfind('}') + 1
-        if start != -1 and end != -1:
-            return json.loads(text[start:end])
+        if start == -1:
+            return None
+
+        # We try to parse from the first '{' and see if it succeeds.
+        # JSONDecoder.raw_decode parses a JSON document and returns the object and the index where it ended.
+        decoder = json.JSONDecoder()
+        obj, end = decoder.raw_decode(text[start:])
+        return obj
     except Exception:
-        pass
+        # Fallback to simple find/rfind if raw_decode fails
+        try:
+            end = text.rfind('}') + 1
+            if end > start:
+                return json.loads(text[start:end])
+        except Exception:
+            pass
     return None
 
 def get_repo_name() -> Optional[str]:

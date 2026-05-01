@@ -98,9 +98,10 @@ jobs:
         run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
-        run: python3 dev-tools/td_cli.py ratchet-any ${{ github.ref == 'refs/heads/main' && '--update --execute' || '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATE_FLAGS: ${{ github.ref == 'refs/heads/main' && '--update --execute' || '' }}
+        run: python3 dev-tools/td_cli.py ratchet-any $UPDATE_FLAGS
 
   audit:
     name: Anti-Pattern Audit
@@ -175,9 +176,10 @@ jobs:
           REF_NAME: ${{ github.ref_name }}
 
       - name: Bundle Size Check
-        run: python3 dev-tools/td_cli.py bundle-size ${{ github.ref == 'refs/heads/main' && '--update --execute' || '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATE_FLAGS: ${{ github.ref == 'refs/heads/main' && '--update --execute' || '' }}
+        run: python3 dev-tools/td_cli.py bundle-size $UPDATE_FLAGS
 
       - name: Cache Playwright Browsers
         id: playwright-cache

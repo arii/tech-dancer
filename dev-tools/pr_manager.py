@@ -104,7 +104,7 @@ def handle_audit_pr(args):
         if files_to_audit:
             try:
                 # Use pnpm run audit as requested, passing targets after --
-                proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, capture_output=True, text=True)
+                proc = subprocess.run(["pnpm", "run", "-s", "audit", "--", "--json"] + files_to_audit, capture_output=True, text=True)
                 if proc.stdout:
                     from utils import extract_json
                     audit_data = extract_json(proc.stdout)

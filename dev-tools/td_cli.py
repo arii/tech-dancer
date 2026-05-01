@@ -30,9 +30,9 @@ def handle_pre_submit(args):
             if proc.returncode != 0 and not ignore_failure: raise subprocess.CalledProcessError(proc.returncode, cmd)
             return proc
 
-        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
-        run_step("TypeScript", ["pnpm", "run", "type-check"])
-        run_step("Lint", ["pnpm", "run", "lint"])
+        run_step("Anti-Pattern Audit", ["pnpm", "run", "-s", "audit"])
+        run_step("TypeScript", ["pnpm", "run", "-s", "type-check"])
+        run_step("Lint", ["pnpm", "run", "-s", "lint"])
 
         # PR Scope Check
         scope_warning = verify_pr_scope()
@@ -63,7 +63,7 @@ def handle_audit_gate(args):
     from utils import extract_json
     current_count = 0
     try:
-        proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"], capture_output=True, text=True)
+        proc = subprocess.run(["pnpm", "run", "-s", "audit", "--", "--json"], capture_output=True, text=True)
         if proc.stdout:
             audit_data = extract_json(proc.stdout)
             if audit_data:
