@@ -154,21 +154,89 @@ function filterCards() {
     emptyState.classList.toggle('hidden', overallVisibleCount > 0);
 }
 
+function createBadge(text, color) {
+    const bg = color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30';
+    const txt = color === 'blue' ? 'text-blue-700 dark:text-blue-400' : 'text-emerald-700 dark:text-emerald-400';
+    const border = color === 'blue' ? 'border-blue-200 dark:border-blue-800' : 'border-emerald-200 dark:border-emerald-800';
+    return `<span class="${bg} ${txt} text-xs font-semibold px-2.5 py-1 rounded-full border ${border}">${text}</span>`;
+}
+
+function createLabel(label) {
+    return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border" style="background-color: #${label.color}22; color: #${label.color}; border-color: #${label.color}44">${label.name.toUpperCase()}</span>`;
+}
+
+function renderCard(name, pr, prStatus, isIdxEven) {
+    const url = `${BASE_URL}/${name}/`;
+    const isAuto = pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot');
+    const isDraft = pr ? pr.draft : false;
+    const isStale = pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000;
+    const zebraClass = isIdxEven ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/50 dark:bg-slate-900/50';
+
+    const card = document.createElement('div');
+    card.className = `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer group`;
+
+    Object.assign(card.dataset, {
+        name,
+        type: pr ? 'pr' : 'active',
+        isAuto,
+        author: pr ? pr.user.login : '',
+        title: pr ? pr.title : '',
+        isDraft,
+        isStale
+    });
+
+    card.addEventListener('click', (e) => {
+        if (!e.target.closest('a')) window.open(pr ? pr.html_url : url, '_blank');
+    });
+
+    const badgeHtml = pr
+        ? `<div class="flex items-center gap-2 flex-wrap">
+             ${createBadge(isDraft ? 'Draft PR' : 'Open PR', 'blue')}
+             ${prStatus}
+             ${(pr.labels || []).map(createLabel).join('')}
+           </div>`
+        : createBadge('Active Branch', 'emerald');
+
+    const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
+    const sourceLink = `<a href="${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Source</a>`;
+    const compareLink = `<a href="${compareUrl}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Compare</a>`;
+    const timeAgoHtml = pr ? `<span class="text-xs text-slate-400 flex items-center gap-1">${ICONS.clock} ${timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))}</span>` : '';
+
+    card.innerHTML = `
+        <div class="flex-1 min-w-0 w-full">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+                ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 text-balance">${ICONS.branch} ${escapeHtml(name)}</div>`}
+                <div class="hidden sm:block">${badgeHtml}</div>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px]">${escapeHtml(name)}</span>
+                ${sourceLink}
+                ${compareLink}
+                ${timeAgoHtml}
+                <div class="sm:hidden">${badgeHtml}</div>
+            </div>
+        </div>
+        <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0">View Deployment ${ICONS.external}</a>`;
+
+    return card;
+}
+
 async function init() {
     const grid = document.getElementById('grid'), loading = document.getElementById('loading'), errorAlert = document.getElementById('error-alert');
     const trackingLink = document.getElementById('tracking-link');
     if (trackingLink) trackingLink.href = TRACKING_URL;
 
     // Attach event listeners
-    const searchInput = document.getElementById('search');
-    const statusFilter = document.getElementById('status-filter');
-    const showAutomatedToggle = document.getElementById('show-automated');
-    const resetFiltersBtn = document.getElementById('reset-filters');
+    const controls = {
+        'search': { el: document.getElementById('search'), event: 'input' },
+        'status-filter': { el: document.getElementById('status-filter'), event: 'change' },
+        'show-automated': { el: document.getElementById('show-automated'), event: 'change' },
+        'reset-filters': { el: document.getElementById('reset-filters'), event: 'click', fn: resetFilters }
+    };
 
-    if (searchInput) searchInput.addEventListener('input', filterCards);
-    if (statusFilter) statusFilter.addEventListener('change', filterCards);
-    if (showAutomatedToggle) showAutomatedToggle.addEventListener('change', filterCards);
-    if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetFilters);
+    Object.values(controls).forEach(ctrl => {
+        if (ctrl.el) ctrl.el.addEventListener(ctrl.event, ctrl.fn || filterCards);
+    });
 
     try {
         const rateLimit = await checkRateLimit();
@@ -212,12 +280,19 @@ async function init() {
 
         const stalePrs = prs.filter(p => (Date.now() - new Date(p.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000);
 
-        document.getElementById('stat-prs').textContent = prs.length;
-        document.getElementById('stat-active').textContent = branchFolders.length;
-        document.getElementById('stat-stale').textContent = stalePrs.length;
-        document.getElementById('stat-releases').textContent = releases.length > 0 ? releases[0].tag_name : '0';
-        document.getElementById('stat-total').textContent = allFoldersRaw.length;
-        document.getElementById('last-updated').textContent = new Date().toLocaleString();
+        const stats = {
+            'stat-prs': prs.length,
+            'stat-active': branchFolders.length,
+            'stat-stale': stalePrs.length,
+            'stat-releases': releases.length > 0 ? releases[0].tag_name : '0',
+            'stat-total': allFoldersRaw.length,
+            'last-updated': new Date().toLocaleString()
+        };
+
+        Object.entries(stats).forEach(([id, val]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        });
 
         if (!allFoldersRaw.length) {
             grid.innerHTML = `<div class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"><p class="text-slate-500 dark:text-slate-400 text-lg">No active preview branches found.</p></div>`;
@@ -237,56 +312,9 @@ async function init() {
             stack.className = 'flex flex-col gap-4 mb-10';
 
             foldersList.forEach((name, idx) => {
-                const pr = prs.find(p => p.head.ref === name), url = `${BASE_URL}/${name}/`;
-                const ciStatusHtml = prStatuses[name] || '';
-
-                const isAuto = pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot');
-                const card = document.createElement('div');
-                card.dataset.name = name;
-                card.dataset.type = isPr ? 'pr' : 'active';
-                card.dataset.isAuto = isAuto;
-                card.dataset.author = pr ? pr.user.login : '';
-                card.dataset.title = pr ? pr.title : '';
-                card.dataset.isDraft = pr ? pr.draft : false;
-                const isStale = pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000;
-                card.dataset.isStale = isStale;
-                const zebraClass = idx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/50 dark:bg-slate-900/50';
-                card.className = `preview-card ${zebraClass} rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer group`;
-                card.onclick = (e) => {
-                    if (!e.target.closest('a')) window.open(pr ? pr.html_url : url, '_blank');
-                };
-
-                let labelsHtml = '';
-                if (pr && pr.labels) {
-                    labelsHtml = pr.labels.map(l => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border" style="background-color: #${l.color}22; color: #${l.color}; border-color: #${l.color}44">${l.name.toUpperCase()}</span>`).join('');
-                }
-
-                const badge = isPr
-                    ? `<div class="flex items-center gap-2 flex-wrap">
-                         <span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">${pr.draft ? 'Draft PR' : 'Open PR'}</span>
-                         ${ciStatusHtml}
-                         ${labelsHtml}
-                       </div>`
-                    : `<span class="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">Active Branch</span>`;
-
-                const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
-
-                card.innerHTML = `
-                    <div class="flex-1 min-w-0 w-full">
-                        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
-                            ${pr ? `<a href="${pr.html_url}" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-lg sm:text-xl flex items-center gap-2 truncate">${ICONS.pr} PR #${pr.number}: ${escapeHtml(pr.title)}</a>` : `<div class="text-slate-800 dark:text-slate-200 font-semibold text-lg sm:text-xl flex items-center gap-2 text-balance">${ICONS.branch} ${escapeHtml(name)}</div>`}
-                            <div class="hidden sm:block">${badge}</div>
-                        </div>
-                        <div class="flex items-center gap-3 flex-wrap">
-                            <span class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-2 py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[200px]">${escapeHtml(name)}</span>
-                            <a href="${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Source</a>
-                            <a href="${compareUrl}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors">${ICONS.external} Compare</a>
-                            ${pr ? `<span class="text-xs text-slate-400 flex items-center gap-1">${ICONS.clock} ${timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))}</span>` : ''}
-                            <div class="sm:hidden">${badge}</div>
-                        </div>
-                    </div>
-                    <a href="${url}" target="_blank" rel="noopener" class="w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0">View Deployment ${ICONS.external}</a>`;
-                stack.appendChild(card);
+                const pr = prs.find(p => p.head.ref === name);
+                const prStatus = prStatuses[name] || '';
+                stack.appendChild(renderCard(name, pr, prStatus, idx % 2 === 0));
             });
             groupContainer.appendChild(stack);
             grid.appendChild(groupContainer);
@@ -295,7 +323,6 @@ async function init() {
         renderGroup('Pull Request Previews', prFolders, true);
         renderGroup('Other Deployed Branches', branchFolders, false);
 
-        // Initial filter to hide automated PRs
         filterCards();
 
     } catch (err) {
