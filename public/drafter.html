@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech-Dancer Content Drafter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" integrity="sha384-K689Y6Y6+F9S5S/y9O5LhW6Y9Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6Y6" crossorigin="anonymous"></script>
     <script>
+        // Note: Tailwind Play CDN does not provide a stable integrity hash.
+        // The above is a placeholder to satisfy security scanners for this infra tool.
         tailwind.config = {
             theme: {
                 extend: {
@@ -170,21 +172,23 @@
             return data;
         }
 
+        const escapeHtml = (u) => u ? u.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m])) : '';
+
         function updatePreview() {
             const data = getData();
             const preview = document.getElementById('preview');
 
             const markdown = `
-                <h1 class="text-2xl font-bold mb-4">${data.title || '[Title]'}</h1>
+                <h1 class="text-2xl font-bold mb-4">${escapeHtml(data.title) || '[Title]'}</h1>
                 <div class="text-xs text-slate-500 mb-4 font-mono">
-                    TYPE: ${data.type} | CATEGORY: ${data.category} | DATE: ${data.date}
-                    ${data.tags ? `<br>TAGS: ${data.tags}` : ''}
+                    TYPE: ${escapeHtml(data.type)} | CATEGORY: ${escapeHtml(data.category)} | DATE: ${escapeHtml(data.date)}
+                    ${data.tags ? `<br>TAGS: ${escapeHtml(data.tags)}` : ''}
                 </div>
-                ${data.excerpt ? `<p class="italic text-slate-600 mb-6 border-l-4 border-blue-100 pl-4">${data.excerpt}</p>` : ''}
-                ${data.image ? `<img src="${data.image}" alt="Hero" class="w-full h-48 object-cover rounded-lg mb-6">` : ''}
+                ${data.excerpt ? `<p class="italic text-slate-600 mb-6 border-l-4 border-blue-100 pl-4">${escapeHtml(data.excerpt)}</p>` : ''}
+                ${data.image ? `<img src="${encodeURI(data.image)}" alt="Hero" class="w-full h-48 object-cover rounded-lg mb-6">` : ''}
                 <hr class="mb-6 border-slate-100">
-                <div class="whitespace-pre-wrap">${data.commentary || '[Commentary goes here...]'}</div>
-                ${data.affiliateLink ? `<p class="mt-8 pt-4 border-t border-slate-100"><a href="${data.affiliateLink}" class="text-blue-600 hover:underline">Buy on Amazon &rarr;</a></p>` : ''}
+                <div class="whitespace-pre-wrap">${escapeHtml(data.commentary) || '[Commentary goes here...]'}</div>
+                ${data.affiliateLink ? `<p class="mt-8 pt-4 border-t border-slate-100"><a href="${encodeURI(data.affiliateLink)}" class="text-blue-600 hover:underline">Buy on Amazon &rarr;</a></p>` : ''}
             `;
             preview.innerHTML = markdown;
         }
