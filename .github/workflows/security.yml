@@ -3,8 +3,20 @@ name: Security & Quality Scan
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/security.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/security.yml'
 
 permissions:
   contents: read
