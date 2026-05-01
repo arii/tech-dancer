@@ -46,18 +46,13 @@ export function HeroPathCard({
       )}
     >
       {/* Background Image */}
-      <Box as="img"
+      <img
         src={image}
         alt=""
         loading="lazy"
         decoding="async"
-        position="absolute"
-        inset={true}
-        zIndex={0}
-        width="full"
-        height="full"
         className={cn(
-          "object-cover transition-transform duration-700 ease-in-out",
+          "absolute inset-0 z-0 w-full h-full object-cover transition-transform duration-700 ease-in-out",
           isHovered ? "scale-105" : "scale-100"
         )}
       />
@@ -66,9 +61,7 @@ export function HeroPathCard({
       <Box
         shadow="glow"
         position="absolute"
-        top={0}
-        left={0}
-        width="full"
+        inset="top"
         height="0.5"
         zIndex={10}
         className={cn(

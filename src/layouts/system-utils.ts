@@ -9,21 +9,24 @@ export function getResponsiveClasses(
   mapper?: (val: string | number | boolean | undefined | null) => string | number | undefined
 ) {
   if (prop === undefined || prop === null) return ""
+
+  const buildClass = (val: string | number | boolean | undefined | null, prefix: string) => {
+    const v = mapper ? mapper(val) : val
+    return (v !== undefined && v !== null && v !== "") ? `${prefix}${v}` : ""
+  }
+
   if (typeof prop !== "object" || isValidElement(prop)) {
-    const val = mapper ? mapper(prop) : prop
-    return (val !== undefined && val !== null && val !== "") ? `${classPrefix}${val}` : ""
+    return buildClass(prop, classPrefix)
   }
 
   const { base, sm, md, lg, xl, "2xl": xxl } = prop as Record<string, string | number | boolean | undefined | null>
-  const getVal = (v: string | number | boolean | undefined | null) => mapper ? mapper(v) : v
-  const hasVal = (v: string | number | boolean | undefined | null) => v !== undefined && v !== null && v !== ""
 
   return cn(
-    hasVal(base) && `${classPrefix}${getVal(base)}`,
-    hasVal(sm) && `sm:${classPrefix}${getVal(sm)}`,
-    hasVal(md) && `md:${classPrefix}${getVal(md)}`,
-    hasVal(lg) && `lg:${classPrefix}${getVal(lg)}`,
-    hasVal(xl) && `xl:${classPrefix}${getVal(xl)}`,
-    hasVal(xxl) && `2xl:${classPrefix}${getVal(xxl)}`
+    buildClass(base, classPrefix),
+    buildClass(sm, `sm:${classPrefix}`),
+    buildClass(md, `md:${classPrefix}`),
+    buildClass(lg, `lg:${classPrefix}`),
+    buildClass(xl, `xl:${classPrefix}`),
+    buildClass(xxl, `2xl:${classPrefix}`)
   )
 }
