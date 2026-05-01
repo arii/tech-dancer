@@ -30,7 +30,7 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
       ) : (
         <Stack height="full" width="full" gap={0}>
           <Box height={4} width="full" surface={surfaceVariant} />
-          <Box flex={1} display="flex" align="center" justify="center" className="bg-muted-wash">
+          <Box flex={1} display="flex" align="center" justify="center" className="bg-muted/10">
             <CategoryPlaceholder category={category} size="md" />
           </Box>
         </Stack>
