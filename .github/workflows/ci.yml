@@ -95,6 +95,7 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
+          if [ -z "$AUDIT_BASELINE" ]; then echo '⚠️ Warning: AUDIT_BASELINE is not set, defaulting to 0'; fi
           CURRENT=$(node scripts/detect-antipatterns.mjs --count-only 2>/dev/null)
           BASELINE=${AUDIT_BASELINE:-0}
           [[ "$BASELINE" =~ ^[0-9]+$ ]] || { echo "Invalid baseline"; exit 1; }
