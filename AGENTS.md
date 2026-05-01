@@ -44,41 +44,6 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 - Navigation uses route config (not hardcoded)
 - Do NOT use `HashRouter`.
 
-## 23. 🤝 Collaborative GitHub Workflows
-
-The `dev-tools/td_cli.py` tool handles repository automation and PR reviews.
-
-**Step 1 — Generate a review context:**
-```bash
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch
-# Outputs to dev-tools/logs/reviews/pr-context-<PR>.md
-```
-
-**Step 2 — Perform an AI Audit:**
-```bash
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
-```
-
-**Step 3 — Submit the review:**
-```bash
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup
-```
-
-**Other commands:**
-- `python3 dev-tools/td_cli.py conflicts`: Detect merge conflicts.
-- `python3 dev-tools/td_cli.py pre-submit`: Run all quality gates.
-- `python3 dev-tools/td_cli.py status-board`: Active agent dashboard.
-
-**Code Review Standards (anti-bloat):**
-When reviewing, evaluate EVERY changed file against these criteria:
-1. **Dead abstractions** — Is a new class/context/hook solving a problem that a simpler primitive already handles?
-2. **Unnecessary indirection** — Does this add a layer where a direct call would do?
-3. **Responsibility creep** — Is a component taking on logic that belongs in a hook or a parent?
-4. **Import bloat** — Are `React` default imports added unnecessarily (not needed in React 17+)?
-5. **Token compliance** — Are design tokens used, or is raw Tailwind/inline style leaking in?
-6. Post an inline comment on the most critical line of each file changed.
-
-
 ## 10. 🎞 Motion Must Use Tokens
 - Motion values come from `motionTokens`
 
@@ -112,35 +77,40 @@ When reviewing, evaluate EVERY changed file against these criteria:
 - Page-level compositors MUST reside in `src/pages/`
 - Component imports MUST use the `@/layouts/` or `@/pages/` alias
 
-## 22. 🛤 Code Splitting & SPA Routing
-- Application routes MUST be code-split using `React.lazy()` or equivalent dynamic imports to keep bundles small.
+## 22. 🛤 SPA Routing & Parallel Work Protocol
+- Application routes MUST be code-split using `React.lazy()` to keep bundles small.
 - Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries.
-- Ensure the application maintains single-page application (SPA) characteristics with environment-agnostic routing (e.g., handling base URLs cleanly for GitHub Pages).
+- Ensure environment-agnostic routing (handling base URLs cleanly for GitHub Pages).
 
 ### Parallel Work Protocol
 When multiple agents work simultaneously:
 1. **Run conflict check first**: `python3 dev-tools/td_cli.py conflicts`
-2. **Stagger feature files**: Agents should not touch the same component file
-3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` to communicate scope
-   - ✅ `feat/issue-247-gear-card` (scoped to GearCard)
-   - ❌ `feat/issue-247-ui-updates` (ambiguous scope)
-4. **Shared primitives**: Never modify `src/layouts/*.tsx` in a feature branch without coordinating
+2. **Stagger feature files**: Agents should not touch the same component file.
+3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` to communicate scope (e.g. `feat/issue-247-gear-card`).
+4. **Shared primitives**: Never modify `src/layouts/*.tsx` in a feature branch without coordinating.
 
+## 23. 🤝 Collaborative GitHub Workflows
 
+The `dev-tools/td_cli.py` tool is the unified entry point for repository automation and PR reviews.
 
-## 23. Pull Request & Submission Protocol
-- **Mass Reviewing Allowed**: Agents may perform systematic technical audits of multiple PRs and submit reviews (Comment/Approve/Request Changes) as part of a single task.
-- **Manual Confirmation for Merges**: Every merge command MUST be preceded by a specific `notify_user` request for approval, even if part of a previously discussed plan.
-- **No Autonomous Batch Merging**: Avoid sequential, rebase-based merge strategies that operate autonomously. Every merge transition requires manual verification.
+### PR Review Lifecycle
+1. **Fetch Context**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch`
+2. **Perform Audit**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit`
+3. **Submit Review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
 
-### 🚫 Anti-Pattern: Monolithic (God) PRs
-To prevent unmanageable merge conflicts and maintain feature isolation, agents MUST NOT generate "monolithic" PRs that touch multiple core layout files simultaneously.
-1. **Scope Limit**: A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
-2. **Isolation**: Broad cross-cutting concerns (e.g., accessibility audits, SEO meta tags across all pages, or global token changes) must be split into isolated, focused PRs.
-3. **Conflict Awareness**: Before initiating cross-cutting refactors, agents MUST check for potential conflicts using:
-   ```bash
-   python3 dev-tools/td_cli.py conflicts
-   ```
+### Quality Gates & Submission Protocol
+- **Pre-Submit Check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing.
+- **No Monolithic PRs**: Keep PRs focused. A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
+- **Manual Confirmation**: Every merge command MUST be preceded by a specific `notify_user` request for approval.
+- **Code Review Standards**: Evaluate for dead abstractions, unnecessary indirection, responsibility creep, and token compliance.
+
+### Baseline Maintenance
+- **Automated Gates**: CI enforces bundle size and TypeScript `any` counts via GitHub Actions Variables.
+- **Updating Baselines**: After intentional, approved changes that increase technical debt, update the variables using the GitHub CLI:
+  ```bash
+  gh variable set BUNDLE_BASELINE_KB --body 1250
+  gh variable set ANY_COUNT_BASELINE --body 42
+  ```
 
 ## 24. Setup (Jules Environment)
 
@@ -194,4 +164,3 @@ Before submitting any PR that modifies `.tsx` files:
 2. **Review the Report**: Check `TODO_ANTIPATTERNS.md` for any new violations introduced by your changes.
 3. **Enforce Compliance**: Fix all identified anti-patterns or use `// impeccable-ignore` for intentional deviations.
 4. **Clean Slate**: Ensure your changes do not increase the total count of violations in the target files.
-

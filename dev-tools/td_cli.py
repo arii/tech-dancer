@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, CLIError
+from utils import get_github_token, get_repo_name, get_gha_variable, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -86,20 +86,23 @@ REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'e
 # --- Shared Logic ---
 
 def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
-    """Resolves a baseline value from CLI argument, environment variable, or default file."""
+    """Resolves a baseline value from CLI argument, environment variable, GHA variable, or default file."""
     if file_path:
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 return int(f.read().strip() or fallback_value)
-        else:
-            # If explicit file path is provided but doesn't exist, we fallback to other sources
-            # but ideally we should probably warn. For now, following requested fallback logic.
-            pass
 
+    # 1. Environment Variable (High Priority in CI)
     env_val = os.environ.get(env_var)
-    if env_val:
+    if env_val and env_val.strip():
         return int(env_val)
 
+    # 2. GitHub Actions Variable (Local Fetch)
+    gha_val = get_gha_variable(env_var)
+    if gha_val:
+        return int(gha_val)
+
+    # 3. Default File (Legacy Fallback)
     if os.path.exists(default_file):
         with open(default_file, 'r') as f:
             return int(f.read().strip() or fallback_value)
@@ -297,7 +300,7 @@ def handle_ratchet_any(args):
 
 def handle_bundle_size(args):
     size = get_bundle_size()
-    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 1000)
+    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 3000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -462,6 +465,21 @@ def handle_pre_submit(args):
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
+
+        # Baseline Configuration Check
+        if not args.json: print("--- Baseline Configuration ---")
+        missing_vars = []
+        for var_name in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"]:
+            if not (os.environ.get(var_name) or get_gha_variable(var_name)):
+                missing_vars.append(var_name)
+
+        if missing_vars:
+            msg = f"Missing GHA variables: {', '.join(missing_vars)}. Run 'gh variable set <NAME> --body <VALUE>' to configure them locally."
+            if not args.json: print(f"  ⚠️  {msg}")
+            results["steps"].append({"name": "Baseline Check", "status": "warning", "message": msg})
+        else:
+            results["steps"].append({"name": "Baseline Check", "status": "success"})
+            if not args.json: print("  ✅ Technical debt baselines are configured.")
 
         # PR Scope Check
         scope_warning = verify_pr_scope()

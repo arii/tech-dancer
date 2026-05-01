@@ -19,6 +19,7 @@ export function SearchBox({
     <Box
       display="flex"
       align="center"
+      position="relative"
       surface="default"
       border
       paddingX={4}
@@ -29,14 +30,17 @@ export function SearchBox({
       radius="lg"
       className="focus-within:ring-2 focus-within:ring-accent transition-all"
     >
-      <Search size={18} className="text-text-dim" />
+      <Search
+        size={18}
+        className="text-text-dim absolute left-4 pointer-events-none"
+      />
       <Box
         as="input"
         type="text"
         placeholder={placeholder}
         variant="mono"
         size="sm"
-        className="bg-transparent border-none outline-none pl-3 w-full focus:ring-0"
+        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
         value={value}
         onChange={onChange}
       />

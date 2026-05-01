@@ -17,7 +17,9 @@ jobs:
           lfs: true
 
       - name: Setup Python Environment
-        run: ./dev-tools/setup-python.sh
+        run: |
+          ./dev-tools/setup-python.sh
+          echo "${{ github.workspace }}/.venv/bin" >> $GITHUB_PATH
 
       - name: Cache Playwright Browsers
         id: cache-playwright
@@ -34,19 +36,16 @@ jobs:
 
       - name: Run Pytest (Data Validation)
         run: |
-          source .venv/bin/activate
           PYTHONPATH=etl pytest etl/tests/
 
       - name: Execute Extraction Script
         run: |
           # Run crawl for a single year in automated workflow to keep it efficient
           # Markdown files are generated in content/studies/ but ignored by .gitignore
-          source .venv/bin/activate
           python etl/scraper.py --years 1
 
       - name: Validate Output
         run: |
-          source .venv/bin/activate
           python -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
 
       - name: Commit via Git LFS

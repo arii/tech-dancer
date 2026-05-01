@@ -55,6 +55,10 @@
     "zod": "^3.23.8",
     "zustand": "^5.0.12"
   },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.59.1",

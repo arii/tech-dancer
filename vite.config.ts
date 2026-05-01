@@ -22,7 +22,7 @@ export default defineConfig(({mode}) => {
   // Determine the GitHub branch for base path constructing
   const ghBranch = process.env.GITHUB_REF_NAME;
   const isMainBranch = ghBranch === 'main' || !ghBranch;
-  
+
   // Use VITE_BASE_PATH if specified, otherwise construct based on environment
   let base = process.env.VITE_BASE_PATH;
   if (!base) {
@@ -36,8 +36,14 @@ export default defineConfig(({mode}) => {
     }
   }
 
-  const appUrl = env.VITE_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : isVercel ? 'https://tech-dancer.vercel.app' : 'https://arii.github.io');
-  const fullAppUrl = new URL(base, appUrl).href;
+  const resolveHostname = () => {
+    if (env.VITE_APP_URL) return env.VITE_APP_URL;
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    if (isVercel) return 'https://tech-dancer.vercel.app';
+    return 'https://arii.github.io';
+  };
+
+  const fullAppUrl = new URL(base, resolveHostname()).href;
 
   // Automatically discover dynamic routes from config/routes.ts and content directories
   const dynamicRoutes = [
