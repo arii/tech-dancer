@@ -1,0 +1,13 @@
+{
+  "name": "default",
+  "colors": {
+    "primary": "#007BFF",
+    "secondary": "#1A2B3C",
+    "background": "#f8f9fa"
+  },
+  "fonts": {
+    "display": "Bricolage Grotesque",
+    "sans": "Albert Sans",
+    "mono": "Space Mono"
+  }
+}

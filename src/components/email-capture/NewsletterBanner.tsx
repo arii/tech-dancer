@@ -3,7 +3,7 @@ import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
 import { motion } from 'motion/react';
-import { useEmailStore } from './emailStore';
+import { useEmailStore } from '@/hooks/emailStore';
 import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {

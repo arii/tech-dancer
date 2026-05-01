@@ -1,4 +1,4 @@
-import { ProfileData } from './types';
+import { ProfileData } from '@/hooks/types';
 
 const PROFILE_DATA: ProfileData = {
     name: "Ariel Anders, PhD",

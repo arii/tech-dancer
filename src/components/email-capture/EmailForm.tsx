@@ -2,7 +2,7 @@ import { Stack, Box, Text, Button } from '@/layouts/Primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
-import { useEmailForm } from './useEmailForm';
+import { useEmailForm } from '@/hooks/useEmailForm';
 
 export function EmailForm() {
   const { status, email, setEmail, submitForm } = useEmailForm();

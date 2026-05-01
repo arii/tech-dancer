@@ -1,16 +1,25 @@
-import { Search } from 'lucide-react';
+import { Search, Home, BookOpen, ShoppingBag, Database, User, Send, type LucideIcon } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { throttle } from 'throttle-debounce';
-import { routes } from '@/config/routes';
+import { getNavigation } from '@/lib/content';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  Home,
+  BookOpen,
+  ShoppingBag,
+  Database,
+  User,
+  Send
+};
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -105,8 +114,8 @@ export default function Navigation() {
               </Box>
             </Box>
 
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+            {(getNavigation() || []).filter(item => item.path !== '/').map((item) => (
+              <NavItem key={item.path} to={item.path} label={item.label} icon={ICON_MAP[item.icon]} />
             ))}
           </Stack>
         </Stack>

@@ -1,2 +1,2 @@
-import Blog from '@/features/journal/BlogFeed';
+import Blog from '@/components/journal/BlogFeed';
 export default Blog;

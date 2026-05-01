@@ -1,2 +1,2 @@
-import Home from '@/features/dashboard/Dashboard';
+import Home from '@/components/dashboard/Dashboard';
 export default Home;

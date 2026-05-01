@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { useHome } from './useHome';
+import { useHome } from '@/hooks/useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { SectionHeader, PageHeader } from '@/components/ui/PageHeader';

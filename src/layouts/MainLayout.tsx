@@ -5,7 +5,7 @@ import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import { useEmailStore } from '@/features/email-capture/emailStore';
+import { useEmailStore } from '@/hooks/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
 const SWIPE_THRESHOLD = 50;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useEmailStore } from './emailStore';
+import { useEmailStore } from '@/hooks/emailStore';
 
 export type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 

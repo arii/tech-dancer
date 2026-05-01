@@ -1,42 +1,39 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Grid } from '@/layouts/Primitives';
 import { HeroPathCard } from './HeroPathCard';
+import { getSiteConfig } from '@/lib/content';
 import dancerHero from '@/assets/dancer_hero.webp';
 import roboticistHero from '@/assets/roboticist_hero.webp';
 
 type PathID = 'dancer' | 'roboticist';
 
-const PATH_DATA = [
-  {
-    id: 'dancer' as PathID,
-    title: 'ARE YOU A DANCER?',
-    wrapperClass: 'lg:col-span-7 bg-black',
+const PATH_ASSETS = {
+  dancer: {
     image: dancerHero,
+    wrapperClass: 'lg:col-span-7 bg-black',
     titleClass: 'text-4xl md:text-6xl',
     scanlineDelay: 'animation-delay-0',
-    links: [
-      { text: 'WCS blog posts', to: '/blog?category=Lifestyle' },
-      { text: 'Travel & Lifestyle', to: '/blog?category=Travel' },
-      { text: 'Gear reviews', to: '/gear' },
-    ],
   },
-  {
-    id: 'roboticist' as PathID,
-    title: 'HIRING A ROBOTICIST?',
-    wrapperClass: 'lg:col-span-5 bg-zinc-900',
+  roboticist: {
     image: roboticistHero,
+    wrapperClass: 'lg:col-span-5 bg-zinc-900',
     titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'animation-delay-500',
-    links: [
-      { text: 'Technical Portfolio', to: 'https://arii.github.io' },
-      { text: 'Tech blog posts', to: '/blog?category=Tech' },
-      { text: 'Data & Development Lab', to: '/research' },
-    ],
-  },
-];
+  }
+};
 
 export default function PathSelector() {
   const [hoveredPath, setHoveredPath] = useState<PathID | null>(null);
+  const { data: siteConfig } = useQuery({
+    queryKey: ['site-config'],
+    queryFn: getSiteConfig,
+  });
+
+  const pathData = ((siteConfig?.pathSelector as Record<string, unknown>[]) || []).map((path) => ({
+    ...path,
+    ...PATH_ASSETS[path.id as PathID],
+  }));
 
   return (
     <Grid
@@ -48,7 +45,7 @@ export default function PathSelector() {
       width="full"
       className="bg-line"
     >
-      {PATH_DATA.map((path) => {
+      {pathData.map((path) => {
         const isHovered = hoveredPath === path.id;
         const isOtherHovered = hoveredPath !== null && !isHovered;
 

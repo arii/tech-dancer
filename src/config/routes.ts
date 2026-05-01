@@ -33,7 +33,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/gear/:slug',
-    lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
+    lazy: () => import('@/components/lab/GearPost').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
   {

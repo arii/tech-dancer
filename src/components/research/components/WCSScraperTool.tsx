@@ -14,8 +14,8 @@ import {
   Button
 } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { useExport } from '../hooks/useExport';
-import { useWCSData, WCSRecord } from '../hooks/useWCSData';
+import { useExport } from '@/hooks/useExport';
+import { useWCSData, type WCSRecord } from '@/hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
 
 function WCSDataTable({ data }: { data: WCSRecord[] }) {

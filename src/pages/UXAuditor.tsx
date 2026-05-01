@@ -4,7 +4,7 @@ import {
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
   ChevronRight, Github
 } from 'lucide-react';
-import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
+import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/hooks/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';

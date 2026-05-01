@@ -1,3 +1,4 @@
+import mdx from '@mdx-js/rollup';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -65,12 +66,33 @@ export default defineConfig(({mode}) => {
       // Ensure assets are also handled correctly
       assetsDir: 'assets',
       chunkSizeWarningLimit: 400,
+      lib: mode === 'library' ? {
+        entry: path.resolve(__dirname, 'src/components/index.ts'),
+        name: 'TechDancerUI',
+        fileName: (format) => `tech-dancer-ui.${format}.js`
+      } : undefined,
+      rollupOptions: mode === 'library' ? {
+        external: ['react', 'react-dom', 'motion/react', 'lucide-react', 'react-router-dom'],
+        output: {
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'motion/react': 'motion',
+            'lucide-react': 'lucide',
+            'react-router-dom': 'ReactRouterDOM'
+          }
+        }
+      } : {}
     },
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
       'import.meta.env.VITE_APP_URL': JSON.stringify(fullAppUrl),
     },
     plugins: [
+      {
+        ...mdx(),
+        enforce: 'pre'
+      },
       react(),
       tailwindcss(),
       Sitemap({

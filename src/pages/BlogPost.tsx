@@ -1,2 +1,2 @@
-import BlogPost from '@/features/journal/BlogPost';
+import BlogPost from '@/components/journal/BlogPost';
 export default BlogPost;

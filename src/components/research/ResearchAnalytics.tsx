@@ -5,7 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { useResearch } from './useResearch';
+import { useResearch } from '@/hooks/useResearch';
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();

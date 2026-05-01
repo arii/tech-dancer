@@ -1,2 +1,2 @@
-import GearReviews from '@/features/lab/Toolbox';
+import GearReviews from '@/components/lab/Toolbox';
 export default GearReviews;

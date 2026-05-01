@@ -9,13 +9,13 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { GlobalErrorBoundary } from './components/GlobalErrorBoundary';
 import { routes as routeConfig } from './config/routes';
-import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
+import { NewsletterBanner } from '@/components/email-capture/NewsletterBanner';
 import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
-import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
+import { STORAGE_KEY, useEmailStore } from '@/hooks/emailStore';
 
 const BANNER_DELAY_MS = 30000; // 30s delay
 

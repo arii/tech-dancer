@@ -121,13 +121,14 @@ interface ContentModule {
 }
 
 const contentModules = {
-  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
-  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
-  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
-  events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
+  posts: import.meta.glob(['/content/posts/*.md', '/content/posts/*.mdx'], { eager: true, query: '?raw' }),
+  resources: import.meta.glob(['/content/resources/*.md', '/content/resources/*.mdx'], { eager: true, query: '?raw' }),
+  studies: import.meta.glob(['/content/studies/*.md', '/content/studies/*.mdx'], { eager: true, query: '?raw' }),
+  events: import.meta.glob(['/content/events/*.md', '/content/events/*.mdx'], { eager: true, query: '?raw' }),
+  json: import.meta.glob('/content/**/*.json', { eager: true })
 };
 
-const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
+const slugFrom = (path: string) => path.split('/').pop()?.replace(/\.(md|mdx|json)$/, '') || '';
 
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
   return Object.entries(modules)
@@ -179,9 +180,22 @@ const maps = {
 export const getPosts = () => items.posts;
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
+export const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+
+export function getJsonContent<T>(path: string): T {
+  const fullPath = path.startsWith('/') ? path : `/content/${path}`;
+  const module = contentModules.json[fullPath] as { default: T };
+  if (!module) {
+    throw new Error(`JSON content not found at path: ${fullPath}`);
+  }
+  return module.default;
+}
+
+export const getNavigation = () => getJsonContent<Record<string, unknown>[]>('navigation.json');
+export const getSiteConfig = () => getJsonContent<Record<string, unknown>>('site-config.json');
 
 /**
  * Calculates estimated reading time in minutes.

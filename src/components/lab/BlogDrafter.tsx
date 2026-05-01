@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { useBlogDrafter } from './useBlogDrafter';
+import { useBlogDrafter } from '@/hooks/useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';

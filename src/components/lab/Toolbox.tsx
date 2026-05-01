@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { useToolbox } from './useToolbox';
+import { useToolbox } from '@/hooks/useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { GearCard } from '@/components/ui/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';

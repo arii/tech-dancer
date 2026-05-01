@@ -1,2 +1,2 @@
-import Research from '@/features/research/ResearchAnalytics';
+import Research from '@/components/research/ResearchAnalytics';
 export default Research;

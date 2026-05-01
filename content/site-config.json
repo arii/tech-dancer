@@ -1,0 +1,59 @@
+{
+  "siteName": "TECH-DANCER",
+  "tagline": "The Roboticist's Guide to West Coast Swing",
+  "description": "Technical systems and travel hacks for the modern competitive dancer.",
+  "homeSEO": {
+    "title": "Home",
+    "description": "TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
+  },
+  "pathSelector": [
+    {
+      "id": "dancer",
+      "title": "ARE YOU A DANCER?",
+      "links": [
+        { "text": "WCS blog posts", "to": "/blog?category=Lifestyle" },
+        { "text": "Travel & Lifestyle", "to": "/blog?category=Travel" },
+        { "text": "Gear reviews", "to": "/gear" }
+      ]
+    },
+    {
+      "id": "roboticist",
+      "title": "HIRING A ROBOTICIST?",
+      "links": [
+        { "text": "Technical Portfolio", "to": "https://arii.github.io" },
+        { "text": "Tech blog posts", "to": "/blog?category=Tech" },
+        { "text": "Data & Development Lab", "to": "/research" }
+      ]
+    }
+  ],
+  "labTools": [
+    {
+      "id": "wcs-scraper",
+      "name": "WCS Prelim Scoring Scraper",
+      "category": "Dance Research",
+      "status": "Active",
+      "layman": "A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions."
+    },
+    {
+      "id": "blog-drafter",
+      "name": "Blog Post Drafter",
+      "category": "Content Generation",
+      "status": "Active",
+      "layman": "Drafter tool to generate blog posts using AI with human feedback in the loop."
+    },
+    {
+      "id": "flight-finder",
+      "name": "Event Flight Finder",
+      "category": "Logistics",
+      "status": "Active",
+      "layman": "Flight finder for WCS events - optimizing travel routes and finding the best deals."
+    },
+    {
+      "id": "ux-auditor",
+      "name": "Visual UX Auditor",
+      "category": "Development Tool",
+      "status": "Active",
+      "layman": "Automated visual regression and UX improvement suggestions across viewports."
+    }
+  ]
+}
