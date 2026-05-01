@@ -36,7 +36,7 @@ const CONFIG = {
     },
     {
       name: 'Raw Layout/Spacing',
-      pattern: /\b(flex(-[a-z0-9-]+)?|grid(-[a-z0-9-]+)?|items-[a-z-]+|justify-[a-z-]+|p[xytrbl]?-[0-9\.]+|m[xytrbl]?-[0-9\.]+|gap-[0-9\.]+)\b/,
+      pattern: /\b(flex(-[a-z0-9-]+)?|grid(-[a-z0-9-]+)?|items-[a-z-]+|justify-[a-z-]+|p[xytrbl]?-[0-9.]+|m[xytrbl]?-[0-9.]+|gap-[0-9.]+)\b/,
       isClassNameRule: true,
       severity: 'minor',
       message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
@@ -152,7 +152,7 @@ function checkContent(content) {
     if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
     const classStr = match[1] || match[2] || '';
-    const classes = classStr.split(/[\s"'`,()\[\]{}]+/).filter(Boolean);
+    const classes = classStr.split(/[\s"'`,()[\]{}]+/).filter(Boolean);
 
     classes.forEach(cls => {
       // Raw Layout/Spacing
