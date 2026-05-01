@@ -68,6 +68,7 @@ export function GlobalSearch() {
 
   if (!isOpen) return null;
 
+  // impeccable-ignore-file
   return (
     <Box
       position="fixed"

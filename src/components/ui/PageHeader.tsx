@@ -44,7 +44,7 @@ export function PageHeader({
             color="dim"
             maxWidth={descriptionMaxWidth}
             marginTop={4}
-            className="leading-relaxed text-pretty"
+            className="leading-relaxed"
           >
             {description}
           </Text>

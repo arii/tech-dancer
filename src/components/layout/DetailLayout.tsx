@@ -74,7 +74,7 @@ export function DetailLayout({
               aspect="video"
               overflow="hidden"
               border
-              className="bg-muted"
+              surface="sunken"
             >
               <img
                 src={image}
@@ -85,13 +85,13 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10}>
             {/* Content - first on mobile via order classes */}
-            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
+            <Box span={{ base: 1, lg: sidebar ? 2 : 1 }} className={cn(!sidebar && "w-full", "order-1 lg:order-2")}>
               {children}
               <Box
+                maxWidth="prose"
                 className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
-                style={{ maxWidth: '720px' }}
               >
                 <MarkdownRenderer content={content} />
               </Box>

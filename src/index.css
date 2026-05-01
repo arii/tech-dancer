@@ -82,6 +82,9 @@
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
 
+  /* Additional Tokens */
+  --color-muted-wash: color-mix(in srgb, var(--color-text-dim) 10%, transparent);
+
   /* Font Sizes */
   --text-micro: 9px;
   --text-tiny: 10px;

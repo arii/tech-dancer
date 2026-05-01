@@ -12,10 +12,10 @@ interface ScoreItemProps {
 
 export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
   return (
-    <Stack gap={1} align="center" className="flex-1 px-2 md:px-4 py-2 min-w-[100px] sm:min-w-[120px]">
+    <Stack gap={1} align="center" flex={1} paddingX={{ base: 2, md: 4 }} paddingY={2} minWidth={{ base: "[100px]", sm: "[120px]" }}>
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
       <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
-        {Icon && <Icon className="w-4 h-4" />}
+          {Icon && <Box as={Icon} width={4} height={4} />}
         <Text variant="display" size="xl" weight="font-bold">{value}</Text>
       </Box>
     </Stack>
@@ -48,7 +48,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Technical Specs</Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase border="b" paddingBottom={2} className="tracking-widest border-line">Technical Specs</Text>
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
@@ -67,7 +67,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
     <Box border padding={8} surface="success" marginBottom={12}>
        <Stack gap={3}>
           <Box display="flex" align="center" gap={3}>
-             <Shield className="w-6 h-6 text-emerald-600" />
+             <Box as={Shield} width={6} height={6} className="text-emerald-600" />
              <Text variant="display" size="2xl" weight="font-black" intent="success">THE VERDICT</Text>
           </Box>
           <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">

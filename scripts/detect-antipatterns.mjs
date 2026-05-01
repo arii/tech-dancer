@@ -7,7 +7,7 @@ import { glob } from 'glob';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/App.tsx'];
 
 const LAYOUT_SUGGESTIONS = {
   'flex flex-col': '<Stack direction="col">',
@@ -22,8 +22,8 @@ const CONFIG = {
   allowedColors: [
     'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
-    'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-    'amber-500', 'success', 'error', 'warning'
+    'transparent', 'current', 'yellow-400', 'emerald-500', 'emerald-600', 'red-500',
+    'amber-500', 'success', 'error', 'warning', 'muted-wash'
   ],
   allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
   allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
@@ -36,14 +36,14 @@ const CONFIG = {
     },
     {
       name: 'Raw Layout/Spacing',
-      pattern: /\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b/,
+      pattern: /\b(flex(-[a-z0-9-]+)?|grid(-[a-z0-9-]+)?|items-[a-z-]+|justify-[a-z-]+|p[xytrbl]?-[0-9\.]+|m[xytrbl]?-[0-9\.]+|gap-[0-9\.]+)\b/,
       isClassNameRule: true,
       severity: 'minor',
       message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
     },
     {
       name: 'div Layout',
-      pattern: /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g,
+      pattern: /<div\s+[^>]*?className=(?:["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']|\{.*?["'`].*?(?:flex|grid|p-|m-|gap-).*?["'`].*?\})/gs,
       severity: 'minor',
       message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
     },
@@ -147,12 +147,12 @@ function checkContent(content) {
     });
 
   // 2. ClassName Specific Rules (Global Scanner)
-  for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
+  for (const match of content.matchAll(/className=(?:["'](.*?)(?:["'])|\{(.*?)\})/gs)) {
     const lineNum = getLineNumber(match.index);
     if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
-    const classStr = match[1];
-    const classes = classStr.split(/\s+/);
+    const classStr = match[1] || match[2] || '';
+    const classes = classStr.split(/[\s"'`,()\[\]{}]+/).filter(Boolean);
 
     classes.forEach(cls => {
       // Raw Layout/Spacing

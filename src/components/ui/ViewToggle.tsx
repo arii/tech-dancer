@@ -13,11 +13,13 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
     <Box display="flex" border radius="none" overflow="hidden">
       {(['card', 'list'] as ViewMode[]).map((v) => (
-        <button
+        <Box
+          as="button"
           key={v}
+          padding={2}
           onClick={() => onChange(v)}
           className={cn(
-            'p-2 transition-colors',
+            'transition-colors',
             v === 'card' ? 'border-r border-line' : '',
             view === v ? 'bg-surface text-text-main' : 'bg-bg text-text-dim hover:text-text-main'
           )}
@@ -25,7 +27,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           aria-pressed={view === v}
         >
           {v === 'card' ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
-        </button>
+        </Box>
       ))}
     </Box>
   );

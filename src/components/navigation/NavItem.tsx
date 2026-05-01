@@ -39,9 +39,9 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             border={isMobile ? "b" : undefined}
             surface={isMobile && isActive ? "accent" : undefined}
             emphasis={isMobile && isActive ? "high" : undefined}
+            minHeight="[44px]"
             className={cn(
               isMobile ? "border-line/50" : undefined,
-              "min-h-[44px]",
               isMobile && isActive && "shadow-sm"
             )}
           >

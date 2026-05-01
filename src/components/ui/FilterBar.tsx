@@ -20,8 +20,10 @@ export function FilterBar({ categories }: FilterBarProps) {
             paddingX={6}
             paddingY={2}
             radius="none"
+            minHeight="[44px]"
+            minWidth="[44px]"
             className={cn(
-              "transition-all duration-300 border text-sm font-bold min-h-[44px] min-w-[44px]",
+              "transition-all duration-300 border text-sm font-bold",
               activeCategory === cat
                 ? "bg-text-main text-bg border-text-main"
                 : "bg-bg text-text-dim border-line hover:border-accent hover:text-accent"

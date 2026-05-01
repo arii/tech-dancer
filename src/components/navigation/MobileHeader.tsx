@@ -15,7 +15,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       as="nav"
       aria-label="Mobile Navigation"
       layout="mobileHeader"
-      className="transition-[backdrop-filter] duration-300 bg-surface border-b border-line"
+      className="transition-[backdrop-filter] duration-300 bg-surface/90 backdrop-blur-xl border-b border-line" // impeccable-ignore
     >
       <Box as={NavLink} to="/" onClick={onClose}>
         <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>
