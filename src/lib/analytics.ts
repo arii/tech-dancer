@@ -20,12 +20,17 @@ export type AnalyticsEvent =
   | { name: 'ai_response_apply'; params: { tool_id: string } }
   | { name: 'snapshot_create'; params: { tool_id: string } };
 
+let lastTrackedPath: string | null = null;
+
 /**
  * Tracks a page view to Google Analytics 4.
+ * Includes a guard to prevent duplicate tracking of the same path.
  */
 export const trackPageView = (path: string) => {
   if (!GA_MEASUREMENT_ID || typeof window.gtag !== 'function') return;
+  if (path === lastTrackedPath) return;
 
+  lastTrackedPath = path;
   window.gtag('config', GA_MEASUREMENT_ID, {
     page_path: path,
   });
