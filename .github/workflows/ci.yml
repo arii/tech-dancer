@@ -76,10 +76,13 @@ jobs:
       - name: Type-check
         run: pnpm run type-check
 
-      - name: Run CLI Unit Tests
+      - name: Setup Python Environment
         run: |
           ./dev-tools/setup-python.sh
           echo "${{ github.workspace }}/.venv/bin" >> $GITHUB_PATH
+
+      - name: Run CLI Unit Tests
+        run: |
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_td_cli.py
 
       - name: Check for dead code
