@@ -145,7 +145,9 @@ function WCSScraperStats() {
           </Box>
           <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Ethical Backoff</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">ACTIVE</Text>
+            <Box surface="accent" paddingX={2} paddingY={0.5} className="bg-accent/10">
+              <Text variant="mono" size="xs" color="brand" weight="font-bold">ACTIVE</Text>
+            </Box>
           </Box>
         </Stack>
       </Stack>
