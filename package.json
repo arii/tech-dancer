@@ -10,7 +10,10 @@
     "build:analyze": "ANALYZE=true vite build",
     "build:profile": "vite build --profile",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "lighthouse": "lhci autorun",
     "clean": "rm -rf dist",
     "lint": "run-p lint:*",
     "lint:ox": "oxlint --deny-warnings",
@@ -60,6 +63,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.14.0",
@@ -69,6 +73,7 @@
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.5.0",
+    "jsdom": "^29.1.1",
     "knip": "^6.7.0",
     "npm-run-all": "^4.1.5",
     "oxlint": "^1.61.0",
@@ -86,7 +91,8 @@
     "vite": "^6.4.2",
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-inspect": "^11.3.3",
-    "vite-plugin-sitemap": "^0.8.2"
+    "vite-plugin-sitemap": "^0.8.2",
+    "vitest": "^4.1.5"
   },
   "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264"
 }

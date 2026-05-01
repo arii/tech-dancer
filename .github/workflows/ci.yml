@@ -76,6 +76,9 @@ jobs:
       - name: Type-check
         run: pnpm run type-check
 
+      - name: Run Unit Tests (Vitest)
+        run: pnpm test
+
       - name: Run CLI Unit Tests
         run: |
           pip install PyGithub pytest
@@ -189,6 +192,19 @@ jobs:
         env:
           CI: true
           NODE_ENV: production
+          REPO_NAME: ${{ github.event.repository.name }}
+          REF_NAME: ${{ github.ref_name }}
+
+      - name: Run Lighthouse CI
+        run: |
+          if [ "$REF_NAME" = "main" ]; then
+            export VITE_BASE_PATH=/$REPO_NAME/
+          else
+            export VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/
+          fi
+          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           REPO_NAME: ${{ github.event.repository.name }}
           REF_NAME: ${{ github.ref_name }}
 
