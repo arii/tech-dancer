@@ -25,8 +25,35 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  validate-lockfile:
+    name: Validate Lockfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Verify lockfile integrity
+        run: |
+          if ! git diff --quiet pnpm-lock.yaml; then
+            echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."
+            exit 1
+          fi
+
   oxlint:
     name: Oxlint Scan
+    needs: validate-lockfile
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -49,6 +76,7 @@ jobs:
 
   gitleaks:
     name: Gitleaks Secret Detection
+    needs: validate-lockfile
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -63,6 +91,7 @@ jobs:
 
   semgrep:
     name: Semgrep Static Analysis
+    needs: validate-lockfile
     runs-on: ubuntu-latest
     container:
       image: returntocorp/semgrep
