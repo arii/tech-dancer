@@ -35,14 +35,12 @@ env:
   BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
 
 jobs:
-  lint-typecheck:
-    name: Lint & Type Check
+  lockfile-integrity:
+    name: Verify Lockfile
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -62,6 +60,28 @@ jobs:
             echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."
             exit 1
           fi
+
+  lint-typecheck:
+    name: Lint & Type Check
+    needs: lockfile-integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Lint
         run: pnpm run lint
@@ -84,6 +104,7 @@ jobs:
 
   audit:
     name: Anti-Pattern Audit
+    needs: lockfile-integrity
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -103,19 +124,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Verify lockfile integrity
-        run: |
-          if ! git diff --quiet pnpm-lock.yaml; then
-            echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."
-            exit 1
-          fi
-
       - name: UI Anti-Pattern Audit (Gate)
-        run: |
-          # Capture violation count and run gate
-          V_COUNT=$(pnpm run audit | grep "VIOLATION_COUNT=" | cut -d'=' -f2 || echo "0")
-          echo "Detected $V_COUNT current violations."
-          python3 dev-tools/td_cli.py audit-gate
+        run: python3 dev-tools/td_cli.py audit-gate
 
       - name: Design Token Compliance
         run: |
@@ -133,7 +143,7 @@ jobs:
 
   test-build:
     name: Build & E2E
-    needs: lint-typecheck
+    needs: [lockfile-integrity, lint-typecheck]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -150,13 +160,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
-
-      - name: Verify lockfile integrity
-        run: |
-          if ! git diff --quiet pnpm-lock.yaml; then
-            echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."
-            exit 1
-          fi
 
       - name: Build App
         run: |

@@ -142,7 +142,11 @@ To prevent unmanageable merge conflicts and maintain feature isolation, agents M
    python3 dev-tools/td_cli.py conflicts
    ```
 
-## 24. Setup (Jules Environment)
+## 24. Local Tooling Requirements
+- **GitHub CLI (`gh`)**: Required for state persistence of technical debt baselines. Ensure it is authenticated.
+- **GitHub Variables**: Baselines for bundle size and TypeScript `any` counts are stored in repository variables (`BUNDLE_BASELINE_KB`, `ANY_COUNT_BASELINE`). The `td_cli.py` tool handles these via `gh variable set/get`.
+
+## 25. Setup (Jules Environment)
 
 To prepare the base environment (Node.js/pnpm), execute the minimal setup script:
 
@@ -163,7 +167,7 @@ To keep the environment snapshot small, heavy dependencies are installed only wh
 ./dev-tools/setup-python.sh
 ```
 
-## 25. UI Auditing Workflow
+## 26. UI Auditing Workflow
 
 The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) helps maintain design system integrity by identifying arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
 
