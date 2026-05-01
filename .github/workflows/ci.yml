@@ -134,15 +134,16 @@ jobs:
 
       - name: Build App
         run: |
-          REPO_NAME=${{ github.event.repository.name }}
-          if [ "${{ github.ref_name }}" = "main" ]; then
+          if [ "$REF_NAME" = "main" ]; then
             export VITE_BASE_PATH=/$REPO_NAME/
           else
-            export VITE_BASE_PATH=/$REPO_NAME/${{ github.ref_name }}/
+            export VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/
           fi
           pnpm run build
         env:
           NODE_ENV: production
+          REPO_NAME: ${{ github.event.repository.name }}
+          REF_NAME: ${{ github.ref_name }}
 
       - name: Bundle Size Check
         run: python3 dev-tools/td_cli.py bundle-size --update
@@ -164,16 +165,17 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
-          REPO_NAME=${{ github.event.repository.name }}
-          if [ "${{ github.ref_name }}" = "main" ]; then
+          if [ "$REF_NAME" = "main" ]; then
             export VITE_BASE_PATH=/$REPO_NAME/
           else
-            export VITE_BASE_PATH=/$REPO_NAME/${{ github.ref_name }}/
+            export VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/
           fi
           pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
+          REPO_NAME: ${{ github.event.repository.name }}
+          REF_NAME: ${{ github.ref_name }}
 
       - name: Upload Test Results
         if: failure()

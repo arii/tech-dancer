@@ -45,6 +45,7 @@ export function escapeRegExp(string: string): string {
  */
 export function getHighlightedParts(text: string, query: string) {
   if (!query) return [text];
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
   return text.split(regex);
 }
