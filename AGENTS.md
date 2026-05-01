@@ -50,7 +50,7 @@ The `dev-tools/td_cli.py` tool handles repository automation and PR reviews.
 
 **Step 1 — Generate a review context:**
 ```bash
-python3 dev-tools/td_cli.py fetch-review <PR_NUMBER>
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch
 # Outputs to dev-tools/logs/reviews/pr-context-<PR>.md
 ```
 

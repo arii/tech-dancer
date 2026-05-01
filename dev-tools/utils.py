@@ -1,7 +1,13 @@
 import os
 import subprocess
-import sys
 from typing import Optional
+
+class CLIError(Exception):
+    def __init__(self, message, code=1, data=None):
+        self.message = message
+        self.code = code
+        self.data = data
+        super().__init__(self.message)
 
 def get_github_token() -> Optional[str]:
     """Retrieves the GitHub token from environment or via gh CLI."""

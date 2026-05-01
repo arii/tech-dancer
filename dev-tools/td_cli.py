@@ -13,10 +13,9 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from github_utils import get_github_token, get_repo_name
+from utils import get_github_token, get_repo_name, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
-sys.path.append(os.path.dirname(__file__))
 
 from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
@@ -44,14 +43,28 @@ RENAMED_ASSETS = { 'accent-brand': 'accent', 'useSearch': 'useSearchParam' }
 DEPRECATED_PATHS = { 'src/components/common/': 'src/components/ui/' }
 REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'excerpt']
 
-class CLIError(Exception):
-    def __init__(self, message, code=1, data=None):
-        self.message = message
-        self.code = code
-        self.data = data
-        super().__init__(self.message)
-
 # --- Shared Logic ---
+
+def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
+    """Resolves a baseline value from CLI argument, environment variable, or default file."""
+    if file_path:
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as f:
+                return int(f.read().strip() or fallback_value)
+        else:
+            # If explicit file path is provided but doesn't exist, we fallback to other sources
+            # but ideally we should probably warn. For now, following requested fallback logic.
+            pass
+
+    env_val = os.environ.get(env_var)
+    if env_val:
+        return int(env_val)
+
+    if os.path.exists(default_file):
+        with open(default_file, 'r') as f:
+            return int(f.read().strip() or fallback_value)
+
+    return fallback_value
 
 def extract_code_blocks(text: str) -> list[str]:
     return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
@@ -156,8 +169,8 @@ def handle_status_board(args):
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
 
 def handle_ratchet_any(args):
-    current = get_any_count(); baseline = 0
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 0)
+    current = get_any_count()
+    baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', "any-count.txt", 0)
 
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
@@ -168,12 +181,18 @@ def handle_ratchet_any(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update: open(args.baseline_file, 'w').write(str(current))
+    if args.update:
+        update_file = args.baseline_file or "any-count.txt"
+        if not args.dry_run:
+            with open(update_file, 'w') as f:
+                f.write(str(current))
+        elif not args.json:
+            print(f"[DRY-RUN] Would update {update_file} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
-    size = get_bundle_size(); baseline = 1000
-    if os.path.exists(args.baseline_file): baseline = int(open(args.baseline_file).read().strip() or 1000)
+    size = get_bundle_size()
+    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 1000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -184,7 +203,13 @@ def handle_bundle_size(args):
         else: print(f"❌ Error: {msg}")
         sys.exit(1)
 
-    if args.update: open(args.baseline_file, 'w').write(str(size))
+    if args.update:
+        update_file = args.baseline_file or ".bundle-baseline"
+        if not args.dry_run:
+            with open(update_file, 'w') as f:
+                f.write(str(size))
+        elif not args.json:
+            print(f"[DRY-RUN] Would update {update_file} to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
@@ -281,12 +306,30 @@ def handle_audit_pr(args):
         if scope_warning:
             auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
 
-        for fp in changed_files:
-            if fp.endswith('.tsx') and os.path.exists(fp):
-                content = open(fp).read()
-                if "import React from 'react'" in content: auto_findings.append({"path": fp, "issue": "Unnecessary `import React`", "severity": "minor"})
-                if 'HashRouter' in content: auto_findings.append({"path": fp, "issue": "HashRouter usage banned", "severity": "major"})
-                for m in re.finditer(r'text-\[\d+px\]|bg-\[#[0-9a-fA-F]+\]', content): auto_findings.append({"path": fp, "issue": f"Arbitrary Tailwind: `{m.group()}`", "severity": "minor"})
+        files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
+        if files_to_audit:
+            try:
+                # Use pnpm run audit as requested, passing targets after --
+                proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, capture_output=True, text=True)
+                if proc.stdout:
+                    # pnpm might add some noise to stdout before/after the actual JSON if not careful,
+                    # but our script uses process.stdout.write for JSON.
+                    # We try to find the JSON part if there's noise.
+                    output = proc.stdout
+                    if "{" in output:
+                        json_start = output.find("{")
+                        json_end = output.rfind("}") + 1
+                        audit_data = json.loads(output[json_start:json_end])
+                    for filepath, violations in audit_data.items():
+                        for v in violations:
+                            auto_findings.append({
+                                "path": filepath,
+                                "issue": f"{v['pattern']}: {v['message']} (value: {v['value']})",
+                                "severity": v.get('severity', 'minor')
+                            })
+            except Exception as e:
+                if not args.json: print(f"⚠️  Audit script failed: {e}")
+
         res["auto_findings"] = auto_findings
         if not args.json:
             if auto_findings:
@@ -295,38 +338,10 @@ def handle_audit_pr(args):
             subprocess.call(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"])
 
     if args.submit:
-        handle_submit_review_logic(rev_path, args.cleanup, args.dry_run, args.event, args.json)
+        from submit_review import submit_review
+        submit_review(pr_num, rev_path, cleanup=args.cleanup, dry_run=args.dry_run, event_override=args.event, is_json=args.json)
 
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
-
-def handle_submit_review_logic(filepath, cleanup, dry_run, event_override, is_json):
-    from github import Github
-    if not os.path.exists(filepath): raise CLIError(f"Review file missing: {filepath}")
-    with open(filepath) as f: content = f.read()
-    pr_num_match = re.search(r'pr-review-(\d+)\.md', filepath)
-    if not pr_num_match: raise CLIError(f"Could not parse PR number from filename: {filepath}")
-    pr_num = pr_num_match.group(1)
-
-    json_match = re.search(r'```json\n(.*?)\n```', content, re.DOTALL)
-    if not json_match: raise CLIError("Could not find JSON block in review document")
-    payload = json.loads(json_match.group(1))
-
-    token = get_github_token()
-    if not token: raise CLIError("GitHub token not found", code=401)
-    repo = Github(token).get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
-    event = event_override or ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","") else "APPROVE" if "Approved" in payload.get("body","") else "COMMENT")
-
-    if not dry_run:
-        pr.create_review(body=payload.get("body",""), comments=payload.get("comments",[]), event=event)
-        if event == "REQUEST_CHANGES":
-            labels = [l.name for l in pr.labels]
-            if "needs-design-system-fix" not in labels and any(k in payload.get("body","").lower() for k in ['tailwind', 'token']): pr.add_to_labels("needs-design-system-fix")
-        if not is_json: print(f"✅ Submitted {event} for PR #{pr_num}")
-        if cleanup:
-            if os.path.exists(filepath): os.remove(filepath)
-            ctx = filepath.replace('pr-review-','pr-context-')
-            if os.path.exists(ctx): os.remove(ctx)
-    elif not is_json: print(f"[DRY-RUN] Would submit {event} for PR #{pr_num}")
 
 def handle_pre_submit(args):
     if not args.json: print("🔍 Running pre-submission checks...")
@@ -339,7 +354,7 @@ def handle_pre_submit(args):
             if proc.returncode != 0 and not ignore_failure: raise subprocess.CalledProcessError(proc.returncode, cmd)
             return proc
 
-        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"], ignore_failure=True)
+        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
 
@@ -349,18 +364,6 @@ def handle_pre_submit(args):
         if scope_warning:
             if not args.json: print(f"  ⚠️ {scope_warning}")
             results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
-
-        react_findings = []
-        for fp in walk_tsx():
-            for ln, _, _ in find_patterns_in_file(fp, [(r"^import React from 'react'", "Unnecessary import")]):
-                react_findings.append({"file": fp, "line": ln})
-                if not args.json: print(f"  ⚠️ {fp}:{ln}: Found unnecessary 'import React'")
-        results["react_imports"] = react_findings
-
-        for fp in walk_tsx():
-            if 'HashRouter' in open(fp).read():
-                if args.json: raise CLIError(f"HashRouter usage found in {fp}")
-                else: print(f"❌ HashRouter usage found in {fp}."); sys.exit(1)
 
         token = get_github_token()
         if token:
@@ -422,20 +425,33 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr)]: # fetch-review is alias for audit-pr --fetch
+                      ("manage-reviews", handle_manage_reviews)]:
         p = subparsers.add_parser(cmd)
-        if cmd == "validate-issue": p.add_argument("--issue-number", type=int); p.add_argument("--all-open", action="store_true"); p.add_argument("--post-comments", action="store_true"); p.add_argument("--dry-run", action="store_true")
+        if cmd == "validate-issue":
+            p.add_argument("--issue-number", type=int)
+            p.add_argument("--all-open", action="store_true")
+            p.add_argument("--post-comments", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "conflicts": p.add_argument("--pr", type=int)
-        elif cmd == "ratchet-any": p.add_argument("--baseline-file", default="any-count.txt"); p.add_argument("--update", action="store_true")
-        elif cmd == "bundle-size": p.add_argument("--baseline-file", default=".bundle-baseline"); p.add_argument("--threshold", type=int, default=50); p.add_argument("--update", action="store_true")
+        elif cmd == "ratchet-any":
+            p.add_argument("--baseline-file", default="any-count.txt")
+            p.add_argument("--update", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
+        elif cmd == "bundle-size":
+            p.add_argument("--baseline-file", default=".bundle-baseline")
+            p.add_argument("--threshold", type=int, default=50)
+            p.add_argument("--update", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "migrate-tokens": p.add_argument("--find"); p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW')); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "update-issues": p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd in ["audit-pr", "fetch-review"]:
+        elif cmd == "audit-pr":
             p.add_argument("pr_number")
-            if cmd == "audit-pr":
-                p.add_argument("--fetch", action="store_true"); p.add_argument("--audit", action="store_true"); p.add_argument("--submit", action="store_true"); p.add_argument("--cleanup", action="store_true"); p.add_argument("--dry-run", action="store_true"); p.add_argument("--event"); p.add_argument("--base")
-            else:
-                p.set_defaults(fetch=True, audit=False, submit=False, cleanup=False, dry_run=False, event=None, base=None)
+            p.add_argument("--fetch", action="store_true"); p.add_argument("--audit", action="store_true"); p.add_argument("--submit", action="store_true"); p.add_argument("--cleanup", action="store_true")
+            p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
+            p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         p.set_defaults(func=func)
 

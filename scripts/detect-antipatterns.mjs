@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
+import { glob } from 'glob';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
@@ -31,71 +31,105 @@ const CONFIG = {
     {
       name: 'Arbitrary Value',
       pattern: /-\[.*?\]/g,
+      severity: 'minor',
       message: 'Avoid arbitrary values like -[...]. Use design tokens instead.'
     },
     {
       name: 'Raw Layout/Spacing',
       pattern: /\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b/,
       isClassNameRule: true,
+      severity: 'minor',
       message: 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
     },
     {
       name: 'div Layout',
       pattern: /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g,
+      severity: 'minor',
       message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
+    },
+    {
+      name: 'HashRouter Usage',
+      pattern: /HashRouter/g,
+      severity: 'major',
+      message: 'HashRouter is banned. Use createBrowserRouter (AGENTS.md §9)'
+    },
+    {
+      name: 'Unnecessary React Import',
+      pattern: /import\s+React\s+from\s+['"]react['"]/g,
+      severity: 'minor',
+      message: 'Unnecessary React import — React 17+ (AGENTS.md §4)'
+    },
+    {
+      name: 'Inline Styles',
+      pattern: /style=\{\{/g,
+      severity: 'major',
+      message: 'Inline styles are banned. Use design tokens (AGENTS.md §11)'
     }
   ]
 };
 
-function getLineNumber(content, index) {
-  return content.substring(0, index).split('\n').length;
-}
-
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  const lines = content.split('\n');
+  if (content.includes('// impeccable-ignore-file')) return [];
+
   const violations = [];
 
-  if (content.includes('// impeccable-ignore-file')) {
-    return [];
+  // Helper to get line number from index efficiently
+  const lineOffsets = [0];
+  for (let i = 0; i < content.length; i++) {
+    if (content[i] === '\n') lineOffsets.push(i + 1);
   }
-
-  // 1. Check for regex patterns defined in rules
-  CONFIG.rules.forEach(rule => {
-    if (rule.isClassNameRule) return; // Handled separately below
-
-    let match;
-    const regex = new RegExp(rule.pattern);
-    while ((match = regex.exec(content)) !== null) {
-      const lineNum = getLineNumber(content, match.index);
-      if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
-
-      violations.push({
-        line: lineNum,
-        pattern: rule.name,
-        value: match[0].length > 50 ? match[0].substring(0, 50) + '...' : match[0],
-        message: rule.message
-      });
+  const getLineNumber = (index) => {
+    let low = 0, high = lineOffsets.length - 1;
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      if (lineOffsets[mid] <= index) low = mid + 1;
+      else high = mid - 1;
     }
-  });
+    return low;
+  };
 
-  // 2. Check for classes in className
-  const classNameRegex = /className=["'](.*?)["']/g;
-  let match;
-  while ((match = classNameRegex.exec(content)) !== null) {
-    const lineNum = getLineNumber(content, match.index);
+  // Pre-compiled rules and helper utilities
+  const lines = content.split('\n');
+  const layoutRule = CONFIG.rules.find(r => r.name === 'Raw Layout/Spacing');
+  const suggestionsEntries = Object.entries(LAYOUT_SUGGESTIONS);
+
+  // 1. Multi-line and General Rules (Global Scanner)
+  CONFIG.rules
+    .filter(r => !r.isClassNameRule)
+    .forEach(rule => {
+      const regex = new RegExp(rule.pattern.source, rule.name === 'div Layout' ? 'gs' : 'g');
+      const matches = content.matchAll(regex);
+
+      for (const match of matches) {
+        const lineNum = getLineNumber(match.index);
+        if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+
+        violations.push({
+          line: lineNum,
+          pattern: rule.name,
+          severity: rule.severity || 'minor',
+          value: match[0].length > 60 ? match[0].substring(0, 60).replace(/\s+/g, ' ') + '...' : match[0].replace(/\s+/g, ' '),
+          message: rule.message
+        });
+      }
+    });
+
+  // 2. ClassName Specific Rules (Global Scanner)
+  for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
+    const lineNum = getLineNumber(match.index);
     if (lines[lineNum - 1].includes('// impeccable-ignore')) continue;
 
     const classStr = match[1];
     const classes = classStr.split(/\s+/);
 
     classes.forEach(cls => {
-      // Check against Raw Layout/Spacing rule
-      const layoutRule = CONFIG.rules.find(r => r.name === 'Raw Layout/Spacing');
+      // Raw Layout/Spacing
       if (layoutRule.pattern.test(cls)) {
         violations.push({
           line: lineNum,
           pattern: layoutRule.name,
+          severity: layoutRule.severity || 'minor',
           value: cls,
           message: layoutRule.message
         });
@@ -105,9 +139,9 @@ function checkFile(filepath) {
       if (/\b(bg-|text-)\b/.test(cls)) {
         const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
         if (colorMatch) {
-          const type = colorMatch[1];
+          const prefix = colorMatch[1];
           const baseColor = colorMatch[2].split('/')[0];
-          const fullToken = `${type}-${baseColor}`;
+          const fullToken = `${prefix}-${baseColor}`;
           const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
                             CONFIG.allowedColors.includes(fullToken) ||
                             CONFIG.allowedTextUtils.includes(baseColor) ||
@@ -117,48 +151,33 @@ function checkFile(filepath) {
             violations.push({
               line: lineNum,
               pattern: 'Non-token Color/Size',
+              severity: 'minor',
               value: cls,
               message: `Class '${cls}' uses a value that is not a recognized design token.`
             });
           }
         }
       }
+    });
 
-      // Check for layout suggestions
-      Object.entries(LAYOUT_SUGGESTIONS).forEach(([pattern, suggestion]) => {
-        if (classStr.includes(pattern)) {
-          // Only add once per line if not already added
-          if (!violations.find(v => v.line === lineNum && v.pattern === 'Layout Suggestion')) {
-            violations.push({
-              line: lineNum,
-              pattern: 'Layout Suggestion',
-              value: pattern,
-              message: `Consider replacing '${pattern}' with ${suggestion}`
-            });
-          }
+    // Layout Suggestions
+    suggestionsEntries.forEach(([pattern, suggestion]) => {
+      if (classStr.includes(pattern)) {
+        if (!violations.some(v => v.line === lineNum && v.pattern === 'Layout Suggestion' && v.value === pattern)) {
+          violations.push({
+            line: lineNum,
+            pattern: 'Layout Suggestion',
+            severity: 'minor',
+            value: pattern,
+            message: `Consider replacing '${pattern}' with ${suggestion}`
+          });
         }
-      });
+      }
     });
   }
 
-  return violations;
-}
-
-function walk(dir, callback) {
-    if (!fs.existsSync(dir)) return;
-    if (fs.statSync(dir).isFile()) {
-        callback(dir);
-        return;
-    }
-    fs.readdirSync(dir).forEach( f => {
-        const dirPath = path.join(dir, f);
-        const isDirectory = fs.statSync(dirPath).isDirectory();
-        if (isDirectory) {
-            walk(dirPath, callback);
-        } else {
-            callback(dirPath);
-        }
-    });
+  // Sort violations by line number
+  return violations.sort((a, b) => a.line - b.line);
 }
 
 function checkPRScope() {
@@ -188,29 +207,41 @@ function generateTodoFile(allViolations) {
   fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
 }
 
-console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+const args = process.argv.slice(2);
+const isJson = args.includes('--json');
+const targets = args.filter(arg => !arg.startsWith('--'));
 
-checkPRScope();
+if (!isJson) {
+  console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+  checkPRScope();
+}
 
+const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
 const allViolations = {};
-CHECK_DIRS.forEach(dir => {
-    const fullPath = path.resolve(ROOT, dir);
-    walk(fullPath, (filepath) => {
-        if (filepath.endsWith('.tsx')) {
-            const violations = checkFile(filepath);
-            if (violations.length > 0) {
-                allViolations[path.relative(ROOT, filepath)] = violations;
-            }
-        }
-    });
+
+const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
+
+files.forEach(filepath => {
+  if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
+    const violations = checkFile(filepath);
+    if (violations.length > 0) {
+      allViolations[path.relative(ROOT, filepath)] = violations;
+    }
+  }
 });
 
-if (Object.keys(allViolations).length === 0) {
+if (isJson) {
+  process.stdout.write(JSON.stringify(allViolations, null, 2));
+  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+}
+
+const totalViolations = Object.values(allViolations).flat().length;
+
+if (totalViolations === 0) {
   console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  // If no violations, we can still update/clear the TODO file
   generateTodoFile({});
 } else {
-  console.log('\x1b[31m✖ Anti-patterns detected:\x1b[0m\n');
+  console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
   for (const [file, violations] of Object.entries(allViolations)) {
     console.log(`\x1b[36m${file}\x1b[0m`);
     violations.forEach(v => {
@@ -218,8 +249,6 @@ if (Object.keys(allViolations).length === 0) {
     });
     console.log();
   }
-
   generateTodoFile(allViolations);
-  console.log("Successfully generated TODO_ANTIPATTERNS.md");
   process.exit(1);
 }
