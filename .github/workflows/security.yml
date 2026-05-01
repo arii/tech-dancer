@@ -47,10 +47,28 @@ jobs:
       - name: Run Oxlint
         run: pnpm run lint:ox
 
+  check-secrets:
+    name: Check Secrets Availability
+    runs-on: ubuntu-latest
+    outputs:
+      run_snyk: ${{ steps.check.outputs.run_snyk }}
+    steps:
+      - name: Check Snyk Token
+        id: check
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          if [ -n "$SNYK_TOKEN" ] || [ -n "${{ vars.SNYK_TOKEN }}" ]; then
+            echo "run_snyk=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_snyk=false" >> "$GITHUB_OUTPUT"
+          fi
+
   snyk:
     name: Snyk Security Scan
+    needs: check-secrets
     runs-on: ubuntu-latest
-    if: ${{ vars.SNYK_TOKEN != '' || secrets.SNYK_TOKEN != '' }}
+    if: needs.check-secrets.outputs.run_snyk == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
