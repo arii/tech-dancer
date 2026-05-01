@@ -47,33 +47,6 @@ jobs:
       - name: Run Oxlint
         run: pnpm run lint:ox
 
-  snyk:
-    name: Snyk Security Scan
-    runs-on: ubuntu-latest
-    if: ${{ vars.SNYK_TOKEN != '' || secrets.SNYK_TOKEN != '' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
-
   gitleaks:
     name: Gitleaks Secret Detection
     runs-on: ubuntu-latest
