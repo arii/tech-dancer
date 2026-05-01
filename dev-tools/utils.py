@@ -9,21 +9,19 @@ class CLIError(Exception):
         self.data = data
         super().__init__(self.message)
 
-def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment or via gh CLI."""
-    token = os.getenv("GITHUB_TOKEN")
-    if token:
-        return token
+import json
+from gh_client import get_github_token
+
+def extract_json(text: str) -> Optional[dict]:
+    """Extracts the first JSON object found in a string, even if surrounded by noise."""
     try:
-        result = subprocess.run(
-            ["gh", "auth", "token"],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip()
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return None
+        start = text.find('{')
+        end = text.rfind('}') + 1
+        if start != -1 and end != -1:
+            return json.loads(text[start:end])
+    except Exception:
+        pass
+    return None
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""

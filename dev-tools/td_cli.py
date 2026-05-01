@@ -13,8 +13,10 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, CLIError
+from utils import get_repo_name, CLIError, extract_json
+from gh_client import get_github_token, get_gh_variable, set_gh_variable
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
+from audit_logic import AUDIT_CHECK_DIRS, get_violations_count, get_audit_baseline_count
 from collections import defaultdict
 
 from scope_check import verify_pr_scope, get_project_config
@@ -29,45 +31,6 @@ EXISTING_COMPONENTS = {
     'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
 }
 
-# --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
-
-AUDIT_LAYOUT_SUGGESTIONS = {
-    'flex flex-col': '<Stack direction="col">',
-    'flex flex-row': '<Stack direction="row">',
-    'flex items-center': '<Stack align="center">',
-    'flex justify-between': '<Stack justify="between">',
-    'grid grid-cols': '<Grid cols={...}>',
-}
-
-AUDIT_CONFIG = {
-    'allowedColors': [
-        'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
-        'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
-        'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-        'amber-500', 'success', 'error', 'warning'
-    ],
-    'allowedTextUtils': ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
-    'allowedTextSizes': ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
-    'rules': [
-        {
-            'name': 'Arbitrary Value',
-            'pattern': r'-\[.*?\]',
-            'message': 'Avoid arbitrary values like -[...]. Use design tokens instead.'
-        },
-        {
-            'name': 'Raw Layout/Spacing',
-            'pattern': r'\b(flex|grid|items-|justify-|p[xytrbl]?-|m[xytrbl]?-|gap-)\b',
-            'isClassNameRule': True,
-            'message': 'Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.'
-        },
-        {
-            'name': 'div Layout',
-            'pattern': r'<div\s+[^>]*?className=["\'](.*?(?:flex|grid|p-|m-|gap-).*?)["\']',
-            'message': 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
-        }
-      ]
-}
 
 BANNED_PATTERNS = [
     (r'HashRouter', 'HashRouter is banned. Use createBrowserRouter (AGENTS.md §9)'),
@@ -96,12 +59,9 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
         return int(env_val)
 
     # Try fetching from GitHub Variable
-    try:
-        proc = subprocess.run(["gh", "variable", "get", env_var], capture_output=True, text=True)
-        if proc.returncode == 0 and proc.stdout.strip():
-            return int(proc.stdout.strip())
-    except Exception:
-        pass
+    gh_val = get_gh_variable(env_var)
+    if gh_val:
+        return int(gh_val)
 
     if os.path.exists(default_file):
         with open(default_file, 'r') as f:
@@ -109,70 +69,6 @@ def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fal
 
     return fallback_value
 
-def get_violations_count(content: str, filepath: str) -> int:
-    if '// impeccable-ignore-file' in content:
-        return 0
-
-    lines = content.split('\n')
-    violations_count = 0
-
-    # 1. Check for regex patterns defined in rules
-    for rule in AUDIT_CONFIG['rules']:
-        if rule.get('isClassNameRule'):
-            continue
-
-        pattern = rule['pattern']
-        for match in re.finditer(pattern, content):
-            line_num = content.count('\n', 0, match.start()) + 1
-            if line_num <= len(lines) and '// impeccable-ignore' in lines[line_num - 1]:
-                continue
-            violations_count += 1
-
-    # 2. Check for classes in className
-    class_name_regex = r'className=["\'](.*?)["\']'
-    for match in re.finditer(class_name_regex, content):
-        line_num = content.count('\n', 0, match.start()) + 1
-        if line_num <= len(lines) and '// impeccable-ignore' in lines[line_num - 1]:
-            continue
-
-        class_str = match.group(1)
-        classes = class_str.split()
-
-        layout_rule = next(r for r in AUDIT_CONFIG['rules'] if r['name'] == 'Raw Layout/Spacing')
-
-        for cls in classes:
-            # Check against Raw Layout/Spacing rule
-            if re.search(layout_rule['pattern'], cls):
-                violations_count += 1
-
-            # Colors check
-            if re.search(r'\b(bg-|text-)\b', cls):
-                color_match = re.search(r'\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b', cls)
-                if color_match:
-                    base_color = color_match.group(2).split('/')[0]
-                    full_token = f"{color_match.group(1)}-{base_color}"
-
-                    is_allowed = (base_color in AUDIT_CONFIG['allowedColors'] or
-                                  full_token in AUDIT_CONFIG['allowedColors'] or
-                                  base_color in AUDIT_CONFIG['allowedTextUtils'] or
-                                  base_color in AUDIT_CONFIG['allowedTextSizes'])
-
-                    if not is_allowed:
-                        violations_count += 1
-
-        # Check for layout suggestions (once per className match)
-        # Mirroring JS logic: Object.entries(LAYOUT_SUGGESTIONS).forEach(([pattern, suggestion]) => { if (classStr.includes(pattern)) { ... } })
-        # Note: JS version only adds once per LINE if not already added for 'Layout Suggestion'
-        # To match exactly, we'd need to track line violations.
-        # But JS adds once per className check effectively because it's inside the className loop.
-        # Wait, JS has `if (!violations.find(v => v.line === lineNum && v.pattern === 'Layout Suggestion'))`
-
-        for pattern, suggestion in AUDIT_LAYOUT_SUGGESTIONS.items():
-            if pattern in class_str:
-                violations_count += 1
-                break # Only count ONE layout suggestion per className match to stay closer to JS "once per line" (usually one className per line)
-
-    return violations_count
 
 def extract_code_blocks(text: str) -> list[str]:
     return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
@@ -291,11 +187,10 @@ def handle_ratchet_any(args):
 
     if args.update:
         if not args.dry_run:
-            try:
-                subprocess.run(["gh", "variable", "set", "ANY_COUNT_BASELINE", "--body", str(current)], check=True)
+            if set_gh_variable("ANY_COUNT_BASELINE", str(current)):
                 if not args.json: print(f"✅ Updated GitHub variable ANY_COUNT_BASELINE to {current}")
-            except Exception as e:
-                if not args.json: print(f"⚠️ Failed to update GitHub variable: {e}")
+            else:
+                if not args.json: print("⚠️ Failed to update GitHub variable. Falling back to file.")
                 # Fallback to file update if gh CLI fails (e.g. local dev)
                 update_file = args.baseline_file or "any-count.txt"
                 with open(update_file, 'w') as f:
@@ -319,11 +214,10 @@ def handle_bundle_size(args):
 
     if args.update:
         if not args.dry_run:
-            try:
-                subprocess.run(["gh", "variable", "set", "BUNDLE_BASELINE_KB", "--body", str(size)], check=True)
+            if set_gh_variable("BUNDLE_BASELINE_KB", str(size)):
                 if not args.json: print(f"✅ Updated GitHub variable BUNDLE_BASELINE_KB to {size}")
-            except Exception as e:
-                if not args.json: print(f"⚠️ Failed to update GitHub variable: {e}")
+            else:
+                if not args.json: print("⚠️ Failed to update GitHub variable. Falling back to file.")
                 # Fallback to file update if gh CLI fails (e.g. local dev)
                 update_file = args.baseline_file or ".bundle-baseline"
                 with open(update_file, 'w') as f:
@@ -508,50 +402,15 @@ def handle_audit_gate(args):
     try:
         proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"], capture_output=True, text=True)
         if proc.stdout:
-            # pnpm might add noise, so we find the JSON part
-            output = proc.stdout
-            json_start = output.find("{")
-            json_end = output.rfind("}") + 1
-            if json_start != -1 and json_end != -1:
-                audit_data = json.loads(output[json_start:json_end])
+            audit_data = extract_json(proc.stdout)
+            if audit_data:
                 current_count = sum(len(violations) for violations in audit_data.values())
-            else:
-                # If no JSON found, maybe there are 0 violations and it just printed summary
-                # or it failed. We check return code.
-                if proc.returncode == 0:
-                    current_count = 0
-                else:
-                    # If it failed but no JSON, maybe it's not JSON output?
-                    # Fallback to older count method or raise error
-                    pass
+            elif proc.returncode == 0:
+                current_count = 0
     except Exception as e:
         if not args.json: print(f"⚠️ Failed to get current audit count via JS script: {e}")
 
-    baseline_count = 0
-    try:
-        # Get files from origin/main
-        ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-        main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
-
-        relevant_main_files = []
-        for mf in main_files:
-            if not mf.endswith('.tsx'):
-                continue
-            for check_dir in AUDIT_CHECK_DIRS:
-                if mf == check_dir or mf.startswith(check_dir + '/'):
-                    relevant_main_files.append(mf)
-                    break
-
-        for mf in relevant_main_files:
-            try:
-                show_cmd = ["git", "show", f"origin/main:{mf}"]
-                content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
-                baseline_count += get_violations_count(content, mf)
-            except subprocess.CalledProcessError:
-                continue
-    except subprocess.CalledProcessError:
-        # origin/main might not exist
-        pass
+    baseline_count = get_audit_baseline_count()
 
     if not args.json:
         print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} (origin/main)")

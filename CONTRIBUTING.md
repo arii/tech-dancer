@@ -128,13 +128,14 @@ What do the results mean?
 
 ## Local Development & Tooling
 
-To maintain state for technical debt (e.g., bundle size baselines and TypeScript `any` counts) without polluting the git history, this repository uses GitHub Repository Variables.
+To maintain state for technical debt (e.g., bundle size baselines and TypeScript `any` counts) without polluting the git history, this repository uses GitHub Repository Variables as the **primary source of truth**.
 
 ### Requirements
 - **GitHub CLI (`gh`)**: Must be installed and authenticated (`gh auth login`).
 - **Permissions**: Your user (or the `GITHUB_TOKEN` in CI) needs write access to repository variables to update baselines.
 
-If `gh` is not available locally, the tooling will fallback to writing baselines to local files (`.bundle-baseline`, `any-count.txt`). These files are gitignored and should not be committed.
+### Fallback Mechanism
+If `gh` is not available or authenticated locally, the tooling will fallback to reading/writing baselines from/to local files (`.bundle-baseline`, `any-count.txt`). Note that these files are gitignored and **should not be committed**. The remote GitHub Variables will always override local files in the CI environment.
 
 ## Checklist Before Submitting
 - [ ] Issue title starts with `Draft:`
