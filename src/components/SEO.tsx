@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION } from '@/config/constants';
 
 interface SEOProps {
   title: string;
@@ -20,11 +20,11 @@ export function SEO({
   image,
   canonical,
   schema,
-  googleVerification
+  googleVerification = GOOGLE_SITE_VERIFICATION
 }: SEOProps) {
   const { pathname } = useLocation();
 
-  const url = canonical || `${BASE_URL.replace(/\/$/, '')}${pathname}`;
+  const url = canonical || `${BASE_URL}${pathname}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
   const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
@@ -52,7 +52,6 @@ export function SEO({
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
-      <meta name="google-site-verification" content="FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
