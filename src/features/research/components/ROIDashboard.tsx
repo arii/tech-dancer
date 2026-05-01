@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, ElementType } from 'react';
 import {
   TrendingUp,
   DollarSign,
@@ -40,7 +40,7 @@ function MetricCard({
 }: {
   label: string;
   value: string;
-  icon: any;
+  icon: ElementType;
   trend?: string;
 }) {
   return (
