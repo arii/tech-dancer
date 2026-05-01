@@ -1,41 +1,59 @@
 # PR Review Tooling: USAGE_NOTES
 
 ## Overview
-The PR review system uses a **Read/Write Decoupled Architecture**.
+The PR review system is centralized in the unified Tech-Dancer CLI.
+- **CLI Entry Point**: `dev-tools/td_cli.py`
 - **Read Context**: `dev-tools/logs/reviews/pr-context-{PR}.md` (Diffs, stats, and valid line ranges).
 - **Write Review**: `dev-tools/logs/reviews/pr-review-{PR}.md` (Checklist and JSON output block).
 
-## Core Commands (Automated Orchestrator)
+## Core Commands
 
 ### 1. Single PR Audit
 The recommended way to review a single PR:
 
 ```bash
-# ONE COMMAND: Fetch + AI-Audit + Submit + Cleanup (Failure-Proof)
-./dev-tools/auto-review-pr.sh <PR_NUMBER> --cleanup
+# Step 1: Fetch metadata and generate context
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch
+
+# Step 2: Run automated audit and (optionally) AI review
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
+
+# Step 3: Submit the review to GitHub and clean up logs
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup --execute
 ```
 
-### 2. Bulk PR Audit (Mass Review)
-To audit multiple PRs sequentially with a single command:
+### 2. Pre-Submission Quality Gate
+Before pushing code or opening a PR, run the full suite of local checks:
 
 ```bash
-# Orchestrate fleet-wide audits
-./dev-tools/auto-mass-audit-pr.sh <PR_NUM1> <PR_NUM2> <PR_NUM3> ...
+python3 dev-tools/td_cli.py pre-submit
+```
+This includes:
+- UI Anti-pattern audit
+- TypeScript type-checking
+- ESLint linting
+- PR Scope validation
+- Conflict detection (requires `GITHUB_TOKEN`)
+
+## CI Gate Baselines
+
+Technical debt is tracked using **GitHub Actions Variables** instead of local files. This prevents "lockfile-style" churn on small metric changes.
+
+### Tracked Metrics
+- `BUNDLE_BASELINE_KB`: The maximum allowed size of the production JS bundle (in KB).
+- `ANY_COUNT_BASELINE`: The maximum allowed number of TypeScript `any` usages.
+
+### How to Update
+When a PR intentionally and legitimately increases one of these metrics, an admin must update the baseline in GitHub after the PR is merged:
+
+```bash
+# Update bundle size baseline to 1200KB
+gh variable set BUNDLE_BASELINE_KB --body 1200
+
+# Update 'any' count baseline to 50
+gh variable set ANY_COUNT_BASELINE --body 50
 ```
 
-## Advanced Flags
-- `--dry-run`: Performs a full audit and draft submission but does NOT hit the GitHub API.
-- `--submit-only`: Skips Fetch/Audit and attempts to submit an existing review file.
-- `--cleanup`: Deletes logs and context files after a SUCCESSFUL submission.
-
 ## Failure Prevention
-- **Valid Line Ranges**: The system provides explicit ranges to prevent GitHub API 422 errors.
-- **AI Instructions**: Permanent audit rules are stored in `dev-tools/REVIEW_INSTRUCTIONS.md`.
-
-## Verification Log
-| Date | PR # | Outcome | Notes |
-|------|------|---------|-------|
-| 2026-04-22 | 195 | SUCCESS | Hardened line validation test |
-| 2026-04-22 | 223 | SUCCESS | Self-audit (tooling refactor test) |
-| 2026-04-22 | 188 | SUCCESS | AI protocol compliance test (Direct edit) |
-| 2026-04-22 | 154 | SUCCESS | Architectural regression detection test |
+- **Valid Line Ranges**: The system provides explicit ranges in the context file to prevent GitHub API 422 errors.
+- **Dry Run Default**: Most mutating CLI commands require `--execute` to actually perform actions on GitHub.
