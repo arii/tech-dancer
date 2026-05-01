@@ -33,6 +33,7 @@ on:
 
 permissions:
   contents: read
+  variables: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -113,7 +114,7 @@ jobs:
 
       - name: UI Anti-Pattern Audit (Gate)
         run: |
-          pnpm run audit || true
+          # Run the gate (delegates to JS script for current count)
           python3 dev-tools/td_cli.py audit-gate
 
       - name: Design Token Compliance

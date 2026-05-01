@@ -126,6 +126,44 @@ class GHAConfigManager:
 
         return None
 
+    def set_variable(self, name: str, value: str) -> bool:
+        """Sets a GitHub Actions variable using the gh CLI and updates local cache."""
+        # 1. Check gh CLI availability
+        if self.gh_available is None:
+            try:
+                subprocess.run(["gh", "--version"], capture_output=True, check=True)
+                self.gh_available = True
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                self.gh_available = False
+
+        if not self.gh_available:
+            print("⚠️  Warning: 'gh' CLI not available. Cannot set remote variable.", file=sys.stderr)
+            return False
+
+        # 2. Set via gh CLI
+        try:
+            # Note: Using 'gh variable set'
+            result = subprocess.run(
+                ["gh", "variable", "set", name, "--body", str(value)],
+                capture_output=True,
+                text=True
+            )
+
+            if result.returncode == 0:
+                self.cache[name] = str(value)
+                self._save_cache()
+                return True
+            else:
+                print(f"❌ Error setting GHA variable '{name}': {result.stderr.strip()}", file=sys.stderr)
+                return False
+        except Exception as e:
+            print(f"❌ Unexpected error calling 'gh' CLI: {e}", file=sys.stderr)
+            return False
+
 def get_gha_variable(name: str) -> Optional[str]:
     """Helper function to retrieve a GHA variable via the global manager."""
     return GHAConfigManager().get_variable(name)
+
+def set_gha_variable(name: str, value: str) -> bool:
+    """Helper function to set a GHA variable via the global manager."""
+    return GHAConfigManager().set_variable(name, value)

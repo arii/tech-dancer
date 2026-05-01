@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, get_gha_variable, CLIError
+from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -290,17 +290,15 @@ def handle_ratchet_any(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file
-        if not update_file:
-            msg = "Update failed: No baseline file specified for update."
-            if args.json: print(json.dumps({"status": "error", "message": msg}, indent=2))
-            else: print(f"❌ Error: {msg}")
-            sys.exit(1)
         if not args.dry_run:
-            with open(update_file, 'w') as f:
-                f.write(str(current))
+            if args.baseline_file:
+                with open(args.baseline_file, 'w') as f:
+                    f.write(str(current))
+            else:
+                set_gha_variable('ANY_COUNT_BASELINE', str(current))
         elif not args.json:
-            print(f"[DRY-RUN] Would update {update_file} to {current}")
+            target = args.baseline_file or "GHA variable ANY_COUNT_BASELINE"
+            print(f"[DRY-RUN] Would update {target} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
@@ -317,17 +315,15 @@ def handle_bundle_size(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file
-        if not update_file:
-            msg = "Update failed: No baseline file specified for update."
-            if args.json: print(json.dumps({"status": "error", "message": msg}, indent=2))
-            else: print(f"❌ Error: {msg}")
-            sys.exit(1)
         if not args.dry_run:
-            with open(update_file, 'w') as f:
-                f.write(str(size))
+            if args.baseline_file:
+                with open(args.baseline_file, 'w') as f:
+                    f.write(str(size))
+            else:
+                set_gha_variable('BUNDLE_BASELINE_KB', str(size))
         elif not args.json:
-            print(f"[DRY-RUN] Would update {update_file} to {size}")
+            target = args.baseline_file or "GHA variable BUNDLE_BASELINE_KB"
+            print(f"[DRY-RUN] Would update {target} to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
@@ -517,63 +513,79 @@ def handle_pre_submit(args):
         sys.exit(1)
 
 def handle_audit_gate(args):
-    current_count = 0
-    files_to_check = []
-
-    for dir_path in AUDIT_CHECK_DIRS:
-        full_path = os.path.join(os.getcwd(), dir_path)
-        if os.path.isfile(full_path) and full_path.endswith('.tsx'):
-            files_to_check.append(dir_path)
-        elif os.path.isdir(full_path):
-            for root, _, files in os.walk(full_path):
-                for file in files:
-                    if file.endswith('.tsx'):
-                        files_to_check.append(os.path.relpath(os.path.join(root, file), os.getcwd()))
-
-    for filepath in files_to_check:
-        if os.path.exists(filepath):
-            with open(filepath, 'r') as f:
-                current_count += get_violations_count(f.read(), filepath)
-
-    baseline_count = 0
+    # 1. Get current count from JS script
     try:
-        # Get files from origin/main
-        ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-        main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+        proc = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--json"], capture_output=True, text=True, check=False)
+        if proc.stdout:
+            # Handle potential pnpm/node noise by finding the first {
+            output = proc.stdout
+            json_start = output.find("{")
+            if json_start != -1:
+                audit_data = json.loads(output[json_start:])
+                current_count = sum(len(v) for v in audit_data.values())
+            else:
+                current_count = 0
+        else:
+            current_count = 0
+    except Exception as e:
+        raise CLIError(f"Failed to run audit script: {e}")
 
-        relevant_main_files = []
-        for mf in main_files:
-            if not mf.endswith('.tsx'):
-                continue
-            for check_dir in AUDIT_CHECK_DIRS:
-                if mf == check_dir or mf.startswith(check_dir + '/'):
-                    relevant_main_files.append(mf)
-                    break
+    # 2. Resolve baseline
+    # Priority: AUDIT_BASELINE env/gha variable -> origin/main comparison
+    baseline_val = get_gha_variable('AUDIT_BASELINE') or os.environ.get('AUDIT_BASELINE')
 
-        for mf in relevant_main_files:
-            try:
-                show_cmd = ["git", "show", f"origin/main:{mf}"]
-                content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
-                baseline_count += get_violations_count(content, mf)
-            except subprocess.CalledProcessError:
-                continue
-    except subprocess.CalledProcessError:
-        # origin/main might not exist
-        pass
+    if baseline_val is not None:
+        baseline_count = int(baseline_val)
+        baseline_source = "GHA Variable AUDIT_BASELINE"
+    else:
+        baseline_count = 0
+        baseline_source = "origin/main"
+        try:
+            # Get files from origin/main
+            ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
+            main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+
+            relevant_main_files = []
+            for mf in main_files:
+                if not (mf.endswith('.tsx') or mf.endswith('.ts')):
+                    continue
+                for check_dir in AUDIT_CHECK_DIRS:
+                    if mf == check_dir or mf.startswith(check_dir + '/'):
+                        relevant_main_files.append(mf)
+                        break
+
+            # Process all relevant files in one batch via stdin to JS script
+            # We combine them into a single virtual "file" for counting
+            combined_content = ""
+            for mf in relevant_main_files:
+                try:
+                    show_cmd = ["git", "show", f"origin/main:{mf}"]
+                    combined_content += subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL) + "\n"
+                except subprocess.CalledProcessError:
+                    continue
+
+            if combined_content:
+                proc = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                      input=combined_content, capture_output=True, text=True)
+                if proc.returncode == 0:
+                    baseline_count = int(proc.stdout.strip() or 0)
+        except subprocess.CalledProcessError:
+            # origin/main might not exist, baseline stays 0
+            pass
 
     if not args.json:
-        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} (origin/main)")
+        print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count} ({baseline_source})")
 
     if current_count > baseline_count:
         msg = f"Anti-pattern violations increased from {baseline_count} to {current_count}."
         if args.json:
-            print(json.dumps({"status": "error", "message": msg, "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
+            print(json.dumps({"status": "error", "message": msg, "data": {"current": current_count, "baseline": baseline_count, "source": baseline_source}}, indent=2))
         else:
             print(f"❌ Error: {msg}")
         sys.exit(1)
 
     if args.json:
-        print(json.dumps({"status": "success", "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
+        print(json.dumps({"status": "success", "data": {"current": current_count, "baseline": baseline_count, "source": baseline_source}}, indent=2))
     elif not args.json:
         print("✅ No new violations introduced.")
 

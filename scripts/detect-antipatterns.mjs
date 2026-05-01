@@ -68,8 +68,104 @@ const CONFIG = {
   ]
 };
 
+function checkPRScope() {
+  try {
+    const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
+    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
+    if (output) {
+      console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
+    }
+  } catch {
+    // Python or script might not be available
+  }
+}
+
+function generateTodoFile(allViolations) {
+  let todoContent = "# UI Anti-Pattern TODO List\n\n";
+  todoContent += "This list is automatically generated from the audit report. Fix these anti-patterns to adhere to the project design system.\n\n";
+
+  for (const [file, violations] of Object.entries(allViolations)) {
+    todoContent += `## ${file}\n`;
+    violations.forEach(v => {
+      todoContent += `- [ ] Line ${v.line}: [${v.pattern}] ${v.value} - ${v.message}\n`;
+    });
+    todoContent += "\n";
+  }
+
+  fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
+}
+
+const args = process.argv.slice(2);
+const isJson = args.includes('--json');
+const isCountOnly = args.includes('--count-only');
+const shouldGenerateTodo = args.includes('--todo');
+const targets = args.filter(arg => !arg.startsWith('--'));
+
+const isStdin = targets.includes('-');
+
+if (!isJson && !isCountOnly) {
+  console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+  if (!isStdin) checkPRScope();
+}
+
+const allViolations = {};
+
+if (isStdin) {
+  const content = fs.readFileSync(0, 'utf8');
+  const violations = checkFileContent(content, 'stdin');
+  if (violations.length > 0) {
+    allViolations['stdin'] = violations;
+  }
+} else {
+  const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
+  const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
+
+  files.forEach(filepath => {
+    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
+      const violations = checkFile(filepath);
+      if (violations.length > 0) {
+        allViolations[path.relative(ROOT, filepath)] = violations;
+      }
+    }
+  });
+}
+
+if (isJson) {
+  process.stdout.write(JSON.stringify(allViolations, null, 2));
+  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
+}
+
+const totalViolations = Object.values(allViolations).flat().length;
+
+if (isCountOnly) {
+  process.stdout.write(totalViolations.toString());
+  process.exit(0);
+}
+
+if (totalViolations === 0) {
+  console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
+  if (shouldGenerateTodo) generateTodoFile({});
+} else {
+  if (!isJson && !isCountOnly) {
+    console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
+    for (const [file, violations] of Object.entries(allViolations)) {
+      console.log(`\x1b[36m${file}\x1b[0m`);
+      violations.forEach(v => {
+        console.log(`  \x1b[90mLine ${v.line}:\x1b[0m [${v.pattern}] \x1b[33m${v.value}\x1b[0m - ${v.message}`);
+      });
+      console.log();
+    }
+  }
+  if (shouldGenerateTodo) generateTodoFile(allViolations);
+  process.exit(1);
+}
+
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
+  return checkFileContent(content, filepath);
+}
+
+function checkFileContent(content, filepath) {
   if (content.includes('// impeccable-ignore-file')) return [];
 
   const violations = [];
@@ -178,77 +274,4 @@ function checkFile(filepath) {
 
   // Sort violations by line number
   return violations.sort((a, b) => a.line - b.line);
-}
-
-function checkPRScope() {
-  try {
-    const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
-    if (output) {
-      console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
-    }
-  } catch {
-    // Python or script might not be available
-  }
-}
-
-function generateTodoFile(allViolations) {
-  let todoContent = "# UI Anti-Pattern TODO List\n\n";
-  todoContent += "This list is automatically generated from the audit report. Fix these anti-patterns to adhere to the project design system.\n\n";
-
-  for (const [file, violations] of Object.entries(allViolations)) {
-    todoContent += `## ${file}\n`;
-    violations.forEach(v => {
-      todoContent += `- [ ] Line ${v.line}: [${v.pattern}] ${v.value} - ${v.message}\n`;
-    });
-    todoContent += "\n";
-  }
-
-  fs.writeFileSync(path.join(ROOT, 'TODO_ANTIPATTERNS.md'), todoContent);
-}
-
-const args = process.argv.slice(2);
-const isJson = args.includes('--json');
-const targets = args.filter(arg => !arg.startsWith('--'));
-
-if (!isJson) {
-  console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
-  checkPRScope();
-}
-
-const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
-const allViolations = {};
-
-const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
-
-files.forEach(filepath => {
-  if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
-    const violations = checkFile(filepath);
-    if (violations.length > 0) {
-      allViolations[path.relative(ROOT, filepath)] = violations;
-    }
-  }
-});
-
-if (isJson) {
-  process.stdout.write(JSON.stringify(allViolations, null, 2));
-  process.exit(Object.keys(allViolations).length > 0 ? 1 : 0);
-}
-
-const totalViolations = Object.values(allViolations).flat().length;
-
-if (totalViolations === 0) {
-  console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  generateTodoFile({});
-} else {
-  console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
-  for (const [file, violations] of Object.entries(allViolations)) {
-    console.log(`\x1b[36m${file}\x1b[0m`);
-    violations.forEach(v => {
-      console.log(`  \x1b[90mLine ${v.line}:\x1b[0m [${v.pattern}] \x1b[33m${v.value}\x1b[0m - ${v.message}`);
-    });
-    console.log();
-  }
-  generateTodoFile(allViolations);
-  process.exit(1);
 }
