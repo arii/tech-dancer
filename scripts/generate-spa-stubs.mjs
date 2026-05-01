@@ -6,19 +6,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import { CONTENT_DIR_MAP, getContentSlugs } from './content-loader.ts';
+import { routes } from '../src/config/routes.ts';
 
 const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 
-// Static routes
-const STATIC_ROUTES = [
-  '/blog',
-  '/gear',
-  '/research',
-  '/ux-auditor',
-  '/about',
-  '/contact',
-];
+// Automatically discover static routes from configuration, excluding parameterized and catch-all
+const STATIC_ROUTES = routes
+  .map(r => r.path)
+  .filter(path => path !== '*' && !path.includes(':') && path !== '/');
 
 // Dynamic routes from content
 const DYNAMIC_ROUTES = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>

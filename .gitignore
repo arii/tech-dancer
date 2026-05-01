@@ -40,6 +40,9 @@ ai-fix-prompt.txt
 .bundle-baseline
 any-count.txt
 
+# Tools
+dev-tools/config.json
+
 # IDEs
 .vscode/*
 !.vscode/extensions.json

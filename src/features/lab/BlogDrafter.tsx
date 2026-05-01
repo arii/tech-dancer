@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
+import { inputs } from '@/styles/design-tokens';
+import { cn } from '@/lib/utils';
 
 export function BlogDrafter() {
   const {
@@ -87,8 +90,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
         </Box>
         <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
-           <Stack gap={2} display="flex" align="start" direction="row">
-              <Box as="span" marginTop={1} className="shrink-0">
+           <Stack gap={2} display="flex" align="baseline" direction="row">
+              <Box as="span" className="shrink-0">
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
@@ -110,7 +113,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                display="flex"
                align="center"
                gap={2}
-               className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+               className="text-accent hover:opacity-70 transition-all cursor-pointer"
              >
                 <Save className="w-3 h-3" />
                 <Text variant="mono" size="micro" weight="font-bold">SNAPSHOT_NOW</Text>
@@ -119,37 +122,25 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
           <Stack gap={6}>
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">POST_TITLE</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
               <Box
                 as="input"
                 type="text"
                 value={data.title}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
                 placeholder="The Future of WCS..."
-                width="full"
-                surface="default"
-                border
-                padding={3}
-                variant="mono"
-                size="sm"
-                className="focus:border-accent outline-none"
+                className={inputs.base}
               />
             </Stack>
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim">CATEGORY</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
                 <Box
                   as="select"
                   value={data.category}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
-                  width="full"
-                  surface="default"
-                  border
-                  padding={3}
-                  variant="mono"
-                  size="sm"
-                  className="focus:border-accent outline-none appearance-none"
+                  className={cn(inputs.base, "appearance-none")}
                 >
                   {CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
@@ -157,74 +148,50 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim">DATE</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DATE</Text>
                 <Box
                   as="input"
                   type="date"
                   value={data.date}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
-                  width="full"
-                  surface="default"
-                  border
-                  padding={3}
-                  variant="mono"
-                  size="sm"
-                  className="focus:border-accent outline-none"
+                  className={inputs.base}
                 />
               </Stack>
             </Grid>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">EXCERPT_SUMMARY</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>EXCERPT_SUMMARY</Text>
               <Box
                 as="textarea"
                 value={data.excerpt}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the post content..."
-                width="full"
                 height={20}
-                surface="default"
-                border
-                padding={3}
-                variant="mono"
-                size="sm"
-                className="focus:border-accent outline-none resize-none"
+                className={cn(inputs.base, "resize-none")}
               />
             </Stack>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
               <Box
                 as="input"
                 type="url"
                 value={data.affiliateLink}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
                 placeholder="https://amazon.com/..."
-                width="full"
-                surface="default"
-                border
-                padding={3}
-                variant="mono"
-                size="sm"
-                className="focus:border-accent outline-none"
+                className={inputs.base}
               />
             </Stack>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim">BODY_COMMENTARY</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>BODY_COMMENTARY</Text>
               <Box
                 as="textarea"
                 value={data.commentary}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
                 placeholder="Write your main content here..."
-                width="full"
                 height={40}
-                surface="default"
-                border
-                padding={3}
-                variant="mono"
-                size="sm"
-                className="focus:border-accent outline-none resize-none"
+                className={cn(inputs.base, "resize-none")}
               />
             </Stack>
           </Stack>
@@ -300,29 +267,17 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               value={aiInput}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
               placeholder="Paste AI JSON response here..."
-              width="full"
               height={32}
-              surface="default"
-              border
-              padding={3}
-              variant="mono"
-              size="sm"
-              className="focus:border-accent outline-none resize-none"
+              className={cn(inputs.base, "resize-none")}
             />
-            <Box
-              as="button"
+            <PrimaryActionButton
               onClick={handleApply}
-              display="flex"
-              align="center"
-              justify="center"
               gap={3}
-              surface="accent"
               padding={4}
-              className="bg-accent text-bg hover:bg-accent-brand transition-all cursor-pointer font-bold uppercase tracking-widest text-xs"
             >
               <Send className="w-4 h-4" />
               APPLY_RESPONSE
-            </Box>
+            </PrimaryActionButton>
           </Stack>
 
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
@@ -335,7 +290,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                  align="center"
                  gap={1}
                  paddingLeft={4}
-                 className="text-accent hover:text-accent-brand transition-colors cursor-pointer"
+                 className="text-accent hover:opacity-70 transition-all cursor-pointer"
                >
                  <Eye className="w-3 h-3" />
                  <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>

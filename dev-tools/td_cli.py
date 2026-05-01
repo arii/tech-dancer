@@ -12,7 +12,7 @@ import os
 import subprocess
 import json
 from utils import get_repo_name, CLIError
-from gh_client import get_github_token
+from gh_client import get_github_token, get_gh_variable
 from issue_manager import handle_validate_issue, handle_update_issues
 from baseline_manager import handle_ratchet_any, handle_bundle_size
 from pr_manager import handle_conflicts, handle_status_board, handle_audit_pr, handle_manage_reviews, detect_conflicts
@@ -33,6 +33,21 @@ def handle_pre_submit(args):
         run_step("Anti-Pattern Audit", ["pnpm", "run", "-s", "audit"])
         run_step("TypeScript", ["pnpm", "run", "-s", "type-check"])
         run_step("Lint", ["pnpm", "run", "-s", "lint"])
+
+        # Baseline Configuration Check
+        if not args.json: print("--- Baseline Configuration ---")
+        missing_vars = []
+        for var_name in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"]:
+            if not (os.environ.get(var_name) or get_gh_variable(var_name)):
+                missing_vars.append(var_name)
+
+        if missing_vars:
+            msg = f"Missing GHA variables: {', '.join(missing_vars)}. Run 'gh variable set <NAME> --body <VALUE>' to configure them locally."
+            if not args.json: print(f"  ⚠️  {msg}")
+            results["steps"].append({"name": "Baseline Check", "status": "warning", "message": msg})
+        else:
+            results["steps"].append({"name": "Baseline Check", "status": "success"})
+            if not args.json: print("  ✅ Technical debt baselines are configured.")
 
         # PR Scope Check
         scope_warning = verify_pr_scope()

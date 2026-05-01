@@ -77,5 +77,20 @@ class TestTDCLI(unittest.TestCase):
         # Verify review WAS created
         mock_pr.create_review.assert_called_once()
 
+    @patch('baseline_manager.get_gh_variable')
+    @patch('os.path.exists')
+    @patch('os.environ.get')
+    def test_resolve_baseline_fallback_to_gha(self, mock_env_get, mock_exists, mock_gha_get):
+        """Test that resolve_baseline falls back to GitHub variable if env var is missing"""
+        mock_exists.return_value = False
+        mock_env_get.return_value = None
+        mock_gha_get.return_value = "42"
+
+        from baseline_manager import resolve_baseline
+        baseline = resolve_baseline(None, "FAKE_VAR", "fake.txt", 100)
+
+        self.assertEqual(baseline, 42)
+        mock_gha_get.assert_called_with("FAKE_VAR")
+
 if __name__ == '__main__':
     unittest.main()
