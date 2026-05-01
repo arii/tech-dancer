@@ -96,7 +96,7 @@ class GHAConfigManager:
         # 3. Fetch from gh CLI
         try:
             result = subprocess.run(
-                ["gh", "variable", "get", name, "--body"],
+                ["gh", "variable", "get", name],
                 capture_output=True,
                 text=True
             )
