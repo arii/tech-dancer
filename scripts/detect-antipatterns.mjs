@@ -165,7 +165,7 @@ function checkFile(filepath) {
   return checkFileContent(content, filepath);
 }
 
-function checkFileContent(content, filepath) {
+function checkFileContent(content, _filepath) {
   if (content.includes('// impeccable-ignore-file')) return [];
 
   const violations = [];
