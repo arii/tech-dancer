@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, CLIError
+from utils import get_github_token, get_repo_name, get_gha_variable, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -86,20 +86,23 @@ REQUIRED_FOR_CONTENT_ISSUES = ['type', 'title', 'date', 'author', 'category', 'e
 # --- Shared Logic ---
 
 def resolve_baseline(file_path: str | None, env_var: str, default_file: str, fallback_value: int) -> int:
-    """Resolves a baseline value from CLI argument, environment variable, or default file."""
+    """Resolves a baseline value from CLI argument, environment variable, GHA variable, or default file."""
     if file_path:
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 return int(f.read().strip() or fallback_value)
-        else:
-            # If explicit file path is provided but doesn't exist, we fallback to other sources
-            # but ideally we should probably warn. For now, following requested fallback logic.
-            pass
 
+    # 1. Environment Variable (High Priority in CI)
     env_val = os.environ.get(env_var)
     if env_val:
         return int(env_val)
 
+    # 2. GitHub Actions Variable (Local Fetch)
+    gha_val = get_gha_variable(env_var)
+    if gha_val:
+        return int(gha_val)
+
+    # 3. Default File (Legacy Fallback)
     if os.path.exists(default_file):
         with open(default_file, 'r') as f:
             return int(f.read().strip() or fallback_value)
