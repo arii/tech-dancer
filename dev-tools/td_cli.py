@@ -278,7 +278,7 @@ def handle_status_board(args):
 
 def handle_ratchet_any(args):
     current = get_any_count()
-    baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', "any-count.txt", 0)
+    baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', "", 0)
 
     res = {"current": current, "baseline": baseline}
     if not args.json: print(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
@@ -290,7 +290,12 @@ def handle_ratchet_any(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file or "any-count.txt"
+        update_file = args.baseline_file
+        if not update_file:
+            msg = "Update failed: No baseline file specified for update."
+            if args.json: print(json.dumps({"status": "error", "message": msg}, indent=2))
+            else: print(f"❌ Error: {msg}")
+            sys.exit(1)
         if not args.dry_run:
             with open(update_file, 'w') as f:
                 f.write(str(current))
@@ -300,7 +305,7 @@ def handle_ratchet_any(args):
 
 def handle_bundle_size(args):
     size = get_bundle_size()
-    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', ".bundle-baseline", 3000)
+    baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', "", 3000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
     if not args.json: print(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
@@ -312,7 +317,12 @@ def handle_bundle_size(args):
         sys.exit(1)
 
     if args.update:
-        update_file = args.baseline_file or ".bundle-baseline"
+        update_file = args.baseline_file
+        if not update_file:
+            msg = "Update failed: No baseline file specified for update."
+            if args.json: print(json.dumps({"status": "error", "message": msg}, indent=2))
+            else: print(f"❌ Error: {msg}")
+            sys.exit(1)
         if not args.dry_run:
             with open(update_file, 'w') as f:
                 f.write(str(size))
@@ -619,12 +629,12 @@ def main():
             p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
-            p.add_argument("--baseline-file", default="any-count.txt")
+            p.add_argument("--baseline-file")
             p.add_argument("--update", action="store_true")
             p.add_argument("--dry-run", action="store_true", default=True)
             p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "bundle-size":
-            p.add_argument("--baseline-file", default=".bundle-baseline")
+            p.add_argument("--baseline-file")
             p.add_argument("--threshold", type=int, default=50)
             p.add_argument("--update", action="store_true")
             p.add_argument("--dry-run", action="store_true", default=True)
