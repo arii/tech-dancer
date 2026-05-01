@@ -10,6 +10,13 @@ const routes = [
 ];
 
 test.describe('Visual Regression Tests', () => {
+  test.beforeEach(async ({ page }) => {
+    // Ensure newsletter banner doesn't interfere with visual tests
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
+    });
+  });
+
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
