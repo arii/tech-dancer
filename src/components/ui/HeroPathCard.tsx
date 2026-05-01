@@ -45,7 +45,7 @@ export function HeroPathCard({
         <img
           src={image}
           alt=""
-          loading="lazy"
+          loading="eager"
           decoding="async"
           className={cn(
             "w-full h-full object-cover transition-transform duration-700 ease-in-out",
