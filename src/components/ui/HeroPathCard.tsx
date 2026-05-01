@@ -73,6 +73,7 @@ export function HeroPathCard({
         height="full"
         direction="col"
         justify="end"
+        gap={0}
         className="bg-gradient-to-t from-black via-black/40 to-transparent"
       >
         <Box
