@@ -4,9 +4,21 @@ on:
   push:
     branches:
       - '**'
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches:
       - '**'
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
   workflow_dispatch:
 
 permissions:
@@ -51,6 +63,9 @@ jobs:
         run: |
           pip install PyGithub pytest
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_td_cli.py
+
+      - name: Check for dead code
+        run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
         run: python3 dev-tools/td_cli.py ratchet-any --update
