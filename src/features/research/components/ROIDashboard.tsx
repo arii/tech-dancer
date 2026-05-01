@@ -128,30 +128,30 @@ export function ROIDashboard() {
                     fontSize={10}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: '#374151' }}
+                    tick={{ fill: 'var(--raw-color-text-dim)' }}
                   />
                   <YAxis
                     fontSize={10}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: '#374151' }}
+                    tick={{ fill: 'var(--raw-color-text-dim)' }}
                     tickFormatter={(val) => `$${val}`}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'var(--raw-color-surface)',
+                      border: '1px solid var(--raw-color-line)',
                       fontSize: '10px',
-                      fontFamily: 'var(--font-mono)'
+                      fontFamily: 'var(--raw-font-mono)'
                     }}
                   />
                   <Legend
-                    wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontFamily: 'var(--font-mono)' }}
+                    wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontFamily: 'var(--raw-font-mono)' }}
                   />
                   <Bar
                     name="Cost Per Engagement"
                     dataKey="cpe"
-                    fill="#1A2B3C"
+                    fill="var(--raw-color-accent-navy)"
                     opacity={0.2}
                     radius={[2, 2, 0, 0]}
                     isAnimationActive={false}
@@ -160,14 +160,14 @@ export function ROIDashboard() {
                     name="Earnings Per Click"
                     type="monotone"
                     dataKey="epc"
-                    stroke="#007BFF"
+                    stroke="var(--raw-color-accent)"
                     strokeWidth={3}
-                    dot={{ r: 4, fill: '#007BFF' }}
+                    dot={{ r: 4, fill: 'var(--raw-color-accent)' }}
                     isAnimationActive={false}
                   />
                 </ComposedChart>
               </ResponsiveContainer>
-            </div>
+            </Box>
             <Box padding="compact" surface="muted" border className="border-dashed">
               <Text variant="body" size="xs" color="dim">
                 Insight: Earnings Per Click has consistently outpaced Cost Per Engagement, resulting in an expanding profit margin and demonstrating high portfolio efficiency.
@@ -188,8 +188,8 @@ export function ROIDashboard() {
                 <AreaChart data={ROI_DATA}>
                   <defs>
                     <linearGradient id="colorEngage" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#007BFF" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#007BFF" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="var(--raw-color-accent)" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="var(--raw-color-accent)" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.1)" />
@@ -198,33 +198,33 @@ export function ROIDashboard() {
                     fontSize={10}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: '#374151' }}
+                    tick={{ fill: 'var(--raw-color-text-dim)' }}
                   />
                   <YAxis
                     fontSize={10}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: '#374151' }}
+                    tick={{ fill: 'var(--raw-color-text-dim)' }}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'var(--raw-color-surface)',
+                      border: '1px solid var(--raw-color-line)',
                       fontSize: '10px',
-                      fontFamily: 'var(--font-mono)'
+                      fontFamily: 'var(--raw-font-mono)'
                     }}
                   />
                   <Area
                     type="monotone"
                     dataKey="engagement"
-                    stroke="#007BFF"
+                    stroke="var(--raw-color-accent)"
                     fillOpacity={1}
                     fill="url(#colorEngage)"
                     isAnimationActive={false}
                   />
                 </AreaChart>
               </ResponsiveContainer>
-            </div>
+            </Box>
             <Box padding="compact" surface="muted" border className="border-dashed">
               <Text variant="body" size="xs" color="dim">
                 The portfolio has seen a 158% increase in engagement over the last 6 months, driven by strategic content releases and UX optimizations.
