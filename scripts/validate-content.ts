@@ -49,7 +49,7 @@ function parseFrontmatter(content: string) {
   if (!match) return null;
 
   const yaml = match[1];
-  const data: Record<string, any> = {};
+  const data: Record<string, string | number | string[] | undefined> = {};
 
   let currentKey = '';
   yaml.split('\n').forEach(line => {
