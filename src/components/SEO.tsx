@@ -10,6 +10,7 @@ interface SEOProps {
   image?: string;
   canonical?: string;
   schema?: Record<string, unknown> | Record<string, unknown>[];
+  googleVerification?: string;
 }
 
 export function SEO({
@@ -18,7 +19,8 @@ export function SEO({
   type = 'website',
   image,
   canonical,
-  schema
+  schema,
+  googleVerification
 }: SEOProps) {
   const { pathname } = useLocation();
 
@@ -46,6 +48,7 @@ export function SEO({
   return (
     <Helmet>
       {/* Standard metadata */}
+      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
