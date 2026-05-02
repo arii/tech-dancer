@@ -30,7 +30,7 @@ export default function Home() {
           paddingBottom={{ base: 12, md: 20 }}
           className="bg-surface overflow-hidden"
         >
-          <Stack gap={12}>
+          <Stack gap={10}>
             <Box display="flex" justify="between" align="center">
               <Text
                 variant="mono"
@@ -86,7 +86,7 @@ export default function Home() {
           <PathSelector />
         </Box>
 
-        <Stack gap={8} paddingX={{ base: 4, md: 6, lg: 12 }} marginTop={12}>
+        <Stack gap={6} paddingX={{ base: 4, md: 6, lg: 12 }} marginTop={12}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
             <Box 
               as={NavLink} 
@@ -103,7 +103,7 @@ export default function Home() {
 
           <Grid
             cols={{ base: 1, md: 2 }}
-            gap={8}
+            gap={6}
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"

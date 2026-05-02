@@ -83,10 +83,30 @@ export default defineConfig(({mode}) => {
       !process.env.VITEST && Sitemap({
         hostname: resolveHostname().replace(/\/$/, ''),
         basePath: base.replace(/\/$/, ''),
-        dynamicRoutes: dynamicRoutes.map(route => route.replace(/\/$/, '') || '/'),
+        dynamicRoutes: dynamicRoutes.filter(route => route !== '/').map(route => route.replace(/\/$/, '') || '/'),
         // Exclude infrastructure pages that are not real app routes
         exclude: ['/404', '/previews', '/previews/'],
         generateRobotsTxt: false,
+        xmlns: {
+          news: false,
+          xhtml: true,
+          image: false,
+          video: false,
+        },
+        changefreq: {
+          '/': 'daily',
+          '/blog': 'weekly',
+          '/gear': 'weekly',
+          '/research': 'weekly',
+          '*': 'monthly'
+        },
+        priority: {
+          '/': 1.0,
+          '/blog': 0.8,
+          '/gear': 0.8,
+          '/research': 0.8,
+          '*': 0.5
+        }
       }),
       ViteImageOptimizer({
         includePublic: true,

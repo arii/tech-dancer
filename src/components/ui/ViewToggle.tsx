@@ -17,9 +17,11 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           key={v}
           onClick={() => onChange(v)}
           className={cn(
-            'p-2 transition-colors',
+            'p-2 transition-colors cursor-pointer',
             v === 'card' ? 'border-r border-line' : '',
-            view === v ? 'bg-surface text-text-main' : 'bg-bg text-text-dim hover:text-text-main'
+            view === v 
+              ? 'bg-accent-navy text-white shadow-inner' 
+              : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface transition-colors'
           )}
           aria-label={v === 'card' ? 'Card view' : 'List view'}
           aria-pressed={view === v}

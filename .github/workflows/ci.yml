@@ -161,6 +161,8 @@ jobs:
           pnpm run build
 
       - name: Bundle Size Check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 dev-tools/td_cli.py bundle-size
 
       - name: Cache Playwright Browsers

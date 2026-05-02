@@ -4,6 +4,8 @@ import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 
+import { COLS_MAP, ROWS_MAP } from "./layout-maps"
+
 interface GridProps extends BoxProps {
   cols?: ResponsiveProp<number | string>
   rows?: ResponsiveProp<number | string>
@@ -16,8 +18,8 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
         ref={ref}
         className={composeStyles(
           "grid",
-          getResponsiveClasses(cols, "grid-cols-"),
-          getResponsiveClasses(rows, "grid-rows-"),
+          getResponsiveClasses(cols, "", (v) => COLS_MAP[v as keyof typeof COLS_MAP] || ""),
+          getResponsiveClasses(rows, "", (v) => ROWS_MAP[v as keyof typeof ROWS_MAP] || ""),
           className
         )}
         {...props}

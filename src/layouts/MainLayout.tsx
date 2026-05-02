@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
@@ -20,7 +20,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   // Unified Scroll Management: Reset on navigation, Restore on history
-  useLayoutEffect(() => {
+  useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 

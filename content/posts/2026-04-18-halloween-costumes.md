@@ -24,4 +24,4 @@ I've stress-tested a specific **Pumpkin outfit** that works perfectly for the so
 
 The key is Keeping the costume flexible. Avoid anything that restricts the ribcage or the shoulder blades. You want to look like a pumpkin but move like a technical dancer.
 
-[Check out the Gear specific review here](/lab)
+[Check out the Gear specific review here](/gear)
