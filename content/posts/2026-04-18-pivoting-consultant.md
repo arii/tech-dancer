@@ -2,7 +2,7 @@
 type: post
 title: "Pivoting to consulting and project based work"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Tech Dancer"
 category: "Tech Portfolio"
 excerpt: "A pun-intended look at moving from fixed industry roles to highly specialized project-based consultancy."
 image: ""

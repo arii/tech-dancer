@@ -1,7 +1,7 @@
 # PR Review Tooling: USAGE_NOTES
 
 ## Overview
-The PR review system is centralized in the unified Tech-Dancer CLI.
+The PR review system is centralized in the unified BoomTick.blog CLI.
 - **CLI Entry Point**: `dev-tools/td_cli.py`
 - **Read Context**: `dev-tools/logs/reviews/pr-context-{PR}.md` (Diffs, stats, and valid line ranges).
 - **Write Review**: `dev-tools/logs/reviews/pr-review-{PR}.md` (Checklist and JSON output block).

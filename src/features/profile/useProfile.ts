@@ -1,8 +1,8 @@
 import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
-    name: "Ariel Anders, PhD",
-    role: "MIT Roboticist // WCS Tech-Dancer",
+    name: "Tech Dancer",
+    role: "West Coast Swing Blogger // Data Science Consultant",
     sections: [
       {
         id: "dance-background",
@@ -11,23 +11,23 @@ const PROFILE_DATA: ProfileData = {
       },
       {
         id: "phd-matters",
-        title: "Why My PhD Matters",
-        content: "I believe in building things that actually work. Since 2010, I have dedicated myself to creating robotic systems that stay reliable even in complex situations. From my PhD at MIT to my industry experience, I don't just study data—I engineer real-world systems that deliver results. I consider myself a pragmatic roboticist: I use machine learning, traditional AI, and solid software design to build systems that are functional, robust, and ready to complete the task at hand."
+        title: "The Tech Dancer Perspective",
+        content: "With a background in building complex robotic systems, I bring a unique analytical lens to the world of West Coast Swing. I don't just study data—I look for the underlying structures that make dance, travel, and lifestyle systems work. As a consultant, I use data science to optimize every aspect of the dance experience, from movement mechanics to event logistics."
       },
       {
         id: "why-built",
-        title: "Why I Built This Site",
-        content: "People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I am fortunate to have a strong career, but I have always focused on making my lifestyle as financially efficient as possible. This site is how I share the 'stacks' I've built—everything from curated gear reviews to my travel-hacking systems."
+        title: "Why I Built BoomTick.blog",
+        content: "People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I have always focused on making my lifestyle as efficient as possible. This site is how I share the 'stacks' I've built—everything from curated gear reviews to my travel-hacking systems. It's about making the high-end dance lifestyle accessible to everyone through smart optimization."
       },
       {
         id: "financial-strategies",
-        title: "Financial Strategies for WCS",
-        content: "I love maximizing credit card perks and hotel benefits, which helps me make the WCS Events lifestyle both high-end and entirely feasible. I'm known for my bright, fun outfits and my optimized travel philosophy."
+        title: "Lifestyle & Travel Optimization",
+        content: "I love maximizing credit card perks and hotel benefits, which helps me make the WCS Events lifestyle both high-end and entirely feasible. I'm known for my bright, fun outfits and my optimized travel philosophy. On BoomTick.blog, I document these strategies to help fellow dancers spend less time worrying about logistics and more time on the dance floor."
       }
     ],
     details: [
-      { label: "EDUCATION", value: "PhD in Computer Science, MIT" },
-      { label: "FOCUS", value: "Robotics // AI // Data Analytics" },
+      { label: "IDENTITY", value: "Tech Dancer" },
+      { label: "FOCUS", value: "WCS // Travel // Data Science" },
       { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
     ]
 };

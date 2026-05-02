@@ -2,7 +2,7 @@
 type: post
 title: "Ignore scores and focus on your results"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Tech Dancer"
 category: "All about WCS"
 excerpt: "Setting granular measurable metrics for competitions, recording comp videos, and objective analysis."
 image: ""

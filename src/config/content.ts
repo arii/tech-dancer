@@ -6,9 +6,9 @@ export const CONTENT_CATEGORIES = [
 ] as const;
 
 export const SITE_METADATA = {
-  title: 'Tech-Dancer',
-  author: 'Ariel Anders, PhD',
-  description: 'The Roboticist\'s Guide to the West Coast Swing',
+  title: 'BoomTick.blog',
+  author: 'Tech Dancer',
+  description: 'A lifestyle and travel guide to West Coast Swing',
   repo: {
     owner: 'arii',
     name: 'tech-dancer'

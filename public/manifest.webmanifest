@@ -1,7 +1,7 @@
 {
-  "name": "Tech-Dancer",
-  "short_name": "TechDancer",
-  "description": "The Roboticist's Guide to WCS",
+  "name": "BoomTick.blog",
+  "short_name": "BoomTick",
+  "description": "A lifestyle and travel guide to West Coast Swing",
   "theme_color": "#1A2B3C",
   "background_color": "#ffffff",
   "display": "standalone",
