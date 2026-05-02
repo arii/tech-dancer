@@ -9,6 +9,7 @@ import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PageSkeleton } from './components/ui/PageSkeleton';
 import { GlobalErrorBoundary } from './components/GlobalErrorBoundary';
+import { GA_MEASUREMENT_ID } from './config/constants';
 import { routes as routeConfig } from './config/routes';
 import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { MainLayout } from './layouts/MainLayout';
@@ -24,6 +25,45 @@ export function RootLayout() {
   const location = useLocation();
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
+
+  useEffect(() => {
+    if (!import.meta.env.PROD) return;
+
+    // Inject Google Analytics script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+
+    // Initialize dataLayer and gtag
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function() {
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments);
+    };
+    window.gtag('js', new Date());
+
+    // Configure GA4 with automatic page_view tracking disabled
+    // We'll track page views manually on location change to handle SPA routing correctly
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      send_page_view: false
+    });
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!import.meta.env.PROD) return;
+
+    // Track page view on route change
+    window.gtag('event', 'page_view', {
+      page_path: location.pathname + location.search,
+      page_location: window.location.href,
+      page_title: document.title
+    });
+  }, [location]);
 
   useEffect(() => {
     const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';
