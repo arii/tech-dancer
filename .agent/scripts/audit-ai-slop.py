@@ -2,7 +2,7 @@
 """
 AI Slop Audit Script
 
-Searches codebase for banned language per BANLIST.md and APPROVEDLIST.md
+Searches codebase for banned language per audit.config.yaml
 Generates actionable audit report with before/after fixes
 """
 
@@ -12,45 +12,34 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Tuple
-
-# Banned term categories
-BANNED_TERMS = {
-    "weak_intensifiers": ["actually", "really", "basically", "kind of", "sort of"],
-    "corporate_speak": ["curated", "synergy", "next-level", "cutting-edge", "empower", "industry-leading"],
-    "credential_crutch": ["As a PhD", "In my research", "Given my robotics", "My analysis suggests"],
-    "academic_scaffolding": ["Utilize", "Facilitate", "Methodology", "Pedagogical", "It was observed"],
-    "wcs_conflicts": ["The Circuit", "Circuit Points", "Point Chasing"],
-    "robotics_jargon": ["Kinetics", "Signal Latency", "Actuate", "Interface"],
-    "passive_voice": ["can be", "will be", "is seen", "is applied", "is facilitated"],
-    "false_authority": ["Studies show", "Everyone agrees", "As we can see", "It's important to note"],
-    "ai_cliches": ["Tapestry", "Vibrant", "Testament", "Unlock your potential", "Game-changing", 
-                   "Unprecedented", "Journey", "Heartbeat", "Quintessential", "Strategic Vulnerability",
-                   "Narrative Grounding", "In the world of", "But the reality is", "Picture this"],
-}
-
-APPROVED_FIXES = {
-    "actually": "Delete",
-    "really": "Delete",
-    "curated": "Replace with: selected, tested, chosen",
-    "fantastic": "Delete or be specific",
-    "can be": "Convert to active voice",
-    "utilize": "Replace with: use, do",
-    "facilitate": "Replace with: fix, help, enable",
-    "As a PhD": "Delete",
-}
+import yaml
 
 class AISlopAuditor:
-    def __init__(self, root_dir: str = "."):
+    def __init__(self, root_dir: str = ".", config_path: str = ".agent/audit.config.yaml"):
         self.root_dir = Path(root_dir)
+        self.config_path = self.root_dir / config_path
         self.violations: List[Dict] = []
         self.exclude_dirs = {"node_modules", "dist", ".git", ".playwright", "test-results"}
         self.file_extensions = {".tsx", ".ts", ".md", ".jsx", ".js"}
-    
+        self.load_config()
+
+    def load_config(self):
+        try:
+            with open(self.config_path, 'r') as f:
+                self.config = yaml.safe_load(f)
+        except Exception as e:
+            print(f"Error loading config: {e}")
+            self.config = {"categories": {}}
+
     def search_violations(self) -> None:
         """Search entire codebase for banned terms"""
         print("🔍 Scanning codebase for banned language...")
         
-        for category, terms in BANNED_TERMS.items():
+        categories = self.config.get("categories", {})
+        for category, details in categories.items():
+            terms = details.get("terms", [])
+            fix = details.get("fix", "Fix per category")
+
             for term in terms:
                 # Build grep pattern (case-insensitive for most terms)
                 pattern = f"\\b{re.escape(term)}\\b"
@@ -80,7 +69,7 @@ class AISlopAuditor:
                                     "content": content.strip(),
                                     "term": term,
                                     "category": category,
-                                    "fix": APPROVED_FIXES.get(term, f"Fix per {category}")
+                                    "fix": fix
                                 })
                 
                 except subprocess.CalledProcessError:
@@ -160,7 +149,7 @@ class AISlopAuditor:
         report += "4. Commit with clear message referencing this audit\n\n"
         
         report += "---\n\n"
-        report += "**Reference:** See `.agent/BANLIST.md` and `.agent/APPROVEDLIST.md` for full standards\n"
+        report += "**Reference:** See `.agent/audit.config.yaml` for full standards\n"
         
         return report
     
@@ -179,7 +168,9 @@ def main():
     
     # Save to file
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    output_file = Path(".agent/workflows") / f"ai-slop-audit-{timestamp}.md"
+    output_dir = Path(".agent/workflows")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_file = output_dir / f"ai-slop-audit-{timestamp}.md"
     output_file.write_text(report)
     
     print(f"\n✅ Report saved to: {output_file}")
