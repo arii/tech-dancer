@@ -110,9 +110,9 @@ export default function ResearchDetail() {
 
         <Box border surface="default" padding={{ base: 8, md: 12 }} className="rounded-none">
           <Stack gap={12}>
-            {tool.id === 'blog-drafter' ? (
+            {tool.id === 'blog-drafter' && tool.status !== 'Coming Soon' ? (
               <BlogDrafter />
-            ) : tool.id === 'wcs-scraper' ? (
+            ) : tool.id === 'wcs-scraper' && tool.status !== 'Coming Soon' ? (
               <WCSScraperTool />
             ) : (
               <Stack gap={12}>

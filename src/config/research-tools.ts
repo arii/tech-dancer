@@ -11,7 +11,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     id: 'wcs-scraper',
     name: 'WCS Prelim Scoring Scraper',
     category: 'Dance Research',
-    status: 'Active',
+    status: 'Coming Soon',
     layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
   },
   {
@@ -20,13 +20,6 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Content Generation',
     status: 'Active',
     layman: 'Drafter tool to generate blog posts using AI with human feedback in the loop.'
-  },
-  {
-    id: 'flight-finder',
-    name: 'Event Flight Finder',
-    category: 'Logistics',
-    status: 'Active',
-    layman: 'Flight finder for WCS events - optimizing travel routes and finding the best deals.'
   },
   {
     id: 'ux-auditor',

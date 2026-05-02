@@ -1,40 +1,52 @@
 ---
 type: post
-title: "Why I have the Amex Platinum and Hyatt card"
+title: "Coming Soon: The Comprehensive Financial Strategy Guide for Dancers"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Travel/Lifestyle"
-excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible credit-as-debit philosophy."
+excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle."
 image: ""
 tags:
-  - financial literacy
-  - travel hacking
+  - financial-literacy
+  - travel-hacking
   - wcs
 ---
 
-## Financial Literacy for WCS Events
+<Notice type="info">
+**Lab Notes: Financial Engineering**
 
-Attending West Coast Swing events shouldn't be a financial burden. Over the years, I've developed a travel optimization system. It relies on high-tier travel credits and a strict debit-first philosophy.
-
-### The Stack: Amex Platinum & Hyatt Card
-
-I carry both the American Express Platinum and the World of Hyatt Credit Card. 
-
-1. **Amex Platinum:** My entry point to lounges and high-end flight credits. When you're spending 20 weekends a year in airports, lounge access isn't a luxury; I need a quiet place to work at the airport.
-2. **Hyatt Card:** Hyatt has the most valuable point redemptions in the major hotel chains. Status stacking here ensures late checkouts (critical for social dance recovery) and breakfast credits.
-
-### The "Credit-as-Debit" Rule
-
-<Notice type="warning">
-**Financial Health Disclaimer**
-
-This content is a prerequisite for any credit card strategy: always use credit cards as debit cards. Never carry a balance. I strongly recommend signing up for a Roth IRA before you start exploring credit card points. Financial stability is the foundation of your long-term dance journey.
+- **Current State:** Ad-hoc event booking and manual expense tracking.
+- **Why Improvement is Needed:** WCS travel costs are rising, and lack of a systematic points strategy leads to missed savings.
+- **Action Items:**
+  - [x] Finalize Hyatt status-stacking breakdown.
+  - [ ] Draft "Credit-as-Debit" workflow.
+  - [ ] Create 2026 event budget template.
 </Notice>
 
-**This is the most important part:** If you don't have the cash in your checking account to cover the dance fee or the flight, *don't buy it*.
+## The Problem: WCS Travel is Expensive
 
-Financial stability allows for better dancing because you're not stressed about the cost of the next workshop.
+Attending West Coast Swing events is one of the most rewarding parts of the dance lifestyle, but it can also be a significant financial burden. Between event passes, flights, hotels, and workshops, the costs add up quickly.
 
-### Avoid FOMO
+I am currently drafting a **Comprehensive Financial Strategy Guide** specifically tailored for the active WCS dancer.
 
-Don't attend events outside your means. The WCS community is great, but your financial health is the foundation of your long-term dance progression.
+### What's Coming
+
+This guide will move beyond basic "saving tips" and look at the dance journey as a logistics and optimization problem.
+
+#### [ ] Budget Planning
+How to forecast your yearly dance expenses and set aside a "Dance Fund" that doesn't compromise your long-term financial health.
+
+#### [ ] Credit Card Strategy
+A deep dive into status-stacking with travel cards. I'll explain why I use the Amex Platinum and Hyatt cards to secure late checkouts (critical for social dance recovery) and airport lounge access, all while maintaining a strict "credit-as-debit" philosophy.
+
+#### [ ] Cost Optimization
+Strategies for finding the best flight deals, managing group housing, and making the most of early-bird registration windows.
+
+### Timeline for Release
+
+The full guide is undergoing final review and will be available in the coming weeks. My goal is to help you build a sustainable financial foundation that allows for more dancing and less stress.
+
+<Notice type="info">
+**Sustainability is Key**
+The best way to improve your dance is to stay in the game. Financial stability is the foundation of that longevity.
+</Notice>
