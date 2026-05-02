@@ -1,0 +1,38 @@
+
+> boomtick-blog@0.0.0 build /home/ari/tech-dancer
+> shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build
+
+
+> boomtick-blog@0.0.0 type-check /home/ari/tech-dancer
+> tsc --noEmit
+
+vite v6.4.2 building for production...
+transforming...
+✓ 39 modules transformed.
+
+✨ [36m[vite-plugin-image-optimizer][39m - optimized images successfully: 
+[2mdist[22m/[94mpwa-192x192.png[39m                 [90m[32m0%[39m[90m    [39m [33m[1mskipped[22m[39m [2moriginal: 0.15 kB <= optimized: 0.15 kB[22m
+[2mdist[22m/[94mpwa-512x512.png[39m                 [90m[32m0%[39m[90m    [39m [33m[1mskipped[22m[39m [2moriginal: 0.36 kB <= optimized: 0.36 kB[22m
+[2mdist[22m/[94massets/comp_analysis_hero.webp[39m  [90m[32m-1%[39m[90m   [39m [2m68.77 kB ⭢  68.42 kB[22m
+[2mdist[22m/[94mfavicon.svg[39m                     [90m[32m0%[39m[90m    [39m [33m[1mskipped[22m[39m [2moriginal: 0.24 kB <= optimized: 0.24 kB[22m
+
+💰 total savings = [32m0.34kB[39m/[32m68.77kB[39m ≈ [32m0%[39m
+
+
+✗ Build failed in 3.40s
+error during build:
+[vite]: Rollup failed to resolve import "@vercel/analytics/react" from "/home/ari/tech-dancer/src/App.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`
+    at viteLog (file:///home/ari/tech-dancer/node_modules/.pnpm/vite@6.4.2_@types+node@22.19.17_jiti@2.6.1_lightningcss@1.32.0_terser@5.46.2_tsx@4.21.0_yaml@2.8.3/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:46399:15)
+    at file:///home/ari/tech-dancer/node_modules/.pnpm/vite@6.4.2_@types+node@22.19.17_jiti@2.6.1_lightningcss@1.32.0_terser@5.46.2_tsx@4.21.0_yaml@2.8.3/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:46457:18
+    at onwarn (file:///home/ari/tech-dancer/node_modules/.pnpm/@vitejs+plugin-react@5.2.0_vite@6.4.2_@types+node@22.19.17_jiti@2.6.1_lightningcss@1.32_07f3e19a2ffe62146fb79011344820c8/node_modules/@vitejs/plugin-react/dist/index.js:76:7)
+    at file:///home/ari/tech-dancer/node_modules/.pnpm/vite@6.4.2_@types+node@22.19.17_jiti@2.6.1_lightningcss@1.32.0_terser@5.46.2_tsx@4.21.0_yaml@2.8.3/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:46455:7
+    at onRollupLog (file:///home/ari/tech-dancer/node_modules/.pnpm/vite@6.4.2_@types+node@22.19.17_jiti@2.6.1_lightningcss@1.32.0_terser@5.46.2_tsx@4.21.0_yaml@2.8.3/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:46447:5)
+    at onLog (file:///home/ari/tech-dancer/node_modules/.pnpm/vite@6.4.2_@types+node@22.19.17_jiti@2.6.1_lightningcss@1.32.0_terser@5.46.2_tsx@4.21.0_yaml@2.8.3/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:46097:7)
+    at file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:21383:32
+    at Object.logger [as onLog] (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:23378:9)
+    at ModuleLoader.handleInvalidResolvedId (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:22122:26)
+    at file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:22080:26
+ ELIFECYCLE  Command failed with exit code 1.

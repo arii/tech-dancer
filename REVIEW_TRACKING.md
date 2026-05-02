@@ -4,14 +4,15 @@
 
 | PR # | Title | Author | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| #626 | chore(branding): migrate identity to BoomTick.Blog | @arii | Approved | |
-| #625 | chore: rebrand site to BoomTick.blog and update persona | @arii | Approved | |
+| #628 | feat: consolidated rebranding (BoomTick.blog) | @antigravity | Pending | Consolidates #616, #625, #626 |
+| #626 | chore(branding): migrate identity to BoomTick.Blog | @arii | Consolidated | Merged into #628 |
+| #625 | chore: rebrand site to BoomTick.blog and update persona | @arii | Consolidated | Merged into #628 |
 | #623 | feat: add AI slop audit workflow to .agent/ | @arii | Approved | |
 | #621 | Update SVG icon to BoomTick.blog | @arii | Approved | |
 | #620 | Improve language and remove banned terms | @arii | Approved | |
-| #619 | Remove stock content and update Research Lab strategy | @arii | Approved | |
-| #616 | Migration: Phase 2 - Branding Transition to BoomTick.blog | @arii | Approved | |
-| #613 | Fix sitemap production URL on Vercel | @arii | Approved | |
+| #619 | Remove stock content and update Research Lab strategy | @arii | Merged | |
+| #616 | Migration: Phase 2 - Branding Transition to BoomTick.blog | @arii | Consolidated | Merged into #628 |
+| #613 | Fix sitemap production URL on Vercel | @arii | Postponed | Keep site verification |
 
 ## Conflict Analysis
 

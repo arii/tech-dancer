@@ -74,11 +74,7 @@ export default function Contact() {
     <>
       <SEO
         title="Contact"
-<<<<<<< HEAD
         description="Get in touch with BoomTick.blog. Send your feedback, inquiries, or collaboration proposals regarding West Coast Swing, travel, and lifestyle."
-=======
-        description="Get in touch with boomtick-blog. Send your feedback, inquiries, or collaboration proposals regarding West Coast Swing and data science."
->>>>>>> pr-626
       />
       <ContactFormView
         register={register}

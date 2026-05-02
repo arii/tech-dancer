@@ -1,57 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-<<<<<<< HEAD
-    <title>BoomTick.blog // Redirecting...</title>
-=======
-    <title>boomtick-blog // Redirecting...</title>
->>>>>>> pr-626
+    <meta charset="utf-8" />
+    <title>Page Not Found | BoomTick.blog</title>
     <script type="text/javascript">
-      // SPA redirect for GitHub Pages.
-      // This script handles redirects for both the main deployment (/boomtick-blog/)
-      // and branch preview deployments (/boomtick-blog/<branch>/).
-      // It probes the path hierarchy to find the deepest index.html.
-      (function () {
-        var l = window.location;
-        var pathParts = l.pathname.split('/').filter(function (p) { return p !== ''; });
-
-        function redirect(baseDepth) {
-          var basePath = baseDepth === 0 ? '/' : '/' + pathParts.slice(0, baseDepth).join('/') + '/';
-          var routePath = pathParts.slice(baseDepth).join('/').replace(/&/g, '~and~');
-          l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            basePath + '?/' + routePath +
-            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState(...),
+      // which will cause the browser to refresh the page without actually
+      // reloading it.
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
           );
         }
-
-        // Probing depths to find where the app is actually hosted
-        // Start with root (depth 0)
-        var checkDepths = [0].concat(pathParts.map(function (_, i) { return i + 1; }));
-
-        var checks = checkDepths.map(function (depth) {
-          var path = depth === 0 ? '/index.html' : '/' + pathParts.slice(0, depth).join('/') + '/index.html';
-          return fetch(path, { method: 'HEAD', cache: 'no-store' })
-            .then(function (r) { return r.ok ? depth : -1; })
-            .catch(function () { return -1; });
-        });
-
-        Promise.all(checks).then(function (depths) {
-          var best = -1;
-          for (var i = 0; i < depths.length; i++) {
-            if (depths[i] > best) best = depths[i];
-          }
-
-          if (best !== -1) {
-            redirect(best);
-          } else {
-            // Fallback to root if all probes fail
-            redirect(0);
-          }
-        });
-      })();
+      }(window.location))
     </script>
   </head>
   <body>

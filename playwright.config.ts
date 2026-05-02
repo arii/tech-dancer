@@ -1,12 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = process.env.PORT || 4173;
-<<<<<<< HEAD
-const BASE_PATH = process.env.VITE_BASE_PATH || '/';
-=======
-const BASE_PATH = process.env.VITE_BASE_PATH || '/boomtick-blog/';
->>>>>>> pr-626
-
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -15,8 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    // Standardize baseURL for local and CI
-    baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
   projects: [
@@ -26,14 +18,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm run preview --port 4173 --strictPort',
-    url: `http://localhost:${PORT}${BASE_PATH}`,
+    command: 'pnpm run dev',
+    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    stdout: 'ignore',
-    stderr: 'pipe',
-    timeout: 60 * 1000,
-    env: {
-      VITE_BASE_PATH: BASE_PATH
-    }
   },
 });

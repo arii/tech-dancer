@@ -18,13 +18,8 @@ export interface HistoryEntry {
   data: DraftData;
 }
 
-<<<<<<< HEAD
 const STORAGE_KEY = 'boomtick-blog-draft';
 const HISTORY_KEY = 'boomtick-blog-history';
-=======
-const STORAGE_KEY = 'boomtick-blog-blog-draft';
-const HISTORY_KEY = 'boomtick-blog-blog-history';
->>>>>>> pr-626
 const DEBOUNCE_WAIT = 1000; // 1 second
 
 // Safe ID generator with fallback for legacy browsers
