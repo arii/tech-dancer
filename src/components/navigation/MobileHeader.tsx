@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -7,15 +8,16 @@ interface MobileHeaderProps {
   isOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
+  scrolled: boolean;
 }
 
-export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
+export function MobileHeader({ isOpen, onToggle, onClose, scrolled }: MobileHeaderProps) {
   return (
     <Box
       as="nav"
       aria-label="Mobile Navigation"
       layout="mobileHeader"
-      className="transition-[backdrop-filter] duration-300 bg-surface border-b border-line"
+      className={cn("transition-[backdrop-filter,box-shadow] duration-300 bg-surface border-b border-line", scrolled ? "shadow-md" : "")}
     >
       <Box as={NavLink} to="/" onClick={onClose}>
         <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">TECH-DANCER</Text>

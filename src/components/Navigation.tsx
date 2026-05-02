@@ -45,6 +45,7 @@ export default function Navigation() {
         isOpen={isOpen}
         onToggle={() => setIsOpen(!isOpen)}
         onClose={() => setIsOpen(false)}
+        scrolled={scrolled}
       />
 
       {/* Mobile Menu Overlay */}
@@ -64,8 +65,8 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
+          "transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 border-r",
+          scrolled ? "backdrop-blur-xl bg-surface/90 border-line shadow-md" : "border-transparent"
         )}
       >
         <Stack
