@@ -14,7 +14,7 @@ tags:
 
 ## Suede Your Dance Shoes
 
-Buying dedicated dance shoes can be expensive and often limited in style. My preferred system is to "upgrade" high-comfort sneakers or flats using adhesive suede.
+Dedicated dance shoes cost more and offer limited styles. My preferred system is to "upgrade" high-comfort sneakers or flats using adhesive suede.
 
 ### Potential Options and Analysis
 
