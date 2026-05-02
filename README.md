@@ -37,6 +37,8 @@ pnpm build
 pnpm preview
 ```
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md) and [AGENTS.md](./AGENTS.md) for coding standards, architectural patterns, and contribution workflows.
+
 ## Firebase Security Rules
 To deploy the Firestore security rules for the UX Auditor, use the Firebase CLI:
 ```bash
