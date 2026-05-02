@@ -6,24 +6,19 @@
 
 ## Contents
 
-### Standards & References
-
-- **APPROVEDLIST.md** - Approved language, active voice patterns, specific terminology, scar tissue format
-- **BANLIST.md** - Prohibited words, phrases, and writing patterns
+### Automation Configuration
+- **audit.config.yaml** - Unified configuration defining all banned language categories, terms, and standard fixes.
 
 ### Workflows
 
 Located in `.agent/workflows/`:
-
-- **audit-ai-slop.md** - Step-by-step manual audit process + approved alternatives reference
 - **ai-slop-audit-[DATE].md** - Auto-generated audit results (latest run)
 - Other workflows: mass-audit-issues, review-pr, review-ux, etc.
 
 ### Scripts
 
 Located in `.agent/scripts/`:
-
-- **audit-ai-slop.py** - Automated auditor that searches codebase and generates action plan
+- **audit-ai-slop.py** - Automated auditor that searches codebase and generates action plan. Consumes `audit.config.yaml`.
 
 ---
 
@@ -41,10 +36,6 @@ This generates a timestamped report in `.agent/workflows/ai-slop-audit-[DATE].md
 - Context for each violation
 - Action plan with next steps
 
-### Manual Audit
-
-See `.agent/workflows/audit-ai-slop.md` for step-by-step grep commands to search for each category of banned language.
-
 ### Apply Fixes
 
 Follow the audit report to fix violations in priority order:
@@ -61,7 +52,7 @@ Follow the audit report to fix violations in priority order:
    ↓
 2. Review violations by priority
    ↓
-3. Apply fixes per APPROVEDLIST.md
+3. Apply fixes per audit.config.yaml
    ↓
 4. Run pnpm build to verify
    ↓
@@ -80,22 +71,7 @@ Follow the audit report to fix violations in priority order:
 
 ## Standards
 
-All content must follow:
-
-**BANLIST.md:**
-- ❌ No weak intensifiers (actually, really, basically)
-- ❌ No corporate speak (curated, synergy, empower)
-- ❌ No credential crutch (As a PhD, In my research)
-- ❌ No passive voice
-- ❌ No invented scar tissue
-- ❌ No AI clichés
-
-**APPROVEDLIST.md:**
-- ✅ Active voice only
-- ✅ Specific terminology (WCS domain)
-- ✅ Technical precision (measurements, specific examples)
-- ✅ Direct language (Fix, Stop, Test, Measure)
-- ✅ User-provided scar tissue only
+All content must follow rules defined in `audit.config.yaml`. No weak intensifiers, corporate speak, credential crutch, passive voice, invented scar tissue, or AI clichés. Active voice only, specific terminology, direct language.
 
 ---
 
