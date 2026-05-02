@@ -20,7 +20,7 @@ export function SEO({
   image,
   canonical,
   schema,
-  googleVerification = GOOGLE_SITE_VERIFICATION
+  googleVerification
 }: SEOProps) {
   const { pathname } = useLocation();
 
@@ -48,7 +48,7 @@ export function SEO({
   return (
     <Helmet>
       {/* Standard metadata */}
-      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+      {googleVerification && googleVerification !== GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={googleVerification} />}
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
