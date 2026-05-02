@@ -1,42 +1,40 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { getResourceBySlug } from '@/lib/content';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { SITE_METADATA } from '@/config/content';
 
+import { BlogDrafter } from '@/features/lab/BlogDrafter';
+import { WCSScraperTool } from './components/WCSScraperTool';
+
 export default function ResearchDetail() {
-  const { slug } = useParams();
+  const { id: toolId } = useParams();
   const navigate = useNavigate();
-  const { data: resource } = useQuery({
-    queryKey: ['resources', slug],
-    queryFn: () => slug ? getResourceBySlug(slug) : undefined,
-    enabled: !!slug
-  });
+  const { getTool } = useResearch();
+  
+  const tool = useMemo(() => toolId ? getTool(toolId) : undefined, [toolId, getTool]);
 
   const structuredData = useMemo(() => {
-    if (!resource) return null;
+    if (!tool) return null;
     return {
       "@context": "https://schema.org",
       "@type": "Article",
-      "headline": resource.title,
-      "description": resource.excerpt,
+      "headline": tool.name,
+      "description": tool.layman,
       "author": {
         "@type": "Person",
-        "name": resource.author || SITE_METADATA.author,
+        "name": SITE_METADATA.author,
         "url": `${BASE_URL}/about`
       },
-      "datePublished": resource.date,
       "publisher": {
         "@type": "Organization",
         "name": SITE_NAME
       }
     };
-  }, [resource]);
+  }, [tool]);
 
-  if (!resource) {
+  if (!tool) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
@@ -52,19 +50,25 @@ export default function ResearchDetail() {
   return (
     <>
       <SEO
-        title={resource.title}
-        description={resource.excerpt}
+        title={tool.name}
+        description={tool.layman}
         type="article"
         schema={structuredData}
       />
       <Box as="article" paddingY={12}>
         <PageHeader
-          label={resource.category.toUpperCase()}
-          title={resource.title}
-          description={resource.excerpt}
+          label={tool.category.toUpperCase()}
+          title={tool.name}
+          description={tool.layman}
         />
         <Stack gap={8} marginTop={12}>
-           {/* Component implementation details... */}
+           {toolId === 'blog-drafter' && <BlogDrafter />}
+           {toolId === 'wcs-scraper' && <WCSScraperTool />}
+           {toolId !== 'blog-drafter' && toolId !== 'wcs-scraper' && (
+             <Box padding="panel" border surface="muted" textAlign="center">
+               <Text variant="mono" size="xs" color="dim">SYSTEM_LOG: Console for "{tool.name}" is currently in development.</Text>
+             </Box>
+           )}
         </Stack>
       </Box>
     </>
