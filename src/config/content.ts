@@ -1,16 +1,16 @@
 export const CONTENT_CATEGORIES = [
   { id: 'Lifestyle', label: 'Lifestyle', description: 'Personal stories, travel, and routines.' },
-  { id: 'Tech', label: 'Tech', description: 'Robotics, software engineering, and AI.' },
+  { id: 'Tech', label: 'Tech', description: 'Data Science, software engineering, and AI.' },
   { id: 'Gear', label: 'Gear', description: 'Hardware reviews and DIY modifications.' },
   { id: 'Travel', label: 'Travel', description: 'WCS event logistics and travel optimization hacks.' }
 ] as const;
 
 export const SITE_METADATA = {
-  title: 'Tech-Dancer',
-  author: 'Ariel Anders, PhD',
-  description: 'The Roboticist\'s Guide to the West Coast Swing',
+  title: 'BoomTick.Blog',
+  author: 'Tech Dancer',
+  description: 'The West Coast Swing Lifestyle Blog',
   repo: {
     owner: 'arii',
-    name: 'tech-dancer'
+    name: 'boomtick-blog'
   }
 };

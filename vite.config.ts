@@ -29,7 +29,7 @@ export default defineConfig(({mode}) => {
       base = '/';
     } else if (isGHAction) {
       // If we're on a branch other than main in GH Actions, include the branch name in the base path
-      base = isMainBranch ? '/tech-dancer/' : `/tech-dancer/${ghBranch}/`;
+      base = isMainBranch ? '/boomtick-blog/' : `/boomtick-blog/${ghBranch}/`;
     } else {
       base = '/';
     }
@@ -38,7 +38,7 @@ export default defineConfig(({mode}) => {
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    if (isVercel) return 'https://tech-dancer.vercel.app';
+    if (isVercel) return 'https://boomtick-blog.vercel.app';
     return 'https://arii.github.io';
   };
 

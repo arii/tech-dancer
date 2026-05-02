@@ -2,9 +2,9 @@
 type: post
 title: "How I used GitHub Actions to power this site"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Tech Dancer"
 category: "Tech"
-excerpt: "Automated deployments and CI/CD pipelines for a roboticist's living portfolio."
+excerpt: "Automated deployments and CI/CD pipelines for a data scientist's living portfolio."
 image: ""
 tags:
   - automation
@@ -23,4 +23,4 @@ Every time I update a gear review or add a data study, the pipeline triggers:
 2. **Build generation:** Compiling the TypeScript assets.
 3. **Auto-deploying updates instantly.**
 
-This is the same philosophy I apply to robotics: automate the repetitive so you can focus on the complex.
+This is the same philosophy I apply to data science: automate the repetitive so you can focus on the complex.

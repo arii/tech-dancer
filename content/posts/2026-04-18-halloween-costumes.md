@@ -2,7 +2,7 @@
 type: post
 title: "Halloween costumes you can dance in"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Tech Dancer"
 category: "Gear Reviews"
 excerpt: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test."
 image: ""

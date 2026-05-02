@@ -4,14 +4,14 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 
-export default function ArielProfile() {
+export default function TechDancerProfile() {
   const { bio } = useProfile();
 
   return (
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: Roboticist, Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
+        description="Tech Dancer: West Coast Swing Blogger and Data Science Consultant. Exploring the intersection of technical systems and creative movement."
       />
       
       <PageHeader

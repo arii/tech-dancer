@@ -80,15 +80,15 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.goto('./blog');
     await page.waitForLoadState('networkidle');
 
-    const categoryButton = page.getByRole('button', { name: 'Tech Portfolio', exact: true }).or(page.getByRole('button', { name: 'Tech Portfolio' }).first());
+    const categoryButton = page.getByRole('button', { name: 'Tech', exact: true }).or(page.getByRole('button', { name: 'Tech' }).first());
     if (await categoryButton.isVisible()) {
       await categoryButton.click();
-      await expect(page).toHaveURL(/category=Tech[+%20]Portfolio/);
+      await expect(page).toHaveURL(/category=Tech/);
 
       await page.reload();
       await page.waitForLoadState('networkidle');
 
-      const categoryButtonReload = page.getByRole('button', { name: 'Tech Portfolio', exact: true }).or(page.getByRole('button', { name: 'Tech Portfolio' }).first());
+      const categoryButtonReload = page.getByRole('button', { name: 'Tech', exact: true }).or(page.getByRole('button', { name: 'Tech' }).first());
       await expect(categoryButtonReload).toHaveClass(/bg-text-main/);
     }
   });

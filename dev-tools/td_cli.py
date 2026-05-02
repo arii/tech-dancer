@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-td_cli.py - Unified Tech-Dancer Developer CLI
+td_cli.py - Unified boomtick-blog Developer CLI
 
 Consolidates multiple fragmented scripts into a single entry point for repo automation.
 Supports structured JSON output for tool integration.
@@ -526,7 +526,7 @@ def handle_manage_reviews(args):
     if args.json: print(json.dumps({"status": "success", "prs": prs_data}, indent=2))
 
 def main():
-    parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
+    parser = argparse.ArgumentParser(description="boomtick-blog Repository CLI")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
