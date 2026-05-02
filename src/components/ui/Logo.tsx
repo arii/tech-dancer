@@ -33,7 +33,8 @@ export function Logo({ className }: LogoProps) {
             fontSize="38"
             fill="var(--raw-color-accent-navy)"
             letterSpacing="-0.02em">
-        boomtick
+        <tspan fontWeight="700">boom</tspan>
+        <tspan fontWeight="400" fill="var(--raw-color-accent)">tick</tspan>
       </text>
     </svg>
   );
