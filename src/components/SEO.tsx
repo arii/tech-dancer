@@ -48,7 +48,6 @@ export function SEO({
   return (
     <Helmet>
       {/* Standard metadata */}
-      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />

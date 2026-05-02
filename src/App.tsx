@@ -36,8 +36,25 @@ export function RootLayout() {
     return () => clearTimeout(timer);
   }, [setShowEmailBar]);
 
-  // Google Analytics 4 page view tracking
+  // Google Analytics 4 script injection and page view tracking
   useEffect(() => {
+    // 1. Inject script if not already present
+    if (!window.gtag) {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function (command: string, ...args: unknown[]) {
+        window.dataLayer.push([command, ...args]);
+      };
+      window.gtag('js', new Date());
+      // Disable default page_view to allow manual control in SPAs
+      window.gtag('config', GA_MEASUREMENT_ID, { send_page_view: false });
+    }
+
+    // 2. Track page view on location change
     if (typeof window.gtag === 'function') {
       window.gtag('config', GA_MEASUREMENT_ID, {
         page_path: location.pathname + location.search,
