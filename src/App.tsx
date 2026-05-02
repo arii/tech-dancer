@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Analytics } from '@vercel/analytics/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -59,6 +60,7 @@ export function RootLayout() {
       <AnimatePresence>
         {showEmailBar && <NewsletterBanner />}
       </AnimatePresence>
+      <Analytics />
     </>
   );
 }
