@@ -43,7 +43,11 @@ export default function ResearchDetail() {
         "description": study.excerpt,
         "author": {
           "@type": "Person",
+<<<<<<< HEAD
           "name": study.author || "Tech Dancer",
+=======
+          "name": study.author || SITE_METADATA.author,
+>>>>>>> origin/rebrand-boomtick-blog-1770114126300875003
           "url": `${BASE_URL}/about`
         },
         "datePublished": study.date,

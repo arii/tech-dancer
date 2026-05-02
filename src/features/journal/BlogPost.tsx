@@ -5,6 +5,7 @@ import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { SITE_METADATA } from '@/config/content';
 import { BlogPostDetail } from './components/BlogPostDetail';
 
 export default function BlogPost() {
@@ -25,7 +26,7 @@ export default function BlogPost() {
       "description": post.excerpt,
       "author": {
         "@type": "Person",
-        "name": post.author || "Tech Dancer",
+        "name": post.author || SITE_METADATA.author,
         "url": `${BASE_URL}/about`
       },
       "datePublished": post.date,

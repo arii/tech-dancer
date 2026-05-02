@@ -1,7 +1,11 @@
 {
   "name": "BoomTick.blog",
   "short_name": "BoomTick",
+<<<<<<< HEAD
   "description": "A lifestyle and travel guide to West Coast Swing",
+=======
+  "description": "The West Coast Swing Lifestyle Blog",
+>>>>>>> origin/rebrand-boomtick-blog-1770114126300875003
   "theme_color": "#1A2B3C",
   "background_color": "#ffffff",
   "display": "standalone",

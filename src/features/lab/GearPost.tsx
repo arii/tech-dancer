@@ -5,6 +5,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
+import { SITE_METADATA } from '@/config/content';
 import { GearPostDetail } from './components/GearPostDetail';
 
 export default function GearPost() {
@@ -37,7 +38,7 @@ export default function GearPost() {
         },
         "author": {
           "@type": "Person",
-          "name": "Tech Dancer",
+          "name": SITE_METADATA.author,
           "url": `${BASE_URL}/about`
         },
         "datePublished": resource.date

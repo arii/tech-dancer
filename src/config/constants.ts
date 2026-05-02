@@ -1,8 +1,10 @@
+import { SITE_METADATA } from "@/config/content";
+
 export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
 export const SITE_NAME = 'BoomTick.blog';
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
-const DEFAULT_DESCRIPTION = "A lifestyle, travel, and data-driven guide to West Coast Swing. Exploring the community, gear, and experiences of modern social dancing.";
+const DEFAULT_DESCRIPTION = `The West Coast Swing Lifestyle Blog by ${SITE_METADATA.author}. Exploring the intersection of dance, physics, and engineering.`;
 
 export const STATIC_SCHEMAS = {
   HOME: {
@@ -12,8 +14,8 @@ export const STATIC_SCHEMAS = {
     "url": BASE_URL,
     "description": DEFAULT_DESCRIPTION,
     "publisher": {
-      "@type": "Organization",
-      "name": "Tech Dancer"
+      "@type": "Person",
+      "name": SITE_METADATA.author
     }
   },
   ABOUT: (bioName: string, bioRole: string) => ({
