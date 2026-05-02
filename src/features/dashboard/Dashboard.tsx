@@ -21,7 +21,7 @@ export default function Home() {
         description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
         schema={STATIC_SCHEMAS.HOME}
       />
-      <Stack gap={8}>
+      <Stack gap={6}>
         <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
           <PageHeader
             label="WELCOME"
@@ -38,7 +38,7 @@ export default function Home() {
           <PathSelector />
         </Box>
 
-        <Stack gap={8} paddingX={{ base: 4, md: 6, lg: 12 }}>
+        <Stack gap={6} paddingX={{ base: 4, md: 6, lg: 12 }}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
             <Box 
               as={NavLink} 
@@ -55,7 +55,7 @@ export default function Home() {
 
           <Grid
             cols={{ base: 1, md: 2 }}
-            gap={8}
+            gap={6}
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"

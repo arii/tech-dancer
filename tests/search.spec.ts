@@ -20,7 +20,7 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    await page.getByTestId('search-backdrop').click({ force: true });
+    await page.getByTestId('search-backdrop').click({ position: { x: 5, y: 5 }, force: true });
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
