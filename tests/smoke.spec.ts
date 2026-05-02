@@ -30,12 +30,13 @@ test('homepage loads without console errors', async ({ page }) => {
   await page.goto('./');
   await page.waitForLoadState('networkidle');
   const errors = getPageErrors(page);
-  expect(errors.filter(e =>
+  // Filter out known environment-specific errors
+  const filteredErrors = errors.filter(e =>
     !e.includes("Stack is not defined") &&
-    !e.includes("_vercel/insights/script.js") &&
     !e.includes("Failed to load resource") &&
-    !e.includes("[Vercel Web Analytics]")
-  )).toHaveLength(0);
+    !e.includes("Vercel Web Analytics")
+  );
+  expect(filteredErrors).toHaveLength(0);
 });
 
 test('all nav links are reachable and error-free', async ({ page }) => {
@@ -55,12 +56,12 @@ test('all nav links are reachable and error-free', async ({ page }) => {
     const response = await page.goto(href);
     await page.waitForLoadState('networkidle');
     expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
-    expect(errors.filter(e =>
+    const filteredErrors = errors.filter(e =>
       !e.includes("Stack is not defined") &&
-      !e.includes("_vercel/insights/script.js") &&
       !e.includes("Failed to load resource") &&
-      !e.includes("[Vercel Web Analytics]")
-    ), `Console errors at ${href}: ${errors.join(', ')}`).toHaveLength(0);
+      !e.includes("Vercel Web Analytics")
+    );
+    expect(filteredErrors, `Console errors at ${href}: ${errors.join(', ')}`).toHaveLength(0);
   }
 });
 
@@ -89,13 +90,13 @@ test('all post/content pages load without errors', async ({ page }) => {
       await page.waitForLoadState('networkidle');
 
       expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
+      const filteredErrors = errors.filter(e =>
+        !e.includes("Stack is not defined") &&
+        !e.includes("Failed to load resource") &&
+        !e.includes("Vercel Web Analytics")
+      );
       expect(
-        errors.filter(e =>
-          !e.includes("Stack is not defined") &&
-          !e.includes("_vercel/insights/script.js") &&
-          !e.includes("Failed to load resource") &&
-          !e.includes("[Vercel Web Analytics]")
-        ),
+        filteredErrors,
         `Console errors at ${href}:\n${errors.join('\n')}`
       ).toHaveLength(0);
     }
