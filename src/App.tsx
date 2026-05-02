@@ -60,7 +60,7 @@ export function RootLayout() {
       <AnimatePresence>
         {showEmailBar && <NewsletterBanner />}
       </AnimatePresence>
-      {import.meta.env.PROD && <Analytics />}
+      {import.meta.env.PROD && window.location.hostname !== "localhost" && <Analytics />}
     </>
   );
 }
