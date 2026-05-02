@@ -18,15 +18,15 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
+        description="BoomTick.blog: Exploring West Coast Swing through travel, lifestyle, and a touch of data science. The West Coast Swing Lifestyle Blog by Tech Dancer."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={6}>
         <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
           <PageHeader
             label="WELCOME"
-            title="The West Coast Swing Lifestyle Blog"
-            description="Technical systems and travel hacks for the modern competitive dancer."
+            title={<>The Lifestyle Guide <br className="hidden md:block" /> to West Coast Swing.</>}
+            description="Exploring West Coast Swing through travel, lifestyle, and a touch of data science."
             border="none"
             paddingBottom={0}
             titleSize="fluid-7"

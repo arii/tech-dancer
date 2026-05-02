@@ -2,7 +2,7 @@
 type: post
 title: "Coming Soon: The Comprehensive Financial Strategy Guide for Dancers"
 date: "2026-04-18"
-author: "Ariel Anders, PhD"
+author: "Tech Dancer"
 category: "Travel/Lifestyle"
 excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle."
 image: ""

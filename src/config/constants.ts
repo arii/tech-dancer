@@ -1,8 +1,8 @@
-export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, '');
+export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
 export const SITE_NAME = 'BoomTick.blog';
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
-const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Exploring the intersection of dance, physics, and engineering.";
+const DEFAULT_DESCRIPTION = "A lifestyle, travel, and data-driven guide to West Coast Swing. Exploring the community, gear, and experiences of modern social dancing.";
 
 export const STATIC_SCHEMAS = {
   HOME: {
@@ -12,8 +12,8 @@ export const STATIC_SCHEMAS = {
     "url": BASE_URL,
     "description": DEFAULT_DESCRIPTION,
     "publisher": {
-      "@type": "Person",
-      "name": "Ariel Anders"
+      "@type": "Organization",
+      "name": "Tech Dancer"
     }
   },
   ABOUT: (bioName: string, bioRole: string) => ({
@@ -22,7 +22,7 @@ export const STATIC_SCHEMAS = {
     "mainEntity": {
       "@type": "Person",
       "name": bioName,
-      "description": bioRole,
+      "description": "West Coast Swing enthusiast, traveler, and data science consultant.",
       "image": `${BASE_URL}/assets/comp_analysis_hero.webp`,
       "jobTitle": bioRole,
       "url": `${BASE_URL}/about`,

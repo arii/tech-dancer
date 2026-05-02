@@ -4,14 +4,14 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 
-export default function ArielProfile() {
+export default function Profile() {
   const { bio } = useProfile();
 
   return (
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: Roboticist, Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
+        description="Tech Dancer: West Coast Swing enthusiast, traveler, and data science consultant. Exploring the intersection of dance, travel, and lifestyle."
       />
       
       <PageHeader
@@ -53,9 +53,9 @@ export default function ArielProfile() {
                 <Box display="flex" gap={4} wrap>
                   {[
                     { label: 'INSTAGRAM', url: 'https://instagram.com' },
-                    { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
+                    { label: 'LINKEDIN', url: 'https://www.linkedin.com/in/arielanders/' },
                     { label: 'GITHUB', url: 'https://github.com/arii' },
-                    { label: 'PORTFOLIO', url: 'https://arii.github.io' }
+                    { label: 'PORTFOLIO', url: 'https://boomtick.blog' }
                   ].map((link) => (
                     <Box
                       key={link.label}

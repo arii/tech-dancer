@@ -22,13 +22,13 @@ const PATH_DATA = [
   },
   {
     id: 'roboticist' as PathID,
-    title: 'HIRING A ROBOTICIST?',
+    title: 'NEED DATA INSIGHTS?',
     wrapperClass: 'lg:col-span-5 bg-zinc-900',
     image: roboticistHero,
     titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'animation-delay-500',
     links: [
-      { text: 'Technical Portfolio', to: 'https://arii.github.io' },
+      { text: 'Data Science Consulting', to: '/about' },
       { text: 'Tech blog posts', to: '/blog?category=Tech' },
       { text: 'Data & Development Lab', to: '/research' },
     ],

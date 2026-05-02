@@ -155,9 +155,8 @@ jobs:
         env:
           NODE_ENV: production
           REPO_NAME: ${{ github.event.repository.name }}
+          VITE_BASE_PATH: /
         run: |
-          # Use consistent base path for CI tests to match visual snapshots
-          export VITE_BASE_PATH=/$REPO_NAME/
           pnpm run build
 
       - name: Bundle Size Check
@@ -182,20 +181,17 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
           pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
+          VITE_BASE_PATH: /
 
       - name: Run Lighthouse CI
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
-          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+          pnpm run lighthouse --collect.url="http://localhost:4173/"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          REPO_NAME: ${{ github.event.repository.name }}
 
       - name: Upload Test Results
         if: failure()

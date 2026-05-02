@@ -43,7 +43,7 @@ export default function ResearchDetail() {
         "description": study.excerpt,
         "author": {
           "@type": "Person",
-          "name": study.author || "Ariel Anders",
+          "name": study.author || "Tech Dancer",
           "url": `${BASE_URL}/about`
         },
         "datePublished": study.date,
@@ -159,7 +159,7 @@ export default function ResearchDetail() {
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
-                          This specialized module is currently being integrated into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
+                          This specialized module is currently being integrated into the BoomTick.blog platform. We are finalizing the analysis models and UI components.
                         </Text>
                       </Stack>
                     </Stack>

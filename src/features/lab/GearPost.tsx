@@ -37,7 +37,7 @@ export default function GearPost() {
         },
         "author": {
           "@type": "Person",
-          "name": "Ariel Anders",
+          "name": "Tech Dancer",
           "url": `${BASE_URL}/about`
         },
         "datePublished": resource.date
