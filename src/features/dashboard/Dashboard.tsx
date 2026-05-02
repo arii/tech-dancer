@@ -18,7 +18,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick.blog: Exploring West Coast Swing through travel, lifestyle, and a touch of data science. The West Coast Swing Lifestyle Blog by Ariel Anders, PhD."
+        description="BoomTick.blog: Exploring West Coast Swing through travel, lifestyle, and a touch of data science. The West Coast Swing Lifestyle Blog by Tech Dancer."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={6}>

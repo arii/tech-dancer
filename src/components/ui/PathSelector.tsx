@@ -4,7 +4,7 @@ import { HeroPathCard } from './HeroPathCard';
 import dancerHero from '@/assets/dancer_hero.webp';
 import roboticistHero from '@/assets/roboticist_hero.webp';
 
-type PathID = 'dancer' | 'roboticist';
+type PathID = 'dancer' | 'data_scientist';
 
 const PATH_DATA = [
   {
@@ -21,7 +21,7 @@ const PATH_DATA = [
     ],
   },
   {
-    id: 'roboticist' as PathID,
+    id: 'data_scientist' as PathID,
     title: 'NEED DATA INSIGHTS?',
     wrapperClass: 'lg:col-span-5 bg-zinc-900',
     image: roboticistHero,
