@@ -37,17 +37,7 @@ export function ContentCard({
       direction="col"
       gap={0}
       height="full"
-      surface
-      border
-      radius={compact ? "none" : "xl"}
-      shadow={compact ? "none" : "standard"}
-      overflow="hidden"
-      className={cn(
-        "group transition-all duration-300",
-        compact 
-          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent" 
-          : "hover:border-accent hover:shadow-xl hover:-translate-y-1"
-      )}
+      className={cn("group transition-all duration-300")}
       {...motionProps}
     >
       {!compact && (
@@ -59,7 +49,7 @@ export function ContentCard({
       )}
 
       {/* Content Area */}
-      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
+      <Stack gap={compact ? 2 : 5} paddingTop={compact ? 2 : 4} paddingBottom={compact ? 2 : 4} flex={1} justify="between">
         <Stack gap={compact ? 0.5 : 3}>
           <Box display="flex" align="center" gap={3} wrap>
             <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
