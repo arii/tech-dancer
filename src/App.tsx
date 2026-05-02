@@ -27,7 +27,7 @@ export function RootLayout() {
   const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
 
   useEffect(() => {
-    if (!import.meta.env.PROD) return;
+    if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
     // Inject Google Analytics script
     const script = document.createElement('script');
@@ -55,7 +55,7 @@ export function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (!import.meta.env.PROD) return;
+    if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
     // Track page view on route change
     window.gtag('event', 'page_view', {
@@ -100,7 +100,7 @@ export function RootLayout() {
       <AnimatePresence>
         {showEmailBar && <NewsletterBanner />}
       </AnimatePresence>
-      {import.meta.env.PROD && <Analytics />}
+      {import.meta.env.PROD && window.location.hostname !== 'localhost' && <Analytics />}
     </>
   );
 }
