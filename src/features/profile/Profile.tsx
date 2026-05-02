@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 
-export default function ArielProfile() {
+export default function Profile() {
   const { bio } = useProfile();
 
   return (
@@ -53,9 +53,9 @@ export default function ArielProfile() {
                 <Box display="flex" gap={4} wrap>
                   {[
                     { label: 'INSTAGRAM', url: 'https://instagram.com' },
-                    { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
+                    { label: 'LINKEDIN', url: 'https://www.linkedin.com/in/arielanders/' },
                     { label: 'GITHUB', url: 'https://github.com/arii' },
-                    { label: 'PORTFOLIO', url: 'https://arii.github.io' }
+                    { label: 'PORTFOLIO', url: 'https://boomtick.blog' }
                   ].map((link) => (
                     <Box
                       key={link.label}

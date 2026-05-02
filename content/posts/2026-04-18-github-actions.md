@@ -4,7 +4,7 @@ title: "How I used GitHub Actions to power this site"
 date: "2026-04-18"
 author: "Tech Dancer"
 category: "Tech"
-excerpt: "Automated deployments and CI/CD pipelines for a roboticist's living portfolio."
+excerpt: "Automated deployments and CI/CD pipelines for the Tech Dancer lifestyle blog."
 image: ""
 tags:
   - automation
