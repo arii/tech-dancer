@@ -74,7 +74,7 @@ export function DetailLayout({
               aspect="video"
               overflow="hidden"
               border
-              className="bg-muted"
+              className="bg-surface-alt"
             >
               <img
                 src={image}
@@ -89,11 +89,10 @@ export function DetailLayout({
             {/* Content - first on mobile via order classes */}
             <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
               {children}
-              <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
-                style={{ maxWidth: '720px' }}
-              >
-                <MarkdownRenderer content={content} />
+              <Box marginX="auto" width="full" maxWidth="3xl">
+                <Box className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main w-full max-w-none">
+                  <MarkdownRenderer content={content} />
+                </Box>
               </Box>
             </Box>
 

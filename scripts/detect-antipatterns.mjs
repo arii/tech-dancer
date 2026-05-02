@@ -7,7 +7,7 @@ import { glob } from 'glob';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/App.tsx'];
 
 const LAYOUT_SUGGESTIONS = {
   'flex flex-col': '<Stack direction="col">',

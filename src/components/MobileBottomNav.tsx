@@ -12,7 +12,8 @@ export function MobileBottomNav() {
       position="fixed"
       inset="bottom"
       zIndex="sticky"
-      className="lg:hidden bg-surface/90 backdrop-blur-xl border-t border-line pb-[safe-area-inset-bottom]"
+      className="lg:hidden bg-surface/90 backdrop-blur-xl border-t border-line"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <Box as="ul" display="flex" justify="around" align="center" width="full" className="h-16">
         {MOBILE_NAV_ROUTES.map((item) => {
@@ -22,14 +23,16 @@ export function MobileBottomNav() {
               <NavLink
                 to={item.path}
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center h-full transition-colors min-h-[44px]",
+                  "flex flex-col items-center justify-center h-full transition-colors min-h-11",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >
                 <Icon className={cn("w-6 h-6", stroke.thick)} />
-                <Text variant="mono" size="micro" weight="font-bold" className="mt-1">
-                  {item.label.split(' ')[0]}
-                </Text>
+                <Box marginTop={1}>
+                  <Text variant="mono" size="micro" weight="font-bold">
+                    {item.label.split(' ')[0]}
+                  </Text>
+                </Box>
               </NavLink>
             </Box>
           );

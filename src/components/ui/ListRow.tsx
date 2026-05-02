@@ -26,7 +26,7 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
       <Box width={12} height={12} margin={3} shrink={0} radius="none" overflow="hidden" display="flex" align="center" justify="center">
         <CategoryPlaceholder category={category} size="md" />
       </Box>
-      <Stack gap={1} flex className="py-3 min-w-0">
+      <Stack gap={1} flex paddingY={3} className="min-w-0">
         <Box display="flex" align="center" gap={3}>
           <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
           <Text variant="mono" size="micro" color="dim">{date}</Text>

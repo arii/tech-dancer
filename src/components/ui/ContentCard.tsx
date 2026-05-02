@@ -92,14 +92,16 @@ export function ContentCard({
         </Stack>
 
         {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
+          <Box display="flex" align="center" gap={2} paddingTop={4} marginTop="auto" border="t" className="border-line/50">
             <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
               Read Article
             </Text>
             <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
-            <Text variant="mono" size="xs" color="accent" className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-              →
-            </Text>
+            <Box marginLeft="auto">
+              <Text variant="mono" size="xs" color="accent" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                →
+              </Text>
+            </Box>
           </Box>
         )}
       </Stack>

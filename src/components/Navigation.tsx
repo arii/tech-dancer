@@ -64,7 +64,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
+          "transition-colors duration-300",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -100,7 +100,7 @@ export default function Navigation() {
                 radius="md"
                 className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
               >
-                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 shrink-0" />
                 <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
               </Box>
             </Box>

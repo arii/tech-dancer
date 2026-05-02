@@ -39,7 +39,7 @@ export function HeroPathCard({
       className={cn(
         wrapperClass,
         "group transition-all duration-700 ease-in-out",
-        isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
+        isOtherHovered ? "opacity-30 grayscale" : "opacity-100 grayscale-0 scale-100"
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

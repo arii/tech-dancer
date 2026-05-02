@@ -34,16 +34,18 @@ export function SearchBox({
         size={18}
         className="text-text-dim absolute left-4 pointer-events-none"
       />
-      <Box
-        as="input"
-        type="text"
-        placeholder={placeholder}
-        variant="mono"
-        size="sm"
-        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
-        value={value}
-        onChange={onChange}
-      />
+      <Box paddingLeft={10} width="full">
+        <Box
+          as="input"
+          type="text"
+          placeholder={placeholder}
+          variant="mono"
+          size="sm"
+          className="bg-transparent border-none outline-none w-full focus:ring-0"
+          value={value}
+          onChange={onChange}
+        />
+      </Box>
     </Box>
   );
 }

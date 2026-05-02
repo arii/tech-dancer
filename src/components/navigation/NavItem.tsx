@@ -41,11 +41,11 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             emphasis={isMobile && isActive ? "high" : undefined}
             className={cn(
               isMobile ? "border-line/50" : undefined,
-              "min-h-[44px]",
+              "min-h-11",
               isMobile && isActive && "shadow-sm"
             )}
           >
-            <Icon className={cn(`w-5 h-5 ${stroke.thick} flex-shrink-0`, isMobile ? "w-6 h-6" : "")} />
+            <Icon className={cn(`w-5 h-5 ${stroke.thick} shrink-0`, isMobile ? "w-6 h-6" : "")} />
             <Text variant="sans" size={isMobile ? "lg" : "base"} weight="font-bold" className="leading-none">
               {label}
             </Text>
