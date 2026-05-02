@@ -50,7 +50,7 @@ export function HeroPathCard({
         <img
           src={image}
           alt=""
-          fetchPriority="high"
+          loading="lazy"
           decoding="async"
           className={cn(
             "w-full h-full object-cover transition-transform duration-700 ease-in-out",
