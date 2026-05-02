@@ -87,7 +87,7 @@ export function useUXAuditor() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
-  const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer/');
+  const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 

@@ -1,6 +1,6 @@
-# Tech-Dancer
+# BoomTick.blog
 
-The Roboticist's Guide to the West Coast Swing.
+The West Coast Swing Lifestyle Blog by Tech Dancer.
 
 ## Overview
 A gear, tech, and travel guide for West Coast Swing dancers. Built with Vite + React to provide real-time comp data and travel logistics.

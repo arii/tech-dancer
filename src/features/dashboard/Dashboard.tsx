@@ -18,68 +18,20 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="TechDancer: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The Roboticist's Guide to West Coast Swing."
+        description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
         schema={STATIC_SCHEMAS.HOME}
       />
-      <Stack gap={0}>
-        {/* Editorial Hero Section */}
-        <Box
-          as="header"
-          paddingX={{ base: 4, md: 16, lg: 20 }}
-          paddingTop={{ base: 12, md: 24 }}
-          paddingBottom={{ base: 12, md: 20 }}
-          className="bg-surface overflow-hidden"
-        >
-          <Stack gap={10}>
-            <Box display="flex" justify="between" align="center">
-              <Text
-                variant="mono"
-                size="xs"
-                color="brand"
-                weight="font-bold"
-                tracking="wide-editorial"
-                uppercase
-              >
-                — Welcome
-              </Text>
-
-              <Box border="l" paddingLeft={3} className="border-line hidden sm:block">
-                <Text variant="mono" size="micro" color="dim" tracking="utility">
-                  REL {BUILD_VERSION} // 2025
-                </Text>
-              </Box>
-            </Box>
-
-            <Box position="relative">
-              <Text
-                as="h1"
-                variant="headline"
-                size="fluid-9"
-                weight="font-black"
-                className="text-accent-navy leading-[0.8] tracking-tighter" // impeccable-ignore
-              >
-                The Roboticist's Guide <br className="hidden md:block" />
-                <Box as="span" display="inline-block" marginLeft={{ md: "[15%]" }}>to West Coast Swing</Box>
-              </Text>
-            </Box>
-
-            <Box
-              maxWidth="[500px]"
-              marginLeft={{ md: "40%" }}
-              border="l"
-              paddingLeft={8}
-              className="border-accent"
-            >
-              <Text
-                variant="body"
-                size={{ base: "lg", lg: "2xl" }}
-                color="dim"
-                className="leading-snug text-pretty italic" // impeccable-ignore
-              >
-                Technical systems and travel hacks for the modern competitive dancer.
-              </Text>
-            </Box>
-          </Stack>
+      <Stack gap={6}>
+        <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
+          <PageHeader
+            label="WELCOME"
+            title="The West Coast Swing Lifestyle Blog"
+            description="Technical systems and travel hacks for the modern competitive dancer."
+            border="none"
+            paddingBottom={0}
+            titleSize="fluid-7"
+            descriptionMaxWidth="prose"
+          />
         </Box>
 
         <Box width="full" className="border-y border-line">

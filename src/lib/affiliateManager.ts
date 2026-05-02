@@ -24,7 +24,7 @@ export const affiliateManager = {
       });
     }
     // Add global tracking
-    url.searchParams.append('utm_source', 'tech-dancer-platform');
+    url.searchParams.append('utm_source', 'boomtick-blog');
     url.searchParams.append('utm_medium', 'portfolio');
     
     return url.toString();
