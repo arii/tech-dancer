@@ -20,18 +20,18 @@ export function BrandIcon({ className, withBackground = false }: BrandIconProps)
       )}
 
       {/* B */}
-      <text x="10" y="44"
+      <text x="4" y="48"
             fontFamily="var(--raw-font-display)"
-            fontSize="40"
+            fontSize="48"
             fontWeight="700"
             fill="var(--raw-color-accent-navy)">
         B
       </text>
 
       {/* Tick stroke */}
-      <path d="M38 18 L54 46"
+      <path d="M42 16 L58 48"
             stroke="var(--raw-color-accent)"
-            strokeWidth="6"
+            strokeWidth="8"
             strokeLinecap="round"/>
     </svg>
   );

@@ -1,14 +1,13 @@
 <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="12" fill="white"/>
-  <text x="10" y="44"
+  <text x="4" y="48"
         font-family="Bricolage Grotesque, Albert Sans, sans-serif"
-        font-size="40"
+        font-size="48"
         font-weight="700"
         fill="#1A2B3C">
     B
   </text>
-  <path d="M38 18 L54 46"
+  <path d="M42 16 L58 48"
         stroke="#007BFF"
-        stroke-width="6"
+        stroke-width="8"
         stroke-linecap="round"/>
 </svg>
