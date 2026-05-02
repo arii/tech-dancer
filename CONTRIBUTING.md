@@ -1,4 +1,4 @@
-# Tech Dancer Platform — Content Contributor Guide
+# BoomTick.blog — Content Contributor Guide
 
 This guide explains how to add new content to the site using GitHub Issues and the automated PR workflow.
 

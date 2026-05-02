@@ -27,7 +27,7 @@ export default defineConfig(({mode}) => {
   if (!base) {
     if (isVercel) {
       base = '/';
-    } else if (isGHAction || isProd) {
+    } else if (isGHAction) {
       // If we're on a branch other than main in GH Actions, include the branch name in the base path
       base = isMainBranch ? '/tech-dancer/' : `/tech-dancer/${ghBranch}/`;
     } else {
