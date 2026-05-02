@@ -22,7 +22,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm run preview --base /boomtick-blog/',
+    command: 'pnpm run preview --port 4173 --base /boomtick-blog/',
     url: `http://localhost:${PORT}${BASE_PATH}`,
     reuseExistingServer: !process.env.CI,
     stdout: 'ignore',
