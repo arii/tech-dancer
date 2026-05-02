@@ -14,13 +14,7 @@ tags:
 
 <Notice type="info">
 **Lab Notes: Financial Engineering**
-
-- **Current State:** Ad-hoc event booking and manual expense tracking.
-- **Why Improvement is Needed:** WCS travel costs are rising, and lack of a systematic points strategy leads to missed savings.
-- **Action Items:**
-  - [x] Finalize Hyatt status-stacking breakdown.
-  - [ ] Draft "Credit-as-Debit" workflow.
-  - [ ] Create 2026 event budget template.
+Drafting a systematic travel-hacking strategy specifically for WCS dancers to make the lifestyle sustainable.
 </Notice>
 
 ## The Problem: WCS Travel is Expensive
@@ -33,13 +27,13 @@ I am currently drafting a **Comprehensive Financial Strategy Guide** specificall
 
 This guide will move beyond basic "saving tips" and look at the dance journey as a logistics and optimization problem.
 
-#### [ ] Budget Planning
+#### Budget Planning
 How to forecast your yearly dance expenses and set aside a "Dance Fund" that doesn't compromise your long-term financial health.
 
-#### [ ] Credit Card Strategy
-A deep dive into status-stacking with travel cards. I'll explain why I use the Amex Platinum and Hyatt cards to secure late checkouts (critical for social dance recovery) and airport lounge access, all while maintaining a strict "credit-as-debit" philosophy.
+#### Credit Card Strategy
+A deep dive into status-stacking with travel cards. I'll explain why I use the Amex Platinum and Hyatt cards to secure late checkouts and airport lounge access.
 
-#### [ ] Cost Optimization
+#### Cost Optimization
 Strategies for finding the best flight deals, managing group housing, and making the most of early-bird registration windows.
 
 ### Timeline for Release

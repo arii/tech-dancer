@@ -7,15 +7,21 @@ import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { WCSScraperTool } from './components/WCSScraperTool';
 import { SEO } from '@/components/SEO';
+import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
+
+const TOOL_REGISTRY: Record<string, ComponentType> = {
+  'blog-drafter': BlogDrafter,
+  'wcs-scraper': WCSScraperTool,
+};
 
 export default function ResearchDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getTool, getStudy } = useResearch();
-  
+
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
 
@@ -110,13 +116,14 @@ export default function ResearchDetail() {
 
         <Box border surface="default" padding={{ base: 8, md: 12 }} className="rounded-none">
           <Stack gap={12}>
-            {tool.id === 'blog-drafter' && tool.status !== 'Coming Soon' ? (
-              <BlogDrafter />
-            ) : tool.id === 'wcs-scraper' && tool.status !== 'Coming Soon' ? (
-              <WCSScraperTool />
+            {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
+              (() => {
+                const ToolComponent = TOOL_REGISTRY[id];
+                return <ToolComponent />;
+              })()
             ) : (
               <Stack gap={12}>
-                  <Stack gap={4}>
+                <Stack gap={4}>
                     <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
                       LABORATORY_ACCESS // {tool.category}
                     </Text>

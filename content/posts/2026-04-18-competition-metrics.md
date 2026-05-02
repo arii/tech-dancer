@@ -14,14 +14,8 @@ tags:
 ---
 
 <Notice type="info">
-**Lab Notes: Competitive Intelligence**
-
-- **Current State:** Subjective video review and manual placement tracking.
-- **Why Improvement is Needed:** High variance in human judging makes it difficult to measure granular technical growth over time.
-- **Action Items:**
-  - [x] Define ethical data collection framework.
-  - [ ] Complete ETL pipeline for major 2025/2026 events.
-  - [ ] Build interactive judge variance visualization.
+**Lab Notes: Data Science**
+Defining an ethical framework for public scoring data collection to analyze progression and judging consistency.
 </Notice>
 
 ## Objective Analysis in a Subjective Sport
@@ -34,25 +28,18 @@ I am excited to announce the development of the **WCS Competition Data Scraper**
 
 The goal of this project isn't to rank dancers, but to provide tools for self-improvement and to understand the underlying mechanics of competition scoring.
 
-- **[ ] Anonymous data collection:** The tool focus on trends and distributions. No individual dancer names are stored in our public datasets; we only process aggregated scores and anonymized IDs.
-- **[ ] Ethical approach:** We only use public competition data that has already been published by event organizers. Our scraper respects `robots.txt` and implements aggressive rate-limiting to ensure zero impact on event servers.
-- **[ ] Privacy guarantees:** All raw data is processed in a secure environment and then discarded after aggregation. We do not track personal performance over time in a way that is identifiable to the public.
-
-### Technical Pipeline
-
-Our data pipeline is built for accuracy and reliability:
-1. **Collection:** Automated extraction from public WSDC-compliant registries.
-2. **Validation:** Cross-referencing results to ensure data integrity.
-3. **Processing:** Normalizing scores across different event sizes and judging panels.
+- **Anonymous data collection:** The tool focuses on trends and distributions. No individual dancer names are stored in our public datasets.
+- **Ethical approach:** We only use public competition data that has already been published. Our scraper respects `robots.txt` and implements rate-limiting.
+- **Privacy guarantees:** All raw data is processed in a secure environment and discarded after aggregation.
 
 ### Analytical Features
 
 Once launched, the lab will feature:
 
 #### Judge Variance Analysis
-Measuring the consistency across judging panels. This helps competitors understand which aspects of their dance resonate with different judging styles, without the noise of a single subjective opinion.
+Measuring the consistency across judging panels. This helps competitors understand which aspects of their dance resonate with different judging styles.
 
 #### Median-Relative Performance Tracking
-Instead of looking at your raw placement, we compare your performance to the competition median. This provides a much more stable metric of growth, as it accounts for the overall strength of the heat.
+Instead of looking at your raw placement, we compare your performance to the competition median. This accounts for the overall strength of the heat.
 
 *Stay tuned for the official release in the Research Lab.*

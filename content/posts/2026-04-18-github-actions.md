@@ -13,14 +13,8 @@ tags:
 ---
 
 <Notice type="warning">
-**Lab Notes: Dev-Ops Evolution**
-
-- **Current State:** Basic automated build and deploy.
-- **Why Improvement is Needed:** Manual checks for design anti-patterns were slow and inconsistent.
-- **Action Items:**
-  - [x] Implement design pattern audit gate.
-  - [x] Automate bundle size regression checks.
-  - [ ] Add visual regression testing for mobile viewports.
+**Lab Notes: Dev-Ops**
+Automating the "Impeccable" audit gate and bundle size checks to maintain high design standards and performance.
 </Notice>
 
 ## Reliable Deployments for the Tech-Dancer
@@ -29,11 +23,11 @@ Building a "living portfolio" requires a system that handles the mundane tasks o
 
 ### The CI/CD Architecture
 
-My workflow is split into three primary stages: **Verification**, **Audit**, and **Deployment**. This modular approach allows for rapid feedback during development.
+My workflow is split into three primary stages: **Verification**, **Audit**, and **Deployment**.
 
 #### 1. Verification (Lint & Test)
 
-This stage ensures code quality and functional correctness. It runs on every push and pull request.
+This stage ensures code quality and functional correctness.
 
 ```yaml
 name: CI
@@ -57,7 +51,7 @@ jobs:
 
 #### 2. Anti-Pattern Audit
 
-To maintain the "Impeccable" design standards of this site, I've integrated a custom audit script that checks for design anti-patterns like "Cardocalypse" or "Grid Fatigue".
+To maintain the "Impeccable" design standards of this site, I've integrated a custom audit script.
 
 ```yaml
   audit:
@@ -73,7 +67,7 @@ To maintain the "Impeccable" design standards of this site, I've integrated a cu
 
 #### 3. Build & E2E Testing
 
-Before deployment, the application is built for production and subjected to end-to-end (E2E) tests using Playwright and performance audits via Lighthouse.
+Before deployment, the application is subjected to end-to-end (E2E) tests.
 
 ```yaml
   test-build:
@@ -86,36 +80,14 @@ Before deployment, the application is built for production and subjected to end-
         run: pnpm run build
       - name: Run Playwright Smoke Test
         run: pnpm run test:e2e
-      - name: Run Lighthouse CI
-        run: pnpm run lighthouse
-```
-
-### Sample Execution Logs
-
-When a workflow runs, GitHub Actions provides detailed output. Here is what a successful `audit` step looks like:
-
-```text
-> boomtick-blog@0.1.0 audit /home/runner/work/boomtick-blog
-> node scripts/detect-antipatterns.mjs
-
-🔍 Auditing 42 files for Impeccable design anti-patterns...
-
-✅ No major anti-patterns detected.
-✅ Layout primitives (Box, Stack, Grid) used in 98% of components.
-✅ Design token compliance: 100%
-
-✨ Audit passed!
 ```
 
 ### Troubleshooting Common Issues
 
-Even the best pipelines fail. Here are the most common issues I encounter and how to fix them:
+Even the best pipelines fail. Here are the most common issues:
 
-- **Stale Lockfile:** If the CI fails on the `Verify lockfile integrity` step, it means `pnpm-lock.yaml` is out of sync.
-  - *Fix:* Run `pnpm install` locally and commit the updated lockfile.
-- **Visual Regression Failure:** UI changes may cause Playwright snapshots to mismatch.
-  - *Fix:* If the change is intentional, run `pnpm test:e2e --update-snapshots` and commit the new images.
-- **Node Engine Mismatch:** The project pins Node.js to version 22. Using a different version locally might cause inconsistencies.
-  - *Fix:* Use `nvm use` or check the `.node-version` file.
+- **Stale Lockfile:** If CI fails on the `Verify lockfile integrity` step, run `pnpm install` locally.
+- **Visual Regression Failure:** If UI changes are intentional, run `pnpm test:e2e --update-snapshots`.
+- **Node Engine Mismatch:** The project pins Node.js to version 22. Use `nvm use` or check `.node-version`.
 
 Automating the boring parts allows me to focus on what matters: analyzing dance data and sharing insights with the WCS community.
