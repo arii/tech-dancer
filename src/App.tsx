@@ -35,6 +35,15 @@ export function RootLayout() {
     return () => clearTimeout(timer);
   }, [setShowEmailBar]);
 
+  // Google Analytics 4 page view tracking
+  useEffect(() => {
+    if (typeof window.gtag === 'function') {
+      window.gtag('config', 'G-W9W73FV2K1', {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
   const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
 
   return (
