@@ -1,3 +1,4 @@
+import React from 'react';
 import { Cpu, Globe, Camera, Heart, HelpCircle, LucideIcon } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';
 
@@ -31,11 +32,11 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
     lg: 'w-24 h-24 opacity-10'
   };
 
-  const CategoryIcon = getCategoryIcon(category);
+  const icon = getCategoryIcon(category);
 
   return (
     <Box surface={surfaceClass} width="full" height="full" display="flex" align="center" justify="center">
-      <CategoryIcon className={sizeClasses[size]} strokeWidth={1.5} />
+      {React.createElement(icon, { className: sizeClasses[size], strokeWidth: 1.5 })}
     </Box>
   );
 }

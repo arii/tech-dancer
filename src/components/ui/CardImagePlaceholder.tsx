@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Text, Stack } from '@/layouts/Primitives';
 import { CategoryPlaceholder, getCategoryIcon } from '@/components/ui/CategoryPlaceholder';
 
@@ -38,8 +39,8 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
       <Box className="absolute top-4 left-4">
         <Box className="flex items-center gap-2 px-3 py-1 bg-surface/95 backdrop-blur-md border border-line rounded-sm shadow-sm">
           {(() => {
-            const CategoryIcon = getCategoryIcon(category);
-            return <CategoryIcon className="w-3.5 h-3.5 text-accent" strokeWidth={2.5} />;
+            const icon = getCategoryIcon(category);
+            return React.createElement(icon, { className: "w-3.5 h-3.5 text-accent", strokeWidth: 2.5 });
           })()}
           <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-accent-navy">
             {category}
