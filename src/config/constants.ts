@@ -13,7 +13,7 @@ export const STATIC_SCHEMAS = {
     "description": DEFAULT_DESCRIPTION,
     "publisher": {
       "@type": "Person",
-      "name": "Ariel Anders"
+      "name": "Tech Dancer"
     }
   },
   ABOUT: (bioName: string, bioRole: string) => ({
