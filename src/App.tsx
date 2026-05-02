@@ -14,6 +14,7 @@ import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
+import { GA_MEASUREMENT_ID } from './config/constants';
 
 import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
 
@@ -38,7 +39,7 @@ export function RootLayout() {
   // Google Analytics 4 page view tracking
   useEffect(() => {
     if (typeof window.gtag === 'function') {
-      window.gtag('config', 'G-W9W73FV2K1', {
+      window.gtag('config', GA_MEASUREMENT_ID, {
         page_path: location.pathname + location.search,
       });
     }
