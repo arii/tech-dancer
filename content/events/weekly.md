@@ -2,7 +2,7 @@
 type: event
 title: "Weekly Class"
 date: "2024-01-01"
-author: "Tech Dancer"
+author: "Ariel Anders, PhD"
 category: "Dance"
 excerpt: "Weekly social dance and classes at Mission City Swing in San Francisco."
 location: "Mission City Swing"

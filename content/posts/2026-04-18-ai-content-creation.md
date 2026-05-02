@@ -2,7 +2,7 @@
 type: post
 title: "AI powered content creation and development"
 date: "2026-04-18"
-author: "Tech Dancer"
+author: "Ariel Anders, PhD"
 category: "Tech Portfolio"
 excerpt: "How I use Jules and other AI tools to generate data analytics and blog posts with a human in the loop."
 image: ""

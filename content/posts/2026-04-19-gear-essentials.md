@@ -2,7 +2,7 @@
 type: post
 title: "The WCS Travel Pack: 3 Essentials You’re Forgetting"
 date: "2026-04-19"
-author: "Tech Dancer"
+author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Loop earplugs, industrial travel steamers, and portable sound. Why these three Pieces of gear are the secret to a better dance weekend."
 image: ""

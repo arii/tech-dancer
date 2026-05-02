@@ -2,7 +2,7 @@
 type: post
 title: Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages
 date: "2026-04-20"
-author: "Tech Dancer"
+author: "Ariel Anders, PhD"
 category: Tech
 excerpt: Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages.
 ---
