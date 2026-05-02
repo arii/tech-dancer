@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION } from '@/config/constants';
+import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 interface SEOProps {
   title: string;
@@ -10,7 +10,6 @@ interface SEOProps {
   image?: string;
   canonical?: string;
   schema?: Record<string, unknown> | Record<string, unknown>[];
-  googleVerification?: string;
 }
 
 export function SEO({
@@ -20,7 +19,6 @@ export function SEO({
   image,
   canonical,
   schema,
-  googleVerification = GOOGLE_SITE_VERIFICATION
 }: SEOProps) {
   const { pathname } = useLocation();
 
