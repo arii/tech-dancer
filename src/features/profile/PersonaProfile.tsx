@@ -1,17 +1,18 @@
+import { SITE_METADATA } from "@/config/content";
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 
-export default function ArielProfile() {
+export default function PersonaProfile() {
   const { bio } = useProfile();
 
   return (
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Tech Dancer: West Coast Swing Blogger // Data Science Consultant. Exploring the intersection of dance, physics, and engineering."
+        description={`${SITE_METADATA.author}: West Coast Swing Blogger // Data Science Consultant. Exploring the intersection of dance, physics, and engineering.`}
       />
       
       <PageHeader

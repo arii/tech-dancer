@@ -1,7 +1,8 @@
+import { SITE_METADATA } from "@/config/content";
 import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
-    name: "Tech Dancer",
+    name: SITE_METADATA.author,
     role: "West Coast Swing Blogger // Data Science Consultant",
     sections: [
       {

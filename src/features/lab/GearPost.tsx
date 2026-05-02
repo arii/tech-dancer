@@ -37,7 +37,7 @@ export default function GearPost() {
         },
         "author": {
           "@type": "Person",
-          "name": "Tech Dancer",
+          "name": SITE_METADATA.author,
           "url": `${BASE_URL}/about`
         },
         "datePublished": resource.date

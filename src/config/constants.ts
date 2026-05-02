@@ -1,8 +1,9 @@
-export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, '');
+import { SITE_METADATA } from "@/config/content";
+export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://arii.github.io/boomtick-blog').replace(/\/$/, '');
 export const SITE_NAME = 'BoomTick.blog';
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
-const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Exploring the intersection of dance, physics, and engineering.";
+const DEFAULT_DESCRIPTION = `The West Coast Swing Lifestyle Blog by ${SITE_METADATA.author}. Exploring the intersection of dance, physics, and engineering.`;
 
 export const STATIC_SCHEMAS = {
   HOME: {
@@ -13,7 +14,7 @@ export const STATIC_SCHEMAS = {
     "description": DEFAULT_DESCRIPTION,
     "publisher": {
       "@type": "Person",
-      "name": "Tech Dancer"
+      "name": SITE_METADATA.author
     }
   },
   ABOUT: (bioName: string, bioRole: string) => ({

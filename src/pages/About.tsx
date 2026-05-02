@@ -1,2 +1,2 @@
-import About from '@/features/profile/ArielProfile';
+import About from '@/features/profile/PersonaProfile';
 export default About;
