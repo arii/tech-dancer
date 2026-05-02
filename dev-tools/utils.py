@@ -108,7 +108,7 @@ class GHAConfigManager:
                 return val
 
             stderr = result.stderr.lower()
-            if "not authenticated" in stderr or "not logged in" in stderr:
+            if "not authenticated" in stderr or "not logged in" in stderr or "gh_token" in stderr:
                 if not self.warned_auth:
                     print(f"⚠️  Warning: 'gh' CLI not authenticated. Run 'gh auth login' to fetch baselines.", file=sys.stderr)
                     self.warned_auth = True
