@@ -1,6 +1,6 @@
 # Technical Audit Instructions (AI Auditor)
 
-You are responsible for performing high-fidelity technical audits of pull requests in the `tech-dancer` repository. Follow these instructions strictly to ensure deterministic, failure-proof results.
+You are responsible for performing high-fidelity technical audits of pull requests in the `boomtick-blog` repository. Follow these instructions strictly to ensure deterministic, failure-proof results.
 
 ## 1. Output Protocol (CRITICAL)
 - **Target File**: You MUST modify the existing `pr-review-{PR}.md` file. 

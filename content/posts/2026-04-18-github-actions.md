@@ -4,7 +4,11 @@ title: "How I used GitHub Actions to power this site"
 date: "2026-04-18"
 author: "Tech Dancer"
 category: "Tech"
+<<<<<<< HEAD
 excerpt: "Automated deployments and CI/CD pipelines for a tech-forward dance blog."
+=======
+excerpt: "Automated deployments and CI/CD pipelines for a data scientist's living portfolio."
+>>>>>>> pr-626
 image: ""
 tags:
   - automation
@@ -23,6 +27,7 @@ Building a "living portfolio" requires a system that handles the mundane tasks o
 
 ### The CI/CD Architecture
 
+<<<<<<< HEAD
 My workflow is split into three primary stages: **Verification**, **Audit**, and **Deployment**.
 
 #### 1. Verification (Lint & Test)
@@ -91,3 +96,6 @@ Even the best pipelines fail. Here are the most common issues:
 - **Node Engine Mismatch:** The project pins Node.js to version 22. Use `nvm use` or check `.node-version`.
 
 Automating the boring parts allows me to focus on what matters: analyzing dance data and sharing insights with the WCS community.
+=======
+This is the same philosophy I apply to data science: automate the repetitive so you can focus on the complex.
+>>>>>>> pr-626

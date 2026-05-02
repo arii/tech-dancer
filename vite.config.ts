@@ -18,12 +18,26 @@ export default defineConfig(({mode}) => {
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
 
   // Default to root base path for BoomTick.blog deployment
-  const base = process.env.VITE_BASE_PATH || '/';
+  // If we are on GitHub Actions and not the main branch, we use a sub-path for previews
+  const ghBranch = process.env.GITHUB_REF_NAME;
+  const isGHAction = !!process.env.GITHUB_ACTIONS;
+  const isMainBranch = ghBranch === 'main' || !ghBranch;
+
+  let base = process.env.VITE_BASE_PATH;
+  if (!base) {
+    if (isVercel) {
+      base = '/';
+    } else if (isGHAction && !isMainBranch) {
+      // Branch previews on GitHub Pages use the branch name
+      base = `/tech-dancer/${ghBranch}/`;
+    } else {
+      base = '/';
+    }
+  }
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    if (isVercel) return 'https://boomtick.blog';
     return 'https://boomtick.blog';
   };
 

@@ -19,7 +19,7 @@ from etl.processor import process_for_ledger
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 BASE_URL = "https://scoring.dance"
-USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/tech-dancer)"
+USER_AGENT = "TechDancer-WCS-Scraper/1.0 (+https://github.com/arii/boomtick-blog)"
 
 async def ethical_throttle(base_delay=1.0, jitter_range=(0.0, 2.0)):
     """Handles ethical rate limiting with jitter."""

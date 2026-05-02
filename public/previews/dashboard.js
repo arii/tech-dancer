@@ -4,7 +4,7 @@
  */
 
 const REPO_OWNER = 'arii';
-const REPO_NAME = 'tech-dancer';
+const REPO_NAME = 'boomtick-blog';
 const BASE_URL = `https://${REPO_OWNER}.github.io/${REPO_NAME}`;
 const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const TRACKING_URL = `${BASE_URL}/REVIEW_TRACKING.md`;

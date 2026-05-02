@@ -1,7 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = process.env.PORT || 4173;
+<<<<<<< HEAD
 const BASE_PATH = process.env.VITE_BASE_PATH || '/';
+=======
+const BASE_PATH = process.env.VITE_BASE_PATH || '/boomtick-blog/';
+>>>>>>> pr-626
 
 export default defineConfig({
   testDir: './tests',
@@ -22,7 +26,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm run preview',
+    command: 'pnpm run preview --port 4173 --strictPort',
     url: `http://localhost:${PORT}${BASE_PATH}`,
     reuseExistingServer: !process.env.CI,
     stdout: 'ignore',

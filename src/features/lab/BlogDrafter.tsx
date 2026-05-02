@@ -41,7 +41,11 @@ export function BlogDrafter() {
   };
 
   const handleCopyPrompt = () => {
+<<<<<<< HEAD
     const prompt = `Objective: Expand the following blog post draft JSON for BoomTick.blog.
+=======
+    const prompt = `Objective: Expand the following blog post draft JSON for boomtick-blog.
+>>>>>>> pr-626
 Requirements:
 1. Respond ONLY with a valid JSON object.
 2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.
@@ -95,7 +99,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
+<<<<<<< HEAD
                 This tool prepares your blog post for the BoomTick.blog automated pipeline.
+=======
+                This tool prepares your blog post for the boomtick-blog automated pipeline.
+>>>>>>> pr-626
                 Complete the form below to generate a pre-formatted GitHub Issue link.
               </Text>
            </Stack>

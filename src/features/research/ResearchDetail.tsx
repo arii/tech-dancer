@@ -44,10 +44,14 @@ export default function ResearchDetail() {
         "author": {
           "@type": "Person",
 <<<<<<< HEAD
+<<<<<<< HEAD
           "name": study.author || "Tech Dancer",
 =======
           "name": study.author || SITE_METADATA.author,
 >>>>>>> origin/rebrand-boomtick-blog-1770114126300875003
+=======
+          "name": study.author || "Tech Dancer",
+>>>>>>> pr-626
           "url": `${BASE_URL}/about`
         },
         "datePublished": study.date,
@@ -163,7 +167,11 @@ export default function ResearchDetail() {
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
+<<<<<<< HEAD
                           This specialized module is currently being integrated into the BoomTick.blog platform. We are finalizing the analysis models and UI components.
+=======
+                          This specialized module is currently being integrated into the boomtick-blog platform. We are finalizing the analysis models and UI components.
+>>>>>>> pr-626
                         </Text>
                       </Stack>
                     </Stack>
