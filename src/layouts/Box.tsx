@@ -59,6 +59,7 @@ export interface BaseProps {
   right?: ResponsiveProp<keyof typeof spacing | number | string>
   bottom?: ResponsiveProp<keyof typeof spacing | number | string>
   left?: ResponsiveProp<keyof typeof spacing | number | string>
+  borderBottom?: boolean
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -119,6 +120,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "r" && "border-r border-line",
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
+      props.borderBottom && "border-b border-line",
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),
@@ -127,6 +129,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
 
     // Remove props that shouldn't be spread to DOM elements
     const { 
+      borderBottom,
       // ... already destructured above
       ...domProps 
     } = props;

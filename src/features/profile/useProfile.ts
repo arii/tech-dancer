@@ -12,7 +12,7 @@ const PROFILE_DATA: ProfileData = {
       },
       {
         id: "phd-matters",
-        title: "The Tech Dancer Perspective",
+        title: "The Ariel Anders Perspective",
         content: "With a background in building complex robotic systems, I bring a unique analytical lens to the world of West Coast Swing. I don't just study data—I look for the underlying structures that make dance, travel, and lifestyle systems work. As a consultant, I use data science to optimize every aspect of the dance experience, from movement mechanics to event logistics."
       },
       {
@@ -27,7 +27,7 @@ const PROFILE_DATA: ProfileData = {
       }
     ],
     details: [
-      { label: "IDENTITY", value: "Tech Dancer" },
+      { label: "IDENTITY", value: "Ariel Anders, PhD" },
       { label: "FOCUS", value: "WCS // Travel // Data Science" },
       { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
     ]
