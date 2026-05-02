@@ -129,7 +129,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
 
     // Remove props that shouldn't be spread to DOM elements
     const { 
-      borderBottom,
+      borderBottom: _borderBottom,
       // ... already destructured above
       ...domProps 
     } = props;
