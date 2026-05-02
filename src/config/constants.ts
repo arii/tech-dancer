@@ -1,4 +1,4 @@
-export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, '');
+export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
 export const SITE_NAME = 'BoomTick.blog';
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
