@@ -1,1 +1,0 @@
-import{j as t}from"./index-CVUt8vIf.js";import{a as r}from"./ContentCard-H3T8pQ0N.js";function n({posts:a}){return t.jsx(t.Fragment,{children:a.map(e=>t.jsx(r,{...e,basePath:"/blog",aspect:"video"},e.slug))})}export{n as default};

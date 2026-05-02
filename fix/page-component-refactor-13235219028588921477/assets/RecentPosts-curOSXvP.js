@@ -1,1 +1,0 @@
-import{j as t}from"./index-Bt3WlyqG.js";import{a as o}from"./ContentCard-D7KmHEoa.js";import{u as r}from"./useHome-CM6zd52b.js";function i(){const{recentPosts:s}=r();return t.jsx(t.Fragment,{children:s.map(e=>t.jsx(o,{...e,basePath:"/blog",aspect:"video"},e.slug))})}export{i as default};

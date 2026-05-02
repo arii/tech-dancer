@@ -1,1 +1,0 @@
-import{r as e}from"./index-BfFyPlCi.js";function c(r){const[s,t]=e.useState(!1),[a,o]=e.useState(r);r!==a&&(o(r),t(!1));const u=e.useCallback(()=>{t(!0)},[]);return{imgError:s,handleError:u}}export{c as u};
