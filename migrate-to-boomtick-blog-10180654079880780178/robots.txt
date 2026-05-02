@@ -3,4 +3,4 @@ Allow: /
 Disallow: /previews/
 Disallow: /404.html
 
-Sitemap: https://boomtick.blog/sitemap.xml
+Sitemap: https://arii.github.io/tech-dancer/migrate-to-boomtick-blog-10180654079880780178/sitemap.xml
