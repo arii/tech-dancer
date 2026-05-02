@@ -14,7 +14,6 @@ export default defineConfig(({mode}) => {
 
   // Dynamic base path for GitHub Pages vs Vercel vs Local Override
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
-  const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
 
