@@ -55,7 +55,7 @@ export default function ArielProfile() {
                     { label: 'INSTAGRAM', url: 'https://instagram.com' },
                     { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
                     { label: 'GITHUB', url: 'https://github.com/arii' },
-                    { label: 'PORTFOLIO', url: 'https://arii.github.io' }
+                    { label: 'PORTFOLIO', url: 'https://ariel-anders.com' }
                   ].map((link) => (
                     <Box
                       key={link.label}

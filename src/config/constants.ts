@@ -1,7 +1,7 @@
-export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://arii.github.io/tech-dancer').replace(/\/$/, '');
-export const SITE_NAME = 'TechDancer';
+export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
+export const SITE_NAME = 'BoomTick.blog';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
-const DEFAULT_DESCRIPTION = "The Roboticist's Guide to the West Coast Swing. Exploring the intersection of dance, physics, and engineering.";
+const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Exploring the intersection of dance, physics, and engineering.";
 
 export const STATIC_SCHEMAS = {
   HOME: {

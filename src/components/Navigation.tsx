@@ -80,7 +80,7 @@ export default function Navigation() {
               weight="font-bold" 
               className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
             >
-              TECH-DANCER
+              BOOMTICK.BLOG
             </Text>
           </Box>
 

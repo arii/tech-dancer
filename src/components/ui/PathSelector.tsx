@@ -28,7 +28,7 @@ const PATH_DATA = [
     titleClass: 'text-3xl md:text-5xl',
     scanlineDelay: 'animation-delay-500',
     links: [
-      { text: 'Technical Portfolio', to: 'https://arii.github.io' },
+      { text: 'Technical Portfolio', to: 'https://ariel-anders.com' },
       { text: 'Tech blog posts', to: '/blog?category=Tech' },
       { text: 'Data & Development Lab', to: '/research' },
     ],
