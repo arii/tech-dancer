@@ -9,9 +9,7 @@ const Home = () => {
 
   return (
     <div className="flex min-h-screen bg-background text-foreground flex-col md:flex-row">
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
+      <Sidebar />
       <main className="flex-1 min-h-screen md:ml-56 pt-0 md:pt-0">
         <section className="px-4 sm:px-6 md:px-10 pt-10 md:pt-14 pb-10 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
