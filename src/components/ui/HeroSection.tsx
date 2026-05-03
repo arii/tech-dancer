@@ -101,7 +101,7 @@ export function HeroSection() {
           boom<span style={{ color: 'var(--hero-accent)' }}>tick</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>.blog</span>
         </Box>
 
-        {/* Visual-style Headline from tag.png - Resized significantly per persistent feedback */}
+        {/* Visual-style Headline from tag.png - Resized even further to 'lg' per feedback */}
         <Stack
           marginTop={6}
           align="center"
@@ -111,7 +111,7 @@ export function HeroSection() {
         >
           <Text
             variant="headline"
-            size="xl"
+            size="lg"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -121,7 +121,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="xl"
+            size="lg"
             weight="font-black"
             tracking="tight"
             className="leading-none"
@@ -137,7 +137,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="xl"
+            size="lg"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -182,7 +182,8 @@ export function HeroSection() {
           align="end"
           gap={1}
           marginTop={10}
-          height={14}
+          height={16}
+          overflow="hidden"
           className="opacity-0"
           style={{ animation: 'fadeIn 1s ease forwards 2.0s' }}
           aria-hidden="true"
