@@ -24,7 +24,7 @@ const Blog = () => {
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Insights</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Blog Posts</h1>
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
-          <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/60 p-3">
+          <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/70 p-3 shadow-sm">
             {blogFilters.map((item, i) => (
               <button
                 key={item}
@@ -39,13 +39,13 @@ const Blog = () => {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {visiblePosts.map((post) => (
-              <article key={post.href} className="border border-border bg-card/80 rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors">
+              <article key={post.href} className="border border-border bg-card/90 rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors min-h-[260px]">
                 <div className="flex items-center justify-between gap-3">
                   <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>{post.tag}</span>
-                  <time className="text-[11px] font-mono text-foreground/65">{post.date}</time>
+                  <time className="text-[11px] font-mono text-foreground/75">{post.date}</time>
                 </div>
                 <h2 className="text-lg font-black leading-snug">{post.title}</h2>
-                <p className="text-sm text-foreground/72 leading-6">{post.excerpt}</p>
+                <p className="text-sm text-foreground/80 leading-6">{post.excerpt}</p>
                 <a href={post.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-secondary hover:text-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 rounded-sm">Read Article</a>
               </article>
             ))}
