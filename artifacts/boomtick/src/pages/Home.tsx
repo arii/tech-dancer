@@ -70,7 +70,7 @@ const Home = () => {
           >
             <div className="relative bg-[#0a0718] flex flex-col justify-end p-8 group overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-secondary/4 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-22 pointer-events-none">
+              <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none">
                 <Equalizer compact />
               </div>
               <div className="relative z-10">
@@ -81,31 +81,29 @@ const Home = () => {
                   Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
                 </p>
                 <div className="flex flex-col gap-2">
-                  {
-                    [
-                      { label: "WCS Training →", href: "https://boomtick.blog/blog?category=Training" },
-                      { label: "Competition tips →", href: "https://boomtick.blog/blog?category=Lifestyle" },
-                      { label: "Gear reviews →", href: "https://boomtick.blog/gear" },
-                    ].map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors"
-                        data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                      >
-                        {link.label}
-                      </a>
-                    ))
-                  }
+                  {[
+                    { label: "WCS Training →", href: "https://boomtick.blog/blog?category=Training" },
+                    { label: "Competition tips →", href: "https://boomtick.blog/blog?category=Lifestyle" },
+                    { label: "Gear reviews →", href: "https://boomtick.blog/gear" },
+                  ].map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors"
+                      data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                    >
+                      {link.label}
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
 
             <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-8 group overflow-hidden border-l border-border">
               <div className="absolute inset-0 bg-gradient-to-bl from-secondary/8 via-accent/4 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-22 pointer-events-none">
+              <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none">
                 <Equalizer compact reverse />
               </div>
               <div className="relative z-10">
@@ -116,24 +114,22 @@ const Home = () => {
                   Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
                 </p>
                 <div className="flex flex-col gap-2">
-                  {
-                    [
-                      { label: "Travel guides →", href: "https://boomtick.blog/blog?category=Travel" },
-                      { label: "Event calendar →", href: "https://boomtick.blog/blog" },
-                      { label: "Packing lists →", href: "https://boomtick.blog/gear" },
-                    ].map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-secondary hover:text-secondary/80 font-semibold transition-colors"
-                        data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                      >
-                        {link.label}
-                      </a>
-                    ))
-                  }
+                  {[
+                    { label: "Travel guides →", href: "https://boomtick.blog/blog?category=Travel" },
+                    { label: "Event calendar →", href: "https://boomtick.blog/blog" },
+                    { label: "Packing lists →", href: "https://boomtick.blog/gear" },
+                  ].map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-secondary hover:text-secondary/80 font-semibold transition-colors"
+                      data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                    >
+                      {link.label}
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
