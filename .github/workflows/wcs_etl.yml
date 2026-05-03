@@ -1,0 +1,65 @@
+name: WCS Data Pipeline (Wednesday Build)
+
+on:
+  schedule:
+    - cron: '0 10 * * 3'
+  workflow_dispatch:
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r etl/requirements.txt
+
+      - name: Cache Playwright Browsers
+        id: cache-playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-etl-${{ runner.os }}-chromium-v1
+          restore-keys: |
+            playwright-etl-${{ runner.os }}-chromium-
+
+      - name: Install Playwright Chromium
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: playwright install chromium
+
+      - name: Run Pytest (Data Validation)
+        run: |
+          PYTHONPATH=etl pytest etl/tests/
+
+      - name: Execute Extraction Script
+        run: |
+          # Run crawl for a single year in automated workflow to keep it efficient
+          # Markdown files are generated in content/studies/ but ignored by .gitignore
+          python etl/scraper.py --years 1
+
+      - name: Validate Output
+        run: |
+          python -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
+
+      - name: Commit via Git LFS
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs track "*.parquet"
+          # Only track and add the Parquet ledger; Markdown studies are ignored
+          git add etl/data/wcs_prelims.parquet .gitattributes
+
+          git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)
