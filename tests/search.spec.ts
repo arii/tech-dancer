@@ -7,7 +7,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).locator('button').filter({ hasText: 'Search' }).first();
     await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
@@ -17,7 +17,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when clicking on backdrop', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).locator('button').filter({ hasText: 'Search' }).first().click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.getByTestId('search-backdrop').click({ position: { x: 5, y: 5 }, force: true });
@@ -25,7 +25,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).locator('button').filter({ hasText: 'Search' }).first().click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.goto('./gear');
@@ -36,7 +36,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).locator('button').filter({ hasText: 'Search' }).first().click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await searchInput.fill('ai');
 
