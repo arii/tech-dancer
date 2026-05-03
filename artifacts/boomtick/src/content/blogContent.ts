@@ -1,4 +1,2 @@
-import { blogPosts, tagColors } from "@/lib/types/site";
-
-export { blogPosts, tagColors };
-export { blogFilters } from "@/lib/types/content";
+export { blogPosts, blogFilters } from "@/lib/types/content";
+export { tagColors } from "@/lib/types/site";
