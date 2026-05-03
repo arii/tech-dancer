@@ -18,17 +18,17 @@ const NavigationShell = () => {
         </div>
         <nav className="flex-1 overflow-y-auto py-4">
           {primaryNavigation.map((item) => (
-            <Link key={item.label} href={item.href} data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex items-center gap-3 px-6 py-3 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground">
-              <item.icon size={16} className="shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
+            <Link key={item.label} href={item.href} data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex items-center gap-3 px-6 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground">
+              <item.icon size={16} className="shrink-0 text-foreground/70 transition-colors group-hover:text-primary group-focus-visible:text-primary" />
               <span>{item.label}</span>
             </Link>
           ))}
         </nav>
         <div className="space-y-1 border-t border-border px-6 py-5">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-foreground/75">
             Written by <span className="font-semibold text-primary">Tech Dancer</span>
           </p>
-          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} boomtick.blog</p>
+          <p className="text-xs text-foreground/65">&copy; {new Date().getFullYear()} boomtick.blog</p>
         </div>
       </aside>
 
@@ -39,14 +39,14 @@ const NavigationShell = () => {
               <Logo />
             </div>
           </Link>
-          <button type="button" onClick={() => setOpen((value) => !value)} className="inline-flex items-center justify-center rounded-md border border-border bg-card p-2 text-foreground" data-testid="button-toggle-nav" aria-label="Toggle navigation">
+          <button type="button" onClick={() => setOpen((value) => !value)} className="inline-flex items-center justify-center rounded-md border border-border bg-card p-2 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid="button-toggle-nav" aria-label="Toggle navigation">
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
         {open ? (
           <nav className="border-t border-border bg-card px-3 py-3">
             {primaryNavigation.map((item) => (
-              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground">
+              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground">
                 <item.icon size={16} className="shrink-0 text-primary" />
                 <span>{item.label}</span>
               </Link>

@@ -25,7 +25,7 @@ const Home = () => {
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none"><Equalizer compact /></div>
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">Train smarter.</h2>
-                <p className="text-sm text-white/70 mb-4 max-w-xs">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
+                <p className="text-sm text-white/85 mb-4 max-w-xs">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
                 <div className="flex flex-col gap-2">{[
                   { label: "WCS Training →", href: "/blog" },
                   { label: "Competition tips →", href: "/blog" },
@@ -38,7 +38,7 @@ const Home = () => {
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none"><Equalizer compact reverse /></div>
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">Travel better.</h2>
-                <p className="text-sm text-white/70 mb-4 max-w-xs">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
+                <p className="text-sm text-white/85 mb-4 max-w-xs">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
                 <div className="flex flex-col gap-2">{[
                   { label: "Travel guides →", href: "/blog" },
                   { label: "Event calendar →", href: "/research" },
@@ -49,11 +49,11 @@ const Home = () => {
           </motion.div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-14">
-          <div className="flex items-end justify-between mb-6"><div><p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">Latest Updates</p><h2 className="text-2xl font-black">Recent Posts</h2></div><a href="/blog" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors" data-testid="link-view-all-posts">View all posts <ArrowRight size={13} /></a></div>
+          <div className="flex items-end justify-between mb-6"><div><p className="text-xs font-bold tracking-widest uppercase text-foreground/70 mb-1">Latest Updates</p><h2 className="text-2xl font-black">Recent Posts</h2></div><a href="/blog" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-foreground/75 hover:text-foreground transition-colors" data-testid="link-view-all-posts">View all posts <ArrowRight size={13} /></a></div>
           <div className="flex flex-col divide-y divide-border">{blogPosts.map((post, i) => (<motion.a key={i} href={post.href} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 * i + 0.3 }} className="group flex flex-col sm:flex-row sm:items-start gap-4 py-6 hover:bg-muted/20 -mx-4 px-4 rounded-lg transition-colors cursor-pointer" data-testid={`post-card-${i}`}><div className="flex items-center gap-3 sm:w-44 shrink-0 pt-0.5"><span className={`text-xs font-bold px-2 py-0.5 rounded border ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>{post.tag}</span><time className="text-xs text-muted-foreground whitespace-nowrap font-mono">{post.date}</time></div><div><h3 className="font-bold text-base group-hover:text-primary transition-colors mb-1">{post.title}</h3><p className="text-sm text-muted-foreground leading-relaxed">{post.excerpt}</p></div></motion.a>))}</div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-16">
-          <div className="mb-6"><p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">On the Circuit</p><h2 className="text-2xl font-black">Where Dancers Go</h2></div>
+          <div className="mb-6"><p className="text-xs font-bold tracking-widest uppercase text-foreground/70 mb-1">On the Circuit</p><h2 className="text-2xl font-black">Where Dancers Go</h2></div>
           <div className="grid sm:grid-cols-3 gap-4">{upcomingEvents.map((evt, i) => (<motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 * i + 0.4 }} className="border border-border rounded-xl p-5 bg-card hover:border-primary/40 transition-colors" data-testid={`event-card-${i}`}><h3 className="font-bold text-sm mb-2">{evt.name}</h3><div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1"><MapPin size={12} className="text-primary shrink-0" />{evt.location}</div><div className="flex items-center gap-1.5 text-xs text-secondary"><Calendar size={12} className="shrink-0" />{evt.cadence}</div></motion.div>))}</div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-16">
