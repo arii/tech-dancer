@@ -164,13 +164,11 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            <div className="grid h-full w-full place-items-center">
-              <img
-                src="/image_1777799906546.png"
-                alt="Boom Tick feature tiles"
-                className="h-full w-full object-contain select-none pointer-events-none"
-              />
-            </div>
+            <img
+              src="/attached_assets/image_1777800046330.png"
+              alt="Boom Tick feature tiles"
+              className="h-full w-full object-contain select-none pointer-events-none"
+            />
           </motion.div>
         </div>
       </Box>
