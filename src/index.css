@@ -131,3 +131,32 @@
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }
+
+@layer utilities {
+  .hero-title-gradient {
+    background: linear-gradient(to right, #06b6d4, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .brand-gradient-bg {
+    background: linear-gradient(to right, var(--raw-color-accent-brand), #3b82f6);
+  }
+  .fade-to-top-bg {
+    background: linear-gradient(to top, var(--raw-color-bg), rgba(255,255,255,0.2), transparent);
+  }
+  .min-h-90vh {
+    min-height: 90vh;
+  }
+  .h-2px {
+    height: 2px;
+  }
+  .leading-1-1 {
+    line-height: 1.1;
+  }
+  .aspect-4-3 {
+    aspect-ratio: 4/3;
+  }
+  .aspect-3-4 {
+    aspect-ratio: 3/4;
+  }
+}

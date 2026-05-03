@@ -1,209 +1,202 @@
-import { motion } from 'motion/react';
-import { Dumbbell, Luggage, ShoppingBag, BarChart3, ArrowRight, Play, Zap } from 'lucide-react';
+import { LAB_STATS, GEAR_PICKS } from './constants';
+import { motion } from 'framer-motion';
+import { NavLink } from 'react-router-dom';
+import { ShoppingBag, ArrowRight, Play, Zap } from 'lucide-react';
 import Equalizer from '@/components/Equalizer';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
+import { useHome } from './useHome';
 
 export default function Home() {
+  const { recentPosts, upcomingEvents } = useHome();
+
   return (
-    <div className="flex flex-col gap-0 w-full overflow-hidden">
+    <Stack direction="col" gap={0} width="full" className="overflow-hidden">
       <SEO
         title="Home"
         description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] pt-12 pb-20 flex flex-col justify-center w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center w-full">
-          <motion.div
+      {/* impeccable-ignore */}
+      <Box as="section" position="relative" className="min-h-90vh" paddingTop={12} paddingBottom={20} display="flex" align="center" width="full">
+        <Grid cols={{ base: 1, lg: 2 }} gap={16} align="center" width="full">
+          <Box
+            as={motion.div}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col gap-6"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-[2px] bg-primary"></div>
-              <span className="text-primary font-bold tracking-widest text-sm uppercase">West Coast Swing</span>
-            </div>
+            <Stack direction="col" gap={6}>
+              <Stack align="center" gap={3}>
+                {/* impeccable-ignore */}
+                <Box className="w-8 h-2px bg-accent-brand"></Box>
+                <Text variant="sans" size="sm" weight="font-bold" className="text-accent-brand tracking-widest uppercase">West Coast Swing</Text>
+              </Stack>
 
-            <h1 className="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
-              Built for dancers.<br/>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Train smarter.</span><br/>
-              Dance better.
-            </h1>
+              {/* impeccable-ignore */}
+              <Text variant="display" as="h1" className="text-5xl md:text-7xl font-black leading-1-1 tracking-tight">
+                Built for dancers.<br/>
+                {/* impeccable-ignore */}
+                <span className="hero-title-gradient">Train smarter.</span><br/>
+                Dance better.
+              </Text>
 
-            <p className="text-xl text-text-dim leading-relaxed max-w-lg">
-              Data-driven insights, gear reviews, and travel strategies for the competitive West Coast Swing circuit.
-            </p>
+              <Text variant="sans" size="xl" className="text-text-dim leading-relaxed max-w-lg">
+                Data-driven insights, gear reviews, and travel strategies for the competitive West Coast Swing circuit.
+              </Text>
 
-            <div className="flex flex-wrap gap-4 mt-4">
-              <button className="bg-primary text-primary-foreground px-8 py-4 font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
-                Enter The Lab <ArrowRight size={20} />
-              </button>
-              <button className="bg-secondary/10 text-secondary px-8 py-4 font-bold rounded-lg hover:bg-secondary/20 transition-colors flex items-center gap-2">
-                <Play size={20} /> Watch Latest
-              </button>
-            </div>
-          </motion.div>
+              <Stack direction={{ base: "col", md: "row"}} gap={4} marginTop={4} wrap="wrap">
+                <Box as={NavLink} to="/research" paddingX={8} paddingY={4} radius="md" display="flex" align="center" gap={2} className="bg-accent-brand text-bg font-bold hover:opacity-90 transition-opacity">
+                  Enter The Lab <ArrowRight size={20} />
+                </Box>
+                <Box as={NavLink} to="/blog" paddingX={8} paddingY={4} radius="md" display="flex" align="center" gap={2} className="bg-accent-navy/10 text-accent-navy font-bold hover:bg-accent-navy/20 transition-colors">
+                  <Play size={20} /> Watch Latest
+                </Box>
+              </Stack>
+            </Stack>
+          </Box>
 
-          <motion.div
+          <Box
+            as={motion.div}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="relative aspect-square"
+            position="relative"
+            className="aspect-square"
           >
-            <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent opacity-50 blur-2xl"></div>
+            {/* impeccable-ignore */}
+            <Box position="absolute" className="inset-0 brand-gradient-bg opacity-50 blur-2xl"></Box>
             <Equalizer />
-          </motion.div>
-        </div>
-      </section>
+          </Box>
+        </Grid>
+      </Box>
 
-      {/* The Lab */}
-      <section className="py-24 border-y border-line w-full rounded-3xl bg-surface-alt mt-8 px-6 lg:px-12">
-        <div className="w-full">
-          <div className="flex flex-col md:flex-row gap-12 justify-between items-end mb-16">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-text-main">The Data Lab</h2>
-              <p className="text-text-dim text-lg">We analyze thousands of competition results to uncover the real patterns behind tier progression and competitive success.</p>
-            </div>
-            <button className="flex items-center gap-2 text-primary hover:text-accent transition-colors font-bold tracking-widest uppercase text-sm">
-              View Methodology <ArrowRight size={16} />
-            </button>
-          </div>
+      <Box as="section" paddingY={24} marginTop={8} className="border-y border-line rounded-3xl bg-surface" paddingX={{ base: 6, lg: 12 }} width="full">
+        <Box width="full">
+          <Stack direction={{ base: 'col', md: 'row' }} gap={12} justify="between" align="end" marginBottom={16}>
+            <Box className="max-w-2xl">
+              <Text variant="display" as="h2" size="4xl" weight="font-bold" marginBottom={4} className="text-text-main md:text-5xl">The Data Lab</Text>
+              <Text variant="sans" size="lg" className="text-text-dim">We analyze thousands of competition results to uncover the real patterns behind tier progression and competitive success.</Text>
+            </Box>
+            <Box as={NavLink} to="/research" display="flex" align="center" gap={2} className="text-accent-brand hover:opacity-80 transition-colors font-bold tracking-widest uppercase text-sm">
+              View Methods <ArrowRight size={16} />
+            </Box>
+          </Stack>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { stat: "12,450", label: "Competition results analyzed", trend: "+14% this month" },
-              { stat: "98%", label: "Accuracy in tier progression models", trend: "Updated weekly" },
-              { stat: "2.4M", label: "Data points collected", trend: "Since 2018" }
-            ].map((item, i) => (
-              <div key={i} className="bg-surface border border-line p-8 rounded-xl relative overflow-hidden group">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="text-4xl font-bold mb-2 font-mono tracking-tighter text-text-main">{item.stat}</div>
-                <div className="text-text-body font-medium mb-4">{item.label}</div>
-                <div className="text-sm text-secondary flex items-center gap-2">
+          <Grid cols={{ base: 1, md: 3 }} gap={6}>
+            {LAB_STATS.map((item, i) => (
+              <Box key={i} padding={8} className="bg-surface border border-line rounded-xl relative overflow-hidden group">
+                {/* impeccable-ignore */}
+                <Box position="absolute" className="top-0 left-0 w-full h-1 brand-gradient-bg opacity-0 group-hover:opacity-100 transition-opacity"></Box>
+                <Text variant="mono" size="4xl" weight="font-bold" marginBottom={2} className="tracking-tighter text-text-main">{item.stat}</Text>
+                <Text variant="sans" weight="font-medium" marginBottom={4} className="text-text-body">{item.label}</Text>
+                <Stack align="center" gap={2} className="text-sm text-accent-navy">
                   <Zap size={14} /> {item.trend}
-                </div>
-              </div>
+                </Stack>
+              </Box>
             ))}
-          </div>
-        </div>
-      </section>
+          </Grid>
+        </Box>
+      </Box>
 
-      {/* Featured Content */}
-      <section className="py-24 w-full">
-        <div className="flex justify-between items-end mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-text-main">Latest Intel</h2>
-          <button className="hidden md:flex items-center gap-2 text-text-dim hover:text-text-main transition-colors uppercase text-sm font-bold tracking-widest">
+      <Box as="section" paddingY={24} width="full">
+        <Stack justify="between" align="end" marginBottom={12}>
+          <Text variant="display" as="h2" size="4xl" weight="font-bold" className="text-text-main md:text-5xl">Latest Intel</Text>
+          <Stack as={NavLink} to="/blog" align="center" gap={2} display={{ base: "none", md: "flex"}} className="text-text-dim hover:text-text-main transition-colors uppercase text-sm font-bold tracking-widest as-button">
             View All <ArrowRight size={16} />
-          </button>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            { tag: "TRAINING", title: "The biomechanics of a perfect anchor step", time: "5 MIN READ", img: "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=800&q=80" },
-            { tag: "GEAR", title: "Review: The new SwayD competition line", time: "8 MIN READ", img: "https://images.unsplash.com/photo-1546483875-ad9014c88eba?auto=format&fit=crop&w=800&q=80" },
-            { tag: "TRAVEL", title: "Navigating US Open: A survivor's guide", time: "12 MIN READ", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80" }
-          ].map((post, i) => (
-            <div key={i} className="group cursor-pointer flex flex-col gap-4">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface-alt">
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                <img src={post.img} alt={post.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0" />
-                <div className="absolute top-4 left-4 z-20">
-                  <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">{post.tag}</span>
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-text-dim mb-2 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                  {post.time}
-                </div>
-                <h3 className="text-xl font-bold group-hover:text-primary transition-colors text-text-main">{post.title}</h3>
-              </div>
-            </div>
+          </Stack>
+        </Stack>
+        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
+          {recentPosts.slice(0, 3).map((post, i) => (
+              <Stack key={i} direction="col" gap={4} className="group cursor-pointer" as={NavLink} to={`/blog/${post.slug}`}>
+              {/* impeccable-ignore */}
+              <Box position="relative" className="aspect-4-3 overflow-hidden rounded-xl bg-surface">
+                <Box position="absolute" className="inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></Box>
+                <img src={post.image || `https://images.unsplash.com/photo-${1547153760 + i}?auto=format&fit=crop&w=800&q=80`} alt={post.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                <Box position="absolute" className="top-4 left-4 z-20">
+                  <Box as="span" paddingX={3} paddingY={1} className="bg-accent-brand text-bg text-xs font-bold rounded-full uppercase tracking-wider">{post.category || "TRAINING"}</Box>
+                </Box>
+              </Box>
+              <Box>
+                <Stack align="center" gap={2} marginBottom={2} className="text-sm text-text-dim">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-navy"></span>
+                  {post.readingTime || "5 MIN READ"}
+                </Stack>
+                <Text as="h3" variant="display" size="xl" weight="font-bold" className="group-hover:text-accent-brand transition-colors text-text-main">{post.title}</Text>
+              </Box>
+            </Stack>
           ))}
-        </div>
-      </section>
+        </Grid>
+      </Box>
 
-      {/* Gear Picks */}
-      <section className="py-24 border-y border-line w-full rounded-3xl bg-surface-alt px-6 lg:px-12 mt-8 mb-8">
-        <div className="w-full">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/3">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-text-main">Gear Picks</h2>
-              <p className="text-text-dim text-lg mb-8">Stop slipping. Stop sticking. Find the exact shoes, soles, and training equipment the pros use.</p>
-              <button className="border-2 border-text-main px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-text-main hover:text-bg transition-colors rounded-lg text-text-main">
+      <Box as="section" paddingY={24} paddingX={{ base: 6, lg: 12 }} marginTop={8} marginBottom={8} className="border-y border-line w-full rounded-3xl bg-surface">
+        <Box width="full">
+          <Stack direction={{ base: 'col', md: 'row' }} align="center" gap={12}>
+            <Box className="md:w-1/3">
+              <Text variant="display" as="h2" size="4xl" weight="font-bold" marginBottom={4} className="text-text-main md:text-5xl">Gear Picks</Text>
+              <Text variant="sans" size="lg" marginBottom={8} className="text-text-dim">Stop slipping. Stop sticking. Find the exact shoes, soles, and training equipment the pros use.</Text>
+              <Box as={NavLink} to="/gear" paddingX={6} paddingY={3} radius="md" className="border-2 border-text-main font-bold uppercase tracking-widest text-sm hover:bg-text-main hover:text-bg transition-colors text-text-main">
                 Shop The Guide
-              </button>
-            </div>
-            <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
-               {[
-                 { name: "SwayD Urban", type: "Dance Sneaker", price: "$110" },
-                 { name: "Taygra Split", type: "Competition Boot", price: "$145" },
-                 { name: "G-Franco", type: "Street Sole", price: "$95" },
-                 { name: "Suede Brush", type: "Maintenance", price: "$12" }
-               ].map((item, i) => (
-                 <div key={i} className="bg-surface border border-line p-6 rounded-xl hover:border-primary/50 transition-colors cursor-pointer group">
-                   <div className="aspect-square bg-surface-alt rounded-md mb-4 overflow-hidden flex items-center justify-center text-text-dim group-hover:text-primary transition-colors">
+              </Box>
+            </Box>
+            <Grid cols={{ base: 1, sm: 2 }} gap={4} className="md:w-2/3">
+               {GEAR_PICKS.map((item, i) => (
+                 <Box key={i} padding={6} className="bg-surface border border-line rounded-xl hover:border-accent-brand/50 transition-colors cursor-pointer group">
+                   <Stack align="center" justify="center" marginBottom={4} className="aspect-square bg-bg rounded-md overflow-hidden text-text-dim group-hover:text-accent-brand transition-colors">
                      <ShoppingBag size={32} />
-                   </div>
-                   <div className="font-bold text-lg text-text-main">{item.name}</div>
-                   <div className="flex justify-between items-center mt-2">
+                   </Stack>
+                   <Text variant="sans" size="lg" weight="font-bold" className="text-text-main">{item.name}</Text>
+                   <Stack justify="between" align="center" marginTop={2}>
                      <span className="text-sm text-text-dim">{item.type}</span>
-                     <span className="text-primary font-mono">{item.price}</span>
-                   </div>
-                 </div>
+                     <span className="text-accent-brand font-mono">{item.price}</span>
+                   </Stack>
+                 </Box>
                ))}
-            </div>
-          </div>
-        </div>
-      </section>
+            </Grid>
+          </Stack>
+        </Box>
+      </Box>
 
-      {/* Travel Destinations */}
-      <section className="py-24 w-full">
-        <div className="w-full">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-center text-text-main">The Circuit</h2>
-          <p className="text-text-dim text-lg mb-12 text-center max-w-2xl mx-auto">Where to go, where to stay, and what to eat when you're not in the ballroom.</p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { city: "Burbank", event: "US Open", month: "November", img: "https://images.unsplash.com/photo-1580659324838-891000b080d9?auto=format&fit=crop&w=400&q=80" },
-              { city: "Atlanta", event: "Swing Diego", month: "January", img: "https://images.unsplash.com/photo-1575917649705-5b59aaa12e6b?auto=format&fit=crop&w=400&q=80" },
-              { city: "Denver", event: "Atlanta WCS", month: "August", img: "https://images.unsplash.com/photo-1605338144211-137b2d131f6e?auto=format&fit=crop&w=400&q=80" },
-              { city: "London", event: "UK Championships", month: "May", img: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=400&q=80" }
-            ].map((dest, i) => (
-              <div key={i} className="relative aspect-[3/4] rounded-xl overflow-hidden group cursor-pointer">
-                <img src={dest.img} alt={dest.city} className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-6 w-full">
-                  <div className="text-primary font-mono text-sm mb-1">{dest.month}</div>
-                  <div className="text-2xl font-bold mb-1 text-white">{dest.city}</div>
-                  <div className="text-white/80 text-sm font-medium">{dest.event}</div>
-                </div>
-              </div>
+      <Box as="section" paddingY={24} width="full">
+        <Box width="full">
+          <Text variant="display" as="h2" size="4xl" weight="font-bold" marginBottom={4} className="text-center text-text-main md:text-5xl">Events</Text>
+          <Box marginX="auto" className="max-w-2xl">
+            <Text variant="sans" size="lg" marginBottom={12} className="text-text-dim text-center">Where to go, where to stay, and what to eat when you're not in the ballroom.</Text>
+          </Box>
+          <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={4}>
+            {upcomingEvents.slice(0, 4).map((dest, i) => (
+              <Box key={i} position="relative" className="aspect-3-4 rounded-xl overflow-hidden group cursor-pointer" as="a" href={dest.url} target="_blank" rel="noopener noreferrer">
+                <img src={`https://images.unsplash.com/photo-${1580659324838 + i}?auto=format&fit=crop&w=400&q=80`} alt={dest.name} className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
+                <Box position="absolute" className="inset-0 fade-to-top-bg from-bg via-bg/20 to-transparent"></Box>
+                <Box position="absolute" padding={6} width="full" className="bottom-0 left-0">
+                  <Box className="text-accent-brand font-mono text-sm" marginBottom={1}>{new Date(dest.startDate).toLocaleDateString('en-US', { month: 'long' })}</Box>
+                  <Box className="text-2xl font-bold text-white" marginBottom={1}>{dest.location}</Box>
+                  <Box className="text-white/80 text-sm font-medium">{dest.name}</Box>
+                </Box>
+              </Box>
             ))}
-          </div>
-        </div>
-      </section>
+          </Grid>
+        </Box>
+      </Box>
 
-      {/* Subscribe Section */}
-      <section className="py-32 relative overflow-hidden w-full rounded-3xl bg-surface-alt mt-8 mb-8">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10 opacity-50"></div>
-        <div className="max-w-3xl mx-auto text-center relative z-10 px-6">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 text-text-main">Never miss a beat.</h2>
-          <p className="text-xl text-text-dim mb-10">Join 5,000+ competitive dancers receiving our weekly breakdown of training tactics, gear drops, and data insights.</p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="YOUR EMAIL ADDRESS"
-              className="flex-1 bg-surface border border-line px-6 py-4 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-text-main font-mono placeholder:text-text-dim backdrop-blur-sm"
-            />
-            <button className="bg-primary text-primary-foreground px-8 py-4 font-bold rounded-lg hover:opacity-90 transition-colors uppercase tracking-wide">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
+      <Box as="section" paddingY={32} position="relative" marginTop={8} marginBottom={8} className="overflow-hidden w-full rounded-3xl bg-surface">
+        {/* impeccable-ignore */}
+        <Box position="absolute" className="inset-0 brand-gradient-bg opacity-50"></Box>
+        <Box position="relative" paddingX={6} marginX="auto" className="max-w-3xl text-center z-10">
+          <Text variant="display" as="h2" size="4xl" weight="font-black" marginBottom={6} className="text-text-main md:text-6xl">Never miss a beat.</Text>
+          <Text variant="sans" size="xl" marginBottom={10} className="text-text-dim">Join 5,000+ competitive dancers receiving our weekly breakdown of training tactics, gear drops, and data insights.</Text>
+          <Box marginX="auto" className="max-w-md">
+            <Stack direction={{ base: 'col', sm: 'row' }} gap={4}>
+              <Box flex={1} as="input" paddingX={6} paddingY={4} className="bg-surface border border-line rounded-lg focus:outline-none focus:border-accent-brand focus:ring-1 focus:ring-accent-brand text-text-main font-mono placeholder:text-text-dim backdrop-blur-sm" type="email" placeholder="YOUR EMAIL ADDRESS" />
+              <Box as={NavLink} to="/contact" paddingX={8} paddingY={4} className="bg-accent-brand text-bg font-bold rounded-lg hover:opacity-90 transition-colors uppercase tracking-wide ">
+                Contact Us
+              </Box>
+            </Stack>
+          </Box>
+        </Box>
+      </Box>
+    </Stack>
   );
 }
