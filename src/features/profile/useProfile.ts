@@ -67,7 +67,6 @@ const PROFILE_DATA: ProfileData = {
     },
     {
       id: "education-focus",
-      title: "Stats",
       items: [
         {
           title: "Education",
@@ -99,12 +98,11 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "connect",
       eyebrow: "Connect & Networking",
-      title: "Let's Talk",
       links: [
-        { label: 'INSTAGRAM', url: 'https://instagram.com/' },
-        { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
-        { label: 'GITHUB', url: 'https://github.com/arii' },
-        { label: 'PORTFOLIO', url: 'https://arii.github.io/' }
+        { label: 'Instagram', url: 'https://instagram.com/' },
+        { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
+        { label: 'GitHub', url: 'https://github.com/arii' },
+        { label: 'Portfolio', url: 'https://arii.github.io/' }
       ]
     }
   ],
@@ -114,10 +112,10 @@ const PROFILE_DATA: ProfileData = {
     { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" }
   ],
   links: [
-    { label: 'INSTAGRAM', url: 'https://instagram.com/' },
-    { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
-    { label: 'GITHUB', url: 'https://github.com/arii' },
-    { label: 'PORTFOLIO', url: 'https://arii.github.io/' }
+    { label: 'Instagram', url: 'https://instagram.com/' },
+    { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
+    { label: 'GitHub', url: 'https://github.com/arii' },
+    { label: 'Portfolio', url: 'https://arii.github.io/' }
   ]
 };
 
