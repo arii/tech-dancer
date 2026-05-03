@@ -12,14 +12,14 @@ export default function BlogFeed(): JSX.Element {
     <Box as="section">
       <SEO
         title="Blog"
-        description="West Coast Swing blog posts covering travel, lifestyle, gear reviews, technical notes, and competition insights."
+        description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
       />
       <FolioGrid
         items={posts}
         categoryTitle="Blog Posts"
         as="h1"
         label="INSIGHTS"
-        description="West Coast Swing blog posts covering travel, lifestyle, gear reviews, technical notes, and competition insights."
+        description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
         basePath="/blog"
         view={view}
         onViewChange={setView}

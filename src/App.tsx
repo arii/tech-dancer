@@ -78,7 +78,7 @@ export function RootLayout() {
 
   const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
 
-  return (
+    return (
     <>
       <MainLayout>
         <AnimatePresence mode="wait">

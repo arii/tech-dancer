@@ -1,6 +1,6 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 
-export function Footer() {
+export function Footer(): JSX.Element {
   const legalLinks = [
     { label: 'Privacy', href: '#' },
     { label: 'Terms', href: '#' },
@@ -11,7 +11,7 @@ export function Footer() {
     <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-line mt-auto">
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest">
-          © 2026 BOOMTICK.BLOG
+          © 2026 BOOM TICK
         </Text>
         <Stack direction="row" gap={2} align="center">
           {legalLinks.map((link) => (
