@@ -7,7 +7,7 @@ const navItems = [
   { icon: BookOpen, label: "Blog", href: "/" },
   { icon: ShoppingBag, label: "Gear Reviews", href: "/" },
   { icon: BarChart2, label: "Data Lab", href: "/" },
-  { icon: Info, label: "About Tech Dancer", href: "/" },
+  { icon: Info, label: "About", href: "/about" },
 ];
 
 const Sidebar = () => {
