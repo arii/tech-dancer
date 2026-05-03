@@ -14,7 +14,7 @@ const Blog = () => {
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
           <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/60 p-3">
             {blogFilters.map((item, i) => (
-              <button key={item} className={`border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors rounded-full ${i === 0 ? "bg-secondary text-background border-secondary shadow-sm" : "bg-background/40 text-muted-foreground border-border hover:border-primary/40 hover:text-foreground hover:bg-background/70"}`}>
+              <button key={item} className={`border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${i === 0 ? "bg-secondary text-background border-secondary shadow-sm" : "bg-background/40 text-muted-foreground border-border hover:border-primary/40 hover:text-foreground hover:bg-background/70"}`}>
                 {item}
               </button>
             ))}
@@ -28,7 +28,7 @@ const Blog = () => {
                 </div>
                 <h2 className="text-lg font-black leading-snug">{post.title}</h2>
                 <p className="text-sm text-foreground/72 leading-6">{post.excerpt}</p>
-                <a href={post.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-secondary hover:text-secondary/80">Read Article</a>
+                <a href={post.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-secondary hover:text-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 rounded-sm">Read Article</a>
               </article>
             ))}
           </div>

@@ -24,7 +24,7 @@ const Gear = () => {
                 </div>
                 <h2 className="text-lg font-black leading-snug">{item.title}</h2>
                 <p className="text-sm text-foreground/72 leading-6">{item.description}</p>
-                <a href={item.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-primary hover:text-primary/80">Read Review</a>
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm">Read Review</a>
               </article>
             ))}
           </div>
