@@ -71,14 +71,14 @@ export function GlobalSearch() {
   return (
     <Box
       position="fixed"
-      inset="y"
+
       zIndex="search"
       display="flex"
       justify="center"
       align="start"
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
-      className="bg-bg/90 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-56"
+      className="bg-bg/90 backdrop-blur-md left-0 right-0 bottom-0 top-16 lg:top-0 lg:left-56"
       onClick={close}
     >
       <Box

@@ -13,7 +13,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
     <Box
       as="nav"
       aria-label="Mobile Navigation"
-      className="md:hidden sticky top-0 left-0 right-0 h-16 flex items-center justify-between px-4 bg-surface/90 backdrop-blur-xl border-b border-line/50 z-50"
+      className="md:hidden fixed top-0 left-0 right-0 w-full h-16 flex items-center justify-between px-4 bg-surface/90 backdrop-blur-xl border-b border-line/50 z-50"
     >
       <Box 
         as="div"
