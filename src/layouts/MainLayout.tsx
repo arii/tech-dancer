@@ -145,7 +145,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
         className="sr-only"
       />
       <Box display="flex" minHeight="screen" width="full">
-        <Navigation />
+        <Box zIndex="search">
+          <Navigation />
+        </Box>
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
