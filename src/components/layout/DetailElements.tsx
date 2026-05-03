@@ -16,7 +16,7 @@ export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItem
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
       <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
-        <Text variant="display" size="xl" weight="font-bold">{value}</Text>
+      <Text variant="display" size="xl" weight="font-bold" className="text-white">{value}</Text>
       </Box>
     </Stack>
   );
@@ -68,7 +68,7 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
        <Stack gap={3}>
           <Box display="flex" align="center" gap={3}>
              <Shield className="w-6 h-6 text-emerald-600" />
-             <Text variant="display" size="2xl" weight="font-black" intent="success">THE VERDICT</Text>
+        <Text variant="display" size="2xl" weight="font-black" intent="success" className="text-white">THE VERDICT</Text>
           </Box>
           <Text variant="body" size="lg" intent="success" italic className="leading-relaxed font-medium">
             "{verdict}"

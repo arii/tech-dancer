@@ -34,7 +34,7 @@ export function PageHeader({
         <Text variant="mono" size="xs" color="brand" weight="font-bold" tracking="wide-editorial" uppercase>
           {label}
         </Text>
-        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-white leading-tight tracking-tight break-words">
+        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-white leading-tight tracking-tight break-words max-w-full">
           {title}
         </Text>
         {description && (

@@ -57,7 +57,7 @@ export function DetailLayout({
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
               {category} • {date} • {rt} min read
             </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+            <Text variant="headline" size="fluid-5" weight="font-black" className="text-white leading-tight tracking-tight break-words">
               {title}
             </Text>
             {headerExtras}
@@ -86,7 +86,7 @@ export function DetailLayout({
             <Box className={cn(sidebar ? 'lg:col-span-2' : 'w-full', 'order-1 lg:order-2')}>
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
+                className="prose prose-slate prose-headings:font-display prose-headings:text-white prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
                 style={{ maxWidth: '720px' }}
               >
                 <MarkdownRenderer content={content} />
