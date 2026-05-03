@@ -7,7 +7,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/',
     index: true,
-    lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
+    lazy: () => import('@/features/dashboard/Dashboard').then(m => ({ Component: m.default })),
     label: 'Home',
     icon: Home,
     skeleton: 'grid'

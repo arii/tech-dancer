@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
+import { Box, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -10,11 +10,17 @@ import { Search } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 export default function Toolbox() {
-  const { filteredCategories, searchTerm, setSearchTerm } = useToolbox();
+  const { filteredCategories, searchTerm, setSearchTerm, selectedPill, setSelectedPill } = useToolbox();
 
   const allFilteredItems = useMemo(() =>
     filteredCategories.flatMap(cat => cat.items),
   [filteredCategories]);
+
+  const pills = [
+    { label: "Best for travel", value: "Best for travel", color: "text-primary border-primary/30 bg-primary/10" },
+    { label: "Highly recommended", value: "Highly recommended", color: "text-secondary border-secondary/30 bg-secondary/10" },
+    { label: "Competition ready", value: "Competition ready", color: "text-accent-vivid border-accent-vivid/30 bg-accent-vivid/10" }
+  ];
 
   return (
     <Box as="section">
@@ -29,14 +35,18 @@ export default function Toolbox() {
           description="Honest reviews of the gear, travel essentials, and accessories that keep WCS dancers moving."
         />
 
-        <Box className="mb-8 flex flex-wrap gap-2 rounded-2xl border border-line/80 bg-surface/60 p-3 shadow-sm">
-          {[
-            { label: "Best for travel", color: "text-primary border-primary/30 bg-primary/10" },
-            { label: "Highly recommended", color: "text-secondary border-secondary/30 bg-secondary/10" },
-            { label: "Competition ready", color: "text-accent-vivid border-accent-vivid/30 bg-accent-vivid/10" }
-          ].map((badge) => (
-            <span key={badge.label} className={cn("inline-flex items-center rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em]", badge.color)}>
-              {badge.label}
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} className="rounded-2xl border border-line/80 bg-surface/60 shadow-sm">
+          {pills.map((pill) => (
+            <span 
+              key={pill.label} 
+              onClick={() => setSelectedPill(pill.value)}
+              className={cn(
+                "inline-flex items-center rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-emphasized cursor-pointer", 
+                pill.color,
+                selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"
+              )}
+            >
+              {pill.label}
             </span>
           ))}
         </Box>

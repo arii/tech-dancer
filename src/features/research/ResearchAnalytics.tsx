@@ -1,11 +1,9 @@
-import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { Database, FileText, ArrowRight } from 'lucide-react';
+import { FileText, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
+import { SEO } from '@/components/SEO';
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
@@ -38,16 +36,16 @@ export default function ResearchAnalytics() {
                 className="border-line/80 bg-surface shadow-sm transition-colors hover:border-primary/30 group cursor-pointer"
                 onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
               >
-                <Text size="micro" weight="font-bold" className="mb-3 uppercase tracking-[0.25em] text-text-dim/65">
+                <Text size="micro" weight="font-bold" marginBottom={3} uppercase tracking="widest" color="dim">
                   {tool.status}
                 </Text>
-                <Text as="h2" size="lg" weight="font-bold" className="mb-2 group-hover:text-primary transition-colors">
+                <Text as="h2" size="lg" weight="font-bold" marginBottom={2} className="group-hover:text-primary transition-colors">
                   {tool.name}
                 </Text>
-                <Text size="sm" className="leading-7 text-text-body/72 mb-4">
+                <Text size="sm" marginBottom={4} className="leading-7 text-text-body/72">
                   {tool.layman}
                 </Text>
-                <Box display="flex" align="center" gap={2} className="text-text-dim/60 group-hover:text-primary transition-colors mt-auto">
+                <Box display="flex" align="center" gap={2} marginTop="auto" color="dim" className="group-hover:text-primary transition-colors">
                   <Text weight="font-bold" size="xs" className="uppercase tracking-widest">Launch Console</Text>
                   <ArrowRight size={14} />
                 </Box>
@@ -89,10 +87,10 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box className="rounded-2xl border border-dashed border-line/80 bg-surface/40 p-12 text-center shadow-xl relative overflow-hidden">
+            <Box padding={12} className="rounded-2xl border border-dashed border-line/80 bg-surface/40 text-center shadow-xl relative overflow-hidden">
               <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="accent" opacity={0.03} radius="full" className="blur-3xl" />
-              <Text as="h2" size="2xl" weight="font-black" className="mb-3 text-accent uppercase tracking-tighter">ETL Pipeline Synchronizing...</Text>
-              <Text className="mx-auto max-w-2xl text-base leading-8 text-text-body/90">
+              <Text as="h2" size="2xl" weight="font-black" marginBottom={3} color="accent" uppercase tracking="tighter">ETL Pipeline Synchronizing...</Text>
+              <Text marginX="auto" maxWidth="2xl" className="text-base leading-8 text-text-body/90">
                 The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
               </Text>
             </Box>

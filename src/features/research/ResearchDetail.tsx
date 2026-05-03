@@ -127,7 +127,7 @@ export default function ResearchDetail() {
                     <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
                       LABORATORY_ACCESS // {tool.category}
                     </Text>
-                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-primary leading-tight tracking-tight">
                       {tool.name}
                     </Text>
                   <Box border surface="accent" padding="compact">
@@ -147,7 +147,7 @@ export default function ResearchDetail() {
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
                     <Box border padding="compact" display="flex" align="center" gap={3}>
                       <Database className="w-4 h-4 text-accent" />
-                      <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
+                      <Text variant="mono" size="xs" color="accent">WSDC REGISTRY // AUTHENTICATED</Text>
                     </Box>
                   </Stack>
                 </Grid>

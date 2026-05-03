@@ -188,6 +188,7 @@ const maps = {
 export const getPosts = () => items.posts;
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
+export const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);

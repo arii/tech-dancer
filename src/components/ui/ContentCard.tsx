@@ -1,8 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { readingTime } from '@/lib/content';
-import { cn } from '@/lib/utils';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
@@ -22,9 +20,9 @@ export function ContentCard({
   category, 
   excerpt, 
   date, 
-  image, 
+  image: _image, 
   basePath, 
-  content, 
+  content: _content, 
   compact = false,
   ...motionProps 
 }: ContentCardProps) {

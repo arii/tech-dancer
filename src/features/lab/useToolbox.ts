@@ -13,6 +13,7 @@ export function useToolbox() {
   });
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
+  const [selectedPill, setSelectedPill] = useSearchParam('pill', 'all');
 
   const view = viewParam as ViewMode;
   const setView = (v: ViewMode) => setViewParam(v);
@@ -24,11 +25,29 @@ export function useToolbox() {
   ];
 
   const groupedResources = useMemo(() => {
+    let filteredResources = resources;
+
+    if (selectedPill && selectedPill !== 'all') {
+      filteredResources = resources.filter(resource => {
+        // Map pills to categories or tags
+        switch (selectedPill) {
+          case 'Best for travel':
+            return safeSearch(resource.category, 'travel') || resource.tags?.includes('travel');
+          case 'Highly recommended':
+            return resource.tags?.includes('highly recommended');
+          case 'Competition ready':
+            return resource.tags?.includes('competition ready');
+          default:
+            return true;
+        }
+      });
+    }
+
     return categories.map(cat => ({
       ...cat,
-      items: resources.filter(r => safeSearch(r.category, cat.id))
+      items: filteredResources.filter(r => safeSearch(r.category, cat.id))
     }));
-  }, [resources]);
+  }, [resources, selectedPill]);
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) return groupedResources;
@@ -48,6 +67,8 @@ export function useToolbox() {
     setSearchTerm,
     filteredCategories,
     view,
-    setView
+    setView,
+    selectedPill,
+    setSelectedPill
   };
 }

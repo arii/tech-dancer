@@ -1,12 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'motion/react';
 
 const NUM_BARS = 28;
-
-/** HSL brand stops — same intent as `artifacts/boomtick/src/components/Equalizer.tsx` (color-mix across the row). */
-const PRIMARY = 'hsl(190 100% 50%)';
-const SECONDARY = 'hsl(258 90% 66%)';
-const ACCENT = 'hsl(313 100% 50%)';
 
 export interface EqualizerProps {
   /** Hero panels use compact density (matches artifact home). */
@@ -18,26 +13,22 @@ export interface EqualizerProps {
  * Kinetic equalizer: per-bar color-mix + independent motion loops (ported from artifact boomtick stack).
  */
 export default function Equalizer({ compact = true, reverse = false }: EqualizerProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const bars = useMemo(() => {
     return Array.from({ length: NUM_BARS }).map((_, i) => {
-      const ratio = i / (NUM_BARS - 1);
-      const adjustedRatio = reverse ? 1 - ratio : ratio;
+
+      // const adjustedRatio = reverse ? 1 - ratio : ratio;
       const wave = Math.sin((i / NUM_BARS) * Math.PI * 2.2) * 0.5 + 0.5;
 
-      let color: string;
-      if (adjustedRatio < 0.5) {
-        const pct = Math.round(96 - adjustedRatio * 100);
-        color = `color-mix(in srgb, ${PRIMARY} ${pct}%, ${SECONDARY})`;
-      } else {
-        const pct = Math.round(96 - (adjustedRatio - 0.5) * 100);
-        color = `color-mix(in srgb, ${SECONDARY} ${pct}%, ${ACCENT})`;
-      }
+      // Removed color calculation as we are now using a static linear gradient
+      // let color: string;
+      // if (adjustedRatio < 0.5) {
+      //   const pct = Math.round(96 - adjustedRatio * 100);
+      //   color = `color-mix(in srgb, ${PRIMARY} ${pct}%, ${SECONDARY})`;
+      // } else {
+      //   const pct = Math.round(96 - (adjustedRatio - 0.5) * 100);
+      //   color = `color-mix(in srgb, ${SECONDARY} ${pct}%, ${ACCENT})`;
+      // }
+
 
       const base = compact ? 18 : 26;
       const minH = base + wave * (compact ? 18 : 22);
@@ -45,7 +36,7 @@ export default function Equalizer({ compact = true, reverse = false }: Equalizer
       const maxH = minH + (compact ? 18 : 34) + jitter;
 
       return {
-        color,
+        // color, // Removed as it's not used directly anymore
         minH,
         maxH,
         delay: i * 0.045,
@@ -55,23 +46,20 @@ export default function Equalizer({ compact = true, reverse = false }: Equalizer
     });
   }, [compact, reverse]);
 
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <div className="pointer-events-none relative flex h-full w-full items-end justify-center gap-[3px] overflow-hidden px-4">
+    <div className="pointer-events-none relative flex h-full w-full items-end justify-center gap-[4px] overflow-hidden px-4 pb-[18px]">
       <motion.div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-50"
+        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-[.22]"
       />
       {bars.map((bar, i) => (
         <motion.div
           key={i}
           className="min-h-[4px] flex-1 origin-bottom rounded-t-sm"
           style={{
-            backgroundColor: bar.color,
-            boxShadow: `0 0 10px ${bar.color}`,
+            backgroundColor: 'transparent',
+            background: `linear-gradient(180deg, #00CFFF, #8B2FFF, #FF00C8)`,
+            boxShadow: `0 0 14px rgba(0,207,255,.2)`,
             opacity: bar.opacity,
           }}
           initial={{ height: `${bar.minH}%`, scaleY: 0.95 }}

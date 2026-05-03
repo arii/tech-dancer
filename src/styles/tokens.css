@@ -14,6 +14,11 @@
   --raw-color-error: hsl(0 84% 60%);
   --raw-color-error-bg: hsla(0, 84%, 60%, 0.1);
 
+  --color-cyan: #00cfff;
+  --color-purple: #8b2fff;
+  --color-magenta: #ff00c8;
+
+
   /* BoomTick Brand Specifics */
   --color-primary: hsl(190 100% 50%);
   --color-secondary: hsl(258 90% 66%);

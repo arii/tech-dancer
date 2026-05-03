@@ -117,6 +117,7 @@ export default function UXAuditor() {
             label="Visual UX Auditor"
             title="Multimodal AI Analysis"
             description="Automated visual regression and UX improvement suggestions across viewports."
+            descriptionMaxWidth="full"
           />
         </Box>
 

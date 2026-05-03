@@ -14,7 +14,7 @@ export function FormField({ label, error, children }: FormFieldProps) {
   return (
     <Stack gap={2} marginBottom={6}>
       <Box display="flex" justify="between" align="center">
-        <Text as="label" htmlFor={id} variant="mono" size="micro" weight="font-black" className="uppercase tracking-[0.2em] text-primary">
+        <Text as="label" htmlFor={id} variant="mono" size="micro" weight="font-black" uppercase tracking="emphasized" className="text-primary">
           {label}
         </Text>
         {error && (

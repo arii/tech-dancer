@@ -99,7 +99,8 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     rows={6}
                     placeholder="Message payload..."
                     aria-required="true"
-                    className={cn(inputClasses, "resize-none min-h-[200px]", errors.message && "border-error/50")}
+                    minHeight={200}
+                    className={cn(inputClasses, "resize-none", errors.message && "border-error/50")}
                   />
                 </FormField>
 

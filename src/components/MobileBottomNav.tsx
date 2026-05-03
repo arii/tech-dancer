@@ -27,7 +27,7 @@ export function MobileBottomNav() {
                 )}
               >
                 <Icon className={cn("w-6 h-6", stroke.thick)} />
-                <Text variant="mono" size="micro" weight="font-bold" className="mt-1">
+                <Text variant="mono" size="micro" weight="font-bold">
                   {item.label.split(' ')[0]}
                 </Text>
               </NavLink>

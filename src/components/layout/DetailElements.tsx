@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Star, ShieldCheck, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 export function VerdictCallout({
   score,

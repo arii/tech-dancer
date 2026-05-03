@@ -131,7 +131,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           position="relative"
           overflowY="auto"
           paddingTop={{ base: 16, md: 0 }}
-          marginLeft={{ md: 56 }}
+          marginLeft={{ md: 64 }}
           surface="bg"
           scrollBehavior="smooth"
           scrollPaddingTop={64}

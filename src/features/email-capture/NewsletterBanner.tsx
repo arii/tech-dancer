@@ -28,7 +28,8 @@ export function NewsletterBanner() {
         className="pointer-events-auto"
       >
         <Box
-          className="bg-surface/95 backdrop-blur-2xl border-t border-line/50 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]"
+          className="bg-surface/95 backdrop-blur-2xl border-t border-line/50"
+          shadow="topOverlay"
           paddingX={{ base: 4, md: 8 }}
           paddingY={4}
           width="full"
@@ -40,7 +41,8 @@ export function NewsletterBanner() {
                 size="sm"
                 onClick={hideBar}
                 aria-label="Dismiss"
-                className="text-text-dim/50 hover:text-primary transition-colors p-1 min-w-0"
+                className="text-text-dim/50 hover:text-primary transition-colors min-w-0"
+                padding={1}
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -69,7 +71,7 @@ export function NewsletterBanner() {
                   <Text variant="display" size="sm" uppercase tracking="tight" className="text-white">
                     Weekly Insights
                   </Text>
-                  <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-[0.2em] text-primary">
+                  <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="emphasized" className="text-primary">
                     Dance Analytics // Gear Reviews // Community Updates
                   </Text>
                 </Stack>

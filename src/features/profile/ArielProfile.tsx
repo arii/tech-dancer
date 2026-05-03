@@ -2,29 +2,29 @@ import { motion } from 'motion/react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Briefcase, Lightbulb, Instagram, Linkedin, Github, Globe, Star, Zap, Terminal, Globe2 } from 'lucide-react';
+import { Star, Zap, Terminal, Globe2, Globe } from 'lucide-react';
 
 const CONNECT_ITEMS = [
-  { label: 'Instagram', href: 'https://instagram.com/arii', icon: Instagram },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/arianders', icon: Linkedin },
-  { label: 'GitHub', href: 'https://github.com/arii', icon: Github },
-  { label: 'Portfolio', href: 'https://arii.github.io', icon: Globe },
+  { label: 'Instagram', href: 'https://instagram.com/arii' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/arianders' },
+  { label: 'GitHub', href: 'https://github.com/arii' },
+  { label: 'Portfolio', href: 'https://arii.github.io' },
 ];
 
 const SERVICE_CARDS = [
   {
     title: "Robotics & Engineering",
-    text: "Building scalable, production-ready systems with focus on perception, motion planning, custom visualization, and AWS IoT telemetry.",
+    text: "My background is in robot software engineering and architecture, helping startups build scalable, production-ready systems. My specialized skillsets include perception, motion planning, custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep autonomous fleets reliable and mission-ready.",
     icon: Terminal
   },
   {
     title: "AI Strategy",
-    text: "Implementing generative AI to automate internal workflows, content management, and specialized systems like WebBluetooth fitness tracking.",
+    text: "I implement generative AI tools to automate internal workflows and content management. Products built with these tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system.",
     icon: Zap
   },
   {
-    title: "Digital Presence",
-    text: "Handling the technical logistics for artists and niche brands — from functional websites and SEO to booking tools and merch infrastructure.",
+    title: "Digital Presence & Management",
+    text: "I help artists and niche brands build the infrastructure they need to grow — from functional websites and merch stores to SEO, booking tools, and content workflows. I handle the technical logistics from start to finish so you can stay focused on your craft.",
     icon: Globe2
   }
 ];
@@ -60,6 +60,7 @@ export default function ArielProfile() {
                 {/* Professional Services */}
                 <section>
                   <Text as="h2" size="3xl" weight="font-black" tracking="tight" marginBottom={6} className="text-white">What I Do Professionally</Text>
+                  <Text className="text-lg leading-relaxed text-text-body/90" marginBottom={4}>I provide high-level technical consulting for startups and project-based digital execution for niche brands.</Text>
                   <Grid cols={{ base: 1, md: 1 }} gap={4}>
                     {SERVICE_CARDS.map((card) => (
                       <Box key={card.title} padding={6} border radius="2xl" surface="surface" className="border-line/40 hover:border-primary/40 transition-colors group">
@@ -95,36 +96,48 @@ export default function ArielProfile() {
                   </Text>
                 </section>
 
-                {/* The Vision */}
+                {/* Why I Built This Site */}
                 <section>
-                   <Box padding={{ base: 6, md: 10 }} radius="3xl" surface="muted" border className="border-primary/20 bg-primary/5 relative overflow-hidden">
-                      <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="primary" opacity={0.05} radius="full" className="blur-3xl" />
-                      <Stack gap={8} position="relative" zIndex={10}>
-                        <Stack gap={4}>
-                          <Text as="h2" size="3xl" weight="font-black" className="text-white">The Vision</Text>
-                          <Text className="text-lg leading-relaxed text-text-body/90">
-                            <span className="text-primary font-bold">boomtick.blog</span> is where I share the systems behind a sustainable WCS lifestyle. 
-                            From practical travel advice and gear selection to event analysis and performance optimization. 
-                            It's about finding the small efficiencies that make a big difference over a lifetime of dancing.
-                          </Text>
-                        </Stack>
-                        
-                        <Box display="flex" gap={6} wrap className="pt-2">
-                           <Box display="flex" align="center" gap={2}>
-                              <Star size={14} className="text-primary fill-primary shrink-0" />
-                              <Text variant="mono" size="micro" weight="font-bold" color="brand" className="uppercase tracking-widest whitespace-nowrap">DATA DRIVEN</Text>
-                           </Box>
-                           <Box display="flex" align="center" gap={2}>
-                              <Star size={14} className="text-primary fill-primary shrink-0" />
-                              <Text variant="mono" size="micro" weight="font-bold" color="brand" className="uppercase tracking-widest whitespace-nowrap">ARTISTICALLY CENTERED</Text>
-                           </Box>
-                           <Box display="flex" align="center" gap={2}>
-                              <Star size={14} className="text-primary fill-primary shrink-0" />
-                              <Text variant="mono" size="micro" weight="font-bold" color="brand" className="uppercase tracking-widest whitespace-nowrap">SYSTEMS FOCUSED</Text>
-                           </Box>
-                        </Box>
+                  <Text as="h2" size="3xl" weight="font-black" tracking="tight" marginBottom={6} className="text-white">Why I Built This Site</Text>
+                  <Text className="text-lg leading-relaxed text-text-body/90">
+                    <span className="text-primary font-bold">boomtick.blog</span> is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that actually helps, event tips, and the small optimizations that make a big difference over a season of dancing.
+                  </Text>
+                </section>
+
+                {/* What I Love About WCS */}
+                <section>
+                  <Text as="h2" size="3xl" weight="font-black" tracking="tight" marginBottom={6} className="text-white">What I Love About WCS</Text>
+                  <Grid cols={{ base: 1, sm: 3 }} gap={4}>
+                    <Box padding={4} border radius="2xl" surface="surface" className="border-line/40">
+                      <Stack gap={2}>
+                        <Star size={24} className="text-primary" />
+                        <Text as="h3" size="lg" weight="font-bold" className="text-white">Style</Text>
+                        <Text className="text-text-body/80">Bright outfits, clean lines, and personal expression.</Text>
                       </Stack>
-                   </Box>
+                    </Box>
+                    <Box padding={4} border radius="2xl" surface="surface" className="border-line/40">
+                      <Stack gap={2}>
+                        <Zap size={24} className="text-primary" /> {/* Using Zap for Timing for now */}
+                        <Text as="h3" size="lg" weight="font-bold" className="text-white">Timing</Text>
+                        <Text className="text-text-body/80">Musicality and precision matter just as much as flash.</Text>
+                      </Stack>
+                    </Box>
+                    <Box padding={4} border radius="2xl" surface="surface" className="border-line/40">
+                      <Stack gap={2}>
+                        <Globe size={24} className="text-primary" /> {/* Using Globe for Travel for now */}
+                        <Text as="h3" size="lg" weight="font-bold" className="text-white">Travel</Text>
+                        <Text className="text-text-body/80">Every weekend is a chance to see new floors, new people, and new ideas.</Text>
+                      </Stack>
+                    </Box>
+                  </Grid>
+                </section>
+
+                {/* Financial Strategies for WCS */}
+                <section>
+                  <Text as="h2" size="3xl" weight="font-black" tracking="tight" marginBottom={6} className="text-white">Financial Strategies for WCS</Text>
+                  <Text className="text-lg leading-relaxed text-text-body/90">
+                    I love maximizing credit card perks and hotel benefits, which helps me make the WCS event lifestyle both high-end and feasible. The goal is to spend more energy dancing and less energy stressing over the logistics.
+                  </Text>
                 </section>
               </Stack>
             </Box>
@@ -134,29 +147,14 @@ export default function ArielProfile() {
               <Stack gap={6} className="lg:sticky lg:top-8">
                 <Box padding={8} border radius="2xl" surface="surface" className="border-line/50 shadow-xl">
                   <Text variant="mono" size="xs" weight="font-bold" color="brand" uppercase tracking="widest" marginBottom={6}>At a Glance</Text>
-                  <Stack gap={6}>
-                    <Box>
-                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Location</Text>
-                       <Text as="div" weight="font-bold" className="text-white">San Francisco, CA</Text>
-                    </Box>
-                    <Box>
-                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Dance Focus</Text>
-                       <Text as="div" weight="font-bold" className="text-white">West Coast Swing + Lindy Hop</Text>
-                    </Box>
-                    <Box>
-                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Dance Level</Text>
-                       <Text as="div" weight="font-bold" className="text-white">Competitive Intermediate Follow</Text>
-                    </Box>
-                    <Box>
-                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Education</Text>
-                       <Text as="div" weight="font-bold" className="text-white">PhD in Computer Science, MIT</Text>
-                    </Box>
-                  </Stack>
+                  <Text className="text-text-body/80 leading-relaxed">
+                    San Francisco, CA<br/>West Coast Swing + Lindy Hop<br/>Competitive Intermediate Follow
+                  </Text>
                 </Box>
 
                 <Box padding={8} border radius="2xl" surface="surface" className="border-line/50">
-                  <Text variant="mono" size="xs" weight="font-bold" color="brand" uppercase tracking="widest" marginBottom={6}>Connect</Text>
-                  <Stack gap={3}>
+                  <Text variant="mono" size="xs" weight="font-bold" color="brand" uppercase tracking="widest" marginBottom={6}>Connect & Networking</Text>
+                  <Box display="flex" wrap gap={2}>
                     {CONNECT_ITEMS.map((item) => (
                       <Box 
                         key={item.label} 
@@ -164,22 +162,13 @@ export default function ArielProfile() {
                         href={item.href} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        display="flex"
-                        align="center"
-                        justify="between"
-                        padding={4}
-                        radius="xl"
-                        border
-                        className="border-line/50 hover:bg-white/5 hover:border-primary/30 transition-all group"
+                        display="inline-flex" align="center" gap={2} paddingX={4} paddingY={2}
+                        className="rounded-full border border-line text-sm font-semibold text-text-body transition-colors hover:border-primary/40 hover:text-white"
                       >
-                        <Box display="flex" align="center" gap={3}>
-                           <item.icon size={18} className="text-text-dim group-hover:text-primary transition-colors" />
-                           <Text weight="font-bold" className="text-white group-hover:text-white">{item.label}</Text>
-                        </Box>
-                        <Box className="w-2 h-2 rounded-full bg-line group-hover:bg-primary transition-colors" />
+                        {item.label}
                       </Box>
                     ))}
-                  </Stack>
+                  </Box>
                 </Box>
               </Stack>
             </Box>
@@ -187,8 +176,9 @@ export default function ArielProfile() {
 
           {/* Photo Gallery */}
           <Box paddingTop={12} border="t" className="border-line/30">
-            <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest" marginBottom={6}>Photo Gallery // Moments</Text>
-            <Box className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest" marginBottom={6}>Photo Gallery</Text>
+            <Text as="h2" size="3xl" weight="font-black" tracking="tight" marginBottom={6} className="text-white">WCS Moments</Text>
+            <Grid cols={{ base: 2, md: 3, lg: 6 }} gap={4}>
                {PHOTOS.map((photo, i) => (
                  <Box 
                    key={photo.url}
@@ -200,7 +190,8 @@ export default function ArielProfile() {
                    radius="xl"
                    overflow="hidden"
                    border
-                   className="aspect-[4/5] border-line/30 group"
+                   aspect="4/5"
+                   className="border-line/30 group"
                  >
                    <img 
                      src={photo.url} 
@@ -209,7 +200,7 @@ export default function ArielProfile() {
                    />
                  </Box>
                ))}
-            </Box>
+            </Grid>
           </Box>
         </Stack>
       </Box>
