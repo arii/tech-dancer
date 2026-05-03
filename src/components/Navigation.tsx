@@ -2,7 +2,6 @@ import { Search } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box } from '@/layouts/Primitives';
 import { throttle } from 'throttle-debounce';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
