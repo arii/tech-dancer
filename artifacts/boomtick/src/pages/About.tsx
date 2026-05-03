@@ -1,6 +1,21 @@
 import { motion } from "framer-motion";
 import { Github, Instagram, Linkedin, Globe, MapPin, Sparkles, Clock3 } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
+import firstComp from "@assets/first_comp_1777789859021.jpg";
+import roboticist from "@assets/roboticist_1777789859029.jpg";
+import monterey from "@assets/monterey_1777789859029.jpg";
+import madJam from "@assets/mad_jam_ari_1777789859029.jpg";
+import glowBunny from "@assets/glow_bunny_1777789859030.jpg";
+import wwwAri from "@assets/www_ari_1777789859030.jpg";
+
+const photos = [
+  { src: firstComp, alt: "West Coast Swing competition moment" },
+  { src: monterey, alt: "West Coast Swing stage pose" },
+  { src: madJam, alt: "West Coast Swing social dance" },
+  { src: glowBunny, alt: "Glow bunny dance costume" },
+  { src: wwwAri, alt: "West Coast Swing floor connection" },
+  { src: roboticist, alt: "Portrait photo" },
+];
 
 const About = () => {
   return (
@@ -124,6 +139,22 @@ const About = () => {
               </div>
             </aside>
           </div>
+
+          <section className="mt-14">
+            <div className="flex items-end justify-between mb-5">
+              <div>
+                <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">Photo Gallery</p>
+                <h2 className="text-2xl font-black">WCS Moments</h2>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {photos.map((photo, i) => (
+                <div key={i} className="overflow-hidden rounded-xl border border-border bg-card aspect-[4/5]">
+                  <img src={photo.src} alt={photo.alt} className="h-full w-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </section>
         </section>
       </main>
     </div>
