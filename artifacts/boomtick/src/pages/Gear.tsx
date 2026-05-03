@@ -6,7 +6,9 @@ const Gear = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
-      <Sidebar />
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
       <main className="flex-1 min-h-screen md:ml-56 px-4 sm:px-6 md:px-10 py-8 md:py-14">
         <section className="max-w-6xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">The Toolbox</p>
