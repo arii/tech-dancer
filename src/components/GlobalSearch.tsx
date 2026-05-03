@@ -100,7 +100,7 @@ export function GlobalSearch() {
             as="input"
             ref={inputRef}
             type="text"
-            placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+            placeholder="Search posts, gear, research..."
             defaultValue={query}
             onChange={handleInputChange}
             width="full"
@@ -173,7 +173,7 @@ export function GlobalSearch() {
            <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                 <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                  </Box>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
               </Box>
@@ -184,7 +184,7 @@ export function GlobalSearch() {
                  <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
               {results.length} RESULTS FOUND
             </Text>
         </Box>

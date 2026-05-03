@@ -23,7 +23,7 @@ export default function BlogFeed() {
         view={view}
         onViewChange={setView}
       >
-        <Box marginTop={8}>
+        <Box marginTop={8} aria-label="Blog category filters">
           <FilterBar
             categories={categories}
           />

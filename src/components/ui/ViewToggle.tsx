@@ -11,7 +11,7 @@ interface ViewToggleProps {
 
 export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
-    <Box display="flex" border radius="none" overflow="hidden">
+    <Box display="flex" border radius="none" overflow="hidden" aria-label="Switch content view">
       {(['card', 'list'] as ViewMode[]).map((v) => (
         <button
           key={v}

@@ -22,9 +22,10 @@ export function MobileBottomNav() {
               <NavLink
                 to={item.path}
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center h-full transition-colors min-h-[44px]",
+                  "flex flex-col items-center justify-center h-full transition-colors min-h-[44px] rounded-md",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
+                aria-label={item.label}
               >
                 <Icon className={cn("w-6 h-6", stroke.thick)} />
                 <Text variant="mono" size="micro" weight="font-bold" className="mt-1">

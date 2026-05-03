@@ -27,7 +27,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
           type="button"
           onClick={onClose}
           className="inline-flex h-10 w-10 items-center justify-center rounded-full text-text-dim transition-colors hover:text-accent"
-          aria-label="Search"
+          aria-label="Open search"
         >
           <Search className="h-5 w-5" />
         </button>
