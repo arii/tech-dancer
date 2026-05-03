@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Logo } from '@/components/ui/Logo';
 import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -74,14 +75,7 @@ export default function Navigation() {
           flex={1}
         >
           <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Text 
-              variant="mono" 
-              size="lg" 
-              weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
-            >
-              BOOMTICK.BLOG
-            </Text>
+            <Logo className="h-10 transition-colors group-hover:opacity-80" />
           </Box>
 
           <Stack as="ul" gap={2}>
