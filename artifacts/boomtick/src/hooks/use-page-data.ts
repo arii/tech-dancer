@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { aboutConnectItems, aboutPillars, aboutServiceCards, blogPosts, photos, tagColors, upcomingEvents } from "@/lib/types/site";
-import { blogFilters, gearItems, researchTools, contactInquiries } from "@/lib/types/content";
+import { aboutConnectItems, aboutPillars, aboutServiceCards, photos, tagColors, upcomingEvents } from "@/lib/types/site";
+import { blogFilters, blogPosts, gearItems, researchTools, contactInquiries } from "@/lib/types/content";
 import { primaryNavigation } from "@/lib/types/navigation";
 
 export const useHomePageData = () => useMemo(() => ({ blogPosts, upcomingEvents, tagColors }), []);
