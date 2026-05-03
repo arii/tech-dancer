@@ -35,10 +35,10 @@ export default function Navigation() {
       >
         <Box as={NavLink} to="/" className="flex items-center gap-2 shrink-0 group">
           <Box className="w-8 h-8 border border-accent/60 flex items-center justify-center rounded-sm group-hover:border-accent transition-colors">
-            <span className="font-bold text-white text-xs leading-none">B<span className="neon-text-cyan">\</span></span>
+            <span className="font-bold text-white text-xs leading-none">Boom Tick</span>
           </Box>
           <Text variant="mono" size="sm" weight="font-bold" className="text-white leading-none tracking-tight hidden xl:block">
-            boomtick
+            Boom Tick
           </Text>
         </Box>
 
