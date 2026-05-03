@@ -1,4 +1,3 @@
-import { LAB_STATS, GEAR_PICKS } from './constants';
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingBag, ArrowRight, Play, Zap } from 'lucide-react';
@@ -7,6 +6,9 @@ import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { useHome } from './useHome';
+import { ContentCard } from '@/components/ui/ContentCard';
+import { EventCard } from '@/components/ui/EventCard';
+import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
   const { recentPosts, upcomingEvents } = useHome();
@@ -86,7 +88,11 @@ export default function Home() {
           </Stack>
 
           <Grid cols={{ base: 1, md: 3 }} gap={6}>
-            {LAB_STATS.map((item, i) => (
+            {[
+              { stat: "12,450", label: "Competition results analyzed", trend: "+14% this month" },
+              { stat: "98%", label: "Accuracy in tier progression models", trend: "Updated weekly" },
+              { stat: "2.4M", label: "Data points collected", trend: "Since 2018" }
+            ].map((item, i) => (
               <Box key={i} padding={8} className="bg-surface border border-line rounded-xl relative overflow-hidden group">
                 {/* impeccable-ignore */}
                 <Box position="absolute" className="top-0 left-0 w-full h-1 brand-gradient-bg opacity-0 group-hover:opacity-100 transition-opacity"></Box>
@@ -108,27 +114,26 @@ export default function Home() {
             View All <ArrowRight size={16} />
           </Stack>
         </Stack>
-        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
-          {recentPosts.slice(0, 3).map((post, i) => (
-              <Stack key={i} direction="col" gap={4} className="group cursor-pointer" as={NavLink} to={`/blog/${post.slug}`}>
-              {/* impeccable-ignore */}
-              <Box position="relative" className="aspect-4-3 overflow-hidden rounded-xl bg-surface">
-                <Box position="absolute" className="inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></Box>
-                <img src={post.image || `https://images.unsplash.com/photo-${1547153760 + i}?auto=format&fit=crop&w=800&q=80`} alt={post.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0" />
-                <Box position="absolute" className="top-4 left-4 z-20">
-                  <Box as="span" paddingX={3} paddingY={1} className="bg-accent-brand text-bg text-xs font-bold rounded-full uppercase tracking-wider">{post.category || "TRAINING"}</Box>
-                </Box>
-              </Box>
-              <Box>
-                <Stack align="center" gap={2} marginBottom={2} className="text-sm text-text-dim">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent-navy"></span>
-                  {post.readingTime || "5 MIN READ"}
-                </Stack>
-                <Text as="h3" variant="display" size="xl" weight="font-bold" className="group-hover:text-accent-brand transition-colors text-text-main">{post.title}</Text>
-              </Box>
-            </Stack>
-          ))}
-        </Grid>
+        <Grid
+            cols={{ base: 1, md: 2 }}
+            gap={6}
+            as={motion.div}
+            variants={motionTokens.staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-50px" }}
+          >
+            {recentPosts.slice(0, 3).map((post) => (
+              <ContentCard
+                key={post.slug}
+                {...post}
+                basePath="/blog"
+                aspect="video"
+                variants={motionTokens.staggerItem}
+                compact={true}
+              />
+            ))}
+          </Grid>
       </Box>
 
       <Box as="section" paddingY={24} paddingX={{ base: 6, lg: 12 }} marginTop={8} marginBottom={8} className="border-y border-line w-full rounded-3xl bg-surface">
@@ -142,7 +147,12 @@ export default function Home() {
               </Box>
             </Box>
             <Grid cols={{ base: 1, sm: 2 }} gap={4} className="md:w-2/3">
-               {GEAR_PICKS.map((item, i) => (
+               {[
+                 { name: "SwayD Urban", type: "Dance Sneaker", price: "$110" },
+                 { name: "Taygra Split", type: "Competition Boot", price: "$145" },
+                 { name: "G-Franco", type: "Street Sole", price: "$95" },
+                 { name: "Suede Brush", type: "Maintenance", price: "$12" }
+               ].map((item, i) => (
                  <Box key={i} padding={6} className="bg-surface border border-line rounded-xl hover:border-accent-brand/50 transition-colors cursor-pointer group">
                    <Stack align="center" justify="center" marginBottom={4} className="aspect-square bg-bg rounded-md overflow-hidden text-text-dim group-hover:text-accent-brand transition-colors">
                      <ShoppingBag size={32} />
@@ -165,16 +175,16 @@ export default function Home() {
           <Box marginX="auto" className="max-w-2xl">
             <Text variant="sans" size="lg" marginBottom={12} className="text-text-dim text-center">Where to go, where to stay, and what to eat when you're not in the ballroom.</Text>
           </Box>
-          <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={4}>
-            {upcomingEvents.slice(0, 4).map((dest, i) => (
-              <Box key={i} position="relative" className="aspect-3-4 rounded-xl overflow-hidden group cursor-pointer" as="a" href={dest.url} target="_blank" rel="noopener noreferrer">
-                <img src={`https://images.unsplash.com/photo-${1580659324838 + i}?auto=format&fit=crop&w=400&q=80`} alt={dest.name} className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
-                <Box position="absolute" className="inset-0 fade-to-top-bg from-bg via-bg/20 to-transparent"></Box>
-                <Box position="absolute" padding={6} width="full" className="bottom-0 left-0">
-                  <Box className="text-accent-brand font-mono text-sm" marginBottom={1}>{new Date(dest.startDate).toLocaleDateString('en-US', { month: 'long' })}</Box>
-                  <Box className="text-2xl font-bold text-white" marginBottom={1}>{dest.location}</Box>
-                  <Box className="text-white/80 text-sm font-medium">{dest.name}</Box>
-                </Box>
+          <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
+            {upcomingEvents.slice(0, 4).map((event) => (
+              <Box
+                key={event.name}
+                as={motion.div}
+                variants={motionTokens.staggerItem}
+                border
+                className="border-line h-full"
+              >
+                <EventCard {...event} />
               </Box>
             ))}
           </Grid>
