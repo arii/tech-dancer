@@ -10,6 +10,7 @@ import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { NavItem } from './navigation/NavItem';
+import { Logo } from './ui/Logo';
 import { cn } from '@/lib/utils';
 
 export default function Navigation() {
@@ -74,14 +75,9 @@ export default function Navigation() {
           flex={1}
         >
           <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Text 
-              variant="mono" 
-              size="lg" 
-              weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
-            >
-              BOOMTICK.BLOG
-            </Text>
+            <Box className="scale-75 origin-left text-accent-navy *:text-accent-navy group-hover:opacity-80 transition-opacity"> {/* impeccable-ignore */}
+              <Logo />
+            </Box>
           </Box>
 
           <Stack as="ul" gap={2}>

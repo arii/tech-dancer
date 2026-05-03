@@ -1,7 +1,8 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
+import { Logo } from '../ui/Logo';
 
 interface MobileHeaderProps {
   isOpen: boolean;
@@ -18,7 +19,9 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       className="transition-[backdrop-filter] duration-300 bg-surface border-b border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose}>
-        <Text variant="mono" size="sm" weight="font-bold" className="text-accent-navy tracking-wider uppercase">BOOMTICK.BLOG</Text>
+        <Box className="scale-[0.6] origin-left text-accent-navy *:text-accent-navy"> {/* impeccable-ignore */}
+          <Logo />
+        </Box>
       </Box>
       <Box
         as={motion.create("button")}

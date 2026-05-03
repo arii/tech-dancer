@@ -85,6 +85,18 @@
   .animate-scanline { animation: scanline 2.5s linear infinite; }
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
+  @keyframes bounce {
+    from { height: 15%; opacity: 0.3; }
+    to { height: var(--h); opacity: 0.8; }
+  }
+  .visualizer-bar {
+    animation: bounce var(--d) ease-in-out infinite alternate;
+  }
+
+  .text-gradient-cyan-blue {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#00E5FF] to-[#007BFF];
+  }
+
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
   }

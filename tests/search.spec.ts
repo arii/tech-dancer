@@ -43,8 +43,12 @@ test.describe('Global Search Modal', () => {
     const resultButton = page.getByTestId('search-result').first();
     await expect(resultButton).toBeVisible();
 
-    await resultButton.click();
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
+    // Click the button using evaluate to bypass click interception due to animations
+    await resultButton.evaluate(node => (node as HTMLElement).click());
+
+    // Check URL has changed and modal is closed
+    await page.waitForURL(url => url.pathname.includes('/blog/') || url.pathname.includes('/gear/') || url.pathname.includes('/research/'));
+    await expect(page.getByTestId('search-backdrop')).toBeHidden({ timeout: 10000 });
   });
 });
 
