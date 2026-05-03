@@ -129,10 +129,10 @@ export default defineConfig(({mode}) => {
       },
     },
     server: {
-      hmr: process.env.DISABLE_HMR ? false : {
-        protocol: 'ws',
-        host: 'localhost',
-      },
+      host: '0.0.0.0',
+      port: 5000,
+      allowedHosts: true,
+      hmr: process.env.DISABLE_HMR ? false : true,
     },
   };
 });
