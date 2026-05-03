@@ -3,6 +3,7 @@
     "collect": {
       "startServerCommand": "pnpm run preview",
       "startServerReadyPattern": "Local:",
+      "startServerReadyTimeout": 60000,
       "numberOfRuns": 3,
       "settings": {
         "chromeFlags": "--no-sandbox --headless --disable-gpu"
