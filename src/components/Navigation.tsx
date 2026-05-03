@@ -1,21 +1,21 @@
 import { Search } from 'lucide-react';
 import { useState, useEffect } from "react";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { throttle } from 'throttle-debounce';
-import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
-import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
+import { LogoMark } from '@/components/ui/Logo';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = throttle(100, () => {
@@ -58,59 +58,44 @@ export default function Navigation() {
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
-      <Box 
-        as="nav"
-        aria-label="Main Navigation"
-        layout="navRail" 
-        className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
-        )}
-      >
-        <Stack
-          padding={8}
-          gap={10}
-          flex={1}
-        >
-          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Text 
-              variant="mono" 
-              size="lg" 
-              weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
+      {/* Desktop Navbar */}
+      <header className={cn(
+        "hidden md:block w-full h-[72px] border-b border-white/5 sticky top-0 z-50 transition-[background-color,backdrop-filter] duration-300",
+        scrolled ? "backdrop-blur-xl bg-bg/90" : "bg-bg"
+      )}>
+        <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-8">
+
+          {/* Logo */}
+          <NavLink to="/" className="flex items-center gap-3 group">
+            <LogoMark />
+            <span className="text-lg font-semibold tracking-tight text-text">
+              boom<span className="text-muted font-normal">tick</span>
+            </span>
+          </NavLink>
+
+          {/* Nav */}
+          <nav className="hidden md:flex items-center gap-8 text-sm text-muted">
+            <NavLink to="/blog" className="nav-link-hover transition-colors">Blog</NavLink>
+            <NavLink to="/gear" className="nav-link-hover transition-colors">Gear</NavLink>
+            <NavLink to="/research" className="nav-link-hover transition-colors">Data</NavLink>
+            {/* Travel link added as per user spec but routing might not exist, mapping to placeholder or existing */}
+            <span className="nav-link-hover transition-colors cursor-pointer" onClick={() => navigate('/blog?category=travel')}>Travel</span>
+
+            <button
+              onClick={handleSearchClick}
+              className="text-muted hover:text-text transition-colors flex items-center gap-2"
+              aria-label="Search"
             >
-              BOOMTICK.BLOG
-            </Text>
-          </Box>
+              <Search className="w-4 h-4" />
+            </button>
+          </nav>
 
-          <Stack as="ul" gap={2}>
-            <Box as="li">
-              <Box
-                as="button"
-                type="button"
-                cursor="pointer"
-                onClick={handleSearchClick}
-                display="flex"
-                align="center"
-                gap={4}
-                width="full"
-                paddingY={6}
-                paddingX={4}
-                radius="md"
-                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
-              >
-                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
-              </Box>
-            </Box>
-
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
-            ))}
-          </Stack>
-        </Stack>
-      </Box>
+          {/* CTA */}
+          <button className="btn-hover text-sm px-4 py-2 rounded-full border border-white/10 text-text hover:border-cyan transition-all">
+            Subscribe
+          </button>
+        </div>
+      </header>
     </>
   );
 }

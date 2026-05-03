@@ -27,6 +27,12 @@ export default {
         "brand-amber-text": "#92400e",
         error: "var(--color-error)",
         "error-surface": "var(--color-error-surface)",
+        bg: "#0B0F14",
+        panel: "#0F1620",
+        text: "#E6EDF3",
+        muted: "#8B98A5",
+        cyan: "#22D3EE",
+        purple: "#A855F7",
       },
       fontSize: {
         micro: "var(--text-micro)",
