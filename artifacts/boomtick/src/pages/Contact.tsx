@@ -8,7 +8,10 @@ const Contact = () => {
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />
       <main className="flex-1 min-h-screen md:ml-56 px-4 sm:px-6 md:px-10 py-8 md:py-14">
-        <section className="max-w-5xl">
+        <a href="#contact-content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/60">
+          Skip to content
+        </a>
+        <section id="contact-content" className="max-w-5xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Contact</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Get in Touch</h1>
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Have a question about WCS, travel, gear, or the site itself? I’d love to hear from you.</p>
@@ -26,14 +29,18 @@ const Contact = () => {
               ))}
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <input className="border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Your Name" />
-              <input className="border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Your Email" />
+              <label className="sr-only" htmlFor="contact-name">Your Name</label>
+              <input id="contact-name" className="border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Your Name" />
+              <label className="sr-only" htmlFor="contact-email">Your Email</label>
+              <input id="contact-email" className="border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Your Email" />
             </div>
             <div className="mt-4">
-              <input className="w-full border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Subject" />
+              <label className="sr-only" htmlFor="contact-subject">Subject</label>
+              <input id="contact-subject" className="w-full border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Subject" />
             </div>
             <div className="mt-4">
-              <textarea className="w-full min-h-40 border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Message" />
+              <label className="sr-only" htmlFor="contact-message">Message</label>
+              <textarea id="contact-message" className="w-full min-h-40 border border-border bg-background px-4 py-3 rounded-lg outline-none transition-colors focus:border-primary text-foreground placeholder:text-foreground/45" placeholder="Message" />
             </div>
             <button className="mt-4 bg-secondary text-background px-5 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">Send Message</button>
           </div>
