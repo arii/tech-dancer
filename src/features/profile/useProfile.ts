@@ -1,6 +1,10 @@
 import { ProfileData } from './types';
-import dancerHero from '@/assets/dancer_hero.webp';
-import roboticistHero from '@/assets/roboticist_hero.webp';
+import firstComp from '@/assets/first_comp.jpg';
+import glowBunny from '@/assets/glow_bunny.jpg';
+import madJamAri from '@/assets/mad_jam_ari.jpg';
+import monterey from '@/assets/monterey.jpg';
+import roboticist from '@/assets/roboticist.jpg';
+import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
@@ -62,21 +66,51 @@ const PROFILE_DATA: ProfileData = {
       content: "I love maximizing credit card perks and hotel benefits, which helps me make the WCS event lifestyle both high-end and feasible. The goal is to spend more energy dancing and less energy stressing over the logistics."
     },
     {
+      id: "education-focus",
+      title: "Stats",
+      items: [
+        {
+          title: "Education",
+          description: "PhD in Computer Science, MIT"
+        },
+        {
+          title: "Focus",
+          description: "Robotics // AI // Data Analytics"
+        },
+        {
+          title: "Dance Level",
+          description: "Competitive Intermediate Follow"
+        }
+      ]
+    },
+    {
       id: "gallery",
+      eyebrow: "Photo Gallery",
       title: "WCS Moments",
       gallery: [
-        { src: dancerHero, alt: "West Coast Swing competition moment" },
-        { src: roboticistHero, alt: "West Coast Swing stage pose" },
-        { src: dancerHero, alt: "West Coast Swing social dance" },
-        { src: roboticistHero, alt: "Glow bunny dance costume" },
-        { src: dancerHero, alt: "West Coast Swing floor connection" },
-        { src: roboticistHero, alt: "Portrait photo" }
+        { src: firstComp, alt: "West Coast Swing competition moment" },
+        { src: monterey, alt: "West Coast Swing stage pose" },
+        { src: madJamAri, alt: "West Coast Swing social dance" },
+        { src: glowBunny, alt: "Glow bunny dance costume" },
+        { src: wwwAri, alt: "West Coast Swing floor connection" },
+        { src: roboticist, alt: "Portrait photo" }
+      ]
+    },
+    {
+      id: "connect",
+      eyebrow: "Connect & Networking",
+      title: "Let's Talk",
+      links: [
+        { label: 'INSTAGRAM', url: 'https://instagram.com/' },
+        { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
+        { label: 'GITHUB', url: 'https://github.com/arii' },
+        { label: 'PORTFOLIO', url: 'https://arii.github.io/' }
       ]
     }
   ],
   details: [
-    { label: "EDUCATION", value: "PhD in Computer Science, MIT" },
-    { label: "FOCUS", value: "Robotics // AI // Data Analytics" },
+    { label: "LOCATION", value: "San Francisco, CA" },
+    { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
     { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" }
   ],
   links: [

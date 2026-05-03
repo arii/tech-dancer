@@ -1,10 +1,12 @@
 export interface ProfileSection {
   id: string;
   title: string;
+  eyebrow?: string;
   content?: string;
   cards?: ProfileCard[];
   items?: ProfileItem[];
   gallery?: ProfileGalleryImage[];
+  links?: ProfileLink[];
 }
 
 export interface ProfileCard {
@@ -13,7 +15,7 @@ export interface ProfileCard {
 }
 
 export interface ProfileItem {
-  icon: 'star' | 'music' | 'map-pin'; // Standardized icon identifiers
+  icon?: 'star' | 'music' | 'map-pin'; // Standardized icon identifiers
   title: string;
   description: string;
 }

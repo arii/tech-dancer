@@ -18,6 +18,12 @@ export default function ArielProfile() {
   const renderSection = (section: ProfileSection) => {
     return (
       <Stack key={section.id} gap={4} maxWidth="prose">
+        {section.eyebrow && (
+          <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">
+            {section.eyebrow}
+          </Text>
+        )}
+
         <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy uppercase tracking-tight">
           {section.title}
         </Text>
@@ -46,11 +52,11 @@ export default function ArielProfile() {
         {section.items && (
           <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={4}>
             {section.items.map((item: ProfileItem, index: number) => {
-              const Icon = IconMap[item.icon];
+              const Icon = item.icon ? IconMap[item.icon] : null;
               return (
                 <Box key={index} padding={6} border className="bg-surface/30 border-line/10">
                   <Stack gap={3}>
-                    <Icon className="w-5 h-5 text-accent" />
+                    {Icon && <Icon className="w-5 h-5 text-accent" />}
                     <Text as="h3" variant="display" size="md" weight="font-bold" className="uppercase">
                       {item.title}
                     </Text>
@@ -82,6 +88,28 @@ export default function ArielProfile() {
               </Box>
             ))}
           </Grid>
+        )}
+
+        {section.links && (
+          <Box display="flex" gap={4} wrap marginTop={4}>
+            {section.links.map((link) => (
+              <Box
+                key={link.label}
+                as="a"
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                paddingX={4}
+                paddingY={2}
+                border
+                className="hover:border-accent hover:bg-accent/5 transition-all group"
+              >
+                <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+                  {link.label}
+                </Text>
+              </Box>
+            ))}
+          </Box>
         )}
       </Stack>
     );
