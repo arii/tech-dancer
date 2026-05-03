@@ -18,7 +18,7 @@ const Gear = () => {
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">The Toolbox</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Gear Reviews</h1>
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Rigorous testing and honest takes on the gear that keeps you moving.</p>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {gearItems.map((item) => (
               <article key={item.href} className="border border-border bg-card rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors">
                 <div className="flex items-start justify-between gap-3">

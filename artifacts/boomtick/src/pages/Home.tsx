@@ -20,7 +20,7 @@ const Home = () => {
         <section className="px-4 sm:px-6 md:px-10 pt-8 md:pt-14 pb-10 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Welcome to boomtick.blog</p>
-            <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">The West Coast Swing<br />Lifestyle Blog</h1>
+            <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">The West Coast Swing Lifestyle Blog</h1>
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl">Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by Ariel Anders.</p>
           </motion.div>
         </section>
