@@ -17,7 +17,7 @@ export default function ArielProfile() {
 
   const renderSection = (section: ProfileSection) => {
     return (
-      <Stack key={section.id} gap={6} maxWidth="prose">
+      <Stack key={section.id} gap={4} maxWidth="prose">
         {section.eyebrow && (
           <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">
             {section.eyebrow}
@@ -25,21 +25,21 @@ export default function ArielProfile() {
         )}
 
         {section.title && (
-          <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy uppercase tracking-tight">
+          <Text variant="display" size="2xl" weight="font-bold" className="text-accent-navy uppercase tracking-tight">
             {section.title}
           </Text>
         )}
 
         {section.content && (
-          <Text variant="body" size="lg" color="body" className="leading-loose">
+          <Text variant="body" size="lg" color="body" className="leading-relaxed">
             {section.content}
           </Text>
         )}
 
         {section.cards && (
-          <Stack gap={6} marginTop={4}>
+          <Stack gap={6} marginTop={2}>
             {section.cards.map((card, index) => (
-              <Box key={index} padding={6} border className="bg-surface/30 border-line/10">
+              <Box key={index} padding={6} border radius="xl" className="bg-surface/30 border-line/10">
                 <Text as="h3" variant="display" size="lg" weight="font-bold" marginBottom={2} className="uppercase tracking-wide">
                   {card.title}
                 </Text>
@@ -52,11 +52,11 @@ export default function ArielProfile() {
         )}
 
         {section.items && (
-          <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={4}>
+          <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={2}>
             {section.items.map((item: ProfileItem, index: number) => {
               const Icon = item.icon ? IconMap[item.icon] : null;
               return (
-                <Box key={index} padding={6} border className="bg-surface/30 border-line/10">
+                <Box key={index} padding={6} border radius="xl" className="bg-surface/30 border-line/10">
                   <Stack gap={3}>
                     {Icon && <Icon className="w-5 h-5 text-accent" />}
                     {item.title && (
@@ -75,13 +75,14 @@ export default function ArielProfile() {
         )}
 
         {section.gallery && (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={8}>
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
             {section.gallery.map((image, index) => (
               <Box
                 key={index}
                 aspect="4/5"
                 overflow="hidden"
                 border
+                radius="xl"
                 className="border-line/20 bg-surface/50 group"
               >
                 <img
@@ -106,6 +107,7 @@ export default function ArielProfile() {
                 paddingX={4}
                 paddingY={2}
                 border
+                radius="full"
                 className="hover:border-accent hover:bg-accent/5 transition-all group"
               >
                 <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
@@ -133,20 +135,20 @@ export default function ArielProfile() {
         titleSize="fluid-7"
       />
 
-      <Stack gap={16} marginTop={12}>
+      <Stack gap={12} marginTop={8}>
         <Reveal direction="up">
-          <Grid cols={{ base: 1, lg: 3 }} gap={16}>
-            <Stack gap={16} className="lg:col-span-2">
+          <Grid cols={{ base: 1, lg: 3 }} gap={12}>
+            <Stack gap={12} className="lg:col-span-2">
               {bio.sections.map(renderSection)}
             </Stack>
 
             <Box className="relative">
               <Stack gap={8} position="sticky" top={24}>
-                <Box padding={8} border className="bg-surface/50 border-line/20">
+                <Box padding={8} border radius="xl" className="bg-surface/50 border-line/20">
                   <Stack gap={8}>
                     <Stack gap={6}>
                       <Text variant="mono" size="xs" color="brand" weight="font-bold">AT A GLANCE</Text>
-                      <Stack gap={2}>
+                      <Stack gap={4}>
                         {bio.details.map((detail) => (
                           <Stack key={detail.label} gap={1}>
                             <Text variant="mono" size="xs" color="brand" weight="font-bold">{detail.label}</Text>
@@ -169,6 +171,7 @@ export default function ArielProfile() {
                             paddingX={4}
                             paddingY={2}
                             border
+                            radius="full"
                             className="hover:border-accent hover:bg-accent/5 transition-all group"
                           >
                             <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
