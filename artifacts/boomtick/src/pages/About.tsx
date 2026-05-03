@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Instagram, Linkedin, Globe } from "lucide-react";
+import { Github, Instagram, Linkedin, Globe, MapPin, Sparkles, Clock3 } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 
 const About = () => {
@@ -8,7 +8,7 @@ const About = () => {
       <Sidebar />
 
       <main className="ml-56 flex-1 min-h-screen px-10 py-14">
-        <section className="max-w-4xl">
+        <section className="max-w-5xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Biography</p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">Ariel Anders, PhD</h1>
@@ -17,88 +17,112 @@ const About = () => {
             </p>
           </motion.div>
 
-          <div className="space-y-14 max-w-3xl">
-            <section>
-              <h2 className="text-2xl font-black mb-4">My Dance Background</h2>
-              <p className="text-sm leading-7 text-muted-foreground">
-                I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022,
-                I moved to San Francisco and resumed partner dancing at Lindy in the Park. Seeking a new challenge,
-                I signed up for a series at Mission City Swing and discovered West Coast Swing. The music and style
-                resonated with me. I started dancing both WCS and Lindy Hop, and attending WCS events helped me
-                travel again after the pandemic. WCS gradually became my primary focus, though I still love Lindy and
-                live swing music in SF. I’m a competitive intermediate-level follow who cares about weight transfer,
-                clean lines, and timing.
-              </p>
-            </section>
+          <div className="grid lg:grid-cols-[1.4fr_0.9fr] gap-10 items-start">
+            <div className="space-y-10 max-w-3xl">
+              <section>
+                <h2 className="text-2xl font-black mb-4">My Dance Background</h2>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022,
+                  I moved to San Francisco and returned to the social dance scene through Lindy in the Park. A Mission
+                  City Swing series pulled me into West Coast Swing, and the music, connection, and style hooked me fast.
+                  WCS became my main focus because it combines creativity, athleticism, and a truly welcoming community.
+                </p>
+              </section>
 
-            <section>
-              <h2 className="text-2xl font-black mb-4">Why My PhD Matters</h2>
-              <p className="text-sm leading-7 text-muted-foreground">
-                I believe in building things that work. Since 2010, I’ve dedicated myself to creating robotic systems
-                that stay reliable even in complex situations. From my PhD at MIT to my industry experience, I don’t
-                just study data — I engineer real-world systems that deliver results. I consider myself a pragmatic
-                roboticist: I use machine learning, traditional AI, and solid software design to build systems that are
-                functional, robust, and ready to complete the task at hand.
-              </p>
-            </section>
+              <section>
+                <h2 className="text-2xl font-black mb-4">Why I Built This Site</h2>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  People constantly ask about outfits, event travel, and how to make the WCS lifestyle sustainable.
+                  boomtick.blog is where I share the systems behind it all: practical travel advice, gear that actually
+                  helps, and the small optimizations that make a big difference over a season of events.
+                </p>
+              </section>
 
-            <section>
-              <h2 className="text-2xl font-black mb-4">Why I Built This Site</h2>
-              <p className="text-sm leading-7 text-muted-foreground">
-                People often ask me, “Where did you get that outfit?” and “How can you afford to travel to so many
-                events?” I’m fortunate to have a strong career, but I’ve always focused on making my lifestyle as
-                financially efficient as possible. This site is how I share the stacks I’ve built — everything from
-                tested gear reviews to travel-hacking systems.
-              </p>
-            </section>
+              <section>
+                <h2 className="text-2xl font-black mb-4">What I Love About WCS</h2>
+                <div className="grid sm:grid-cols-3 gap-4">
+                  {[
+                    { icon: Sparkles, title: "Style", text: "Bright outfits, clean lines, and personal expression." },
+                    { icon: Clock3, title: "Timing", text: "Musicality and precision matter just as much as flash." },
+                    { icon: MapPin, title: "Travel", text: "Every weekend is a chance to see new floors, new people, and new ideas." },
+                  ].map((item) => (
+                    <div key={item.title} className="border border-border rounded-xl p-5 bg-card">
+                      <item.icon size={18} className="text-primary mb-3" />
+                      <h3 className="font-bold text-sm mb-2">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-6">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
 
-            <section>
-              <h2 className="text-2xl font-black mb-4">Financial Strategies for WCS</h2>
-              <p className="text-sm leading-7 text-muted-foreground">
-                I love maximizing credit card perks and hotel benefits, which helps me make the WCS events lifestyle
-                both high-end and entirely feasible. I’m known for bright, fun outfits and an optimized travel
-                philosophy.
-              </p>
-            </section>
+              <section>
+                <h2 className="text-2xl font-black mb-4">Financial Strategies for WCS</h2>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  I love maximizing credit card perks and hotel benefits, which helps me make the WCS event lifestyle
+                  both high-end and feasible. The goal is to spend more energy dancing and less energy stressing over
+                  the logistics.
+                </p>
+              </section>
 
-            <section className="grid sm:grid-cols-3 gap-4 pt-2">
-              <div className="border border-border rounded-xl p-5 bg-card">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Education</p>
-                <p className="text-sm font-semibold">PhD in Computer Science, MIT</p>
+              <section className="grid sm:grid-cols-3 gap-4 pt-2">
+                <div className="border border-border rounded-xl p-5 bg-card">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Education</p>
+                  <p className="text-sm font-semibold">PhD in Computer Science, MIT</p>
+                </div>
+                <div className="border border-border rounded-xl p-5 bg-card">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Focus</p>
+                  <p className="text-sm font-semibold">Robotics // AI // Data Analytics</p>
+                </div>
+                <div className="border border-border rounded-xl p-5 bg-card">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Dance Level</p>
+                  <p className="text-sm font-semibold">Competitive Intermediate Follow</p>
+                </div>
+              </section>
+            </div>
+
+            <aside className="space-y-6 lg:sticky lg:top-8">
+              <div className="border border-border rounded-xl p-6 bg-card">
+                <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-3">At a glance</p>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin size={14} className="text-primary" />
+                    San Francisco, CA
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Sparkles size={14} className="text-primary" />
+                    West Coast Swing + Lindy Hop
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Clock3 size={14} className="text-primary" />
+                    Competitive Intermediate Follow
+                  </div>
+                </div>
               </div>
-              <div className="border border-border rounded-xl p-5 bg-card">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Focus</p>
-                <p className="text-sm font-semibold">Robotics // AI // Data Analytics</p>
-              </div>
-              <div className="border border-border rounded-xl p-5 bg-card">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Dance Level</p>
-                <p className="text-sm font-semibold">Competitive Intermediate Follow</p>
-              </div>
-            </section>
 
-            <section className="pt-2">
-              <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Connect & Networking</p>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { label: "Instagram", icon: Instagram, href: "https://instagram.com/" },
-                  { label: "LinkedIn", icon: Linkedin, href: "https://linkedin.com/in/arianders" },
-                  { label: "GitHub", icon: Github, href: "https://github.com/arii" },
-                  { label: "Portfolio", icon: Globe, href: "https://arii.github.io/" },
-                ].map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
-                    data-testid={`link-${item.label.toLowerCase()}`}
-                  >
-                    <item.icon size={14} className="text-primary" />
-                    {item.label}
-                  </a>
-                ))}
+              <div className="border border-border rounded-xl p-6 bg-card">
+                <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Connect & Networking</p>
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    { label: "Instagram", icon: Instagram, href: "https://instagram.com/" },
+                    { label: "LinkedIn", icon: Linkedin, href: "https://linkedin.com/in/arianders" },
+                    { label: "GitHub", icon: Github, href: "https://github.com/arii" },
+                    { label: "Portfolio", icon: Globe, href: "https://arii.github.io/" },
+                  ].map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+                      data-testid={`link-${item.label.toLowerCase()}`}
+                    >
+                      <item.icon size={14} className="text-primary" />
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
               </div>
-            </section>
+            </aside>
           </div>
         </section>
       </main>
