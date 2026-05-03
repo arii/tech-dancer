@@ -87,7 +87,7 @@ export default function Home() {
             <div className="mb-6">
               <h1 className="font-display font-bold leading-[1.05] tracking-tight">
                 <span className="block text-white" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
-                  Built for dancers.
+                  Boom Tick builds for dancers.
                 </span>
                 <span
                   className="block"

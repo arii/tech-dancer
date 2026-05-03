@@ -14,9 +14,10 @@ export function getCategoryIcon(category: string): LucideIcon {
 interface CategoryPlaceholderProps {
   category: string;
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
 }
 
-export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlaceholderProps) {
+export function CategoryPlaceholder({ category, size = 'lg', className }: CategoryPlaceholderProps) {
   const norm = (category || '').toLowerCase();
 
   let surfaceClass: "brand" | "accent" | "warning" | "danger" | "muted" = 'muted';
@@ -35,7 +36,7 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
   const icon = getCategoryIcon(category);
 
   return (
-    <Box surface={surfaceClass} width="full" height="full" display="flex" align="center" justify="center">
+    <Box surface={surfaceClass} width="full" height="full" display="flex" align="center" justify="center" className={`bg-[#050816] ${className || ''}`}>
       {React.createElement(icon, { className: sizeClasses[size], strokeWidth: 1.5 })}
     </Box>
   );

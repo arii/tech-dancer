@@ -23,7 +23,7 @@ export default function BlogFeed(): JSX.Element {
       />
       <FolioGrid
         items={posts}
-        categoryTitle="Blog Posts"
+        categoryTitle="Boom Tick Blog"
         as="h1"
         label="INSIGHTS"
         description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
