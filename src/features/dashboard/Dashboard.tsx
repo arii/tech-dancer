@@ -167,6 +167,7 @@ export default function Home() {
             display="flex"
             align="center"
             gap={3}
+            aria-label="View all blog posts"
             className="text-text-dim hover:text-accent transition-colors"
           >
             <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
@@ -200,10 +201,12 @@ export default function Home() {
           {upcomingEvents.map((event) => (
             <Box
               key={event.name}
-              as={motion.div}
+              as={motion.create(NavLink)}
+              to="/contact"
               variants={motionTokens.staggerItem}
               border
-              className="border-line h-full"
+              aria-label={`Open event details for ${event.name}`}
+              className="border-line h-full group hover:border-accent transition-all"
             >
               <EventCard {...event} />
             </Box>
