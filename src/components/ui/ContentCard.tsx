@@ -16,6 +16,7 @@ interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   aspect?: "square" | "video";
   content?: string;
   compact?: boolean;
+  variant?: "default" | "minimal";
 }
 
 export function ContentCard({ 
@@ -28,8 +29,11 @@ export function ContentCard({
   basePath, 
   content, 
   compact = false,
+  variant = "default",
   ...motionProps 
 }: ContentCardProps) {
+  const isMinimal = variant === "minimal";
+
   return (
     <Stack
       as={motion.create(NavLink)}
@@ -37,20 +41,21 @@ export function ContentCard({
       direction="col"
       gap={0}
       height="full"
-      surface
-      border
-      radius={compact ? "none" : "xl"}
-      shadow={compact ? "none" : "standard"}
+      surface={!isMinimal}
+      border={!isMinimal}
+      radius={isMinimal || compact ? "none" : "xl"}
+      shadow={isMinimal || compact ? "none" : "standard"}
       overflow="hidden"
       className={cn(
         "group transition-all duration-300",
-        compact 
+        !isMinimal && (compact
           ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent" 
-          : "hover:border-accent hover:shadow-xl hover:-translate-y-1"
+          : "hover:border-accent hover:shadow-xl hover:-translate-y-1"),
+        isMinimal && "bg-transparent border-none shadow-none"
       )}
       {...motionProps}
     >
-      {!compact && (
+      {!compact && !isMinimal && (
         <CardImagePlaceholder
           image={image}
           category={category}
@@ -59,7 +64,7 @@ export function ContentCard({
       )}
 
       {/* Content Area */}
-      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
+      <Stack gap={compact ? 1 : 4} padding={isMinimal ? 0 : (compact ? 4 : 5)} flex={1} justify="between">
         <Stack gap={compact ? 0.5 : 3}>
           <Box display="flex" align="center" gap={3} wrap>
             <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
@@ -92,7 +97,7 @@ export function ContentCard({
         </Stack>
 
         {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
+          <Box display="flex" align="center" gap={2} paddingTop={4} border={isMinimal ? undefined : "t"} className={cn("border-line/50 mt-auto", isMinimal && "pt-2")}>
             <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
               Read Article
             </Text>

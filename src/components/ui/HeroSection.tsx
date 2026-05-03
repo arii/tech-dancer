@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
+import { Stack, Text } from '@/layouts/Primitives';
 
 // Number of waveform bars — matches the HTML
 const BAR_COUNT = 48;
@@ -30,7 +31,7 @@ export function HeroSection() {
       <HeroParticleCanvas />
 
       {/* All content sits above the canvas via z-index */}
-      <div className="relative z-10 flex flex-col items-center gap-0 text-center px-6">
+      <Stack relative zIndex={10} align="center" gap={0} className="text-center px-6">
 
         {/* Logo mark — B + slash */}
         <div
@@ -58,29 +59,36 @@ export function HeroSection() {
           />
         </div>
 
-        {/* Wordmark */}
-        <div
-          className="font-display font-bold text-white -mt-1.5 opacity-0 translate-y-2.5"
+        {/* Improved Headline */}
+        <Text
+          variant="headline"
+          size="fluid-7"
+          weight="font-semibold"
+          color="white"
+          tracking="tight"
+          className="opacity-0 translate-y-2.5 max-w-4xl"
           style={{
-            fontSize: 'clamp(28px, 5vw, 46px)',
-            letterSpacing: '-1px',
             animation: 'fadeUp 0.7s ease forwards 0.7s',
           }}
         >
-          boom<span style={{ color: 'var(--hero-accent)' }}>tick</span>
-        </div>
+          Train smarter. Travel better. Win more.
+        </Text>
 
         {/* Tagline */}
-        <p
-          className="mt-4 font-sans font-medium max-w-[480px] leading-relaxed opacity-0"
+        <Text
+          as="p"
+          variant="body"
+          size={{ base: "lg", lg: "xl" }}
+          color="dim"
+          marginTop={6}
+          maxWidth="xl"
+          className="opacity-0 leading-relaxed text-white/80"
           style={{
-            fontSize: 'clamp(15px, 2vw, 20px)',
-            color: 'rgba(255,255,255,0.76)',
             animation: 'fadeUp 0.7s ease forwards 1.1s',
           }}
         >
-          Systems, gear, and travel insights for competitive West Coast Swing dancers.
-        </p>
+          The operating system for competitive West Coast Swing dancers.
+        </Text>
 
         {/* Waveform */}
         <div
@@ -102,7 +110,7 @@ export function HeroSection() {
             />
           ))}
         </div>
-      </div>
+      </Stack>
     </section>
   );
 }
