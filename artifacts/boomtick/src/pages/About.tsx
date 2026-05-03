@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Instagram, Linkedin, Globe, MapPin, Sparkles, Clock3, Bot, Code2, Megaphone } from "lucide-react";
+import { Github, Instagram, Linkedin, Globe, MapPin, Sparkles, Clock3, Bot, Code2, Megaphone, Mail } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import firstComp from "@assets/first_comp_1777789859021.jpg";
 import roboticist from "@assets/roboticist_1777789859029.jpg";
@@ -46,10 +46,10 @@ const About = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-black mb-4">What I Do Professionally</h2>
+                <h2 className="text-2xl font-black mb-4">Work With Me</h2>
                 <p className="text-sm leading-7 text-muted-foreground mb-4">
                   I provide high-level technical consulting for startups and project-based digital execution for niche
-                  brands.
+                  brands. If you need someone who can move from strategy to execution quickly, I’d love to talk.
                 </p>
 
                 <div className="space-y-4">
@@ -59,10 +59,9 @@ const About = () => {
                       <h3 className="font-bold text-sm">Robotics & Engineering</h3>
                     </div>
                     <p className="text-sm text-muted-foreground leading-6">
-                      My background is in robot software engineering and architecture, helping startups build
-                      scalable, production-ready systems. My specialized skillsets include perception, motion planning,
-                      custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep
-                      autonomous fleets reliable and mission-ready.
+                      Robot software engineering and architecture for scalable, production-ready systems — including
+                      perception, motion planning, custom visualization tools, AWS IoT telemetry, and reliable CI/CD and
+                      DevOps pipelines.
                     </p>
                   </div>
 
@@ -72,10 +71,9 @@ const About = () => {
                       <h3 className="font-bold text-sm">AI Strategy (DevAI)</h3>
                     </div>
                     <p className="text-sm text-muted-foreground leading-6">
-                      I implement generative AI tools to automate internal developer tasks and content management.
-                      Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring
-                      WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my
-                      GitHub at github.com/arii.
+                      Generative AI tools for internal developer workflows and content management. Built examples include
+                      boomtick.blog and a heartrate-monitoring WebBluetooth fitness system, with the underlying agentic
+                      workflows visible on GitHub at github.com/arii.
                     </p>
                   </div>
 
@@ -85,9 +83,8 @@ const About = () => {
                       <h3 className="font-bold text-sm">Digital Presence & Management</h3>
                     </div>
                     <p className="text-sm text-muted-foreground leading-6">
-                      I help artists and niche brands build the infrastructure they need to grow — from functional
-                      websites and merch stores to SEO, booking tools, and content workflows. I handle the technical
-                      logistics from start to finish so you can stay focused on your craft.
+                      Websites, merch stores, SEO, booking tools, and content workflows for artists and niche brands.
+                      I handle the technical logistics from start to finish so you can stay focused on your craft.
                     </p>
                   </div>
                 </div>
@@ -105,7 +102,7 @@ const About = () => {
               <section>
                 <h2 className="text-2xl font-black mb-4">What I Love About WCS</h2>
                 <div className="grid sm:grid-cols-3 gap-4">
-                  {[
+                  [
                     { icon: Sparkles, title: "Style", text: "Bright outfits, clean lines, and personal expression." },
                     { icon: Clock3, title: "Timing", text: "Musicality and precision matter just as much as flash." },
                     { icon: MapPin, title: "Travel", text: "Every weekend is a chance to see new floors, new people, and new ideas." },
@@ -115,7 +112,7 @@ const About = () => {
                       <h3 className="font-bold text-sm mb-2">{item.title}</h3>
                       <p className="text-sm text-muted-foreground leading-6">{item.text}</p>
                     </div>
-                  ))}
+                  ))
                 </div>
               </section>
 
@@ -160,6 +157,27 @@ const About = () => {
                     <Clock3 size={14} className="text-primary" />
                     Competitive Intermediate Follow
                   </div>
+                </div>
+              </div>
+
+              <div className="border border-border rounded-xl p-6 bg-card">
+                <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Hire Me</p>
+                <p className="text-sm text-muted-foreground leading-6 mb-4">
+                  Available for long-term advisory roles or discrete, high-impact projects.
+                </p>
+                <div className="flex flex-col gap-3">
+                  <a
+                    href="mailto:hello@boomtick.blog"
+                    className="inline-flex items-center justify-center gap-2 border border-primary/40 rounded-full px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 transition-colors"
+                    data-testid="link-email-hire"
+                  >
+                    <Mail size={14} className="text-primary" />
+                    Contact Me to Hire Me
+                  </a>
+                  <p className="text-xs text-muted-foreground leading-5">
+                    If you’re building something that needs reliable technical execution, systems thinking, or a
+                    polished digital presence, reach out.
+                  </p>
                 </div>
               </div>
 
