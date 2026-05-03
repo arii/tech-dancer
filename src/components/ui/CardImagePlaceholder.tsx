@@ -48,12 +48,12 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
         </Stack>
       )}
       <Box className="absolute top-4 left-4">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#090914]/92 backdrop-blur-md border border-line/80 rounded-full shadow-[0_0_16px_rgba(0,229,255,.12)]">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 max-w-[calc(100%-2rem)] bg-[#090914]/88 backdrop-blur-md border border-line/70 rounded-full shadow-[0_0_16px_rgba(0,229,255,.12)]">
           {(() => {
             const icon = getCategoryIcon(category);
             return React.createElement(icon, { className: "w-3.5 h-3.5 text-accent", strokeWidth: 2.5 });
           })()}
-          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-white">
+          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-text-main truncate">
             {category}
           </Text>
         </div>
