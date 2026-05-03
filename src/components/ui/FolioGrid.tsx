@@ -56,7 +56,7 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap" className="w-full">
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}

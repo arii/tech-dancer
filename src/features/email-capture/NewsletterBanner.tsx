@@ -17,6 +17,8 @@ export function NewsletterBanner() {
       transition={motionTokens.overlay.transition}
       className="fixed inset-x-4 bottom-4 z-toast overflow-hidden border border-cyan-300/20 bg-[#090916]/96 px-4 py-4 shadow-[0_-14px_44px_rgba(0,0,0,0.45)] backdrop-blur-xl md:px-6 md:py-5"
       radius="lg"
+      role="region"
+      aria-label="Email signup banner"
     >
       <Box position="absolute" top={3} right={3} zIndex="docked">
         <Button

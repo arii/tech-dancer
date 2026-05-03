@@ -57,7 +57,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          aria-label="Scroll to top"
+          aria-label="Scroll to top of page"
           bottom={8}
           right={8}
           className="transition-all duration-300"
