@@ -1,8 +1,14 @@
 import Sidebar from "@/components/Sidebar";
+import { useMemo, useState } from "react";
 import { useBlogPageData } from "@/hooks/use-page-data";
 
 const Blog = () => {
   const { blogFilters, blogPosts, tagColors } = useBlogPageData();
+  const [activeFilter, setActiveFilter] = useState("All Posts");
+  const visiblePosts = useMemo(
+    () => (activeFilter === "All Posts" ? blogPosts : blogPosts.filter((post) => post.tag === activeFilter)),
+    [activeFilter, blogPosts],
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
@@ -14,13 +20,19 @@ const Blog = () => {
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
           <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/60 p-3">
             {blogFilters.map((item, i) => (
-              <button key={item} className={`border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${i === 0 ? "bg-secondary text-background border-secondary shadow-sm" : "bg-background/40 text-muted-foreground border-border hover:border-primary/40 hover:text-foreground hover:bg-background/70"}`}>
+              <button
+                key={item}
+                type="button"
+                onClick={() => setActiveFilter(item)}
+                aria-pressed={activeFilter === item}
+                className={`border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${activeFilter === item ? "bg-secondary text-background border-secondary shadow-sm" : "bg-background/40 text-muted-foreground border-border hover:border-primary/40 hover:text-foreground hover:bg-background/70"}`}
+              >
                 {item}
               </button>
             ))}
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {blogPosts.map((post) => (
+            {visiblePosts.map((post) => (
               <article key={post.href} className="border border-border bg-card/80 rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors">
                 <div className="flex items-center justify-between gap-3">
                   <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>{post.tag}</span>
