@@ -22,8 +22,6 @@ interface ContactFormViewProps {
   onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
 }
 
-const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/75";
-
 export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (
     <Box as="section" minHeight="[calc(100vh-64px)]">
@@ -51,7 +49,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 placeholder="Jane Doe"
                 aria-required="true"
                 className={cn(
-                  inputClasses,
+                  inputs.base,
                   errors.name ? inputs.error : 'border-line'
                 )}
               />
@@ -64,7 +62,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 placeholder="jane@example.com"
                 aria-required="true"
                 className={cn(
-                  inputClasses,
+                  inputs.base,
                   errors.email ? inputs.error : 'border-line'
                 )}
               />
@@ -73,7 +71,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             <FormField label="Subject" error={errors.subject?.message}>
               <Box as="select"
                 {...register('subject')}
-                className={cn(inputClasses, "border-line")}
+                className={cn(inputs.select, "border-line")}
               >
                 <option value="General Feedback">General Feedback</option>
                 <option value="Content Request">Content Request</option>
@@ -89,7 +87,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 placeholder="How can I help you?"
                 aria-required="true"
                 className={cn(
-                  inputClasses,
+                  inputs.base,
                   "resize-none",
                   errors.message ? inputs.error : 'border-line'
                 )}
@@ -110,21 +108,21 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 paddingX={8}
                 className="font-semibold text-base min-h-12"
               >
-                  {isSubmitting ? (
-                    <Stack direction="row" align="center" gap={3}>
-                      <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
-                      <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
-                    </Stack>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </Button>
-              </Box>
-            </Stack>
+                {isSubmitting ? (
+                  <Stack direction="row" align="center" gap={3}>
+                    <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
+                    <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
+                  </Stack>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Send Message</span>
+                  </>
+                )}
+              </Button>
+            </Box>
           </Stack>
+        </Stack>
       </Stack>
     </Box>
   );
