@@ -37,7 +37,7 @@ const Blog = () => {
               </button>
             ))}
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {visiblePosts.map((post) => (
               <article key={post.href} className="border border-border bg-card/80 rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors">
                 <div className="flex items-center justify-between gap-3">

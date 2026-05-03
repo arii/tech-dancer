@@ -46,7 +46,7 @@ const NavigationShell = () => {
         {open ? (
           <nav className="border-t border-border bg-card px-3 py-3">
             {primaryNavigation.map((item) => (
-              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground">
+              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground min-h-11">
                 <item.icon size={16} className="shrink-0 text-primary" />
                 <span>{item.label}</span>
               </Link>
