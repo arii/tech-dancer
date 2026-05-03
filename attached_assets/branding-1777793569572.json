@@ -1,0 +1,153 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Albert Sans",
+      "role": "body"
+    },
+    {
+      "family": "Bricolage Grotesque",
+      "role": "heading"
+    },
+    {
+      "family": "Space Mono",
+      "role": "monospace"
+    }
+  ],
+  "colors": {
+    "primary": "#1A2B3C",
+    "secondary": "#DDECFC",
+    "accent": "#1A2B3C",
+    "background": "#F6F9FC",
+    "textPrimary": "#374151",
+    "link": "#374151"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Albert Sans",
+      "heading": "Bricolage Grotesque"
+    },
+    "fontStacks": {
+      "heading": [
+        "Bricolage Grotesque",
+        "Albert Sans",
+        "sans-serif"
+      ],
+      "body": [
+        "Albert Sans",
+        "ui-sans-serif",
+        "system-ui",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "Albert Sans",
+        "ui-sans-serif",
+        "system-ui",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "48px",
+      "h2": "48px",
+      "body": "16px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "8px"
+  },
+  "components": {
+    "input": {
+      "background": "#F6F9FC",
+      "textColor": "#1A2B3C",
+      "borderColor": "#E0E5EB",
+      "borderRadius": "12px",
+      "borderRadiusCorners": {
+        "topLeft": "12px",
+        "topRight": "12px",
+        "bottomRight": "12px",
+        "bottomLeft": "12px"
+      },
+      "shadow": "none"
+    },
+    "buttonPrimary": {
+      "background": "#1A2B3C",
+      "textColor": "#FFFFFF",
+      "borderRadius": "12px",
+      "borderRadiusCorners": {
+        "topLeft": "12px",
+        "topRight": "12px",
+        "bottomRight": "12px",
+        "bottomLeft": "12px"
+      },
+      "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px"
+    },
+    "buttonSecondary": {
+      "background": "#F6F9FC",
+      "textColor": "#374151",
+      "borderRadius": "0px",
+      "borderRadiusCorners": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomRight": "0px",
+        "bottomLeft": "0px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "favicon": "File saved at: attached_assets/favicon.ico",
+    "ogImage": "File saved at: attached_assets/ogImage.webp",
+    "logoHref": "File saved at: attached_assets/logoHref.html",
+    "logoAlt": "BoomTick Logo"
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 5,
+    "reasoning": "Selected #5 because it is visible, medium-sized, located in the header, and matches the brand name 'BoomTick'.",
+    "confidence": 0.9,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 1,
+      "text": "Send Message",
+      "reasoning": "Button #1 ('Send Message') has a vibrant background color (#1A2B3C) and action-oriented text, making it the primary CTA."
+    },
+    "secondary": {
+      "index": 0,
+      "text": "Contact",
+      "reasoning": "Button #0 ('Contact') has a different background color (#F6F9FC) and serves as a secondary action."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "medium",
+    "targetAudience": "tech-savvy individuals"
+  },
+  "designSystem": {
+    "framework": "tailwind",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 5,
+        "selectedLogoReasoning": "Selected #5 because it is visible, medium-sized, located in the header, and matches the brand name 'BoomTick'.",
+        "confidence": 0.9
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}
