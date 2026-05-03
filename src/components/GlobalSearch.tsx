@@ -44,7 +44,7 @@ export function GlobalSearch() {
 
     return parts.map((part, i) =>
       part.toLowerCase() === query.toLowerCase()
-        ? <Box as="span" key={i} radius="none" paddingX={0.5} surface="primary" weight="font-bold" className="text-bg">{part}</Box>
+        ? <Text as="span" key={i} radius="none" paddingX={0.5} surface="primary" weight="font-bold" className="text-bg">{part}</Text>
         : part
     );
   }, [query]);
@@ -147,12 +147,12 @@ export function GlobalSearch() {
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
                       <Box display="flex" align="center" justify="between" gap={3}>
-                         <Text variant="display" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
+                         <Text variant="display" size="lg" weight="font-bold" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
                          <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
-                            <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
+                            <Text variant="mono" size="micro" weight="font-bold" className="tracking-widest uppercase">{res.type}</Text>
                           </Box>
                       </Box>
-                      <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
+                      <Text variant="body" size="xs" color="dim" className="max-w-[65ch] line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                    </Stack>
                    <CornerDownLeft className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
                 </Box>

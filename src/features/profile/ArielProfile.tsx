@@ -99,7 +99,7 @@ export default function ArielProfile() {
                 <section>
                    <Box padding={{ base: 6, md: 10 }} radius="3xl" surface="muted" border className="border-primary/20 bg-primary/5 relative overflow-hidden">
                       <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="primary" opacity={0.05} radius="full" className="blur-3xl" />
-                      <Stack gap={8} relative zIndex={10}>
+                      <Stack gap={8} position="relative" zIndex={10}>
                         <Stack gap={4}>
                           <Text as="h2" size="3xl" weight="font-black" className="text-white">The Vision</Text>
                           <Text className="text-lg leading-relaxed text-text-body/90">
@@ -136,20 +136,20 @@ export default function ArielProfile() {
                   <Text variant="mono" size="xs" weight="font-bold" color="brand" uppercase tracking="widest" marginBottom={6}>At a Glance</Text>
                   <Stack gap={6}>
                     <Box>
-                       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Location</Text>
-                       <Text weight="font-bold" className="text-white">San Francisco, CA</Text>
+                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Location</Text>
+                       <Text as="div" weight="font-bold" className="text-white">San Francisco, CA</Text>
                     </Box>
                     <Box>
-                       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Dance Focus</Text>
-                       <Text weight="font-bold" className="text-white">West Coast Swing + Lindy Hop</Text>
+                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Dance Focus</Text>
+                       <Text as="div" weight="font-bold" className="text-white">West Coast Swing + Lindy Hop</Text>
                     </Box>
                     <Box>
-                       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Dance Level</Text>
-                       <Text weight="font-bold" className="text-white">Competitive Intermediate Follow</Text>
+                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Dance Level</Text>
+                       <Text as="div" weight="font-bold" className="text-white">Competitive Intermediate Follow</Text>
                     </Box>
                     <Box>
-                       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Education</Text>
-                       <Text weight="font-bold" className="text-white">PhD in Computer Science, MIT</Text>
+                       <Text as="div" variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={1}>Education</Text>
+                       <Text as="div" weight="font-bold" className="text-white">PhD in Computer Science, MIT</Text>
                     </Box>
                   </Stack>
                 </Box>

@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts } from '@/lib/content';
-import { Home as HomeIcon } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 
+/** Matches `artifacts/boomtick/index.html` “Where Dancers Go” cards (venue + location + cadence). */
 export const upcomingEvents = [
-  { name: 'Mission City Swing', date: 'Every Wednesday', status: 'Local Regular', icon: HomeIcon },
+  { name: 'Mission City Swing', date: 'San Jose, CA', status: 'Every Wednesday', icon: MapPin },
+  { name: 'US Open Swing Dance Championships', date: 'Burbank, CA', status: 'November', icon: Calendar },
+  { name: 'Swing Diego', date: 'San Diego, CA', status: 'January', icon: Calendar },
 ];
 
 export function useHome() {

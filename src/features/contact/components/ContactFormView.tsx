@@ -35,7 +35,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
         <Box padding={{ base: 6, md: 10 }} border radius="3xl" surface="surface" className="border-line/50 shadow-2xl relative overflow-hidden">
           <Box position="absolute" top={-16} left={-16} width={64} height={64} surface="secondary" opacity={0.05} radius="full" className="blur-3xl" />
           
-          <Stack gap={10} relative zIndex={10}>
+          <Stack gap={10} position="relative" zIndex={10}>
             <Stack gap={2}>
               <Text as="h2" size="3xl" weight="font-black" className="tracking-tight text-white">System Inquiries</Text>
               <Text size="lg" className="max-w-2xl leading-relaxed text-text-body/90">

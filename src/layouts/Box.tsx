@@ -53,6 +53,7 @@ export interface BaseProps {
   self?: "start" | "center" | "end" | "stretch" | "auto"
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly"
   align?: "start" | "center" | "end" | "baseline" | "stretch"
+  textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
   scrollBehavior?: "smooth" | "auto"
   scrollPaddingTop?: number | string
   top?: ResponsiveProp<keyof typeof spacing | number | string>
@@ -77,7 +78,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap,
-    justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop,
+    justify, align, textAlign, scrollBehavior: _scrollBehavior, scrollPaddingTop,
     top, right, bottom, left,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
@@ -213,6 +214,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
+          getResponsiveClasses(textAlign, "text-"),
           getResponsiveClasses(top, "", s("top")),
           getResponsiveClasses(right, "", s("right")),
           getResponsiveClasses(bottom, "", s("bottom")),

@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 export function VerdictCallout({
   score,
   verdict,
-  pros,
-  cons
+  pros = [],
+  cons = []
 }: {
   score: number;
   verdict: string;
-  pros: string[];
-  cons: string[];
+  pros?: string[];
+  cons?: string[];
 }) {
   return (
     <Box padding={8} border radius="3xl" surface="surface" className="border-line/80 shadow-xl relative overflow-hidden">
@@ -40,7 +40,7 @@ export function VerdictCallout({
               <Text weight="font-bold" size="sm" className="text-white uppercase tracking-wider">Pros</Text>
             </Box>
             <Stack gap={2}>
-              {pros.map((pro, i) => (
+              {(pros || []).map((pro, i) => (
                 <Text key={i} size="sm" className="text-text-body/80 flex gap-2">
                   <span className="text-green-400/60">•</span> {pro}
                 </Text>
@@ -54,7 +54,7 @@ export function VerdictCallout({
               <Text weight="font-bold" size="sm" className="text-white uppercase tracking-wider">Cons</Text>
             </Box>
             <Stack gap={2}>
-              {cons.map((con, i) => (
+              {(cons || []).map((con, i) => (
                 <Text key={i} size="sm" className="text-text-body/80 flex gap-2">
                   <span className="text-red-400/60">•</span> {con}
                 </Text>

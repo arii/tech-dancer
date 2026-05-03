@@ -11,7 +11,6 @@ import { motionTokens } from '@/styles/motion';
 import Equalizer from '@/components/Equalizer';
 
 export default function Home() {
-  const NUM_BARS = 28;
   const { recentPosts, upcomingEvents } = useHome();
 
   return (
@@ -33,24 +32,25 @@ export default function Home() {
             >
               Welcome to boomtick.blog
             </Text>
-            <Text as="h1" variant="display" size="fluid-7" weight="font-black" className="leading-tight mb-4 text-white">
-              The West Coast Swing Lifestyle Blog
+            <Text as="h1" variant="display" size="fluid-7" weight="font-black" className="leading-[0.96] mb-4 text-white">
+              The West Coast Swing
+              <br />
+              Lifestyle Blog
             </Text>
-            <Text size="lg" className="leading-7 text-text-body/90 max-w-xl">
-              Training tips, travel guides, gear picks, and data for dancers who want to get better and go further.
+            <Text size="lg" className="leading-7 text-white/88 max-w-xl">
+              Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by Ariel Anders.
             </Text>
           </motion.div>
         </Box>
 
         {/* Dual Path Hero */}
         <Box paddingX={{ base: 4, md: 10 }}>
-          <Box 
+          <Grid 
             as={motion.div} 
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.7, delay: 0.15 }} 
-            display="grid"
-            gridCols={{ base: 1, lg: 2 }}
+            cols={{ base: 1, lg: 2 }}
             radius="2xl"
             border
             overflow="hidden"
@@ -62,60 +62,94 @@ export default function Home() {
               position="relative" 
               minHeight={{ base: 280, sm: 320 }} 
               padding={8} 
-              display="flex" 
-              flexDirection="col" 
               justify="end" 
-              className="bg-[#0a0c18] group overflow-hidden"
+              className="flex flex-col bg-[#0a0c18] group overflow-hidden"
             >
-              <Box inset className="absolute bg-gradient-to-br from-primary/10 via-secondary/5 to-transparent pointer-events-none" />
+              <Box
+                position="absolute"
+                inset
+                className="absolute pointer-events-none opacity-25"
+                style={{
+                  background:
+                    'radial-gradient(circle at 50% 100%, rgba(0,207,255,.18), transparent 40%), linear-gradient(135deg, rgba(0,207,255,.08), rgba(139,47,255,.05) 40%, rgba(255,0,200,.06))',
+                }}
+              />
               <Box position="absolute" inset="bottom" left={0} right={0} height={170} zIndex={1}>
-                <Equalizer count={NUM_BARS} />
+                <Equalizer />
               </Box>
               <Box position="relative" zIndex={10}>
-                <Text as="h2" weight="font-black" size="4xl" className="mb-2 uppercase tracking-tighter text-white">
+                <Text as="h2" weight="font-black" size="4xl" className="mb-2 uppercase tracking-tighter text-white drop-shadow-sm">
                   Train smarter.
                 </Text>
-                <Text className="mb-4 max-w-xs text-sm leading-6 text-white/75">
+                <Text className="mb-4 max-w-xs text-sm leading-6 text-white/90">
                   Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
                 </Text>
                 <Stack gap={1}>
-                  <NavLink to="/blog?category=Training" className="text-sm font-bold text-primary hover:text-white transition-colors">WCS Training →</NavLink>
-                  <NavLink to="/blog?category=Mindset" className="text-sm font-bold text-primary hover:text-white transition-colors">Competition tips →</NavLink>
-                  <NavLink to="/gear" className="text-sm font-bold text-primary hover:text-white transition-colors">Gear reviews →</NavLink>
+                  <NavLink
+                    to="/blog?category=Training"
+                    className="text-sm font-bold text-[#7df9ff] hover:text-white transition-colors drop-shadow-sm"
+                  >
+                    WCS Training →
+                  </NavLink>
+                  <NavLink
+                    to="/blog?category=Mindset"
+                    className="text-sm font-bold text-[#7df9ff] hover:text-white transition-colors drop-shadow-sm"
+                  >
+                    Competition tips →
+                  </NavLink>
+                  <NavLink to="/gear" className="text-sm font-bold text-[#7df9ff] hover:text-white transition-colors drop-shadow-sm">
+                    Gear reviews →
+                  </NavLink>
                 </Stack>
               </Box>
             </Box>
 
             {/* Travel Better */}
-            <Box 
-              position="relative" 
-              minHeight={{ base: 280, sm: 320 }} 
-              padding={8} 
-              display="flex" 
-              flexDirection="col" 
-              justify="end" 
-              border={{ base: "t", lg: "l" }}
-              className="bg-[#0a0c18] border-line group overflow-hidden"
-            >
-              <Box inset className="absolute bg-gradient-to-bl from-secondary/10 via-accent/5 to-transparent pointer-events-none" />
+                          <Box 
+                            position="relative" 
+                            minHeight={{ base: 280, sm: 320 }} 
+                            padding={8} 
+                            justify="end" 
+                            border={{ base: "t", lg: "l" }}
+                            className="flex flex-col bg-[#0a0c18] border-line group overflow-hidden"
+                          >              <Box
+                inset
+                className="absolute pointer-events-none opacity-25"
+                style={{
+                  background:
+                    'radial-gradient(circle at 50% 100%, rgba(0,207,255,.18), transparent 40%), linear-gradient(135deg, rgba(0,207,255,.08), rgba(139,47,255,.05) 40%, rgba(255,0,200,.06))',
+                }}
+              />
               <Box position="absolute" inset="bottom" left={0} right={0} height={170} zIndex={1}>
-                <Equalizer reverse count={NUM_BARS} />
+                <Equalizer reverse />
               </Box>
               <Box position="relative" zIndex={10}>
-                <Text as="h2" weight="font-black" size="4xl" className="mb-2 uppercase tracking-tighter text-white">
+                <Text as="h2" weight="font-black" size="4xl" className="mb-2 uppercase tracking-tighter text-white drop-shadow-sm">
                   Travel better.
                 </Text>
-                <Text className="mb-4 max-w-xs text-sm leading-6 text-white/75">
+                <Text className="mb-4 max-w-xs text-sm leading-6 text-white/90">
                   Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
                 </Text>
                 <Stack gap={1}>
-                  <NavLink to="/blog?category=Travel" className="text-sm font-bold text-secondary hover:text-white transition-colors">Travel guides →</NavLink>
-                  <NavLink to="/research" className="text-sm font-bold text-secondary hover:text-white transition-colors">Event calendar →</NavLink>
-                  <NavLink to="/gear" className="text-sm font-bold text-secondary hover:text-white transition-colors">Packing lists →</NavLink>
+                  <NavLink
+                    to="/blog?category=Travel"
+                    className="text-sm font-bold text-[#e9d5ff] hover:text-white transition-colors drop-shadow-sm"
+                  >
+                    Travel guides →
+                  </NavLink>
+                  <NavLink
+                    to="/research"
+                    className="text-sm font-bold text-[#e9d5ff] hover:text-white transition-colors drop-shadow-sm"
+                  >
+                    Event calendar →
+                  </NavLink>
+                  <NavLink to="/gear" className="text-sm font-bold text-[#e9d5ff] hover:text-white transition-colors drop-shadow-sm">
+                    Packing lists →
+                  </NavLink>
                 </Stack>
               </Box>
             </Box>
-          </Box>
+          </Grid>
         </Box>
 
         {/* Blog Posts */}
@@ -123,32 +157,33 @@ export default function Home() {
           <Box display="flex" align="end" justify="between" width="full">
             <Stack gap={1}>
               <Text size="xs" weight="font-bold" className="tracking-widest uppercase text-text-dim">Latest Updates</Text>
-              <Text as="h2" size="2xl" weight="font-black" className="text-white">Recent Blog Posts</Text>
+              <Text as="h2" size="2xl" weight="font-black" className="text-white">Recent Posts</Text>
             </Stack>
             <Box as={NavLink} to="/blog" display="flex" align="center" gap={2} className="text-xs font-bold uppercase tracking-widest text-text-dim hover:text-primary transition-colors">
               View all posts <ArrowRight size={13} />
             </Box>
           </Box>
 
-          <Grid
-            cols={{ base: 1, md: 2 }}
-            gap={6}
+          <Stack
+            gap={0}
             as={motion.div}
             variants={motionTokens.staggerContainer}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}
+            className="divide-y divide-line"
           >
             {recentPosts.map((post) => (
-              <ContentCard
-                key={post.slug}
-                {...post}
-                basePath="/blog"
-                variants={motionTokens.staggerItem}
-                compact={true}
-              />
+              <Box key={post.slug} paddingY={4}>
+                <ContentCard
+                  {...post}
+                  basePath="/blog"
+                  variants={motionTokens.staggerItem}
+                  compact={true}
+                />
+              </Box>
             ))}
-          </Grid>
+          </Stack>
         </Stack>
 
         {/* Events Grid */}
@@ -156,7 +191,7 @@ export default function Home() {
           <Stack gap={1}>
             <Text as="h2" size="2xl" weight="font-black" className="text-white">Where Dancers Go</Text>
           </Stack>
-          <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
             {upcomingEvents.map((event) => (
               <Box
                 key={event.name}

@@ -69,7 +69,9 @@ export default function Navigation() {
         )}
       >
         <Box className="border-b border-line px-4 py-6">
-          <Logo className="h-10" />
+          <NavLink to="/" aria-label="Go to home">
+            <Logo className="h-10" />
+          </NavLink>
         </Box>
         
         <Stack as="ul" gap={1} flex={1} paddingY={4} className="overflow-y-auto">
