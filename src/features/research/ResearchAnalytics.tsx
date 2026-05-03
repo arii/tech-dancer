@@ -37,12 +37,14 @@ export default function ResearchAnalytics(): JSX.Element {
               <Box 
                 key={tool.id}
                 as="button"
+                type="button"
+                aria-label={`Open ${tool.name}`}
                 onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 surface="default"
                 border
                 padding="card"
                 cursor="pointer"
-                className="group hover:border-accent transition-all text-left"
+                className="group hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all text-left"
               >
                 <Stack gap={6} height="full" justify="between">
                   <Stack gap={4}>
@@ -76,8 +78,15 @@ export default function ResearchAnalytics(): JSX.Element {
           {studies.length > 0 ? (
             <Grid cols={{ base: 1, md: 2 }} gap={12}>
               {studies.map((study) => (
-                <Box key={study.slug} className="group">
-                  <Stack gap={4}>
+                <Box
+                  key={study.slug}
+                  as="button"
+                  type="button"
+                  onClick={() => navigate(`/research/${study.slug}`)}
+                  aria-label={`Read study ${study.title}`}
+                  className="group w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <Stack gap={4} surface="default" border padding="card" className="transition-all hover:border-accent">
                     <Box display="flex" justify="between" align="center">
                       <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
                       <Text variant="mono" size="micro" color="dim">{study.date}</Text>
