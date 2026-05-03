@@ -44,7 +44,7 @@ export function useBlogDrafter() {
       title: '',
       category: 'Lifestyle',
       excerpt: '',
-      author: SITE_METADATA.author,
+      author: SITE_METADATA.persona || 'Tech Dancer',
       date: new Date().toISOString().split('T')[0],
       affiliateLink: '',
       commentary: ''
@@ -160,7 +160,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
       title: '',
       category: 'Lifestyle',
       excerpt: '',
-      author: SITE_METADATA.author,
+      author: SITE_METADATA.persona || 'Tech Dancer',
       date: new Date().toISOString().split('T')[0],
       affiliateLink: '',
       commentary: ''

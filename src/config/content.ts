@@ -5,12 +5,3 @@ export const CONTENT_CATEGORIES = [
   { id: 'Travel', label: 'Travel', description: 'WCS event logistics and travel optimization hacks.' }
 ] as const;
 
-export const SITE_METADATA = {
-  title: 'BoomTick.Blog',
-  author: 'Tech Dancer',
-  description: 'The West Coast Swing Lifestyle Blog',
-  repo: {
-    owner: 'arii',
-    name: 'boomtick-blog'
-  }
-};

@@ -2,7 +2,7 @@ import { SITE_METADATA } from "@/config/content";
 import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
-    name: SITE_METADATA.author,
+    name: SITE_METADATA.persona || 'Tech Dancer',
     role: "West Coast Swing Blogger // Data Science Consultant",
     sections: [
       {
@@ -13,7 +13,7 @@ const PROFILE_DATA: ProfileData = {
       {
         id: "phd-matters",
         title: "The Tech Dancer Perspective",
-        content: "With a background in building complex systems, I bring a unique analytical lens to the world of West Coast Swing. I don't just study data—I look for the underlying structures that make dance, travel, and lifestyle systems work. As a consultant, I use data science to optimize every aspect of the dance experience, from movement mechanics to event logistics."
+        content: "As Ariel Anders, PhD, I bring a unique analytical lens to the world of West Coast Swing. With a background in building complex robotic systems, I don't just study data—I look for the underlying structures that make dance, travel, and lifestyle systems work. As a consultant, I use data science to optimize every aspect of the dance experience, from movement mechanics to event logistics."
       },
       {
         id: "why-built",
@@ -27,7 +27,8 @@ const PROFILE_DATA: ProfileData = {
       }
     ],
     details: [
-      { label: "IDENTITY", value: "Tech Dancer" },
+      { label: "AUTHOR", value: SITE_METADATA.author },
+      { label: "IDENTITY", value: SITE_METADATA.persona || "Tech Dancer" },
       { label: "FOCUS", value: "WCS // Travel // Data Science" },
       { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
     ]
