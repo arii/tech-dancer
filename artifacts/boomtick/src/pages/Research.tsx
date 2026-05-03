@@ -20,16 +20,16 @@ const Research = () => {
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Interactive data science, software development, and specialized tools to optimize the WCS lifestyle — part of the broader creator toolkit at arii.github.io.</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 mb-10">
             {researchTools.map((tool) => (
-              <article key={tool.title} className="border border-border bg-card rounded-xl p-4">
+              <article key={tool.title} className="border border-border bg-card rounded-xl p-5 shadow-sm hover:border-primary/30 transition-colors">
                 <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-muted-foreground mb-3">{tool.status}</p>
                 <h2 className="text-lg font-bold mb-2">{tool.title}</h2>
-                <p className="text-sm text-foreground/72 leading-6">{tool.description}</p>
+                <p className="text-sm text-foreground/80 leading-6">{tool.description}</p>
               </article>
             ))}
           </div>
-          <section className="border border-dashed border-border rounded-xl p-6 sm:p-8 bg-muted/20 text-center">
+          <section className="border border-dashed border-border rounded-xl p-6 sm:p-8 bg-muted/20 text-center shadow-sm">
             <h2 className="text-2xl font-black mb-2">ETL Pipeline Synchronizing...</h2>
-            <p className="text-sm text-foreground/72 max-w-2xl mx-auto">The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.</p>
+            <p className="text-sm text-foreground/80 max-w-2xl mx-auto">The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.</p>
           </section>
         </section>
       </main>
