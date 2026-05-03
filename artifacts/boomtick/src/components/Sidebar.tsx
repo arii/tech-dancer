@@ -14,7 +14,7 @@ const navItems = [
 const Sidebar = () => {
   return (
     <aside className="fixed top-0 left-0 h-full w-56 bg-card border-r border-border z-40 flex flex-col">
-      <div className="px-6 py-6 border-b border-border">
+      <div className="px-4 py-4 border-b border-border">
         <Link href="/" className="inline-flex items-center" data-testid="link-home-logo">
           <Logo />
         </Link>
