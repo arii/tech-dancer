@@ -34,10 +34,10 @@ export default function Home() {
                 display={{ base: "none", md: "flex" }}
                 align="center"
                 gap={3}
-                className="text-text-dim hover:text-accent transition-colors"
+                className="text-text-dim hover:text-accent transition-colors group/link"
               >
                 <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
               </Box>
             </SectionHeader>
 

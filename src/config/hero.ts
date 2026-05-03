@@ -17,6 +17,6 @@ export const HERO_CONFIG = {
   PARTICLE_HUES: [190, 270], // Cyan and Purple
 
   // Layout
-  MOBILE_PY: 10,
+  MOBILE_PY: 6,
   DESKTOP_PY: 20,
 };

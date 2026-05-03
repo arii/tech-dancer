@@ -11,13 +11,21 @@ interface WaveBar {
 }
 
 export function HeroSection() {
-  // Generate bar data once on mount (stable across re-renders)
+  const BAR_COUNT = HERO_CONFIG.BAR_COUNT;
+  // Generate deterministic bar data based on index to prevent visual regression flakiness
   const bars: WaveBar[] = useMemo(() =>
-    Array.from({ length: HERO_CONFIG.BAR_COUNT }, () => ({
-      height: 20 + Math.random() * 36,
-      dur: (0.4 + Math.random() * 0.8).toFixed(2) + 's',
-      delay: (Math.random() * 0.8).toFixed(2) + 's',
-    })),
+    Array.from({ length: BAR_COUNT }, (_, i) => {
+      // Deterministic pseudo-random values based on index i
+      const hSeed = (i * 137.5) % 36;
+      const dSeed = (i * 222.2) % 0.8;
+      const lSeed = (i * 333.3) % 0.8;
+
+      return {
+        height: 20 + hSeed,
+        dur: (0.4 + dSeed).toFixed(2) + 's',
+        delay: lSeed.toFixed(2) + 's',
+      };
+    }),
   []);
 
   return (
@@ -51,13 +59,13 @@ export function HeroSection() {
         <Box
           display="flex"
           align="center"
-          gap={3}
-          marginBottom={6}
+          gap={2}
+          marginBottom={{ base: 4, lg: 6 }}
           className="opacity-0"
           style={{ animation: 'fadeIn 0.8s ease forwards 0.1s' }}
         >
-          <Box width={8} height="px" style={{ background: 'var(--hero-accent)' }} />
-          <Text variant="mono" size="micro" weight="font-bold" style={{ color: 'var(--hero-accent)', letterSpacing: '2px' }}>
+          <Box width={{ base: 4, lg: 8 }} height="px" style={{ background: 'var(--hero-accent)' }} />
+          <Text variant="mono" size={{ base: "tiny", lg: "micro" }} weight="font-bold" style={{ color: 'var(--hero-accent)', letterSpacing: '2px' }}>
             WEST COAST SWING
           </Text>
         </Box>
@@ -98,7 +106,7 @@ export function HeroSection() {
           weight="font-bold"
           className="text-white -mt-1 opacity-0 translate-y-2.5 pointer-events-none"
           style={{
-            fontSize: 'clamp(20px, 3vw, 28px)',
+            fontSize: 'clamp(18px, 4vw, 28px)',
             letterSpacing: '-0.5px',
             animation: 'fadeUp 0.7s ease forwards 0.4s',
           }}
@@ -108,7 +116,7 @@ export function HeroSection() {
 
         {/* Visual-style Headline from tag.png - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
         <Stack
-          marginTop={6}
+          marginTop={{ base: 4, lg: 6 }}
           align="center"
           gap={0}
           className="opacity-0 translate-y-2.5 pointer-events-none"
@@ -116,7 +124,7 @@ export function HeroSection() {
         >
           <Text
             variant="headline"
-            size="base"
+            size={{ base: "base", lg: "base" }}
             weight="font-black"
             color="white"
             tracking="tight"
@@ -126,7 +134,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="base"
+            size={{ base: "base", lg: "base" }}
             weight="font-black"
             tracking="tight"
             className="leading-none"
@@ -142,7 +150,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="base"
+            size={{ base: "base", lg: "base" }}
             weight="font-black"
             color="white"
             tracking="tight"
@@ -170,10 +178,9 @@ export function HeroSection() {
           as="p"
           variant="body"
           size={{ base: "sm", lg: "xl" }}
-          color="dim"
-          marginTop={8}
-          maxWidth={{ base: "sm", lg: "xl" }}
-          className="opacity-0 leading-relaxed text-white/80 pointer-events-none"
+          marginTop={{ base: 6, lg: 8 }}
+          maxWidth={{ base: "80", lg: "xl" }}
+          className="opacity-0 leading-relaxed text-white pointer-events-none text-center mx-auto"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
           }}
