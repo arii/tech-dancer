@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { debounce } from 'throttle-debounce';
+import { HERO_CONFIG } from '@/config/hero';
 
 interface Particle {
   x: number; y: number; r: number;
@@ -24,18 +26,21 @@ export function HeroParticleCanvas() {
       canvas.width = parent.clientWidth;
       canvas.height = parent.clientHeight;
     };
+
+    const debouncedResize = debounce(200, resize);
+
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', debouncedResize);
 
     // Build particles
-    const particles: Particle[] = Array.from({ length: 60 }, () => ({
+    const particles: Particle[] = Array.from({ length: HERO_CONFIG.PARTICLE_COUNT }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: Math.random() * 1.8 + 0.4,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      alpha: Math.random() * 0.4 + 0.1,
-      hue: Math.random() > 0.5 ? 190 : 270,
+      r: Math.random() * (HERO_CONFIG.PARTICLE_RADIUS_MAX - HERO_CONFIG.PARTICLE_RADIUS_MIN) + HERO_CONFIG.PARTICLE_RADIUS_MIN,
+      vx: (Math.random() - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
+      vy: (Math.random() - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
+      alpha: Math.random() * (HERO_CONFIG.PARTICLE_ALPHA_MAX - HERO_CONFIG.PARTICLE_ALPHA_MIN) + HERO_CONFIG.PARTICLE_ALPHA_MIN,
+      hue: Math.random() > 0.5 ? HERO_CONFIG.PARTICLE_HUES[0] : HERO_CONFIG.PARTICLE_HUES[1],
     }));
 
     let rafId: number;
@@ -59,7 +64,7 @@ export function HeroParticleCanvas() {
     draw();
 
     return () => {
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', debouncedResize);
       cancelAnimationFrame(rafId);
     };
   }, []);

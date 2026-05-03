@@ -179,6 +179,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         </Stack>
       </Box>
 
+      {/* GlobalSearch is outside main stack but still needs high z-index to avoid interception from branding. */}
       <GlobalSearch />
     </Box>
   );

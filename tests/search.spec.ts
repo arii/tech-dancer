@@ -43,7 +43,7 @@ test.describe('Global Search Modal', () => {
     const resultButton = page.getByTestId('search-result').first();
     await expect(resultButton).toBeVisible();
 
-    await resultButton.evaluate(node => (node as HTMLElement).click());
+    await resultButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 });

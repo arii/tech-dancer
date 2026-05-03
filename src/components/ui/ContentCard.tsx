@@ -71,12 +71,12 @@ export function ContentCard({
               {category}
             </Text>
             {date && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" color="body" weight="font-bold" uppercase tracking="widest">
                 {date}
               </Text>
             )}
             {!compact && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" color="body" weight="font-bold" uppercase tracking="widest">
                 {readingTime(content, excerpt)} MIN
               </Text>
             )}

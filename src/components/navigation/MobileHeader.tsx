@@ -28,6 +28,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         display="flex"
         align="center"
         justify="center"
+        shrink={0}
         className="min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors"
         aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}

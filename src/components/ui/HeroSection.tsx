@@ -2,9 +2,7 @@
 import { useMemo } from 'react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-
-// Number of waveform bars — matches the HTML
-const BAR_COUNT = 48;
+import { HERO_CONFIG } from '@/config/hero';
 
 interface WaveBar {
   height: number;
@@ -15,7 +13,7 @@ interface WaveBar {
 export function HeroSection() {
   // Generate bar data once on mount (stable across re-renders)
   const bars: WaveBar[] = useMemo(() =>
-    Array.from({ length: BAR_COUNT }, () => ({
+    Array.from({ length: HERO_CONFIG.BAR_COUNT }, () => ({
       height: 20 + Math.random() * 36,
       dur: (0.4 + Math.random() * 0.8).toFixed(2) + 's',
       delay: (Math.random() * 0.8).toFixed(2) + 's',
@@ -39,8 +37,15 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* All content sits above the canvas via z-index */}
-      <Stack relative zIndex={10} align="center" gap={0} className="text-center px-6 py-20">
+      {/* All content sits above the canvas via z-index. Set pointer-events-none on decorative branding to prevent interception of Global Search clicks in tests. */}
+      <Stack
+        relative
+        zIndex={10}
+        align="center"
+        gap={0}
+        className="text-center px-6 pointer-events-none"
+        paddingY={{ base: HERO_CONFIG.MOBILE_PY, lg: HERO_CONFIG.DESKTOP_PY }}
+      >
 
         {/* Top Label: WEST COAST SWING */}
         <Box
@@ -61,7 +66,7 @@ export function HeroSection() {
         <Box
           display="flex"
           align="end"
-          className="leading-none opacity-0 translate-y-[-20px]"
+          className="leading-none opacity-0 translate-y-[-20px] pointer-events-none"
           style={{ animation: 'fadeUp 0.8s ease forwards 0.2s' }}
         >
           <Text
@@ -91,7 +96,7 @@ export function HeroSection() {
         <Box
           variant="display"
           weight="font-bold"
-          className="text-white -mt-1 opacity-0 translate-y-2.5"
+          className="text-white -mt-1 opacity-0 translate-y-2.5 pointer-events-none"
           style={{
             fontSize: 'clamp(20px, 3vw, 28px)',
             letterSpacing: '-0.5px',
@@ -101,17 +106,17 @@ export function HeroSection() {
           boom<span style={{ color: 'var(--hero-accent)' }}>tick</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>.blog</span>
         </Box>
 
-        {/* Visual-style Headline from tag.png - Resized even further to 'lg' per feedback */}
+        {/* Visual-style Headline from tag.png - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
         <Stack
           marginTop={6}
           align="center"
           gap={0}
-          className="opacity-0 translate-y-2.5"
+          className="opacity-0 translate-y-2.5 pointer-events-none"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
             variant="headline"
-            size="lg"
+            size="base"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -121,7 +126,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="lg"
+            size="base"
             weight="font-black"
             tracking="tight"
             className="leading-none"
@@ -137,7 +142,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="lg"
+            size="base"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -153,22 +158,22 @@ export function HeroSection() {
           height={1.5}
           marginTop={8}
           radius="full"
-          className="opacity-0"
+          className="opacity-0 pointer-events-none"
           style={{
             background: 'linear-gradient(to right, var(--hero-accent), #8B2FFF)',
             animation: 'fadeIn 1s ease forwards 1.2s'
           }}
         />
 
-        {/* Reverted Tagline */}
+        {/* Reverted Tagline - Scaled and constrained for mobile readability */}
         <Text
           as="p"
           variant="body"
-          size={{ base: "lg", lg: "xl" }}
+          size={{ base: "sm", lg: "xl" }}
           color="dim"
           marginTop={8}
-          maxWidth="xl"
-          className="opacity-0 leading-relaxed text-white/80"
+          maxWidth={{ base: "sm", lg: "xl" }}
+          className="opacity-0 leading-relaxed text-white/80 pointer-events-none"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
           }}
@@ -176,15 +181,16 @@ export function HeroSection() {
           Systems, gear, and travel insights for competitive West Coast Swing dancers.
         </Text>
 
-        {/* Waveform */}
+        {/* Waveform - Height fixed to 16 (64px) and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Box
           display="flex"
           align="end"
           gap={1}
-          marginTop={10}
+          marginTop={12}
+          marginBottom={8}
           height={16}
           overflow="hidden"
-          className="opacity-0"
+          className="opacity-0 pointer-events-none"
           style={{ animation: 'fadeIn 1s ease forwards 2.0s' }}
           aria-hidden="true"
         >

@@ -31,7 +31,7 @@ export default function Home() {
               <Box
                 as={NavLink}
                 to="/blog"
-                display="flex"
+                display={{ base: "none", md: "flex" }}
                 align="center"
                 gap={3}
                 className="text-text-dim hover:text-accent transition-colors"
@@ -62,6 +62,26 @@ export default function Home() {
                 />
               ))}
             </Grid>
+
+            {/* Centered Mobile Button for Repo Access */}
+            <Box display={{ base: "flex", md: "none" }} justify="center" marginTop={4}>
+              <Box
+                as={NavLink}
+                to="/blog"
+                display="flex"
+                align="center"
+                justify="center"
+                gap={3}
+                paddingX={8}
+                paddingY={4}
+                radius="full"
+                border
+                className="border-accent text-accent hover:bg-accent/5 transition-all w-full max-w-xs"
+              >
+                <Text variant="mono" size="sm" weight="font-bold">View full repository</Text>
+                <ArrowRight className="w-4 h-4" />
+              </Box>
+            </Box>
           </Stack>
 
           {/* Upcoming Events Mini-Grid */}
