@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Instagram, Linkedin, Globe, MapPin, Sparkles, Clock3 } from "lucide-react";
+import { Github, Instagram, Linkedin, Globe, MapPin, Sparkles, Clock3, Bot, Code2, Megaphone } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import firstComp from "@assets/first_comp_1777789859021.jpg";
 import roboticist from "@assets/roboticist_1777789859029.jpg";
@@ -38,18 +38,67 @@ const About = () => {
                 <h2 className="text-2xl font-black mb-4">My Dance Background</h2>
                 <p className="text-sm leading-7 text-muted-foreground">
                   I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022,
-                  I moved to San Francisco and returned to the social dance scene through Lindy in the Park. A Mission
-                  City Swing series pulled me into West Coast Swing, and the music, connection, and style hooked me fast.
-                  WCS became my main focus because it combines creativity, athleticism, and a truly welcoming community.
+                  I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series
+                  introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the
+                  creative feel of the dance made it easy to care deeply about. WCS became my main focus because it
+                  combines artistry, athleticism, and a genuinely welcoming community.
                 </p>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-black mb-4">What I Do Professionally</h2>
+                <p className="text-sm leading-7 text-muted-foreground mb-4">
+                  I provide high-level technical consulting for startups and project-based digital execution for niche
+                  brands.
+                </p>
+
+                <div className="space-y-4">
+                  <div className="border border-border rounded-xl p-5 bg-card">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Code2 size={16} className="text-primary" />
+                      <h3 className="font-bold text-sm">Robotics & Engineering</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-6">
+                      My background is in robot software engineering and architecture, helping startups build
+                      scalable, production-ready systems. My specialized skillsets include perception, motion planning,
+                      custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep
+                      autonomous fleets reliable and mission-ready.
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-xl p-5 bg-card">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Bot size={16} className="text-primary" />
+                      <h3 className="font-bold text-sm">AI Strategy (DevAI)</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-6">
+                      I implement generative AI tools to automate internal developer tasks and content management.
+                      Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring
+                      WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my
+                      GitHub at github.com/arii.
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-xl p-5 bg-card">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Megaphone size={16} className="text-primary" />
+                      <h3 className="font-bold text-sm">Digital Presence & Management</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-6">
+                      I help artists and niche brands build the infrastructure they need to grow — from functional
+                      websites and merch stores to SEO, booking tools, and content workflows. I handle the technical
+                      logistics from start to finish so you can stay focused on your craft.
+                    </p>
+                  </div>
+                </div>
               </section>
 
               <section>
                 <h2 className="text-2xl font-black mb-4">Why I Built This Site</h2>
                 <p className="text-sm leading-7 text-muted-foreground">
-                  People constantly ask about outfits, event travel, and how to make the WCS lifestyle sustainable.
-                  boomtick.blog is where I share the systems behind it all: practical travel advice, gear that actually
-                  helps, and the small optimizations that make a big difference over a season of events.
+                  boomtick.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel
+                  advice, gear that actually helps, event tips, and the small optimizations that make a big difference
+                  over a season of dancing.
                 </p>
               </section>
 
