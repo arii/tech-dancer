@@ -3,70 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="google-site-verification" content="FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k" />
-    <link rel="icon" href="favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <script type="text/javascript">
-      (function(l) {
-        // If we were redirected from 404.html, the route is encoded in the query string starting with /
-        if (l.search[1] === '/') {
-          var decodedPath = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-
-          // Calculate the actual base path (where index.html is located)
-          var base = l.pathname.replace(/\/index\.html$/, '');
-          window.__ROUTER_BASENAME__ = base;
-
-          // Restore the intended URL without a page reload
-          // We use base.replace(/\/$/, '') to avoid double slashes when joining with decodedPath
-          window.history.replaceState(null, null, base.replace(/\/$/, '') + decodedPath + l.hash);
-        }
-      }(window.location))
-    </script>
+    <title>Boom Tick</title>
+    <style>
+      html,body{margin:0;height:100%;background:#04040a;color:#fff;font-family:system-ui,sans-serif;overflow:hidden}
+      .wrap{min-height:100vh;position:relative;overflow:hidden;background:#04040a}
+      .top{position:absolute;inset:0 0 auto 0;height:48px;display:flex;justify-content:space-between;align-items:center;padding:14px 10px 12px;font-weight:800;letter-spacing:.22em;font-size:12px;text-transform:uppercase;z-index:2}
+      .grid{position:absolute;inset:48px 0 0 0;background-image:linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);background-size:44px 44px;opacity:.85}
+      .main{position:relative;z-index:2;max-width:920px;margin:0 auto;padding:28px 8px 0}
+      .label{color:#27e7ff;font-size:11px;letter-spacing:.4em;text-transform:uppercase;font-weight:800;margin:6px 0 14px}
+      h1{margin:0;font-size:clamp(50px,9.2vw,92px);line-height:.94;letter-spacing:-.05em;font-weight:900}
+      .grad{background:linear-gradient(90deg,#27e7ff 0%,#6c77ff 55%,#df37ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .rule{width:46px;height:3px;background:linear-gradient(90deg,#27e7ff,#6c77ff);margin:22px 0 16px}
+      .desc{max-width:340px;color:rgba(255,255,255,.55);font-size:15px;line-height:1.55;margin:0 0 26px}
+      .chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:330px;margin-bottom:26px}
+      .chip>div:first-child{width:34px;height:34px;border-radius:12px}
+      .panel{height:430px;border-radius:24px;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 80%, rgba(39,231,255,.11), transparent 30%),linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));box-shadow:0 0 0 1px rgba(255,255,255,.05),0 28px 90px rgba(0,0,0,.52)}
+      .bars{position:absolute;inset:0;background:linear-gradient(90deg, transparent 0 3%, #22d8ef 3% 5%, transparent 5% 7%, #24c5ee 7% 9%, transparent 9% 12%, #2bb1f0 12% 14%, transparent 14% 16%, #4796f1 16% 18%, transparent 18% 21%, #6c77ff 21% 23%, transparent 23% 25%, #7b5cff 25% 27%, transparent 27% 30%, #9a4df7 30% 32%, transparent 32% 34%, #c33bf4 34% 36%, transparent 36% 38%, #df37ff 38% 40%, transparent 40% 43%, #ff2fbf 43% 45%, transparent 45% 47%, #ff2b92 47% 49%, transparent 49% 100%);opacity:.95;filter:saturate(1.2) blur(.2px)}
+      .banner{position:relative;margin-top:-56px;padding:18px 14px;border-radius:18px;background:rgba(8,8,16,.82);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);display:flex;justify-content:space-between;align-items:center;gap:12px}
+      .small{font-size:11px;letter-spacing:.28em;font-weight:800;text-transform:uppercase}
+      .sub{margin-top:4px;font-size:11px;color:rgba(255,255,255,.48);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .email{min-width:112px;border-radius:12px;background:#0c0f1e;padding:12px 14px;font-size:13px;color:rgba(255,255,255,.42)}
+      .btn{border-radius:12px;background:linear-gradient(90deg,#27e7ff,#6c77ff);padding:12px 13px;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+      .icons{display:flex;gap:14px;opacity:.9;font-size:18px}
+      .chiptxt{margin-top:8px;font-size:9px;line-height:1.08;letter-spacing:.22em;font-weight:800}
+      @media (max-width: 700px){.main{padding-left:10px;padding-right:10px}.chips{max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}.panel{height:300px}.banner{flex-direction:column;align-items:stretch}.email{min-width:0;width:100%}}
+    </style>
   </head>
   <body>
-    <div id="root">
-      <div style="min-height:100vh;background:#04040a;color:#fff;font-family:system-ui,sans-serif;position:relative;overflow:hidden">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 10px 12px 10px;font-weight:800;letter-spacing:.22em;font-size:12px;text-transform:uppercase;position:relative;z-index:2">
-          <div>Boom Tick</div>
-          <div style="display:flex;gap:14px;opacity:.9;font-size:18px"><span>○</span><span>≡</span></div>
+    <div class="wrap">
+      <div class="top"><div>Boom Tick</div><div class="icons"><span>○</span><span>≡</span></div></div>
+      <div class="grid"></div>
+      <main class="main">
+        <div class="label">West Coast Swing</div>
+        <h1>Built for dancers.<br><span class="grad">Train smarter.</span><br>Dance better.</h1>
+        <div class="rule"></div>
+        <p class="desc">Training, travel, and data for competitive West Coast Swing dancers.</p>
+        <div class="chips">
+          <div class="chip"><div style="border:1px solid rgba(39,231,255,.25);background:rgba(39,231,255,.05);box-shadow:0 0 10px rgba(39,231,255,.22)"></div><div class="chiptxt">TRAIN<br><span style="color:#27e7ff">SMARTER</span></div></div>
+          <div class="chip"><div style="border:1px solid rgba(108,119,255,.25);background:rgba(108,119,255,.05);box-shadow:0 0 10px rgba(108,119,255,.22)"></div><div class="chiptxt">TRAVEL<br><span style="color:#6c77ff">BETTER</span></div></div>
+          <div class="chip"><div style="border:1px solid rgba(223,55,255,.25);background:rgba(223,55,255,.05);box-shadow:0 0 10px rgba(223,55,255,.22)"></div><div class="chiptxt">SHOP<br><span style="color:#df37ff">SMARTER</span></div></div>
+          <div class="chip"><div style="border:1px solid rgba(108,119,255,.25);background:rgba(108,119,255,.05);box-shadow:0 0 10px rgba(108,119,255,.22)"></div><div class="chiptxt">USE<br><span style="color:#6c77ff">DATA</span></div></div>
         </div>
-        <div style="position:absolute;inset:48px 0 0 0;background-image:linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);background-size:44px 44px;opacity:.85"></div>
-        <div style="position:relative;z-index:2;max-width:920px;margin:0 auto;padding:28px 8px 0">
-          <div style="color:#27e7ff;font-size:11px;letter-spacing:.4em;text-transform:uppercase;font-weight:800;margin:6px 0 14px">West Coast Swing</div>
-          <h1 style="margin:0;font-size:clamp(50px,9.2vw,92px);line-height:.94;letter-spacing:-.05em;font-weight:900">
-            Built for dancers.<br>
-            <span style="background:linear-gradient(90deg,#27e7ff 0%,#6c77ff 55%,#df37ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Train smarter.</span><br>
-            Dance better.
-          </h1>
-          <div style="width:46px;height:3px;background:linear-gradient(90deg,#27e7ff,#6c77ff);margin:22px 0 16px"></div>
-          <p style="max-width:340px;color:rgba(255,255,255,.55);font-size:15px;line-height:1.55;margin:0 0 26px">Training, travel, and data for competitive West Coast Swing dancers.</p>
-          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:330px;margin-bottom:26px">
-            <div><div style="width:34px;height:34px;border:1px solid rgba(39,231,255,.24);border-radius:12px;background:rgba(39,231,255,.05);box-shadow:0 0 10px rgba(39,231,255,.22)"></div><div style="margin-top:8px;font-size:9px;line-height:1.08;letter-spacing:.22em;font-weight:800">TRAIN<br><span style="color:#27e7ff">SMARTER</span></div></div>
-            <div><div style="width:34px;height:34px;border:1px solid rgba(108,119,255,.24);border-radius:12px;background:rgba(108,119,255,.05);box-shadow:0 0 10px rgba(108,119,255,.22)"></div><div style="margin-top:8px;font-size:9px;line-height:1.08;letter-spacing:.22em;font-weight:800">TRAVEL<br><span style="color:#6c77ff">BETTER</span></div></div>
-            <div><div style="width:34px;height:34px;border:1px solid rgba(223,55,255,.24);border-radius:12px;background:rgba(223,55,255,.05);box-shadow:0 0 10px rgba(223,55,255,.22)"></div><div style="margin-top:8px;font-size:9px;line-height:1.08;letter-spacing:.22em;font-weight:800">SHOP<br><span style="color:#df37ff">SMARTER</span></div></div>
-            <div><div style="width:34px;height:34px;border:1px solid rgba(108,119,255,.24);border-radius:12px;background:rgba(108,119,255,.05);box-shadow:0 0 10px rgba(108,119,255,.22)"></div><div style="margin-top:8px;font-size:9px;line-height:1.08;letter-spacing:.22em;font-weight:800">USE<br><span style="color:#6c77ff">DATA</span></div></div>
-          </div>
-          <div style="height:430px;border-radius:24px;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 80%, rgba(39,231,255,.11), transparent 30%),linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));box-shadow:0 0 0 1px rgba(255,255,255,.05),0 28px 90px rgba(0,0,0,.52)">
-            <div style="position:absolute;inset:0;background:linear-gradient(90deg, transparent 0 3%, #22d8ef 3% 5%, transparent 5% 7%, #24c5ee 7% 9%, transparent 9% 12%, #2bb1f0 12% 14%, transparent 14% 16%, #4796f1 16% 18%, transparent 18% 21%, #6c77ff 21% 23%, transparent 23% 25%, #7b5cff 25% 27%, transparent 27% 30%, #9a4df7 30% 32%, transparent 32% 34%, #c33bf4 34% 36%, transparent 36% 38%, #df37ff 38% 40%, transparent 40% 43%, #ff2fbf 43% 45%, transparent 45% 47%, #ff2b92 47% 49%, transparent 49% 100%);opacity:.95;filter:saturate(1.2) blur(.2px)"></div>
-          </div>
-          <div style="position:relative;margin-top:-56px;padding:18px 14px;border-radius:18px;background:rgba(8,8,16,.82);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);display:flex;justify-content:space-between;align-items:center;gap:12px">
-            <div style="min-width:0">
-              <div style="font-size:11px;letter-spacing:.28em;font-weight:800;color:#fff">Weekly Insights</div>
-              <div style="margin-top:4px;font-size:11px;color:rgba(255,255,255,.48);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dance analytics // Gear reviews // Community updates</div>
-            </div>
-            <div style="display:flex;gap:10px;align-items:center;min-width:0">
-              <div style="padding:12px 14px;border-radius:12px;background:#0c0f1e;color:rgba(255,255,255,.42);font-size:13px;min-width:112px">Email Address</div>
-              <div style="padding:12px 13px;border-radius:12px;background:linear-gradient(90deg,#27e7ff,#6c77ff);color:#fff;font-weight:900;letter-spacing:.12em;font-size:11px;text-transform:uppercase">Subscribe →</div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div class="panel"><div class="bars"></div></div>
+        <div class="banner"><div><div class="small">Weekly Insights</div><div class="sub">Dance analytics // Gear reviews // Community updates</div></div><div style="display:flex;gap:10px;align-items:center;min-width:0;flex-wrap:wrap"><div class="email">Email Address</div><div class="btn">Subscribe →</div></div></div>
+      </main>
     </div>
-    <script type="module" src="/assets/index-DTe2Dw4F.js"></script>
   </body>
 </html>
