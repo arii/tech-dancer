@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Search } from 'lucide-react';
-import { Box } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { cn } from '@/lib/utils';
-import logo from '@assets/logo_1777795327103.png';
 
 const TOP_NAV_ROUTES = [
   { path: '/blog', label: 'BLOG' },
@@ -34,8 +33,13 @@ export default function Navigation() {
         aria-label="Main Navigation"
         className="hidden lg:flex fixed top-0 left-0 right-0 z-50 h-16 items-center border-b border-line bg-surface/90 backdrop-blur-xl px-6 xl:px-10"
       >
-        <Box as={NavLink} to="/" className="flex items-center gap-3 shrink-0 group">
-          <img src={logo} alt="Boom Tick" className="h-12 w-auto object-contain" />
+        <Box as={NavLink} to="/" className="flex items-center gap-2 shrink-0 group">
+          <Box className="w-8 h-8 border border-accent/60 flex items-center justify-center rounded-sm group-hover:border-accent transition-colors">
+            <span className="font-bold text-white text-xs leading-none">Boom Tick</span>
+          </Box>
+          <Text variant="mono" size="sm" weight="font-bold" className="text-white leading-none tracking-tight hidden xl:block">
+            Boom Tick
+          </Text>
         </Box>
 
         <Box as="ul" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8">
