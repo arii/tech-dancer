@@ -13,7 +13,7 @@ export function EmailForm() {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} noValidate width={{ base: "full", md: "auto" }} maxWidth="md">
+    <Box as="form" onSubmit={handleSubmit} noValidate width={{ base: "full", md: "auto" }} maxWidth="3xl">
       <Stack direction="row" gap={0} position="relative" width="full">
         <Box
           as="input"

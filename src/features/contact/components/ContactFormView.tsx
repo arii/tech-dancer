@@ -34,14 +34,13 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I’ll reply soon."
         />
 
-        <Box maxWidth="3xl">
-          <Stack gap={8}>
-            <Stack gap={2}>
-              <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
-              <Text variant="body" size="base" color="dim">
-                Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
-              </Text>
-            </Stack>
+        <Stack gap={8} maxWidth="3xl">
+          <Stack gap={2}>
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+            <Text variant="body" size="base" color="dim">
+              Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
+            </Text>
+          </Stack>
 
             <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
               <FormField label="Your Name" error={errors.name?.message}>
@@ -102,30 +101,29 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 </Text>
               )}
 
-              <Box display="flex" justify="end">
-                <Button
-                  type="submit"
-                  variant="professional"
-                  disabled={isSubmitting}
-                  paddingX={8}
-                  className="font-semibold text-base min-h-12"
-                >
-                  {isSubmitting ? (
-                    <Stack direction="row" align="center" gap={3}>
-                      <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
-                      <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
-                    </Stack>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </Button>
-              </Box>
+            <Box display="flex" justify="end">
+              <Button
+                type="submit"
+                variant="professional"
+                disabled={isSubmitting}
+                paddingX={8}
+                className="font-semibold text-base min-h-12"
+              >
+                {isSubmitting ? (
+                  <Stack direction="row" align="center" gap={3}>
+                    <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
+                    <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
+                  </Stack>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Send Message</span>
+                  </>
+                )}
+              </Button>
             </Box>
-          </Stack>
-        </Box>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   );
