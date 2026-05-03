@@ -43,10 +43,10 @@ export function ContentCard({
       shadow={compact ? "none" : "standard"}
       overflow="hidden"
       className={cn(
-        "group transition-all duration-300",
+        "group transition-all duration-300 h-full",
         compact 
-          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent" 
-          : "hover:border-accent hover:shadow-xl hover:-translate-y-1"
+          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent bg-surface" 
+          : "hover:border-accent hover:shadow-xl hover:-translate-y-1 bg-surface"
       )}
       {...motionProps}
     >
@@ -59,19 +59,19 @@ export function ContentCard({
       )}
 
       {/* Content Area */}
-      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
+      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} className={cn(compact ? "min-h-[120px]" : "min-h-[180px]", "justify-between")}>
         <Stack gap={compact ? 0.5 : 3}>
-          <Box display="flex" align="center" gap={3} wrap>
-            <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
+          <Box display="flex" align="center" gap={3} wrap className="leading-none">
+            <Text variant="mono" size="micro" weight="font-black" color="accent" uppercase tracking="widest" className="whitespace-nowrap">
               {category}
             </Text>
             {date && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" className="whitespace-nowrap">
                 {date}
               </Text>
             )}
             {!compact && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" className="whitespace-nowrap">
                 {readingTime(content, excerpt)} MIN
               </Text>
             )}
@@ -81,19 +81,19 @@ export function ContentCard({
             variant="body"
             size={compact ? "base" : "lg"}
             weight="font-bold"
-            className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
+            className="text-white leading-tight group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
           
-          <Text variant="body" size="sm" color="dim" className="line-clamp-1 leading-relaxed opacity-70">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-72">
              {excerpt}
           </Text>
         </Stack>
 
         {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
+          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto pt-4">
+            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent" className="whitespace-nowrap">
               Read Article
             </Text>
             <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
