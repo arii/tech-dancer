@@ -24,9 +24,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     if (!container) return;
 
     const handleSaveScroll = () => {
-      if (container) {
-        sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
-      }
+      sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
     };
 
     window.addEventListener('beforeunload', handleSaveScroll);
@@ -40,9 +38,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       }
     } else {
       requestAnimationFrame(() => {
-        if (container) {
-          container.scrollTop = 0;
-        }
+        if (container) container.scrollTop = 0;
       });
       window.scrollTo(0, 0);
     }
@@ -91,11 +87,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
       const currentIndex = MAIN_ROUTES.indexOf(pathname);
       if (currentIndex !== -1) {
         let targetRoute = '';
-        if (deltaX > 0 && currentIndex > 0) {
-          targetRoute = MAIN_ROUTES[currentIndex - 1];
-        } else if (deltaX < 0 && currentIndex < MAIN_ROUTES.length - 1) {
-          targetRoute = MAIN_ROUTES[currentIndex + 1];
-        }
+        if (deltaX > 0 && currentIndex > 0) targetRoute = MAIN_ROUTES[currentIndex - 1];
+        else if (deltaX < 0 && currentIndex < MAIN_ROUTES.length - 1) targetRoute = MAIN_ROUTES[currentIndex + 1];
 
         if (targetRoute) {
           navigate(targetRoute);
@@ -120,14 +113,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <Box
-        id="route-announcer"
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      />
-
-      {/* Navigation is now at the top (top nav for desktop, mobile header for mobile) */}
+      <Box id="route-announcer" aria-live="polite" aria-atomic="true" className="sr-only" />
       <Navigation />
       <ScrollToTopButton scrollRef={scrollRef} />
 
@@ -137,7 +123,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         flex={1}
         position="relative"
         overflowY="auto"
-        paddingTop={{ base: 16, lg: 0 }}
+        paddingTop={{ base: 56, lg: 64 }}
         maxWidth="full"
         width="full"
         surface="bg"
@@ -145,15 +131,15 @@ export function MainLayout({ children }: { children: ReactNode }) {
         scrollBehavior="smooth"
         scrollPaddingTop={64}
       >
-        <Stack
-          flex={1}
-          direction="col"
-          width="full"
-        >
+        <Stack flex={1} direction="col" width="full">
           <Box flex={1} width="full">
             {children}
           </Box>
-          <Box paddingX={{ base: 4, md: 6, lg: 12 }} marginX="auto" maxWidth="7xl" width="full"
+          <Box
+            paddingX={{ base: 4, md: 6, lg: 12 }}
+            marginX="auto"
+            maxWidth="7xl"
+            width="full"
             paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
           >
             <Footer />
