@@ -24,30 +24,30 @@ const Home = () => {
         <section className="px-4 sm:px-6 md:px-10 pb-14">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }} className="relative rounded-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[280px]">
             <div className="relative bg-[#0a0718] flex flex-col justify-end p-5 sm:p-8 group overflow-hidden min-h-[240px] sm:min-h-[260px]">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/18 to-transparent" />
-              <div className="absolute inset-0 bg-[#0a0718]/45" />
-              <div className="absolute bottom-0 left-0 right-0 h-44 overflow-hidden opacity-12 pointer-events-none"><Equalizer compact /></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-secondary/25 to-transparent" />
+              <div className="absolute inset-0 bg-[#05040d]/60" />
+              <div className="absolute bottom-0 left-0 right-0 h-40 overflow-hidden opacity-8 pointer-events-none"><Equalizer compact /></div>
               <div className="relative z-10">
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]">Train smarter.</h2>
-                <p className="text-sm text-white/100 mb-4 max-w-xs drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
-                <div className="flex flex-col gap-2">{homeHeroLinks[0].map((link) => (<a key={link.label} href={link.href} className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm" data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
+                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Train smarter.</h2>
+                <p className="text-sm text-white/100 mb-4 max-w-xs drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
+                <div className="flex flex-col gap-2">{homeHeroLinks[0].map((link) => (<a key={link.label} href={link.href} className="text-sm text-cyan-300 hover:text-cyan-200 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 rounded-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
               </div>
             </div>
             <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-5 sm:p-8 group overflow-hidden border-l border-border min-h-[240px] sm:min-h-[260px]">
-              <div className="absolute inset-0 bg-gradient-to-bl from-secondary/30 via-accent/18 to-transparent" />
-              <div className="absolute inset-0 bg-[#0c0a1e]/45" />
-              <div className="absolute bottom-0 left-0 right-0 h-44 overflow-hidden opacity-12 pointer-events-none"><Equalizer compact reverse /></div>
+              <div className="absolute inset-0 bg-gradient-to-bl from-secondary/40 via-accent/25 to-transparent" />
+              <div className="absolute inset-0 bg-[#070616]/60" />
+              <div className="absolute bottom-0 left-0 right-0 h-40 overflow-hidden opacity-8 pointer-events-none"><Equalizer compact reverse /></div>
               <div className="relative z-10">
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]">Travel better.</h2>
-                <p className="text-sm text-white/100 mb-4 max-w-xs drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
-                <div className="flex flex-col gap-2">{homeHeroLinks[1].map((link) => (<a key={link.label} href={link.href} className="text-sm text-secondary hover:text-secondary/80 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 rounded-sm" data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
+                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Travel better.</h2>
+                <p className="text-sm text-white/100 mb-4 max-w-xs drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
+                <div className="flex flex-col gap-2">{homeHeroLinks[1].map((link) => (<a key={link.label} href={link.href} className="text-sm text-fuchsia-300 hover:text-fuchsia-200 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/70 rounded-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
               </div>
             </div>
           </motion.div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-14">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6"><div><p className="text-xs font-bold tracking-widest uppercase text-foreground/70 mb-1">Latest Updates</p><h2 className="text-2xl font-black">Recent Posts</h2></div><a href="/blog" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-foreground/75 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm" data-testid="link-view-all-posts">View all posts <ArrowRight size={13} /></a></div>
-          <div className="flex flex-col divide-y divide-border">{blogPosts.map((post, i) => (<motion.a key={i} href={post.href} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 * i + 0.3 }} className="group flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 py-5 sm:py-6 hover:bg-muted/20 -mx-2 sm:-mx-4 px-2 sm:px-4 rounded-lg transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid={`post-card-${i}`}><div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:w-44 shrink-0 pt-0.5"><span className={`text-xs font-bold px-2 py-0.5 rounded border ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>{post.tag}</span><time className="text-xs text-muted-foreground whitespace-nowrap font-mono">{post.date}</time></div><div><h3 className="font-bold text-base group-hover:text-primary transition-colors mb-1">{post.title}</h3><p className="text-sm text-muted-foreground leading-relaxed">{post.excerpt}</p></div></motion.a>))}</div>
+          <div className="flex flex-col divide-y divide-border">{blogPosts.map((post: { href: string; tag: string; date: string; title: string; excerpt: string }, i: number) => (<motion.a key={post.href} href={post.href} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 * i + 0.3 }} className="group flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 py-5 sm:py-6 hover:bg-muted/20 -mx-2 sm:-mx-4 px-2 sm:px-4 rounded-lg transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid={`post-card-${i}`}><div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:w-44 shrink-0 pt-0.5"><span className={`text-xs font-bold px-2 py-0.5 rounded border ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>{post.tag}</span><time className="text-xs text-muted-foreground whitespace-nowrap font-mono">{post.date}</time></div><div><h3 className="font-bold text-base group-hover:text-primary transition-colors mb-1">{post.title}</h3><p className="text-sm text-muted-foreground leading-relaxed">{post.excerpt}</p></div></motion.a>))}</div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-16">
           <div className="mb-6"><p className="text-xs font-bold tracking-widest uppercase text-foreground/70 mb-1">On the Circuit</p><h2 className="text-2xl font-black">Where Dancers Go</h2></div>
