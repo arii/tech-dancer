@@ -1,11 +1,10 @@
 import { Link } from "wouter";
-import { BookOpen, ShoppingBag, Plane, BarChart2, Info, Search } from "lucide-react";
+import { BookOpen, ShoppingBag, BarChart2, Info, Search } from "lucide-react";
 import Logo from "@/components/Logo";
 
 const navItems = [
   { icon: Search, label: "Search", href: "/" },
   { icon: BookOpen, label: "Blog", href: "/" },
-  { icon: Plane, label: "Travel", href: "/" },
   { icon: ShoppingBag, label: "Gear Reviews", href: "/" },
   { icon: BarChart2, label: "Data Lab", href: "/" },
   { icon: Info, label: "About Tech Dancer", href: "/" },
