@@ -7,7 +7,7 @@ const PROFILE_DATA: ProfileData = {
       {
         id: "dance-background",
         title: "My Dance Background",
-        content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into the swing of things at Lindy in the Park. Seeking a new challenge, I signed up for a series at Mission City Swing—and realized it wasn't Lindy Hop! The music, like 'In Da Club' by 50 Cent, was so much fun that I started dancing both styles. Attending West Coast Swing (WCS) events became a fantastic way for me to travel again after the pandemic. WCS gradually became my primary focus, but you can still find me Lindy Hopping to live Swing music in SF. I'm a competitive Intermediate-level follow (and an occasional lead!) who focuses on weight transfer, clean lines, and timing."
+        content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and resumed partner dancing at Lindy in the Park. Seeking a new challenge, I signed up for a series at Mission City Swing and discovered West Coast Swing. The music and style resonated with me. I started dancing both WCS and Lindy Hop. Attending WCS events enabled me to travel again after the pandemic. WCS gradually became my primary focus, but you can still find me Lindy Hopping to live Swing music in SF. I'm a competitive Intermediate-level follow (and an occasional lead!) who focuses on weight transfer, clean lines, and timing."
       },
       {
         id: "phd-matters",
@@ -17,7 +17,7 @@ const PROFILE_DATA: ProfileData = {
       {
         id: "why-built",
         title: "Why I Built This Site",
-        content: "People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I am fortunate to have a strong career, but I have always focused on making my lifestyle as financially efficient as possible. This site is how I share the 'stacks' I've built—everything from selected gear reviews to my travel-hacking systems."
+        content: "People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I am fortunate to have a strong career, but I have always focused on making my lifestyle as financially efficient as possible. This site is how I share the 'stacks' I've built—everything from tested gear reviews to my travel-hacking systems."
       },
       {
         id: "financial-strategies",
