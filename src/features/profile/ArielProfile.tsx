@@ -32,7 +32,7 @@ export default function ArielProfile() {
           <Stack gap={6} marginTop={4}>
             {section.cards.map((card, index) => (
               <Box key={index} padding={6} border className="bg-surface/30 border-line/10">
-                <Text as="h3" variant="display" size="lg" weight="font-bold" className="mb-2 uppercase tracking-wide">
+                <Text as="h3" variant="display" size="lg" weight="font-bold" marginBottom={2} className="uppercase tracking-wide">
                   {card.title}
                 </Text>
                 <Text variant="body" size="md" color="body" className="leading-relaxed">
