@@ -10,6 +10,7 @@ import argparse
 import sys
 import os
 import re
+
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
@@ -54,8 +55,13 @@ def get_audit_results(content: str = None, targets: list[str] = None):
 
     proc = subprocess.run(cmd, input=content, capture_output=True, text=True)
     try:
-        return json.loads(proc.stdout)
-    except json.JSONDecodeError:
+        output = proc.stdout
+
+        match = re.search(r'\{[\s\S]*\}', output)
+        if match:
+            return json.loads(match.group(0))
+        return json.loads(output)
+    except Exception:
         return {"violations": {}, "config": {}}
 
 def extract_code_blocks(text: str) -> list[str]:
@@ -80,7 +86,10 @@ def detect_conflicts(repo, target_pr_num=None):
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
-    from github import Github
+    try:
+        from github import Github
+    except ImportError:
+        raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
     repo = Github(token).get_repo(get_repo_name())
@@ -149,7 +158,10 @@ def handle_validate_issue(args):
     if total_findings > 0: sys.exit(1)
 
 def handle_conflicts(args):
-    from github import Github
+    try:
+        from github import Github
+    except ImportError:
+        raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
     repo = Github(token).get_repo(get_repo_name())
@@ -166,7 +178,10 @@ def handle_conflicts(args):
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
 def handle_status_board(args):
-    from github import Github
+    try:
+        from github import Github
+    except ImportError:
+        raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
     repo = Github(token).get_repo(get_repo_name())
@@ -266,7 +281,10 @@ def handle_migrate_tokens(args):
     if args.json: print(json.dumps({"status": "success", "matches": matches}, indent=2))
 
 def handle_update_issues(args):
-    from github import Github
+    try:
+        from github import Github
+    except ImportError:
+        raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
     token = get_github_token(); repo_name = get_repo_name()
     if not token: raise CLIError("GitHub token not found", code=401)
     g = Github(token); repo = g.get_repo(repo_name)
@@ -310,7 +328,11 @@ def handle_audit_pr(args):
     if args.fetch:
         token = get_github_token()
         if not token: raise CLIError("GitHub token not found", code=401)
-        from github import Github; repo = Github(token).get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
+        try:
+            from github import Github
+        except ImportError:
+            raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
+        repo = Github(token).get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
         title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
         context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## Files Changed"]
         for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
@@ -356,11 +378,14 @@ def handle_audit_pr(args):
                     # but our script uses process.stdout.write for JSON.
                     # We try to find the JSON part if there's noise.
                     output = proc.stdout
-                    if "{" in output:
-                        json_start = output.find("{")
-                        json_end = output.rfind("}") + 1
-                        audit_data = json.loads(output[json_start:json_end])
-                    for filepath, violations in audit_data.items():
+
+                    match = re.search(r'\{[\s\S]*\}', output)
+                    if match:
+                        audit_data = json.loads(match.group(0))
+                    else:
+                        audit_data = json.loads(output)
+                    violations_dict = audit_data.get('violations', audit_data)
+                    for filepath, violations in violations_dict.items():
                         for v in violations:
                             val = v.get('value', 'N/A')
                             auto_findings.append({
@@ -376,7 +401,10 @@ def handle_audit_pr(args):
             if auto_findings:
                 print(f"📋 Found {len(auto_findings)} violations:")
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
-            subprocess.call(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"])
+            try:
+                subprocess.call(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"])
+            except FileNotFoundError:
+                if not args.json: print("⚠️  'copilot' CLI not found. Skipping automated audit step.")
 
     if args.submit:
         from submit_review import submit_review
@@ -424,7 +452,10 @@ def handle_pre_submit(args):
         token = get_github_token()
         if token:
             if not args.json: print("--- Conflict Check ---")
-            from github import Github
+            try:
+                from github import Github
+            except ImportError:
+                raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
             conflicts = detect_conflicts(Github(token).get_repo(get_repo_name()))
             results["conflicts"] = [{"prs": list(p), "files": f} for p, f in conflicts.items()]
             if not args.json:
@@ -492,7 +523,10 @@ def handle_audit_gate(args):
         print("✅ No new violations introduced.")
 
 def handle_manage_reviews(args):
-    from github import Github
+    try:
+        from github import Github
+    except ImportError:
+        raise CLIError('Missing PyGithub. Please install it using pip install PyGithub', code=1)
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
     g = Github(token); repo = g.get_repo(get_repo_name()); login = g.get_user().login
