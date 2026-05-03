@@ -141,6 +141,13 @@
     max-width: 65ch;
     @apply text-text-body break-words;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white tracking-tight;
+  }
+  ::selection {
+    background: rgba(0, 229, 255, 0.28);
+    color: #ffffff;
+  }
 }
 
 /* Desktop top nav */
@@ -156,4 +163,10 @@
   @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
-.content-card { @apply bg-surface p-8 rounded-none border border-line; }
+.content-card { @apply bg-surface p-8 rounded-none border border-line shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_12px_40px_rgba(0,0,0,0.16)]; }
+.page-shell {
+  @apply mx-auto w-full max-w-[1400px] px-4 md:px-6 lg:px-12;
+}
+.section-shell {
+  @apply mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8;
+}

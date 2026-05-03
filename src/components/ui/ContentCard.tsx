@@ -43,10 +43,10 @@ export function ContentCard({
       shadow={compact ? "none" : "standard"}
       overflow="hidden"
       className={cn(
-        "group transition-all duration-300 h-full",
+        "group transition-all duration-300 h-full will-change-transform",
         compact
           ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent bg-surface"
-          : "hover:border-accent hover:shadow-md hover:-translate-y-0.5 bg-surface"
+          : "hover:border-accent hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)] hover:-translate-y-1 bg-surface"
       )}
       {...motionProps}
     >

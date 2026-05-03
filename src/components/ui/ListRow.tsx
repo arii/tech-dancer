@@ -20,7 +20,7 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
   return (
     <Box as={NavLink} to={`${basePath}/${slug}`}
       display="flex" align="center" border="b"
-      className="group hover:bg-surface/50 transition-colors min-h-[68px]"
+      className="group hover:bg-surface/50 transition-colors min-h-[72px]"
     >
       <Box className="w-1 self-stretch bg-accent shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
       <Box width={9} height={9} margin={3} shrink={0} radius="none" overflow="hidden" display="flex" align="center" justify="center">

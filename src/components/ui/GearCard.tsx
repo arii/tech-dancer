@@ -31,7 +31,7 @@ export function GearCard({
       border
       radius="none"
       overflow="hidden"
-      className="group hover:border-accent transition-all duration-300 max-w-[320px] mx-auto"
+      className="group hover:border-accent transition-all duration-300 max-w-[320px] mx-auto hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.24)]"
     >
       <CardImagePlaceholder
         image={image}
