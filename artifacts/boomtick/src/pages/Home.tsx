@@ -21,17 +21,17 @@ const Home = () => {
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Welcome to boomtick.blog</p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">The West Coast Swing Lifestyle Blog</h1>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl">Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by Ariel Anders, creator of arii.github.io.</p>
+            <p className="text-base sm:text-lg text-foreground/82 max-w-xl">Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by Ariel Anders, creator of arii.github.io.</p>
           </motion.div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-14">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }} className="relative rounded-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[280px]">
             <div className="relative bg-[#0a0718] flex flex-col justify-end p-5 sm:p-8 group overflow-hidden min-h-[240px] sm:min-h-[260px]">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-secondary/4 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/18 via-secondary/10 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none"><Equalizer compact /></div>
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">Train smarter.</h2>
-                <p className="text-sm text-white/85 mb-4 max-w-xs">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
+                <p className="text-sm text-white/95 mb-4 max-w-xs">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
                 <div className="flex flex-col gap-2">{[
                   { label: "WCS Training →", href: "/blog" },
                   { label: "Competition tips →", href: "/blog" },
@@ -40,11 +40,11 @@ const Home = () => {
               </div>
             </div>
             <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-5 sm:p-8 group overflow-hidden border-l border-border min-h-[240px] sm:min-h-[260px]">
-              <div className="absolute inset-0 bg-gradient-to-bl from-secondary/8 via-accent/4 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-bl from-secondary/18 via-accent/10 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none"><Equalizer compact reverse /></div>
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">Travel better.</h2>
-                <p className="text-sm text-white/85 mb-4 max-w-xs">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
+                <p className="text-sm text-white/95 mb-4 max-w-xs">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
                 <div className="flex flex-col gap-2">{[
                   { label: "Travel guides →", href: "/blog" },
                   { label: "Event calendar →", href: "/research" },
