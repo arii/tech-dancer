@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { motion } from 'motion/react';
 

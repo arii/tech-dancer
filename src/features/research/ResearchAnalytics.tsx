@@ -1,8 +1,9 @@
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { Database, FileText, ArrowRight } from 'lucide-react';
+import { Database, FileText, Search, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
@@ -15,87 +16,99 @@ export default function ResearchAnalytics() {
     <Box as="section">
       <SEO
         title="Research"
-        description="Interactive data science, software development, and specialized tools for West Coast Swing research and analysis."
+        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
       />
       <Stack gap={12}>
         <PageHeader
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
-          description="Interactive data science, software development, and specialized tools for West Coast Swing research and analysis."
+          description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
           as="h1"
         />
 
         <Stack gap={8}>
-          <Grid cols={{ base: 1, sm: 2, xl: 3 }} gap={4}>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
+          </Box>
+          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
               <Box 
                 key={tool.id}
-                as="article"
+                as="button"
+                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 surface="default"
                 border
-                padding={5}
-                radius="2xl"
-                className="border-line/80 bg-surface shadow-sm transition-colors hover:border-primary/30 group cursor-pointer"
-                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
+                padding="card"
+                cursor="pointer"
+                className="group hover:border-accent transition-all text-left"
               >
-                <Text size="micro" weight="font-bold" className="mb-3 uppercase tracking-[0.25em] text-text-dim/65">
-                  {tool.status}
-                </Text>
-                <Text as="h2" size="lg" weight="font-bold" className="mb-2 group-hover:text-primary transition-colors">
-                  {tool.name}
-                </Text>
-                <Text size="sm" className="leading-7 text-text-body/72 mb-4">
-                  {tool.layman}
-                </Text>
-                <Box display="flex" align="center" gap={2} className="text-text-dim/60 group-hover:text-primary transition-colors mt-auto">
-                  <Text weight="font-bold" size="xs" className="uppercase tracking-widest">Launch Console</Text>
-                  <ArrowRight size={14} />
-                </Box>
+                <Stack gap={6} height="full" justify="between">
+                  <Stack gap={4}>
+                    <Box display="flex" justify="between" align="start">
+                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
+                        <Search className="w-5 h-5" />
+                      </Box>
+                      <StatusBadge label={tool.status} />
+                    </Box>
+                    <Stack gap={2}>
+                      <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>
+                      <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
+                    </Stack>
+                  </Stack>
+                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
+                    <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
+                    <ArrowRight className="w-3 h-3" />
+                  </Box>
+                </Stack>
               </Box>
             ))}
           </Grid>
         </Stack>
 
         <Stack gap={8}>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
+          </Box>
+
           {studies.length > 0 ? (
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+            <Grid cols={{ base: 1, md: 2 }} gap={12}>
               {studies.map((study) => (
-                <Box 
-                  key={study.slug} 
-                  as="article" 
-                  padding={5} 
-                  border 
-                  radius="2xl" 
-                  className="border-line/80 bg-surface shadow-sm transition-colors hover:border-primary/30 group cursor-pointer"
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                >
+                <Box key={study.slug} className="group">
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
-                      <Text size="micro" weight="font-bold" className="uppercase tracking-widest text-text-dim/65">{study.category}</Text>
-                      <Text variant="mono" size="micro" className="text-text-dim/60">{study.date}</Text>
+                      <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
+                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
                     </Box>
-                    <Text as="h2" size="xl" weight="font-black" className="group-hover:text-primary transition-colors leading-tight">
+                    <Text variant="display" size="2xl" className="group-hover:text-accent transition-colors">
                       {study.title}
                     </Text>
-                    <Text size="sm" className="leading-7 text-text-body/72 line-clamp-3">
+                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
                       {study.excerpt}
                     </Text>
-                    <Box display="flex" align="center" gap={2} className="text-text-dim/60 group-hover:text-accent-vivid transition-colors">
-                      <Text weight="font-bold" size="xs" className="uppercase tracking-widest">Read Study</Text>
-                      <FileText size={14} />
+                    <Box
+                      as={motion.div}
+                      whileHover={{ x: 5 }}
+                      display="flex"
+                      align="center"
+                      gap={2}
+                      color="dim"
+                      className="group-hover:text-accent transition-colors"
+                    >
+                      <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
+                      <FileText className="w-4 h-4" />
                     </Box>
                   </Stack>
                 </Box>
               ))}
             </Grid>
           ) : (
-            <Box className="rounded-2xl border border-dashed border-line/80 bg-surface/40 p-12 text-center shadow-xl relative overflow-hidden">
-              <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="accent" opacity={0.03} radius="full" className="blur-3xl" />
-              <Text as="h2" size="2xl" weight="font-black" className="mb-3 text-accent uppercase tracking-tighter">ETL Pipeline Synchronizing...</Text>
-              <Text className="mx-auto max-w-2xl text-base leading-8 text-text-body/90">
-                The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
-              </Text>
-            </Box>
+            <EmptyState
+              icon={<Database className="w-12 h-12" />}
+              title="ETL Pipeline Synchronizing..."
+              description="The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete."
+            />
           )}
         </Stack>
       </Stack>
