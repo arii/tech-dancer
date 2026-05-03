@@ -194,7 +194,7 @@ export function useUXAuditor() {
         try {
           const scaledW = Math.floor(vp.width * 0.5);
           const scaledH = Math.floor(vp.height * 0.5);
-          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
+          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}&vpw=${vp.width}&vph=${vp.height}`;
           const res = await fetch(snapshotUrl);
           if (res.ok) {
             const blob = await res.blob();
