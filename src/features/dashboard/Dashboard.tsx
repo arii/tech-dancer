@@ -120,10 +120,23 @@ export default function Home() {
             <div className="grid grid-cols-4 gap-4 max-w-sm">
               {FEATURE_ITEMS.map((item) => {
                 const Icon = item.icon;
+                const to =
+                  item.label === 'TRAIN'
+                    ? '/research'
+                    : item.label === 'TRAVEL'
+                      ? '/blog'
+                      : item.label === 'SHOP'
+                        ? '/gear'
+                        : '/research';
                 return (
-                  <div key={item.label} className="flex flex-col items-start gap-2">
+                  <NavLink
+                    key={item.label}
+                    to={to}
+                    className="flex flex-col items-start gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    aria-label={`Open ${item.label.toLowerCase()} section`}
+                  >
                     <div
-                      className="w-10 h-10 flex items-center justify-center rounded-lg border"
+                      className="w-10 h-10 flex items-center justify-center rounded-lg border transition-transform group-hover:-translate-y-0.5"
                       style={{
                         borderColor: item.color + '50',
                         background: item.color + '0f',
@@ -137,7 +150,7 @@ export default function Home() {
                       <br />
                       <span style={{ color: item.color }}>{item.accent}</span>
                     </div>
-                  </div>
+                  </NavLink>
                 );
               })}
             </div>
@@ -151,7 +164,13 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            <NeonEqualizer />
+            <div className="grid h-full w-full place-items-center">
+              <img
+                src="/image_1777799906546.png"
+                alt="Boom Tick feature tiles"
+                className="h-full w-full object-contain select-none pointer-events-none"
+              />
+            </div>
           </motion.div>
         </div>
       </Box>
