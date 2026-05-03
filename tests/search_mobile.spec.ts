@@ -16,7 +16,8 @@ test.describe('Global Search Modal - Mobile', () => {
 
     // Use text selector to find "Search" button
     const searchButton = page.getByRole('button', { name: 'Search' });
-    await searchButton.click({ force: true });
+    // Use evaluate click to avoid issues with menu animations or viewport edge cases
+    await searchButton.evaluate(node => (node as HTMLElement).click());
 
     // Modal should be visible
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
