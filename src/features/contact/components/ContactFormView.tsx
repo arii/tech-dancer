@@ -69,7 +69,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             <Box maxWidth="xl" marginX="auto">
               <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
                 <FormField label="Your Name" error={errors.name?.message}>
-                  <Box as="input"
+                  <input
                     {...register('name')}
                     type="text"
                     placeholder="Jane Doe"
@@ -82,7 +82,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 </FormField>
 
                 <FormField label="Your Email" error={errors.email?.message}>
-                  <Box as="input"
+                  <input
                     {...register('email')}
                     type="email"
                     placeholder="jane@example.com"
@@ -95,7 +95,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 </FormField>
 
                 <FormField label="Subject" error={errors.subject?.message}>
-                  <Box as="select"
+                  <select
                     {...register('subject')}
                     className={cn(inputClasses, "border-line")}
                   >
@@ -103,11 +103,11 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     <option value="Content Request">Content Request</option>
                     <option value="Gear Review Request">Gear Review Request</option>
                     <option value="Dance Statistics">Dance Statistics</option>
-                  </Box>
+                  </select>
                 </FormField>
 
                 <FormField label="Message" error={errors.message?.message}>
-                  <Box as="textarea"
+                  <textarea
                     {...register('message')}
                     rows={5}
                     placeholder="How can I help you?"

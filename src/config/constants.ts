@@ -1,4 +1,4 @@
-import { SITE_METADATA } from "@/config/content";
+import { SITE_METADATA } from "./content";
 
 export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
 export const SITE_NAME = 'BoomTick.blog';

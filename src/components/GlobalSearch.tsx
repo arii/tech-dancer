@@ -2,10 +2,9 @@ import { Search, X, Hash, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
+import { useRef, useCallback, useEffect, MouseEvent, ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-import { debounce } from 'throttle-debounce';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -19,17 +18,6 @@ export function GlobalSearch() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Debounced URL sync to avoid excessive navigation and re-renders
-  const debouncedSetQuery = useMemo(
-    () => debounce(300, (q: string) => {
-      setQuery(q);
-    }),
-    [setQuery]
-  );
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    debouncedSetQuery(e.target.value);
-  };
 
   // Sync input value with URL query for external changes (back/forward navigation)
   useEffect(() => {
@@ -72,14 +60,16 @@ export function GlobalSearch() {
     <Box
       position="fixed"
       inset="y"
-      zIndex="search"
+      zIndex={1000}
       display="flex"
       justify="center"
       align="start"
-      paddingTop={{ base: 0, lg: 20 }}
-      surface={false}
+      paddingTop={{ base: 4, lg: 20 }}
+      paddingX={4}
+      surface="bg"
+      opacity={0.98}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
+      className="backdrop-blur-xl left-0 right-0 top-0 lg:left-72"
       onClick={close}
     >
       <Box
@@ -96,19 +86,17 @@ export function GlobalSearch() {
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
           <Search className="w-6 h-6 text-accent shrink-0" />
-          <Text
+          <Box
             as="input"
             ref={inputRef}
             type="text"
-            placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
-            defaultValue={query}
-            onChange={handleInputChange}
-            width="full"
-            variant="display"
-            size="2xl"
-            color="main"
-            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
             autoFocus
+            placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+            value={query}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+            width="full"
+            paddingY={2}
+            className="bg-transparent border-none focus:outline-none placeholder:text-text-dim/20 text-lg font-mono font-bold tracking-widest"
           />
           <Box 
             as="button"
