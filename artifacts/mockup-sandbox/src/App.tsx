@@ -32,8 +32,7 @@ function PreviewRenderer({
   useEffect(() => {
     let cancelled = false;
 
-    setComponent(null);
-    setError(null);
+
 
     async function loadComponent(): Promise<void> {
       const key = `./components/mockups/${componentPath}.tsx`;
@@ -57,6 +56,7 @@ function PreviewRenderer({
           return;
         }
         setComponent(() => comp);
+        setError(null);
       } catch (e) {
         if (cancelled) {
           return;

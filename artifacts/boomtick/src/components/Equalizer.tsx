@@ -12,9 +12,10 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
   const [mounted, setMounted] = useState(false);
   const { scrollYProgress } = useScroll();
   const scrollShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const yShift = useTransform(scrollYProgress, [0, 1], [0, -10]);
 
   useEffect(() => {
-    setMounted(true);
+    setTimeout(() => setMounted(true), 0);
   }, []);
 
   const bars = useMemo(() => {
@@ -91,7 +92,7 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
       />
       <motion.div
         className="flex items-end justify-center gap-1.5 md:gap-2 w-full h-[80%] z-10"
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -10]) }}
+        style={{ y: yShift }}
       >
         {bars.map((bar, i) => (
           <motion.div

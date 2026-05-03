@@ -9,7 +9,6 @@
  */
 function parseFrontmatter(content: string) {
   if (!content.startsWith('---\n')) return { data: {}, content };
-
   const endOfYaml = content.indexOf('\n---\n');
   if (endOfYaml === -1) return { data: {}, content };
 

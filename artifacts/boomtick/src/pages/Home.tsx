@@ -1,14 +1,17 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import Equalizer from "@/components/Equalizer";
 import { homeHeroLinks, ArrowRight, Calendar, MapPin, blogPosts, tagColors, upcomingEvents } from "@/lib/content/home";
 
 const Home = () => {
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = "boomtick.blog | West Coast Swing Lifestyle Blog";
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "West Coast Swing lifestyle blog with training tips, travel guides, gear reviews, and dance data from boomtick.blog.");
   }
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-background text-foreground flex-col md:flex-row">

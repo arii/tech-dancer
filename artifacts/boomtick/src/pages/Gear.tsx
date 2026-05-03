@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import { gearItems, tagColors } from "@/lib/content/gear";
 
 const Gear = () => {
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = "West Coast Swing Gear Reviews | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "West Coast Swing gear reviews, travel essentials, and practical picks for dancers.");
   }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">

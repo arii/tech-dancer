@@ -1,13 +1,16 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import { aboutConnectItems, aboutPillars, aboutServiceCards, photos } from "@/lib/content/about";
 
 const About = () => {
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = "About Ariel Anders | West Coast Swing Blog";
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "About Ariel Anders, MIT roboticist and West Coast Swing creator behind boomtick.blog.");
   }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">

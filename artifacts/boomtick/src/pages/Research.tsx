@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import { researchTools } from "@/lib/content/research";
 
 const Research = () => {
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = "WCS Data & Development Lab | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "Interactive data science, software development, and WCS research tools from boomtick.blog.");
   }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
