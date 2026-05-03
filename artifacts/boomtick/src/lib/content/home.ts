@@ -1,5 +1,6 @@
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
-import { blogPosts, upcomingEvents, tagColors } from "@/lib/types/site";
+import { upcomingEvents, tagColors } from "@/lib/types/site";
+import { blogPosts } from "@/lib/types/content";
 
 export const homeHeroLinks = [
   [

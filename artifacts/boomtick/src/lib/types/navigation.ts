@@ -1,9 +1,9 @@
-import { Calendar, Globe, Mail, Megaphone, ShoppingBag } from "lucide-react";
+import { BarChart2, BookOpen, Globe, Mail, ShoppingBag } from "lucide-react";
 
 export const primaryNavigation = [
+  { icon: BookOpen, label: "Blog Posts", href: "/blog" },
   { icon: ShoppingBag, label: "Gear Reviews", href: "/gear" },
-  { icon: Megaphone, label: "Data & Development Lab", href: "/research" },
-  { icon: Megaphone, label: "Blog Posts", href: "/blog" },
+  { icon: BarChart2, label: "Data & Development Lab", href: "/research" },
   { icon: Globe, label: "About", href: "/about" },
   { icon: Mail, label: "Contact", href: "/contact" },
 ];

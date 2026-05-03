@@ -24,7 +24,7 @@ const Blog = () => {
           <h1 className="text-4xl md:text-5xl font-black mb-4">Blog Posts</h1>
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
           <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/70 p-3 shadow-sm">
-            {blogFilters.map((item, i) => (
+            {blogFilters.map((item) => (
               <button
                 key={item}
                 type="button"

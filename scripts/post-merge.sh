@@ -1,4 +1,6 @@
 #!/bin/bash
 set -e
 pnpm install --frozen-lockfile
-pnpm --filter db push
+if pnpm --filter db exec true >/dev/null 2>&1; then
+  pnpm --filter db push
+fi
