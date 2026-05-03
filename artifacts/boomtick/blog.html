@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>boomtick.blog/blog</title>
+    <meta name="description" content="Browse boomtick.blog posts on West Coast Swing training, travel, gear, and data." />
+    <link rel="canonical" href="https://boomtick.blog/blog" />
+    <meta property="og:title" content="boomtick.blog blog" />
+    <meta property="og:description" content="Browse West Coast Swing training, travel, gear, and data posts." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://boomtick.blog/blog" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      :root{--bg:#070b14;--card:#0e1322;--muted:#9aa4b2;--text:#f5f7fb;--line:#20283a;--cyan:#00cfff;--purple:#8b2fff;--magenta:#ff00c8}
+      *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+      html{scroll-behavior:smooth} body{display:flex;min-height:100vh}.sidebar{width:240px;min-height:100vh;background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0}.logo{padding:16px;border-bottom:1px solid var(--line)}
+      .nav-toggle{display:none;appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--text);border-radius:12px;padding:12px 14px;font:inherit;font-weight:800;width:100%;text-align:left}
+      .nav{padding:16px 0;flex:1}.nav a{display:flex;align-items:center;gap:12px;padding:12px 24px;color:var(--muted);text-decoration:none;font-size:14px}.nav a:hover,.nav a:focus-visible{color:var(--text);background:rgba(255,255,255,.03);outline:none}.footer{padding:20px 24px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+      .skip{position:absolute;left:-999px;top:12px;background:var(--cyan);color:#06101d;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;z-index:20}.skip:focus{left:12px}
+      main{flex:1;padding:56px 40px 48px;max-width:1220px}.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:18px}.h1{font-size:clamp(42px,5vw,74px);line-height:.96;font-weight:900;max-width:900px;margin:0 0 18px}.sub{max-width:760px;color:var(--muted);font-size:18px;line-height:1.55;margin:0 0 34px}
+      .filters{display:flex;flex-wrap:wrap;gap:10px;padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02);margin:0 0 28px}.filters span{border:1px solid var(--line);padding:10px 14px;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}.filters span.active{background:var(--cyan);color:#06101d;border-color:var(--cyan)}
+      .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.post{border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}.post-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.tag{display:inline-flex;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.tag.tech{color:var(--cyan)}.tag.travel{color:var(--purple)}.tag.data{color:var(--magenta)}.post h3{margin:0;font-size:18px;line-height:1.25;font-weight:900}.post p{margin:0;color:var(--muted);font-size:14px;line-height:1.65}.post .date{font-size:11px;font-family:monospace;color:var(--muted)}.post a{margin-top:auto;color:var(--cyan);text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+      @media (max-width:1100px){body{display:block}.sidebar{position:static;width:100%;min-height:auto;z-index:2}.nav-toggle{display:block}.nav{display:none;padding-top:8px}.sidebar[data-open="true"] .nav{display:block}.grid{grid-template-columns:1fr}.filters{gap:8px} main{padding:28px 16px 40px}}
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <aside class="sidebar">
+      <div class="logo">
+        <svg viewBox="0 0 280 110" fill="none" style="width:100%;height:62px;display:block"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00CFFF"/><stop offset="100%" stop-color="#8B2FFF"/></linearGradient></defs><rect width="280" height="110" rx="18" fill="#0D0E1C"/><text x="16" y="72" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="60" fill="white">B</text><line x1="82" y1="20" x2="112" y2="72" stroke="url(#g)" stroke-width="12" stroke-linecap="round"/><text x="152" y="69" font-family="Arial, Helvetica Neue, Arial, sans-serif" font-weight="700" font-size="34" fill="white" letter-spacing="-.5"><tspan fill="white">boom</tspan><tspan fill="#00CFFF">tick</tspan></text></svg>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" onclick="const s=this.closest('.sidebar');const o=s.dataset.open==='true';s.dataset.open=o?'false':'true';this.setAttribute('aria-expanded',String(!o));">Menu</button>
+      </div>
+      <nav class="nav" id="site-nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="blog.html">Blog</a><a href="gear.html">Gear Reviews</a><a href="research.html">Research</a></nav>
+      <div class="footer">Written by Ariel Anders<br>&copy; 2026 boomtick.blog</div>
+    </aside>
+    <main id="main">
+      <p class="eyebrow">Insights</p>
+      <h1 class="h1">Blog Posts</h1>
+      <p class="sub">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
+      <div class="filters"><span class="active">All Posts</span><span>Tech</span><span>Travel</span><span>Dance Research</span><span>Travel/Lifestyle</span><span>Gear Reviews</span><span>Data & Dev Lab</span></div>
+      <div class="grid">
+        <article class="post"><div class="post-head"><span class="tag tech">Tech</span><span class="date">2026-04-20</span></div><h3>Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages</h3><p>Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages.</p><a href="index.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag travel">Travel</span><span class="date">2026-04-19</span></div><h3>The WCS Travel Pack: 3 Essentials You're Forgetting</h3><p>Loop earplugs, industrial travel steamers, and portable sound. Why these three pieces of gear are the secret to a better dance weekend.</p><a href="gear.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag data">Dance Research</span><span class="date">2026-04-18</span></div><h3>Coming Soon: WCS Competition Data Scraper</h3><p>Announcing a new tool for objective, ethical analysis of West Coast Swing competition data.</p><a href="research.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag travel">Travel/Lifestyle</span><span class="date">2026-04-17</span></div><h3>Coming Soon: The Comprehensive Financial Strategy Guide for Dancers</h3><p>A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle.</p><a href="about.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag tech">Tech</span><span class="date">2026-04-16</span></div><h3>How I used GitHub Actions to power this site</h3><p>Automated deployments and CI/CD pipelines for a tech-forward dance blog.</p><a href="index.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag data">Gear Reviews</span><span class="date">2026-04-15</span></div><h3>Halloween costumes you can dance in</h3><p>How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test.</p><a href="gear.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag data">Gear Reviews</span><span class="date">2026-04-14</span></div><h3>Make any shoe a dance shoe</h3><p>Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response.</p><a href="gear.html">Read Article</a></article>
+        <article class="post"><div class="post-head"><span class="tag data">Data & Dev Lab</span><span class="date">2026-04-13</span></div><h3>The majority of above average dancers don’t make it to finals</h3><p>A statistical look at competition heat density and judge variance, explaining why placement is a poor metric for progress.</p><a href="research.html">Read Article</a></article>
+      </div>
+    </main>
+  </body>
+</html>

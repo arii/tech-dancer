@@ -1,70 +1,49 @@
-# Dependencies
-node_modules/
-.pnpm-store/
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# Build and Analysis
-dist/
-dist-ssr/
-build/
-*-analysis.html
-.eslintcache
-.prettiercache
+# compiled output
+dist
+tmp
+out-tsc
+*.tsbuildinfo
+.expo
+.expo-shared
 
-# Testing
-playwright-report/
-test-results/
-coverage/
-blob-report/
-.playwright/
+# dependencies
+node_modules
 
-# Environment and Secrets
-.env
-.env.local
-.env.*.local
-!.env.example
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# Logs and OS files
-*.log
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
 .DS_Store
 Thumbs.db
 
-# Audit Artifacts
-antipattern-report.txt
-TODO_ANTIPATTERNS.md
-ai-fix-prompt.txt
-.bundle-baseline
-any-count.txt
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
 
-# Tools
-dev-tools/config.json
-
-# IDEs
-.vscode/*
-!.vscode/extensions.json
-!.vscode/launch.json
-.idea/
-*.swp
-*.swo
-
-# Python / ETL
-__pycache__/
-*.py[cod]
-*$py.class
-.venv/
-venv/
-ENV/
-.python-version
-etl/data/*.parquet
-!etl/data/wcs_prelims.parquet
-
-# Package Manager Lockfiles
-# Since you use pnpm, we ignore other manager lockfiles
-package-lock.json
-yarn.lock
-public/data
-link-validation-report.md
-public/data
-link-validation-report.md
+# Replit
+.cache/
+.local/

@@ -2,7 +2,7 @@ import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
     name: "Ariel Anders, PhD",
-    role: "MIT Roboticist // WCS Tech-Dancer",
+    role: "MIT Roboticist // West Coast Swing Dancer",
     sections: [
       {
         id: "dance-background",

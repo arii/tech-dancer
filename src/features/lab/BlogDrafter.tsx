@@ -41,7 +41,7 @@ export function BlogDrafter() {
   };
 
   const handleCopyPrompt = () => {
-    const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.
+    const prompt = `Objective: Expand the following blog post draft JSON for boomtick.blog.
 Requirements:
 1. Respond ONLY with a valid JSON object.
 2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.
@@ -95,7 +95,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
-                This tool prepares your blog post for the Tech-Dancer automated pipeline.
+                This tool prepares your blog post for the boomtick.blog automated pipeline.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
               </Text>
            </Stack>
