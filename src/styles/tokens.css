@@ -1,18 +1,20 @@
 :root {
-  /* Colors */
-  --raw-color-bg: oklch(98% 0.005 250);
-  --raw-color-surface: oklch(100% 0 0);
-  --raw-color-surface-alt: oklch(95% 0.01 250);
-  --raw-color-line: oklch(92% 0.01 250);
-  --raw-color-accent: #007BFF;
-  --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --raw-color-accent-navy: #1A2B3C;
-  --raw-color-accent-brand: #007BFF;
-  --raw-color-text-main: #1A2B3C;
-  --raw-color-text-body: #1A202C;
-  --raw-color-text-dim: #374151;
-  --raw-color-error: #dc2626;
-  --raw-color-error-bg: #fef2f2;
+  /* Colors - High-Tech Dark Theme */
+  --raw-color-bg: #070b14;
+  --raw-color-surface: #0e1322;
+  --raw-color-surface-alt: #0a0c18;
+  --raw-color-line: #20283a;
+  --raw-color-accent: #00cfff;
+  --raw-color-accent-purple: #8b2fff;
+  --raw-color-accent-magenta: #ff00c8;
+  --raw-color-accent-shadow: rgba(0, 207, 255, 0.3);
+  --raw-color-accent-navy: #f5f7fb;
+  --raw-color-accent-brand: #00cfff;
+  --raw-color-text-main: #f5f7fb;
+  --raw-color-text-body: #f5f7fb;
+  --raw-color-text-dim: #9aa4b2;
+  --raw-color-error: #ff4d4d;
+  --raw-color-error-bg: #1a0a0a;
 
   /* Typography */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
@@ -21,12 +23,12 @@
 
   /* Radius */
   --raw-radius-none: 0px;
-  --raw-radius-subtle: 2px;
-  --raw-radius-standard: 4px;
-  --raw-radius-sm: 4px;
-  --raw-radius-md: 8px;
-  --raw-radius-lg: 12px;
-  --raw-radius-xl: 12px;
+  --raw-radius-subtle: 4px;
+  --raw-radius-standard: 8px;
+  --raw-radius-sm: 6px;
+  --raw-radius-md: 12px;
+  --raw-radius-lg: 18px;
+  --raw-radius-xl: 24px;
   --raw-radius-full: 9999px;
 
   /* Spacing */
@@ -73,5 +75,5 @@
   --raw-z-search: 200;
 
   /* Shadows */
-  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
 }

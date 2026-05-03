@@ -75,19 +75,18 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line">
+          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
             {filteredItems.map((item) => (
               <Box
                 key={item.slug}
-                border="r"
-                borderBottom={true}
-                padding={{ base: 6, lg: 6 }}
-                className="hover:bg-card-bg transition-colors group"
+                padding={4}
+                radius="lg"
+                border
+                className="bg-bg/40 backdrop-blur-sm"
               >
                 <ContentCard
                   {...item}
                   basePath={basePath}
-                  aspect="video"
                 />
               </Box>
             ))}

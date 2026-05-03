@@ -3,124 +3,142 @@ import { cn } from '@/lib/utils';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface HeroPathCardProps {
+  id: string;
   title: string;
-  wrapperClass: string;
-  image: string;
-  titleClass: string;
-  scanlineDelay?: string;
-  links: { text: string; to: string }[];
+  description?: string;
+  links: { text: string; to: string; color?: string }[];
   isHovered: boolean;
-  isOtherHovered: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onClick: () => void;
 }
 
 export function HeroPathCard({
+  id,
   title,
-  wrapperClass,
-  image,
-  titleClass,
-  scanlineDelay,
+  description,
   links,
   isHovered,
-  isOtherHovered,
   onMouseEnter,
   onMouseLeave,
   onClick
 }: HeroPathCardProps) {
+  const isSecond = id === 'travel';
+
   return (
     <Box
       position="relative"
       overflow="hidden"
       cursor="pointer"
       height="full"
-      minHeight="[300px]"
+      minHeight="[320px]"
       className={cn(
-        wrapperClass,
-        "group transition-all duration-700 ease-in-out",
-        isOtherHovered ? "opacity-30 grayscale scale-[0.98]" : "opacity-100 grayscale-0 scale-100"
+        "group transition-all duration-700 ease-in-out bg-surface-alt",
+        isSecond && "lg:border-l lg:border-line"
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
-      {/* Background Image */}
-      <Box position="absolute" inset={true} zIndex={0}>
-        <img
-          src={image}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className={cn(
-            "w-full h-full object-cover transition-transform duration-700 ease-in-out",
-            isHovered ? "scale-105" : "scale-100"
-          )}
-        />
-      </Box>
+      {/* Glow Effect */}
+      <Box
+        position="absolute"
+        inset={true}
+        zIndex={1}
+        className={cn(
+          "opacity-25 pointer-events-none transition-opacity duration-500",
+          isHovered ? "opacity-40" : "opacity-20"
+        )}
+        style={{
+          background: `radial-gradient(circle at 50% 100%, var(--raw-color-accent-shadow), transparent 40%), linear-gradient(135deg, rgba(0, 207, 255, 0.08), rgba(139, 47, 255, 0.05) 40%, rgba(255, 0, 200, 0.06))`
+        }}
+      />
 
-      {/* Scanline */}
+      {/* Animated Bars */}
       <Box
         position="absolute"
         left={0}
-        top={0}
-        width="full"
-        height="0.5"
-        shadow="glow"
-        zIndex={10}
-        className={cn(
-          "bg-accent pointer-events-none transition-opacity duration-500",
-          scanlineDelay,
-          isHovered ? 'opacity-100 animate-scanline' : 'opacity-0'
-        )}
-      ></Box>
+        right={0}
+        bottom={0}
+        height="[170px]"
+        display="flex"
+        align="end"
+        gap={1}
+        paddingX={4}
+        paddingBottom={4}
+        zIndex={2}
+        className="opacity-20 pointer-events-none"
+      >
+        {Array.from({ length: 28 }).map((_, i) => (
+          <Box
+            key={i}
+            flex={1}
+            height="full"
+            radius="none"
+            className={cn(
+              "animate-wave",
+              "bg-gradient-to-t from-accent-magenta via-accent-purple to-accent shadow-[0_0_14px_rgba(0,207,255,0.2)]",
+              isSecond && "animation-reverse",
+              i >= 14 && "hidden sm:block" // Limit bars on mobile for performance
+            )}
+            style={{
+              animationDelay: `${(i % 5) * 0.2}s`,
+              animationDuration: `${3.5 + (i % 3) * 0.8}s`
+            }}
+          />
+        ))}
+      </Box>
 
       {/* Content Container */}
       <Stack
         position="relative"
-        zIndex={20}
-        padding={{ base: 8, md: 16, lg: 20 }}
+        zIndex={10}
+        padding={{ base: 8, md: 10, lg: 12 }}
         height="full"
         direction="col"
         justify="end"
-        className="bg-gradient-to-t from-black via-black/40 to-transparent"
       >
         <Text
           as="h2"
-          variant="headline"
+          variant="display"
+          size="4xl"
+          weight="font-black"
+          uppercase
           className={cn(
-            titleClass,
-            "mb-8 text-white transition-transform duration-500 group-hover:translate-x-2"
+            "mb-3 text-white transition-transform duration-500 group-hover:translate-x-2 leading-none"
           )}
         >
           {title}
         </Text>
-        <Stack as="ul" gap={5} marginBottom={6} className="font-sans text-lg tracking-tight text-white">
-          {links.map((link, index) => {
+
+        {description && (
+          <Text size="base" color="dim" className="mb-6 max-w-[360px]">
+            {description}
+          </Text>
+        )}
+
+        <Stack gap={2} className="font-sans text-sm tracking-tight">
+          {links.map((link) => {
             const isExternal = link.to.startsWith('http') || link.to.startsWith('//');
-            const isPrimary = index === 0;
             
             const commonProps = {
               className: cn(
-                "group/link flex items-center gap-3 transition-all duration-300",
-                isPrimary ? "text-white font-bold" : "text-white/60 hover:text-white"
+                "group/link flex items-center gap-2 transition-all duration-300 font-bold",
+                link.color ? `text-${link.color}` : "text-accent"
               )
             };
 
             const linkContent = (
               <>
-                <span className="relative">
-                  {link.text}
-                  <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover/link:w-full" />
-                </span>
-                <span className="text-accent opacity-0 -translate-x-2 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300">
+                <span>{link.text}</span>
+                <span className="transition-transform duration-300 group-hover/link:translate-x-1">
                   →
                 </span>
               </>
             );
 
             return (
-              <li key={link.text}>
+              <Box key={link.text} as="div">
                 {isExternal ? (
                   <a
                     {...commonProps}
@@ -138,7 +156,7 @@ export function HeroPathCard({
                     {linkContent}
                   </NavLink>
                 )}
-              </li>
+              </Box>
             );
           })}
         </Stack>

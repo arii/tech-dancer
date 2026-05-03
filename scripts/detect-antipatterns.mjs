@@ -20,7 +20,8 @@ const LAYOUT_SUGGESTIONS = {
 // Modularized linting configuration
 const CONFIG = {
   allowedColors: [
-    'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
+    'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
+    'accent-purple', 'accent-magenta',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
     'amber-500', 'success', 'error', 'warning'

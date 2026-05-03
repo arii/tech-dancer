@@ -38,7 +38,7 @@ Strategies for finding the best flight deals, managing group housing, and making
 
 ### Timeline for Release
 
-The full guide is undergoing final review and will be available in the coming weeks. My goal is to help you build a sustainable financial foundation that allows for more dancing and less stress.
+The full guide undergoes final review and launches in the coming weeks. My goal is to help you build a sustainable financial foundation that allows for more dancing and less stress.
 
 <Notice type="info">
 **Sustainability is Key**
