@@ -4,9 +4,16 @@ import monterey from "@assets/monterey_1777789859029.jpg";
 import madJam from "@assets/mad_jam_ari_1777789859029.jpg";
 import glowBunny from "@assets/glow_bunny_1777789859030.jpg";
 import wwwAri from "@assets/www_ari_1777789859030.jpg";
-import { Calendar, Clock3, Code2, Globe, Github, Instagram, Linkedin, MapPin, Megaphone, Search, ShoppingBag, Sparkles, Bot } from "lucide-react";
+import { Calendar, Clock3, Code2, Globe, Github, Instagram, Linkedin, MapPin, Megaphone, Search, ShoppingBag, Sparkles, Bot, Mail } from "lucide-react";
 
 export const blogPosts = [
+  {
+    tag: "Tech",
+    date: "2026-04-20",
+    title: "Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages",
+    excerpt: "Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages.",
+    href: "https://boomtick.blog/blog/2026-04-20-stop-wasting-vercel-credits-deploy-every-branch-to-github-pages",
+  },
   {
     tag: "Travel",
     date: "2026-04-19",
@@ -15,18 +22,46 @@ export const blogPosts = [
     href: "https://boomtick.blog/blog/2026-04-19-gear-essentials",
   },
   {
-    tag: "Training",
-    date: "2026-04-18",
-    title: "Focus on Results, Not Scores",
-    excerpt: "How shifting your mindset from placements to personal growth changes the way you compete — and how you feel at the end of a weekend.",
-    href: "https://boomtick.blog/blog",
-  },
-  {
-    tag: "Data Lab",
+    tag: "Dance Research",
     date: "2026-04-18",
     title: "Coming Soon: WCS Competition Data Scraper",
     excerpt: "Announcing a new tool for objective, ethical analysis of West Coast Swing competition data.",
     href: "https://boomtick.blog/blog/2026-04-18-competition-metrics",
+  },
+  {
+    tag: "Travel/Lifestyle",
+    date: "2026-04-18",
+    title: "Coming Soon: The Comprehensive Financial Strategy Guide for Dancers",
+    excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle.",
+    href: "https://boomtick.blog/blog/2026-04-18-financial-literacy-dancers",
+  },
+  {
+    tag: "Tech",
+    date: "2026-04-18",
+    title: "How I used GitHub Actions to power this site",
+    excerpt: "Automated deployments and CI/CD pipelines for a tech-forward dance blog.",
+    href: "https://boomtick.blog/blog/2026-04-18-github-actions",
+  },
+  {
+    tag: "Gear Reviews",
+    date: "2026-04-18",
+    title: "Halloween costumes you can dance in",
+    excerpt: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test.",
+    href: "https://boomtick.blog/blog/2026-04-18-halloween-costumes",
+  },
+  {
+    tag: "Gear Reviews",
+    date: "2026-04-18",
+    title: "Make any shoe a dance shoe",
+    excerpt: "Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response.",
+    href: "https://boomtick.blog/blog/2026-04-18-make-shoe-dance",
+  },
+  {
+    tag: "Data & Dev Lab",
+    date: "2026-04-18",
+    title: "The majority of above average dancers don’t make it to finals",
+    excerpt: "A statistical look at competition heat density and judge variance, explaining why placement is a poor metric for progress.",
+    href: "https://boomtick.blog/blog/2026-04-18-why-finals-are-hard",
   },
 ];
 
@@ -37,9 +72,12 @@ export const upcomingEvents = [
 ];
 
 export const tagColors: Record<string, string> = {
+  Tech: "text-primary border-primary/40",
   Travel: "text-secondary border-secondary/40",
-  Training: "text-primary border-primary/40",
-  "Data Lab": "text-accent border-accent/40",
+  "Dance Research": "text-accent border-accent/40",
+  "Travel/Lifestyle": "text-secondary border-secondary/40",
+  "Gear Reviews": "text-primary border-primary/40",
+  "Data & Dev Lab": "text-accent border-accent/40",
   Gear: "text-primary border-primary/40",
 };
 
@@ -60,10 +98,11 @@ export const photos = [
 
 export const sidebarNavItems = [
   { icon: Search, label: "Search", href: "/" },
-  { icon: ShoppingBag, label: "Gear Reviews", href: "/" },
-  { icon: Calendar, label: "Events", href: "/" },
-  { icon: Megaphone, label: "Data Lab", href: "/" },
+  { icon: ShoppingBag, label: "Gear Reviews", href: "/gear" },
+  { icon: Calendar, label: "Data & Development Lab", href: "/research" },
+  { icon: Megaphone, label: "Blog Posts", href: "/blog" },
   { icon: Globe, label: "About", href: "/about" },
+  { icon: Mail, label: "Contact", href: "/contact" },
 ];
 
 export const aboutConnectItems = [
