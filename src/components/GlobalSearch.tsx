@@ -83,6 +83,9 @@ export function GlobalSearch() {
       onClick={close}
     >
       <Box
+        role="dialog"
+        aria-modal="true"
+        aria-label="Global search"
         width="full"
         maxWidth="3xl"
         height="fit"
@@ -100,6 +103,7 @@ export function GlobalSearch() {
             as="input"
             ref={inputRef}
             type="text"
+            aria-label="Search content"
             placeholder="Search posts, gear, research..."
             defaultValue={query}
             onChange={handleInputChange}
@@ -132,6 +136,7 @@ export function GlobalSearch() {
                   as="button"
                   type="button"
                   data-testid="search-result"
+                  aria-label={`Open ${res.type} result ${res.title}`}
                   onClick={() => handleSelect(res)}
                   width="full"
                   padding={3}

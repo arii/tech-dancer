@@ -64,6 +64,7 @@ export default function Navigation() {
             className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 font-mono text-[11px] font-bold tracking-[0.28em] text-text-dim transition-colors hover:border-accent hover:text-accent"
             aria-label={isSearchOpen ? 'Close search' : 'Open search'}
             aria-pressed={isSearchOpen}
+            type="button"
           >
             <Search className="h-3.5 w-3.5" />
             SEARCH
