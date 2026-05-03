@@ -8,7 +8,7 @@ import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { cn } from '@/lib/utils';
-import logo from '@assets/targeted_element_1777795230392.png';
+import logo from '@assets/logo_1777795327103.png';
 
 const TOP_NAV_ROUTES = [
   { path: '/blog', label: 'BLOG' },
@@ -35,7 +35,7 @@ export default function Navigation() {
         className="hidden lg:flex fixed top-0 left-0 right-0 z-50 h-16 items-center border-b border-line bg-surface/90 backdrop-blur-xl px-6 xl:px-10"
       >
         <Box as={NavLink} to="/" className="flex items-center gap-3 shrink-0 group">
-          <img src={logo} alt="Boom Tick" className="h-4 w-4 rounded-sm object-contain" />
+          <img src={logo} alt="Boom Tick" className="h-12 w-auto object-contain" />
         </Box>
 
         <Box as="ul" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8">
