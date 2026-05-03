@@ -79,7 +79,7 @@ export function GlobalSearch() {
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
+      className="bg-accent/30 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
       onClick={close}
     >
       <Box
@@ -111,7 +111,7 @@ export function GlobalSearch() {
             variant="display"
             size="2xl"
             color="main"
-            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
+            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/40"
             autoFocus
           />
           <Box 
