@@ -17,12 +17,18 @@ const photos = [
   { src: roboticist, alt: "Portrait photo" },
 ];
 
+const aboutPillars = [
+  { icon: Sparkles, title: "Style", text: "Bright outfits, clean lines, and personal expression." },
+  { icon: Clock3, title: "Timing", text: "Musicality and precision matter just as much as flash." },
+  { icon: MapPin, title: "Travel", text: "Every weekend is a chance to see new floors, new people, and new ideas." },
+];
+
 const About = () => {
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />
 
-      <main className="ml-56 flex-1 min-h-screen px-10 py-14">
+      <main className="flex-1 min-h-screen md:ml-56 px-4 sm:px-6 md:px-10 py-8 md:py-14">
         <section className="max-w-5xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Biography</p>
@@ -102,17 +108,13 @@ const About = () => {
               <section>
                 <h2 className="text-2xl font-black mb-4">What I Love About WCS</h2>
                 <div className="grid sm:grid-cols-3 gap-4">
-                  [
-                    { icon: Sparkles, title: "Style", text: "Bright outfits, clean lines, and personal expression." },
-                    { icon: Clock3, title: "Timing", text: "Musicality and precision matter just as much as flash." },
-                    { icon: MapPin, title: "Travel", text: "Every weekend is a chance to see new floors, new people, and new ideas." },
-                  ].map((item) => (
+                  {aboutPillars.map((item) => (
                     <div key={item.title} className="border border-border rounded-xl p-5 bg-card">
                       <item.icon size={18} className="text-primary mb-3" />
                       <h3 className="font-bold text-sm mb-2">{item.title}</h3>
                       <p className="text-sm text-muted-foreground leading-6">{item.text}</p>
                     </div>
-                  ))
+                  ))}
                 </div>
               </section>
 
