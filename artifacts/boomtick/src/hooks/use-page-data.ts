@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { aboutConnectItems, aboutPillars, aboutServiceCards, blogPosts, photos, sidebarNavItems, tagColors, upcomingEvents } from "@/content/siteContent";
+import { aboutConnectItems, aboutPillars, aboutServiceCards, blogPosts, photos, tagColors, upcomingEvents } from "@/content/siteContent";
 import { blogFilters } from "@/content/blogContent";
 import { gearItems } from "@/content/gearContent";
 import { researchTools } from "@/content/researchContent";
@@ -11,4 +11,3 @@ export const useBlogPageData = () => useMemo(() => ({ blogFilters, blogPosts, ta
 export const useGearPageData = () => useMemo(() => ({ gearItems, tagColors }), []);
 export const useResearchPageData = () => useMemo(() => ({ researchTools }), []);
 export const useContactPageData = () => useMemo(() => ({ contactInquiries }), []);
-export const useSidebarData = () => useMemo(() => ({ sidebarNavItems }), []);

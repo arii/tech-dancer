@@ -4,7 +4,7 @@ import monterey from "@assets/monterey_1777789859029.jpg";
 import madJam from "@assets/mad_jam_ari_1777789859029.jpg";
 import glowBunny from "@assets/glow_bunny_1777789859030.jpg";
 import wwwAri from "@assets/www_ari_1777789859030.jpg";
-import { Calendar, Clock3, Code2, Globe, Github, Instagram, Linkedin, MapPin, Megaphone, Search, ShoppingBag, Sparkles, Bot, Mail } from "lucide-react";
+import { Bot, Clock3, Code2, Github, Globe, Instagram, Linkedin, MapPin, Megaphone, Sparkles } from "lucide-react";
 
 export const blogPosts = [
   {
@@ -94,15 +94,6 @@ export const photos = [
   { src: glowBunny, alt: "Glow bunny dance costume" },
   { src: wwwAri, alt: "West Coast Swing floor connection" },
   { src: roboticist, alt: "Portrait photo" },
-];
-
-export const sidebarNavItems = [
-  { icon: Search, label: "Search", href: "/" },
-  { icon: ShoppingBag, label: "Gear Reviews", href: "/gear" },
-  { icon: Megaphone, label: "Data & Development Lab", href: "/research" },
-  { icon: Megaphone, label: "Blog Posts", href: "/blog" },
-  { icon: Globe, label: "About", href: "/about" },
-  { icon: Mail, label: "Contact", href: "/contact" },
 ];
 
 export const aboutConnectItems = [
