@@ -2,7 +2,8 @@ import Sidebar from "@/components/Sidebar";
 import { useBlogPageData } from "@/hooks/use-page-data";
 
 const Blog = () => {
-  const { blogFilters, blogPosts, tagColors } = useBlogPageData();
+  const { blogFilters } = useBlogPageData();
+  const { blogPosts, tagColors } = useBlogPageData();
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
