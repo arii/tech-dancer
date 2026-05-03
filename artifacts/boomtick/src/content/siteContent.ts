@@ -99,7 +99,7 @@ export const photos = [
 export const sidebarNavItems = [
   { icon: Search, label: "Search", href: "/" },
   { icon: ShoppingBag, label: "Gear Reviews", href: "/gear" },
-  { icon: Calendar, label: "Data & Development Lab", href: "/research" },
+  { icon: Megaphone, label: "Data & Development Lab", href: "/research" },
   { icon: Megaphone, label: "Blog Posts", href: "/blog" },
   { icon: Globe, label: "About", href: "/about" },
   { icon: Mail, label: "Contact", href: "/contact" },

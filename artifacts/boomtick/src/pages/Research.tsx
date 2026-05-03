@@ -1,12 +1,9 @@
 import Sidebar from "@/components/Sidebar";
-
-const tools = [
-  { status: "Coming Soon", title: "WCS Prelim Scoring Scraper", description: "A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions." },
-  { status: "Active", title: "Blog Post Drafter", description: "Drafter tool to generate blog posts using AI with human feedback in the loop." },
-  { status: "Active", title: "Visual UX Auditor", description: "Automated visual regression and UX improvement suggestions across viewports." },
-];
+import { useResearchPageData } from "@/hooks/use-page-data";
 
 const Research = () => {
+  const { researchTools } = useResearchPageData();
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />
@@ -16,7 +13,7 @@ const Research = () => {
           <h1 className="text-4xl md:text-5xl font-black mb-4">Data & Development Lab</h1>
           <p className="text-sm md:text-base text-muted-foreground max-w-3xl mb-8">Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle.</p>
           <div className="grid gap-4 md:grid-cols-3 mb-10">
-            {tools.map((tool) => (
+            {researchTools.map((tool) => (
               <article key={tool.title} className="border border-border bg-card rounded-xl p-4">
                 <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-muted-foreground mb-3">{tool.status}</p>
                 <h2 className="text-lg font-bold mb-2">{tool.title}</h2>

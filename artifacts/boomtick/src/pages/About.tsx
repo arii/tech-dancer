@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
-import { aboutPillars, aboutConnectItems, aboutServiceCards, photos } from "@/content/siteContent";
+import { useAboutPageData } from "@/hooks/use-page-data";
 
 const About = () => {
+  const { aboutConnectItems, aboutPillars, aboutServiceCards, photos } = useAboutPageData();
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />

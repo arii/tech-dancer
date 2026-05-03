@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Calendar } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Equalizer from "@/components/Equalizer";
-import { blogPosts, upcomingEvents, tagColors } from "@/content/siteContent";
+import { useHomePageData } from "@/hooks/use-page-data";
 
 const Home = () => {
+  const { blogPosts, upcomingEvents, tagColors } = useHomePageData();
+
   return (
     <div className="flex min-h-screen bg-background text-foreground flex-col md:flex-row">
       <Sidebar />
