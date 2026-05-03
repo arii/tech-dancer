@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
-import { Stack, Text } from '@/layouts/Primitives';
+import { Stack, Text, Box } from '@/layouts/Primitives';
 
 // Number of waveform bars — matches the HTML
 const BAR_COUNT = 48;
@@ -25,13 +25,22 @@ export function HeroSection() {
   return (
     <section
       className="relative flex items-center justify-center overflow-hidden"
-      style={{ background: 'var(--hero-bg)', minHeight: '100vh' }}
+      style={{ background: 'var(--hero-bg)', minHeight: '75vh' }}
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
 
+      {/* Bottom Fade Gradient for better contrast with the site background */}
+      <Box
+        position="absolute"
+        inset="bottom"
+        height={48}
+        className="bg-gradient-to-t from-bg to-transparent z-[5]"
+        aria-hidden="true"
+      />
+
       {/* All content sits above the canvas via z-index */}
-      <Stack relative zIndex={10} align="center" gap={0} className="text-center px-6">
+      <Stack relative zIndex={10} align="center" gap={0} className="text-center px-6 py-20">
 
         {/* Logo mark — B + slash */}
         <div
@@ -40,17 +49,17 @@ export function HeroSection() {
         >
           <span
             className="font-display font-black text-white"
-            style={{ fontSize: 'clamp(80px, 14vw, 140px)', letterSpacing: '-4px' }}
+            style={{ fontSize: 'clamp(80px, 12vw, 120px)', letterSpacing: '-4px' }}
           >
             B
           </span>
           <div
             className="rounded-md"
             style={{
-              width: 'clamp(8px, 1.4vw, 14px)',
-              height: 'clamp(70px, 12vw, 120px)',
-              marginLeft: 'clamp(6px, 1vw, 12px)',
-              marginBottom: 'clamp(8px, 1.5vw, 18px)',
+              width: 'clamp(8px, 1.2vw, 12px)',
+              height: 'clamp(60px, 10vw, 100px)',
+              marginLeft: 'clamp(6px, 0.8vw, 10px)',
+              marginBottom: 'clamp(8px, 1.2vw, 14px)',
               background: 'var(--hero-slash-gradient)',
               transform: 'skewX(-12deg)',
               boxShadow: 'var(--hero-slash-glow)',

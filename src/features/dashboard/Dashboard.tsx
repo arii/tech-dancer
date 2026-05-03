@@ -21,7 +21,7 @@ export default function Home() {
         description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
         schema={STATIC_SCHEMAS.HOME}
       />
-      <Stack gap={24}>
+      <Stack gap={16}>
         {/* Full-bleed hero — no padding wrapper needed */}
         <HeroSection />
 
