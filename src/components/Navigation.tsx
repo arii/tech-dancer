@@ -1,30 +1,24 @@
-import { Search } from 'lucide-react';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { throttle } from 'throttle-debounce';
+import { Box, Text } from '@/layouts/Primitives';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
-import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
+
+const TOP_NAV_ROUTES = [
+  { path: '/blog', label: 'BLOG' },
+  { path: '/gear', label: 'GEAR' },
+  { path: '/research', label: 'DATA LAB' },
+  { path: '/about', label: 'TRAVEL' },
+];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
-
-  useEffect(() => {
-    const handleScroll = throttle(100, () => {
-      setScrolled(window.scrollY > 20);
-    });
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleSearchClick = () => {
     setIsOpen(false);
@@ -58,58 +52,69 @@ export default function Navigation() {
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
-      <Box 
+      {/* Desktop Top Nav */}
+      <Box
         as="nav"
         aria-label="Main Navigation"
-        layout="navRail" 
-        className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
-        )}
+        layout="navRail"
       >
-        <Stack
-          padding={8}
-          gap={10}
-          flex={1}
-        >
-          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Text 
-              variant="mono" 
-              size="lg" 
-              weight="font-bold" 
-              className="text-accent-navy group-hover:text-accent transition-colors tracking-wider leading-none uppercase"
-            >
-              BOOMTICK.BLOG
-            </Text>
+        {/* Logo */}
+        <Box as={NavLink} to="/" display="flex" align="center" gap={2} className="flex-shrink-0 group">
+          <Box
+            className="w-9 h-9 border border-accent/60 flex items-center justify-center rounded-sm flex-shrink-0 group-hover:border-accent transition-colors"
+            display="flex"
+            align="center"
+            justify="center"
+          >
+            <span className="font-bold text-white text-sm leading-none">
+              B<span className="neon-text-cyan">\</span>
+            </span>
           </Box>
+          <Text
+            variant="mono"
+            size="sm"
+            weight="font-bold"
+            className="text-white leading-none tracking-tight"
+          >
+            <span className="font-bold">boom</span>
+            <span className="text-text-dim font-normal">tick</span>
+          </Text>
+        </Box>
 
-          <Stack as="ul" gap={2}>
-            <Box as="li">
-              <Box
-                as="button"
-                type="button"
-                cursor="pointer"
-                onClick={handleSearchClick}
-                display="flex"
-                align="center"
-                gap={4}
-                width="full"
-                paddingY={6}
-                paddingX={4}
-                radius="md"
-                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+        {/* Nav Links */}
+        <Box as="ul" display="flex" align="center" gap={8} className="absolute left-1/2 -translate-x-1/2">
+          {TOP_NAV_ROUTES.map((item) => (
+            <Box as="li" key={item.path}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) => cn(
+                  "font-mono text-xs font-bold tracking-widest transition-colors py-1",
+                  isActive
+                    ? "text-accent"
+                    : "text-text-dim hover:text-white"
+                )}
               >
-                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
-              </Box>
+                {item.label}
+              </NavLink>
             </Box>
+          ))}
+        </Box>
 
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
-            ))}
-          </Stack>
-        </Stack>
+        {/* Subscribe Button */}
+        <Box display="flex" align="center" gap={4}>
+          <button
+            onClick={handleSearchClick}
+            className="font-mono text-xs font-bold tracking-widest text-text-dim hover:text-accent transition-colors"
+          >
+            SEARCH
+          </button>
+          <NavLink
+            to="/contact"
+            className="neon-border border rounded-full px-5 py-2 font-mono text-xs font-bold tracking-widest text-white hover:text-accent transition-colors flex-shrink-0"
+          >
+            SUBSCRIBE
+          </NavLink>
+        </Box>
       </Box>
     </>
   );

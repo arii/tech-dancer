@@ -1,18 +1,19 @@
 :root {
-  /* Colors */
-  --raw-color-bg: oklch(98% 0.005 250);
-  --raw-color-surface: oklch(100% 0 0);
-  --raw-color-surface-alt: oklch(95% 0.01 250);
-  --raw-color-line: oklch(92% 0.01 250);
-  --raw-color-accent: #007BFF;
-  --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --raw-color-accent-navy: #1A2B3C;
-  --raw-color-accent-brand: #007BFF;
-  --raw-color-text-main: #1A2B3C;
-  --raw-color-text-body: #1A202C;
-  --raw-color-text-dim: #374151;
-  --raw-color-error: #dc2626;
-  --raw-color-error-bg: #fef2f2;
+  /* Colors — Dark Neon Theme */
+  --raw-color-bg: #060612;
+  --raw-color-surface: #0d0d1f;
+  --raw-color-surface-alt: #13132a;
+  --raw-color-line: #1c1c3a;
+  --raw-color-accent: #00e5ff;
+  --raw-color-accent-shadow: rgba(0, 229, 255, 0.35);
+  --raw-color-accent-navy: #ffffff;
+  --raw-color-accent-brand: #00e5ff;
+  --raw-color-accent-purple: #9b5de5;
+  --raw-color-text-main: #ffffff;
+  --raw-color-text-body: #e2e8f0;
+  --raw-color-text-dim: #94a3b8;
+  --raw-color-error: #f87171;
+  --raw-color-error-bg: #1a0a0a;
 
   /* Typography */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
@@ -73,5 +74,5 @@
   --raw-z-search: 200;
 
   /* Shadows */
-  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.4);
 }
