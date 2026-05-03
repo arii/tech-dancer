@@ -16,53 +16,72 @@ export function NewsletterBanner() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      className="bg-surface backdrop-blur-xl border border-line"
-      padding="emailBar"
-      radius="none"
-      marginX="auto"
       position="fixed"
       bottom={0}
-      left={4}
-      right={4}
+      left={0}
+      right={0}
       zIndex="toast"
+      className="pointer-events-none"
     >
-      <Box position="absolute" className="top-2 right-2" zIndex="docked">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={hideBar}
-          aria-label="Dismiss"
-          padding={1}
-          minHeight={0}
-          minWidth={0}
-        >
-          <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
-        </Button>
-      </Box>
-
-      <Stack 
-        direction={{ base: 'col', md: 'row' }} 
-        align="center" 
-        justify="between" 
-        gap={{ base: 4, md: 8 }}
-        className="w-full"
+      <Box 
+        marginLeft={{ base: 0, md: 64 }} 
+        className="pointer-events-auto"
       >
-        <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
-          <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }}>
-            <Mail className="w-5 h-5 text-accent" />
+        <Box
+          className="bg-surface/95 backdrop-blur-2xl border-t border-line/50 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]"
+          paddingX={{ base: 4, md: 8 }}
+          paddingY={4}
+          width="full"
+        >
+          <Box maxWidth="6xl" marginX="auto" position="relative">
+            <Box position="absolute" className="-top-2 -right-2 md:right-0" zIndex="docked">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={hideBar}
+                aria-label="Dismiss"
+                className="text-text-dim/50 hover:text-primary transition-colors p-1 min-w-0"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </Box>
+
+            <Stack 
+              direction={{ base: 'col', sm: 'row' }} 
+              align="center" 
+              justify="between" 
+              gap={{ base: 4, sm: 8 }}
+              className="w-full"
+            >
+              <Stack direction="row" align="center" gap={4} className="w-full sm:w-auto">
+                <Box 
+                  display={{ base: 'none', lg: 'flex' }}
+                  align="center"
+                  justify="center"
+                  width={10} 
+                  height={10} 
+                  radius="full" 
+                  className="bg-primary/10 border border-primary/20"
+                >
+                  <Mail className="w-5 h-5 text-primary" />
+                </Box>
+                <Stack gap={0}>
+                  <Text variant="display" size="sm" uppercase tracking="tight" className="text-white">
+                    Weekly Insights
+                  </Text>
+                  <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-[0.2em] text-primary">
+                    Dance Analytics // Gear Reviews // Community Updates
+                  </Text>
+                </Stack>
+              </Stack>
+              
+              <Box width={{ base: 'full', sm: 'auto' }} maxWidth={{ base: 'full', sm: 'md' }}>
+                <EmailForm />
+              </Box>
+            </Stack>
           </Box>
-          <Stack gap={0}>
-            <Text variant="display" size="base" uppercase tracking="tight">
-              Weekly Insights
-            </Text>
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
-              Dance Analytics // Gear Reviews // Community Updates
-            </Text>
-          </Stack>
-        </Stack>
-        
-        <EmailForm />
-      </Stack>
+        </Box>
+      </Box>
     </Box>
   );
 }

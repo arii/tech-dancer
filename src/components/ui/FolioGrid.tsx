@@ -66,7 +66,7 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : (
-          <Grid cols={{ base: 1, sm: 2, xl: 3 }} gap={4}>
+          <Grid cols={{ base: 1, sm: 2, xl: 4 }} gap={4}>
             {filteredItems.map((item) => (
               <ContentCard
                 key={item.slug}

@@ -79,8 +79,8 @@
   --spacing-12: 3rem;
 
   /* Font Sizes */
-  --text-micro: 9px;
-  --text-tiny: 10px;
+  --text-micro: 12px;
+  --text-tiny: 13px;
 }
 
 @layer utilities {

@@ -143,6 +143,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
             flex={1}
             direction="col"
+            marginX="auto"
             maxWidth="7xl"
             width="full"
           >

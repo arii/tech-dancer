@@ -15,25 +15,20 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
     <Box
       as="nav"
       aria-label="Mobile Navigation"
-      layout="mobileHeader"
-      className="transition-[backdrop-filter] duration-300 bg-surface border-b border-line"
+      className="md:hidden sticky top-0 left-0 right-0 h-16 flex items-center justify-between px-4 bg-surface/90 backdrop-blur-xl border-b border-line/50 z-50"
     >
-      <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center">
+      <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" className="h-10">
         <Logo className="h-6" />
       </Box>
+      
       <Box
-        as={motion.create("button")}
+        as={motion.button}
         onClick={onToggle}
-        padding={4}
-        display="flex"
-        align="center"
-        justify="center"
-        className="min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors"
+        className="h-11 w-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:scale-90 transition-all border border-line/30"
         aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}
-        whileTap={{ scale: 0.95 }}
       >
-        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {isOpen ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5" />}
       </Box>
     </Box>
   );

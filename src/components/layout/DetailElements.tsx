@@ -1,79 +1,108 @@
 import { ReactNode } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { LucideIcon, Shield } from 'lucide-react';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Star, ShieldCheck, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-interface ScoreItemProps {
-  label: string;
-  value: string | number;
-  icon?: LucideIcon;
-  color?: string;
-  intent?: "brand" | "accent" | "success" | "warning" | "danger";
-}
-
-export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItemProps) {
+export function VerdictCallout({
+  score,
+  verdict,
+  pros,
+  cons
+}: {
+  score: number;
+  verdict: string;
+  pros: string[];
+  cons: string[];
+}) {
   return (
-    <Stack gap={1} align="center" className="flex-1 px-2 md:px-4 py-2 min-w-[100px] sm:min-w-[120px]">
-      <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
-      <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
-        {Icon && <Icon className="w-4 h-4" />}
-        <Text variant="display" size="xl" weight="font-bold">{value}</Text>
-      </Box>
-    </Stack>
-  );
-}
+    <Box padding={8} border radius="3xl" surface="surface" className="border-line/80 shadow-xl relative overflow-hidden">
+      <Box position="absolute" top={-10} right={-10} width={40} height={40} surface="primary" opacity={0.03} radius="full" className="blur-3xl" />
+      
+      <Stack gap={8}>
+        <Box display="flex" align="center" justify="between" width="full">
+          <Stack gap={1}>
+             <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">The Verdict</Text>
+             <Text size="3xl" weight="font-black" className="text-white">Score: {score}/10</Text>
+          </Stack>
+          <Box height={16} width={16} radius="full" display="flex" align="center" justify="center" border className="border-primary/30 bg-primary/5">
+             <Star className="text-primary fill-primary w-8 h-8" />
+          </Box>
+        </Box>
 
-export function ScoreGrid({ children }: { children: ReactNode }) {
-  return (
-    <Box
-      border="y"
-      paddingY={6}
-      surface="muted"
-      className="border-line/50 w-full"
-    >
-      <Box
-        display="flex"
-        flexDirection="row"
-        flexWrap="wrap"
-        justify="center"
-        className="w-full divide-x-0 md:divide-x divide-line/30 gap-y-4 md:gap-y-0"
-      >
-        {children}
-      </Box>
+        <Text className="text-lg leading-relaxed text-text-body/90 italic">
+          "{verdict}"
+        </Text>
+
+        <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          <Stack gap={4}>
+            <Box display="flex" align="center" gap={2}>
+              <ShieldCheck className="w-5 h-5 text-green-400" />
+              <Text weight="font-bold" size="sm" className="text-white uppercase tracking-wider">Pros</Text>
+            </Box>
+            <Stack gap={2}>
+              {pros.map((pro, i) => (
+                <Text key={i} size="sm" className="text-text-body/80 flex gap-2">
+                  <span className="text-green-400/60">•</span> {pro}
+                </Text>
+              ))}
+            </Stack>
+          </Stack>
+
+          <Stack gap={4}>
+            <Box display="flex" align="center" gap={2}>
+              <AlertCircle className="w-5 h-5 text-red-400" />
+              <Text weight="font-bold" size="sm" className="text-white uppercase tracking-wider">Cons</Text>
+            </Box>
+            <Stack gap={2}>
+              {cons.map((con, i) => (
+                <Text key={i} size="sm" className="text-text-body/80 flex gap-2">
+                  <span className="text-red-400/60">•</span> {con}
+                </Text>
+              ))}
+            </Stack>
+          </Stack>
+        </Grid>
+      </Stack>
     </Box>
   );
 }
 
-export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
-  if (!specs || Object.keys(specs).length === 0) return null;
-
+export function GearSpecGrid({ specs }: { specs: Record<string, string> }) {
   return (
-    <Stack gap={4}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line pb-2">Technical Specs</Text>
-      <Stack gap={3}>
-        {Object.entries(specs).map(([key, value]) => (
-          <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" className="uppercase opacity-50">{key}</Text>
-            <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
-          </Stack>
+    <Box padding={6} border radius="2xl" className="border-line/40 bg-surface/40">
+      <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest" className="mb-6">Technical Specs</Text>
+      <Grid cols={{ base: 1, sm: 2 }} gap={4}>
+        {Object.entries(specs).map(([label, value]) => (
+          <Box key={label} padding={4} border radius="xl" className="border-line/30 bg-surface/60">
+            <Text size="micro" weight="font-bold" color="dim" uppercase tracking="tighter" className="mb-1">{label}</Text>
+            <Text size="sm" weight="font-semibold" className="text-white">{value}</Text>
+          </Box>
         ))}
-      </Stack>
-    </Stack>
+      </Grid>
+    </Box>
   );
 }
 
+export const SpecsTable = GearSpecGrid;
 
-export function VerdictCallout({ verdict }: { verdict: string }) {
+export function ScoreGrid({ children }: { children: ReactNode }) {
   return (
-    <Box border padding={8} surface="default" className="border-accent/40 bg-accent/5" marginBottom={12}>
-       <Stack gap={3}>
-          <Box display="flex" align="center" gap={3}>
-             <Shield className="w-6 h-6 text-accent" />
-             <Text variant="display" size="2xl" weight="font-black" className="text-accent">THE VERDICT</Text>
-          </Box>
-          <Text variant="body" size="lg" className="text-text-body leading-relaxed font-medium" italic>
-            "{verdict}"
-          </Text>
-       </Stack>
+    <Grid cols={{ base: 1, md: 2 }} gap={4}>
+      {children}
+    </Grid>
+  );
+}
+
+export function ScoreItem({ label, score }: { label: string; score: number }) {
+  return (
+    <Box padding={4} border radius="xl" className="border-line/30 bg-surface/60">
+      <Box display="flex" justify="between" align="center">
+        <Text size="sm" weight="font-bold" className="text-white">{label}</Text>
+        <Text variant="mono" size="sm" weight="font-black" className="text-primary">{score}/10</Text>
+      </Box>
+      <Box width="full" height={1.5} radius="full" className="bg-white/5 mt-2 overflow-hidden">
+        <Box width={`${score * 10}%`} height="full" className="bg-primary" />
+      </Box>
     </Box>
   );
 }

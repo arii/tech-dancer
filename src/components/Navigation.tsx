@@ -64,12 +64,12 @@ export default function Navigation() {
         as="nav"
         aria-label="Main Navigation"
         className={cn(
-          "fixed top-0 left-0 hidden h-full w-56 flex-col border-r border-line bg-surface md:flex z-40 transition-[background-color,backdrop-filter] duration-300",
+          "fixed top-0 left-0 hidden h-full w-64 flex-col border-r border-line bg-surface md:flex z-40 transition-[background-color,backdrop-filter] duration-300",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
-        <Box className="border-b border-line px-4 py-4">
-          <Logo />
+        <Box className="border-b border-line px-4 py-6">
+          <Logo className="h-10" />
         </Box>
         
         <Stack as="ul" gap={1} flex={1} paddingY={4} className="overflow-y-auto">
@@ -97,10 +97,14 @@ export default function Navigation() {
           ))}
         </Stack>
 
-        <Box className="space-y-1 border-t border-line px-6 py-5">
-          <Text size="xs" className="text-text-dim/75">Written by Ariel Anders</Text>
-          <Text size="xs" className="text-text-dim/65">&copy; {new Date().getFullYear()} boomtick.blog</Text>
-        </Box>
+        <Stack gap={2} className="border-t border-line px-6 py-8">
+          <Text as="div" size="tiny" weight="font-bold" className="uppercase tracking-[0.15em] text-text-dim">
+            Written by Ariel Anders
+          </Text>
+          <Text as="div" size="micro" className="text-text-dim/80">
+            &copy; {new Date().getFullYear()} boomtick.blog
+          </Text>
+        </Stack>
       </Box>
     </>
   );

@@ -36,7 +36,7 @@ export function DetailLayout({
   const rt = readingTime(content);
 
   return (
-    <Box as="article" padding="panel">
+    <Box as="article" padding={{ base: 4, md: 8, lg: 12 }}>
       <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
         {/* Navigation */}
         <Box
@@ -46,11 +46,11 @@ export function DetailLayout({
           align="center"
           gap={2}
           color="dim"
-          className="hover:text-accent transition-colors"
+          className="hover:text-primary transition-colors"
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold" className="normal-case">{backLabel}</Text>
+          <Text variant="mono" size="xs" weight="font-bold" className="normal-case tracking-wider">{backLabel}</Text>
         </Box>
 
         <Stack gap={10}>
@@ -59,7 +59,7 @@ export function DetailLayout({
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
               {category} • {date} • {rt} min read
             </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+            <Text as="h1" size="fluid-5" weight="font-black" className="text-white leading-tight tracking-tight">
               {title}
             </Text>
             {headerExtras}
@@ -71,35 +71,36 @@ export function DetailLayout({
               as={motion.div}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              radius="2xl"
               aspect="video"
               overflow="hidden"
               border
-              className="bg-muted"
+              className="bg-surface/50 border-line/50 shadow-2xl"
             >
               <img
                 src={image}
                 alt={title}
                 loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700"
+                className="w-full h-full object-cover"
               />
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
-            {/* Content - first on mobile via order classes */}
-            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
+          <Grid cols={{ base: 1, lg: sidebar ? 12 : 1 }} gap={10}>
+            {/* Content */}
+            <Box className={cn(sidebar ? "lg:col-span-8" : "w-full")}>
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
-                style={{ maxWidth: '720px' }}
+                className="prose prose-invert prose-slate prose-headings:font-black prose-p:font-sans prose-p:text-text-body/90 prose-p:leading-relaxed prose-p:text-base prose-strong:text-white mx-auto w-full"
+                style={{ maxWidth: '760px' }}
               >
                 <MarkdownRenderer content={content} />
               </Box>
             </Box>
 
-            {/* Sidebar - second on mobile via order classes */}
+            {/* Sidebar */}
             {sidebar && (
-              <Box className="order-2 lg:order-1">
+              <Box className="lg:col-span-4">
                 <Stack gap={4} className="lg:sticky lg:top-32">
                    {sidebar}
                 </Stack>

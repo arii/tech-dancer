@@ -1,109 +1,55 @@
-import { useEffect, useMemo, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
-
-const NUM_BARS = 64;
+import { Box } from '@/layouts/Primitives';
 
 interface EqualizerProps {
+  count?: number;
   compact?: boolean;
   reverse?: boolean;
-  count?: number;
 }
 
-export const Equalizer = ({ compact = false, reverse = false, count = NUM_BARS }: EqualizerProps) => {
-  const [mounted, setMounted] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const scrollShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const bars = useMemo(() => {
-    return Array.from({ length: count }).map((_, i) => {
-      const ratio = i / (count - 1);
-      const adjustedRatio = reverse ? 1 - ratio : ratio;
-      const wave = Math.sin((i / count) * Math.PI * 2.2) * 0.5 + 0.5;
-
-      let color: string;
-      if (adjustedRatio < 0.5) {
-        color = `color-mix(in srgb, var(--color-primary) ${96 - adjustedRatio * 100}%, var(--color-secondary))`;
-      } else {
-        color = `color-mix(in srgb, var(--color-secondary) ${96 - (adjustedRatio - 0.5) * 100}%, var(--color-accent-vivid))`;
-      }
-
-      const base = compact ? 8 : 15;
-      const minH = base + wave * (compact ? 10 : 15);
-      const maxH = minH + (compact ? 10 : 20) + Math.random() * (compact ? 5 : 10);
-
-      return {
-        color,
-        minH,
-        maxH,
-        delay: i * (0.045 * (NUM_BARS / count)),
-        duration: 3.5 + (i % 5) * 0.5,
-        opacity: 0.3 + wave * 0.2,
-      };
-    });
-  }, [compact, reverse, count]);
-
-  if (!mounted) return null;
-
-  if (compact) {
-    return (
-      <div className="relative flex items-end justify-center gap-[3px] w-full h-full px-4 overflow-hidden">
-        {bars.map((bar, i) => (
-          <motion.div
-            key={i}
-            className="w-0.5 md:w-1 rounded-full origin-bottom"
-            style={{
-              backgroundColor: bar.color,
-              boxShadow: `0 0 12px ${bar.color}44`,
-              height: `${bar.minH}%`,
-              opacity: bar.opacity,
-            }}
-            animate={{
-              height: [`${bar.minH}%`, `${bar.maxH}%`, `${bar.minH}%`],
-              opacity: [bar.opacity, bar.opacity * 1.5, bar.opacity],
-            }}
-            transition={{
-              duration: bar.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: bar.delay,
-            }}
-          />
-        ))}
-      </div>
-    );
-  }
+export default function Equalizer({ count = 28, compact = false, reverse = false }: EqualizerProps) {
+  const bars = Array.from({ length: count });
 
   return (
-    <div className="relative flex items-end justify-center gap-2 md:gap-3 w-full h-[85%] px-4 md:px-12 overflow-hidden">
-      {bars.map((bar, i) => (
-        <motion.div
-          key={i}
-          className="w-1.5 md:w-2 rounded-t-lg origin-bottom relative group"
-          style={{
-            backgroundColor: bar.color,
-            boxShadow: `0 0 20px ${bar.color}66`,
-            height: `${bar.minH}%`,
-          }}
-          animate={{
-            height: [`${bar.minH}%`, `${bar.maxH}%`, `${bar.minH}%`],
-            scaleX: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: bar.duration,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: bar.delay,
-          }}
-        >
-           <div className="absolute -inset-1 bg-inherit blur-md opacity-20 group-hover:opacity-40 transition-opacity" />
-        </motion.div>
-      ))}
+    <div 
+      style={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        gap: '4px',
+        height: '100%',
+        width: '100%',
+        padding: '0 32px 32px',
+        pointerEvents: 'none'
+      }}
+    >
+      {bars.map((_, i) => {
+        const duration = i % 3 === 0 ? '5.6s' : i % 4 === 0 ? '4.2s' : i % 5 === 0 ? '5.1s' : '4.8s';
+        const delay = `${-(i * 0.15)}s`;
+        
+        return (
+          <div
+            key={i}
+            style={{
+              flex: 1,
+              borderRadius: '4px 4px 0 0',
+              background: 'linear-gradient(to top, #00CFFF, #8B2FFF, #FF00C1)',
+              minHeight: '8px',
+              height: '30%',
+              animation: `equalizer-wave ${duration} ease-in-out ${delay} infinite`,
+              animationDirection: reverse ? 'reverse' : 'normal',
+              boxShadow: '0 0 20px rgba(0, 207, 255, 0.5)',
+              opacity: 1
+            }}
+          />
+        );
+      })}
+      <style>{`
+        @keyframes equalizer-wave {
+          0%, 100% { height: 28%; }
+          25% { height: 72%; }
+          50% { height: 46%; }
+          75% { height: 86%; }
+        }
+      `}</style>
     </div>
   );
-};
-
-export default Equalizer;
+}

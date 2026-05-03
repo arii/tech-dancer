@@ -63,7 +63,7 @@ export function EmailForm() {
               )}
               {status === 'idle' && (
                 <>
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">SUBSCRIBE</Text>
+                  <Text variant="mono" size="micro" weight="font-black" className="text-bg">SUBSCRIBE</Text>
                   <ArrowRight className="w-4 h-4 text-bg" />
                 </>
               )}

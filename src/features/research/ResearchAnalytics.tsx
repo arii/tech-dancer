@@ -89,9 +89,10 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box className="rounded-2xl border border-dashed border-line/80 bg-muted/20 p-8 text-center shadow-sm">
-              <Text as="h2" size="2xl" weight="font-black" className="mb-2">ETL Pipeline Synchronizing...</Text>
-              <Text className="mx-auto max-w-2xl text-sm leading-7 text-text-body/72">
+            <Box className="rounded-2xl border border-dashed border-line/80 bg-surface/40 p-12 text-center shadow-xl relative overflow-hidden">
+              <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="accent" opacity={0.03} radius="full" className="blur-3xl" />
+              <Text as="h2" size="2xl" weight="font-black" className="mb-3 text-accent uppercase tracking-tighter">ETL Pipeline Synchronizing...</Text>
+              <Text className="mx-auto max-w-2xl text-base leading-8 text-text-body/90">
                 The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
               </Text>
             </Box>
