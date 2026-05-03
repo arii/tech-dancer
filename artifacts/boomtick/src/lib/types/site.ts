@@ -6,65 +6,6 @@ import glowBunny from "@assets/glow_bunny_1777789859030.jpg";
 import wwwAri from "@assets/www_ari_1777789859030.jpg";
 import { Bot, Clock3, Code2, Github, Globe, Instagram, Linkedin, MapPin, Megaphone, Sparkles } from "lucide-react";
 
-export const blogPosts = [
-  {
-    tag: "Tech",
-    date: "2026-04-20",
-    title: "Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages",
-    excerpt: "Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages.",
-    href: "https://boomtick.blog/blog/2026-04-20-stop-wasting-vercel-credits-deploy-every-branch-to-github-pages",
-  },
-  {
-    tag: "Travel",
-    date: "2026-04-19",
-    title: "The WCS Travel Pack: 3 Essentials You're Forgetting",
-    excerpt: "Loop earplugs, industrial travel steamers, and portable sound. Why these three pieces of gear are the secret to a better dance weekend.",
-    href: "https://boomtick.blog/blog/2026-04-19-gear-essentials",
-  },
-  {
-    tag: "Dance Research",
-    date: "2026-04-18",
-    title: "Coming Soon: WCS Competition Data Scraper",
-    excerpt: "Announcing a new tool for objective, ethical analysis of West Coast Swing competition data.",
-    href: "https://boomtick.blog/blog/2026-04-18-competition-metrics",
-  },
-  {
-    tag: "Travel/Lifestyle",
-    date: "2026-04-18",
-    title: "Coming Soon: The Comprehensive Financial Strategy Guide for Dancers",
-    excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle.",
-    href: "https://boomtick.blog/blog/2026-04-18-financial-literacy-dancers",
-  },
-  {
-    tag: "Tech",
-    date: "2026-04-18",
-    title: "How I used GitHub Actions to power this site",
-    excerpt: "Automated deployments and CI/CD pipelines for a tech-forward dance blog.",
-    href: "https://boomtick.blog/blog/2026-04-18-github-actions",
-  },
-  {
-    tag: "Gear Reviews",
-    date: "2026-04-18",
-    title: "Halloween costumes you can dance in",
-    excerpt: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test.",
-    href: "https://boomtick.blog/blog/2026-04-18-halloween-costumes",
-  },
-  {
-    tag: "Gear Reviews",
-    date: "2026-04-18",
-    title: "Make any shoe a dance shoe",
-    excerpt: "Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response.",
-    href: "https://boomtick.blog/blog/2026-04-18-make-shoe-dance",
-  },
-  {
-    tag: "Data & Dev Lab",
-    date: "2026-04-18",
-    title: "The majority of above average dancers don’t make it to finals",
-    excerpt: "A statistical look at competition heat density and judge variance, explaining why placement is a poor metric for progress.",
-    href: "https://boomtick.blog/blog/2026-04-18-why-finals-are-hard",
-  },
-];
-
 export const upcomingEvents = [
   { name: "Mission City Swing", location: "San Jose, CA", cadence: "Every Wednesday" },
   { name: "US Open Swing Dance Championships", location: "Burbank, CA", cadence: "November" },
