@@ -1,12 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowRight, MapPin, Calendar } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Equalizer from "@/components/Equalizer";
-import { useHomePageData } from "@/hooks/use-page-data";
+import { homeHeroLinks, ArrowRight, Calendar, MapPin, blogPosts, tagColors, upcomingEvents } from "@/lib/content/home";
 
 const Home = () => {
-  const { blogPosts, upcomingEvents, tagColors } = useHomePageData();
-
   if (typeof document !== "undefined") {
     document.title = "boomtick.blog | West Coast Swing Lifestyle";
     const description = document.querySelector('meta[name="description"]');
@@ -32,11 +29,7 @@ const Home = () => {
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">Train smarter.</h2>
                 <p className="text-sm text-white/95 mb-4 max-w-xs">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
-                <div className="flex flex-col gap-2">{[
-                  { label: "WCS Training →", href: "/blog" },
-                  { label: "Competition tips →", href: "/blog" },
-                  { label: "Gear reviews →", href: "/gear" },
-                ].map((link) => (<a key={link.label} href={link.href} className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm" data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
+                <div className="flex flex-col gap-2">{homeHeroLinks[0].map((link) => (<a key={link.label} href={link.href} className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm" data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
               </div>
             </div>
             <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-5 sm:p-8 group overflow-hidden border-l border-border min-h-[240px] sm:min-h-[260px]">
@@ -45,11 +38,7 @@ const Home = () => {
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">Travel better.</h2>
                 <p className="text-sm text-white/95 mb-4 max-w-xs">Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.</p>
-                <div className="flex flex-col gap-2">{[
-                  { label: "Travel guides →", href: "/blog" },
-                  { label: "Event calendar →", href: "/research" },
-                  { label: "Packing lists →", href: "/gear" },
-                ].map((link) => (<a key={link.label} href={link.href} className="text-sm text-secondary hover:text-secondary/80 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 rounded-sm" data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
+                <div className="flex flex-col gap-2">{homeHeroLinks[1].map((link) => (<a key={link.label} href={link.href} className="text-sm text-secondary hover:text-secondary/80 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 rounded-sm" data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
               </div>
             </div>
           </motion.div>

@@ -1,9 +1,7 @@
 import Sidebar from "@/components/Sidebar";
-import { useResearchPageData } from "@/hooks/use-page-data";
+import { researchTools } from "@/lib/content/research";
 
 const Research = () => {
-  const { researchTools } = useResearchPageData();
-
   if (typeof document !== "undefined") {
     document.title = "Data & Development Lab | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');

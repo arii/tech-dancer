@@ -1,9 +1,8 @@
 import Sidebar from "@/components/Sidebar";
 import { useMemo, useState } from "react";
-import { useBlogPageData } from "@/hooks/use-page-data";
+import { blogFilters, blogPosts, tagColors } from "@/lib/content/blog";
 
 const Blog = () => {
-  const { blogFilters, blogPosts, tagColors } = useBlogPageData();
   const [activeFilter, setActiveFilter] = useState("All Posts");
   const visiblePosts = useMemo(
     () => (activeFilter === "All Posts" ? blogPosts : blogPosts.filter((post) => post.tag === activeFilter)),

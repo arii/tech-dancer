@@ -1,9 +1,7 @@
 import Sidebar from "@/components/Sidebar";
-import { useGearPageData } from "@/hooks/use-page-data";
+import { gearItems, tagColors } from "@/lib/content/gear";
 
 const Gear = () => {
-  const { gearItems, tagColors } = useGearPageData();
-
   if (typeof document !== "undefined") {
     document.title = "Gear Reviews | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');

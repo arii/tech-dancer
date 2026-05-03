@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
-import { useAboutPageData } from "@/hooks/use-page-data";
+import { aboutConnectItems, aboutPillars, aboutServiceCards, photos } from "@/lib/content/about";
 
 const About = () => {
-  const { aboutConnectItems, aboutPillars, aboutServiceCards, photos } = useAboutPageData();
-
   if (typeof document !== "undefined") {
     document.title = "About Ariel Anders | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');
