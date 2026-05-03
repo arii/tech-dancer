@@ -49,7 +49,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
+        description="Boom Tick blog for West Coast Swing dancers. Exploring the intersection of dance, physics, and engineering through interactive studies and resources."
         schema={STATIC_SCHEMAS.HOME}
       />
 
