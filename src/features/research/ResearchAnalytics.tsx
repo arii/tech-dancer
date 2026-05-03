@@ -106,8 +106,8 @@ export default function ResearchAnalytics() {
           ) : (
             <EmptyState
               icon={<Database className="w-12 h-12" />}
-              title="Pipeline Synchronizing..."
-              description="Research studies are automatically ingested via the ETL pipeline. New analysis runs weekly—check back soon for recent data."
+              title="ETL Pipeline Synchronizing..."
+              description="The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete."
             />
           )}
         </Stack>
