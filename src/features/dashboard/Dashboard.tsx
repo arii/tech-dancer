@@ -66,7 +66,7 @@ export default function Home() {
           style={{ background: 'radial-gradient(circle, rgba(155,93,229,0.07) 0%, transparent 70%)' }}
         />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-center min-h-[calc(100vh-64px)] px-8 md:px-12 lg:px-16 pt-12 lg:pt-0 pb-8 max-w-[1400px] mx-auto w-full">
+        <div className="relative z-10 flex flex-col lg:flex-row items-center min-h-[calc(100vh-64px)] px-8 md:px-12 lg:px-16 pt-20 lg:pt-8 pb-8 max-w-[1400px] mx-auto w-full">
 
           {/* Left — Content */}
           <motion.div
