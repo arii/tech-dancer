@@ -8,7 +8,7 @@ interface SuccessStateProps {
 
 export function SuccessState({ onReset }: SuccessStateProps) {
   return (
-    <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" className="text-center">
+    <Box as="section" padding="panel" display="flex" direction="col" align="center" justify="center" textAlign="center">
       <Stack gap={12} align="center">
         <Box width={24} height={24} border surface="dim" display="flex" align="center" justify="center" color="accent" radius="lg">
           <Sparkles className="w-12 h-12 stroke-1" />

@@ -11,13 +11,13 @@ interface ViewToggleProps {
 
 export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
-    <Box display="flex" border radius="none" overflow="hidden" aria-label="Switch content view" role="group">
+    <Box display="flex" border radius="none" overflow="hidden">
       {(['card', 'list'] as ViewMode[]).map((v) => (
         <button
           key={v}
           onClick={() => onChange(v)}
           className={cn(
-            'p-2 transition-colors cursor-pointer min-h-11 min-w-11 flex items-center justify-center',
+            'p-2 transition-colors cursor-pointer',
             v === 'card' ? 'border-r border-line' : '',
             view === v 
               ? 'bg-accent-navy text-white shadow-inner' 

@@ -7,9 +7,8 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
-import type { JSX } from 'react';
 
-export default function ResearchAnalytics(): JSX.Element {
+export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
@@ -17,13 +16,13 @@ export default function ResearchAnalytics(): JSX.Element {
     <Box as="section">
       <SEO
         title="Research"
-        description="Boom Tick research on robotics, dance analytics, competition data, and biomechanics for West Coast Swing."
+        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
       />
       <Stack gap={12}>
         <PageHeader
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
-          description="Interactive data science, software development, and specialized tools to optimize the Boom Tick WCS lifestyle."
+          description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
           as="h1"
         />
 
@@ -37,14 +36,12 @@ export default function ResearchAnalytics(): JSX.Element {
               <Box 
                 key={tool.id}
                 as="button"
-                type="button"
-                aria-label={`Open ${tool.name}`}
                 onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 surface="default"
                 border
                 padding="card"
                 cursor="pointer"
-                className="group hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all text-left"
+                className="group hover:border-accent transition-all text-left"
               >
                 <Stack gap={6} height="full" justify="between">
                   <Stack gap={4}>
@@ -78,15 +75,8 @@ export default function ResearchAnalytics(): JSX.Element {
           {studies.length > 0 ? (
             <Grid cols={{ base: 1, md: 2 }} gap={12}>
               {studies.map((study) => (
-                <Box
-                  key={study.slug}
-                  as="button"
-                  type="button"
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                  aria-label={`Read study ${study.title}`}
-                  className="group w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  <Stack gap={4} surface="default" border padding="card" className="transition-all hover:border-accent">
+                <Box key={study.slug} className="group">
+                  <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
                       <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
                       <Text variant="mono" size="micro" color="dim">{study.date}</Text>

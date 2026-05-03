@@ -43,10 +43,10 @@ export function ContentCard({
       shadow={compact ? "none" : "standard"}
       overflow="hidden"
       className={cn(
-        "group transition-all duration-300 h-full will-change-transform",
+        "group transition-all duration-300",
         compact
-          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent bg-surface"
-          : "hover:border-accent hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)] hover:-translate-y-1 bg-surface"
+          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent"
+          : "hover:border-accent hover:shadow-xl hover:-translate-y-1"
       )}
       {...motionProps}
     >
@@ -59,32 +59,19 @@ export function ContentCard({
       )}
 
       {/* Content Area */}
-      <Stack
-        gap={compact ? 1 : 2}
-        padding={compact ? 4 : 3}
-        flex={1}
-        className={cn(compact ? "min-h-[120px]" : "min-h-[128px]", "justify-between")}
-      >
-        <Stack gap={compact ? 0.5 : 1.5}>
-          <Box display="flex" align="center" gap={3} wrap className="leading-none">
-            <Text
-              variant="mono"
-              size="micro"
-              weight="font-black"
-              color={category.toLowerCase().includes('gear') || category.toLowerCase().includes('white') ? 'white' : 'accent'}
-              uppercase
-              tracking="widest"
-              className="whitespace-nowrap"
-            >
+      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
+        <Stack gap={compact ? 0.5 : 3}>
+          <Box display="flex" align="center" gap={3} wrap>
+            <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
               {category}
             </Text>
             {date && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" className="whitespace-nowrap">
+              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
                 {date}
               </Text>
             )}
             {!compact && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" className="whitespace-nowrap">
+              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
                 {readingTime(content, excerpt)} MIN
               </Text>
             )}
@@ -92,21 +79,21 @@ export function ContentCard({
 
           <Text 
             variant="body"
-            size={compact ? "base" : "sm"}
+            size={compact ? "base" : "lg"}
             weight="font-bold"
-            className="text-white leading-tight group-hover:text-accent transition-colors line-clamp-2"
+            className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
           
-          <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed opacity-72">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-1 leading-relaxed opacity-70">
              {excerpt}
           </Text>
         </Stack>
 
         {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto pt-4">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent" className="whitespace-nowrap">
+          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
+            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
               Read Article
             </Text>
             <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />

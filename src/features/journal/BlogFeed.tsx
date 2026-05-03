@@ -3,28 +3,27 @@ import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
-import type { JSX } from 'react';
 
-export default function BlogFeed(): JSX.Element {
+export default function BlogFeed() {
   const { posts, categories, view, setView } = useBlog();
 
   return (
     <Box as="section">
       <SEO
         title="Blog"
-        description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
       />
       <FolioGrid
         items={posts}
         categoryTitle="Blog Posts"
         as="h1"
         label="INSIGHTS"
-        description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
         view={view}
         onViewChange={setView}
       >
-        <Box marginTop={8} aria-label="Blog category filters">
+        <Box marginTop={8}>
           <FilterBar
             categories={categories}
           />

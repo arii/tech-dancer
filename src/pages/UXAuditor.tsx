@@ -10,8 +10,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import type { JSX } from 'react';
-import type { UXReport } from '@/features/ux-auditor/useUXAuditor';
 
 const viewportIcons = {
   Mobile: <Smartphone className="w-5 h-5" />,
@@ -86,7 +84,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   );
 }
 
-export default function UXAuditor(): JSX.Element {
+export default function UXAuditor() {
   const {
     reports,
     isAnalyzing,
@@ -105,7 +103,7 @@ export default function UXAuditor(): JSX.Element {
     <Stack gap={8} width="full">
       <SEO
         title="Visual UX Auditor"
-        description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions across mobile, tablet, and desktop."
+        description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
       />
       <Stack
         direction={{ base: 'col', md: 'row' }}
@@ -174,7 +172,7 @@ export default function UXAuditor(): JSX.Element {
                 icon={<RefreshCw className="w-8 h-8 opacity-20" />}
               />
             )}
-            {reports.map((report: UXReport) => (
+            {reports.map((report) => (
               <Box
                 key={report.id}
                 as="button"

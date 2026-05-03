@@ -47,7 +47,7 @@ export default function BlogPost() {
 
   if (!post) {
     return (
-      <Box padding="panel" className="text-center">
+      <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Post Not Found</Text>
           <Box as="button" onClick={() => navigate('/blog')} className="hover:text-accent transition-colors">

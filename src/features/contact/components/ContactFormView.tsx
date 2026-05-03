@@ -1,4 +1,3 @@
-import { type BaseSyntheticEvent } from 'react';
 import { Send, MessageSquare, Sparkles, BarChart2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { inputs } from '@/styles/design-tokens';
@@ -24,14 +23,14 @@ interface ContactFormViewProps {
 
 const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
 
-export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps): JSX.Element {
+export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (
     <Box as="section" minHeight="[calc(100vh-64px)]">
       <Stack gap={12}>
         <PageHeader
           label="CONTACT"
           title="Get in Touch"
-          description="Have a question about Boom Tick, West Coast Swing, gear reviews, or research? I'd love to hear from you."
+          description="Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I'd love to hear from you."
         />
 
         <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={{ base: 40, md: 0 }} overflow="hidden" radius="lg">

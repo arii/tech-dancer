@@ -19,20 +19,8 @@ export function useBlog() {
   const setView = (v: ViewMode) => setViewParam(v);
 
   const categories = useMemo(() => {
-    const normalize = (value: string) => value.trim().replace(/\s+/g, ' ');
-    const seen = new Set<string>();
-    const result: string[] = ['All'];
-
-    posts.forEach((post) => {
-      const category = normalize(post.category);
-      const key = category.toLowerCase();
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(category);
-      }
-    });
-
-    return result;
+    const cats = posts.map(p => p.category);
+    return ['All', ...new Set(cats)];
   }, [posts]);
 
   const filteredPosts = useMemo(() => {

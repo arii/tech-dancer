@@ -34,13 +34,13 @@ export function PageHeader({
         <Text variant="mono" size="xs" color="brand" weight="font-bold" tracking="wide-editorial" uppercase>
           {label}
         </Text>
-        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-white leading-tight tracking-tight break-words max-w-full">
+        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-accent-navy leading-tight tracking-tight">
           {title}
         </Text>
         {description && (
           <Text
             variant="body"
-            size={{ base: "base", lg: "lg" }}
+            size={{ base: "lg", lg: "xl" }}
             color="dim"
             maxWidth={descriptionMaxWidth}
             marginTop={4}

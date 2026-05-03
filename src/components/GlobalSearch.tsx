@@ -79,13 +79,10 @@ export function GlobalSearch() {
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/30 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
       onClick={close}
     >
       <Box
-        role="dialog"
-        aria-modal="true"
-        aria-label="Global search"
         width="full"
         maxWidth="3xl"
         height="fit"
@@ -103,15 +100,14 @@ export function GlobalSearch() {
             as="input"
             ref={inputRef}
             type="text"
-            aria-label="Search content"
-            placeholder="Search posts, gear, research..."
+            placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
             defaultValue={query}
             onChange={handleInputChange}
             width="full"
             variant="display"
             size="2xl"
             color="main"
-            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/40"
+            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
             autoFocus
           />
           <Box 
@@ -136,7 +132,6 @@ export function GlobalSearch() {
                   as="button"
                   type="button"
                   data-testid="search-result"
-                  aria-label={`Open ${res.type} result ${res.title}`}
                   onClick={() => handleSelect(res)}
                   width="full"
                   padding={3}
@@ -178,7 +173,7 @@ export function GlobalSearch() {
            <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center">
-                 <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                  </Box>
                  <Text variant="mono" size="micro" color="dim" className="leading-none">CLOSE</Text>
               </Box>
@@ -189,7 +184,7 @@ export function GlobalSearch() {
                  <Text variant="mono" size="micro" color="dim" className="leading-none">SELECT</Text>
               </Box>
            </Box>
-              <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest">
               {results.length} RESULTS FOUND
             </Text>
         </Box>

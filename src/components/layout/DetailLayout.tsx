@@ -38,6 +38,7 @@ export function DetailLayout({
   return (
     <Box as="article" padding="panel">
       <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
+        {/* Navigation */}
         <Box
           as="button"
           onClick={onBack}
@@ -53,16 +54,18 @@ export function DetailLayout({
         </Box>
 
         <Stack gap={10}>
+          {/* Header */}
           <Stack gap={4}>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
               {category} • {date} • {rt} min read
             </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" className="text-white leading-tight tracking-tight break-words">
+            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
               {title}
             </Text>
             {headerExtras}
           </Stack>
 
+          {/* Hero Image */}
           {image && (
             <Box
               as={motion.div}
@@ -82,21 +85,23 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? 'lg:grid-cols-1' : ''}>
-            <Box className={cn(sidebar ? 'lg:col-span-2' : 'w-full', 'order-1 lg:order-2')}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
+            {/* Content - first on mobile via order classes */}
+            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-headings:text-white prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
                 style={{ maxWidth: '720px' }}
               >
                 <MarkdownRenderer content={content} />
               </Box>
             </Box>
 
+            {/* Sidebar - second on mobile via order classes */}
             {sidebar && (
               <Box className="order-2 lg:order-1">
                 <Stack gap={4} className="lg:sticky lg:top-32">
-                  {sidebar}
+                   {sidebar}
                 </Stack>
               </Box>
             )}

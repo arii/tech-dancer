@@ -1,89 +1,54 @@
-import { useState } from 'react';
+import { Search } from 'lucide-react';
+import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Search } from 'lucide-react';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Logo } from '@/components/ui/Logo';
+import { throttle } from 'throttle-debounce';
+import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
+import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
-
-const TOP_NAV_ROUTES = [
-  { path: '/blog', label: 'BLOG' },
-  { path: '/gear', label: 'GEAR' },
-  { path: '/research', label: 'LAB' },
-  { path: '/about', label: 'ABOUT' },
-];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
+
+  useEffect(() => {
+    const handleScroll = throttle(100, () => {
+      setScrolled(window.scrollY > 20);
+    });
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearchClick = () => {
     setIsOpen(false);
-    if (isSearchOpen) closeSearch();
-    else openSearch();
+    if (isSearchOpen) {
+      closeSearch();
+    } else {
+      openSearch();
+    }
   };
 
   return (
     <>
-      <Box
-        as="nav"
-        aria-label="Main Navigation"
-        className="hidden lg:flex fixed top-0 left-0 right-0 z-50 h-16 items-center border-b border-line bg-surface/90 backdrop-blur-xl px-6 xl:px-10"
-      >
-        <Box as={NavLink} to="/" className="flex items-center gap-2 shrink-0 group">
-          <Box className="w-8 h-8 border border-accent/60 flex items-center justify-center rounded-sm group-hover:border-accent transition-colors">
-            <span className="font-bold text-white text-xs leading-none">Boom Tick</span>
-          </Box>
-          <Text variant="mono" size="sm" weight="font-bold" className="text-white leading-none tracking-tight hidden xl:block">
-            Boom Tick
-          </Text>
-        </Box>
+      {/* Mobile Bottom Tabs */}
+      <MobileBottomNav />
 
-        <Box as="ul" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8">
-          {TOP_NAV_ROUTES.map((item) => (
-            <Box as="li" key={item.path}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) => cn(
-                  'font-mono text-[11px] font-bold tracking-[0.28em] leading-none transition-colors',
-                  isActive ? 'text-accent' : 'text-text-dim hover:text-white'
-                )}
-              >
-                {item.label}
-              </NavLink>
-            </Box>
-          ))}
-        </Box>
-
-        <Box className="ml-auto flex items-center gap-3">
-          <button
-            onClick={handleSearchClick}
-            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 font-mono text-[11px] font-bold tracking-[0.28em] text-text-dim transition-colors hover:border-accent hover:text-accent"
-            aria-label={isSearchOpen ? 'Close search' : 'Open search'}
-            aria-pressed={isSearchOpen}
-            type="button"
-          >
-            <Search className="h-3.5 w-3.5" />
-            SEARCH
-          </button>
-          <NavLink
-            to="/contact"
-            className="neon-border inline-flex items-center rounded-full border px-4 py-2 font-mono text-[11px] font-bold tracking-[0.28em] text-white transition-colors hover:text-accent"
-          >
-            SUBSCRIBE
-          </NavLink>
-        </Box>
-      </Box>
-
+      {/* Mobile Header */}
       <MobileHeader
         isOpen={isOpen}
         onToggle={() => setIsOpen(!isOpen)}
         onClose={() => setIsOpen(false)}
       />
 
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <MobileMenuOverlay
@@ -94,9 +59,52 @@ export default function Navigation() {
         )}
       </AnimatePresence>
 
-      <div className="lg:hidden">
-        <MobileBottomNav />
-      </div>
+      {/* Desktop Sidebar */}
+      <Box
+        as="nav"
+        aria-label="Main Navigation"
+        layout="navRail"
+        className={cn(
+          "transition-[background-color,backdrop-filter] duration-300",
+          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
+        )}
+      >
+        <Stack
+          padding={8}
+          gap={10}
+          flex={1}
+        >
+          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
+            <Logo className="h-10 transition-colors group-hover:opacity-80" />
+          </Box>
+
+          <Stack as="ul" gap={2}>
+            <Box as="li">
+              <Box
+                as="button"
+                type="button"
+                cursor="pointer"
+                onClick={handleSearchClick}
+                display="flex"
+                align="center"
+                gap={4}
+                width="full"
+                paddingY={6}
+                paddingX={4}
+                radius="md"
+                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+              >
+                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
+              </Box>
+            </Box>
+
+            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+            ))}
+          </Stack>
+        </Stack>
+      </Box>
     </>
   );
 }

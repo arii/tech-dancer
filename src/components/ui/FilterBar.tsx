@@ -9,12 +9,10 @@ interface FilterBarProps {
 export function FilterBar({ categories }: FilterBarProps) {
   const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
 
-  const allCategories = ['All', ...categories.filter((cat) => cat !== 'All')];
-
   return (
     <Box border="b" className="w-full bg-surface/80 backdrop-blur-md sticky top-16 lg:top-0 z-40 overflow-x-auto no-scrollbar" paddingY={5}>
       <Stack direction="row" gap={4} className="min-w-max">
-        {allCategories.map((cat) => (
+        {categories.map((cat) => (
           <Box
             key={cat}
             as="button"

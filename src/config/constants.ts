@@ -2,8 +2,7 @@ export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog'
 export const SITE_NAME = 'BoomTick.blog';
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
-const DEFAULT_DESCRIPTION = "Boom Tick blog for West Coast Swing dancers. Exploring the intersection of dance, physics, and engineering.";
-const DEFAULT_OG_IMAGE = `${BASE_URL}/assets/comp_analysis_hero.webp`;
+const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Exploring the intersection of dance, physics, and engineering.";
 
 export const STATIC_SCHEMAS = {
   HOME: {
@@ -12,7 +11,6 @@ export const STATIC_SCHEMAS = {
     "name": SITE_NAME,
     "url": BASE_URL,
     "description": DEFAULT_DESCRIPTION,
-    "image": DEFAULT_OG_IMAGE,
     "publisher": {
       "@type": "Person",
       "name": "Ariel Anders"
@@ -25,7 +23,7 @@ export const STATIC_SCHEMAS = {
       "@type": "Person",
       "name": bioName,
       "description": bioRole,
-      "image": DEFAULT_OG_IMAGE,
+      "image": `${BASE_URL}/assets/comp_analysis_hero.webp`,
       "jobTitle": bioRole,
       "url": `${BASE_URL}/about`,
       "sameAs": [

@@ -37,4 +37,4 @@ Your `.github/workflows/deploy.yml` acts as the lead here. It organizes your bra
 
 Don't follow a broken build off a bridge. The `actions/github-script` posts the direct URL to your Pull Request.
 
-**Next Step:** Check your workflow logs. Is your timing actually on beat, or is your build failing?
+**Next Step:** Check your workflow logs. Is your timing on beat, or is your build failing?

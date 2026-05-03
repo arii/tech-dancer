@@ -28,7 +28,7 @@ export function SearchBox({
       flex={1}
       minHeight="44px"
       radius="lg"
-      className="focus-within:ring-2 focus-within:ring-accent transition-all w-full"
+      className="focus-within:ring-2 focus-within:ring-accent transition-all"
     >
       <Search
         size={18}
@@ -40,7 +40,7 @@ export function SearchBox({
         placeholder={placeholder}
         variant="mono"
         size="sm"
-        className="bg-transparent border-none outline-none pl-10 w-full min-w-0 focus:ring-0"
+        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
         value={value}
         onChange={onChange}
       />

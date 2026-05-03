@@ -46,7 +46,6 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
       {isVisible && (
         <Button
           as={motion.button}
-          type="button"
           onClick={scrollToTop}
           position="fixed"
           padding={3}
@@ -57,7 +56,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          aria-label="Scroll to top of page"
+          aria-label="Scroll to top"
           bottom={8}
           right={8}
           className="transition-all duration-300"

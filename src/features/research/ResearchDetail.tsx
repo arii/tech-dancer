@@ -79,7 +79,7 @@ export default function ResearchDetail() {
 
   if (!tool) {
     return (
-      <Box padding="panel" align="center">
+      <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Search size={48} className="opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
@@ -127,7 +127,7 @@ export default function ResearchDetail() {
                     <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
                       LABORATORY_ACCESS // {tool.category}
                     </Text>
-                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-white leading-tight tracking-tight break-words">
+                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
                       {tool.name}
                     </Text>
                   <Box border surface="accent" padding="compact">
@@ -154,12 +154,12 @@ export default function ResearchDetail() {
 
                 {tool.status === 'Coming Soon' && (
                   <Box border surface="accent" padding="card" className="bg-accent/5 border-dashed">
-                    <Stack gap={4} align="center" className="text-center">
+                    <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
-                          This specialized module is currently being integrated into the Boom Tick platform. We are finalizing the analysis models and UI components.
+                          This specialized module is currently being integrated into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
                         </Text>
                       </Stack>
                     </Stack>
