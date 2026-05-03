@@ -59,7 +59,7 @@ export default function PathSelector() {
                 <NavLink
                   key={link.text}
                   to={link.to}
-                  className="text-gradient-cyan-blue font-bold text-sm tracking-wide transition-all hover:opacity-80 flex items-center"
+                  className="text-[#8B2FFF] font-bold text-sm tracking-wide transition-all hover:opacity-80 flex items-center"
                 >
                   {link.text}
                 </NavLink>
