@@ -44,7 +44,7 @@ export function GlobalSearch() {
 
     return parts.map((part, i) =>
       part.toLowerCase() === query.toLowerCase()
-        ? <Box as="span" key={i} radius="industrial" paddingX={0.5} surface="accent" weight="font-bold">{part}</Box>
+        ? <Box as="span" key={i} radius="none" paddingX={0.5} surface="primary" weight="font-bold" className="text-bg">{part}</Box>
         : part
     );
   }, [query]);
@@ -78,8 +78,7 @@ export function GlobalSearch() {
       align="start"
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
-      data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
+      className="bg-bg/90 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-56"
       onClick={close}
     >
       <Box

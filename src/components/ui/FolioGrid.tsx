@@ -4,9 +4,7 @@ import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
-import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { SearchBox } from '@/components/ui/SearchBox';
-import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { Search } from 'lucide-react';
@@ -18,8 +16,6 @@ interface FolioGridProps {
   label?: string;
   description?: string;
   children?: ReactNode;
-  view?: ViewMode;
-  onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
 }
 
@@ -30,8 +26,6 @@ export default function FolioGrid({
   label,
   description,
   children,
-  view = 'card',
-  onViewChange,
   as
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
@@ -48,7 +42,7 @@ export default function FolioGrid({
 
   return (
     <Box as="section" height="full">
-      <Box as="header" marginBottom={12}>
+      <Box as="header" marginBottom={8}>
         <PageHeader
           label={label || "FOLIO"}
           title={categoryTitle}
@@ -56,14 +50,11 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Box marginTop={8}>
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {onViewChange && (
-            <ViewToggle view={view} onChange={onViewChange} />
-          )}
         </Box>
       </Box>
 
@@ -74,30 +65,16 @@ export default function FolioGrid({
             title="No results found"
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
-        ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={0} border="t" className="border-l border-line">
+        ) : (
+          <Grid cols={{ base: 1, sm: 2, xl: 3 }} gap={4}>
             {filteredItems.map((item) => (
-              <Box
+              <ContentCard
                 key={item.slug}
-                border="r"
-                borderBottom={true}
-                padding={{ base: 6, lg: 6 }}
-                className="hover:bg-card-bg transition-colors group"
-              >
-                <ContentCard
-                  {...item}
-                  basePath={basePath}
-                  aspect="video"
-                />
-              </Box>
+                {...item}
+                basePath={basePath}
+              />
             ))}
           </Grid>
-        ) : (
-          <Stack gap={0} border="t" className="border-line">
-            {filteredItems.map((item) => (
-              <ListRow key={item.slug} {...item} basePath={basePath} />
-            ))}
-          </Stack>
         )}
       </Box>
     </Box>

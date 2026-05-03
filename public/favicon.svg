@@ -1,14 +1,20 @@
 <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="12" fill="white"/>
-  <text x="10" y="44"
-        font-family="Bricolage Grotesque, Albert Sans, sans-serif"
-        font-size="40"
-        font-weight="700"
-        fill="#1A2B3C">
+  <rect width="64" height="64" rx="12" fill="#0D0E1C"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#00CFFF" />
+      <stop offset="100%" stopColor="#8B2FFF" />
+    </linearGradient>
+  </defs>
+  <text x="12" y="46"
+        font-family="Arial Black, Arial, sans-serif"
+        font-size="44"
+        font-weight="900"
+        fill="white">
     B
   </text>
-  <path d="M38 18 L54 46"
-        stroke="#007BFF"
-        stroke-width="6"
+  <path d="M40 16 L56 48"
+        stroke="url(#g)"
+        stroke-width="8"
         stroke-linecap="round"/>
 </svg>

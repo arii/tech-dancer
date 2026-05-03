@@ -19,9 +19,9 @@ export function PageHeader({
   title, 
   description, 
   as = "h1", 
-  paddingBottom = 12, 
-  border = "b", 
-  descriptionMaxWidth = "prose",
+  paddingBottom = 8, 
+  border = "none", 
+  descriptionMaxWidth = "3xl",
   titleSize = "fluid-5",
   cta
 }: PageHeaderProps) {
@@ -31,20 +31,17 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="brand" weight="font-bold" tracking="wide-editorial" uppercase>
+        <Text weight="font-bold" size="xs" className="tracking-[0.35em] uppercase text-text-dim/65">
           {label}
         </Text>
-        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+        <Text as={as} variant="display" size={titleSize} weight="font-black" className="leading-tight tracking-tight">
           {title}
         </Text>
         {description && (
           <Text
-            variant="body"
-            size={{ base: "lg", lg: "xl" }}
-            color="dim"
+            size={{ base: "sm", sm: "base" }}
             maxWidth={descriptionMaxWidth}
-            marginTop={4}
-            className="leading-relaxed text-pretty"
+            className="leading-7 text-text-body/72"
           >
             {description}
           </Text>
@@ -61,10 +58,10 @@ export function PageHeader({
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-line">
+    <Box display="flex" justify="between" align="end" paddingBottom={4}>
       <Stack gap={1}>
-        <Text variant="mono" size="xs" color="brand" weight="font-semibold" tracking="widest" uppercase>{label}</Text>
-        <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
+        <Text size="xs" weight="font-bold" className="tracking-widest uppercase text-text-dim/65">{label}</Text>
+        <Text as="h2" size="2xl" weight="font-black">{title}</Text>
       </Stack>
       {children}
     </Box>

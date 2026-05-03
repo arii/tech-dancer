@@ -63,47 +63,44 @@ export default function Navigation() {
       <Box 
         as="nav"
         aria-label="Main Navigation"
-        layout="navRail" 
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
+          "fixed top-0 left-0 hidden h-full w-56 flex-col border-r border-line bg-surface md:flex z-40 transition-[background-color,backdrop-filter] duration-300",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
-        <Stack
-          padding={8}
-          gap={10}
-          flex={1}
-        >
-          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Logo className="h-10 transition-colors group-hover:opacity-80" />
+        <Box className="border-b border-line px-4 py-4">
+          <Logo />
+        </Box>
+        
+        <Stack as="ul" gap={1} flex={1} paddingY={4} className="overflow-y-auto">
+          <Box as="li">
+            <Box
+              as="button"
+              type="button"
+              cursor="pointer"
+              onClick={handleSearchClick}
+              display="flex"
+              align="center"
+              gap={3}
+              width="full"
+              paddingY={3}
+              paddingX={6}
+              className="group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11"
+            >
+              <Search className="w-4 h-4 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+              <Text variant="sans" size="base" className="leading-none">Search</Text>
+            </Box>
           </Box>
 
-          <Stack as="ul" gap={2}>
-            <Box as="li">
-              <Box
-                as="button"
-                type="button"
-                cursor="pointer"
-                onClick={handleSearchClick}
-                display="flex"
-                align="center"
-                gap={4}
-                width="full"
-                paddingY={6}
-                paddingX={4}
-                radius="md"
-                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
-              >
-                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
-              </Box>
-            </Box>
-
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
-            ))}
-          </Stack>
+          {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+            <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+          ))}
         </Stack>
+
+        <Box className="space-y-1 border-t border-line px-6 py-5">
+          <Text size="xs" className="text-text-dim/75">Written by Ariel Anders</Text>
+          <Text size="xs" className="text-text-dim/65">&copy; {new Date().getFullYear()} boomtick.blog</Text>
+        </Box>
       </Box>
     </>
   );

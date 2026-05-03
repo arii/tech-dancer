@@ -1,22 +1,28 @@
 :root {
   /* Colors */
-  --raw-color-bg: oklch(98% 0.005 250);
-  --raw-color-surface: oklch(100% 0 0);
-  --raw-color-surface-alt: oklch(95% 0.01 250);
-  --raw-color-line: oklch(92% 0.01 250);
-  --raw-color-accent: #007BFF;
-  --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --raw-color-accent-navy: #1A2B3C;
-  --raw-color-accent-brand: #007BFF;
-  --raw-color-text-main: #1A2B3C;
-  --raw-color-text-body: #1A202C;
-  --raw-color-text-dim: #374151;
-  --raw-color-error: #dc2626;
-  --raw-color-error-bg: #fef2f2;
+  --raw-color-bg: hsl(222 47% 5%);
+  --raw-color-surface: hsl(222 30% 8%);
+  --raw-color-surface-alt: hsl(222 30% 15%);
+  --raw-color-line: hsl(222 30% 15%);
+  --raw-color-accent: hsl(190 100% 50%);
+  --raw-color-accent-shadow: hsla(190, 100%, 50%, 0.3);
+  --raw-color-accent-navy: hsl(222 47% 5%);
+  --raw-color-accent-brand: hsl(190 100% 50%);
+  --raw-color-text-main: hsl(0 0% 100%);
+  --raw-color-text-body: hsl(0 0% 95%);
+  --raw-color-text-dim: hsl(222 10% 60%);
+  --raw-color-error: hsl(0 84% 60%);
+  --raw-color-error-bg: hsla(0, 84%, 60%, 0.1);
+
+  /* BoomTick Brand Specifics */
+  --color-primary: hsl(190 100% 50%);
+  --color-secondary: hsl(258 90% 66%);
+  --color-accent-vivid: hsl(313 100% 50%);
+  --color-muted: hsl(222 30% 15%);
 
   /* Typography */
-  --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
-  --raw-font-display: "Bricolage Grotesque", "Albert Sans", sans-serif;
+  --raw-font-sans: "Inter", "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+  --raw-font-display: "Bricolage Grotesque", "Inter", sans-serif;
   --raw-font-mono: "Space Mono", monospace;
 
   /* Radius */
