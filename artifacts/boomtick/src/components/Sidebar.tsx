@@ -1,18 +1,16 @@
-import { Link, useLocation } from "wouter";
-import { Search, BookOpen, ShoppingBag, FlaskConical, User, Send } from "lucide-react";
+import { Link } from "wouter";
+import { BookOpen, ShoppingBag, Plane, BarChart2, Info, Search } from "lucide-react";
 
 const navItems = [
   { icon: Search, label: "Search", href: "/" },
-  { icon: BookOpen, label: "Blog Posts", href: "/" },
+  { icon: BookOpen, label: "Blog", href: "/" },
+  { icon: Plane, label: "Travel", href: "/" },
   { icon: ShoppingBag, label: "Gear Reviews", href: "/" },
-  { icon: FlaskConical, label: "Data & Development Lab", href: "/" },
-  { icon: User, label: "About", href: "/" },
-  { icon: Send, label: "Contact", href: "/" },
+  { icon: BarChart2, label: "Data Lab", href: "/" },
+  { icon: Info, label: "About Tech Dancer", href: "/" },
 ];
 
 const Sidebar = () => {
-  const [location] = useLocation();
-
   return (
     <aside className="fixed top-0 left-0 h-full w-56 bg-card border-r border-border z-40 flex flex-col">
       <div className="px-6 py-6 border-b border-border">
@@ -36,10 +34,9 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="px-6 py-5 border-t border-border">
-        <p className="text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} boomtick.blog
-        </p>
+      <div className="px-6 py-5 border-t border-border space-y-1">
+        <p className="text-xs text-muted-foreground">Written by <span className="text-primary font-semibold">Tech Dancer</span></p>
+        <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} boomtick.blog</p>
       </div>
     </aside>
   );

@@ -1,16 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin, Calendar } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Equalizer from "@/components/Equalizer";
 
 const blogPosts = [
-  {
-    tag: "Tech",
-    date: "2026-04-20",
-    title: "Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages",
-    excerpt: "Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages.",
-    href: "https://boomtick.blog/blog/2026-04-20-stop-wasting-vercel-credits-deploy-every-branch-to-github-pages",
-  },
   {
     tag: "Travel",
     date: "2026-04-19",
@@ -19,7 +12,14 @@ const blogPosts = [
     href: "https://boomtick.blog/blog/2026-04-19-gear-essentials",
   },
   {
-    tag: "Dance Research",
+    tag: "Training",
+    date: "2026-04-18",
+    title: "Focus on Results, Not Scores",
+    excerpt: "How shifting your mindset from placements to personal growth changes the way you compete — and how you feel at the end of a weekend.",
+    href: "https://boomtick.blog/blog",
+  },
+  {
+    tag: "Data Lab",
     date: "2026-04-18",
     title: "Coming Soon: WCS Competition Data Scraper",
     excerpt: "Announcing a new tool for objective, ethical analysis of West Coast Swing competition data.",
@@ -27,10 +27,17 @@ const blogPosts = [
   },
 ];
 
+const upcomingEvents = [
+  { name: "Mission City Swing", location: "San Jose, CA", cadence: "Every Wednesday" },
+  { name: "US Open Swing Dance Championships", location: "Burbank, CA", cadence: "November" },
+  { name: "Swing Diego", location: "San Diego, CA", cadence: "January" },
+];
+
 const tagColors: Record<string, string> = {
-  Tech: "text-primary border-primary/40",
   Travel: "text-secondary border-secondary/40",
-  "Dance Research": "text-accent border-accent/40",
+  Training: "text-primary border-primary/40",
+  "Data Lab": "text-accent border-accent/40",
+  Gear: "text-primary border-primary/40",
 };
 
 const Home = () => {
@@ -39,7 +46,8 @@ const Home = () => {
       <Sidebar />
 
       <main className="ml-56 flex-1 min-h-screen">
-        {/* Welcome / Hero */}
+
+        {/* Welcome Hero */}
         <section className="px-10 pt-14 pb-10 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -47,39 +55,42 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">
-              Welcome
+              Welcome to boomtick.blog
             </p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-              The West Coast Swing Lifestyle Blog
+              The West Coast Swing<br />Lifestyle Blog
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl">
-              Technical systems and travel hacks for the modern competitive dancer.
+              Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by <span className="text-primary font-semibold">Tech Dancer</span>.
             </p>
           </motion.div>
         </section>
 
-        {/* Split Hero Banner */}
+        {/* Split Hero Panels */}
         <section className="px-10 pb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="relative rounded-xl overflow-hidden grid grid-cols-2 min-h-[260px]"
+            className="relative rounded-xl overflow-hidden grid grid-cols-2 min-h-[280px]"
           >
-            {/* Left panel — Dancer */}
+            {/* Left — Dance & Train */}
             <div className="relative bg-[#0a0718] flex flex-col justify-end p-8 group overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-48 overflow-hidden opacity-50 group-hover:opacity-70 transition-opacity">
+              <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-40 group-hover:opacity-65 transition-opacity">
                 <Equalizer compact />
               </div>
               <div className="relative z-10">
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 text-white">
-                  Are you a dancer?
+                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">
+                  Train smarter.
                 </h2>
+                <p className="text-sm text-white/70 mb-4 max-w-xs">
+                  Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
+                </p>
                 <div className="flex flex-col gap-2">
                   {[
-                    { label: "WCS blog posts →", href: "https://boomtick.blog/blog?category=Lifestyle" },
-                    { label: "Travel & Lifestyle →", href: "https://boomtick.blog/blog?category=Travel" },
+                    { label: "WCS Training →", href: "https://boomtick.blog/blog?category=Training" },
+                    { label: "Competition tips →", href: "https://boomtick.blog/blog?category=Lifestyle" },
                     { label: "Gear reviews →", href: "https://boomtick.blog/gear" },
                   ].map((link) => (
                     <a
@@ -88,7 +99,7 @@ const Home = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors"
-                      data-testid={`dancer-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                      data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                     >
                       {link.label}
                     </a>
@@ -97,29 +108,32 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right panel — Roboticist */}
+            {/* Right — Travel & Lifestyle */}
             <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-8 group overflow-hidden border-l border-border">
-              <div className="absolute inset-0 bg-gradient-to-bl from-accent/10 via-secondary/5 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-48 overflow-hidden opacity-50 group-hover:opacity-70 transition-opacity">
+              <div className="absolute inset-0 bg-gradient-to-bl from-secondary/10 via-accent/5 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-40 group-hover:opacity-65 transition-opacity">
                 <Equalizer compact reverse />
               </div>
               <div className="relative z-10">
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 text-white">
-                  Hiring a roboticist?
+                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white">
+                  Travel better.
                 </h2>
+                <p className="text-sm text-white/70 mb-4 max-w-xs">
+                  Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
+                </p>
                 <div className="flex flex-col gap-2">
                   {[
-                    { label: "Technical Portfolio →", href: "https://arii.github.io/" },
-                    { label: "Tech blog posts →", href: "https://boomtick.blog/blog?category=Tech" },
-                    { label: "Data & Development Lab →", href: "https://boomtick.blog/research" },
+                    { label: "Travel guides →", href: "https://boomtick.blog/blog?category=Travel" },
+                    { label: "Event calendar →", href: "https://boomtick.blog/blog" },
+                    { label: "Packing lists →", href: "https://boomtick.blog/gear" },
                   ].map((link) => (
                     <a
                       key={link.label}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-accent hover:text-accent/80 font-semibold transition-colors"
-                      data-testid={`roboticist-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                      className="text-sm text-secondary hover:text-secondary/80 font-semibold transition-colors"
+                      data-testid={`travel-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                     >
                       {link.label}
                     </a>
@@ -131,22 +145,22 @@ const Home = () => {
         </section>
 
         {/* Recent Blog Posts */}
-        <section className="px-10 pb-16">
+        <section className="px-10 pb-14">
           <div className="flex items-end justify-between mb-6">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">
                 Latest Updates
               </p>
-              <h2 className="text-2xl font-black">Recent Blog Posts</h2>
+              <h2 className="text-2xl font-black">Recent Posts</h2>
             </div>
             <a
               href="https://boomtick.blog/blog"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-view-full-repository"
+              data-testid="link-view-all-posts"
             >
-              View full repository <ArrowRight size={13} />
+              View all posts <ArrowRight size={13} />
             </a>
           </div>
 
@@ -186,16 +200,61 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Local Regular */}
+        {/* On The Circuit — Events */}
         <section className="px-10 pb-16">
-          <div className="border border-border rounded-xl p-6 bg-card max-w-sm">
-            <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-2">
-              Local Regular
+          <div className="mb-6">
+            <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">
+              On the Circuit
             </p>
-            <h3 className="font-black text-lg mb-1">Mission City Swing</h3>
-            <p className="text-sm text-primary font-semibold">Every Wednesday</p>
+            <h2 className="text-2xl font-black">Where Dancers Go</h2>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            {upcomingEvents.map((evt, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 * i + 0.4 }}
+                className="border border-border rounded-xl p-5 bg-card hover:border-primary/40 transition-colors"
+                data-testid={`event-card-${i}`}
+              >
+                <h3 className="font-bold text-sm mb-2">{evt.name}</h3>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+                  <MapPin size={12} className="text-primary shrink-0" />
+                  {evt.location}
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-secondary">
+                  <Calendar size={12} className="shrink-0" />
+                  {evt.cadence}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </section>
+
+        {/* Data Lab Teaser — secondary, low-key */}
+        <section className="px-10 pb-16">
+          <div className="border border-border rounded-xl p-6 bg-card/50 flex flex-col sm:flex-row sm:items-center gap-6">
+            <div className="flex-1">
+              <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Data Lab</p>
+              <h3 className="font-black text-lg mb-1">WCS Competition Analytics</h3>
+              <p className="text-sm text-muted-foreground">
+                Objective data on competition trends, scoring patterns, and point progression — because the numbers tell a story too.
+              </p>
+            </div>
+            <a
+              href="https://boomtick.blog/research"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 flex items-center gap-2 border border-accent/40 text-accent text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-accent/10 transition-colors"
+              data-testid="link-data-lab"
+            >
+              Explore Data <ArrowRight size={14} />
+            </a>
+          </div>
+        </section>
+
       </main>
     </div>
   );
