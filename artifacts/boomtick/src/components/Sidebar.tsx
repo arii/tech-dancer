@@ -46,7 +46,7 @@ const Sidebar = () => {
       <div className="md:hidden sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
         <div className="flex items-center justify-between px-4 py-3">
           <Link href="/" className="inline-flex items-center" data-testid="link-home-logo-mobile">
-            <div className="scale-[0.82] origin-left">
+            <div className="scale-[0.62] -translate-x-2 origin-left">
               <Logo />
             </div>
           </Link>
@@ -62,7 +62,7 @@ const Sidebar = () => {
         </div>
 
         {open ? (
-          <nav className="border-t border-border bg-card px-2 py-2">
+          <nav className="border-t border-border bg-card px-3 py-3">
             {navItems.map((item) => (
               <Link
                 key={item.label}

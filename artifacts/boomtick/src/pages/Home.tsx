@@ -42,11 +42,11 @@ const tagColors: Record<string, string> = {
 
 const Home = () => {
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen bg-background text-foreground flex-col md:flex-row">
       <Sidebar />
 
-      <main className="ml-56 flex-1 min-h-screen">
-        <section className="px-10 pt-14 pb-10 max-w-4xl">
+      <main className="flex-1 min-h-screen md:ml-56 pt-0 md:pt-0">
+        <section className="px-4 sm:px-6 md:px-10 pt-10 md:pt-14 pb-10 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">
               Welcome to boomtick.blog
@@ -61,14 +61,14 @@ const Home = () => {
           </motion.div>
         </section>
 
-        <section className="px-10 pb-14">
+        <section className="px-4 sm:px-6 md:px-10 pb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="relative rounded-xl overflow-hidden grid grid-cols-2 min-h-[280px]"
+            className="relative rounded-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[280px]"
           >
-            <div className="relative bg-[#0a0718] flex flex-col justify-end p-8 group overflow-hidden">
+            <div className="relative bg-[#0a0718] flex flex-col justify-end p-6 sm:p-8 group overflow-hidden min-h-[260px]">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-secondary/4 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none">
                 <Equalizer compact />
@@ -101,7 +101,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-8 group overflow-hidden border-l border-border">
+            <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-6 sm:p-8 group overflow-hidden border-l border-border min-h-[260px]">
               <div className="absolute inset-0 bg-gradient-to-bl from-secondary/8 via-accent/4 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-18 pointer-events-none">
                 <Equalizer compact reverse />
@@ -136,7 +136,7 @@ const Home = () => {
           </motion.div>
         </section>
 
-        <section className="px-10 pb-14">
+        <section className="px-4 sm:px-6 md:px-10 pb-14">
           <div className="flex items-end justify-between mb-6">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">
@@ -189,7 +189,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="px-10 pb-16">
+        <section className="px-4 sm:px-6 md:px-10 pb-16">
           <div className="mb-6">
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">
               On the Circuit
@@ -221,7 +221,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="px-10 pb-16">
+        <section className="px-4 sm:px-6 md:px-10 pb-16">
           <div className="border border-border rounded-xl p-6 bg-card/50 flex flex-col sm:flex-row sm:items-center gap-6">
             <div className="flex-1">
               <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Data Lab</p>
