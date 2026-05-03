@@ -83,14 +83,15 @@ export function HeroPathCard({
         height="full"
         direction="col"
         justify="end"
-        className="bg-gradient-to-t from-black via-black/40 to-transparent"
+        className="bg-gradient-to-t from-black/90 via-black/50 to-transparent"
       >
+        <div className="absolute inset-0 bg-[#05040d]/60 z-[-1]" />
         <Text
           as="h2"
           variant="headline"
           className={cn(
             titleClass,
-            "mb-8 text-white transition-transform duration-500 group-hover:translate-x-2"
+            "mb-8 text-white transition-transform duration-500 group-hover:translate-x-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]"
           )}
         >
           {title}
@@ -102,8 +103,8 @@ export function HeroPathCard({
             
             const commonProps = {
               className: cn(
-                "group/link flex items-center gap-3 transition-all duration-300",
-                isPrimary ? "text-white font-bold" : "text-white/60 hover:text-white"
+                "group/link flex items-center gap-3 transition-all duration-300 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]",
+                isPrimary ? "text-white font-bold" : "text-white/80 hover:text-white"
               )
             };
 
