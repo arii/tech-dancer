@@ -189,27 +189,25 @@ export function useUXAuditor() {
 
       for (const vp of VIEWPORTS) {
         let mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
-        let base64DataUri = "";
+        let snapshotImg = "";
 
         try {
-          const scaledW = Math.floor(vp.width * 0.5);
-          const scaledH = Math.floor(vp.height * 0.5);
-          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
+          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${vp.width}&h=${vp.height}`;
           const res = await fetch(snapshotUrl);
           if (res.ok) {
             const blob = await res.blob();
-            base64DataUri = await new Promise<string>((resolve) => {
+            snapshotImg = await new Promise<string>((resolve) => {
               const reader = new FileReader();
               reader.onloadend = () => resolve(reader.result as string);
               reader.readAsDataURL(blob);
             });
-            mockImg = base64DataUri;
+            mockImg = snapshotImg;
           }
         } catch {
           console.error("Failed to fetch realistic snapshot, using placeholder");
         }
 
-        const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
+        const analysis = await analyzeViewport(vp, targetUrl, snapshotImg);
 
         newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
         newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
