@@ -1,4 +1,4 @@
-export const blogFilters = ["All Posts", "Tech", "Travel", "Dance Research", "Gear Reviews", "Data & Dev Lab"];
+export const blogFilters = ["All Posts", "Tech", "Travel", "Dance Research", "Gear Reviews"];
 
 export const blogPosts = [
   {
