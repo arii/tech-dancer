@@ -4,6 +4,12 @@ import { useGearPageData } from "@/hooks/use-page-data";
 const Gear = () => {
   const { gearItems, tagColors } = useGearPageData();
 
+  if (typeof document !== "undefined") {
+    document.title = "Gear Reviews | boomtick.blog";
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute("content", "West Coast Swing gear reviews, travel essentials, and practical picks for dancers who want reliable equipment.");
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />

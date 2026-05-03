@@ -7,6 +7,12 @@ import { useHomePageData } from "@/hooks/use-page-data";
 const Home = () => {
   const { blogPosts, upcomingEvents, tagColors } = useHomePageData();
 
+  if (typeof document !== "undefined") {
+    document.title = "boomtick.blog | West Coast Swing Lifestyle";
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute("content", "Dark, neon West Coast Swing lifestyle blog with training tips, travel guides, gear reviews, and dance data from Ariel Anders.");
+  }
+
   return (
     <div className="flex min-h-screen bg-background text-foreground flex-col md:flex-row">
       <Sidebar />

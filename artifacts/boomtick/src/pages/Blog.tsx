@@ -10,6 +10,12 @@ const Blog = () => {
     [activeFilter, blogPosts],
   );
 
+  if (typeof document !== "undefined") {
+    document.title = "Blog Posts | boomtick.blog";
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute("content", "Browse West Coast Swing posts covering training, travel, gear reviews, and dance data from Ariel Anders.");
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />

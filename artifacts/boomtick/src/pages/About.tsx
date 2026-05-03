@@ -5,6 +5,12 @@ import { useAboutPageData } from "@/hooks/use-page-data";
 const About = () => {
   const { aboutConnectItems, aboutPillars, aboutServiceCards, photos } = useAboutPageData();
 
+  if (typeof document !== "undefined") {
+    document.title = "About Ariel Anders | boomtick.blog";
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute("content", "About Ariel Anders, MIT roboticist and West Coast Swing author behind boomtick.blog.");
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />
