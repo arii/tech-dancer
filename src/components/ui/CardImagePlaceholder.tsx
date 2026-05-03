@@ -16,10 +16,16 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
   if (norm.includes('tech')) surfaceVariant = 'brand';
   else if (norm.includes('travel') || norm.includes('wcs')) surfaceVariant = 'accent';
   else if (norm.includes('gear')) surfaceVariant = 'warning';
-  else if (norm.includes('lifestyle')) surfaceVariant = 'danger';
+  else if (norm.includes('lifestyle') || norm.includes('white')) surfaceVariant = 'danger';
 
   return (
-    <Box shrink={false} aspect="video" maxHeight="cardImage" width="full" className="relative overflow-hidden border-b border-line bg-[#05050d]">
+    <Box
+      shrink={false}
+      aspect="video"
+      maxHeight="cardImage"
+      width="full"
+      className="relative overflow-hidden border-b border-line bg-[#05050d]"
+    >
       {image ? (
         <img
           src={image}
@@ -29,8 +35,13 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
       ) : (
-        <Stack height="full" width="full" gap={0} className="bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,.04),transparent_45%),linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))]">
-          <Box height={2} width="full" surface={surfaceVariant} />
+        <Stack
+          height="full"
+          width="full"
+          gap={0}
+          className="bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,.06),transparent_42%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))]"
+        >
+          <Box height={2} width="full" surface={surfaceVariant} className="opacity-90" />
           <Box flex={1} display="flex" align="center" justify="center" className="bg-transparent">
             <CategoryPlaceholder category={category} size="lg" className="opacity-90 scale-105" />
           </Box>

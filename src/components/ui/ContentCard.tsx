@@ -59,10 +59,23 @@ export function ContentCard({
       )}
 
       {/* Content Area */}
-      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} className={cn(compact ? "min-h-[120px]" : "min-h-[180px]", "justify-between")}>
+      <Stack
+        gap={compact ? 1 : 4}
+        padding={compact ? 4 : 5}
+        flex={1}
+        className={cn(compact ? "min-h-[120px]" : "min-h-[180px]", "justify-between")}
+      >
         <Stack gap={compact ? 0.5 : 3}>
           <Box display="flex" align="center" gap={3} wrap className="leading-none">
-            <Text variant="mono" size="micro" weight="font-black" color="accent" uppercase tracking="widest" className="whitespace-nowrap">
+            <Text
+              variant="mono"
+              size="micro"
+              weight="font-black"
+              color={category.toLowerCase().includes('gear') || category.toLowerCase().includes('white') ? 'white' : 'accent'}
+              uppercase
+              tracking="widest"
+              className="whitespace-nowrap"
+            >
               {category}
             </Text>
             {date && (
@@ -81,7 +94,12 @@ export function ContentCard({
             variant="body"
             size={compact ? "base" : "lg"}
             weight="font-bold"
-            className="text-white leading-tight group-hover:text-accent transition-colors line-clamp-2"
+            className={cn(
+              "leading-tight group-hover:text-accent transition-colors line-clamp-2",
+              category.toLowerCase().includes('gear') || category.toLowerCase().includes('white')
+                ? "text-white"
+                : "text-white"
+            )}
           >
             {title}
           </Text>
