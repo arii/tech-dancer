@@ -17,7 +17,7 @@ const Research = () => {
         <section className="max-w-6xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Technical Portfolio</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Data & Development Lab</h1>
-          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Interactive data science, software development, and specialized tools to optimize the WCS lifestyle.</p>
+          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Interactive data science, software development, and specialized tools to optimize the WCS lifestyle — part of the broader creator toolkit at arii.github.io.</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 mb-10">
             {researchTools.map((tool) => (
               <article key={tool.title} className="border border-border bg-card rounded-xl p-4">

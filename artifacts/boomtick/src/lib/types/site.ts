@@ -53,7 +53,7 @@ export const aboutServiceCards = [
   {
     icon: Bot,
     title: "AI Strategy (DevAI)",
-    text: "Generative AI tools for internal developer workflows and content management. Built examples include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system, with the underlying agentic workflows visible on GitHub at github.com/arii.",
+    text: "Generative AI tools for internal developer workflows and content management. Built examples include boomtick.blog, creator sites and automation work on arii.github.io, and a heartrate-monitoring WebBluetooth fitness system, with the underlying agentic workflows visible on GitHub at github.com/arii.",
   },
   {
     icon: Megaphone,
