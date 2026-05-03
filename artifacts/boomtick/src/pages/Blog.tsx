@@ -1,6 +1,8 @@
 import Sidebar from "@/components/Sidebar";
 import { blogPosts, tagColors } from "@/content/siteContent";
 
+const filters = ["All Posts", "Tech", "Travel", "Dance Research", "Travel/Lifestyle", "Gear Reviews", "Data & Dev Lab"];
+
 const Blog = () => {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
@@ -9,21 +11,39 @@ const Blog = () => {
         <section className="max-w-6xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Insights</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Blog Posts</h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-3xl mb-8">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {["All Posts", "Tech", "Travel", "Dance Research", "Travel/Lifestyle", "Gear Reviews", "Data & Dev Lab"].map((item, i) => (
-              <button key={item} className={`border px-3 py-2 text-xs font-semibold ${i === 0 ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-700 border-slate-200"}`}>{item}</button>
+          <p className="text-sm md:text-base text-muted-foreground max-w-3xl mb-8">
+            A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces,
+            and everything about West Coast Swing.
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/60 p-3">
+            {filters.map((item, i) => (
+              <button
+                key={item}
+                className={`border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                  i === 0
+                    ? "bg-secondary text-background border-secondary shadow-sm"
+                    : "bg-background/40 text-muted-foreground border-border hover:border-primary/40 hover:text-foreground hover:bg-background/70"
+                }`}
+              >
+                {item}
+              </button>
             ))}
           </div>
+
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {blogPosts.map((post) => (
-              <article key={post.href} className="border border-border bg-card rounded-xl p-4 flex flex-col gap-3">
+              <article key={post.href} className="border border-border bg-card/80 rounded-xl p-4 flex flex-col gap-3 shadow-sm hover:border-primary/30 transition-colors">
                 <div className="text-[11px] font-bold uppercase tracking-[0.2em]">
-                  <span className={`inline-flex rounded border px-2 py-1 ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>{post.tag}</span>
+                  <span className={`inline-flex rounded border px-2 py-1 ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>
+                    {post.tag}
+                  </span>
                 </div>
                 <h2 className="text-lg font-bold leading-snug">{post.title}</h2>
                 <p className="text-sm text-muted-foreground leading-6">{post.excerpt}</p>
-                <a href={post.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-primary">Read Article</a>
+                <a href={post.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-secondary">
+                  Read Article
+                </a>
               </article>
             ))}
           </div>
