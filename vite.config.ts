@@ -37,6 +37,7 @@ export default defineConfig(({mode}) => {
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
+    if (process.env.VERCEL_ENV === 'production' || (isVercel && isProd)) return 'https://boomtick.blog';
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
     return 'https://boomtick.blog';
   };
