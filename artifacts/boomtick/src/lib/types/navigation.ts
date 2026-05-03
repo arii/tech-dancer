@@ -1,7 +1,6 @@
-import { Calendar, Globe, Mail, Megaphone, Search, ShoppingBag } from "lucide-react";
+import { Calendar, Globe, Mail, Megaphone, ShoppingBag } from "lucide-react";
 
 export const primaryNavigation = [
-  { icon: Search, label: "Search", href: "/" },
   { icon: ShoppingBag, label: "Gear Reviews", href: "/gear" },
   { icon: Megaphone, label: "Data & Development Lab", href: "/research" },
   { icon: Megaphone, label: "Blog Posts", href: "/blog" },
