@@ -42,7 +42,7 @@ export function HeroSection() {
       {/* All content sits above the canvas via z-index */}
       <Stack relative zIndex={10} align="center" gap={0} className="text-center px-6 py-20">
 
-        {/* Logo mark — B + slash */}
+        {/* Logo mark — B + \ (backslash) */}
         <div
           className="flex items-end leading-none opacity-0 translate-y-[-20px]"
           style={{ animation: 'fadeUp 0.8s ease forwards 0.2s' }}
@@ -57,46 +57,59 @@ export function HeroSection() {
             className="rounded-md"
             style={{
               width: 'clamp(8px, 1.2vw, 12px)',
-              height: 'clamp(60px, 10vw, 100px)',
+              height: 'clamp(70px, 10vw, 100px)',
               marginLeft: 'clamp(6px, 0.8vw, 10px)',
               marginBottom: 'clamp(8px, 1.2vw, 14px)',
               background: 'var(--hero-slash-gradient)',
-              transform: 'skewX(-12deg)',
+              transform: 'skewX(12deg)', // Changed to positive to look like \
               boxShadow: 'var(--hero-slash-glow)',
               animation: 'glowPulse 2.5s ease-in-out infinite alternate',
             }}
           />
         </div>
 
-        {/* Improved Headline */}
+        {/* Wordmark: boomtick.blog */}
+        <div
+          className="font-display font-bold text-white -mt-1.5 opacity-0 translate-y-2.5"
+          style={{
+            fontSize: 'clamp(24px, 4vw, 36px)',
+            letterSpacing: '-0.5px',
+            animation: 'fadeUp 0.7s ease forwards 0.6s',
+          }}
+        >
+          boom<span style={{ color: 'var(--hero-accent)' }}>tick.blog</span>
+        </div>
+
+        {/* High Impact Headline */}
         <Text
           variant="headline"
           size="fluid-7"
           weight="font-semibold"
           color="white"
           tracking="tight"
+          marginTop={8}
           className="opacity-0 translate-y-2.5 max-w-4xl"
           style={{
-            animation: 'fadeUp 0.7s ease forwards 0.7s',
+            animation: 'fadeUp 0.7s ease forwards 0.9s',
           }}
         >
           Train smarter. Travel better. Win more.
         </Text>
 
-        {/* Tagline */}
+        {/* Reverted Tagline */}
         <Text
           as="p"
           variant="body"
           size={{ base: "lg", lg: "xl" }}
           color="dim"
-          marginTop={6}
+          marginTop={4}
           maxWidth="xl"
           className="opacity-0 leading-relaxed text-white/80"
           style={{
-            animation: 'fadeUp 0.7s ease forwards 1.1s',
+            animation: 'fadeUp 0.7s ease forwards 1.2s',
           }}
         >
-          The operating system for competitive West Coast Swing dancers.
+          Systems, gear, and travel insights for competitive West Coast Swing dancers.
         </Text>
 
         {/* Waveform */}
