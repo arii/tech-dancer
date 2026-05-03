@@ -13,15 +13,11 @@ Your site is currently deployed on Vercel. By following these steps, you'll:
 
 ---
 
-## Part 1: Vercel Domain Configuration
-
-For step-by-step instructions on adding a custom domain to Vercel and configuring DNS records, please refer to the official Vercel documentation:
-
 👉 **[Vercel Custom Domains Documentation](https://vercel.com/docs/concepts/projects/domains)**
 
 ---
 
-## Part 2: Update Environment Configuration
+## Part 1: Update Environment Configuration
 
 Your application includes smart hostname resolution logic in `vite.config.ts`. Update these configurations:
 
@@ -67,7 +63,7 @@ const resolveHostname = () => {
 
 ---
 
-## Part 3: Update Application References
+## Part 2: Update Application References
 
 ### 1. Update Hardcoded Domain References
 
@@ -84,7 +80,7 @@ The file `src/features/ux-auditor/useUXAuditor.ts` contains hostname detection l
 
 ---
 
-## Part 4: Update robots.txt for SEO
+## Part 3: Update robots.txt for SEO
 
 The `robots.txt` file must be updated to reflect the root path on the custom domain.
 
@@ -103,7 +99,7 @@ Sitemap: https://boomtick.blog/sitemap.xml
 
 ---
 
-## Part 5: Test & Verify
+## Part 4: Test & Verify
 
 ### 1. Test Locally
 
