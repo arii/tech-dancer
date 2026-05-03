@@ -7,6 +7,7 @@ import { SITE_METADATA } from '@/config/content';
 
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import { WCSScraperTool } from './components/WCSScraperTool';
+import { useResearch } from './useResearch';
 
 export default function ResearchDetail() {
   const { id: toolId } = useParams();
