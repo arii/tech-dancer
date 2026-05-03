@@ -1,9 +1,10 @@
 import Sidebar from "@/components/Sidebar";
 import { researchTools } from "@/lib/content/research";
+import { siteName } from "@/lib/seo";
 
 const Research = () => {
   if (typeof document !== "undefined") {
-    document.title = "WCS Data & Development Lab | boomtick.blog";
+    document.title = `WCS Data & Development Lab | ${siteName}`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "Interactive data science, software development, and WCS research tools from boomtick.blog.");
   }

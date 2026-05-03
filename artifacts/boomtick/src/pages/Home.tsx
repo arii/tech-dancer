@@ -2,12 +2,13 @@ import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import Equalizer from "@/components/Equalizer";
 import { homeHeroLinks, ArrowRight, Calendar, MapPin, blogPosts, tagColors, upcomingEvents } from "@/lib/content/home";
+import { siteDescription, siteName } from "@/lib/seo";
 
 const Home = () => {
   if (typeof document !== "undefined") {
-    document.title = "boomtick.blog | West Coast Swing Lifestyle Blog";
+    document.title = `${siteName} | West Coast Swing Lifestyle Blog`;
     const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", "West Coast Swing lifestyle blog with training tips, travel guides, gear reviews, and dance data from boomtick.blog.");
+    if (description) description.setAttribute("content", siteDescription);
   }
 
   return (

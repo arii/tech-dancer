@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import { aboutConnectItems, aboutPillars, aboutServiceCards, photos } from "@/lib/content/about";
+import { siteName } from "@/lib/seo";
 
 const About = () => {
   if (typeof document !== "undefined") {
-    document.title = "About Ariel Anders | West Coast Swing Blog";
+    document.title = `About Ariel Anders | ${siteName}`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "About Ariel Anders, MIT roboticist and West Coast Swing creator behind boomtick.blog.");
   }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://boomtick.blog/sitemap.xml

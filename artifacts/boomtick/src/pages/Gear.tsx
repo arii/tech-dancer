@@ -1,9 +1,10 @@
 import Sidebar from "@/components/Sidebar";
 import { gearItems, tagColors } from "@/lib/content/gear";
+import { siteName } from "@/lib/seo";
 
 const Gear = () => {
   if (typeof document !== "undefined") {
-    document.title = "West Coast Swing Gear Reviews | boomtick.blog";
+    document.title = `West Coast Swing Gear Reviews | ${siteName}`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "West Coast Swing gear reviews, travel essentials, and practical picks for dancers.");
   }

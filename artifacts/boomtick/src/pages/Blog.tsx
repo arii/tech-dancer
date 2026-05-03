@@ -1,6 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import { useMemo, useState } from "react";
 import { blogFilters, blogPosts, tagColors } from "@/lib/content/blog";
+import { siteDescription, siteName } from "@/lib/seo";
 
 const Blog = () => {
   const [activeFilter, setActiveFilter] = useState("All Posts");
@@ -10,7 +11,7 @@ const Blog = () => {
   );
 
   if (typeof document !== "undefined") {
-    document.title = "West Coast Swing Blog Posts | boomtick.blog";
+    document.title = `${siteName} | West Coast Swing Blog Posts`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "Browse West Coast Swing blog posts on training, travel, gear reviews, and dance research.");
   }
