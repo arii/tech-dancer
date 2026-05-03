@@ -34,16 +34,15 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I’ll reply soon."
         />
 
-        <Box maxWidth="3xl">
-          <Stack gap={8}>
-            <Stack gap={2}>
-              <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
-              <Text variant="body" size="base" color="dim">
-                Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
-              </Text>
-            </Stack>
+        <Stack gap={8} maxWidth="3xl">
+          <Stack gap={2}>
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+            <Text variant="body" size="base" color="dim">
+              Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
+            </Text>
+          </Stack>
 
-            <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
+          <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
               <FormField label="Your Name" error={errors.name?.message}>
                 <Box as="input"
                   {...register('name')}
@@ -125,7 +124,6 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
               </Box>
             </Box>
           </Stack>
-        </Box>
       </Stack>
     </Box>
   );

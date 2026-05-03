@@ -13,7 +13,7 @@ export function SearchBox({
   value,
   onChange,
   placeholder = "Search articles, guides, or gear...",
-  maxWidth = "2xl"
+  maxWidth = "3xl"
 }: SearchBoxProps) {
   return (
     <Box
