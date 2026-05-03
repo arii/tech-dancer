@@ -131,3 +131,14 @@
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }
+
+@layer utilities {
+  .bg-gradient-brand {
+    background-image: linear-gradient(to top, #7e22ce, #06b6d4);
+  }
+  .text-gradient-cyan-blue {
+    background-image: linear-gradient(to right, #06b6d4, #3b82f6);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
