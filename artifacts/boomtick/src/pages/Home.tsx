@@ -12,14 +12,14 @@ const Home = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground flex-col md:flex-row">
+    <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
       <Sidebar />
       <main className="flex-1 min-h-screen md:ml-56 pt-0 md:pt-0">
         <section className="px-4 sm:px-6 md:px-10 pt-8 md:pt-14 pb-10 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Welcome to boomtick.blog</p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">The West Coast Swing Lifestyle Blog</h1>
-            <p className="text-base sm:text-lg text-foreground/82 max-w-xl">Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by Ariel Anders, creator of arii.github.io.</p>
+            <p className="text-base sm:text-lg text-foreground/82 max-w-xl">Training tips, travel guides, gear picks, and data for dancers who want to get better and go further.</p>
           </motion.div>
         </section>
         <section className="px-4 sm:px-6 md:px-10 pb-14">
@@ -30,7 +30,7 @@ const Home = () => {
               <div className="absolute bottom-0 left-0 right-0 h-40 overflow-hidden opacity-8 pointer-events-none"><Equalizer compact /></div>
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-3 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Train smarter.</h2>
-                <p className="text-sm text-white/100 mb-4 max-w-xs drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.</p>
+                <p className="text-sm text-white/100 mb-4 max-w-xs drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Drills, breakdowns, and mindset for West Coast Swing dancers at every level.</p>
                 <div className="flex flex-col gap-2">{homeHeroLinks[0].map((link) => (<a key={link.label} href={link.href} className="text-sm text-cyan-300 hover:text-cyan-200 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 rounded-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" data-testid={`train-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}>{link.label}</a>))}</div>
               </div>
             </div>

@@ -25,7 +25,7 @@ const Contact = () => {
           <div className="border border-border bg-card rounded-xl p-6 md:p-8 shadow-sm">
             <div className="flex flex-col gap-2 mb-8">
               <h2 className="text-2xl font-black">Inquiries</h2>
-              <p className="text-sm text-foreground/72 max-w-2xl">I’m always open to new ideas, questions about reviews, or a good dance-scene conversation.</p>
+              <p className="text-sm text-foreground/72 max-w-2xl">I’m open to new ideas, questions about reviews, or a good dance-scene conversation.</p>
             </div>
             <div className="grid gap-3 md:grid-cols-3 mb-8">
               {contactInquiries.map((item) => (
