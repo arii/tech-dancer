@@ -3,6 +3,7 @@ import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
+import { STATIC_SCHEMAS } from '@/config/constants';
 import type { JSX } from 'react';
 
 export default function BlogFeed(): JSX.Element {
@@ -13,6 +14,12 @@ export default function BlogFeed(): JSX.Element {
       <SEO
         title="Blog"
         description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+        schema={{
+          ...STATIC_SCHEMAS.HOME,
+          "@type": "Blog",
+          "name": "Boom Tick Blog",
+          "description": "Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+        }}
       />
       <FolioGrid
         items={posts}
