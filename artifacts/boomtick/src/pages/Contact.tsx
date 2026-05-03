@@ -14,7 +14,7 @@ const Contact = () => {
         <section id="contact-content" className="max-w-5xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Contact</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Get in Touch</h1>
-          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Have a question about WCS, travel, gear, or the site itself? I’d love to hear from you.</p>
+          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Have a question about West Coast Swing, travel, gear, or the site itself? I’d love to hear from you.</p>
           <div className="border border-border bg-card rounded-xl p-6 md:p-8 shadow-sm">
             <div className="flex flex-col gap-2 mb-8">
               <h2 className="text-2xl font-black">Inquiries</h2>

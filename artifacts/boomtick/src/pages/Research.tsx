@@ -3,9 +3,9 @@ import { researchTools } from "@/lib/content/research";
 
 const Research = () => {
   if (typeof document !== "undefined") {
-    document.title = "Data & Development Lab | boomtick.blog";
+    document.title = "WCS Data & Development Lab | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", "Interactive data science, software development, and WCS research tools from Ariel Anders.");
+    if (description) description.setAttribute("content", "Interactive data science, software development, and WCS research tools from boomtick.blog.");
   }
 
   return (
@@ -15,7 +15,7 @@ const Research = () => {
         <section className="max-w-6xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Technical Portfolio</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Data & Development Lab</h1>
-          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Interactive data science, software development, and specialized tools to optimize the WCS lifestyle — part of the broader creator toolkit at arii.github.io.</p>
+          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Interactive data science, software development, and specialized tools for West Coast Swing research and analysis.</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 mb-10">
             {researchTools.map((tool) => (
               <article key={tool.title} className="border border-border bg-card rounded-xl p-5 shadow-sm hover:border-primary/30 transition-colors">

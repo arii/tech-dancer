@@ -3,9 +3,9 @@ import { gearItems, tagColors } from "@/lib/content/gear";
 
 const Gear = () => {
   if (typeof document !== "undefined") {
-    document.title = "Gear Reviews | boomtick.blog";
+    document.title = "West Coast Swing Gear Reviews | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", "West Coast Swing gear reviews, travel essentials, and practical picks for dancers who want reliable equipment.");
+    if (description) description.setAttribute("content", "West Coast Swing gear reviews, travel essentials, and practical picks for dancers.");
   }
 
   return (
@@ -15,7 +15,7 @@ const Gear = () => {
         <section className="max-w-6xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">The Toolbox</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Gear Reviews</h1>
-          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Rigorous testing and honest takes on the gear that keeps you moving.</p>
+          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Honest reviews of the gear, travel essentials, and accessories that keep WCS dancers moving.</p>
           <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/60 p-3">
             <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Best for travel</span>
             <span className="inline-flex items-center rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Highly recommended</span>

@@ -5,9 +5,9 @@ import { homeHeroLinks, ArrowRight, Calendar, MapPin, blogPosts, tagColors, upco
 
 const Home = () => {
   if (typeof document !== "undefined") {
-    document.title = "boomtick.blog | West Coast Swing Lifestyle";
+    document.title = "boomtick.blog | West Coast Swing Lifestyle Blog";
     const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", "Dark, neon West Coast Swing lifestyle blog with training tips, travel guides, gear reviews, and dance data from Ariel Anders.");
+    if (description) description.setAttribute("content", "West Coast Swing lifestyle blog with training tips, travel guides, gear reviews, and dance data from boomtick.blog.");
   }
 
   return (

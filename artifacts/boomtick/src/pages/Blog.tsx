@@ -10,9 +10,9 @@ const Blog = () => {
   );
 
   if (typeof document !== "undefined") {
-    document.title = "Blog Posts | boomtick.blog";
+    document.title = "West Coast Swing Blog Posts | boomtick.blog";
     const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", "Browse West Coast Swing posts covering training, travel, gear reviews, and dance data from Ariel Anders.");
+    if (description) description.setAttribute("content", "Browse West Coast Swing blog posts on training, travel, gear reviews, and dance research.");
   }
 
   return (
@@ -22,7 +22,7 @@ const Blog = () => {
         <section className="max-w-6xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Insights</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Blog Posts</h1>
-          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.</p>
+          <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">A searchable collection of West Coast Swing posts covering travel, lifestyle, gear reviews, and dance research.</p>
           <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/70 p-3 shadow-sm">
             {blogFilters.map((item) => (
               <button
