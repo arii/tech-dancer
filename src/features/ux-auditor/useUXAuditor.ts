@@ -1,0 +1,386 @@
+
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  setDoc,
+  query,
+  orderBy,
+  initializeFirestore,
+  persistentLocalCache
+} from 'firebase/firestore';
+import { throttle } from 'throttle-debounce';
+
+// --- Utilities ---
+
+/**
+ * Exponential backoff wrapper for async operations.
+ * Only retries on transient errors (network, timeout, etc.)
+ */
+async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 1000): Promise<T> {
+  const transientErrorCodes = ['unavailable', 'deadline-exceeded', 'resource-exhausted', 'internal', 'aborted'];
+
+  let lastError: unknown;
+  for (let i = 0; i <= maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error: unknown) {
+      lastError = error;
+
+      // Check if the error is transient
+      const errorCode = (error as { code?: string })?.code;
+      const isTransient = errorCode && transientErrorCodes.includes(errorCode);
+
+      if (isTransient && i < maxRetries) {
+        const delay = baseDelay * Math.pow(2, i) + (Math.random() * 100); // add jitter
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+  throw lastError;
+}
+
+// --- Configuration & Constants ---
+const apiKey = ""; // Provided by environment
+declare const __app_id: string | undefined;
+declare const __firebase_config: string | undefined;
+declare const __initial_auth_token: string | undefined;
+
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'ux-auditor-v2';
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+
+export const VIEWPORTS = [
+  { name: 'Mobile', width: 375, height: 667 },
+  { name: 'Tablet', width: 768, height: 1024 },
+  { name: 'Desktop', width: 1440, height: 900 }
+];
+
+export interface Improvement {
+  element: string;
+  issue: string;
+  suggestion: string;
+  severity: number;
+}
+
+export interface ViewportAnalysis {
+  summary: string;
+  improvements: Improvement[];
+}
+
+export interface UXReport {
+  id: string;
+  url: string;
+  timestamp: number;
+  status: 'processing' | 'completed';
+  [key: string]: string | number | ViewportAnalysis | undefined; // Allow dynamic keys like findings_mobile, image_mobile
+}
+
+export function useUXAuditor() {
+  const queryClient = useQueryClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [activeReportId, setActiveReportId] = useState<string | null>(null);
+  const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
+  const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
+  const [isExportingToGithub, setIsExportingToGithub] = useState(false);
+
+  // Transient state resets with cleanup
+  useEffect(() => {
+    if (!isCopiedMarkdown) return;
+    const timer = setTimeout(() => setIsCopiedMarkdown(false), 2000);
+    return () => clearTimeout(timer);
+  }, [isCopiedMarkdown]);
+
+  useEffect(() => {
+    if (!isExportingToGithub) return;
+    const timer = setTimeout(() => setIsExportingToGithub(false), 1000);
+    return () => clearTimeout(timer);
+  }, [isExportingToGithub]);
+
+  // Firebase Init
+  useEffect(() => {
+    if (!firebaseConfig) return;
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+    // Enable local persistence for offline support
+    try {
+      initializeFirestore(app, {
+        localCache: persistentLocalCache({})
+      });
+    } catch {
+      // ignore if already initialized
+    }
+
+    const auth = getAuth(app);
+
+    const initAuth = async () => {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (err) {
+        console.error("Firebase auth error:", err);
+      }
+    };
+    initAuth();
+
+    const unsubscribeAuth = onAuthStateChanged(auth, setUser);
+    return () => unsubscribeAuth();
+  }, []);
+
+  // Fetch Reports (Real-time with TanStack Query)
+  const { data: reports = [] } = useQuery({
+    queryKey: ['ux-reports', user?.uid],
+    queryFn: () => queryClient.getQueryData(['ux-reports', user?.uid]) ?? [],
+    enabled: !!user && !!firebaseConfig,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+
+  // Real-time listener that updates TanStack Query cache
+  useEffect(() => {
+    if (!user || !firebaseConfig) return;
+    const db = getFirestore();
+    const q = query(
+      collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'),
+      orderBy('timestamp', 'desc')
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UXReport));
+      queryClient.setQueryData(['ux-reports', user.uid], data);
+    }, (err) => console.error("Firestore error:", err));
+
+    return () => unsubscribe();
+  }, [user, queryClient]);
+
+  const auditMutation = useMutation({
+    mutationFn: async (targetUrl: string) => {
+      const reportId = Date.now().toString();
+
+      const newReport: UXReport = {
+        id: reportId,
+        url: targetUrl,
+        timestamp: Date.now(),
+        status: 'processing',
+      };
+
+      setActiveReportId(reportId);
+
+      // Optimistic update for immediate UI feedback
+      queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) => [newReport, ...old]);
+
+      if (user && firebaseConfig) {
+        const db = getFirestore();
+        // Use setDoc with a pre-generated ID for idempotency during retries
+        await withRetry(() =>
+          setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
+        );
+      }
+
+      for (const vp of VIEWPORTS) {
+        let mockImg = `https://placehold.co/${vp.width}x${vp.height}/6366f1/ffffff?text=${vp.name}+Analysis+Pending`;
+        let base64DataUri = "";
+
+        try {
+          const scaledW = Math.floor(vp.width * 0.5);
+          const scaledH = Math.floor(vp.height * 0.5);
+          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
+          const res = await fetch(snapshotUrl);
+          if (res.ok) {
+            const blob = await res.blob();
+            base64DataUri = await new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.readAsDataURL(blob);
+            });
+            mockImg = base64DataUri;
+          }
+        } catch {
+          console.error("Failed to fetch realistic snapshot, using placeholder");
+        }
+
+        const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
+
+        newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
+        newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
+
+        // Update the report in cache to reflect progress
+        queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+          old.map(r => r.id === reportId ? { ...newReport } : r)
+        );
+
+        if (user && firebaseConfig) {
+          const db = getFirestore();
+          await withRetry(() =>
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+              [`findings_${vp.name.toLowerCase()}`]: analysis,
+              [`image_${vp.name.toLowerCase()}`]: mockImg
+            })
+          );
+        }
+      }
+
+      newReport.status = 'completed';
+      queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+        old.map(r => r.id === reportId ? { ...newReport } : r)
+      );
+
+      if (user && firebaseConfig) {
+        const db = getFirestore();
+        await withRetry(() =>
+          updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+            status: 'completed'
+          })
+        );
+      }
+
+      return newReport;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ux-reports', user?.uid] });
+    },
+  });
+
+  const throttledAudit = useRef(
+    throttle(2000, (targetUrl: string) => {
+      auditMutation.mutate(targetUrl);
+    }, { noTrailing: true })
+  );
+
+  const runUXAudit = useCallback((targetUrl: string) => {
+    throttledAudit.current(targetUrl);
+  }, []);
+
+  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
+    const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
+    const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: userQuery }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "OBJECT",
+              properties: {
+                summary: { type: "STRING" },
+                improvements: {
+                  type: "ARRAY",
+                  items: {
+                    type: "OBJECT",
+                    properties: {
+                      element: { type: "STRING" },
+                      issue: { type: "STRING" },
+                      suggestion: { type: "STRING" },
+                      severity: { type: "NUMBER" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        })
+      });
+      const result = await response.json();
+      return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
+    } catch {
+      // Provide a populated prompt if API fails, as requested
+      const imgContext = base64DataUri
+        ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
+        : `[Please attach the image from scripts/ux-capture.js here]`;
+
+      return {
+        summary: "API Key missing or fetch failed. Manual analysis required. Copy the prompt below.",
+        improvements: [
+          {
+            element: "Manual Audit Required",
+            issue: "No automated analysis generated.",
+            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
+            severity: 5
+          }
+        ]
+      } as ViewportAnalysis;
+    }
+  };
+
+  const activeReport = reports.find(r => r.id === activeReportId) || null;
+
+  const getMarkdown = () => {
+    if (!activeReport) return "";
+    let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
+    VIEWPORTS.forEach(vp => {
+      const data = activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis;
+      if (data) {
+        md += `## ${vp.name} Analysis\n${data.summary}\n\n`;
+        md += `| Element | Issue | Suggestion | Severity |\n|---|---|---|---|\n`;
+        data.improvements?.forEach(i => {
+          md += `| ${i.element} | ${i.issue} | ${i.suggestion} | ${i.severity}/10 |\n`;
+        });
+        md += `\n`;
+      }
+    });
+    return md;
+  };
+
+  const exportToGithub = async () => {
+    if (!activeReport) return;
+    setIsExportingToGithub(true);
+    const body = encodeURIComponent(getMarkdown());
+    const title = encodeURIComponent(`UX Audit Findings: ${activeReport.url}`);
+
+    // Attempt to parse repository from URL
+    let repoBase = "https://github.com/new";
+    try {
+      const urlObj = new URL(activeReport.url);
+      if (urlObj.hostname.endsWith('.github.io')) {
+        const userPart = urlObj.hostname.split('.')[0];
+        const repo = urlObj.pathname.split('/')[1];
+        if (userPart && repo) repoBase = `https://github.com/${userPart}/${repo}/issues/new`;
+      }
+    } catch {
+      // Ignore URL parsing errors
+    }
+
+    window.open(`${repoBase}?title=${title}&body=${body}`, '_blank');
+  };
+
+  const copyMarkdown = async () => {
+    const md = getMarkdown();
+    try {
+      await navigator.clipboard.writeText(md);
+      setIsCopiedMarkdown(true);
+    } catch (err) {
+      console.error('Failed to copy markdown:', err);
+    }
+  };
+
+  return {
+    user,
+    reports,
+    isAnalyzing: auditMutation.isPending,
+    activeReport,
+    setActiveReport: (r: UXReport | null) => setActiveReportId(r?.id || null),
+    url,
+    setUrl,
+    isCopiedMarkdown,
+    isExportingToGithub,
+    runUXAudit,
+    exportToGithub,
+    copyMarkdown,
+    firebaseConfig // Exported just to check if it's initialized in the UI if needed
+  };
+}

@@ -1,0 +1,78 @@
+import { useMemo } from "react";
+import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
+import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION } from '@/config/constants';
+
+interface SEOProps {
+  title: string;
+  description: string;
+  type?: 'website' | 'article' | 'profile';
+  image?: string;
+  canonical?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  googleVerification?: string;
+}
+
+export function SEO({
+  title,
+  description,
+  type = 'website',
+  image,
+  canonical,
+  schema,
+  googleVerification = GOOGLE_SITE_VERIFICATION
+}: SEOProps) {
+  const { pathname } = useLocation();
+
+  const url = canonical || `${BASE_URL}${pathname}`;
+  const displayTitle = `${title} | ${SITE_NAME}`;
+
+  const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
+
+  // Use a dynamic OG image generator if no specific image is provided for articles
+  // Removed Vercel logos to better align with TechDancer brand
+  const seoImage = image || (type === 'article'
+    ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px`
+    : defaultImage);
+
+  const serializedSchema = useMemo(() => {
+    if (!schema) return null;
+    try {
+      return JSON.stringify(schema);
+    } catch (e) {
+      console.error('Failed to serialize Schema.org markup:', e);
+      return null;
+    }
+  }, [schema]);
+
+  return (
+    <Helmet>
+      {/* Standard metadata */}
+      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+      <title>{displayTitle}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={url} />
+
+      {/* Open Graph / Facebook */}
+      <meta property="og:type" content={type} />
+      <meta property="og:url" content={url} />
+      <meta property="og:title" content={displayTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={seoImage} />
+
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={url} />
+      <meta name="twitter:title" content={displayTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={seoImage} />
+
+      {/* Structured Data */}
+      {serializedSchema && (
+        <script type="application/ld+json">
+          {serializedSchema}
+        </script>
+      )}
+    </Helmet>
+  );
+}

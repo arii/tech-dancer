@@ -1,0 +1,133 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+@theme {
+  /* Colors */
+  --color-bg: var(--raw-color-bg);
+  --color-surface: var(--raw-color-surface);
+  --color-surface-alt: var(--raw-color-surface-alt);
+  --color-line: var(--raw-color-line);
+  --color-accent: var(--raw-color-accent);
+  --color-accent-shadow: var(--raw-color-accent-shadow);
+  --color-accent-navy: var(--raw-color-accent-navy);
+  --color-accent-brand: var(--raw-color-accent-brand);
+  --color-text-main: var(--raw-color-text-main);
+  --color-text-body: var(--raw-color-text-body);
+  --color-text-dim: var(--raw-color-text-dim);
+  --color-error: var(--raw-color-error);
+  --color-error-surface: var(--raw-color-error-bg);
+
+  /* Fonts */
+  --font-sans: var(--raw-font-sans);
+  --font-display: var(--raw-font-display);
+  --font-mono: var(--raw-font-mono);
+
+  /* Radius */
+  --radius-none: var(--raw-radius-none);
+  --radius-subtle: var(--raw-radius-subtle);
+  --radius-standard: var(--raw-radius-standard);
+  --radius-sm: var(--raw-radius-sm);
+  --radius-md: var(--raw-radius-md);
+  --radius-lg: var(--raw-radius-lg);
+  --radius-xl: var(--raw-radius-xl);
+  --radius-full: var(--raw-radius-full);
+
+  /* Spacing */
+  --spacing-container-sm: var(--raw-spacing-container-sm);
+  --spacing-container-md: var(--raw-spacing-container-md);
+  --spacing-card: var(--raw-spacing-card);
+  --spacing-compact: var(--raw-spacing-compact);
+  --spacing-nav: var(--raw-spacing-nav);
+  --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
+  --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
+  --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
+  --spacing-hero: var(--raw-spacing-hero);
+  --spacing-comfort: var(--raw-spacing-comfort);
+  --spacing-end-pad: var(--raw-spacing-end-pad);
+
+  /* Z-Index */
+  --z-hide: var(--raw-z-hide);
+  --z-base: var(--raw-z-base);
+  --z-docked: var(--raw-z-docked);
+  --z-dropdown: var(--raw-z-dropdown);
+  --z-sticky: var(--raw-z-sticky);
+  --z-overlay: var(--raw-z-overlay);
+  --z-modal: var(--raw-z-modal);
+  --z-popover: var(--raw-z-popover);
+  --z-skip-link: var(--raw-z-skip-link);
+  --z-toast: var(--raw-z-toast);
+  --z-top: var(--raw-z-top);
+  --z-search: var(--raw-z-search);
+
+  /* Shadows */
+  --shadow-top-overlay: var(--raw-shadow-top-overlay);
+
+  /* Animation */
+  --ease-smooth: var(--raw-ease-smooth);
+
+  /* Static Defaults */
+  --container-blog: 1100px;
+  --padding-panel: clamp(1.5rem, 5vw, 4rem);
+  --gap-cards: 2rem;
+  --spacing-6: 1.5rem;
+  --spacing-12: 3rem;
+
+  /* Font Sizes */
+  --text-micro: 9px;
+  --text-tiny: 10px;
+}
+
+@layer utilities {
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(800px); }
+  }
+  .animate-scanline { animation: scanline 2.5s linear infinite; }
+  @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+  }
+  .industrial-gradient { background: linear-gradient(135deg, #001f3f 0%, #000c19 100%); }
+  .text-glow { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+  .gold-accent { @apply border-line hover:border-accent transition-colors; }
+  .scanline-hover { @apply relative overflow-hidden; }
+  .scanline-hover::after {
+    content: "";
+    @apply absolute inset-0 bg-accent/10 -translate-y-full opacity-0 pointer-events-none z-20;
+  }
+  .scanline-hover:hover::after {
+    @apply opacity-100;
+    animation: scanline 3s linear infinite;
+  }
+  .grid-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
+    line-height: 1.6;
+  }
+  p {
+    max-width: 65ch;
+    @apply text-text-body break-words;
+  }
+}
+
+.panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
+.nav-rail {
+  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
+}
+.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
+.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
+.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
+.experience-chip {
+  @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+}
+.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
+.content-card { @apply bg-surface p-8 rounded-none border border-line; }
