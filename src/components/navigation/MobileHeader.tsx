@@ -1,7 +1,8 @@
 import { Menu, X, Search } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
+import logo from '@assets/targeted_element_1777795230392.png';
 
 interface MobileHeaderProps {
   isOpen: boolean;
@@ -17,15 +18,8 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       layout="mobileHeader"
       className="lg:hidden fixed top-0 left-0 right-0 z-50 h-14 border-b border-line bg-surface/90 px-4 backdrop-blur-xl"
     >
-      <Box as={NavLink} to="/" onClick={onClose} className="flex items-center gap-2">
-        <Box className="flex h-4 w-4 items-center justify-center overflow-hidden rounded-sm bg-[#0a1424]">
-          <Text variant="mono" size="xs" weight="font-bold" className="text-white leading-none">
-            B
-          </Text>
-        </Box>
-        <Text variant="mono" size="sm" weight="font-bold" className="text-white tracking-tight lowercase">
-          boomtick
-        </Text>
+      <Box as={NavLink} to="/" onClick={onClose} className="flex items-center">
+        <img src={logo} alt="Boom Tick" className="h-4 w-4 rounded-sm object-contain" />
       </Box>
       <Box className="flex items-center gap-2">
         <button
