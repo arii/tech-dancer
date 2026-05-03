@@ -48,16 +48,16 @@ export const aboutServiceCards = [
   {
     icon: Code2,
     title: "Robotics & Engineering",
-    text: "Robot software engineering and architecture for scalable, production-ready systems — including perception, motion planning, custom visualization tools, AWS IoT telemetry, and reliable CI/CD and DevOps pipelines.",
+    text: "Robot software engineering and architecture for scalable systems, including perception, motion planning, custom visualization tools, AWS IoT telemetry, and dependable CI/CD pipelines.",
   },
   {
     icon: Bot,
-    title: "AI Strategy (DevAI)",
-    text: "Generative AI tools for internal developer workflows and content management. Built examples include boomtick.blog, creator sites and automation work on arii.github.io, and a heartrate-monitoring WebBluetooth fitness system, with the underlying agentic workflows visible on GitHub at github.com/arii.",
+    title: "AI Strategy",
+    text: "Generative AI tools for internal workflows and content management. Examples include boomtick.blog, creator sites on arii.github.io, and a heartrate-monitoring WebBluetooth fitness system.",
   },
   {
     icon: Megaphone,
     title: "Digital Presence & Management",
-    text: "Websites, merch stores, SEO, booking tools, and content workflows for artists and niche brands. I handle the technical logistics from start to finish so you can stay focused on your craft.",
+    text: "Websites, merch stores, SEO, booking tools, and content workflows for artists and niche brands. I handle the technical logistics so you can stay focused on your craft.",
   },
 ];
