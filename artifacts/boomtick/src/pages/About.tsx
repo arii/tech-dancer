@@ -14,7 +14,7 @@ const About = () => {
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Biography</p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">Ariel Anders, PhD</h1>
-            <p className="text-sm text-muted-foreground border-b border-border pb-6 mb-10">MIT Roboticist // WCS Tech-Dancer</p>
+            <p className="text-sm text-muted-foreground border-b border-border pb-6 mb-10">MIT Roboticist // WCS author</p>
           </motion.div>
           <div className="grid lg:grid-cols-[1.4fr_0.9fr] gap-10 items-start">
             <div className="space-y-10 max-w-3xl">

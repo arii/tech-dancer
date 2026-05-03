@@ -26,7 +26,7 @@ const NavigationShell = () => {
         </nav>
         <div className="space-y-1 border-t border-border px-6 py-5">
           <p className="text-xs text-foreground/75">
-            Written by <span className="font-semibold text-primary">Tech Dancer</span>
+            Written by Ariel Anders
           </p>
           <p className="text-xs text-foreground/65">&copy; {new Date().getFullYear()} boomtick.blog</p>
         </div>
