@@ -1,5 +1,5 @@
 import { LAB_STATS, GEAR_PICKS } from './constants';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingBag, ArrowRight, Play, Zap } from 'lucide-react';
 import Equalizer from '@/components/Equalizer';
