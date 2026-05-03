@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
-import { primaryNavigation } from "@/content/navigationContent";
+import { useSidebarData } from "@/hooks/use-page-data";
 
 const NavigationShell = () => {
   const [open, setOpen] = useState(false);
+  const { primaryNavigation } = useSidebarData();
 
   return (
     <>
@@ -17,12 +18,7 @@ const NavigationShell = () => {
         </div>
         <nav className="flex-1 overflow-y-auto py-4">
           {primaryNavigation.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-              className="group flex items-center gap-3 px-6 py-3 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-            >
+            <Link key={item.label} href={item.href} data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex items-center gap-3 px-6 py-3 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground">
               <item.icon size={16} className="shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
               <span>{item.label}</span>
             </Link>
@@ -43,26 +39,14 @@ const NavigationShell = () => {
               <Logo />
             </div>
           </Link>
-          <button
-            type="button"
-            onClick={() => setOpen((value) => !value)}
-            className="inline-flex items-center justify-center rounded-md border border-border bg-card p-2 text-foreground"
-            data-testid="button-toggle-nav"
-            aria-label="Toggle navigation"
-          >
+          <button type="button" onClick={() => setOpen((value) => !value)} className="inline-flex items-center justify-center rounded-md border border-border bg-card p-2 text-foreground" data-testid="button-toggle-nav" aria-label="Toggle navigation">
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
         {open ? (
           <nav className="border-t border-border bg-card px-3 py-3">
             {primaryNavigation.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-              >
+              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground">
                 <item.icon size={16} className="shrink-0 text-primary" />
                 <span>{item.label}</span>
               </Link>

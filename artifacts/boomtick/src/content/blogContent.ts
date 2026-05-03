@@ -1,5 +1,4 @@
-import { blogPosts, tagColors } from "@/content/siteContent";
-
-export const blogFilters = ["All Posts", "Tech", "Travel", "Dance Research", "Travel/Lifestyle", "Gear Reviews", "Data & Dev Lab"];
+import { blogPosts, tagColors } from "@/lib/types/site";
 
 export { blogPosts, tagColors };
+export { blogFilters } from "@/lib/types/content";
