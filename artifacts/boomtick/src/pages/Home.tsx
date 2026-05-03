@@ -46,19 +46,14 @@ const Home = () => {
       <Sidebar />
 
       <main className="ml-56 flex-1 min-h-screen">
-
-        {/* Welcome Hero */}
         <section className="px-10 pt-14 pb-10 max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">
               Welcome to boomtick.blog
             </p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-              The West Coast Swing<br />Lifestyle Blog
+              The West Coast Swing
+              <br />Lifestyle Blog
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl">
               Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by <span className="text-primary font-semibold">Tech Dancer</span>.
@@ -66,7 +61,6 @@ const Home = () => {
           </motion.div>
         </section>
 
-        {/* Split Hero Panels */}
         <section className="px-10 pb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -74,7 +68,6 @@ const Home = () => {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="relative rounded-xl overflow-hidden grid grid-cols-2 min-h-[280px]"
           >
-            {/* Left — Dance & Train */}
             <div className="relative bg-[#0a0718] flex flex-col justify-end p-8 group overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-40 group-hover:opacity-65 transition-opacity">
@@ -108,7 +101,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right — Travel & Lifestyle */}
             <div className="relative bg-[#0c0a1e] flex flex-col justify-end p-8 group overflow-hidden border-l border-border">
               <div className="absolute inset-0 bg-gradient-to-bl from-secondary/10 via-accent/5 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-56 overflow-hidden opacity-40 group-hover:opacity-65 transition-opacity">
@@ -144,7 +136,6 @@ const Home = () => {
           </motion.div>
         </section>
 
-        {/* Recent Blog Posts */}
         <section className="px-10 pb-14">
           <div className="flex items-end justify-between mb-6">
             <div>
@@ -178,9 +169,7 @@ const Home = () => {
                 data-testid={`post-card-${i}`}
               >
                 <div className="flex items-center gap-3 sm:w-44 shrink-0 pt-0.5">
-                  <span
-                    className={`text-xs font-bold px-2 py-0.5 rounded border ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}
-                  >
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded border ${tagColors[post.tag] ?? "text-muted-foreground border-border"}`}>
                     {post.tag}
                   </span>
                   <time className="text-xs text-muted-foreground whitespace-nowrap font-mono">
@@ -200,7 +189,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* On The Circuit — Events */}
         <section className="px-10 pb-16">
           <div className="mb-6">
             <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1">
@@ -233,7 +221,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Data Lab Teaser — secondary, low-key */}
         <section className="px-10 pb-16">
           <div className="border border-border rounded-xl p-6 bg-card/50 flex flex-col sm:flex-row sm:items-center gap-6">
             <div className="flex-1">
@@ -254,7 +241,6 @@ const Home = () => {
             </a>
           </div>
         </section>
-
       </main>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { BookOpen, ShoppingBag, Plane, BarChart2, Info, Search } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const navItems = [
   { icon: Search, label: "Search", href: "/" },
@@ -14,9 +15,8 @@ const Sidebar = () => {
   return (
     <aside className="fixed top-0 left-0 h-full w-56 bg-card border-r border-border z-40 flex flex-col">
       <div className="px-6 py-6 border-b border-border">
-        <Link href="/" className="flex items-center gap-1.5 font-black text-xl tracking-tighter text-foreground">
-          <span className="text-primary">B\</span>
-          <span>boomtick</span>
+        <Link href="/" className="inline-flex items-center" data-testid="link-home-logo">
+          <Logo />
         </Link>
       </div>
 
