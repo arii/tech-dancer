@@ -86,6 +86,9 @@ importers:
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
+      throttle-debounce:
+        specifier: ^5.0.2
+        version: 5.0.2
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
@@ -168,9 +171,6 @@ importers:
       tailwindcss:
         specifier: ^4.2.2
         version: 4.2.2
-      throttle-debounce:
-        specifier: ^5.0.2
-        version: 5.0.2
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
