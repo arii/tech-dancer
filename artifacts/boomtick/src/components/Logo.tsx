@@ -1,6 +1,9 @@
+import { Link } from "wouter";
+
 const Logo = () => {
   return (
-    <svg viewBox="0 0 280 110" fill="none" className="h-14 w-[220px] max-w-full" aria-hidden="true">
+    <Link href="/" aria-label="Go to home" className="inline-flex">
+      <svg viewBox="0 0 280 110" fill="none" className="h-14 w-[220px] max-w-full" aria-hidden="true">
       <defs>
         <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#00CFFF" />
@@ -35,7 +38,8 @@ const Logo = () => {
         <tspan fill="white">boom</tspan>
         <tspan fill="#00CFFF">tick</tspan>
       </text>
-    </svg>
+      </svg>
+    </Link>
   );
 };
 
