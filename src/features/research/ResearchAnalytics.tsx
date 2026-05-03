@@ -1,10 +1,10 @@
-import { motion } from 'motion/react';
+
 import { useNavigate } from 'react-router-dom';
-import { Database, FileText, ArrowRight } from 'lucide-react';
+import { FileText, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { EmptyState } from '@/components/ui/EmptyState';
+
 import { useResearch } from './useResearch';
 
 export default function ResearchAnalytics() {

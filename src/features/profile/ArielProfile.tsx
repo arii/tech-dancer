@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Briefcase, Lightbulb, Instagram, Linkedin, Github, Globe, Star, Zap, Terminal, Globe2 } from 'lucide-react';
+import { Instagram, Linkedin, Github, Globe, Star, Zap, Terminal, Globe2 } from 'lucide-react';
 
 const CONNECT_ITEMS = [
   { label: 'Instagram', href: 'https://instagram.com/arii', icon: Instagram },

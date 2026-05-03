@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
+import { Box, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';

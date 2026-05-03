@@ -24,6 +24,8 @@ export default function Equalizer({ compact = true, reverse = false }: Equalizer
     setMounted(true);
   }, []);
 
+
+
   const bars = useMemo(() => {
     return Array.from({ length: NUM_BARS }).map((_, i) => {
       const ratio = i / (NUM_BARS - 1);
