@@ -1,15 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Menu, X, BookOpen, ShoppingBag, BarChart2, Info, Search } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
-
-const navItems = [
-  { icon: Search, label: "Search", href: "/" },
-  { icon: BookOpen, label: "Blog", href: "/" },
-  { icon: ShoppingBag, label: "Gear Reviews", href: "/" },
-  { icon: BarChart2, label: "Data Lab", href: "/" },
-  { icon: Info, label: "About", href: "/about" },
-];
+import { sidebarNavItems } from "@/content/siteContent";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
@@ -24,7 +17,7 @@ const Sidebar = () => {
         </div>
 
         <nav className="flex-1 py-4 overflow-y-auto">
-          {navItems.map((item) => (
+          {sidebarNavItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
@@ -63,7 +56,7 @@ const Sidebar = () => {
 
         {open ? (
           <nav className="border-t border-border bg-card px-3 py-3">
-            {navItems.map((item) => (
+            {sidebarNavItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
