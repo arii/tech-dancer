@@ -16,8 +16,8 @@
       .nav{padding:16px 0;flex:1}.nav a{display:flex;align-items:center;gap:12px;padding:12px 24px;color:var(--muted);text-decoration:none;font-size:14px}.nav a:hover,.nav a:focus-visible{color:var(--text);background:rgba(255,255,255,.03);outline:none}.footer{padding:20px 24px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
       .skip{position:absolute;left:-999px;top:12px;background:var(--cyan);color:#06101d;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;z-index:20}.skip:focus{left:12px}
       main{flex:1;padding:56px 40px 48px;max-width:1220px}.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:18px}.h1{font-size:clamp(42px,5vw,74px);line-height:.96;font-weight:900;max-width:900px;margin:0 0 18px}.sub{max-width:760px;color:var(--muted);font-size:18px;line-height:1.55;margin:0 0 34px}
-      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:16px;padding:18px}.card .status{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--purple);font-weight:800;margin-bottom:10px}.card h3{margin:0 0 8px;font-size:18px;line-height:1.2}.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
-      .notice{margin-top:28px;border:1px dashed var(--line);border-radius:16px;padding:22px;background:rgba(255,255,255,.02);text-align:center}.notice h2{margin:0 0 8px;font-size:26px}.notice p{margin:0;color:var(--muted);line-height:1.6}
+      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:16px;padding:18px}.card .status{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--purple);font-weight:800;margin-bottom:10px}.card h3{margin:0 0 8px;font-size:18px;line-height:1.2}.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.card-action{margin-top:14px;display:inline-flex;color:var(--cyan);text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+      .notice{margin-top:28px;border:1px dashed var(--line);border-radius:16px;padding:22px;background:rgba(255,255,255,.02);text-align:center}.notice h2{margin:0 0 8px;font-size:26px}.notice p{margin:0;color:var(--muted);line-height:1.6}.notice a{display:inline-flex;margin-top:14px;color:var(--magenta);text-decoration:none;font-weight:800}
       @media (max-width:1100px){body{display:block}.sidebar{position:static;width:100%;min-height:auto;z-index:2}.nav-toggle{display:block}.nav{display:none;padding-top:8px}.sidebar[data-open="true"] .nav{display:block}.grid{grid-template-columns:1fr} main{padding:28px 16px 40px}}
     </style>
   </head>
@@ -37,10 +37,10 @@
       <p class="sub">Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle.</p>
       <div class="grid">
         <div class="card"><div class="status">Coming Soon</div><h3>WCS Prelim Scoring Scraper</h3><p>A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.</p></div>
-        <div class="card"><div class="status">Active</div><h3>Blog Post Drafter</h3><p>Drafter tool to generate blog posts using AI with human feedback in the loop.</p></div>
-        <div class="card"><div class="status">Active</div><h3>Visual UX Auditor</h3><p>Automated visual regression and UX improvement suggestions across viewports.</p></div>
+        <div class="card"><div class="status">Active</div><h3>Blog Post Drafter</h3><p>Drafter tool to generate blog posts using AI with human feedback in the loop.</p><a class="card-action" href="blog.html">View Articles →</a></div>
+        <div class="card"><div class="status">Active</div><h3>Visual UX Auditor</h3><p>Automated visual regression and UX improvement suggestions across viewports.</p><a class="card-action" href="index.html">See Home Layout →</a></div>
       </div>
-      <div class="notice"><h2>ETL Pipeline Synchronizing...</h2><p>The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.</p></div>
+      <div class="notice"><h2>ETL Pipeline Synchronizing...</h2><p>The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.</p><a href="blog.html">Read related posts →</a></div>
     </main>
   </body>
 </html>
