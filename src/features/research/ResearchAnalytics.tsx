@@ -17,13 +17,13 @@ export default function ResearchAnalytics(): JSX.Element {
     <Box as="section">
       <SEO
         title="Research"
-        description="Boom Tick research on robotics, dance analytics, competition data, and biomechanics for West Coast Swing."
+        description="Boom Tick research on robotics, dance analytics, competition data, and biomechanics for West Coast Swing dancers."
       />
       <Stack gap={12}>
         <PageHeader
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
-          description="Interactive data science, software development, and specialized tools to optimize the Boom Tick WCS lifestyle."
+          description="Interactive data science, software development, and specialized tools to optimize the Boom Tick West Coast Swing lifestyle."
           as="h1"
         />
 
@@ -117,7 +117,7 @@ export default function ResearchAnalytics(): JSX.Element {
             <EmptyState
               icon={<Database className="w-12 h-12" />}
               title="ETL Pipeline Synchronizing..."
-              description="The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete."
+              description="The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will appear once the baseline analysis is complete."
             />
           )}
         </Stack>

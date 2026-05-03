@@ -31,7 +31,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
         <PageHeader
           label="CONTACT"
           title="Get in Touch"
-          description="Have a question about Boom Tick, West Coast Swing, gear reviews, or research? I'd love to hear from you."
+        description="Have a question about Boom Tick, West Coast Swing, gear reviews, travel planning, or research? I'd love to hear from you."
         />
 
         <Grid cols={1} md={2} gap={0} border maxWidth="6xl" marginBottom={{ base: 40, md: 0 }} overflow="hidden" radius="lg">
@@ -42,7 +42,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                   <Text as="h3" variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
                 </Box>
                 <Text variant="body" size="base" maxWidth="md" color="dim">
-                  I&apos;m always open to new ideas, questions about my reviews, or just chat about the dance scene.
+                  I&apos;m always open to new ideas, questions about my reviews, or just chatting about the dance scene and the gear that supports it.
                 </Text>
               </Stack>
 
@@ -100,10 +100,10 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     {...register('subject')}
                     className={cn(inputClasses, "border-line")}
                   >
-                    <option value="General Feedback">General Feedback</option>
-                    <option value="Content Request">Content Request</option>
-                    <option value="Gear Review Request">Gear Review Request</option>
-                    <option value="Dance Statistics">Dance Statistics</option>
+                  <option value="General Feedback">General Feedback</option>
+                  <option value="Content Request">Content Request</option>
+                  <option value="Gear Review Request">Gear Review Request</option>
+                  <option value="Dance Statistics">Dance Statistics</option>
                   </Box>
                 </FormField>
 

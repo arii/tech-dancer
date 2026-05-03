@@ -49,7 +49,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="Boom Tick blog for West Coast Swing dancers. Explore West Coast Swing travel, gear, research, and training insights."
+        description="Boom Tick helps West Coast Swing dancers train smarter, travel better, and choose gear with practical guidance from the floor to the road."
         schema={STATIC_SCHEMAS.HOME}
       />
 
@@ -112,7 +112,7 @@ export default function Home() {
             <p className="text-text-dim font-sans leading-relaxed mb-10 max-w-xs"
               style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1rem)' }}
             >
-              Training, travel, and data<br />
+              Training, travel, gear, and data<br />
               for competitive West Coast Swing dancers.
             </p>
 
@@ -183,7 +183,7 @@ export default function Home() {
             aria-label="View all blog posts"
             className="text-text-dim hover:text-accent transition-colors"
           >
-            <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
+            <Text variant="mono" size="xs" weight="font-bold">View all articles</Text>
             <ArrowRight className="w-4 h-4" />
           </Box>
         </SectionHeader>

@@ -13,12 +13,12 @@ export default function BlogFeed(): JSX.Element {
     <Box as="section">
       <SEO
         title="Blog"
-        description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+        description="Boom Tick's journal on West Coast Swing travel, training, gear, event strategy, and the dance science behind better movement."
         schema={{
           ...STATIC_SCHEMAS.HOME,
           "@type": "Blog",
           "name": "Boom Tick Blog",
-          "description": "Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+          "description": "Boom Tick's journal on West Coast Swing travel, training, gear, event strategy, and the dance science behind better movement."
         }}
       />
       <FolioGrid
@@ -26,7 +26,7 @@ export default function BlogFeed(): JSX.Element {
         categoryTitle="Boom Tick Blog"
         as="h1"
         label="INSIGHTS"
-        description="Boom Tick articles on West Coast Swing travel, lifestyle, gear reviews, technical notes, and competition insights."
+        description="Boom Tick's journal on West Coast Swing travel, training, gear, event strategy, and the dance science behind better movement."
         basePath="/blog"
         view={view}
         onViewChange={setView}

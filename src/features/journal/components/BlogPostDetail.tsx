@@ -34,7 +34,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <Stack direction="row" gap={4} marginTop={6}>
           <Stack direction="row" align="center" gap={2} color="dim">
              <Box width={8} height={8} radius="full" surface="muted" />
-             <Text variant="mono" size="xs">{post.author}</Text>
+             <Text variant="mono" size="xs">{post.author || 'Ariel Anders'}</Text>
           </Stack>
           <Box flex />
           <Stack as="button" direction="row" onClick={share} align="center" gap={2} className="text-accent hover:opacity-70 transition-opacity">
@@ -47,7 +47,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       {post.tags && post.tags.length > 0 && (
         <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
           <Stack gap={4}>
-            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Discovery Tags</Text>
+            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Explore More</Text>
             <Stack direction="row" wrap gap={2}>
               {post.tags.map(tag => (
                 <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
@@ -58,6 +58,14 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           </Stack>
         </Box>
       )}
+      <Box marginTop={12} paddingTop={10} border="t" className="border-line/30">
+        <Stack gap={3}>
+          <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Why This Matters</Text>
+          <Text variant="body" size="sm" color="dim">
+            Each post is written to help dancers make better decisions on the floor, on the road, and when choosing the gear they actually use.
+          </Text>
+        </Stack>
+      </Box>
     </DetailLayout>
   );
 }

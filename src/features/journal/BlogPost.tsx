@@ -62,7 +62,7 @@ export default function BlogPost() {
     <>
       <SEO
         title={post.title}
-        description={post.excerpt}
+        description={`${post.excerpt} Read Boom Tick for practical West Coast Swing travel, training, and gear insights.`}
         type="article"
         image={post.image}
         schema={structuredData}

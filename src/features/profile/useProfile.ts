@@ -2,12 +2,12 @@ import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
     name: "Ariel Anders, PhD",
-    role: "Roboticist, dancer, and Boom Tick creator",
+    role: "Roboticist, dancer, and creator of Boom Tick",
     sections: [
       {
         id: "dance-background",
         title: "My Dance Background",
-      content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into the swing of things at Lindy in the Park. Seeking a new challenge, I signed up for a series at Mission City Swing—and realized it wasn't Lindy Hop! The music, like 'In Da Club' by 50 Cent, was so much fun that I started dancing both styles. Attending West Coast Swing (WCS) events became a fantastic way for me to travel again after the pandemic. WCS gradually became my primary focus, but you can still find me Lindy Hopping to live Swing music in SF. I'm a competitive Intermediate-level follow (and an occasional lead!) who focuses on weight transfer, clean lines, and timing. I create Boom Tick to share that dance journey alongside practical gear, travel, and training notes."
+      content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into the swing of things at Lindy in the Park. Seeking a new challenge, I signed up for a series at Mission City Swing—and realized it wasn't Lindy Hop! The music, like 'In Da Club' by 50 Cent, was so much fun that I started dancing both styles. Attending West Coast Swing (WCS) events became a fantastic way for me to travel again after the pandemic. WCS gradually became my primary focus, but you can still find me Lindy Hopping to live Swing music in SF. I'm a competitive Intermediate-level follow (and an occasional lead!) who focuses on weight transfer, clean lines, and timing. I built Boom Tick to share that dance journey alongside practical gear, travel, and training notes."
       },
       {
         id: "phd-matters",
@@ -17,7 +17,7 @@ const PROFILE_DATA: ProfileData = {
       {
         id: "why-built",
         title: "Why I Built This Site",
-      content: "People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I am fortunate to have a strong career, but I have always focused on making my lifestyle as financially efficient as possible. This site is how I share the 'stacks' I've built—everything from curated gear reviews to my travel-hacking systems. I also keep it as a place to organize useful links, experiments, and lessons learned as creator at arii.github.io."
+      content: "People often ask me, 'Where did you get that outfit?' and 'How can you afford to travel to so many events?' I am fortunate to have a strong career, but I have always focused on making my lifestyle as financially efficient as possible. This site is how I share the 'stacks' I've built—everything from curated gear reviews to my travel-hacking systems. I also keep it as a place to organize useful links, experiments, and lessons learned as the creator behind arii.github.io."
       },
       {
         id: "financial-strategies",
