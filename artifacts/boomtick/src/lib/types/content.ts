@@ -7,9 +7,9 @@ export const gearItems = [
 ];
 
 export const researchTools = [
-  { status: "Coming Soon", title: "WCS Prelim Scoring Scraper", description: "A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions." },
-  { status: "Active", title: "Blog Post Drafter", description: "Drafter tool to generate blog posts using AI with human feedback in the loop." },
-  { status: "Active", title: "Visual UX Auditor", description: "Automated visual regression and UX improvement suggestions across viewports." },
+  { status: "Coming Soon", title: "WCS Prelim Scoring Scraper", description: "A focused scraper for gathering and analyzing preliminary scoring data from WCS competitions." },
+  { status: "Active", title: "Blog Post Drafter", description: "Drafts blog posts with AI while keeping a human in the loop for tone, accuracy, and final edits." },
+  { status: "Active", title: "Visual UX Auditor", description: "Captures viewport screenshots and flags layout, contrast, and spacing issues across breakpoints." },
 ];
 
 export const contactInquiries = [
