@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { cn } from '@/lib/utils';
 
 // Hardcoded heights for the audio wave visualizer
 const VISUALIZER_HEIGHTS = [

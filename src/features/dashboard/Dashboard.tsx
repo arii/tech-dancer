@@ -68,11 +68,12 @@ export default function Home() {
                   key={post.slug}
                   as={motion.div}
                   variants={motionTokens.staggerItem}
-                  className="pt-6 first:pt-0 group"
+                  paddingTop={6}
+                  className="first:pt-0 group" // impeccable-ignore
                 >
                   <NavLink to={`/blog/${post.slug}`} className="block">
                     <Grid cols={{ base: 1, md: 12 }} gap={{ base: 2, md: 6 }}>
-                      <Stack direction="col" gap={2} className="md:col-span-3 lg:col-span-2 pt-1">
+                      <Stack direction="col" gap={2} paddingTop={1} className="md:col-span-3 lg:col-span-2">
                         <Box display="inline-flex">
                           <Text
                             variant="mono"
@@ -87,7 +88,7 @@ export default function Home() {
                           </Text>
                         </Box>
                         {post.date && (
-                          <Text variant="mono" size="xs" color="dim" className="pl-1">
+                          <Text variant="mono" size="xs" color="dim" paddingLeft={1}>
                             {post.date}
                           </Text>
                         )}
