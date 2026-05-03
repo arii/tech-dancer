@@ -129,7 +129,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         surface="bg"
         direction="col"
         scrollBehavior="smooth"
-        scrollPaddingTop={64}
+        scrollPaddingTop={96}
       >
         <Stack flex={1} direction="col" width="full">
           <Box flex={1} width="full">
