@@ -14,11 +14,16 @@ const Gear = () => {
           <p className="text-sm md:text-base text-muted-foreground max-w-3xl mb-8">Rigorous testing and honest takes on the gear that keeps you moving.</p>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {gearItems.map((item) => (
-              <article key={item.href} className="border border-border bg-card rounded-xl p-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em]"><span className={`inline-flex rounded border px-2 py-1 ${tagColors[item.tag] ?? "text-muted-foreground border-border"}`}>{item.tag}</span><span>{item.label}</span></div>
-                <h2 className="text-lg font-bold leading-snug">{item.title}</h2>
+              <article key={item.href} className="border border-border bg-card rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors">
+                <div className="flex items-start justify-between gap-3">
+                  <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] ${tagColors[item.tag] ?? "text-muted-foreground border-border"}`}>{item.tag}</span>
+                  <div className="text-right">
+                    <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">{item.label}</div>
+                    <div className="text-xs font-mono text-muted-foreground mt-1">{item.rating}/5</div>
+                  </div>
+                </div>
+                <h2 className="text-lg font-black leading-snug">{item.title}</h2>
                 <p className="text-sm text-muted-foreground leading-6">{item.description}</p>
-                <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{item.rating}</div>
                 <a href={item.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-primary">Read Review</a>
               </article>
             ))}
