@@ -8,15 +8,20 @@ const NavigationShell = () => {
   return (
     <>
       <header className="md:hidden sticky top-0 z-50 border-b border-border bg-background/98 backdrop-blur">
-        <div className="flex h-10 items-center px-3 overflow-x-auto whitespace-nowrap gap-2">
+        <div className="flex h-10 items-center gap-2 px-3 overflow-x-auto whitespace-nowrap">
           <Link href="/" className="shrink-0 inline-flex items-center" data-testid="link-home-logo-mobile">
-            <div className="scale-[0.34] -translate-x-7 -translate-y-1 origin-left">
+            <div className="scale-[0.28] -translate-x-8 -translate-y-1 origin-left">
               <Logo />
             </div>
           </Link>
-          <nav className="flex min-w-0 items-center gap-3 text-[11px] text-muted-foreground">
+          <nav className="flex min-w-0 items-center gap-2 text-[10px] font-medium text-muted-foreground">
             {primaryNavigation.map((item) => (
-              <Link key={item.label} href={item.href} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="shrink-0 hover:text-foreground transition-colors">
+              <Link
+                key={item.label}
+                href={item.href}
+                data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+                className="shrink-0 rounded-full px-2 py-1 leading-none hover:text-foreground hover:bg-muted/50 transition-colors"
+              >
                 {item.label}
               </Link>
             ))}
