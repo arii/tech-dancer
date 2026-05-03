@@ -11,11 +11,11 @@ const Contact = () => {
         <section className="max-w-5xl">
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">Contact</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Get in Touch</h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-3xl mb-8">Have a burning analytical question regarding WCS? Want a lifestyle post about financial literacy or building community? Or just have feedback on a gear review? I’d love to hear from you.</p>
+          <p className="text-sm md:text-base text-muted-foreground max-w-3xl mb-8">Have a question about WCS, travel, gear, or the site itself? I’d love to hear from you.</p>
           <div className="border border-border bg-card rounded-xl p-6 md:p-8 shadow-sm">
             <div className="flex flex-col gap-2 mb-8">
               <h2 className="text-2xl font-black">Inquiries</h2>
-              <p className="text-sm text-muted-foreground max-w-2xl">I’m always open to new ideas, questions about my reviews, or just chat about the dance scene.</p>
+              <p className="text-sm text-muted-foreground max-w-2xl">I’m always open to new ideas, questions about reviews, or a good dance-scene conversation.</p>
             </div>
             <div className="grid gap-3 md:grid-cols-3 mb-8">
               {contactInquiries.map((item) => (
