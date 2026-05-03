@@ -41,7 +41,7 @@ export function PageHeader({
           <Text
             variant="body"
             size={{ base: "lg", lg: "xl" }}
-            color="dim"
+            color="main"
             maxWidth={descriptionMaxWidth}
             marginTop={4}
             className="leading-relaxed text-pretty"
