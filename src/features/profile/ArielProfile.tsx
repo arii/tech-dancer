@@ -1,6 +1,6 @@
-// impeccable-ignore-file
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { Star, Music, MapPin } from 'lucide-react';
 import { useProfile } from './useProfile';
@@ -17,33 +17,33 @@ export default function ArielProfile() {
 
   const renderSection = (section: ProfileSection) => {
     return (
-      <Stack key={section.id} gap={4} maxWidth="[820px]" className={section.gallery ? "mt-14" : ""}>
+      <Stack key={section.id} gap={6} maxWidth="prose">
         {section.eyebrow && (
-          <Text variant="mono" size="xs" color="dim" weight="font-extrabold" className="uppercase tracking-[0.18em]" marginBottom={-2}>
+          <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">
             {section.eyebrow}
           </Text>
         )}
 
         {section.title && (
-          <Text variant="display" size="[28px]" weight="font-bold" className="text-accent-navy">
+          <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy uppercase tracking-tight">
             {section.title}
           </Text>
         )}
 
         {section.content && (
-          <Text variant="body" size="[15px]" color="dim" className="leading-[1.75]">
+          <Text variant="body" size="lg" color="body" className="leading-loose">
             {section.content}
           </Text>
         )}
 
         {section.cards && (
-          <Stack gap={3.5} marginTop={1}>
+          <Stack gap={6} marginTop={4}>
             {section.cards.map((card, index) => (
-              <Box key={index} padding="[18px]" border radius="2xl" className="bg-white/[0.02] border-line/50">
-                <Text as="h3" variant="display" size="xs" weight="font-bold" marginBottom={2} className="uppercase tracking-wide">
+              <Box key={index} padding={6} border className="bg-surface/30 border-line/10">
+                <Text as="h3" variant="display" size="lg" weight="font-bold" marginBottom={2} className="uppercase tracking-wide">
                   {card.title}
                 </Text>
-                <Text variant="body" size="sm" color="dim" className="leading-[1.75]">
+                <Text variant="body" size="md" color="body" className="leading-relaxed">
                   {card.content}
                 </Text>
               </Box>
@@ -52,19 +52,19 @@ export default function ArielProfile() {
         )}
 
         {section.items && (
-          <Grid cols={{ base: 1, md: 3 }} gap={3.5} marginTop={1}>
+          <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={4}>
             {section.items.map((item: ProfileItem, index: number) => {
               const Icon = item.icon ? IconMap[item.icon] : null;
               return (
-                <Box key={index} padding="[18px]" border radius="2xl" className="bg-surface/50 border-line/50">
-                  <Stack gap={Icon ? 2.5 : 2}>
-                    {Icon && <Icon className="w-4 h-4 text-accent" strokeWidth={2} />}
+                <Box key={index} padding={6} border className="bg-surface/30 border-line/10">
+                  <Stack gap={3}>
+                    {Icon && <Icon className="w-5 h-5 text-accent" />}
                     {item.title && (
-                      <Text as="h3" variant="mono" size="[11px]" color="dim" weight="font-bold" className="uppercase tracking-[0.16em]">
+                      <Text as="h3" variant="display" size="md" weight="font-bold" className="uppercase">
                         {item.title}
                       </Text>
                     )}
-                    <Text variant="body" size="[15px]" color={Icon ? "dim" : "main"} weight={Icon ? "font-normal" : "font-normal"}>
+                    <Text variant="body" size="sm" color="dim">
                       {item.description}
                     </Text>
                   </Stack>
@@ -75,15 +75,14 @@ export default function ArielProfile() {
         )}
 
         {section.gallery && (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={3.5} marginTop={4}>
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={8}>
             {section.gallery.map((image, index) => (
               <Box
                 key={index}
                 aspect="4/5"
                 overflow="hidden"
                 border
-                radius="2xl"
-                className="border-line/50 bg-surface/50 group"
+                className="border-line/20 bg-surface/50 group"
               >
                 <img
                   src={image.src}
@@ -96,7 +95,7 @@ export default function ArielProfile() {
         )}
 
         {section.links && (
-          <Box display="flex" gap={2.5} wrap marginTop={3}>
+          <Box display="flex" gap={4} wrap marginTop={4}>
             {section.links.map((link) => (
               <Box
                 key={link.label}
@@ -104,13 +103,12 @@ export default function ArielProfile() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                paddingX="[14px]"
-                paddingY="[10px]"
+                paddingX={4}
+                paddingY={2}
                 border
-                radius="full"
-                className="border-line/50 hover:border-accent hover:bg-accent/5 transition-all group"
+                className="hover:border-accent hover:bg-accent/5 transition-all group"
               >
-                <Text variant="mono" size="sm" weight="font-bold" color="dim" className="group-hover:text-accent">
+                <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
                   {link.label}
                 </Text>
               </Box>
@@ -128,40 +126,57 @@ export default function ArielProfile() {
         description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
       />
       
-      <Box paddingBottom="[34px]">
-        <Stack gap="[18px]">
-          <Text variant="mono" size="xs" color="dim" weight="font-extrabold" className="uppercase tracking-[0.18em]">
-            Biography
-          </Text>
-          <Text as="h1" variant="headline" size="[74px]" weight="font-black" className="text-accent-navy leading-[0.96] max-w-[900px] -ml-1">
-            {bio.name}
-          </Text>
-          {bio.role && (
-            <Text variant="body" size="lg" color="dim" className="leading-[1.55] max-w-[760px] text-[18px]">
-              {bio.role}
-            </Text>
-          )}
-        </Stack>
-      </Box>
+      <PageHeader
+        label="BIOGRAPHY"
+        title={bio.name}
+        description={bio.role}
+        titleSize="fluid-7"
+      />
 
-      <Stack gap={10} marginTop={0}>
+      <Stack gap={16} marginTop={12}>
         <Reveal direction="up">
-          <Grid cols={{ base: 1, lg: "1.4fr 0.9fr" }} gap={10}>
-            <Stack gap={10}>
+          <Grid cols={{ base: 1, lg: 3 }} gap={16}>
+            <Stack gap={16} className="lg:col-span-2">
               {bio.sections.map(renderSection)}
             </Stack>
 
             <Box className="relative">
-              <Stack gap={6} position="sticky" top={8}>
-                <Box padding="[18px]" border radius="2xl" className="bg-surface/50 border-line/20">
-                  <Stack gap={3}>
-                    <Text variant="mono" size="[11px]" color="dim" weight="font-bold" className="uppercase tracking-[0.16em]">At a glance</Text>
-                    <Stack gap={0}>
-                      {bio.details.map((detail) => (
-                        <Text key={detail.label} variant="body" size="sm" color="dim" className="leading-[1.8]">
-                          {detail.value}
-                        </Text>
-                      ))}
+              <Stack gap={8} position="sticky" top={24}>
+                <Box padding={8} border className="bg-surface/50 border-line/20">
+                  <Stack gap={8}>
+                    <Stack gap={6}>
+                      <Text variant="mono" size="xs" color="brand" weight="font-bold">AT A GLANCE</Text>
+                      <Stack gap={2}>
+                        {bio.details.map((detail) => (
+                          <Stack key={detail.label} gap={1}>
+                            <Text variant="mono" size="xs" color="brand" weight="font-bold">{detail.label}</Text>
+                            <Text variant="body" size="sm" color="main" weight="font-semibold">{detail.value}</Text>
+                          </Stack>
+                        ))}
+                      </Stack>
+                    </Stack>
+
+                    <Stack gap={6} border="t" paddingTop={8} className="border-line/20">
+                      <Text variant="mono" size="xs" color="brand" weight="font-bold">CONNECT & NETWORKING</Text>
+                      <Box display="flex" gap={4} wrap>
+                        {bio.links.map((link) => (
+                          <Box
+                            key={link.label}
+                            as="a"
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            paddingX={4}
+                            paddingY={2}
+                            border
+                            className="hover:border-accent hover:bg-accent/5 transition-all group"
+                          >
+                            <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+                              {link.label}
+                            </Text>
+                          </Box>
+                        ))}
+                      </Box>
                     </Stack>
                   </Stack>
                 </Box>
