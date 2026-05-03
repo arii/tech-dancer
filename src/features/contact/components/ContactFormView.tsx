@@ -42,7 +42,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             </Text>
           </Stack>
 
-            <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
+          <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
               <FormField label="Your Name" error={errors.name?.message}>
                 <Box as="input"
                   {...register('name')}
