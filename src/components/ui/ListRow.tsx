@@ -20,19 +20,19 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
   return (
     <Box as={NavLink} to={`${basePath}/${slug}`}
       display="flex" align="center" border="b"
-      className="group hover:bg-surface/50 transition-colors"
+      className="group hover:bg-surface/50 transition-colors min-h-[68px]"
     >
       <Box className="w-1 self-stretch bg-accent shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-      <Box width={12} height={12} margin={3} shrink={0} radius="none" overflow="hidden" display="flex" align="center" justify="center">
+      <Box width={9} height={9} margin={3} shrink={0} radius="none" overflow="hidden" display="flex" align="center" justify="center">
         <CategoryPlaceholder category={category} size="md" />
       </Box>
-      <Stack gap={1} flex className="py-3 min-w-0">
+      <Stack gap={1} flex className="py-2 min-w-0">
         <Box display="flex" align="center" gap={3}>
           <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
           <Text variant="mono" size="micro" color="dim">{date}</Text>
         </Box>
-        <Text variant="display" size="sm" weight="font-bold" className="line-clamp-1">{title}</Text>
-        <Text variant="body" size="xs" color="dim" className="truncate">{excerpt}</Text>
+        <Text variant="display" size="base" weight="font-bold" className="line-clamp-1">{title}</Text>
+        <Text variant="body" size="xs" color="dim" className="truncate leading-relaxed">{excerpt}</Text>
       </Stack>
       <Box display="flex" align="center" gap={3} padding={4} className="shrink-0 text-text-dim">
         <Text variant="mono" size="micro">{rt} min</Text>

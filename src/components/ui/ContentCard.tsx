@@ -44,9 +44,9 @@ export function ContentCard({
       overflow="hidden"
       className={cn(
         "group transition-all duration-300 h-full",
-        compact 
-          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent bg-surface" 
-          : "hover:border-accent hover:shadow-xl hover:-translate-y-1 bg-surface"
+        compact
+          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent bg-surface"
+          : "hover:border-accent hover:shadow-md hover:-translate-y-0.5 bg-surface"
       )}
       {...motionProps}
     >
@@ -60,12 +60,12 @@ export function ContentCard({
 
       {/* Content Area */}
       <Stack
-        gap={compact ? 1 : 4}
-        padding={compact ? 4 : 5}
+        gap={compact ? 1 : 2}
+        padding={compact ? 4 : 3}
         flex={1}
-        className={cn(compact ? "min-h-[120px]" : "min-h-[180px]", "justify-between")}
+        className={cn(compact ? "min-h-[120px]" : "min-h-[128px]", "justify-between")}
       >
-        <Stack gap={compact ? 0.5 : 3}>
+        <Stack gap={compact ? 0.5 : 1.5}>
           <Box display="flex" align="center" gap={3} wrap className="leading-none">
             <Text
               variant="mono"
@@ -92,19 +92,14 @@ export function ContentCard({
 
           <Text 
             variant="body"
-            size={compact ? "base" : "lg"}
+            size={compact ? "base" : "sm"}
             weight="font-bold"
-            className={cn(
-              "leading-tight group-hover:text-accent transition-colors line-clamp-2",
-              category.toLowerCase().includes('gear') || category.toLowerCase().includes('white')
-                ? "text-white"
-                : "text-white"
-            )}
+            className="text-white leading-tight group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
           
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed opacity-72">
+          <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed opacity-72">
              {excerpt}
           </Text>
         </Stack>

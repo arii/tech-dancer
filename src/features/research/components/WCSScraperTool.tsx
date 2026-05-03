@@ -64,7 +64,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
         </table>
       </Box>
       {data.length > 20 && (
-        <Box padding="compact" textAlign="center" borderTop>
+        <Box padding="compact" align="center" borderTop>
           <Text variant="mono" size="micro" color="dim">AND {data.length - 20} MORE RECORDS...</Text>
         </Box>
       )}

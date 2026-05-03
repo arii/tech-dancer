@@ -79,7 +79,7 @@ export default function ResearchDetail() {
 
   if (!tool) {
     return (
-      <Box padding="panel" textAlign="center">
+      <Box padding="panel" align="center">
         <Stack gap={8} align="center">
           <Search size={48} className="opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
