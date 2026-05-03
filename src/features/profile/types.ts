@@ -1,6 +1,6 @@
 export interface ProfileSection {
   id: string;
-  title: string;
+  title?: string;
   eyebrow?: string;
   content?: string;
   cards?: ProfileCard[];
@@ -38,7 +38,6 @@ export interface ProfileLink {
 export interface ProfileData {
   name: string;
   role: string;
-  bio?: string;
   sections: ProfileSection[];
   details: ProfileDetail[];
   links: ProfileLink[];
