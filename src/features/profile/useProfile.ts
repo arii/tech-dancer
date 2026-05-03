@@ -2,7 +2,7 @@ import { ProfileData } from './types';
 
 const PROFILE_DATA: ProfileData = {
     name: "Ariel Anders, PhD",
-    role: "MIT Roboticist // Boom Tick",
+    role: "Roboticist, dancer, and Boom Tick creator",
     sections: [
       {
         id: "dance-background",

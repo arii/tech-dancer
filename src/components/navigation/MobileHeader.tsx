@@ -9,7 +9,7 @@ interface MobileHeaderProps {
   onClose: () => void;
 }
 
-export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
+export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps): JSX.Element {
   return (
     <Box
       as="nav"

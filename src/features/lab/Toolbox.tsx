@@ -10,14 +10,13 @@ import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
-import type { JSX } from 'react';
 import type { Resource } from '@/lib/content';
 
-export default function Toolbox(): JSX.Element {
+export default function Toolbox(): React.ReactElement {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView } = useToolbox();
 
   const allFilteredItems = useMemo(() =>
-    filteredCategories.flatMap(cat => cat.items),
+    filteredCategories.flatMap((cat: (typeof filteredCategories)[number]) => cat.items),
   [filteredCategories]);
 
   return (
@@ -47,9 +46,9 @@ export default function Toolbox(): JSX.Element {
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
         <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 4, md: 6 }}>
-          {allFilteredItems.map((item) => (
+          {allFilteredItems.map((item: Resource) => (
             <GearCard
-              key={(item as Resource).slug}
+              key={item.slug}
               {...item}
               basePath="/gear"
             />
@@ -57,8 +56,8 @@ export default function Toolbox(): JSX.Element {
         </Grid>
       ) : (
         <Stack gap={0} border="t" className="border-line">
-          {allFilteredItems.map((item) => (
-            <ListRow key={(item as Resource).slug} {...item} basePath="/gear" />
+          {allFilteredItems.map((item: Resource) => (
+            <ListRow key={item.slug} {...item} basePath="/gear" />
           ))}
         </Stack>
       )}

@@ -3,14 +3,14 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
-export default function ArielProfile() {
+export default function ArielProfile(): JSX.Element {
   const { bio } = useProfile();
 
   return (
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: roboticist, dancer, and engineer. Exploring the intersection of technical systems and creative movement."
+        description="Ariel Anders, PhD: roboticist, dancer, and creator of Boom Tick. Exploring the intersection of technical systems and creative movement."
       />
       <Box className="relative overflow-hidden grid-pattern" style={{ minHeight: 'calc(100vh - 64px)' }}>
         <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 lg:px-16 py-10 lg:py-14">

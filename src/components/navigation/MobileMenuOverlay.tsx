@@ -12,7 +12,7 @@ interface MobileMenuOverlayProps {
   onSearchClick: () => void;
 }
 
-export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenuOverlayProps) {
+export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenuOverlayProps): JSX.Element | null {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
           >
             <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
             <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
-              Search
+              Search Boom Tick
             </Text>
           </Box>
         </Box>
