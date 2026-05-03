@@ -85,6 +85,25 @@
   .animate-scanline { animation: scanline 2.5s linear infinite; }
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
+  @keyframes wave {
+    0%,100% { height: 28%; }
+    25% { height: 72%; }
+    50% { height: 46%; }
+    75% { height: 86%; }
+  }
+
+  .bar-wave {
+    animation: wave 4.8s ease-in-out infinite;
+  }
+
+  .panel-reverse .bar-wave {
+    animation-direction: reverse;
+  }
+
+  .bar-wave:nth-child(3n) { animation-duration: 5.6s; }
+  .bar-wave:nth-child(4n) { animation-duration: 4.2s; }
+  .bar-wave:nth-child(5n) { animation-duration: 5.1s; }
+
   .glass-panel {
     @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
   }

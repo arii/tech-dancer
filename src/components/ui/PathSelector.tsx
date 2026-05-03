@@ -1,23 +1,30 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
 
-// Hardcoded heights for the audio wave visualizer
-const VISUALIZER_HEIGHTS = [
-  40, 25, 60, 30, 45, 80, 50, 35, 70, 90, 60, 40, 55, 30, 45, 70, 40, 80, 50, 35, 65, 45, 75, 50, 30, 40, 60, 35, 55, 70
-];
+interface VisualizerProps {
+  reverse?: boolean;
+}
 
-function Visualizer() {
+function Visualizer({ reverse }: VisualizerProps) {
+  // Use 28 bars as in the mockup
+  const bars = Array.from({ length: 28 });
+
   return (
-    <Box position="absolute" bottom={0} left={0} width="full" height="32" className="flex items-end gap-[2px] sm:gap-1 px-4 sm:px-8 opacity-40 overflow-hidden pointer-events-none">
-      {VISUALIZER_HEIGHTS.map((h, i) => (
+    <Box
+      position="absolute"
+      bottom={0} left={0} width="full" height="170px"
+      className={cn(
+        "flex items-end gap-1 px-4 pb-[18px] opacity-25 pointer-events-none",
+        reverse && "panel-reverse"
+      )}
+    >
+      {bars.map((_, i) => (
         <Box
           key={i}
-          className="flex-1 rounded-t-md bg-gradient-brand transition-all duration-500"
-          style={{ height: `${h}%` }}
+          className="bar-wave flex-1 rounded-t-md bg-gradient-brand shadow-[0_0_14px_rgba(0,207,255,0.2)]"
         />
       ))}
-      {/* Gradient fade to hide the bottom or top of bars if needed, or overlay */}
-      <Box position="absolute" inset={true} className="bg-gradient-to-t from-[#0B1120] via-[#0B1120]/40 to-transparent" />
     </Box>
   );
 }
@@ -42,7 +49,8 @@ export default function PathSelector() {
       <Grid cols={{ base: 1, md: 2 }} className="divide-y md:divide-y-0 md:divide-x divide-line/20">
 
         {/* Train Smarter Section */}
-        <Box position="relative" padding={{ base: 8, md: 10, lg: 12 }} minHeight="[320px]" className="group">
+        <Box position="relative" padding={{ base: 8, md: 10, lg: 12 }} minHeight="[320px]" className="group overflow-hidden">
+          <Box className="absolute inset-0 opacity-25 pointer-events-none bg-[radial-gradient(circle_at_50%_100%,rgba(0,207,255,0.18),transparent_40%),linear-gradient(135deg,rgba(0,207,255,0.08),rgba(139,47,255,0.05)_40%,rgba(255,0,200,0.06))]" />
           <Visualizer />
           <Stack position="relative" zIndex={10} direction="col" justify="between" height="full">
             <Box>
@@ -69,8 +77,9 @@ export default function PathSelector() {
         </Box>
 
         {/* Travel Better Section */}
-        <Box position="relative" padding={{ base: 8, md: 10, lg: 12 }} minHeight="[320px]" className="group">
-          <Visualizer />
+        <Box position="relative" padding={{ base: 8, md: 10, lg: 12 }} minHeight="[320px]" className="group overflow-hidden">
+          <Box className="absolute inset-0 opacity-25 pointer-events-none bg-[radial-gradient(circle_at_50%_100%,rgba(0,207,255,0.18),transparent_40%),linear-gradient(135deg,rgba(0,207,255,0.08),rgba(139,47,255,0.05)_40%,rgba(255,0,200,0.06))]" />
+          <Visualizer reverse={true} />
           <Stack position="relative" zIndex={10} direction="col" justify="between" height="full">
             <Box>
               <Text as="h2" variant="headline" className="text-white text-3xl md:text-4xl font-extrabold tracking-tight mb-4 group-hover:translate-x-1 transition-transform">
