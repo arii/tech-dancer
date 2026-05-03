@@ -1,4 +1,4 @@
-export const blogFilters = ["All Posts", "Tech", "Travel", "Dance Research", "Travel/Lifestyle", "Gear Reviews", "Data & Dev Lab"];
+export const blogFilters = ["All Posts", "Tech", "Travel", "Dance Research", "Gear Reviews", "Data & Dev Lab"];
 
 export const gearItems = [
   { tag: "Dance Gear", title: "Portable Bluetooth Speaker (UE Wonderboom 4)", description: "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.", href: "https://boomtick.blog/gear/2024-01-01-portable-speaker", rating: "4.8", label: "Best for Travel" },
