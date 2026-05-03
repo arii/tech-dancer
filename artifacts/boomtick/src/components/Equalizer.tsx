@@ -23,25 +23,25 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
 
     let color: string;
     if (adjustedRatio < 0.5) {
-      color = `color-mix(in srgb, hsl(var(--primary)) ${100 - adjustedRatio * 200}%, hsl(var(--secondary)))`;
+      color = `color-mix(in srgb, hsl(var(--primary)) ${95 - adjustedRatio * 120}%, hsl(var(--secondary)))`;
     } else {
-      color = `color-mix(in srgb, hsl(var(--secondary)) ${100 - (adjustedRatio - 0.5) * 200}%, hsl(var(--accent)))`;
+      color = `color-mix(in srgb, hsl(var(--secondary)) ${95 - (adjustedRatio - 0.5) * 120}%, hsl(var(--accent)))`;
     }
 
-    const minH = 15 + Math.random() * 20;
-    const maxH = 45 + Math.random() * 55;
+    const minH = 24 + Math.random() * 8;
+    const maxH = 42 + Math.random() * 18;
 
-    return { color, minH, maxH, delay: Math.random() * 0.4, duration: 0.7 + Math.random() * 1.2 };
+    return { color, minH, maxH, delay: Math.random() * 1.2, duration: 2.8 + Math.random() * 1.6 };
   });
 
   if (compact) {
     return (
-      <div className="flex items-end justify-center gap-1 w-full h-full px-4">
+      <div className="flex items-end justify-center gap-1 w-full h-full px-4 opacity-70">
         {bars.map((bar, i) => (
           <motion.div
             key={i}
             className="flex-1 rounded-t-sm"
-            style={{ backgroundColor: bar.color, boxShadow: `0 0 8px ${bar.color}` }}
+            style={{ backgroundColor: bar.color, boxShadow: `0 0 6px ${bar.color}` }}
             initial={{ height: `${bar.minH}%` }}
             animate={{ height: [`${bar.minH}%`, `${bar.maxH}%`, `${bar.minH}%`] }}
             transition={{ duration: bar.duration, repeat: Infinity, ease: "easeInOut", delay: bar.delay }}
