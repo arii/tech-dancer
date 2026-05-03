@@ -10,9 +10,13 @@ export function useExport() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
 
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.href = url;
+    link.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.rel = 'noopener';
+    document.body.appendChild(link);
     link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   };
 
   interface PDFOptions {
@@ -39,7 +43,6 @@ export function useExport() {
       head: headers,
       body: data,
       theme: 'grid',
-      // Using RGB values to avoid hex color detection and match brand-ish dark gray
       headStyles: { fillColor: [26, 43, 60], textColor: [255, 255, 255], fontSize: 10 },
       bodyStyles: { fontSize: 9 },
       columnStyles: {
