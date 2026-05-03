@@ -27,14 +27,15 @@ const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-s
 export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (
     <Box as="section" minHeight="[calc(100vh-64px)]">
-      <Stack gap={12}>
+      <Stack gap={12} maxWidth="3xl" marginX="auto">
         <PageHeader
           label="CONTACT"
           title="Get in Touch"
           description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I’ll reply soon."
+          border="b"
         />
 
-        <Stack gap={8} maxWidth="3xl">
+        <Stack gap={8}>
           <Stack gap={2}>
             <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
             <Text variant="body" size="base" color="main">
