@@ -7,34 +7,33 @@ interface LogoProps {
 export function Logo({ className }: LogoProps) {
   return (
     <svg
-      viewBox="0 0 280 60"
+      viewBox="0 0 360 80"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-8 w-auto", className)}
       aria-labelledby="logo-title"
     >
       <title id="logo-title">BoomTick Logo</title>
       {/* Mark */}
-      <text x="4" y="44"
-            fontFamily="var(--raw-font-display)"
-            fontSize="48"
+      <text x="10" y="52"
+            fontFamily="var(--raw-font-display), sans-serif"
+            fontSize="44"
             fontWeight="700"
             fill="var(--raw-color-accent-navy)">
         B
       </text>
 
-      <path d="M48 12 L70 52"
+      <path d="M50 20 L72 60"
             stroke="var(--raw-color-accent)"
             strokeWidth="8"
             strokeLinecap="round"/>
 
       {/* Wordmark */}
-      <text x="94" y="46"
-            fontFamily="var(--raw-font-sans)"
-            fontSize="38"
+      <text x="100" y="54"
+            fontFamily="var(--raw-font-sans), sans-serif"
+            fontSize="34"
             fill="var(--raw-color-accent-navy)"
-            letterSpacing="-0.02em">
-        <tspan fontWeight="700">boom</tspan>
-        <tspan fontWeight="400" fill="var(--raw-color-accent)">tick</tspan>
+            letterSpacing="0.5">
+        boomtick
       </text>
     </svg>
   );
