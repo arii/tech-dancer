@@ -18,6 +18,11 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps): 
       className="lg:hidden fixed top-0 left-0 right-0 z-50 h-14 border-b border-line bg-[#050816]/95 px-4 backdrop-blur-xl"
     >
       <Box as={NavLink} to="/" onClick={onClose} className="flex items-center gap-2 shrink-0">
+        <Box className="flex h-9 w-9 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent shadow-[0_0_18px_rgba(0,229,255,.16)]">
+          <Text variant="mono" size="xs" weight="font-bold" className="tracking-[0.22em] uppercase">
+            BT
+          </Text>
+        </Box>
         <Text variant="mono" size="sm" weight="font-bold" className="text-white tracking-[0.18em] uppercase">
           Boom Tick
         </Text>

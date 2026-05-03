@@ -37,7 +37,9 @@ export function CategoryPlaceholder({ category, size = 'lg', className }: Catego
 
   return (
     <Box surface={surfaceClass} width="full" height="full" display="flex" align="center" justify="center" className={`bg-[#050816] ${className || ''}`}>
-      {React.createElement(icon, { className: sizeClasses[size], strokeWidth: 1.5 })}
+      <Box className="flex items-center justify-center rounded-full border border-accent/20 bg-accent/10 text-accent shadow-[0_0_18px_rgba(0,229,255,.12)] p-4">
+        {React.createElement(icon, { className: sizeClasses[size], strokeWidth: 1.5 })}
+      </Box>
     </Box>
   );
 }
