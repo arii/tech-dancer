@@ -1,6 +1,6 @@
 const Logo = () => {
   return (
-    <svg viewBox="0 0 240 110" fill="none" className="h-14 w-auto" aria-hidden="true">
+    <svg viewBox="0 0 280 110" fill="none" className="h-14 w-[220px] max-w-full" aria-hidden="true">
       <defs>
         <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#00CFFF" />
@@ -8,7 +8,7 @@ const Logo = () => {
         </linearGradient>
       </defs>
 
-      <rect width="240" height="110" rx="18" fill="#0D0E1C" />
+      <rect width="280" height="110" rx="18" fill="#0D0E1C" />
 
       <text
         x="16"
@@ -24,7 +24,7 @@ const Logo = () => {
       <line x1="82" y1="20" x2="112" y2="72" stroke="url(#logo-g)" strokeWidth="12" strokeLinecap="round" />
 
       <text
-        x="132"
+        x="152"
         y="69"
         fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
         fontWeight="700"
