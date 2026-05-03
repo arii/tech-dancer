@@ -154,7 +154,7 @@ export default function ResearchDetail() {
 
                 {tool.status === 'Coming Soon' && (
                   <Box border surface="accent" padding="card" className="bg-accent/5 border-dashed">
-                    <Stack gap={4} align="center" textAlign="center">
+                    <Stack gap={4} align="center" className="text-center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
