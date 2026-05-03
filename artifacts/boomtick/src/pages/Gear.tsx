@@ -18,18 +18,23 @@ const Gear = () => {
           <p className="text-xs font-bold tracking-[0.35em] uppercase text-muted-foreground mb-4">The Toolbox</p>
           <h1 className="text-4xl md:text-5xl font-black mb-4">Gear Reviews</h1>
           <p className="text-sm md:text-base text-foreground/72 max-w-3xl mb-8">Rigorous testing and honest takes on the gear that keeps you moving.</p>
+          <div className="flex flex-wrap gap-2 mb-8 rounded-xl border border-border bg-card/60 p-3">
+            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Best for travel</span>
+            <span className="inline-flex items-center rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Highly recommended</span>
+            <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Competition ready</span>
+          </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {gearItems.map((item) => (
-              <article key={item.href} className="border border-border bg-card rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors">
+              <article key={item.href} className="border border-border bg-card rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:border-primary/30 transition-colors min-h-[280px]">
                 <div className="flex items-start justify-between gap-3">
                   <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] ${tagColors[item.tag] ?? "text-muted-foreground border-border"}`}>{item.tag}</span>
                   <div className="text-right">
-                    <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/70">{item.label}</div>
-                    <div className="text-xs font-mono text-foreground/65 mt-1">{item.rating}/5</div>
+                    <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/80">{item.label}</div>
+                    <div className="text-xs font-mono text-foreground/75 mt-1">{item.rating}/5</div>
                   </div>
                 </div>
                 <h2 className="text-lg font-black leading-snug">{item.title}</h2>
-                <p className="text-sm text-foreground/72 leading-6">{item.description}</p>
+                <p className="text-sm text-foreground/80 leading-6">{item.description}</p>
                 <a href={item.href} target="_blank" rel="noopener noreferrer" className="mt-auto text-xs font-bold uppercase tracking-[0.25em] text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm">Read Review</a>
               </article>
             ))}
