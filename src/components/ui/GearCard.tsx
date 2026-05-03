@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -19,7 +20,7 @@ export function GearCard({
   verdict,
   priceCategory,
   updatedDate
-}: GearCardProps): JSX.Element {
+}: GearCardProps): ReactNode {
   return (
     <Stack
       as={NavLink}
@@ -31,7 +32,7 @@ export function GearCard({
       border
       radius="none"
       overflow="hidden"
-      className="group hover:border-amber-400 transition-all duration-300 max-w-[320px] mx-auto hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.24)]"
+      className="group hover:border-accent transition-all duration-300 max-w-[320px] mx-auto hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.24)]"
     >
       <CardImagePlaceholder
         image={image}
