@@ -5,11 +5,11 @@ description: Systematically review and test UI/UX changes interactively using pl
 # Review UX Changes
 
 0. **Prerequisites**:
-Ensure project dependencies and `playwright-cli` are installed, and its skills are available.
+Ensure project dependencies and Playwright are installed:
 ```bash
 pnpm install
-npm install -g @playwright/cli@latest
-playwright-cli install --skills
+./dev-tools/setup-playwright.sh
+./dev-tools/setup-python.sh
 ```
 
 1. **Pre-flight validation**:
@@ -22,43 +22,25 @@ pnpm run audit
 pnpm run dev &
 ```
 
-3. **Desktop Visual Audit (1440x900)**:
+3. **Visual Audit (Desktop & Mobile)**:
 ```bash
-playwright-cli open http://localhost:3000/ --headed --viewport-size=1440,900
+python3 dev-tools/td_cli.py visual-audit
 ```
-Verify the following routes and features:
-- `/`
-- `/about`
-- `/blog`
-- `/gear`
-- `/research`
-- Search modal
-Verify: Design consistency, typography, Recharts rendering, and ContentCard/GearCard 16:9 aspect ratio.
-```bash
-playwright-cli snapshot
-playwright-cli screenshot --filename=desktop-home.png
-```
+This unified command will capture desktop (1440x900) and mobile (390x844) screenshots of all core routes and the search modal, saving them to `design_audit/`.
 
-4. **Mobile Visual Audit (390x844)**:
-```bash
-playwright-cli open http://localhost:3000/ --headed --viewport-size=390,844
-```
-Verify the same routes and features, plus:
-- Mobile navigation bar (`pb-[safe-area-inset-bottom]`)
-- Mobile spacing and tap targets
-- Search modal overlay and Z-index collisions (ensure no overlap with header/hamburger menu)
-```bash
-playwright-cli snapshot
-playwright-cli screenshot --filename=mobile-home.png
-```
+Verify the generated screenshots for:
+- Design consistency, typography, and Recharts rendering.
+- ContentCard/GearCard 16:9 aspect ratio.
+- Mobile navigation bar (`pb-[safe-area-inset-bottom]`).
+- Mobile spacing and tap targets.
+- Search modal overlay and Z-index collisions.
 
-5. **Cleanup**:
+4. **Cleanup**:
 ```bash
-playwright-cli close-all
 npx kill-port 3000
 ```
 
-6. **Evaluate Against Core Design Principles**:
+5. **Evaluate Against Core Design Principles**:
 Systematically review your screenshots and interactive sessions against these heuristics:
 - **Spatial Design & Layout**: Grouping, whitespace, consistent padding.
 - **Typography**: Visual hierarchy, line heights, font weights.
@@ -66,7 +48,7 @@ Systematically review your screenshots and interactive sessions against these he
 - **Interaction & Motion**: Hover/focus states, purposeful transitions.
 - **Cognitive Load & UX Writing**: Choice architecture, action-oriented labels, empty states.
 
-7. **Structure Your UX Feedback**:
+6. **Structure Your UX Feedback**:
 When logging UX issues from your Playwright snapshots, always use a standardized format:
 - **Observation**: What is currently happening in the UI?
 - **Heuristic / Principle Violated**: Why is this a problem?
@@ -80,14 +62,14 @@ When logging UX issues from your Playwright snapshots, always use a standardized
 > - **Impact**: Fails WCAG AA standards; difficult for visually impaired users to read.
 > - **Recommendation**: Change the text class to `text-gray-600` or darker.
 
-8. **Assign Severity Scores**:
+7. **Assign Severity Scores**:
 Categorize your UX feedback so the engineering team knows what to prioritize:
 - **Critical (P0)**: Broken functionality, blocking overlap, severe accessibility failures.
 - **High (P1)**: Major visual bugs, confusing navigation, high cognitive load.
 - **Medium (P2)**: Inconsistent design tokens, missing hover states, minor responsive quirks.
 - **Low/Polish (P3)**: Micro-interaction tweaks, slight spacing adjustments.
 
-9. **Consolidate and Share Results**:
+8. **Consolidate and Share Results**:
 Compile the Playwright artifacts into a comprehensive UX report:
 - Create a PR comment or markdown document titled `UX Audit: [Feature Name]`.
 - Embed the relevant Playwright screenshots.

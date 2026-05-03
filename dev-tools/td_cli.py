@@ -491,6 +491,37 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+
+def handle_visual_audit(args):
+    print("Running Visual Audit...")
+    script_path = os.path.join(os.path.dirname(__file__), "visual_audit.py")
+    if not os.path.exists(script_path):
+        if args.json:
+            print(json.dumps({"status": "error", "message": f"Script not found at {script_path}"}))
+            sys.exit(1)
+        else:
+            raise CLIError(f"Script not found at {script_path}")
+
+    # Try to use virtual environment python if it exists, otherwise fallback to sys.executable
+    python_bin = sys.executable
+    if os.path.exists(".venv/bin/python"):
+        python_bin = ".venv/bin/python"
+    elif os.path.exists("venv/bin/python"):
+        python_bin = "venv/bin/python"
+
+    try:
+        subprocess.run([python_bin, script_path], check=True)
+        if args.json:
+            print(json.dumps({"status": "success", "message": "Visual audit complete"}))
+        else:
+            print("✅ Visual audit complete.")
+    except subprocess.CalledProcessError as e:
+        if args.json:
+            print(json.dumps({"status": "error", "message": f"Visual audit failed: {e}"}))
+            sys.exit(1)
+        else:
+            raise CLIError(f"Visual audit failed: {e}")
+
 def handle_manage_reviews(args):
     from github import Github
     token = get_github_token()
@@ -533,7 +564,8 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate)]: # fetch-review is alias for audit-pr --fetch
+                                            ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
+                      ("visual-audit", handle_visual_audit)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -562,6 +594,7 @@ def main():
             p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "audit-gate": pass # Uses global --json if provided
+        elif cmd == "visual-audit": pass # Uses global --json if provided
         p.set_defaults(func=func)
 
     args = parser.parse_args()
