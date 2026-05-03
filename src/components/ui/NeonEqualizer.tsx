@@ -70,19 +70,12 @@ export function NeonEqualizer() {
         const y1 = floorY - barH;
 
         ctx.save();
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 14;
-
         const grad = ctx.createLinearGradient(x, y1, x, floorY);
         grad.addColorStop(0, color);
         grad.addColorStop(0.6, withAlpha(color, '0.66'));
         grad.addColorStop(1, withAlpha(color, '0.12'));
         ctx.fillStyle = grad;
         ctx.fillRect(x - barW / 2, y1, barW, barH);
-
-        ctx.shadowBlur = 28;
-        ctx.fillStyle = withAlpha(color, '0.2');
-        ctx.fillRect(x - barW, y1, barW * 2, barH);
         ctx.restore();
       }
 
@@ -109,8 +102,6 @@ export function NeonEqualizer() {
         ringGrad.addColorStop(1, `rgba(255,0,200,${opacity * 0.5})`);
         ctx.strokeStyle = ringGrad;
         ctx.lineWidth = 1.5;
-        ctx.shadowColor = '#00e5ff';
-        ctx.shadowBlur = 8;
         ctx.stroke();
         ctx.restore();
       });
