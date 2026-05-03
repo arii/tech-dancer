@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Sidebar from "@/components/Sidebar";
 import { useContactPageData } from "@/hooks/use-page-data";
 import { siteName } from "@/lib/seo";
@@ -5,11 +6,13 @@ import { siteName } from "@/lib/seo";
 const Contact = () => {
   const { contactInquiries } = useContactPageData();
 
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = `Contact boomtick.blog | ${siteName}`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "Get in touch about West Coast Swing, consulting, project-based work, travel, gear, or the site itself.");
-  }
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">

@@ -14,7 +14,8 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
   const scrollShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const bars = useMemo(() => {
@@ -82,6 +83,7 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
     );
   }
 
+
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-end overflow-hidden">
       <motion.div
@@ -91,7 +93,7 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
       />
       <motion.div
         className="flex items-end justify-center gap-1.5 md:gap-2 w-full h-[80%] z-10"
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -10]) }}
+        style={{ y: yShift }}
       >
         {bars.map((bar, i) => (
           <motion.div

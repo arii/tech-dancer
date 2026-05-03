@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Sidebar from "@/components/Sidebar";
 import { useMemo, useState } from "react";
 import { blogFilters, blogPosts, tagColors } from "@/lib/content/blog";
@@ -10,11 +11,13 @@ const Blog = () => {
     [activeFilter, blogPosts],
   );
 
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = `${siteName} | West Coast Swing Blog Posts`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", "Browse West Coast Swing blog posts on training, travel, gear reviews, and dance research.");
-  }
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">

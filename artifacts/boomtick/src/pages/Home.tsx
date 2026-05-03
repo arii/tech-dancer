@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import Equalizer from "@/components/Equalizer";
@@ -5,11 +6,13 @@ import { homeHeroLinks, ArrowRight, Calendar, MapPin, blogPosts, tagColors, upco
 import { siteDescription, siteName } from "@/lib/seo";
 
 const Home = () => {
-  if (typeof document !== "undefined") {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
     document.title = `${siteName} | West Coast Swing Lifestyle Blog`;
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", siteDescription);
-  }
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">

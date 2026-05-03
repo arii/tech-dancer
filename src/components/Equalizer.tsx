@@ -21,7 +21,8 @@ export default function Equalizer({ compact = true, reverse = false }: Equalizer
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const bars = useMemo(() => {
