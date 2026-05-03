@@ -33,13 +33,8 @@ export default function Navigation() {
         aria-label="Main Navigation"
         className="hidden lg:flex fixed top-0 left-0 right-0 z-50 h-16 items-center border-b border-line bg-surface/90 backdrop-blur-xl px-6 xl:px-10"
       >
-        <Box as={NavLink} to="/" className="flex items-center gap-2 shrink-0 group">
-          <Box className="w-8 h-8 flex items-center justify-center rounded-sm group-hover:border-accent transition-colors">
-            <img src="/favicon.ico" alt="Boom Tick" className="h-8 w-8 object-contain" />
-          </Box>
-          <Text variant="mono" size="sm" weight="font-bold" className="text-white leading-none tracking-tight hidden xl:block">
-            Boom Tick
-          </Text>
+        <Box as={NavLink} to="/" className="flex items-center gap-3 shrink-0 group">
+          <img src="/favicon.ico" alt="Boom Tick" className="h-10 w-auto object-contain" />
         </Box>
 
         <Box as="ul" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8">
