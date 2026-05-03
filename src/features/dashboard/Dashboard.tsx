@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight, Dumbbell, Luggage, ShoppingBag, BarChart2 } from 'lucide-react';
@@ -11,7 +10,7 @@ import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
 import { NeonEqualizer } from '@/components/ui/NeonEqualizer';
-import heroTiles from '../../../attached_assets/image_1777801971481.png';
+import heroTiles from '../../../attached_assets/image_1777799906546.png';
 
 const FEATURE_ITEMS = [
   {
@@ -44,7 +43,7 @@ const FEATURE_ITEMS = [
   },
 ];
 
-export default function Home(): ReactNode {
+export default function Home() {
   const { recentPosts, upcomingEvents } = useHome();
 
   return (
