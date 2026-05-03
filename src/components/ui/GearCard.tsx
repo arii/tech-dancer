@@ -31,7 +31,7 @@ export function GearCard({
       border
       radius="none"
       overflow="hidden"
-      className="group hover:border-accent transition-all duration-300"
+      className="group hover:border-accent transition-all duration-300 max-w-[320px] mx-auto"
     >
       <CardImagePlaceholder
         image={image}
@@ -41,8 +41,8 @@ export function GearCard({
       />
 
       {/* Content Area */}
-      <Stack gap={4} padding={4} flex={1} justify="between">
-        <Stack gap={3}>
+      <Stack gap={3} padding={3} flex={1} justify="between">
+        <Stack gap={2}>
           <Box display="flex" align="center" justify="between" wrap>
             {rating && (
               <Box display="flex" align="center" gap={0.5}>
@@ -76,14 +76,14 @@ export function GearCard({
 
           <Text
             variant="body"
-            size="xl"
+            size="lg"
             weight="font-black"
-            className="text-accent-navy leading-none group-hover:text-accent transition-colors line-clamp-2"
+            className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
 
-          <Text variant="body" size="base" color="dim" className="line-clamp-3 leading-snug opacity-90">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-snug opacity-90">
              {excerpt}
           </Text>
 
@@ -103,12 +103,12 @@ export function GearCard({
           </Stack>
         </Stack>
 
-        <Stack gap={3} marginTop="auto">
+        <Stack gap={2} marginTop="auto">
           <Text variant="mono" size="micro" color="dim" className="leading-tight opacity-70 italic">
             * Affiliate links — commission earned at no cost to you.
           </Text>
 
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50">
+          <Box display="flex" align="center" gap={2} paddingTop={3} border="t" className="border-line/50">
             <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="wider">
               Read Review
             </Text>
