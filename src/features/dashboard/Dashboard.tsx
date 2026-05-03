@@ -5,8 +5,8 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
-import { SectionHeader, PageHeader } from '@/components/ui/PageHeader';
-import PathSelector from '@/components/ui/PathSelector';
+import { SectionHeader } from '@/components/ui/PageHeader';
+import { HeroSection } from '@/components/ui/HeroSection';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
@@ -22,21 +22,7 @@ export default function Home() {
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={6}>
-        <Box paddingLeft={{ base: 4, md: 16, lg: 20 }}>
-          <PageHeader
-            label="WELCOME"
-            title="The West Coast Swing Lifestyle Blog"
-            description="Technical systems and travel hacks for the modern competitive dancer."
-            border="none"
-            paddingBottom={0}
-            titleSize="fluid-7"
-            descriptionMaxWidth="prose"
-          />
-        </Box>
-
-        <Box width="full" className="border-y border-line">
-          <PathSelector />
-        </Box>
+        <HeroSection />
 
         <Stack gap={6} paddingX={{ base: 4, md: 6, lg: 12 }}>
           <SectionHeader label="LATEST UPDATES" title="Recent Blog Posts">
@@ -69,7 +55,7 @@ export default function Home() {
                 basePath="/blog"
                 aspect="video"
                 variants={motionTokens.staggerItem}
-                compact={true}
+                variant="minimal"
               />
             ))}
           </Grid>

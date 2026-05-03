@@ -15,7 +15,8 @@ interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   basePath: string;
   aspect?: "square" | "video";
   content?: string;
-  compact?: boolean;
+  variant?: "default" | "minimal";
+  compact?: boolean; // deprecated
 }
 
 export function ContentCard({ 
@@ -27,9 +28,11 @@ export function ContentCard({
   image, 
   basePath, 
   content, 
+  variant = "default",
   compact = false,
   ...motionProps 
 }: ContentCardProps) {
+  const isMinimal = variant === "minimal" || compact;
   return (
     <Stack
       as={motion.create(NavLink)}
@@ -37,20 +40,18 @@ export function ContentCard({
       direction="col"
       gap={0}
       height="full"
-      surface
-      border
-      radius={compact ? "none" : "xl"}
-      shadow={compact ? "none" : "standard"}
+      {...(!isMinimal && { surface: true, border: true, shadow: "standard" })}
+      radius={isMinimal ? "none" : "xl"}
       overflow="hidden"
       className={cn(
         "group transition-all duration-300",
-        compact 
+        isMinimal
           ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent" 
           : "hover:border-accent hover:shadow-xl hover:-translate-y-1"
       )}
       {...motionProps}
     >
-      {!compact && (
+      {!isMinimal && (
         <CardImagePlaceholder
           image={image}
           category={category}
@@ -59,8 +60,8 @@ export function ContentCard({
       )}
 
       {/* Content Area */}
-      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
-        <Stack gap={compact ? 0.5 : 3}>
+      <Stack gap={isMinimal ? 1 : 4} padding={isMinimal ? 4 : 5} flex={1} justify="between">
+        <Stack gap={isMinimal ? 0.5 : 3}>
           <Box display="flex" align="center" gap={3} wrap>
             <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
               {category}
@@ -70,7 +71,7 @@ export function ContentCard({
                 {date}
               </Text>
             )}
-            {!compact && (
+            {!isMinimal && (
               <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
                 {readingTime(content, excerpt)} MIN
               </Text>
@@ -79,7 +80,7 @@ export function ContentCard({
 
           <Text 
             variant="body"
-            size={compact ? "base" : "lg"}
+            size={isMinimal ? "base" : "lg"}
             weight="font-bold"
             className="text-accent-navy leading-tight group-hover:text-accent transition-colors line-clamp-2"
           >
@@ -91,7 +92,7 @@ export function ContentCard({
           </Text>
         </Stack>
 
-        {!compact && (
+        {!isMinimal && (
           <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
             <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
               Read Article

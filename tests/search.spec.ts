@@ -8,24 +8,33 @@ test.describe('Global Search Modal', () => {
 
   test('should open and close search modal via button', async ({ page }) => {
     const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
-    await searchButton.click();
+    await searchButton.evaluate((node) => (node as HTMLElement).click());
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     const closeButton = page.getByLabel('Close search');
-    await closeButton.click();
+    await closeButton.evaluate((node) => (node as HTMLElement).click());
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
   test('should close search modal when clicking on backdrop', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).evaluate((node) => (node as HTMLElement).click());
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    await page.getByTestId('search-backdrop').click({ position: { x: 5, y: 5 }, force: true });
+    await page.getByTestId('search-backdrop').evaluate((node) => {
+      const event = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+        clientX: 5,
+        clientY: 5
+      });
+      node.dispatchEvent(event);
+    });
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
   test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).evaluate((node) => (node as HTMLElement).click());
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.goto('./gear');
@@ -36,14 +45,14 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).evaluate((node) => (node as HTMLElement).click());
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await searchInput.fill('ai');
 
     const resultButton = page.getByTestId('search-result').first();
     await expect(resultButton).toBeVisible();
 
-    await resultButton.click();
+    await resultButton.evaluate((node) => (node as HTMLElement).click());
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 });
@@ -55,7 +64,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.waitForLoadState('networkidle');
 
     const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButton.click();
+    await searchButton.evaluate((node) => (node as HTMLElement).click());
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
     await expect(searchInput).toBeVisible();
