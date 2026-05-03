@@ -16,7 +16,7 @@ const NavigationShell = () => {
         </div>
         <nav className="flex-1 overflow-y-auto py-4" aria-label="Primary">
           {primaryNavigation.map((item) => (
-            <Link key={item.label} href={item.href} data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex items-center gap-3 px-6 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground">
+            <Link key={item.label} href={item.href} data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex min-h-11 items-center gap-3 px-6 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground">
               <item.icon size={16} className="shrink-0 text-foreground/70 transition-colors group-hover:text-primary group-focus-visible:text-primary" />
               <span>{item.label}</span>
             </Link>
@@ -31,18 +31,18 @@ const NavigationShell = () => {
       </aside>
 
       <div className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur md:hidden">
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="origin-left scale-[0.62] -translate-x-2">
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <div className="min-w-0 origin-left scale-[0.58] -translate-x-3 -translate-y-1">
             <Logo />
           </div>
-          <button type="button" onClick={() => setOpen((value) => !value)} className="inline-flex items-center justify-center rounded-md border border-border bg-card p-2 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid="button-toggle-nav" aria-label="Toggle navigation">
+          <button type="button" onClick={() => setOpen((value) => !value)} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card p-2 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid="button-toggle-nav" aria-label="Toggle navigation">
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
         {open ? (
           <nav className="border-t border-border bg-card px-3 py-3" aria-label="Mobile primary">
             {primaryNavigation.map((item) => (
-              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground min-h-11">
+              <Link key={item.label} href={item.href} onClick={() => setOpen(false)} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground">
                 <item.icon size={16} className="shrink-0 text-primary" />
                 <span>{item.label}</span>
               </Link>
