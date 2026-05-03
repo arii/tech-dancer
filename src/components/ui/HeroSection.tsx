@@ -101,7 +101,7 @@ export function HeroSection() {
           boom<span style={{ color: 'var(--hero-accent)' }}>tick</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>.blog</span>
         </Box>
 
-        {/* Visual-style Headline from tag.png */}
+        {/* Visual-style Headline from tag.png - Resized to fluid-6 per feedback */}
         <Stack
           marginTop={10}
           align="center"
@@ -111,7 +111,7 @@ export function HeroSection() {
         >
           <Text
             variant="headline"
-            size="fluid-7"
+            size="fluid-6"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -121,7 +121,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="fluid-7"
+            size="fluid-6"
             weight="font-black"
             tracking="tight"
             className="leading-none"
@@ -137,7 +137,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size="fluid-7"
+            size="fluid-6"
             weight="font-black"
             color="white"
             tracking="tight"
