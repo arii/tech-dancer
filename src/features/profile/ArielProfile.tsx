@@ -2,15 +2,9 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
-import { Star, Music, MapPin } from 'lucide-react';
 import { useProfile } from './useProfile';
-import { ProfileSection, ProfileItem } from './types';
-
-const IconMap = {
-  star: Star,
-  music: Music,
-  'map-pin': MapPin,
-};
+import { ProfileSection } from './types';
+import { ExperienceCards, ProfileItems, ProfileGallery } from './components/ProfileComponents';
 
 export default function ArielProfile() {
   const { bio } = useProfile();
@@ -36,64 +30,9 @@ export default function ArielProfile() {
           </Text>
         )}
 
-        {section.cards && (
-          <Stack gap={4} marginTop={2}>
-            {section.cards.map((card, index) => (
-              <Box key={index} padding={6} border radius="xl" className="bg-surface/20 border-line/5">
-                <Text as="h3" variant="mono" size="xs" color="brand" weight="font-bold" marginBottom={2} className="uppercase tracking-widest">
-                  {card.title}
-                </Text>
-                <Text variant="body" size="sm" color="body" className="leading-relaxed">
-                  {card.content}
-                </Text>
-              </Box>
-            ))}
-          </Stack>
-        )}
-
-        {section.items && (
-          <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={2}>
-            {section.items.map((item: ProfileItem, index: number) => {
-              const Icon = item.icon ? IconMap[item.icon] : null;
-              return (
-                <Box key={index} padding={6} border radius="xl" className="bg-surface/20 border-line/5">
-                  <Stack gap={3}>
-                    {Icon && <Icon className="w-4 h-4 text-accent" />}
-                    {item.title && (
-                      <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="uppercase tracking-widest">
-                        {item.title}
-                      </Text>
-                    )}
-                    <Text variant="body" size="xs" color="dim" className="leading-normal">
-                      {item.description}
-                    </Text>
-                  </Stack>
-                </Box>
-              );
-            })}
-          </Grid>
-        )}
-
-        {section.gallery && (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
-            {section.gallery.map((image, index) => (
-              <Box
-                key={index}
-                aspect="4/5"
-                overflow="hidden"
-                border
-                radius="xl"
-                className="border-line/10 bg-surface/30 group"
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </Box>
-            ))}
-          </Grid>
-        )}
+        {section.cards && <ExperienceCards cards={section.cards} />}
+        {section.items && <ProfileItems items={section.items} />}
+        {section.gallery && <ProfileGallery images={section.gallery} />}
 
         {section.links && (
           <Box display="flex" gap={3} wrap marginTop={4}>
