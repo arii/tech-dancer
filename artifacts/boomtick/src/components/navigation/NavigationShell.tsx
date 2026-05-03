@@ -8,12 +8,19 @@ const NavigationShell = () => {
   return (
     <>
       <header className="md:hidden sticky top-0 z-50 border-b border-border bg-background/98 backdrop-blur">
-        <div className="flex h-12 items-center justify-center px-3">
-          <Link href="/" className="inline-flex items-center" data-testid="link-home-logo-mobile">
-            <div className="scale-[0.42] -translate-y-0.5">
+        <div className="flex h-10 items-center px-3 overflow-x-auto whitespace-nowrap gap-2">
+          <Link href="/" className="shrink-0 inline-flex items-center" data-testid="link-home-logo-mobile">
+            <div className="scale-[0.34] -translate-x-7 -translate-y-1 origin-left">
               <Logo />
             </div>
           </Link>
+          <nav className="flex min-w-0 items-center gap-3 text-[11px] text-muted-foreground">
+            {primaryNavigation.map((item) => (
+              <Link key={item.label} href={item.href} data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`} className="shrink-0 hover:text-foreground transition-colors">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </header>
       <aside className="fixed top-0 left-0 hidden h-full w-56 flex-col border-r border-border bg-card md:flex z-40">
