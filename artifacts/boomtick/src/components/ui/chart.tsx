@@ -42,7 +42,8 @@ const ChartContainer = React.forwardRef<
   }
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId()
-  const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
+  const safeId = id ? id.replace(/[^a-zA-Z0-9-]/g, "") : uniqueId.replace(/[^a-zA-Z0-9-]/g, "")
+  const chartId = `chart-${safeId}`
 
   return (
     <ChartContext.Provider value={{ config }}>

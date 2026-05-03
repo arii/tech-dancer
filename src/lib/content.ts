@@ -8,11 +8,13 @@
  * Lightweight browser-safe frontmatter parser.
  */
 function parseFrontmatter(content: string) {
-  const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
-  if (!match) return { data: {}, content };
+  if (!content.startsWith('---\n')) return { data: {}, content };
 
-  const yaml = match[1];
-  const body = match[2];
+  const endOfYaml = content.indexOf('\n---\n');
+  if (endOfYaml === -1) return { data: {}, content };
+
+  const yaml = content.slice(4, endOfYaml);
+  const body = content.slice(endOfYaml + 5);
   const data: Record<string, string | number | string[] | undefined> = {};
 
   let currentKey = '';
