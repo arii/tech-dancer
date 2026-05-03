@@ -11,7 +11,7 @@ export default function ArielProfile() {
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: Roboticist, Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
+        description="Ariel Anders, PhD: roboticist, dancer, and engineer. Exploring the intersection of technical systems and creative movement."
       />
       
       <PageHeader

@@ -7,8 +7,9 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
+import type { JSX } from 'react';
 
-export default function ResearchAnalytics() {
+export default function ResearchAnalytics(): JSX.Element {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
@@ -16,13 +17,13 @@ export default function ResearchAnalytics() {
     <Box as="section">
       <SEO
         title="Research"
-        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
+        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Explore kinematics, competition data, and biomechanics."
       />
       <Stack gap={12}>
         <PageHeader
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
-          description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
+          description="Interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
           as="h1"
         />
 

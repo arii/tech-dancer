@@ -10,8 +10,10 @@ import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
+import type { JSX } from 'react';
+import type { Resource } from '@/lib/content';
 
-export default function Toolbox() {
+export default function Toolbox(): JSX.Element {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView } = useToolbox();
 
   const allFilteredItems = useMemo(() =>
@@ -22,13 +24,13 @@ export default function Toolbox() {
     <Box as="section" paddingY={4}>
       <SEO
         title="Toolbox"
-        description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
+        description="Rigorous gear reviews for West Coast Swing dancers, with honest notes on shoes, accessories, and practice essentials."
       />
       <Box as="header" marginBottom={8}>
         <PageHeader
           label="THE TOOLBOX"
           title="Gear Reviews"
-          description="Rigorous testing and honest takes on the gear that keeps you moving."
+          description="Rigorous gear reviews for West Coast Swing dancers, with honest notes on shoes, accessories, and practice essentials."
         />
 
         {/* Modern Search Bar & Toggle */}
@@ -47,7 +49,7 @@ export default function Toolbox() {
         <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 4, md: 6 }}>
           {allFilteredItems.map((item) => (
             <GearCard
-              key={item.slug}
+              key={(item as Resource).slug}
               {...item}
               basePath="/gear"
             />
@@ -56,7 +58,7 @@ export default function Toolbox() {
       ) : (
         <Stack gap={0} border="t" className="border-line">
           {allFilteredItems.map((item) => (
-            <ListRow key={item.slug} {...item} basePath="/gear" />
+            <ListRow key={(item as Resource).slug} {...item} basePath="/gear" />
           ))}
         </Stack>
       )}

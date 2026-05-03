@@ -21,16 +21,17 @@ export function SEO({
   canonical,
   schema,
   googleVerification = GOOGLE_SITE_VERIFICATION
-}: SEOProps) {
+}: SEOProps): JSX.Element {
   const { pathname } = useLocation();
 
   const url = canonical || `${BASE_URL}${pathname}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
   const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
+  const descriptionText = description.trim();
 
   // Use a dynamic OG image generator if no specific image is provided for articles
-  // Removed Vercel logos to better align with TechDancer brand
+  // Removed generic logos to better align with the Boom Tick brand
   const seoImage = image || (type === 'article'
     ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px`
     : defaultImage);
@@ -50,21 +51,25 @@ export function SEO({
       {/* Standard metadata */}
       {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
       <title>{displayTitle}</title>
-      <meta name="description" content={description} />
+      <meta name="description" content={descriptionText} />
+      <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
       <link rel="canonical" href={url} />
+      <meta name="application-name" content={SITE_NAME} />
+      <meta name="theme-color" content="#050816" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={displayTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={descriptionText} />
       <meta property="og:image" content={seoImage} />
+      <meta property="og:site_name" content={SITE_NAME} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={displayTitle} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={descriptionText} />
       <meta name="twitter:image" content={seoImage} />
 
       {/* Structured Data */}
