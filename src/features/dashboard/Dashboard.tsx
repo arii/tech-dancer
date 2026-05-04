@@ -53,10 +53,10 @@ export default function Home() {
             >
               <Box position="absolute" inset="top" height="full" width="full" opacity={0.1} className="industrial-gradient group-hover:scale-105 transition-transform duration-700" />
               <Stack gap={2} position="relative" zIndex="base">
-                <Text as="h2" variant="headline" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter">
+                <Text as="h2" variant="headline" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter" color="white">
                   Train smarter.
                 </Text>
-                <Text variant="body" marginBottom={4} maxWidth="xs" size="sm" emphasis="high" className="leading-6">
+                <Text variant="body" marginBottom={4} maxWidth="xs" size="sm" color="white" className="leading-6">
                   Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
                 </Text>
                 <Box display="flex" align="center" gap={2} color="accent" className="font-bold text-sm group-hover:translate-x-2 transition-transform">
@@ -78,10 +78,10 @@ export default function Home() {
             >
               <Box position="absolute" inset="top" height="full" width="full" opacity={0.1} className="industrial-gradient group-hover:scale-105 transition-transform duration-700" />
               <Stack gap={2} position="relative" zIndex="base">
-                <Text as="h2" variant="headline" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter">
+                <Text as="h2" variant="headline" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter" color="white">
                   Travel better.
                 </Text>
-                <Text variant="body" marginBottom={4} maxWidth="xs" size="sm" emphasis="high" className="leading-6">
+                <Text variant="body" marginBottom={4} maxWidth="xs" size="sm" color="white" className="leading-6">
                   Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
                 </Text>
                 <Box display="flex" align="center" gap={2} color="accent" className="font-bold text-sm group-hover:translate-x-2 transition-transform">
