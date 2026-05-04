@@ -38,6 +38,7 @@ export interface ProfileLink {
 export interface ProfileData {
   name: string;
   role: string;
+  portrait?: ProfileGalleryImage;
   sections: ProfileSection[];
   details: ProfileDetail[];
   links: ProfileLink[];

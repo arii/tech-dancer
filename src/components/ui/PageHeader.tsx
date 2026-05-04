@@ -11,6 +11,8 @@ interface PageHeaderProps {
   border?: BaseProps['border'];
   descriptionMaxWidth?: BaseProps['maxWidth'];
   titleSize?: "fluid-5" | "fluid-6" | "fluid-7" | "fluid-8";
+  labelSize?: "micro" | "xs" | "sm" | "base";
+  labelWeight?: "font-medium" | "font-semibold" | "font-bold" | "font-black";
   cta?: ReactNode;
 }
 
@@ -23,6 +25,8 @@ export function PageHeader({
   border = "b", 
   descriptionMaxWidth = "prose",
   titleSize = "fluid-5",
+  labelSize = "xs",
+  labelWeight = "font-bold",
   cta
 }: PageHeaderProps) {
   return (
@@ -31,7 +35,7 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="brand" weight="font-bold" tracking="wide-editorial" uppercase>
+        <Text variant="mono" size={labelSize} color="brand" weight={labelWeight} tracking="wide-editorial" uppercase>
           {label}
         </Text>
         <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-accent-navy leading-tight tracking-tight">

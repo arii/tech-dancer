@@ -87,12 +87,11 @@ const PROFILE_DATA: ProfileData = {
       eyebrow: "Photo Gallery",
       title: "WCS Moments",
       gallery: [
-        { src: firstComp, alt: "West Coast Swing competition moment" },
-        { src: monterey, alt: "West Coast Swing stage pose" },
-        { src: madJamAri, alt: "West Coast Swing social dance" },
-        { src: glowBunny, alt: "Glow bunny dance costume" },
-        { src: wwwAri, alt: "West Coast Swing floor connection" },
-        { src: roboticist, alt: "Portrait photo" }
+        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension at a competition" },
+        { src: monterey, alt: "Ariel Anders in a dramatic West Coast Swing pose in Monterey" },
+        { src: madJamAri, alt: "Ariel Anders enjoying a social dance at MadJam" },
+        { src: glowBunny, alt: "Ariel Anders wearing a creative glow bunny costume for a themed dance" },
+        { src: wwwAri, alt: "Close-up of West Coast Swing floor connection during a performance" }
       ]
     },
     {
@@ -102,10 +101,14 @@ const PROFILE_DATA: ProfileData = {
         { label: 'Instagram', url: 'https://instagram.com/' },
         { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
         { label: 'GitHub', url: 'https://github.com/arii' },
-        { label: 'Portfolio', url: 'https://arii.github.io/' }
+        { label: 'Portfolio', url: import.meta.env.BASE_URL }
       ]
     }
   ],
+  portrait: {
+    src: roboticist,
+    alt: "Ariel Anders, PhD - MIT Roboticist and Tech-Dancer"
+  },
   details: [
     { label: "LOCATION", value: "San Francisco, CA" },
     { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
@@ -115,7 +118,7 @@ const PROFILE_DATA: ProfileData = {
     { label: 'Instagram', url: 'https://instagram.com/' },
     { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
     { label: 'GitHub', url: 'https://github.com/arii' },
-    { label: 'Portfolio', url: 'https://arii.github.io/' }
+    { label: 'Portfolio', url: import.meta.env.BASE_URL }
   ]
 };
 

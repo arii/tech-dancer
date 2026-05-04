@@ -13,7 +13,7 @@ export function EmailForm() {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} noValidate width={{ base: "full", md: "auto" }} maxWidth="md">
+    <Box as="form" onSubmit={handleSubmit} width={{ base: "full", md: "auto" }} maxWidth="md">
       <Stack direction="row" gap={0} position="relative" width="full">
         <Box
           as="input"
@@ -30,6 +30,7 @@ export function EmailForm() {
         <Button
           type="submit"
           variant="primary"
+          className="bg-accent-navy hover:bg-accent-navy/90"
           disabled={status === 'loading' || status === 'success'}
           minHeight={11}
           width="auto"

@@ -16,9 +16,9 @@ export default function ArielProfile() {
 
   const renderSection = (section: ProfileSection) => {
     return (
-      <Stack key={section.id} gap={4} maxWidth="prose">
+      <Stack key={section.id} gap={6} maxWidth="prose">
         {section.eyebrow && (
-          <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">
+          <Text variant="mono" size="sm" color="brand" weight="font-black" className="uppercase tracking-widest">
             {section.eyebrow}
           </Text>
         )}
@@ -55,9 +55,11 @@ export default function ArielProfile() {
         title={bio.name}
         description={bio.role}
         titleSize="fluid-7"
+        labelSize="sm"
+        labelWeight="font-black"
       />
 
-      <Stack gap={12} marginTop={8}>
+      <Stack gap={16} marginTop={12}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             <Stack gap={16} className="lg:col-span-8">
@@ -66,9 +68,24 @@ export default function ArielProfile() {
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
+                {bio.portrait && (
+                  <Box
+                    aspect="4/5"
+                    radius="xl"
+                    overflow="hidden"
+                    border
+                    className="border-line/10 shadow-lg"
+                  >
+                    <img
+                      src={bio.portrait.src}
+                      alt={bio.portrait.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </Box>
+                )}
                 <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
+                    <Text variant="mono" size="sm" color="brand" weight="font-black" className="uppercase tracking-widest">AT A GLANCE</Text>
                     <Stack gap={4}>
                       {bio.details.map((detail) => (
                         <Stack key={detail.label} gap={1}>
@@ -82,7 +99,7 @@ export default function ArielProfile() {
 
                 <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                    <Text variant="mono" size="sm" color="brand" weight="font-black" className="uppercase tracking-widest">CONNECT</Text>
                     <ProfileLinks links={bio.links} />
                   </Stack>
                 </Box>
