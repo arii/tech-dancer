@@ -1,4 +1,3 @@
-import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 interface BrandIconProps {
@@ -7,47 +6,32 @@ interface BrandIconProps {
 }
 
 export function BrandIcon({ className, showBackground = false }: BrandIconProps) {
-  const titleId = useId();
-  const gradientId = useId();
-
   return (
     <svg
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-6 w-6", className)}
-      aria-labelledby={titleId}
-      fill="none"
+      aria-labelledby="icon-title"
     >
-      <title id={titleId}>BoomTick Icon</title>
-      {showBackground && <rect width="64" height="64" rx="12" fill="#0D0E1C" />}
+      <title id="icon-title">BoomTick Icon</title>
+      {showBackground && (
+        <rect width="64" height="64" rx="12" fill="white"/>
+      )}
 
-      <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#00CFFF" />
-          <stop offset="100%" stopColor="#8B2FFF" />
-        </linearGradient>
-      </defs>
-
-      <text
-        x="10"
-        y="44"
-        fontFamily="Arial Black, Arial, sans-serif"
-        fontSize="40"
-        fontWeight="900"
-        fill="white"
-      >
+      {/* B */}
+      <text x="10" y="44"
+            fontFamily="var(--raw-font-display), sans-serif"
+            fontSize="40"
+            fontWeight="700"
+            fill="var(--raw-color-accent-navy)">
         B
       </text>
 
-      <line
-        x1="38"
-        y1="18"
-        x2="54"
-        y2="46"
-        stroke={`url(#${gradientId})`}
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
+      {/* Tick stroke */}
+      <path d="M38 18 L54 46"
+            stroke="var(--raw-color-accent)"
+            strokeWidth="6"
+            strokeLinecap="round"/>
     </svg>
   );
 }

@@ -81,7 +81,7 @@ export default function Navigation() {
             padding={4}
             className="group border-b border-line"
           >
-            <Logo className="h-14 transition-opacity group-hover:opacity-80" />
+            <Logo className="h-14 transition-colors group-hover:opacity-80" />
           </Box>
 
           <Stack as="ul" gap={0} flex={1} paddingY={4}>
