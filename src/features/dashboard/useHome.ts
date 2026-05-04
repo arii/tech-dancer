@@ -4,9 +4,7 @@ import { getPosts } from '@/lib/content';
 import { Home as HomeIcon } from 'lucide-react';
 
 export const upcomingEvents = [
-  { name: 'Mission City Swing', location: 'San Jose, CA', date: 'Every Wednesday', status: 'Local Regular', icon: HomeIcon },
-  { name: 'US Open Swing Dance Championships', location: 'Burbank, CA', date: 'November', status: 'Major Event', icon: HomeIcon },
-  { name: 'Swing Diego', location: 'San Diego, CA', date: 'January', status: 'Major Event', icon: HomeIcon },
+  { name: 'Mission City Swing', date: 'Every Wednesday', status: 'Local Regular', icon: HomeIcon },
 ];
 
 export function useHome() {

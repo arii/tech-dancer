@@ -1,28 +1,36 @@
 import { useState } from 'react';
 import { Grid } from '@/layouts/Primitives';
 import { HeroPathCard } from './HeroPathCard';
+import dancerHero from '@/assets/dancer_hero.webp';
+import roboticistHero from '@/assets/roboticist_hero.webp';
 
-type PathID = 'train' | 'travel';
+type PathID = 'dancer' | 'roboticist';
 
 const PATH_DATA = [
   {
-    id: 'train' as PathID,
-    title: 'Train smarter.',
-    description: 'Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.',
+    id: 'dancer' as PathID,
+    title: 'ARE YOU A DANCER?',
+    wrapperClass: 'lg:col-span-7 bg-black',
+    image: dancerHero,
+    titleClass: 'text-4xl md:text-6xl',
+    scanlineDelay: 'animation-delay-0',
     links: [
-      { text: 'WCS Training', to: '/blog?category=Lifestyle' },
-      { text: 'Competition tips', to: '/blog?category=Strategy' },
+      { text: 'WCS blog posts', to: '/blog?category=Lifestyle' },
+      { text: 'Travel & Lifestyle', to: '/blog?category=Travel' },
       { text: 'Gear reviews', to: '/gear' },
     ],
   },
   {
-    id: 'travel' as PathID,
-    title: 'Travel better.',
-    description: 'Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.',
+    id: 'roboticist' as PathID,
+    title: 'HIRING A ROBOTICIST?',
+    wrapperClass: 'lg:col-span-5 bg-zinc-900',
+    image: roboticistHero,
+    titleClass: 'text-3xl md:text-5xl',
+    scanlineDelay: 'animation-delay-500',
     links: [
-      { text: 'Travel guides', to: '/blog?category=Travel', color: 'accent-purple' },
-      { text: 'Event calendar', to: '/blog?category=Events', color: 'accent-purple' },
-      { text: 'Packing lists', to: '/blog?category=Gear', color: 'accent-purple' },
+      { text: 'Technical Portfolio', to: 'https://arii.github.io' },
+      { text: 'Tech blog posts', to: '/blog?category=Tech' },
+      { text: 'Data & Development Lab', to: '/research' },
     ],
   },
 ];
@@ -32,20 +40,24 @@ export default function PathSelector() {
 
   return (
     <Grid
-      cols={{ base: 1, lg: 2 }}
-      gap="none"
+      cols={{ base: 1, lg: 12 }}
+      gap="px"
+      surface="muted"
       border="y"
+      minHeight="[40vh]"
       width="full"
       className="bg-line"
     >
       {PATH_DATA.map((path) => {
         const isHovered = hoveredPath === path.id;
+        const isOtherHovered = hoveredPath !== null && !isHovered;
 
         return (
           <HeroPathCard
             key={path.id}
             {...path}
             isHovered={isHovered}
+            isOtherHovered={isOtherHovered}
             onMouseEnter={() => setHoveredPath(path.id)}
             onMouseLeave={() => setHoveredPath(null)}
             onClick={() => setHoveredPath(isHovered ? null : path.id)}
