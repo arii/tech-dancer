@@ -41,7 +41,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             </Text>
           </Stack>
 
-<<<<<<< HEAD
+
           <Stack as="form" onSubmit={onSubmit} gap={6} noValidate>
             <FormField label="Your Name" error={errors.name?.message}>
               <Box as="input"
