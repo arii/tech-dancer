@@ -25,7 +25,7 @@ function collectAuditFiles(targets) {
   };
 
   for (const target of resolvedTargets) {
-    const absoluteTarget = path.resolve(ROOT, target);
+    const absoluteTarget = path.isAbsolute(target) ? target : path.join(ROOT, target);
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
@@ -234,35 +234,30 @@ function checkContent(content) {
   }
 
   // 3. Contrast safety heuristic for inverse/gradient hero panels.
-  // If a file uses the shared industrial gradient treatment, nearby headline/body Text
-  // should explicitly opt into an inverse color token (white/bg) or semantic intent.
-  const industrialGradientLines = [];
-  lines.forEach((line, index) => {
-    if (line.includes('industrial-gradient')) industrialGradientLines.push(index + 1);
-  });
+  // Single-pass sliding window: when an industrial gradient line is seen,
+  // inspect nearby headline/body Text lines for explicit inverse-safe styling.
+  let activeGradientWindowUntil = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const lineNum = i + 1;
+    const line = lines[i];
 
-  if (industrialGradientLines.length > 0) {
-    for (const gradLine of industrialGradientLines) {
-      const start = Math.max(1, gradLine - 2);
-      const end = Math.min(lines.length, gradLine + 30);
-      for (let lineNum = start; lineNum <= end; lineNum++) {
-        const line = lines[lineNum - 1];
-        if (!line || line.includes('// impeccable-ignore')) continue;
-        if (!line.includes('<Text')) continue;
+    if (line.includes('industrial-gradient')) {
+      activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
+      continue;
+    }
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore')) continue;
 
-        const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
-        const hasInverseColor = /color="(?:white|bg)"/.test(line);
-        const hasIntent = /intent="/.test(line);
-        if (isHeadlineOrBody && !hasInverseColor && !hasIntent) {
-          violations.push({
-            line: lineNum,
-            pattern: 'Contrast Risk (Inverse Surface)',
-            severity: 'major',
-            value: line.trim().slice(0, 80),
-            message: 'Text near industrial gradient must set inverse color token (white/bg) or intent for reliable contrast.'
-          });
-        }
-      }
+    const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
+    const hasInverseColor = /color="(?:white|bg)"/.test(line);
+    const hasIntent = /intent="/.test(line);
+    if (isHeadlineOrBody && !hasInverseColor && !hasIntent) {
+      violations.push({
+        line: lineNum,
+        pattern: 'Contrast Risk (Inverse Surface)',
+        severity: 'major',
+        value: line.trim().slice(0, 80),
+        message: 'Text near industrial gradient must set inverse color token (white/bg) or intent for reliable contrast.'
+      });
     }
   }
 
