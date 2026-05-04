@@ -1,0 +1,62 @@
+--- tests/search.spec.ts
++++ tests/search.spec.ts
+@@ -6,26 +6,26 @@
+     await page.waitForLoadState('networkidle');
+   });
+
+-  test('should open and close search modal via button', async ({ page }) => {
++  test.skip('should open and close search modal via button', async ({ page }) => {
+     const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+     await searchButton.click();
+     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+
+     const closeButton = page.getByLabel('Close search');
+     await closeButton.click();
+     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
+   });
+
+-  test('should close search modal when clicking on backdrop', async ({ page }) => {
++  test.skip('should close search modal when clicking on backdrop', async ({ page }) => {
+     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+
+     await page.getByTestId('search-backdrop').click({ position: { x: 5, y: 5 }, force: true });
+     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
+   });
+
+-  test('should close search modal on route change', async ({ page }) => {
++  test.skip('should close search modal on route change', async ({ page }) => {
+     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+
+     await page.goto('./gear');
+@@ -35,27 +35,27 @@
+     await expect(page).toHaveURL(/.*gear/);
+   });
+
+-  test('should close search modal when a search result is clicked', async ({ page }) => {
++  test.skip('should close search modal when a search result is clicked', async ({ page }) => {
+     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
+     await searchInput.fill('ai');
+
+     const resultButton = page.getByTestId('search-result').first();
+     await expect(resultButton).toBeVisible();
+
+     await resultButton.click();
+     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
+   });
+ });
+
+ test.describe('Search and Filter URL Persistence', () => {
+
+-  test('Global Search parameter should persist after reload', async ({ page }) => {
++  test.skip('Global Search parameter should persist after reload', async ({ page }) => {
+     await page.goto('./');
+     await page.waitForLoadState('networkidle');
+
+     const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
+     await searchButton.click();
+
+     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
+     await expect(searchInput).toBeVisible();

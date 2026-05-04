@@ -5,7 +5,6 @@ import { getHighlightedParts } from '@/lib/utils';
 import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-import { debounce } from 'throttle-debounce';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -21,10 +20,15 @@ export function GlobalSearch() {
 
   // Debounced URL sync to avoid excessive navigation and re-renders
   const debouncedSetQuery = useMemo(
-    () => debounce(300, (q: string) => {
-      setQuery(q);
-    }),
-    [setQuery]
+    () => {
+      let timeoutId: ReturnType<typeof setTimeout>;
+      return (q: string) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setQuery(q);
+        }, 300);
+      };
+    }, [setQuery]
   );
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -79,8 +83,11 @@ export function GlobalSearch() {
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-0"
       onClick={close}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Search"
     >
       <Box
         width="full"
@@ -107,7 +114,7 @@ export function GlobalSearch() {
             variant="display"
             size="2xl"
             color="main"
-            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/30"
+            className="border-none outline-none focus:ring-0 placeholder:text-text-dim/75"
             autoFocus
           />
           <Box 

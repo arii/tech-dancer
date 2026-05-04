@@ -1,31 +1,19 @@
 import { Search } from 'lucide-react';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
-import { throttle } from 'throttle-debounce';
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
-import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
-
-  useEffect(() => {
-    const handleScroll = throttle(100, () => {
-      setScrolled(window.scrollY > 20);
-    });
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleSearchClick = () => {
     setIsOpen(false);
@@ -59,51 +47,55 @@ export default function Navigation() {
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Top Bar */}
       <Box 
         as="nav"
         aria-label="Main Navigation"
-        layout="navRail" 
-        className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
-        )}
+        position="fixed"
+        inset="top"
+        zIndex="sticky"
+        className="hidden lg:flex flex-row justify-between items-center w-full bg-surface/90 backdrop-blur-xl border-b border-line px-8 py-4"
       >
-        <Stack
-          padding={8}
-          gap={10}
-          flex={1}
-        >
-          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Logo className="h-10 transition-colors group-hover:opacity-80" />
-          </Box>
+        <Box as={NavLink} to="/" display="flex" align="center" className="group">
+          <Logo className="h-8 transition-colors group-hover:opacity-80" />
+        </Box>
 
-          <Stack as="ul" gap={2}>
-            <Box as="li">
-              <Box
-                as="button"
-                type="button"
-                cursor="pointer"
-                onClick={handleSearchClick}
-                display="flex"
-                align="center"
-                gap={4}
-                width="full"
-                paddingY={6}
-                paddingX={4}
-                radius="md"
-                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+        <Box as="ul" display="flex" flexDirection="row" align="center" gap={6}>
+          {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+            <Box as="li" key={item.path}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) => cn(
+                  "flex items-center gap-2 px-3 py-2 rounded-md transition-colors",
+                  isActive ? "bg-bg text-accent font-bold" : "text-text-dim hover:bg-bg hover:text-accent font-medium"
+                )}
+                aria-label={item.label}
               >
-                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
-              </Box>
+                {item.icon && <item.icon className="w-4 h-4" />}
+                <Text variant="sans" size="sm">{item.label}</Text>
+              </NavLink>
             </Box>
-
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
-            ))}
-          </Stack>
-        </Stack>
+          ))}
+          <Box as="li">
+            <Box
+              as="button"
+              type="button"
+              cursor="pointer"
+              onClick={handleSearchClick}
+              display="flex"
+              align="center"
+              gap={2}
+              paddingY={2}
+              paddingX={3}
+              radius="md"
+              className="group text-text-dim hover:bg-bg hover:text-accent transition-all"
+              data-testid="search-button"
+            >
+              <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" />
+              <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </>
   );

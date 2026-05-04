@@ -15,7 +15,6 @@ import {
   initializeFirestore,
   persistentLocalCache
 } from 'firebase/firestore';
-import { throttle } from 'throttle-debounce';
 
 // --- Utilities ---
 
@@ -251,15 +250,21 @@ export function useUXAuditor() {
     },
   });
 
-  const throttledAudit = useRef(
-    throttle(2000, (targetUrl: string) => {
-      auditMutation.mutate(targetUrl);
-    }, { noTrailing: true })
-  );
+  const throttledAudit = useRef<{ lastRun?: number }>({});
 
   const runUXAudit = useCallback((targetUrl: string) => {
-    throttledAudit.current(targetUrl);
-  }, []);
+    const now = Date.now();
+    const limit = 2000;
+
+    // If we've run recently, ignore this call (no trailing edge)
+    if (throttledAudit.current.lastRun && (now - throttledAudit.current.lastRun) < limit) {
+      return;
+    }
+
+    // Otherwise, run immediately and update lastRun
+    throttledAudit.current.lastRun = now;
+    auditMutation.mutate(targetUrl);
+  }, [auditMutation]);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
