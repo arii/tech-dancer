@@ -42,7 +42,7 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
             const icon = getCategoryIcon(category);
             return React.createElement(icon, { className: "w-3.5 h-3.5 text-accent", strokeWidth: 2.5 });
           })()}
-          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" className="text-accent-navy">
+          <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider" color="brand">
             {category}
           </Text>
         </Box>
