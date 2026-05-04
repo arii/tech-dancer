@@ -127,7 +127,7 @@ export default function ResearchDetail() {
                     <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
                       LABORATORY_ACCESS // {tool.category}
                     </Text>
-                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" leading="tight" tracking="tight">
                       {tool.name}
                     </Text>
                   <Box border surface="accent" padding="compact">

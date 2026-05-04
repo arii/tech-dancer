@@ -26,7 +26,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Tools Ecosystem</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -72,7 +72,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Studies</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
 
