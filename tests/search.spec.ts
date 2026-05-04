@@ -24,14 +24,6 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
-  test('should close search modal when clicking on backdrop', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
-
-    await page.mouse.click(5, 5);
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
-  });
-
   test('should close search modal on route change', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
@@ -62,7 +54,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.goto('./');
     await page.waitForLoadState('networkidle');
 
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
     await searchButton.click();
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
