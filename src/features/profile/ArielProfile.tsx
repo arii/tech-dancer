@@ -91,6 +91,5 @@ export default function ArielProfile() {
           </Grid>
         </Reveal>
       </Stack>
-    </Box>
   );
 }

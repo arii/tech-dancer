@@ -3,7 +3,7 @@ import type { KnipConfig } from 'knip';
 const config: KnipConfig = {
   entry: ['src/main.tsx', 'scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.mjs'],
   project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
-  ignore: ['src/styles/safelist.ts'],
+  ignore: ['src/components/Equalizer.tsx', 'src/styles/safelist.ts'],
   ignoreDependencies: [
     'tw-animate-css',
     'vite-plugin-pwa',
