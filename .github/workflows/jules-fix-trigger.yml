@@ -1,0 +1,75 @@
+name: Jules Fix CI
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  trigger-jules:
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@jules-fix-ci') &&
+      (github.event.comment.author_association == 'OWNER' ||
+       github.event.comment.author_association == 'MEMBER' ||
+       github.event.comment.author_association == 'COLLABORATOR')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get PR branch
+        id: pr_info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_DATA=$(gh pr view ${{ github.event.issue.number }} --json headRefName -R ${{ github.repository }})
+          echo "branch=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
+
+      - name: Initialize Jules Repair Session
+        id: jules_api
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          JULES_SOURCE_ID: ${{ vars.JULES_SOURCE_ID }}
+          PR_BRANCH: ${{ steps.pr_info.outputs.branch }}
+        run: |
+          # Use vars.JULES_SOURCE_ID, falling back to a dummy if not set for testing/initial deployment
+          SOURCE_ID="${JULES_SOURCE_ID:-UNKNOWN_SOURCE}"
+
+          RESPONSE=$(curl -s -X POST "https://jules.googleapis.com/v1alpha/sessions" \
+            -H "Content-Type: application/json" \
+            -H "x-goog-api-key: $JULES_API_KEY" \
+            -d "{
+              \"prompt\": \"Analyze the failing CI logs and fix the errors. Prioritize adherence to RepoAuditor Anti-Slop directives.\",
+              \"sourceContext\": {
+                \"source\": \"sources/$SOURCE_ID\",
+                \"githubRepoContext\": { \"branch\": \"$PR_BRANCH\" }
+              },
+              \"automationMode\": \"FULLY_AUTOMATED\"
+            }")
+
+          echo "Full Response: $RESPONSE"
+          SESSION_NAME=$(echo $RESPONSE | jq -r .name)
+          if [ "$SESSION_NAME" == "null" ]; then
+            echo "Error: Failed to initialize Jules session."
+            echo "$RESPONSE"
+            exit 1
+          fi
+          echo "session_name=$SESSION_NAME" >> $GITHUB_OUTPUT
+
+      - name: Feedback Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            🤖 **Jules is on it!**
+
+            I've initialized an autonomous repair session to diagnose and fix the CI failures on branch `${{ steps.pr_info.outputs.branch }}`.
+
+            **Session Details:**
+            - **ID:** `${{ steps.jules_api.outputs.session_name }}`
+            - **Mode:** `FULLY_AUTOMATED`
+
+            I will post an update once the analysis is complete or if I've applied a patch.
+          token: ${{ secrets.GITHUB_TOKEN }}

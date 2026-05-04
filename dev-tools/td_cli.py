@@ -491,6 +491,72 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_fix_ci(args):
+    from github import Github
+    token = get_github_token()
+    if not token: raise CLIError("GitHub token not found", code=401)
+
+    repo_name = get_repo_name()
+    g = Github(token)
+    repo = g.get_repo(repo_name)
+
+    # 1. Resolve PR and Branch
+    pr = None
+    if args.pr_number:
+        pr = repo.get_pull(int(args.pr_number))
+        branch = pr.head.ref
+    elif args.branch:
+        branch = args.branch
+        pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
+        pr = pulls[0] if pulls else None
+    else:
+        raise CLIError("Provide --pr-number or --branch")
+
+    # 2. Get API Credentials
+    api_key = os.environ.get("JULES_API_KEY")
+    source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
+
+    if not api_key: raise CLIError("JULES_API_KEY environment variable missing")
+    if not source_id: raise CLIError("JULES_SOURCE_ID missing (env or GHA variable)")
+
+    # 3. Call Jules API
+    import urllib.request
+    url = "https://jules.googleapis.com/v1alpha/sessions"
+    payload = {
+        "prompt": "Analyze the failing CI logs and fix the errors. Prioritize adherence to RepoAuditor Anti-Slop directives.",
+        "sourceContext": {
+            "source": f"sources/{source_id}",
+            "githubRepoContext": { "branch": branch }
+        },
+        "automationMode": "FULLY_AUTOMATED"
+    }
+
+    headers = {"Content-Type": "application/json", "x-goog-api-key": api_key}
+
+    if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
+
+    session_name = "dry-run-session"
+    if not args.dry_run:
+        req = urllib.request.Request(url, data=json.dumps(payload).encode(), headers=headers, method='POST')
+        try:
+            with urllib.request.urlopen(req) as res:
+                response_data = json.loads(res.read().decode())
+                session_name = response_data.get("name")
+        except Exception as e:
+            raise CLIError(f"Jules API request failed: {e}")
+    elif not args.json:
+        print(f"[DRY-RUN] Would POST to {url} with source sources/{source_id}")
+
+    # 4. Feedback
+    feedback = f"🤖 **Jules is on it!**\n\nInitialized an autonomous repair session (`{session_name}`) for branch `{branch}`."
+    if pr and not args.dry_run:
+        pr.create_issue_comment(feedback)
+        if not args.json: print(f"✅ Posted feedback to PR #{pr.number}")
+    elif not args.json:
+        print(feedback)
+
+    if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
+
 def handle_manage_reviews(args):
     from github import Github
     token = get_github_token()
@@ -533,7 +599,8 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate)]: # fetch-review is alias for audit-pr --fetch
+                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
+                      ("fix-ci", handle_fix_ci)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -562,6 +629,11 @@ def main():
             p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "audit-gate": pass # Uses global --json if provided
+        elif cmd == "fix-ci":
+            p.add_argument("--pr-number")
+            p.add_argument("--branch")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
         p.set_defaults(func=func)
 
     args = parser.parse_args()
