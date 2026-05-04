@@ -17,6 +17,7 @@ export function NewsletterBanner() {
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
       className="bg-white/80 backdrop-blur-xl border border-line/50"
+      shadow="topOverlay"
       padding="emailBar"
       radius="none"
       marginX="auto"
@@ -35,6 +36,7 @@ export function NewsletterBanner() {
           padding={1}
           minHeight={0}
           minWidth={0}
+          className="min-w-0"
         >
           <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
         </Button>
@@ -55,7 +57,7 @@ export function NewsletterBanner() {
             <Text variant="display" size="base" uppercase tracking="tight">
               Weekly Insights
             </Text>
-            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+            <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="emphasized">
               Dance Analytics // Gear Reviews // Community Updates
             </Text>
           </Stack>

@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
-import { debounce } from 'throttle-debounce';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
@@ -64,13 +64,16 @@ export function useBlogDrafter() {
   });
 
   // Debounced persistence for manual edits
-  const debouncedSave = useMemo(
-    () =>
-      debounce(DEBOUNCE_WAIT, (nextData: DraftData) => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
-      }),
-    []
-  );
+  const saveTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedSave = useCallback((nextData: DraftData) => {
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+    }
+    saveTimer.current = setTimeout(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
+    }, DEBOUNCE_WAIT);
+  }, []);
 
   useEffect(() => {
     debouncedSave(data);
