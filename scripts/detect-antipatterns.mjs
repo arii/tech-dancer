@@ -207,6 +207,39 @@ function checkContent(content) {
     });
   }
 
+  // 3. Contrast safety heuristic for inverse/gradient hero panels.
+  // If a file uses the shared industrial gradient treatment, nearby headline/body Text
+  // should explicitly opt into an inverse color token (white/bg) or semantic intent.
+  const industrialGradientLines = [];
+  lines.forEach((line, index) => {
+    if (line.includes('industrial-gradient')) industrialGradientLines.push(index + 1);
+  });
+
+  if (industrialGradientLines.length > 0) {
+    for (const gradLine of industrialGradientLines) {
+      const start = Math.max(1, gradLine - 2);
+      const end = Math.min(lines.length, gradLine + 30);
+      for (let lineNum = start; lineNum <= end; lineNum++) {
+        const line = lines[lineNum - 1];
+        if (!line || line.includes('// impeccable-ignore')) continue;
+        if (!line.includes('<Text')) continue;
+
+        const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
+        const hasInverseColor = /color="(?:white|bg)"/.test(line);
+        const hasIntent = /intent="/.test(line);
+        if (isHeadlineOrBody && !hasInverseColor && !hasIntent) {
+          violations.push({
+            line: lineNum,
+            pattern: 'Contrast Risk (Inverse Surface)',
+            severity: 'major',
+            value: line.trim().slice(0, 80),
+            message: 'Text near industrial gradient must set inverse color token (white/bg) or intent for reliable contrast.'
+          });
+        }
+      }
+    }
+  }
+
   // Sort violations by line number
   return violations.sort((a, b) => a.line - b.line);
 }

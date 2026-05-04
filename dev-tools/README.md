@@ -59,7 +59,7 @@ CI gates for tracking technical debt. These commands compare current metrics aga
 
 ## 🧪 Quality Gates
 
-- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs`.
+- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs` (includes inverse-surface contrast checks for `Text` near `industrial-gradient` treatments).
 - **Type Safety**: TypeScript `any` usage ratchet (enforced in CI).
 - **Bundle Size**: Automated size regression tracking (enforced in CI).
 
