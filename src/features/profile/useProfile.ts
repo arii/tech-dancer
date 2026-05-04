@@ -37,7 +37,7 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "why-built",
       title: "Why I Built This Site",
-      content: "boomtick.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that actually helps, event tips, and the small optimizations that make a big difference over a season of dancing."
+      content: "boomtick.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that helps, event tips, and the small optimizations that make a big difference over a season of dancing."
     },
     {
       id: "wcs-love",
