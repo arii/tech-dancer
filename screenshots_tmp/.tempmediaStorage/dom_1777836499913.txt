@@ -1,0 +1,85 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Home
+Blog
+Gear
+Data
+[0] (174,49)<a class='flex items-center' href='/' />
+	[1] (174,49)<a aria-label='Go to home' class='inline-flex h-6' href='/' />
+[2] (932,49)<button aria-label='Open menu' class='p-4 flex justify-center items-center min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors' />
+[3] (145,211)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+	[4] (102,211)<span >Search />
+[5] (145,287)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+	[6] (113,287)<span >Blog Posts />
+[7] (145,362)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+	[8] (127,362)<span >Gear Reviews />
+[9] (145,453)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+	[10] (163,453)<span >Data & Development Lab />
+[11] (145,544)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/about' />
+	[12] (94,544)<span >About />
+[13] (145,619)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+	[14] (102,619)<span >Contact />
+Written by Ariel Anders
+©
+2026
+boomtick.blog
+Biography
+Ariel Anders, PhD
+MIT roboticist, creator of arii.github.io, and West Coast Swing writer
+My Dance Background
+I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.
+Work With Me
+I provide consulting and project-based digital execution for startups, artists, and niche brands. If you need someone who can move from strategy to delivery quickly, I’d love to talk.
+Digital Execution
+I build high-performance web applications and automated systems that move fast without breaking.
+[15] (500,550)<div  />
+	[16] (500,689)<div  />
+		[17] (488,173)<input class='w-full font-display font-bold tracking-tight text-text-main text-2xl border-none outline-none focus:ring-0 placeholder:text-text-dim/30' placeholder='SEARCH REPOSITORY // FILTER BLOG & GEAR' />
+		[18] (940,173)<button aria-label='Close search' class='p-2 cursor-pointer group hover:bg-accent/5 transition-colors border border-line/50' />
+		[19] (500,325)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[20] (512,325)<div  />
+				[21] (512,309)<div  />
+					[22] (348,309)<span >Coming Soon:
+WCS
+Competition Data Scraper />
+						WCS
+					[23] (896,309)<div  />
+						[24] (896,312)<span >POST />
+				[25] (416,353)<span >Announcing a new tool for objective, ethical analysis of West Coast Swing competition data. />
+		[26] (500,459)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[27] (512,459)<div  />
+				[28] (512,443)<div  />
+					[29] (426,443)<span >The majority of above average dancers don’t make it to finals />
+					[30] (896,443)<div  />
+						[31] (896,446)<span >POST />
+				[32] (416,487)<span >A statistical look at competition heat density and judge variance, explaining why placement is a poor metric for progress. />
+		[33] (500,593)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[34] (512,593)<div  />
+				[35] (512,578)<div  />
+					[36] (475,578)<span >Coming Soon: The Comprehensive Financial Strategy Guide for Dancers />
+					[37] (896,578)<div  />
+						[38] (896,580)<span >POST />
+				[39] (416,621)<span >A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle. />
+		[40] (500,728)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[41] (512,728)<div  />
+				[42] (512,712)<div  />
+					[43] (306,712)<span >Halloween costumes you can dance in />
+					[44] (896,712)<div  />
+						[45] (896,715)<span >POST />
+				[46] (416,756)<span >How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test. />
+		[47] (500,862)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[48] (512,862)<div  />
+				[49] (512,846)<div >Make any shoe a dance shoe />
+					Make any shoe a dance shoe
+					[50] (896,846)<div  />
+						[51] (896,849)<span >POST />
+				[52] (416,890)<span >Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response. />
+		The
+		WCS
+		Travel Pack: 3 Essentials You’re Forgetting
+		[53] (896,981)<div  />
+			[54] (896,983)<span >POST />
+
+</current_dom>

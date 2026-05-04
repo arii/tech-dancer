@@ -1,0 +1,44 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (500,110)<div  />
+	Home
+	Blog
+	Gear
+	Data
+	[1] (174,49)<a class='flex items-center' href='/' />
+		[2] (174,49)<a aria-label='Go to home' class='inline-flex h-6' href='/' />
+	[3] (932,49)<button aria-label='Open menu' class='p-4 flex justify-center items-center min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors' />
+	[4] (145,211)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+		[5] (102,211)<span >Search />
+	[6] (145,287)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+		[7] (113,287)<span >Blog Posts />
+	[8] (145,362)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+		[9] (127,362)<span >Gear Reviews />
+	[10] (145,453)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/research' />
+		[11] (163,453)<span >Data & Development Lab />
+	[12] (145,544)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+		[13] (94,544)<span >About />
+	[14] (145,619)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+		[15] (102,619)<span >Contact />
+	Written by Ariel Anders
+	©
+	2026
+	boomtick.blog
+	Launch Console
+	Active
+	Visual UX Auditor
+	Automated visual regression and UX improvement suggestions across viewports.
+	Launch Console
+	ETL Pipeline Synchronizing...
+	The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
+	© 2026 BOOMTICK.BLOG
+	[16] (661,815)<a class='cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px] text-text-dim hover:text-accent' href='#' />
+		[17] (661,815)<span >Privacy />
+	[18] (780,815)<a class='cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px] text-text-dim hover:text-accent' href='#' />
+		[19] (780,815)<span >Terms />
+	[20] (899,815)<a class='cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px] text-text-dim hover:text-accent' href='/contact' />
+		[21] (899,815)<span >Contact />
+
+</current_dom>

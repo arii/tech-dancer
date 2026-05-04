@@ -1,0 +1,39 @@
+[0] (500,569)<div  />
+	[1] (59,48)<a aria-label='Go to home' class='inline-flex ' href='/' />
+	[2] (59,147)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+		[3] (42,147)<span >Search />
+	[4] (59,199)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+		[5] (46,199)<span >Blog Posts />
+	[6] (59,252)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/gear' />
+		[7] (52,252)<span >Gear Reviews />
+	[8] (59,315)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+		[9] (67,315)<span >Data & Development Lab />
+	[10] (59,378)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+		[11] (38,378)<span >About />
+	[12] (59,431)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+		[13] (42,431)<span >Contact />
+	Written by Ariel Anders
+	©
+	2026
+	boomtick.blog
+	[14] (458,131)<button class='gap-2 flex cursor-pointer items-center hover:text-accent transition-colors' />
+		[15] (267,131)<span >Back to Toolbox />
+	Dance Gear
+	•
+	2024-01-01
+	•
+	1
+	min read
+	Portable Bluetooth Speaker (UE Wonderboom 4)
+	Overall
+	4.8
+	Price
+	$$
+	Updated
+	Jan 2024
+	THE VERDICT
+	"
+	Best for Travel
+	"
+	Practice Anywhere
+	The UE Wonderboom 4 is the gold standard for portable practice. It's loud enough for a small studio space and rugged enough to survive being tossed in a dance bag.

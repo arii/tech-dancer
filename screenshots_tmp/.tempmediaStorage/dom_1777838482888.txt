@@ -1,0 +1,41 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (62,137)<a href='index.html'>Home />
+[1] (62,180)<a href='about.html'>About />
+[2] (62,223)<a href='blog.html'>Blog />
+[3] (62,265)<a href='gear.html'>Gear Reviews />
+[4] (62,308)<a href='research.html'>Research />
+Welcome to boomtick.blog
+The West Coast Swing
+Lifestyle Blog
+Training tips, travel guides, gear picks, and data — for dancers who want to get better and go further. Written by Ariel Anders.
+Train smarter.
+Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
+[5] (295,530)<a href='blog.html'>WCS Training → />
+[6] (295,564)<a href='blog.html'>Competition tips → />
+[7] (295,599)<a href='gear.html'>Gear reviews → />
+Travel better.
+Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
+[8] (591,530)<a href='blog.html'>Travel guides → />
+[9] (591,564)<a href='research.html'>Event calendar → />
+[10] (591,599)<a href='gear.html'>Packing lists → />
+Latest Updates
+Recent Posts
+[11] (702,744)<a href='blog.html'>View all posts → />
+[12] (443,832)<a class='post' href='blog.html' />
+	[13] (193,831)<div  />
+		[14] (160,802)<span >Travel />
+		[15] (193,830)<span >2026-04-19 />
+	[16] (494,831)<div  />
+		[17] (494,801)<h4 >The WCS Travel Pack: 3 Essentials You're Forgetting />
+		[18] (494,846)<p >Loop earplugs, industrial travel steamers, and portable sound. Why these three pieces of gear are the secret to a better dance weekend. />
+[19] (443,956)<a class='post' href='blog.html' />
+	[20] (193,956)<div  />
+		[21] (163,927)<span >Training />
+		[22] (193,955)<span >2026-04-18 />
+	[23] (494,926)<h4 >Focus on Results, Not Scores />
+	How shifting your mindset from placements to personal growth changes the way you compete — and how you feel at the end of a weekend.
+
+</current_dom>

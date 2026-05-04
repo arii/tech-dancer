@@ -1,0 +1,12 @@
+# Verification Checklist
+
+- [ ] Home Page: Hero panels screenshot
+- [ ] Home Page: Equalizer visibility/contrast
+- [ ] Home Page: Sidebar Logo (slash visible)
+- [ ] Sidebar: Width & footer legibility
+- [ ] Contact Page: Form screenshot
+- [ ] Contact Page: Input field styling
+- [ ] Browser: Favicon clarity
+
+## Notes
+- Start verifying from http://localhost:3000

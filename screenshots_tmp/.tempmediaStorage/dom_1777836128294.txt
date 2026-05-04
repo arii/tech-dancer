@@ -1,0 +1,15 @@
+Home
+Blog
+Gear
+Data
+[0] (249,46)<a class='flex items-center active' href='/' />
+	[1] (249,46)<a aria-label='Go to home' class='inline-flex h-6' href='/' />
+[2] (903,46)<button aria-label='Open menu' class='p-4 flex justify-center items-center min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors' />
+Welcome to boomtick.blog
+The West Coast Swing Lifestyle Blog
+Training tips, travel guides, gear picks, and data for dancers who want to get better and go further.
+Train smarter.
+Drills, breakdowns, and mindset for West Coast Swing dancers at every level.
+[3] (500,822)<a class='text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition-colors' href='/blog?category=Training'>WCS Training → />
+Competition tips →
+Gear reviews →

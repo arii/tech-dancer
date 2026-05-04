@@ -1,0 +1,23 @@
+# BoomTick Audit Checklist
+
+- [ ] **Home Page (/)**
+    - [ ] Capture screenshot
+    - [ ] Verify Equalizer animation (visible, high-contrast, position)
+    - [ ] Verify Newsletter banner (centered, correct alignment, no sidebar overlap)
+- [ ] **About Page (/about)**
+    - [ ] Capture screenshot
+    - [ ] Verify title (Ariel Anders, PhD / About)
+    - [ ] Check text legibility (secondary text, labels)
+- [ ] **Contact Page (/contact)**
+    - [ ] Capture screenshot
+    - [ ] Verify form labels (high-contrast cyan)
+    - [ ] Verify Subscribe button (dark text on cyan background)
+- [ ] **Favicon**
+    - [ ] Verify 'B' with diagonal slash
+- [ ] **Comparison with Artifacts**
+    - [ ] Compare Home vs index.html
+    - [ ] Compare About vs about.html (if exists)
+    - [ ] Compare Contact vs contact.html (if exists)
+
+## Findings
+- 

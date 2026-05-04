@@ -1,0 +1,88 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (500,569)<div  />
+	[1] (59,48)<a aria-label='Go to home' class='inline-flex ' href='/' />
+	[2] (59,147)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+		[3] (42,147)<span >Search />
+	[4] (59,199)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+		[5] (46,199)<span >Blog Posts />
+	[6] (59,252)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/gear' />
+		[7] (52,252)<span >Gear Reviews />
+	[8] (59,315)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+		[9] (67,315)<span >Data & Development Lab />
+	[10] (59,378)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+		[11] (38,378)<span >About />
+	[12] (59,431)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+		[13] (42,431)<span >Contact />
+	Written by Ariel Anders
+	©
+	2026
+	boomtick.blog
+	Back to Toolbox
+	Dance Gear
+	•
+	2024-01-01
+	•
+	1
+	min read
+	Portable Bluetooth Speaker (UE Wonderboom 4)
+	Overall
+	4.8
+	Price
+	$$
+	Updated
+	Jan 2024
+	THE VERDICT
+	"
+	Best for Travel
+	"
+	Practice Anywhere
+	The UE Wonderboom 4 is the gold standard for portable practice. It's loud enough for a small studio space and rugged enough to survive being tossed in a dance bag.
+	[14] (559,500)<div  />
+		[15] (559,356)<div  />
+			[16] (555,138)<input class='w-full font-display font-bold tracking-tight text-text-main text-2xl border-none outline-none focus:ring-0 placeholder:text-text-dim/30' placeholder='SEARCH REPOSITORY // FILTER BLOG & GEAR' />
+			[17] (738,138)<button aria-label='Close search' class='p-2 cursor-pointer group hover:bg-accent/5 transition-colors border border-line/50' />
+			[18] (559,243)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+				[19] (379,234)<div  />
+				[20] (564,243)<div  />
+					[21] (564,232)<div  />
+						[22] (503,232)<span >Portable Bluetooth
+(UE Wonderboom 4) />
+							[23] (501,232)<span >Speaker />
+						[24] (714,232)<div  />
+							[25] (714,234)<span >RESOURCE />
+					[26] (525,263)<span >Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings. />
+			[27] (559,337)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+				[28] (379,327)<div  />
+				[29] (564,337)<div  />
+					[30] (564,326)<div  />
+						[31] (509,326)<span >The WCS Travel Pack: 3 Essentials You’re Forgetting />
+						[32] (721,326)<div  />
+							[33] (721,328)<span >POST />
+					[34] (525,356)<span >Loop earplugs, industrial travel steamers, and portable sound. Why these three Pieces of gear are the secret to a better dance weekend. />
+			[35] (559,430)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+				[36] (379,421)<div  />
+				[37] (564,430)<div  />
+					[38] (564,419)<div  />
+						[39] (459,419)<span >Make any shoe a dance shoe />
+						[40] (721,419)<div  />
+							[41] (721,421)<span >POST />
+					[42] (525,450)<span >Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response. />
+			[43] (559,524)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+				[44] (379,514)<div  />
+				[45] (564,524)<div  />
+					[46] (564,513)<div  />
+						[47] (494,513)<span >How to Suede Your Own Dance Shoes for $15 />
+						[48] (714,513)<div  />
+							[49] (714,514)<span >RESOURCE />
+					[50] (525,543)<span >The $15 DIY hack for perfect traction on any ballroom floor. />
+			ESC
+			CLOSE
+			↵
+			SELECT
+			4
+			RESULTS FOUND
+
+</current_dom>

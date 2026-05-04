@@ -1,0 +1,38 @@
+[0] (41,46)<a aria-label='Go to home' class='inline-flex items-center h-10' href='/' />
+[1] (66,140)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+	[2] (41,140)<span >Search />
+[3] (66,190)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+	[4] (45,190)<span >Blog Posts />
+[5] (66,240)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+	[6] (51,240)<span >Gear Reviews />
+[7] (66,291)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+	[8] (70,291)<span >Data & Development Lab />
+[9] (66,341)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+	[10] (37,341)<span >About />
+[11] (66,391)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+	[12] (41,391)<span >Contact />
+Written by Ariel Anders
+©
+2026
+boomtick.blog
+Welcome to boomtick.blog
+The West Coast Swing Lifestyle Blog
+Training tips, travel guides, gear picks, and data for dancers who want to get better and go further.
+Train smarter.
+Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
+[13] (674,607)<a class='text-sm font-bold text-primary hover:text-white transition-colors' href='/blog?category=Training'>WCS Training → />
+[14] (674,632)<a class='text-sm font-bold text-primary hover:text-white transition-colors' href='/blog?category=Mindset'>Competition tips → />
+[15] (674,657)<a class='text-sm font-bold text-primary hover:text-white transition-colors' href='/gear'>Gear reviews → />
+Travel better.
+Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
+[16] (648,821)<a class='text-sm font-bold text-secondary hover:text-white transition-colors' href='/blog?category=Travel'>Travel guides → />
+[17] (648,846)<a class='text-sm font-bold text-secondary hover:text-white transition-colors' href='/research'>Event calendar → />
+[18] (648,872)<a class='text-sm font-bold text-secondary hover:text-white transition-colors' href='/gear'>Packing lists → />
+Latest Updates
+Recent Blog Posts
+Weekly Insights
+Dance Analytics // Gear Reviews // Community Updates
+[19] (726,959)<input class='min-h-11 w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all' placeholder='Email Address' />
+[20] (828,958)<button class='w-auto sm:min-w-44 cursor-pointer inline-flex items-center justify-center uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-accent text-white font-mono tracking-widest hover:bg-text-main active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-white/50 after:transition-all after:duration-500 h-[40px] px-6 text-xs min-h-[44px] min-w-[44px]' />
+	[21] (828,958)<div  />
+		[22] (822,958)<span >SUBSCRIBE />

@@ -1,0 +1,31 @@
+# Visual Audit Plan (1440x900)
+
+## Checklist
+- [ ] Set viewport to 1440x900
+- [ ] **Home Page (/)**
+    - [ ] Screenshot & DOM
+    - [ ] Design consistency (cyan/purple/magenta)
+    - [ ] Logo (slash visible, no crop)
+    - [ ] Equalizer (170px height, animation)
+    - [ ] Newsletter alignment
+    - [ ] Grid column count (2)
+- [ ] **About Page (/about)**
+    - [ ] Screenshot & DOM
+    - [ ] Design consistency
+    - [ ] Typography & Contrast
+    - [ ] Logo check
+- [ ] **Blog Page (/blog)**
+    - [ ] Screenshot & DOM
+    - [ ] Grid column count (4)
+    - [ ] Design consistency
+- [ ] **Gear Page (/gear)**
+    - [ ] Screenshot & DOM
+    - [ ] Grid column count (3)
+    - [ ] Design consistency
+- [ ] **Research Page (/research)**
+    - [ ] Screenshot & DOM
+    - [ ] Grid column count (3)
+    - [ ] Design consistency
+
+## Observations
+- 

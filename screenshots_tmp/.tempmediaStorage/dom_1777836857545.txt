@@ -1,0 +1,93 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (89,69)<a aria-label='Go to home' class='inline-flex ' href='/' />
+[1] (89,211)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+	[2] (63,211)<span >Search />
+[3] (89,287)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+	[4] (70,287)<span >Blog Posts />
+[5] (89,362)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/gear' />
+	[6] (78,362)<span >Gear Reviews />
+[7] (89,453)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+	[8] (101,453)<span >Data & Development Lab />
+[9] (89,544)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+	[10] (58,544)<span >About />
+[11] (89,619)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+	[12] (63,619)<span >Contact />
+Written by Ariel Anders
+©
+2026
+boomtick.blog
+Back to Toolbox
+Dance Gear
+•
+2024-01-01
+•
+1
+min read
+Portable Bluetooth Speaker (UE Wonderboom 4)
+Overall
+4.8
+Price
+$$
+Updated
+Jan 2024
+THE VERDICT
+"
+Best for Travel
+"
+[13] (590,500)<div  />
+	[14] (590,512)<div  />
+		[15] (583,198)<input class='w-full font-display font-bold tracking-tight text-text-main text-2xl border-none outline-none focus:ring-0 placeholder:text-text-dim/30' placeholder='SEARCH REPOSITORY // FILTER BLOG & GEAR' />
+		[16] (861,198)<button aria-label='Close search' class='p-2 cursor-pointer group hover:bg-accent/5 transition-colors border border-line/50' />
+		[17] (590,350)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[18] (317,336)<div  />
+			[19] (597,350)<div  />
+				[20] (597,334)<div  />
+					[21] (513,334)<span >The WCS Travel Pack: 3 Essentials You’re Forgetting />
+					[22] (833,334)<div  />
+						[23] (833,337)<span >POST />
+				[24] (538,378)<span >Loop earplugs, industrial travel steamers, and portable sound. Why these three Pieces of
+gear
+are the secret to a better dance weekend. />
+					gear
+		[25] (590,484)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[26] (317,470)<div  />
+			[27] (597,484)<div  />
+				[28] (597,468)<div  />
+					[29] (470,468)<span >Halloween costumes you can dance in />
+					[30] (833,468)<div  />
+						[31] (833,471)<span >POST />
+				[32] (538,512)<span >How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test. />
+		[33] (590,618)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[34] (317,605)<div  />
+			[35] (597,618)<div  />
+				[36] (597,603)<div  />
+					[37] (490,603)<span >How I used GitHub Actions to power this site />
+					[38] (833,603)<div  />
+						[39] (833,605)<span >POST />
+				[40] (538,646)<span >Automated deployments and CI/CD pipelines for a tech-forward dance blog. />
+		[41] (590,753)<button class='bg-surface text-text-main border border-line gap-4 p-3 w-full flex cursor-pointer items-start hover:bg-accent/5 group transition-colors' />
+			[42] (317,739)<div  />
+			[43] (597,753)<div  />
+				[44] (597,737)<div  />
+					[45] (491,737)<span >How to Suede Your Own Dance Shoes for $15 />
+					[46] (823,737)<div  />
+						[47] (823,740)<span >RESOURCE />
+				[48] (538,781)<span >The $15 DIY hack for perfect traction on any ballroom floor. />
+		ESC
+		CLOSE
+		↵
+		SELECT
+		4
+		RESULTS FOUND
+[49] (961,914)<button aria-label='Dismiss' class='p-1 cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px]' />
+Weekly Insights
+Dance Analytics // Gear Reviews // Community Updates
+[50] (752,932)<input class='min-h-11 w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all' placeholder='Email Address' />
+[51] (906,931)<button class='w-auto sm:min-w-44 cursor-pointer inline-flex items-center justify-center uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-accent text-white font-mono tracking-widest hover:bg-text-main active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-white/50 after:transition-all after:duration-500 h-[40px] px-6 text-xs min-h-[44px] min-w-[44px]' />
+	[52] (906,931)<div  />
+		[53] (896,931)<span >SUBSCRIBE />
+
+</current_dom>

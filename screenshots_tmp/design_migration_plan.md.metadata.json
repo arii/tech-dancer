@@ -1,0 +1,6 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "Implementation plan for migrating the BoomTick design from the artifacts directory to the main repository. The plan prioritizes migrating React components and design tokens over static HTML to ensure maintainability and consistency with the existing React architecture.",
+  "updatedAt":  "2026-05-03T19:03:10.401683749Z",
+  "requestFeedback":  true
+}

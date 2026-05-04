@@ -1,0 +1,27 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Home
+Blog
+Gear
+Data
+[0] (249,46)<a class='flex items-center active' href='/' />
+	[1] (249,46)<a aria-label='Go to home' class='inline-flex h-6' href='/' />
+[2] (903,46)<button aria-label='Open menu' class='p-4 flex justify-center items-center min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors' />
+Welcome to boomtick.blog
+The West Coast Swing Lifestyle Blog
+Training tips, travel guides, gear picks, and data for dancers who want to get better and go further.
+Train smarter.
+Drills, breakdowns, and mindset for West Coast Swing dancers at every level.
+[3] (500,822)<a class='text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition-colors' href='/blog?category=Training'>WCS Training → />
+[4] (500,863)<a class='text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition-colors' href='/blog?category=Mindset'>Competition tips → />
+[5] (500,904)<a class='text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition-colors' href='/gear'>Gear reviews → />
+[6] (909,878)<button aria-label='Dismiss' class='p-1 cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px]' />
+Weekly Insights
+Dance Analytics // Gear Reviews // Community Updates
+[7] (816,990)<button class='w-auto sm:min-w-44 cursor-pointer inline-flex items-center justify-center uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-accent text-white font-mono tracking-widest hover:bg-text-main active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-white/50 after:transition-all after:duration-500 h-[40px] px-6 text-xs min-h-[44px] min-w-[44px]' />
+	[8] (816,990)<div  />
+		[9] (793,990)<span >SUBSCRIBE />
+
+</current_dom>

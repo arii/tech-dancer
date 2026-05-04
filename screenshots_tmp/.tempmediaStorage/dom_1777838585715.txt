@@ -1,0 +1,36 @@
+[0] (500,767)<div  />
+	[1] (41,46)<a aria-label='Go to home' class='inline-flex items-center h-10' href='/' />
+	[2] (66,140)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+		[3] (41,140)<span >Search />
+	[4] (66,190)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+		[5] (45,190)<span >Blog Posts />
+	[6] (66,240)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+		[7] (51,240)<span >Gear Reviews />
+	[8] (66,291)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+		[9] (70,291)<span >Data & Development Lab />
+	[10] (66,341)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+		[11] (37,341)<span >About />
+	[12] (66,391)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/contact' />
+		[13] (41,391)<span >Contact />
+	Written by Ariel Anders
+	©
+	2026
+	boomtick.blog
+	COMMUNICATIONS
+	Direct Line
+	Inquiries regarding West Coast Swing lifestyle, engineering consulting, or specialized data projects. I respond to all professional outreach within 48 hours.
+	System Inquiries
+	Choose a channel for your message to ensure it reaches the right workflow.
+	ANALYTICS
+	Data Inquiry
+	HARDWARE
+	Gear Review
+	COMMUNITY
+	General
+	[14] (293,659)<label class='font-mono font-black uppercase tracking-[0.2em] text-primary'>Your Name />
+	[15] (408,712)<input class='w-full min-h-12 bg-white/5 border border-white/10 px-5 py-4 text-white font-sans rounded-xl transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 focus:bg-white/10 placeholder:text-text-dim/80' id='_r_2_' placeholder='Identification (Name)' />
+	[16] (598,659)<label class='font-mono font-black uppercase tracking-[0.2em] text-primary'>Your Email />
+	[17] (709,712)<input class='w-full min-h-12 bg-white/5 border border-white/10 px-5 py-4 text-white font-sans rounded-xl transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 focus:bg-white/10 placeholder:text-text-dim/80' id='_r_3_' placeholder='Return Address (Email)' />
+	[18] (286,806)<label class='font-mono font-black uppercase tracking-[0.2em] text-primary'>Subject />
+	[19] (558,859)<input class='w-full min-h-12 bg-white/5 border border-white/10 px-5 py-4 text-white font-sans rounded-xl transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 focus:bg-white/10 placeholder:text-text-dim/80' id='_r_4_' placeholder='Inquiry Subject' />
+	[20] (286,954)<label class='font-mono font-black uppercase tracking-[0.2em] text-primary'>Message />

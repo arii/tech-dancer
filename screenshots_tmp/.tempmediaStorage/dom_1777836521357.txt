@@ -1,0 +1,52 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Home
+Blog
+Gear
+Data
+[0] (174,49)<a class='flex items-center' href='/' />
+	[1] (174,49)<a aria-label='Go to home' class='inline-flex h-6' href='/' />
+[2] (932,49)<button aria-label='Open menu' class='p-4 flex justify-center items-center min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors' />
+[3] (145,211)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+	[4] (102,211)<span >Search />
+[5] (145,287)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+	[6] (113,287)<span >Blog Posts />
+[7] (145,362)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/gear' />
+	[8] (127,362)<span >Gear Reviews />
+[9] (145,453)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+	[10] (163,453)<span >Data & Development Lab />
+[11] (145,544)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+	[12] (94,544)<span >About />
+[13] (145,619)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+	[14] (102,619)<span >Contact />
+Written by Ariel Anders
+©
+2026
+boomtick.blog
+THE TOOLBOX
+Gear Reviews
+Honest reviews of the gear, travel essentials, and accessories that keep WCS dancers moving.
+Best for travel
+Highly recommended
+Competition ready
+[15] (458,568)<input class='bg-transparent border-none outline-none pl-10 w-full focus:ring-0' placeholder='Search gear (e.g. earplugs, shoes)...' />
+Dance Gear
+[16] (376,716)<div  />
+	[17] (376,700)<div >Best for Travel />
+	[18] (376,732)<div >4.8
+/5 />
+Portable Bluetooth Speaker (UE Wonderboom 4)
+Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.
+[19] (745,878)<a class='flex min-h-[280px] flex-col gap-4 rounded-2xl border border-line/80 bg-surface p-5 shadow-sm transition-colors hover:border-primary/30 group' href='/gear/2023-10-01-loop-earplugs' />
+	[20] (745,716)<div  />
+		[21] (613,708)<span >Dance Gear />
+		[22] (840,716)<div  />
+			[23] (840,700)<div >Highly Recommended />
+			[24] (840,732)<div >5
+/5 />
+	[25] (745,790)<h2 >Loop Experience Earplugs />
+	[26] (745,900)<span >A must-have for protecting your hearing in loud ballroom and social dance settings without sacrificing sound quality. />
+
+</current_dom>

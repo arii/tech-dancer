@@ -1,0 +1,64 @@
+[0] (500,886)<div  />
+	[1] (34,33)<a aria-label='Go to home' class='inline-flex items-center h-8' href='/' />
+	[2] (58,115)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+		[3] (41,115)<span >Search />
+	[4] (58,165)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/blog' />
+		[5] (46,165)<span >Blog Posts />
+	[6] (58,215)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+		[7] (51,215)<span >Gear Reviews />
+	[8] (58,276)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+		[9] (65,276)<span >Data & Development Lab />
+	[10] (58,336)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+		[11] (37,336)<span >About />
+	[12] (58,386)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+		[13] (41,386)<span >Contact />
+	Written by Ariel Anders
+	©
+	2026
+	boomtick.blog
+	INSIGHTS
+	Blog Posts
+	A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing.
+	[14] (288,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-secondary bg-secondary text-bg shadow-sm'>All Posts />
+	[15] (343,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-line bg-bg/40 text-text-dim hover:border-primary/40 hover:bg-bg/70 hover:text-text-main'>Tech />
+	[16] (391,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-line bg-bg/40 text-text-dim hover:border-primary/40 hover:bg-bg/70 hover:text-text-main'>Travel />
+	[17] (465,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-line bg-bg/40 text-text-dim hover:border-primary/40 hover:bg-bg/70 hover:text-text-main'>Dance Research />
+	[18] (561,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-line bg-bg/40 text-text-dim hover:border-primary/40 hover:bg-bg/70 hover:text-text-main'>Travel/Lifestyle />
+	[19] (652,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-line bg-bg/40 text-text-dim hover:border-primary/40 hover:bg-bg/70 hover:text-text-main'>Gear Reviews />
+	[20] (737,352)<button class='rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 border-line bg-bg/40 text-text-dim hover:border-primary/40 hover:bg-bg/70 hover:text-text-main'>Data & Dev Lab />
+	[21] (425,440)<input class='bg-transparent border-none outline-none pl-10 w-full focus:ring-0' placeholder='Search articles, guides, or gear...' />
+	[22] (402,626)<a class='rounded-2xl border gap-4 p-5 h-full flex flex-col border-line/80 bg-surface/90 shadow-sm transition-colors hover:border-primary/30 group' href='/blog/2026-04-20-stop-wasting-vercel-credits-deploy-every-branch-to-github-pages' />
+		[23] (402,533)<div  />
+			[24] (277,533)<span >Tech />
+			[25] (514,533)<span >2026-04-20 />
+		[26] (402,590)<h2 >Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages />
+		[27] (402,661)<span >Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages. />
+		[28] (402,720)<div  />
+			[29] (293,720)<span >Read Article />
+			[30] (539,720)<span  />
+	[31] (715,626)<a class='rounded-2xl border gap-4 p-5 h-full flex flex-col border-line/80 bg-surface/90 shadow-sm transition-colors hover:border-primary/30 group' href='/blog/2026-04-19-gear-essentials' />
+		[32] (715,533)<div  />
+			[33] (594,533)<span >Travel />
+			[34] (826,533)<span >2026-04-19 />
+		[35] (715,577)<h2 >The WCS Travel Pack: 3 Essentials You’re Forgetting />
+		[36] (715,635)<span >Loop earplugs, industrial travel steamers, and portable sound. Why these three Pieces of gear are the secret to a better dance weekend. />
+		[37] (715,720)<div  />
+			[38] (606,720)<span >Read Article />
+			[39] (852,720)<span  />
+	[40] (402,902)<a class='rounded-2xl border gap-4 p-5 h-full flex flex-col border-line/80 bg-surface/90 shadow-sm transition-colors hover:border-primary/30 group' href='/blog/2026-04-18-competition-metrics' />
+		[41] (402,809)<div  />
+			[42] (301,809)<span >Dance Research />
+			[43] (514,809)<span >2026-04-18 />
+		[44] (402,853)<h2 >Coming Soon: WCS Competition Data Scraper />
+		[45] (402,911)<span >Announcing a new tool for objective, ethical analysis of West Coast Swing competition data. />
+		[46] (402,996)<div  />
+			[47] (293,996)<span >Read Article />
+	[48] (715,902)<a class='rounded-2xl border gap-4 p-5 h-full flex flex-col border-line/80 bg-surface/90 shadow-sm transition-colors hover:border-primary/30 group' href='/blog/2026-04-18-financial-literacy-dancers' />
+		[49] (715,809)<div  />
+			[50] (616,809)<span >Travel/Lifestyle />
+			[51] (826,809)<span >2026-04-18 />
+		[52] (715,866)<h2 >Coming Soon: The Comprehensive Financial Strategy Guide for Dancers />
+		[53] (715,937)<span >A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle. />
+		[54] (715,996)<div  />
+			[55] (606,996)<span >Read Article />
+			[56] (852,996)<span  />

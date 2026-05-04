@@ -1,0 +1,49 @@
+[0] (34,33)<a aria-label='Go to home' class='inline-flex items-center h-8' href='/' />
+[1] (58,115)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+	[2] (41,115)<span >Search />
+[3] (58,165)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+	[4] (45,165)<span >Blog Posts />
+[5] (58,215)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+	[6] (51,215)<span >Gear Reviews />
+[7] (58,276)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+	[8] (65,276)<span >Data & Development Lab />
+[9] (58,336)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors bg-muted/50 text-text-main font-medium' href='/about' />
+	[10] (38,336)<span >About />
+[11] (58,386)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+	[12] (41,386)<span >Contact />
+Written by Ariel Anders
+boomtick.blog
+BIOGRAPHY
+Ariel Anders, PhD
+MIT roboticist, creator of arii.github.io, and West Coast Swing writer. I provide high-level technical consulting for startups and project-based digital execution for niche brands.
+What I Do Professionally
+Robotics & Engineering
+Building scalable, production-ready systems with focus on perception, motion planning, custom visualization, and AWS IoT telemetry.
+AI Strategy
+Implementing generative AI to automate internal workflows, content management, and specialized systems like WebBluetooth fitness tracking.
+Digital Presence
+Handling the technical logistics for artists and niche brands — from functional websites and SEO to booking tools and merch infrastructure.
+My Dance Background
+I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and rediscovered the floor at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked immediately — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.
+At a Glance
+Location
+San Francisco, CA
+Dance Focus
+West Coast Swing + Lindy Hop
+Dance Level
+Competitive Intermediate Follow
+Education
+PhD in Computer Science, MIT
+Connect
+[13] (761,812)<a class='rounded-xl border p-4 flex justify-between items-center border-line/50 hover:bg-white/5 hover:border-primary/30 transition-all group' href='https://instagram.com/arii' />
+	[14] (727,812)<div  />
+		[15] (734,812)<span >Instagram />
+	[16] (822,812)<div  />
+[17] (761,887)<a class='rounded-xl border p-4 flex justify-between items-center border-line/50 hover:bg-white/5 hover:border-primary/30 transition-all group' href='https://linkedin.com/in/arianders' />
+	[18] (723,887)<div  />
+		[19] (731,887)<span >LinkedIn />
+	[20] (822,887)<div  />
+[21] (761,962)<a class='rounded-xl border p-4 flex justify-between items-center border-line/50 hover:bg-white/5 hover:border-primary/30 transition-all group' href='https://github.com/arii' />
+	[22] (720,962)<div  />
+		[23] (728,962)<span >GitHub />
+	[24] (822,962)<div  />

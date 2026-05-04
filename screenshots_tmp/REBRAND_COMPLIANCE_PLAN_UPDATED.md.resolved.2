@@ -1,0 +1,65 @@
+# Updated Rebrand Compliance Plan
+
+The previous attempts to stabilize the BoomTick branding have failed to meet visual parity standards. This plan addresses the specific regressions identified by the USER and the UX audit.
+
+## 🌓 Compare & Contrast: Artifacts vs. Live
+
+| Feature | Reference Artifact (`index.html`) | Current Live Version (`localhost:3000`) | Visual Evidence |
+| :--- | :--- | :--- | :--- |
+| **Equalizer** | High-contrast kinetic bars (28 count) with `@keyframes wave`. | Invisible or extremely low opacity; appears "missing". | ![Equalizer Regression](/home/ari/.gemini/antigravity/brain/f4f7b8ee-743c-4405-9996-75162486caa5/.tempmediaStorage/media_f4f7b8ee-743c-4405-9996-75162486caa5_1777838164735.png) |
+| **Logo Slash** | Distinct diagonal gradient slash between 'B' and 'boom'. | Slash is missing; only 'B' and text are visible. | ![Logo Regression](/home/ari/.gemini/antigravity/brain/f4f7b8ee-743c-4405-9996-75162486caa5/.tempmediaStorage/media_f4f7b8ee-743c-4405-9996-75162486caa5_1777838171553.png) |
+| **Sidebar Footer** | Cleanly separated copyright and credit lines. | Cramped single-line text; low legibility. | ![Footer Regression](/home/ari/.gemini/antigravity/brain/f4f7b8ee-743c-4405-9996-75162486caa5/.tempmediaStorage/media_f4f7b8ee-743c-4405-9996-75162486caa5_1777838241301.png) |
+| **Form Inputs** | Clearly defined boundaries with subtle surface tint. | Flat, dark boxes that lack interactive affordance. | ![Form Regression](/home/ari/.gemini/antigravity/brain/f4f7b8ee-743c-4405-9996-75162486caa5/.tempmediaStorage/media_f4f7b8ee-743c-4405-9996-75162486caa5_1777838178874.png) |
+| **Sidebar Width** | Adequate space for nav labels and icons. | Truncated text and cramped layouts on smaller viewports. | ![Sidebar Regression](/home/ari/.gemini/antigravity/brain/f4f7b8ee-743c-4405-9996-75162486caa5/.tempmediaStorage/media_f4f7b8ee-743c-4405-9996-75162486caa5_1777838250221.png) |
+
+---
+
+## 🔴 Critical Failures to Remediate
+
+### 1. Equalizer Animation (Home Page)
+- **Problem**: The equalizer is "not there" according to the user and audit.
+- **Root Cause**: Likely cumulative transparency (`opacity-40` parent * `opacity-80` bars) or incorrect gradient mapping making it blend into the dark background.
+- **Fix**: 
+  - Remove all parent-level opacities.
+  - Use `hsl` values directly for the gradient to ensure visibility.
+  - Set bars to `opacity: 1` by default and animate them to a visible range.
+  - Add a subtle background glow to the equalizer container.
+
+### 2. Sidebar Logo (Diagonal Slash Missing)
+- **Problem**: The brand's signature slash is invisible in the sidebar.
+- **Root Cause**: Gradient ID collision (`id="g"`) when multiple SVGs are present, or `userSpaceOnUse` scaling issues.
+- **Fix**:
+  - Use a unique ID for the logo gradient (e.g., `id="logo-gradient"`).
+  - Use `gradientUnits="objectBoundingBox"` with relative coordinates `x1="0" y1="0" x2="1" y2="1"` for maximum portability.
+
+### 3. Sidebar Footer (Typography Slop)
+- **Problem**: "WRITTEN BY ARIEL ANDERSboomtick.blog" is cramped and illegible.
+- **Root Cause**: `Text` components rendering inline-block without proper spacing or vertical separation.
+- **Fix**:
+  - Use a `Stack` with `gap={2}` for the footer.
+  - Use `as="div"` for the `Text` components to ensure block behavior.
+  - Increase contrast (remove `/75` and `/65` opacity).
+
+### 4. Contact Form (Low Affordance)
+- **Problem**: User cannot tell if fields are interactive.
+- **Root Cause**: Fields are too dark and blend into the background.
+- **Fix**:
+  - Add a subtle border (`border-line/40`) that brightens on hover/focus.
+  - Add a very subtle background tint (`bg-white/5`) to distinguish inputs from the page surface.
+
+### 5. Favicon (Blank Box)
+- **Problem**: Tab icon is just a dark square.
+- **Root Cause**: `Arial Black` might not be rendering, or contrast is too low in small sizes.
+- **Fix**:
+  - Use a `path` for the 'B' instead of a `text` element to ensure cross-platform rendering.
+  - Make the 'B' and slash significantly larger within the 64x64 viewbox.
+
+---
+
+## 🛠 Execution Steps
+
+1.  **Equalizer**: Update `src/components/Equalizer.tsx` with high-visibility styles.
+2.  **Logo**: Update `src/components/ui/Logo.tsx` with unique IDs and relative gradients.
+3.  **Navigation**: Update `src/components/Navigation.tsx` footer layout and sidebar logo height.
+4.  **Form**: Update `src/features/contact/components/FormField.tsx` and `ContactFormView.tsx` for better affordance.
+5.  **Favicon**: Rewrite `public/favicon.svg` with robust path-based geometry.

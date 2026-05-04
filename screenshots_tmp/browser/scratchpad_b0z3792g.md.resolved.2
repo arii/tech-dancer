@@ -1,0 +1,15 @@
+# Verification Plan: BoomTick Design Migration
+
+- [x] Open http://localhost:3000/
+- [x] Resize viewport to ~800px width
+- [ ] Verify sidebar offset (no overlap with main content) - **ISSUE: Sidebar overlaps main content and modals at 800px.**
+- [ ] Verify Equalizer bars in Home hero (not covering links) - **ISSUE: Equalizer bars overlap hero links and text.**
+- [ ] Verify Newsletter bar (dark and readable) - **PENDING: Page is currently loading/blank.**
+- [ ] Verify Search backdrop (dark and readable) - **CONFIRMED: Backdrop is dark, but sidebar overlaps the modal.**
+- [ ] Report findings
+
+### Findings:
+1. **Sidebar Overlap**: At 800px width, the fixed sidebar covers the left part of the main content and modals (like Search).
+2. **Hero Equalizer**: The kinetic equalizer bars in the background are appearing on top of or too close to the interactive links in the hero section.
+3. **Search Modal**: The search backdrop is dark and readable, but the modal itself is partially hidden by the sidebar.
+4. **Newsletter Bar**: Need to find and verify this once the page loads.

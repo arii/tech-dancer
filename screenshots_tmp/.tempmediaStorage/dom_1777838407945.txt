@@ -1,0 +1,57 @@
+[0] (500,502)<div  />
+	[1] (41,46)<a aria-label='Go to home' class='inline-flex items-center h-10' href='/' />
+	[2] (66,140)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+		[3] (41,140)<span >Search />
+	[4] (66,190)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+		[5] (45,190)<span >Blog Posts />
+	[6] (66,240)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+		[7] (51,240)<span >Gear Reviews />
+	[8] (66,291)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+		[9] (70,291)<span >Data & Development Lab />
+	[10] (66,341)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+		[11] (37,341)<span >About />
+	[12] (66,391)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+		[13] (41,391)<span >Contact />
+	Written by Ariel Anders
+	©
+	2026
+	boomtick.blog
+	Travel better.
+	Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
+	[14] (648,74)<a class='text-sm font-bold text-secondary hover:text-white transition-colors' href='/blog?category=Travel'>Travel guides → />
+	[15] (648,99)<a class='text-sm font-bold text-secondary hover:text-white transition-colors' href='/research'>Event calendar → />
+	[16] (648,124)<a class='text-sm font-bold text-secondary hover:text-white transition-colors' href='/gear'>Packing lists → />
+	Latest Updates
+	Recent Blog Posts
+	[17] (810,265)<a class='gap-2 flex items-center text-xs font-bold uppercase tracking-widest text-text-dim hover:text-primary transition-colors' href='/blog'>View all posts />
+	[18] (411,377)<a class='group flex flex-col gap-3 rounded-lg px-3 py-5 transition-colors hover:bg-muted/20 sm:-mx-2 sm:flex-row sm:items-start sm:gap-4 sm:px-5 sm:py-6' href='/blog/2026-04-20-stop-wasting-vercel-credits-deploy-every-branch-to-github-pages' />
+		[19] (323,336)<div  />
+			[20] (289,337)<span >Tech />
+			[21] (330,337)<span >2026-04-20 />
+		[22] (461,377)<div  />
+			[23] (461,346)<h3 >Stop Wasting Vercel Credits: Deploy Every Branch to GitHub Pages />
+			[24] (461,402)<span >Time is your most precious commodity. Narrow the gap between coding and seeing your changes by deploying every branch to GitHub Pages. />
+	[25] (705,377)<a class='group flex flex-col gap-3 rounded-lg px-3 py-5 transition-colors hover:bg-muted/20 sm:-mx-2 sm:flex-row sm:items-start sm:gap-4 sm:px-5 sm:py-6' href='/blog/2026-04-19-gear-essentials' />
+		[26] (617,336)<div  />
+			[27] (585,337)<span >Travel />
+			[28] (627,337)<span >2026-04-19 />
+		[29] (755,377)<div  />
+			[30] (755,346)<h3 >The WCS Travel Pack: 3 Essentials You’re Forgetting />
+			[31] (755,402)<span >Loop earplugs, industrial travel steamers, and portable sound. Why these three Pieces of gear are the secret to a better dance weekend. />
+	[32] (411,561)<a class='group flex flex-col gap-3 rounded-lg px-3 py-5 transition-colors hover:bg-muted/20 sm:-mx-2 sm:flex-row sm:items-start sm:gap-4 sm:px-5 sm:py-6' href='/blog/2026-04-18-competition-metrics' />
+		[33] (323,534)<div  />
+			[34] (307,520)<span >Dance Research />
+			[35] (299,552)<span >2026-04-18 />
+		[36] (461,561)<div  />
+			[37] (461,529)<h3 >Coming Soon: WCS Competition Data Scraper />
+			[38] (461,586)<span >Announcing a new tool for objective, ethical analysis of West Coast Swing competition data. />
+	Where Dancers Go
+	Local Regular
+	Mission City Swing
+	Every Wednesday
+	Weekly Insights
+	Dance Analytics // Gear Reviews // Community Updates
+	[39] (726,959)<input class='min-h-11 w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all' placeholder='Email Address' />
+	[40] (828,958)<button class='w-auto sm:min-w-44 cursor-pointer inline-flex items-center justify-center uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-accent text-white font-mono tracking-widest hover:bg-text-main active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-white/50 after:transition-all after:duration-500 h-[40px] px-6 text-xs min-h-[44px] min-w-[44px]' />
+		[41] (828,958)<div  />
+			[42] (822,958)<span >SUBSCRIBE />

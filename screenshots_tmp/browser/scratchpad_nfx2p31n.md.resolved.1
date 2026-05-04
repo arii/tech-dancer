@@ -1,0 +1,25 @@
+# BoomTick Audit Checklist
+
+- [x] **Home Page (/)**
+    - [x] Capture screenshot
+    - [x] Verify Equalizer animation (visible, high-contrast, position) -> **FAILED: Not visible**
+    - [x] Verify Newsletter banner (centered, correct alignment, no sidebar overlap) -> **FAILED: Not visible**
+- [ ] **About Page (/about)**
+    - [ ] Capture screenshot
+    - [ ] Verify title (Ariel Anders, PhD / About)
+    - [ ] Check text legibility (secondary text, labels)
+- [ ] **Contact Page (/contact)**
+    - [ ] Capture screenshot
+    - [ ] Verify form labels (high-contrast cyan)
+    - [ ] Verify Subscribe button (dark text on cyan background)
+- [ ] **Favicon**
+    - [ ] Verify 'B' with diagonal slash
+- [ ] **Comparison with Artifacts**
+    - [x] Compare Home vs index.html -> **Equalizer missing in implementation. Newsletter missing in both?**
+    - [ ] Compare About vs about.html (if exists)
+    - [ ] Compare Contact vs contact.html (if exists)
+
+## Findings
+- **Home Page**: Equalizer animation is missing from the hero panels.
+- **Home Page**: Newsletter banner is missing entirely from the page.
+- **Comparison**: The reference `index.html` has the Equalizer bars, but the live site does not.

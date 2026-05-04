@@ -1,0 +1,43 @@
+Home
+Blog
+Gear
+Data
+[0] (249,46)<a class='flex items-center active' href='/' />
+	[1] (249,46)<a aria-label='Go to home' class='inline-flex h-6' href='/' />
+[2] (903,46)<button aria-label='Close menu' class='p-4 flex justify-center items-center min-h-12 min-w-12 rounded-full hover:bg-bg/50 active:bg-accent/10 transition-colors' />
+[3] (500,547)<div aria-label='Navigation menu' class='p-8 fixed overflow-y-auto top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden w-full' role='dialog' scrollable='true' />
+	[4] (486,195)<button class='border-b gap-4 py-6 w-full flex cursor-pointer items-center transition-all relative z-10 rounded-md text-text-dim hover:text-accent hover:bg-bg/50 border-line/50 min-h-[44px]' />
+		[5] (198,194)<span >Search />
+	[6] (486,337)<a class='transition-all relative z-10 block text-text-dim hover:text-accent hover:bg-surface cursor-pointer' href='/blog' />
+		[7] (486,337)<div  />
+			[8] (250,336)<span >Blog Posts />
+	[9] (486,479)<a class='transition-all relative z-10 block text-text-dim hover:text-accent hover:bg-surface cursor-pointer' href='/gear' />
+		[10] (486,479)<div  />
+			[11] (275,479)<span >Gear Reviews />
+	[12] (486,622)<a class='transition-all relative z-10 block text-text-dim hover:text-accent hover:bg-surface cursor-pointer' href='/research' />
+		[13] (486,622)<div  />
+			[14] (363,621)<span >Data & Development Lab />
+	[15] (486,764)<a class='transition-all relative z-10 block text-text-dim hover:text-accent hover:bg-surface cursor-pointer' href='/about' />
+		[16] (486,764)<div  />
+			[17] (214,764)<span >About />
+	[18] (486,907)<a class='transition-all relative z-10 block text-text-dim hover:text-accent hover:bg-surface cursor-pointer' href='/contact' />
+		[19] (486,907)<div  />
+			[20] (229,906)<span >Contact />
+Welcome to boomtick.blog
+The West Coast Swing Lifestyle Blog
+Training tips, travel guides, gear picks, and data for dancers who want to get better and go further.
+Train smarter.
+Drills, breakdowns, and mindset for West Coast Swing dancers at every level.
+WCS Training →
+Competition tips →
+Gear reviews →
+Calibrating Variance...
+ESC
+CLOSE
+↵
+SELECT
+0
+RESULTS FOUND
+Weekly Insights
+Dance Analytics // Gear Reviews // Community Updates
+SUBSCRIBE

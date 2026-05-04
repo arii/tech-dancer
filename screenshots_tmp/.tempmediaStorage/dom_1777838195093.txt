@@ -1,0 +1,43 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (34,33)<a aria-label='Go to home' class='inline-flex items-center h-8' href='/' />
+[1] (58,115)<button class='gap-3 px-6 py-3 w-full flex cursor-pointer items-center group text-sm text-text-dim hover:bg-bg hover:text-accent transition-colors text-left min-h-11' />
+	[2] (41,115)<span >Search />
+[3] (58,165)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/blog' />
+	[4] (45,165)<span >Blog Posts />
+[5] (58,215)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/gear' />
+	[6] (51,215)<span >Gear Reviews />
+[7] (58,276)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/research' />
+	[8] (65,276)<span >Data & Development Lab />
+[9] (58,336)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/about' />
+	[10] (37,336)<span >About />
+[11] (58,386)<a class='group flex min-h-11 items-center gap-3 px-6 py-3 text-sm transition-colors text-text-dim hover:bg-muted/50 hover:text-text-main' href='/contact' />
+	[12] (41,386)<span >Contact />
+Written by Ariel Anders
+boomtick.blog
+[13] (411,94)<a class='group flex flex-col gap-3 rounded-lg px-3 py-5 transition-colors hover:bg-muted/20 sm:-mx-2 sm:flex-row sm:items-start sm:gap-4 sm:px-5 sm:py-6' href='/blog/2026-04-18-competition-metrics' />
+	[14] (323,67)<div  />
+		[15] (307,53)<span >Dance Research />
+		[16] (299,85)<span >2026-04-18 />
+	[17] (461,94)<div  />
+		[18] (461,62)<h3 >Coming Soon: WCS Competition Data Scraper />
+		[19] (461,119)<span >Announcing a new tool for objective, ethical analysis of West Coast Swing competition data. />
+Where Dancers Go
+Local Regular
+Mission City Swing
+Every Wednesday
+Data Lab
+WCS Competition Analytics
+Objective data on competition trends, scoring patterns, and point progression — because the numbers tell a story too.
+[20] (794,649)<a class='rounded-lg border gap-2 px-5 py-2.5 flex justify-center items-center shrink-0 text-sm font-bold text-accent border-accent/40 hover:bg-accent/10 transition-colors' href='/research'>Explore Data />
+© 2026 BOOMTICK.BLOG
+[21] (740,877)<a class='cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px] text-text-dim hover:text-accent' href='#' />
+	[22] (740,877)<span >Privacy />
+[23] (787,877)<a class='cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px] text-text-dim hover:text-accent' href='#' />
+	[24] (787,877)<span >Terms />
+[25] (835,877)<a class='cursor-pointer inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent hover:bg-line/10 h-8 px-4 text-xs min-h-[44px] min-w-[44px] text-text-dim hover:text-accent' href='/contact' />
+	[26] (835,877)<span >Contact />
+
+</current_dom>
