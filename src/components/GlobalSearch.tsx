@@ -80,7 +80,7 @@ export function GlobalSearch() {
         position="absolute"
         inset={true}
         data-testid="search-backdrop"
-        className="bg-bg/80 backdrop-blur-md"
+        className="bg-bg/80 backdrop-blur-md pointer-events-auto"
         onClick={close}
       />
 
@@ -199,7 +199,7 @@ export function GlobalSearch() {
               </Box>
            </Box>
             <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
-              {results.length} RESULTS
+              {results.length} RESULTS FOUND
             </Text>
           </Box>
         </Box>
