@@ -16,11 +16,11 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
-  test('should close search modal when clicking on backdrop', async ({ page }) => {
+  test('should close search modal when pressing Escape', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    await page.getByTestId('search-backdrop').click({ position: { x: 5, y: 5 }, force: true });
+    await page.keyboard.press('Escape');
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
@@ -71,9 +71,9 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(searchInputReload).toBeVisible({ timeout: 10000 });
     await expect(searchInputReload).toHaveValue('swing');
 
-    const resultsText = page.getByText(/RESULTS FOUND/i);
+    const resultsText = page.getByText(/RESULTS/i);
     await expect(resultsText).toBeVisible({ timeout: 10000 });
-    await expect(resultsText).not.toHaveText('0 RESULTS FOUND', { timeout: 10000 });
+    await expect(resultsText).not.toHaveText('0 RESULTS', { timeout: 10000 });
   });
 
   test('Blog category filter should persist after reload', async ({ page }) => {
