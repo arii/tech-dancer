@@ -59,7 +59,7 @@ export function DetailLayout({
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
               {category} • {date} • {rt} min read
             </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+            <Text variant="headline" size="fluid-5" weight="font-black" color="brand" leading="tight" tracking="tight">
               {title}
             </Text>
             {headerExtras}

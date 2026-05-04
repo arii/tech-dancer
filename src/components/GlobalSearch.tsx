@@ -5,7 +5,7 @@ import { getHighlightedParts } from '@/lib/utils';
 import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-import { debounce } from 'throttle-debounce';
+
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -20,10 +20,17 @@ export function GlobalSearch() {
   const navigate = useNavigate();
 
   // Debounced URL sync to avoid excessive navigation and re-renders
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
   const debouncedSetQuery = useMemo(
-    () => debounce(300, (q: string) => {
-      setQuery(q);
-    }),
+    () => (q: string) => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+      debounceTimer.current = setTimeout(() => {
+        setQuery(q);
+      }, 300);
+    },
     [setQuery]
   );
 

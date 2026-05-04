@@ -35,7 +35,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
 
         <Stack gap={8}>
           <Stack gap={2}>
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Inquiries</Text>
             <Text variant="body" size="base" color="main">
               Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
             </Text>

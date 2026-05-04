@@ -30,7 +30,7 @@ export default function Home() {
           >
             Welcome to boomtick.blog
           </Text>
-          <Text as="h1" variant="display" size="fluid-7" weight="font-black" leading="snug" marginBottom={4} color="white">
+          <Text as="h1" variant="headline" size="fluid-7" weight="font-black" leading="snug" marginBottom={4}>
             The West Coast Swing
             <br />
             Lifestyle Blog
@@ -53,10 +53,10 @@ export default function Home() {
             >
               <Box position="absolute" inset="top" height="full" width="full" opacity={0.1} className="industrial-gradient group-hover:scale-105 transition-transform duration-700" />
               <Stack gap={2} position="relative" zIndex="base">
-                <Text as="h2" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter" color="white" className="drop-shadow-sm">
+                <Text as="h2" variant="headline" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter" color="white">
                   Train smarter.
                 </Text>
-                <Text marginBottom={4} maxWidth="xs" size="sm" color="white" opacity={0.9} className="leading-6">
+                <Text variant="body" marginBottom={4} maxWidth="xs" size="sm" color="white" className="leading-6">
                   Drills, breakdowns, and mindset for competitive West Coast Swing dancers at every level.
                 </Text>
                 <Box display="flex" align="center" gap={2} color="accent" className="font-bold text-sm group-hover:translate-x-2 transition-transform">
@@ -78,10 +78,10 @@ export default function Home() {
             >
               <Box position="absolute" inset="top" height="full" width="full" opacity={0.1} className="industrial-gradient group-hover:scale-105 transition-transform duration-700" />
               <Stack gap={2} position="relative" zIndex="base">
-                <Text as="h2" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter" color="white" className="drop-shadow-sm">
+                <Text as="h2" variant="headline" weight="font-black" size="4xl" marginBottom={2} uppercase tracking="tighter" color="white">
                   Travel better.
                 </Text>
-                <Text marginBottom={4} maxWidth="xs" size="sm" color="white" opacity={0.9} className="leading-6">
+                <Text variant="body" marginBottom={4} maxWidth="xs" size="sm" color="white" className="leading-6">
                   Make the most of every dance weekend — what to pack, where to stay, and how to arrive ready to move.
                 </Text>
                 <Box display="flex" align="center" gap={2} color="accent" className="font-bold text-sm group-hover:translate-x-2 transition-transform">
@@ -110,7 +110,7 @@ export default function Home() {
             </Box>
             <Stack gap={1} flex={1}>
                <Text size="xs" weight="font-bold" tracking="widest" uppercase color="accent" marginBottom={2}>Data Lab</Text>
-               <Text as="h3" size="lg" weight="font-black" marginBottom={1} color="white">WCS Competition Analytics</Text>
+               <Text as="h3" variant="headline" size="lg" weight="font-black" marginBottom={1}>WCS Competition Analytics</Text>
                <Text size="sm" color="dim">Exploring kinematics, judge variance, and biomechanics through data.</Text>
             </Stack>
             <ArrowRight className="w-6 h-6 text-line hidden sm:block" />

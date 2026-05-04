@@ -22,7 +22,7 @@ export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
           {status}
         </Text>
       </Stack>
-      <Text variant="display" size="xl" weight="font-black" className="text-accent-navy leading-snug">
+      <Text variant="headline" size="xl" weight="font-black" leading="snug">
         {name}
       </Text>
       <Text variant="body" size="base" color="dim">

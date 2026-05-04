@@ -34,7 +34,7 @@ export function PageHeader({
         <Text variant="mono" size="xs" color="brand" weight="font-bold" tracking="wide-editorial" uppercase>
           {label}
         </Text>
-        <Text as={as} variant="headline" size={titleSize} weight="font-black" className="text-accent-navy leading-tight tracking-tight">
+        <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight">
           {title}
         </Text>
         {description && (
@@ -64,7 +64,7 @@ export function SectionHeader({ label, title, children }: { label: string; title
     <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-line">
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="brand" weight="font-semibold" tracking="widest" uppercase>{label}</Text>
-        <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy">{title}</Text>
+        <Text variant="headline" size="3xl" weight="font-black">{title}</Text>
       </Stack>
       {children}
     </Box>
