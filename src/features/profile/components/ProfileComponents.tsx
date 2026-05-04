@@ -95,19 +95,23 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
       </Grid>
 
       {selectedImage && (
-        <Box
+        <Stack
           position="fixed"
           inset={0}
           zIndex="modal"
-          className="bg-black/90 flex items-center justify-center cursor-pointer"
+          className="bg-black/90 cursor-pointer"
+          align="center"
+          justify="center"
           onClick={() => setSelectedImage(null)}
         >
-          <img
-            src={selectedImage}
-            alt="Expanded view"
-            className="max-w-[90vw] max-h-[90vh] object-contain"
-          />
-        </Box>
+          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
+            <img
+              src={selectedImage}
+              alt="Expanded view"
+              className="max-w-full max-h-full object-contain"
+            />
+          </Box>
+        </Stack>
       )}
     </>
   );
@@ -130,7 +134,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={2}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}
