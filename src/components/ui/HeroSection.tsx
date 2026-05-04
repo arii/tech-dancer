@@ -26,7 +26,7 @@ export function HeroSection() {
         delay: lSeed.toFixed(2) + 's',
       };
     }),
-  []);
+  [BAR_COUNT]);
 
   return (
     <section
@@ -114,7 +114,7 @@ export function HeroSection() {
           boom<span style={{ color: 'var(--hero-accent)' }}>tick</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>.blog</span>
         </Box>
 
-        {/* Visual-style Headline from tag.png - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
+        {/* Visual-style Headline - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
         <Stack
           marginTop={{ base: 4, lg: 6 }}
           align="center"
@@ -124,7 +124,7 @@ export function HeroSection() {
         >
           <Text
             variant="headline"
-            size={{ base: "base", lg: "base" }}
+            size="base"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -134,7 +134,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size={{ base: "base", lg: "base" }}
+            size="base"
             weight="font-black"
             tracking="tight"
             className="leading-none"
@@ -150,7 +150,7 @@ export function HeroSection() {
           </Text>
           <Text
             variant="headline"
-            size={{ base: "base", lg: "base" }}
+            size="base"
             weight="font-black"
             color="white"
             tracking="tight"
@@ -179,7 +179,7 @@ export function HeroSection() {
           variant="body"
           size={{ base: "sm", lg: "xl" }}
           marginTop={{ base: 6, lg: 8 }}
-          maxWidth={{ base: "80", lg: "xl" }}
+          maxWidth={{ base: "72", lg: "xl" }}
           className="opacity-0 leading-relaxed text-white pointer-events-none text-center mx-auto"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
@@ -188,7 +188,7 @@ export function HeroSection() {
           Systems, gear, and travel insights for competitive West Coast Swing dancers.
         </Text>
 
-        {/* Waveform - Height fixed to 16 (64px) and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
+        {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Box
           display="flex"
           align="end"

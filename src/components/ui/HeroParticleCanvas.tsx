@@ -32,15 +32,15 @@ export function HeroParticleCanvas() {
     resize();
     window.addEventListener('resize', debouncedResize);
 
-    // Build particles deterministically for visual regression testing
-    const particles: Particle[] = Array.from({ length: HERO_CONFIG.PARTICLE_COUNT }, (_, i) => ({
-      x: ((i * 777.7) % 1) * canvas.width,
-      y: ((i * 333.3) % 1) * canvas.height,
-      r: ((i * 123.4) % 1) * (HERO_CONFIG.PARTICLE_RADIUS_MAX - HERO_CONFIG.PARTICLE_RADIUS_MIN) + HERO_CONFIG.PARTICLE_RADIUS_MIN,
-      vx: (((i * 555.5) % 1) - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
-      vy: (((i * 999.9) % 1) - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
-      alpha: ((i * 444.4) % 1) * (HERO_CONFIG.PARTICLE_ALPHA_MAX - HERO_CONFIG.PARTICLE_ALPHA_MIN) + HERO_CONFIG.PARTICLE_ALPHA_MIN,
-      hue: i % 2 === 0 ? HERO_CONFIG.PARTICLE_HUES[0] : HERO_CONFIG.PARTICLE_HUES[1],
+    // Build particles
+    const particles: Particle[] = Array.from({ length: HERO_CONFIG.PARTICLE_COUNT }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * (HERO_CONFIG.PARTICLE_RADIUS_MAX - HERO_CONFIG.PARTICLE_RADIUS_MIN) + HERO_CONFIG.PARTICLE_RADIUS_MIN,
+      vx: (Math.random() - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
+      vy: (Math.random() - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
+      alpha: Math.random() * (HERO_CONFIG.PARTICLE_ALPHA_MAX - HERO_CONFIG.PARTICLE_ALPHA_MIN) + HERO_CONFIG.PARTICLE_ALPHA_MIN,
+      hue: Math.random() > 0.5 ? HERO_CONFIG.PARTICLE_HUES[0] : HERO_CONFIG.PARTICLE_HUES[1],
     }));
 
     let rafId: number;

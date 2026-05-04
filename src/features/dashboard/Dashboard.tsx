@@ -22,7 +22,6 @@ export default function Home() {
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={16}>
-        {/* Full-bleed hero — no padding wrapper needed */}
         <HeroSection />
 
         <Stack gap={16} paddingX={{ base: 4, md: 6, lg: 12 }}>
@@ -63,7 +62,6 @@ export default function Home() {
               ))}
             </Grid>
 
-            {/* Centered Mobile Button for Repo Access */}
             <Box display={{ base: "flex", md: "none" }} justify="center" marginTop={4}>
               <Box
                 as={NavLink}
@@ -84,7 +82,6 @@ export default function Home() {
             </Box>
           </Stack>
 
-          {/* Upcoming Events Mini-Grid */}
           <Stack gap={8}>
             <SectionHeader label="COMPETE" title="Upcoming Events" />
             <Grid cols={{ base: 1, sm: 2, lg: 4 }} gap={4}>

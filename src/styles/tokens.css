@@ -70,7 +70,7 @@
   --raw-z-skip-link: 70;
   --raw-z-toast: 80;
   --raw-z-top: 100;
-  --raw-z-search: 200;
+  --raw-z-search: 300;
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
@@ -79,9 +79,9 @@
 /* ── Hero Section ────────────────────────────────────── */
 :root {
   /* Background */
-  --hero-bg: #0a0b18;
+  --hero-bg: #070b14;
 
-  /* Option A: Use mockup colours exactly */
+  /* Use mockup colours exactly */
   --hero-accent: #00CFFF;
   --hero-slash-gradient: linear-gradient(180deg, #00CFFF 0%, #8B2FFF 100%);
   --hero-slash-glow: 0 0 32px rgba(0, 207, 255, 0.4), 0 0 64px rgba(139, 47, 255, 0.2);
@@ -97,8 +97,10 @@
   to   { transform: scaleY(1); }
 }
 @keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeIn {
+  from { opacity: 0; }
   to { opacity: 1; }
 }
