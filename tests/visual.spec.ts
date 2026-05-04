@@ -19,7 +19,10 @@ test.describe('Visual Regression Tests', () => {
 
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
-      await page.goto(route.path);
+      // Use standard navigation without leading slash to allow Playwright's baseURL
+      // (which includes the subpath) to resolve correctly.
+      const path = route.path === '/' ? './' : route.path.replace(/^\//, '');
+      await page.goto(path);
       await page.waitForLoadState('networkidle');
 
       // Ensure the main content is loaded instead of using a manual timeout
