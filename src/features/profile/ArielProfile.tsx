@@ -3,92 +3,80 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
-import { ProfileSection } from './types';
-import {
-  ExperienceCards,
-  ProfileItems,
-  ProfileGallery,
-  ProfileLinks
-} from './components/ProfileComponents';
 
 export default function ArielProfile() {
   const { bio } = useProfile();
-
-  const renderSection = (section: ProfileSection) => {
-    return (
-      <Stack key={section.id} gap={4} maxWidth="prose">
-        {section.eyebrow && (
-          <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">
-            {section.eyebrow}
-          </Text>
-        )}
-
-        {section.title && (
-          <Text variant="display" size="2xl" weight="font-bold" className="text-accent-navy uppercase tracking-tight">
-            {section.title}
-          </Text>
-        )}
-
-        {section.content && (
-          <Text variant="body" size="lg" color="body" className="leading-relaxed">
-            {section.content}
-          </Text>
-        )}
-
-        {section.cards && <ExperienceCards cards={section.cards} />}
-        {section.items && <ProfileItems items={section.items} />}
-        {section.gallery && <ProfileGallery images={section.gallery} />}
-        {section.links && <ProfileLinks links={section.links} />}
-      </Stack>
-    );
-  };
 
   return (
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
+        description="Ariel Anders, PhD: Roboticist, Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
       />
       
       <PageHeader
         label="BIOGRAPHY"
         title={bio.name}
         description={bio.role}
-        titleSize="fluid-7"
       />
 
-      <Stack gap={12} marginTop={8}>
+      <Stack gap={16} marginTop={12} maxWidth="prose">
         <Reveal direction="up">
-          <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            <Stack gap={16} className="lg:col-span-8">
-              {bio.sections.map(renderSection)}
-            </Stack>
+          <Stack gap={16}>
+            {bio.sections.map((section) => (
+              <Stack key={section.id} gap={4} maxWidth="prose">
+                <Text variant="display" size="3xl" weight="font-black" className="text-accent-navy uppercase tracking-tight">
+                  {section.title}
+                </Text>
+                <Text variant="body" size="lg" color="body" className="leading-loose">
+                  {section.content}
+                </Text>
+              </Stack>
+            ))}
+          </Stack>
+        </Reveal>
 
-            <Box className="lg:col-span-4 relative">
-              <Stack gap={8} position="sticky" top={24}>
-                <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
-                  <Stack gap={6}>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
-                    <Stack gap={4}>
-                      {bio.details.map((detail) => (
-                        <Stack key={detail.label} gap={1}>
-                          <Text variant="mono" size="micro" color="dim" weight="font-bold" className="uppercase tracking-wider">{detail.label}</Text>
-                          <Text variant="body" size="sm" color="main" weight="font-semibold">{detail.value}</Text>
-                        </Stack>
-                      ))}
-                    </Stack>
+        <Reveal direction="up" delay={0.2}>
+          <Box padding={8} border className="bg-surface/50 border-line/20 overflow-hidden">
+            <Stack gap={8}>
+              <Grid cols={{ base: 1, md: 3 }} gap={8}>
+                {bio.details.map((detail) => (
+                  <Stack key={detail.label} gap={1}>
+                    <Text variant="mono" size="xs" color="brand" weight="font-bold">{detail.label}</Text>
+                    <Text variant="body" size="sm" color="main" weight="font-semibold" className="break-words">{detail.value}</Text>
                   </Stack>
-                </Box>
+                ))}
+              </Grid>
 
-                <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
-                  <Stack gap={6}>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
-                    <ProfileLinks links={bio.links} />
-                  </Stack>
+              <Stack gap={6} border="t" paddingTop={8} className="border-line/20">
+                <Text variant="mono" size="xs" color="brand" weight="font-bold">CONNECT & NETWORKING</Text>
+                <Box display="flex" gap={4} wrap>
+                  {[
+                    { label: 'INSTAGRAM', url: 'https://instagram.com' },
+                    { label: 'LINKEDIN', url: 'https://linkedin.com/in/arianders' },
+                    { label: 'GITHUB', url: 'https://github.com/arii' },
+                    { label: 'PORTFOLIO', url: 'https://arii.github.io' }
+                  ].map((link) => (
+                    <Box
+                      key={link.label}
+                      as="a"
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      paddingX={4}
+                      paddingY={2}
+                      border
+                      className="hover:border-accent hover:bg-accent/5 transition-all group"
+                    >
+                      <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+                        {link.label}
+                      </Text>
+                    </Box>
+                  ))}
                 </Box>
               </Stack>
-            </Box>
-          </Grid>
+            </Stack>
+          </Box>
         </Reveal>
       </Stack>
     </Box>
