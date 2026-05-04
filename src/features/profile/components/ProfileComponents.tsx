@@ -1,13 +1,24 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Star, Music, MapPin } from 'lucide-react';
-import { ProfileCard, ProfileItem, ProfileGalleryImage } from '../types';
+import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
+/**
+ * IconMap centralizes Lucide icon mapping for the profile feature.
+ * To add a new icon:
+ * 1. Import the icon from 'lucide-react'
+ * 2. Add it to this map with a unique key
+ * 3. Use the key in the ProfileItem data
+ */
 export const IconMap = {
   star: Star,
   music: Music,
   'map-pin': MapPin,
 };
 
+/**
+ * Renders a list of professional experience cards.
+ * Adheres to 'no-card' principles by using minimal borders and surface density.
+ */
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   return (
     <Stack gap={4} marginTop={2}>
@@ -25,6 +36,9 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   );
 }
 
+/**
+ * Renders a grid of icon-based interest or focus items.
+ */
 export function ProfileItems({ items }: { items: ProfileItem[] }) {
   return (
     <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={2}>
@@ -50,6 +64,9 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
   );
 }
 
+/**
+ * Renders a responsive photo gallery grid.
+ */
 export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
   return (
     <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
@@ -65,10 +82,39 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           <img
             src={image.src}
             alt={image.alt}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         </Box>
       ))}
     </Grid>
+  );
+}
+
+/**
+ * Renders a collection of pill-style external links.
+ */
+export function ProfileLinks({ links }: { links: ProfileLink[] }) {
+  return (
+    <Box display="flex" gap={3} wrap marginTop={4}>
+      {links.map((link) => (
+        <Box
+          key={link.label}
+          as="a"
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          paddingX={4}
+          paddingY={2}
+          border
+          radius="full"
+          className="hover:border-accent hover:bg-accent/5 transition-all group"
+        >
+          <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+            {link.label}
+          </Text>
+        </Box>
+      ))}
+    </Box>
   );
 }

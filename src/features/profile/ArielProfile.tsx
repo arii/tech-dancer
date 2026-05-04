@@ -4,7 +4,12 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 import { ProfileSection } from './types';
-import { ExperienceCards, ProfileItems, ProfileGallery } from './components/ProfileComponents';
+import {
+  ExperienceCards,
+  ProfileItems,
+  ProfileGallery,
+  ProfileLinks
+} from './components/ProfileComponents';
 
 export default function ArielProfile() {
   const { bio } = useProfile();
@@ -33,29 +38,7 @@ export default function ArielProfile() {
         {section.cards && <ExperienceCards cards={section.cards} />}
         {section.items && <ProfileItems items={section.items} />}
         {section.gallery && <ProfileGallery images={section.gallery} />}
-
-        {section.links && (
-          <Box display="flex" gap={3} wrap marginTop={4}>
-            {section.links.map((link) => (
-              <Box
-                key={link.label}
-                as="a"
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                paddingX={4}
-                paddingY={2}
-                border
-                radius="full"
-                className="hover:border-accent hover:bg-accent/5 transition-all group"
-              >
-                <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
-                  {link.label}
-                </Text>
-              </Box>
-            ))}
-          </Box>
-        )}
+        {section.links && <ProfileLinks links={section.links} />}
       </Stack>
     );
   };
@@ -94,6 +77,13 @@ export default function ArielProfile() {
                         </Stack>
                       ))}
                     </Stack>
+                  </Stack>
+                </Box>
+
+                <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
+                  <Stack gap={6}>
+                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                    <ProfileLinks links={bio.links} />
                   </Stack>
                 </Box>
               </Stack>
