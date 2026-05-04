@@ -1,0 +1,124 @@
+name: 'Self-Healing CI'
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  repair:
+    if: >
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure') ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@jules-fix-local'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout failing branch
+        uses: actions/checkout@v4
+        with:
+          # For workflow_run, checkout the head_branch of the run that triggered this
+          # For issue_comment, we'll need to fetch the branch later or use a different checkout strategy
+          ref: ${{ github.event.workflow_run.head_sha || '' }}
+          fetch-depth: 0
+
+      - name: Resolve PR branch (for ChatOps)
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_JSON=$(gh pr view ${{ github.event.issue.number }} --json headRefName,headRefOid)
+          echo "HEAD_REF=$(echo $PR_JSON | jq -r .headRefName)" >> $GITHUB_ENV
+          echo "HEAD_SHA=$(echo $PR_JSON | jq -r .headRefOid)" >> $GITHUB_ENV
+          gh pr checkout ${{ github.event.issue.number }}
+
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve &
+
+          echo "Waiting for Ollama to be ready..."
+          for i in {1..20}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama is ready!"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Ollama failed to start in time."
+          exit 1
+
+      - name: Pull Model
+        run: ollama pull qwen2.5-coder:1.5b
+
+      - name: Fetch Logs & Run Repair
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLLAMA_MODEL: "qwen2.5-coder:1.5b"
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_run" ]; then
+            RUN_ID=${{ github.event.workflow_run.id }}
+          else
+            # For ChatOps, find the latest failed CI run for this PR
+            RUN_ID=$(gh run list --workflow CI --branch $HEAD_REF --status failure --limit 1 --json databaseId -q '.[0].databaseId')
+          fi
+
+          if [ -n "$RUN_ID" ]; then
+            echo "Fetching logs for run $RUN_ID..."
+            gh run view $RUN_ID --log > ci_logs.txt
+            python3 dev-tools/repair.py ci_logs.txt
+          else
+            echo "No failed run found to repair."
+            exit 0
+          fi
+
+      - name: Verify Fixes
+        run: |
+          # Try to run lint/type-check to see if it's fixed
+          # We'll use a simplified check or just rely on the next CI run
+          echo "Verifying repairs..."
+          # pnpm install --frozen-lockfile
+          # pnpm run lint || echo "Still has lint errors"
+
+      - name: Commit & Push Changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            BRANCH_NAME="ai-repair-${{ github.run_id }}"
+            if [ "${{ github.event_name }}" == "issue_comment" ]; then
+              BRANCH_NAME="ai-repair-pr-${{ github.event.issue.number }}"
+            fi
+
+            git checkout -b $BRANCH_NAME
+            git add .
+            git commit -m "🤖 AI-generated fix for CI failures"
+            git push origin $BRANCH_NAME --force
+
+            if [ "${{ github.event_name }}" == "workflow_run" ]; then
+              # Create a PR against the original head branch or main?
+              # Better to create a PR against the head branch or just comment?
+              # If we can push to the head branch directly, that's better.
+              # But workflow_run might not have push access to foreign forks.
+
+              HEAD_REPO=${{ github.event.workflow_run.head_repository.full_name }}
+              if [ "$HEAD_REPO" == "${{ github.repository }}" ]; then
+                # Same repo, we can probably push to the head branch directly if we want
+                # For now, let's just create a PR to be safe
+                gh pr create --title "🤖 AI Repair: Fix CI failures" --body "Automated repair attempt for failed run ${{ github.event.workflow_run.id }}" --head $BRANCH_NAME --base ${{ github.event.workflow_run.head_branch }} || true
+              fi
+            else
+              gh pr comment ${{ github.event.issue.number }} --body "🤖 I've attempted to fix the CI failures. See the proposed changes in branch \`$BRANCH_NAME\`."
+            fi
+          else
+            echo "No changes to commit."
+          fi

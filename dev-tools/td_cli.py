@@ -439,6 +439,34 @@ def handle_pre_submit(args):
         else: print(f"❌ Pre-submission checks failed: {e}")
         sys.exit(1)
 
+def handle_repair(args):
+    """Wraps repair.py for AI-assisted CI repair."""
+    cmd = [sys.executable, os.path.join(os.path.dirname(__file__), "repair.py")]
+    if args.stdin:
+        cmd.append("--stdin")
+    elif args.logs:
+        cmd.append(args.logs)
+    else:
+        raise CLIError("Provide --logs <path> or --stdin")
+
+    log_file = args.logs if args.logs else "stdin"
+    if not args.json: print(f"🤖 Starting autonomous repair using logs from {log_file}...")
+
+    # Ensure Ollama is running or at least check it
+    try:
+        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
+    except Exception:
+        if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
+
+    proc = subprocess.run(cmd)
+    if proc.returncode == 0:
+        if args.json: print(json.dumps({"status": "success"}, indent=2))
+        else: print("✅ Repair process completed.")
+    else:
+        if args.json: print(json.dumps({"status": "error", "code": proc.returncode}, indent=2))
+        else: print(f"❌ Repair process failed with code {proc.returncode}")
+        sys.exit(proc.returncode)
+
 def handle_audit_gate(args):
     # Current violations count
     proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
@@ -533,7 +561,8 @@ def main():
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate)]: # fetch-review is alias for audit-pr --fetch
+                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
+                      ("repair", handle_repair)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -562,6 +591,9 @@ def main():
             p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "audit-gate": pass # Uses global --json if provided
+        elif cmd == "repair":
+            p.add_argument("--logs", help="Path to CI logs file")
+            p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
         p.set_defaults(func=func)
 
     args = parser.parse_args()
