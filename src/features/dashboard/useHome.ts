@@ -1,17 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getPosts } from '@/lib/content';
-import { Home as HomeIcon } from 'lucide-react';
+import { getPosts, getEvents } from '@/lib/content';
+import { MapPin } from 'lucide-react';
 
-export const upcomingEvents = [
-  { name: 'Mission City Swing', date: 'Every Wednesday', status: 'Local Regular', icon: HomeIcon },
-];
-
+/** Matches `artifacts/boomtick/index.html` “Where Dancers Go” cards (venue + location + cadence). */
 export function useHome() {
   const navigate = useNavigate();
   const { data: recentPosts = [] } = useQuery({
     queryKey: ['posts', 'recent'],
     queryFn: () => getPosts().slice(0, 3),
+  });
+
+  const { data: upcomingEvents = [] } = useQuery({
+    queryKey: ['events', 'upcoming'],
+    queryFn: () => getEvents().slice(0, 3), // Fetch first 3 events
   });
 
   const dancerPaths = [
@@ -31,7 +33,12 @@ export function useHome() {
 
   return { 
     recentPosts, 
-    upcomingEvents,
+    upcomingEvents: upcomingEvents.map(event => ({ // Map to original structure
+      name: event.title,
+      date: event.location,
+      status: event.schedule,
+      icon: MapPin, // Default icon, can be dynamic based on event data
+    })),
     dancerPaths,
     hirePaths,
     handleNavigateToBlog,

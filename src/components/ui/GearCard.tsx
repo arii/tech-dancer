@@ -78,7 +78,9 @@ export function GearCard({
             variant="body"
             size="xl"
             weight="font-black"
-            className="text-accent-navy leading-none group-hover:text-accent transition-colors line-clamp-2"
+            color="brand"
+            leading="none"
+            className="group-hover:text-accent transition-colors line-clamp-2"
           >
             {title}
           </Text>
