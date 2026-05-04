@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 import { ProfileSection } from './types';
+import roboticistPhoto from '@/assets/roboticist.jpg';
 import {
   ExperienceCards,
   ProfileItems,
@@ -66,6 +67,14 @@ export default function ArielProfile() {
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
+                <Box border radius="xl" overflow="hidden" className="border-line/10 bg-surface/30">
+                  <img
+                    src={roboticistPhoto}
+                    alt="Portrait of Ariel Anders"
+                    loading="lazy"
+                    className="w-full h-auto object-cover aspect-square"
+                  />
+                </Box>
                 <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>

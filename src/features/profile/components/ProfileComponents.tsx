@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Star, Music, MapPin } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
@@ -68,26 +69,47 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
  * Renders a responsive photo gallery grid.
  */
 export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   return (
-    <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
-      {images.map((image, index) => (
+    <>
+      <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
+        {images.map((image, index) => (
+          <Box
+            key={index}
+            aspect="1/1"
+            overflow="hidden"
+            border
+            radius="xl"
+            className="border-line/10 bg-surface/30 group cursor-pointer"
+            onClick={() => setSelectedImage(image.src)}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          </Box>
+        ))}
+      </Grid>
+
+      {selectedImage && (
         <Box
-          key={index}
-          aspect="4/5"
-          overflow="hidden"
-          border
-          radius="xl"
-          className="border-line/10 bg-surface/30 group"
+          position="fixed"
+          inset={0}
+          zIndex="modal"
+          className="bg-black/90 flex items-center justify-center cursor-pointer"
+          onClick={() => setSelectedImage(null)}
         >
           <img
-            src={image.src}
-            alt={image.alt}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            src={selectedImage}
+            alt="Expanded view"
+            className="max-w-[90vw] max-h-[90vh] object-contain"
           />
         </Box>
-      ))}
-    </Grid>
+      )}
+    </>
   );
 }
 
@@ -108,7 +130,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={2}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group"
+          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}

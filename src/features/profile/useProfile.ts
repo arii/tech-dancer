@@ -3,7 +3,6 @@ import firstComp from '@/assets/first_comp.jpg';
 import glowBunny from '@/assets/glow_bunny.jpg';
 import madJamAri from '@/assets/mad_jam_ari.jpg';
 import monterey from '@/assets/monterey.jpg';
-import roboticist from '@/assets/roboticist.jpg';
 import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
@@ -87,12 +86,11 @@ const PROFILE_DATA: ProfileData = {
       eyebrow: "Photo Gallery",
       title: "WCS Moments",
       gallery: [
-        { src: firstComp, alt: "West Coast Swing competition moment" },
-        { src: monterey, alt: "West Coast Swing stage pose" },
-        { src: madJamAri, alt: "West Coast Swing social dance" },
-        { src: glowBunny, alt: "Glow bunny dance costume" },
-        { src: wwwAri, alt: "West Coast Swing floor connection" },
-        { src: roboticist, alt: "Portrait photo" }
+        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension at a competition" },
+        { src: monterey, alt: "Ariel Anders posing playfully on stage at a West Coast Swing event" },
+        { src: madJamAri, alt: "Ariel Anders social dancing at MADjam West Coast Swing convention" },
+        { src: glowBunny, alt: "Ariel Anders dancing in a light-up bunny costume at a themed dance" },
+        { src: wwwAri, alt: "Ariel Anders creating a strong connection on the dance floor" }
       ]
     },
     {
@@ -101,8 +99,7 @@ const PROFILE_DATA: ProfileData = {
       links: [
         { label: 'Instagram', url: 'https://instagram.com/' },
         { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
-        { label: 'GitHub', url: 'https://github.com/arii' },
-        { label: 'Portfolio', url: 'https://arii.github.io/' }
+        { label: 'GitHub', url: 'https://github.com/arii' }
       ]
     }
   ],
@@ -114,8 +111,7 @@ const PROFILE_DATA: ProfileData = {
   links: [
     { label: 'Instagram', url: 'https://instagram.com/' },
     { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
-    { label: 'GitHub', url: 'https://github.com/arii' },
-    { label: 'Portfolio', url: 'https://arii.github.io/' }
+    { label: 'GitHub', url: 'https://github.com/arii' }
   ]
 };
 export function useProfile(): { bio: ProfileData } {
