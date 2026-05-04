@@ -79,7 +79,7 @@ export function GlobalSearch() {
       paddingTop={{ base: 0, lg: 20 }}
       surface={false}
       data-testid="search-backdrop"
-      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-16 lg:top-0 lg:left-72"
+      className="bg-accent/40 backdrop-blur-md left-0 right-0 top-0 lg:left-0"
       onClick={close}
     >
       <Box

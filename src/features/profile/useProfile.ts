@@ -117,8 +117,7 @@ const PROFILE_DATA: ProfileData = {
   links: [
     { label: 'Instagram', url: 'https://instagram.com/' },
     { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
-    { label: 'GitHub', url: 'https://github.com/arii' },
-    { label: 'Portfolio', url: import.meta.env.BASE_URL }
+    { label: 'GitHub', url: 'https://github.com/arii' }
   ]
 };
 

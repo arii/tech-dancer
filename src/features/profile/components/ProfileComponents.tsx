@@ -78,7 +78,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
         {images.map((image, index) => (
           <Box
             key={index}
-            aspect="4/5"
+            aspect="1/1"
             overflow="hidden"
             border
             radius="xl"
@@ -90,6 +90,8 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
               src={image.src}
               alt={image.alt}
               loading="lazy"
+              width={600}
+              height={600}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           </Box>
