@@ -135,9 +135,10 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
                 position="absolute"
                 top={4}
                 right={4}
+                padding={2}
                 as="button"
                 onClick={() => setSelectedImage(null)}
-                className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+                className="bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
                 aria-label="Close Lightbox"
               >
                 <X className="w-6 h-6" />
@@ -167,7 +168,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={2}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none transition-all group"
+          className="hover:border-accent hover:bg-accent/5 interactive-press focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none transition-all group"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}
