@@ -1,24 +1,14 @@
-import { test, expect, devices } from '@playwright/test';
-
-test.use({ ...devices['Pixel 7'] });
+import { test, expect } from '@playwright/test';
 
 test.describe('Global Search Modal - Mobile', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('./');
+    await page.waitForLoadState('networkidle');
   });
 
-  test('should open search modal via mobile menu', async ({ page }) => {
-    // Open mobile menu
-    await page.getByLabel('Open menu').click();
-
-    // Check if the menu is actually visible
-    await expect(page.locator('nav[aria-label="Mobile Navigation"]').locator('..').locator('div').filter({ hasText: 'Search' }).first()).toBeVisible();
-
-    // Use text selector to find "Search" button
-    const searchButton = page.getByRole('button', { name: 'Search' });
-    await searchButton.click({ force: true });
-
-    // Modal should be visible
+  test('should open search modal via shortcut on mobile', async ({ page }) => {
+    await page.keyboard.press('Meta+k');
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
   });
 });

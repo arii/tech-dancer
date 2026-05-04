@@ -1,117 +1,46 @@
-import { motion } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
-import { Database, FileText, Search, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Grid, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { StatusBadge } from '@/components/ui/StatusBadge';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
-  const { studies, tools } = useResearch();
+  const { tools } = useResearch();
 
   return (
-    <Box as="section">
+    <Box as="section" className="bg-bg text-text-main">
       <SEO
-        title="Research"
-        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
+        title="WCS Data & Development Lab"
+        description="Interactive data science, software development, and WCS research tools from boomtick.blog."
       />
-      <Stack gap={12}>
-        <PageHeader
-          label="TECHNICAL PORTFOLIO"
-          title="Data & Development Lab"
-          description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
-          as="h1"
-        />
+      <Box paddingX={{ base: 4, sm: 6, md: 10 }} paddingY={{ base: 6, md: 14 }}>
+        <Box as="section" className="max-w-6xl">
+          <Text variant="sans" size="xs" weight="font-bold" uppercase className="tracking-widest text-text-dim">
+            Technical Portfolio
+          </Text>
+          <Text as="h1" variant="display" size="5xl" weight="font-black" className="text-3xl 4xl 5xl">
+            Data & Development Lab
+          </Text>
+          <Text variant="body" size="base" className="max-w-3xl leading-7 text-text-dim">
+            Interactive data science, software development, and specialized tools for West Coast Swing research and analysis.
+          </Text>
 
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
-          </Box>
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
+          <Grid cols={{ base: 1, sm: 2, xl: 3 }} gap={4} >
             {tools.map((tool) => (
-              <Box 
-                key={tool.id}
-                as="button"
-                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
-                surface="default"
-                border
-                padding="card"
-                cursor="pointer"
-                className="group hover:border-accent transition-all text-left"
-              >
-                <Stack gap={6} height="full" justify="between">
-                  <Stack gap={4}>
-                    <Box display="flex" justify="between" align="start">
-                      <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
-                        <Search className="w-5 h-5" />
-                      </Box>
-                      <StatusBadge label={tool.status} />
-                    </Box>
-                    <Stack gap={2}>
-                      <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>
-                      <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
-                    </Stack>
-                  </Stack>
-                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
-                    <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
-                    <ArrowRight className="w-3 h-3" />
-                  </Box>
-                </Stack>
+              <Box as="article" key={tool.name} className="rounded-2xl border border-border/80 bg-surface shadow-sm transition-colors hover:border-primary/30">
+                <Text variant="sans" size="xs" weight="font-bold" uppercase className="tracking-widest text-text-dim">{tool.status}</Text>
+                <Text as="h2" variant="display" size="lg" weight="font-bold" >{tool.name}</Text>
+                <Text variant="body" size="sm" className="leading-7 text-text-dim">{tool.layman}</Text>
               </Box>
             ))}
           </Grid>
-        </Stack>
 
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
+          <Box as="section" padding={6} className="rounded-2xl border border-dashed border-border/80 bg-surface text-center shadow-sm sm:">
+            <Text as="h2" variant="display" size="2xl" weight="font-black" >ETL Pipeline Synchronizing...</Text>
+            <Text variant="body" size="sm" className=" max-w-2xl leading-7 text-text-dim">
+              The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
+            </Text>
           </Box>
-
-          {studies.length > 0 ? (
-            <Grid cols={{ base: 1, md: 2 }} gap={12}>
-              {studies.map((study) => (
-                <Box key={study.slug} className="group">
-                  <Stack gap={4}>
-                    <Box display="flex" justify="between" align="center">
-                      <Text variant="mono" size="micro" color="brand" uppercase>{study.category}</Text>
-                      <Text variant="mono" size="micro" color="dim">{study.date}</Text>
-                    </Box>
-                    <Text variant="display" size="2xl" className="group-hover:text-accent transition-colors">
-                      {study.title}
-                    </Text>
-                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
-                      {study.excerpt}
-                    </Text>
-                    <Box
-                      as={motion.div}
-                      whileHover={{ x: 5 }}
-                      display="flex"
-                      align="center"
-                      gap={2}
-                      color="dim"
-                      className="group-hover:text-accent transition-colors"
-                    >
-                      <Text variant="mono" size="xs" weight="font-bold">Read Study</Text>
-                      <FileText className="w-4 h-4" />
-                    </Box>
-                  </Stack>
-                </Box>
-              ))}
-            </Grid>
-          ) : (
-            <EmptyState
-              icon={<Database className="w-12 h-12" />}
-              title="ETL Pipeline Synchronizing..."
-              description="The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete."
-            />
-          )}
-        </Stack>
-      </Stack>
+        </Box>
+      </Box>
     </Box>
   );
 }

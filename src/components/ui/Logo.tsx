@@ -1,40 +1,46 @@
-import { cn } from '@/lib/utils';
+import { Link } from "react-router-dom";
 
-interface LogoProps {
-  className?: string;
-}
-
-export function Logo({ className }: LogoProps) {
+export const Logo = () => {
   return (
-    <svg
-      viewBox="0 0 360 80"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-8 w-auto", className)}
-      aria-labelledby="logo-title"
-    >
-      <title id="logo-title">BoomTick Logo</title>
-      {/* Mark */}
-      <text x="10" y="52"
-            fontFamily="var(--raw-font-display), sans-serif"
-            fontSize="44"
-            fontWeight="700"
-            fill="var(--raw-color-accent-navy)">
+    <Link to="/" aria-label="Go to home" className="inline-flex">
+      <svg viewBox="0 0 280 110" fill="none" className="h-14 w-[220px] max-w-full" aria-hidden="true">
+      <defs>
+        <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#00CFFF" />
+          <stop offset="100%" stopColor="#8B2FFF" />
+        </linearGradient>
+      </defs>
+
+      <rect width="280" height="110" rx="18" fill="#0D0E1C" />
+
+      <text
+        x="16"
+        y="72"
+        fontFamily="Arial Black, Arial, sans-serif"
+        fontWeight="900"
+        fontSize="60"
+        fill="white"
+      >
         B
       </text>
 
-      <path d="M50 20 L72 60"
-            stroke="var(--raw-color-accent)"
-            strokeWidth="8"
-            strokeLinecap="round"/>
+      <line x1="82" y1="20" x2="112" y2="72" stroke="url(#logo-g)" strokeWidth="12" strokeLinecap="round" />
 
-      {/* Wordmark */}
-      <text x="100" y="54"
-            fontFamily="var(--raw-font-sans), sans-serif"
-            fontSize="34"
-            fill="var(--raw-color-accent-navy)"
-            letterSpacing="0.5">
-        boomtick
+      <text
+        x="152"
+        y="69"
+        fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
+        fontWeight="700"
+        fontSize="34"
+        fill="white"
+        letterSpacing="-0.5"
+      >
+        <tspan fill="white">boom</tspan>
+        <tspan fill="#00CFFF">tick</tspan>
       </text>
-    </svg>
+      </svg>
+    </Link>
   );
-}
+};
+
+export default Logo;
