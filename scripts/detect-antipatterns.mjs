@@ -2,12 +2,38 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
-import { glob } from 'glob';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+
+function collectAuditFiles(targets) {
+  const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
+  const results = new Set();
+
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+        walk(fullPath);
+        continue;
+      }
+      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) results.add(fullPath);
+    }
+  };
+
+  for (const target of resolvedTargets) {
+    const absoluteTarget = path.resolve(ROOT, target);
+    if (!fs.existsSync(absoluteTarget)) continue;
+    const stat = fs.statSync(absoluteTarget);
+    if (stat.isDirectory()) walk(absoluteTarget);
+    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx')) results.add(absoluteTarget);
+  }
+
+  return Array.from(results);
+}
 
 const LAYOUT_SUGGESTIONS = {
   'flex flex-col': '<Stack direction="col">',
@@ -300,8 +326,7 @@ if (targets.includes('-')) {
     allViolations['stdin'] = violations;
   }
 } else {
-  const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
-  const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
+  const files = collectAuditFiles(targets);
 
   files.forEach(filepath => {
     if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
