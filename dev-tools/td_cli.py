@@ -20,10 +20,24 @@ from collections import defaultdict
 from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
+# Global state for logging
+CLI_ARGS = None
+
 # --- Anti-Pattern Audit Configuration ---
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
 # --- Shared Logic ---
+
+def log_cli(message: str, force_stderr: bool = False):
+    """
+    Centralized logging for the CLI. Encapsulates the JSON check and stderr redirection.
+    """
+    global CLI_ARGS
+    if CLI_ARGS and CLI_ARGS.json and not force_stderr:
+        return
+
+    dest = sys.stderr if force_stderr else sys.stdout
+    print(message, file=dest)
 
 def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -> int:
     """Resolves a baseline value from CLI argument, environment variable, or GHA variable."""
@@ -692,7 +706,7 @@ def handle_fix_ci(args):
 
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
-        if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...", file=sys.stderr)
+        log_cli("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...", force_stderr=True)
         try:
             source_id = client.discover_source_id(repo.full_name)
         except Exception as e:
@@ -702,7 +716,7 @@ def handle_fix_ci(args):
         raise CLIError("JULES_SOURCE_ID is missing and auto-discovery failed. Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
 
     # 3. Call Jules API
-    if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...", file=sys.stderr)
+    log_cli(f"🚀 Initializing Jules session for branch `{branch}`...", force_stderr=True)
 
     session_name = "dry-run-session"
     if not args.dry_run:
@@ -713,15 +727,15 @@ def handle_fix_ci(args):
         else:
             raise CLIError("Jules API session creation failed")
     elif not args.json:
-        print(f"[DRY-RUN] Would create session with source sources/{source_id}", file=sys.stderr)
+        log_cli(f"[DRY-RUN] Would create session with source sources/{source_id}", force_stderr=True)
 
     # 4. Feedback
     feedback = f"🤖 **Jules is on it!**\n\nInitialized an autonomous repair session (`{session_name}`) for branch `{branch}`."
     if pr and not args.dry_run:
         pr.create_issue_comment(feedback)
-        if not args.json: print(f"✅ Posted feedback to PR #{pr.number}", file=sys.stderr)
-    elif not args.json:
-        print(feedback, file=sys.stderr)
+        log_cli(f"✅ Posted feedback to PR #{pr.number}", force_stderr=True)
+    else:
+        log_cli(feedback, force_stderr=True)
 
     if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
 
@@ -816,6 +830,9 @@ def main():
 
     args = parser.parse_args()
     if not args.command: parser.print_help(); sys.exit(1)
+
+    global CLI_ARGS
+    CLI_ARGS = args
 
     try:
         args.func(args)
