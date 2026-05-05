@@ -12,9 +12,10 @@ export function MobileBottomNav() {
       position="fixed"
       inset="bottom"
       zIndex="sticky"
-      className="lg:hidden bg-surface/90 backdrop-blur-xl border-t border-line pb-[safe-area-inset-bottom]"
+      border="t"
+      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line pb-[safe-area-inset-bottom]"
     >
-      <Box as="ul" display="flex" justify="around" align="center" width="full" className="h-16">
+      <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
           const Icon = item.icon;
           return (
@@ -27,7 +28,7 @@ export function MobileBottomNav() {
                 )}
               >
                 <Icon className={cn("w-6 h-6", stroke.thick)} />
-                <Text variant="mono" size="micro" weight="font-bold" className="mt-1">
+                <Text variant="mono" size="micro" weight="font-bold" marginTop={1}>
                   {item.label.split(' ')[0]}
                 </Text>
               </NavLink>
