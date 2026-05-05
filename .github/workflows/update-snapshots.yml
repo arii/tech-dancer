@@ -12,6 +12,10 @@ jobs:
       contents: write
       pull-requests: write
       actions: write
+    env:
+      NODE_ENV: production
+      REPO_NAME: ${{ github.event.repository.name }}
+      VITE_BASE_PATH: /${{ github.event.repository.name }}/
     steps:
       - name: Create initial comment
         id: initial-comment
@@ -25,19 +29,9 @@ jobs:
       - name: Resolve PR details
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
         run: |
-          PR_INFO=$(gh api "repos/${GH_REPO}/pulls/${{ github.event.issue.number }}")
-
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          {
-            echo "HEAD_REF<<$EOF"
-            echo "$PR_INFO" | jq -r '.head.ref'
-            echo "$EOF"
-            echo "HEAD_REPO<<$EOF"
-            echo "$PR_INFO" | jq -r '.head.repo.full_name'
-            echo "$EOF"
-          } >> "$GITHUB_ENV"
+          gh api "repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}" \
+            --jq '"HEAD_REF=" + .head.ref, "HEAD_REPO=" + .head.repo.full_name' >> "$GITHUB_ENV"
 
       - name: Checkout source branch
         uses: actions/checkout@v4
@@ -63,23 +57,13 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build project
-        env:
-          NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
-        run: |
-          # Use consistent base path for CI tests to match visual snapshots
-          export VITE_BASE_PATH=/$REPO_NAME/
-          pnpm run build
+        run: pnpm run build
 
       - name: Update Playwright snapshots
         id: update
         env:
           CI: true
-          NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
-        run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
-          pnpm run test:e2e --update-snapshots
+        run: pnpm run test:e2e --update-snapshots
 
       - name: Commit and push changes
         id: commit
