@@ -11,22 +11,12 @@ export function NewsletterBanner() {
 
   return (
     <Box 
-      as={motion.div}
-      initial={motionTokens.overlay.initial}
-      animate={motionTokens.overlay.animate}
-      exit={motionTokens.overlay.exit}
-      transition={motionTokens.overlay.transition}
-      className="bg-white/80 backdrop-blur-xl border border-line/50"
+      as="section"
+      className="bg-surface-alt/30 border-y border-line/10 relative"
       padding="emailBar"
-      radius="none"
-      marginX="auto"
-      position="fixed"
-      bottom={0}
-      left={4}
-      right={4}
-      zIndex="toast"
+      width="full"
     >
-      <Box position="absolute" className="top-2 right-2" zIndex="docked">
+      <Box position="absolute" className="top-4 right-4" zIndex="docked">
         <Button
           variant="ghost"
           size="sm"
@@ -54,9 +44,9 @@ export function NewsletterBanner() {
             display={{ base: 'none', sm: 'flex' }}
             align="center"
             justify="center"
-            surface="accent"
-            opacity={5}
+            className="bg-accent/10"
             radius="md"
+            shrink={0}
           >
             <Mail className="w-5 h-5 text-accent" />
           </Box>

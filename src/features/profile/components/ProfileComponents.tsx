@@ -1,26 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Star, Music, MapPin, X } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 
-/**
- * IconMap centralizes Lucide icon mapping for the profile feature.
- * To add a new icon:
- * 1. Import the icon from 'lucide-react'
- * 2. Add it to this map with a unique key
- * 3. Use the key in the ProfileItem data
- */
 export const IconMap = {
   star: Star,
   music: Music,
   'map-pin': MapPin,
 };
 
-/**
- * Renders a list of professional experience cards.
- * Adheres to 'no-card' principles by using minimal borders and surface density.
- */
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   return (
     <Stack gap={4}>
@@ -38,9 +27,6 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   );
 }
 
-/**
- * Renders a grid of icon-based interest or focus items.
- */
 export function ProfileItems({ items }: { items: ProfileItem[] }) {
   return (
     <Grid cols={{ base: 1, md: 3 }} gap={4}>
@@ -66,11 +52,16 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
   );
 }
 
-/**
- * Renders a responsive photo gallery grid with a simple lightbox.
- */
 export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
   const [selectedImage, setSelectedImage] = useState<ProfileGalleryImage | null>(null);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedImage(null);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
 
   return (
     <>
@@ -106,7 +97,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             position="fixed"
-            inset
+            inset={true}
             zIndex="modal"
             display="flex"
             align="center"
@@ -122,11 +113,11 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
               exit={{ scale: 0.9, opacity: 0 }}
               maxWidth="4xl"
               width="full"
-              maxHeight="[90vh]"
+              maxHeight="85vh"
               radius="xl"
               overflow="hidden"
               className="relative"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <img
                 src={selectedImage.src}
@@ -153,9 +144,6 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
   );
 }
 
-/**
- * Renders a collection of pill-style external links.
- */
 export function ProfileLinks({ links }: { links: ProfileLink[] }) {
   return (
     <Box display="flex" gap={3} wrap>

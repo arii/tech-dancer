@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
 import { inputs } from '@/styles/design-tokens';
 import { useEmailForm } from './useEmailForm';
+import { FormEvent, ChangeEvent } from 'react';
 
 export function EmailForm() {
   const { status, email, setEmail, submitForm } = useEmailForm();
@@ -52,20 +53,20 @@ export function EmailForm() {
             >
               {status === 'loading' && (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">PROCESSING...</Text>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <Text variant="mono" size="micro" weight="font-bold" className="text-white">PROCESSING...</Text>
                 </>
               )}
               {status === 'success' && (
                 <>
-                  <Check className="w-4 h-4 text-bg" />
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">ACCESS_GRANTED</Text>
+                  <Check className="w-4 h-4 text-white" />
+                  <Text variant="mono" size="micro" weight="font-bold" className="text-white">ACCESS_GRANTED</Text>
                 </>
               )}
               {status === 'idle' && (
                 <>
-                  <Text variant="mono" size="micro" weight="font-bold" color="bg">SUBSCRIBE</Text>
-                  <ArrowRight className="w-4 h-4 text-bg" />
+                  <Text variant="mono" size="micro" weight="font-bold" className="text-white">SUBSCRIBE</Text>
+                  <ArrowRight className="w-4 h-4 text-white" />
                 </>
               )}
             </Stack>
