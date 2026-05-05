@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts, getEvents } from '@/lib/content';
-import { MapPin } from 'lucide-react';
 
 /** Matches `artifacts/boomtick/index.html` “Where Dancers Go” cards (venue + location + cadence). */
 export function useHome() {

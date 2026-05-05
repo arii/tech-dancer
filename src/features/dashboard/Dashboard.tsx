@@ -6,8 +6,6 @@ import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { PageHeader } from '@/components/ui/PageHeader';
-import PathSelector from '@/components/ui/PathSelector';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
