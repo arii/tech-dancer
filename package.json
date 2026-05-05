@@ -21,7 +21,8 @@
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit": "node scripts/detect-antipatterns.mjs"
+    "audit": "node scripts/detect-antipatterns.mjs",
+    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
