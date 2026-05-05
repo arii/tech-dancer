@@ -73,7 +73,7 @@ export function GlobalSearch() {
       position="fixed"
       inset="y"
       zIndex="search"
-      className="left-0 right-0 top-0 lg:left-56"
+      className="left-0 right-0 top-0 lg:left-56 pointer-events-none"
     >
       {/* Backdrop */}
       <Box
@@ -93,7 +93,7 @@ export function GlobalSearch() {
         width="full"
         height="full"
         paddingTop={{ base: 0, lg: 32 }}
-        className="pointer-events-none"
+        className=""
       >
         <Box
           width="full"
