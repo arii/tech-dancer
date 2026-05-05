@@ -582,11 +582,19 @@ def handle_fix_ci(args):
         pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
         pr = pulls[0] if pulls else None
     else:
-        raise CLIError("Provide --pr-number or --branch")
+        # Local dev fallback: detect current branch
+        try:
+            branch = subprocess.check_output(['git', 'branch', '--show-current'], text=True).strip()
+            if not branch: raise Exception("No current branch detected")
+            if not args.json: print(f"ℹ️  Detected current branch: `{branch}`")
+            pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
+            pr = pulls[0] if pulls else None
+        except Exception as e:
+            raise CLIError(f"Could not resolve branch or PR: {e}. Provide --pr-number or --branch.")
 
     # 2. Get API Credentials
-    api_key = os.environ.get("JULES_API_KEY")
-    if not api_key: raise CLIError("JULES_API_KEY environment variable missing")
+    api_key = args.api_key or os.environ.get("JULES_API_KEY")
+    if not api_key: raise CLIError("JULES_API_KEY missing (provide via --api-key or environment variable)")
 
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
@@ -708,8 +716,9 @@ def main():
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "audit-gate": pass # Uses global --json if provided
         elif cmd == "fix-ci":
-            p.add_argument("--pr-number")
-            p.add_argument("--branch")
+            p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
+            p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")
+            p.add_argument("--api-key", help="Jules API Key (falls back to JULES_API_KEY env var)")
             p.add_argument("--dry-run", action="store_true", default=True)
             p.add_argument("--execute", action="store_false", dest="dry_run")
         p.set_defaults(func=func)
