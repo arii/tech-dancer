@@ -9,7 +9,7 @@ export function Footer() {
   ];
 
   return (
-    <Box as="footer" paddingY={12} paddingX={4} surface="bg" className="opacity-80 border-t border-line mt-auto">
+    <Box as="footer" paddingY={12} paddingX={4} surface="bg" border="t" opacity={80} marginTop="auto">
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={2}>
           <BrandIcon className="w-4 h-4 opacity-50" />
