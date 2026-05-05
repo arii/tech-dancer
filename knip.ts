@@ -9,7 +9,7 @@ const config: KnipConfig = {
     'vite-plugin-pwa',
     'workbox-window'
   ],
-  ignoreBinaries: [],
+  ignoreBinaries: ['python3'],
   ignoreExportsUsedInFile: true,
 };
 
