@@ -33,13 +33,14 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
   BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
