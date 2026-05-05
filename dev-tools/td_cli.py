@@ -622,6 +622,28 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_repair_context(args):
+    from error_rag import RAGPipeline
+    pipeline = RAGPipeline()
+
+    if args.log:
+        prompt = pipeline.generate_prompt(args.log)
+        if prompt:
+            print(prompt)
+        else:
+            raise CLIError("Failed to generate repair context from log line.")
+    elif args.file:
+        if not os.path.exists(args.file):
+            raise CLIError(f"Log file not found: {args.file}")
+        with open(args.file, 'r') as f:
+            for line in f:
+                prompt = pipeline.generate_prompt(line)
+                if prompt:
+                    print(prompt)
+                    print("-" * 40)
+    else:
+        raise CLIError("Provide --log or --file")
+
 def handle_fix_ci(args):
     from github import Github
     from clients.jules_api_client import JulesAPIClient
@@ -747,7 +769,7 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -777,6 +799,9 @@ def main():
             p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "audit-gate": pass # Uses global --json if provided
+        elif cmd == "repair-context":
+            p.add_argument("--log", help="Raw log line")
+            p.add_argument("--file", help="Path to log file")
         elif cmd == "fix-ci":
             p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
             p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")
