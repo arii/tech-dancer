@@ -626,18 +626,30 @@ def handle_fix_ci(args):
     from github import Github
     from clients.jules_api_client import JulesAPIClient
 
+    # 1. Validate Environment & Credentials
     token = get_github_token()
-    if not token: raise CLIError("GitHub token not found", code=401)
+    if not token:
+        raise CLIError("Missing GITHUB_TOKEN. Ensure 'secrets.GITHUB_TOKEN' is passed to the environment.", code=401)
+
+    api_key = args.api_key or os.environ.get("JULES_API_KEY")
+    if not api_key:
+        raise CLIError("Missing JULES_API_KEY. Provide it via --api-key or 'secrets.JULES_API_KEY' environment variable.", code=401)
 
     repo_name = get_repo_name()
+    if not repo_name:
+        raise CLIError("Could not determine repository name. Ensure the script is run within a git repository or GH_REPO is set.", code=400)
+
     g = Github(token)
     repo = g.get_repo(repo_name)
 
-    # 1. Resolve PR and Branch
+    # 2. Resolve PR and Branch
     pr = None
     if args.pr_number:
-        pr = repo.get_pull(int(args.pr_number))
-        branch = pr.head.ref
+        try:
+            pr = repo.get_pull(int(args.pr_number))
+            branch = pr.head.ref
+        except Exception as e:
+            raise CLIError(f"Failed to fetch PR #{args.pr_number}: {e}", code=404)
     elif args.branch:
         branch = args.branch
         pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
@@ -651,20 +663,21 @@ def handle_fix_ci(args):
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
             pr = pulls[0] if pulls else None
         except Exception as e:
-            raise CLIError(f"Could not resolve branch or PR: {e}. Provide --pr-number or --branch.")
+            raise CLIError(f"Could not resolve branch or PR: {e}. Provide --pr-number or --branch.", code=400)
 
-    # 2. Get API Credentials
-    api_key = args.api_key or os.environ.get("JULES_API_KEY")
-    if not api_key: raise CLIError("JULES_API_KEY missing (provide via --api-key or environment variable)")
-
+    # 3. Initialize Jules Client and Resolve Source ID
     client = JulesAPIClient(api_key)
 
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
         if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
-        source_id = client.discover_source_id(repo.full_name)
+        try:
+            source_id = client.discover_source_id(repo.full_name)
+        except Exception as e:
+            raise CLIError(f"Error during JULES_SOURCE_ID auto-discovery: {e}", code=500)
 
-    if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed")
+    if not source_id:
+        raise CLIError("JULES_SOURCE_ID is missing and auto-discovery failed. Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
 
     # 3. Call Jules API
     if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
