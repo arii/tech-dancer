@@ -32,15 +32,38 @@ def find_patterns_in_file(filepath, patterns):
 
 def get_bundle_size(dist_dir='dist/assets'):
     """Returns bundle size in KB."""
-    # Avoid 2>/dev/null to see errors if dir doesn't exist
-    # If this fails, let the CLIError bubble up to identify environment issues
-    cmd = f"du -sk {dist_dir}/*.js | awk '{{sum+=$1}} END{{print sum}}'"
-    result = run_command(cmd, shell=True)
-    return int(result) if result else 0
+    if not os.path.exists(dist_dir):
+        print(f"⚠️  Warning: Directory not found: {dist_dir}", file=sys.stderr)
+        return 0
+
+    total_size = 0
+    try:
+        for f in os.listdir(dist_dir):
+            if f.endswith('.js'):
+                total_size += os.path.getsize(os.path.join(dist_dir, f))
+    except Exception as e:
+        print(f"⚠️  Warning: Failed to calculate bundle size: {e}", file=sys.stderr)
+        return 0
+
+    return total_size // 1024
 
 def get_any_count(search_dir='src'):
     """Returns count of 'any' usages in TS/TSX files."""
-    # If grep fails (e.g. directory missing), let the CLIError bubble up
-    cmd = f"grep -rn ': any\\b\\|as any\\b' {search_dir} --include='*.tsx' --include='*.ts' | wc -l"
-    result = run_command(cmd, shell=True)
-    return int(result) if result else 0
+    if not os.path.exists(search_dir):
+        print(f"⚠️  Warning: Directory not found: {search_dir}", file=sys.stderr)
+        return 0
+
+    import shlex
+    safe_dir = shlex.quote(search_dir)
+    # Using check=False because grep exits non-zero on no matches
+    cmd = f"grep -rn ': any\\b\\|as any\\b' {safe_dir} --include='*.tsx' --include='*.ts' | wc -l"
+    res = run_command(cmd, shell=True, check=False)
+
+    if res.returncode != 0:
+        # If wc -l failed (unlikely) or other shell error
+        return 0
+
+    try:
+        return int(res.stdout.strip() or 0)
+    except ValueError:
+        return 0
