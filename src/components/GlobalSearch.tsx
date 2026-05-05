@@ -107,7 +107,7 @@ export function GlobalSearch() {
           className="bg-surface/90 backdrop-blur-2xl border-accent/20 mx-4 pointer-events-auto"
           onClick={(e: MouseEvent) => e.stopPropagation()}
         >
-        <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
+          <Box border="b" padding={5} display="flex" align="center" gap={4}>
           <Search className="w-5 h-5 text-accent shrink-0" />
           <Text
             as="input"

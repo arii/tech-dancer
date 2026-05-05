@@ -83,7 +83,8 @@ export function HeroPathCard({
             )}
             style={{
               animationDelay: `${(i % 5) * 0.2}s`,
-              animationDuration: `${3.5 + (i % 3) * 0.8}s`
+              animationDuration: `${3.5 + (i % 3) * 0.8}s`,
+              willChange: 'transform'
             }}
           />
         ))}

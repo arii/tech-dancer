@@ -8,6 +8,15 @@ interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   category: string;
   excerpt?: string;
   basePath: string;
+  // Accept and ignore data props that might be spread into the component
+  type?: string;
+  date?: string;
+  author?: string;
+  authorAvatar?: string;
+  content?: string;
+  image?: string;
+  tags?: string[];
+  affiliateIds?: string[];
 }
 
 export function ContentCard({ 
@@ -16,16 +25,17 @@ export function ContentCard({
   category, 
   excerpt, 
   basePath, 
-  ...motionProps 
+  // Ignore data props to keep them out of the DOM
+  type: _type,
+  date: _date,
+  author: _author,
+  authorAvatar: _authorAvatar,
+  content: _content,
+  image: _image,
+  tags: _tags,
+  affiliateIds: _affiliateIds,
+  ...cleanMotionProps
 }: ContentCardProps) {
-  // Destructure and ignore known data props that shouldn't bleed to the DOM
-  // even if they are passed via {...item} in parent components.
-  const {
-    // @ts-expect-error - ignoring unused data props
-    type: _type, date: _date, author: _author, authorAvatar: _authorAvatar,
-    content: _content, image: _image, tags: _tags, affiliateIds: _affiliateIds,
-    ...cleanMotionProps
-  } = motionProps as Record<string, unknown>;
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();

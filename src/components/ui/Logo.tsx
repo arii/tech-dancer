@@ -16,17 +16,17 @@ export function Logo({ className }: LogoProps) {
       <title id="logo-title">BoomTick Logo</title>
       <defs>
         <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="var(--raw-color-accent)" />
-          <stop offset="100%" stopColor="var(--raw-color-accent-purple)" />
+          <stop offset="0%" stopColor="#00CFFF" />
+          <stop offset="100%" stopColor="#8B2FFF" />
         </linearGradient>
       </defs>
 
-      <rect width="280" height="110" rx="18" fill="var(--raw-color-surface-alt)" />
+      <rect width="280" height="110" rx="18" fill="#0D0E1C" />
 
       {/* Mark */}
       <text
         x="16" y="72"
-        fontFamily="var(--raw-font-display), Arial Black, Arial, sans-serif"
+        fontFamily="Arial Black, Arial, sans-serif"
         fontWeight="900"
         fontSize="60"
         fill="white"
@@ -44,14 +44,14 @@ export function Logo({ className }: LogoProps) {
       {/* Wordmark */}
       <text
         x="152" y="69"
-        fontFamily="var(--raw-font-sans), Arial, Helvetica Neue, Arial, sans-serif"
+        fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
         fontWeight="700"
         fontSize="34"
         fill="white"
         letterSpacing="-0.5"
       >
         <tspan fill="white">boom</tspan>
-        <tspan fill="var(--raw-color-accent)">tick</tspan>
+        <tspan fill="#00CFFF">tick</tspan>
       </text>
     </svg>
   );
