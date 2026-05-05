@@ -13,7 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, run_command
+from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -52,8 +52,8 @@ def get_audit_results(content: str = None, targets: list[str] = None):
     elif content is not None:
         cmd.append("-")
 
-    # Using check=False because the audit tool exits 1 on findings
-    res = run_command(cmd, input_str=content, check=False)
+    # Use execute_raw because the audit tool exits 1 on findings, which is expected
+    res = execute_raw(cmd, input_str=content)
     try:
         return json.loads(res.stdout)
     except (json.JSONDecodeError, AttributeError):
@@ -173,8 +173,7 @@ def handle_conflicts(args):
     """
     def run(cmd, exit_on_fail=False):
         print(f"🏃 Running: {cmd}")
-        # Use check=False to manually handle return code
-        res = run_command(cmd, shell=True, check=False)
+        res = execute_raw(cmd, shell=True)
         if res.returncode != 0 and exit_on_fail:
             sys.exit(res.returncode)
         return res.returncode, res.stdout.strip()
@@ -395,8 +394,9 @@ def handle_audit_pr(args):
         if files_to_audit:
             try:
                 # Use pnpm run audit as requested, passing targets after --
-                # Using run_command with check=False because audit script exits 1 on violations
-                output = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
+                # Use execute_raw because audit script exits 1 on violations
+                res = execute_raw(["pnpm", "run", "audit", "--", "--json"] + files_to_audit)
+                output = res.stdout
                 if output:
                     # pnpm might add some noise to stdout before/after the actual JSON if not careful,
                     # but our script uses process.stdout.write for JSON.
@@ -435,15 +435,19 @@ def handle_pre_submit(args):
     try:
         def run_step(name, cmd, ignore_failure=False):
             if not args.json: print(f"--- {name} ---")
-            try:
-                stdout = run_command(cmd, check=not ignore_failure)
-                results["steps"].append({"name": name, "status": "success"})
-                return stdout
-            except CLIError as e:
-                results["steps"].append({"name": name, "status": "failure"})
-                if not ignore_failure:
+            if ignore_failure:
+                res = execute_raw(cmd)
+                status = "success" if res.returncode == 0 else "failure"
+                results["steps"].append({"name": name, "status": status})
+                return res.stdout.strip()
+            else:
+                try:
+                    stdout = execute(cmd)
+                    results["steps"].append({"name": name, "status": "success"})
+                    return stdout
+                except CLIError as e:
+                    results["steps"].append({"name": name, "status": "failure"})
                     raise e
-                return ""
 
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
@@ -516,10 +520,10 @@ def handle_repair(args):
             raise CLIError(f"Log file not found: {args.logs}")
     else:
         if not args.json: print("🔍 No logs provided. Running local triage...")
-        # Run lint and tsc to gather logs - using check=False as we WANT the error logs
+        # Run lint and tsc to gather logs - using execute_raw as we WANT the error logs
         # We gather both stdout and stderr for triage
-        res_lint = run_command(["pnpm", "run", "lint:ox"], check=False)
-        res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
+        res_lint = execute_raw(["pnpm", "run", "lint:ox"])
+        res_tsc = execute_raw(["pnpm", "run", "type-check"])
         logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
         logs_source = "local triage"
 
@@ -578,7 +582,7 @@ def handle_repair(args):
 
 def handle_audit_gate(args):
     # Current violations count
-    stdout_current = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
+    stdout_current = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
     current_count = int(stdout_current or 0)
 
     # 1. Try to get baseline from GHA variable or Environment
@@ -589,7 +593,7 @@ def handle_audit_gate(args):
         baseline_count = 0
         try:
             ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-            main_files = run_command(ls_cmd).splitlines()
+            main_files = execute(ls_cmd).splitlines()
 
             relevant_main_files = []
             for mf in main_files:
@@ -603,14 +607,20 @@ def handle_audit_gate(args):
             for mf in relevant_main_files:
                 try:
                     show_cmd = ["git", "show", f"origin/main:{mf}"]
-                    content = run_command(show_cmd)
-                    stdout_baseline = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
-                                                   input_str=content)
+                    # Don't log error here as it might be expected if file is new
+                    res_show = execute_raw(show_cmd, log_on_error=False)
+                    if res_show.returncode != 0:
+                        continue
+
+                    content = res_show.stdout
+                    stdout_baseline = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                               input_str=content)
                     baseline_count += int(stdout_baseline or 0)
-                except (CLIError, subprocess.CalledProcessError):
+                except (CLIError, subprocess.CalledProcessError) as e:
+                    print(f"⚠️  Warning: Failed to calculate baseline for {mf}: {e}", file=sys.stderr)
                     continue
-        except (CLIError, subprocess.CalledProcessError):
-            pass
+        except (CLIError, subprocess.CalledProcessError) as e:
+            print(f"⚠️  Warning: Failed to resolve dynamic audit baseline: {e}", file=sys.stderr)
 
     if not args.json:
         print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count}")
@@ -685,7 +695,7 @@ def handle_fix_ci(args):
     else:
         # Local dev fallback: detect current branch
         try:
-            branch = run_command(['git', 'branch', '--show-current'])
+            branch = execute(['git', 'branch', '--show-current'])
             if not branch: raise Exception("No current branch detected")
             if not args.json: print(f"ℹ️  Detected current branch: `{branch}`")
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))

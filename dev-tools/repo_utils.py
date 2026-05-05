@@ -5,8 +5,8 @@ import sys
 from typing import Optional, List, Tuple, Union
 from collections import defaultdict
 
-# Import run_command from utils
-from utils import run_command
+# Import execute from utils
+from utils import execute
 
 # Use existing github_utils if possible, but we'll add common repo walking/matching logic here
 def walk_tsx(root_dir='src'):
@@ -33,19 +33,15 @@ def find_patterns_in_file(filepath, patterns):
 
 def get_bundle_size(dist_dir='dist/assets'):
     """Returns bundle size in KB."""
-    try:
-        # Avoid 2>/dev/null to see errors if dir doesn't exist
-        cmd = f"du -sk {dist_dir}/*.js | awk '{{sum+=$1}} END{{print sum}}'"
-        result = run_command(cmd, shell=True)
-        return int(result) if result else 0
-    except Exception:
-        return 0
+    # Avoid 2>/dev/null to see errors if dir doesn't exist
+    # If this fails, let the CLIError bubble up to identify environment issues
+    cmd = f"du -sk {dist_dir}/*.js | awk '{{sum+=$1}} END{{print sum}}'"
+    result = execute(cmd, shell=True)
+    return int(result) if result else 0
 
 def get_any_count(search_dir='src'):
     """Returns count of 'any' usages in TS/TSX files."""
-    try:
-        cmd = f"grep -rn ': any\\b\\|as any\\b' {search_dir} --include='*.tsx' --include='*.ts' | wc -l"
-        result = run_command(cmd, shell=True)
-        return int(result) if result else 0
-    except Exception:
-        return 0
+    # If grep fails (e.g. directory missing), let the CLIError bubble up
+    cmd = f"grep -rn ': any\\b\\|as any\\b' {search_dir} --include='*.tsx' --include='*.ts' | wc -l"
+    result = execute(cmd, shell=True)
+    return int(result) if result else 0

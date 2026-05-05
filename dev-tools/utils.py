@@ -27,40 +27,43 @@ def get_github_token() -> Optional[str]:
     except (subprocess.CalledProcessError, FileNotFoundError):
         return None
 
-def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True) -> Union[str, subprocess.CompletedProcess]:
-    """
-    Runs a command, captures stdout/stderr, and handles errors with granular logging.
-    If check=True, returns stdout as string.
-    If check=False, returns the full CompletedProcess object.
-    """
-    try:
-        proc = subprocess.run(
-            cmd,
-            shell=shell,
-            input=input_str,
-            capture_output=True,
-            text=True,
-            check=check
-        )
-        return proc.stdout.strip() if check else proc
-    except subprocess.CalledProcessError as e:
-        if log_on_error:
-            print(f"❌ Command failed (exit {e.returncode}): {e.cmd}", file=sys.stderr)
-            if e.stdout:
-                print(f"--- stdout ---\n{e.stdout.strip()}", file=sys.stderr)
-            if e.stderr:
-                print(f"--- stderr ---\n{e.stderr.strip()}", file=sys.stderr)
+def _run(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> subprocess.CompletedProcess:
+    """Internal helper to run a command with granular logging on failure."""
+    proc = subprocess.run(
+        cmd,
+        shell=shell,
+        input=input_str,
+        capture_output=True,
+        text=True,
+        check=False
+    )
+    if proc.returncode != 0 and log_on_error:
+        print(f"❌ Command failed (exit {proc.returncode}): {proc.args}", file=sys.stderr)
+        if proc.stdout:
+            print(f"--- stdout ---\n{proc.stdout.strip()}", file=sys.stderr)
+        if proc.stderr:
+            print(f"--- stderr ---\n{proc.stderr.strip()}", file=sys.stderr)
+    return proc
 
-        if check:
-            raise CLIError(f"Command failed with exit code {e.returncode}", code=e.returncode)
-        # Should not be reachable because subprocess.run with check=False doesn't raise CalledProcessError
-        return subprocess.CompletedProcess(e.cmd, e.returncode, e.stdout, e.stderr)
+def execute(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> str:
+    """Runs a command, returns stripped stdout, and raises CLIError on failure."""
+    proc = _run(cmd, shell, input_str, log_on_error)
+    if proc.returncode != 0:
+        raise CLIError(f"Command failed with exit code {proc.returncode}", code=proc.returncode)
+    return proc.stdout.strip()
+
+def execute_raw(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> subprocess.CompletedProcess:
+    """Runs a command and returns the full CompletedProcess object without raising."""
+    return _run(cmd, shell, input_str, log_on_error)
+
+# Legacy alias for backward compatibility during transition
+run_command = execute_raw
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""
     try:
-        # Using run_command here with check=False to avoid noisy logs for a common discovery step
-        res = run_command(['git', 'config', '--get', 'remote.origin.url'], check=False, log_on_error=False)
+        # Using execute_raw here to avoid noisy logs for a common discovery step
+        res = execute_raw(['git', 'config', '--get', 'remote.origin.url'], log_on_error=False)
         if res.returncode != 0:
             return os.getenv("GH_REPO")
         url = res.stdout.strip()

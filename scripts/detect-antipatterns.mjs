@@ -278,8 +278,11 @@ function checkPRScope() {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
   } catch (error) {
+    // If the error message itself is present and is not just a standard shell error, report it
     if (error.stderr && error.stderr.trim()) {
-      console.error(`\x1b[31m❌ Error running scope check:\x1b[0m\n${error.stderr}`);
+      console.error(`\x1b[31m❌ Scope check failed:\x1b[0m\n${error.stderr}`);
+    } else if (error.message) {
+      console.error(`\x1b[31m❌ Scope check error:\x1b[0m ${error.message}`);
     }
     // Don't exit here as scope check is usually a non-blocking warning
   }
