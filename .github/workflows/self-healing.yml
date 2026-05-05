@@ -139,8 +139,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git config --global credential.helper store
-            echo "https://x-access-token:${GH_TOKEN}@github.com" > ~/.git-credentials
+            git config http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${GH_TOKEN}" | base64)"
 
             NEW_BRANCH="ai-repair-$RUN_ID"
             if [ "$EVENT_NAME" == "issue_comment" ]; then
