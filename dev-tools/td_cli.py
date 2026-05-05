@@ -14,6 +14,7 @@ import subprocess
 import json
 from datetime import datetime, timezone, timedelta
 from utils import get_github_token, get_github_client, get_repo_name, get_gha_variable, set_gha_variable, CLIError
+from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -52,10 +53,11 @@ def get_audit_results(content: str = None, targets: list[str] = None):
     elif content is not None:
         cmd.append("-")
 
-    proc = subprocess.run(cmd, input=content, capture_output=True, text=True)
+    # Use execute_raw because the audit tool exits 1 on findings, which is expected
+    res = execute_raw(cmd, input_str=content)
     try:
-        return json.loads(proc.stdout)
-    except json.JSONDecodeError:
+        return json.loads(res.stdout)
+    except (json.JSONDecodeError, AttributeError):
         return {"violations": {}, "config": {}}
 
 def extract_code_blocks(text: str) -> list[str]:
@@ -166,11 +168,9 @@ def handle_conflicts(args):
     """
     def run(cmd, exit_on_fail=False):
         print(f"🏃 Running: {cmd}")
-        res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-        if res.returncode != 0:
-            print(f"⚠️ Output/Error:\n{res.stderr.strip() or res.stdout.strip()}")
-            if exit_on_fail:
-                sys.exit(res.returncode)
+        res = execute_raw(cmd, shell=True)
+        if res.returncode != 0 and exit_on_fail:
+            sys.exit(res.returncode)
         return res.returncode, res.stdout.strip()
 
     base_branch = getattr(args, 'base', 'main') or 'main'
@@ -382,12 +382,13 @@ def handle_audit_pr(args):
         if files_to_audit:
             try:
                 # Use pnpm run audit as requested, passing targets after --
-                proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, capture_output=True, text=True)
-                if proc.stdout:
+                # Use execute_raw because audit script exits 1 on violations
+                res = execute_raw(["pnpm", "run", "audit", "--", "--json"] + files_to_audit)
+                output = res.stdout
+                if output:
                     # pnpm might add some noise to stdout before/after the actual JSON if not careful,
                     # but our script uses process.stdout.write for JSON.
                     # We try to find the JSON part if there's noise.
-                    output = proc.stdout
                     if "{" in output:
                         json_start = output.find("{")
                         json_end = output.rfind("}") + 1
@@ -422,10 +423,19 @@ def handle_pre_submit(args):
     try:
         def run_step(name, cmd, ignore_failure=False):
             if not args.json: print(f"--- {name} ---")
-            proc = subprocess.run(cmd, capture_output=args.json, text=True)
-            results["steps"].append({"name": name, "status": "success" if proc.returncode == 0 else "failure"})
-            if proc.returncode != 0 and not ignore_failure: raise subprocess.CalledProcessError(proc.returncode, cmd)
-            return proc
+            if ignore_failure:
+                res = execute_raw(cmd)
+                status = "success" if res.returncode == 0 else "failure"
+                results["steps"].append({"name": name, "status": status})
+                return res.stdout.strip()
+            else:
+                try:
+                    stdout = execute(cmd)
+                    results["steps"].append({"name": name, "status": "success"})
+                    return stdout
+                except CLIError as e:
+                    results["steps"].append({"name": name, "status": "failure"})
+                    raise e
 
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
@@ -500,9 +510,10 @@ def handle_repair(args):
             raise CLIError(f"Log file not found: {args.logs}")
     else:
         if not args.json: print("🔍 No logs provided. Running local triage...")
-        # Run lint and tsc to gather logs
-        res_lint = subprocess.run(["pnpm", "run", "lint:ox"], capture_output=True, text=True)
-        res_tsc = subprocess.run(["pnpm", "run", "type-check"], capture_output=True, text=True)
+        # Run lint and tsc to gather logs - using execute_raw as we WANT the error logs
+        # We gather both stdout and stderr for triage
+        res_lint = execute_raw(["pnpm", "run", "lint:ox"])
+        res_tsc = execute_raw(["pnpm", "run", "type-check"])
         logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
         logs_source = "local triage"
 
@@ -561,8 +572,8 @@ def handle_repair(args):
 
 def handle_audit_gate(args):
     # Current violations count
-    proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
-    current_count = int(proc_current.stdout.strip() or 0)
+    stdout_current = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
+    current_count = int(stdout_current or 0)
 
     # 1. Try to get baseline from GHA variable or Environment
     baseline_count = resolve_baseline(None, 'AUDIT_BASELINE', -1)
@@ -572,7 +583,7 @@ def handle_audit_gate(args):
         baseline_count = 0
         try:
             ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-            main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
+            main_files = execute(ls_cmd).splitlines()
 
             relevant_main_files = []
             for mf in main_files:
@@ -586,14 +597,20 @@ def handle_audit_gate(args):
             for mf in relevant_main_files:
                 try:
                     show_cmd = ["git", "show", f"origin/main:{mf}"]
-                    content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
-                    proc_baseline = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
-                                                   input=content, capture_output=True, text=True)
-                    baseline_count += int(proc_baseline.stdout.strip() or 0)
-                except subprocess.CalledProcessError:
+                    # Don't log error here as it might be expected if file is new
+                    res_show = execute_raw(show_cmd, log_on_error=False)
+                    if res_show.returncode != 0:
+                        continue
+
+                    content = res_show.stdout
+                    stdout_baseline = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                               input_str=content)
+                    baseline_count += int(stdout_baseline or 0)
+                except (CLIError, subprocess.CalledProcessError) as e:
+                    print(f"⚠️  Warning: Failed to calculate baseline for {mf}: {e}", file=sys.stderr)
                     continue
-        except subprocess.CalledProcessError:
-            pass
+        except (CLIError, subprocess.CalledProcessError) as e:
+            print(f"⚠️  Warning: Failed to resolve dynamic audit baseline: {e}", file=sys.stderr)
 
     if not args.json:
         print(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count}")
@@ -611,18 +628,57 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_repair_context(args):
+    from error_rag import RAGPipeline
+    pipeline = RAGPipeline()
+
+    if args.log:
+        prompt = pipeline.generate_prompt(args.log)
+        if prompt:
+            print(prompt)
+        else:
+            raise CLIError("Failed to generate repair context from log line.")
+    elif args.file:
+        if not os.path.exists(args.file):
+            raise CLIError(f"Log file not found: {args.file}")
+        with open(args.file, 'r') as f:
+            for line in f:
+                prompt = pipeline.generate_prompt(line)
+                if prompt:
+                    print(prompt)
+                    print("-" * 40)
+    else:
+        raise CLIError("Provide --log or --file")
+
 def handle_fix_ci(args):
     from clients.jules_api_client import JulesAPIClient
 
     repo_name = get_repo_name()
-    g = get_github_client()
+
+    # 1. Validate Environment & Credentials
+    token = get_github_token()
+    if not token:
+        raise CLIError("Missing GITHUB_TOKEN. Ensure 'secrets.GITHUB_TOKEN' is passed to the environment.", code=401)
+
+    api_key = args.api_key or os.environ.get("JULES_API_KEY")
+    if not api_key:
+        raise CLIError("Missing JULES_API_KEY. Provide it via --api-key or 'secrets.JULES_API_KEY' environment variable.", code=401)
+
+    repo_name = get_repo_name()
+    if not repo_name:
+        raise CLIError("Could not determine repository name. Ensure the script is run within a git repository or GH_REPO is set.", code=400)
+
+    g = Github(token)
     repo = g.get_repo(repo_name)
 
-    # 1. Resolve PR and Branch
+    # 2. Resolve PR and Branch
     pr = None
     if args.pr_number:
-        pr = repo.get_pull(int(args.pr_number))
-        branch = pr.head.ref
+        try:
+            pr = repo.get_pull(int(args.pr_number))
+            branch = pr.head.ref
+        except Exception as e:
+            raise CLIError(f"Failed to fetch PR #{args.pr_number}: {e}", code=404)
     elif args.branch:
         branch = args.branch
         pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
@@ -630,26 +686,27 @@ def handle_fix_ci(args):
     else:
         # Local dev fallback: detect current branch
         try:
-            branch = subprocess.check_output(['git', 'branch', '--show-current'], text=True).strip()
+            branch = execute(['git', 'branch', '--show-current'])
             if not branch: raise Exception("No current branch detected")
             if not args.json: print(f"ℹ️  Detected current branch: `{branch}`")
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
             pr = pulls[0] if pulls else None
         except Exception as e:
-            raise CLIError(f"Could not resolve branch or PR: {e}. Provide --pr-number or --branch.")
+            raise CLIError(f"Could not resolve branch or PR: {e}. Provide --pr-number or --branch.", code=400)
 
-    # 2. Get API Credentials
-    api_key = args.api_key or os.environ.get("JULES_API_KEY")
-    if not api_key: raise CLIError("JULES_API_KEY missing (provide via --api-key or environment variable)")
-
+    # 3. Initialize Jules Client and Resolve Source ID
     client = JulesAPIClient(api_key)
 
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
         if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
-        source_id = client.discover_source_id(repo.full_name)
+        try:
+            source_id = client.discover_source_id(repo.full_name)
+        except Exception as e:
+            raise CLIError(f"Error during JULES_SOURCE_ID auto-discovery: {e}", code=500)
 
-    if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed")
+    if not source_id:
+        raise CLIError("JULES_SOURCE_ID is missing and auto-discovery failed. Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
 
     # 3. Call Jules API
     if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
@@ -716,7 +773,7 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -746,6 +803,9 @@ def main():
             p.add_argument("--event"); p.add_argument("--base")
         elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
         elif cmd == "audit-gate": pass # Uses global --json if provided
+        elif cmd == "repair-context":
+            p.add_argument("--log", help="Raw log line")
+            p.add_argument("--file", help="Path to log file")
         elif cmd == "fix-ci":
             p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
             p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")

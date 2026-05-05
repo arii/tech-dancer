@@ -5,22 +5,26 @@ on:
     - cron: '0 10 * * 3'
   workflow_dispatch:
 
+env:
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
         with:
           lfs: true
 
       - name: Set up Python
-        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: etl/requirements.txt
 
       - name: Install Python Dependencies
         run: |
@@ -32,9 +36,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-etl-${{ runner.os }}-chromium-v1
+          key: v1-playwright-etl-${{ runner.os }}-chromium-${{ hashFiles('etl/requirements.txt') }}
           restore-keys: |
-            playwright-etl-${{ runner.os }}-chromium-
+            v1-playwright-etl-${{ runner.os }}-chromium-
 
       - name: Install Playwright Chromium
         if: steps.cache-playwright.outputs.cache-hit != 'true'

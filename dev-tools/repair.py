@@ -12,6 +12,7 @@ import subprocess
 import urllib.request
 import urllib.error
 from typing import List, Dict, Any
+from utils import execute_raw
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:1.5b")
@@ -19,13 +20,6 @@ MAX_RETRIES = 3
 
 def log(msg):
     print(f"🤖 [Repair Agent] {msg}")
-
-def run_command(cmd, shell=False):
-    try:
-        result = subprocess.run(cmd, shell=shell, capture_output=True, text=True)
-        return result.stdout + result.stderr, result.returncode
-    except Exception as e:
-        return str(e), 1
 
 def get_ollama_response(prompt):
     data = {
@@ -150,9 +144,12 @@ def run_verification():
     log("Running verification checks...")
     results = {}
     # Check Oxlint (Fast)
-    results['oxlint'], _ = run_command(["pnpm", "run", "lint:ox"])
+    # Use execute_raw to gather both stdout and stderr
+    res_ox = execute_raw(["pnpm", "run", "lint:ox"])
+    results['oxlint'] = res_ox.stdout + res_ox.stderr
     # Check Typescript
-    results['tsc'], _ = run_command(["pnpm", "run", "type-check"])
+    res_tsc = execute_raw(["pnpm", "run", "type-check"])
+    results['tsc'] = res_tsc.stdout + res_tsc.stderr
     return results
 
 def agent_loop(file_path, initial_errors):

@@ -61,7 +61,7 @@ export function PageHeader({
 
 export function SectionHeader({ label, title, children }: { label: string; title: string; children?: ReactNode }) {
   return (
-    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4} className="border-line">
+    <Box display="flex" justify="between" align="end" border="b" paddingBottom={4}>
       <Stack gap={1}>
         <Text variant="mono" size="xs" color="brand" weight="font-semibold" tracking="widest" uppercase>{label}</Text>
         <Text variant="headline" size="3xl" weight="font-black">{title}</Text>
