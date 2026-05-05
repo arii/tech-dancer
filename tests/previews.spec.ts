@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Preview Dashboard', () => {
   test('should load the dashboard and show initial elements', async ({ page }) => {
-    // Navigate to the preview dashboard
-    await page.goto(`${process.env.VITE_BASE_PATH || '/'}previews/index.html`);
+    // Navigate to the preview dashboard using a relative path to ensure correct resolution against baseURL
+    await page.goto('./previews/index.html');
     await page.waitForLoadState('networkidle');
 
     // Check title
@@ -23,7 +23,7 @@ test.describe('Preview Dashboard', () => {
   });
 
   test('responsive layout check', async ({ page }) => {
-    await page.goto(`${process.env.VITE_BASE_PATH || '/'}previews/index.html`);
+    await page.goto('./previews/index.html');
     await page.waitForLoadState('networkidle');
 
     // Desktop view
