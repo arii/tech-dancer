@@ -15,8 +15,9 @@ export default function ArielProfile() {
   const { bio } = useProfile();
 
   const galleryImages = bio.sections.find(s => s.id === 'gallery')?.gallery || [];
-  const danceExtensionPhoto = galleryImages[0];
-  const socialDancePhoto = galleryImages[2];
+  const featuredImages = galleryImages.filter(img => img.featured);
+  const danceExtensionPhoto = featuredImages.find(img => img.alt.includes('extension'));
+  const socialDancePhoto = featuredImages.find(img => img.alt.includes('MadJam'));
 
   const renderSection = (section: ProfileSection) => {
     const isDanceBackground = section.id === "dance-background";
@@ -30,22 +31,29 @@ export default function ArielProfile() {
           </Text>
         )}
 
-        {section.title && (
-          <Text variant="display" size="2xl" weight="font-bold" className="text-accent-navy uppercase tracking-tight">
-            {section.title}
-          </Text>
-        )}
+          <Stack direction={{ base: 'col', md: 'row' }} gap={8} align="start">
+            <Stack gap={6} flex={1}>
+              {section.content && (
+                <Text variant="body" size="lg" color="body" className="leading-relaxed">
+                  {section.content}
+                </Text>
+              )}
 
-        <Stack direction={{ base: 'col', md: 'row' }} gap={8} align="start">
-          <Stack gap={6} flex={1}>
-            {section.content && (
-              <Text variant="body" size="lg" color="body" className="leading-relaxed">
-                {section.content}
-              </Text>
+              {section.cards && <ExperienceCards cards={section.cards} />}
+              {section.items && <ProfileItems items={section.items} />}
+            </Stack>
+
+            {isDanceBackground && danceExtensionPhoto && (
+              <Box width={{ base: 'full', md: '72' }} aspect="1/1" radius="xl" overflow="hidden" border className="border-line/10 shadow-md shrink-0">
+                <img src={danceExtensionPhoto.src} alt={danceExtensionPhoto.alt} width={300} height={300} className="w-full h-full object-cover" />
+              </Box>
             )}
 
-            {section.cards && <ExperienceCards cards={section.cards} />}
-            {section.items && <ProfileItems items={section.items} />}
+            {isWhyBuilt && socialDancePhoto && (
+              <Box width={{ base: 'full', md: '72' }} aspect="1/1" radius="xl" overflow="hidden" border className="border-line/10 shadow-md shrink-0">
+                <img src={socialDancePhoto.src} alt={socialDancePhoto.alt} width={300} height={300} className="w-full h-full object-cover" />
+              </Box>
+            )}
           </Stack>
 
           {isDanceBackground && danceExtensionPhoto && (
@@ -60,10 +68,7 @@ export default function ArielProfile() {
             </Box>
           )}
         </Stack>
-
-        {section.gallery && <ProfileGallery images={section.gallery.filter((_, i) => i !== 0 && i !== 2)} />}
-        {section.links && <ProfileLinks links={section.links} />}
-      </Stack>
+      </Box>
     );
   };
 
@@ -84,7 +89,7 @@ export default function ArielProfile() {
       />
 
       {/* Quick Facts Bar */}
-      <Box paddingY={8} border="b" className="border-line/10">
+      <Box paddingY={8} border="b" className="border-line/10" marginBottom={12}>
         <Grid cols={{ base: 2, md: 4 }} gap={6}>
           {bio.details.map((detail) => (
             <Stack key={detail.label} gap={1}>
@@ -99,10 +104,10 @@ export default function ArielProfile() {
         </Grid>
       </Box>
 
-      <Stack gap={16} marginTop={12}>
+      <Stack gap={0} marginTop={12}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            <Stack gap={16} className="lg:col-span-8">
+            <Stack gap={0} className="lg:col-span-8">
               {bio.sections.map(renderSection)}
             </Stack>
 

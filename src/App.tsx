@@ -56,6 +56,11 @@ export function RootLayout() {
             </Suspense>
           </Box>
         </AnimatePresence>
+        {showEmailBar && (
+          <Box marginTop={12}>
+            <NewsletterBanner />
+          </Box>
+        )}
       </MainLayout>
       {import.meta.env.PROD && window.location.hostname !== 'localhost' && <Analytics />}
     </>

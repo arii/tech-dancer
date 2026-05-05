@@ -87,9 +87,9 @@ const PROFILE_DATA: ProfileData = {
       eyebrow: "Photo Gallery",
       title: "WCS Moments",
       gallery: [
-        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension at a competition" },
+        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension at a competition", featured: true },
         { src: monterey, alt: "Ariel Anders in a dramatic West Coast Swing pose in Monterey" },
-        { src: madJamAri, alt: "Ariel Anders enjoying a social dance at MadJam" },
+        { src: madJamAri, alt: "Ariel Anders enjoying a social dance at MadJam", featured: true },
         { src: glowBunny, alt: "Ariel Anders wearing a creative glow bunny costume for a themed dance" },
         { src: wwwAri, alt: "Close-up of West Coast Swing floor connection during a performance" }
       ]

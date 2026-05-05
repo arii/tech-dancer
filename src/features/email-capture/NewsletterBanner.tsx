@@ -1,10 +1,7 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
-import { motionTokens } from '@/styles/motion';
-import { motion } from 'motion/react';
 import { useEmailStore } from './emailStore';
-import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {
   const hideBar = useEmailStore((state) => state.hideBar);
@@ -21,7 +18,7 @@ export function NewsletterBanner() {
       radius="xl"
       marginX="auto"
     >
-      <Box position="absolute" className="top-2 right-2" zIndex="docked">
+      <Box position="absolute" className="top-4 right-4" zIndex="docked">
         <Button
           variant="ghost"
           size="sm"
@@ -49,9 +46,9 @@ export function NewsletterBanner() {
             display={{ base: 'none', sm: 'flex' }}
             align="center"
             justify="center"
-            surface="accent"
-            opacity={5}
+            className="bg-accent/10"
             radius="md"
+            shrink={0}
           >
             <Mail className="w-5 h-5 text-accent" />
           </Box>
