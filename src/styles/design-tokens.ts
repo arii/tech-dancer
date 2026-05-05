@@ -56,3 +56,32 @@ export const shadows = {
 };
 
 
+
+export const zIndex = {
+  hide: -1,
+  base: 0,
+  docked: 10,
+  dropdown: 1000,
+  sticky: 1100,
+  overlay: 1300,
+  modal: 1400,
+  popover: 1500,
+  skipLink: 1600,
+  toast: 1700,
+  top: 9999,
+  search: 2000,
+};
+
+export const typography = {
+  h1: "text-4xl md:text-5xl lg:text-6xl font-black tracking-tight",
+  h2: "text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight",
+  h3: "text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight",
+  h4: "text-xl md:text-2xl font-bold tracking-tight",
+  h5: "text-lg md:text-xl font-bold tracking-tight",
+  h6: "text-base md:text-lg font-bold tracking-tight",
+  p: "text-base leading-relaxed",
+  lead: "text-lg md:text-xl text-muted-foreground leading-relaxed",
+  large: "text-lg font-medium",
+  small: "text-sm font-medium leading-none",
+  muted: "text-sm text-muted-foreground",
+};

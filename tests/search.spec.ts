@@ -7,7 +7,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('button', { name: 'Search' }).first();
+    const searchButton = page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Search' });
     await searchButton.click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
@@ -17,7 +17,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when clicking on backdrop', async ({ page }) => {
-    await page.getByRole('button', { name: 'Search' }).first().click();
+    await page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.getByTestId('search-backdrop').click({ position: { x: 5, y: 5 }, force: true });
@@ -25,7 +25,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('button', { name: 'Search' }).first().click();
+    await page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.goto('./gear');
@@ -36,7 +36,7 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('button', { name: 'Search' }).first().click();
+    await page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Search' }).click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await searchInput.fill('ai');
 
@@ -54,7 +54,7 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.goto('./');
     await page.waitForLoadState('networkidle');
 
-    const searchButton = page.getByRole('button', { name: 'Search' }).first();
+    const searchButton = page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Search' });
     await searchButton.click();
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
