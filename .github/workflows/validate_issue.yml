@@ -5,7 +5,7 @@ on:
     types: [opened, edited]
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   validate:
@@ -14,7 +14,7 @@ jobs:
       issues: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
@@ -22,5 +22,6 @@ jobs:
       - name: Validate Issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONPATH: ${{ github.workspace }}/dev-tools
         run: |
-          python3 dev-tools/td_cli.py validate-issue --issue-number ${{ github.event.issue.number }} --post-comments
+          python3 dev-tools/td_cli.py validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute

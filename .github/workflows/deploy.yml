@@ -17,20 +17,20 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v4.0.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.1.0
         with:
           node-version: 24
           cache: 'pnpm'
@@ -242,21 +242,25 @@ jobs:
 
               const existingComment = comments.find(c => c.body.includes(commentTag));
 
-              if (existingComment) {
-                console.log(`Updating existing comment ${existingComment.id}`);
-                await github.rest.issues.updateComment({
-                  owner,
-                  repo,
-                  comment_id: existingComment.id,
-                  body,
-                });
-              } else {
-                console.log(`Creating new comment for PR #${pr.number}`);
-                await github.rest.issues.createComment({
-                  issue_number: pr.number,
-                  owner,
-                  repo,
-                  body,
-                });
+              try {
+                if (existingComment) {
+                  console.log(`Updating existing comment ${existingComment.id}`);
+                  await github.rest.issues.updateComment({
+                    owner,
+                    repo,
+                    comment_id: existingComment.id,
+                    body,
+                  });
+                } else {
+                  console.log(`Creating new comment for PR #${pr.number}`);
+                  await github.rest.issues.createComment({
+                    issue_number: pr.number,
+                    owner,
+                    repo,
+                    body,
+                  });
+                }
+              } catch (error) {
+                console.warn(`Failed to update comment on PR #${pr.number}:`, error.message);
               }
             }

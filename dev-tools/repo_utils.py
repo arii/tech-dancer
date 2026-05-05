@@ -1,12 +1,13 @@
 import os
 import re
-import subprocess
 import sys
+import glob
+import shlex
 from typing import Optional, List, Tuple, Union
 from collections import defaultdict
 
-# Import execute from utils
-from utils import execute
+# Import run_command from utils
+from utils import run_command, CLIError
 
 # Use existing github_utils if possible, but we'll add common repo walking/matching logic here
 def walk_tsx(root_dir='src'):
@@ -33,15 +34,40 @@ def find_patterns_in_file(filepath, patterns):
 
 def get_bundle_size(dist_dir='dist/assets'):
     """Returns bundle size in KB."""
-    # Avoid 2>/dev/null to see errors if dir doesn't exist
-    # If this fails, let the CLIError bubble up to identify environment issues
-    cmd = f"du -sk {dist_dir}/*.js | awk '{{sum+=$1}} END{{print sum}}'"
-    result = execute(cmd, shell=True)
-    return int(result) if result else 0
+    if not os.path.isdir(dist_dir):
+        print(f"⚠️ Warning: Bundle directory {dist_dir} not found.", file=sys.stderr)
+        return 0
+
+    js_files = glob.glob(os.path.join(dist_dir, "*.js"))
+    if not js_files:
+        return 0
+
+    total_bytes = 0
+    for js_file in js_files:
+        try:
+            total_bytes += os.path.getsize(js_file)
+        except OSError as e:
+            print(f"❌ Error getting size for {js_file}: {e}", file=sys.stderr)
+            raise CLIError(f"Failed to calculate bundle size: {e}")
+
+    # Return size in KB (rounded up to match du -k behavior roughly)
+    return (total_bytes + 1023) // 1024
 
 def get_any_count(search_dir='src'):
     """Returns count of 'any' usages in TS/TSX files."""
-    # If grep fails (e.g. directory missing), let the CLIError bubble up
-    cmd = f"grep -rn ': any\\b\\|as any\\b' {search_dir} --include='*.tsx' --include='*.ts' | wc -l"
-    result = execute(cmd, shell=True)
-    return int(result) if result else 0
+    if not os.path.isdir(search_dir):
+        print(f"⚠️ Warning: Search directory {search_dir} not found.", file=sys.stderr)
+        return 0
+
+    safe_dir = shlex.quote(search_dir)
+    # Using check=False because grep exits non-zero on no matches
+    cmd = f"grep -rn ': any\\b\\|as any\\b' {safe_dir} --include='*.tsx' --include='*.ts'"
+    res = run_command(cmd, check=False, shell=True, log_on_error=False)
+
+    if res.returncode == 0:
+        return len(res.stdout.strip().split('\n')) if res.stdout.strip() else 0
+    elif res.returncode == 1:
+        return 0
+    else:
+        print(f"❌ Error running grep: {res.stderr.strip()}", file=sys.stderr)
+        raise CLIError(f"Grep failed with exit code {res.returncode}")
