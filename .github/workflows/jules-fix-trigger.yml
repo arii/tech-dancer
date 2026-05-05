@@ -1,0 +1,40 @@
+name: Jules Fix CI
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  trigger-jules:
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@jules-fix-ci') &&
+      (github.event.comment.author_association == 'OWNER' ||
+       github.event.comment.author_association == 'MEMBER' ||
+       github.event.comment.author_association == 'COLLABORATOR')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          pip install PyGithub
+
+      - name: Initialize Jules Repair Session
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          JULES_SOURCE_ID: ${{ vars.JULES_SOURCE_ID }}
+        run: |
+          python3 dev-tools/td_cli.py fix-ci --pr-number ${{ github.event.issue.number }} --execute
