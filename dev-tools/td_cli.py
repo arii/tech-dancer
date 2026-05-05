@@ -643,6 +643,7 @@ def handle_repair_context(args):
                     print("-" * 40)
     else:
         raise CLIError("Provide --log or --file")
+
 def handle_fix_ci(args):
     from github import Github
     from clients.jules_api_client import JulesAPIClient
@@ -755,9 +756,7 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
-                      ("fix-ci", handle_fix_ci)]: # fetch-review is alias for audit-pr --fetch
-                      ("repair", handle_repair)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
