@@ -102,14 +102,14 @@ export function HeroPathCard({
             
             const commonProps = {
               className: cn(
-                "group/link flex items-center gap-3 transition-all duration-300",
+                "group/link flex items-center gap-3 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
                 isPrimary ? "text-white font-bold" : "text-white/60 hover:text-white"
               )
             };
 
             const linkContent = (
               <>
-                <span className="relative">
+                <span className="relative drop-shadow-md">
                   {link.text}
                   <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover/link:w-full" />
                 </span>

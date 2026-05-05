@@ -199,7 +199,7 @@ export function GlobalSearch() {
               </Box>
            </Box>
             <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
-              {results.length} RESULTS
+              {results.length} RESULTS FOUND
             </Text>
           </Box>
         </Box>

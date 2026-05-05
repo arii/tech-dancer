@@ -7,9 +7,13 @@ import { useEmailForm } from './useEmailForm';
 export function EmailForm() {
   const { status, email, setEmail, submitForm } = useEmailForm();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submitForm(email);
+    if (e.currentTarget.checkValidity()) {
+      submitForm(email);
+    } else {
+      e.currentTarget.reportValidity();
+    }
   };
 
   return (
@@ -20,7 +24,7 @@ export function EmailForm() {
           type="email"
           placeholder="Email Address"
           value={email}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
@@ -35,6 +39,7 @@ export function EmailForm() {
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}
+          className="bg-accent-navy hover:bg-accent-navy/90 text-bg"
         >
           <AnimatePresence mode="wait">
             <Stack
