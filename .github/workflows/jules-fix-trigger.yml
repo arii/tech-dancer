@@ -31,10 +31,28 @@ jobs:
         run: |
           pip install PyGithub
 
+      - name: Pre-check Jules Credentials
+        run: |
+          MISSING=()
+          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then MISSING+=("GITHUB_TOKEN"); fi
+          if [ -z "${{ secrets.JULES_API_KEY }}" ]; then MISSING+=("JULES_API_KEY"); fi
+
+          if [ ${#MISSING[@]} -ne 0 ]; then
+            echo "❌ Missing required secrets: ${MISSING[*]}"
+            echo "Please ensure GITHUB_TOKEN and JULES_API_KEY are configured in repository secrets."
+            exit 1
+          fi
+
+          if [ -z "${{ vars.JULES_SOURCE_ID }}" ]; then
+            echo "⚠️ JULES_SOURCE_ID variable not found. Script will attempt auto-discovery."
+          fi
+          echo "✅ Credentials pre-check passed."
+
       - name: Initialize Jules Repair Session
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           JULES_SOURCE_ID: ${{ vars.JULES_SOURCE_ID }}
         run: |
-          python3 dev-tools/td_cli.py fix-ci --pr-number ${{ github.event.issue.number }} --execute
+          # Capture both stdout and stderr for better diagnostic visibility
+          python3 dev-tools/td_cli.py fix-ci --pr-number ${{ github.event.issue.number }} --execute 2>&1
