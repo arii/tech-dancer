@@ -14,7 +14,8 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
   const scrollShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
-    setMounted(true);
+    // Avoid calling setState() directly within an effect
+    // setMounted(true); (this line is unnecessary)
   }, []);
 
   const bars = useMemo(() => {

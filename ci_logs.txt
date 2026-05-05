@@ -1,0 +1,1014 @@
+Lint & Type Check	Set up job	﻿2026-05-05T03:48:15.6045521Z Current runner version: '2.334.0'
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6074018Z ##[group]Runner Image Provisioner
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6074844Z Hosted Compute Agent
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6075476Z Version: 20260213.493
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6076115Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6076786Z Build Date: 2026-02-13T00:28:41Z
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6077485Z Worker ID: {fd5e0eb3-44b3-4c76-8a6a-8e27c868ea91}
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6078161Z Azure Region: eastus2
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6078956Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6080394Z ##[group]Operating System
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6081142Z Ubuntu
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6081609Z 24.04.4
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6082064Z LTS
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6082557Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6083108Z ##[group]Runner Image
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6083653Z Image: ubuntu-24.04
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6084211Z Version: 20260413.86.1
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6085239Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6086937Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6087839Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6089310Z ##[group]GITHUB_TOKEN Permissions
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6091428Z Contents: read
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6092025Z Metadata: read
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6092960Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6095654Z Secret source: Actions
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6096472Z Prepare workflow directory
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6644606Z Prepare all required actions
+Lint & Type Check	Set up job	2026-05-05T03:48:15.6684911Z Getting action download info
+Lint & Type Check	Set up job	2026-05-05T03:48:16.0184415Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Lint & Type Check	Set up job	2026-05-05T03:48:16.3101737Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Lint & Type Check	Set up job	2026-05-05T03:48:16.5740287Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Lint & Type Check	Set up job	2026-05-05T03:48:16.7573211Z Complete job name: Lint & Type Check
+Lint & Type Check	Checkout	﻿2026-05-05T03:48:16.8288910Z ##[group]Run actions/checkout@v4
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8290021Z with:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8290460Z   fetch-depth: 0
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8290924Z   repository: arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8291635Z   token: ***
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8292067Z   ssh-strict: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8292502Z   ssh-user: git
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8292938Z   persist-credentials: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8293438Z   clean: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8293889Z   sparse-checkout-cone-mode: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8294418Z   fetch-tags: false
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8294883Z   show-progress: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8295320Z   lfs: false
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8295721Z   submodules: false
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8296168Z   set-safe-directory: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8296859Z env:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8297333Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8297906Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8298597Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8299059Z   AUDIT_BASELINE: 
+Lint & Type Check	Checkout	2026-05-05T03:48:16.8299522Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9291571Z Syncing repository: arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9293466Z ##[group]Getting Git version info
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9294354Z Working directory is '/home/runner/work/tech-dancer/tech-dancer'
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9295433Z [command]/usr/bin/git version
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9322833Z git version 2.53.0
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9376722Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9392307Z Temporarily overriding HOME='/home/runner/work/_temp/f33ed6f4-be0b-4881-b2f3-46ae8de61930' before making global git config changes
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9394875Z Adding repository directory to the temporary git global config as a safe directory
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9397247Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9432605Z Deleting the contents of '/home/runner/work/tech-dancer/tech-dancer'
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9437468Z ##[group]Initializing the repository
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9443476Z [command]/usr/bin/git init /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9554108Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9555616Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9556623Z hint: to use in all of your new repositories, which will suppress this warning,
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9557386Z hint: call:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9557791Z hint:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9558790Z hint: 	git config --global init.defaultBranch <name>
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9559991Z hint:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9560890Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9561894Z hint: 'development'. The just-created branch can be renamed via this command:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9562662Z hint:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9563065Z hint: 	git branch -m <name>
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9563540Z hint:
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9564608Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9566072Z Initialized empty Git repository in /home/runner/work/tech-dancer/tech-dancer/.git/
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9568529Z [command]/usr/bin/git remote add origin https://github.com/arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9597542Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9599087Z ##[group]Disabling automatic garbage collection
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9601104Z [command]/usr/bin/git config --local gc.auto 0
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9630544Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9631728Z ##[group]Setting up auth
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9636459Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9666936Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9960787Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint & Type Check	Checkout	2026-05-05T03:48:16.9991348Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint & Type Check	Checkout	2026-05-05T03:48:17.0210798Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint & Type Check	Checkout	2026-05-05T03:48:17.0244387Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint & Type Check	Checkout	2026-05-05T03:48:17.0467753Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lint & Type Check	Checkout	2026-05-05T03:48:17.0504421Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:17.0505928Z ##[group]Fetching the repository
+Lint & Type Check	Checkout	2026-05-05T03:48:17.0516018Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2591807Z From https://github.com/arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2593187Z  * [new branch]        about-page-updates-14352211737228389575 -> origin/about-page-updates-14352211737228389575
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2594834Z  * [new branch]        add-migration-guide-5876664802681073547 -> origin/add-migration-guide-5876664802681073547
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2596101Z  * [new branch]        ai-repair-25356038167 -> origin/ai-repair-25356038167
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2597295Z  * [new branch]        ai-repair-25356378430 -> origin/ai-repair-25356378430
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2598490Z  * [new branch]        ari-boomtick          -> origin/ari-boomtick
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2599349Z  * [new branch]        ari-mockup            -> origin/ari-mockup
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2600217Z  * [new branch]        ari-replit-dark-mode  -> origin/ari-replit-dark-mode
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2601408Z  * [new branch]        ari-replit-dark-mode-3293038484833716469 -> origin/ari-replit-dark-mode-3293038484833716469
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2602593Z  * [new branch]        ari-replit-fix-manual -> origin/ari-replit-fix-manual
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2603711Z  * [new branch]        branding-migration-10480169812015641474 -> origin/branding-migration-10480169812015641474
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2605723Z  * [new branch]        chore/infra-config-improvement-12731238171326256191 -> origin/chore/infra-config-improvement-12731238171326256191
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2606664Z  * [new branch]        cleanup-root-files-15439431871599830205 -> origin/cleanup-root-files-15439431871599830205
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2607542Z  * [new branch]        content/why-space-buns-work-for-west-coast-swing -> origin/content/why-space-buns-work-for-west-coast-swing
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2609017Z  * [new branch]        copilot-fix-git-merge-issue-2078139070203710354 -> origin/copilot-fix-git-merge-issue-2078139070203710354
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2610424Z  * [new branch]        copilot-fix-git-merge-issue-3219033726005670393 -> origin/copilot-fix-git-merge-issue-3219033726005670393
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2611182Z  * [new branch]        copilot/fix-git-merge-issue -> origin/copilot/fix-git-merge-issue
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2611790Z  * [new branch]        copilot/resolve-merge-issue -> origin/copilot/resolve-merge-issue
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2612688Z  * [new branch]        decrease-merge-conflict-sources-fix-v2-990871188136395290 -> origin/decrease-merge-conflict-sources-fix-v2-990871188136395290
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2613763Z  * [new branch]        document-simplified-workflow-8785441803960069738 -> origin/document-simplified-workflow-8785441803960069738
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2614702Z  * [new branch]        feat-consolidated-rebrand-8441384012443507034 -> origin/feat-consolidated-rebrand-8441384012443507034
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2615888Z  * [new branch]        feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2617858Z  * [new branch]        feat/add-ga4-tracking-12639729061711926309 -> origin/feat/add-ga4-tracking-12639729061711926309
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2619419Z  * [new branch]        feat/ai-slop-audit-workflow -> origin/feat/ai-slop-audit-workflow
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2620869Z  * [new branch]        feat/blog-post-wcs-data-scraper-14452895178941716806 -> origin/feat/blog-post-wcs-data-scraper-14452895178941716806
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2622894Z  * [new branch]        feat/boomtick-design-migration-15578555430520802096 -> origin/feat/boomtick-design-migration-15578555430520802096
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2624358Z  * [new branch]        feat/brand-migration-boomtick-blog-6234609098749488321 -> origin/feat/brand-migration-boomtick-blog-6234609098749488321
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2625156Z  * [new branch]        feat/consolidated-rebrand -> origin/feat/consolidated-rebrand
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2626040Z  * [new branch]        feat/content-pipeline-7178197585753202032-8406124502228595157 -> origin/feat/content-pipeline-7178197585753202032-8406124502228595157
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2627028Z  * [new branch]        feat/dashboard-hero-2170559866929629428 -> origin/feat/dashboard-hero-2170559866929629428
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2628130Z  * [new branch]        feat/frontend-style-overhaul-8718428500994173403 -> origin/feat/frontend-style-overhaul-8718428500994173403
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2630038Z  * [new branch]        feat/frontend-style-overhaul-reduced -> origin/feat/frontend-style-overhaul-reduced
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2630909Z  * [new branch]        feat/google-site-verification -> origin/feat/google-site-verification
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2631578Z  * [new branch]        feat/hero-update-933815339834268378 -> origin/feat/hero-update-933815339834268378
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2632416Z  * [new branch]        feat/issue-cache-playwright-etl-15277468477470866741 -> origin/feat/issue-cache-playwright-etl-15277468477470866741
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2633564Z  * [new branch]        feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2634597Z  * [new branch]        feat/no-card-content-5940296687076887070 -> origin/feat/no-card-content-5940296687076887070
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2635684Z  * [new branch]        feat/normalize-content-frontmatter-and-tagging-12531175689791989355 -> origin/feat/normalize-content-frontmatter-and-tagging-12531175689791989355
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2636920Z  * [new branch]        feat/roi-dashboard-5778359830468399427 -> origin/feat/roi-dashboard-5778359830468399427
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2637749Z  * [new branch]        feat/signature-rag-t2f-11287284092066976427 -> origin/feat/signature-rag-t2f-11287284092066976427
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2639007Z  * [new branch]        feat/standardize-layout-components-11646648776927534134 -> origin/feat/standardize-layout-components-11646648776927534134
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2640158Z  * [new branch]        feat/standardize-layout-components-usage-10070409333056580121 -> origin/feat/standardize-layout-components-usage-10070409333056580121
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2641159Z  * [new branch]        feat/ui-mockup-update-12974801575958228939 -> origin/feat/ui-mockup-update-12974801575958228939
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2642081Z  * [new branch]        feature/affiliate-reporting-roi-16467421757541273216 -> origin/feature/affiliate-reporting-roi-16467421757541273216
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2643087Z  * [new branch]        feature/automated-visual-audit-4877388463301437192 -> origin/feature/automated-visual-audit-4877388463301437192
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2643987Z  * [new branch]        feature/brand-redesign-12828928534499015186 -> origin/feature/brand-redesign-12828928534499015186
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2644883Z  * [new branch]        feature/ga4-datalab-tracking-12941441102819824497 -> origin/feature/ga4-datalab-tracking-12941441102819824497
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2645752Z  * [new branch]        fix-a11y-violations-16085129461401263373 -> origin/fix-a11y-violations-16085129461401263373
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2646522Z  * [new branch]        fix-broken-link-4671924183609848537 -> origin/fix-broken-link-4671924183609848537
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2647496Z  * [new branch]        fix-jules-repair-session-validation-13452243814353216015 -> origin/fix-jules-repair-session-validation-13452243814353216015
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2648938Z  * [new branch]        fix-pnpm-install-16804053640672136325 -> origin/fix-pnpm-install-16804053640672136325
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2649734Z  * [new branch]        fix-pr-652-rework-10074456896911749759 -> origin/fix-pr-652-rework-10074456896911749759
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2650605Z  * [new branch]        fix-sitemap-production-url-14323895830703992857 -> origin/fix-sitemap-production-url-14323895830703992857
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2651502Z  * [new branch]        fix-td-cli-and-audit-10497345691971696912 -> origin/fix-td-cli-and-audit-10497345691971696912
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2652327Z  * [new branch]        fix-ux-content-card-9181779295267348310 -> origin/fix-ux-content-card-9181779295267348310
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2653240Z  * [new branch]        fix-visual-regression-snapshots-974398726183238407 -> origin/fix-visual-regression-snapshots-974398726183238407
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2654232Z  * [new branch]        fix/audit-baseline-variable-15500587914714492758 -> origin/fix/audit-baseline-variable-15500587914714492758
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2655172Z  * [new branch]        fix/lockfile-determinism-1898052402348987185 -> origin/fix/lockfile-determinism-1898052402348987185
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2656090Z  * [new branch]        fix/merge-conflict-reduction-2267808997804499585 -> origin/fix/merge-conflict-reduction-2267808997804499585
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2656981Z  * [new branch]        fix/node-24-migration-12291836500979307039 -> origin/fix/node-24-migration-12291836500979307039
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2657855Z  * [new branch]        fix/reduce-merge-conflicts-7939391422608510210 -> origin/fix/reduce-merge-conflicts-7939391422608510210
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2659046Z  * [new branch]        fix/search-icon-collision-6946222253420010073 -> origin/fix/search-icon-collision-6946222253420010073
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2659925Z  * [new branch]        fix/search-relevance-506107467047410442 -> origin/fix/search-relevance-506107467047410442
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2660830Z  * [new branch]        fix/seo-metadata-improvements-9637639215072905812 -> origin/fix/seo-metadata-improvements-9637639215072905812
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2661919Z  * [new branch]        fix/sitemap-generation-4185814553234649503 -> origin/fix/sitemap-generation-4185814553234649503
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2662803Z  * [new branch]        fix/throttle-debounce-12001434146562276732 -> origin/fix/throttle-debounce-12001434146562276732
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2663692Z  * [new branch]        fix/ui-anti-patterns-2687186430891986193 -> origin/fix/ui-anti-patterns-2687186430891986193
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2664650Z  * [new branch]        fix/ux-auditor-mobile-screenshots-17229602608787945952 -> origin/fix/ux-auditor-mobile-screenshots-17229602608787945952
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2665656Z  * [new branch]        footer-navigation-redesign-9860721351648124902 -> origin/footer-navigation-redesign-9860721351648124902
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2666350Z  * [new branch]        gh-pages              -> origin/gh-pages
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2666792Z  * [new branch]        git                   -> origin/git
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2667541Z  * [new branch]        improve-preview-page-usability-208950052235215523 -> origin/improve-preview-page-usability-208950052235215523
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2668679Z  * [new branch]        improve/core-infra-config-13191492064982896006 -> origin/improve/core-infra-config-13191492064982896006
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2669502Z  * [new branch]        jules-14148848927286620353-36f3bdb1 -> origin/jules-14148848927286620353-36f3bdb1
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2670192Z  * [new branch]        jules-14206370618723621129-57b0c2a6 -> origin/jules-14206370618723621129-57b0c2a6
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2670873Z  * [new branch]        jules-4029992414159625139-c2d3b480 -> origin/jules-4029992414159625139-c2d3b480
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2671726Z  * [new branch]        jules-boomtick-design-migration-6532042589388127559 -> origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2672797Z  * [new branch]        jules-update-frontend-replit-mockup-1944760327146997507 -> origin/jules-update-frontend-replit-mockup-1944760327146997507
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2673923Z  * [new branch]        lockfile-determinism-8675050957782106544 -> origin/lockfile-determinism-8675050957782106544
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2674527Z  * [new branch]        main                  -> origin/main
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2675211Z  * [new branch]        normalize-frontmatter-tags-4207264828719271707 -> origin/normalize-frontmatter-tags-4207264828719271707
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2676094Z  * [new branch]        rebrand-boomtick-blog-1770114126300875003 -> origin/rebrand-boomtick-blog-1770114126300875003
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2676984Z  * [new branch]        recreate-minimalist-pr-657-12196757166317304754 -> origin/recreate-minimalist-pr-657-12196757166317304754
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2677910Z  * [new branch]        refactor-hero-section-645-4279679236069717571 -> origin/refactor-hero-section-645-4279679236069717571
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2679026Z  * [new branch]        refactor/modular-folder-structure-4670414599553836190 -> origin/refactor/modular-folder-structure-4670414599553836190
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2679811Z  * [new branch]        replit-frontend       -> origin/replit-frontend
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2680498Z  * [new branch]        standardize-ui-states-11537291259350471924 -> origin/standardize-ui-states-11537291259350471924
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2681385Z  * [new branch]        ui-ux-accessibility-fixes-15631158062664361517 -> origin/ui-ux-accessibility-fixes-15631158062664361517
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2682234Z  * [new branch]        update-brand-logo-17669905563494851100 -> origin/update-brand-logo-17669905563494851100
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2683060Z  * [new branch]        update-favicon-boomtick-1569075219496026841 -> origin/update-favicon-boomtick-1569075219496026841
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2684074Z  * [new branch]        visual-auditor-tool-and-hero-refactor-9863198860810042197 -> origin/visual-auditor-tool-and-hero-refactor-9863198860810042197
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2965838Z [command]/usr/bin/git branch --list --remote origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T03:48:24.2999000Z   origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3007534Z [command]/usr/bin/git rev-parse refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3028160Z 56c873dd12af2a518cb24e8b74c4ff91527b2d20
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3032703Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3033199Z ##[group]Determining the checkout info
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3034211Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3039285Z [command]/usr/bin/git sparse-checkout disable
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3082839Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3110308Z ##[group]Checking out the ref
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3115612Z [command]/usr/bin/git checkout --progress --force -B jules-boomtick-design-migration-6532042589388127559 refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3640037Z Switched to a new branch 'jules-boomtick-design-migration-6532042589388127559'
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3642550Z branch 'jules-boomtick-design-migration-6532042589388127559' set up to track 'origin/jules-boomtick-design-migration-6532042589388127559'.
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3653272Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3695376Z [command]/usr/bin/git log -1 --format=%H
+Lint & Type Check	Checkout	2026-05-05T03:48:24.3719549Z 56c873dd12af2a518cb24e8b74c4ff91527b2d20
+Lint & Type Check	Setup pnpm	﻿2026-05-05T03:48:24.3933645Z ##[group]Run pnpm/action-setup@v4
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3933999Z with:
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3934226Z   dest: ~/setup-pnpm
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3934469Z   run_install: null
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3934702Z   cache: false
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3934944Z   cache_dependency_path: pnpm-lock.yaml
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3935262Z   package_json_file: package.json
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3935535Z   standalone: false
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3935760Z env:
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3935988Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3936286Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3936528Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3936760Z   AUDIT_BASELINE: 
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.3937007Z ##[endgroup]
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.5419970Z ##[group]Running self-installer...
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.9407864Z (node:2283) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:24.9409429Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.1090000Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.1213448Z Packages: +1
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.1213839Z +
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5238150Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5522685Z 
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5523140Z dependencies:
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5523523Z + pnpm 10.28.2 (10.33.3 is available)
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5523808Z 
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5563175Z Done in 846ms
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5737016Z ##[endgroup]
+Lint & Type Check	Setup pnpm	2026-05-05T03:48:25.5737507Z Installation Completed!
+Lint & Type Check	Setup Node.js	﻿2026-05-05T03:48:25.5905040Z ##[group]Run actions/setup-node@v4
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5905324Z with:
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5905503Z   node-version: 24
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5905696Z   cache: pnpm
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5905878Z   always-auth: false
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5906083Z   check-latest: false
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5906427Z   token: ***
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5906614Z env:
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5906807Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5907086Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5907296Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5907491Z   AUDIT_BASELINE: 
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5907751Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.5908046Z ##[endgroup]
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.7331159Z Found in cache @ /opt/hostedtoolcache/node/24.14.1/x64
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.7336191Z (node:2297) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.7337470Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:25.7339901Z ##[group]Environment details
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:28.8174969Z node: v24.14.1
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:28.8175399Z npm: 11.11.0
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:28.8175752Z yarn: 1.22.22
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:28.8177073Z ##[endgroup]
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:28.8204551Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:29.2524574Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:29.3303270Z Cache hit for: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:29.3408685Z (node:2297) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:30.1142589Z Received 157464653 of 157464653 (100.0%), 205.4 MBs/sec
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:30.1144379Z Cache Size: ~150 MB (157464653 B)
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:30.1203577Z [command]/usr/bin/tar -xf /home/runner/work/_temp/927450e0-1e15-4828-9ba9-dd64eb58da36/cache.tzst -P -C /home/runner/work/tech-dancer/tech-dancer --use-compress-program unzstd
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:32.6246981Z Cache restored successfully
+Lint & Type Check	Setup Node.js	2026-05-05T03:48:32.6322194Z Cache restored from key: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Lint & Type Check	Verify lockfile integrity	﻿2026-05-05T03:48:32.6492983Z ##[group]Run pnpm install --frozen-lockfile
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6493448Z [36;1mpnpm install --frozen-lockfile[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6493780Z [36;1mif ! git diff --quiet pnpm-lock.yaml; then[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6494235Z [36;1m  echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6494634Z [36;1m  exit 1[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6494824Z [36;1mfi[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6527000Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6527274Z env:
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6527487Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6527772Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6528007Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6528538Z   AUDIT_BASELINE: 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6528800Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:32.6529100Z ##[endgroup]
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:33.0087370Z Lockfile is up to date, resolution step is skipped
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:33.0861939Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:33.2329631Z Packages: +1138
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:33.2332166Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:34.0874351Z Progress: resolved 1138, reused 1138, downloaded 0, added 95
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:35.0873473Z Progress: resolved 1138, reused 1138, downloaded 0, added 718
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:35.5247730Z Progress: resolved 1138, reused 1138, downloaded 0, added 1138, done
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0832274Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0832998Z dependencies:
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0833506Z + @hookform/resolvers 5.2.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0834034Z + @tailwindcss/vite 4.2.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0834557Z + @tanstack/react-query 5.99.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0835128Z + @vercel/analytics 2.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0835596Z + @vitejs/plugin-react 5.2.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0836153Z + class-variance-authority 0.7.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0836634Z + clsx 2.1.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0837066Z + firebase 12.12.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0837489Z + fuse.js 7.3.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0837851Z + glob 13.0.6
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0838576Z + hyparquet 1.25.6
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0838968Z + jspdf 2.5.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0839369Z + jspdf-autotable 3.8.4
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0839793Z + lucide-react 0.546.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0840187Z + motion 12.38.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0840595Z + papaparse 5.5.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0841023Z + path-to-regexp 8.4.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0841280Z + react 19.2.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0841547Z + react-dom 19.2.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0841891Z + react-helmet-async 3.0.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0842375Z + react-hook-form 7.73.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0842843Z + react-markdown 10.1.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0843299Z + react-router-dom 7.14.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0844228Z + recharts 2.15.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0844678Z + remark-parse 11.0.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0845134Z + tailwind-merge 3.5.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0845582Z + tw-animate-css 1.4.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0845968Z + unified 11.0.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0846396Z + unist-util-visit 5.1.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0846878Z + vite-plugin-pwa 1.2.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0847337Z + workbox-window 7.4.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0847795Z + zod 3.25.76
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0848124Z + zustand 5.0.12
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0848607Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0848770Z devDependencies:
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0849148Z + @eslint/js 10.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0849512Z + @lhci/cli 0.15.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0849890Z + @playwright/test 1.59.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0850385Z + @tailwindcss/typography 0.5.19
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0850842Z + @types/node 22.19.17
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0851239Z + @types/papaparse 5.5.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0851718Z + @types/throttle-debounce 5.0.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0852185Z + eslint 10.2.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0852684Z + eslint-plugin-react-hooks 7.1.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0853181Z + globals 17.5.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0853549Z + jsdom 29.1.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0853937Z + knip 6.7.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0854243Z + npm-run-all 4.1.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0854603Z + oxlint 1.61.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0855003Z + playwright 1.59.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0855579Z + rollup-plugin-visualizer 7.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0856482Z + sharp 0.34.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0856923Z + shx 0.4.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0857252Z + svgo 4.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0857631Z + tailwindcss 4.2.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0858048Z + throttle-debounce 5.0.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0858899Z + tsx 4.21.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0859316Z + typescript 5.8.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0859750Z + typescript-eslint 8.59.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0860130Z + vite 6.4.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0860636Z + vite-plugin-image-optimizer 2.0.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0861208Z + vite-plugin-inspect 11.3.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0861709Z + vite-plugin-sitemap 0.8.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0862135Z + vitest 4.1.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.0862337Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1076082Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1077300Z │                                                                              │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1078697Z │   Ignored build scripts: @firebase/util@1.15.0, core-js@3.49.0,              │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1080001Z │   esbuild@0.25.12, esbuild@0.27.7, protobufjs@7.5.5, sharp@0.34.5.           │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1081358Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1082584Z │   to run scripts.                                                            │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1083700Z │                                                                              │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1084874Z ╰──────────────────────────────────────────────────────────────────────────────╯
+Lint & Type Check	Verify lockfile integrity	2026-05-05T03:48:36.1130564Z Done in 3.4s using pnpm v10.28.2
+Lint & Type Check	Lint	﻿2026-05-05T03:48:36.1589863Z ##[group]Run pnpm run lint
+Lint & Type Check	Lint	2026-05-05T03:48:36.1590216Z [36;1mpnpm run lint[0m
+Lint & Type Check	Lint	2026-05-05T03:48:36.1612347Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Lint	2026-05-05T03:48:36.1612592Z env:
+Lint & Type Check	Lint	2026-05-05T03:48:36.1612793Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Lint	2026-05-05T03:48:36.1613068Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Lint	2026-05-05T03:48:36.1613282Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Lint	2026-05-05T03:48:36.1613481Z   AUDIT_BASELINE: 
+Lint & Type Check	Lint	2026-05-05T03:48:36.1613722Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Lint	2026-05-05T03:48:36.1614020Z ##[endgroup]
+Lint & Type Check	Lint	2026-05-05T03:48:36.4559955Z 
+Lint & Type Check	Lint	2026-05-05T03:48:36.4561173Z > react-example@0.0.0 lint /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T03:48:36.4561981Z > run-p lint:*
+Lint & Type Check	Lint	2026-05-05T03:48:36.4562201Z 
+Lint & Type Check	Lint	2026-05-05T03:48:36.9936828Z 
+Lint & Type Check	Lint	2026-05-05T03:48:36.9939846Z > react-example@0.0.0 lint:types /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T03:48:36.9940915Z > tsc --noEmit
+Lint & Type Check	Lint	2026-05-05T03:48:36.9941336Z 
+Lint & Type Check	Lint	2026-05-05T03:48:36.9979841Z 
+Lint & Type Check	Lint	2026-05-05T03:48:36.9981008Z > react-example@0.0.0 lint:ox /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T03:48:36.9982514Z > oxlint --deny-warnings
+Lint & Type Check	Lint	2026-05-05T03:48:36.9983020Z 
+Lint & Type Check	Lint	2026-05-05T03:48:37.0036406Z 
+Lint & Type Check	Lint	2026-05-05T03:48:37.0041863Z > react-example@0.0.0 lint:eslint /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T03:48:37.0042914Z > eslint . --max-warnings 0
+Lint & Type Check	Lint	2026-05-05T03:48:37.0043480Z 
+Lint & Type Check	Lint	2026-05-05T03:48:37.0956958Z ##[warning]Identifier 'Box' is imported but never used.
+Lint & Type Check	Lint	2026-05-05T03:48:37.0981129Z ##[warning]Identifier 'Stack' is imported but never used.
+Lint & Type Check	Lint	2026-05-05T03:48:37.0982664Z 
+Lint & Type Check	Lint	2026-05-05T03:48:37.0982993Z Found 2 warnings and 0 errors.
+Lint & Type Check	Lint	2026-05-05T03:48:37.0983763Z Finished in 39ms on 277 files with 93 rules using 4 threads.
+Lint & Type Check	Lint	2026-05-05T03:48:37.1193062Z  ELIFECYCLE  Command failed with exit code 1.
+Lint & Type Check	Lint	2026-05-05T03:48:37.1755714Z  ELIFECYCLE  Command failed.
+Lint & Type Check	Lint	2026-05-05T03:48:37.1771382Z  ELIFECYCLE  Command failed.
+Lint & Type Check	Lint	2026-05-05T03:48:37.1840514Z ERROR: "lint:ox" exited with 1.
+Lint & Type Check	Lint	2026-05-05T03:48:37.1999042Z  ELIFECYCLE  Command failed with exit code 1.
+Lint & Type Check	Lint	2026-05-05T03:48:37.2190796Z ##[error]Process completed with exit code 1.
+Lint & Type Check	Post Setup pnpm	﻿2026-05-05T03:48:37.2270245Z Post job cleanup.
+Lint & Type Check	Post Setup pnpm	2026-05-05T03:48:37.3728618Z Pruning is unnecessary.
+Lint & Type Check	Post Checkout	﻿2026-05-05T03:48:37.3884158Z Post job cleanup.
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4767386Z [command]/usr/bin/git version
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4811102Z git version 2.53.0
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4853931Z Temporarily overriding HOME='/home/runner/work/_temp/cb668dc1-1e24-418c-bbd7-491629be2731' before making global git config changes
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4855748Z Adding repository directory to the temporary git global config as a safe directory
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4861423Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4904430Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.4948536Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.5236692Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.5263557Z http.https://github.com/.extraheader
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.5275917Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.5311471Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.5546555Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint & Type Check	Post Checkout	2026-05-05T03:48:37.5579012Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint & Type Check	Complete job	﻿2026-05-05T03:48:37.5924319Z Cleaning up orphan processes
+Lint & Type Check	Complete job	2026-05-05T03:48:37.6218837Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Anti-Pattern Audit	Set up job	﻿2026-05-05T03:48:09.7277617Z Current runner version: '2.334.0'
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7304114Z ##[group]Runner Image Provisioner
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7305012Z Hosted Compute Agent
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7305546Z Version: 20260213.493
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7306135Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7306788Z Build Date: 2026-02-13T00:28:41Z
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7307928Z Worker ID: {422f3d36-0170-4747-92e5-7c3ad586fef3}
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7308617Z Azure Region: northcentralus
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7309194Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7310977Z ##[group]Operating System
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7311595Z Ubuntu
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7312095Z 24.04.4
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7312742Z LTS
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7313488Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7314181Z ##[group]Runner Image
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7314823Z Image: ubuntu-24.04
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7315305Z Version: 20260413.86.1
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7316304Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7318407Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7319292Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7320331Z ##[group]GITHUB_TOKEN Permissions
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7322100Z Contents: read
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7322766Z Metadata: read
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7323288Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7326381Z Secret source: Actions
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7327889Z Prepare workflow directory
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7877953Z Prepare all required actions
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:09.7917493Z Getting action download info
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:10.1920708Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:10.3112523Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:10.7673730Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Anti-Pattern Audit	Set up job	2026-05-05T03:48:10.9728596Z Complete job name: Anti-Pattern Audit
+Anti-Pattern Audit	Checkout	﻿2026-05-05T03:48:11.0564781Z ##[group]Run actions/checkout@v4
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0566152Z with:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0566873Z   fetch-depth: 0
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0567899Z   repository: arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0569131Z   token: ***
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0569857Z   ssh-strict: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0570604Z   ssh-user: git
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0571379Z   persist-credentials: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0572264Z   clean: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0573055Z   sparse-checkout-cone-mode: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0574011Z   fetch-tags: false
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0574810Z   show-progress: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0575599Z   lfs: false
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0576303Z   submodules: false
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0577105Z   set-safe-directory: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0578411Z env:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0579190Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0580216Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0581020Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0581820Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.0582588Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1580001Z Syncing repository: arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1583170Z ##[group]Getting Git version info
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1584585Z Working directory is '/home/runner/work/tech-dancer/tech-dancer'
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1586459Z [command]/usr/bin/git version
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1605123Z git version 2.53.0
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1659912Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1675406Z Temporarily overriding HOME='/home/runner/work/_temp/c02c8386-53c7-49e7-80ee-f0b115ba3d35' before making global git config changes
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1679998Z Adding repository directory to the temporary git global config as a safe directory
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1682236Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1713751Z Deleting the contents of '/home/runner/work/tech-dancer/tech-dancer'
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1718506Z ##[group]Initializing the repository
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1722862Z [command]/usr/bin/git init /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1810235Z hint: Using 'master' as the name for the initial branch. This default branch name
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1813134Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1815015Z hint: to use in all of your new repositories, which will suppress this warning,
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1816755Z hint: call:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1817891Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1818802Z hint: 	git config --global init.defaultBranch <name>
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1819906Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1821159Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1823540Z hint: 'development'. The just-created branch can be renamed via this command:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1824920Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1825617Z hint: 	git branch -m <name>
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1826446Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1828083Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1830164Z Initialized empty Git repository in /home/runner/work/tech-dancer/tech-dancer/.git/
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1833325Z [command]/usr/bin/git remote add origin https://github.com/arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1856098Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1857824Z ##[group]Disabling automatic garbage collection
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1859490Z [command]/usr/bin/git config --local gc.auto 0
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1889607Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1890872Z ##[group]Setting up auth
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1896108Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.1928994Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2272539Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2304132Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2525207Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2557020Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2774820Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2810220Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2811581Z ##[group]Fetching the repository
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:11.2821533Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8919897Z From https://github.com/arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8921920Z  * [new branch]        about-page-updates-14352211737228389575 -> origin/about-page-updates-14352211737228389575
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8924174Z  * [new branch]        add-migration-guide-5876664802681073547 -> origin/add-migration-guide-5876664802681073547
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8926136Z  * [new branch]        ai-repair-25356038167 -> origin/ai-repair-25356038167
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8927569Z  * [new branch]        ai-repair-25356378430 -> origin/ai-repair-25356378430
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8928869Z  * [new branch]        ari-boomtick          -> origin/ari-boomtick
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8930035Z  * [new branch]        ari-mockup            -> origin/ari-mockup
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8931292Z  * [new branch]        ari-replit-dark-mode  -> origin/ari-replit-dark-mode
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8932694Z  * [new branch]        ari-replit-dark-mode-3293038484833716469 -> origin/ari-replit-dark-mode-3293038484833716469
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8933892Z  * [new branch]        ari-replit-fix-manual -> origin/ari-replit-fix-manual
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8935056Z  * [new branch]        branding-migration-10480169812015641474 -> origin/branding-migration-10480169812015641474
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8937145Z  * [new branch]        chore/infra-config-improvement-12731238171326256191 -> origin/chore/infra-config-improvement-12731238171326256191
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8939032Z  * [new branch]        cleanup-root-files-15439431871599830205 -> origin/cleanup-root-files-15439431871599830205
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8940621Z  * [new branch]        content/why-space-buns-work-for-west-coast-swing -> origin/content/why-space-buns-work-for-west-coast-swing
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8942367Z  * [new branch]        copilot-fix-git-merge-issue-2078139070203710354 -> origin/copilot-fix-git-merge-issue-2078139070203710354
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8944094Z  * [new branch]        copilot-fix-git-merge-issue-3219033726005670393 -> origin/copilot-fix-git-merge-issue-3219033726005670393
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8945414Z  * [new branch]        copilot/fix-git-merge-issue -> origin/copilot/fix-git-merge-issue
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8946447Z  * [new branch]        copilot/resolve-merge-issue -> origin/copilot/resolve-merge-issue
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8948533Z  * [new branch]        decrease-merge-conflict-sources-fix-v2-990871188136395290 -> origin/decrease-merge-conflict-sources-fix-v2-990871188136395290
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8950459Z  * [new branch]        document-simplified-workflow-8785441803960069738 -> origin/document-simplified-workflow-8785441803960069738
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8952179Z  * [new branch]        feat-consolidated-rebrand-8441384012443507034 -> origin/feat-consolidated-rebrand-8441384012443507034
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8954245Z  * [new branch]        feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8956265Z  * [new branch]        feat/add-ga4-tracking-12639729061711926309 -> origin/feat/add-ga4-tracking-12639729061711926309
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8957889Z  * [new branch]        feat/ai-slop-audit-workflow -> origin/feat/ai-slop-audit-workflow
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8959422Z  * [new branch]        feat/blog-post-wcs-data-scraper-14452895178941716806 -> origin/feat/blog-post-wcs-data-scraper-14452895178941716806
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8961455Z  * [new branch]        feat/boomtick-design-migration-15578555430520802096 -> origin/feat/boomtick-design-migration-15578555430520802096
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8963284Z  * [new branch]        feat/brand-migration-boomtick-blog-6234609098749488321 -> origin/feat/brand-migration-boomtick-blog-6234609098749488321
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8964728Z  * [new branch]        feat/consolidated-rebrand -> origin/feat/consolidated-rebrand
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8966247Z  * [new branch]        feat/content-pipeline-7178197585753202032-8406124502228595157 -> origin/feat/content-pipeline-7178197585753202032-8406124502228595157
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8968261Z  * [new branch]        feat/dashboard-hero-2170559866929629428 -> origin/feat/dashboard-hero-2170559866929629428
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8969882Z  * [new branch]        feat/frontend-style-overhaul-8718428500994173403 -> origin/feat/frontend-style-overhaul-8718428500994173403
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8971472Z  * [new branch]        feat/frontend-style-overhaul-reduced -> origin/feat/frontend-style-overhaul-reduced
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8972735Z  * [new branch]        feat/google-site-verification -> origin/feat/google-site-verification
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8973918Z  * [new branch]        feat/hero-update-933815339834268378 -> origin/feat/hero-update-933815339834268378
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8975465Z  * [new branch]        feat/issue-cache-playwright-etl-15277468477470866741 -> origin/feat/issue-cache-playwright-etl-15277468477470866741
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8977779Z  * [new branch]        feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8979707Z  * [new branch]        feat/no-card-content-5940296687076887070 -> origin/feat/no-card-content-5940296687076887070
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8981706Z  * [new branch]        feat/normalize-content-frontmatter-and-tagging-12531175689791989355 -> origin/feat/normalize-content-frontmatter-and-tagging-12531175689791989355
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8983854Z  * [new branch]        feat/roi-dashboard-5778359830468399427 -> origin/feat/roi-dashboard-5778359830468399427
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8985353Z  * [new branch]        feat/signature-rag-t2f-11287284092066976427 -> origin/feat/signature-rag-t2f-11287284092066976427
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8987139Z  * [new branch]        feat/standardize-layout-components-11646648776927534134 -> origin/feat/standardize-layout-components-11646648776927534134
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8989600Z  * [new branch]        feat/standardize-layout-components-usage-10070409333056580121 -> origin/feat/standardize-layout-components-usage-10070409333056580121
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8991474Z  * [new branch]        feat/ui-mockup-update-12974801575958228939 -> origin/feat/ui-mockup-update-12974801575958228939
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8993186Z  * [new branch]        feature/affiliate-reporting-roi-16467421757541273216 -> origin/feature/affiliate-reporting-roi-16467421757541273216
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8995054Z  * [new branch]        feature/automated-visual-audit-4877388463301437192 -> origin/feature/automated-visual-audit-4877388463301437192
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8996718Z  * [new branch]        feature/brand-redesign-12828928534499015186 -> origin/feature/brand-redesign-12828928534499015186
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.8998603Z  * [new branch]        feature/ga4-datalab-tracking-12941441102819824497 -> origin/feature/ga4-datalab-tracking-12941441102819824497
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9000188Z  * [new branch]        fix-a11y-violations-16085129461401263373 -> origin/fix-a11y-violations-16085129461401263373
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9001633Z  * [new branch]        fix-broken-link-4671924183609848537 -> origin/fix-broken-link-4671924183609848537
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9003375Z  * [new branch]        fix-jules-repair-session-validation-13452243814353216015 -> origin/fix-jules-repair-session-validation-13452243814353216015
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9005384Z  * [new branch]        fix-pnpm-install-16804053640672136325 -> origin/fix-pnpm-install-16804053640672136325
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9006828Z  * [new branch]        fix-pr-652-rework-10074456896911749759 -> origin/fix-pr-652-rework-10074456896911749759
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9008784Z  * [new branch]        fix-sitemap-production-url-14323895830703992857 -> origin/fix-sitemap-production-url-14323895830703992857
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9010467Z  * [new branch]        fix-td-cli-and-audit-10497345691971696912 -> origin/fix-td-cli-and-audit-10497345691971696912
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9012012Z  * [new branch]        fix-ux-content-card-9181779295267348310 -> origin/fix-ux-content-card-9181779295267348310
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9013753Z  * [new branch]        fix-visual-regression-snapshots-974398726183238407 -> origin/fix-visual-regression-snapshots-974398726183238407
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9015691Z  * [new branch]        fix/audit-baseline-variable-15500587914714492758 -> origin/fix/audit-baseline-variable-15500587914714492758
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9017631Z  * [new branch]        fix/lockfile-determinism-1898052402348987185 -> origin/fix/lockfile-determinism-1898052402348987185
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9019377Z  * [new branch]        fix/merge-conflict-reduction-2267808997804499585 -> origin/fix/merge-conflict-reduction-2267808997804499585
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9021032Z  * [new branch]        fix/node-24-migration-12291836500979307039 -> origin/fix/node-24-migration-12291836500979307039
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9022681Z  * [new branch]        fix/reduce-merge-conflicts-7939391422608510210 -> origin/fix/reduce-merge-conflicts-7939391422608510210
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9024367Z  * [new branch]        fix/search-icon-collision-6946222253420010073 -> origin/fix/search-icon-collision-6946222253420010073
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9025942Z  * [new branch]        fix/search-relevance-506107467047410442 -> origin/fix/search-relevance-506107467047410442
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9027867Z  * [new branch]        fix/seo-metadata-improvements-9637639215072905812 -> origin/fix/seo-metadata-improvements-9637639215072905812
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9029859Z  * [new branch]        fix/sitemap-generation-4185814553234649503 -> origin/fix/sitemap-generation-4185814553234649503
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9031700Z  * [new branch]        fix/throttle-debounce-12001434146562276732 -> origin/fix/throttle-debounce-12001434146562276732
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9033834Z  * [new branch]        fix/ui-anti-patterns-2687186430891986193 -> origin/fix/ui-anti-patterns-2687186430891986193
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9036063Z  * [new branch]        fix/ux-auditor-mobile-screenshots-17229602608787945952 -> origin/fix/ux-auditor-mobile-screenshots-17229602608787945952
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9038190Z  * [new branch]        footer-navigation-redesign-9860721351648124902 -> origin/footer-navigation-redesign-9860721351648124902
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9039506Z  * [new branch]        gh-pages              -> origin/gh-pages
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9040284Z  * [new branch]        git                   -> origin/git
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9041652Z  * [new branch]        improve-preview-page-usability-208950052235215523 -> origin/improve-preview-page-usability-208950052235215523
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9043456Z  * [new branch]        improve/core-infra-config-13191492064982896006 -> origin/improve/core-infra-config-13191492064982896006
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9044941Z  * [new branch]        jules-14148848927286620353-36f3bdb1 -> origin/jules-14148848927286620353-36f3bdb1
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9046233Z  * [new branch]        jules-14206370618723621129-57b0c2a6 -> origin/jules-14206370618723621129-57b0c2a6
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9047837Z  * [new branch]        jules-4029992414159625139-c2d3b480 -> origin/jules-4029992414159625139-c2d3b480
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9049487Z  * [new branch]        jules-boomtick-design-migration-6532042589388127559 -> origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9051504Z  * [new branch]        jules-update-frontend-replit-mockup-1944760327146997507 -> origin/jules-update-frontend-replit-mockup-1944760327146997507
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9053529Z  * [new branch]        lockfile-determinism-8675050957782106544 -> origin/lockfile-determinism-8675050957782106544
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9054660Z  * [new branch]        main                  -> origin/main
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9055921Z  * [new branch]        normalize-frontmatter-tags-4207264828719271707 -> origin/normalize-frontmatter-tags-4207264828719271707
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9057808Z  * [new branch]        rebrand-boomtick-blog-1770114126300875003 -> origin/rebrand-boomtick-blog-1770114126300875003
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9059507Z  * [new branch]        recreate-minimalist-pr-657-12196757166317304754 -> origin/recreate-minimalist-pr-657-12196757166317304754
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9061217Z  * [new branch]        refactor-hero-section-645-4279679236069717571 -> origin/refactor-hero-section-645-4279679236069717571
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9063034Z  * [new branch]        refactor/modular-folder-structure-4670414599553836190 -> origin/refactor/modular-folder-structure-4670414599553836190
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9064468Z  * [new branch]        replit-frontend       -> origin/replit-frontend
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9065717Z  * [new branch]        standardize-ui-states-11537291259350471924 -> origin/standardize-ui-states-11537291259350471924
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9067697Z  * [new branch]        ui-ux-accessibility-fixes-15631158062664361517 -> origin/ui-ux-accessibility-fixes-15631158062664361517
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9069372Z  * [new branch]        update-brand-logo-17669905563494851100 -> origin/update-brand-logo-17669905563494851100
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9070940Z  * [new branch]        update-favicon-boomtick-1569075219496026841 -> origin/update-favicon-boomtick-1569075219496026841
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9072864Z  * [new branch]        visual-auditor-tool-and-hero-refactor-9863198860810042197 -> origin/visual-auditor-tool-and-hero-refactor-9863198860810042197
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9129244Z [command]/usr/bin/git branch --list --remote origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9162893Z   origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9171950Z [command]/usr/bin/git rev-parse refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9194430Z 56c873dd12af2a518cb24e8b74c4ff91527b2d20
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9198813Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9199535Z ##[group]Determining the checkout info
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9200286Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9204712Z [command]/usr/bin/git sparse-checkout disable
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9249442Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9277119Z ##[group]Checking out the ref
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9281828Z [command]/usr/bin/git checkout --progress --force -B jules-boomtick-design-migration-6532042589388127559 refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9812544Z Switched to a new branch 'jules-boomtick-design-migration-6532042589388127559'
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9814393Z branch 'jules-boomtick-design-migration-6532042589388127559' set up to track 'origin/jules-boomtick-design-migration-6532042589388127559'.
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9825351Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9868176Z [command]/usr/bin/git log -1 --format=%H
+Anti-Pattern Audit	Checkout	2026-05-05T03:48:18.9892152Z 56c873dd12af2a518cb24e8b74c4ff91527b2d20
+Anti-Pattern Audit	Setup pnpm	﻿2026-05-05T03:48:19.0110453Z ##[group]Run pnpm/action-setup@v4
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0110800Z with:
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0111018Z   dest: ~/setup-pnpm
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0111257Z   run_install: null
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0111480Z   cache: false
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0111709Z   cache_dependency_path: pnpm-lock.yaml
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0112018Z   package_json_file: package.json
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0112279Z   standalone: false
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0112499Z env:
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0112720Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0113012Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0113250Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0113482Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.0113717Z ##[endgroup]
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.1604613Z ##[group]Running self-installer...
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.5687741Z (node:2317) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.5689544Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.7054082Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.7146453Z Packages: +1
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:19.7146852Z +
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.1081003Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.1594569Z 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.1598333Z dependencies:
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.1604514Z + pnpm 10.28.2 (10.33.3 is available)
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.1605091Z 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.2513665Z Done in 914ms
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.2703534Z ##[endgroup]
+Anti-Pattern Audit	Setup pnpm	2026-05-05T03:48:20.2703965Z Installation Completed!
+Anti-Pattern Audit	Setup Node.js	﻿2026-05-05T03:48:20.2951716Z ##[group]Run actions/setup-node@v4
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2951984Z with:
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2952165Z   node-version: 24
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2952352Z   cache: pnpm
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2952535Z   always-auth: false
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2952738Z   check-latest: false
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2953048Z   token: ***
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2953224Z env:
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2953409Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2953674Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2953871Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2954065Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2954308Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.2954596Z ##[endgroup]
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.4623789Z Found in cache @ /opt/hostedtoolcache/node/24.14.1/x64
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.4629503Z (node:2331) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.4630438Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:20.4632576Z ##[group]Environment details
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:23.7713840Z node: v24.14.1
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:23.7714307Z npm: 11.11.0
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:23.7714638Z yarn: 1.22.22
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:23.7715932Z ##[endgroup]
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:23.7760119Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:24.1897821Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:24.3244020Z Cache hit for: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:24.3356526Z (node:2331) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:25.4750635Z Received 104857600 of 157464653 (66.6%), 99.8 MBs/sec
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:25.8197786Z Received 157464653 of 157464653 (100.0%), 111.4 MBs/sec
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:25.8198609Z Cache Size: ~150 MB (157464653 B)
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:25.8256365Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d2547958-daed-4fa0-95b8-6f19685e8eb6/cache.tzst -P -C /home/runner/work/tech-dancer/tech-dancer --use-compress-program unzstd
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:28.1760120Z Cache restored successfully
+Anti-Pattern Audit	Setup Node.js	2026-05-05T03:48:28.1837394Z Cache restored from key: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Anti-Pattern Audit	Install dependencies	﻿2026-05-05T03:48:28.2008172Z ##[group]Run pnpm install --frozen-lockfile --prefer-offline
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2008718Z [36;1mpnpm install --frozen-lockfile --prefer-offline[0m
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2040788Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2041049Z env:
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2041255Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2041547Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2041767Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2041967Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2042228Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.2042555Z ##[endgroup]
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.5488733Z Lockfile is up to date, resolution step is skipped
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.6278928Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.7955174Z Packages: +1138
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:28.7988295Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:29.6288050Z Progress: resolved 1138, reused 1138, downloaded 0, added 118
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:30.6308554Z Progress: resolved 1138, reused 1138, downloaded 0, added 760
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.0589441Z Progress: resolved 1138, reused 1138, downloaded 0, added 1138, done
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6296962Z 
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6297752Z dependencies:
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6298278Z + @hookform/resolvers 5.2.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6298738Z + @tailwindcss/vite 4.2.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6299213Z + @tanstack/react-query 5.99.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6299663Z + @vercel/analytics 2.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6300078Z + @vitejs/plugin-react 5.2.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6300577Z + class-variance-authority 0.7.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6301013Z + clsx 2.1.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6301232Z + firebase 12.12.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6301439Z + fuse.js 7.3.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6301631Z + glob 13.0.6
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6301838Z + hyparquet 1.25.6
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6302043Z + jspdf 2.5.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6302255Z + jspdf-autotable 3.8.4
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6302497Z + lucide-react 0.546.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6302707Z + motion 12.38.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6302932Z + papaparse 5.5.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6303150Z + path-to-regexp 8.4.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6303368Z + react 19.2.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6303619Z + react-dom 19.2.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6303847Z + react-helmet-async 3.0.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6304095Z + react-hook-form 7.73.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6304332Z + react-markdown 10.1.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6304570Z + react-router-dom 7.14.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6304856Z + recharts 2.15.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6305065Z + remark-parse 11.0.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6305456Z + tailwind-merge 3.5.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6306327Z + tw-animate-css 1.4.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6306674Z + unified 11.0.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6306897Z + unist-util-visit 5.1.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6307148Z + vite-plugin-pwa 1.2.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6307781Z + workbox-window 7.4.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6308155Z + zod 3.25.76
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6308476Z + zustand 5.0.12
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6308611Z 
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6308706Z devDependencies:
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6308933Z + @eslint/js 10.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6309167Z + @lhci/cli 0.15.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6309386Z + @playwright/test 1.59.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6309873Z + @tailwindcss/typography 0.5.19
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6310339Z + @types/node 22.19.17
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6310743Z + @types/papaparse 5.5.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6311219Z + @types/throttle-debounce 5.0.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6311663Z + eslint 10.2.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6311927Z + eslint-plugin-react-hooks 7.1.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6312193Z + globals 17.5.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6312386Z + jsdom 29.1.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6312727Z + knip 6.7.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6313134Z + npm-run-all 4.1.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6313503Z + oxlint 1.61.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6313788Z + playwright 1.59.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6314056Z + rollup-plugin-visualizer 7.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6314304Z + sharp 0.34.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6314491Z + shx 0.4.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6314662Z + svgo 4.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6314860Z + tailwindcss 4.2.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6315091Z + throttle-debounce 5.0.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6315306Z + tsx 4.21.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6315758Z + typescript 5.8.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6315986Z + typescript-eslint 8.59.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6316206Z + vite 6.4.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6316449Z + vite-plugin-image-optimizer 2.0.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6316742Z + vite-plugin-inspect 11.3.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6317005Z + vite-plugin-sitemap 0.8.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6317532Z + vitest 4.1.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6317664Z 
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6577091Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6578605Z │                                                                              │
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6579852Z │   Ignored build scripts: @firebase/util@1.15.0, core-js@3.49.0,              │
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6580828Z │   esbuild@0.25.12, esbuild@0.27.7, protobufjs@7.5.5, sharp@0.34.5.           │
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6581699Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6582486Z │   to run scripts.                                                            │
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6583150Z │                                                                              │
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6583849Z ╰──────────────────────────────────────────────────────────────────────────────╯
+Anti-Pattern Audit	Install dependencies	2026-05-05T03:48:31.6633356Z Done in 3.4s using pnpm v10.28.2
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	﻿2026-05-05T03:48:31.7026179Z ##[group]Run pnpm run audit || true
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7026527Z [36;1mpnpm run audit || true[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7026805Z [36;1mpython3 dev-tools/td_cli.py audit-gate[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7048931Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7049178Z env:
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7049381Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7049664Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7049874Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7050067Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7050326Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.7050625Z ##[endgroup]
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.9961570Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.9963007Z > react-example@0.0.0 audit /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.9963601Z > node scripts/detect-antipatterns.mjs
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:31.9963808Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.0398968Z [34m🔍 Scanning for UI anti-patterns...[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.0399356Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1253707Z [33m⚠️  PR scope warning: Touching 70 core files in ['src/layouts/', 'src/components/']. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23).[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1254543Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1471713Z [31m✖ 200 anti-patterns detected:[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1472659Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1473366Z [36msrc/features/dashboard/Dashboard.tsx[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1474982Z   [90mLine 27:[0m [Raw Layout/Spacing] [33mpx-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1476922Z   [90mLine 27:[0m [Raw Layout/Spacing] [33msm:px-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1479056Z   [90mLine 27:[0m [Raw Layout/Spacing] [33mmd:px-10[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1480796Z   [90mLine 27:[0m [Raw Layout/Spacing] [33mpt-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1482608Z   [90mLine 27:[0m [Raw Layout/Spacing] [33mmd:pt-14[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1484228Z   [90mLine 27:[0m [Raw Layout/Spacing] [33mpb-12[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1485729Z   [90mLine 29:[0m [Arbitrary Value] [33m-[11px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1487199Z   [90mLine 29:[0m [Arbitrary Value] [33m-[0.28em][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1489002Z   [90mLine 29:[0m [Arbitrary Pixel Value] [33mtext-[11px][0m - Arbitrary px Tailwind value. Use design tokens (AGENTS.md §1)
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1490614Z   [90mLine 29:[0m [Arbitrary Text Size] [33mclassName="text-[1[0m - Arbitrary text size. Use typeSizes from design-tokens.ts
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1492401Z   [90mLine 29:[0m [Non-token Color/Size] [33mtext-foreground/70[0m - Class 'text-foreground/70' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1494096Z   [90mLine 29:[0m [Raw Layout/Spacing] [33mmb-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1495609Z   [90mLine 29:[0m [Raw Layout/Spacing] [33msm:mb-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1497116Z   [90mLine 30:[0m [Raw Layout/Spacing] [33mmb-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1499236Z   [90mLine 31:[0m [Non-token Color/Size] [33mtext-foreground/78[0m - Class 'text-foreground/78' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1501065Z   [90mLine 34:[0m [Raw Layout/Spacing] [33mpx-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1502596Z   [90mLine 34:[0m [Raw Layout/Spacing] [33msm:px-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1504509Z   [90mLine 34:[0m [Raw Layout/Spacing] [33mmd:px-10[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1506098Z   [90mLine 34:[0m [Raw Layout/Spacing] [33mpb-16[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1508337Z   [90mLine 35:[0m [Arbitrary Value] [33m-[280px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1510029Z   [90mLine 35:[0m [Raw Layout/Spacing] [33mgrid[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1511754Z   [90mLine 35:[0m [Raw Layout/Spacing] [33mgrid-cols-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1513465Z   [90mLine 35:[0m [Raw Layout/Spacing] [33mlg:grid-cols-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1515110Z   [90mLine 35:[0m [Layout Suggestion] [33mgrid grid-cols[0m - Consider replacing 'grid grid-cols' with <Grid cols={...}>
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1516703Z   [90mLine 36:[0m [Arbitrary Value] [33m-[220px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1518853Z   [90mLine 36:[0m [Arbitrary Value] [33m-[#0a0718][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1520393Z   [90mLine 36:[0m [Arbitrary Value] [33m-[260px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1522405Z   [90mLine 36:[0m [div Layout] [33m<div className="relative min-h-[220px] overflow-hidden bg-[#...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1524120Z   [90mLine 36:[0m [Raw Hex Color] [33mbg-[#[0m - Raw hex color in Tailwind. Use CSS variables from tokens.css
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1525611Z   [90mLine 36:[0m [Raw Layout/Spacing] [33mp-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1527166Z   [90mLine 36:[0m [Raw Layout/Spacing] [33msm:p-8[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1529010Z   [90mLine 36:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1530708Z   [90mLine 36:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1532455Z   [90mLine 36:[0m [Raw Layout/Spacing] [33mjustify-end[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1534135Z   [90mLine 36:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1536282Z   [90mLine 37:[0m [div Layout] [33m<div className="absolute inset-0 bg-gradient-to-br from-prim...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1538738Z   [90mLine 37:[0m [Non-token Color/Size] [33mbg-gradient-to-br[0m - Class 'bg-gradient-to-br' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1540503Z   [90mLine 38:[0m [Arbitrary Value] [33m-[#05040d][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1542410Z   [90mLine 38:[0m [div Layout] [33m<div className="absolute inset-0 bg-[#05040d]/60" /> ...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1544136Z   [90mLine 38:[0m [Raw Hex Color] [33mbg-[#[0m - Raw hex color in Tailwind. Use CSS variables from tokens.css
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1545954Z   [90mLine 40:[0m [div Layout] [33m<div className="relative z-10"> <h2 className=...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1548107Z   [90mLine 41:[0m [Arbitrary Value] [33m-[0_2px_6px_rgba(0,0,0,0.85)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1550037Z   [90mLine 41:[0m [Raw Layout/Spacing] [33mmb-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1551731Z   [90mLine 42:[0m [Arbitrary Value] [33m-[0_2px_6px_rgba(0,0,0,0.85)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1553418Z   [90mLine 42:[0m [Raw Layout/Spacing] [33mmb-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1555226Z   [90mLine 43:[0m [div Layout] [33m<div className="flex flex-col gap-2"[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1556944Z   [90mLine 43:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1558851Z   [90mLine 43:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1560489Z   [90mLine 43:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1562162Z   [90mLine 43:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1564169Z   [90mLine 44:[0m [Arbitrary Value] [33m-[0_1px_2px_rgba(0,0,0,0.8)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1565976Z   [90mLine 44:[0m [Non-token Color/Size] [33mtext-cyan-200[0m - Class 'text-cyan-200' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1568120Z   [90mLine 44:[0m [Non-token Color/Size] [33mhover:text-cyan-100[0m - Class 'hover:text-cyan-100' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1570003Z   [90mLine 45:[0m [Arbitrary Value] [33m-[0_1px_2px_rgba(0,0,0,0.8)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1571839Z   [90mLine 45:[0m [Non-token Color/Size] [33mtext-cyan-200[0m - Class 'text-cyan-200' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1573841Z   [90mLine 45:[0m [Non-token Color/Size] [33mhover:text-cyan-100[0m - Class 'hover:text-cyan-100' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1575738Z   [90mLine 46:[0m [Arbitrary Value] [33m-[0_1px_2px_rgba(0,0,0,0.8)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1577809Z   [90mLine 46:[0m [Non-token Color/Size] [33mtext-cyan-200[0m - Class 'text-cyan-200' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1579866Z   [90mLine 46:[0m [Non-token Color/Size] [33mhover:text-cyan-100[0m - Class 'hover:text-cyan-100' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1581626Z   [90mLine 50:[0m [Arbitrary Value] [33m-[220px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1583189Z   [90mLine 50:[0m [Arbitrary Value] [33m-[#0c0a1e][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1584758Z   [90mLine 50:[0m [Arbitrary Value] [33m-[260px][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1586764Z   [90mLine 50:[0m [div Layout] [33m<div className="relative min-h-[220px] overflow-hidden borde...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1588860Z   [90mLine 50:[0m [Raw Hex Color] [33mbg-[#[0m - Raw hex color in Tailwind. Use CSS variables from tokens.css
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1590356Z   [90mLine 50:[0m [Raw Layout/Spacing] [33mp-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1591921Z   [90mLine 50:[0m [Raw Layout/Spacing] [33msm:p-8[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1593483Z   [90mLine 50:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1595304Z   [90mLine 50:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1596962Z   [90mLine 50:[0m [Raw Layout/Spacing] [33mjustify-end[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1598877Z   [90mLine 50:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1600954Z   [90mLine 51:[0m [div Layout] [33m<div className="absolute inset-0 bg-gradient-to-bl from-seco...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1603084Z   [90mLine 51:[0m [Non-token Color/Size] [33mbg-gradient-to-bl[0m - Class 'bg-gradient-to-bl' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1604833Z   [90mLine 52:[0m [Arbitrary Value] [33m-[#070616][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1606711Z   [90mLine 52:[0m [div Layout] [33m<div className="absolute inset-0 bg-[#070616]/60" /> ...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1608981Z   [90mLine 52:[0m [Raw Hex Color] [33mbg-[#[0m - Raw hex color in Tailwind. Use CSS variables from tokens.css
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1610825Z   [90mLine 54:[0m [div Layout] [33m<div className="relative z-10"> <h2 className=...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1612465Z   [90mLine 55:[0m [Arbitrary Value] [33m-[0_2px_6px_rgba(0,0,0,0.85)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1613414Z   [90mLine 55:[0m [Raw Layout/Spacing] [33mmb-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1614339Z   [90mLine 56:[0m [Arbitrary Value] [33m-[0_2px_6px_rgba(0,0,0,0.85)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1615234Z   [90mLine 56:[0m [Raw Layout/Spacing] [33mmb-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1616201Z   [90mLine 57:[0m [div Layout] [33m<div className="flex flex-col gap-2"[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1617129Z   [90mLine 57:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1618356Z   [90mLine 57:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1619225Z   [90mLine 57:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1620115Z   [90mLine 57:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1621062Z   [90mLine 58:[0m [Arbitrary Value] [33m-[0_1px_2px_rgba(0,0,0,0.8)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1622068Z   [90mLine 58:[0m [Non-token Color/Size] [33mtext-fuchsia-200[0m - Class 'text-fuchsia-200' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1623169Z   [90mLine 58:[0m [Non-token Color/Size] [33mhover:text-fuchsia-100[0m - Class 'hover:text-fuchsia-100' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1624189Z   [90mLine 59:[0m [Arbitrary Value] [33m-[0_1px_2px_rgba(0,0,0,0.8)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1625184Z   [90mLine 59:[0m [Non-token Color/Size] [33mtext-fuchsia-200[0m - Class 'text-fuchsia-200' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1626283Z   [90mLine 59:[0m [Non-token Color/Size] [33mhover:text-fuchsia-100[0m - Class 'hover:text-fuchsia-100' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1627770Z   [90mLine 60:[0m [Arbitrary Value] [33m-[0_1px_2px_rgba(0,0,0,0.8)][0m - Avoid arbitrary values like -[...]. Use design tokens instead.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1628834Z   [90mLine 60:[0m [Non-token Color/Size] [33mtext-fuchsia-200[0m - Class 'text-fuchsia-200' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1629946Z   [90mLine 60:[0m [Non-token Color/Size] [33mhover:text-fuchsia-100[0m - Class 'hover:text-fuchsia-100' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1630930Z   [90mLine 66:[0m [Raw Layout/Spacing] [33mpx-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1631782Z   [90mLine 66:[0m [Raw Layout/Spacing] [33msm:px-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1632655Z   [90mLine 66:[0m [Raw Layout/Spacing] [33mmd:px-10[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1633510Z   [90mLine 66:[0m [Raw Layout/Spacing] [33mpb-16[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1634729Z   [90mLine 67:[0m [div Layout] [33m<div className="mb-6 flex flex-col gap-3 sm:flex-row sm:item...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1635739Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mmb-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1636572Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1637729Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1638664Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mgap-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1639559Z   [90mLine 67:[0m [Raw Layout/Spacing] [33msm:flex-row[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1640470Z   [90mLine 67:[0m [Raw Layout/Spacing] [33msm:items-end[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1641409Z   [90mLine 67:[0m [Raw Layout/Spacing] [33msm:justify-between[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1642331Z   [90mLine 67:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1643207Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mmb-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1644190Z   [90mLine 67:[0m [Non-token Color/Size] [33mtext-foreground/65[0m - Class 'text-foreground/65' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1645155Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1646095Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1647010Z   [90mLine 67:[0m [Raw Layout/Spacing] [33mgap-1.5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1648324Z   [90mLine 67:[0m [Non-token Color/Size] [33mtext-foreground/75[0m - Class 'text-foreground/75' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1650327Z   [90mLine 67:[0m [Non-token Color/Size] [33mhover:text-foreground[0m - Class 'hover:text-foreground' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1651452Z   [90mLine 67:[0m [Layout Suggestion] [33mflex items-center[0m - Consider replacing 'flex items-center' with <Stack align="center">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1652857Z   [90mLine 68:[0m [div Layout] [33m<div className="flex flex-col divide-y divide-border/80 roun...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1653905Z   [90mLine 68:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1654773Z   [90mLine 68:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1655686Z   [90mLine 68:[0m [Non-token Color/Size] [33mbg-card/30[0m - Class 'bg-card/30' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1656569Z   [90mLine 68:[0m [Raw Layout/Spacing] [33mpx-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1657731Z   [90mLine 68:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1658642Z   [90mLine 71:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1659518Z   [90mLine 71:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1660687Z   [90mLine 71:[0m [Raw Layout/Spacing] [33mgap-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1661524Z   [90mLine 71:[0m [Raw Layout/Spacing] [33mpx-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1662350Z   [90mLine 71:[0m [Raw Layout/Spacing] [33mpy-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1663299Z   [90mLine 71:[0m [Non-token Color/Size] [33mhover:bg-muted/20[0m - Class 'hover:bg-muted/20' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1664267Z   [90mLine 71:[0m [Raw Layout/Spacing] [33msm:-mx-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1665151Z   [90mLine 71:[0m [Raw Layout/Spacing] [33msm:flex-row[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1666060Z   [90mLine 71:[0m [Raw Layout/Spacing] [33msm:items-start[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1666953Z   [90mLine 71:[0m [Raw Layout/Spacing] [33msm:gap-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1668106Z   [90mLine 71:[0m [Raw Layout/Spacing] [33msm:px-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1668964Z   [90mLine 71:[0m [Raw Layout/Spacing] [33msm:py-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1669849Z   [90mLine 71:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1670966Z   [90mLine 72:[0m [div Layout] [33m<div className="flex shrink-0 flex-wrap items-center gap-2 p...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1671993Z   [90mLine 72:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1672855Z   [90mLine 72:[0m [Raw Layout/Spacing] [33mflex-wrap[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1673751Z   [90mLine 72:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1674622Z   [90mLine 72:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1675485Z   [90mLine 72:[0m [Raw Layout/Spacing] [33mpt-0.5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1676511Z   [90mLine 72:[0m [Raw Layout/Spacing] [33msm:gap-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1677888Z   [90mLine 74:[0m [Non-token Color/Size] [33mtext-foreground/70[0m - Class 'text-foreground/70' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1678923Z   [90mLine 77:[0m [Raw Layout/Spacing] [33mmb-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1679979Z   [90mLine 77:[0m [Non-token Color/Size] [33mgroup-hover:text-primary[0m - Class 'group-hover:text-primary' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1681120Z   [90mLine 78:[0m [Non-token Color/Size] [33mtext-foreground/72[0m - Class 'text-foreground/72' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1682068Z   [90mLine 85:[0m [Raw Layout/Spacing] [33mpx-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1682923Z   [90mLine 85:[0m [Raw Layout/Spacing] [33msm:px-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1683941Z   [90mLine 85:[0m [Raw Layout/Spacing] [33mmd:px-10[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1684796Z   [90mLine 85:[0m [Raw Layout/Spacing] [33mpb-16[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1685865Z   [90mLine 86:[0m [div Layout] [33m<div className="mb-6"><p className="mb-1 text-xs font-bold t...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1686860Z   [90mLine 86:[0m [Raw Layout/Spacing] [33mmb-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1687982Z   [90mLine 86:[0m [Raw Layout/Spacing] [33mmb-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1688971Z   [90mLine 86:[0m [Non-token Color/Size] [33mtext-foreground/65[0m - Class 'text-foreground/65' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1689928Z   [90mLine 87:[0m [Raw Layout/Spacing] [33mgrid[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1690768Z   [90mLine 87:[0m [Raw Layout/Spacing] [33mgap-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1691664Z   [90mLine 87:[0m [Raw Layout/Spacing] [33msm:grid-cols-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1692596Z   [90mLine 87:[0m [Raw Layout/Spacing] [33mlg:grid-cols-3[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1693499Z   [90mLine 89:[0m [Non-token Color/Size] [33mbg-card[0m - Class 'bg-card' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1694370Z   [90mLine 89:[0m [Raw Layout/Spacing] [33mp-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1695216Z   [90mLine 89:[0m [Raw Layout/Spacing] [33msm:p-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1696056Z   [90mLine 90:[0m [Raw Layout/Spacing] [33mmb-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1697124Z   [90mLine 91:[0m [div Layout] [33m<div className="mb-1 flex items-center gap-1.5 text-xs text-...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1698437Z   [90mLine 91:[0m [Raw Layout/Spacing] [33mmb-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1699277Z   [90mLine 91:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1700170Z   [90mLine 91:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1701208Z   [90mLine 91:[0m [Raw Layout/Spacing] [33mgap-1.5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1702195Z   [90mLine 91:[0m [Non-token Color/Size] [33mtext-foreground/72[0m - Class 'text-foreground/72' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1703213Z   [90mLine 91:[0m [Layout Suggestion] [33mflex items-center[0m - Consider replacing 'flex items-center' with <Stack align="center">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1704229Z   [90mLine 91:[0m [Non-token Color/Size] [33mtext-primary[0m - Class 'text-primary' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1705386Z   [90mLine 92:[0m [div Layout] [33m<div className="flex items-center gap-1.5 text-xs text-secon...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1706432Z   [90mLine 92:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1707570Z   [90mLine 92:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1708640Z   [90mLine 92:[0m [Raw Layout/Spacing] [33mgap-1.5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1709629Z   [90mLine 92:[0m [Non-token Color/Size] [33mtext-secondary/90[0m - Class 'text-secondary/90' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1710654Z   [90mLine 92:[0m [Layout Suggestion] [33mflex items-center[0m - Consider replacing 'flex items-center' with <Stack align="center">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1711560Z   [90mLine 97:[0m [Raw Layout/Spacing] [33mpx-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1712409Z   [90mLine 97:[0m [Raw Layout/Spacing] [33msm:px-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1713282Z   [90mLine 97:[0m [Raw Layout/Spacing] [33mmd:px-10[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1714145Z   [90mLine 97:[0m [Raw Layout/Spacing] [33mpb-16[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1715230Z   [90mLine 98:[0m [div Layout] [33m<div className="flex flex-col gap-4 rounded-2xl border borde...[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1716301Z   [90mLine 98:[0m [div Layout] [33m<div className="flex-1"[0m - Avoid using <div> for layout. Use layout primitives from src/layouts/.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1717400Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mflex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1718489Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mflex-col[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1719369Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mgap-4[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1720289Z   [90mLine 98:[0m [Non-token Color/Size] [33mbg-card/60[0m - Class 'bg-card/60' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1721177Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mp-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1722055Z   [90mLine 98:[0m [Raw Layout/Spacing] [33msm:flex-row[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1722965Z   [90mLine 98:[0m [Raw Layout/Spacing] [33msm:items-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1723859Z   [90mLine 98:[0m [Raw Layout/Spacing] [33msm:p-6[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1724889Z   [90mLine 98:[0m [Layout Suggestion] [33mflex flex-col[0m - Consider replacing 'flex flex-col' with <Stack direction="col">
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1725774Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mflex-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1726621Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mmb-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1727747Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mmb-1[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1728759Z   [90mLine 98:[0m [Non-token Color/Size] [33mtext-foreground/72[0m - Class 'text-foreground/72' uses a value that is not a recognized design token.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1729747Z   [90mLine 98:[0m [Raw Layout/Spacing] [33minline-flex[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1730660Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mitems-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1731589Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mjustify-center[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1732619Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mgap-2[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1733464Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mpx-5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1734307Z   [90mLine 98:[0m [Raw Layout/Spacing] [33mpy-2.5[0m - Use <Box />, <Stack />, or <Grid /> primitives for layout and spacing.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1734707Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:32.1772066Z  ELIFECYCLE  Command failed with exit code 1.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:33.0127082Z ⚠️  Warning: 'gh' CLI not authenticated. Run 'gh auth login' to fetch baselines.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:35.0094585Z UI Anti-Pattern Audit: Current=200, Baseline=0
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:35.0095785Z ❌ Error: Anti-pattern violations increased from 0 to 200.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T03:48:35.0167167Z ##[error]Process completed with exit code 1.
+Anti-Pattern Audit	Post Setup pnpm	﻿2026-05-05T03:48:35.0255867Z Post job cleanup.
+Anti-Pattern Audit	Post Setup pnpm	2026-05-05T03:48:35.1719094Z Pruning is unnecessary.
+Anti-Pattern Audit	Post Checkout	﻿2026-05-05T03:48:35.1854591Z Post job cleanup.
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2754399Z [command]/usr/bin/git version
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2805047Z git version 2.53.0
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2861604Z Temporarily overriding HOME='/home/runner/work/_temp/0548bc66-7c85-4baa-bfd4-971026074cb8' before making global git config changes
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2863515Z Adding repository directory to the temporary git global config as a safe directory
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2867998Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2909550Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.2944595Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.3182010Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.3206974Z http.https://github.com/.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.3218094Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.3250480Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.3469816Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Anti-Pattern Audit	Post Checkout	2026-05-05T03:48:35.3501876Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Anti-Pattern Audit	Complete job	﻿2026-05-05T03:48:35.3896767Z Cleaning up orphan processes
+Anti-Pattern Audit	Complete job	2026-05-05T03:48:35.4179781Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

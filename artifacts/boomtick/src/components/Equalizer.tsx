@@ -14,8 +14,10 @@ const Equalizer = ({ compact = false, reverse = false }: EqualizerProps) => {
   const scrollShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!mounted) {
+      setMounted(true);
+    }
+  }, [mounted]);
 
   const bars = useMemo(() => {
     return Array.from({ length: NUM_BARS }).map((_, i) => {

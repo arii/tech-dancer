@@ -18,9 +18,9 @@ const Gear = () => {
           <h1 className="mb-4 text-3xl font-black sm:text-4xl md:text-5xl">Gear Reviews</h1>
           <p className="mb-8 max-w-3xl text-sm leading-7 text-foreground/72 sm:text-base">Honest reviews of the gear, travel essentials, and accessories that keep WCS dancers moving.</p>
           <div className="mb-8 flex flex-wrap gap-2 rounded-2xl border border-border/80 bg-card/60 p-3 shadow-sm">
-            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Best for travel</span>
-            <span className="inline-flex items-center rounded-full border border-secondary/30 bg-secondary/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Highly recommended</span>
-            <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Competition ready</span>
+            <span className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] ${tagColors[item.tag] ?? "text-foreground/70 border-border"}`>{item.tag}</span>
+            <div className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-secondary">Highly recommended</span>
+            <span className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Competition ready</span>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {gearItems.map((item) => (

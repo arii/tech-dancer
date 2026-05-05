@@ -4,11 +4,13 @@ import { aboutConnectItems, aboutPillars, aboutServiceCards, photos } from "@/li
 import { siteName } from "@/lib/seo";
 
 const About = () => {
-  if (typeof document !== "undefined") {
-    document.title = `About Ariel Anders | ${siteName}`;
-    const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", "About Ariel Anders, MIT roboticist, West Coast Swing creator, and consultant behind boomtick.blog.");
-  }
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.title = `About Ariel Anders | ${siteName}`;
+      const description = document.querySelector('meta[name="description"]');
+      if (description) description.setAttribute("content", "About Ariel Anders, MIT roboticist, West Coast Swing creator, and consultant behind boomtick.blog.");
+    }
+  }, []); // Add an empty dependency array to run this effect only once when the component mounts
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
@@ -29,7 +31,7 @@ const About = () => {
               <section><h2 className="mb-4 text-2xl font-black">Why Clients Hire Me</h2><p className="text-sm leading-7 text-foreground/72">I bring a mix of product thinking, technical execution, and clear communication. That means fewer handoffs, faster shipping, and work that stays aligned with the goal from start to finish.</p></section>
               <section className="grid gap-4 pt-2 sm:grid-cols-3"><div className="rounded-xl border border-border/80 bg-card p-5 shadow-sm"><p className="mb-2 text-xs uppercase tracking-widest text-foreground/65">Education</p><p className="text-sm font-semibold">PhD in Computer Science, MIT</p></div><div className="rounded-xl border border-border/80 bg-card p-5 shadow-sm"><p className="mb-2 text-xs uppercase tracking-widest text-foreground/65">Focus</p><p className="text-sm font-semibold">Robotics // AI // Data Analytics</p></div><div className="rounded-xl border border-border/80 bg-card p-5 shadow-sm"><p className="mb-2 text-xs uppercase tracking-widest text-foreground/65">Dance Level</p><p className="text-sm font-semibold">Competitive Intermediate Follow</p></div></section>
             </div>
-            <aside className="space-y-6 lg:sticky lg:top-8"><div className="rounded-xl border border-border/80 bg-card p-6 shadow-sm"><p className="mb-3 text-xs font-bold tracking-widest uppercase text-foreground/65">At a glance</p><div className="space-y-3 text-sm leading-7"><div className="text-foreground/72">San Francisco, CA</div><div className="text-foreground/72">West Coast Swing + Lindy Hop</div><div className="text-foreground/72">Consulting + project-based work</div></div></div><div className="rounded-xl border border-border/80 bg-card p-6 shadow-sm"><p className="mb-4 text-xs font-bold tracking-widest uppercase text-foreground/65">Connect & Networking</p><div className="flex flex-wrap gap-3">{aboutConnectItems.map((item) => (<a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground/75 transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid={`link-${item.label.toLowerCase()}`}><item.icon size={14} className="text-primary" />{item.label}</a>))}</div></div></aside>
+            <aside className="space-y-6 lg:sticky lg:top-8"><div className="rounded-xl border border-border/80 bg-card p-6 shadow-sm"><p className="mb-3 text-xs font-bold tracking-widest uppercase text-foreground/65">At a glance</p><div className="space-y-3 text-sm leading-7"><div className="text-foreground/72">San Francisco, CA</div><div className="text-foreground/72">West Coast Swing + Lindy Hop</div><div className="text-foreground/72">Consulting + project-based work</div></div></div><div className="rounded-xl border border-border/80 bg-card p-6 shadow-sm"><p className="mb-4 text-xs font-bold tracking-widest uppercase text-foreground/65">Connect & Networking</p><div className="flex flex-wrap gap-3">{aboutConnectItems.map((item) => (<a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary px-4 py-2 text-sm font-semibold text-foreground/75 transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60" data-testid={`link-${item.label.toLowerCase()}`}><item.icon size={14} className="text-primary" />{item.label}</a>))}</div></div></aside>
           </div>
           <section className="mt-16"><div className="mb-5 flex items-end justify-between"><div><p className="mb-1 text-xs font-bold tracking-widest uppercase text-foreground/65">Photo Gallery</p><h2 className="text-2xl font-black">WCS Moments</h2></div></div><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">{photos.map((photo, i) => (<div key={i} className="aspect-[4/5] overflow-hidden rounded-xl border border-border/80 bg-card shadow-sm"><img src={photo.src} alt={photo.alt} className="h-full w-full object-cover" loading="lazy" /></div>))}</div></section>
         </section>

@@ -147,7 +147,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
 
       <main
         ref={scrollRef}
-        className="flex-1 relative overflow-y-auto w-full scroll-smooth pt-16 md:pt-0 md:ml-56"
+        className="flex-1 relative overflow-y-auto w-full scroll-smooth pt-16 md:pt-12 pb-${showEmailBar ? '64 md:pb-80' : '28 md:pb-12'}"
       >
         <div
           className={`flex flex-col flex-1 mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-12 pt-16 md:pt-12 pb-${showEmailBar ? '64 md:pb-80' : '28 md:pb-12'}`}

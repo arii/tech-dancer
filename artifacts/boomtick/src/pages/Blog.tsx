@@ -31,10 +31,7 @@ const Blog = () => {
                 type="button"
                 onClick={() => setActiveFilter(item)}
                 aria-pressed={activeFilter === item}
-                className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${activeFilter === item ? "border-secondary bg-secondary text-background shadow-sm" : "border-border bg-background/40 text-foreground/70 hover:border-primary/40 hover:bg-background/70 hover:text-foreground"}`}
-              >
-                {item}
-              </button>
+                className={`rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${tagColors[post.tag] ?? "text-foreground/70 border-border"}`}>{item}</button>
             ))}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
