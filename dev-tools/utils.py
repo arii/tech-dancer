@@ -194,3 +194,10 @@ def get_gha_variable(name: str) -> Optional[str]:
 def set_gha_variable(name: str, value: str) -> bool:
     """Helper function to set a GHA variable via the global manager."""
     return GHAConfigManager().set_variable(name, value)
+
+def get_github_client():
+    from github import Github, Auth
+    token = get_github_token()
+    if not token:
+        raise CLIError("GitHub token not found", code=401)
+    return Github(auth=Auth.Token(token))
