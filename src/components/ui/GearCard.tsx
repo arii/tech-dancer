@@ -9,19 +9,6 @@ interface GearCardProps {
   basePath: string;
   rating?: number;
   verdict?: string;
-  // Accept and ignore data props that might be spread into the component
-  type?: string;
-  date?: string;
-  author?: string;
-  content?: string;
-  image?: string;
-  tags?: string[];
-  affiliateIds?: string[];
-  priceCategory?: string;
-  updatedDate?: string;
-  durability?: number;
-  value?: number;
-  specs?: Record<string, string>;
 }
 
 export function GearCard({
@@ -32,21 +19,17 @@ export function GearCard({
   basePath,
   rating,
   verdict,
-  // Ignore data props to keep them out of the DOM
-  type: _type,
-  date: _date,
-  author: _author,
-  content: _content,
-  image: _image,
-  tags: _tags,
-  affiliateIds: _affiliateIds,
-  priceCategory: _priceCategory,
-  updatedDate: _updatedDate,
-  durability: _durability,
-  value: _value,
-  specs: _specs,
-  ...cleanProps
+  ...rest
 }: GearCardProps) {
+  // Destructure and ignore known data props that shouldn't bleed to the DOM
+  // even if they are passed via {...item} in parent components.
+  const {
+    type: _type, date: _date, author: _author, content: _content,
+    image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    priceCategory: _priceCategory, updatedDate: _updatedDate,
+    durability: _durability, value: _value, specs: _specs,
+    ...cleanProps
+  } = rest as Record<string, unknown>;
 
   return (
     <Stack
