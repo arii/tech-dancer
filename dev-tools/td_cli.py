@@ -49,6 +49,12 @@ def add_execution_args(parser: argparse.ArgumentParser):
     parser.add_argument("--execute", action="store_false", dest="dry_run",
                       help="Enable actual side effects (e.g., posting to GitHub, modifying files)")
 
+def get_env_or_gha(env_var: str) -> str | None:
+    """Helper to safely fetch variables avoiding CLI fallback if explicitly empty in CI."""
+    if env_var in os.environ:
+        return os.environ[env_var]
+    return get_gha_variable(env_var)
+
 def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -> int:
     """Resolves a baseline value from CLI argument, environment variable, or GHA variable."""
     if file_path:
@@ -56,18 +62,9 @@ def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -
             with open(file_path, 'r') as f:
                 return int(f.read().strip() or fallback_value)
 
-    # 1. Environment Variable (High Priority in CI)
-    if env_var in os.environ:
-        env_val = os.environ[env_var]
-        if str(env_val).strip() != "":
-            return int(env_val)
-        else:
-            return fallback_value
-
-    # 2. GitHub Actions Variable (Local Fetch)
-    gha_val = get_gha_variable(env_var)
-    if gha_val is not None:
-        return int(gha_val)
+    val = get_env_or_gha(env_var)
+    if val is not None and str(val).strip() != "":
+        return int(val)
 
     return fallback_value
 
@@ -738,20 +735,16 @@ def handle_fix_ci(args):
     # 3. Initialize Jules Client and Resolve Source ID
     client = JulesAPIClient(api_key)
 
-    if "JULES_SOURCE_ID" in os.environ:
-        source_id = os.environ.get("JULES_SOURCE_ID")
-    else:
-        source_id = get_gha_variable("JULES_SOURCE_ID")
+    source_id = get_env_or_gha("JULES_SOURCE_ID")
 
     if not source_id:
         if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
         try:
             source_id = client.discover_source_id(repo.full_name)
+            if not source_id:
+                raise Exception("No matching source found")
         except Exception as e:
-            raise CLIError(f"Error during JULES_SOURCE_ID auto-discovery: {e}", code=500)
-
-    if not source_id:
-        raise CLIError("JULES_SOURCE_ID is missing and auto-discovery failed. Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
+            raise CLIError(f"JULES_SOURCE_ID is missing and auto-discovery failed ({e}). Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
 
     # 3. Call Jules API
     if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
