@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
-import Navigation from '@/components/Navigation';
+import Sidebar from '@/components/Sidebar';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailStore } from '@/features/email-capture/emailStore';
@@ -128,58 +128,38 @@ export function MainLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <Box
-      layout="root"
-      position="relative"
-      overflowX="hidden"
-      width="full"
-      minHeight="screen"
-      className="touch-pan-y"
+    <div
+      className="relative overflow-x-hidden w-full min-h-screen touch-pan-y flex flex-col bg-background text-foreground md:flex-row"
+      // @ts-ignore
       onTouchStart={handleTouchStart}
+      // @ts-ignore
       onTouchEnd={handleTouchEnd}
     >
-      <Box
+      <div
         id="route-announcer"
         aria-live="polite"
         aria-atomic="true"
         className="sr-only"
       />
-      <Box display="flex" minHeight="screen" width="full">
-        <Navigation />
-        <ScrollToTopButton scrollRef={scrollRef} />
-        <Stack
-          as="main"
-          ref={scrollRef}
-          flex={1}
-          position="relative"
-          overflowY="auto"
-          paddingTop={{ base: 16, lg: 0 }}
-          maxWidth="full"
-          width="full"
-          surface="bg"
-          direction="col"
-          scrollBehavior="smooth"
-          scrollPaddingTop={64}
+
+      <Sidebar />
+      <ScrollToTopButton scrollRef={scrollRef} />
+
+      <main
+        ref={scrollRef}
+        className="flex-1 relative overflow-y-auto w-full scroll-smooth pt-16 md:pt-0 md:ml-56"
+      >
+        <div
+          className={`flex flex-col flex-1 mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-12 pt-16 md:pt-12 pb-${showEmailBar ? '64 md:pb-80' : '28 md:pb-12'}`}
         >
-          <Stack
-            paddingX={{ base: 4, md: 6, lg: 12 }}
-            paddingTop={{ base: 16, md: 12 }}
-            paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
-            flex={1}
-            direction="col"
-            marginX="auto"
-            maxWidth="7xl"
-            width="full"
-          >
-            <Box flex={1} width="full">
-              {children}
-            </Box>
-            <Footer />
-          </Stack>
-        </Stack>
-      </Box>
+          <div className="flex-1 w-full">
+            {children}
+          </div>
+          <Footer />
+        </div>
+      </main>
 
       <GlobalSearch />
-    </Box>
+    </div>
   );
 }

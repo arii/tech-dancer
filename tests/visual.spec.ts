@@ -23,7 +23,7 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForLoadState('networkidle');
 
       // Ensure the main content is loaded instead of using a manual timeout
-      await expect(page.locator('#root')).toBeVisible();
+      await expect(page.locator('#root').first()).toBeVisible();
 
       // Robust scroll to bottom to trigger all lazy-loaded content
       await page.evaluate(async () => {

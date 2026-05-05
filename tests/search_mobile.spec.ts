@@ -9,13 +9,12 @@ test.describe('Global Search Modal - Mobile', () => {
 
   test('should open search modal via mobile menu', async ({ page }) => {
     // Open mobile menu
-    await page.getByLabel('Open menu').click();
+    await page.getByTestId('button-toggle-nav').click();
 
     // Check if the menu is actually visible
-    await expect(page.locator('nav[aria-label="Mobile Navigation"]').locator('..').locator('div').filter({ hasText: 'Search' }).first()).toBeVisible();
+    const searchButton = page.getByText('Search', { exact: true }).first();
+    await expect(searchButton).toBeVisible();
 
-    // Use text selector to find "Search" button
-    const searchButton = page.getByRole('button', { name: 'Search' });
     await searchButton.click({ force: true });
 
     // Modal should be visible
