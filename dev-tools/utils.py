@@ -150,6 +150,9 @@ class GHAConfigManager:
                 if not self.warned_repo:
                     print(f"⚠️  Warning: Not a git repository or no remote configured for 'gh' CLI.", file=sys.stderr)
                     self.warned_repo = True
+            elif "resource not accessible by integration" in stderr:
+                print(f"⚠️  Warning: Cannot fetch variable '{name}' due to permissions.", file=sys.stderr)
+                return None
             else:
                 if result.stderr:
                     print(f"❌ Error fetching GHA variable '{name}': {result.stderr.strip()}", file=sys.stderr)

@@ -70,3 +70,7 @@ public/data
 link-validation-report.md
 public/data
 link-validation-report.md
+
+# Dynamically generated analysis artifacts
+pr_overlaps.txt
+workflow_overlaps.txt
