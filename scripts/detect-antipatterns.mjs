@@ -273,18 +273,12 @@ function checkFile(filepath) {
 function checkPRScope() {
   try {
     const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8", stdio: ['inherit', 'pipe', 'pipe'] }).trim();
+    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
     if (output) {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
-  } catch (error) {
-    // If the error message itself is present and is not just a standard shell error, report it
-    if (error.stderr && error.stderr.trim()) {
-      console.error(`\x1b[31m❌ Scope check failed:\x1b[0m\n${error.stderr}`);
-    } else if (error.message) {
-      console.error(`\x1b[31m❌ Scope check error:\x1b[0m ${error.message}`);
-    }
-    // Don't exit here as scope check is usually a non-blocking warning
+  } catch {
+    // Python or script might not be available
   }
 }
 

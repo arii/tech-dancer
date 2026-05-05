@@ -101,7 +101,7 @@ export function GlobalSearch() {
         className="border-accent/20"
         onClick={(e: MouseEvent) => e.stopPropagation()}
       >
-        <Box border="b" padding={6} display="flex" align="center" gap={4} position="relative">
+        <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">
           <Search className="w-6 h-6 text-accent shrink-0" />
           <Text
             as="input"
@@ -124,8 +124,7 @@ export function GlobalSearch() {
             onClick={close}
             padding={2}
             cursor="pointer"
-            border
-            className="group hover:bg-accent/5 transition-colors border-line/50"
+            className="group hover:bg-accent/5 transition-colors border border-line/50"
           >
             <X className="w-6 h-6 text-text-dim group-hover:text-accent" />
           </Box>
@@ -151,13 +150,13 @@ export function GlobalSearch() {
                   cursor="pointer"
                   className="hover:bg-accent/5 group transition-colors"
                 >
-                   <Box border padding={2} surface="muted" radius="sm" shrink={0}>
+                   <Box border padding={2} surface="muted" radius="sm" className="shrink-0">
                       <Hash className="w-4 h-4 text-accent opacity-50" />
                    </Box>
                    <Stack gap={1} flex className="min-w-0">
                       <Box display="flex" align="center" justify="between" gap={3}>
                          <Text variant="display" size="lg" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
-                         <Box border paddingX={2} paddingY={0.5} radius="none" shrink={0} className="bg-accent/5">
+                         <Box border paddingX={2} paddingY={0.5} radius="none" className="bg-accent/5 shrink-0">
                             <Text variant="mono" size="micro" color="brand">{res.type.toUpperCase()}</Text>
                           </Box>
                       </Box>

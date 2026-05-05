@@ -51,8 +51,8 @@ function PostSkeleton() {
 function SimpleSkeleton() {
   const { opacity } = motionTokens.skeleton;
   return (
-    <Stack gap={12} width="full" className={opacity}>
-      <Box paddingBottom={10} border="b" className="border-line/30">
+    <Stack gap={12} className={`w-full ${opacity}`}>
+      <Box paddingBottom={10} className="border-b border-line/30">
         <Stack gap={4}>
           <Skeleton height={4} width={24} />
           <Skeleton height={10} width="1/2" />
@@ -76,7 +76,7 @@ const SKELETON_MAP: Record<SkeletonVariant, ReactNode> = {
 
 export function PageSkeleton({ className, variant = 'grid' }: PageSkeletonProps) {
   return (
-    <Box width="full" className={className || ''}>
+    <Box className={`w-full ${className || ''}`}>
       {SKELETON_MAP[variant]}
     </Box>
   );

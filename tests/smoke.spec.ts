@@ -66,7 +66,7 @@ test('all nav links are reachable and error-free', async ({ page }) => {
 });
 
 test('all post/content pages load without errors', async ({ page }) => {
-  const contentIndexes = ['./blog', './gear', './research'];
+  const contentIndexes = ['blog', 'gear', 'research'];
 
   for (const index of contentIndexes) {
     await page.goto(index);

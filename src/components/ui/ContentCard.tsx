@@ -94,7 +94,7 @@ export function ContentCard({
         </Stack>
 
         {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" marginTop="auto" className="border-line/50">
+          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50 mt-auto">
             <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
               Read Article
             </Text>

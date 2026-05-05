@@ -4,7 +4,7 @@ test.use({ ...devices['Pixel 7'] });
 
 test.describe('Global Search Modal - Mobile', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('./');
+    await page.goto('/');
   });
 
   test('should open search modal via mobile menu', async ({ page }) => {

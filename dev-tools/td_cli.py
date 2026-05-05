@@ -13,31 +13,43 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
+from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
 from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
-# Global state for logging
-CLI_ARGS = None
-
 # --- Anti-Pattern Audit Configuration ---
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
 # --- Shared Logic ---
 
-def log_cli(message: str, force_stderr: bool = False):
+def log_cli(json_mode: bool, message: str, force_stderr: bool = False):
     """
     Centralized logging for the CLI. Encapsulates the JSON check and stderr redirection.
     """
-    global CLI_ARGS
-    if CLI_ARGS and CLI_ARGS.json and not force_stderr:
+    if json_mode and not force_stderr:
         return
 
     dest = sys.stderr if force_stderr else sys.stdout
     print(message, file=dest)
+
+def format_error_response(e: Exception, is_json: bool):
+    """
+    Centralized error reporting for the CLI.
+    """
+    if isinstance(e, CLIError):
+        if is_json:
+            print(json.dumps({"status": "error", "message": e.message, "code": e.code, "data": e.data}, indent=2))
+        else:
+            print(f"❌ Error: {e.message}", file=sys.stderr)
+        sys.exit(e.code)
+    else:
+        if is_json:
+            print(json.dumps({"status": "error", "message": str(e)}, indent=2))
+        else:
+            print(f"💥 Unexpected Error: {e}", file=sys.stderr)
 
 def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -> int:
     """Resolves a baseline value from CLI argument, environment variable, or GHA variable."""
@@ -66,11 +78,10 @@ def get_audit_results(content: str = None, targets: list[str] = None):
     elif content is not None:
         cmd.append("-")
 
-    # Use execute_raw because the audit tool exits 1 on findings, which is expected
-    res = execute_raw(cmd, input_str=content)
+    proc = subprocess.run(cmd, input=content, capture_output=True, text=True)
     try:
-        return json.loads(res.stdout)
-    except (json.JSONDecodeError, AttributeError):
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError:
         return {"violations": {}, "config": {}}
 
 def extract_code_blocks(text: str) -> list[str]:
@@ -149,9 +160,9 @@ def handle_validate_issue(args):
         results.append(issue_result)
         total_findings += len(findings)
 
-        log_cli(f"{'✅' if not findings else '❌'} #{issue.number}: {title[:60]}")
-        for f in findings: log_cli(f"   ❌ {f}")
-        for w in warnings: log_cli(f"   ⚠️  {w}")
+        log_cli(args.json, f"{'✅' if not findings else '❌'} #{issue.number}: {title[:60]}")
+        for f in findings: log_cli(args.json, f"   ❌ {f}")
+        for w in warnings: log_cli(args.json, f"   ⚠️  {w}")
 
         if args.post_comments and (findings or warnings):
             comment = "## 🤖 Issue Quality Review\n\n"
@@ -172,8 +183,8 @@ def handle_detect_conflicts(args):
     formatted = []
     for pr_pair, files in conflicts.items():
         formatted.append({"prs": list(pr_pair), "files": files})
-        log_cli(f"⚠️  {' ↔ '.join(f'#{p}' for p in pr_pair)} share {len(files)} file(s):")
-        for f in sorted(files)[:10]: log_cli(f"    - {f}")
+        log_cli(args.json, f"⚠️  {' ↔ '.join(f'#{p}' for p in pr_pair)} share {len(files)} file(s):")
+        for f in sorted(files)[:10]: log_cli(args.json, f"    - {f}")
 
     if args.json: print(json.dumps({"status": "success", "conflicts": formatted}, indent=2))
     elif not conflicts: print("✅ No potential merge conflicts detected.")
@@ -185,9 +196,11 @@ def handle_conflicts(args):
     """
     def run(cmd, exit_on_fail=False):
         print(f"🏃 Running: {cmd}")
-        res = execute_raw(cmd, shell=True)
-        if res.returncode != 0 and exit_on_fail:
-            sys.exit(res.returncode)
+        res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        if res.returncode != 0:
+            print(f"⚠️ Output/Error:\n{res.stderr.strip() or res.stdout.strip()}")
+            if exit_on_fail:
+                sys.exit(res.returncode)
         return res.returncode, res.stdout.strip()
 
     base_branch = getattr(args, 'base', 'main') or 'main'
@@ -228,11 +241,11 @@ def handle_status_board(args):
     repo = Github(token).get_repo(get_repo_name())
 
     prs_data = []
-    log_cli("# Active Agent Work Board\n| Branch | Issue | Status | Conflicts |\n|--------|-------|--------|-----------|")
+    log_cli(args.json, "# Active Agent Work Board\n| Branch | Issue | Status | Conflicts |\n|--------|-------|--------|-----------|")
 
     for pr in repo.get_pulls(state='open'):
         m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
-        log_cli(f"| {pr.head.ref} | {issue} | {'Draft' if pr.draft else 'Open'} | ... |")
+        log_cli(args.json, f"| {pr.head.ref} | {issue} | {'Draft' if pr.draft else 'Open'} | ... |")
         prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open"})
 
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
@@ -242,29 +255,27 @@ def handle_ratchet_any(args):
     baseline = resolve_baseline(args.baseline_file, 'ANY_COUNT_BASELINE', 0)
 
     res = {"current": current, "baseline": baseline}
-    log_cli(f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
+    log_cli(args.json, f"TypeScript 'any' Ratchet: Current={current}, Baseline={baseline}")
 
     if current > baseline:
         msg = f"'any' count increased from {baseline} to {current}."
-        if args.json: print(json.dumps({"status": "error", "message": msg, "data": res}, indent=2))
-        else: log_cli(f"❌ Error: {msg}")
-        sys.exit(1)
+        raise CLIError(msg, code=1, data=res)
 
     if args.update:
         if not args.dry_run:
             if args.baseline_file:
                 with open(args.baseline_file, 'w') as f:
                     f.write(str(current))
-                log_cli(f"✅ Updated {args.baseline_file} to {current}")
+                log_cli(args.json, f"✅ Updated {args.baseline_file} to {current}")
             else:
                 if set_gha_variable('ANY_COUNT_BASELINE', str(current)):
-                    log_cli(f"✅ Updated ANY_COUNT_BASELINE to {current}")
+                    log_cli(args.json, f"✅ Updated ANY_COUNT_BASELINE to {current}")
                 else:
-                    log_cli(f"❌ Failed to update ANY_COUNT_BASELINE.")
+                    log_cli(args.json, f"❌ Failed to update ANY_COUNT_BASELINE.")
                     sys.exit(1)
         else:
             target = args.baseline_file if args.baseline_file else "ANY_COUNT_BASELINE"
-            log_cli(f"[DRY-RUN] Would update {target} to {current}")
+            log_cli(args.json, f"[DRY-RUN] Would update {target} to {current}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_bundle_size(args):
@@ -272,53 +283,51 @@ def handle_bundle_size(args):
     baseline = resolve_baseline(args.baseline_file, 'BUNDLE_BASELINE_KB', 3000)
 
     res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": baseline + args.threshold}
-    log_cli(f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
+    log_cli(args.json, f"Bundle Size Check: Current={size}KB, Baseline={baseline}KB")
 
     if size > res["threshold_kb"]:
         msg = f"Bundle size exceeds threshold ({size}KB > {res['threshold_kb']}KB)."
-        if args.json: print(json.dumps({"status": "error", "message": msg, "data": res}, indent=2))
-        else: log_cli(f"❌ Error: {msg}")
-        sys.exit(1)
+        raise CLIError(msg, code=1, data=res)
 
     if args.update:
         if not args.dry_run:
             if args.baseline_file:
                 with open(args.baseline_file, 'w') as f:
                     f.write(str(size))
-                log_cli(f"✅ Updated {args.baseline_file} to {size}")
+                log_cli(args.json, f"✅ Updated {args.baseline_file} to {size}")
             else:
                 if set_gha_variable('BUNDLE_BASELINE_KB', str(size)):
-                    log_cli(f"✅ Updated BUNDLE_BASELINE_KB to {size}")
+                    log_cli(args.json, f"✅ Updated BUNDLE_BASELINE_KB to {size}")
                 else:
-                    log_cli(f"❌ Failed to update BUNDLE_BASELINE_KB.")
+                    log_cli(args.json, f"❌ Failed to update BUNDLE_BASELINE_KB.")
                     sys.exit(1)
         else:
             target = args.baseline_file if args.baseline_file else "BUNDLE_BASELINE_KB"
-            log_cli(f"[DRY-RUN] Would update {target} to {size}")
+            log_cli(args.json, f"[DRY-RUN] Would update {target} to {size}")
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_migrate_tokens(args):
     root_dir = 'src'
     matches = []
     if args.find:
-        log_cli(f"🔍 Searching for token: {args.find}")
+        log_cli(args.json, f"🔍 Searching for token: {args.find}")
         for filepath in walk_tsx(root_dir):
             findings = find_patterns_in_file(filepath, [(re.escape(args.find), "Found")])
             for ln, _, content in findings:
                 matches.append({"file": filepath, "line": ln, "content": content.strip()})
-                log_cli(f"  {filepath}:{ln}: {content.strip()}")
+                log_cli(args.json, f"  {filepath}:{ln}: {content.strip()}")
     elif args.migrate:
         old, new = args.migrate
-        log_cli(f"{'[DRY-RUN] Would replace' if args.dry_run else '[EXECUTE] Replacing'} `{old}` with `{new}`")
+        log_cli(args.json, f"{'[DRY-RUN] Would replace' if args.dry_run else '[EXECUTE] Replacing'} `{old}` with `{new}`")
         for filepath in walk_tsx(root_dir):
             with open(filepath, 'r') as f: c = f.read()
             if old in c:
                 matches.append({"file": filepath})
                 if not args.dry_run:
                     with open(filepath, 'w') as f: f.write(c.replace(old, new))
-                    log_cli(f"  ✅ Updated: {filepath}")
+                    log_cli(args.json, f"  ✅ Updated: {filepath}")
                 else:
-                    log_cli(f"  📝 Match in: {filepath}")
+                    log_cli(args.json, f"  📝 Match in: {filepath}")
 
     if args.json: print(json.dumps({"status": "success", "matches": matches}, indent=2))
 
@@ -329,7 +338,7 @@ def handle_update_issues(args):
     g = Github(token); repo = g.get_repo(repo_name)
 
     updates = []
-    log_cli(f"🔍 Scanning open issues in {repo_name}...")
+    log_cli(args.json, f"🔍 Scanning open issues in {repo_name}...")
 
     audit_base = get_audit_results(content="")
     config = audit_base.get("config", {})
@@ -352,9 +361,9 @@ def handle_update_issues(args):
         if findings:
             updates.append({"number": issue.number, "findings": findings})
             comment = "## 🤖 Automated Issue Update\n\n" + "\n".join(f"- {f}" for f in findings) + "\n\n---\n*Generated by `td_cli update-issues`*"
-            log_cli(f"[{'DRY-RUN' if args.dry_run else 'EXECUTE'}] Found {len(findings)} findings in #{issue.number}")
-            if not args.dry_run: issue.create_comment(comment); log_cli(f"✅ Posted update comment to #{issue.number}")
-            else: log_cli(f"Preview for #{issue.number}:\n{comment}\n")
+            log_cli(args.json, f"[{'DRY-RUN' if args.dry_run else 'EXECUTE'}] Found {len(findings)} findings in #{issue.number}")
+            if not args.dry_run: issue.create_comment(comment); log_cli(args.json, f"✅ Posted update comment to #{issue.number}")
+            else: log_cli(args.json, f"Preview for #{issue.number}:\n{comment}\n")
 
     if args.json: print(json.dumps({"status": "success", "updates": updates}, indent=2))
 
@@ -392,7 +401,7 @@ def handle_audit_pr(args):
         with open(rev_path, "w") as f: f.write(template)
         res["files"]["context"] = ctx_path
         res["files"]["review"] = rev_path
-        log_cli(f"✅ Generated review files for PR #{pr_num}")
+        log_cli(args.json, f"✅ Generated review files for PR #{pr_num}")
 
     if args.audit:
         if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
@@ -407,13 +416,12 @@ def handle_audit_pr(args):
         if files_to_audit:
             try:
                 # Use pnpm run audit as requested, passing targets after --
-                # Use execute_raw because audit script exits 1 on violations
-                res = execute_raw(["pnpm", "run", "audit", "--", "--json"] + files_to_audit)
-                output = res.stdout
-                if output:
+                proc = subprocess.run(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, capture_output=True, text=True)
+                if proc.stdout:
                     # pnpm might add some noise to stdout before/after the actual JSON if not careful,
                     # but our script uses process.stdout.write for JSON.
                     # We try to find the JSON part if there's noise.
+                    output = proc.stdout
                     if "{" in output:
                         json_start = output.find("{")
                         json_end = output.rfind("}") + 1
@@ -427,12 +435,12 @@ def handle_audit_pr(args):
                                 "severity": v.get('severity', 'minor')
                             })
             except Exception as e:
-                log_cli(f"⚠️  Audit script failed: {e}")
+                log_cli(args.json, f"⚠️  Audit script failed: {e}")
 
         res["auto_findings"] = auto_findings
         if auto_findings:
-            log_cli(f"📋 Found {len(auto_findings)} violations:")
-            for f in auto_findings: log_cli(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
+            log_cli(args.json, f"📋 Found {len(auto_findings)} violations:")
+            for f in auto_findings: log_cli(args.json, f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
             subprocess.call(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"])
 
     if args.submit:
@@ -442,36 +450,22 @@ def handle_audit_pr(args):
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
 def handle_pre_submit(args):
-    log_cli("🔍 Running pre-submission checks...")
+    log_cli(args.json, "🔍 Running pre-submission checks...")
     results = {"steps": []}
     try:
         def run_step(name, cmd, ignore_failure=False):
-            log_cli(f"--- {name} ---")
+            log_cli(args.json, f"--- {name} ---")
             proc = subprocess.run(cmd, capture_output=args.json, text=True)
             results["steps"].append({"name": name, "status": "success" if proc.returncode == 0 else "failure"})
             if proc.returncode != 0 and not ignore_failure: raise subprocess.CalledProcessError(proc.returncode, cmd)
             return proc
-            if not args.json: print(f"--- {name} ---")
-            if ignore_failure:
-                res = execute_raw(cmd)
-                status = "success" if res.returncode == 0 else "failure"
-                results["steps"].append({"name": name, "status": status})
-                return res.stdout.strip()
-            else:
-                try:
-                    stdout = execute(cmd)
-                    results["steps"].append({"name": name, "status": "success"})
-                    return stdout
-                except CLIError as e:
-                    results["steps"].append({"name": name, "status": "failure"})
-                    raise e
 
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
 
         # Baseline Configuration Check
-        log_cli("--- Baseline Configuration ---")
+        log_cli(args.json, "--- Baseline Configuration ---")
         missing_vars = []
         for var_name in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"]:
             if not (os.environ.get(var_name) or get_gha_variable(var_name)):
@@ -479,32 +473,32 @@ def handle_pre_submit(args):
 
         if missing_vars:
             msg = f"Missing GHA variables: {', '.join(missing_vars)}. Run 'gh variable set <NAME> --body <VALUE>' to configure them locally."
-            log_cli(f"  ⚠️  {msg}")
+            log_cli(args.json, f"  ⚠️  {msg}")
             results["steps"].append({"name": "Baseline Check", "status": "warning", "message": msg})
         else:
             results["steps"].append({"name": "Baseline Check", "status": "success"})
-            log_cli("  ✅ Technical debt baselines are configured.")
+            log_cli(args.json, "  ✅ Technical debt baselines are configured.")
 
         # PR Scope Check
         scope_warning = verify_pr_scope()
 
         if scope_warning:
-            log_cli(f"  ⚠️ {scope_warning}")
+            log_cli(args.json, f"  ⚠️ {scope_warning}")
             results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
 
         token = get_github_token()
         if token:
-            log_cli("--- Conflict Check ---")
+            log_cli(args.json, "--- Conflict Check ---")
             from github import Github
             conflicts = detect_conflicts(Github(token).get_repo(get_repo_name()))
             results["conflicts"] = [{"prs": list(p), "files": f} for p, f in conflicts.items()]
             if conflicts:
-                for pr_pair, files in conflicts.items(): log_cli(f"⚠️  {' ↔ '.join(f'#{p}' for p in pr_pair)} share {len(files)} file(s)")
+                for pr_pair, files in conflicts.items(): log_cli(args.json, f"⚠️  {' ↔ '.join(f'#{p}' for p in pr_pair)} share {len(files)} file(s)")
             else:
-                log_cli("✅ No conflicts detected.")
+                log_cli(args.json, "✅ No conflicts detected.")
 
         if args.json: print(json.dumps({"status": "success", "results": results}, indent=2))
-        else: log_cli("✅ Pre-submission checks passed.")
+        else: log_cli(args.json, "✅ Pre-submission checks passed.")
     except Exception as e:
         if args.json: print(json.dumps({"status": "error", "message": str(e), "results": results}, indent=2))
         else: print(f"❌ Pre-submission checks failed: {e}")
@@ -520,7 +514,7 @@ def handle_repair(args):
         import urllib.request
         urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
     except Exception:
-        log_cli("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
+        log_cli(args.json, "⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
 
     logs_source = ""
     logs_content = ""
@@ -536,7 +530,7 @@ def handle_repair(args):
         else:
             raise CLIError(f"Log file not found: {args.logs}")
     else:
-        log_cli("🔍 No logs provided. Running local triage...")
+        log_cli(args.json, "🔍 No logs provided. Running local triage...")
         # Run lint and tsc to gather logs
         res_lint = subprocess.run(["pnpm", "run", "lint:ox"], capture_output=True, text=True)
         res_tsc = subprocess.run(["pnpm", "run", "type-check"], capture_output=True, text=True)
@@ -544,7 +538,7 @@ def handle_repair(args):
         logs_source = "local triage"
 
     if not logs_content.strip():
-        log_cli("✅ No errors found in logs or local triage. Nothing to repair.")
+        log_cli(args.json, "✅ No errors found in logs or local triage. Nothing to repair.")
         return
 
     worktree_path = None
@@ -555,7 +549,7 @@ def handle_repair(args):
         if args.worktree:
             branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
             worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
-            log_cli(f"🏗️  Setting up git worktree at {worktree_path} (branch: {branch_name})...")
+            log_cli(args.json, f"🏗️  Setting up git worktree at {worktree_path} (branch: {branch_name})...")
             subprocess.run(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"], check=True, capture_output=True)
             os.chdir(worktree_path)
             # We need to make sure node_modules or dependencies are available if we verify
@@ -568,7 +562,7 @@ def handle_repair(args):
             tmp_log.write(logs_content)
             tmp_log_path = tmp_log.name
 
-        log_cli(f"🤖 Starting autonomous repair agent using {logs_source}...")
+        log_cli(args.json, f"🤖 Starting autonomous repair agent using {logs_source}...")
 
         cmd = [sys.executable, repair_script, tmp_log_path]
         # Also pass eslint json if available locally? For now let's keep it simple.
@@ -598,20 +592,20 @@ def handle_repair(args):
 
 def handle_audit_gate(args):
     # Current violations count
-    stdout_current = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
-    current_count = int(stdout_current or 0)
+    proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
+    current_count = int(proc_current.stdout.strip() or 0)
 
     # 1. Try to get baseline from GHA variable or Environment
     baseline_count = resolve_baseline(None, 'AUDIT_BASELINE', -1)
 
     # 2. If not set, fallback to origin/main comparison (dynamic baseline)
-    log_cli(f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count}")
+    log_cli(args.json, f"UI Anti-Pattern Audit: Current={current_count}, Baseline={baseline_count}")
 
     if baseline_count == -1:
         baseline_count = 0
         try:
             ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-            main_files = execute(ls_cmd).splitlines()
+            main_files = subprocess.check_output(ls_cmd, text=True, stderr=subprocess.DEVNULL).splitlines()
 
             relevant_main_files = []
             for mf in main_files:
@@ -625,33 +619,24 @@ def handle_audit_gate(args):
             for mf in relevant_main_files:
                 try:
                     show_cmd = ["git", "show", f"origin/main:{mf}"]
-                    # Don't log error here as it might be expected if file is new
-                    res_show = execute_raw(show_cmd, log_on_error=False)
-                    if res_show.returncode != 0:
-                        continue
-
-                    content = res_show.stdout
-                    stdout_baseline = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
-                                               input_str=content)
-                    baseline_count += int(stdout_baseline or 0)
-                except (CLIError, subprocess.CalledProcessError) as e:
-                    print(f"⚠️  Warning: Failed to calculate baseline for {mf}: {e}", file=sys.stderr)
+                    content = subprocess.check_output(show_cmd, text=True, stderr=subprocess.DEVNULL)
+                    proc_baseline = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                                   input=content, capture_output=True, text=True)
+                    baseline_count += int(proc_baseline.stdout.strip() or 0)
+                except subprocess.CalledProcessError:
                     continue
-        except (CLIError, subprocess.CalledProcessError) as e:
-            print(f"⚠️  Warning: Failed to resolve dynamic audit baseline: {e}", file=sys.stderr)
+        except subprocess.CalledProcessError:
+            pass
 
+    res = {"current": current_count, "baseline": baseline_count}
     if current_count > baseline_count:
         msg = f"Anti-pattern violations increased from {baseline_count} to {current_count}."
-        if args.json:
-            print(json.dumps({"status": "error", "message": msg, "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
-        else:
-            log_cli(f"❌ Error: {msg}")
-        sys.exit(1)
+        raise CLIError(msg, code=1, data=res)
 
     if args.json:
-        print(json.dumps({"status": "success", "data": {"current": current_count, "baseline": baseline_count}}, indent=2))
+        print(json.dumps({"status": "success", "data": res}, indent=2))
     else:
-        log_cli("✅ No new violations introduced.")
+        log_cli(args.json, "✅ No new violations introduced.")
 
 def handle_repair_context(args):
     from error_rag import RAGPipeline
@@ -710,9 +695,9 @@ def handle_fix_ci(args):
     else:
         # Local dev fallback: detect current branch
         try:
-            branch = execute(['git', 'branch', '--show-current'])
+            branch = subprocess.check_output(['git', 'branch', '--show-current'], text=True).strip()
             if not branch: raise Exception("No current branch detected")
-            log_cli(f"ℹ️  Detected current branch: `{branch}`")
+            log_cli(args.json, f"ℹ️  Detected current branch: `{branch}`")
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
             pr = pulls[0] if pulls else None
         except Exception as e:
@@ -723,7 +708,7 @@ def handle_fix_ci(args):
 
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
-        log_cli("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...", force_stderr=True)
+        log_cli(args.json, "🔍 JULES_SOURCE_ID not found, attempting auto-discovery...", force_stderr=True)
         try:
             source_id = client.discover_source_id(repo.full_name)
         except Exception as e:
@@ -733,7 +718,7 @@ def handle_fix_ci(args):
         raise CLIError("JULES_SOURCE_ID is missing and auto-discovery failed. Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
 
     # 3. Call Jules API
-    log_cli(f"🚀 Initializing Jules session for branch `{branch}`...", force_stderr=True)
+    log_cli(args.json, f"🚀 Initializing Jules session for branch `{branch}`...", force_stderr=True)
 
     session_name = "dry-run-session"
     if not args.dry_run:
@@ -744,15 +729,15 @@ def handle_fix_ci(args):
         else:
             raise CLIError("Jules API session creation failed")
     else:
-        log_cli(f"[DRY-RUN] Would create session with source sources/{source_id}", force_stderr=True)
+        log_cli(args.json, f"[DRY-RUN] Would create session with source sources/{source_id}", force_stderr=True)
 
     # 4. Feedback
     feedback = f"🤖 **Jules is on it!**\n\nInitialized an autonomous repair session (`{session_name}`) for branch `{branch}`."
     if pr and not args.dry_run:
         pr.create_issue_comment(feedback)
-        log_cli(f"✅ Posted feedback to PR #{pr.number}", force_stderr=True)
+        log_cli(args.json, f"✅ Posted feedback to PR #{pr.number}", force_stderr=True)
     else:
-        log_cli(feedback, force_stderr=True)
+        log_cli(args.json, feedback, force_stderr=True)
 
     if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
 
@@ -768,7 +753,7 @@ def handle_manage_reviews(args):
         status = "ACTION: Needs Review" if not last_review else f"ACTION: Needs Re-Review" if last_review.commit_id != pr.head.sha else "STATE: Up-To-Date"
 
         pr_item = {"number": pr.number, "title": pr.title, "status": status, "unaddressed": []}
-        log_cli(f"[PR #{pr.number}] {pr.title}\n  ├── {status}")
+        log_cli(args.json, f"[PR #{pr.number}] {pr.title}\n  ├── {status}")
 
         if args.check_responses:
             revs = list(pr.get_reviews()); our_revs = [r for r in revs if r.user.login == login]
@@ -779,13 +764,13 @@ def handle_manage_reviews(args):
                 for oc in our_coms:
                     if not any(ac.in_reply_to_id == oc.id for ac in after_coms) and not commits_after:
                         pr_item["unaddressed"].append(f"{oc.path}:{oc.position}")
-                if pr_item["unaddressed"]: log_cli(f"  └── ⚠️ UNADDRESSED ({len(pr_item['unaddressed'])})")
+                if pr_item["unaddressed"]: log_cli(args.json, f"  └── ⚠️ UNADDRESSED ({len(pr_item['unaddressed'])})")
 
         if args.cleanup_comments:
             for c in pr.get_issue_comments():
                 if c.user.login == login and "<!-- td-review-manager-comment -->" in c.body:
-                    if not args.dry_run: c.delete(); log_cli(f"  Deleted tool comment {c.id}")
-                    else: log_cli(f"  [DRY-RUN] Would delete tool comment {c.id}")
+                    if not args.dry_run: c.delete(); log_cli(args.json, f"  Deleted tool comment {c.id}")
+                    else: log_cli(args.json, f"  [DRY-RUN] Would delete tool comment {c.id}")
         prs_data.append(pr_item)
 
     if args.json: print(json.dumps({"status": "success", "prs": prs_data}, indent=2))
@@ -848,24 +833,13 @@ def main():
     args = parser.parse_args()
     if not args.command: parser.print_help(); sys.exit(1)
 
-    global CLI_ARGS
-    CLI_ARGS = args
-
     try:
         args.func(args)
-    except CLIError as e:
-        if args.json:
-            print(json.dumps({"status": "error", "message": e.message, "code": e.code, "data": e.data}, indent=2))
-        else:
-            print(f"❌ Error: {e.message}", file=sys.stderr)
-        sys.exit(e.code)
     except Exception as e:
-        if args.json:
-            print(json.dumps({"status": "error", "message": str(e)}, indent=2))
-        else:
-            print(f"💥 Unexpected Error: {e}", file=sys.stderr)
+        format_error_response(e, args.json)
+        if not isinstance(e, CLIError):
             raise e
-        sys.exit(1)
+        sys.exit(e.code)
 
 if __name__ == "__main__":
     main()
