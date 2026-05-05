@@ -14,7 +14,7 @@ class TestTDCLI(unittest.TestCase):
 
     @patch('td_cli.get_github_token')
     @patch('td_cli.get_repo_name')
-    @patch('github.Github')
+    @patch('td_cli.get_github_client')
     def test_validate_issue_dry_run_default(self, mock_github_class, mock_repo, mock_token):
         """Test that validate-issue defaults to dry-run True"""
         mock_token.return_value = "fake-token"
