@@ -148,7 +148,7 @@ def handle_validate_issue(args):
     if args.json: print(json.dumps({"status": "success" if total_findings == 0 else "error", "issues": results}, indent=2))
     if total_findings > 0: sys.exit(1)
 
-def handle_conflicts(args):
+def handle_detect_conflicts(args):
     from github import Github
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
@@ -164,6 +164,51 @@ def handle_conflicts(args):
 
     if args.json: print(json.dumps({"status": "success", "conflicts": formatted}, indent=2))
     elif not conflicts: print("✅ No potential merge conflicts detected.")
+
+def handle_conflicts(args):
+    """
+    Squashes commits, attempts auto-resolution of simple conflicts,
+    and updates snapshots.
+    """
+    def run(cmd, exit_on_fail=False):
+        print(f"🏃 Running: {cmd}")
+        res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        if res.returncode != 0:
+            print(f"⚠️ Output/Error:\n{res.stderr.strip() or res.stdout.strip()}")
+            if exit_on_fail:
+                sys.exit(res.returncode)
+        return res.returncode, res.stdout.strip()
+
+    base_branch = getattr(args, 'base', 'main') or 'main'
+
+    # 1. Squash all commits relative to the base branch
+    print("📦 Squashing current branch commits...")
+    run("git fetch origin")
+    code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
+
+    if code == 0 and merge_base:
+        run(f"git reset --soft {merge_base}")
+        run('git commit -m "chore: squashed commits prior to conflict resolution"')
+
+    # 2. Merge base to auto-resolve simple conflicts
+    print(f"🔄 Merging origin/{base_branch}...")
+    merge_code, _ = run(f"git merge origin/{base_branch}")
+
+    if merge_code != 0:
+        print("🚧 Complex conflicts remain. Git has auto-resolved the simple ones.")
+        print("Please resolve the remaining file conflicts manually.")
+        print("⚠️ Skipping snapshot updates until conflict markers are cleared.")
+        return
+
+    # 3. Update snapshots after successful merge
+    print("📸 Updating test snapshots...")
+    run("pnpm test -u")
+
+    # Amend the snapshot updates directly into our squashed commit
+    run("git add -A")
+    run("git commit --amend --no-edit")
+
+    print("✅ Conflict handling and snapshot updates complete!")
 
 def handle_status_board(args):
     from github import Github
@@ -439,6 +484,92 @@ def handle_pre_submit(args):
         else: print(f"❌ Pre-submission checks failed: {e}")
         sys.exit(1)
 
+def handle_repair(args):
+    """Wraps repair.py for AI-assisted CI repair."""
+    import tempfile
+    import shutil
+
+    # Ensure Ollama is running or at least check it
+    try:
+        import urllib.request
+        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
+    except Exception:
+        if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
+
+    logs_source = ""
+    logs_content = ""
+
+    if args.stdin:
+        logs_content = sys.stdin.read()
+        logs_source = "stdin"
+    elif args.logs:
+        if os.path.exists(args.logs):
+            with open(args.logs, 'r') as f:
+                logs_content = f.read()
+            logs_source = args.logs
+        else:
+            raise CLIError(f"Log file not found: {args.logs}")
+    else:
+        if not args.json: print("🔍 No logs provided. Running local triage...")
+        # Run lint and tsc to gather logs
+        res_lint = subprocess.run(["pnpm", "run", "lint:ox"], capture_output=True, text=True)
+        res_tsc = subprocess.run(["pnpm", "run", "type-check"], capture_output=True, text=True)
+        logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
+        logs_source = "local triage"
+
+    if not logs_content.strip():
+        if not args.json: print("✅ No errors found in logs or local triage. Nothing to repair.")
+        return
+
+    worktree_path = None
+    original_cwd = os.getcwd()
+    repair_script = os.path.abspath(os.path.join(os.path.dirname(__file__), "repair.py"))
+
+    try:
+        if args.worktree:
+            branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
+            worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
+            if not args.json: print(f"🏗️  Setting up git worktree at {worktree_path} (branch: {branch_name})...")
+            subprocess.run(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"], check=True, capture_output=True)
+            os.chdir(worktree_path)
+            # We need to make sure node_modules or dependencies are available if we verify
+            # But local repair script runs pnpm. Maybe just symlink node_modules for speed?
+            if os.path.exists(os.path.join(original_cwd, "node_modules")):
+                os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
+
+        # Write logs to a temp file for repair.py
+        with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False) as tmp_log:
+            tmp_log.write(logs_content)
+            tmp_log_path = tmp_log.name
+
+        if not args.json: print(f"🤖 Starting autonomous repair agent using {logs_source}...")
+
+        cmd = [sys.executable, repair_script, tmp_log_path]
+        # Also pass eslint json if available locally? For now let's keep it simple.
+
+        proc = subprocess.run(cmd)
+        os.unlink(tmp_log_path)
+
+        if proc.returncode == 0:
+            if args.json:
+                print(json.dumps({
+                    "status": "success",
+                    "worktree": worktree_path,
+                    "branch": branch_name if args.worktree else None
+                }, indent=2))
+            else:
+                print("✅ Repair process completed.")
+                if worktree_path:
+                    print(f"👉 Inspect your fixed code at: {worktree_path}")
+                    print(f"   Branch: {branch_name}")
+        else:
+            if args.json: print(json.dumps({"status": "error", "code": proc.returncode}, indent=2))
+            else: print(f"❌ Repair process failed with code {proc.returncode}")
+            sys.exit(proc.returncode)
+
+    finally:
+        os.chdir(original_cwd)
+
 def handle_audit_gate(args):
     # Current violations count
     proc_current = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only"], capture_output=True, text=True)
@@ -512,6 +643,73 @@ def handle_repair_context(args):
                     print("-" * 40)
     else:
         raise CLIError("Provide --log or --file")
+def handle_fix_ci(args):
+    from github import Github
+    from clients.jules_api_client import JulesAPIClient
+
+    token = get_github_token()
+    if not token: raise CLIError("GitHub token not found", code=401)
+
+    repo_name = get_repo_name()
+    g = Github(token)
+    repo = g.get_repo(repo_name)
+
+    # 1. Resolve PR and Branch
+    pr = None
+    if args.pr_number:
+        pr = repo.get_pull(int(args.pr_number))
+        branch = pr.head.ref
+    elif args.branch:
+        branch = args.branch
+        pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
+        pr = pulls[0] if pulls else None
+    else:
+        # Local dev fallback: detect current branch
+        try:
+            branch = subprocess.check_output(['git', 'branch', '--show-current'], text=True).strip()
+            if not branch: raise Exception("No current branch detected")
+            if not args.json: print(f"ℹ️  Detected current branch: `{branch}`")
+            pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))
+            pr = pulls[0] if pulls else None
+        except Exception as e:
+            raise CLIError(f"Could not resolve branch or PR: {e}. Provide --pr-number or --branch.")
+
+    # 2. Get API Credentials
+    api_key = args.api_key or os.environ.get("JULES_API_KEY")
+    if not api_key: raise CLIError("JULES_API_KEY missing (provide via --api-key or environment variable)")
+
+    client = JulesAPIClient(api_key)
+
+    source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
+    if not source_id:
+        if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
+        source_id = client.discover_source_id(repo.full_name)
+
+    if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed")
+
+    # 3. Call Jules API
+    if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
+
+    session_name = "dry-run-session"
+    if not args.dry_run:
+        prompt = "Analyze the failing CI logs and fix the errors. Prioritize adherence to RepoAuditor Anti-Slop directives."
+        response = client.create_session(source_id, branch, prompt)
+        if response:
+            session_name = response.get("name")
+        else:
+            raise CLIError("Jules API session creation failed")
+    elif not args.json:
+        print(f"[DRY-RUN] Would create session with source sources/{source_id}")
+
+    # 4. Feedback
+    feedback = f"🤖 **Jules is on it!**\n\nInitialized an autonomous repair session (`{session_name}`) for branch `{branch}`."
+    if pr and not args.dry_run:
+        pr.create_issue_comment(feedback)
+        if not args.json: print(f"✅ Posted feedback to PR #{pr.number}")
+    elif not args.json:
+        print(feedback)
+
+    if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
 
 def handle_manage_reviews(args):
     from github import Github
@@ -552,11 +750,14 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+                      ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
                       ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci)]: # fetch-review is alias for audit-pr --fetch
+                      ("repair", handle_repair)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -564,7 +765,8 @@ def main():
             p.add_argument("--post-comments", action="store_true")
             p.add_argument("--dry-run", action="store_true", default=True)
             p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd == "conflicts": p.add_argument("--pr", type=int)
+        elif cmd == "conflicts": p.add_argument("--base")
+        elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")
             p.add_argument("--update", action="store_true")
@@ -588,6 +790,16 @@ def main():
         elif cmd == "repair-context":
             p.add_argument("--log", help="Raw log line")
             p.add_argument("--file", help="Path to log file")
+        elif cmd == "fix-ci":
+            p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
+            p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")
+            p.add_argument("--api-key", help="Jules API Key (falls back to JULES_API_KEY env var)")
+            p.add_argument("--dry-run", action="store_true", default=True)
+            p.add_argument("--execute", action="store_false", dest="dry_run")
+        elif cmd == "repair":
+            p.add_argument("--logs", help="Path to CI logs file")
+            p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
+            p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
         p.set_defaults(func=func)
 
     args = parser.parse_args()
