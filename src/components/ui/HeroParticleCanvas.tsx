@@ -16,6 +16,7 @@ interface HeroParticleCanvasProps {
   alphaMin?: number;
   alphaMax?: number;
   hues?: number[];
+  seeds?: typeof HERO_CONFIG.SEEDS;
 }
 
 export function HeroParticleCanvas({
@@ -26,6 +27,7 @@ export function HeroParticleCanvas({
   alphaMin = HERO_CONFIG.PARTICLE_ALPHA_MIN,
   alphaMax = HERO_CONFIG.PARTICLE_ALPHA_MAX,
   hues = HERO_CONFIG.PARTICLE_HUES,
+  seeds = HERO_CONFIG.SEEDS,
 }: HeroParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>();
@@ -45,12 +47,12 @@ export function HeroParticleCanvas({
 
     // Build particles deterministically for visual regression testing
     const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => ({
-      x: ((i * 777.7) % 1) * width,
-      y: ((i * 333.3) % 1) * height,
-      r: ((i * 123.4) % 1) * (radiusMax - radiusMin) + radiusMin,
-      vx: (((i * 555.5) % 1) - 0.5) * velocityFactor,
-      vy: (((i * 999.9) % 1) - 0.5) * velocityFactor,
-      alpha: ((i * 444.4) % 1) * (alphaMax - alphaMin) + alphaMin,
+      x: ((i * seeds.PARTICLE_X) % 1) * width,
+      y: ((i * seeds.PARTICLE_Y) % 1) * height,
+      r: ((i * seeds.PARTICLE_R) % 1) * (radiusMax - radiusMin) + radiusMin,
+      vx: (((i * seeds.PARTICLE_VX) % 1) - 0.5) * velocityFactor,
+      vy: (((i * seeds.PARTICLE_VY) % 1) - 0.5) * velocityFactor,
+      alpha: ((i * seeds.PARTICLE_ALPHA) % 1) * (alphaMax - alphaMin) + alphaMin,
       hue: i % 2 === 0 ? hues[0] : hues[1],
     }));
 
@@ -77,7 +79,7 @@ export function HeroParticleCanvas({
     return () => {
       cancelAnimationFrame(rafId);
     };
-  }, [width, height, particleCount, radiusMin, radiusMax, velocityFactor, alphaMin, alphaMax, hues]);
+  }, [width, height, particleCount, radiusMin, radiusMax, velocityFactor, alphaMin, alphaMax, hues, seeds]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 z-0">

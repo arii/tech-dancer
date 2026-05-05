@@ -9,4 +9,16 @@ export const HERO_CONFIG = {
   BAR_COUNT: 48,
   MOBILE_PY: 6,
   DESKTOP_PY: 12,
+  // Deterministic seeds for stable animations
+  SEEDS: {
+    BAR_HEIGHT: 137.5,
+    BAR_DUR: 222.2,
+    BAR_DELAY: 333.3,
+    PARTICLE_X: 777.7,
+    PARTICLE_Y: 333.3,
+    PARTICLE_R: 123.4,
+    PARTICLE_VX: 555.5,
+    PARTICLE_VY: 999.9,
+    PARTICLE_ALPHA: 444.4,
+  }
 };
