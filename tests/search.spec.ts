@@ -28,7 +28,7 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    await page.goto('./gear');
+    await page.goto('gear');
     await page.waitForLoadState('networkidle');
 
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
@@ -77,7 +77,7 @@ test.describe('Search and Filter URL Persistence', () => {
   });
 
   test('Blog category filter should persist after reload', async ({ page }) => {
-    await page.goto('./blog');
+    await page.goto('blog');
     await page.waitForLoadState('networkidle');
 
     const categoryButton = page.getByRole('button', { name: 'Tech Portfolio', exact: true }).or(page.getByRole('button', { name: 'Tech Portfolio' }).first());
@@ -94,7 +94,7 @@ test.describe('Search and Filter URL Persistence', () => {
   });
 
   test('Blog search term should persist after reload', async ({ page }) => {
-    await page.goto('./blog');
+    await page.goto('blog');
     await page.waitForLoadState('networkidle');
 
     const searchInput = page.getByPlaceholder(/Search posts/i);
@@ -111,7 +111,7 @@ test.describe('Search and Filter URL Persistence', () => {
   });
 
   test('Gear search term should persist after reload', async ({ page }) => {
-    await page.goto('./gear');
+    await page.goto('gear');
     await page.waitForLoadState('networkidle');
 
     const searchInput = page.getByPlaceholder(/Search gear/i);

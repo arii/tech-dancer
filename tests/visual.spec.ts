@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 
 const routes = [
   { name: 'home', path: './' },
-  { name: 'blog', path: './blog' },
-  { name: 'gear', path: './gear' },
-  { name: 'research', path: './research' },
-  { name: 'about', path: './about' },
-  { name: 'contact', path: './contact' }
+  { name: 'blog', path: 'blog' },
+  { name: 'gear', path: 'gear' },
+  { name: 'research', path: 'research' },
+  { name: 'about', path: 'about' },
+  { name: 'contact', path: 'contact' }
 ];
 
 test.describe('Visual Regression Tests', () => {
@@ -22,8 +22,11 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
 
-      // Ensure the main content is loaded instead of using a manual timeout
-      await expect(page.locator('#root')).toBeVisible();
+      // Ensure the main content is loaded and visible
+      // We wait for both #root to be visible and for the main element to be present
+      // to ensure hydration has finished and initial animations (opacity) have progressed.
+      await expect(page.locator('#root')).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
 
       // Robust scroll to bottom to trigger all lazy-loaded content
       await page.evaluate(async () => {
