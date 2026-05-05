@@ -101,16 +101,25 @@ def extract_failing_info(logs):
         findings.append({"file": file_path, "line": line, "message": f"{code}: {msg}", "type": "typescript"})
 
     # Vitest Errors (Basic)
-    vitest_matches = re.finditer(r"FAIL\s+(.*?)\n.*?❯ (.*?)\n\n(.*?)\n", logs, re.DOTALL)
+    vitest_matches = re.finditer(r"FAIL\s+(.*?)\n.*?❯ (.*?):(\d+):(\d+)", logs)
     for m in vitest_matches:
-        findings.append({"file": m.group(1).strip(), "message": f"Test Failure: {m.group(2).strip()}\n{m.group(3).strip()}", "type": "vitest"})
+        findings.append({
+            "file": m.group(2),
+            "line": m.group(3),
+            "message": f"Test Failure in {m.group(1)}",
+            "type": "vitest"
+        })
 
     return findings
 
-def construct_prompt(file_path, file_content, error_msg, context=""):
+def construct_prompt(file_path, file_content, error_msg, context="", attempt=0):
+    retry_msg = ""
+    if attempt > 0:
+        retry_msg = f"\nATTENTION: This is attempt {attempt + 1}. Previous attempts failed to resolve the issue. Please re-examine carefully.\n"
+
     return f"""
 You are an expert software engineer. Fix the following error in {file_path}.
-
+{retry_msg}
 ERROR:
 {error_msg}
 
@@ -161,14 +170,19 @@ def agent_loop(file_path, initial_errors):
         imports = extract_imports(content)
         base_dir = os.path.dirname(file_path)
         for imp in imports:
+            target = ""
             if imp.startswith('.'):
                 target = os.path.normpath(os.path.join(base_dir, imp))
+            elif imp.startswith('@/'):
+                target = os.path.normpath(os.path.join('src', imp[2:]))
+
+            if target:
                 for ext in ['.ts', '.tsx', '.js', '.jsx']:
                     if os.path.exists(target + ext):
                         context_str += get_file_context(target + ext, seen_files_context)
                         break
 
-        prompt = construct_prompt(file_path, content, "\n".join(current_errors), context_str)
+        prompt = construct_prompt(file_path, content, "\n".join(current_errors), context_str, attempt=attempt)
         repaired_content = get_ollama_response(prompt)
 
         if not repaired_content:
