@@ -22,8 +22,9 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
 
-      // Ensure the main content is loaded instead of using a manual timeout
-      await expect(page.locator('#root')).toBeVisible();
+      // Ensure the main content is loaded and visible
+      // Relying solely on the main element ensures hydration and layout are ready.
+      await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
 
       // Robust scroll to bottom to trigger all lazy-loaded content
       await page.evaluate(async () => {
