@@ -1,0 +1,111 @@
+src/components/navigation/NavigationShell.tsx overlaps in: PR #711 PR #677
+src/features/dashboard/Dashboard.tsx overlaps in: PR #711 PR #680 PR #677 PR #652 PR #647 PR #645
+tests/visual.spec.ts-snapshots/gear-chromium-linux.png overlaps in: PR #747 PR #711 PR #680 PR #677 PR #647
+src/assets/roboticist.jpg overlaps in: PR #722 PR #647
+dev-tools/utils.py overlaps in: PR #748 PR #725
+.github/workflows/deploy.yml overlaps in: PR #739 PR #677
+src/features/lab/Toolbox.tsx overlaps in: PR #677 PR #652
+artifacts/boomtick/blog.html overlaps in: PR #711 PR #677
+src/components/ui/GearCard.tsx overlaps in: PR #680 PR #652 PR #647
+tests/dev-tools/test_td_cli.py overlaps in: PR #748 PR #746 PR #745 PR #739 PR #725
+artifacts/boomtick/public/robots.txt overlaps in: PR #711 PR #677
+src/components/ui/EventCard.tsx overlaps in: PR #711 PR #680 PR #647
+src/components/Navigation.tsx overlaps in: PR #722 PR #711 PR #680 PR #677 PR #652 PR #647
+artifacts/boomtick/src/pages/Blog.tsx overlaps in: PR #711 PR #677
+artifacts/boomtick/src/pages/Research.tsx overlaps in: PR #711 PR #677
+artifacts/boomtick/src/lib/content/gear.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/src/pages/not-found.tsx overlaps in: PR #711 PR #677
+lighthouserc.json overlaps in: PR #746 PR #745
+.github/workflows/ci.yml overlaps in: PR #746 PR #745 PR #739 PR #680
+src/features/journal/BlogFeed.tsx overlaps in: PR #677 PR #652
+src/components/ui/HeroPathCard.tsx overlaps in: PR #711 PR #680 PR #647 PR #645
+package.json overlaps in: PR #652 PR #645
+src/features/lab/useToolbox.ts overlaps in: PR #677 PR #652
+artifacts/boomtick/src/content/contactContent.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/research.html overlaps in: PR #711 PR #677
+src/features/contact/components/FormField.tsx overlaps in: PR #680 PR #647
+src/components/ui/SectionHeader.tsx overlaps in: PR #680 PR #647
+src/components/navigation/MobileHeader.tsx overlaps in: PR #711 PR #652 PR #645
+artifacts/boomtick/src/pages/Contact.tsx overlaps in: PR #711 PR #677
+artifacts/boomtick/src/lib/seo.ts overlaps in: PR #711 PR #677
+dev-tools/repo_utils.py overlaps in: PR #748 PR #745
+artifacts/boomtick/src/hooks/use-toast.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/src/content/blogContent.ts overlaps in: PR #711 PR #677
+tests/visual.spec.ts-snapshots/about-chromium-linux.png overlaps in: PR #747 PR #711 PR #680 PR #677 PR #647
+dev-tools/td_cli.py overlaps in: PR #748 PR #746 PR #725
+artifacts/boomtick/src/content/researchContent.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/package.json overlaps in: PR #711 PR #677
+src/components/ui/ContentCard.tsx overlaps in: PR #680 PR #652 PR #647 PR #645
+src/components/navigation/NavItem.tsx overlaps in: PR #722 PR #711 PR #680 PR #647
+src/features/journal/useBlog.ts overlaps in: PR #677 PR #652
+artifacts/boomtick/src/hooks/use-page-data.ts overlaps in: PR #711 PR #677
+src/styles/design-tokens.ts overlaps in: PR #711 PR #680 PR #647 PR #645
+src/features/contact/components/ContactFormView.tsx overlaps in: PR #680 PR #652 PR #647
+src/config/constants.ts overlaps in: PR #652 PR #647
+artifacts/boomtick/src/pages/Gear.tsx overlaps in: PR #711 PR #677
+src/assets/mad_jam_ari.jpg overlaps in: PR #722 PR #647
+src/main.tsx overlaps in: PR #676 PR #652
+src/components/MobileBottomNav.tsx overlaps in: PR #711 PR #652
+src/assets/glow_bunny.jpg overlaps in: PR #722 PR #647
+tests/search_mobile.spec.ts overlaps in: PR #711 PR #677 PR #647 PR #645
+artifacts/boomtick/src/components/Logo.tsx overlaps in: PR #711 PR #677
+artifacts/boomtick/index.html overlaps in: PR #711 PR #677
+artifacts/boomtick/components.json overlaps in: PR #711 PR #677
+artifacts/boomtick/src/lib/content/about.ts overlaps in: PR #711 PR #677
+src/components/ui/FilterBar.tsx overlaps in: PR #680 PR #652 PR #647
+tests/search.spec.ts overlaps in: PR #711 PR #680 PR #677 PR #647
+artifacts/boomtick/src/lib/content/blog.ts overlaps in: PR #711 PR #677
+tests/visual.spec.ts-snapshots/contact-chromium-linux.png overlaps in: PR #747 PR #711 PR #680 PR #677 PR #647
+src/components/navigation/MobileMenuOverlay.tsx overlaps in: PR #711 PR #652
+artifacts/boomtick/src/lib/content/research.ts overlaps in: PR #711 PR #677
+src/components/ui/FolioGrid.tsx overlaps in: PR #680 PR #652 PR #647
+artifacts/boomtick/about.html overlaps in: PR #711 PR #677
+artifacts/boomtick/public/favicon.svg overlaps in: PR #711 PR #677
+src/features/profile/ArielProfile.tsx overlaps in: PR #722 PR #680 PR #677 PR #652 PR #647
+content/posts/2026-04-18-github-actions.md overlaps in: PR #722 PR #652
+src/layouts/MainLayout.tsx overlaps in: PR #722 PR #711 PR #677 PR #652 PR #645
+artifacts/boomtick/src/main.tsx overlaps in: PR #711 PR #677
+artifacts/boomtick/src/lib/site-jsonld.ts overlaps in: PR #711 PR #677
+src/assets/www_ari.jpg overlaps in: PR #722 PR #647
+src/index.css overlaps in: PR #711 PR #680 PR #677 PR #652 PR #647 PR #645
+artifacts/boomtick/tsconfig.json overlaps in: PR #711 PR #677
+artifacts/boomtick/export.html overlaps in: PR #711 PR #677
+src/assets/first_comp.jpg overlaps in: PR #722 PR #647
+src/layouts/Footer.tsx overlaps in: PR #722 PR #680 PR #652
+src/components/ui/PathSelector.tsx overlaps in: PR #711 PR #647 PR #645
+src/assets/monterey.jpg overlaps in: PR #722 PR #647
+tests/visual.spec.ts-snapshots/research-chromium-linux.png overlaps in: PR #747 PR #711 PR #680 PR #677 PR #647
+artifacts/boomtick/src/lib/content/home.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/src/pages/About.tsx overlaps in: PR #711 PR #677
+artifacts/boomtick/public/humans.txt overlaps in: PR #711 PR #677
+scripts/detect-antipatterns.mjs overlaps in: PR #680 PR #647
+artifacts/boomtick/src/index.css overlaps in: PR #711 PR #677
+artifacts/boomtick/src/content/siteContent.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/public/sitemap.xml overlaps in: PR #711 PR #677
+artifacts/boomtick/src/pages/Home.tsx overlaps in: PR #711 PR #677
+src/components/ui/PageHeader.tsx overlaps in: PR #711 PR #680 PR #652 PR #647
+src/features/profile/components/ProfileComponents.tsx overlaps in: PR #722 PR #680 PR #647
+src/features/dashboard/useHome.ts overlaps in: PR #677 PR #647
+src/App.tsx overlaps in: PR #722 PR #652
+tests/visual.spec.ts-snapshots/blog-chromium-linux.png overlaps in: PR #747 PR #711 PR #680 PR #677 PR #647
+artifacts/boomtick/src/content/gearContent.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/src/App.tsx overlaps in: PR #711 PR #677
+content/posts/2026-04-18-financial-literacy-dancers.md overlaps in: PR #722 PR #647
+artifacts/boomtick/public/opengraph.jpg overlaps in: PR #711 PR #677
+src/features/profile/useProfile.ts overlaps in: PR #722 PR #680 PR #677 PR #652 PR #647
+src/features/research/ResearchAnalytics.tsx overlaps in: PR #677 PR #652 PR #647
+src/components/ui/CardImagePlaceholder.tsx overlaps in: PR #680 PR #652 PR #647
+artifacts/boomtick/src/hooks/use-mobile.tsx overlaps in: PR #711 PR #677
+tests/visual.spec.ts-snapshots/home-chromium-linux.png overlaps in: PR #747 PR #711 PR #680 PR #677 PR #647 PR #645
+src/components/GlobalSearch.tsx overlaps in: PR #680 PR #652 PR #647 PR #645
+index.html overlaps in: PR #722 PR #647
+src/styles/tokens.css overlaps in: PR #711 PR #680 PR #677 PR #652 PR #647 PR #645
+artifacts/boomtick/src/lib/utils.ts overlaps in: PR #711 PR #677
+src/components/ui/Logo.tsx overlaps in: PR #711 PR #680 PR #677 PR #647
+artifacts/boomtick/src/lib/types/navigation.ts overlaps in: PR #711 PR #677
+.github/workflows/validate_issue.yml overlaps in: PR #739 PR #725
+knip.ts overlaps in: PR #747 PR #711 PR #680 PR #647 PR #645
+src/features/email-capture/NewsletterBanner.tsx overlaps in: PR #722 PR #680 PR #652 PR #647
+artifacts/boomtick/src/content/navigationContent.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/vite.config.ts overlaps in: PR #711 PR #677
+artifacts/boomtick/gear.html overlaps in: PR #711 PR #677
