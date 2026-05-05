@@ -48,12 +48,12 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-border-standard/80 bg-surface/60">
           <span
             onClick={() => setSelectedPill('all')}
             className={cn(
               "inline-flex items-center rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-emphasized cursor-pointer",
-              "text-text-dim border-line/50 bg-bg",
+              "text-text-dim border-border-standard/50 bg-bg",
               selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
             )}
           >
@@ -87,7 +87,7 @@ export default function Toolbox() {
           ))}
         </Grid>
       ) : (
-        <Stack gap={0} border="t" className="border-line">
+        <Stack gap={0} border="t" className="border-standard">
           {allFilteredItems.map((item) => (
             <ListRow key={item.slug} {...item} basePath="/gear" />
           ))}

@@ -28,7 +28,7 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
       border="y"
       paddingY={6}
       surface="muted"
-      className="border-line/50 w-full"
+      className="border-border-standard/50 w-full"
     >
       <Box
         display="flex"

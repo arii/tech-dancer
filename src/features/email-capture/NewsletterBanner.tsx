@@ -19,7 +19,7 @@ export function NewsletterBanner() {
       surface="alt"
       opacity={0.9}
       border
-      className="backdrop-blur-xl border-line/50"
+      className="backdrop-blur-xl border-border-standard/50"
       shadow="topOverlay"
       padding="emailBar"
       radius="none"

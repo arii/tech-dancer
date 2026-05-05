@@ -41,7 +41,7 @@ export default function Home() {
         </Box>
 
         {/* Path Selectors Refactored */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={0} border="y" className="border-line">
+        <Grid cols={{ base: 1, lg: 2 }} gap={0} border="y" className="border-standard">
            <Stack
               position="relative"
               minHeight={{ base: 280, sm: 320 }}
@@ -72,7 +72,7 @@ export default function Home() {
               padding={8}
               justify="end"
               border={{ base: "t", lg: "l" }}
-              direction="col" surface="surface" className="group overflow-hidden border-line"
+              direction="col" surface="surface" className="group overflow-hidden border-standard"
               cursor="pointer"
               onClick={() => handleNavigate('/blog?category=Travel')}
             >
@@ -101,7 +101,7 @@ export default function Home() {
             radius="2xl"
             border
             padding={6}
-            className="border-line/80 bg-surface/60"
+            className="border-border-standard/80 bg-surface/60"
             cursor="pointer"
             onClick={() => handleNavigate('/research')}
           >
@@ -151,7 +151,7 @@ export default function Home() {
             ))}
           </Grid>
 
-          <Box paddingY={8} border="y" className="border-line/50">
+          <Box paddingY={8} border="y" className="border-border-standard/50">
              <SectionHeader label="WHERE DANCERS GO" title="Upcoming Events" />
              <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4} marginTop={8}>
               {upcomingEvents.map((event) => (

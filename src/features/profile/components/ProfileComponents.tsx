@@ -29,7 +29,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all">
+          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-border-standard/5 group hover:border-accent/20 transition-all">
             <Box display="flex" gap={8} align="start" direction={{ base: "col", sm: "row" }}>
               {Icon && (
                 <Box 
@@ -70,7 +70,7 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
       {items.map((item, index) => {
         const Icon = item.icon ? IconMap[item.icon] : null;
         return (
-          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-border-standard/5">
             <Stack gap={3}>
               {Icon && <Icon className="w-4 h-4 text-accent" />}
               {item.title && (
@@ -105,7 +105,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             overflow="hidden"
             border
             radius="lg"
-            className="border-line/10 bg-surface/30 group cursor-pointer"
+            className="border-border-standard/10 bg-surface/30 group cursor-pointer"
             onClick={() => setSelectedImage(image.src)}
           >
             <img

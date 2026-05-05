@@ -38,7 +38,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
           </thead>
           <tbody>
             {data.slice(0, 20).map((record, i) => (
-              <tr key={`${record.Dancer_ID}-${record.result_id}-${i}`} className="border-b border-line/50 transition-colors">
+              <tr key={`${record.Dancer_ID}-${record.result_id}-${i}`} className="border-b border-border-standard/50 transition-colors">
                 <Box as="td" padding={4} className="font-mono text-xs text-dim">{record.event_date}</Box>
                 <Box as="td" padding={4}>
                   <Stack gap={0}>

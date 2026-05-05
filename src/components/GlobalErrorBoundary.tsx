@@ -54,7 +54,7 @@ export function GlobalErrorBoundary() {
           surface="sunken"
           width="full"
           border
-          className="text-left border-line/50 overflow-auto max-h-[300px]"
+          className="text-left border-border-standard/50 overflow-auto max-h-[300px]"
         >
           <Text weight="bold" color="error" className="mb-2 block">
             {errorMessage}

@@ -90,7 +90,7 @@ export default function FolioGrid({
             ))}
           </Grid>
         ) : (
-          <Stack gap={0} border="t" className="border-line">
+          <Stack gap={0} border="t" className="border-standard">
             {filteredItems.map((item) => (
               <ListRow key={item.slug} {...item} basePath={basePath} />
             ))}

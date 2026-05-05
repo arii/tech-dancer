@@ -51,7 +51,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 aria-required="true"
                 className={cn(
                   inputs.base,
-                  errors.name ? inputs.error : 'border-line'
+                  errors.name ? inputs.error : 'border-standard'
                 )}
               />
             </FormField>
@@ -64,7 +64,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 aria-required="true"
                 className={cn(
                   inputs.base,
-                  errors.email ? inputs.error : 'border-line'
+                  errors.email ? inputs.error : 'border-standard'
                 )}
               />
             </FormField>
@@ -72,7 +72,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             <FormField label="Subject" error={errors.subject?.message}>
               <Box as="select"
                 {...register('subject')}
-                className={cn(inputs.select, "border-line")}
+                className={cn(inputs.select, "border-standard")}
               >
                 <option value="General Feedback">General Feedback</option>
                 <option value="Content Request">Content Request</option>
@@ -90,7 +90,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 className={cn(
                   inputs.base,
                   "resize-none",
-                  errors.message ? inputs.error : 'border-line'
+                  errors.message ? inputs.error : 'border-standard'
                 )}
               />
             </FormField>

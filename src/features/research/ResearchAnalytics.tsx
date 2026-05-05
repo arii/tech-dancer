@@ -118,7 +118,7 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box padding={12} border radius="2xl" shadow="xl" position="relative" overflow="hidden" className="border-dashed border-line/80 bg-surface/40 text-center">
+            <Box padding={12} border radius="2xl" shadow="xl" position="relative" overflow="hidden" className="border-dashed border-border-standard/80 bg-surface/40 text-center">
                <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="accent" opacity={0.03} radius="full" className="blur-3xl" />
                <Stack align="center" justify="center" gap={4}>
                   <Box color="dim" opacity={0.5}>

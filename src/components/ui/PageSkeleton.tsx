@@ -52,7 +52,7 @@ function SimpleSkeleton() {
   const { opacity } = motionTokens.skeleton;
   return (
     <Stack gap={12} width="full" className={opacity}>
-      <Box paddingBottom={10} border="b" className="border-line/30">
+      <Box paddingBottom={10} border="b" className="border-border-standard/30">
         <Stack gap={4}>
           <Skeleton height={4} width={24} />
           <Skeleton height={10} width="1/2" />

@@ -45,7 +45,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       }
     >
       {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+        <Box border="t" paddingTop={12} marginTop={12} className="border-border-standard/30">
           <Stack gap={4}>
             <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Discovery Tags</Text>
             <Stack direction="row" wrap gap={2}>

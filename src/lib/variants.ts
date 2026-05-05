@@ -10,7 +10,7 @@ export const variants = {
     muted: "bg-line/50 text-text-dim",
     accent: "bg-accent/5 border-accent/20 text-accent",
     alt: "bg-surface-alt text-text-main",
-    card: "bg-card-bg border-line",
+    card: "bg-card-bg border-standard",
     contrast: "bg-text-main text-bg",
     success: "bg-accent/5 border-accent/20 text-accent",
     warning: "bg-accent-purple/5 border-accent-purple/20 text-accent-purple",

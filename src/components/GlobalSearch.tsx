@@ -139,7 +139,7 @@ export function GlobalSearch() {
               radius="sm"
               cursor="pointer"
               border
-              className="group hover:bg-accent/10 transition-colors border-line/50"
+              className="group hover:bg-accent/10 transition-colors border-border-standard/50"
             >
               <X className="w-4 h-4 text-text-dim interactive-accent" />
             </Box>
