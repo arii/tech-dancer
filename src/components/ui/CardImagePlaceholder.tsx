@@ -19,7 +19,7 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
   else if (norm.includes('lifestyle')) surfaceVariant = 'danger';
 
   return (
-    <Box shrink={false} aspect="video" maxHeight="cardImage" width="full" className="relative overflow-hidden border-b border-line bg-bg">
+    <Box shrink={false} aspect="video" maxHeight="cardImage" width="full" border="b" position="relative" overflow="hidden" className="bg-bg">
       {image ? (
         <img
           src={image}
@@ -36,8 +36,8 @@ export function CardImagePlaceholder({ image, category, title }: CardImagePlaceh
           </Box>
         </Stack>
       )}
-      <Box className="absolute top-4 left-4">
-        <Box className="flex items-center gap-2 px-3 py-1 bg-surface/95 backdrop-blur-md border border-line rounded-sm shadow-sm">
+      <Box position="absolute" className="top-4 left-4">
+        <Box border display="flex" align="center" gap={2} paddingX={3} paddingY={1} radius="sm" shadow="sm" className="bg-surface/95 backdrop-blur-md">
           {(() => {
             const icon = getCategoryIcon(category);
             return React.createElement(icon, { className: "w-3.5 h-3.5 text-accent", strokeWidth: 2.5 });

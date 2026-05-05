@@ -11,10 +11,9 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  actions: read
+  actions: write
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   repair:
@@ -66,7 +65,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies (Safe)
@@ -139,6 +138,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${GH_TOKEN}" | base64)"
 
             NEW_BRANCH="ai-repair-$RUN_ID"
             if [ "$EVENT_NAME" == "issue_comment" ]; then
@@ -148,7 +148,8 @@ jobs:
             git checkout -b "$NEW_BRANCH"
             git add .
             git commit -m "🤖 AI-generated fix for CI failures"
-            git push origin "$NEW_BRANCH" --force
+            echo "::add-mask::${GH_TOKEN}"
+            git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
 
             PR_MSG="Automated repair attempt for failed run $WORKFLOW_RUN_ID"
             if [ "${{ steps.verify.outputs.success }}" == "success" ]; then
