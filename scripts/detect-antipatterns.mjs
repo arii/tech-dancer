@@ -273,12 +273,15 @@ function checkFile(filepath) {
 function checkPRScope() {
   try {
     const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
+    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8", stdio: ['inherit', 'pipe', 'pipe'] }).trim();
     if (output) {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
-  } catch {
-    // Python or script might not be available
+  } catch (error) {
+    if (error.stderr && error.stderr.trim()) {
+      console.error(`\x1b[31m❌ Error running scope check:\x1b[0m\n${error.stderr}`);
+    }
+    // Don't exit here as scope check is usually a non-blocking warning
   }
 }
 

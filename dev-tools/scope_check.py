@@ -2,6 +2,10 @@ import json
 import os
 import sys
 import subprocess
+from typing import List, Optional
+
+# Import run_command from utils
+from utils import run_command
 
 def get_project_config():
     config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
@@ -18,13 +22,16 @@ def get_changed_files():
     """Returns the list of files changed in the current branch."""
     config = get_project_config()
     base = config.get("base_branch", "origin/main")
-    try:
-        return subprocess.check_output(["git", "diff", "--name-only", base], text=True).splitlines()
-    except subprocess.CalledProcessError:
-        try:
-            return subprocess.check_output(["git", "diff", "--name-only", "HEAD"], text=True).splitlines()
-        except:
-            return []
+    # Using check=False to manually handle fallback
+    res = run_command(["git", "diff", "--name-only", base], check=False, log_on_error=False)
+    if res.returncode == 0:
+        return res.stdout.strip().splitlines()
+
+    res = run_command(["git", "diff", "--name-only", "HEAD"], check=False, log_on_error=False)
+    if res.returncode == 0:
+        return res.stdout.strip().splitlines()
+
+    return []
 
 def verify_pr_scope(file_list=None):
     """Checks if a PR touches too many core layout/component files."""

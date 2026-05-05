@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 import json
-from typing import Optional
+from typing import Optional, Union, List
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):
@@ -27,13 +27,45 @@ def get_github_token() -> Optional[str]:
     except (subprocess.CalledProcessError, FileNotFoundError):
         return None
 
+def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True) -> Union[str, subprocess.CompletedProcess]:
+    """
+    Runs a command, captures stdout/stderr, and handles errors with granular logging.
+    If check=True, returns stdout as string.
+    If check=False, returns the full CompletedProcess object.
+    """
+    try:
+        proc = subprocess.run(
+            cmd,
+            shell=shell,
+            input=input_str,
+            capture_output=True,
+            text=True,
+            check=check
+        )
+        return proc.stdout.strip() if check else proc
+    except subprocess.CalledProcessError as e:
+        if log_on_error:
+            print(f"❌ Command failed (exit {e.returncode}): {e.cmd}", file=sys.stderr)
+            if e.stdout:
+                print(f"--- stdout ---\n{e.stdout.strip()}", file=sys.stderr)
+            if e.stderr:
+                print(f"--- stderr ---\n{e.stderr.strip()}", file=sys.stderr)
+
+        if check:
+            raise CLIError(f"Command failed with exit code {e.returncode}", code=e.returncode)
+        # Should not be reachable because subprocess.run with check=False doesn't raise CalledProcessError
+        return subprocess.CompletedProcess(e.cmd, e.returncode, e.stdout, e.stderr)
+
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""
     try:
-        url = subprocess.check_output(
-            ['git', 'config', '--get', 'remote.origin.url'],
-            stderr=subprocess.DEVNULL, text=True
-        ).strip()
+        # Using run_command here with check=False to avoid noisy logs for a common discovery step
+        res = run_command(['git', 'config', '--get', 'remote.origin.url'], check=False, log_on_error=False)
+        if res.returncode != 0:
+            return os.getenv("GH_REPO")
+        url = res.stdout.strip()
+        if not url:
+            return os.getenv("GH_REPO")
         import re
         match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
         return match.group(1) if match else url
