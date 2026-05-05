@@ -80,9 +80,7 @@ export default function FolioGrid({
               <Box
                 key={item.slug}
                 padding={4}
-                radius="lg"
-                border
-                className="bg-bg/40 backdrop-blur-sm"
+                className="bg-transparent"
               >
                 <ContentCard
                   {...item}

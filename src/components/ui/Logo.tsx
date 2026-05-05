@@ -21,12 +21,11 @@ export function Logo({ className }: LogoProps) {
       <title id={titleId}>BoomTick Logo</title>
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#00CFFF" />
+          <stop offset="0%" stopColor="#0891B2" />
           <stop offset="100%" stopColor="#8B2FFF" />
         </linearGradient>
       </defs>
 
-      <rect width="340" height="110" rx="18" fill="#0D0E1C" />
 
       <text
         x="16"
@@ -34,7 +33,7 @@ export function Logo({ className }: LogoProps) {
         fontFamily="Arial Black, Arial, sans-serif"
         fontWeight="900"
         fontSize="60"
-        fill="white"
+        fill="#f1f5f9"
       >
         B
       </text>
@@ -55,11 +54,11 @@ export function Logo({ className }: LogoProps) {
         fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
         fontWeight="700"
         fontSize="33"
-        fill="white"
+        fill="#f1f5f9"
         letterSpacing="-0.5"
       >
-        <tspan fill="white">boom</tspan>
-        <tspan fill="#00CFFF">tick</tspan>
+        <tspan fill="#f1f5f9">boom</tspan>
+        <tspan fill="#0891B2">tick</tspan>
       </text>
     </svg>
   );

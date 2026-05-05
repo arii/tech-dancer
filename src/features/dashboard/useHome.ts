@@ -33,11 +33,10 @@ export function useHome() {
 
   return { 
     recentPosts, 
-    upcomingEvents: upcomingEvents.map(event => ({ // Map to original structure
+    upcomingEvents: upcomingEvents.map(event => ({
       name: event.title,
-      date: event.location,
-      status: event.schedule,
-      icon: MapPin, // Default icon, can be dynamic based on event data
+      location: event.location,
+      schedule: event.schedule,
     })),
     dancerPaths,
     hirePaths,

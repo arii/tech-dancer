@@ -51,31 +51,44 @@ export default function ArielProfile() {
         description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
       />
       
-      <PageHeader
-        label="BIOGRAPHY"
-        title={bio.name}
-        description={bio.role}
-        titleSize="fluid-7"
-      />
+      <Stack gap={8} width="full">
+        <PageHeader
+          label="BIOGRAPHY"
+          title={bio.name}
+          description={bio.role}
+          titleSize="fluid-7"
+        />
+        
+        {/* Featured Portrait for immediate personal branding */}
+      </Stack>
 
-      <Stack gap={12} marginTop={8}>
+      <Stack gap={12} marginTop={8} paddingTop={{ base: 4, lg: 20 }}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             <Stack gap={16} className="lg:col-span-8">
+              <Box display={{ base: 'block', lg: 'none' }} marginBottom={8} maxWidth="md" marginX="auto" paddingX={4}>
+                <Box border radius="lg" overflow="hidden" className="aspect-[16/9] bg-surface-alt shadow-inner">
+                  <img
+                    src={roboticistPhoto}
+                    alt="Ariel Anders in a professional robotics environment"
+                    className="w-full h-full object-cover object-[center_20%]"
+                  />
+                </Box>
+              </Box>
               {bio.sections.map(renderSection)}
             </Stack>
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
-                <Box border radius="xl" overflow="hidden" className="border-line/10 bg-surface/30">
+                <Box border radius="lg" overflow="hidden" display={{ base: 'none', lg: 'block' }} className="border-line/20 bg-surface shadow-2xl">
                   <img
                     src={roboticistPhoto}
-                    alt="Portrait of Ariel Anders"
+                    alt="Portrait of Ariel Anders, PhD"
                     loading="lazy"
-                    className="w-full h-auto object-cover aspect-square"
+                    className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
                   />
                 </Box>
-                <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
+                <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
                     <Stack gap={4}>
@@ -89,7 +102,7 @@ export default function ArielProfile() {
                   </Stack>
                 </Box>
 
-                <Box padding={8} border radius="xl" className="bg-surface/20 border-line/5">
+                <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                     <ProfileLinks links={bio.links} />

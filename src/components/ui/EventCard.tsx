@@ -1,28 +1,37 @@
-import { Box, Text } from '@/layouts/Primitives';
+import { MapPin } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface EventCardProps {
   name: string;
   location: string;
-  date: string;
+  schedule: string;
 }
 
-export function EventCard({ name, location, date }: EventCardProps) {
+export function EventCard({ name, location, schedule }: EventCardProps) {
   return (
-    <Box
-      padding={6}
-      radius="lg"
+    <Stack
+      padding={8}
+      radius="md"
       border
-      className="bg-surface-alt"
+      gap={4}
+      height="full"
+      className="bg-surface hover:border-accent/40 transition-all duration-300"
     >
-      <Text as="h4" weight="font-bold" display="block" marginBottom={2}>
-        {name}
-      </Text>
-      <Text size="sm" color="dim" display="block">
-        {location}
-      </Text>
-      <Text size="sm" display="block" marginTop={1} className="text-accent-purple">
-        {date}
-      </Text>
-    </Box>
+      <Box display="flex" align="center" gap={2}>
+        <MapPin className="w-4 h-4 text-accent" />
+        <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
+          {schedule}
+        </Text>
+      </Box>
+
+      <Stack gap={1}>
+        <Text as="h4" variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
+          {name}
+        </Text>
+        <Text size="sm" color="dim">
+          {location}
+        </Text>
+      </Stack>
+    </Stack>
   );
 }

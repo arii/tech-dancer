@@ -104,8 +104,8 @@
   .glass-panel {
     @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
   }
-  .industrial-gradient { background: linear-gradient(135deg, #070b14 0%, #0a0c18 100%); }
-  .text-glow { text-shadow: 0 0 20px rgba(0, 207, 255, 0.4); }
+  .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
+  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {

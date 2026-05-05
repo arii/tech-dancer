@@ -40,10 +40,10 @@ export function GearCard({
       direction="col"
       gap={3}
       height="full"
-      padding={4}
+      padding={6}
       radius="lg"
       border
-      className="group bg-bg/40 backdrop-blur-sm transition-all duration-300"
+      className="group bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30"
     >
       <Box display="flex" align="center" justify="between">
         <Box

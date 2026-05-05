@@ -20,7 +20,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
             'p-2 transition-colors cursor-pointer',
             v === 'card' ? 'border-r border-line' : '',
             view === v 
-              ? 'bg-accent-navy text-white shadow-inner' 
+              ? 'bg-accent-navy text-bg shadow-inner' 
               : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface transition-colors'
           )}
           aria-label={v === 'card' ? 'Card view' : 'List view'}

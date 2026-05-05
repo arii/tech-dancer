@@ -23,8 +23,8 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
 
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#00CFFF" />
-          <stop offset="100%" stopColor="#8B2FFF" />
+          <stop offset="0%" stopColor="#0891B2" />
+          <stop offset="100%" stopColor="#8B5CF6" />
         </linearGradient>
       </defs>
 
@@ -34,7 +34,7 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
         fontFamily="Arial Black, Arial, sans-serif"
         fontSize="40"
         fontWeight="900"
-        fill="white"
+        fill="#f1f5f9"
       >
         B
       </text>

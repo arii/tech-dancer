@@ -42,7 +42,10 @@ export function ContentCard({
       direction="col"
       gap={4}
       height="full"
-      className="group"
+      padding={6}
+      radius="lg"
+      border
+      className="group bg-surface hover:border-accent/40 transition-all duration-300"
       {...cleanMotionProps}
     >
       <Text

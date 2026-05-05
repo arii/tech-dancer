@@ -1,19 +1,19 @@
 :root {
-  /* Colors - High-Tech Dark Theme */
-  --raw-color-bg: #070b14;
-  --raw-color-surface: #0e1322;
-  --raw-color-surface-alt: #0a0c18;
-  --raw-color-line: #20283a;
-  --raw-color-accent: #00cfff;
-  --raw-color-accent-purple: #8b2fff;
-  --raw-color-accent-magenta: #ff00c8;
-  --raw-color-accent-shadow: rgba(0, 207, 255, 0.3);
-  --raw-color-accent-navy: #f5f7fb;
-  --raw-color-accent-brand: #00cfff;
-  --raw-color-text-main: #f5f7fb;
-  --raw-color-text-body: #f5f7fb;
-  --raw-color-text-dim: #9aa4b2;
-  --raw-color-error: #ff4d4d;
+  /* Colors - High-Tech Dark Theme Refined */
+  --raw-color-bg: #020617;
+  --raw-color-surface: #0f172a;
+  --raw-color-surface-alt: #1e293b;
+  --raw-color-line: #334155;
+  --raw-color-accent: #0891b2; /* Cyan 600 for better WCAG contrast */
+  --raw-color-accent-purple: #8b5cf6;
+  --raw-color-accent-magenta: #d946ef;
+  --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
+  --raw-color-accent-navy: #f1f5f9;
+  --raw-color-accent-brand: #0891b2;
+  --raw-color-text-main: #f1f5f9;
+  --raw-color-text-body: #e2e8f0;
+  --raw-color-text-dim: #94a3b8;
+  --raw-color-error: #ef4444;
   --raw-color-error-bg: #1a0a0a;
 
   /* Typography */

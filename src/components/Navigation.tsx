@@ -84,10 +84,11 @@ export default function Navigation() {
             as={NavLink}
             to="/"
             display="block"
-            padding={4}
+            paddingX={4}
+            paddingY={6}
             className="group border-b border-line"
           >
-            <Logo className="h-14 transition-opacity group-hover:opacity-80" />
+            <Logo className="h-16 w-full transition-opacity group-hover:opacity-80" />
           </Box>
 
           <Stack as="ul" gap={0} flex={1} paddingY={4}>

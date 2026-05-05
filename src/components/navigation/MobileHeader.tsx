@@ -20,7 +20,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       className="transition-[backdrop-filter] duration-300 bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center">
-        <Logo className="h-6" />
+        <Logo className="h-9" />
       </Box>
       <Box
         as={motion.create("button")}

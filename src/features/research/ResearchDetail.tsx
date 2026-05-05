@@ -107,14 +107,14 @@ export default function ResearchDetail() {
           align="center" 
           gap={2}
           color="dim"
-          className="hover:text-accent transition-colors"
+          className="hover:text-accent transition-all group"
           cursor="pointer"
         >
-          <ArrowLeft size={16} />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim">Back to Lab</Text>
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Lab</Text>
         </Box>
 
-        <Box border surface="default" padding={{ base: 8, md: 12 }} className="rounded-none">
+        <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
           <Stack gap={12}>
             {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
               (() => {
@@ -130,22 +130,22 @@ export default function ResearchDetail() {
                     <Text as="h1" variant="headline" size="fluid-5" weight="font-black" leading="tight" tracking="tight">
                       {tool.name}
                     </Text>
-                  <Box border surface="accent" padding="compact">
-                    <Text variant="body" size="lg" color="body">{tool.layman}</Text>
+                  <Box border radius="md" surface="default" padding="compact">
+                    <Text variant="body" size="lg" color="dim">{tool.layman}</Text>
                   </Box>
                 </Stack>
 
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
-                    <Box border padding="compact" display="flex" align="center" gap={3}>
+                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
                       <Activity className="w-4 h-4 text-accent" />
                       <StatusBadge label={tool.status} />
                     </Box>
                   </Stack>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
-                    <Box border padding="compact" display="flex" align="center" gap={3}>
+                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
                       <Database className="w-4 h-4 text-accent" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
                     </Box>
@@ -153,7 +153,7 @@ export default function ResearchDetail() {
                 </Grid>
 
                 {tool.status === 'Coming Soon' && (
-                  <Box border surface="accent" padding="card" className="bg-accent/5 border-dashed">
+                  <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>

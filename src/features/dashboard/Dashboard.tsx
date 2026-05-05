@@ -157,16 +157,11 @@ export default function Home() {
              <SectionHeader label="WHERE DANCERS GO" title="Upcoming Events" />
              <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4} marginTop={8}>
               {upcomingEvents.map((event) => (
-                <Box
-                  key={event.name}
-                  as={motion.div}
+                <EventCard 
+                  key={event.name} 
+                  {...event} 
                   variants={motionTokens.staggerItem}
-                  border
-                  height="full"
-                  className="border-line"
-                >
-                  <EventCard {...event} />
-                </Box>
+                />
               ))}
             </Grid>
           </Box>
