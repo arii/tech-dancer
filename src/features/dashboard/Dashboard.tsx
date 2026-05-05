@@ -34,9 +34,9 @@ export default function Home() {
       </section>
       <section className="px-4 sm:px-6 md:px-10 pb-16">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }} className="relative grid grid-cols-1 overflow-hidden rounded-2xl border border-border/80 min-h-[280px] lg:grid-cols-2">
-          <div className="relative min-h-[220px] overflow-hidden bg-[#0a0718] p-5 sm:min-h-[260px] sm:p-8 flex flex-col justify-end group">
+          <div className="relative min-h-[220px] overflow-hidden bg-background p-5 sm:min-h-[260px] sm:p-8 flex flex-col justify-end group">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-secondary/25 to-transparent" />
-            <div className="absolute inset-0 bg-[#05040d]/60" />
+            <div className="absolute inset-0 bg-background/60" />
             <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 overflow-hidden opacity-10 pointer-events-none"><Equalizer compact /></div>
             <div className="relative z-10">
               <h2 className="mb-3 text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Train smarter.</h2>
@@ -48,9 +48,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="relative min-h-[220px] overflow-hidden border-t border-border bg-[#0c0a1e] p-5 sm:min-h-[260px] sm:p-8 flex flex-col justify-end group lg:border-t-0 lg:border-l">
+          <div className="relative min-h-[220px] overflow-hidden border-t border-border bg-background p-5 sm:min-h-[260px] sm:p-8 flex flex-col justify-end group lg:border-t-0 lg:border-l">
             <div className="absolute inset-0 bg-gradient-to-bl from-secondary/40 via-accent/25 to-transparent" />
-            <div className="absolute inset-0 bg-[#070616]/60" />
+            <div className="absolute inset-0 bg-background/60" />
             <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 overflow-hidden opacity-10 pointer-events-none"><Equalizer compact reverse /></div>
             <div className="relative z-10">
               <h2 className="mb-3 text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">Travel better.</h2>
