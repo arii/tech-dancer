@@ -4,7 +4,6 @@ import { Mail, X } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
 import { motion } from 'motion/react';
 import { useEmailStore } from './emailStore';
-import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {
   const hideBar = useEmailStore((state) => state.hideBar);
