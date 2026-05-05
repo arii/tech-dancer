@@ -536,35 +536,10 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
-def discover_source_id(api_key, repo_full_name):
-    """Automatically discover the JULES_SOURCE_ID for the given repository."""
-    import urllib.request
-    url = "https://jules.googleapis.com/v1alpha/sources"
-    headers = {"x-goog-api-key": api_key}
-
-    req = urllib.request.Request(url, headers=headers)
-    try:
-        with urllib.request.urlopen(req) as res:
-            data = json.loads(res.read().decode())
-            sources = data.get("sources", [])
-            for s in sources:
-                # Expecting source name like "sources/SOURCE_ID" and display name or description containing repo
-                # Alternatively, check githubRepoContext if available in ListSources response
-                # Based on the spec payload: sources/${{ secrets.JULES_SOURCE_ID }}
-                # We'll look for a source that matches our repo context.
-                ctx = s.get("githubRepoContext", {})
-                if ctx.get("repo") == repo_full_name:
-                    return s.get("name").replace("sources/", "")
-
-                # Fallback: check if the display name contains the repo name
-                if repo_full_name in s.get("displayName", ""):
-                    return s.get("name").replace("sources/", "")
-    except Exception as e:
-        print(f"⚠️  Source discovery failed: {e}")
-    return None
-
 def handle_fix_ci(args):
     from github import Github
+    from clients.jules_api_client import JulesAPIClient
+
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
 
@@ -596,40 +571,28 @@ def handle_fix_ci(args):
     api_key = args.api_key or os.environ.get("JULES_API_KEY")
     if not api_key: raise CLIError("JULES_API_KEY missing (provide via --api-key or environment variable)")
 
+    client = JulesAPIClient(api_key)
+
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
         if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
-        source_id = discover_source_id(api_key, repo.full_name)
+        source_id = client.discover_source_id(repo.full_name)
 
     if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed")
 
     # 3. Call Jules API
-    import urllib.request
-    url = "https://jules.googleapis.com/v1alpha/sessions"
-    payload = {
-        "prompt": "Analyze the failing CI logs and fix the errors. Prioritize adherence to RepoAuditor Anti-Slop directives.",
-        "sourceContext": {
-            "source": f"sources/{source_id}",
-            "githubRepoContext": { "branch": branch }
-        },
-        "automationMode": "FULLY_AUTOMATED"
-    }
-
-    headers = {"Content-Type": "application/json", "x-goog-api-key": api_key}
-
     if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
 
     session_name = "dry-run-session"
     if not args.dry_run:
-        req = urllib.request.Request(url, data=json.dumps(payload).encode(), headers=headers, method='POST')
-        try:
-            with urllib.request.urlopen(req) as res:
-                response_data = json.loads(res.read().decode())
-                session_name = response_data.get("name")
-        except Exception as e:
-            raise CLIError(f"Jules API request failed: {e}")
+        prompt = "Analyze the failing CI logs and fix the errors. Prioritize adherence to RepoAuditor Anti-Slop directives."
+        response = client.create_session(source_id, branch, prompt)
+        if response:
+            session_name = response.get("name")
+        else:
+            raise CLIError("Jules API session creation failed")
     elif not args.json:
-        print(f"[DRY-RUN] Would POST to {url} with source sources/{source_id}")
+        print(f"[DRY-RUN] Would create session with source sources/{source_id}")
 
     # 4. Feedback
     feedback = f"🤖 **Jules is on it!**\n\nInitialized an autonomous repair session (`{session_name}`) for branch `{branch}`."
