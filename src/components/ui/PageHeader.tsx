@@ -31,7 +31,7 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        <Text variant="mono" size="xs" color="brand" weight="font-bold" tracking="wide-editorial" uppercase>
+        <Text variant="mono" size="base" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
           {label}
         </Text>
         <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight">
@@ -41,7 +41,7 @@ export function PageHeader({
           <Text
             variant="body"
             size={{ base: "lg", lg: "xl" }}
-            color="main"
+            color="dim"
             maxWidth={descriptionMaxWidth}
             marginTop={4}
             className="leading-relaxed text-pretty"

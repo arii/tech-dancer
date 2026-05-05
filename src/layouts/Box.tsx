@@ -203,7 +203,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           overflowY && `overflow-y-${overflowY}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
           opacity && getVal(opacity, "opacity"),
-          getResponsiveClasses(display, ""),
+          getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
           aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
           shrink === true && "shrink",
           shrink === false && "shrink-0",

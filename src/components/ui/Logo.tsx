@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -5,35 +6,59 @@ interface LogoProps {
 }
 
 export function Logo({ className }: LogoProps) {
+  const titleId = useId();
+  const gradientId = useId();
+
   return (
     <svg
-      viewBox="0 0 360 80"
+      viewBox="0 0 340 110"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-8 w-auto", className)}
-      aria-labelledby="logo-title"
+      className={cn("h-full w-auto max-w-none overflow-visible", className)}
+      aria-labelledby={titleId}
+      fill="none"
+      preserveAspectRatio="xMidYMid meet"
     >
-      <title id="logo-title">BoomTick Logo</title>
-      {/* Mark */}
-      <text x="10" y="52"
-            fontFamily="var(--raw-font-display), sans-serif"
-            fontSize="44"
-            fontWeight="700"
-            fill="var(--raw-color-accent-navy)">
+      <title id={titleId}>BoomTick Logo</title>
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#0891B2" />
+          <stop offset="100%" stopColor="#8B2FFF" />
+        </linearGradient>
+      </defs>
+
+
+      <text
+        x="16"
+        y="72"
+        fontFamily="Arial Black, Arial, sans-serif"
+        fontWeight="900"
+        fontSize="60"
+        fill="#f1f5f9"
+      >
         B
       </text>
 
-      <path d="M50 20 L72 60"
-            stroke="var(--raw-color-accent)"
-            strokeWidth="8"
-            strokeLinecap="round"/>
+      <line
+        x1="82"
+        y1="20"
+        x2="112"
+        y2="72"
+        stroke={`url(#${gradientId})`}
+        strokeWidth="12"
+        strokeLinecap="round"
+      />
 
-      {/* Wordmark */}
-      <text x="100" y="54"
-            fontFamily="var(--raw-font-sans), sans-serif"
-            fontSize="34"
-            fill="var(--raw-color-accent-navy)"
-            letterSpacing="0.5">
-        boomtick
+      <text
+        x="148"
+        y="69"
+        fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
+        fontWeight="700"
+        fontSize="33"
+        fill="#f1f5f9"
+        letterSpacing="-0.5"
+      >
+        <tspan fill="#f1f5f9">boom</tspan>
+        <tspan fill="#0891B2">tick</tspan>
       </text>
     </svg>
   );

@@ -74,7 +74,8 @@ export function DetailLayout({
               aspect="video"
               overflow="hidden"
               border
-              className="bg-muted"
+              radius="lg"
+              className="bg-surface-alt"
             >
               <img
                 src={image}

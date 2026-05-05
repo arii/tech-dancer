@@ -71,20 +71,27 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300",
+          "transition-[background-color,backdrop-filter] duration-300 border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
         <Stack
-          padding={8}
-          gap={10}
+          padding={0}
+          gap={0}
           flex={1}
         >
-          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
-            <Logo className="h-10 transition-colors group-hover:opacity-80" />
+          <Box
+            as={NavLink}
+            to="/"
+            display="block"
+            paddingX={4}
+            paddingY={6}
+            className="group border-b border-line"
+          >
+            <Logo className="h-16 w-full transition-opacity group-hover:opacity-80" />
           </Box>
 
-          <Stack as="ul" gap={2}>
+          <Stack as="ul" gap={0} flex={1} paddingY={4}>
             <Box as="li">
               <Box
                 as="button"
@@ -93,15 +100,14 @@ export default function Navigation() {
                 onClick={handleSearchClick}
                 display="flex"
                 align="center"
-                gap={4}
+                gap={3}
                 width="full"
-                paddingY={6}
-                paddingX={4}
-                radius="md"
-                className="group text-text-dim hover:bg-bg hover:text-accent transition-all text-left"
+                paddingY={3}
+                paddingX={6}
+                className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
               >
                 <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="base" weight="font-bold" className="leading-none">Search</Text>
+                <Text variant="sans" size="sm" weight="font-bold" className="leading-none">Search</Text>
               </Box>
             </Box>
 
@@ -109,6 +115,15 @@ export default function Navigation() {
               <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
             ))}
           </Stack>
+
+          <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
+            <Text variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
+              Written by <strong className="text-accent">Tech Dancer</strong>
+            </Text>
+            <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
+              © 2026 boomtick.blog
+            </Text>
+          </Box>
         </Stack>
       </Box>
     </>

@@ -1,18 +1,20 @@
 :root {
-  /* Colors */
-  --raw-color-bg: oklch(98% 0.005 250);
-  --raw-color-surface: oklch(100% 0 0);
-  --raw-color-surface-alt: oklch(95% 0.01 250);
-  --raw-color-line: oklch(92% 0.01 250);
-  --raw-color-accent: #007BFF;
-  --raw-color-accent-shadow: rgba(255, 127, 80, 0.3);
-  --raw-color-accent-navy: #1A2B3C;
-  --raw-color-accent-brand: #007BFF;
-  --raw-color-text-main: #1A2B3C;
-  --raw-color-text-body: #1A202C;
-  --raw-color-text-dim: #374151;
-  --raw-color-error: #dc2626;
-  --raw-color-error-bg: #fef2f2;
+  /* Colors - High-Tech Dark Theme Refined */
+  --raw-color-bg: #020617;
+  --raw-color-surface: #0f172a;
+  --raw-color-surface-alt: #1e293b;
+  --raw-color-line: #334155;
+  --raw-color-accent: #0891b2; /* Cyan 600 for better WCAG contrast */
+  --raw-color-accent-purple: #8b5cf6;
+  --raw-color-accent-magenta: #d946ef;
+  --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
+  --raw-color-accent-navy: #f1f5f9;
+  --raw-color-accent-brand: #0891b2;
+  --raw-color-text-main: #f1f5f9;
+  --raw-color-text-body: #e2e8f0;
+  --raw-color-text-dim: #94a3b8;
+  --raw-color-error: #ef4444;
+  --raw-color-error-bg: #1a0a0a;
 
   /* Typography */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
@@ -21,12 +23,12 @@
 
   /* Radius */
   --raw-radius-none: 0px;
-  --raw-radius-subtle: 2px;
-  --raw-radius-standard: 4px;
-  --raw-radius-sm: 4px;
-  --raw-radius-md: 8px;
-  --raw-radius-lg: 12px;
-  --raw-radius-xl: 12px;
+  --raw-radius-subtle: 4px;
+  --raw-radius-standard: 8px;
+  --raw-radius-sm: 6px;
+  --raw-radius-md: 12px;
+  --raw-radius-lg: 18px;
+  --raw-radius-xl: 24px;
   --raw-radius-full: 9999px;
 
   /* Spacing */
@@ -73,5 +75,5 @@
   --raw-z-search: 200;
 
   /* Shadows */
-  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
+  --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
 }

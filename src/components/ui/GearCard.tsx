@@ -1,11 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import { Star } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Resource } from '@/lib/content';
-import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
 
-interface GearCardProps extends Resource {
+interface GearCardProps {
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
   basePath: string;
+  rating?: number;
+  verdict?: string;
 }
 
 export function GearCard({
@@ -13,127 +16,78 @@ export function GearCard({
   title,
   category,
   excerpt,
-  image,
   basePath,
   rating,
   verdict,
-  priceCategory,
-  updatedDate
+  ...rest
 }: GearCardProps) {
+  // Destructure and ignore known data props that shouldn't bleed to the DOM
+  // even if they are passed via {...item} in parent components.
+  const {
+    // @ts-expect-error - ignoring unused data props
+    type: _type, date: _date, author: _author, content: _content,
+    image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    priceCategory: _priceCategory, updatedDate: _updatedDate,
+    durability: _durability, value: _value, specs: _specs,
+    ...cleanProps
+  } = rest as Record<string, unknown>;
+
   return (
     <Stack
       as={NavLink}
       to={`${basePath}/${slug}`}
+      {...cleanProps}
       direction="col"
-      gap={0}
+      gap={3}
       height="full"
-      surface
+      padding={6}
+      radius="lg"
       border
-      radius="none"
-      overflow="hidden"
-      className="group hover:border-accent transition-all duration-300"
+      className="group bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30"
     >
-      <CardImagePlaceholder
-        image={image}
-        category={category}
-        date={updatedDate}
-        title={title}
-      />
-
-      {/* Content Area */}
-      <Stack gap={4} padding={4} flex={1} justify="between">
-        <Stack gap={3}>
-          <Box display="flex" align="center" justify="between" wrap>
-            {rating && (
-              <Box display="flex" align="center" gap={0.5}>
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={12}
-                    className={
-                      i < Math.floor(rating)
-                        ? "fill-amber-500 text-amber-500"
-                        : i < rating
-                        ? "fill-amber-500/50 text-amber-500"
-                        : "text-line"
-                    }
-                  />
-                ))}
-                <Text variant="mono" size="micro" color="dim" marginLeft={1}>
-                  ({rating})
-                </Text>
-              </Box>
-            )}
-
-            {verdict && (
-              <Box surface="brand" paddingX={1.5} paddingY={0.5} radius="none" border className="border-line/10">
-                <Text variant="mono" size="micro" weight="font-bold" uppercase>
-                  {verdict}
-                </Text>
-              </Box>
-            )}
-          </Box>
-
-          <Text
-            variant="body"
-            size="xl"
-            weight="font-black"
-            color="brand"
-            leading="none"
-            className="group-hover:text-accent transition-colors line-clamp-2"
-          >
-            {title}
+      <Box display="flex" align="center" justify="between">
+        <Box
+          paddingX={2}
+          paddingY={1}
+          radius="full"
+          border
+          className="border-line"
+        >
+          <Text size="tiny" weight="font-black" uppercase tracking="widest" color="accent">
+            {category}
           </Text>
+        </Box>
+        <Text variant="mono" size="tiny" color="dim">
+          {verdict}
+        </Text>
+      </Box>
 
-          <Text variant="body" size="base" color="dim" className="line-clamp-3 leading-snug opacity-90">
-             {excerpt}
-          </Text>
+      <Stack gap={2}>
+        <Text
+          as="h3"
+          variant="body"
+          size="lg"
+          weight="font-bold"
+          className="text-text-main leading-tight group-hover:text-accent transition-colors line-clamp-2"
+        >
+          {title}
+        </Text>
 
-          <Stack direction="row" wrap gap={2}>
-            {category && (
-              <Box surface="accent" paddingX={2} paddingY={0.5} radius="none" border className="border-line/10">
-                <Text variant="mono" size="micro" weight="font-bold" uppercase>
-                  {category}
-                </Text>
-              </Box>
-            )}
-            {priceCategory && (
-              <Box surface="warning" paddingX={2} paddingY={0.5} width="fit">
-                <Text variant="mono" size="micro" weight="font-bold">{priceCategory}</Text>
-              </Box>
-            )}
-          </Stack>
-        </Stack>
-
-        <Stack gap={3} marginTop="auto">
-          <Text variant="mono" size="micro" color="dim" className="leading-tight opacity-70 italic">
-            * Affiliate links — commission earned at no cost to you.
-          </Text>
-
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" className="border-line/50">
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="wider">
-              Read Review
-            </Text>
-            <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
-            <Box marginLeft="auto" className="group-hover:translate-x-1 transition-transform duration-300">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-accent"
-              >
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </Box>
-          </Box>
-        </Stack>
+        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
+           {excerpt}
+        </Text>
       </Stack>
+
+      <Box display="flex" align="center" justify="between" marginTop="auto">
+        {rating && (
+          <Text variant="mono" size="xs" weight="font-bold" className="text-accent-purple">
+            {rating}
+          </Text>
+        )}
+        <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest" uppercase>
+          Read Review
+        </Text>
+      </Box>
     </Stack>
   );
 }

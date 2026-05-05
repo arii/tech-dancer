@@ -42,9 +42,9 @@ export const layout = {
 };
 
 export const inputs = {
-  base: "w-full min-h-12 bg-bg border border-line px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/75",
+  base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans focus:outline-none focus:border-accent transition-all",
   label: "text-tiny font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
-  select: "bg-bg border border-line px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20",
+  select: "bg-bg border border-line px-3 py-1 text-tiny font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
   error: "border-error focus:border-error focus:ring-error/20",
 };
 

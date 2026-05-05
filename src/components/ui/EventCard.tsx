@@ -1,33 +1,37 @@
-import { Stack, Text } from '@/layouts/Primitives';
-import { LucideIcon } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface EventCardProps {
   name: string;
-  date: string;
-  status: string;
-  icon: LucideIcon;
+  location: string;
+  schedule: string;
 }
 
-export function EventCard({ name, date, status, icon: Icon }: EventCardProps) {
+export function EventCard({ name, location, schedule }: EventCardProps) {
   return (
     <Stack
-      height="full"
-      padding={{ base: 6, lg: 8 }}
+      padding={8}
+      radius="md"
+      border
       gap={4}
-      className="bg-surface/50"
+      height="full"
+      className="bg-surface hover:border-accent/40 transition-all duration-300"
     >
-      <Stack direction="row" align="center" gap={3}>
-        <Icon size={20} className="text-accent" />
-        <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
-          {status}
+      <Box display="flex" align="center" gap={2}>
+        <MapPin className="w-4 h-4 text-accent" />
+        <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
+          {schedule}
+        </Text>
+      </Box>
+
+      <Stack gap={1}>
+        <Text as="h4" variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
+          {name}
+        </Text>
+        <Text size="sm" color="dim">
+          {location}
         </Text>
       </Stack>
-      <Text variant="headline" size="xl" weight="font-black" leading="snug">
-        {name}
-      </Text>
-      <Text variant="body" size="base" color="dim">
-        {date}
-      </Text>
     </Stack>
   );
 }

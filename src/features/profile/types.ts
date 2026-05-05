@@ -12,10 +12,11 @@ export interface ProfileSection {
 export interface ProfileCard {
   title: string;
   content: string;
+  icon?: string;
 }
 
 export interface ProfileItem {
-  icon?: 'star' | 'music' | 'map-pin'; // Standardized icon identifiers
+  icon?: string;
   title: string;
   description: string;
 }

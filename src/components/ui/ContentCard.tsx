@@ -1,21 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { readingTime } from '@/lib/content';
-import { CardImagePlaceholder } from '@/components/ui/CardImagePlaceholder';
-import { cn } from '@/lib/utils';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
   category: string;
   excerpt?: string;
-  date?: string;
-  image?: string;
   basePath: string;
-  aspect?: "square" | "video";
-  content?: string;
-  compact?: boolean;
 }
 
 export function ContentCard({ 
@@ -23,88 +15,71 @@ export function ContentCard({
   title, 
   category, 
   excerpt, 
-  date, 
-  image, 
   basePath, 
-  content, 
-  compact = false,
   ...motionProps 
 }: ContentCardProps) {
+  // Destructure and ignore known data props that shouldn't bleed to the DOM
+  // even if they are passed via {...item} in parent components.
+  const {
+    // @ts-expect-error - ignoring unused data props
+    type: _type, date: _date, author: _author, authorAvatar: _authorAvatar,
+    content: _content, image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    ...cleanMotionProps
+  } = motionProps as Record<string, unknown>;
+
+  const getTagColorClass = (cat: string) => {
+    const c = cat.toLowerCase();
+    if (c.includes('travel')) return 'text-accent-purple';
+    if (c.includes('tech')) return 'text-accent';
+    if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
+    return 'text-accent';
+  };
+
   return (
     <Stack
       as={motion.create(NavLink)}
       to={`${basePath}/${slug}`}
       direction="col"
-      gap={0}
+      gap={4}
       height="full"
-      surface
+      padding={6}
+      radius="lg"
       border
-      radius={compact ? "none" : "xl"}
-      shadow={compact ? "none" : "standard"}
-      overflow="hidden"
-      className={cn(
-        "group transition-all duration-300",
-        compact 
-          ? "hover:bg-accent/5 border-line border-l-4 hover:border-l-accent" 
-          : "hover:border-accent hover:shadow-xl hover:-translate-y-1"
-      )}
-      {...motionProps}
+      className="group bg-surface hover:border-accent/40 transition-all duration-300"
+      {...cleanMotionProps}
     >
-      {!compact && (
-        <CardImagePlaceholder
-          image={image}
-          category={category}
-          title={title}
-        />
-      )}
+      <Text
+        variant="mono"
+        size="tiny"
+        weight="font-black"
+        uppercase
+        tracking="widest"
+        className={getTagColorClass(category)}
+      >
+        {category}
+      </Text>
 
-      {/* Content Area */}
-      <Stack gap={compact ? 1 : 4} padding={compact ? 4 : 5} flex={1} justify="between">
-        <Stack gap={compact ? 0.5 : 3}>
-          <Box display="flex" align="center" gap={3} wrap>
-            <Text variant="mono" size="micro" weight="font-black" color="brand" uppercase tracking="widest">
-              {category}
-            </Text>
-            {date && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
-                {date}
-              </Text>
-            )}
-            {!compact && (
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
-                {readingTime(content, excerpt)} MIN
-              </Text>
-            )}
-          </Box>
+      <Stack gap={2}>
+        <Text
+          as="h3"
+          variant="body"
+          size="lg"
+          weight="font-bold"
+          className="text-text-main leading-tight group-hover:text-accent transition-colors line-clamp-2"
+        >
+          {title}
+        </Text>
 
-          <Text 
-            variant="body"
-            size={compact ? "base" : "lg"}
-            weight="font-bold"
-            color="brand"
-            leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
-          >
-            {title}
-          </Text>
-          
-          <Text variant="body" size="sm" color="dim" className="line-clamp-1 leading-relaxed opacity-70">
-             {excerpt}
-          </Text>
-        </Stack>
-
-        {!compact && (
-          <Box display="flex" align="center" gap={2} paddingTop={4} border="t" marginTop="auto" className="border-line/50">
-            <Text variant="mono" size="xs" weight="font-bold" tracking="wider" color="accent">
-              Read Article
-            </Text>
-            <Box width={0} height="px" className="bg-accent group-hover:w-6 transition-all duration-500" />
-            <Text variant="mono" size="xs" color="accent" className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-              →
-            </Text>
-          </Box>
-        )}
+        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
+           {excerpt}
+        </Text>
       </Stack>
+
+      <Box display="flex" align="center" marginTop="auto">
+        <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest" uppercase>
+          Read Article
+        </Text>
+      </Box>
     </Stack>
   );
 }

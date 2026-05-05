@@ -29,7 +29,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
         <PageHeader
           label="CONTACT"
           title="Get in Touch"
-          description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I’ll reply soon."
+          description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I'll reply soon."
           border="b"
         />
 
@@ -115,10 +115,10 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                     <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
                   </Stack>
                 ) : (
-                  <>
+                  <Stack direction="row" align="center" gap={2}>
                     <Send className="w-4 h-4" />
-                    <span>Send Message</span>
-                  </>
+                    <Text variant="sans" size="sm" weight="font-semibold" color="inherit">Send Message</Text>
+                  </Stack>
                 )}
               </Button>
             </Box>

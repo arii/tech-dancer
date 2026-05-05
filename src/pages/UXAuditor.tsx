@@ -75,7 +75,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       {isCopying ? (
         <RefreshCw className="w-3 h-3 animate-spin" />
       ) : copied ? (
-        <CheckCircle className="w-3 h-3 text-emerald-500" />
+        <CheckCircle className="w-3 h-3 text-accent" />
       ) : (
         <Copy className="w-3 h-3" />
       )}
@@ -124,7 +124,7 @@ export default function UXAuditor() {
           direction="row"
           align="center"
           gap={3}
-          surface="default" padding={2} radius="xl" shadow="sm" border={true}
+          className="bg-surface p-2 rounded-lg shadow-sm border border-line"
         >
           <Box
             as="input"
@@ -133,7 +133,7 @@ export default function UXAuditor() {
             title={url}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
             className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-            width={64}
+            width={{ base: "full", sm: 64, md: 80 }}
             paddingX={4}
             paddingY={2}
             radius="lg"
@@ -147,7 +147,7 @@ export default function UXAuditor() {
             display="flex"
             align="center"
             gap={2}
-            className="bg-accent hover:opacity-90 text-white font-bold transition-all disabled:opacity-50"
+            className="bg-accent hover:opacity-90 text-bg font-bold transition-all disabled:opacity-50"
             paddingX={6}
             paddingY={2}
             radius="md"
@@ -164,7 +164,7 @@ export default function UXAuditor() {
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden" className="divide-y divide-line">
+          <Stack className="bg-surface rounded-lg shadow-sm border border-line overflow-hidden divide-y divide-line">
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -173,11 +173,13 @@ export default function UXAuditor() {
               />
             )}
             {reports.map((report) => (
-              <Box
+              <Stack
                 key={report.id}
                 as="button"
+                direction="row"
                 onClick={() => setActiveReport(report)}
-                width="full" display="flex" align="center" gap={3} padding={4} className={`text-left hover:bg-surface transition-all ${
+                width="full" align="center" gap={3} padding={4} 
+                className={`text-left hover:bg-surface transition-all ${
                   activeReport?.id === report.id ? 'bg-bg border-l-4 border-accent' : 'border-l-4 border-transparent'
                 }`}
               >
@@ -186,19 +188,20 @@ export default function UXAuditor() {
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
                   className={report.status !== 'completed' ? 'animate-pulse' : ''}
+                  shrink={0}
                 >
                   {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                 </Box>
                 <Box flex={1} minWidth="0">
-                  <Text variant="sans" size="sm" weight="font-bold" className="truncate">
+                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
                     {report.url.replace('https://', '')}
                   </Text>
                   <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
-                <ChevronRight className="w-4 h-4 text-text-dim opacity-50" />
-              </Box>
+                <ChevronRight className="w-4 h-4 text-text-dim opacity-50 shrink-0" />
+              </Stack>
             ))}
           </Stack>
         </Stack>
@@ -207,10 +210,12 @@ export default function UXAuditor() {
         <Stack gap={6} span={{ lg: 3 }}>
           {activeReport ? (
             <>
-              <Box
-                surface="default" padding={6} radius="2xl" shadow="sm" border={true} display="flex" justify="between" align={{ base: "start", md: "center" }} gap={4} direction={{ base: "col", md: "row" }}
+              <Stack
+                className="bg-surface p-6 rounded-lg shadow-sm border border-line"
+                justify="between" align={{ base: "start", md: "center" }} 
+                gap={6} direction={{ base: "col", md: "row" }}
               >
-                <Stack gap={1} marginBottom={{ base: 4, md: 0 }} minWidth="0" flex={1}>
+                <Stack gap={1} minWidth="0" flex={1}>
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
@@ -218,14 +223,16 @@ export default function UXAuditor() {
                     {activeReport.url}
                   </Text>
                 </Stack>
-                <Box display="flex" gap={2}>
+                <Stack direction="row" gap={3} shrink={0}>
                   <Box
                     as="button"
                     onClick={copyMarkdown}
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text-main transition-all text-sm" surface="muted" color="dim"
+                    className="font-bold hover:text-text-main transition-all text-sm shrink-0" 
+                    surface="muted" 
+                    color="dim"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
@@ -240,7 +247,7 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold bg-accent text-white hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm"
+                    className="font-bold bg-accent text-bg hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm shrink-0"
                     paddingX={6}
                     paddingY={2}
                     radius="xl"
@@ -248,8 +255,8 @@ export default function UXAuditor() {
                     {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
                   </Box>
-                </Box>
-              </Box>
+                </Stack>
+              </Stack>
 
               <Stack gap={8}>
                 {VIEWPORTS.map(vp => {
@@ -257,20 +264,20 @@ export default function UXAuditor() {
                   const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
 
                   return (
-                    <Box key={vp.name} surface="default" radius="2xl" shadow="sm" border={true} overflow="hidden">
-                      <Box padding={4} border="b" display="flex" align="center" justify="between" surface="muted">
-                        <Box display="flex" align="center" gap={3}>
+                    <Box className="bg-surface rounded-lg shadow-sm border border-line overflow-hidden">
+                      <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
+                        <Stack direction="row" align="center" gap={3}>
                           <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
                             {vp.name} Analysis
                           </Text>
-                        </Box>
+                        </Stack>
                         <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
                           {vp.width}w × {vp.height}h
                         </Text>
-                      </Box>
+                      </Stack>
 
                       <Stack direction={{ base: 'col', md: 'row' }} width="full">
                         <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
@@ -297,7 +304,7 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box surface="muted" border={true} padding={5} radius="2xl">
+                              <Box className="bg-surface-alt border border-line p-5 rounded-lg">
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
@@ -309,10 +316,10 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} padding={4} radius="xl" border={true} surface="default" shadow="sm" className="hover:border-accent transition-all">
+                                  <Box key={idx} className="bg-surface p-4 rounded-lg border border-line shadow-sm hover:border-accent transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
-                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-amber-500'} />
+                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
                                         <Text variant="sans" size="sm" weight="font-black">
                                           {imp.element}
                                         </Text>

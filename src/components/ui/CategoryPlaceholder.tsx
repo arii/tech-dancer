@@ -17,15 +17,6 @@ interface CategoryPlaceholderProps {
 }
 
 export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlaceholderProps) {
-  const norm = (category || '').toLowerCase();
-
-  let surfaceClass: "brand" | "accent" | "warning" | "danger" | "muted" = 'muted';
-
-  if (norm.includes('tech')) surfaceClass = 'brand';
-  else if (norm.includes('travel') || norm.includes('wcs')) surfaceClass = 'accent';
-  else if (norm.includes('gear')) surfaceClass = 'warning';
-  else if (norm.includes('lifestyle')) surfaceClass = 'danger';
-
   const sizeClasses = {
     sm: 'w-5 h-5',
     md: 'w-8 h-8',
@@ -35,8 +26,18 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
   const icon = getCategoryIcon(category);
 
   return (
-    <Box surface={surfaceClass} width="full" height="full" display="flex" align="center" justify="center">
-      {React.createElement(icon, { className: sizeClasses[size], strokeWidth: 1.5 })}
+    <Box 
+      width="full" 
+      height="full" 
+      display="flex" 
+      align="center" 
+      justify="center"
+      className="text-accent"
+    >
+      {React.createElement(icon, { 
+        className: sizeClasses[size], 
+        strokeWidth: 2 
+      })}
     </Box>
   );
 }

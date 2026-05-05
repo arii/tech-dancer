@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Star, Music, MapPin } from 'lucide-react';
+import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
 /**
@@ -9,10 +10,13 @@ import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../t
  * 2. Add it to this map with a unique key
  * 3. Use the key in the ProfileItem data
  */
-export const IconMap = {
+export const IconMap: Record<string, React.ElementType> = {
   star: Star,
   music: Music,
   'map-pin': MapPin,
+  terminal: Terminal,
+  zap: Zap,
+  globe: Globe,
 };
 
 /**
@@ -21,17 +25,38 @@ export const IconMap = {
  */
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   return (
-    <Stack gap={4} marginTop={2}>
-      {cards.map((card, index) => (
-        <Box key={index} padding={6} border radius="xl" className="bg-surface/20 border-line/5">
-          <Text as="h3" variant="mono" size="xs" color="brand" weight="font-bold" marginBottom={2} className="uppercase tracking-widest">
-            {card.title}
-          </Text>
-          <Text variant="body" size="sm" color="body" className="leading-relaxed">
-            {card.content}
-          </Text>
-        </Box>
-      ))}
+    <Stack gap={6} marginTop={4}>
+      {cards.map((card, index) => {
+        const Icon = card.icon ? IconMap[card.icon] : null;
+        return (
+          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all">
+            <Box display="flex" gap={8} align="start" direction={{ base: "col", sm: "row" }}>
+              {Icon && (
+                <Box 
+                  width={12} 
+                  height={12} 
+                  radius="lg" 
+                  border 
+                  display="flex" 
+                  align="center" 
+                  justify="center" 
+                  className="bg-accent/5 border-accent/20 shrink-0 shadow-sm group-hover:shadow-accent/5"
+                >
+                  <Icon className="w-6 h-6 text-accent" />
+                </Box>
+              )}
+              <Stack gap={2} flex={1}>
+                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
+                  {card.title}
+                </Text>
+                <Text variant="body" size="base" color="dim" className="leading-relaxed opacity-90">
+                  {card.content}
+                </Text>
+              </Stack>
+            </Box>
+          </Box>
+        );
+      })}
     </Stack>
   );
 }
@@ -45,7 +70,7 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
       {items.map((item, index) => {
         const Icon = item.icon ? IconMap[item.icon] : null;
         return (
-          <Box key={index} padding={6} border radius="xl" className="bg-surface/20 border-line/5">
+          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-line/5">
             <Stack gap={3}>
               {Icon && <Icon className="w-4 h-4 text-accent" />}
               {item.title && (
@@ -68,26 +93,51 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
  * Renders a responsive photo gallery grid.
  */
 export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   return (
-    <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
-      {images.map((image, index) => (
-        <Box
-          key={index}
-          aspect="4/5"
-          overflow="hidden"
-          border
-          radius="xl"
-          className="border-line/10 bg-surface/30 group"
+    <>
+      <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={4} marginTop={6}>
+        {images.map((image, index) => (
+          <Box
+            key={index}
+            aspect="1/1"
+            overflow="hidden"
+            border
+            radius="lg"
+            className="border-line/10 bg-surface/30 group cursor-pointer"
+            onClick={() => setSelectedImage(image.src)}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          </Box>
+        ))}
+      </Grid>
+
+      {selectedImage && (
+        <Stack
+          position="fixed"
+          inset={0}
+          zIndex="modal"
+          className="bg-black/90 cursor-pointer"
+          align="center"
+          justify="center"
+          onClick={() => setSelectedImage(null)}
         >
-          <img
-            src={image.src}
-            alt={image.alt}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-        </Box>
-      ))}
-    </Grid>
+          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
+            <img
+              src={selectedImage}
+              alt="Expanded view"
+              className="max-w-full max-h-full object-contain"
+            />
+          </Box>
+        </Stack>
+      )}
+    </>
   );
 }
 
@@ -108,7 +158,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           paddingY={2}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group"
+          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}

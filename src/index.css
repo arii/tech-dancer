@@ -8,6 +8,8 @@
   --color-surface-alt: var(--raw-color-surface-alt);
   --color-line: var(--raw-color-line);
   --color-accent: var(--raw-color-accent);
+  --color-accent-purple: var(--raw-color-accent-purple);
+  --color-accent-magenta: var(--raw-color-accent-magenta);
   --color-accent-shadow: var(--raw-color-accent-shadow);
   --color-accent-navy: var(--raw-color-accent-navy);
   --color-accent-brand: var(--raw-color-accent-brand);
@@ -83,13 +85,27 @@
     100% { transform: translateY(800px); }
   }
   .animate-scanline { animation: scanline 2.5s linear infinite; }
+
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.28); }
+    25% { transform: scaleY(0.72); }
+    50% { transform: scaleY(0.46); }
+    75% { transform: scaleY(0.86); }
+  }
+  .animate-wave {
+    animation: wave 4.8s ease-in-out infinite;
+    will-change: transform;
+    transform-origin: bottom;
+  }
+  .animation-reverse { animation-direction: reverse; }
+
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
   }
-  .industrial-gradient { background: linear-gradient(135deg, #001f3f 0%, #000c19 100%); }
-  .text-glow { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+  .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
+  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
@@ -102,8 +118,8 @@
   }
   .grid-pattern {
     background-image: 
-      linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 }
