@@ -1,0 +1,117 @@
+name: Update Playwright Snapshots
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  update-snapshots:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '@update-snapshots')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Create initial comment
+        id: initial-comment
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ⏳ Updating Playwright snapshots...
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve PR details
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          PR_INFO=$(gh api "repos/${GH_REPO}/pulls/${{ github.event.issue.number }}")
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          {
+            echo "HEAD_REF<<$EOF"
+            echo "$PR_INFO" | jq -r '.head.ref'
+            echo "$EOF"
+            echo "HEAD_REPO<<$EOF"
+            echo "$PR_INFO" | jq -r '.head.repo.full_name'
+            echo "$EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.HEAD_REF }}
+          repository: ${{ env.HEAD_REPO }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build project
+        env:
+          NODE_ENV: production
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          # Use consistent base path for CI tests to match visual snapshots
+          export VITE_BASE_PATH=/$REPO_NAME/
+          pnpm run build
+
+      - name: Update Playwright snapshots
+        id: update
+        env:
+          CI: true
+          NODE_ENV: production
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          export VITE_BASE_PATH=/$REPO_NAME/
+          pnpm run test:e2e --update-snapshots
+
+      - name: Commit and push changes
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update playwright snapshots"
+            git push origin HEAD:${{ env.HEAD_REF }}
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update comment on success
+        if: success()
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.initial-comment.outputs.comment-id }}
+          body: |
+            ✅ Playwright snapshots updated successfully.
+          edit-mode: replace
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update comment on failure
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.initial-comment.outputs.comment-id }}
+          body: |
+            ❌ Failed to update Playwright snapshots.
+            Please check the workflow logs for more details.
+          edit-mode: replace
+          token: ${{ secrets.GITHUB_TOKEN }}
