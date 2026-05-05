@@ -28,7 +28,11 @@ def get_github_token() -> Optional[str]:
         return None
 
 def get_repo_name() -> Optional[str]:
-    """Auto-detect repo from git remote."""
+    """Auto-detect repo from environment variables or git remote."""
+    repo = os.getenv("GITHUB_REPOSITORY") or os.getenv("GH_REPO")
+    if repo:
+        return repo
+
     try:
         url = subprocess.check_output(
             ['git', 'config', '--get', 'remote.origin.url'],
@@ -38,7 +42,7 @@ def get_repo_name() -> Optional[str]:
         match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
         return match.group(1) if match else url
     except Exception:
-        return os.getenv("GH_REPO")
+        return None
 
 class GHAConfigManager:
     """Manages GitHub Actions variables with local caching and robust error handling."""
