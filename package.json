@@ -21,7 +21,8 @@
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
-    "audit": "node scripts/detect-antipatterns.mjs"
+    "audit": "node scripts/detect-antipatterns.mjs",
+    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -69,7 +70,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.14.0",
     "@types/papaparse": "^5.5.2",
-    "@types/throttle-debounce": "^5.0.2",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.5.0",
@@ -83,7 +83,6 @@
     "shx": "^0.4.0",
     "svgo": "^4.0.1",
     "tailwindcss": "^4.2.2",
-    "throttle-debounce": "^5.0.2",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.59.0",

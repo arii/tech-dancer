@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { StatusBadge } from '@/components/ui/StatusBadge';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { useResearch } from './useResearch';
 
 export default function ResearchAnalytics() {
@@ -27,8 +25,8 @@ export default function ResearchAnalytics() {
         />
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Tools Ecosystem</Text>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+            <Text variant="headline" size="2xl" weight="font-black">Tools Ecosystem</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -49,15 +47,21 @@ export default function ResearchAnalytics() {
                       <Box width={10} height={10} surface="muted" border display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
                         <Search className="w-5 h-5" />
                       </Box>
-                      <StatusBadge label={tool.status} />
+                      <Text size="micro" weight="font-bold" marginBottom={3} uppercase tracking="widest" color="dim">
+                        {tool.status}
+                      </Text>
                     </Box>
                     <Stack gap={2}>
-                      <Text variant="display" size="xl" className="group-hover:text-accent transition-colors">{tool.name}</Text>
-                      <Text variant="body" size="sm" color="dim" className="line-clamp-2">{tool.layman}</Text>
+                      <Text variant="display" size="xl" weight="font-bold" marginBottom={2} className="group-hover:text-accent transition-colors">
+                        {tool.name}
+                      </Text>
+                      <Text size="sm" marginBottom={4} className="leading-7 text-text-body/72 line-clamp-2">
+                        {tool.layman}
+                      </Text>
                     </Stack>
                   </Stack>
-                  <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">
-                    <Text variant="mono" size="micro" weight="font-bold">Launch Console</Text>
+                  <Box display="flex" align="center" gap={2} marginTop="auto" color="dim" className="group-hover:text-accent transition-colors">
+                    <Text weight="font-bold" size="xs" className="uppercase tracking-widest">Launch Console</Text>
                     <ArrowRight className="w-3 h-3" />
                   </Box>
                 </Stack>
@@ -67,8 +71,8 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
-            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Studies</Text>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+            <Text variant="headline" size="2xl" weight="font-black">Studies</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
 
@@ -104,11 +108,20 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <EmptyState
-              icon={<Database className="w-12 h-12" />}
-              title="ETL Pipeline Synchronizing..."
-              description="The WCS Competition Data Scraper is currently ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete."
-            />
+            <Box padding={12} border radius="2xl" shadow="xl" position="relative" overflow="hidden" className="border-dashed border-line/80 bg-surface/40 text-center">
+               <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="accent" opacity={0.03} radius="full" className="blur-3xl" />
+               <Stack align="center" justify="center" gap={4}>
+                  <Box color="dim" opacity={0.5}>
+                    <Database className="w-12 h-12" />
+                  </Box>
+                  <Stack gap={2}>
+                    <Text as="h2" size="2xl" weight="font-black" marginBottom={3} color="accent" uppercase tracking="tighter">ETL Pipeline Synchronizing...</Text>
+                    <Text marginX="auto" maxWidth="2xl" className="text-base leading-8 text-text-body/90">
+                      The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
+                    </Text>
+                  </Stack>
+               </Stack>
+            </Box>
           )}
         </Stack>
       </Stack>

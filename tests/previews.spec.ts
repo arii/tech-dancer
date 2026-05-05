@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Preview Dashboard', () => {
   test('should load the dashboard and show initial elements', async ({ page }) => {
-    // Navigate to the preview dashboard
-    await page.goto('./previews/');
+    // Navigate to the preview dashboard using a relative path to ensure correct resolution against baseURL
+    await page.goto('./previews/index.html');
+    await page.waitForLoadState('networkidle');
 
     // Check title
     await expect(page).toHaveTitle(/Preview Environments/);
@@ -22,7 +23,8 @@ test.describe('Preview Dashboard', () => {
   });
 
   test('responsive layout check', async ({ page }) => {
-    await page.goto('./previews/');
+    await page.goto('./previews/index.html');
+    await page.waitForLoadState('networkidle');
 
     // Desktop view
     await page.setViewportSize({ width: 1440, height: 900 });

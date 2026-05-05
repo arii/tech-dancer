@@ -12,7 +12,11 @@ export function FilterBar({ categories }: FilterBarProps) {
   return (
     <Box
       border="b"
-      className="w-full bg-bg/80 backdrop-blur-md sticky top-16 lg:top-0 z-40 overflow-x-auto no-scrollbar"
+      width="full"
+      position="sticky"
+      zIndex={40}
+      overflowX="auto"
+      className="bg-bg/80 backdrop-blur-md top-16 lg:top-0 no-scrollbar"
       paddingY={4}
     >
       <Stack direction="row" gap={6} className="min-w-max">

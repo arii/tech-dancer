@@ -1,10 +1,10 @@
 import { Search } from 'lucide-react';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
-import { throttle } from 'throttle-debounce';
+
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -18,10 +18,16 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
+  const timer = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
-    const handleScroll = throttle(100, () => {
-      setScrolled(window.scrollY > 20);
-    });
+    const handleScroll = () => {
+      if (timer.current) return;
+      timer.current = setTimeout(() => {
+        setScrolled(window.scrollY > 20);
+        timer.current = null;
+      }, 100);
+    };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);

@@ -1,0 +1,27 @@
+{
+  "eslint/no-unused-vars": {
+    "strategy": "Remove the unused variable or prefix it with an underscore if it's intentionally kept but unused (e.g., in a function signature).",
+    "examples": [
+      {
+        "before": "const unused = 10;",
+        "after": "// removed or const _unused = 10;"
+      }
+    ]
+  },
+  "react-hooks/rules-of-hooks": {
+    "strategy": "Ensure hooks are called at the top level of a React functional component or a custom hook. They cannot be called inside loops, conditions, or nested functions.",
+    "examples": []
+  },
+  "ts/2322": {
+    "strategy": "The provided value does not match the expected type. Check the type definition of the variable or property being assigned to and ensure the value conforms to it.",
+    "examples": []
+  },
+  "ts/2339": {
+    "strategy": "The property does not exist on the given type. Check if it's a typo, if the type needs to be extended, or if the object needs a type cast.",
+    "examples": []
+  },
+  "ts/2307": {
+    "strategy": "The module cannot be found. Ensure the package is installed, the path is correct, and the tsconfig includes the necessary paths or types.",
+    "examples": []
+  }
+}

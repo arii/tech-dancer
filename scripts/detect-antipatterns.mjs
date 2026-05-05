@@ -2,12 +2,38 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
-import { glob } from 'glob';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
 const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+
+function collectAuditFiles(targets) {
+  const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
+  const results = new Set();
+
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+        walk(fullPath);
+        continue;
+      }
+      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) results.add(fullPath);
+    }
+  };
+
+  for (const target of resolvedTargets) {
+    const absoluteTarget = path.isAbsolute(target) ? target : path.join(ROOT, target);
+    if (!fs.existsSync(absoluteTarget)) continue;
+    const stat = fs.statSync(absoluteTarget);
+    if (stat.isDirectory()) walk(absoluteTarget);
+    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx')) results.add(absoluteTarget);
+  }
+
+  return Array.from(results);
+}
 
 const LAYOUT_SUGGESTIONS = {
   'flex flex-col': '<Stack direction="col">',
@@ -208,6 +234,34 @@ function checkContent(content) {
     });
   }
 
+  // 3. Contrast safety heuristic for inverse/gradient hero panels.
+  // Single-pass sliding window: when an industrial gradient line is seen,
+  // inspect nearby headline/body Text lines for explicit inverse-safe styling.
+  let activeGradientWindowUntil = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const lineNum = i + 1;
+    const line = lines[i];
+
+    if (line.includes('industrial-gradient')) {
+      activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
+      continue;
+    }
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore')) continue;
+
+    const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
+    const hasInverseColor = /color="(?:white|bg)"/.test(line);
+    const hasIntent = /intent="/.test(line);
+    if (isHeadlineOrBody && !hasInverseColor && !hasIntent) {
+      violations.push({
+        line: lineNum,
+        pattern: 'Contrast Risk (Inverse Surface)',
+        severity: 'major',
+        value: line.trim().slice(0, 80),
+        message: 'Text near industrial gradient must set inverse color token (white/bg) or intent for reliable contrast.'
+      });
+    }
+  }
+
   // Sort violations by line number
   return violations.sort((a, b) => a.line - b.line);
 }
@@ -220,12 +274,18 @@ function checkFile(filepath) {
 function checkPRScope() {
   try {
     const scopeCheckScript = path.join(__dirname, "../dev-tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8" }).trim();
+    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8", stdio: ['inherit', 'pipe', 'pipe'] }).trim();
     if (output) {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
-  } catch {
-    // Python or script might not be available
+  } catch (error) {
+    // If the error message itself is present and is not just a standard shell error, report it
+    if (error.stderr && error.stderr.trim()) {
+      console.error(`\x1b[31m❌ Scope check failed:\x1b[0m\n${error.stderr}`);
+    } else if (error.message) {
+      console.error(`\x1b[31m❌ Scope check error:\x1b[0m ${error.message}`);
+    }
+    // Don't exit here as scope check is usually a non-blocking warning
   }
 }
 
@@ -268,8 +328,7 @@ if (targets.includes('-')) {
     allViolations['stdin'] = violations;
   }
 } else {
-  const auditTargets = targets.length > 0 ? targets : CHECK_DIRS.map(d => d.includes('.') ? d : `${d}/**/*.{ts,tsx}`);
-  const files = await glob(auditTargets, { cwd: ROOT, absolute: true, ignore: ['**/node_modules/**'] });
+  const files = collectAuditFiles(targets);
 
   files.forEach(filepath => {
     if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {

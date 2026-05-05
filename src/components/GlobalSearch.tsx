@@ -5,7 +5,7 @@ import { getHighlightedParts } from '@/lib/utils';
 import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-import { debounce } from 'throttle-debounce';
+
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -20,10 +20,17 @@ export function GlobalSearch() {
   const navigate = useNavigate();
 
   // Debounced URL sync to avoid excessive navigation and re-renders
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
   const debouncedSetQuery = useMemo(
-    () => debounce(300, (q: string) => {
-      setQuery(q);
-    }),
+    () => (q: string) => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+      debounceTimer.current = setTimeout(() => {
+        setQuery(q);
+      }, 300);
+    },
     [setQuery]
   );
 
@@ -107,103 +114,104 @@ export function GlobalSearch() {
           className="bg-surface/90 backdrop-blur-2xl border-accent/20 mx-4 pointer-events-auto"
           onClick={(e: MouseEvent) => e.stopPropagation()}
         >
-        <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
-          <Search className="w-5 h-5 text-accent shrink-0" />
-          <Text
-            as="input"
-            ref={inputRef}
-            type="text"
-            placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
-            defaultValue={query}
-            onChange={handleInputChange}
-            width="full"
-            variant="sans"
-            size="xl"
-            weight="font-bold"
-            color="main"
-            className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50"
-            autoFocus
-          />
-          <Box 
-            as="button"
-            type="button"
-            aria-label="Close search"
-            onClick={close}
-            padding={1.5}
-            radius="sm"
-            cursor="pointer"
-            className="group hover:bg-accent/10 transition-colors border border-line"
-          >
-            <X className="w-4 h-4 text-text-dim group-hover:text-accent" />
-          </Box>
-        </Box>
-
-        <Box padding={2} overflow="y-auto" maxHeight="60vh">
-          {results.length > 0 ? (
-            <Stack gap={1}>
-              {results.map((res: SearchResult) => (
-                <Box 
-                  key={`${res.type}-${res.slug}`}
-                  as="button"
-                  type="button"
-                  data-testid="search-result"
-                  onClick={() => handleSelect(res)}
-                  width="full"
-                  paddingX={4}
-                  paddingY={3}
-                  display="flex"
-                  align="center"
-                  gap={4}
-                  radius="md"
-                  cursor="pointer"
-                  className="hover:bg-accent/10 group transition-colors text-left"
-                >
-                   <Stack gap={0.5} flex className="min-w-0">
-                      <Box display="flex" align="center" gap={3}>
-                         <Text size="base" weight="font-bold" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
-                         <Box border paddingX={2} paddingY={0.5} radius="none" className="border-accent/20 bg-accent/10 shrink-0">
-                            <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold">{res.type}</Text>
-                          </Box>
-                      </Box>
-                      <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate opacity-80">{highlight(res.excerpt)}</Text>
-                   </Stack>
-                   <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-60 transition-opacity" />
-                </Box>
-              ))}
-            </Stack>
-          ) : (
-            <Box padding={20} display="flex" align="center" justify="center">
-              <Stack align="center" gap={4} className="opacity-60">
-                <Sparkles className="w-10 h-10 text-accent animate-pulse" />
-                <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                   {query ? "No coordinates found" : "Calibrating Variance..."}
-                </Text>
-              </Stack>
+          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
+            <Search className="w-5 h-5 text-accent shrink-0" />
+            <Text
+              as="input"
+              ref={inputRef}
+              type="text"
+              placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+              defaultValue={query}
+              onChange={handleInputChange}
+              width="full"
+              variant="sans"
+              size="xl"
+              weight="font-bold"
+              color="main"
+              className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50"
+              autoFocus
+            />
+            <Box 
+              as="button"
+              type="button"
+              aria-label="Close search"
+              onClick={close}
+              padding={1.5}
+              radius="sm"
+              cursor="pointer"
+              border
+              className="group hover:bg-accent/10 transition-colors border-line/50"
+            >
+              <X className="w-4 h-4 text-text-dim group-hover:text-accent" />
             </Box>
-          )}
-        </Box>
+          </Box>
 
-        <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center">
-           <Box display="flex" align="center" gap={6}>
-              <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
-                 </Box>
-                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
+          <Box padding={2} overflow="y-auto" maxHeight="60vh">
+            {results.length > 0 ? (
+              <Stack gap={1}>
+                {results.map((res: SearchResult) => (
+                  <Box 
+                    key={`${res.type}-${res.slug}`}
+                    as="button"
+                    type="button"
+                    data-testid="search-result"
+                    onClick={() => handleSelect(res)}
+                    width="full"
+                    paddingX={4}
+                    paddingY={3}
+                    display="flex"
+                    align="center"
+                    gap={4}
+                    radius="md"
+                    cursor="pointer"
+                    className="hover:bg-accent/10 group transition-colors text-left"
+                  >
+                     <Stack gap={0.5} flex className="min-w-0">
+                        <Box display="flex" align="center" gap={3}>
+                           <Text size="base" weight="font-bold" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
+                           <Box border paddingX={2} paddingY={0.5} radius="none" className="border-accent/20 bg-accent/10 shrink-0">
+                              <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold">{res.type}</Text>
+                           </Box>
+                        </Box>
+                        <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate opacity-80">{highlight(res.excerpt)}</Text>
+                     </Stack>
+                     <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-60 transition-opacity" />
+                  </Box>
+                ))}
+              </Stack>
+            ) : (
+              <Box padding={20} display="flex" align="center" justify="center">
+                <Stack align="center" gap={4} className="opacity-60">
+                  <Sparkles className="w-10 h-10 text-accent animate-pulse" />
+                  <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
+                     {query ? "No coordinates found" : "Calibrating Variance..."}
+                  </Text>
+                </Stack>
               </Box>
-              <Box display="flex" align="center" gap={2}>
-                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
-                    <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
-                 </Box>
-                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
-              </Box>
-           </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
-              {results.length} RESULTS FOUND
-            </Text>
+            )}
+          </Box>
+
+          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center">
+             <Box display="flex" align="center" gap={6}>
+                <Box display="flex" align="center" gap={2}>
+                   <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                      <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
+                   </Box>
+                   <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
+                </Box>
+                <Box display="flex" align="center" gap={2}>
+                   <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                      <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
+                   </Box>
+                   <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
+                </Box>
+             </Box>
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
+                {results.length} RESULTS FOUND
+              </Text>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
-  );
+    );
 }

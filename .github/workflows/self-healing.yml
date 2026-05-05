@@ -1,0 +1,171 @@
+name: 'Self-Healing CI'
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  repair:
+    if: >
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure') ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@jules-fix-local'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      EVENT_NAME: ${{ github.event_name }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      RUN_ID: ${{ github.run_id }}
+      WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+      WORKFLOW_RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+      REPO: ${{ github.repository }}
+      HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+      HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+      OLLAMA_MODEL: "qwen2.5-coder:1.5b"
+    steps:
+      - name: Checkout trusted code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Prepare trusted repair script
+        run: |
+          mkdir -p /tmp/repair-tool
+          cp dev-tools/repair.py /tmp/repair-tool/repair.py
+          chmod +x /tmp/repair-tool/repair.py
+
+      - name: Checkout failing branch
+        run: |
+          if [ "$EVENT_NAME" == "workflow_run" ]; then
+            git fetch origin "$WORKFLOW_RUN_SHA"
+            git checkout "$WORKFLOW_RUN_SHA"
+          fi
+
+      - name: Resolve PR branch (for ChatOps)
+        if: env.EVENT_NAME == 'issue_comment'
+        run: |
+          PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,headRefOid)
+          echo "HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> $GITHUB_ENV
+          echo "HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> $GITHUB_ENV
+          gh pr checkout "$ISSUE_NUMBER"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies (Safe)
+        run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+
+      - name: Native Auto-Fix
+        run: |
+          pnpm eslint . --fix || true
+          pnpm oxlint --fix || true
+
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve &
+
+          echo "Waiting for Ollama to be ready..."
+          for i in {1..20}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama is ready!"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Ollama failed to start in time."
+          exit 1
+
+      - name: Pull Model
+        run: ollama pull "$OLLAMA_MODEL"
+
+      - name: Fetch Logs & Run Repair
+        run: |
+          if [ "$EVENT_NAME" == "workflow_run" ]; then
+            TARGET_RUN_ID="$WORKFLOW_RUN_ID"
+          else
+            TARGET_RUN_ID=$(gh run list --workflow CI --branch "$HEAD_REF" --status failure --limit 1 --json databaseId -q '.[0].databaseId')
+          fi
+
+          if [ -n "$TARGET_RUN_ID" ]; then
+            echo "Fetching logs for run $TARGET_RUN_ID..."
+            gh run view "$TARGET_RUN_ID" --log > ci_logs.txt
+
+            # Generate fresh structured logs from current state
+            pnpm eslint . --format json > eslint-errors.json || true
+
+            python3 /tmp/repair-tool/repair.py ci_logs.txt --eslint-json eslint-errors.json
+          else
+            echo "No failed run found to repair."
+            exit 0
+          fi
+
+      - name: Verify Fixes
+        id: verify
+        run: |
+          echo "Verifying repairs..."
+          if pnpm run lint:ox && pnpm run type-check; then
+            echo "Repair verified successfully!"
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "Repair failed verification or only partially fixed."
+            if [ -n "$(git status --porcelain)" ]; then
+               echo "success=partial" >> $GITHUB_OUTPUT
+            else
+               echo "success=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Commit & Push Changes
+        if: steps.verify.outputs.success != 'false'
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${GH_TOKEN}" | base64)"
+
+            NEW_BRANCH="ai-repair-$RUN_ID"
+            if [ "$EVENT_NAME" == "issue_comment" ]; then
+              NEW_BRANCH="ai-repair-pr-$ISSUE_NUMBER"
+            fi
+
+            git checkout -b "$NEW_BRANCH"
+            git add .
+            git commit -m "🤖 AI-generated fix for CI failures"
+            echo "::add-mask::${GH_TOKEN}"
+            git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
+
+            PR_MSG="Automated repair attempt for failed run $WORKFLOW_RUN_ID"
+            if [ "${{ steps.verify.outputs.success }}" == "success" ]; then
+              PR_MSG="✅ $PR_MSG (Verified to pass lint/types)"
+            else
+              PR_MSG="⚠️ $PR_MSG (Partial fix, still has some issues)"
+            fi
+
+            if [ "$EVENT_NAME" == "workflow_run" ]; then
+              if [ "$HEAD_REPO" == "$REPO" ]; then
+                gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH" || true
+              fi
+            else
+              gh pr comment "$ISSUE_NUMBER" --body "🤖 I've attempted to fix the CI failures. $PR_MSG. See the proposed changes in branch \`$NEW_BRANCH\`."
+            fi
+          else
+            echo "No changes to commit."
+          fi

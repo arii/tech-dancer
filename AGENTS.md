@@ -99,6 +99,14 @@ The `dev-tools/td_cli.py` tool is the unified entry point for repository automat
 3. **Submit Review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
 
 ### Quality Gates & Submission Protocol
+- **Autonomous Repair**: If you encounter persistent linting or TypeScript errors, you can use the autonomous repair agent:
+  ```bash
+  # Triage current local errors and attempt to fix them in-place
+  python3 dev-tools/td_cli.py repair
+
+  # Attempt repairs in an isolated git worktree and branch
+  python3 dev-tools/td_cli.py repair --worktree
+  ```
 - **Pre-Submit Check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing.
 - **No Monolithic PRs**: Keep PRs focused. A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
 - **Manual Confirmation**: Every merge command MUST be preceded by a specific `notify_user` request for approval.

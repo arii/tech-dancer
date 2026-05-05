@@ -21,6 +21,9 @@ on:
     - cron: '45 4 * * 6'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})

@@ -51,6 +51,15 @@ Detects potential merge conflicts across all open PRs.
   - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
 - **Usage**: `python3 dev-tools/td_cli.py conflicts`
 
+#### `repair-context`
+Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
+- **Flags**:
+  - `--log <LOG_LINE>`: Process a single raw log line.
+  - `--file <FILE_PATH>`: Process all errors in a log file.
+- **Usage**:
+  - `pnpm repair-context --log "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"`
+  - `python3 dev-tools/td_cli.py repair-context --file logs/ci_failure.log`
+
 #### `ratchet-any` / `bundle-size`
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
 - **Usage**: `python3 dev-tools/td_cli.py bundle-size`
@@ -59,7 +68,7 @@ CI gates for tracking technical debt. These commands compare current metrics aga
 
 ## 🧪 Quality Gates
 
-- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs`.
+- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs` (includes inverse-surface contrast checks for `Text` near `industrial-gradient` treatments).
 - **Type Safety**: TypeScript `any` usage ratchet (enforced in CI).
 - **Bundle Size**: Automated size regression tracking (enforced in CI).
 
