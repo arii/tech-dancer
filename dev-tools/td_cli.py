@@ -10,11 +10,9 @@ import argparse
 import sys
 import os
 import re
-import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_github_client, get_repo_name, get_gha_variable, set_gha_variable, CLIError
-from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
+from utils import get_github_token, get_github_client, get_repo_name, get_gha_variable, set_gha_variable, CLIError, run_command
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -54,7 +52,7 @@ def get_audit_results(content: str = None, targets: list[str] = None):
         cmd.append("-")
 
     # Use execute_raw because the audit tool exits 1 on findings, which is expected
-    res = execute_raw(cmd, input_str=content)
+    res = run_command(cmd, check=False, input_str=content)
     try:
         return json.loads(res.stdout)
     except (json.JSONDecodeError, AttributeError):
@@ -168,7 +166,7 @@ def handle_conflicts(args):
     """
     def run(cmd, exit_on_fail=False):
         print(f"🏃 Running: {cmd}")
-        res = execute_raw(cmd, shell=True)
+        res = run_command(cmd, check=False, shell=True)
         if res.returncode != 0 and exit_on_fail:
             sys.exit(res.returncode)
         return res.returncode, res.stdout.strip()
@@ -383,7 +381,7 @@ def handle_audit_pr(args):
             try:
                 # Use pnpm run audit as requested, passing targets after --
                 # Use execute_raw because audit script exits 1 on violations
-                res = execute_raw(["pnpm", "run", "audit", "--", "--json"] + files_to_audit)
+                res = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
                 output = res.stdout
                 if output:
                     # pnpm might add some noise to stdout before/after the actual JSON if not careful,
@@ -409,7 +407,7 @@ def handle_audit_pr(args):
             if auto_findings:
                 print(f"📋 Found {len(auto_findings)} violations:")
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
-            subprocess.call(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"])
+            run_command(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
 
     if args.submit:
         from submit_review import submit_review
@@ -424,13 +422,13 @@ def handle_pre_submit(args):
         def run_step(name, cmd, ignore_failure=False):
             if not args.json: print(f"--- {name} ---")
             if ignore_failure:
-                res = execute_raw(cmd)
+                res = run_command(cmd, check=False)
                 status = "success" if res.returncode == 0 else "failure"
                 results["steps"].append({"name": name, "status": status})
                 return res.stdout.strip()
             else:
                 try:
-                    stdout = execute(cmd)
+                    stdout = run_command(cmd)
                     results["steps"].append({"name": name, "status": "success"})
                     return stdout
                 except CLIError as e:
@@ -512,8 +510,8 @@ def handle_repair(args):
         if not args.json: print("🔍 No logs provided. Running local triage...")
         # Run lint and tsc to gather logs - using execute_raw as we WANT the error logs
         # We gather both stdout and stderr for triage
-        res_lint = execute_raw(["pnpm", "run", "lint:ox"])
-        res_tsc = execute_raw(["pnpm", "run", "type-check"])
+        res_lint = run_command(["pnpm", "run", "lint:ox"], check=False)
+        res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
         logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
         logs_source = "local triage"
 
@@ -530,7 +528,7 @@ def handle_repair(args):
             branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
             worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
             if not args.json: print(f"🏗️  Setting up git worktree at {worktree_path} (branch: {branch_name})...")
-            subprocess.run(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"], check=True, capture_output=True)
+            run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
             os.chdir(worktree_path)
             # We need to make sure node_modules or dependencies are available if we verify
             # But local repair script runs pnpm. Maybe just symlink node_modules for speed?
@@ -547,7 +545,7 @@ def handle_repair(args):
         cmd = [sys.executable, repair_script, tmp_log_path]
         # Also pass eslint json if available locally? For now let's keep it simple.
 
-        proc = subprocess.run(cmd)
+        proc = run_command(cmd, check=False)
         os.unlink(tmp_log_path)
 
         if proc.returncode == 0:
@@ -572,7 +570,7 @@ def handle_repair(args):
 
 def handle_audit_gate(args):
     # Current violations count
-    stdout_current = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
+    stdout_current = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
     current_count = int(stdout_current or 0)
 
     # 1. Try to get baseline from GHA variable or Environment
@@ -583,7 +581,7 @@ def handle_audit_gate(args):
         baseline_count = 0
         try:
             ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-            main_files = execute(ls_cmd).splitlines()
+            main_files = run_command(ls_cmd).splitlines()
 
             relevant_main_files = []
             for mf in main_files:
@@ -598,18 +596,18 @@ def handle_audit_gate(args):
                 try:
                     show_cmd = ["git", "show", f"origin/main:{mf}"]
                     # Don't log error here as it might be expected if file is new
-                    res_show = execute_raw(show_cmd, log_on_error=False)
+                    res_show = run_command(show_cmd, check=False, log_on_error=False)
                     if res_show.returncode != 0:
                         continue
 
                     content = res_show.stdout
-                    stdout_baseline = execute(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                    stdout_baseline = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
                                                input_str=content)
                     baseline_count += int(stdout_baseline or 0)
-                except (CLIError, subprocess.CalledProcessError) as e:
+                except (CLIError) as e:
                     print(f"⚠️  Warning: Failed to calculate baseline for {mf}: {e}", file=sys.stderr)
                     continue
-        except (CLIError, subprocess.CalledProcessError) as e:
+        except (CLIError) as e:
             print(f"⚠️  Warning: Failed to resolve dynamic audit baseline: {e}", file=sys.stderr)
 
     if not args.json:
@@ -668,7 +666,7 @@ def handle_fix_ci(args):
     if not repo_name:
         raise CLIError("Could not determine repository name. Ensure the script is run within a git repository or GH_REPO is set.", code=400)
 
-    g = Github(token)
+    g = get_github_client()
     repo = g.get_repo(repo_name)
 
     # 2. Resolve PR and Branch
@@ -686,7 +684,7 @@ def handle_fix_ci(args):
     else:
         # Local dev fallback: detect current branch
         try:
-            branch = execute(['git', 'branch', '--show-current'])
+            branch = run_command(['git', 'branch', '--show-current'])
             if not branch: raise Exception("No current branch detected")
             if not args.json: print(f"ℹ️  Detected current branch: `{branch}`")
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}"))

@@ -11,24 +11,12 @@ class CLIError(Exception):
         self.data = data
         super().__init__(self.message)
 
-def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment or via gh CLI."""
-    token = os.getenv("GITHUB_TOKEN")
-    if token:
-        return token
-    try:
-        result = subprocess.run(
-            ["gh", "auth", "token"],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip()
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return None
-
-def _run(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> subprocess.CompletedProcess:
-    """Internal helper to run a command with granular logging on failure."""
+def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True) -> Union[str, subprocess.CompletedProcess]:
+    """
+    Unified command execution helper.
+    - If check=True (default): returns stripped stdout string, raises CLIError on non-zero exit.
+    - If check=False: returns CompletedProcess object.
+    """
     proc = subprocess.run(
         cmd,
         shell=shell,
@@ -43,24 +31,29 @@ def _run(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[st
             print(f"--- stdout ---\n{proc.stdout.strip()}", file=sys.stderr)
         if proc.stderr:
             print(f"--- stderr ---\n{proc.stderr.strip()}", file=sys.stderr)
+
+    if check:
+        if proc.returncode != 0:
+            raise CLIError(f"Command failed with exit code {proc.returncode}", code=proc.returncode)
+        return proc.stdout.strip()
+
     return proc
 
-def execute(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> str:
-    """Runs a command, returns stripped stdout, and raises CLIError on failure."""
-    proc = _run(cmd, shell, input_str, log_on_error)
-    if proc.returncode != 0:
-        raise CLIError(f"Command failed with exit code {proc.returncode}", code=proc.returncode)
-    return proc.stdout.strip()
-
-def execute_raw(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> subprocess.CompletedProcess:
-    """Runs a command and returns the full CompletedProcess object without raising."""
-    return _run(cmd, shell, input_str, log_on_error)
+def get_github_token() -> Optional[str]:
+    """Retrieves the GitHub token from environment or via gh CLI."""
+    token = os.getenv("GITHUB_TOKEN")
+    if token:
+        return token
+    try:
+        return run_command(["gh", "auth", "token"], log_on_error=False)
+    except (CLIError, FileNotFoundError):
+        return None
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""
     try:
-        # Using execute_raw here to avoid noisy logs for a common discovery step
-        res = execute_raw(['git', 'config', '--get', 'remote.origin.url'], log_on_error=False)
+        # Using check=False here to avoid noisy logs for a common discovery step
+        res = run_command(['git', 'config', '--get', 'remote.origin.url'], check=False, log_on_error=False)
         if res.returncode != 0:
             return os.getenv("GH_REPO")
         url = res.stdout.strip()
@@ -117,9 +110,9 @@ class GHAConfigManager:
         # 2. Check gh CLI availability
         if self.gh_available is None:
             try:
-                subprocess.run(["gh", "--version"], capture_output=True, check=True)
+                run_command(["gh", "--version"], log_on_error=False)
                 self.gh_available = True
-            except (subprocess.CalledProcessError, FileNotFoundError):
+            except (CLIError, FileNotFoundError):
                 self.gh_available = False
 
         if not self.gh_available:
@@ -127,10 +120,10 @@ class GHAConfigManager:
 
         # 3. Fetch from gh CLI
         try:
-            result = subprocess.run(
+            result = run_command(
                 ["gh", "variable", "get", name],
-                capture_output=True,
-                text=True
+                check=False,
+                log_on_error=False
             )
 
             if result.returncode == 0:
@@ -167,9 +160,9 @@ class GHAConfigManager:
         # 2. Check gh CLI availability
         if self.gh_available is None:
             try:
-                subprocess.run(["gh", "--version"], capture_output=True, check=True)
+                run_command(["gh", "--version"], log_on_error=False)
                 self.gh_available = True
-            except (subprocess.CalledProcessError, FileNotFoundError):
+            except (CLIError, FileNotFoundError):
                 self.gh_available = False
 
         if not self.gh_available:
@@ -177,10 +170,9 @@ class GHAConfigManager:
 
         # 3. Set via gh CLI
         try:
-            subprocess.run(
+            run_command(
                 ["gh", "variable", "set", name, "--body", str(value)],
-                check=True,
-                capture_output=True
+                log_on_error=True
             )
             return True
         except Exception as e:

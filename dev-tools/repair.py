@@ -8,11 +8,10 @@ import os
 import sys
 import json
 import re
-import subprocess
 import urllib.request
 import urllib.error
 from typing import List, Dict, Any
-from utils import execute_raw
+from utils import run_command
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:1.5b")
@@ -144,11 +143,11 @@ def run_verification():
     log("Running verification checks...")
     results = {}
     # Check Oxlint (Fast)
-    # Use execute_raw to gather both stdout and stderr
-    res_ox = execute_raw(["pnpm", "run", "lint:ox"])
+    # Use run_command with check=False to gather both stdout and stderr
+    res_ox = run_command(["pnpm", "run", "lint:ox"], check=False)
     results['oxlint'] = res_ox.stdout + res_ox.stderr
     # Check Typescript
-    res_tsc = execute_raw(["pnpm", "run", "type-check"])
+    res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
     results['tsc'] = res_tsc.stdout + res_tsc.stderr
     return results
 

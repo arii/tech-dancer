@@ -1,11 +1,10 @@
 import json
 import os
 import sys
-import subprocess
 from typing import List, Optional
 
-# Import execute and execute_raw from utils
-from utils import execute, execute_raw
+# Import run_command from utils
+from utils import run_command
 
 def get_project_config():
     config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
@@ -22,12 +21,12 @@ def get_changed_files():
     """Returns the list of files changed in the current branch."""
     config = get_project_config()
     base = config.get("base_branch", "origin/main")
-    # Use execute_raw to manually handle fallback
-    res = execute_raw(["git", "diff", "--name-only", base], log_on_error=False)
+    # Use check=False to manually handle fallback
+    res = run_command(["git", "diff", "--name-only", base], check=False, log_on_error=False)
     if res.returncode == 0:
         return res.stdout.strip().splitlines()
 
-    res = execute_raw(["git", "diff", "--name-only", "HEAD"], log_on_error=False)
+    res = run_command(["git", "diff", "--name-only", "HEAD"], check=False, log_on_error=False)
     if res.returncode == 0:
         return res.stdout.strip().splitlines()
 
