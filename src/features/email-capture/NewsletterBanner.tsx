@@ -2,7 +2,6 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
 import { useEmailStore } from './emailStore';
-import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {
   const hideBar = useEmailStore((state) => state.hideBar);
