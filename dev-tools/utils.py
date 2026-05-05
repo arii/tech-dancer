@@ -57,7 +57,11 @@ def execute_raw(cmd: Union[str, List[str]], shell: bool = False, input_str: Opti
     return _run(cmd, shell, input_str, log_on_error)
 
 def get_repo_name() -> Optional[str]:
-    """Auto-detect repo from git remote."""
+    """Auto-detect repo from environment variables or git remote."""
+    repo = os.getenv("GITHUB_REPOSITORY") or os.getenv("GH_REPO")
+    if repo:
+        return repo
+
     try:
         # Using execute_raw here to avoid noisy logs for a common discovery step
         res = execute_raw(['git', 'config', '--get', 'remote.origin.url'], log_on_error=False)
@@ -70,7 +74,7 @@ def get_repo_name() -> Optional[str]:
         match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
         return match.group(1) if match else url
     except Exception:
-        return os.getenv("GH_REPO")
+        return None
 
 class GHAConfigManager:
     """Manages GitHub Actions variables with local caching and robust error handling."""
