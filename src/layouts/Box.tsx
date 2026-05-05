@@ -1,7 +1,7 @@
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
-import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
+import { spacing, layout as layoutTokens, shadows } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 import { SPACING_MAP, RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
@@ -201,7 +201,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           overflow && `overflow-${overflow}`,
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
-          zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
+          zIndex && getVal(zIndex, "z"),
           opacity && getVal(opacity, "opacity"),
           getResponsiveClasses(display, ""),
           aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
