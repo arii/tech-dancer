@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
-import { Box, Stack } from '@/layouts/Primitives';
 import Sidebar from '@/components/Sidebar';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
@@ -130,9 +129,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
   return (
     <div
       className="relative overflow-x-hidden w-full min-h-screen touch-pan-y flex flex-col bg-background text-foreground md:flex-row"
-      // @ts-ignore
+      // @ts-expect-error view transition api is not standard yet
       onTouchStart={handleTouchStart}
-      // @ts-ignore
+      // @ts-expect-error view transition api is not standard yet
       onTouchEnd={handleTouchEnd}
     >
       <div

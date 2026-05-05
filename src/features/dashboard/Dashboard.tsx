@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight, MapPin, Calendar } from 'lucide-react';

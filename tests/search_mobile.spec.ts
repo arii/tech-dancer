@@ -12,7 +12,7 @@ test.describe('Global Search Modal - Mobile', () => {
     await page.getByTestId('button-toggle-nav').click();
 
     // Check if the menu is actually visible
-    const searchButton = page.getByText('Search', { exact: true }).first();
+    const searchButton = page.locator('nav[aria-label="Mobile Navigation"] button[aria-label="Search"]');
     await expect(searchButton).toBeVisible();
 
     await searchButton.click({ force: true });
