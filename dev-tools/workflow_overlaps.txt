@@ -1,9 +1,0 @@
-File: .github/workflows/deploy.yml
-Related PRs: PR #739 PR #677
----
-File: .github/workflows/ci.yml
-Related PRs: PR #746 PR #745 PR #739 PR #680
----
-File: .github/workflows/validate_issue.yml
-Related PRs: PR #739 PR #725
----
