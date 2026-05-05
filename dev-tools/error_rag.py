@@ -1,14 +1,54 @@
 import re
 import os
 import json
+import sys
+
+def resolve_file_path(path):
+    """Resolves path relative to current working directory or via filename lookup."""
+    if not path:
+        return None
+
+    # 1. Direct check (if absolute and exists, we take it, but we prefer relative)
+    if os.path.isabs(path) and os.path.exists(path):
+         # If it's absolute but under current directory, make it relative
+         try:
+             rel = os.path.relpath(path)
+             if not rel.startswith('..'):
+                 return rel
+         except ValueError:
+             pass
+
+    # 2. Try stripping leading common absolute paths (like /app/ or /workspace/)
+    # We look for the first part that actually exists in the current directory relative to CWD
+    parts = [p for p in path.split(os.sep) if p]
+    for i in range(len(parts)):
+        subpath = os.path.join(*parts[i:])
+        if subpath and os.path.exists(subpath):
+            return subpath
+
+    # 3. Fallback to basename lookup in current directory (recursive)
+    filename = os.path.basename(path)
+    for root, dirs, files in os.walk('.'):
+        if filename in files:
+            found_path = os.path.join(root, filename)
+            if found_path.startswith('./'):
+                return found_path[2:]
+            return found_path
+
+    return None
+
+def strip_ansi(text):
+    """Strips ANSI color codes from string."""
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    return ansi_escape.sub('', text)
 
 class SignatureExtractor:
     """Extracts file, line, and error signature from logs."""
 
-    # ESLint example: /app/src/App.tsx:10:5: 'unused' is defined but never used. [eslint/no-unused-vars]
-    # Some ESLint formatters might not include the 'eslint/' prefix if it's a core rule,
-    # but the spec mentioned eslint/no-unused-vars.
+    # ESLint stylish: /app/src/App.tsx:10:5: 'unused' is defined but never used. [eslint/no-unused-vars]
+    # ESLint compact: /app/src/App.tsx: line 10, col 5, Error - 'unused' is defined but never used. [eslint/no-unused-vars]
     ESLINT_PATTERN = re.compile(r'^(.*?):(\d+):(\d+): (.*) \[(.*)\]$')
+    ESLINT_COMPACT_PATTERN = re.compile(r'^(.*?): line (\d+), col (\d+), (?:Error|Warning) - (.*) \[(.*)\]$')
 
     # TS example: src/App.tsx:10:5 - error TS2322: Type 'string' is not assignable to type 'number'.
     TS_PATTERN = re.compile(r'^(.*?):(\d+):(\d+) - error (TS\d+): (.*)$')
@@ -18,10 +58,10 @@ class SignatureExtractor:
 
     @classmethod
     def extract(cls, log_line):
-        log_line = log_line.strip()
+        log_line = strip_ansi(log_line.strip())
 
         # Try ESLint
-        match = cls.ESLINT_PATTERN.match(log_line)
+        match = cls.ESLINT_PATTERN.match(log_line) or cls.ESLINT_COMPACT_PATTERN.match(log_line)
         if match:
             sig = match.group(5)
             if not sig.startswith('eslint/') and '/' not in sig:
@@ -62,10 +102,10 @@ class ASTContextualizer:
     """Extracts surrounding code block for a given line."""
 
     @staticmethod
-    def extract_context(filepath, line_number, window=5):
+    def extract_context(filepath, line_number, window=15):
         """
-        Extracts a window of code around line_number.
-        Tries to be smart about finding the logical block (indentation-based).
+        Extracts a deterministic window of code around line_number.
+        Uses a fixed window to avoid brittle indentation heuristics.
         """
         if not os.path.exists(filepath):
             return None
@@ -84,45 +124,9 @@ class ASTContextualizer:
         if idx < 0 or idx >= len(lines):
             return None
 
-        # Basic heuristic: find the block based on indentation
-        target_line = lines[idx]
-        target_indent = len(target_line) - len(target_line.lstrip())
-
-        start_idx = idx
-        while start_idx > 0:
-            line = lines[start_idx - 1]
-            if line.strip() == "":
-                start_idx -= 1
-                continue
-            indent = len(line) - len(line.lstrip())
-            if indent < target_indent:
-                # Potential start of block (e.g. function def)
-                # Check if it's actually code or just a closing brace from previous block
-                if any(k in line for k in ['function', 'const', 'let', 'var', 'class', 'if', 'for', 'while', 'switch']):
-                     break
-                if '{' in line:
-                    break
-            start_idx -= 1
-            if idx - start_idx > 15: # Safety limit
-                break
-
-        end_idx = idx
-        while end_idx < len(lines) - 1:
-            line = lines[end_idx + 1]
-            if line.strip() == "":
-                end_idx += 1
-                continue
-            indent = len(line) - len(line.lstrip())
-            if indent < target_indent:
-                break
-            end_idx += 1
-            if end_idx - idx > 15: # Safety limit
-                break
-
-        # Add some padding if we didn't find much
-        if end_idx - start_idx < window:
-             start_idx = max(0, idx - window)
-             end_idx = min(len(lines) - 1, idx + window)
+        # Use a deterministic window
+        start_idx = max(0, idx - window)
+        end_idx = min(len(lines) - 1, idx + window)
 
         context_lines = lines[start_idx:end_idx+1]
         return "".join(context_lines)
@@ -140,7 +144,11 @@ class RAGPipeline:
         try:
             with open(self.knowledge_base_path, 'r') as f:
                 return json.load(f)
-        except Exception:
+        except json.JSONDecodeError as e:
+            print(f"⚠️ Warning: Knowledge base JSON is invalid: {e}", file=sys.stderr)
+            return {}
+        except Exception as e:
+            print(f"⚠️ Warning: Failed to load knowledge base: {e}", file=sys.stderr)
             return {}
 
     def generate_prompt(self, log_line):
@@ -154,8 +162,8 @@ class RAGPipeline:
         examples = strategy_data.get('examples', [])
 
         # Adjust file path for context extraction
-        filepath = extracted['file'].replace('/app/', '')
-        context = ASTContextualizer.extract_context(filepath, extracted['line'])
+        filepath = resolve_file_path(extracted['file'])
+        context = ASTContextualizer.extract_context(filepath, extracted['line']) if filepath else None
 
         prompt = f"### Error Report\n"
         prompt += f"- **File**: `{extracted['file']}`\n"

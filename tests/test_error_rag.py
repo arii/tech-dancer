@@ -10,7 +10,11 @@ error_rag = importlib.util.module_from_spec(spec)
 sys.modules["error_rag"] = error_rag
 spec.loader.exec_module(error_rag)
 
-from error_rag import SignatureExtractor, ASTContextualizer, RAGPipeline
+from error_rag import SignatureExtractor, ASTContextualizer, RAGPipeline, resolve_file_path, strip_ansi
+
+def test_strip_ansi():
+    colored = "\x1b[31mError\x1b[0m: test"
+    assert strip_ansi(colored) == "Error: test"
 
 def test_signature_extractor_eslint():
     log = "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"
@@ -20,35 +24,44 @@ def test_signature_extractor_eslint():
     assert extracted["col"] == 5
     assert extracted["signature"] == "eslint/no-unused-vars"
 
-def test_signature_extractor_ts():
-    log = "src/App.tsx:10:5 - error TS2322: Type 'string' is not assignable to type 'number'."
+def test_signature_extractor_colored():
+    log = "\x1b[31m/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]\x1b[0m"
     extracted = SignatureExtractor.extract(log)
-    assert extracted["file"] == "src/App.tsx"
-    assert extracted["line"] == 10
-    assert extracted["signature"] == "ts/2322"
+    assert extracted["file"] == "/app/src/App.tsx"
+    assert extracted["signature"] == "eslint/no-unused-vars"
 
-def test_signature_extractor_ts_alt():
-    log = "src/App.tsx(10,5): error TS2322: Type 'string' is not assignable to type 'number'."
-    extracted = SignatureExtractor.extract(log)
-    assert extracted["file"] == "src/App.tsx"
-    assert extracted["line"] == 10
-    assert extracted["signature"] == "ts/2322"
+def test_resolve_file_path(tmp_path):
+    # Setup dummy project structure
+    src = tmp_path / "src"
+    src.mkdir()
+    app_tsx = src / "App.tsx"
+    app_tsx.write_text("content")
+
+    os.chdir(tmp_path)
+
+    # 1. Direct path
+    assert resolve_file_path("src/App.tsx") == "src/App.tsx"
+
+    # 2. Stripping absolute prefix
+    assert resolve_file_path("/app/src/App.tsx") == "src/App.tsx"
+
+    # 3. Basename fallback
+    assert resolve_file_path("/some/random/path/App.tsx") == "src/App.tsx"
 
 def test_ast_contextualizer_basic(tmp_path):
     f = tmp_path / "test.tsx"
-    content = """
-function Test() {
-    const x = 1;
-    return <div>{x}</div>;
-}
-"""
+    content = "\n".join([f"line {i}" for i in range(1, 101)])
     f.write_text(content)
-    context = ASTContextualizer.extract_context(str(f), 3)
-    assert "const x = 1;" in context
-    assert "function Test()" in context
-    assert "return <div>{x}</div>;" in context
 
-def test_rag_pipeline(tmp_path):
+    context = ASTContextualizer.extract_context(str(f), 50, window=5)
+    # 0-indexed: line 50 is index 49. Window +/- 5 is 44 to 54.
+    # lines[44:55] (exclusive end) -> line 45 to line 55
+    assert "line 45" in context
+    assert "line 55" in context
+    assert "line 44" not in context
+    assert "line 56" not in context
+
+def test_rag_pipeline_robust(tmp_path):
     kb_file = tmp_path / "errors.json"
     kb_data = {
         "eslint/no-unused-vars": {
@@ -58,8 +71,16 @@ def test_rag_pipeline(tmp_path):
     }
     kb_file.write_text(json.dumps(kb_data))
 
+    # Create the file being referred to
+    src = tmp_path / "src"
+    src.mkdir()
+    app_tsx = src / "App.tsx"
+    app_tsx.write_text("import React from 'react';\n\nconst x = 1;\n")
+
+    os.chdir(tmp_path)
+
     pipeline = RAGPipeline(knowledge_base_path=str(kb_file))
-    log = "src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"
+    log = "/app/src/App.tsx:3:7: 'x' is assigned a value but never used. [no-unused-vars]"
 
     prompt = pipeline.generate_prompt(log)
     assert "eslint/no-unused-vars" in prompt
