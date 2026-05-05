@@ -22,84 +22,84 @@ interface ContactFormViewProps {
   onSubmit: (e?: BaseSyntheticEvent) => Promise<void>;
 }
 
+const inputClasses = "w-full min-h-12 bg-bg border px-4 py-3 text-base sm:text-sm font-sans rounded-lg transition-all focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 placeholder:text-text-dim/50";
+
 export function ContactFormView({ register, errors, isSubmitting, onSubmit }: ContactFormViewProps) {
   return (
     <Box as="section" minHeight="[calc(100vh-64px)]">
-      <Stack gap={12} maxWidth="3xl" marginX="auto">
+      <Stack gap={12}>
         <PageHeader
           label="CONTACT"
           title="Get in Touch"
           description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I’ll reply soon."
-          border="b"
         />
 
-        <Stack gap={8}>
+        <Stack gap={8} maxWidth="3xl">
           <Stack gap={2}>
-            <Text variant="headline" size="2xl" weight="font-black">Inquiries</Text>
-            <Text variant="body" size="base" color="main">
+            <Text variant="display" size="2xl" weight="font-black" className="text-accent-navy">Inquiries</Text>
+            <Text variant="body" size="base" color="dim">
               Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
             </Text>
           </Stack>
 
+          <Box as="form" onSubmit={onSubmit} className="space-y-6" noValidate>
+              <FormField label="Your Name" error={errors.name?.message}>
+                <Box as="input"
+                  {...register('name')}
+                  type="text"
+                  placeholder="Jane Doe"
+                  aria-required="true"
+                  className={cn(
+                    inputClasses,
+                    errors.name ? inputs.error : 'border-line'
+                  )}
+                />
+              </FormField>
 
-          <Stack as="form" onSubmit={onSubmit} gap={6} noValidate>
-            <FormField label="Your Name" error={errors.name?.message}>
-              <Box as="input"
-                {...register('name')}
-                type="text"
-                placeholder="Jane Doe"
-                aria-required="true"
-                className={cn(
-                  inputs.base,
-                  errors.name ? inputs.error : 'border-line'
-                )}
-              />
-            </FormField>
+              <FormField label="Your Email" error={errors.email?.message}>
+                <Box as="input"
+                  {...register('email')}
+                  type="email"
+                  placeholder="jane@example.com"
+                  aria-required="true"
+                  className={cn(
+                    inputClasses,
+                    errors.email ? inputs.error : 'border-line'
+                  )}
+                />
+              </FormField>
 
-            <FormField label="Your Email" error={errors.email?.message}>
-              <Box as="input"
-                {...register('email')}
-                type="email"
-                placeholder="jane@example.com"
-                aria-required="true"
-                className={cn(
-                  inputs.base,
-                  errors.email ? inputs.error : 'border-line'
-                )}
-              />
-            </FormField>
+              <FormField label="Subject" error={errors.subject?.message}>
+                <Box as="select"
+                  {...register('subject')}
+                  className={cn(inputClasses, "border-line")}
+                >
+                  <option value="General Feedback">General Feedback</option>
+                  <option value="Content Request">Content Request</option>
+                  <option value="Gear Review Request">Gear Review Request</option>
+                  <option value="Dance Statistics">Dance Statistics</option>
+                </Box>
+              </FormField>
 
-            <FormField label="Subject" error={errors.subject?.message}>
-              <Box as="select"
-                {...register('subject')}
-                className={cn(inputs.select, "border-line")}
-              >
-                <option value="General Feedback">General Feedback</option>
-                <option value="Content Request">Content Request</option>
-                <option value="Gear Review Request">Gear Review Request</option>
-                <option value="Dance Statistics">Dance Statistics</option>
-              </Box>
-            </FormField>
+              <FormField label="Message" error={errors.message?.message}>
+                <Box as="textarea"
+                  {...register('message')}
+                  rows={5}
+                  placeholder="How can I help you?"
+                  aria-required="true"
+                  className={cn(
+                    inputClasses,
+                    "resize-none",
+                    errors.message ? inputs.error : 'border-line'
+                  )}
+                />
+              </FormField>
 
-            <FormField label="Message" error={errors.message?.message}>
-              <Box as="textarea"
-                {...register('message')}
-                rows={5}
-                placeholder="How can I help you?"
-                aria-required="true"
-                className={cn(
-                  inputs.base,
-                  "resize-none",
-                  errors.message ? inputs.error : 'border-line'
-                )}
-              />
-            </FormField>
-
-            {errors.root && (
-              <Text color="error" size="sm" align="center" as="p" marginTop={2}>
-                {errors.root.message}
-              </Text>
-            )}
+              {errors.root && (
+                <Text color="error" size="sm" align="center" as="p" marginTop={2}>
+                  {errors.root.message}
+                </Text>
+              )}
 
             <Box display="flex" justify="end">
               <Button
@@ -122,7 +122,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 )}
               </Button>
             </Box>
-          </Stack>
+          </Box>
         </Stack>
       </Stack>
     </Box>
