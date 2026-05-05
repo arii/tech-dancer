@@ -1,0 +1,1019 @@
+Lint & Type Check	Set up job	﻿2026-05-05T05:39:16.3569097Z Current runner version: '2.334.0'
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3593504Z ##[group]Runner Image Provisioner
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3594415Z Hosted Compute Agent
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3595023Z Version: 20260213.493
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3595595Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3596380Z Build Date: 2026-02-13T00:28:41Z
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3597007Z Worker ID: {d4beabbc-3c1c-42b1-bb3b-8774e5a5a8ee}
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3597688Z Azure Region: westus
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3598263Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3600037Z ##[group]Operating System
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3600668Z Ubuntu
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3601178Z 24.04.4
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3601658Z LTS
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3602083Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3602607Z ##[group]Runner Image
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3603184Z Image: ubuntu-24.04
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3603762Z Version: 20260413.86.1
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3604789Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3606348Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3607260Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3608269Z ##[group]GITHUB_TOKEN Permissions
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3610446Z Contents: read
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3611137Z Metadata: read
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3611612Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3613805Z Secret source: Actions
+Lint & Type Check	Set up job	2026-05-05T05:39:16.3614628Z Prepare workflow directory
+Lint & Type Check	Set up job	2026-05-05T05:39:16.4151887Z Prepare all required actions
+Lint & Type Check	Set up job	2026-05-05T05:39:16.4191641Z Getting action download info
+Lint & Type Check	Set up job	2026-05-05T05:39:16.8774056Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Lint & Type Check	Set up job	2026-05-05T05:39:16.9982895Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Lint & Type Check	Set up job	2026-05-05T05:39:17.4798713Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Lint & Type Check	Set up job	2026-05-05T05:39:17.6671644Z Complete job name: Lint & Type Check
+Lint & Type Check	Checkout	﻿2026-05-05T05:39:17.7355525Z ##[group]Run actions/checkout@v4
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7356376Z with:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7356758Z   fetch-depth: 0
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7357184Z   repository: arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7357824Z   token: ***
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7358204Z   ssh-strict: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7358803Z   ssh-user: git
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7359209Z   persist-credentials: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7359652Z   clean: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7360050Z   sparse-checkout-cone-mode: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7360532Z   fetch-tags: false
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7360924Z   show-progress: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7361325Z   lfs: false
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7361687Z   submodules: false
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7362080Z   set-safe-directory: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7362742Z env:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7363151Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7363664Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7364112Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7364519Z   AUDIT_BASELINE: 
+Lint & Type Check	Checkout	2026-05-05T05:39:17.7364912Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8311643Z Syncing repository: arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8313507Z ##[group]Getting Git version info
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8314235Z Working directory is '/home/runner/work/tech-dancer/tech-dancer'
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8315266Z [command]/usr/bin/git version
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8351687Z git version 2.53.0
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8374556Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8389906Z Temporarily overriding HOME='/home/runner/work/_temp/cfe2b7f5-38d5-4058-96ce-5800cf19bee1' before making global git config changes
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8391889Z Adding repository directory to the temporary git global config as a safe directory
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8396274Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8431779Z Deleting the contents of '/home/runner/work/tech-dancer/tech-dancer'
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8435538Z ##[group]Initializing the repository
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8440789Z [command]/usr/bin/git init /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8530116Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8531884Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8533645Z hint: to use in all of your new repositories, which will suppress this warning,
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8535142Z hint: call:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8535850Z hint:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8536720Z hint: 	git config --global init.defaultBranch <name>
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8537848Z hint:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8539264Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8541175Z hint: 'development'. The just-created branch can be renamed via this command:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8542546Z hint:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8543290Z hint: 	git branch -m <name>
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8544204Z hint:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8545337Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8547037Z Initialized empty Git repository in /home/runner/work/tech-dancer/tech-dancer/.git/
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8549913Z [command]/usr/bin/git remote add origin https://github.com/arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8607091Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8608290Z ##[group]Disabling automatic garbage collection
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8611987Z [command]/usr/bin/git config --local gc.auto 0
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8640610Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8641799Z ##[group]Setting up auth
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8647487Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8677506Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8961116Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint & Type Check	Checkout	2026-05-05T05:39:17.8991275Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint & Type Check	Checkout	2026-05-05T05:39:17.9211265Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint & Type Check	Checkout	2026-05-05T05:39:17.9243163Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint & Type Check	Checkout	2026-05-05T05:39:17.9458931Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lint & Type Check	Checkout	2026-05-05T05:39:17.9492551Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:17.9493834Z ##[group]Fetching the repository
+Lint & Type Check	Checkout	2026-05-05T05:39:17.9503255Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3290439Z From https://github.com/arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3291916Z  * [new branch]        about-page-updates-14352211737228389575 -> origin/about-page-updates-14352211737228389575
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3293574Z  * [new branch]        add-migration-guide-5876664802681073547 -> origin/add-migration-guide-5876664802681073547
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3295111Z  * [new branch]        ai-repair-25356038167 -> origin/ai-repair-25356038167
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3297916Z  * [new branch]        ai-repair-25356378430 -> origin/ai-repair-25356378430
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3299171Z  * [new branch]        ai-repair-25356804818 -> origin/ai-repair-25356804818
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3300024Z  * [new branch]        ari-boomtick          -> origin/ari-boomtick
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3300898Z  * [new branch]        ari-mockup            -> origin/ari-mockup
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3301780Z  * [new branch]        ari-replit-dark-mode  -> origin/ari-replit-dark-mode
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3302980Z  * [new branch]        ari-replit-dark-mode-3293038484833716469 -> origin/ari-replit-dark-mode-3293038484833716469
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3304096Z  * [new branch]        ari-replit-fix-manual -> origin/ari-replit-fix-manual
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3305637Z  * [new branch]        branding-migration-10480169812015641474 -> origin/branding-migration-10480169812015641474
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3307160Z  * [new branch]        chore/infra-config-improvement-12731238171326256191 -> origin/chore/infra-config-improvement-12731238171326256191
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3309091Z  * [new branch]        cleanup-root-files-15439431871599830205 -> origin/cleanup-root-files-15439431871599830205
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3310759Z  * [new branch]        content/why-space-buns-work-for-west-coast-swing -> origin/content/why-space-buns-work-for-west-coast-swing
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3312525Z  * [new branch]        copilot-fix-git-merge-issue-2078139070203710354 -> origin/copilot-fix-git-merge-issue-2078139070203710354
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3314192Z  * [new branch]        copilot-fix-git-merge-issue-3219033726005670393 -> origin/copilot-fix-git-merge-issue-3219033726005670393
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3315567Z  * [new branch]        copilot/fix-git-merge-issue -> origin/copilot/fix-git-merge-issue
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3316604Z  * [new branch]        copilot/resolve-merge-issue -> origin/copilot/resolve-merge-issue
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3318066Z  * [new branch]        decrease-merge-conflict-sources-fix-v2-990871188136395290 -> origin/decrease-merge-conflict-sources-fix-v2-990871188136395290
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3320091Z  * [new branch]        document-simplified-workflow-8785441803960069738 -> origin/document-simplified-workflow-8785441803960069738
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3321677Z  * [new branch]        feat-consolidated-rebrand-8441384012443507034 -> origin/feat-consolidated-rebrand-8441384012443507034
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3323652Z  * [new branch]        feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3325506Z  * [new branch]        feat/add-ga4-tracking-12639729061711926309 -> origin/feat/add-ga4-tracking-12639729061711926309
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3326728Z  * [new branch]        feat/ai-slop-audit-workflow -> origin/feat/ai-slop-audit-workflow
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3328660Z  * [new branch]        feat/blog-post-wcs-data-scraper-14452895178941716806 -> origin/feat/blog-post-wcs-data-scraper-14452895178941716806
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3330130Z  * [new branch]        feat/boomtick-design-migration-15578555430520802096 -> origin/feat/boomtick-design-migration-15578555430520802096
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3331163Z  * [new branch]        feat/brand-migration-boomtick-blog-6234609098749488321 -> origin/feat/brand-migration-boomtick-blog-6234609098749488321
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3331952Z  * [new branch]        feat/consolidated-rebrand -> origin/feat/consolidated-rebrand
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3332887Z  * [new branch]        feat/content-pipeline-7178197585753202032-8406124502228595157 -> origin/feat/content-pipeline-7178197585753202032-8406124502228595157
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3334143Z  * [new branch]        feat/dashboard-hero-2170559866929629428 -> origin/feat/dashboard-hero-2170559866929629428
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3335179Z  * [new branch]        feat/frontend-style-overhaul-8718428500994173403 -> origin/feat/frontend-style-overhaul-8718428500994173403
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3336011Z  * [new branch]        feat/frontend-style-overhaul-reduced -> origin/feat/frontend-style-overhaul-reduced
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3336682Z  * [new branch]        feat/google-site-verification -> origin/feat/google-site-verification
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3337337Z  * [new branch]        feat/hero-update-933815339834268378 -> origin/feat/hero-update-933815339834268378
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3338155Z  * [new branch]        feat/issue-cache-playwright-etl-15277468477470866741 -> origin/feat/issue-cache-playwright-etl-15277468477470866741
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3339598Z  * [new branch]        feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3340634Z  * [new branch]        feat/no-card-content-5940296687076887070 -> origin/feat/no-card-content-5940296687076887070
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3341843Z  * [new branch]        feat/normalize-content-frontmatter-and-tagging-12531175689791989355 -> origin/feat/normalize-content-frontmatter-and-tagging-12531175689791989355
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3342846Z  * [new branch]        feat/roi-dashboard-5778359830468399427 -> origin/feat/roi-dashboard-5778359830468399427
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3343612Z  * [new branch]        feat/signature-rag-t2f-11287284092066976427 -> origin/feat/signature-rag-t2f-11287284092066976427
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3344508Z  * [new branch]        feat/standardize-layout-components-11646648776927534134 -> origin/feat/standardize-layout-components-11646648776927534134
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3345574Z  * [new branch]        feat/standardize-layout-components-usage-10070409333056580121 -> origin/feat/standardize-layout-components-usage-10070409333056580121
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3346551Z  * [new branch]        feat/ui-mockup-update-12974801575958228939 -> origin/feat/ui-mockup-update-12974801575958228939
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3347428Z  * [new branch]        feature/affiliate-reporting-roi-16467421757541273216 -> origin/feature/affiliate-reporting-roi-16467421757541273216
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3348637Z  * [new branch]        feature/automated-visual-audit-4877388463301437192 -> origin/feature/automated-visual-audit-4877388463301437192
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3349549Z  * [new branch]        feature/brand-redesign-12828928534499015186 -> origin/feature/brand-redesign-12828928534499015186
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3350429Z  * [new branch]        feature/ga4-datalab-tracking-12941441102819824497 -> origin/feature/ga4-datalab-tracking-12941441102819824497
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3351259Z  * [new branch]        fix-a11y-violations-16085129461401263373 -> origin/fix-a11y-violations-16085129461401263373
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3351999Z  * [new branch]        fix-broken-link-4671924183609848537 -> origin/fix-broken-link-4671924183609848537
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3352904Z  * [new branch]        fix-jules-repair-session-validation-13452243814353216015 -> origin/fix-jules-repair-session-validation-13452243814353216015
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3354015Z  * [new branch]        fix-pnpm-install-16804053640672136325 -> origin/fix-pnpm-install-16804053640672136325
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3354756Z  * [new branch]        fix-pr-652-rework-10074456896911749759 -> origin/fix-pr-652-rework-10074456896911749759
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3355586Z  * [new branch]        fix-sitemap-production-url-14323895830703992857 -> origin/fix-sitemap-production-url-14323895830703992857
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3356430Z  * [new branch]        fix-td-cli-and-audit-10497345691971696912 -> origin/fix-td-cli-and-audit-10497345691971696912
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3357204Z  * [new branch]        fix-ux-content-card-9181779295267348310 -> origin/fix-ux-content-card-9181779295267348310
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3358104Z  * [new branch]        fix-visual-regression-snapshots-974398726183238407 -> origin/fix-visual-regression-snapshots-974398726183238407
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3359361Z  * [new branch]        fix/audit-baseline-variable-15500587914714492758 -> origin/fix/audit-baseline-variable-15500587914714492758
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3360270Z  * [new branch]        fix/lockfile-determinism-1898052402348987185 -> origin/fix/lockfile-determinism-1898052402348987185
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3361136Z  * [new branch]        fix/merge-conflict-reduction-2267808997804499585 -> origin/fix/merge-conflict-reduction-2267808997804499585
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3361984Z  * [new branch]        fix/node-24-migration-12291836500979307039 -> origin/fix/node-24-migration-12291836500979307039
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3362801Z  * [new branch]        fix/reduce-merge-conflicts-7939391422608510210 -> origin/fix/reduce-merge-conflicts-7939391422608510210
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3363660Z  * [new branch]        fix/search-icon-collision-6946222253420010073 -> origin/fix/search-icon-collision-6946222253420010073
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3364458Z  * [new branch]        fix/search-relevance-506107467047410442 -> origin/fix/search-relevance-506107467047410442
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3365449Z  * [new branch]        fix/seo-metadata-improvements-9637639215072905812 -> origin/fix/seo-metadata-improvements-9637639215072905812
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3366441Z  * [new branch]        fix/sitemap-generation-4185814553234649503 -> origin/fix/sitemap-generation-4185814553234649503
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3367238Z  * [new branch]        fix/throttle-debounce-12001434146562276732 -> origin/fix/throttle-debounce-12001434146562276732
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3368019Z  * [new branch]        fix/ui-anti-patterns-2687186430891986193 -> origin/fix/ui-anti-patterns-2687186430891986193
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3369146Z  * [new branch]        fix/ux-auditor-mobile-screenshots-17229602608787945952 -> origin/fix/ux-auditor-mobile-screenshots-17229602608787945952
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3370112Z  * [new branch]        footer-navigation-redesign-9860721351648124902 -> origin/footer-navigation-redesign-9860721351648124902
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3370797Z  * [new branch]        gh-pages              -> origin/gh-pages
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3371231Z  * [new branch]        git                   -> origin/git
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3371899Z  * [new branch]        improve-preview-page-usability-208950052235215523 -> origin/improve-preview-page-usability-208950052235215523
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3372827Z  * [new branch]        improve/core-infra-config-13191492064982896006 -> origin/improve/core-infra-config-13191492064982896006
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3373594Z  * [new branch]        jules-14148848927286620353-36f3bdb1 -> origin/jules-14148848927286620353-36f3bdb1
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3374248Z  * [new branch]        jules-14206370618723621129-57b0c2a6 -> origin/jules-14206370618723621129-57b0c2a6
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3374901Z  * [new branch]        jules-4029992414159625139-c2d3b480 -> origin/jules-4029992414159625139-c2d3b480
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3375716Z  * [new branch]        jules-boomtick-design-migration-6532042589388127559 -> origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3376739Z  * [new branch]        jules-update-frontend-replit-mockup-1944760327146997507 -> origin/jules-update-frontend-replit-mockup-1944760327146997507
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3377839Z  * [new branch]        lockfile-determinism-8675050957782106544 -> origin/lockfile-determinism-8675050957782106544
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3378711Z  * [new branch]        main                  -> origin/main
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3379379Z  * [new branch]        normalize-frontmatter-tags-4207264828719271707 -> origin/normalize-frontmatter-tags-4207264828719271707
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3380233Z  * [new branch]        rebrand-boomtick-blog-1770114126300875003 -> origin/rebrand-boomtick-blog-1770114126300875003
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3381078Z  * [new branch]        recreate-minimalist-pr-657-12196757166317304754 -> origin/recreate-minimalist-pr-657-12196757166317304754
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3381955Z  * [new branch]        refactor-hero-section-645-4279679236069717571 -> origin/refactor-hero-section-645-4279679236069717571
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3382872Z  * [new branch]        refactor/modular-folder-structure-4670414599553836190 -> origin/refactor/modular-folder-structure-4670414599553836190
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3383617Z  * [new branch]        replit-frontend       -> origin/replit-frontend
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3384263Z  * [new branch]        standardize-ui-states-11537291259350471924 -> origin/standardize-ui-states-11537291259350471924
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3385103Z  * [new branch]        ui-ux-accessibility-fixes-15631158062664361517 -> origin/ui-ux-accessibility-fixes-15631158062664361517
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3385920Z  * [new branch]        update-brand-logo-17669905563494851100 -> origin/update-brand-logo-17669905563494851100
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3386706Z  * [new branch]        update-favicon-boomtick-1569075219496026841 -> origin/update-favicon-boomtick-1569075219496026841
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3387672Z  * [new branch]        visual-auditor-tool-and-hero-refactor-9863198860810042197 -> origin/visual-auditor-tool-and-hero-refactor-9863198860810042197
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3462097Z [command]/usr/bin/git branch --list --remote origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3495611Z   origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3504653Z [command]/usr/bin/git rev-parse refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3526267Z b8fb04fc50ec6c17564917c9dece22e77b366bfd
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3531213Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3531955Z ##[group]Determining the checkout info
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3532738Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3537160Z [command]/usr/bin/git sparse-checkout disable
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3581949Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3609285Z ##[group]Checking out the ref
+Lint & Type Check	Checkout	2026-05-05T05:39:25.3614387Z [command]/usr/bin/git checkout --progress --force -B jules-boomtick-design-migration-6532042589388127559 refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Lint & Type Check	Checkout	2026-05-05T05:39:25.4081487Z Switched to a new branch 'jules-boomtick-design-migration-6532042589388127559'
+Lint & Type Check	Checkout	2026-05-05T05:39:25.4083361Z branch 'jules-boomtick-design-migration-6532042589388127559' set up to track 'origin/jules-boomtick-design-migration-6532042589388127559'.
+Lint & Type Check	Checkout	2026-05-05T05:39:25.4095296Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-05T05:39:25.4137022Z [command]/usr/bin/git log -1 --format=%H
+Lint & Type Check	Checkout	2026-05-05T05:39:25.4166831Z b8fb04fc50ec6c17564917c9dece22e77b366bfd
+Lint & Type Check	Setup pnpm	﻿2026-05-05T05:39:25.4385432Z ##[group]Run pnpm/action-setup@v4
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4385817Z with:
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4386034Z   dest: ~/setup-pnpm
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4386280Z   run_install: null
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4386502Z   cache: false
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4386739Z   cache_dependency_path: pnpm-lock.yaml
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4387059Z   package_json_file: package.json
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4387330Z   standalone: false
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4387549Z env:
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4387773Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4388077Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4388613Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4388931Z   AUDIT_BASELINE: 
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.4389144Z ##[endgroup]
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:25.5916269Z ##[group]Running self-installer...
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.0080065Z (node:2362) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.0082198Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.1497314Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.1593202Z Packages: +1
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.1593745Z +
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.5720974Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.5987890Z 
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.5989043Z dependencies:
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.5989863Z + pnpm 10.28.2 (10.33.3 is available)
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.5990441Z 
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.6039421Z Done in 834ms
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.6203807Z ##[endgroup]
+Lint & Type Check	Setup pnpm	2026-05-05T05:39:26.6204453Z Installation Completed!
+Lint & Type Check	Setup Node.js	﻿2026-05-05T05:39:26.6387709Z ##[group]Run actions/setup-node@v4
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6388025Z with:
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6388225Z   node-version: 24
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6388630Z   cache: pnpm
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6388812Z   always-auth: false
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6389020Z   check-latest: false
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6389337Z   token: ***
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6389513Z env:
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6389694Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6389954Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6390153Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6390340Z   AUDIT_BASELINE: 
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6390597Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.6390888Z ##[endgroup]
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.7800531Z Found in cache @ /opt/hostedtoolcache/node/24.14.1/x64
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.7805620Z (node:2376) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.7807452Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:26.7809220Z ##[group]Environment details
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.0662758Z node: v24.14.1
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.0663260Z npm: 11.11.0
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.0663610Z yarn: 1.22.22
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.0664398Z ##[endgroup]
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.0714937Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.4549720Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.7380634Z Cache hit for: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:27.7492766Z (node:2376) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:29.0604031Z Received 0 of 157464653 (0.0%), 0.0 MBs/sec
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:30.0607963Z Received 130023424 of 157464653 (82.6%), 62.0 MBs/sec
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:30.4630099Z Received 157464653 of 157464653 (100.0%), 62.6 MBs/sec
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:30.4634580Z Cache Size: ~150 MB (157464653 B)
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:30.4689715Z [command]/usr/bin/tar -xf /home/runner/work/_temp/86d41236-03ba-49ef-9e97-04e0c4333015/cache.tzst -P -C /home/runner/work/tech-dancer/tech-dancer --use-compress-program unzstd
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:32.8390749Z Cache restored successfully
+Lint & Type Check	Setup Node.js	2026-05-05T05:39:32.8467378Z Cache restored from key: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Lint & Type Check	Verify lockfile integrity	﻿2026-05-05T05:39:32.8610855Z ##[group]Run pnpm install --frozen-lockfile
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8611307Z [36;1mpnpm install --frozen-lockfile[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8611641Z [36;1mif ! git diff --quiet pnpm-lock.yaml; then[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8612072Z [36;1m  echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8612458Z [36;1m  exit 1[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8612655Z [36;1mfi[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8642504Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8642764Z env:
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8642959Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8643231Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8643427Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8643603Z   AUDIT_BASELINE: 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8643839Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:32.8644133Z ##[endgroup]
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:33.2140709Z Lockfile is up to date, resolution step is skipped
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:33.2934094Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:33.4413347Z Packages: +1138
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:33.4414117Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:34.2940148Z Progress: resolved 1138, reused 1138, downloaded 0, added 26
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:35.2949291Z Progress: resolved 1138, reused 1138, downloaded 0, added 315
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:36.2948748Z Progress: resolved 1138, reused 1138, downloaded 0, added 922
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.0853286Z Progress: resolved 1138, reused 1138, downloaded 0, added 1138, done
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6262752Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6263401Z dependencies:
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6263875Z + @hookform/resolvers 5.2.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6264415Z + @tailwindcss/vite 4.2.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6264961Z + @tanstack/react-query 5.99.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6265430Z + @vercel/analytics 2.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6265885Z + @vitejs/plugin-react 5.2.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6266411Z + class-variance-authority 0.7.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6266874Z + clsx 2.1.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6267230Z + firebase 12.12.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6267624Z + fuse.js 7.3.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6267973Z + glob 13.0.6
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6268643Z + hyparquet 1.25.6
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6269058Z + jspdf 2.5.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6269446Z + jspdf-autotable 3.8.4
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6269881Z + lucide-react 0.546.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6270237Z + motion 12.38.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6270609Z + papaparse 5.5.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6271419Z + path-to-regexp 8.4.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6271819Z + react 19.2.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6272024Z + react-dom 19.2.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6272257Z + react-helmet-async 3.0.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6272695Z + react-hook-form 7.73.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6273130Z + react-markdown 10.1.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6273553Z + react-router-dom 7.14.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6273990Z + recharts 2.15.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6274460Z + remark-parse 11.0.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6274905Z + tailwind-merge 3.5.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6275353Z + tw-animate-css 1.4.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6275751Z + unified 11.0.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6276158Z + unist-util-visit 5.1.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6276648Z + vite-plugin-pwa 1.2.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6277074Z + workbox-window 7.4.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6277479Z + zod 3.25.76
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6277812Z + zustand 5.0.12
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6278025Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6278191Z devDependencies:
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6278845Z + @eslint/js 10.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6279226Z + @lhci/cli 0.15.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6279620Z + @playwright/test 1.59.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6280095Z + @tailwindcss/typography 0.5.19
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6280524Z + @types/node 22.19.17
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6280910Z + @types/papaparse 5.5.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6281366Z + @types/throttle-debounce 5.0.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6281770Z + eslint 10.2.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6282179Z + eslint-plugin-react-hooks 7.1.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6282588Z + globals 17.5.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6282972Z + jsdom 29.1.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6283312Z + knip 6.7.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6283655Z + npm-run-all 4.1.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6283994Z + oxlint 1.61.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6284388Z + playwright 1.59.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6285282Z + rollup-plugin-visualizer 7.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6285717Z + sharp 0.34.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6286035Z + shx 0.4.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6286336Z + svgo 4.0.1
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6286673Z + tailwindcss 4.2.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6287059Z + throttle-debounce 5.0.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6287439Z + tsx 4.21.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6287792Z + typescript 5.8.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6288169Z + typescript-eslint 8.59.0
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6288815Z + vite 6.4.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6289261Z + vite-plugin-image-optimizer 2.0.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6289812Z + vite-plugin-inspect 11.3.3
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6290256Z + vite-plugin-sitemap 0.8.2
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6290651Z + vitest 4.1.5
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6290853Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6478697Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6480010Z │                                                                              │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6481229Z │   Ignored build scripts: @firebase/util@1.15.0, core-js@3.49.0,              │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6482677Z │   esbuild@0.25.12, esbuild@0.27.7, protobufjs@7.5.5, sharp@0.34.5.           │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6484140Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6485412Z │   to run scripts.                                                            │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6486560Z │                                                                              │
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6487781Z ╰──────────────────────────────────────────────────────────────────────────────╯
+Lint & Type Check	Verify lockfile integrity	2026-05-05T05:39:37.6536170Z Done in 4.7s using pnpm v10.28.2
+Lint & Type Check	Lint	﻿2026-05-05T05:39:37.6991290Z ##[group]Run pnpm run lint
+Lint & Type Check	Lint	2026-05-05T05:39:37.6991600Z [36;1mpnpm run lint[0m
+Lint & Type Check	Lint	2026-05-05T05:39:37.7013382Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Lint	2026-05-05T05:39:37.7013629Z env:
+Lint & Type Check	Lint	2026-05-05T05:39:37.7013825Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Lint	2026-05-05T05:39:37.7014101Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Lint	2026-05-05T05:39:37.7014305Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Lint	2026-05-05T05:39:37.7014495Z   AUDIT_BASELINE: 
+Lint & Type Check	Lint	2026-05-05T05:39:37.7014733Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Lint	2026-05-05T05:39:37.7015029Z ##[endgroup]
+Lint & Type Check	Lint	2026-05-05T05:39:37.9970094Z 
+Lint & Type Check	Lint	2026-05-05T05:39:37.9971073Z > react-example@0.0.0 lint /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T05:39:37.9971825Z > run-p lint:*
+Lint & Type Check	Lint	2026-05-05T05:39:37.9972530Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.5105442Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.5127855Z > react-example@0.0.0 lint:eslint /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T05:39:38.5129741Z > eslint . --max-warnings 0
+Lint & Type Check	Lint	2026-05-05T05:39:38.5130795Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.5460892Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.5462053Z > react-example@0.0.0 lint:types /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T05:39:38.5462936Z > tsc --noEmit
+Lint & Type Check	Lint	2026-05-05T05:39:38.5463142Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.5526726Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.5527895Z > react-example@0.0.0 lint:ox /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-05T05:39:38.5529298Z > oxlint --deny-warnings
+Lint & Type Check	Lint	2026-05-05T05:39:38.5529756Z 
+Lint & Type Check	Lint	2026-05-05T05:39:38.6457567Z Found 0 warnings and 0 errors.
+Lint & Type Check	Lint	2026-05-05T05:39:38.6459965Z Finished in 37ms on 187 files with 93 rules using 4 threads.
+Lint & Type Check	Type-check	﻿2026-05-05T05:39:45.3963567Z ##[group]Run pnpm run type-check
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3963898Z [36;1mpnpm run type-check[0m
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3985931Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3986187Z env:
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3986400Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3986683Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3986889Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3987073Z   AUDIT_BASELINE: 
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3987306Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Type-check	2026-05-05T05:39:45.3987605Z ##[endgroup]
+Lint & Type Check	Type-check	2026-05-05T05:39:45.7049478Z 
+Lint & Type Check	Type-check	2026-05-05T05:39:45.7050538Z > react-example@0.0.0 type-check /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Type-check	2026-05-05T05:39:45.7051174Z > tsc --noEmit
+Lint & Type Check	Type-check	2026-05-05T05:39:45.7051334Z 
+Lint & Type Check	Run Unit Tests (Vitest)	﻿2026-05-05T05:39:45.8110784Z ##[group]Run pnpm test
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8111068Z [36;1mpnpm test[0m
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8132973Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8133216Z env:
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8133412Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8133693Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8133902Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8134091Z   AUDIT_BASELINE: 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8134326Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:45.8134667Z ##[endgroup]
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.1055109Z 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.1056056Z > react-example@0.0.0 test /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.1056583Z > vitest run
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.1056737Z 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.6368465Z 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.6371286Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.5 [39m[90m/home/runner/work/tech-dancer/tech-dancer[39m
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:46.6371864Z 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5549940Z  [32m✓[39m src/lib/__tests__/utils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5577716Z 
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5583273Z [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5584244Z [2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5584893Z [2m   Start at [22m 05:39:46
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5586157Z [2m   Duration [22m 913ms[2m (transform 44ms, setup 0ms, import 64ms, tests 13ms, environment 693ms)[22m
+Lint & Type Check	Run Unit Tests (Vitest)	2026-05-05T05:39:47.5588602Z 
+Lint & Type Check	Run CLI Unit Tests	﻿2026-05-05T05:39:47.6041340Z ##[group]Run pip install PyGithub pytest
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6041719Z [36;1mpip install PyGithub pytest[0m
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6042112Z [36;1mPYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_td_cli.py[0m
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6063041Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6063283Z env:
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6063476Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6063746Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6063947Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6064128Z   AUDIT_BASELINE: 
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6064362Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:47.6064655Z ##[endgroup]
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:49.4638035Z Defaulting to user installation because normal site-packages is not writeable
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.5966480Z Collecting PyGithub
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.6505948Z   Downloading pygithub-2.9.1-py3-none-any.whl.metadata (3.9 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7137620Z Collecting pytest
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7239567Z   Downloading pytest-9.0.3-py3-none-any.whl.metadata (7.6 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7612939Z Collecting pynacl>=1.4.0 (from PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7711894Z   Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (10.0 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7769252Z Requirement already satisfied: requests>=2.14.0 in /usr/lib/python3/dist-packages (from PyGithub) (2.31.0)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7782625Z Requirement already satisfied: pyjwt>=2.4.0 in /usr/lib/python3/dist-packages (from pyjwt[crypto]>=2.4.0->PyGithub) (2.7.0)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7800139Z Requirement already satisfied: typing-extensions>=4.5.0 in /usr/lib/python3/dist-packages (from PyGithub) (4.10.0)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.7810978Z Requirement already satisfied: urllib3>=1.26.0 in /usr/lib/python3/dist-packages (from PyGithub) (2.0.7)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8034077Z Collecting iniconfig>=1.0.1 (from pytest)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8131093Z   Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8167689Z Requirement already satisfied: packaging>=22 in /usr/lib/python3/dist-packages (from pytest) (24.0)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8359172Z Collecting pluggy<2,>=1.5 (from pytest)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8456833Z   Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8501508Z Requirement already satisfied: pygments>=2.7.2 in /usr/lib/python3/dist-packages (from pytest) (2.17.2)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.8772249Z Requirement already satisfied: cryptography>=3.4.0 in /usr/lib/python3/dist-packages (from pyjwt[crypto]>=2.4.0->PyGithub) (41.0.7)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:50.9955997Z Collecting cffi>=2.0.0 (from pynacl>=1.4.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.0057681Z   Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.0455961Z Collecting pycparser (from cffi>=2.0.0->pynacl>=1.4.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.0556318Z   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.0829156Z Downloading pygithub-2.9.1-py3-none-any.whl (449 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.1276766Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 449.7/449.7 kB 10.4 MB/s eta 0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.1380620Z Downloading pytest-9.0.3-py3-none-any.whl (375 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.1523638Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 375.2/375.2 kB 30.5 MB/s eta 0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.1629506Z Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.1754812Z Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.1885551Z Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl (1.4 MB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.2128747Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 62.5 MB/s eta 0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.2229135Z Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.2276103Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 219.6/219.6 kB 70.5 MB/s eta 0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.2376237Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.2412178Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 48.2/48.2 kB 19.9 MB/s eta 0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:51.5474344Z Installing collected packages: pycparser, pluggy, iniconfig, pytest, cffi, pynacl, PyGithub
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:52.2161515Z Successfully installed PyGithub-2.9.1 cffi-2.0.0 iniconfig-2.3.0 pluggy-1.6.0 pycparser-3.0 pynacl-1.6.2 pytest-9.0.3
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.4103569Z ============================= test session starts ==============================
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.4104547Z platform linux -- Python 3.12.3, pytest-9.0.3, pluggy-1.6.0
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.4105466Z rootdir: /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.4106025Z collected 4 items
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.4106247Z 
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.5063037Z tests/dev-tools/test_td_cli.py ....                                      [100%]
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.5063617Z 
+Lint & Type Check	Run CLI Unit Tests	2026-05-05T05:39:53.5063987Z ============================== 4 passed in 0.64s ===============================
+Lint & Type Check	Check for dead code	﻿2026-05-05T05:39:53.5479439Z ##[group]Run pnpm run knip
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5479922Z [36;1mpnpm run knip[0m
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5501122Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5501359Z env:
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5501558Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5501829Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5502028Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5502213Z   AUDIT_BASELINE: 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5502442Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.5502725Z ##[endgroup]
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.8372675Z 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.8373685Z > react-example@0.0.0 knip /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.8374403Z > knip
+Lint & Type Check	Check for dead code	2026-05-05T05:39:53.8374549Z 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4360862Z Unused files (63)
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4387403Z src/components/MobileBottomNav.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4388086Z src/components/Navigation.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4388962Z src/components/navigation/MobileHeader.tsx     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4389630Z src/components/navigation/MobileMenuOverlay.tsx
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4390524Z src/components/navigation/NavItem.tsx          
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4391179Z src/components/ui/accordion.tsx                
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4391822Z src/components/ui/alert-dialog.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4392440Z src/components/ui/alert.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4393035Z src/components/ui/aspect-ratio.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4393618Z src/components/ui/avatar.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4394196Z src/components/ui/badge.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4394777Z src/components/ui/breadcrumb.tsx               
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4395375Z src/components/ui/button-group.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4395959Z src/components/ui/button.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4396542Z src/components/ui/calendar.tsx                 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4397120Z src/components/ui/card.tsx                     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4397706Z src/components/ui/carousel.tsx                 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4398315Z src/components/ui/chart.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4399128Z src/components/ui/checkbox.tsx                 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4399861Z src/components/ui/collapsible.tsx              
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4400539Z src/components/ui/command.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4400972Z src/components/ui/context-menu.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4401347Z src/components/ui/dialog.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4401693Z src/components/ui/drawer.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4402038Z src/components/ui/dropdown-menu.tsx            
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4402429Z src/components/ui/empty.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4403029Z src/components/ui/EventCard.tsx                
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4403378Z src/components/ui/field.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4403707Z src/components/ui/form.tsx                     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4404042Z src/components/ui/HeroPathCard.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4404390Z src/components/ui/hover-card.tsx               
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4404729Z src/components/ui/input-group.tsx              
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4405065Z src/components/ui/input-otp.tsx                
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4405395Z src/components/ui/input.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4405718Z src/components/ui/item.tsx                     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4406035Z src/components/ui/kbd.tsx                      
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4406361Z src/components/ui/label.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4406703Z src/components/ui/menubar.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4407050Z src/components/ui/navigation-menu.tsx          
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4407398Z src/components/ui/pagination.tsx               
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4407743Z src/components/ui/PathSelector.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4408079Z src/components/ui/popover.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4408784Z src/components/ui/progress.tsx                 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4409930Z src/components/ui/radio-group.tsx              
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4410455Z src/components/ui/resizable.tsx                
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4410795Z src/components/ui/scroll-area.tsx              
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4411382Z src/components/ui/select.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4412051Z src/components/ui/separator.tsx                
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4412707Z src/components/ui/sheet.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4413061Z src/components/ui/sidebar.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4413387Z src/components/ui/skeleton.tsx                 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4413706Z src/components/ui/slider.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4414020Z src/components/ui/sonner.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4414338Z src/components/ui/spinner.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4414660Z src/components/ui/switch.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4414976Z src/components/ui/table.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4415288Z src/components/ui/tabs.tsx                     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4415623Z src/components/ui/textarea.tsx                 
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4416128Z src/components/ui/toast.tsx                    
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4416770Z src/components/ui/toaster.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4417291Z src/components/ui/toggle-group.tsx             
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4417624Z src/components/ui/toggle.tsx                   
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4417944Z src/components/ui/tooltip.tsx                  
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4418221Z Unused exports (10)
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4419048Z . (root)                  knip.ts  Add entry and/or refine project files (63 unused files)
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4419676Z src/styles/safelist.ts    knip.ts  Remove from ignore                                     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4420304Z src/main.tsx              knip.ts  Remove redundant entry pattern                         
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4420893Z SectionHeader        function  src/components/ui/PageHeader.tsx:62:17
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4421410Z MOBILE_NAV_ROUTES              src/config/routes.ts:77:14            
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4421887Z useHomePageData                src/hooks/use-page-data.ts:6:14       
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4422373Z useAboutPageData               src/hooks/use-page-data.ts:7:14       
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4422851Z useBlogPageData                src/hooks/use-page-data.ts:8:14       
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4423324Z useGearPageData                src/hooks/use-page-data.ts:9:14       
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4423973Z useResearchPageData            src/hooks/use-page-data.ts:10:14      
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4424842Z useContactPageData             src/hooks/use-page-data.ts:11:14      
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4425719Z headerNavigation               src/lib/types/navigation.ts:11:14     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4426547Z stroke                         src/styles/design-tokens.ts:59:14     
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4427114Z Configuration hints (3)
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.4863881Z  ELIFECYCLE  Command failed with exit code 1.
+Lint & Type Check	Check for dead code	2026-05-05T05:39:55.5078168Z ##[error]Process completed with exit code 1.
+Lint & Type Check	Post Setup pnpm	﻿2026-05-05T05:39:55.5153795Z Post job cleanup.
+Lint & Type Check	Post Setup pnpm	2026-05-05T05:39:55.6631969Z Pruning is unnecessary.
+Lint & Type Check	Post Checkout	﻿2026-05-05T05:39:55.6760157Z Post job cleanup.
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7767243Z [command]/usr/bin/git version
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7809629Z git version 2.53.0
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7853544Z Temporarily overriding HOME='/home/runner/work/_temp/53e834ce-f97e-4936-8450-e2e059cdf64d' before making global git config changes
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7855287Z Adding repository directory to the temporary git global config as a safe directory
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7860071Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7900503Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.7937636Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.8180018Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.8207359Z http.https://github.com/.extraheader
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.8220003Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.8255828Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.8476992Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint & Type Check	Post Checkout	2026-05-05T05:39:55.8507403Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint & Type Check	Complete job	﻿2026-05-05T05:39:55.8878971Z Cleaning up orphan processes
+Lint & Type Check	Complete job	2026-05-05T05:39:55.9175339Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Anti-Pattern Audit	Set up job	﻿2026-05-05T05:39:15.9031943Z Current runner version: '2.334.0'
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9059104Z ##[group]Runner Image Provisioner
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9060066Z Hosted Compute Agent
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9060659Z Version: 20260213.493
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9061268Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9062014Z Build Date: 2026-02-13T00:28:41Z
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9062666Z Worker ID: {5856b79c-1f35-4a3c-82c7-6d2a6d443c16}
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9063951Z Azure Region: centralus
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9064482Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9066027Z ##[group]Operating System
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9066671Z Ubuntu
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9067102Z 24.04.4
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9067673Z LTS
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9068106Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9068599Z ##[group]Runner Image
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9069191Z Image: ubuntu-24.04
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9069763Z Version: 20260413.86.1
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9070743Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260413.86/images/ubuntu/Ubuntu2404-Readme.md
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9072471Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260413.86
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9073651Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9074723Z ##[group]GITHUB_TOKEN Permissions
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9076933Z Contents: read
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9077561Z Metadata: read
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9078104Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9080114Z Secret source: Actions
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9081099Z Prepare workflow directory
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9609762Z Prepare all required actions
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:15.9648426Z Getting action download info
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:16.3284057Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:16.4490337Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:17.1451085Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Anti-Pattern Audit	Set up job	2026-05-05T05:39:17.3510022Z Complete job name: Anti-Pattern Audit
+Anti-Pattern Audit	Checkout	﻿2026-05-05T05:39:17.4300052Z ##[group]Run actions/checkout@v4
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4301362Z with:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4302092Z   fetch-depth: 0
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4302896Z   repository: arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4304358Z   token: ***
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4305102Z   ssh-strict: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4305874Z   ssh-user: git
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4306665Z   persist-credentials: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4307549Z   clean: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4308348Z   sparse-checkout-cone-mode: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4309297Z   fetch-tags: false
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4310109Z   show-progress: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4310900Z   lfs: false
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4311639Z   submodules: false
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4312441Z   set-safe-directory: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4313609Z env:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4314375Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4315422Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4316242Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4317054Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.4317842Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5314078Z Syncing repository: arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5317025Z ##[group]Getting Git version info
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5318405Z Working directory is '/home/runner/work/tech-dancer/tech-dancer'
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5320334Z [command]/usr/bin/git version
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5328503Z git version 2.53.0
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5379980Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5394468Z Temporarily overriding HOME='/home/runner/work/_temp/80e1cdc6-fd1e-45ff-b032-bc835315c774' before making global git config changes
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5397910Z Adding repository directory to the temporary git global config as a safe directory
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5400939Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5435080Z Deleting the contents of '/home/runner/work/tech-dancer/tech-dancer'
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5439150Z ##[group]Initializing the repository
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5443456Z [command]/usr/bin/git init /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5508492Z hint: Using 'master' as the name for the initial branch. This default branch name
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5511199Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5513767Z hint: to use in all of your new repositories, which will suppress this warning,
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5515891Z hint: call:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5516965Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5518310Z hint: 	git config --global init.defaultBranch <name>
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5519866Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5521266Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5524180Z hint: 'development'. The just-created branch can be renamed via this command:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5527140Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5528440Z hint: 	git branch -m <name>
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5529675Z hint:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5530826Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5532789Z Initialized empty Git repository in /home/runner/work/tech-dancer/tech-dancer/.git/
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5536221Z [command]/usr/bin/git remote add origin https://github.com/arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5552667Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5554190Z ##[group]Disabling automatic garbage collection
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5556644Z [command]/usr/bin/git config --local gc.auto 0
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5587483Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5588804Z ##[group]Setting up auth
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5593519Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5626526Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5906013Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.5941268Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.6174317Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.6206958Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.6439460Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.6500396Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.6502294Z ##[group]Fetching the repository
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:17.6506038Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4630541Z From https://github.com/arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4635085Z  * [new branch]        about-page-updates-14352211737228389575 -> origin/about-page-updates-14352211737228389575
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4636763Z  * [new branch]        add-migration-guide-5876664802681073547 -> origin/add-migration-guide-5876664802681073547
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4637751Z  * [new branch]        ai-repair-25356038167 -> origin/ai-repair-25356038167
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4638471Z  * [new branch]        ai-repair-25356378430 -> origin/ai-repair-25356378430
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4639237Z  * [new branch]        ai-repair-25356804818 -> origin/ai-repair-25356804818
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4639992Z  * [new branch]        ari-boomtick          -> origin/ari-boomtick
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4640742Z  * [new branch]        ari-mockup            -> origin/ari-mockup
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4641492Z  * [new branch]        ari-replit-dark-mode  -> origin/ari-replit-dark-mode
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4642547Z  * [new branch]        ari-replit-dark-mode-3293038484833716469 -> origin/ari-replit-dark-mode-3293038484833716469
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4643783Z  * [new branch]        ari-replit-fix-manual -> origin/ari-replit-fix-manual
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4645212Z  * [new branch]        branding-migration-10480169812015641474 -> origin/branding-migration-10480169812015641474
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4646564Z  * [new branch]        chore/infra-config-improvement-12731238171326256191 -> origin/chore/infra-config-improvement-12731238171326256191
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4647915Z  * [new branch]        cleanup-root-files-15439431871599830205 -> origin/cleanup-root-files-15439431871599830205
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4649312Z  * [new branch]        content/why-space-buns-work-for-west-coast-swing -> origin/content/why-space-buns-work-for-west-coast-swing
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4650827Z  * [new branch]        copilot-fix-git-merge-issue-2078139070203710354 -> origin/copilot-fix-git-merge-issue-2078139070203710354
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4652226Z  * [new branch]        copilot-fix-git-merge-issue-3219033726005670393 -> origin/copilot-fix-git-merge-issue-3219033726005670393
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4653799Z  * [new branch]        copilot/fix-git-merge-issue -> origin/copilot/fix-git-merge-issue
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4654794Z  * [new branch]        copilot/resolve-merge-issue -> origin/copilot/resolve-merge-issue
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4656168Z  * [new branch]        decrease-merge-conflict-sources-fix-v2-990871188136395290 -> origin/decrease-merge-conflict-sources-fix-v2-990871188136395290
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4657727Z  * [new branch]        document-simplified-workflow-8785441803960069738 -> origin/document-simplified-workflow-8785441803960069738
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4659327Z  * [new branch]        feat-consolidated-rebrand-8441384012443507034 -> origin/feat-consolidated-rebrand-8441384012443507034
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4660962Z  * [new branch]        feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat-issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4662027Z  * [new branch]        feat/add-ga4-tracking-12639729061711926309 -> origin/feat/add-ga4-tracking-12639729061711926309
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4662748Z  * [new branch]        feat/ai-slop-audit-workflow -> origin/feat/ai-slop-audit-workflow
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4663923Z  * [new branch]        feat/blog-post-wcs-data-scraper-14452895178941716806 -> origin/feat/blog-post-wcs-data-scraper-14452895178941716806
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4664854Z  * [new branch]        feat/boomtick-design-migration-15578555430520802096 -> origin/feat/boomtick-design-migration-15578555430520802096
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4665834Z  * [new branch]        feat/brand-migration-boomtick-blog-6234609098749488321 -> origin/feat/brand-migration-boomtick-blog-6234609098749488321
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4666625Z  * [new branch]        feat/consolidated-rebrand -> origin/feat/consolidated-rebrand
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4667499Z  * [new branch]        feat/content-pipeline-7178197585753202032-8406124502228595157 -> origin/feat/content-pipeline-7178197585753202032-8406124502228595157
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4668447Z  * [new branch]        feat/dashboard-hero-2170559866929629428 -> origin/feat/dashboard-hero-2170559866929629428
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4669277Z  * [new branch]        feat/frontend-style-overhaul-8718428500994173403 -> origin/feat/frontend-style-overhaul-8718428500994173403
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4670131Z  * [new branch]        feat/frontend-style-overhaul-reduced -> origin/feat/frontend-style-overhaul-reduced
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4670795Z  * [new branch]        feat/google-site-verification -> origin/feat/google-site-verification
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4671433Z  * [new branch]        feat/hero-update-933815339834268378 -> origin/feat/hero-update-933815339834268378
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4672232Z  * [new branch]        feat/issue-cache-playwright-etl-15277468477470866741 -> origin/feat/issue-cache-playwright-etl-15277468477470866741
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4673458Z  * [new branch]        feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716 -> origin/feat/issue-simplify-contact-form-12551040430367863980-5924767043849769716
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4674497Z  * [new branch]        feat/no-card-content-5940296687076887070 -> origin/feat/no-card-content-5940296687076887070
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4675762Z  * [new branch]        feat/normalize-content-frontmatter-and-tagging-12531175689791989355 -> origin/feat/normalize-content-frontmatter-and-tagging-12531175689791989355
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4676775Z  * [new branch]        feat/roi-dashboard-5778359830468399427 -> origin/feat/roi-dashboard-5778359830468399427
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4677578Z  * [new branch]        feat/signature-rag-t2f-11287284092066976427 -> origin/feat/signature-rag-t2f-11287284092066976427
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4678517Z  * [new branch]        feat/standardize-layout-components-11646648776927534134 -> origin/feat/standardize-layout-components-11646648776927534134
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4679607Z  * [new branch]        feat/standardize-layout-components-usage-10070409333056580121 -> origin/feat/standardize-layout-components-usage-10070409333056580121
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4680559Z  * [new branch]        feat/ui-mockup-update-12974801575958228939 -> origin/feat/ui-mockup-update-12974801575958228939
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4681461Z  * [new branch]        feature/affiliate-reporting-roi-16467421757541273216 -> origin/feature/affiliate-reporting-roi-16467421757541273216
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4682397Z  * [new branch]        feature/automated-visual-audit-4877388463301437192 -> origin/feature/automated-visual-audit-4877388463301437192
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4683602Z  * [new branch]        feature/brand-redesign-12828928534499015186 -> origin/feature/brand-redesign-12828928534499015186
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4684489Z  * [new branch]        feature/ga4-datalab-tracking-12941441102819824497 -> origin/feature/ga4-datalab-tracking-12941441102819824497
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4685343Z  * [new branch]        fix-a11y-violations-16085129461401263373 -> origin/fix-a11y-violations-16085129461401263373
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4686106Z  * [new branch]        fix-broken-link-4671924183609848537 -> origin/fix-broken-link-4671924183609848537
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4687050Z  * [new branch]        fix-jules-repair-session-validation-13452243814353216015 -> origin/fix-jules-repair-session-validation-13452243814353216015
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4688195Z  * [new branch]        fix-pnpm-install-16804053640672136325 -> origin/fix-pnpm-install-16804053640672136325
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4688961Z  * [new branch]        fix-pr-652-rework-10074456896911749759 -> origin/fix-pr-652-rework-10074456896911749759
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4689798Z  * [new branch]        fix-sitemap-production-url-14323895830703992857 -> origin/fix-sitemap-production-url-14323895830703992857
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4690672Z  * [new branch]        fix-td-cli-and-audit-10497345691971696912 -> origin/fix-td-cli-and-audit-10497345691971696912
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4691466Z  * [new branch]        fix-ux-content-card-9181779295267348310 -> origin/fix-ux-content-card-9181779295267348310
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4692351Z  * [new branch]        fix-visual-regression-snapshots-974398726183238407 -> origin/fix-visual-regression-snapshots-974398726183238407
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4693566Z  * [new branch]        fix/audit-baseline-variable-15500587914714492758 -> origin/fix/audit-baseline-variable-15500587914714492758
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4694473Z  * [new branch]        fix/lockfile-determinism-1898052402348987185 -> origin/fix/lockfile-determinism-1898052402348987185
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4695366Z  * [new branch]        fix/merge-conflict-reduction-2267808997804499585 -> origin/fix/merge-conflict-reduction-2267808997804499585
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4696223Z  * [new branch]        fix/node-24-migration-12291836500979307039 -> origin/fix/node-24-migration-12291836500979307039
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4697054Z  * [new branch]        fix/reduce-merge-conflicts-7939391422608510210 -> origin/fix/reduce-merge-conflicts-7939391422608510210
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4697932Z  * [new branch]        fix/search-icon-collision-6946222253420010073 -> origin/fix/search-icon-collision-6946222253420010073
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4698864Z  * [new branch]        fix/search-relevance-506107467047410442 -> origin/fix/search-relevance-506107467047410442
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4700196Z  * [new branch]        fix/seo-metadata-improvements-9637639215072905812 -> origin/fix/seo-metadata-improvements-9637639215072905812
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4701099Z  * [new branch]        fix/sitemap-generation-4185814553234649503 -> origin/fix/sitemap-generation-4185814553234649503
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4702005Z  * [new branch]        fix/throttle-debounce-12001434146562276732 -> origin/fix/throttle-debounce-12001434146562276732
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4702798Z  * [new branch]        fix/ui-anti-patterns-2687186430891986193 -> origin/fix/ui-anti-patterns-2687186430891986193
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4703836Z  * [new branch]        fix/ux-auditor-mobile-screenshots-17229602608787945952 -> origin/fix/ux-auditor-mobile-screenshots-17229602608787945952
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4704808Z  * [new branch]        footer-navigation-redesign-9860721351648124902 -> origin/footer-navigation-redesign-9860721351648124902
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4705492Z  * [new branch]        gh-pages              -> origin/gh-pages
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4705956Z  * [new branch]        git                   -> origin/git
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4706661Z  * [new branch]        improve-preview-page-usability-208950052235215523 -> origin/improve-preview-page-usability-208950052235215523
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4707584Z  * [new branch]        improve/core-infra-config-13191492064982896006 -> origin/improve/core-infra-config-13191492064982896006
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4708359Z  * [new branch]        jules-14148848927286620353-36f3bdb1 -> origin/jules-14148848927286620353-36f3bdb1
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4709035Z  * [new branch]        jules-14206370618723621129-57b0c2a6 -> origin/jules-14206370618723621129-57b0c2a6
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4709699Z  * [new branch]        jules-4029992414159625139-c2d3b480 -> origin/jules-4029992414159625139-c2d3b480
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4710527Z  * [new branch]        jules-boomtick-design-migration-6532042589388127559 -> origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4711570Z  * [new branch]        jules-update-frontend-replit-mockup-1944760327146997507 -> origin/jules-update-frontend-replit-mockup-1944760327146997507
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4712634Z  * [new branch]        lockfile-determinism-8675050957782106544 -> origin/lockfile-determinism-8675050957782106544
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4713342Z  * [new branch]        main                  -> origin/main
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4714019Z  * [new branch]        normalize-frontmatter-tags-4207264828719271707 -> origin/normalize-frontmatter-tags-4207264828719271707
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4714873Z  * [new branch]        rebrand-boomtick-blog-1770114126300875003 -> origin/rebrand-boomtick-blog-1770114126300875003
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4715729Z  * [new branch]        recreate-minimalist-pr-657-12196757166317304754 -> origin/recreate-minimalist-pr-657-12196757166317304754
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4716614Z  * [new branch]        refactor-hero-section-645-4279679236069717571 -> origin/refactor-hero-section-645-4279679236069717571
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4717558Z  * [new branch]        refactor/modular-folder-structure-4670414599553836190 -> origin/refactor/modular-folder-structure-4670414599553836190
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4718301Z  * [new branch]        replit-frontend       -> origin/replit-frontend
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4718955Z  * [new branch]        standardize-ui-states-11537291259350471924 -> origin/standardize-ui-states-11537291259350471924
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4719806Z  * [new branch]        ui-ux-accessibility-fixes-15631158062664361517 -> origin/ui-ux-accessibility-fixes-15631158062664361517
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4720616Z  * [new branch]        update-brand-logo-17669905563494851100 -> origin/update-brand-logo-17669905563494851100
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4721429Z  * [new branch]        update-favicon-boomtick-1569075219496026841 -> origin/update-favicon-boomtick-1569075219496026841
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4722399Z  * [new branch]        visual-auditor-tool-and-hero-refactor-9863198860810042197 -> origin/visual-auditor-tool-and-hero-refactor-9863198860810042197
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4805257Z [command]/usr/bin/git branch --list --remote origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4840662Z   origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4850481Z [command]/usr/bin/git rev-parse refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4873267Z b8fb04fc50ec6c17564917c9dece22e77b366bfd
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4877169Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4877812Z ##[group]Determining the checkout info
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4878734Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4883485Z [command]/usr/bin/git sparse-checkout disable
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4920988Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4947914Z ##[group]Checking out the ref
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.4952062Z [command]/usr/bin/git checkout --progress --force -B jules-boomtick-design-migration-6532042589388127559 refs/remotes/origin/jules-boomtick-design-migration-6532042589388127559
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.5441559Z Switched to a new branch 'jules-boomtick-design-migration-6532042589388127559'
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.5443567Z branch 'jules-boomtick-design-migration-6532042589388127559' set up to track 'origin/jules-boomtick-design-migration-6532042589388127559'.
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.5453560Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.5500879Z [command]/usr/bin/git log -1 --format=%H
+Anti-Pattern Audit	Checkout	2026-05-05T05:39:25.5526860Z b8fb04fc50ec6c17564917c9dece22e77b366bfd
+Anti-Pattern Audit	Setup pnpm	﻿2026-05-05T05:39:25.5744590Z ##[group]Run pnpm/action-setup@v4
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5745000Z with:
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5745230Z   dest: ~/setup-pnpm
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5745488Z   run_install: null
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5745724Z   cache: false
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5745975Z   cache_dependency_path: pnpm-lock.yaml
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5746309Z   package_json_file: package.json
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5746587Z   standalone: false
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5746823Z env:
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5747059Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5747369Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5747634Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5747881Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.5748108Z ##[endgroup]
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:25.7239268Z ##[group]Running self-installer...
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.1141454Z (node:2359) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.1142848Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.3260924Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.3343541Z Packages: +1
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.3343948Z +
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.7741642Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.7992716Z 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.7994061Z dependencies:
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.7994430Z + pnpm 10.28.2 (10.33.3 is available)
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.7994720Z 
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.8021626Z Done in 914ms
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.8205996Z ##[endgroup]
+Anti-Pattern Audit	Setup pnpm	2026-05-05T05:39:26.8206388Z Installation Completed!
+Anti-Pattern Audit	Setup Node.js	﻿2026-05-05T05:39:26.8462531Z ##[group]Run actions/setup-node@v4
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8462800Z with:
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8462980Z   node-version: 24
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8463437Z   cache: pnpm
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8463626Z   always-auth: false
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8463835Z   check-latest: false
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8464182Z   token: ***
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8464365Z env:
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8464563Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8464834Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8465044Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8465231Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8465486Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.8465777Z ##[endgroup]
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.9875764Z Found in cache @ /opt/hostedtoolcache/node/24.14.1/x64
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.9880930Z (node:2373) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.9882305Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:26.9884047Z ##[group]Environment details
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.2729402Z node: v24.14.1
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.2729805Z npm: 11.11.0
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.2730107Z yarn: 1.22.22
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.2730928Z ##[endgroup]
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.2774446Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.6381462Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.7800342Z Cache hit for: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:27.7903797Z (node:2373) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:28.9358741Z Received 75497472 of 157464653 (47.9%), 71.9 MBs/sec
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:29.4632241Z Received 157464653 of 157464653 (100.0%), 98.0 MBs/sec
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:29.4632803Z Cache Size: ~150 MB (157464653 B)
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:29.4682732Z [command]/usr/bin/tar -xf /home/runner/work/_temp/896f3841-65d5-4185-a3d8-f64540bb6624/cache.tzst -P -C /home/runner/work/tech-dancer/tech-dancer --use-compress-program unzstd
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:31.6222348Z Cache restored successfully
+Anti-Pattern Audit	Setup Node.js	2026-05-05T05:39:31.6304733Z Cache restored from key: node-cache-Linux-x64-pnpm-6ba9fe47c1a50fc087c0d4e6239452d07b1ee4edbc294f61dd2f54c110d92755
+Anti-Pattern Audit	Install dependencies	﻿2026-05-05T05:39:31.6479572Z ##[group]Run pnpm install --frozen-lockfile --prefer-offline
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6480121Z [36;1mpnpm install --frozen-lockfile --prefer-offline[0m
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6509774Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6510045Z env:
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6510259Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6510556Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6510775Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6510974Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6511248Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.6511550Z ##[endgroup]
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:31.9822982Z Lockfile is up to date, resolution step is skipped
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:32.0509768Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:32.1772727Z Packages: +1138
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:32.1775238Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:33.0513542Z Progress: resolved 1138, reused 1138, downloaded 0, added 127
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.0516373Z Progress: resolved 1138, reused 1138, downloaded 0, added 961
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.2306847Z Progress: resolved 1138, reused 1138, downloaded 0, added 1138, done
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7960430Z 
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7961067Z dependencies:
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7961556Z + @hookform/resolvers 5.2.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7962006Z + @tailwindcss/vite 4.2.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7962467Z + @tanstack/react-query 5.99.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7962906Z + @vercel/analytics 2.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7963561Z + @vitejs/plugin-react 5.2.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7964052Z + class-variance-authority 0.7.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7964511Z + clsx 2.1.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7964835Z + firebase 12.12.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7965156Z + fuse.js 7.3.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7965472Z + glob 13.0.6
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7965800Z + hyparquet 1.25.6
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7966130Z + jspdf 2.5.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7966466Z + jspdf-autotable 3.8.4
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7966816Z + lucide-react 0.546.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7967156Z + motion 12.38.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7967518Z + papaparse 5.5.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7967874Z + path-to-regexp 8.4.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7968176Z + react 19.2.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7968443Z + react-dom 19.2.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7968674Z + react-helmet-async 3.0.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7969071Z + react-hook-form 7.73.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7969437Z + react-markdown 10.1.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7969818Z + react-router-dom 7.14.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7970200Z + recharts 2.15.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7970895Z + remark-parse 11.0.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7971351Z + tailwind-merge 3.5.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7971735Z + tw-animate-css 1.4.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7971978Z + unified 11.0.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7972204Z + unist-util-visit 5.1.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7972450Z + vite-plugin-pwa 1.2.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7972688Z + workbox-window 7.4.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7972898Z + zod 3.25.76
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7973343Z + zustand 5.0.12
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7973464Z 
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7973569Z devDependencies:
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7973919Z + @eslint/js 10.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7974283Z + @lhci/cli 0.15.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7974637Z + @playwright/test 1.59.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7975093Z + @tailwindcss/typography 0.5.19
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7975504Z + @types/node 22.19.17
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7975886Z + @types/papaparse 5.5.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7976339Z + @types/throttle-debounce 5.0.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7976720Z + eslint 10.2.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7977119Z + eslint-plugin-react-hooks 7.1.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7977527Z + globals 17.5.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7977848Z + jsdom 29.1.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7978146Z + knip 6.7.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7978454Z + npm-run-all 4.1.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7978783Z + oxlint 1.61.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7979119Z + playwright 1.59.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7979538Z + rollup-plugin-visualizer 7.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7979934Z + sharp 0.34.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7980237Z + shx 0.4.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7980525Z + svgo 4.0.1
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7980849Z + tailwindcss 4.2.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7981207Z + throttle-debounce 5.0.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7981564Z + tsx 4.21.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7982202Z + typescript 5.8.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7982584Z + typescript-eslint 8.59.0
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7982933Z + vite 6.4.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7983518Z + vite-plugin-image-optimizer 2.0.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7983996Z + vite-plugin-inspect 11.3.3
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7984423Z + vite-plugin-sitemap 0.8.2
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7984779Z + vitest 4.1.5
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.7984967Z 
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8216334Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8217418Z │                                                                              │
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8218390Z │   Ignored build scripts: @firebase/util@1.15.0, core-js@3.49.0,              │
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8219440Z │   esbuild@0.25.12, esbuild@0.27.7, protobufjs@7.5.5, sharp@0.34.5.           │
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8220639Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8221605Z │   to run scripts.                                                            │
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8222451Z │                                                                              │
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8223559Z ╰──────────────────────────────────────────────────────────────────────────────╯
+Anti-Pattern Audit	Install dependencies	2026-05-05T05:39:34.8270416Z Done in 3.1s using pnpm v10.28.2
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	﻿2026-05-05T05:39:34.8708882Z ##[group]Run pnpm run audit || true
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8709236Z [36;1mpnpm run audit || true[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8709560Z [36;1mpython3 dev-tools/td_cli.py audit-gate[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8732299Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8732558Z env:
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8732780Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8733287Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8733541Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8733738Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8733997Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:34.8734296Z ##[endgroup]
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.1538226Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.1538903Z > react-example@0.0.0 audit /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.1539419Z > node scripts/detect-antipatterns.mjs
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.1539633Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.1947533Z [34m🔍 Scanning for UI anti-patterns...[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.1947993Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.2719950Z [33m⚠️  PR scope warning: Touching 70 core files in ['src/layouts/', 'src/components/']. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23).[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.2721076Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.2912251Z [32m✔ No anti-patterns detected![0m
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:35.8968315Z ⚠️  Warning: 'gh' CLI not authenticated. Run 'gh auth login' to fetch baselines.
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:37.9764954Z UI Anti-Pattern Audit: Current=0, Baseline=0
+Anti-Pattern Audit	UI Anti-Pattern Audit (Gate)	2026-05-05T05:39:37.9765677Z ✅ No new violations introduced.
+Anti-Pattern Audit	Design Token Compliance	﻿2026-05-05T05:39:37.9858473Z ##[group]Run # Check for raw hex colors not in tokens.css
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9858938Z [36;1m# Check for raw hex colors not in tokens.css[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9859366Z [36;1mVIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9859749Z [36;1m  --include="*.tsx" \[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9860119Z [36;1m  | grep -v "design-tokens\|tokens.css\|// impeccable-ignore" \[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9860463Z [36;1m  | wc -l)[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9860692Z [36;1mif [ "$VIOLATIONS" -gt 0 ]; then[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9861134Z [36;1m  echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9861881Z [36;1m  grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9862357Z [36;1m  exit 1[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9862557Z [36;1mfi[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9862790Z [36;1mecho "✅ Design token compliance passed."[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9885856Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9886162Z env:
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9886384Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9886670Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9886890Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9887096Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9887363Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9887669Z ##[endgroup]
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9966369Z ⚠️ Found 4 raw hex color(s) in tsx files. Use CSS variables instead.
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9990229Z src/features/dashboard/Dashboard.tsx:37:          <div className="relative min-h-[220px] overflow-hidden bg-[#0a0718] p-5 sm:min-h-[260px] sm:p-8 flex flex-col justify-end group">
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9991902Z src/features/dashboard/Dashboard.tsx:39:            <div className="absolute inset-0 bg-[#05040d]/60" />
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9994197Z src/features/dashboard/Dashboard.tsx:51:          <div className="relative min-h-[220px] overflow-hidden border-t border-border bg-[#0c0a1e] p-5 sm:min-h-[260px] sm:p-8 flex flex-col justify-end group lg:border-t-0 lg:border-l">
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:37.9995984Z src/features/dashboard/Dashboard.tsx:53:            <div className="absolute inset-0 bg-[#070616]/60" />
+Anti-Pattern Audit	Design Token Compliance	2026-05-05T05:39:38.0005584Z ##[error]Process completed with exit code 1.
+Anti-Pattern Audit	Post Setup pnpm	﻿2026-05-05T05:39:38.0071720Z Post job cleanup.
+Anti-Pattern Audit	Post Setup pnpm	2026-05-05T05:39:38.1500744Z Pruning is unnecessary.
+Anti-Pattern Audit	Post Checkout	﻿2026-05-05T05:39:38.1633412Z Post job cleanup.
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2538773Z [command]/usr/bin/git version
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2577784Z git version 2.53.0
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2614419Z Temporarily overriding HOME='/home/runner/work/_temp/105aaa6e-7d67-45f1-9d80-e1bae9f92bc1' before making global git config changes
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2616360Z Adding repository directory to the temporary git global config as a safe directory
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2620543Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2658977Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2694189Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2930720Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2986922Z http.https://github.com/.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.2997129Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.3031097Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.3263051Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Anti-Pattern Audit	Post Checkout	2026-05-05T05:39:38.3295819Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Anti-Pattern Audit	Complete job	﻿2026-05-05T05:39:38.3663712Z Cleaning up orphan processes
+Anti-Pattern Audit	Complete job	2026-05-05T05:39:38.3940657Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
