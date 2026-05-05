@@ -25,7 +25,7 @@ export default function ResearchAnalytics() {
         />
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
+          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Tools Ecosystem</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{tools.length} TOOLS</Text>
           </Box>
@@ -71,7 +71,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" className="border-b border-line">
+          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Studies</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" className="tracking-widest">{studies.length} ARTICLES</Text>
           </Box>
@@ -108,7 +108,7 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box padding={12} className="rounded-2xl border border-dashed border-line/80 bg-surface/40 text-center shadow-xl relative overflow-hidden">
+            <Box padding={12} border radius="2xl" shadow="xl" position="relative" overflow="hidden" className="border-dashed border-line/80 bg-surface/40 text-center">
                <Box position="absolute" top={-12} right={-12} width={40} height={40} surface="accent" opacity={0.03} radius="full" className="blur-3xl" />
                <Stack align="center" justify="center" gap={4}>
                   <Box color="dim" opacity={0.5}>

@@ -105,7 +105,7 @@ export default function Home() {
             cursor="pointer"
             onClick={() => handleNavigate('/research')}
           >
-            <Box width={16} height={16} radius="xl" surface="muted" display="flex" align="center" justify="center" color="accent" className="shrink-0">
+            <Box width={16} height={16} radius="xl" surface="muted" display="flex" align="center" justify="center" color="accent" shrink={0}>
                <ArrowRight className="w-8 h-8" />
             </Box>
             <Stack gap={1} flex={1}>
@@ -160,7 +160,8 @@ export default function Home() {
                   as={motion.div}
                   variants={motionTokens.staggerItem}
                   border
-                  className="border-line h-full"
+                  height="full"
+                  className="border-line"
                 >
                   <EventCard {...event} />
                 </Box>

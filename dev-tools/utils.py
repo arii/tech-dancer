@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 import json
-from typing import Optional
+from typing import Optional, Union, List
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):
@@ -27,6 +27,35 @@ def get_github_token() -> Optional[str]:
     except (subprocess.CalledProcessError, FileNotFoundError):
         return None
 
+def _run(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> subprocess.CompletedProcess:
+    """Internal helper to run a command with granular logging on failure."""
+    proc = subprocess.run(
+        cmd,
+        shell=shell,
+        input=input_str,
+        capture_output=True,
+        text=True,
+        check=False
+    )
+    if proc.returncode != 0 and log_on_error:
+        print(f"❌ Command failed (exit {proc.returncode}): {proc.args}", file=sys.stderr)
+        if proc.stdout:
+            print(f"--- stdout ---\n{proc.stdout.strip()}", file=sys.stderr)
+        if proc.stderr:
+            print(f"--- stderr ---\n{proc.stderr.strip()}", file=sys.stderr)
+    return proc
+
+def execute(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> str:
+    """Runs a command, returns stripped stdout, and raises CLIError on failure."""
+    proc = _run(cmd, shell, input_str, log_on_error)
+    if proc.returncode != 0:
+        raise CLIError(f"Command failed with exit code {proc.returncode}", code=proc.returncode)
+    return proc.stdout.strip()
+
+def execute_raw(cmd: Union[str, List[str]], shell: bool = False, input_str: Optional[str] = None, log_on_error: bool = True) -> subprocess.CompletedProcess:
+    """Runs a command and returns the full CompletedProcess object without raising."""
+    return _run(cmd, shell, input_str, log_on_error)
+
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from environment variables or git remote."""
     repo = os.getenv("GITHUB_REPOSITORY") or os.getenv("GH_REPO")
@@ -34,10 +63,13 @@ def get_repo_name() -> Optional[str]:
         return repo
 
     try:
-        url = subprocess.check_output(
-            ['git', 'config', '--get', 'remote.origin.url'],
-            stderr=subprocess.DEVNULL, text=True
-        ).strip()
+        # Using execute_raw here to avoid noisy logs for a common discovery step
+        res = execute_raw(['git', 'config', '--get', 'remote.origin.url'], log_on_error=False)
+        if res.returncode != 0:
+            return os.getenv("GH_REPO")
+        url = res.stdout.strip()
+        if not url:
+            return os.getenv("GH_REPO")
         import re
         match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
         return match.group(1) if match else url

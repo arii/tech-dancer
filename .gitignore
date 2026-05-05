@@ -40,6 +40,8 @@ any-count.txt
 
 # Tools
 dev-tools/config.json
+.lighthouseci/*
+!.lighthouseci/assertion-results.json
 
 # IDEs
 .vscode/*
