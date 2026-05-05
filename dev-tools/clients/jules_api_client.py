@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import sys
 
 class JulesAPIClient:
     def __init__(self, api_key):
@@ -15,10 +16,13 @@ class JulesAPIClient:
         url = f"{self.base_url}/sources"
         try:
             response = requests.get(url, headers=self.headers, timeout=10)
+            if response.status_code != 200:
+                print(f"⚠️  Jules API list_sources failed (HTTP {response.status_code}): {response.text}", file=sys.stderr)
             response.raise_for_status()
             return response.json().get("sources", [])
         except Exception as e:
-            print(f"⚠️  Jules API list_sources failed: {e}")
+            if not isinstance(e, requests.HTTPError):
+                print(f"⚠️  Jules API list_sources failed: {e}", file=sys.stderr)
             return []
 
     def discover_source_id(self, repo_full_name):
@@ -43,8 +47,11 @@ class JulesAPIClient:
         }
         try:
             response = requests.post(url, headers=self.headers, json=payload, timeout=15)
+            if response.status_code not in [200, 201]:
+                print(f"⚠️  Jules API create_session failed (HTTP {response.status_code}): {response.text}", file=sys.stderr)
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"⚠️  Jules API create_session failed: {e}")
+            if not isinstance(e, requests.HTTPError):
+                print(f"⚠️  Jules API create_session failed: {e}", file=sys.stderr)
             return None

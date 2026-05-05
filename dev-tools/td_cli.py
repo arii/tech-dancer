@@ -692,7 +692,7 @@ def handle_fix_ci(args):
 
     source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
     if not source_id:
-        if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
+        if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...", file=sys.stderr)
         try:
             source_id = client.discover_source_id(repo.full_name)
         except Exception as e:
@@ -702,7 +702,7 @@ def handle_fix_ci(args):
         raise CLIError("JULES_SOURCE_ID is missing and auto-discovery failed. Ensure JULES_SOURCE_ID is set in GHA variables.", code=400)
 
     # 3. Call Jules API
-    if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...")
+    if not args.json: print(f"🚀 Initializing Jules session for branch `{branch}`...", file=sys.stderr)
 
     session_name = "dry-run-session"
     if not args.dry_run:
@@ -713,15 +713,15 @@ def handle_fix_ci(args):
         else:
             raise CLIError("Jules API session creation failed")
     elif not args.json:
-        print(f"[DRY-RUN] Would create session with source sources/{source_id}")
+        print(f"[DRY-RUN] Would create session with source sources/{source_id}", file=sys.stderr)
 
     # 4. Feedback
     feedback = f"🤖 **Jules is on it!**\n\nInitialized an autonomous repair session (`{session_name}`) for branch `{branch}`."
     if pr and not args.dry_run:
         pr.create_issue_comment(feedback)
-        if not args.json: print(f"✅ Posted feedback to PR #{pr.number}")
+        if not args.json: print(f"✅ Posted feedback to PR #{pr.number}", file=sys.stderr)
     elif not args.json:
-        print(feedback)
+        print(feedback, file=sys.stderr)
 
     if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
 
@@ -820,12 +820,17 @@ def main():
     try:
         args.func(args)
     except CLIError as e:
-        if args.json: print(json.dumps({"status": "error", "message": e.message, "code": e.code, "data": e.data}, indent=2))
-        else: print(f"❌ Error: {e.message}")
+        if args.json:
+            print(json.dumps({"status": "error", "message": e.message, "code": e.code, "data": e.data}, indent=2))
+        else:
+            print(f"❌ Error: {e.message}", file=sys.stderr)
         sys.exit(e.code)
     except Exception as e:
-        if args.json: print(json.dumps({"status": "error", "message": str(e)}, indent=2))
-        else: raise e
+        if args.json:
+            print(json.dumps({"status": "error", "message": str(e)}, indent=2))
+        else:
+            print(f"💥 Unexpected Error: {e}", file=sys.stderr)
+            raise e
         sys.exit(1)
 
 if __name__ == "__main__":
