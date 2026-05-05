@@ -57,9 +57,12 @@ def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -
                 return int(f.read().strip() or fallback_value)
 
     # 1. Environment Variable (High Priority in CI)
-    env_val = os.environ.get(env_var)
-    if env_val is not None and str(env_val).strip() != "":
-        return int(env_val)
+    if env_var in os.environ:
+        env_val = os.environ[env_var]
+        if str(env_val).strip() != "":
+            return int(env_val)
+        else:
+            return fallback_value
 
     # 2. GitHub Actions Variable (Local Fetch)
     gha_val = get_gha_variable(env_var)
@@ -735,7 +738,11 @@ def handle_fix_ci(args):
     # 3. Initialize Jules Client and Resolve Source ID
     client = JulesAPIClient(api_key)
 
-    source_id = os.environ.get("JULES_SOURCE_ID") or get_gha_variable("JULES_SOURCE_ID")
+    if "JULES_SOURCE_ID" in os.environ:
+        source_id = os.environ.get("JULES_SOURCE_ID")
+    else:
+        source_id = get_gha_variable("JULES_SOURCE_ID")
+
     if not source_id:
         if not args.json: print("🔍 JULES_SOURCE_ID not found, attempting auto-discovery...")
         try:
