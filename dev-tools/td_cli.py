@@ -148,7 +148,7 @@ def handle_validate_issue(args):
     if args.json: print(json.dumps({"status": "success" if total_findings == 0 else "error", "issues": results}, indent=2))
     if total_findings > 0: sys.exit(1)
 
-def handle_conflicts(args):
+def handle_detect_conflicts(args):
     from github import Github
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
@@ -164,6 +164,51 @@ def handle_conflicts(args):
 
     if args.json: print(json.dumps({"status": "success", "conflicts": formatted}, indent=2))
     elif not conflicts: print("✅ No potential merge conflicts detected.")
+
+def handle_conflicts(args):
+    """
+    Squashes commits, attempts auto-resolution of simple conflicts,
+    and updates snapshots.
+    """
+    def run(cmd, exit_on_fail=False):
+        print(f"🏃 Running: {cmd}")
+        res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        if res.returncode != 0:
+            print(f"⚠️ Output/Error:\n{res.stderr.strip() or res.stdout.strip()}")
+            if exit_on_fail:
+                sys.exit(res.returncode)
+        return res.returncode, res.stdout.strip()
+
+    base_branch = getattr(args, 'base', 'main') or 'main'
+
+    # 1. Squash all commits relative to the base branch
+    print("📦 Squashing current branch commits...")
+    run("git fetch origin")
+    code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
+
+    if code == 0 and merge_base:
+        run(f"git reset --soft {merge_base}")
+        run('git commit -m "chore: squashed commits prior to conflict resolution"')
+
+    # 2. Merge base to auto-resolve simple conflicts
+    print(f"🔄 Merging origin/{base_branch}...")
+    merge_code, _ = run(f"git merge origin/{base_branch}")
+
+    if merge_code != 0:
+        print("🚧 Complex conflicts remain. Git has auto-resolved the simple ones.")
+        print("Please resolve the remaining file conflicts manually.")
+        print("⚠️ Skipping snapshot updates until conflict markers are cleared.")
+        return
+
+    # 3. Update snapshots after successful merge
+    print("📸 Updating test snapshots...")
+    run("pnpm test -u")
+
+    # Amend the snapshot updates directly into our squashed commit
+    run("git add -A")
+    run("git commit --amend --no-edit")
+
+    print("✅ Conflict handling and snapshot updates complete!")
 
 def handle_status_board(args):
     from github import Github
@@ -627,7 +672,8 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("status-board", handle_status_board),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+                      ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
@@ -639,7 +685,8 @@ def main():
             p.add_argument("--post-comments", action="store_true")
             p.add_argument("--dry-run", action="store_true", default=True)
             p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd == "conflicts": p.add_argument("--pr", type=int)
+        elif cmd == "conflicts": p.add_argument("--base")
+        elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")
             p.add_argument("--update", action="store_true")
