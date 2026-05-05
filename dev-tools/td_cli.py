@@ -441,31 +441,89 @@ def handle_pre_submit(args):
 
 def handle_repair(args):
     """Wraps repair.py for AI-assisted CI repair."""
-    cmd = [sys.executable, os.path.join(os.path.dirname(__file__), "repair.py")]
-    if args.stdin:
-        cmd.append("--stdin")
-    elif args.logs:
-        cmd.append(args.logs)
-    else:
-        raise CLIError("Provide --logs <path> or --stdin")
-
-    log_file = args.logs if args.logs else "stdin"
-    if not args.json: print(f"🤖 Starting autonomous repair using logs from {log_file}...")
+    import tempfile
+    import shutil
 
     # Ensure Ollama is running or at least check it
     try:
+        import urllib.request
         urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
     except Exception:
         if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
 
-    proc = subprocess.run(cmd)
-    if proc.returncode == 0:
-        if args.json: print(json.dumps({"status": "success"}, indent=2))
-        else: print("✅ Repair process completed.")
+    logs_source = ""
+    logs_content = ""
+
+    if args.stdin:
+        logs_content = sys.stdin.read()
+        logs_source = "stdin"
+    elif args.logs:
+        if os.path.exists(args.logs):
+            with open(args.logs, 'r') as f:
+                logs_content = f.read()
+            logs_source = args.logs
+        else:
+            raise CLIError(f"Log file not found: {args.logs}")
     else:
-        if args.json: print(json.dumps({"status": "error", "code": proc.returncode}, indent=2))
-        else: print(f"❌ Repair process failed with code {proc.returncode}")
-        sys.exit(proc.returncode)
+        if not args.json: print("🔍 No logs provided. Running local triage...")
+        # Run lint and tsc to gather logs
+        res_lint = subprocess.run(["pnpm", "run", "lint:ox"], capture_output=True, text=True)
+        res_tsc = subprocess.run(["pnpm", "run", "type-check"], capture_output=True, text=True)
+        logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
+        logs_source = "local triage"
+
+    if not logs_content.strip():
+        if not args.json: print("✅ No errors found in logs or local triage. Nothing to repair.")
+        return
+
+    worktree_path = None
+    original_cwd = os.getcwd()
+    repair_script = os.path.abspath(os.path.join(os.path.dirname(__file__), "repair.py"))
+
+    try:
+        if args.worktree:
+            branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
+            worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
+            if not args.json: print(f"🏗️  Setting up git worktree at {worktree_path} (branch: {branch_name})...")
+            subprocess.run(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"], check=True, capture_output=True)
+            os.chdir(worktree_path)
+            # We need to make sure node_modules or dependencies are available if we verify
+            # But local repair script runs pnpm. Maybe just symlink node_modules for speed?
+            if os.path.exists(os.path.join(original_cwd, "node_modules")):
+                os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
+
+        # Write logs to a temp file for repair.py
+        with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False) as tmp_log:
+            tmp_log.write(logs_content)
+            tmp_log_path = tmp_log.name
+
+        if not args.json: print(f"🤖 Starting autonomous repair agent using {logs_source}...")
+
+        cmd = [sys.executable, repair_script, tmp_log_path]
+        # Also pass eslint json if available locally? For now let's keep it simple.
+
+        proc = subprocess.run(cmd)
+        os.unlink(tmp_log_path)
+
+        if proc.returncode == 0:
+            if args.json:
+                print(json.dumps({
+                    "status": "success",
+                    "worktree": worktree_path,
+                    "branch": branch_name if args.worktree else None
+                }, indent=2))
+            else:
+                print("✅ Repair process completed.")
+                if worktree_path:
+                    print(f"👉 Inspect your fixed code at: {worktree_path}")
+                    print(f"   Branch: {branch_name}")
+        else:
+            if args.json: print(json.dumps({"status": "error", "code": proc.returncode}, indent=2))
+            else: print(f"❌ Repair process failed with code {proc.returncode}")
+            sys.exit(proc.returncode)
+
+    finally:
+        os.chdir(original_cwd)
 
 def handle_audit_gate(args):
     # Current violations count
@@ -594,6 +652,7 @@ def main():
         elif cmd == "repair":
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
+            p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
         p.set_defaults(func=func)
 
     args = parser.parse_args()
