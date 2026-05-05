@@ -15,8 +15,9 @@ export default function ArielProfile() {
   const { bio } = useProfile();
 
   const galleryImages = bio.sections.find(s => s.id === 'gallery')?.gallery || [];
-  const danceExtensionPhoto = galleryImages[0];
-  const socialDancePhoto = galleryImages[2];
+  const featuredImages = galleryImages.filter(img => img.featured);
+  const danceExtensionPhoto = featuredImages.find(img => img.alt.includes('extension'));
+  const socialDancePhoto = featuredImages.find(img => img.alt.includes('MadJam'));
 
   const renderSection = (section: ProfileSection) => {
     const isDanceBackground = section.id === "dance-background";
@@ -62,7 +63,7 @@ export default function ArielProfile() {
             )}
           </Stack>
 
-          {section.gallery && <ProfileGallery images={section.gallery.filter((_, i) => i !== 0 && i !== 2)} />}
+        {section.gallery && <ProfileGallery images={section.gallery.filter(img => !img.featured)} />}
           {section.links && <ProfileLinks links={section.links} />}
         </Stack>
       </Box>

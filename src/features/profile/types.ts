@@ -23,6 +23,7 @@ export interface ProfileItem {
 export interface ProfileGalleryImage {
   src: string;
   alt: string;
+  featured?: boolean;
 }
 
 export interface ProfileDetail {
