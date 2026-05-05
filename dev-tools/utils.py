@@ -56,9 +56,6 @@ def execute_raw(cmd: Union[str, List[str]], shell: bool = False, input_str: Opti
     """Runs a command and returns the full CompletedProcess object without raising."""
     return _run(cmd, shell, input_str, log_on_error)
 
-# Legacy alias for backward compatibility during transition
-run_command = execute_raw
-
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from git remote."""
     try:
