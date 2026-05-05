@@ -2,6 +2,7 @@ import { useState, useEffect, RefObject } from "react";
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/layouts/Primitives';
+import { iconSizes } from '@/styles/design-tokens';
 
 interface ScrollToTopButtonProps {
   scrollRef: RefObject<HTMLElement | null>;
