@@ -148,7 +148,7 @@ jobs:
             git checkout -b "$NEW_BRANCH"
             git add .
             git commit -m "🤖 AI-generated fix for CI failures"
-            git push origin "$NEW_BRANCH" --force
+            git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
 
             PR_MSG="Automated repair attempt for failed run $WORKFLOW_RUN_ID"
             if [ "${{ steps.verify.outputs.success }}" == "success" ]; then
