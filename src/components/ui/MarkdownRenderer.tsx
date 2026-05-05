@@ -37,6 +37,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <Text as="h2" variant="display" size="3xl" weight="font-bold" className="normal-case tracking-tight m-0" {...props} />
               <Box className="h-px w-12 bg-accent mt-4" />
             </Box>
+          ),
+          h3: ({node: _node, ...props}) => (
+            <Box className="mt-8 mb-4">
+              <Text as="h3" variant="display" size="xl" weight="font-bold" className="normal-case tracking-tight m-0" {...props} />
+            </Box>
           )
         }}
       >

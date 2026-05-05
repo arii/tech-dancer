@@ -74,7 +74,7 @@ export default function Navigation() {
           gap={10}
           flex={1}
         >
-          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group">
+          <Box as={NavLink} to="/" display="block" marginBottom={4} className="group" aria-label="Home">
             <Logo className="h-10 transition-colors group-hover:opacity-80" />
           </Box>
 

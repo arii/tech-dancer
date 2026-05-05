@@ -23,7 +23,7 @@ export default function ArielProfile() {
     const isWhyBuilt = section.id === "why-built";
 
     return (
-      <Stack key={section.id} gap={6} maxWidth="prose">
+      <Stack key={section.id} gap={6} marginBottom={12} maxWidth="prose">
         {section.eyebrow && (
           <Text variant="mono" size="base" color="brand" weight="font-black" className="uppercase tracking-widest">
             {section.eyebrow}
@@ -49,14 +49,14 @@ export default function ArielProfile() {
           </Stack>
 
           {isDanceBackground && danceExtensionPhoto && (
-            <Box width={{ base: 'full', md: '72' }} aspect="1/1" radius="xl" overflow="hidden" border className="border-line/10 shadow-md shrink-0">
-              <img src={danceExtensionPhoto.src} alt={danceExtensionPhoto.alt} width={300} height={300} className="w-full h-full object-cover" />
+            <Box width={{ base: 'full', md: '72' }} aspect="1/1" radius="xl" overflow="hidden" border className="border-line/10 shadow-md shrink-0 max-w-screen-md max-h-screen">
+              <img src={danceExtensionPhoto.src} alt={danceExtensionPhoto.alt} width={300} height={300} className="w-full h-full object-cover" loading="lazy" />
             </Box>
           )}
 
           {isWhyBuilt && socialDancePhoto && (
-            <Box width={{ base: 'full', md: '72' }} aspect="1/1" radius="xl" overflow="hidden" border className="border-line/10 shadow-md shrink-0">
-              <img src={socialDancePhoto.src} alt={socialDancePhoto.alt} width={300} height={300} className="w-full h-full object-cover" />
+            <Box width={{ base: 'full', md: '72' }} aspect="1/1" radius="xl" overflow="hidden" border className="border-line/10 shadow-md shrink-0 max-w-screen-md max-h-screen">
+              <img src={socialDancePhoto.src} alt={socialDancePhoto.alt} width={300} height={300} className="w-full h-full object-cover" loading="lazy" />
             </Box>
           )}
         </Stack>
@@ -121,7 +121,8 @@ export default function ArielProfile() {
                       alt={bio.portrait.alt}
                       width={400}
                       height={500}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover max-h-full max-w-screen-md"
+                      loading="lazy"
                     />
                   </Box>
                 )}

@@ -16,15 +16,10 @@ export function NewsletterBanner() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      className="bg-white/80 backdrop-blur-xl border border-line/50"
+      className="bg-white/80 backdrop-blur-xl border border-line/50 w-full relative overflow-hidden"
       padding="emailBar"
-      radius="none"
+      radius="xl"
       marginX="auto"
-      position="fixed"
-      bottom={0}
-      left={4}
-      right={4}
-      zIndex="toast"
     >
       <Box position="absolute" className="top-2 right-2" zIndex="docked">
         <Button

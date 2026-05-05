@@ -4,6 +4,7 @@ import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
+import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
@@ -174,6 +175,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             <Box flex={1} width="full">
               {children}
             </Box>
+            {showEmailBar && <NewsletterBanner />}
             <Footer />
           </Stack>
         </Stack>

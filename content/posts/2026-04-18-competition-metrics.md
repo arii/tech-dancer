@@ -36,10 +36,10 @@ The goal of this project isn't to rank dancers, but to provide tools for self-im
 
 Once launched, the lab will feature:
 
-#### Judge Variance Analysis
+### Judge Variance Analysis
 Measuring the consistency across judging panels. This helps competitors understand which aspects of their dance resonate with different judging styles.
 
-#### Median-Relative Performance Tracking
+### Median-Relative Performance Tracking
 Instead of looking at your raw placement, we compare your performance to the competition median. This accounts for the overall strength of the heat.
 
 *Stay tuned for the official release in the Research Lab.*

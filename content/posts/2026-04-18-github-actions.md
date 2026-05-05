@@ -25,7 +25,7 @@ Building a "living portfolio" requires a system that handles the mundane tasks o
 
 My workflow is split into three primary stages: **Verification**, **Audit**, and **Deployment**.
 
-#### 1. Verification (Lint & Test)
+### 1. Verification (Lint & Test)
 
 This stage ensures code quality and functional correctness.
 
@@ -49,7 +49,7 @@ jobs:
       - run: pnpm test
 ```
 
-#### 2. Anti-Pattern Audit
+### 2. Anti-Pattern Audit
 
 To maintain the "Impeccable" design standards of this site, I've integrated a custom audit script.
 
@@ -65,7 +65,7 @@ To maintain the "Impeccable" design standards of this site, I've integrated a cu
           python3 dev-tools/td_cli.py audit-gate
 ```
 
-#### 3. Build & E2E Testing
+### 3. Build & E2E Testing
 
 Before deployment, the application is subjected to end-to-end (E2E) tests.
 

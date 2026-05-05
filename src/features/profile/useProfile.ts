@@ -1,10 +1,10 @@
 import { ProfileData } from './types';
-import firstComp from '@/assets/first_comp.jpg';
-import glowBunny from '@/assets/glow_bunny.jpg';
-import madJamAri from '@/assets/mad_jam_ari.jpg';
-import monterey from '@/assets/monterey.jpg';
-import roboticist from '@/assets/roboticist.jpg';
-import wwwAri from '@/assets/www_ari.jpg';
+import firstComp from '@/assets/first_comp.webp';
+import glowBunny from '@/assets/glow_bunny.webp';
+import madJamAri from '@/assets/mad_jam_ari.webp';
+import monterey from '@/assets/monterey.webp';
+import roboticist from '@/assets/roboticist.webp';
+import wwwAri from '@/assets/www_ari.webp';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",

@@ -51,7 +51,7 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
             <Stack gap={3}>
               {Icon && <Icon className="w-4 h-4 text-accent" />}
               {item.title && (
-                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="uppercase tracking-widest">
+                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-black" className="uppercase tracking-widest">
                   {item.title}
                 </Text>
               )}
@@ -132,6 +132,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
                 src={selectedImage.src}
                 alt={selectedImage.alt}
                 className="w-full h-full object-contain"
+                loading="lazy"
               />
               <Box
                 position="absolute"
@@ -166,11 +167,12 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`Visit ${link.label}`}
           paddingX={4}
           paddingY={2}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 interactive-press focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none transition-all group"
+          className="hover:border-accent hover:bg-accent/5 interactive-press focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent transition-all group"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}
