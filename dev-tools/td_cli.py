@@ -13,8 +13,15 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_github_client, get_repo_name, get_gha_variable, set_gha_variable, CLIError
-from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
+from utils import (
+    get_github_token,
+    get_github_client,
+    get_repo_name,
+    get_gha_variable,
+    set_gha_variable,
+    CLIError,
+    execute_raw
+)
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 
@@ -25,6 +32,23 @@ PROJECT_CONFIG = get_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
 # --- Shared Logic ---
+
+def log_error(msg: str):
+    """Prints a standardized error message to stderr with timestamp."""
+    now = datetime.now().strftime("%H:%M:%S")
+    print(f"[{now}] ❌ Error: {msg}", file=sys.stderr)
+
+def log_diag(msg: str):
+    """Prints a diagnostic message to stderr with timestamp."""
+    now = datetime.now().strftime("%H:%M:%S")
+    print(f"[{now}] ℹ️  {msg}", file=sys.stderr)
+
+def add_execution_args(parser: argparse.ArgumentParser):
+    """Registers consistent dry-run and execute flags to a subparser."""
+    parser.add_argument("--dry-run", action="store_true", default=True,
+                      help="Preview actions without side effects (default)")
+    parser.add_argument("--execute", action="store_false", dest="dry_run",
+                      help="Enable actual side effects (e.g., posting to GitHub, modifying files)")
 
 def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -> int:
     """Resolves a baseline value from CLI argument, environment variable, or GHA variable."""
@@ -56,13 +80,13 @@ def get_audit_results(content: str = None, targets: list[str] = None):
     # Use execute_raw because the audit tool exits 1 on findings, which is expected
     res = execute_raw(cmd, input_str=content)
     try:
-        return json.loads(proc.stdout)
+        return json.loads(res.stdout)
     except json.JSONDecodeError as e:
-        print(f"❌ Failed to parse audit results as JSON: {e}", file=sys.stderr)
-        if proc.stderr:
-            print(f"   Stderr: {proc.stderr.strip()}", file=sys.stderr)
-        if proc.stdout:
-            print(f"   Stdout (first 200 chars): {proc.stdout[:200].strip()}", file=sys.stderr)
+        log_error(f"Failed to parse audit results as JSON: {e}")
+        if res.stderr:
+            print(f"   Stderr: {res.stderr.strip()}", file=sys.stderr)
+        if res.stdout:
+            print(f"   Stdout (first 200 chars): {res.stdout[:200].strip()}", file=sys.stderr)
         return {"violations": {}, "config": {}}
 
 def extract_code_blocks(text: str) -> list[str]:
@@ -152,7 +176,7 @@ def handle_validate_issue(args):
     if args.json: print(json.dumps({"status": "success" if total_findings == 0 else "error", "issues": results}, indent=2))
     if total_findings > 0:
         if not args.json:
-            print(f"❌ Found {total_findings} blocking findings. Exiting with code 1.")
+            log_error(f"Found {total_findings} blocking findings. Exiting with code 1.")
         sys.exit(1)
 
 def handle_detect_conflicts(args):
@@ -776,10 +800,6 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    # Shared argument help strings to avoid "Help-Text-Explosion"
-    HELP_DRY = "Preview actions without side effects (default)"
-    HELP_EXE = "Execute actual side effects (e.g., posting to GitHub, modifying files)"
-
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
@@ -791,44 +811,37 @@ def main():
             p.add_argument("--issue-number", type=int)
             p.add_argument("--all-open", action="store_true")
             p.add_argument("--post-comments", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd == "conflicts": p.add_argument("--base")
         elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")
             p.add_argument("--update", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd == "bundle-size":
             p.add_argument("--baseline-file")
             p.add_argument("--threshold", type=int, default=50)
             p.add_argument("--update", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd == "migrate-tokens":
             p.add_argument("--find")
             p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW'))
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd == "update-issues":
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd in ["audit-pr", "fetch-review"]:
             p.add_argument("pr_number")
             p.add_argument("--fetch", action="store_true")
             p.add_argument("--audit", action="store_true")
             p.add_argument("--submit", action="store_true")
             p.add_argument("--cleanup", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
             p.add_argument("--event")
             p.add_argument("--base")
         elif cmd == "manage-reviews":
             p.add_argument("--check-responses", action="store_true")
             p.add_argument("--cleanup-comments", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd == "audit-gate": pass # Uses global --json if provided
         elif cmd == "repair-context":
             p.add_argument("--log", help="Raw log line")
@@ -837,8 +850,7 @@ def main():
             p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
             p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")
             p.add_argument("--api-key", help="Jules API Key (falls back to JULES_API_KEY env var)")
-            p.add_argument("--dry-run", action="store_true", default=True, help=HELP_DRY)
-            p.add_argument("--execute", action="store_false", dest="dry_run", help=HELP_EXE)
+            add_execution_args(p)
         elif cmd == "repair":
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
