@@ -44,14 +44,10 @@ jobs:
 
       - name: Checkout failing branch
         run: |
-          # We are currently on the trusted default branch from the previous step.
-          # We fetch and checkout the failing SHA manually to avoid Semgrep's
-          # workflow-run-target-code-checkout detection on actions/checkout.
           if [ "$EVENT_NAME" == "workflow_run" ]; then
             git fetch origin "$WORKFLOW_RUN_SHA"
             git checkout "$WORKFLOW_RUN_SHA"
           fi
-          # For issue_comment, Resolve PR branch step handles checkout.
 
       - name: Resolve PR branch (for ChatOps)
         if: env.EVENT_NAME == 'issue_comment'
@@ -71,8 +67,12 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies (Safe)
-        # Use --ignore-scripts to prevent execution of malicious lifecycle scripts
         run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+
+      - name: Native Auto-Fix
+        run: |
+          pnpm eslint . --fix || true
+          pnpm oxlint --fix || true
 
       - name: Install Ollama
         run: |
@@ -98,15 +98,17 @@ jobs:
           if [ "$EVENT_NAME" == "workflow_run" ]; then
             TARGET_RUN_ID="$WORKFLOW_RUN_ID"
           else
-            # For ChatOps, find the latest failed CI run for this PR
             TARGET_RUN_ID=$(gh run list --workflow CI --branch "$HEAD_REF" --status failure --limit 1 --json databaseId -q '.[0].databaseId')
           fi
 
           if [ -n "$TARGET_RUN_ID" ]; then
             echo "Fetching logs for run $TARGET_RUN_ID..."
             gh run view "$TARGET_RUN_ID" --log > ci_logs.txt
-            # Run the TRUSTED repair script from /tmp
-            python3 /tmp/repair-tool/repair.py ci_logs.txt
+
+            # Generate fresh structured logs from current state
+            pnpm eslint . --format json > eslint-errors.json || true
+
+            python3 /tmp/repair-tool/repair.py ci_logs.txt --eslint-json eslint-errors.json
           else
             echo "No failed run found to repair."
             exit 0
@@ -116,13 +118,11 @@ jobs:
         id: verify
         run: |
           echo "Verifying repairs..."
-          # Only run the lightweight checks first
           if pnpm run lint:ox && pnpm run type-check; then
             echo "Repair verified successfully!"
             echo "success=true" >> $GITHUB_OUTPUT
           else
             echo "Repair failed verification or only partially fixed."
-            # Even if it failed, check if we changed anything
             if [ -n "$(git status --porcelain)" ]; then
                echo "success=partial" >> $GITHUB_OUTPUT
             else
