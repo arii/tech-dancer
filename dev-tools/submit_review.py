@@ -1,8 +1,7 @@
 import os
 import json
 import re
-from github import Github
-from utils import get_github_token, get_repo_name, CLIError
+from utils import get_github_token, get_github_client, get_repo_name, CLIError
 
 def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_override=None, is_json=False):
     """
@@ -23,15 +22,11 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
     except json.JSONDecodeError as e:
         raise CLIError(f"Failed to parse JSON block: {str(e)}")
 
-    token = get_github_token()
-    if not token:
-        raise CLIError("GitHub token not found", code=401)
-
     repo_name = get_repo_name()
     if not repo_name:
         raise CLIError("Could not detect repository name")
 
-    repo = Github(token).get_repo(repo_name)
+    repo = get_github_client().get_repo(repo_name)
     pr = repo.get_pull(int(pr_number))
 
     event = event_override or ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","") else "APPROVE" if "Approved" in payload.get("body","") else "COMMENT")

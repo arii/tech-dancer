@@ -1,14 +1,13 @@
 import os
 import re
-import subprocess
 import sys
 import glob
 import shlex
 from typing import Optional, List, Tuple, Union
 from collections import defaultdict
 
-# Import execute from utils
-from utils import execute, execute_raw, CLIError
+# Import run_command from utils
+from utils import run_command, CLIError
 
 # Use existing github_utils if possible, but we'll add common repo walking/matching logic here
 def walk_tsx(root_dir='src'):
@@ -61,13 +60,14 @@ def get_any_count(search_dir='src'):
         return 0
 
     safe_dir = shlex.quote(search_dir)
+    # Using check=False because grep exits non-zero on no matches
     cmd = f"grep -rn ': any\\b\\|as any\\b' {safe_dir} --include='*.tsx' --include='*.ts'"
-    proc = execute_raw(cmd, shell=True, log_on_error=False)
+    res = run_command(cmd, check=False, shell=True, log_on_error=False)
 
-    if proc.returncode == 0:
-        return len(proc.stdout.strip().split('\n')) if proc.stdout.strip() else 0
-    elif proc.returncode == 1:
+    if res.returncode == 0:
+        return len(res.stdout.strip().split('\n')) if res.stdout.strip() else 0
+    elif res.returncode == 1:
         return 0
     else:
-        print(f"❌ Error running grep: {proc.stderr}", file=sys.stderr)
-        raise CLIError(f"Grep failed with exit code {proc.returncode}")
+        print(f"❌ Error running grep: {res.stderr.strip()}", file=sys.stderr)
+        raise CLIError(f"Grep failed with exit code {res.returncode}")
