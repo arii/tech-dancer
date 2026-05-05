@@ -13,8 +13,7 @@ import re
 import subprocess
 import json
 from datetime import datetime, timezone, timedelta
-from utils import get_github_token, get_github_client, get_repo_name, get_gha_variable, set_gha_variable, CLIError
-from utils import get_github_token, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
+from utils import get_github_token, get_github_client, get_repo_name, get_gha_variable, set_gha_variable, CLIError, execute, execute_raw
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
 

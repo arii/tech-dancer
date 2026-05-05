@@ -1,0 +1,44 @@
+
+> react-example@0.0.0 build /home/ari/tech-dancer
+> shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build
+
+
+> react-example@0.0.0 type-check /home/ari/tech-dancer
+> tsc --noEmit
+
+vite v6.4.2 building for production...
+transforming...
+✓ 3371 modules transformed.
+
+✨ [36m[vite-plugin-image-optimizer][39m - optimized images successfully: 
+[2mdist[22m/[94mpwa-512x512.png[39m                 [90m[32m-2%[39m[90m   [39m [2m3.71 kB ⭢  3.66 kB[22m
+[2mdist[22m/[94mpwa-192x192.png[39m                 [90m[32m-4%[39m[90m   [39m [2m1.56 kB ⭢  1.51 kB[22m
+[2mdist[22m/[94massets/comp_analysis_hero.webp[39m  [90m[32m-1%[39m[90m   [39m [2m68.42 kB ⭢  68.19 kB[22m
+[2mdist[22m/[94mfavicon.svg[39m                     [90m[32m0%[39m[90m    [39m [33m[1mskipped[22m[39m [2moriginal: 0.33 kB <= optimized: 0.33 kB[22m
+
+💰 total savings = [32m0.33kB[39m/[32m73.69kB[39m ≈ [32m0%[39m
+
+
+✗ Build failed in 27.30s
+error during build:
+src/features/lab/components/GearPostDetail.tsx (6:9): "ScoreGrid" is not exported by "src/components/layout/DetailElements.tsx", imported by "src/features/lab/components/GearPostDetail.tsx".
+file: /home/ari/tech-dancer/src/features/lab/components/GearPostDetail.tsx:6:9
+
+4: import { affiliateManager } from '@/lib/affiliateManager';
+5: import { DetailLayout } from '@/components/layout/DetailLayout';
+6: import { ScoreGrid, ScoreItem, SpecsTable, VerdictCallout } from '@/components/layout/DetailElements';
+            ^
+7: 
+8: interface GearPostDetailProps {
+
+    at getRollupError (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/parseAst.js:406:41)
+    at error (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/parseAst.js:402:42)
+    at Module.error (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:17384:16)
+    at Module.traceVariable (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:17817:29)
+    at ModuleScope.findVariable (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:15407:39)
+    at FunctionScope.findVariable (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:5676:38)
+    at FunctionBodyScope.findVariable (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:5676:38)
+    at Identifier.bind (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:5450:40)
+    at CallExpression.bind (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:2828:28)
+    at CallExpression.bind (file:///home/ari/tech-dancer/node_modules/.pnpm/rollup@4.60.2/node_modules/rollup/dist/es/shared/node-entry.js:12516:15)
+ ELIFECYCLE  Command failed with exit code 1.

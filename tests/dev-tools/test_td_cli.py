@@ -12,12 +12,10 @@ from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
-    @patch('utils.get_github_token')
+    @patch('td_cli.get_github_client')
     @patch('td_cli.get_repo_name')
-    @patch('github.Github')
-    def test_validate_issue_dry_run_default(self, mock_github_class, mock_repo, mock_token):
+    def test_validate_issue_dry_run_default(self, mock_repo, mock_github_client):
         """Test that validate-issue defaults to dry-run True"""
-        mock_token.return_value = "fake-token"
         mock_repo.return_value = "owner/repo"
 
         mock_issue = MagicMock()
@@ -25,7 +23,7 @@ class TestTDCLI(unittest.TestCase):
         mock_issue.title = "Test Issue"
         mock_issue.body = "Test Body"
 
-        mock_github_class.return_value.get_repo.return_value.get_issue.return_value = mock_issue
+        mock_github_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
         args = MagicMock()
         args.issue_number = 123

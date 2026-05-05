@@ -91,6 +91,8 @@ jobs:
 
       - name: TypeScript `any` Ratchet
         run: python3 dev-tools/td_cli.py ratchet-any
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
@@ -114,6 +116,8 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit (Gate)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm run audit || true
           python3 dev-tools/td_cli.py audit-gate
