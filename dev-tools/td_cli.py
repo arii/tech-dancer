@@ -78,6 +78,13 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
+def add_execution_args(parser):
+    """Registers --dry-run and --execute flags with standardized help strings."""
+    parser.add_argument("--dry-run", action="store_true", default=True,
+                      help="Run in dry-run mode (default). No side effects will be applied.")
+    parser.add_argument("--execute", action="store_false", dest="dry_run",
+                      help="Execute the command and apply side effects (disables dry-run).")
+
 
 # --- CLI Handlers ---
 
@@ -779,29 +786,26 @@ def main():
             p.add_argument("--issue-number", type=int)
             p.add_argument("--all-open", action="store_true")
             p.add_argument("--post-comments", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True)
-            p.add_argument("--execute", action="store_false", dest="dry_run")
+            add_execution_args(p)
         elif cmd == "conflicts": p.add_argument("--base")
         elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")
             p.add_argument("--update", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True)
-            p.add_argument("--execute", action="store_false", dest="dry_run")
+            add_execution_args(p)
         elif cmd == "bundle-size":
             p.add_argument("--baseline-file")
             p.add_argument("--threshold", type=int, default=50)
             p.add_argument("--update", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True)
-            p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd == "migrate-tokens": p.add_argument("--find"); p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW')); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
-        elif cmd == "update-issues": p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
+            add_execution_args(p)
+        elif cmd == "migrate-tokens": p.add_argument("--find"); p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW')); add_execution_args(p)
+        elif cmd == "update-issues": add_execution_args(p)
         elif cmd in ["audit-pr", "fetch-review"]:
             p.add_argument("pr_number")
             p.add_argument("--fetch", action="store_true"); p.add_argument("--audit", action="store_true"); p.add_argument("--submit", action="store_true"); p.add_argument("--cleanup", action="store_true")
-            p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
+            add_execution_args(p)
             p.add_argument("--event"); p.add_argument("--base")
-        elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); p.add_argument("--dry-run", action="store_true", default=True); p.add_argument("--execute", action="store_false", dest="dry_run")
+        elif cmd == "manage-reviews": p.add_argument("--check-responses", action="store_true"); p.add_argument("--cleanup-comments", action="store_true"); add_execution_args(p)
         elif cmd == "audit-gate": pass # Uses global --json if provided
         elif cmd == "repair-context":
             p.add_argument("--log", help="Raw log line")
@@ -810,8 +814,7 @@ def main():
             p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
             p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")
             p.add_argument("--api-key", help="Jules API Key (falls back to JULES_API_KEY env var)")
-            p.add_argument("--dry-run", action="store_true", default=True)
-            p.add_argument("--execute", action="store_false", dest="dry_run")
+            add_execution_args(p)
         elif cmd == "repair":
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
