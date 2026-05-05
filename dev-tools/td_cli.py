@@ -80,10 +80,10 @@ def detect_conflicts(repo, target_pr_num=None):
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
-    from github import Github
+    from github import Github, Auth
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
-    repo = Github(token).get_repo(get_repo_name())
+    repo = Github(auth=Auth.Token(token)).get_repo(get_repo_name())
 
     issues = []
     if args.all_open: issues = list(repo.get_issues(state='open'))
@@ -149,10 +149,10 @@ def handle_validate_issue(args):
     if total_findings > 0: sys.exit(1)
 
 def handle_detect_conflicts(args):
-    from github import Github
+    from github import Github, Auth
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
-    repo = Github(token).get_repo(get_repo_name())
+    repo = Github(auth=Auth.Token(token)).get_repo(get_repo_name())
     conflicts = detect_conflicts(repo, args.pr)
 
     formatted = []
@@ -211,10 +211,10 @@ def handle_conflicts(args):
     print("✅ Conflict handling and snapshot updates complete!")
 
 def handle_status_board(args):
-    from github import Github
+    from github import Github, Auth
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
-    repo = Github(token).get_repo(get_repo_name())
+    repo = Github(auth=Auth.Token(token)).get_repo(get_repo_name())
 
     prs_data = []
     if not args.json: print("# Active Agent Work Board\n| Branch | Issue | Status | Conflicts |\n|--------|-------|--------|-----------|")
@@ -311,10 +311,10 @@ def handle_migrate_tokens(args):
     if args.json: print(json.dumps({"status": "success", "matches": matches}, indent=2))
 
 def handle_update_issues(args):
-    from github import Github
+    from github import Github, Auth
     token = get_github_token(); repo_name = get_repo_name()
     if not token: raise CLIError("GitHub token not found", code=401)
-    g = Github(token); repo = g.get_repo(repo_name)
+    g = Github(auth=Auth.Token(token)); repo = g.get_repo(repo_name)
 
     updates = []
     if not args.json: print(f"🔍 Scanning open issues in {repo_name}...")
@@ -355,7 +355,7 @@ def handle_audit_pr(args):
     if args.fetch:
         token = get_github_token()
         if not token: raise CLIError("GitHub token not found", code=401)
-        from github import Github; repo = Github(token).get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
+        from github import Github, Auth; repo = Github(auth=Auth.Token(token)).get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
         title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
         context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## Files Changed"]
         for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
@@ -469,8 +469,8 @@ def handle_pre_submit(args):
         token = get_github_token()
         if token:
             if not args.json: print("--- Conflict Check ---")
-            from github import Github
-            conflicts = detect_conflicts(Github(token).get_repo(get_repo_name()))
+            from github import Github, Auth
+            conflicts = detect_conflicts(Github(auth=Auth.Token(token)).get_repo(get_repo_name()))
             results["conflicts"] = [{"prs": list(p), "files": f} for p, f in conflicts.items()]
             if not args.json:
                 if conflicts:
@@ -623,14 +623,14 @@ def handle_audit_gate(args):
         print("✅ No new violations introduced.")
 
 def handle_fix_ci(args):
-    from github import Github
+    from github import Github, Auth
     from clients.jules_api_client import JulesAPIClient
 
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
 
     repo_name = get_repo_name()
-    g = Github(token)
+    g = Github(auth=Auth.Token(token))
     repo = g.get_repo(repo_name)
 
     # 1. Resolve PR and Branch
@@ -691,10 +691,10 @@ def handle_fix_ci(args):
     if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
 
 def handle_manage_reviews(args):
-    from github import Github
+    from github import Github, Auth
     token = get_github_token()
     if not token: raise CLIError("GitHub token not found", code=401)
-    g = Github(token); repo = g.get_repo(get_repo_name()); login = g.get_user().login
+    g = Github(auth=Auth.Token(token)); repo = g.get_repo(get_repo_name()); login = g.get_user().login
 
     prs_data = []
     for pr in repo.get_pulls(state='open', sort='updated', direction='desc'):

@@ -8,6 +8,7 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
+  actions: read
 
 jobs:
   trigger-jules:
@@ -29,7 +30,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install PyGithub
+          pip install PyGithub requests
 
       - name: Initialize Jules Repair Session
         env:
