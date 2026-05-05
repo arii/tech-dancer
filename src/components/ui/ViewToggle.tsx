@@ -18,7 +18,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           onClick={() => onChange(v)}
           className={cn(
             'p-2 transition-colors cursor-pointer',
-            v === 'card' ? 'border-r border-line' : '',
+            v === 'card' ? 'border-r-standard' : '',
             view === v 
               ? 'bg-accent-navy text-bg shadow-inner' 
               : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface transition-colors'

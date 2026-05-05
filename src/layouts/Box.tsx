@@ -112,13 +112,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     }
 
     const borderClasses = cn(
-      border === true && "border border-line",
-      border === "t" && "border-t border-line",
-      border === "b" && "border-b border-line",
-      border === "l" && "border-l border-line",
-      border === "r" && "border-r border-line",
-      border === "x" && "border-x border-line",
-      border === "y" && "border-y border-line",
+      border === true && "border-standard",
+      border === "t" && "border-t-standard",
+      border === "b" && "border-b-standard",
+      border === "l" && "border-l-standard",
+      border === "r" && "border-r-standard",
+      border === "x" && "border-x-standard",
+      border === "y" && "border-y-standard",
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),

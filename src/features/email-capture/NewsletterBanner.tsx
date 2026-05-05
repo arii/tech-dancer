@@ -18,7 +18,8 @@ export function NewsletterBanner() {
       transition={motionTokens.overlay.transition}
       surface="alt"
       opacity={0.9}
-      className="backdrop-blur-xl border border-line/50"
+      border
+      className="backdrop-blur-xl border-line/50"
       shadow="topOverlay"
       padding="emailBar"
       radius="none"

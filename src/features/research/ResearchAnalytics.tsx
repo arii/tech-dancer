@@ -45,7 +45,7 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4}>
                   <Box display="flex" justify="between" align="start">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" color="dim" className="group-hover:text-accent transition-colors">
+                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" color="dim" className="interactive-accent">
                       <Search className="w-5 h-5" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
@@ -53,7 +53,7 @@ export default function ResearchAnalytics() {
                     </Text>
                   </Box>
                   <Stack gap={2}>
-                    <Text variant="display" size="xl" weight="font-black" className="group-hover:text-accent transition-colors">
+                    <Text variant="display" size="xl" weight="font-black" className="interactive-accent">
                       {tool.name}
                     </Text>
                     <Text size="sm" color="dim" className="leading-relaxed line-clamp-2">
@@ -95,7 +95,7 @@ export default function ResearchAnalytics() {
                     <Text variant="mono" size="micro" color="dim">{study.date}</Text>
                   </Box>
                   <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black" className="group-hover:text-accent transition-colors">
+                    <Text variant="display" size="2xl" weight="font-black" className="interactive-accent">
                       {study.title}
                     </Text>
                     <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">

@@ -28,7 +28,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
       <Box className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-line">
+            <tr className="border-b-standard">
               <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Date</Box>
               <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Competitor</Box>
               <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Event</Box>

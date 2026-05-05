@@ -3,6 +3,7 @@
 
 @theme {
   /* Colors */
+  --color-border-standard: var(--raw-color-line);
   --color-bg: var(--raw-color-bg);
   --color-surface: var(--raw-color-surface);
   --color-surface-alt: var(--raw-color-surface-alt);
@@ -79,6 +80,39 @@
   --text-tiny: 10px;
 }
 
+@utility interactive-accent {
+  @apply group-hover:text-accent transition-colors;
+}
+
+@utility border-standard {
+  @apply border border-border-standard;
+}
+
+@utility border-t-standard {
+  @apply border-t border-border-standard;
+}
+
+@utility border-b-standard {
+  @apply border-b border-border-standard;
+}
+
+@utility border-l-standard {
+  @apply border-l border-border-standard;
+}
+
+@utility border-r-standard {
+  @apply border-r border-border-standard;
+}
+
+@utility border-x-standard {
+  @apply border-x border-border-standard;
+}
+
+@utility border-y-standard {
+  @apply border-y border-border-standard;
+}
+
+
 @layer utilities {
   @keyframes scanline {
     0% { transform: translateY(-100%); }
@@ -107,6 +141,7 @@
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
   .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
+
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
     content: "";
@@ -137,13 +172,13 @@
 
 .panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
 .nav-rail {
-  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
+  @apply hidden lg:flex w-[280px] border-r-standard flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
 .main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
-.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
-.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
+.stats-widget { @apply bg-surface p-6 border-standard shadow-none rounded-none; }
+.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border-standard rounded-none; }
 .experience-chip {
-  @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+  @apply text-tiny border-standard px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
-.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
-.content-card { @apply bg-surface p-8 rounded-none border border-line; }
+.product-card { @apply bg-surface border-standard p-6 rounded-none transition-all duration-300; }
+.content-card { @apply bg-surface p-8 rounded-none border-standard; }

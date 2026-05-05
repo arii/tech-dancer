@@ -46,7 +46,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                 </Box>
               )}
               <Stack gap={2} flex={1}>
-                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
+                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight interactive-accent">
                   {card.title}
                 </Text>
                 <Text variant="body" size="base" color="dim" className="leading-relaxed opacity-90">
@@ -160,7 +160,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           radius="full"
           className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
-          <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+          <Text variant="mono" size="xs" weight="font-bold" className="interactive-accent">
             {link.label}
           </Text>
         </Box>

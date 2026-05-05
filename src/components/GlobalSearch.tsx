@@ -141,7 +141,7 @@ export function GlobalSearch() {
               border
               className="group hover:bg-accent/10 transition-colors border-line/50"
             >
-              <X className="w-4 h-4 text-text-dim group-hover:text-accent" />
+              <X className="w-4 h-4 text-text-dim interactive-accent" />
             </Box>
           </Box>
 
@@ -167,7 +167,7 @@ export function GlobalSearch() {
                   >
                      <Stack gap={0.5} flex className="min-w-0">
                         <Box display="flex" align="center" gap={3}>
-                           <Text size="base" weight="font-bold" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
+                           <Text size="base" weight="font-bold" className="interactive-accent truncate">{highlight(res.title)}</Text>
                            <Box border paddingX={2} paddingY={0.5} radius="none" className="border-accent/20 bg-accent/10 shrink-0">
                               <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold">{res.type}</Text>
                            </Box>
@@ -193,13 +193,13 @@ export function GlobalSearch() {
           <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center">
              <Box display="flex" align="center" gap={6}>
                 <Box display="flex" align="center" gap={2}>
-                   <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                   <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center">
                       <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                    </Box>
                    <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
                 </Box>
                 <Box display="flex" align="center" gap={2}>
-                   <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                   <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center">
                       <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
                    </Box>
                    <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>

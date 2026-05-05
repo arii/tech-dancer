@@ -65,7 +65,7 @@ export function ContentCard({
           variant="body"
           size="lg"
           weight="font-bold"
-          className="text-text-main leading-tight group-hover:text-accent transition-colors line-clamp-2"
+          className="text-text-main leading-tight interactive-accent line-clamp-2"
         >
           {title}
         </Text>

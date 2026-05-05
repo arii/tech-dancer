@@ -111,7 +111,7 @@ export default function ResearchDetail() {
           cursor="pointer"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Lab</Text>
+          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="interactive-accent">Back to Lab</Text>
         </Box>
 
         <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>

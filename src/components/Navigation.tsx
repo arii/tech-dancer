@@ -71,7 +71,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail" 
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300 border-r border-line bg-surface",
+          "transition-[background-color,backdrop-filter] duration-300 border-r-standard bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -86,7 +86,8 @@ export default function Navigation() {
             display="block"
             paddingX={4}
             paddingY={6}
-            className="group border-b border-line"
+            border="b"
+            className="group"
           >
             <Logo className="h-16 w-full transition-opacity group-hover:opacity-80" />
           </Box>
@@ -116,7 +117,7 @@ export default function Navigation() {
             ))}
           </Stack>
 
-          <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
+          <Box paddingX={6} paddingY={5} border="t" className="bg-surface">
             <Text variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
               Written by <strong className="text-accent">Tech Dancer</strong>
             </Text>

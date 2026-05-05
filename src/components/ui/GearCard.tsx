@@ -51,7 +51,6 @@ export function GearCard({
           paddingY={1}
           radius="full"
           border
-          className="border-line"
         >
           <Text size="tiny" weight="font-black" uppercase tracking="widest" color="accent">
             {category}
@@ -68,7 +67,7 @@ export function GearCard({
           variant="body"
           size="lg"
           weight="font-bold"
-          className="text-text-main leading-tight group-hover:text-accent transition-colors line-clamp-2"
+          className="text-text-main leading-tight interactive-accent line-clamp-2"
         >
           {title}
         </Text>
