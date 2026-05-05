@@ -144,7 +144,9 @@ export default function Home() {
                 key={post.slug}
                 {...post}
                 basePath="/blog"
+                aspect="video"
                 variants={motionTokens.staggerItem}
+                compact={true}
               />
             ))}
           </Grid>
