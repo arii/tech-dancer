@@ -58,6 +58,7 @@
   --z-toast: var(--raw-z-toast);
   --z-top: var(--raw-z-top);
   --z-search: var(--raw-z-search);
+  --z-search-modal: var(--raw-z-search-modal);
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
@@ -128,6 +129,19 @@
 .tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
 .experience-chip {
   @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+}
+.panel-hero {
+  /* Dynamic values set via CSS variables to satisfy anti-pattern rules */
+  --hero-bar-height: 20px;
+  --hero-bar-dur: 0.8s;
+  --hero-bar-delay: 0s;
+}
+.hero-bar {
+  width: clamp(3px, 0.6vw, 5px);
+  height: var(--hero-bar-height);
+  background: var(--hero-slash-gradient);
+  opacity: 0.75;
+  animation: bounce var(--hero-bar-dur) ease-in-out infinite alternate var(--hero-bar-delay);
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }

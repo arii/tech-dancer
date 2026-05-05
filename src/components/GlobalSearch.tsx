@@ -72,7 +72,7 @@ export function GlobalSearch() {
     <Box
       position="fixed"
       inset="y"
-      zIndex={300} // Increased z-index to ensure it is above EVERYTHING, including Hero branding
+      zIndex="search"
       display="flex"
       justify="center"
       align="start"
@@ -91,7 +91,7 @@ export function GlobalSearch() {
         surface="default"
         border
         shadow="topOverlay"
-        className="border-accent/20 z-[310]"
+        zIndex="searchModal"
         onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         <Box border="b" padding={6} display="flex" align="center" gap={4} className="relative">

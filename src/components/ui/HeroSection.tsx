@@ -14,18 +14,11 @@ export function HeroSection() {
   const BAR_COUNT = HERO_CONFIG.BAR_COUNT;
   // Generate deterministic bar data based on index to prevent visual regression flakiness
   const bars: WaveBar[] = useMemo(() =>
-    Array.from({ length: BAR_COUNT }, (_, i) => {
-      // Deterministic pseudo-random values based on index i
-      const hSeed = (i * 137.5) % 36;
-      const dSeed = (i * 222.2) % 0.8;
-      const lSeed = (i * 333.3) % 0.8;
-
-      return {
-        height: 20 + hSeed,
-        dur: (0.4 + dSeed).toFixed(2) + 's',
-        delay: lSeed.toFixed(2) + 's',
-      };
-    }),
+    Array.from({ length: BAR_COUNT }, (_, i) => ({
+      height: 20 + ((i * 137.5) % 36),
+      dur: (0.4 + ((i * 222.2) % 0.8)).toFixed(2) + 's',
+      delay: ((i * 333.3) % 0.8).toFixed(2) + 's',
+    })),
   [BAR_COUNT]);
 
   return (
@@ -205,14 +198,12 @@ export function HeroSection() {
             <Box
               key={i}
               radius="none"
+              className="hero-bar"
               style={{
-                width: 'clamp(3px, 0.6vw, 5px)',
-                height: bar.height,
-                background: 'var(--hero-slash-gradient)',
-                opacity: 0.75,
-                animation: `bounce ${bar.dur} ease-in-out infinite alternate ${bar.delay}`,
-              }}
-              className="rounded-t-sm"
+                '--hero-bar-height': `${bar.height}px`,
+                '--hero-bar-dur': bar.dur,
+                '--hero-bar-delay': bar.delay,
+              } as React.CSSProperties}
             />
           ))}
         </Box>

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { debounce } from 'throttle-debounce';
 import { HERO_CONFIG } from '@/config/hero';
+import { useResizeObserver } from '@/hooks/useResizeObserver';
 
 interface Particle {
   x: number; y: number; r: number;
@@ -8,39 +8,50 @@ interface Particle {
   alpha: number; hue: number;
 }
 
-export function HeroParticleCanvas() {
+interface HeroParticleCanvasProps {
+  particleCount?: number;
+  radiusMin?: number;
+  radiusMax?: number;
+  velocityFactor?: number;
+  alphaMin?: number;
+  alphaMax?: number;
+  hues?: number[];
+}
+
+export function HeroParticleCanvas({
+  particleCount = HERO_CONFIG.PARTICLE_COUNT,
+  radiusMin = HERO_CONFIG.PARTICLE_RADIUS_MIN,
+  radiusMax = HERO_CONFIG.PARTICLE_RADIUS_MAX,
+  velocityFactor = HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
+  alphaMin = HERO_CONFIG.PARTICLE_ALPHA_MIN,
+  alphaMax = HERO_CONFIG.PARTICLE_ALPHA_MAX,
+  hues = HERO_CONFIG.PARTICLE_HUES,
+}: HeroParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || width === 0 || height === 0) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const resize = () => {
-      const parent = canvas.parentElement;
-      if (!parent) return;
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
-    };
+    // Sync canvas resolution with container size
+    canvas.width = width;
+    canvas.height = height;
 
-    const debouncedResize = debounce(200, resize);
-
-    resize();
-    window.addEventListener('resize', debouncedResize);
-
-    // Build particles
-    const particles: Particle[] = Array.from({ length: HERO_CONFIG.PARTICLE_COUNT }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * (HERO_CONFIG.PARTICLE_RADIUS_MAX - HERO_CONFIG.PARTICLE_RADIUS_MIN) + HERO_CONFIG.PARTICLE_RADIUS_MIN,
-      vx: (Math.random() - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
-      vy: (Math.random() - 0.5) * HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
-      alpha: Math.random() * (HERO_CONFIG.PARTICLE_ALPHA_MAX - HERO_CONFIG.PARTICLE_ALPHA_MIN) + HERO_CONFIG.PARTICLE_ALPHA_MIN,
-      hue: Math.random() > 0.5 ? HERO_CONFIG.PARTICLE_HUES[0] : HERO_CONFIG.PARTICLE_HUES[1],
+    // Build particles deterministically for visual regression testing
+    const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => ({
+      x: ((i * 777.7) % 1) * width,
+      y: ((i * 333.3) % 1) * height,
+      r: ((i * 123.4) % 1) * (radiusMax - radiusMin) + radiusMin,
+      vx: (((i * 555.5) % 1) - 0.5) * velocityFactor,
+      vy: (((i * 999.9) % 1) - 0.5) * velocityFactor,
+      alpha: ((i * 444.4) % 1) * (alphaMax - alphaMin) + alphaMin,
+      hue: i % 2 === 0 ? hues[0] : hues[1],
     }));
 
     let rafId: number;
@@ -64,16 +75,17 @@ export function HeroParticleCanvas() {
     draw();
 
     return () => {
-      window.removeEventListener('resize', debouncedResize);
       cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [width, height, particleCount, radiusMin, radiusMax, velocityFactor, alphaMin, alphaMax, hues]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="absolute inset-0 pointer-events-none z-0"
-    />
+    <div ref={containerRef} className="absolute inset-0 z-0">
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="block pointer-events-none"
+      />
+    </div>
   );
 }

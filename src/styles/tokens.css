@@ -71,6 +71,7 @@
   --raw-z-toast: 80;
   --raw-z-top: 100;
   --raw-z-search: 300;
+  --raw-z-search-modal: 310;
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.1);
