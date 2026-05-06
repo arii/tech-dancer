@@ -22,12 +22,12 @@ export function HeroSection() {
       dur: (0.4 + ((i * SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
       delay: ((i * SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
     })),
-  [BAR_COUNT, SEEDS]);
+    [BAR_COUNT, SEEDS]);
 
   return (
     <section
       className="relative flex items-center justify-center overflow-hidden"
-      style={{ background: 'var(--hero-bg)', minHeight: '75vh' }}
+      style={{ background: 'var(--hero-bg)', minHeight: '40vh' }}
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -45,33 +45,21 @@ export function HeroSection() {
       <Stack
         relative
         zIndex={10}
-        align="center"
+        align="start"
         gap={0}
-        className="text-center px-6 pointer-events-none"
-        paddingY={{ base: HERO_CONFIG.MOBILE_PY, lg: HERO_CONFIG.DESKTOP_PY }}
+        className="px-6 md:px-12 lg:px-24 pointer-events-none"
+        paddingY={{ base: 2, lg: 2 }}
+        maxWidth="screen-xl"
+        marginX="auto"
       >
 
-        {/* Top Label: WEST COAST SWING */}
-        <Box
-          display="flex"
-          align="center"
-          gap={2}
-          marginBottom={{ base: 4, lg: 6 }}
-          className="opacity-0"
-          style={{ animation: 'fadeIn 0.8s ease forwards 0.1s' }}
-        >
-          <Box width={{ base: 4, lg: 8 }} height="px" style={{ background: 'var(--hero-accent)' }} />
-          <Text variant="mono" size={{ base: "tiny", lg: "micro" }} weight="font-bold" style={{ color: 'var(--hero-accent)', letterSpacing: '2px' }}>
-            WEST COAST SWING
-          </Text>
-        </Box>
 
         {/* Logo mark — B + \ (backslash) */}
         <Box
           className="opacity-0 translate-y-[-20px] pointer-events-none"
-          style={{ 
-            height: 'clamp(80px, 12vw, 120px)',
-            animation: 'fadeUp 0.8s ease forwards 0.2s' 
+          style={{
+            height: 'clamp(60px, 10vw, 120px)',
+            animation: 'fadeUp 0.8s ease forwards 0.2s'
           }}
         >
           <Logo className="text-white" showText={false} />
@@ -94,44 +82,34 @@ export function HeroSection() {
         {/* Visual-style Headline - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
         <Stack
           marginTop={{ base: 4, lg: 6 }}
-          align="center"
+          align="start"
           gap={0}
           className="opacity-0 translate-y-2.5 pointer-events-none"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
             variant="headline"
-            size="base"
             weight="font-black"
             color="white"
-            tracking="tight"
-            className="leading-none"
+            tracking="tighter"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
           >
             Built for dancers.
           </Text>
           <Text
             variant="headline"
-            size="base"
             weight="font-black"
-            tracking="tight"
-            className="leading-none"
+            tracking="tighter"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
           >
-            <span style={{ color: 'var(--hero-accent)' }}>Train</span>{' '}
-            <span style={{
-              background: 'linear-gradient(to right, var(--hero-accent) 0%, #8B2FFF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              smarter.
-            </span>
+            <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
           </Text>
           <Text
             variant="headline"
-            size="base"
             weight="font-black"
             color="white"
-            tracking="tight"
-            className="leading-none"
+            tracking="tighter"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
           >
             Dance better.
           </Text>
@@ -141,7 +119,7 @@ export function HeroSection() {
         <Box
           width={24}
           height={1.5}
-          marginTop={8}
+          marginTop={6}
           radius="full"
           className="opacity-0 pointer-events-none"
           style={{
@@ -150,29 +128,41 @@ export function HeroSection() {
           }}
         />
 
-        {/* Reverted Tagline - Scaled and constrained for mobile readability */}
-        <Text
-          as="p"
-          variant="body"
-          size={{ base: "sm", lg: "xl" }}
-          marginTop={{ base: 6, lg: 8 }}
-          maxWidth={{ base: "72", lg: "xl" }}
-          className="opacity-0 leading-relaxed text-white pointer-events-none text-center mx-auto"
+        {/* Tagline with Vertical Accent Bar */}
+        <Box
+          display="flex"
+          align="stretch"
+          gap={5}
+          marginTop={{ base: 4, lg: 4 }}
+          maxWidth="2xl"
+          className="opacity-0 pointer-events-none"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
           }}
         >
-          Systems, gear, and travel insights for competitive West Coast Swing dancers.
-        </Text>
+          <Box
+            width="2px"
+            className="bg-white/20 shrink-0"
+            aria-hidden="true"
+          />
+          <Text
+            as="p"
+            variant="body"
+            weight="font-semibold"
+            className="text-base md:text-lg lg:text-xl leading-relaxed text-white/70 text-left"
+          >
+            Advanced systems, gear analytics, and logistical mastery for the competitive West Coast Swing circuit.
+          </Text>
+        </Box>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Box
           display="flex"
           align="end"
           gap={1}
-          marginTop={12}
-          marginBottom={8}
-          height={16}
+          marginTop={4}
+          marginBottom={4}
+          height={12}
           overflow="hidden"
           className="opacity-0 pointer-events-none"
           style={{ animation: 'fadeIn 1s ease forwards 2.0s' }}

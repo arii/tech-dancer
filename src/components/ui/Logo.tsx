@@ -17,7 +17,7 @@ export function Logo({ className, showText = true }: LogoProps) {
 
   return (
     <svg
-      viewBox={showText ? "0 0 320 100" : "0 0 100 100"}
+      viewBox={showText ? "0 0 450 100" : "0 0 100 100"}
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-full w-auto overflow-visible", className)}
       aria-labelledby={titleId}
@@ -72,7 +72,7 @@ export function Logo({ className, showText = true }: LogoProps) {
             letterSpacing: '-1.5px'
           }}
         >
-          boom<tspan fill="#00CFFF">tick</tspan>
+          boom<tspan fill="#00CFFF">tick</tspan><tspan fill="rgba(255,255,255,0.4)">.blog</tspan>
         </text>
       )}
     </svg>

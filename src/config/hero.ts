@@ -7,8 +7,8 @@ export const HERO_CONFIG = {
   PARTICLE_ALPHA_MAX: 0.4,
   PARTICLE_HUES: [190, 270],
   BAR_COUNT: 48,
-  MOBILE_PY: 6,
-  DESKTOP_PY: 12,
+  MOBILE_PY: 4,
+  DESKTOP_PY: 4,
   // Deterministic seeds for stable animations
   SEEDS: {
     BAR_HEIGHT: 137.5,
