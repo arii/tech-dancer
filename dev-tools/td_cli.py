@@ -412,17 +412,21 @@ def handle_audit_pr(args):
         if files_to_audit:
             try:
                 # Use pnpm run audit as requested, passing targets after --
-                # Use execute_raw because audit script exits 1 on violations
-                proc = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
+                # log_on_error=False because audit script exits 1 on violations, which is expected
+                proc = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False, log_on_error=False)
                 output = proc.stdout
                 if output:
                     # pnpm might add some noise to stdout before/after the actual JSON if not careful,
                     # but our script uses process.stdout.write for JSON.
                     # We try to find the JSON part if there's noise.
+                    audit_data = {}
                     if "{" in output:
                         json_start = output.find("{")
                         json_end = output.rfind("}") + 1
-                        audit_data = json.loads(output[json_start:json_end])
+                        try:
+                            audit_data = json.loads(output[json_start:json_end])
+                        except json.JSONDecodeError:
+                            log_error("Failed to parse JSON from audit output.")
 
                     violations_dict = audit_data.get("violations", {})
                     for filepath, violations in violations_dict.items():

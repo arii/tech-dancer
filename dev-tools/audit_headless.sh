@@ -14,12 +14,18 @@ else
   echo "⏩ Skipping git sync (use --sync to enable)..."
 fi
 
-# 2. Get Open PRs in JSON format
+# 2. Prepare Environment
+if [[ ! -d "node_modules" ]]; then
+  echo "📦 node_modules missing. Installing..."
+  pnpm install --frozen-lockfile
+fi
+
+# 3. Get Open PRs in JSON format
 echo "🔍 Fetching open PRs..."
 mkdir -p dev-tools/logs
 python3 dev-tools/td_cli.py status-board --json > dev-tools/logs/open_prs.json
 
-# 3. Process each PR
+# 4. Process each PR
 # Using jq to extract PR numbers from the JSON output of status-board
 for pr in $(jq -r '.work[].number' dev-tools/logs/open_prs.json); do
   echo "----------------------------------------"
@@ -32,7 +38,7 @@ for pr in $(jq -r '.work[].number' dev-tools/logs/open_prs.json); do
   python3 dev-tools/td_cli.py track-review --pr "$pr" --status "Audited (Headless)" --auditor "TechDancer-Bot"
 done
 
-# 4. Analyze Overlaps
+# 5. Analyze Overlaps
 echo "----------------------------------------"
 echo "📊 Analyzing file overlaps between PRs..."
 ./dev-tools/analyze_overlaps.sh
