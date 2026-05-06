@@ -56,7 +56,7 @@ export default function Home() {
               whileInView="animate"
               viewport={{ once: true, margin: "-50px" }}
             >
-              {recentPosts.map((post) => (
+              {recentPosts.map((post, index) => (
                 <Stack
                   key={post.slug}
                   as={motion.create(NavLink)}
@@ -66,11 +66,11 @@ export default function Home() {
                   paddingX={{ base: 3, sm: 5 }}
                   paddingY={{ base: 5, sm: 6 }}
                   align={{ sm: "start" }}
-                  border="b"
-                  className="group rounded-lg transition-colors hover:bg-surface last:border-0"
+                  border={index === recentPosts.length - 1 ? false : "b"}
+                  className="group rounded-lg transition-colors hover:bg-surface"
                   variants={motionTokens.staggerItem}
                 >
-                  <Box display="flex" shrink={0} align="center" wrap={false} gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-64">
+                  <Box display="flex" shrink={0} align="center" wrap={false} gap={{ base: 2, sm: 3 }} paddingTop={0.5} width={{ sm: 64 }} minWidth={{ sm: 64 }}>
                     <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
                       {post.category}
                     </Box>
