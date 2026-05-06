@@ -25,7 +25,8 @@ export function Footer() {
               href={link.href}
               variant="ghost"
               size="sm"
-              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95"
+              minHeight={11}
+              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all duration-200 ease-in-out active:scale-95"
             >
               <Text
                 variant="mono"

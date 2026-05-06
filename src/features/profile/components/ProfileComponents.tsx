@@ -114,6 +114,8 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
               src={image.src}
               alt={image.alt}
               loading="lazy"
+              width={400}
+              height={400}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           </Box>
@@ -158,11 +160,16 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           rel="noopener noreferrer"
           paddingX={4}
           paddingY={2}
+          minWidth={{ base: 44, sm: 0 }}
+          minHeight={{ base: 44, sm: 0 }}
+          display="flex"
+          align="center"
+          justify="center"
           border
           radius="full"
           className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
         >
-          <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+          <Text variant="mono" size="xs" weight="font-bold" color="main" className="group-hover:text-accent">
             {link.label}
           </Text>
         </Box>

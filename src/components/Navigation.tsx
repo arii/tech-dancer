@@ -104,7 +104,7 @@ export default function Navigation() {
                 width="full"
                 paddingY={3}
                 paddingX={6}
-                className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
+                className="group text-text-dim hover:text-accent transition-all duration-200 ease-in-out text-left hover:bg-surface-alt"
               >
                 <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
                 <Text variant="sans" size="sm" weight="font-bold" className="leading-none">Search</Text>

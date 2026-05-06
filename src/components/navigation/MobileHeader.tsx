@@ -31,7 +31,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         justify="center"
         radius="full"
         className="min-h-12 min-w-12 hover:bg-bg/50 active:bg-accent/10 transition-colors"
-        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-label="Toggle Navigation"
         aria-expanded={isOpen}
         whileTap={{ scale: 0.95 }}
       >

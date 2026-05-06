@@ -17,7 +17,7 @@ export default function ArielProfile() {
 
   const renderSection = (section: ProfileSection) => {
     return (
-      <Stack key={section.id} gap={6} maxWidth="prose">
+      <Stack key={section.id} gap={6} maxWidth="content">
         {section.eyebrow && (
           <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">
             {section.eyebrow}
@@ -25,7 +25,7 @@ export default function ArielProfile() {
         )}
 
         {section.title && (
-          <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
+          <Text as="h2" variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
             {section.title}
           </Text>
         )}
@@ -66,7 +66,7 @@ export default function ArielProfile() {
               <Box display={{ base: 'block', lg: 'none' }} border radius="lg" overflow="hidden" aspect="4/3" surface="default" className="shadow-xl border-line/10">
                 <img
                   src={roboticistPhoto}
-                  alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                  alt="Ariel Anders, MIT Roboticist and WCS Dancer, headshot portrait"
                   className="w-full h-full object-cover"
                 />
               </Box>
@@ -95,7 +95,7 @@ export default function ArielProfile() {
                 <Box display={{ base: 'none', lg: 'block' }} border radius="lg" overflow="hidden" aspect="1/1" surface="default" className="shadow-2xl border-line/10">
                   <img
                     src={roboticistPhoto}
-                    alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                    alt="Ariel Anders, MIT Roboticist and WCS Dancer, headshot portrait"
                     className="w-full h-full object-cover"
                   />
                 </Box>

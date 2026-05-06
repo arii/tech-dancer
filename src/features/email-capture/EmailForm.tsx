@@ -23,6 +23,7 @@ export function EmailForm() {
         <Box
           as="input"
           type="email"
+          aria-label="Email Address"
           placeholder="Email Address"
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
