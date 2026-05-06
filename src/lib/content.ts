@@ -167,7 +167,8 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
       const safeA = Number.isNaN(timeA) ? 0 : timeA;
       const safeB = Number.isNaN(timeB) ? 0 : timeB;
 
-      return safeB - safeA;
+      if (safeB !== safeA) return safeB - safeA;
+      return (b.title || '').localeCompare(a.title || '');
     });
 }
 
