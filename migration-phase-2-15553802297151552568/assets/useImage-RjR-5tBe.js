@@ -1,0 +1,1 @@
+import{r as a}from"./index-C7X1wf_l.js";function u(e){const[t,o]=a.useState(!1),[s,r]=a.useState(!0),l=a.useCallback(()=>{o(!0),r(!1)},[]),n=a.useCallback(()=>{o(!1),r(!1)},[]);return{error:t,loading:s,onError:l,onLoad:n,displaySrc:t||!e?"https://placehold.co/600x400/0f172a/94a3b8?text=Image+Unavailable":e}}export{u};
