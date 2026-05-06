@@ -17,7 +17,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
+        description="BoomTick.blog: Exploring West Coast Swing through travel, lifestyle, and a touch of data science."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={12}>
@@ -31,9 +31,8 @@ export default function Home() {
             Welcome to boomtick.blog
           </Text>
           <Text as="h1" variant="headline" size="fluid-7" weight="font-black" leading="snug" marginBottom={4}>
-            The West Coast Swing
-            <br />
-            Lifestyle Blog
+            The Lifestyle Guide <br className="hidden md:block" />
+            to West Coast Swing
           </Text>
           <Text size="lg" color="dim" maxWidth="prose">
             Technical systems and travel hacks for the modern competitive dancer.

@@ -2,7 +2,7 @@
 type: event
 title: Swing Diego
 date: 2027-01-01
-author: Ariel Anders, PhD
+author: Tech Dancer
 category: Event
 excerpt: Annual WCS Convention.
 location: San Diego, CA

@@ -48,7 +48,7 @@ export default function ArielProfile() {
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
+        description="Tech Dancer: West Coast Swing enthusiast, traveler, and data science consultant. Exploring the WCS lifestyle through travel, gear, and community."
       />
       
       <Stack gap={8} width="full">
@@ -70,7 +70,7 @@ export default function ArielProfile() {
                 <Box border radius="lg" overflow="hidden" className="aspect-[16/9] bg-surface-alt shadow-inner">
                   <img
                     src={roboticistPhoto}
-                    alt="Ariel Anders in a professional robotics environment"
+                    alt="Tech Dancer lifestyle"
                     className="w-full h-full object-cover object-[center_20%]"
                   />
                 </Box>
@@ -83,7 +83,7 @@ export default function ArielProfile() {
                 <Box border radius="lg" overflow="hidden" display={{ base: 'none', lg: 'block' }} className="border-line/20 bg-surface shadow-2xl">
                   <img
                     src={roboticistPhoto}
-                    alt="Portrait of Ariel Anders, PhD"
+                    alt="Tech Dancer portrait"
                     loading="lazy"
                     className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
                   />

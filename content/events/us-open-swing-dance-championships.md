@@ -2,7 +2,7 @@
 type: event
 title: US Open Swing Dance Championships
 date: 2026-11-01
-author: Ariel Anders, PhD
+author: Tech Dancer
 category: Event
 excerpt: Annual WCS Championship.
 location: Burbank, CA

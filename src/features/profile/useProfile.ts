@@ -6,8 +6,8 @@ import monterey from '@/assets/monterey.jpg';
 import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
-  name: "Ariel Anders, PhD",
-  role: "MIT Roboticist // WCS Tech-Dancer",
+  name: "Tech Dancer",
+  role: "West Coast Swing Blogger // Data Science Consultant",
   sections: [
     {
       id: "dance-background",
@@ -21,25 +21,25 @@ const PROFILE_DATA: ProfileData = {
       cards: [
         {
           icon: 'terminal',
-          title: "Robotics & Engineering",
-          content: "My background is in robot software engineering and architecture, helping startups build scalable, production-ready systems. My specialized skillsets include perception, motion planning, custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep autonomous fleets reliable and mission-ready."
+          title: "Data Science & Consulting",
+          content: "I leverage my background in complex systems to help startups and brands make data-driven decisions. My focus is on providing actionable insights that bridge the gap between technical metrics and real-world impact."
         },
         {
           icon: 'zap',
-          title: "AI Strategy (DevAI)",
-          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my GitHub at github.com/arii."
+          title: "Content & Strategy",
+          content: "I implement generative AI tools to automate content management and digital workflows. Products built with these tools include boomtick.blog, focusing on delivering high-quality, relevant content to the West Coast Swing community."
         },
         {
           icon: 'globe',
-          title: "Digital Presence & Management",
-          content: "I help artists and niche brands build the infrastructure they need to grow — from functional websites and merch stores to SEO, booking tools, and content workflows. I handle the technical logistics from start to finish so you can stay focused on your craft."
+          title: "Digital Presence",
+          content: "I help artists and niche brands build the infrastructure they need to grow — from functional websites and SEO to content workflows. I handle the technical logistics from start to finish so you can stay focused on your craft."
         }
       ]
     },
     {
       id: "why-built",
       title: "Why I Built This Site",
-      content: "boomtick.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that helps, event tips, and the small optimizations that make a big difference over a season of dancing."
+      content: "BoomTick.blog is a lifestyle and travel guide to West Coast Swing. I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that helps, event tips, and the small optimizations that make a big difference over a season of dancing."
     },
     {
       id: "wcs-love",
@@ -71,12 +71,12 @@ const PROFILE_DATA: ProfileData = {
       id: "education-focus",
       items: [
         {
-          title: "Education",
-          description: "PhD in Computer Science, MIT"
+          title: "Expertise",
+          description: "Data Science // AI // Analytics"
         },
         {
           title: "Focus",
-          description: "Robotics // AI // Data Analytics"
+          description: "WCS Lifestyle // Travel // Gear"
         },
         {
           title: "Dance Level",
@@ -89,11 +89,11 @@ const PROFILE_DATA: ProfileData = {
       eyebrow: "Photo Gallery",
       title: "WCS Moments",
       gallery: [
-        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension at her first competition" },
-        { src: monterey, alt: "Ariel Anders posing playfully on stage at a West Coast Swing event in Monterey" },
-        { src: madJamAri, alt: "Ariel Anders social dancing with a partner at MADjam West Coast Swing convention" },
-        { src: glowBunny, alt: "Ariel Anders dancing in a creative light-up bunny costume at a themed dance event" },
-        { src: wwwAri, alt: "Ariel Anders maintaining a strong athletic connection during a high-energy dance session" }
+        { src: firstComp, alt: "Tech Dancer performing a West Coast Swing extension at their first competition" },
+        { src: monterey, alt: "Tech Dancer posing playfully on stage at a West Coast Swing event in Monterey" },
+        { src: madJamAri, alt: "Tech Dancer social dancing with a partner at MADjam West Coast Swing convention" },
+        { src: glowBunny, alt: "Tech Dancer dancing in a creative light-up bunny costume at a themed dance event" },
+        { src: wwwAri, alt: "Tech Dancer maintaining a strong athletic connection during a high-energy dance session" }
       ]
     },
     {
@@ -108,7 +108,7 @@ const PROFILE_DATA: ProfileData = {
   ],
   details: [
     { label: "LOCATION", value: "San Francisco, CA" },
-    { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
+    { label: "STYLE", value: "West Coast Swing // Lifestyle" },
     { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" }
   ],
   links: [
