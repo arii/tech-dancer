@@ -60,6 +60,19 @@ Generates a high-precision prompt for fixing a specific CI error. It maps the er
   - `pnpm repair-context --log "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"`
   - `python3 dev-tools/td_cli.py repair-context --file logs/ci_failure.log`
 
+#### `repair`
+Runs the autonomous local repair workflow and now performs a preflight Ollama health check before attempting AI fixes.
+- **Health checks**:
+  - Verifies Ollama service is reachable via `/api/tags`.
+  - Verifies `OLLAMA_MODEL` exists in the returned model list.
+- **Structured diagnostics**:
+  - `service_down`: Ollama is unreachable.
+  - `model_missing`: configured model not present; remediation includes an exact command, e.g. `ollama pull qwen2.5-coder:1.5b`.
+  - `generation_failed`: generation request failed (includes HTTP response body excerpt when available).
+- **Deterministic fallback mode**:
+  - If Ollama is unavailable, `repair` does **not** fail fast; it emits rule-based recommendations from lint/type-check signatures so engineers still get actionable next steps.
+- **Usage**: `python3 dev-tools/td_cli.py repair [--logs <FILE> | --stdin] [--worktree]`
+
 #### `ratchet-any` / `bundle-size`
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
 - **Usage**: `python3 dev-tools/td_cli.py bundle-size`
