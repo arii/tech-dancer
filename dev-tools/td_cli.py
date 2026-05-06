@@ -375,7 +375,7 @@ def handle_audit_pr(args):
     pr_num = args.pr_number; review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
     ctx_path = os.path.join(review_dir, f"pr-context-{pr_num}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_num}.md")
 
-    res = {"pr": pr_num, "files": {}}
+    result_data = {"pr": pr_num, "files": {}}
 
     if args.fetch:
         repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
@@ -401,8 +401,8 @@ def handle_audit_pr(args):
         if os.path.exists(template_path): template = open(template_path).read().format(pr_num=pr_num, head_sha=pr.head.sha)
         else: template = f"# PR Review: #{pr_num}\n- SHA: {pr.head.sha}\n"
         with open(rev_path, "w") as f: f.write(template)
-        res["files"]["context"] = ctx_path
-        res["files"]["review"] = rev_path
+        result_data["files"]["context"] = ctx_path
+        result_data["files"]["review"] = rev_path
         if not args.json: print(f"✅ Generated review files for PR #{pr_num}")
 
     if args.audit:
@@ -440,20 +440,19 @@ def handle_audit_pr(args):
             except Exception as e:
                 if not args.json: print(f"⚠️  Audit script failed: {e}")
 
-        res["auto_findings"] = auto_findings
+        result_data["auto_findings"] = auto_findings
         if not args.json:
             if auto_findings:
                 print(f"📋 Found {len(auto_findings)} violations:")
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
             run_command(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
 
-    log_output(args, "✅ Audit complete." if not auto_findings else "", {"status": "success", "data": res})
-
     if args.submit:
         from submit_review import submit_review
-        submit_review(pr_num, rev_path, cleanup=args.cleanup, dry_run=args.dry_run, event_override=args.event, is_json=args.json)
+        submit_res = submit_review(pr_num, rev_path, cleanup=args.cleanup, dry_run=args.dry_run, event_override=args.event, is_json=args.json)
+        result_data["submit"] = submit_res
 
-    log_output(args, "", {"status": "success", "data": res})
+    log_output(args, "✅ PR Audit workflow complete." if not result_data.get("auto_findings") else "", {"status": "success", "data": result_data})
 
 def handle_pre_submit(args):
     if not args.json: print("🔍 Running pre-submission checks...")
