@@ -13,10 +13,31 @@ import argparse
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL = "code-reviewer"
 DEFAULT_TIMEOUT = 60 # Seconds
+MAX_FILE_SIZE_KB = 50
+
+def is_binary(file_path):
+    """Simple check to detect binary files."""
+    try:
+        with open(file_path, 'tr') as f:
+            f.read(1024)
+            return False
+    except UnicodeDecodeError:
+        return True
 
 def review_file(file_path, silent=False):
     if not os.path.exists(file_path):
         print(f"Error: File '{file_path}' not found.")
+        sys.exit(1)
+
+    # 1. File Size Check
+    file_size_kb = os.path.getsize(file_path) / 1024
+    if file_size_kb > MAX_FILE_SIZE_KB:
+        print(f"Error: File '{file_path}' is too large ({file_size_kb:.1f}KB). Maximum size is {MAX_FILE_SIZE_KB}KB.")
+        sys.exit(1)
+
+    # 2. Binary Check
+    if is_binary(file_path):
+        print(f"Error: File '{file_path}' appears to be binary and cannot be reviewed.")
         sys.exit(1)
 
     try:
