@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, DependencyList } from 'react';
 
 type HotkeyHandler = (event: KeyboardEvent) => void;
 

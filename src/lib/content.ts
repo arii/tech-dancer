@@ -130,10 +130,10 @@ interface ContentModule {
 }
 
 const contentModules = {
-  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
-  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
-  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
-  events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
+  posts: typeof import.meta.glob === 'function' ? import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }) : {},
+  resources: typeof import.meta.glob === 'function' ? import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }) : {},
+  studies: typeof import.meta.glob === 'function' ? import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }) : {},
+  events: typeof import.meta.glob === 'function' ? import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' }) : {}
 };
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';

@@ -15,6 +15,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isThrottled = useRef(false);
   const { pathname, key } = useLocation();
   const navType = useNavigationType();
   const navigate = useNavigate();
@@ -114,8 +115,14 @@ export function MainLayout({ children }: { children: ReactNode }) {
           targetRoute = MAIN_ROUTES[currentIndex + 1];
         }
 
-        if (targetRoute) {
+        if (targetRoute && !isThrottled.current) {
+          isThrottled.current = true;
           navigate(targetRoute);
+
+          setTimeout(() => {
+            isThrottled.current = false;
+          }, 300);
+
           // Optional: announce to screen readers
           const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
           const announcer = document.getElementById('route-announcer');
