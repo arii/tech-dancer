@@ -67,11 +67,11 @@ export default function ArielProfile() {
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             <Stack gap={16} className="lg:col-span-8">
               <Box display={{ base: 'block', lg: 'none' }} marginBottom={8} maxWidth="md" marginX="auto" paddingX={4}>
-                <Box border radius="lg" overflow="hidden" className="aspect-[16/9] bg-surface-alt shadow-inner">
+                <Box border radius="lg" overflow="hidden" aspectRatio="16/9" surface="muted" className="shadow-inner">
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders in a professional robotics environment"
-                    className="w-full h-full object-cover object-[center_20%]"
+                    className="w-full h-full object-cover"
                   />
                 </Box>
               </Box>
@@ -80,12 +80,12 @@ export default function ArielProfile() {
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
-                <Box border radius="lg" overflow="hidden" display={{ base: 'none', lg: 'block' }} className="border-line/20 bg-surface shadow-2xl">
+                <Box border radius="lg" overflow="hidden" display={{ base: 'none', lg: 'block' }} surface="default" className="border-line/20 shadow-2xl">
                   <img
                     src={roboticistPhoto}
                     alt="Portrait of Ariel Anders, PhD"
                     loading="lazy"
-                    className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
+                    className="hover:border-accent hover:bg-accent/5 transition-all group interactive-press focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
                   />
                 </Box>
                 <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
