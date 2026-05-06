@@ -48,7 +48,7 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} className="rounded-2xl border border-line/80 bg-surface/60 shadow-sm">
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} className="rounded-2xl border border-line/80 bg-surface/60 shadow-sm">
           <span
             onClick={() => setSelectedPill('all')}
             className={cn(

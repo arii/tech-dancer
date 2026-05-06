@@ -6,11 +6,18 @@ const NUM_BARS = 28;
 export const Equalizer = () => {
   const bars = useMemo(() => {
     return Array.from({ length: NUM_BARS }).map((_, i) => {
-      const wave = Math.sin((i / (NUM_BARS - 1)) * Math.PI);
+      const ratio = i / (NUM_BARS - 1);
+      const wave = Math.sin(ratio * Math.PI);
       const minH = 4 + wave * 12;
       const maxH = 24 + wave * 48;
 
+      // Removed color calculation as we are now using a static linear gradient
+      // const adjustedRatio = ratio;
+      // let color: string;
+      // if (adjustedRatio < 0.5) { ... }
+
       return {
+        // color, // Removed as it's not used directly anymore
         minH,
         maxH,
         delay: i * 0.045,
