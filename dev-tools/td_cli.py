@@ -443,9 +443,11 @@ def handle_audit_pr(args):
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
 
             if not getattr(args, 'yes', False):
-                run_command(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+                # Fallback to local repair agent (using Ollama) instead of interactive Copilot
+                log_diag(f"Starting autonomous repair for PR #{pr_num}...")
+                run_command([sys.executable, os.path.join(os.path.dirname(__file__), "repair.py"), ctx_path], check=False)
             else:
-                log_diag("Skipping interactive Copilot audit (--yes enabled)")
+                log_diag("Skipping autonomous repair audit (--yes enabled)")
 
     if args.submit:
         from submit_review import submit_review
