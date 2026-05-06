@@ -83,11 +83,20 @@ def parse_eslint_json(json_path: str) -> List[Dict[str, Any]]:
                         "type": "eslint"
                     })
         return findings
-    except:
+    except json.JSONDecodeError as e:
+        log(f"Error: Failed to parse {json_path} as JSON: {e}")
+        return []
+    except Exception as e:
+        log(f"Error: Unexpected error parsing {json_path}: {e}")
         return []
 
 def extract_failing_info(logs):
     findings = []
+    # ESLint / Oxlint Text Format
+    lint_errors = re.findall(r"([a-zA-Z0-9_\-\./]+\.[tj]sx?):(\d+):(\d+): (.*)", logs)
+    for file_path, line, col, msg in lint_errors:
+        findings.append({"file": file_path, "line": line, "message": msg, "type": "lint"})
+
     # TS Errors
     ts_errors = re.findall(r"([a-zA-Z0-9_\-\./]+\.[tj]sx?):(\d+):(\d+) - error (TS\d+): (.*)", logs)
     for file_path, line, col, code, msg in ts_errors:

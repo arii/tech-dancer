@@ -123,6 +123,15 @@ jobs:
         id: verify
         run: |
           echo "Verifying repairs..."
+          # Remove diagnostic files so they don't count as "changes"
+          rm -f ci_logs.txt eslint-errors.json
+
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes made by AI. Skipping commit."
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           if pnpm run lint:ox && pnpm run type-check; then
             echo "Repair verified successfully!"
             echo "success=true" >> $GITHUB_OUTPUT
@@ -138,6 +147,9 @@ jobs:
       - name: Commit & Push Changes
         if: steps.verify.outputs.success != 'false'
         run: |
+          # Redundant check to ensure diagnostic logs are never committed
+          rm -f ci_logs.txt eslint-errors.json
+
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
