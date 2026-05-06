@@ -51,28 +51,26 @@ export default function ArielProfile() {
         description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
       />
       
-      <Stack gap={8} width="full">
-        <Box border radius="lg" overflow="hidden" aspect="21/9" surface="default" className="shadow-2xl border-line/20">
-          <img
-            src={roboticistPhoto}
-            alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
-            className="w-full h-full object-cover"
-          />
-        </Box>
-        <PageHeader
-          label="BIOGRAPHY"
-          title={bio.name}
-          description={bio.role}
-          titleSize="fluid-7"
-          border={false}
-          paddingBottom={0}
-        />
-      </Stack>
+      <PageHeader
+        label="BIOGRAPHY"
+        title={bio.name}
+        description={bio.role}
+        titleSize="fluid-7"
+      />
 
       <Stack gap={12} marginTop={12}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             <Stack gap={12} className="lg:col-span-8">
+              {/* Mobile-only portrait image */}
+              <Box display={{ base: 'block', lg: 'none' }} border radius="lg" overflow="hidden" aspect="4/3" surface="default" className="shadow-xl border-line/10">
+                <img
+                  src={roboticistPhoto}
+                  alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                  className="w-full h-full object-cover"
+                />
+              </Box>
+
               {bio.sections.map(renderSection)}
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
@@ -93,6 +91,15 @@ export default function ArielProfile() {
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
+                {/* Desktop-only portrait image */}
+                <Box display={{ base: 'none', lg: 'block' }} border radius="lg" overflow="hidden" aspect="1/1" surface="default" className="shadow-2xl border-line/10">
+                  <img
+                    src={roboticistPhoto}
+                    alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                    className="w-full h-full object-cover"
+                  />
+                </Box>
+
                 <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
