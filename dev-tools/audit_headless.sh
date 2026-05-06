@@ -1,0 +1,36 @@
+#!/bin/bash
+# dev-tools/audit_headless.sh
+# Headless PR audit workflow for sandbox environments.
+
+set -e
+
+# 1. Sync Git State
+echo "🔄 Syncing git state with origin/main..."
+git fetch origin main
+git checkout main
+git reset --hard origin/main
+
+# 2. Get Open PRs in JSON format
+echo "🔍 Fetching open PRs..."
+mkdir -p dev-tools/logs
+python3 dev-tools/td_cli.py status-board --json > dev-tools/logs/open_prs.json
+
+# 3. Process each PR
+# Using jq to extract PR numbers from the JSON output of status-board
+for pr in $(jq -r '.work[].number' dev-tools/logs/open_prs.json); do
+  echo "----------------------------------------"
+  echo "🚀 Auditing PR #$pr..."
+
+  # Fetch and Audit headlessly
+  python3 dev-tools/td_cli.py --yes audit-pr "$pr" --fetch --audit
+
+  # Track status
+  python3 dev-tools/td_cli.py track-review --pr "$pr" --status "Audited (Headless)" --auditor "TechDancer-Bot"
+done
+
+# 4. Analyze Overlaps
+echo "----------------------------------------"
+echo "📊 Analyzing file overlaps between PRs..."
+./dev-tools/analyze_overlaps.sh
+
+echo "✅ Headless audit complete. See REVIEW_TRACKING.md and pr_overlaps.txt"

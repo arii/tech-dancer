@@ -106,14 +106,6 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
-def add_execution_args(parser):
-    """Registers --dry-run and --execute flags with standardized help strings."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Run in dry-run mode (default). No side effects will be applied.")
-    parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Execute the command and apply side effects (disables dry-run).")
-
-
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
@@ -251,7 +243,7 @@ def handle_status_board(args):
     for pr in repo.get_pulls(state='open'):
         m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
         if not args.json: print(f"| {pr.head.ref} | {issue} | {'Draft' if pr.draft else 'Open'} | ... |")
-        prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open"})
+        prs_data.append({"number": pr.number, "branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open"})
 
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
 
@@ -447,7 +439,11 @@ def handle_audit_pr(args):
             if auto_findings:
                 print(f"📋 Found {len(auto_findings)} violations:")
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
-            run_command(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+
+            if not getattr(args, 'yes', False):
+                run_command(["copilot", "-p", f"Auditing PR #{pr_num}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+            else:
+                log_diag("Skipping interactive Copilot audit (--yes enabled)")
 
     if args.submit:
         from submit_review import submit_review
@@ -770,6 +766,19 @@ def handle_fix_ci(args):
 
     if args.json: print(json.dumps({"status": "success", "session": session_name, "branch": branch}, indent=2))
 
+def handle_track_review(args):
+    filepath = args.file or "REVIEW_TRACKING.md"
+    if not os.path.exists(filepath):
+        with open(filepath, "w") as f:
+            f.write("| PR # | Status | Auditor | Conflicts |\n|------|--------|---------|-----------|\n")
+
+    if args.pr and args.status:
+        with open(filepath, "a") as f:
+            f.write(f"| {args.pr} | {args.status} | {args.auditor or 'System'} | {args.conflicts or 'None'} |\n")
+        if not args.json: print(f"✅ Tracked PR #{args.pr} in {filepath}")
+
+    if args.json: print(json.dumps({"status": "success", "file": filepath}, indent=2))
+
 def handle_manage_reviews(args):
     g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login
 
@@ -804,6 +813,7 @@ def handle_manage_reviews(args):
 def main():
     parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
+    parser.add_argument("--yes", "--non-interactive", action="store_true", help="Bypass interactive prompts and confirmations")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
@@ -811,7 +821,8 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
+                      ("track-review", handle_track_review)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -861,6 +872,12 @@ def main():
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
+        elif cmd == "track-review":
+            p.add_argument("--pr", help="PR number")
+            p.add_argument("--status", help="Current status of the PR")
+            p.add_argument("--auditor", help="Name of the auditor")
+            p.add_argument("--conflicts", help="Conflict status")
+            p.add_argument("--file", help="Path to tracking file")
         p.set_defaults(func=func)
 
     args = parser.parse_args()
