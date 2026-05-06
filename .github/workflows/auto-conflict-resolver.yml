@@ -162,7 +162,11 @@ jobs:
         id: check_core
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true'
         run: |
-          CORE_FILES="src/features/profile/ArielProfile.tsx src/features/email-capture/NewsletterBanner.tsx tests/search.spec.ts"
+          if [ -f "dev-tools/core_features.json" ]; then
+            CORE_FILES=$(jq -r '.core_features | join(" ")' dev-tools/core_features.json)
+          else
+            CORE_FILES="src/features/profile/ArielProfile.tsx src/features/email-capture/NewsletterBanner.tsx tests/search.spec.ts"
+          fi
           CONFLICTED_FILES=$(git diff --name-only --diff-filter=U)
 
           FOUND_CORE=""

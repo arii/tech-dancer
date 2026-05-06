@@ -31,11 +31,18 @@ PROJECT_CONFIG = get_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
 # --- Core Features (Manual Merge Required) ---
-CORE_FEATURES = {
-    "src/features/profile/ArielProfile.tsx",
-    "src/features/email-capture/NewsletterBanner.tsx",
-    "tests/search.spec.ts"
-}
+def get_core_features():
+    config_path = os.path.join(os.path.dirname(__file__), "core_features.json")
+    if os.path.exists(config_path):
+        with open(config_path) as f:
+            return set(json.load(f).get("core_features", []))
+    return {
+        "src/features/profile/ArielProfile.tsx",
+        "src/features/email-capture/NewsletterBanner.tsx",
+        "tests/search.spec.ts"
+    }
+
+CORE_FEATURES = get_core_features()
 
 # --- Shared Logic ---
 
