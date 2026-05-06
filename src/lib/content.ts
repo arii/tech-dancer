@@ -129,13 +129,6 @@ interface ContentModule {
   default: string;
 }
 
-const contentModules = {
-  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
-  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
-  studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
-  events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
-};
-
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
 function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
@@ -171,27 +164,45 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
     });
 }
 
-const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
-  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
-  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
-};
+// Lazy initialization to prevent module evaluation crashes in non-Vite environments
+let cache: {
+  items: { posts: Post[], resources: Resource[], studies: Study[], events: Event[] },
+  maps: { posts: Map<string, Post>, resources: Map<string, Resource>, studies: Map<string, Study>, events: Map<string, Event> }
+} | null = null;
 
-const maps = {
-  posts: new Map(items.posts.map(i => [i.slug, i])),
-  resources: new Map(items.resources.map(i => [i.slug, i])),
-  studies: new Map(items.studies.map(i => [i.slug, i])),
-  events: new Map(items.events.map(i => [i.slug, i]))
-};
+function getCache() {
+  if (!cache) {
+    const posts = typeof import.meta.glob === 'function' ? import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }) : {};
+    const resources = typeof import.meta.glob === 'function' ? import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }) : {};
+    const studies = typeof import.meta.glob === 'function' ? import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }) : {};
+    const events = typeof import.meta.glob === 'function' ? import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' }) : {};
 
-export const getPosts = () => items.posts;
-export const getResources = () => items.resources;
-export const getStudies = () => items.studies;
-export const getEvents = () => items.events;
+    const items = {
+      posts: transform<Post>(posts as Record<string, string | ContentModule>),
+      resources: transform<Resource>(resources as Record<string, string | ContentModule>),
+      studies: transform<Study>(studies as Record<string, string | ContentModule>),
+      events: transform<Event>(events as Record<string, string | ContentModule>)
+    };
 
-export const getPostBySlug = (slug: string) => maps.posts.get(slug);
-export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+    const maps = {
+      posts: new Map(items.posts.map(i => [i.slug, i])),
+      resources: new Map(items.resources.map(i => [i.slug, i])),
+      studies: new Map(items.studies.map(i => [i.slug, i])),
+      events: new Map(items.events.map(i => [i.slug, i]))
+    };
+
+    cache = { items, maps };
+  }
+  return cache;
+}
+
+export const getPosts = () => getCache().items.posts;
+export const getResources = () => getCache().items.resources;
+export const getStudies = () => getCache().items.studies;
+export const getEvents = () => getCache().items.events;
+
+export const getPostBySlug = (slug: string) => getCache().maps.posts.get(slug);
+export const getResourceBySlug = (slug: string) => getCache().maps.resources.get(slug);
 
 /**
  * Calculates estimated reading time in minutes.

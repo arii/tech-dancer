@@ -3,7 +3,8 @@ import {
   Search,
   Download,
   FileJson,
-  FileText
+  FileText,
+  AlertCircle
 } from 'lucide-react';
 import {
   Box,
@@ -163,8 +164,27 @@ export function WCSScraperTool() {
     filterPromoted,
     setFilterPromoted,
     scoreDistribution,
-    trendData
+    trendData,
+    error
   } = useWCSData();
+
+  if (error) {
+    return (
+      <Box border surface="muted" padding="card" radius="lg">
+        <Stack align="center" gap={4} paddingY={12}>
+          <AlertCircle className="w-12 h-12 text-accent opacity-50" />
+          <Stack align="center" gap={2}>
+            <Text variant="mono" size="sm" weight="font-bold" uppercase color="main">
+              Data Connection Failed
+            </Text>
+            <Text variant="body" size="xs" color="dim" className="max-w-md text-center">
+              {error}. This dataset is typically generated during the build process and may not be available in all preview environments.
+            </Text>
+          </Stack>
+        </Stack>
+      </Box>
+    );
+  }
 
   if (isLoading) {
     return (

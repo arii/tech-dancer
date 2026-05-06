@@ -49,7 +49,6 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 10
 }
 
 // --- Configuration & Constants ---
-const apiKey = ""; // Provided by environment
 declare const __app_id: string | undefined;
 declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
@@ -264,60 +263,23 @@ export function useUXAuditor() {
     }, 2000);
   }, [auditMutation]);
 
-  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
-    const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
-    const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
+  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, _targetUrl: string, base64DataUri?: string) => {
+    // Gemini API removed per project direction. Providing manual audit template directly.
+    const imgContext = base64DataUri
+      ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
+      : `[Please attach the image from scripts/ux-capture.js here]`;
 
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: userQuery }] }],
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "OBJECT",
-              properties: {
-                summary: { type: "STRING" },
-                improvements: {
-                  type: "ARRAY",
-                  items: {
-                    type: "OBJECT",
-                    properties: {
-                      element: { type: "STRING" },
-                      issue: { type: "STRING" },
-                      suggestion: { type: "STRING" },
-                      severity: { type: "NUMBER" }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        })
-      });
-      const result = await response.json();
-      return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch {
-      // Provide a populated prompt if API fails, as requested
-      const imgContext = base64DataUri
-        ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
-        : `[Please attach the image from scripts/ux-capture.js here]`;
-
-      return {
-        summary: "API Key missing or fetch failed. Manual analysis required. Copy the prompt below.",
-        improvements: [
-          {
-            element: "Manual Audit Required",
-            issue: "No automated analysis generated.",
-            suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
-            severity: 5
-          }
-        ]
-      } as ViewportAnalysis;
-    }
+    return {
+      summary: "Multimodal AI Audit disabled. Manual analysis required. Copy the prompt below.",
+      improvements: [
+        {
+          element: "Manual Audit Required",
+          issue: "Automated analysis is not active for this environment.",
+          suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
+          severity: 5
+        }
+      ]
+    } as ViewportAnalysis;
   };
 
   const activeReport = reports.find(r => r.id === activeReportId) || null;
