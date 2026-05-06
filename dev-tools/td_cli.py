@@ -442,16 +442,56 @@ def handle_audit_pr(args):
 
         res["auto_findings"] = auto_findings
         if not args.json:
+            findings_str = ""
             if auto_findings:
                 print(f"📋 Found {len(auto_findings)} violations:")
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
+                findings_str = "\\n".join([f"- [{f['severity'].upper()}] {f['path']}: {f['issue']}" for f in auto_findings])
 
-            if not getattr(args, 'yes', False):
-                # Fallback to local repair agent (using Ollama) instead of interactive Copilot
-                log_diag(f"Starting autonomous repair for PR #{pr_num}...")
-                run_command([sys.executable, os.path.join(os.path.dirname(__file__), "repair.py"), ctx_path], check=False)
+                # Update review template with findings
+                if os.path.exists(rev_path):
+                    with open(rev_path, 'r') as f: rev_content = f.read()
+                    rev_content = rev_content.replace("<findings>", findings_str)
+                    rev_content = rev_content.replace("<summary>", f"Audit identified {len(auto_findings)} violations.")
+                    with open(rev_path, 'w') as f: f.write(rev_content)
+                    log_diag(f"Updated review template with {len(auto_findings)} findings.")
             else:
-                log_diag("Skipping autonomous repair audit (--yes enabled)")
+                if os.path.exists(rev_path):
+                    with open(rev_path, 'r') as f: rev_content = f.read()
+                    rev_content = rev_content.replace("<findings>", "No violations found.")
+                    rev_content = rev_content.replace("<summary>", "Audit passed with no violations.")
+                    with open(rev_path, 'w') as f: f.write(rev_content)
+
+            # 1. Trigger autonomous repair agent (using Ollama) to fix files in place
+            log_diag(f"Starting autonomous repair for PR #{pr_num}...")
+            run_command([sys.executable, os.path.join(os.path.dirname(__file__), "repair.py"), ctx_path], check=False)
+
+            # 2. Use Ollama to generate the final review recommendation if possible
+            if os.path.exists(rev_path):
+                try:
+                    from repair import get_ollama_response
+                    with open(rev_path, 'r') as f: rev_content = f.read()
+
+                    if auto_findings:
+                        prompt = f"Review the following PR audit findings and provide a final recommendation (Approved, Approved with Minor Changes, or Not Approved). Respond ONLY with the recommendation string.\n\nFINDINGS:\n{findings_str}"
+                    else:
+                        prompt = "The PR audit passed with no violations. Provide a final recommendation: 'Approved'. Respond ONLY with the recommendation string."
+
+                    recommendation = get_ollama_response(prompt)
+
+                    if recommendation:
+                        recommendation = recommendation.strip().strip("'\"")
+                        # Handle potential long responses or explanations despite instructions
+                        if "Approved" in recommendation:
+                           if "Minor Changes" in recommendation: recommendation = "Approved with Minor Changes"
+                           else: recommendation = "Approved"
+                        elif "Not Approved" in recommendation: recommendation = "Not Approved"
+
+                        rev_content = rev_content.replace("<Approved | Approved with Minor Changes | Not Approved>", recommendation)
+                        with open(rev_path, 'w') as f: f.write(rev_content)
+                        log_diag(f"Ollama recommendation: {recommendation}")
+                except (ImportError, Exception) as e:
+                    log_diag(f"Skipping AI recommendation (Ollama/repair.py unavailable or failed: {e})")
 
     if args.submit:
         from submit_review import submit_review
