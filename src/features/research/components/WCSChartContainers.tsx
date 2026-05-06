@@ -40,7 +40,12 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
               axisLine={false}
               tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
             />
-            <YAxis hide />
+            <YAxis
+              fontSize={10}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
+            />
             <Tooltip
               contentStyle={{
                 backgroundColor: 'rgba(var(--color-surface), 1)',
@@ -75,7 +80,12 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
               axisLine={false}
               tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
             />
-            <YAxis hide />
+            <YAxis
+              fontSize={10}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
+            />
             <Tooltip
               contentStyle={{
                 backgroundColor: 'rgba(var(--color-surface), 1)',
