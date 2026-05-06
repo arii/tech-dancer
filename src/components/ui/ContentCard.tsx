@@ -56,6 +56,7 @@ export function ContentCard({
         uppercase
         tracking="widest"
         className={getTagColorClass(category)}
+        marginBottom={3}
       >
         {category}
       </Text>

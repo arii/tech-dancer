@@ -1,5 +1,6 @@
 import { LucideIcon, Terminal } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { Box, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
@@ -12,6 +13,8 @@ export interface NavItemProps {
   isMobile?: boolean;
 }
 
+const MotionNavLink = motion.create(NavLink);
+
 export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
   if (!icon) {
     console.warn(`Navigation icon missing for route: ${label}. Falling back to Terminal icon.`);
@@ -19,9 +22,10 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
   const Icon = icon || Terminal;
   return (
     <Box as="li" position="relative" className="group">
-      <NavLink
+      <MotionNavLink
         to={to}
         onClick={onClick}
+        whileTap={{ scale: 0.98 }}
         className={({ isActive }) => cn(
           "transition-all relative z-10 block",
           isMobile
@@ -34,7 +38,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             display="flex"
             align="center"
             gap={3}
-            paddingY={3}
+            paddingY={isMobile ? 4 : 4}
             paddingX={isMobile ? 4 : 6}
             border={isMobile ? "b" : undefined}
             className={cn(
@@ -48,7 +52,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             </Text>
           </Box>
         )}
-      </NavLink>
+      </MotionNavLink>
     </Box>
   );
 }

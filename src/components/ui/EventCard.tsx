@@ -25,7 +25,7 @@ export function EventCard({ name, location, schedule }: EventCardProps) {
       </Box>
 
       <Stack gap={1}>
-        <Text as="h4" variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
+        <Text as="h3" variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
           {name}
         </Text>
         <Text size="sm" color="dim">

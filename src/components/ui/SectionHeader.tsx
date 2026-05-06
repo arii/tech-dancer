@@ -14,10 +14,10 @@ export function SectionHeader({ eyebrow, title, link }: SectionHeaderProps) {
   return (
     <Stack direction="row" align="end" justify="between" marginBottom={4}>
       <Stack direction="col" gap={1}>
-        <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
+        <Text variant="mono" size="sm" color="dim" uppercase tracking="widest" weight="font-bold">
           {eyebrow}
         </Text>
-        <Text as="h3" size="3xl" weight="font-black" className="text-accent-navy">
+        <Text as="h2" size="3xl" weight="font-black" className="text-accent-navy">
           {title}
         </Text>
       </Stack>
