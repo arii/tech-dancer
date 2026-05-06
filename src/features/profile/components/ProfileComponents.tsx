@@ -29,7 +29,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
+          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all duration-200 ease-in-out active:scale-95 cursor-pointer">
             <Box display="flex" gap={8} align="start" direction={{ base: "col", sm: "row" }}>
               {Icon && (
                 <Box 
@@ -46,7 +46,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                 </Box>
               )}
               <Stack gap={2} flex={1}>
-                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
+                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors duration-200 ease-in-out">
                   {card.title}
                 </Text>
                 <Text variant="body" size="base" color="dim" className="leading-relaxed opacity-90">
@@ -167,9 +167,9 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           justify="center"
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
+          className="hover:border-accent hover:bg-accent/5 transition-all duration-200 ease-in-out group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
         >
-          <Text variant="mono" size="xs" weight="font-bold" color="main" className="group-hover:text-accent">
+          <Text variant="mono" size="xs" weight="font-bold" color="main" className="group-hover:text-accent transition-colors duration-200 ease-in-out">
             {link.label}
           </Text>
         </Box>
