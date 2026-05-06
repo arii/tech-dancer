@@ -120,6 +120,14 @@ The `dev-tools/td_cli.py` tool is the unified entry point for repository automat
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 
+### Core Features & Manual Merge Strategy
+To maintain stability for high-traffic and critical components, changes to **Core Features** require manual merge conflict resolution. Automated tools (like `Auto Conflict Resolver`) are prohibited from auto-resolving conflicts in these files due to the complexity of development collisions:
+- `src/features/profile/ArielProfile.tsx`
+- `src/features/email-capture/NewsletterBanner.tsx`
+- `tests/search.spec.ts`
+
+When conflicts occur in these files, you MUST resolve them manually in your local environment, ensuring both code integrity and design token compliance.
+
 ## 24. Setup (Jules Environment)
 
 To prepare the base environment (Node.js/pnpm), execute the minimal setup script:

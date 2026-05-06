@@ -158,13 +158,39 @@ jobs:
             echo "merge_failed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Resolve conflicts
+      - name: Check for Core Feature Conflicts
+        id: check_core
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true'
+        run: |
+          CORE_FILES="src/features/profile/ArielProfile.tsx src/features/email-capture/NewsletterBanner.tsx tests/search.spec.ts"
+          CONFLICTED_FILES=$(git diff --name-only --diff-filter=U)
+
+          FOUND_CORE=""
+          for file in $CORE_FILES; do
+            if echo "$CONFLICTED_FILES" | grep -q "^$file$"; then
+              FOUND_CORE="${FOUND_CORE}${file}\n"
+            fi
+          done
+
+          if [ -n "$FOUND_CORE" ]; then
+            echo "core_conflict=true" >> $GITHUB_OUTPUT
+            {
+              echo "core_files<<EOF"
+              echo -e "$FOUND_CORE"
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
+            echo "::warning::Core feature conflicts detected. Manual resolution required."
+          else
+            echo "core_conflict=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Resolve conflicts
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.check_core.outputs.core_conflict != 'true'
         id: resolve
         uses: VeyronSakai/conflict-resolver@7d650534ba240658a381241823f8b4f13861c2ad # pin to v0.5.1
 
       - name: Commit and create PR
-        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files == ''
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.check_core.outputs.core_conflict != 'true' && steps.resolve.outputs.unresolved-files == ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -208,7 +234,7 @@ jobs:
         id: commit_push
 
       - name: Update comment on success
-        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && success() && steps.resolve.outputs.unresolved-files == '' && env.PR_NUMBER && env.PR_NUMBER != '0'
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && success() && steps.check_core.outputs.core_conflict != 'true' && steps.resolve.outputs.unresolved-files == '' && env.PR_NUMBER && env.PR_NUMBER != '0'
         uses: peter-evans/create-or-update-comment@v5
         with:
           issue-number: ${{ env.PR_NUMBER }}
@@ -218,8 +244,23 @@ jobs:
             <!-- id: conflict-resolver-bot -->
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update comment on failure
-        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != '' && env.PR_NUMBER && env.PR_NUMBER != '0'
+      - name: Update comment on core conflict
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.check_core.outputs.core_conflict == 'true' && env.PR_NUMBER && env.PR_NUMBER != '0'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: |
+            ❌ **Error: Unable to automatically resolve conflicts due to Core Feature involvement.**
+            The following Core Features have conflicts and require manual resolution:
+            ```
+            ${{ steps.check_core.outputs.core_files }}
+            ```
+            Please resolve these conflicts manually in your local environment.
+            <!-- id: conflict-resolver-bot -->
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update comment on resolution failure
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.check_core.outputs.core_conflict != 'true' && steps.resolve.outputs.unresolved-files != '' && env.PR_NUMBER && env.PR_NUMBER != '0'
         uses: peter-evans/create-or-update-comment@v5
         with:
           issue-number: ${{ env.PR_NUMBER }}
@@ -234,5 +275,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fail the workflow if conflicts were not resolved
-        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != ''
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && (steps.resolve.outputs.unresolved-files != '' || steps.check_core.outputs.core_conflict == 'true')
         run: exit 1

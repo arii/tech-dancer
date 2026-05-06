@@ -30,6 +30,13 @@ PROJECT_CONFIG = get_project_config()
 # --- Anti-Pattern Audit Configuration ---
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
+# --- Core Features (Manual Merge Required) ---
+CORE_FEATURES = {
+    "src/features/profile/ArielProfile.tsx",
+    "src/features/email-capture/NewsletterBanner.tsx",
+    "tests/search.spec.ts"
+}
+
 # --- Shared Logic ---
 
 def log_error(msg: str):
@@ -191,10 +198,20 @@ def handle_detect_conflicts(args):
 
     formatted = []
     for pr_pair, files in conflicts.items():
-        formatted.append({"prs": list(pr_pair), "files": files})
+        core_conflicts = [f for f in files if f in CORE_FEATURES]
+        formatted.append({
+            "prs": list(pr_pair),
+            "files": files,
+            "core_conflicts": core_conflicts,
+            "manual_required": len(core_conflicts) > 0
+        })
+
         if not args.json:
-            print(f"⚠️  {' ↔ '.join(f'#{p}' for p in pr_pair)} share {len(files)} file(s):")
-            for f in sorted(files)[:10]: print(f"    - {f}")
+            prefix = "🛑 [MANUAL REQUIRED]" if core_conflicts else "⚠️ "
+            print(f"{prefix} {' ↔ '.join(f'#{p}' for p in pr_pair)} share {len(files)} file(s):")
+            for f in sorted(files)[:10]:
+                tag = " [CORE]" if f in CORE_FEATURES else ""
+                print(f"    - {f}{tag}")
 
     if args.json: print(json.dumps({"status": "success", "conflicts": formatted}, indent=2))
     elif not conflicts: print("✅ No potential merge conflicts detected.")
