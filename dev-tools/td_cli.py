@@ -106,6 +106,36 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
+def parse_review_payload(review_path: str) -> dict:
+    if not os.path.exists(review_path):
+        raise CLIError(f"Review file missing: {review_path}")
+    with open(review_path, "r") as f:
+        content = f.read()
+    m = re.search(r"```json\n(.*?)\n```", content, re.DOTALL)
+    if not m:
+        raise CLIError("Could not find JSON block in review document")
+    return json.loads(m.group(1))
+
+def validate_submit_review_contract(payload: dict) -> list[str]:
+    errors = []
+    if not isinstance(payload.get("body"), str) or not payload.get("body", "").strip():
+        errors.append("payload.body must be a non-empty string")
+    comments = payload.get("comments", [])
+    if not isinstance(comments, list):
+        errors.append("payload.comments must be a list when provided")
+        return errors
+    for i, c in enumerate(comments):
+        if not isinstance(c, dict):
+            errors.append(f"payload.comments[{i}] must be an object")
+            continue
+        for field in ("path", "body"):
+            if not isinstance(c.get(field), str) or not c.get(field, "").strip():
+                errors.append(f"payload.comments[{i}].{field} must be a non-empty string")
+        if not (isinstance(c.get("line"), int) or isinstance(c.get("position"), int)):
+            errors.append(f"payload.comments[{i}] must include integer 'line' or 'position'")
+    return errors
+
+
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
@@ -192,150 +222,69 @@ def handle_detect_conflicts(args):
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
 def handle_conflicts(args):
-    """Safely perform conflict-prep mutations with deterministic JSON reporting."""
-
     def run_step(cmd: str):
         res = run_command(cmd, check=False, shell=True)
-        return {
-            "cmd": cmd,
-            "code": res.returncode,
-            "stdout": (res.stdout or "").strip(),
-            "stderr": (res.stderr or "").strip(),
-        }
+        return {"cmd": cmd, "code": res.returncode, "stdout": (res.stdout or "").strip(), "stderr": (res.stderr or "").strip()}
 
     def emit(payload: dict):
-        if args.json:
-            print(json.dumps(payload, indent=2))
-        else:
-            print(f"Status: {payload.get('status')}")
-            print(payload.get("message", ""))
-            if payload.get("planned_commands"):
-                print("Planned commands:")
-                for c in payload["planned_commands"]:
-                    print(f"  - {c}")
-            if payload.get("conflicted_files"):
-                print("Conflicted files:")
-                for f in payload["conflicted_files"]:
-                    print(f"  - {f}")
+        print(json.dumps(payload, indent=2) if args.json else payload.get("message", payload.get("status", "")))
 
     base_branch = getattr(args, "base", "main") or "main"
-    planned_commands = [
-        "git fetch origin",
-        f"git merge-base origin/{base_branch} HEAD",
-        "git reset --soft <MERGE_BASE>",
-        'git commit -m "chore: squashed commits prior to conflict resolution"',
-        f"git merge origin/{base_branch}",
-        "pnpm test -u",
-        "git add -A",
-        "git commit --amend --no-edit",
-    ]
-
-    preflight = {
-        "dirty": run_step("git status --porcelain"),
-        "branch": run_step("git branch --show-current"),
-    }
-
-    is_dirty = bool(preflight["dirty"]["stdout"])
-    branch = preflight["branch"]["stdout"]
-    is_detached = preflight["branch"]["code"] != 0 or not branch
-    protected = {"main", "master", base_branch}
-    on_protected = branch in protected if branch else False
+    planned = ["git fetch origin", f"git merge-base origin/{base_branch} HEAD", "git reset --soft <MERGE_BASE>", 'git commit -m "chore: squashed commits prior to conflict resolution"', f"git merge origin/{base_branch}", "pnpm test -u", "git add -A", "git commit --amend --no-edit"]
+    dirty = run_step("git status --porcelain")
+    branch = run_step("git branch --show-current")
+    is_dirty = bool(dirty["stdout"])
+    current_branch = branch["stdout"]
+    is_detached = branch["code"] != 0 or not current_branch
+    on_protected = current_branch in {"main", "master", base_branch} if current_branch else False
 
     if args.dry_run:
-        emit({
-            "status": "preview",
-            "message": "Dry-run preview only. No git mutations were executed.",
-            "base_branch": base_branch,
-            "preflight": {
-                "is_dirty": is_dirty,
-                "current_branch": branch or None,
-                "detached_head": is_detached,
-                "on_protected_branch": on_protected,
-            },
-            "planned_commands": planned_commands,
-            "executed_commands": [],
-        })
+        emit({"status":"preview","message":"Dry-run preview only. No git mutations were executed.","base_branch":base_branch,"preflight":{"is_dirty":is_dirty,"current_branch":current_branch or None,"detached_head":is_detached,"on_protected_branch":on_protected},"planned_commands":planned,"executed_commands":[]})
         return
-
     if is_dirty and not getattr(args, "force", False):
-        emit({
-            "status": "aborted",
-            "message": "Working tree is dirty. Commit/stash changes or pass --force.",
-            "base_branch": base_branch,
-            "preflight": preflight,
-            "planned_commands": planned_commands,
-            "executed_commands": [],
-        })
+        emit({"status":"aborted","message":"Working tree is dirty. Commit/stash changes or pass --force.","planned_commands":planned})
         return
-
-    if is_detached:
-        emit({
-            "status": "aborted",
-            "message": "HEAD is detached. Switch to a branch before running conflicts.",
-            "base_branch": base_branch,
-            "preflight": preflight,
-            "planned_commands": planned_commands,
-            "executed_commands": [],
-        })
-        return
-
-    if on_protected:
-        emit({
-            "status": "aborted",
-            "message": f"Refusing to run on protected branch '{branch}'.",
-            "base_branch": base_branch,
-            "preflight": preflight,
-            "planned_commands": planned_commands,
-            "executed_commands": [],
-        })
+    if is_detached or on_protected:
+        emit({"status":"aborted","message":"Unsafe branch state for conflict command.","planned_commands":planned})
         return
 
     executed = []
-
     for cmd in ["git fetch origin", f"git merge-base origin/{base_branch} HEAD"]:
-        step = run_step(cmd)
-        executed.append(step)
+        step = run_step(cmd); executed.append(step)
         if step["code"] != 0:
-            emit({"status": "error", "message": f"Command failed: {cmd}", "base_branch": base_branch, "executed_commands": executed})
-            return
-
+            emit({"status":"error","message":f"Command failed: {cmd}","executed_commands":executed}); return
     merge_base = executed[-1]["stdout"]
 
-    for cmd in [
-        f"git reset --soft {merge_base}",
-        'git commit -m "chore: squashed commits prior to conflict resolution"',
-        f"git merge origin/{base_branch}",
-    ]:
-        step = run_step(cmd)
-        executed.append(step)
+    for cmd in [f"git reset --soft {merge_base}", 'git commit -m "chore: squashed commits prior to conflict resolution"', f"git merge origin/{base_branch}"]:
+        step = run_step(cmd); executed.append(step)
         if step["code"] != 0 and cmd.startswith("git merge "):
-            conflicts = run_step("git diff --name-only --diff-filter=U")
-            conflict_files = [f for f in conflicts["stdout"].splitlines() if f.strip()]
-            emit({
-                "status": "merge_conflicts",
-                "message": "Merge reported conflicts. Manual resolution required.",
-                "base_branch": base_branch,
-                "conflicted_files": conflict_files,
-                "executed_commands": executed + [conflicts],
-            })
+            unresolved = run_step("git diff --name-only --diff-filter=U")
+            emit({"status":"merge_conflicts","message":"Merge reported conflicts. Manual resolution required.","conflicted_files":[x for x in unresolved["stdout"].splitlines() if x.strip()],"executed_commands":executed+[unresolved]})
             return
         if step["code"] != 0:
-            emit({"status": "error", "message": f"Command failed: {cmd}", "base_branch": base_branch, "executed_commands": executed})
-            return
+            emit({"status":"error","message":f"Command failed: {cmd}","executed_commands":executed}); return
 
     for cmd in ["pnpm test -u", "git add -A", "git commit --amend --no-edit"]:
-        step = run_step(cmd)
-        executed.append(step)
+        step = run_step(cmd); executed.append(step)
         if step["code"] != 0:
-            emit({"status": "error", "message": f"Command failed: {cmd}", "base_branch": base_branch, "executed_commands": executed})
-            return
+            emit({"status":"error","message":f"Command failed: {cmd}","executed_commands":executed}); return
 
-    emit({
-        "status": "success",
-        "message": "Conflict handling and snapshot updates complete.",
-        "base_branch": base_branch,
-        "executed_commands": executed,
-    })
+    emit({"status":"success","message":"Conflict handling and snapshot updates complete.","executed_commands":executed})
+
+def handle_review_smoke(args):
+    pr_num = args.pr
+    review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+    ctx_path = os.path.join(review_dir, f"pr-context-{pr_num}.md")
+    rev_path = os.path.join(review_dir, f"pr-review-{pr_num}.md")
+    audit_args = argparse.Namespace(pr_number=str(pr_num), fetch=True, audit=True, submit=False, cleanup=False, dry_run=True, event=None, json=True, base=None, command="audit-pr", func=handle_audit_pr)
+    handle_audit_pr(audit_args)
+    payload = parse_review_payload(rev_path)
+    contract_errors = validate_submit_review_contract(payload)
+    repo = get_github_client().get_repo(get_repo_name())
+    conflicts = detect_conflicts(repo, pr_num)
+    print(json.dumps({"status":"success" if not contract_errors else "error","data":{"pr":pr_num,"files":{"context":ctx_path,"review":rev_path},"contract":{"valid":not contract_errors,"errors":contract_errors},"payload":payload,"conflicts":[{"prs":list(k),"files":v} for k,v in conflicts.items()]}}, indent=2))
+    if contract_errors:
+        sys.exit(1)
 
 def handle_status_board(args):
     repo = get_github_client().get_repo(get_repo_name())
@@ -998,7 +947,7 @@ def main():
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
                       ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
-                      ("track-review", handle_track_review)]: # fetch-review is alias for audit-pr --fetch
+                      ("track-review", handle_track_review), ("review-smoke", handle_review_smoke)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd, parents=[base_parser])
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -1057,6 +1006,8 @@ def main():
             p.add_argument("--auditor", help="Name of the auditor")
             p.add_argument("--conflicts", help="Conflict status")
             p.add_argument("--file", help="Path to tracking file")
+        elif cmd == "review-smoke":
+            p.add_argument("--pr", type=int, required=True, help="PR number to smoke-validate")
         p.set_defaults(func=func)
 
     args = main_parser.parse_args()
