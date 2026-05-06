@@ -3,63 +3,81 @@ import { cn } from '@/lib/utils';
 
 interface LogoProps {
   className?: string;
+  showText?: boolean;
 }
 
-export function Logo({ className }: LogoProps) {
+/**
+ * High-fidelity SVG Logo for BoomTick.
+ * Featuring the serif "B" mark with a glowing gradient dot.
+ */
+export function Logo({ className, showText = true }: LogoProps) {
   const titleId = useId();
   const gradientId = useId();
+  const filterId = useId();
 
   return (
     <svg
-      viewBox="0 0 340 110"
+      viewBox={showText ? "0 0 450 100" : "0 0 120 100"}
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-full w-auto max-w-none overflow-visible", className)}
+      className={cn("h-full w-auto overflow-visible", className)}
       aria-labelledby={titleId}
       fill="none"
       preserveAspectRatio="xMidYMid meet"
     >
       <title id={titleId}>BoomTick Logo</title>
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#0891B2" />
-          <stop offset="100%" stopColor="#8B2FFF" />
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#40c4ff" />
+          <stop offset="100%" stopColor="#9d27ff" />
         </linearGradient>
+        <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
       </defs>
 
+      <g transform="translate(10, 82)">
+        {/* The "B" Mark - Serif, Bold, Italic */}
+        <text
+          x="0"
+          y="0"
+          fill="currentColor"
+          transform="skewX(-8)"
+          style={{
+            fontSize: '85px',
+            fontWeight: 700,
+            fontStyle: 'italic',
+            fontFamily: '"Bodoni MT", "Bodoni 72", serif',
+          }}
+        >
+          B
+        </text>
 
-      <text
-        x="16"
-        y="72"
-        fontFamily="Arial Black, Arial, sans-serif"
-        fontWeight="900"
-        fontSize="60"
-        fill="#f1f5f9"
-      >
-        B
-      </text>
+        {/* The Glowing Dot */}
+        <circle
+          cx="82"
+          cy="-28"
+          r="16"
+          fill={`url(#${gradientId})`}
+          filter={`url(#${filterId})`}
+        />
+      </g>
 
-      <line
-        x1="82"
-        y1="20"
-        x2="112"
-        y2="72"
-        stroke={`url(#${gradientId})`}
-        strokeWidth="12"
-        strokeLinecap="round"
-      />
-
-      <text
-        x="148"
-        y="69"
-        fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
-        fontWeight="700"
-        fontSize="33"
-        fill="#f1f5f9"
-        letterSpacing="-0.5"
-      >
-        <tspan fill="#f1f5f9">boom</tspan>
-        <tspan fill="#0891B2">tick</tspan>
-      </text>
+      {showText && (
+        <text
+          x="125"
+          y="78"
+          fill="currentColor"
+          style={{
+            fontSize: '52px',
+            fontWeight: 800,
+            fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
+            letterSpacing: '-1.5px'
+          }}
+        >
+          boom<tspan fill="#00CFFF">tick</tspan><tspan fill="rgba(255,255,255,0.4)">.blog</tspan>
+        </text>
+      )}
     </svg>
   );
 }

@@ -1,14 +1,32 @@
-<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="12" fill="white"/>
-  <text x="10" y="44"
-        font-family="Bricolage Grotesque, Albert Sans, sans-serif"
-        font-size="40"
-        font-weight="700"
-        fill="#1A2B3C">
-    B
-  </text>
-  <path d="M38 18 L54 46"
-        stroke="#007BFF"
-        stroke-width="6"
-        stroke-linecap="round"/>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="14" fill="#0D0E1C"/>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#40c4ff" />
+      <stop offset="100%" stop-color="#9d27ff" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <g transform="translate(8, 50)">
+    <text
+      x="0"
+      y="0"
+      font-family="'Bodoni MT', 'Bodoni 72', serif"
+      font-weight="700"
+      font-style="italic"
+      font-size="44"
+      fill="white"
+      transform="skewX(-8)"
+    >B</text>
+    <circle
+      cx="42"
+      cy="-14"
+      r="8"
+      fill="url(#grad)"
+      filter="url(#glow)"
+    />
+  </g>
 </svg>
