@@ -20,6 +20,11 @@ if [[ ! -d "node_modules" ]]; then
   pnpm install --frozen-lockfile
 fi
 
+# Check Ollama status for AI-assisted features
+if ! curl -s http://localhost:11434/api/tags > /dev/null; then
+  echo "⚠️  Ollama is not running. AI-assisted repairs and recommendations will be skipped (using fallbacks)."
+fi
+
 # 3. Get Open PRs in JSON format
 echo "🔍 Fetching open PRs..."
 mkdir -p dev-tools/logs

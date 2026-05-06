@@ -479,17 +479,20 @@ def handle_audit_pr(args):
 
                     recommendation = get_ollama_response(prompt)
 
-                    if recommendation:
-                        recommendation = recommendation.strip().strip("'\"")
-                        # Handle potential long responses or explanations despite instructions
-                        if "Approved" in recommendation:
-                           if "Minor Changes" in recommendation: recommendation = "Approved with Minor Changes"
-                           else: recommendation = "Approved"
-                        elif "Not Approved" in recommendation: recommendation = "Not Approved"
+                    if not recommendation:
+                        log_diag("Ollama unavailable. Using rule-based fallback recommendation.")
+                        recommendation = "Not Approved" if auto_findings else "Approved"
 
-                        rev_content = rev_content.replace("<Approved | Approved with Minor Changes | Not Approved>", recommendation)
-                        with open(rev_path, 'w') as f: f.write(rev_content)
-                        log_diag(f"Ollama recommendation: {recommendation}")
+                    recommendation = recommendation.strip().strip("'\"")
+                    # Handle potential long responses or explanations despite instructions
+                    if "Approved" in recommendation:
+                        if "Minor Changes" in recommendation: recommendation = "Approved with Minor Changes"
+                        else: recommendation = "Approved"
+                    elif "Not Approved" in recommendation: recommendation = "Not Approved"
+
+                    rev_content = rev_content.replace("<Approved | Approved with Minor Changes | Not Approved>", recommendation)
+                    with open(rev_path, 'w') as f: f.write(rev_content)
+                    log_diag(f"Recommendation: {recommendation} (Ollama fallback used if offline)")
                 except (ImportError, Exception) as e:
                     log_diag(f"Skipping AI recommendation (Ollama/repair.py unavailable or failed: {e})")
 
@@ -821,9 +824,21 @@ def handle_track_review(args):
             f.write("| PR # | Status | Auditor | Conflicts |\n|------|--------|---------|-----------|\n")
 
     if args.pr and args.status:
-        with open(filepath, "a") as f:
-            f.write(f"| {args.pr} | {args.status} | {args.auditor or 'System'} | {args.conflicts or 'None'} |\n")
-        if not args.json: print(f"✅ Tracked PR #{args.pr} in {filepath}")
+        # Deduplicate: check if PR already exists in the file
+        exists = False
+        with open(filepath, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                if f"| {args.pr} |" in line:
+                    exists = True
+                    break
+
+        if not exists:
+            with open(filepath, "a") as f:
+                f.write(f"| {args.pr} | {args.status} | {args.auditor or 'System'} | {args.conflicts or 'None'} |\n")
+            if not args.json: print(f"✅ Tracked PR #{args.pr} in {filepath}")
+        else:
+            if not args.json: print(f"ℹ️  PR #{args.pr} already tracked in {filepath}")
 
     if args.json: print(json.dumps({"status": "success", "file": filepath}, indent=2))
 
