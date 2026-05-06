@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/revert-svg-inlining-newsletter-banner-16573211917678437825/sitemap.xml
