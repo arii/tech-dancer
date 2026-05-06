@@ -64,20 +64,20 @@ export default function ArielProfile() {
             <Stack gap={12} className="lg:col-span-8">
               {bio.sections.map(renderSection)}
 
-              <div className="mt-12 border-t border-line/10 pt-12 flex flex-col gap-8">
-                <div id="privacy" className="flex flex-col gap-4">
+              <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
+                <Stack id="privacy" gap={4}>
                   <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
                   </Text>
-                </div>
-                <div id="terms" className="flex flex-col gap-4">
+                </Stack>
+                <Stack id="terms" gap={4}>
                   <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim">
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
-                </div>
-              </div>
+                </Stack>
+              </Stack>
             </Stack>
 
             <Box className="lg:col-span-4 relative">
