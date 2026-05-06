@@ -25,17 +25,22 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box className="mt-12 mb-6 group" style={{ counterIncrement: 'section' }}>
+            <Box className="mt-16 mb-8 group" style={{ counterIncrement: 'section' }}>
               <Text
                 variant="mono"
-                size="tiny"
+                size="micro"
                 color="accent"
                 weight="font-bold"
-                tracking="wide-editorial"
-                className="block mb-2 opacity-50 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
+                tracking="utility"
+                className="block mb-3 opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
               />
-              <Text as="h2" variant="display" size="3xl" weight="font-bold" className="normal-case tracking-tight m-0" {...props} />
-              <Box className="h-px w-12 bg-accent mt-4" />
+              <Text as="h2" variant="h2" size="4xl" color="brand" className="m-0" {...props} />
+              <Box className="h-0.5 w-16 bg-accent mt-6 transition-all group-hover:w-24" />
+            </Box>
+          ),
+          h3: ({node: _node, ...props}) => (
+            <Box className="mt-12 mb-6">
+              <Text as="h3" variant="h3" size="xl" color="main" className="m-0 border-l-2 border-accent/30 pl-4" {...props} />
             </Box>
           )
         }}

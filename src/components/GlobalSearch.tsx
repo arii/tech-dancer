@@ -102,6 +102,11 @@ export function GlobalSearch() {
         className=""
       >
         <Box
+          as="section"
+          role="dialog"
+          data-testid="search-dialog"
+          aria-modal="true"
+          aria-label="Search Repository"
           width="full"
           maxWidth="3xl"
           height="fit"
@@ -110,8 +115,37 @@ export function GlobalSearch() {
           radius="lg"
           border
           shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 mx-4 pointer-events-auto"
+          className="bg-surface/90 backdrop-blur-2xl border-accent/20 mx-4 pointer-events-auto outline-none"
           onClick={(e: MouseEvent) => e.stopPropagation()}
+          tabIndex={-1}
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key === 'Tab') {
+              const dialog = e.currentTarget;
+              const focusableElements = Array.from(dialog.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+              )).filter(el => {
+                const style = window.getComputedStyle(el);
+                return style.display !== 'none' && style.visibility !== 'hidden' && (el as HTMLElement).offsetWidth > 0;
+              });
+
+              if (focusableElements.length === 0) return;
+
+              const firstElement = focusableElements[0] as HTMLElement;
+              const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+              if (e.shiftKey) {
+                if (document.activeElement === firstElement || document.activeElement === dialog) {
+                  e.preventDefault();
+                  lastElement.focus();
+                }
+              } else {
+                if (document.activeElement === lastElement) {
+                  e.preventDefault();
+                  firstElement.focus();
+                }
+              }
+            }
+          }}
         >
           <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
             <Search className="w-5 h-5 text-accent shrink-0" />
