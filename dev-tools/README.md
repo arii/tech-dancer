@@ -62,10 +62,16 @@ Validates GitHub Issues against repo standards.
 - **Usage**: `python3 dev-tools/td_cli.py validate-issue --issue-number 247`
 
 #### `conflicts`
-Detects potential merge conflicts across all open PRs.
+Performs guarded local conflict prep (squash + merge + snapshot refresh) with preview-first safety checks.
 - **Flags**:
-  - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
-- **Usage**: `python3 dev-tools/td_cli.py conflicts`
+  - `--base <BRANCH>`: Base branch to merge from (default: `main`).
+  - `--dry-run` (default): Preview preflight and planned git commands in JSON/human format.
+  - `--execute`: Run mutations after preflight checks pass.
+  - `--force`: Allow execution even when the working tree is dirty.
+- **Usage (safe preview-first flow)**:
+  - `python3 dev-tools/td_cli.py conflicts --dry-run --json`
+  - `python3 dev-tools/td_cli.py conflicts --execute --json`
+  - `python3 dev-tools/td_cli.py conflicts --execute --force --json`
 
 #### `repair-context`
 Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
