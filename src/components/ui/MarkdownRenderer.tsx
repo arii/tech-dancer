@@ -28,7 +28,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box marginTop={12} marginBottom={6} className="group [counter-increment:section]">
               <Text
                 variant="mono"
-                size="tiny"
+                size="micro"
                 color="accent"
                 weight="font-bold"
                 tracking="wide-editorial"

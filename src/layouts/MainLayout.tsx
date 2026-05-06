@@ -162,12 +162,12 @@ export function MainLayout({ children }: { children: ReactNode }) {
           scrollPaddingTop={64}
         >
           <Stack
-            paddingX={{ base: 4, md: 6, lg: 12 }}
+            paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}
             paddingTop={{ base: 16, md: 12 }}
             paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
             flex={1}
             direction="col"
-            marginX="auto"
+            marginX={{ base: "auto", lg: 0 }}
             maxWidth="7xl"
             width="full"
           >
