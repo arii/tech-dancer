@@ -118,51 +118,6 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
-
-def parse_review_payload(review_path: str) -> dict:
-    """Extracts the JSON payload from a review markdown file."""
-    if not os.path.exists(review_path):
-        raise CLIError(f"Review file missing: {review_path}")
-
-    with open(review_path, 'r') as f:
-        content = f.read()
-
-    json_match = re.search(r'```json\n(.*?)\n```', content, re.DOTALL)
-    if not json_match:
-        raise CLIError("Could not find JSON block in review document")
-
-    try:
-        return json.loads(json_match.group(1))
-    except json.JSONDecodeError as e:
-        raise CLIError(f"Failed to parse JSON block: {str(e)}")
-
-
-def validate_submit_review_contract(payload: dict) -> list[str]:
-    """Validates fields expected by submit_review.py for create_review payload."""
-    errors = []
-
-    body = payload.get("body")
-    if not isinstance(body, str) or not body.strip():
-        errors.append("payload.body must be a non-empty string")
-
-    comments = payload.get("comments", [])
-    if not isinstance(comments, list):
-        errors.append("payload.comments must be a list when provided")
-    else:
-        for i, comment in enumerate(comments):
-            if not isinstance(comment, dict):
-                errors.append(f"payload.comments[{i}] must be an object")
-                continue
-            for field in ["path", "body"]:
-                if field not in comment or not isinstance(comment[field], str) or not comment[field].strip():
-                    errors.append(f"payload.comments[{i}].{field} must be a non-empty string")
-            has_line = isinstance(comment.get("line"), int)
-            has_position = isinstance(comment.get("position"), int)
-            if not (has_line or has_position):
-                errors.append(f"payload.comments[{i}] must include integer 'line' or 'position'")
-
-    return errors
-
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
@@ -249,54 +204,46 @@ def handle_detect_conflicts(args):
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
 def handle_conflicts(args):
-    def run_step(cmd: str):
+    """
+    Squashes commits, attempts auto-resolution of simple conflicts,
+    and updates snapshots.
+    """
+    def run(cmd, exit_on_fail=False):
+        print(f"🏃 Running: {cmd}")
         res = run_command(cmd, check=False, shell=True)
-        return {"cmd": cmd, "code": res.returncode, "stdout": (res.stdout or "").strip(), "stderr": (res.stderr or "").strip()}
+        if res.returncode != 0 and exit_on_fail:
+            sys.exit(res.returncode)
+        return res.returncode, res.stdout.strip()
 
-    def emit(payload: dict):
-        print(json.dumps(payload, indent=2) if args.json else payload.get("message", payload.get("status", "")))
+    base_branch = getattr(args, 'base', 'main') or 'main'
 
-    base_branch = getattr(args, "base", "main") or "main"
-    planned = ["git fetch origin", f"git merge-base origin/{base_branch} HEAD", "git reset --soft <MERGE_BASE>", 'git commit -m "chore: squashed commits prior to conflict resolution"', f"git merge origin/{base_branch}", "pnpm test -u", "git add -A", "git commit --amend --no-edit"]
-    dirty = run_step("git status --porcelain")
-    branch = run_step("git branch --show-current")
-    is_dirty = bool(dirty["stdout"])
-    current_branch = branch["stdout"]
-    is_detached = branch["code"] != 0 or not current_branch
-    on_protected = current_branch in {"main", "master", base_branch} if current_branch else False
+    # 1. Squash all commits relative to the base branch
+    print("📦 Squashing current branch commits...")
+    run("git fetch origin")
+    code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
 
-    if args.dry_run:
-        emit({"status":"preview","message":"Dry-run preview only. No git mutations were executed.","base_branch":base_branch,"preflight":{"is_dirty":is_dirty,"current_branch":current_branch or None,"detached_head":is_detached,"on_protected_branch":on_protected},"planned_commands":planned,"executed_commands":[]})
+    if code == 0 and merge_base:
+        run(f"git reset --soft {merge_base}")
+        run('git commit -m "chore: squashed commits prior to conflict resolution"')
+
+    # 2. Merge base to auto-resolve simple conflicts
+    print(f"🔄 Merging origin/{base_branch}...")
+    merge_code, _ = run(f"git merge origin/{base_branch}")
+
+    if merge_code != 0:
+        print("🚧 Complex conflicts remain. Git has auto-resolved the simple ones.")
+        print("Please resolve the remaining file conflicts manually.")
+        print("⚠️ Skipping snapshot updates until conflict markers are cleared.")
         return
-    if is_dirty and not getattr(args, "force", False):
-        emit({"status":"aborted","message":"Working tree is dirty. Commit/stash changes or pass --force.","planned_commands":planned})
-        return
-    if is_detached or on_protected:
-        emit({"status":"aborted","message":"Unsafe branch state for conflict command.","planned_commands":planned})
-        return
 
-    executed = []
-    for cmd in ["git fetch origin", f"git merge-base origin/{base_branch} HEAD"]:
-        step = run_step(cmd); executed.append(step)
-        if step["code"] != 0:
-            emit({"status":"error","message":f"Command failed: {cmd}","executed_commands":executed}); return
-    merge_base = executed[-1]["stdout"]
+    # 3. Update snapshots after successful merge
+    print("📸 Updating test snapshots...")
+    run("pnpm test -u")
+    # Amend the snapshot updates directly into our squashed commit
+    run("git add -A")
+    run("git commit --amend --no-edit")
 
-    for cmd in [f"git reset --soft {merge_base}", 'git commit -m "chore: squashed commits prior to conflict resolution"', f"git merge origin/{base_branch}"]:
-        step = run_step(cmd); executed.append(step)
-        if step["code"] != 0 and cmd.startswith("git merge "):
-            unresolved = run_step("git diff --name-only --diff-filter=U")
-            emit({"status":"merge_conflicts","message":"Merge reported conflicts. Manual resolution required.","conflicted_files":[x for x in unresolved["stdout"].splitlines() if x.strip()],"executed_commands":executed+[unresolved]})
-            return
-        if step["code"] != 0:
-            emit({"status":"error","message":f"Command failed: {cmd}","executed_commands":executed}); return
-
-    for cmd in ["pnpm test -u", "git add -A", "git commit --amend --no-edit"]:
-        step = run_step(cmd); executed.append(step)
-        if step["code"] != 0:
-            emit({"status":"error","message":f"Command failed: {cmd}","executed_commands":executed}); return
-
-    emit({"status":"success","message":"Conflict handling and snapshot updates complete.","executed_commands":executed})
+    print("✅ Conflict handling and snapshot updates complete!")
 
 def handle_review_smoke(args):
     pr_num = args.pr
@@ -560,8 +507,7 @@ def handle_audit_pr(args):
                     else:
                         prompt = "The PR audit passed with no violations. Provide a final recommendation: 'Approved'. Respond ONLY with the recommendation string."
 
-                    llm_result = get_ollama_response(prompt)
-                    recommendation = llm_result.get("response", "") if llm_result.get("ok") else ""
+                    recommendation = get_ollama_response(prompt)
 
                     if not recommendation:
                         log_diag("Ollama unavailable. Using rule-based fallback recommendation.")
@@ -704,25 +650,13 @@ def handle_repair(args):
     """Wraps repair.py for AI-assisted CI repair."""
     import tempfile
     import shutil
-    from repair import check_ollama_health, ERROR_SERVICE_DOWN, ERROR_MODEL_MISSING, ERROR_GENERATION_FAILED
 
-    def _rule_based_recommendations(logs: str) -> list[str]:
-        findings = []
-        if re.search(r"TS\d+", logs):
-            findings.append("TypeScript errors detected: run `pnpm run type-check` and resolve reported TS codes in order.")
-        if "no-unused-vars" in logs or "unused" in logs.lower():
-            findings.append("Unused symbols detected: remove dead code or prefix intentionally unused params with `_`.")
-        if "anti-pattern" in logs.lower() or "arbitrary values" in logs.lower():
-            findings.append("Design-system violations detected: replace raw Tailwind/layout classes with primitives and tokens.")
-        if not findings:
-            findings.append("Run `pnpm run lint:ox` and `pnpm run type-check`, then address the first error per file deterministically.")
-        return findings
-
-    ollama_health = check_ollama_health()
-    if not ollama_health["ok"] and not args.json:
-        print(f"⚠️ Ollama unavailable ({ollama_health['code']}): {ollama_health['message']}")
-        if ollama_health["code"] == ERROR_MODEL_MISSING:
-            print("⚠️ Remediation:", ollama_health.get("remediation", "Run `ollama pull <model>`."))
+    # Ensure Ollama is running or at least check it
+    try:
+        import urllib.request
+        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
+    except Exception:
+        if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
 
     logs_source = ""
     logs_content = ""
@@ -773,24 +707,6 @@ def handle_repair(args):
             tmp_log_path = tmp_log.name
 
         if not args.json: print(f"🤖 Starting autonomous repair agent using {logs_source}...")
-
-        if not ollama_health["ok"]:
-            recs = _rule_based_recommendations(logs_content)
-            if args.json:
-                print(json.dumps({
-                    "status": "success",
-                    "mode": "fallback",
-                    "error": {
-                        "code": ollama_health["code"],
-                        "message": ollama_health["message"]
-                    },
-                    "recommendations": recs
-                }, indent=2))
-            else:
-                print("🧭 Ollama is unavailable, using deterministic fallback recommendations:")
-                for rec in recs:
-                    print(f"  - {rec}")
-            return
 
         cmd = [sys.executable, repair_script, tmp_log_path]
         # Also pass eslint json if available locally? For now let's keep it simple.
@@ -1005,6 +921,38 @@ def handle_track_review(args):
 
     if args.json: print(json.dumps({"status": "success", "file": filepath}, indent=2))
 
+def handle_review_smoke(args):
+    """Smoke test for Ollama review integration."""
+    try:
+        from repair import get_ollama_response
+        prompt = "This is a smoke test. Please respond with exactly the word 'Approved'."
+        if not args.json: print(f"🔍 Sending smoke test prompt to Ollama...")
+
+        response = get_ollama_response(prompt)
+        if response:
+            recommendation = response.strip().strip("'\"")
+            if "Not Approved" in recommendation:
+                recommendation = "Not Approved"
+            elif "Minor Changes" in recommendation:
+                recommendation = "Approved with Minor Changes"
+            elif "Approved" in recommendation:
+                recommendation = "Approved"
+
+            status = "success" if recommendation == "Approved" else "warning"
+            msg = f"Ollama responded: {recommendation}"
+            if args.json:
+                print(json.dumps({"status": status, "recommendation": recommendation, "raw": response}))
+            else:
+                print(f"✅ {msg}")
+        else:
+            raise Exception("No response from Ollama")
+    except Exception as e:
+        if args.json:
+            print(json.dumps({"status": "error", "message": str(e)}))
+        else:
+            log_error(f"Review smoke test failed: {e}")
+            sys.exit(1)
+
 def handle_manage_reviews(args):
     g = require_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login
 
@@ -1058,10 +1006,7 @@ def main():
             p.add_argument("--all-open", action="store_true")
             p.add_argument("--post-comments", action="store_true")
             add_execution_args(p)
-        elif cmd == "conflicts":
-            p.add_argument("--base")
-            p.add_argument("--force", action="store_true", help="Allow execution with a dirty working tree")
-            add_execution_args(p)
+        elif cmd == "conflicts": p.add_argument("--base")
         elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")
@@ -1110,8 +1055,6 @@ def main():
             p.add_argument("--auditor", help="Name of the auditor")
             p.add_argument("--conflicts", help="Conflict status")
             p.add_argument("--file", help="Path to tracking file")
-        elif cmd == "review-smoke":
-            p.add_argument("--pr", type=int, required=True, help="PR number to smoke-validate")
         p.set_defaults(func=func)
 
     args = main_parser.parse_args()

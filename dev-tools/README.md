@@ -38,26 +38,6 @@ Orchestrates the PR technical audit lifecycle.
   - `--cleanup`: Remove temporary review files on success.
 - **Usage**: `python3 dev-tools/td_cli.py audit-pr 368 --fetch --audit`
 
-
-
-#### `review-smoke`
-Runs a no-side-effect PR review smoke test by executing `audit-pr` fetch/audit stages, validating the review payload contract required by `submit_review.py`, and returning conflict summary in a single JSON object.
-- **Usage**: `python3 dev-tools/td_cli.py review-smoke --pr 368 --json`
-#### `review-smoke`
-Runs a no-side-effect PR review smoke test by executing `audit-pr` fetch/audit stages, validating the review payload contract required by `submit_review.py`, and returning conflict summary in a single JSON object. Exits non-zero when contract validation fails.
-- **Flags**:
-  - `--pr <PR_NUMBER>`: PR number to validate.
-  - `--json`: Emit machine-readable smoke result payload.
-- **Usage**:
-  - `python3 dev-tools/td_cli.py review-smoke --pr 368 --json`
-
-**Local verification flow before submission**
-```bash
-python3 dev-tools/td_cli.py audit-pr 368 --fetch --audit
-python3 dev-tools/td_cli.py review-smoke --pr 368 --json
-python3 dev-tools/td_cli.py audit-pr 368 --submit --execute
-```
-
 #### `validate-issue <ISSUE_NUMBER>`
 Validates GitHub Issues against repo standards.
 - **Flags**:
@@ -66,16 +46,10 @@ Validates GitHub Issues against repo standards.
 - **Usage**: `python3 dev-tools/td_cli.py validate-issue --issue-number 247`
 
 #### `conflicts`
-Performs guarded local conflict prep (squash + merge + snapshot refresh) with preview-first safety checks.
+Detects potential merge conflicts across all open PRs.
 - **Flags**:
-  - `--base <BRANCH>`: Base branch to merge from (default: `main`).
-  - `--dry-run` (default): Preview preflight and planned git commands in JSON/human format.
-  - `--execute`: Run mutations after preflight checks pass.
-  - `--force`: Allow execution even when the working tree is dirty.
-- **Usage (safe preview-first flow)**:
-  - `python3 dev-tools/td_cli.py conflicts --dry-run --json`
-  - `python3 dev-tools/td_cli.py conflicts --execute --json`
-  - `python3 dev-tools/td_cli.py conflicts --execute --force --json`
+  - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
+- **Usage**: `python3 dev-tools/td_cli.py conflicts`
 
 #### `repair-context`
 Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
@@ -85,19 +59,6 @@ Generates a high-precision prompt for fixing a specific CI error. It maps the er
 - **Usage**:
   - `pnpm repair-context --log "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"`
   - `python3 dev-tools/td_cli.py repair-context --file logs/ci_failure.log`
-
-#### `repair`
-Runs the autonomous local repair workflow and now performs a preflight Ollama health check before attempting AI fixes.
-- **Health checks**:
-  - Verifies Ollama service is reachable via `/api/tags`.
-  - Verifies `OLLAMA_MODEL` exists in the returned model list.
-- **Structured diagnostics**:
-  - `service_down`: Ollama is unreachable.
-  - `model_missing`: configured model not present; remediation includes an exact command, e.g. `ollama pull qwen2.5-coder:1.5b`.
-  - `generation_failed`: generation request failed (includes HTTP response body excerpt when available).
-- **Deterministic fallback mode**:
-  - If Ollama is unavailable, `repair` does **not** fail fast; it emits rule-based recommendations from lint/type-check signatures so engineers still get actionable next steps.
-- **Usage**: `python3 dev-tools/td_cli.py repair [--logs <FILE> | --stdin] [--worktree]`
 
 #### `ratchet-any` / `bundle-size`
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
