@@ -75,7 +75,7 @@ export default function Home() {
                     align={{ sm: "start" }}
                     className="group rounded-lg transition-colors hover:bg-surface"
                   >
-                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-56">
+                    <Box display="flex" shrink={0} align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-64">
                       <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
                         {post.category}
                       </Box>

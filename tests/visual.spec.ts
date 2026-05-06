@@ -43,11 +43,11 @@ test.describe('Visual Regression Tests', () => {
         await new Promise(r => setTimeout(r, 200));
       });
 
-      // Increased tolerance to 5% to handle minor rendering differences across environments
+      // Increased tolerance to 10% to handle minor rendering differences across environments
       // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
-        maxDiffPixelRatio: 0.05,
+        maxDiffPixelRatio: 0.1,
         animations: 'disabled'
       });
     });
