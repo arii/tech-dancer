@@ -15,7 +15,6 @@ export function HeroSection() {
   const BAR_COUNT = HERO_CONFIG.BAR_COUNT;
   const SEEDS = HERO_CONFIG.SEEDS;
 
-  // Generate deterministic bar data based on index to prevent visual regression flakiness
   const bars: WaveBar[] = useMemo(() =>
     Array.from({ length: BAR_COUNT }, (_, i) => ({
       height: 20 + ((i * SEEDS.BAR_HEIGHT) % 36),
@@ -32,7 +31,6 @@ export function HeroSection() {
     >
       <HeroParticleCanvas />
 
-      {/* Bottom Fade Gradient for better contrast with the site background */}
       <Box
         position="absolute"
         inset="bottom"
@@ -41,7 +39,6 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* All content sits above the canvas via z-index. Set pointer-events-none on decorative branding to prevent interception of Global Search clicks in tests. */}
       <Stack
         relative
         zIndex={10}
@@ -54,7 +51,6 @@ export function HeroSection() {
       >
 
 
-        {/* Logo mark — B + \ (backslash) */}
         <Box
           className="opacity-0 translate-y-[-20px] pointer-events-none"
           style={{
@@ -65,7 +61,6 @@ export function HeroSection() {
           <Logo className="text-white" showText={false} />
         </Box>
 
-        {/* Wordmark: boomtick.blog */}
         <Box
           variant="display"
           weight="font-bold"
@@ -79,7 +74,6 @@ export function HeroSection() {
           boom<span style={{ color: 'var(--hero-accent)' }}>tick</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>.blog</span>
         </Box>
 
-        {/* Visual-style Headline - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
         <Stack
           marginTop={{ base: 4, lg: 6 }}
           align="start"
@@ -115,7 +109,6 @@ export function HeroSection() {
           </Text>
         </Stack>
 
-        {/* Gradient Accent Line below headline */}
         <Box
           width={24}
           height={1.5}
@@ -128,7 +121,6 @@ export function HeroSection() {
           }}
         />
 
-        {/* Tagline with Vertical Accent Bar */}
         <Box
           display="flex"
           align="stretch"
@@ -156,7 +148,6 @@ export function HeroSection() {
           </Text>
         </Box>
 
-        {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Box
           display="flex"
           align="end"

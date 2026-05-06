@@ -6,11 +6,6 @@ interface LogoProps {
   showText?: boolean;
 }
 
-/**
- * High-fidelity SVG Logo for BoomTick.
- * Featuring the "B\" mark with a custom gradient slash.
- * The slash is positioned closer to the B per design requirements.
- */
 export function Logo({ className, showText = true }: LogoProps) {
   const titleId = useId();
   const gradientId = useId();
@@ -32,7 +27,6 @@ export function Logo({ className, showText = true }: LogoProps) {
         </linearGradient>
       </defs>
 
-      {/* The "B" Mark */}
       <text
         x="0"
         y="82"

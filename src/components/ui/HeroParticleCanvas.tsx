@@ -41,11 +41,9 @@ export function HeroParticleCanvas({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Sync canvas resolution with container size
     canvas.width = width;
     canvas.height = height;
 
-    // Build particles deterministically for visual regression testing
     const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => ({
       x: ((i * seeds.PARTICLE_X) % 1) * width,
       y: ((i * seeds.PARTICLE_Y) % 1) * height,
