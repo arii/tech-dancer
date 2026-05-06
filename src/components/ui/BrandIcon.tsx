@@ -34,18 +34,19 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
         fontFamily="Arial Black, Arial, sans-serif"
         fontSize="40"
         fontWeight="900"
+        fontStyle="italic"
         fill="#f1f5f9"
       >
         B
       </text>
 
       <line
-        x1="38"
-        y1="18"
-        x2="54"
-        y2="46"
+        x1="45"
+        y1="15"
+        x2="25"
+        y2="50"
         stroke={`url(#${gradientId})`}
-        strokeWidth="6"
+        strokeWidth="4"
         strokeLinecap="round"
       />
     </svg>

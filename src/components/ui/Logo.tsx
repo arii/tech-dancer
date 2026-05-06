@@ -32,6 +32,7 @@ export function Logo({ className }: LogoProps) {
         y="72"
         fontFamily="Arial Black, Arial, sans-serif"
         fontWeight="900"
+        fontStyle="italic"
         fontSize="60"
         fill="#f1f5f9"
       >
@@ -39,12 +40,12 @@ export function Logo({ className }: LogoProps) {
       </text>
 
       <line
-        x1="82"
+        x1="95"
         y1="20"
-        x2="112"
-        y2="72"
+        x2="65"
+        y2="85"
         stroke={`url(#${gradientId})`}
-        strokeWidth="12"
+        strokeWidth="8"
         strokeLinecap="round"
       />
 
