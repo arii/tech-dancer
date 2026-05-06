@@ -41,9 +41,9 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* All content sits above the canvas via z-index. Set pointer-events-none on decorative branding to prevent interception of Global Search clicks in tests. */}
+      {/* All content sits above the canvas via z-index. */}
       <Stack
-        relative
+        relative={false}
         zIndex={10}
         align="start"
         gap={0}
@@ -94,7 +94,7 @@ export function HeroSection() {
             weight="font-black"
             color="white"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[1.1] lg:leading-[0.9] uppercase italic text-left"
           >
             Built for dancers.
           </Text>
@@ -103,7 +103,7 @@ export function HeroSection() {
             variant="headline"
             weight="font-black"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[1.1] lg:leading-[0.9] uppercase italic text-left"
           >
             <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
           </Text>
@@ -113,7 +113,7 @@ export function HeroSection() {
             weight="font-black"
             color="white"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[1.1] lg:leading-[0.9] uppercase italic text-left"
           >
             Dance better.
           </Text>
@@ -138,7 +138,7 @@ export function HeroSection() {
           align="stretch"
           gap={5}
           marginTop={{ base: 4, lg: 4 }}
-          maxWidth="4xl"
+          maxWidth="5xl"
           className="opacity-0"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',

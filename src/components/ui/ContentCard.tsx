@@ -71,7 +71,7 @@ export function ContentCard({
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
+        <Text as="div" variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
            {excerpt}
         </Text>
       </Stack>

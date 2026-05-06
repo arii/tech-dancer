@@ -57,42 +57,36 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
             >
               {recentPosts.map((post) => (
-                <Box
+                <Stack
                   key={post.slug}
+                  as={motion.create(NavLink)}
+                  to={`/blog/${post.slug}`}
+                  direction={{ base: "col", sm: "row" }}
+                  gap={{ base: 3, sm: 4 }}
+                  paddingX={{ base: 3, sm: 5 }}
+                  paddingY={{ base: 5, sm: 6 }}
+                  align={{ sm: "start" }}
                   border="b"
-                  width="full"
-                  marginX={{ sm: -2 }}
-                  as={motion.div}
+                  className="group rounded-lg transition-colors hover:bg-surface last:border-0"
                   variants={motionTokens.staggerItem}
                 >
-                  <Stack
-                    as={NavLink}
-                    to={`/blog/${post.slug}`}
-                    direction={{ base: "col", sm: "row" }}
-                    gap={{ base: 3, sm: 4 }}
-                    paddingX={{ base: 3, sm: 5 }}
-                    paddingY={{ base: 5, sm: 6 }}
-                    align={{ sm: "start" }}
-                    className="group rounded-lg transition-colors hover:bg-surface"
-                  >
-                    <Box display="flex" shrink={0} align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-64">
-                      <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
-                        {post.category}
-                      </Box>
-                      <Text variant="mono" tracking="widest" uppercase size="xs" className="whitespace-nowrap text-text-dim/70">
-                        {post.date}
-                      </Text>
+                  <Box display="flex" shrink={0} align="center" wrap={false} gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-64">
+                    <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
+                      {post.category}
                     </Box>
-                    <Box>
-                      <Text as="h3" color="main" size="base" weight="font-bold" marginBottom={1} className="transition-colors group-hover:text-accent leading-snug">
-                        {post.title}
-                      </Text>
-                      <Text as="div" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
-                        {post.excerpt}
-                      </Text>
-                    </Box>
-                  </Stack>
-                </Box>
+                    <Text variant="mono" tracking="widest" uppercase size="xs" className="whitespace-nowrap text-text-dim/70">
+                      {post.date}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text as="h3" color="main" size="base" weight="font-bold" marginBottom={1} className="transition-colors group-hover:text-accent leading-snug">
+                      {post.title}
+                    </Text>
+                    <Text as="div" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
+                      {post.excerpt}
+                    </Text>
+                  </Box>
+                </Stack>
               ))}
             </Stack>
           </Stack>
