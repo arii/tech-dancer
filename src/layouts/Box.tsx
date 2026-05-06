@@ -84,7 +84,7 @@ export const Box = forwardRef(
     layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
     onUpdate, custom,
     ...props 
-  }: BoxProps<T>, ref: React.ForwardedRef<any>) => {
+  }: BoxProps<T>, ref: React.ForwardedRef<React.ElementRef<T>>) => {
     const isMotion = typeof Component !== "string"
     
     const MOTION_PROPS = [
