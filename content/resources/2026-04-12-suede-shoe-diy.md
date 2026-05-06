@@ -2,7 +2,6 @@
 type: resource
 title: "How to Suede Your Own Dance Shoes for $15"
 date: "2026-04-12"
-author: "Tech Dancer"
 category: "Gear"
 excerpt: "The $15 DIY hack for perfect traction on any ballroom floor."
 affiliateIds:

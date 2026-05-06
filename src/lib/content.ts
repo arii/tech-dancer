@@ -123,6 +123,8 @@ export interface Event {
   content: string;
 }
 
+import { SITE_METADATA } from "@/config/content";
+
 export type ContentItem = Post | Resource | Study | Event;
 
 interface ContentModule {
@@ -154,7 +156,7 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         category: String(data.category || 'General'),
         excerpt: String(data.excerpt || ''),
         date: String(data.date || ''),
-        author: String(data.author || ''),
+        author: String(data.author || SITE_METADATA.author),
         tags: Array.isArray(data.tags) ? data.tags : [],
         content: content || '',
         slug: slugFrom(path)

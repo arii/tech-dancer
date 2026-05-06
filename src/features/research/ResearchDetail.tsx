@@ -43,7 +43,7 @@ export default function ResearchDetail() {
         "description": study.excerpt,
         "author": {
           "@type": "Person",
-          "name": study.author || "Ariel Anders",
+          "name": study.author || "Tech Dancer",
           "url": `${BASE_URL}/about`
         },
         "datePublished": study.date,

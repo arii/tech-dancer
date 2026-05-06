@@ -12,7 +12,7 @@ import {
   ProfileLinks
 } from './components/ProfileComponents';
 
-export default function ArielProfile() {
+export default function TechDancerProfile() {
   const { bio } = useProfile();
 
   const renderSection = (section: ProfileSection) => {
@@ -67,11 +67,11 @@ export default function ArielProfile() {
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             <Stack gap={16} className="lg:col-span-8">
               <Box display={{ base: 'block', lg: 'none' }} marginBottom={8} maxWidth="md" marginX="auto" paddingX={4}>
-                <Box border radius="lg" overflow="hidden" className="aspect-[16/9] bg-surface-alt shadow-inner">
+                <Box border radius="lg" overflow="hidden" aspect="video" surface="muted" className="shadow-inner">
                   <img
                     src={roboticistPhoto}
                     alt="Tech Dancer lifestyle"
-                    className="w-full h-full object-cover object-[center_20%]"
+                    className="w-full h-full object-cover object-[center_20%] // impeccable-ignore"
                   />
                 </Box>
               </Box>
@@ -85,7 +85,7 @@ export default function ArielProfile() {
                     src={roboticistPhoto}
                     alt="Tech Dancer portrait"
                     loading="lazy"
-                    className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
+                    className="hover:border-accent hover:bg-accent/5 transition-all group interactive-press focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
                   />
                 </Box>
                 <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">

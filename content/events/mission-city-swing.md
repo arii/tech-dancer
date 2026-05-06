@@ -2,7 +2,6 @@
 type: event
 title: Mission City Swing
 date: 2026-05-01
-author: Tech Dancer
 category: Event
 excerpt: Weekly social dance in San Jose.
 location: San Jose, CA
