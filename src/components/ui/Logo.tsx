@@ -40,6 +40,7 @@ export function Logo({ className, showText = true }: LogoProps) {
         style={{
           fontSize: '85px',
           fontWeight: 900,
+          fontStyle: 'italic',
           fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
           letterSpacing: '-4px'
         }}
@@ -48,14 +49,13 @@ export function Logo({ className, showText = true }: LogoProps) {
       </text>
 
       {/* 
-        The Slanted Backslash "\" 
+        The Slanted Forward Slash "/"
         Design: 
-        - 12 degree skew (tan(12) ≈ 0.21)
-        - Gradient fill matching hero accent
-        - Positioned close to B (x=60)
+        - Thinner slash
+        - Positioned to intersect/cut through the B
       */}
       <path
-        d="M 46 18 L 58 18 L 72.7 88 L 60.7 88 Z"
+        d="M 85 15 L 91 15 L 56 85 L 50 85 Z"
         fill={`url(#${gradientId})`}
         className="drop-shadow-[0_0_8px_rgba(0,207,255,0.4)]"
       />
