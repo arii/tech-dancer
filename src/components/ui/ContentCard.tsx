@@ -24,6 +24,7 @@ export function ContentCard({
     // @ts-expect-error - ignoring unused data props
     type: _type, date: _date, author: _author, authorAvatar: _authorAvatar,
     content: _content, image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    readingTime: _readingTime,
     ...cleanMotionProps
   } = motionProps as Record<string, unknown>;
 
