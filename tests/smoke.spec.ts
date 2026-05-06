@@ -3,6 +3,24 @@ import { test, expect, Page, ConsoleMessage } from '@playwright/test';
 // Use a WeakMap to store console errors per page to avoid global state leakage
 const errorsByPage = new WeakMap<Page, string[]>();
 
+async function validateUrlNavigation(page: Page, href: string) {
+  if (href.includes('#')) {
+    const [baseUrl, fragment] = href.split('#');
+    if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
+      await page.goto(baseUrl);
+      await page.waitForLoadState('networkidle');
+    }
+    const locator = page.locator(`#${fragment}`);
+    await expect(locator).toBeVisible({ timeout: 5000 });
+  } else {
+    const response = await page.goto(href);
+    await page.waitForLoadState('networkidle');
+    if (response !== null) {
+      expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
+    }
+  }
+}
+
 function getPageErrors(page: Page): string[] {
   if (!errorsByPage.has(page)) {
     errorsByPage.set(page, []);
@@ -53,13 +71,7 @@ test('all nav links are reachable and error-free', async ({ page }) => {
     const errors = getPageErrors(page);
     errors.length = 0;
 
-    const response = await page.goto(href);
-    await page.waitForLoadState('networkidle');
-
-      // response can be null if it's a fragment navigation
-      if (response !== null) {
-        expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
-      }
+    await validateUrlNavigation(page, href);
 
     const filteredErrors = errors.filter(e =>
       !e.includes("Stack is not defined") &&
@@ -91,13 +103,7 @@ test('all post/content pages load without errors', async ({ page }) => {
       const errors = getPageErrors(page);
       errors.length = 0;
 
-      const response = await page.goto(href);
-      await page.waitForLoadState('networkidle');
-
-      // response can be null if it's a fragment navigation
-      if (response !== null) {
-        expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
-      }
+      await validateUrlNavigation(page, href);
 
       const filteredErrors = errors.filter(e =>
         !e.includes("Stack is not defined") &&
