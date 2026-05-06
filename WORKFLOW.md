@@ -1,17 +1,17 @@
 # Repository Workflows
 
-This document outlines the GitHub Actions workflows, their triggers, and the variables that control the repository's quality gates.
+This document outlines the GitHub Actions workflows, their triggers, and the variables that control the quality gates.
 
 ## 🔄 Core Workflows
 
 | Workflow | File | Triggers | Description |
 |----------|------|----------|-------------|
-| **CI** | `ci.yml` | Push/PR to any branch | Linting, type-checking, anti-pattern audit, unit tests, and E2E smoke tests. |
+| **CI** | `ci.yml` | Push/PR to any branch | Lints, type-checks, audits anti-patterns, and runs unit and E2E smoke tests. |
 | **Deploy** | `deploy.yml` | Push to any branch | Builds and deploys to GitHub Pages (main and branch previews). Handles SEO assets on `main`. |
 | **Security** | `security.yml` | Push/PR to `main` | Runs Oxlint, Gitleaks, and Semgrep scans. |
-| **CodeQL** | `codeql.yml` | Push/PR to `main`, Weekly | GitHub's static analysis for security vulnerabilities. |
+| **CodeQL** | `codeql.yml` | Push/PR to `main`, Weekly | Runs static analysis for security vulnerabilities. |
 | **Conflict Check** | `conflict-check.yml` | PR synchronization | Checks for merge conflicts with other open PRs. |
-| **Issue Validation** | `validate_issue.yml` | Issue opened/edited | Ensures issues follow template standards and don't propose banned patterns. |
+| **Issue Validation** | `validate_issue.yml` | Issue opened/edited | Ensures issues follow template standards and do not propose banned patterns. |
 | **Preview Pruning** | `prune-stale-previews.yml` | Daily | Deletes branch previews from `gh-pages` for branches that no longer exist. |
 
 ## 📊 Technical Debt Baselines
@@ -27,7 +27,7 @@ We use **GitHub Actions Variables** to manage thresholds for technical debt. Thi
 
 ### Updating Baselines
 
-If a change legitimately increases the bundle size or `any` count (and has been approved), update the baseline variable after the PR is merged:
+If a change legitimately increases the bundle size or `any` count (and has been approved), update the baseline variable after the PR merges:
 
 ```bash
 # Update bundle size baseline

@@ -42,4 +42,4 @@ To deploy the Firestore security rules for the UX Auditor, use the Firebase CLI:
 ```bash
 firebase deploy --only firestore:rules
 ```
-The rules are defined in `firestore.rules` and ensure that users can only access their own audit reports.
+The rules in `firestore.rules` ensure that users can only access their own audit reports.

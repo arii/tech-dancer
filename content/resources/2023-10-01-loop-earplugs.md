@@ -6,7 +6,10 @@ author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "A must-have for protecting your hearing in loud ballroom and social dance settings without sacrificing sound quality."
 affiliateIds: ["loop-experience"]
-tags: ["safety", "ballroom", "music"]
+tags:
+  - safety
+  - ballroom
+  - music
 rating: 5
 verdict: "Highly Recommended"
 priceCategory: "$$"

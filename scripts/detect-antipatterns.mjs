@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx', 'content'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -20,7 +20,7 @@ function collectAuditFiles(targets) {
         walk(fullPath);
         continue;
       }
-      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) results.add(fullPath);
+      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx') || fullPath.endsWith('.md')) results.add(fullPath);
     }
   };
 
@@ -33,6 +33,85 @@ function collectAuditFiles(targets) {
   }
 
   return Array.from(results);
+}
+
+function checkMarkdown(content) {
+  const violations = [];
+  const fmMatch = content.match(/^---\n([\s\S]+?)\n---/);
+
+  if (!fmMatch) {
+    violations.push({
+      line: 1,
+      pattern: 'Missing Frontmatter',
+      severity: 'major',
+      value: 'N/A',
+      message: 'Markdown file is missing frontmatter block.'
+    });
+    return violations;
+  }
+
+  const fmContent = fmMatch[1];
+  const fmData = {};
+  const fmLines = fmContent.split('\n');
+
+  fmLines.forEach(line => {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx !== -1 && !line.trim().startsWith('-')) {
+      const key = line.slice(0, colonIdx).trim();
+      const value = line.slice(colonIdx + 1).trim();
+      fmData[key] = value;
+    }
+  });
+
+  // Required fields check
+  CONFIG.requiredContentFields.forEach(field => {
+    if (!fmData[field]) {
+      violations.push({
+        line: 1,
+        pattern: 'Missing Field',
+        severity: 'major',
+        value: field,
+        message: `Frontmatter is missing required field: ${field}`
+      });
+    }
+  });
+
+  // Tag normalization check
+  const tagsLine = fmLines.find(l => l.trim().startsWith('tags:'));
+  if (tagsLine) {
+    let tags = [];
+    const rawValue = tagsLine.slice(5).trim();
+    if (rawValue.startsWith('[') && rawValue.endsWith(']')) {
+      tags = rawValue.slice(1, -1).split(',').map(t => t.trim().replace(/^["']|["']$/g, ''));
+    } else {
+      // Look for list items following the tags: line
+      const tagsIdx = fmLines.indexOf(tagsLine);
+      for (let i = tagsIdx + 1; i < fmLines.length; i++) {
+        const line = fmLines[i];
+        if (line.startsWith('  - ')) {
+          tags.push(line.replace('  - ', '').trim().replace(/^["']|["']$/g, ''));
+        } else if (line.trim() === '' || line.startsWith(' ')) {
+          continue;
+        } else {
+          break;
+        }
+      }
+    }
+
+    tags.forEach(tag => {
+      if (tag && (tag !== tag.toLowerCase() || tag.includes(' ') || tag.includes('_'))) {
+        violations.push({
+          line: 1,
+          pattern: 'Tag Normalization',
+          severity: 'minor',
+          value: tag,
+          message: `Tag '${tag}' must be lowercase kebab-case.`
+        });
+      }
+    });
+  }
+
+  return violations;
 }
 
 const LAYOUT_SUGGESTIONS = {
@@ -330,13 +409,31 @@ if (targets.includes('-')) {
   const files = collectAuditFiles(targets);
 
   files.forEach(filepath => {
+    let violations = [];
     if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
-      const violations = checkFile(filepath);
-      if (violations.length > 0) {
-        allViolations[path.relative(ROOT, filepath)] = violations;
-      }
+      violations = checkFile(filepath);
+    } else if (filepath.endsWith('.md')) {
+      const content = fs.readFileSync(filepath, 'utf8');
+      violations = checkMarkdown(content);
+    }
+
+    if (violations.length > 0) {
+      allViolations[path.relative(ROOT, filepath)] = violations;
     }
   });
+
+  if (targets.length > 0) {
+    targets.forEach(t => {
+      const absT = path.resolve(ROOT, t);
+      if (fs.existsSync(absT) && fs.statSync(absT).isFile() && absT.endsWith('.md')) {
+        const content = fs.readFileSync(absT, 'utf8');
+        const violations = checkMarkdown(content);
+        if (violations.length > 0) {
+          allViolations[path.relative(ROOT, absT)] = violations;
+        }
+      }
+    });
+  }
 }
 
 const totalViolations = Object.values(allViolations).flat().length;
