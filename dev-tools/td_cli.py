@@ -489,13 +489,13 @@ def handle_audit_pr(args):
 
                     recommendation = recommendation.strip().strip("'\"")
                     # Handle potential long responses or explanations despite instructions
-                        # Order matters: check for rejections first
-                        if "Not Approved" in recommendation:
-                            recommendation = "Not Approved"
-                        elif "Minor Changes" in recommendation:
-                            recommendation = "Approved with Minor Changes"
-                        elif "Approved" in recommendation:
-                            recommendation = "Approved"
+                    # Order matters: check for rejections first
+                    if "Not Approved" in recommendation:
+                        recommendation = "Not Approved"
+                    elif "Minor Changes" in recommendation:
+                        recommendation = "Approved with Minor Changes"
+                    elif "Approved" in recommendation:
+                        recommendation = "Approved"
 
                     rev_content = rev_content.replace("<Approved | Approved with Minor Changes | Not Approved>", recommendation)
                     with open(rev_path, 'w') as f: f.write(rev_content)
