@@ -1,6 +1,6 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
-import { X } from 'lucide-react';
+import { Mail, X } from 'lucide-react';
 import { motionTokens } from '@/styles/motion';
 import { motion } from 'motion/react';
 import { useEmailStore } from './emailStore';
@@ -53,19 +53,7 @@ export function NewsletterBanner() {
       >
         <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
           <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }} width={12} height={12}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 text-accent"
-            >
-              <rect width="20" height="16" x="2" y="4" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
+            <Mail className="w-5 h-5 text-accent" />
           </Box>
           <Stack gap={0}>
             <Text variant="display" size="base" uppercase tracking="tight">
