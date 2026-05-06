@@ -117,7 +117,7 @@ export default function Navigation() {
           </Stack>
 
           <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
-            <Text variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
+            <Text variant="sans" size="xs" color="dim" marginBottom={1} className="leading-normal">
               Written by <strong className="text-accent">Tech Dancer</strong>
             </Text>
             <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">

@@ -55,7 +55,7 @@ export function GlobalErrorBoundary() {
           width="full"
           className="text-left border border-line/50 overflow-auto max-h-[300px]"
         >
-          <Text weight="bold" color="error" className="mb-2 block">
+          <Text weight="bold" color="error" marginBottom={2} display="block">
             {errorMessage}
           </Text>
           {!isProduction && errorDetail && (

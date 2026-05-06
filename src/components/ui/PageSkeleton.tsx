@@ -32,7 +32,7 @@ function GridSkeleton() {
 
 function PostSkeleton() {
   return (
-    <Stack gap={10} className="max-w-4xl mx-auto w-full" padding="panel">
+    <Stack gap={10} maxWidth="4xl" marginX="auto" width="full" padding="panel">
       <Stack gap={6}>
         <Skeleton height={6} width={32} />
         <Skeleton height={20} width="full" />
