@@ -38,7 +38,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             paddingX={isMobile ? 4 : 6}
             border={isMobile ? "b" : undefined}
             className={cn(
-              isMobile ? "border-line/50 min-h-[56px]" : "min-h-[44px]",
+              isMobile ? "border-line/50 min-h-[56px]" : "min-h-[48px]",
               isMobile && isActive && "shadow-sm"
             )}
           >

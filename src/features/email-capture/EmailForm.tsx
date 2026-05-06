@@ -5,14 +5,16 @@ import { inputs } from '@/styles/design-tokens';
 import { useEmailForm } from './useEmailForm';
 
 export function EmailForm() {
-  const { status, email, setEmail, submitForm } = useEmailForm();
+  const { status, submitForm } = useEmailForm();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (e.currentTarget.checkValidity()) {
-      submitForm(email);
+    const form = e.currentTarget;
+    if (form.checkValidity()) {
+      const emailValue = new FormData(form).get('email') as string;
+      if (emailValue) submitForm(emailValue);
     } else {
-      e.currentTarget.reportValidity();
+      form.reportValidity();
     }
   };
 
@@ -21,10 +23,9 @@ export function EmailForm() {
       <Stack direction="row" gap={0} position="relative" width="full">
         <Box
           as="input"
+          name="email"
           type="email"
           placeholder="Email Address"
-          value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
@@ -39,7 +40,8 @@ export function EmailForm() {
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}
-          className="bg-accent-navy hover:bg-accent-navy/90 text-bg"
+          surface="accent"
+          className="hover:bg-accent/90 text-bg border-l border-accent/20"
         >
           <AnimatePresence mode="wait">
             <Stack
