@@ -9,6 +9,7 @@ interface BrandIconProps {
 export function BrandIcon({ className, showBackground = false }: BrandIconProps) {
   const titleId = useId();
   const gradientId = useId();
+  const filterId = useId();
 
   return (
     <svg
@@ -22,32 +23,38 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
       {showBackground && <rect width="64" height="64" rx="12" fill="#0D0E1C" />}
 
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#0891B2" />
-          <stop offset="100%" stopColor="#8B5CF6" />
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#40c4ff" />
+          <stop offset="100%" stopColor="#9d27ff" />
         </linearGradient>
+        <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
       </defs>
 
-      <text
-        x="10"
-        y="44"
-        fontFamily="Arial Black, Arial, sans-serif"
-        fontSize="40"
-        fontWeight="900"
-        fill="#f1f5f9"
-      >
-        B
-      </text>
+      <g transform="translate(8, 50)">
+        <text
+          x="0"
+          y="0"
+          fontFamily='"Bodoni MT", "Bodoni 72", serif'
+          fontSize="44"
+          fontWeight="700"
+          fontStyle="italic"
+          fill="#f1f5f9"
+          transform="skewX(-8)"
+        >
+          B
+        </text>
 
-      <line
-        x1="38"
-        y1="18"
-        x2="54"
-        y2="46"
-        stroke={`url(#${gradientId})`}
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
+        <circle
+          cx="42"
+          cy="-14"
+          r="8"
+          fill={`url(#${gradientId})`}
+          filter={`url(#${filterId})`}
+        />
+      </g>
     </svg>
   );
 }
