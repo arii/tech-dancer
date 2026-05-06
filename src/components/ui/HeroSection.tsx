@@ -81,6 +81,7 @@ export function HeroSection() {
 
         {/* Visual-style Headline - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
         <Stack
+          as="h1"
           marginTop={{ base: 4, lg: 6 }}
           align="start"
           gap={0}
@@ -88,6 +89,7 @@ export function HeroSection() {
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
+            as="span"
             variant="headline"
             weight="font-black"
             color="white"
@@ -97,6 +99,7 @@ export function HeroSection() {
             Built for dancers.
           </Text>
           <Text
+            as="span"
             variant="headline"
             weight="font-black"
             tracking="tighter"
@@ -105,6 +108,7 @@ export function HeroSection() {
             <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
           </Text>
           <Text
+            as="span"
             variant="headline"
             weight="font-black"
             color="white"
