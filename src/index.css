@@ -73,7 +73,9 @@
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
+  --spacing-11: 2.75rem;
   --spacing-12: 3rem;
+  --spacing-14: 3.5rem;
 
   /* Font Sizes */
   --text-micro: 9px;
