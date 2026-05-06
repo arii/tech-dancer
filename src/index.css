@@ -63,6 +63,7 @@
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
+  --shadow-glow: 0 0 15px var(--raw-color-accent-shadow);
 
   /* Animation */
   --ease-smooth: var(--raw-ease-smooth);

@@ -37,7 +37,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
              <Text variant="mono" size="xs">{post.author}</Text>
           </Stack>
           <Box flex />
-          <Stack as="button" direction="row" onClick={share} align="center" gap={2} className="text-accent hover:bg-accent/10 hover:shadow-[0_0_15px_rgba(8,145,178,0.2)] px-3 py-1.5 rounded-sm transition-all active:scale-95 cursor-pointer">
+          <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:bg-accent/10 hover:shadow-glow transition-all active:scale-95 cursor-pointer">
             <Share2 className="w-4 h-4" />
             <Text variant="mono" size="xs" weight="font-bold">SHARE</Text>
           </Stack>
