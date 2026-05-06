@@ -45,12 +45,14 @@ export function DetailLayout({
           display="flex"
           align="center"
           gap={2}
-          color="dim"
-          className="hover:text-accent transition-colors"
+          color="main"
+          className="hover:text-accent transition-colors group"
           cursor="pointer"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <Text variant="mono" size="xs" weight="font-bold" className="normal-case">{backLabel}</Text>
+          <ArrowLeft className="w-4 h-4 text-accent transition-transform group-hover:-translate-x-1" />
+          <Text variant="mono" size="xs" weight="font-bold" className="normal-case tracking-widest">
+            {backLabel.toUpperCase()}
+          </Text>
         </Box>
 
         <Stack gap={10}>

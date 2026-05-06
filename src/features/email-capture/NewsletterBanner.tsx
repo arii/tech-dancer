@@ -16,9 +16,9 @@ export function NewsletterBanner() {
       animate={motionTokens.overlay.animate}
       exit={motionTokens.overlay.exit}
       transition={motionTokens.overlay.transition}
-      surface="alt"
-      opacity={0.9}
-      className="backdrop-blur-xl border border-line/50"
+      surface="default"
+      opacity={0.95}
+      className="backdrop-blur-2xl border-t border-accent/20"
       shadow="topOverlay"
       padding="emailBar"
       radius="none"
@@ -52,7 +52,7 @@ export function NewsletterBanner() {
         className="w-full"
       >
         <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
-          <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }} width={12} height={12}>
+          <Box padding="compact" surface="accent" display={{ base: 'none', sm: 'block' }} width={12} height={12} className="bg-accent/10 border border-accent/20">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

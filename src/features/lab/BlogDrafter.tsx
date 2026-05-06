@@ -89,7 +89,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
           </Box>
         </Box>
-        <Box border surface="accent" padding="compact" opacity={5} className="bg-accent/5">
+        <Box border padding="compact" className="bg-accent/5 border-accent/20">
            <Stack gap={2} display="flex" align="baseline" direction="row">
               <Box as="span" className="shrink-0">
                 <Info className="w-4 h-4 text-accent" />
