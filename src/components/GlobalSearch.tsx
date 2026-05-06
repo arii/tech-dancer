@@ -127,7 +127,7 @@ export function GlobalSearch() {
                 const style = window.getComputedStyle(el);
                 const isVisible = style.display !== 'none' && style.visibility !== 'hidden';
                 // Always include the close button if it's visible, regardless of offsetWidth
-                if (el.getAttribute('aria-label') === 'Close search') return isVisible;
+                if ((el as HTMLElement).dataset.testid === 'close-search') return isVisible;
                 return isVisible && (el as HTMLElement).offsetWidth > 0;
               });
 
@@ -171,6 +171,7 @@ export function GlobalSearch() {
               as="button"
               type="button"
               aria-label="Close search"
+              data-testid="close-search"
               onClick={close}
               padding={1.5}
               radius="sm"

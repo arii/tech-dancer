@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -18,6 +19,8 @@ export function ContentCard({
   basePath, 
   ...motionProps 
 }: ContentCardProps) {
+  const id = useId();
+  const titleId = `title-${id}`;
   // Destructure and ignore known data props that shouldn't bleed to the DOM
   // even if they are passed via {...item} in parent components.
   const {
@@ -46,7 +49,7 @@ export function ContentCard({
       padding={6}
       radius="lg"
       border
-      aria-label={`Article: ${title} in category ${category}`}
+      aria-labelledby={titleId}
       className="group bg-surface hover:border-accent/40 transition-all duration-300"
       {...cleanMotionProps}
     >
@@ -63,6 +66,7 @@ export function ContentCard({
 
       <Stack gap={2}>
         <Text
+          id={titleId}
           as="h3"
           variant="body"
           size="lg"

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
@@ -21,6 +22,8 @@ export function GearCard({
   verdict,
   ...rest
 }: GearCardProps) {
+  const id = useId();
+  const titleId = `title-${id}`;
   // Destructure and ignore known data props that shouldn't bleed to the DOM
   // even if they are passed via {...item} in parent components.
   const {
@@ -44,7 +47,7 @@ export function GearCard({
       padding={6}
       radius="lg"
       border
-      aria-label={`Gear Review: ${title} in ${category}. ${verdict ? `Verdict: ${verdict}` : ''}`}
+      aria-labelledby={titleId}
       className="group bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30"
     >
       <Box display="flex" align="center" justify="between">
@@ -66,6 +69,7 @@ export function GearCard({
 
       <Stack gap={2}>
         <Text
+          id={titleId}
           as="h3"
           variant="body"
           size="lg"
