@@ -446,12 +446,14 @@ def handle_audit_pr(args):
             if auto_findings:
                 print(f"📋 Found {len(auto_findings)} violations:")
                 for f in auto_findings: print(f"  [{f['severity'].upper()}] {f['path']}: {f['issue']}")
-                findings_str = "\\n".join([f"- [{f['severity'].upper()}] {f['path']}: {f['issue']}" for f in auto_findings])
+                findings_str = "\n".join([f"- [{f['severity'].upper()}] {f['path']}: {f['issue']}" for f in auto_findings])
 
                 # Update review template with findings
                 if os.path.exists(rev_path):
                     with open(rev_path, 'r') as f: rev_content = f.read()
-                    rev_content = rev_content.replace("<findings>", findings_str)
+                    # Convert findings to JSON string format for body injection
+                    json_findings = findings_str.replace("\n", "\\n")
+                    rev_content = rev_content.replace("<findings>", json_findings)
                     rev_content = rev_content.replace("<summary>", f"Audit identified {len(auto_findings)} violations.")
                     with open(rev_path, 'w') as f: f.write(rev_content)
                     log_diag(f"Updated review template with {len(auto_findings)} findings.")
@@ -879,11 +881,7 @@ def main():
     base_parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     base_parser.add_argument("--yes", "--non-interactive", action="store_true", help="Bypass interactive prompts and confirmations")
 
-    main_parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
-    # Also add them to the main parser for top-level usage
-    main_parser.add_argument("--json", action="store_true", help="Output results in JSON format")
-    main_parser.add_argument("--yes", "--non-interactive", action="store_true", help="Bypass interactive prompts and confirmations")
-
+    main_parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI", parents=[base_parser])
     subparsers = main_parser.add_subparsers(dest="command", help="Command to run")
 
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
@@ -943,7 +941,7 @@ def main():
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
         elif cmd == "track-review":
-            p.add_argument("--pr", help="PR number")
+            p.add_argument("--pr", type=int, help="PR number")
             p.add_argument("--status", help="Current status of the PR")
             p.add_argument("--auditor", help="Name of the auditor")
             p.add_argument("--conflicts", help="Conflict status")

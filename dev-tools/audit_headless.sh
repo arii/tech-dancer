@@ -2,7 +2,10 @@
 # dev-tools/audit_headless.sh
 # Headless PR audit workflow for sandbox environments.
 
-set -e
+set -euo pipefail
+
+# Error trap for diagnostic feedback
+trap 'echo "❌ Error occurred on line $LINENO. Exiting." >&2' ERR
 
 # 1. Sync Git State
 if [[ "$1" == "--sync" ]]; then
