@@ -129,7 +129,6 @@ export function GlobalSearch() {
               });
 
               if (focusableElements.length === 0) return;
-              // console.log('Focusable elements:', focusableElements.map(el => el.outerHTML));
 
               const firstElement = focusableElements[0] as HTMLElement;
               const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;

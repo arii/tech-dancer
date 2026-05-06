@@ -23,10 +23,6 @@ test.describe('accessibility', () => {
       .disableRules(['region'])
       .analyze();
 
-    if (results.violations.length > 0) {
-        console.log('Search Modal Violations:', JSON.stringify(results.violations, null, 2));
-    }
-
     expect(results.violations).toEqual([]);
   });
 
@@ -48,8 +44,6 @@ test.describe('accessibility', () => {
 
     // Tab forward from close button should wrap back to input (since there are no results yet)
     await page.keyboard.press('Tab');
-
-    // Sometimes Playwright is too fast for the browser to update focus
     await expect(input).toBeFocused();
 
     // Shift+Tab should wrap to close button
