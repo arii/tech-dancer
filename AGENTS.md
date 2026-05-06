@@ -115,6 +115,9 @@ The `dev-tools/td_cli.py` tool is the unified entry point for repository automat
 
   # Verify resolution logic locally (mock mode)
   MERGELLAMA_MOCK=true python3 dev-tools/td_cli.py resolve-conflicts
+
+  # Automated local verification script
+  ./dev-tools/verify-mergellama.sh
   ```
 - **No Monolithic PRs**: Keep PRs focused. A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
 - **Manual Confirmation**: Every merge command MUST be preceded by a specific `notify_user` request for approval.
