@@ -20,22 +20,22 @@ export default function Toolbox() {
   [filteredCategories]);
 
   const pills = [
-    { label: "Best for travel", value: "Best for travel", color: "text-accent border-accent/30 bg-accent/10" },
-    { label: "Highly recommended", value: "Highly recommended", color: "text-accent-navy border-accent-navy/30 bg-accent-navy/10" },
-    { label: "Competition ready", value: "Competition ready", color: "text-error border-error/30 bg-error/10" }
+    { label: "Best for travel", value: "Best for travel", color: "text-primary border-primary/30 bg-primary/10" },
+    { label: "Highly recommended", value: "Highly recommended", color: "text-secondary border-secondary/30 bg-secondary/10" },
+    { label: "Competition ready", value: "Competition ready", color: "text-accent-vivid border-accent-vivid/30 bg-accent-vivid/10" }
   ];
 
   return (
     <Box as="section" paddingY={4}>
       <SEO
         title="Toolbox"
-        description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
+        description="West Coast Swing gear reviews, travel essentials, and practical picks for dancers."
       />
       <Box as="header" marginBottom={8}>
         <PageHeader
           label="THE TOOLBOX"
           title="Gear Reviews"
-          description="Rigorous testing and honest takes on the gear that keeps you moving."
+          description="Honest reviews of the gear, travel essentials, and accessories that keep WCS dancers moving."
         />
 
         {/* Modern Search Bar & Toggle */}
@@ -48,7 +48,7 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} className="rounded-2xl border border-line/80 bg-surface/60 shadow-sm">
           <span
             onClick={() => setSelectedPill('all')}
             className={cn(

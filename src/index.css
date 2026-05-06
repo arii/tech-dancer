@@ -7,6 +7,9 @@
   --color-surface: var(--raw-color-surface);
   --color-surface-alt: var(--raw-color-surface-alt);
   --color-line: var(--raw-color-line);
+  --color-primary: var(--raw-color-primary);
+  --color-secondary: var(--raw-color-secondary);
+  --color-accent-vivid: var(--raw-color-accent-vivid);
   --color-accent: var(--raw-color-accent);
   --color-accent-purple: var(--raw-color-accent-purple);
   --color-accent-magenta: var(--raw-color-accent-magenta);

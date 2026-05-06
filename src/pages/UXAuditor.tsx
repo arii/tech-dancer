@@ -117,6 +117,7 @@ export default function UXAuditor() {
             label="Visual UX Auditor"
             title="Multimodal AI Analysis"
             description="Automated visual regression and UX improvement suggestions across viewports."
+            descriptionMaxWidth="full"
           />
         </Box>
 
@@ -124,7 +125,11 @@ export default function UXAuditor() {
           direction="row"
           align="center"
           gap={3}
-          className="bg-surface p-2 rounded-lg shadow-sm border border-line"
+          padding={2}
+          radius="lg"
+          shadow="sm"
+          border
+          className="bg-surface"
         >
           <Box
             as="input"
@@ -211,7 +216,11 @@ export default function UXAuditor() {
           {activeReport ? (
             <>
               <Stack
-                className="bg-surface p-6 rounded-lg shadow-sm border border-line"
+                padding={6}
+                radius="lg"
+                shadow="sm"
+                border
+                className="bg-surface"
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
               >
@@ -304,7 +313,7 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box className="bg-surface-alt border border-line p-5 rounded-lg">
+                              <Box surface="alt" border padding={5} radius="lg">
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
@@ -316,7 +325,7 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} className="bg-surface p-4 rounded-lg border border-line shadow-sm hover:border-accent transition-all">
+                                  <Box key={idx} padding={4} radius="lg" border shadow="sm" className="bg-surface hover:border-accent transition-all">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
                                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
@@ -324,9 +333,11 @@ export default function UXAuditor() {
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
-                                        SEV {imp.severity}
-                                      </Text>
+                                      <Box as="span" paddingX={2} paddingY={0.5} radius="full" surface="muted" title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                        <Text variant="mono" size="xs" weight="font-black" color="dim" uppercase>
+                                          SEV {imp.severity}
+                                        </Text>
+                                      </Box>
                                     </Box>
                                     <Text variant="sans" size="xs" color="dim" marginBottom={3}>
                                       {imp.issue}

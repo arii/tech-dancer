@@ -4,6 +4,9 @@
   --raw-color-surface: #0f172a;
   --raw-color-surface-alt: #1e293b;
   --raw-color-line: #334155;
+  --raw-color-primary: #00CFFF;
+  --raw-color-secondary: #8B2FFF;
+  --raw-color-accent-vivid: #FF00C8;
   --raw-color-accent: #0891b2; /* Cyan 600 for better WCAG contrast */
   --raw-color-accent-purple: #8b5cf6;
   --raw-color-accent-magenta: #d946ef;
