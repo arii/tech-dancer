@@ -10,7 +10,7 @@ interface EmailState {
 export const STORAGE_KEY = 'td-newsletter-dismissed';
 const BANNER_DELAY_MS = 30000;
 
-export const useEmailStore = create<EmailState>((set, get) => ({
+export const useEmailStore = create<EmailState>((set) => ({
   showEmailBar: false,
   setShowEmailBar: (show: boolean) => set({ showEmailBar: show }),
   hideBar: () => {
