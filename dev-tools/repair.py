@@ -16,11 +16,48 @@ from utils import run_command
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:1.5b")
 MAX_RETRIES = 3
+OLLAMA_TAGS_URL = OLLAMA_URL.rsplit("/api/", 1)[0] + "/api/tags"
+
+ERROR_SERVICE_DOWN = "service_down"
+ERROR_MODEL_MISSING = "model_missing"
+ERROR_GENERATION_FAILED = "generation_failed"
 
 def log(msg):
     print(f"🤖 [Repair Agent] {msg}")
 
+def check_ollama_health() -> Dict[str, Any]:
+    """Checks Ollama service availability and model presence."""
+    req = urllib.request.Request(OLLAMA_TAGS_URL)
+    try:
+        with urllib.request.urlopen(req, timeout=3) as f:
+            raw = f.read().decode("utf-8")
+            data = json.loads(raw)
+    except Exception as e:
+        return {
+            "ok": False,
+            "code": ERROR_SERVICE_DOWN,
+            "message": f"Ollama service unavailable at {OLLAMA_TAGS_URL}: {e}",
+            "remediation": f"Start Ollama and verify it is reachable at {OLLAMA_TAGS_URL}."
+        }
+
+    models = [m.get("name") for m in data.get("models", []) if m.get("name")]
+    if MODEL not in models:
+        return {
+            "ok": False,
+            "code": ERROR_MODEL_MISSING,
+            "message": f"Configured model '{MODEL}' is not available in /api/tags.",
+            "remediation": f"Run: ollama pull {MODEL}"
+        }
+
+    return {"ok": True, "code": "ok", "message": f"Model '{MODEL}' is available."}
+
 def get_ollama_response(prompt):
+    health = check_ollama_health()
+    if not health["ok"]:
+        log(health["message"])
+        log(health["remediation"])
+        return {"ok": False, "code": health["code"], "message": health["message"]}
+
     data = {
         "model": MODEL,
         "prompt": prompt,
@@ -34,10 +71,20 @@ def get_ollama_response(prompt):
     try:
         with urllib.request.urlopen(req) as f:
             response = json.loads(f.read().decode("utf-8"))
-            return response.get("response", "")
+            return {"ok": True, "code": "ok", "response": response.get("response", "")}
+    except urllib.error.HTTPError as e:
+        body_excerpt = ""
+        try:
+            body_excerpt = e.read().decode("utf-8")[:280]
+        except Exception:
+            body_excerpt = "<unavailable>"
+        message = f"Ollama generation HTTP {e.code}: {body_excerpt}"
+        log(message)
+        return {"ok": False, "code": ERROR_GENERATION_FAILED, "message": message}
     except urllib.error.URLError as e:
-        log(f"Error connecting to Ollama: {e}")
-        return None
+        message = f"Error connecting to Ollama: {e}"
+        log(message)
+        return {"ok": False, "code": ERROR_SERVICE_DOWN, "message": message}
 
 def extract_imports(content: str) -> List[str]:
     """Basic extraction of local imports to provide context."""
@@ -206,10 +253,15 @@ def agent_loop(file_path, initial_errors):
                         break
 
         prompt = construct_prompt(file_path, content, "\n".join(current_errors), context_str, attempt=attempt)
-        repaired_content = get_ollama_response(prompt)
+        llm_result = get_ollama_response(prompt)
 
+        if not llm_result.get("ok"):
+            log(f"Failed to get response from LLM for {file_path}: {llm_result.get('code')}")
+            break
+
+        repaired_content = llm_result.get("response", "")
         if not repaired_content:
-            log(f"Failed to get response from LLM for {file_path}")
+            log(f"LLM returned empty content for {file_path}")
             break
 
         apply_fix(file_path, repaired_content)

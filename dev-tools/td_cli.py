@@ -629,7 +629,8 @@ def handle_audit_pr(args):
                     else:
                         prompt = "The PR audit passed with no violations. Provide a final recommendation: 'Approved'. Respond ONLY with the recommendation string."
 
-                    recommendation = get_ollama_response(prompt)
+                    llm_result = get_ollama_response(prompt)
+                    recommendation = llm_result.get("response", "") if llm_result.get("ok") else ""
 
                     if not recommendation:
                         log_diag("Ollama unavailable. Using rule-based fallback recommendation.")
@@ -772,13 +773,25 @@ def handle_repair(args):
     """Wraps repair.py for AI-assisted CI repair."""
     import tempfile
     import shutil
+    from repair import check_ollama_health, ERROR_SERVICE_DOWN, ERROR_MODEL_MISSING, ERROR_GENERATION_FAILED
 
-    # Ensure Ollama is running or at least check it
-    try:
-        import urllib.request
-        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
-    except Exception:
-        if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
+    def _rule_based_recommendations(logs: str) -> list[str]:
+        findings = []
+        if re.search(r"TS\d+", logs):
+            findings.append("TypeScript errors detected: run `pnpm run type-check` and resolve reported TS codes in order.")
+        if "no-unused-vars" in logs or "unused" in logs.lower():
+            findings.append("Unused symbols detected: remove dead code or prefix intentionally unused params with `_`.")
+        if "anti-pattern" in logs.lower() or "arbitrary values" in logs.lower():
+            findings.append("Design-system violations detected: replace raw Tailwind/layout classes with primitives and tokens.")
+        if not findings:
+            findings.append("Run `pnpm run lint:ox` and `pnpm run type-check`, then address the first error per file deterministically.")
+        return findings
+
+    ollama_health = check_ollama_health()
+    if not ollama_health["ok"] and not args.json:
+        print(f"⚠️ Ollama unavailable ({ollama_health['code']}): {ollama_health['message']}")
+        if ollama_health["code"] == ERROR_MODEL_MISSING:
+            print("⚠️ Remediation:", ollama_health.get("remediation", "Run `ollama pull <model>`."))
 
     logs_source = ""
     logs_content = ""
@@ -828,6 +841,24 @@ def handle_repair(args):
             tmp_log_path = tmp_log.name
 
         if not args.json: print(f"🤖 Starting autonomous repair agent using {logs_source}...")
+
+        if not ollama_health["ok"]:
+            recs = _rule_based_recommendations(logs_content)
+            if args.json:
+                print(json.dumps({
+                    "status": "success",
+                    "mode": "fallback",
+                    "error": {
+                        "code": ollama_health["code"],
+                        "message": ollama_health["message"]
+                    },
+                    "recommendations": recs
+                }, indent=2))
+            else:
+                print("🧭 Ollama is unavailable, using deterministic fallback recommendations:")
+                for rec in recs:
+                    print(f"  - {rec}")
+            return
 
         cmd = [sys.executable, repair_script, tmp_log_path]
         # Also pass eslint json if available locally? For now let's keep it simple.
