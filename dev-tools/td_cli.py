@@ -55,6 +55,18 @@ def get_env_or_gha(env_var: str) -> str | None:
         return os.environ[env_var]
     return get_gha_variable(env_var)
 
+def require_github_client():
+    """Returns an authenticated GitHub client with actionable dependency hints."""
+    try:
+        return get_github_client()
+    except ModuleNotFoundError as e:
+        if getattr(e, "name", "") == "github":
+            raise CLIError(
+                "Missing dependency: PyGithub (`github` module). "
+                "Install Python dependencies (for example, run `./dev-tools/setup-python.sh`) and retry."
+            ) from e
+        raise
+
 def resolve_baseline(file_path: str | None, env_var: str, fallback_value: int) -> int:
     """Resolves a baseline value from CLI argument, environment variable, or GHA variable."""
     if file_path:
@@ -154,7 +166,7 @@ def validate_submit_review_contract(payload: dict) -> list[str]:
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
-    repo = get_github_client().get_repo(get_repo_name())
+    repo = require_github_client().get_repo(get_repo_name())
 
     issues = []
     if args.all_open: issues = list(repo.get_issues(state='open'))
@@ -223,7 +235,7 @@ def handle_validate_issue(args):
         sys.exit(1)
 
 def handle_detect_conflicts(args):
-    repo = get_github_client().get_repo(get_repo_name())
+    repo = require_github_client().get_repo(get_repo_name())
     conflicts = detect_conflicts(repo, args.pr)
 
     formatted = []
@@ -295,14 +307,14 @@ def handle_review_smoke(args):
     handle_audit_pr(audit_args)
     payload = parse_review_payload(rev_path)
     contract_errors = validate_submit_review_contract(payload)
-    repo = get_github_client().get_repo(get_repo_name())
+    repo = require_github_client().get_repo(get_repo_name())
     conflicts = detect_conflicts(repo, pr_num)
     print(json.dumps({"status":"success" if not contract_errors else "error","data":{"pr":pr_num,"files":{"context":ctx_path,"review":rev_path},"contract":{"valid":not contract_errors,"errors":contract_errors},"payload":payload,"conflicts":[{"prs":list(k),"files":v} for k,v in conflicts.items()]}}, indent=2))
     if contract_errors:
         sys.exit(1)
 
 def handle_status_board(args):
-    repo = get_github_client().get_repo(get_repo_name())
+    repo = require_github_client().get_repo(get_repo_name())
 
     prs_data = []
     if not args.json: print("# Active Agent Work Board\n| Branch | Issue | Status | Conflicts |\n|--------|-------|--------|-----------|")
@@ -400,7 +412,7 @@ def handle_migrate_tokens(args):
 
 def handle_update_issues(args):
     repo_name = get_repo_name()
-    g = get_github_client(); repo = g.get_repo(repo_name)
+    g = require_github_client(); repo = g.get_repo(repo_name)
 
     updates = []
     if not args.json: print(f"🔍 Scanning open issues in {repo_name}...")
@@ -439,7 +451,7 @@ def handle_audit_pr(args):
     res = {"pr": pr_num, "files": {}}
 
     if args.fetch:
-        repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
+        repo = require_github_client().get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
         title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
         context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## Files Changed"]
         for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
@@ -602,7 +614,7 @@ def handle_review_smoke(args):
     payload = parse_review_payload(rev_path)
     contract_errors = validate_submit_review_contract(payload)
 
-    repo = get_github_client().get_repo(get_repo_name())
+    repo = require_github_client().get_repo(get_repo_name())
     conflicts = detect_conflicts(repo, pr_num)
     formatted_conflicts = [{"prs": list(k), "files": v} for k, v in conflicts.items()]
 
@@ -669,7 +681,7 @@ def handle_pre_submit(args):
             results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
 
         try:
-            client = get_github_client()
+            client = require_github_client()
         except CLIError:
             client = None
         if client:
@@ -724,7 +736,8 @@ def handle_repair(args):
                 logs_content = f.read()
             logs_source = args.logs
         else:
-            raise CLIError(f"Log file not found: {args.logs}")
+            logs_content = args.logs
+            logs_source = "inline logs"
     else:
         if not args.json: print("🔍 No logs provided. Running local triage...")
         # Run lint and tsc to gather logs - using execute_raw as we WANT the error logs
@@ -903,7 +916,7 @@ def handle_fix_ci(args):
     if not repo_name:
         raise CLIError("Could not determine repository name. Ensure the script is run within a git repository or GH_REPO is set.", code=400)
 
-    g = get_github_client()
+    g = require_github_client()
     repo = g.get_repo(repo_name)
 
     # 2. Resolve PR and Branch
@@ -993,7 +1006,7 @@ def handle_track_review(args):
     if args.json: print(json.dumps({"status": "success", "file": filepath}, indent=2))
 
 def handle_manage_reviews(args):
-    g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login
+    g = require_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login
 
     prs_data = []
     for pr in repo.get_pulls(state='open', sort='updated', direction='desc'):
@@ -1088,7 +1101,7 @@ def main():
             p.add_argument("--api-key", help="Jules API Key (falls back to JULES_API_KEY env var)")
             add_execution_args(p)
         elif cmd == "repair":
-            p.add_argument("--logs", help="Path to CI logs file")
+            p.add_argument("--logs", help="Path to CI logs file or inline log content")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
         elif cmd == "track-review":

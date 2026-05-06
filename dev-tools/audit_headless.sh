@@ -8,11 +8,15 @@ set -euo pipefail
 trap 'echo "❌ Error occurred on line $LINENO. Exiting." >&2' ERR
 
 # 1. Sync Git State
-if [[ "$1" == "--sync" ]]; then
+if [[ "${1:-}" == "--sync" ]]; then
   echo "🔄 Syncing git state with origin/main..."
-  git fetch origin main
-  git checkout main
-  git reset --hard origin/main
+  if ! git fetch origin main; then
+    echo "⚠️  Unable to fetch origin/main. Continuing without sync."
+  elif ! git checkout main; then
+    echo "⚠️  Unable to checkout main. Continuing without sync."
+  elif ! git reset --hard origin/main; then
+    echo "⚠️  Unable to reset to origin/main. Continuing without sync."
+  fi
 else
   echo "⏩ Skipping git sync (use --sync to enable)..."
 fi
