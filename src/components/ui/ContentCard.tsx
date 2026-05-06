@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { useImage } from '@/hooks/useImage';
 
 interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   slug: string;
@@ -23,10 +24,12 @@ export function ContentCard({
   const {
     // @ts-expect-error - ignoring unused data props
     type: _type, date: _date, author: _author, authorAvatar: _authorAvatar,
-    content: _content, image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    content: _content, image, tags: _tags, affiliateIds: _affiliateIds,
     readingTime: _readingTime,
     ...cleanMotionProps
   } = motionProps as Record<string, unknown>;
+
+  const { displaySrc, onError } = useImage(image as string);
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();
@@ -49,6 +52,17 @@ export function ContentCard({
       className="group bg-surface hover:border-accent/40 transition-all duration-300"
       {...cleanMotionProps}
     >
+      {image && (
+        <Box aspect="video" overflow="hidden" radius="md" marginBottom={4} className="bg-surface-alt">
+          <img
+            src={displaySrc}
+            alt={title}
+            onError={onError}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Box>
+      )}
+
       <Text
         variant="mono"
         size="tiny"

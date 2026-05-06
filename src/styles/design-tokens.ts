@@ -114,6 +114,7 @@ export const typography = {
 };
 
 export const typeSizes = {
+  nano: "text-nano",
   micro: "text-micro",
   tiny: "text-tiny",
   xs: "text-xs",

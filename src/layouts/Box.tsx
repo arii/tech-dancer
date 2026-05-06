@@ -61,15 +61,14 @@ export interface BaseProps {
   left?: ResponsiveProp<keyof typeof spacing | number | string>
 }
 
-export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
-  as?: ElementType
-  [key: string]: unknown
-}
+export type BoxProps<T extends ElementType = "div"> = BaseProps & {
+  as?: T
+} & Omit<React.ComponentPropsWithoutRef<T>, keyof BaseProps | "as">
 
-export const Box = forwardRef<HTMLDivElement, BoxProps>(
-  ({ 
+export const Box = forwardRef(
+  <T extends ElementType = "div">({
     className, 
-    as: Component = "div", 
+    as: Component = "div" as ElementType,
     padding, 
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
@@ -85,7 +84,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
     onUpdate, custom,
     ...props 
-  }, ref) => {
+  }: BoxProps<T>, ref: React.ForwardedRef<any>) => {
     const isMotion = typeof Component !== "string"
     
     const MOTION_PROPS = [

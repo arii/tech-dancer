@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { useImage } from '@/hooks/useImage';
 import { readingTime } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
@@ -34,6 +35,7 @@ export function DetailLayout({
   relatedContent
 }: DetailLayoutProps) {
   const rt = readingTime(content);
+  const { displaySrc, onError } = useImage(image);
 
   return (
     <Box as="article" padding="panel">
@@ -80,9 +82,10 @@ export function DetailLayout({
               className="bg-surface-alt"
             >
               <img
-                src={image}
+                src={displaySrc}
                 alt={title}
                 loading="lazy"
+                onError={onError}
                 className="w-full h-full object-cover transition-transform duration-700"
               />
             </Box>

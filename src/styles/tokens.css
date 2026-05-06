@@ -16,6 +16,29 @@
   --raw-color-error: #ef4444;
   --raw-color-error-bg: #1a0a0a;
 
+  /* Brand Blue */
+  --raw-brand-blue-bg: #f0f7ff;
+  --raw-brand-blue-border: #dbeafe;
+  --raw-brand-blue-text: #1e40af;
+  --raw-brand-blue-accent: #3b82f6;
+  --raw-brand-blue-light: #eff6ff;
+
+  /* Brand Green */
+  --raw-brand-green-bg: #f0fdf4;
+  --raw-brand-green-border: #dcfce7;
+  --raw-brand-green-text: #166534;
+  --raw-brand-green-status: #22c55e;
+  --raw-brand-green-icon: #4ade80;
+
+  /* Brand Neutral */
+  --raw-brand-neutral-bg: #f9fafb;
+  --raw-brand-neutral-border: #f3f4f6;
+  --raw-brand-neutral-text: #4b5563;
+
+  /* Brand Amber */
+  --raw-brand-amber-bg: #fffbeb;
+  --raw-brand-amber-text: #92400e;
+
   /* Typography */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
   --raw-font-display: "Bricolage Grotesque", "Albert Sans", sans-serif;
@@ -32,6 +55,8 @@
   --raw-radius-full: 9999px;
 
   /* Spacing */
+  --raw-gap-text: 0.5rem;
+  --raw-gap-group: 1.5rem;
   --raw-spacing-container-sm: 1.5rem;
   --raw-spacing-container-md: 3rem;
   --raw-spacing-card: 2rem;
@@ -76,6 +101,11 @@
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
+
+  /* Typography Sizes */
+  --raw-text-nano: 8px;
+  --raw-text-micro: 9px;
+  --raw-text-tiny: 10px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {

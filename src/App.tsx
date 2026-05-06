@@ -17,14 +17,12 @@ import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
-import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
-
-const BANNER_DELAY_MS = 30000; // 30s delay
+import { useEmailStore } from './features/email-capture/emailStore';
 
 export function RootLayout() {
   const location = useLocation();
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
-  const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
+  const initializeEmailStore = useEmailStore((state) => state.initialize);
 
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
@@ -66,15 +64,8 @@ export function RootLayout() {
   }, [location]);
 
   useEffect(() => {
-    const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';
-    if (isDismissed) return;
-
-    const timer = setTimeout(() => {
-      setShowEmailBar(true);
-    }, BANNER_DELAY_MS);
-
-    return () => clearTimeout(timer);
-  }, [setShowEmailBar]);
+    initializeEmailStore();
+  }, [initializeEmailStore]);
 
   const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
 

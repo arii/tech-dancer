@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { useImage } from '@/hooks/useImage';
 
 interface GearCardProps {
   slug: string;
@@ -26,12 +27,14 @@ export function GearCard({
   const {
     // @ts-expect-error - ignoring unused data props
     type: _type, date: _date, author: _author, content: _content,
-    image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    image, tags: _tags, affiliateIds: _affiliateIds,
     priceCategory: _priceCategory, updatedDate: _updatedDate,
     durability: _durability, value: _value, specs: _specs,
     readingTime: _readingTime,
     ...cleanProps
   } = rest as Record<string, unknown>;
+
+  const { displaySrc, onError } = useImage(image as string);
 
   return (
     <Stack
@@ -46,6 +49,17 @@ export function GearCard({
       border
       className="group bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30"
     >
+      {image && (
+        <Box aspect="square" overflow="hidden" radius="md" marginBottom={4} className="bg-surface-alt">
+          <img
+            src={displaySrc}
+            alt={title}
+            onError={onError}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Box>
+      )}
+
       <Box display="flex" align="center" justify="between">
         <Box
           paddingX={2}

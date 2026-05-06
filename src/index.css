@@ -19,6 +19,22 @@
   --color-error: var(--raw-color-error);
   --color-error-surface: var(--raw-color-error-bg);
 
+  --color-brand-blue-bg: var(--raw-brand-blue-bg);
+  --color-brand-blue-border: var(--raw-brand-blue-border);
+  --color-brand-blue-text: var(--raw-brand-blue-text);
+  --color-brand-blue-accent: var(--raw-brand-blue-accent);
+  --color-brand-blue-light: var(--raw-brand-blue-light);
+  --color-brand-green-bg: var(--raw-brand-green-bg);
+  --color-brand-green-border: var(--raw-brand-green-border);
+  --color-brand-green-text: var(--raw-brand-green-text);
+  --color-brand-green-status: var(--raw-brand-green-status);
+  --color-brand-green-icon: var(--raw-brand-green-icon);
+  --color-brand-neutral-bg: var(--raw-brand-neutral-bg);
+  --color-brand-neutral-border: var(--raw-brand-neutral-border);
+  --color-brand-neutral-text: var(--raw-brand-neutral-text);
+  --color-brand-amber-bg: var(--raw-brand-amber-bg);
+  --color-brand-amber-text: var(--raw-brand-amber-text);
+
   /* Fonts */
   --font-sans: var(--raw-font-sans);
   --font-display: var(--raw-font-display);
@@ -35,6 +51,8 @@
   --radius-full: var(--raw-radius-full);
 
   /* Spacing */
+  --spacing-text: var(--raw-gap-text);
+  --spacing-group: var(--raw-gap-group);
   --spacing-container-sm: var(--raw-spacing-container-sm);
   --spacing-container-md: var(--raw-spacing-container-md);
   --spacing-card: var(--raw-spacing-card);
@@ -76,8 +94,9 @@
   --spacing-12: 3rem;
 
   /* Font Sizes */
-  --text-micro: 9px;
-  --text-tiny: 10px;
+  --text-nano: var(--raw-text-nano);
+  --text-micro: var(--raw-text-micro);
+  --text-tiny: var(--raw-text-tiny);
 }
 
 @layer utilities {

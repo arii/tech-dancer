@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Box } from '@/layouts/Primitives';
 import { routes } from './App.tsx';
 import './index.css';
 
@@ -82,7 +83,17 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider 
           router={router} 
-          fallbackElement={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>} 
+          fallbackElement={
+            <Box height="screen" surface="bg" display="flex" align="center" justify="center">
+              <Box
+                width={8}
+                height={8}
+                border
+                radius="full"
+                className="border-4 border-accent border-t-transparent animate-spin"
+              />
+            </Box>
+          }
         />
       </QueryClientProvider>
     </HelmetProvider>
