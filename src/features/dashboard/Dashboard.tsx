@@ -7,42 +7,50 @@ import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
-import { ContentCard } from '@/components/ui/ContentCard';
 import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents, handleNavigate } = useHome();
+  const { recentPosts, upcomingEvents } = useHome();
 
   return (
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick.blog: Exploring the intersection of dance, physics, and engineering through interactive studies and resources. The West Coast Swing Lifestyle Blog by Tech Dancer."
+        description="BoomTick.blog: Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={16}>
         <HeroSection />
 
         <Stack gap={16} paddingX={{ base: 4, md: 6, lg: 12 }}>
-          <Stack gap={8}>
-            <SectionHeader label="ANALYZE" title="Recent Insights">
+          <Stack gap={6}>
+            <Box width="full" display="flex" justify="between" align="end">
+              <Stack gap={1}>
+                <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest" uppercase>
+                  Latest Updates
+                </Text>
+                <Text as="h2" size="2xl" weight="font-black" color="white">
+                  Recent Posts
+                </Text>
+              </Stack>
               <Box
                 as={NavLink}
                 to="/blog"
-                display={{ base: "none", md: "flex" }}
+                display="flex"
                 align="center"
-                gap={3}
-                className="text-text-dim hover:text-accent transition-colors group/link"
+                gap={2}
+                className="text-xs font-bold uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
               >
-                <Text variant="mono" size="xs" weight="font-bold">View full repository</Text>
-                <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                View all posts
+                <ArrowRight className="w-4 h-4" />
               </Box>
-            </SectionHeader>
+            </Box>
 
-            <Grid
-              cols={{ base: 1, md: 2 }}
-              gap={8}
+            <Stack
+              direction="col"
+              gap={0}
+              className="divide-y divide-line"
               as={motion.div}
               variants={motionTokens.staggerContainer}
               initial="initial"
@@ -50,36 +58,32 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
             >
               {recentPosts.map((post) => (
-                <ContentCard
-                  key={post.slug}
-                  {...post}
-                  basePath="/blog"
-                  aspect="video"
-                  variants={motionTokens.staggerItem}
-                  variant="minimal"
-                  whileHover={{ y: -2 }}
-                />
+                <Box key={post.slug} paddingY={4} as={motion.div} variants={motionTokens.staggerItem}>
+                  <Box
+                    as={NavLink}
+                    to={`/blog/${post.slug}`}
+                    className="group flex flex-col gap-3 rounded-lg px-3 py-5 transition-colors hover:bg-surface-alt/50 sm:-mx-2 sm:flex-row sm:items-start sm:gap-4 sm:px-5 sm:py-6"
+                  >
+                    <Box display="flex" shrink={0} className="flex-wrap items-center gap-2 pt-0.5 sm:w-44 sm:gap-3">
+                      <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
+                        {post.category}
+                      </Box>
+                      <Text variant="mono" tracking="widest" uppercase size="xs" className="whitespace-nowrap text-text-dim/70">
+                        {post.date}
+                      </Text>
+                    </Box>
+                    <Box>
+                      <Text as="h3" color="main" size="base" weight="font-bold" className="mb-1 transition-colors group-hover:text-accent leading-snug">
+                        {post.title}
+                      </Text>
+                      <Text as="span" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
+                        {post.excerpt}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
               ))}
-            </Grid>
-
-            <Box display={{ base: "flex", md: "none" }} justify="center" marginTop={4}>
-              <Box
-                as={NavLink}
-                to="/blog"
-                display="flex"
-                align="center"
-                justify="center"
-                gap={3}
-                paddingX={8}
-                paddingY={4}
-                radius="full"
-                border
-                className="border-accent text-accent hover:bg-accent/5 transition-all w-full max-w-xs"
-              >
-                <Text variant="mono" size="sm" weight="font-bold">View full repository</Text>
-                <ArrowRight className="w-4 h-4" />
-              </Box>
-            </Box>
+            </Stack>
           </Stack>
 
           <Stack gap={8}>
@@ -90,8 +94,7 @@ export default function Home() {
                   key={event.name}
                   as={motion.div}
                   variants={motionTokens.staggerItem}
-                  border
-                  className="border-line h-full"
+                  className="h-full"
                 >
                   <EventCard {...event} />
                 </Box>

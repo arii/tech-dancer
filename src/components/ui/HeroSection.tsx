@@ -151,7 +151,8 @@ export function HeroSection() {
             weight="font-semibold"
             className="text-base md:text-lg lg:text-xl leading-relaxed text-white/70 text-left"
           >
-            Advanced systems, gear analytics, and logistical mastery for the competitive West Coast Swing circuit.
+            Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
+            plus technical deep dives into building the platform with DevAI.
           </Text>
         </Box>
 
