@@ -18,33 +18,33 @@ MAX_FILE_SIZE_KB = 50
 def is_binary(file_path):
     """Simple check to detect binary files."""
     try:
-        with open(file_path, 'tr') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             f.read(1024)
             return False
-    except UnicodeDecodeError:
+    except (UnicodeDecodeError, PermissionError):
         return True
 
 def review_file(file_path, silent=False):
     if not os.path.exists(file_path):
-        print(f"Error: File '{file_path}' not found.")
+        print(f"Error: File '{file_path}' not found.", file=sys.stderr)
         sys.exit(1)
 
     # 1. File Size Check
     file_size_kb = os.path.getsize(file_path) / 1024
     if file_size_kb > MAX_FILE_SIZE_KB:
-        print(f"Error: File '{file_path}' is too large ({file_size_kb:.1f}KB). Maximum size is {MAX_FILE_SIZE_KB}KB.")
+        print(f"Error: File '{file_path}' is too large ({file_size_kb:.1f}KB). Maximum size is {MAX_FILE_SIZE_KB}KB.", file=sys.stderr)
         sys.exit(1)
 
     # 2. Binary Check
     if is_binary(file_path):
-        print(f"Error: File '{file_path}' appears to be binary and cannot be reviewed.")
+        print(f"Error: File '{file_path}' appears to be binary or cannot be read as UTF-8.", file=sys.stderr)
         sys.exit(1)
 
     try:
-        with open(file_path, "r") as f:
+        with open(file_path, "r", encoding='utf-8') as f:
             content = f.read()
     except Exception as e:
-        print(f"Error reading file {file_path}: {e}")
+        print(f"Error reading file {file_path}: {e}", file=sys.stderr)
         sys.exit(1)
 
     prompt = f"Please review the following code:\n\n```\n{content}\n```"
@@ -70,17 +70,19 @@ def review_file(file_path, silent=False):
             review = response_data.get("response", "No response from model.")
             print(review)
     except urllib.error.HTTPError as e:
-        print(f"HTTP Error {e.code}: {e.reason}")
+        print(f"HTTP Error {e.code}: {e.reason}", file=sys.stderr)
         sys.exit(1)
     except urllib.error.URLError as e:
-        print(f"Error connecting to Ollama at {OLLAMA_URL}: {e.reason}")
-        print("Ensure Ollama is running and the model is created.")
+        print(f"Error connecting to Ollama at {OLLAMA_URL}: {e.reason}", file=sys.stderr)
+        print("Ensure Ollama is running and the model is created.", file=sys.stderr)
         sys.exit(1)
-    except TimeoutError:
-        print(f"Request timed out after {DEFAULT_TIMEOUT} seconds.")
-        sys.exit(1)
+    except (TimeoutError, urllib.error.URLError) as e:
+        if isinstance(e, TimeoutError) or "timed out" in str(e):
+            print(f"Request timed out after {DEFAULT_TIMEOUT} seconds.", file=sys.stderr)
+            sys.exit(1)
+        raise e
     except Exception as e:
-        print(f"An unexpected error occurred during review: {e}")
+        print(f"An unexpected error occurred during review: {e}", file=sys.stderr)
         sys.exit(1)
 
 def main():

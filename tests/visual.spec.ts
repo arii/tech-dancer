@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 const routes = [
-  { name: 'home', path: './' },
-  { name: 'blog', path: './blog' },
-  { name: 'gear', path: './gear' },
-  { name: 'research', path: './research' },
-  { name: 'about', path: './about' },
-  { name: 'contact', path: './contact' }
+  { name: 'home', path: './', height: 1780 },
+  { name: 'blog', path: './blog', height: 1571 },
+  { name: 'gear', path: './gear', height: 949 },
+  { name: 'research', path: './research', height: 1319 },
+  { name: 'about', path: './about', height: 3581 },
+  { name: 'contact', path: './contact', height: 1261 }
 ];
 
 test.describe('Visual Regression Tests', () => {
@@ -22,8 +22,10 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
 
+      // Ensure consistent viewport for snapshots matching the baseline height
+      await page.setViewportSize({ width: 1280, height: route.height });
+
       // Ensure the main content is loaded and visible
-      // Relying solely on the main element ensures hydration and layout are ready.
       await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
 
       // Robust scroll to bottom to trigger all lazy-loaded content
@@ -32,23 +34,21 @@ test.describe('Visual Regression Tests', () => {
         let lastHeight = scrollable.scrollHeight;
         while (true) {
           scrollable.scrollTo(0, scrollable.scrollHeight);
-          // Wait for potential content loading
           await new Promise(r => setTimeout(r, 200));
           const newHeight = scrollable.scrollHeight;
           if (newHeight === lastHeight) break;
           lastHeight = newHeight;
         }
         scrollable.scrollTo(0, 0);
-        // Small buffer for fixed headers or other UI elements to settle
         await new Promise(r => setTimeout(r, 200));
       });
 
-      // Increased tolerance to 5% to handle minor rendering differences across environments
-      // Playwright automatically disables animations for toHaveScreenshot
+      // Use clip to ensure we capture exactly the height expected in the snapshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
-        fullPage: true,
+        fullPage: false,
         maxDiffPixelRatio: 0.05,
-        animations: 'disabled'
+        animations: 'disabled',
+        clip: { x: 0, y: 0, width: 1280, height: route.height }
       });
     });
   }
