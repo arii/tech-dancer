@@ -108,6 +108,14 @@ The `dev-tools/td_cli.py` tool is the unified entry point for repository automat
   python3 dev-tools/td_cli.py repair --worktree
   ```
 - **Pre-Submit Check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing.
+- **Merge Conflict Resolution**: Use MergeLlama to resolve conflicts automatically.
+  ```bash
+  # Run locally with a running Ollama server
+  python3 dev-tools/td_cli.py resolve-conflicts
+
+  # Verify resolution logic locally (mock mode)
+  MERGELLAMA_MOCK=true python3 dev-tools/td_cli.py resolve-conflicts
+  ```
 - **No Monolithic PRs**: Keep PRs focused. A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
 - **Manual Confirmation**: Every merge command MUST be preceded by a specific `notify_user` request for approval.
 - **Code Review Standards**: Evaluate for dead abstractions, unnecessary indirection, responsibility creep, and token compliance.

@@ -30,9 +30,10 @@ jobs:
           version: 8
 
       - name: Setup Ollama
-        uses: akshgpt7/ollama-action@v2.0.2
-        with:
-          model: 'qwen2.5-coder:7b'
+        uses: ai-action/setup-ollama@v2
+
+      - name: Pull Model
+        run: ollama pull qwen2.5-coder:7b
 
       - name: Find and Resolve Conflicts
         run: |

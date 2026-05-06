@@ -42,6 +42,14 @@ def log_diag(msg: str):
     now = datetime.now().strftime("%H:%M:%S")
     print(f"[{now}] ℹ️  {msg}", file=sys.stderr)
 
+def log_output(args, msg: str, json_data: dict = None):
+    """Unified logger that respects --json flag."""
+    if args.json:
+        if json_data:
+            print(json.dumps(json_data, indent=2))
+    else:
+        print(msg)
+
 def add_execution_args(parser: argparse.ArgumentParser):
     """Registers consistent dry-run and execute flags to a subparser."""
     parser.add_argument("--dry-run", action="store_true", default=True,
@@ -523,34 +531,32 @@ def handle_pre_submit(args):
 
 def handle_resolve_conflicts(args):
     """Scan for conflict markers and use MergeLlama to resolve them."""
-    # Exclude common noise directories
-    # We use a pattern to avoid grep finding its own pattern in scripts
-    pattern = "<<<" + "<<<" + "<"
-    grep_cmd = ["grep", "-lR", "--exclude-dir=.git", "--exclude-dir=node_modules", pattern, "."]
+    # Exclude .git, node_modules, and dev-tools/ (to avoid matching scripts)
+    grep_cmd = [
+        "grep", "-lR",
+        "--exclude-dir=.git",
+        "--exclude-dir=node_modules",
+        "--exclude-dir=dev-tools",
+        "<<<<<<<",
+        "."
+    ]
 
     res = run_command(grep_cmd, check=False)
     conflict_files = [f for f in res.stdout.strip().splitlines() if f]
 
     if not conflict_files:
-        if not args.json:
-            print("✅ No conflict markers found.")
-        if args.json:
-            print(json.dumps({"status": "success", "message": "No conflicts found"}, indent=2))
+        log_output(args, "✅ No conflict markers found.", {"status": "success", "message": "No conflicts found"})
         return
 
     if not args.json:
         print(f"🔍 Found {len(conflict_files)} file(s) with conflicts. Starting MergeLlama...")
 
     mergellama_script = os.path.join(os.path.dirname(__file__), "mergellama.py")
-
     cmd = [sys.executable, mergellama_script] + conflict_files
 
     try:
         run_command(cmd)
-        if not args.json:
-            print("✅ All conflicts resolved successfully.")
-        if args.json:
-            print(json.dumps({"status": "success", "files": conflict_files}, indent=2))
+        log_output(args, "✅ All conflicts resolved successfully.", {"status": "success", "files": conflict_files})
     except CLIError:
         log_error("MergeLlama failed to resolve some conflicts.")
         sys.exit(1)
