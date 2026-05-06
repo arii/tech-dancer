@@ -18,6 +18,7 @@
     "lint": "run-p lint:*",
     "lint:ox": "oxlint --deny-warnings",
     "lint:eslint": "eslint . --max-warnings 0",
+    "lint:audit": "node scripts/detect-antipatterns.mjs",
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
