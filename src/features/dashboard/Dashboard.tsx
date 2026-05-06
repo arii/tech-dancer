@@ -87,7 +87,7 @@ export default function Home() {
                       <Text as="h3" color="main" size="base" weight="font-bold" marginBottom={1} className="transition-colors group-hover:text-accent leading-snug">
                         {post.title}
                       </Text>
-                      <Text as="p" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
+                      <Text as="div" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
                         {post.excerpt}
                       </Text>
                     </Box>
