@@ -9,7 +9,7 @@ test.describe('Global Search Modal - Mobile', () => {
 
   test('should open search modal via mobile menu', async ({ page }) => {
     // Open mobile menu
-    await page.getByLabel('Open menu').click();
+    await page.getByLabel('Toggle Navigation').click();
 
     // Check if the menu is actually visible
     await expect(page.locator('nav[aria-label="Mobile Navigation"]').locator('..').locator('div').filter({ hasText: 'Search' }).first()).toBeVisible();
