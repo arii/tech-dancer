@@ -61,28 +61,38 @@ export default function ArielProfile() {
       <Stack gap={12} marginTop={12}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            <Stack gap={12} className="lg:col-span-8 order-2 lg:order-1">
+            <Stack gap={12} className="lg:col-span-8">
+              {/* Mobile-only portrait image */}
+              <Box display={{ base: 'block', lg: 'none' }} border radius="lg" overflow="hidden" aspect="4/3" surface="default" className="shadow-xl border-line/10">
+                <img
+                  src={roboticistPhoto}
+                  alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                  className="w-full h-full object-cover"
+                />
+              </Box>
+
               {bio.sections.map(renderSection)}
 
-              <div className="mt-12 border-t border-line/10 pt-12 flex flex-col gap-8">
-                <div id="privacy" className="flex flex-col gap-4">
+              <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
+                <Stack id="privacy" gap={4}>
                   <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
                   </Text>
-                </div>
-                <div id="terms" className="flex flex-col gap-4">
+                </Stack>
+                <Stack id="terms" gap={4}>
                   <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim">
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
-                </div>
-              </div>
+                </Stack>
+              </Stack>
             </Stack>
 
-            <Box className="lg:col-span-4 relative order-1 lg:order-2">
+            <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
-                <Box border radius="lg" overflow="hidden" aspect="1/1" surface="default" className="shadow-2xl border-line/10">
+                {/* Desktop-only portrait image */}
+                <Box display={{ base: 'none', lg: 'block' }} border radius="lg" overflow="hidden" aspect="1/1" surface="default" className="shadow-2xl border-line/10">
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
