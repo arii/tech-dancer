@@ -541,7 +541,7 @@ def handle_resolve_conflicts(args):
         "."
     ]
 
-    res = run_command(grep_cmd, check=False)
+    res = run_command(grep_cmd, check=False, log_on_error=False)
     conflict_files = [f for f in res.stdout.strip().splitlines() if f]
 
     if not conflict_files:
