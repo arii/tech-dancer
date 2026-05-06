@@ -24,7 +24,7 @@ export function NewsletterBanner() {
       radius="none"
       marginX="auto"
       position="fixed"
-      bottom={0}
+      bottom={{ base: 20, md: 0 }}
       left={4}
       right={4}
       zIndex="toast"

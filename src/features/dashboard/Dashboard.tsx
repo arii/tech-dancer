@@ -40,7 +40,7 @@ export default function Home() {
                 display="flex"
                 align="center"
                 gap={2}
-                className="text-xs font-bold uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
+                className="text-xs font-bold uppercase tracking-widest text-text-body hover:text-accent transition-colors"
               >
                 View all posts
                 <ArrowRight className="w-4 h-4" />
@@ -50,7 +50,6 @@ export default function Home() {
             <Stack
               direction="col"
               gap={0}
-              className="divide-y divide-line"
               as={motion.div}
               variants={motionTokens.staggerContainer}
               initial="initial"
@@ -58,7 +57,14 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
             >
               {recentPosts.map((post) => (
-                <Box key={post.slug} paddingY={4} as={motion.div} variants={motionTokens.staggerItem}>
+                <Box
+                  key={post.slug}
+                  border="b"
+                  width="full"
+                  marginX={{ sm: -2 }}
+                  as={motion.div}
+                  variants={motionTokens.staggerItem}
+                >
                   <Stack
                     as={NavLink}
                     to={`/blog/${post.slug}`}
@@ -66,11 +72,10 @@ export default function Home() {
                     gap={{ base: 3, sm: 4 }}
                     paddingX={{ base: 3, sm: 5 }}
                     paddingY={{ base: 5, sm: 6 }}
-                    marginX={{ sm: -2 }}
                     align={{ sm: "start" }}
                     className="group rounded-lg transition-colors hover:bg-surface"
                   >
-                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-44">
+                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-56">
                       <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
                         {post.category}
                       </Box>
@@ -82,7 +87,7 @@ export default function Home() {
                       <Text as="h3" color="main" size="base" weight="font-bold" marginBottom={1} className="transition-colors group-hover:text-accent leading-snug">
                         {post.title}
                       </Text>
-                      <Text as="span" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
+                      <Text as="p" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
                         {post.excerpt}
                       </Text>
                     </Box>

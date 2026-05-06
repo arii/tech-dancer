@@ -47,7 +47,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        className="px-6 md:px-12 lg:px-24 pointer-events-none"
+        className="px-6 md:px-12 lg:px-24"
         paddingY={{ base: 2, lg: 2 }}
         maxWidth="screen-xl"
         marginX="auto"
@@ -56,7 +56,7 @@ export function HeroSection() {
 
         {/* Logo mark — B + \ (backslash) */}
         <Box
-          className="opacity-0 translate-y-[-20px] pointer-events-none"
+          className="opacity-0 translate-y-[-20px]"
           style={{
             height: 'clamp(60px, 10vw, 120px)',
             animation: 'fadeUp 0.8s ease forwards 0.2s'
@@ -69,7 +69,7 @@ export function HeroSection() {
         <Box
           variant="display"
           weight="font-bold"
-          className="text-white -mt-1 opacity-0 translate-y-2.5 pointer-events-none"
+          className="text-white -mt-1 opacity-0 translate-y-2.5"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
             letterSpacing: '-0.5px',
@@ -85,7 +85,7 @@ export function HeroSection() {
           marginTop={{ base: 4, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 translate-y-2.5 pointer-events-none"
+          className="opacity-0 translate-y-2.5"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
@@ -94,7 +94,7 @@ export function HeroSection() {
             weight="font-black"
             color="white"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[0.9] uppercase italic text-left"
           >
             Built for dancers.
           </Text>
@@ -103,7 +103,7 @@ export function HeroSection() {
             variant="headline"
             weight="font-black"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[0.9] uppercase italic text-left"
           >
             <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
           </Text>
@@ -113,7 +113,7 @@ export function HeroSection() {
             weight="font-black"
             color="white"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[1.1] md:leading-[0.9] uppercase italic text-left"
           >
             Dance better.
           </Text>
@@ -125,7 +125,7 @@ export function HeroSection() {
           height={1.5}
           marginTop={6}
           radius="full"
-          className="opacity-0 pointer-events-none"
+          className="opacity-0"
           style={{
             background: 'linear-gradient(to right, var(--hero-accent), #8B2FFF)',
             animation: 'fadeIn 1s ease forwards 1.2s'
@@ -138,8 +138,8 @@ export function HeroSection() {
           align="stretch"
           gap={5}
           marginTop={{ base: 4, lg: 4 }}
-          maxWidth="2xl"
-          className="opacity-0 pointer-events-none"
+          maxWidth="4xl"
+          className="opacity-0"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
           }}
@@ -169,7 +169,7 @@ export function HeroSection() {
           marginBottom={4}
           height={12}
           overflow="hidden"
-          className="opacity-0 pointer-events-none"
+          className="opacity-0"
           style={{ animation: 'fadeIn 1s ease forwards 2.0s' }}
           aria-hidden="true"
         >
