@@ -10,8 +10,8 @@ export function Footer() {
     <Box as="footer" paddingY={12} paddingX={4} surface="bg" border="t" opacity={80} marginTop="auto">
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={2}>
-          <BrandIcon className="w-4 h-4 opacity-50" />
-          <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest">
+          <BrandIcon opacity={50} className="w-4 h-4" />
+          <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">
             © 2026 BOOMTICK.BLOG
           </Text>
         </Stack>
@@ -30,7 +30,7 @@ export function Footer() {
                 size="xs"
                 uppercase
                 weight="font-semibold"
-                className="tracking-widest"
+                tracking="widest"
               >
                 {link.label}
               </Text>

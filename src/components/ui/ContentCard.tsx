@@ -28,12 +28,12 @@ export function ContentCard({
     ...cleanMotionProps
   } = motionProps as Record<string, unknown>;
 
-  const getTagColorClass = (cat: string) => {
+  const getTagColor = (cat: string): "purple" | "accent" | "magenta" => {
     const c = cat.toLowerCase();
-    if (c.includes('travel')) return 'text-accent-purple';
-    if (c.includes('tech')) return 'text-accent';
-    if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
-    return 'text-accent';
+    if (c.includes('travel')) return 'purple';
+    if (c.includes('tech')) return 'accent';
+    if (c.includes('data') || c.includes('research')) return 'magenta';
+    return 'accent';
   };
 
   return (
@@ -56,7 +56,7 @@ export function ContentCard({
         weight="font-black"
         uppercase
         tracking="widest"
-        className={getTagColorClass(category)}
+        color={getTagColor(category)}
       >
         {category}
       </Text>

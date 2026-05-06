@@ -82,7 +82,7 @@ export function GearCard({
 
       <Box display="flex" align="center" justify="between" marginTop="auto">
         {rating && (
-          <Text variant="mono" size="xs" weight="font-bold" className="text-accent-purple">
+          <Text variant="mono" size="xs" weight="font-bold" color="purple">
             {rating}
           </Text>
         )}
