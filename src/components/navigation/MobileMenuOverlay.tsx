@@ -83,10 +83,11 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             gap={4}
             paddingY={6}
             border="b"
+            minHeight={14}
             width="full"
             position="relative"
             radius="md"
-            className="transition-all z-10 text-text-dim hover:text-accent hover:bg-bg/50 border-line/50 min-h-[44px]"
+            className="transition-all z-10 text-text-dim hover:text-accent hover:bg-bg/50 border-line/50"
           >
             <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
             <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
