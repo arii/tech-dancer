@@ -811,10 +811,17 @@ def handle_manage_reviews(args):
     if args.json: print(json.dumps({"status": "success", "prs": prs_data}, indent=2))
 
 def main():
-    parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
-    parser.add_argument("--json", action="store_true", help="Output results in JSON format")
-    parser.add_argument("--yes", "--non-interactive", action="store_true", help="Bypass interactive prompts and confirmations")
-    subparsers = parser.add_subparsers(dest="command", help="Command to run")
+    # Base parser for shared arguments across all subcommands
+    base_parser = argparse.ArgumentParser(add_help=False)
+    base_parser.add_argument("--json", action="store_true", help="Output results in JSON format")
+    base_parser.add_argument("--yes", "--non-interactive", action="store_true", help="Bypass interactive prompts and confirmations")
+
+    main_parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
+    # Also add them to the main parser for top-level usage
+    main_parser.add_argument("--json", action="store_true", help="Output results in JSON format")
+    main_parser.add_argument("--yes", "--non-interactive", action="store_true", help="Bypass interactive prompts and confirmations")
+
+    subparsers = main_parser.add_subparsers(dest="command", help="Command to run")
 
     for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
@@ -823,7 +830,7 @@ def main():
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
                       ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
                       ("track-review", handle_track_review)]: # fetch-review is alias for audit-pr --fetch
-        p = subparsers.add_parser(cmd)
+        p = subparsers.add_parser(cmd, parents=[base_parser])
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
             p.add_argument("--all-open", action="store_true")
@@ -880,8 +887,8 @@ def main():
             p.add_argument("--file", help="Path to tracking file")
         p.set_defaults(func=func)
 
-    args = parser.parse_args()
-    if not args.command: parser.print_help(); sys.exit(1)
+    args = main_parser.parse_args()
+    if not args.command: main_parser.print_help(); sys.exit(1)
 
     try:
         args.func(args)

@@ -5,10 +5,14 @@
 set -e
 
 # 1. Sync Git State
-echo "🔄 Syncing git state with origin/main..."
-git fetch origin main
-git checkout main
-git reset --hard origin/main
+if [[ "$1" == "--sync" ]]; then
+  echo "🔄 Syncing git state with origin/main..."
+  git fetch origin main
+  git checkout main
+  git reset --hard origin/main
+else
+  echo "⏩ Skipping git sync (use --sync to enable)..."
+fi
 
 # 2. Get Open PRs in JSON format
 echo "🔍 Fetching open PRs..."
