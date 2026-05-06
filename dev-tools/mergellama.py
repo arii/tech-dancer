@@ -7,10 +7,40 @@ Part of the Tech-Dancer 'Self-Healing' CI pipeline.
 import os
 import sys
 import re
+import json
+import time
+import urllib.request
+import urllib.error
 from typing import Optional
-from utils import call_ollama, CLIError
+from utils import CLIError
 
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+MAX_RETRIES = 3
+
+def call_ollama(prompt: str, model: str) -> Optional[str]:
+    url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                return res_data.get("response")
+        except Exception as e:
+            if attempt == MAX_RETRIES:
+                log(f"API call failed after {MAX_RETRIES} attempts: {e}")
+                return None
+            sleep_time = 2 ** attempt
+            log(f"API call failed ({e}). Retrying in {sleep_time}s...")
+            time.sleep(sleep_time)
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
 CONFLICT_MARKER = "<<<<<<<"
 

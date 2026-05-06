@@ -666,6 +666,49 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_resolve_conflicts(args):
+    import mergellama
+    # 1. Search for Git conflict markers using grep, excluding dev-tools/
+    res = run_command(["grep", "-lr", "<<<<<<<", ".", "--exclude-dir=dev-tools"], check=False, log_on_error=False)
+
+    files_to_resolve = []
+    if res.returncode == 0 and res.stdout:
+        files_to_resolve = [f.strip() for f in res.stdout.splitlines() if f.strip()]
+    elif res.returncode == 1:
+        # grep exit code 1 means no match found
+        pass
+    else:
+        # Some other grep error
+        if not args.json:
+            print(f"⚠️ grep failed with code {res.returncode}: {res.stderr}")
+
+    if not files_to_resolve:
+        if not args.json:
+            print("✅ No merge conflicts found.")
+        else:
+            print(json.dumps({"status": "success", "resolved_files": []}, indent=2))
+        return
+
+    resolved_files = []
+    failed_files = []
+    for f in files_to_resolve:
+        if mergellama.resolve_file_conflicts(f):
+            resolved_files.append(f)
+        else:
+            failed_files.append(f)
+
+    if failed_files:
+        if args.json:
+            print(json.dumps({"status": "error", "resolved": resolved_files, "failed": failed_files}, indent=2))
+        else:
+            print(f"❌ Failed to resolve conflicts in: {', '.join(failed_files)}")
+        sys.exit(1)
+
+    if args.json:
+        print(json.dumps({"status": "success", "resolved_files": resolved_files}, indent=2))
+    else:
+        print(f"✅ All conflicts resolved successfully in {len(resolved_files)} files.")
+
 def handle_repair_context(args):
     from error_rag import RAGPipeline
     pipeline = RAGPipeline()
@@ -811,7 +854,8 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
+                      ("resolve-conflicts", handle_resolve_conflicts)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -861,6 +905,8 @@ def main():
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
+        elif cmd == "resolve-conflicts":
+            pass # Uses global --json flag if provided
         p.set_defaults(func=func)
 
     args = parser.parse_args()
