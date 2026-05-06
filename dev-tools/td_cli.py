@@ -192,47 +192,150 @@ def handle_detect_conflicts(args):
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
 def handle_conflicts(args):
-    """
-    Squashes commits, attempts auto-resolution of simple conflicts,
-    and updates snapshots.
-    """
-    def run(cmd, exit_on_fail=False):
-        print(f"🏃 Running: {cmd}")
+    """Safely perform conflict-prep mutations with deterministic JSON reporting."""
+
+    def run_step(cmd: str):
         res = run_command(cmd, check=False, shell=True)
-        if res.returncode != 0 and exit_on_fail:
-            sys.exit(res.returncode)
-        return res.returncode, res.stdout.strip()
+        return {
+            "cmd": cmd,
+            "code": res.returncode,
+            "stdout": (res.stdout or "").strip(),
+            "stderr": (res.stderr or "").strip(),
+        }
 
-    base_branch = getattr(args, 'base', 'main') or 'main'
+    def emit(payload: dict):
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(f"Status: {payload.get('status')}")
+            print(payload.get("message", ""))
+            if payload.get("planned_commands"):
+                print("Planned commands:")
+                for c in payload["planned_commands"]:
+                    print(f"  - {c}")
+            if payload.get("conflicted_files"):
+                print("Conflicted files:")
+                for f in payload["conflicted_files"]:
+                    print(f"  - {f}")
 
-    # 1. Squash all commits relative to the base branch
-    print("📦 Squashing current branch commits...")
-    run("git fetch origin")
-    code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
+    base_branch = getattr(args, "base", "main") or "main"
+    planned_commands = [
+        "git fetch origin",
+        f"git merge-base origin/{base_branch} HEAD",
+        "git reset --soft <MERGE_BASE>",
+        'git commit -m "chore: squashed commits prior to conflict resolution"',
+        f"git merge origin/{base_branch}",
+        "pnpm test -u",
+        "git add -A",
+        "git commit --amend --no-edit",
+    ]
 
-    if code == 0 and merge_base:
-        run(f"git reset --soft {merge_base}")
-        run('git commit -m "chore: squashed commits prior to conflict resolution"')
+    preflight = {
+        "dirty": run_step("git status --porcelain"),
+        "branch": run_step("git branch --show-current"),
+    }
 
-    # 2. Merge base to auto-resolve simple conflicts
-    print(f"🔄 Merging origin/{base_branch}...")
-    merge_code, _ = run(f"git merge origin/{base_branch}")
+    is_dirty = bool(preflight["dirty"]["stdout"])
+    branch = preflight["branch"]["stdout"]
+    is_detached = preflight["branch"]["code"] != 0 or not branch
+    protected = {"main", "master", base_branch}
+    on_protected = branch in protected if branch else False
 
-    if merge_code != 0:
-        print("🚧 Complex conflicts remain. Git has auto-resolved the simple ones.")
-        print("Please resolve the remaining file conflicts manually.")
-        print("⚠️ Skipping snapshot updates until conflict markers are cleared.")
+    if args.dry_run:
+        emit({
+            "status": "preview",
+            "message": "Dry-run preview only. No git mutations were executed.",
+            "base_branch": base_branch,
+            "preflight": {
+                "is_dirty": is_dirty,
+                "current_branch": branch or None,
+                "detached_head": is_detached,
+                "on_protected_branch": on_protected,
+            },
+            "planned_commands": planned_commands,
+            "executed_commands": [],
+        })
         return
 
-    # 3. Update snapshots after successful merge
-    print("📸 Updating test snapshots...")
-    run("pnpm test -u")
+    if is_dirty and not getattr(args, "force", False):
+        emit({
+            "status": "aborted",
+            "message": "Working tree is dirty. Commit/stash changes or pass --force.",
+            "base_branch": base_branch,
+            "preflight": preflight,
+            "planned_commands": planned_commands,
+            "executed_commands": [],
+        })
+        return
 
-    # Amend the snapshot updates directly into our squashed commit
-    run("git add -A")
-    run("git commit --amend --no-edit")
+    if is_detached:
+        emit({
+            "status": "aborted",
+            "message": "HEAD is detached. Switch to a branch before running conflicts.",
+            "base_branch": base_branch,
+            "preflight": preflight,
+            "planned_commands": planned_commands,
+            "executed_commands": [],
+        })
+        return
 
-    print("✅ Conflict handling and snapshot updates complete!")
+    if on_protected:
+        emit({
+            "status": "aborted",
+            "message": f"Refusing to run on protected branch '{branch}'.",
+            "base_branch": base_branch,
+            "preflight": preflight,
+            "planned_commands": planned_commands,
+            "executed_commands": [],
+        })
+        return
+
+    executed = []
+
+    for cmd in ["git fetch origin", f"git merge-base origin/{base_branch} HEAD"]:
+        step = run_step(cmd)
+        executed.append(step)
+        if step["code"] != 0:
+            emit({"status": "error", "message": f"Command failed: {cmd}", "base_branch": base_branch, "executed_commands": executed})
+            return
+
+    merge_base = executed[-1]["stdout"]
+
+    for cmd in [
+        f"git reset --soft {merge_base}",
+        'git commit -m "chore: squashed commits prior to conflict resolution"',
+        f"git merge origin/{base_branch}",
+    ]:
+        step = run_step(cmd)
+        executed.append(step)
+        if step["code"] != 0 and cmd.startswith("git merge "):
+            conflicts = run_step("git diff --name-only --diff-filter=U")
+            conflict_files = [f for f in conflicts["stdout"].splitlines() if f.strip()]
+            emit({
+                "status": "merge_conflicts",
+                "message": "Merge reported conflicts. Manual resolution required.",
+                "base_branch": base_branch,
+                "conflicted_files": conflict_files,
+                "executed_commands": executed + [conflicts],
+            })
+            return
+        if step["code"] != 0:
+            emit({"status": "error", "message": f"Command failed: {cmd}", "base_branch": base_branch, "executed_commands": executed})
+            return
+
+    for cmd in ["pnpm test -u", "git add -A", "git commit --amend --no-edit"]:
+        step = run_step(cmd)
+        executed.append(step)
+        if step["code"] != 0:
+            emit({"status": "error", "message": f"Command failed: {cmd}", "base_branch": base_branch, "executed_commands": executed})
+            return
+
+    emit({
+        "status": "success",
+        "message": "Conflict handling and snapshot updates complete.",
+        "base_branch": base_branch,
+        "executed_commands": executed,
+    })
 
 def handle_status_board(args):
     repo = get_github_client().get_repo(get_repo_name())
@@ -933,7 +1036,10 @@ def main():
             p.add_argument("--all-open", action="store_true")
             p.add_argument("--post-comments", action="store_true")
             add_execution_args(p)
-        elif cmd == "conflicts": p.add_argument("--base")
+        elif cmd == "conflicts":
+            p.add_argument("--base")
+            p.add_argument("--force", action="store_true", help="Allow execution with a dirty working tree")
+            add_execution_args(p)
         elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")
