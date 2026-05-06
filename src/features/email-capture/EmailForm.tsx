@@ -9,11 +9,10 @@ export function EmailForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity()) {
+    if (e.currentTarget.checkValidity()) {
       submitForm(email);
     } else {
-      form.reportValidity();
+      e.currentTarget.reportValidity();
     }
   };
 
@@ -24,6 +23,7 @@ export function EmailForm() {
           as="input"
           type="email"
           placeholder="Email Address"
+          aria-label="Email Address"
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           required
@@ -40,8 +40,7 @@ export function EmailForm() {
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}
-          surface="accent"
-          className="hover:bg-accent/90 text-bg border-l border-accent/20"
+          className="bg-accent-navy hover:bg-accent-navy/90 text-bg"
         >
           <AnimatePresence mode="wait">
             <Stack

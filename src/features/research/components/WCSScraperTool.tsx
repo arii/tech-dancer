@@ -132,15 +132,15 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
 
 function WCSScraperStats() {
   return (
-    <Box paddingX={4} paddingY={6}>
+    <Box border surface="muted" padding="card">
       <Stack gap={4}>
-        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">Scraper Intelligence</Text>
-        <Stack gap={4}>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold">Scraper Intelligence</Text>
+        <Stack gap={3}>
+          <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Success Rate</Text>
             <Text variant="mono" size="xs" color="brand" weight="font-bold">99.8%</Text>
           </Box>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+          <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Avg Latency</Text>
             <Text variant="mono" size="xs" color="brand" weight="font-bold">1.2s</Text>
           </Box>
@@ -201,7 +201,7 @@ export function WCSScraperTool() {
           </Box>
 
           <Grid cols={{ base: 1, md: 2 }} gap={4}>
-            <Box surface="default" border paddingX="compact" paddingY={3} display="flex" align="center" gap={2}>
+            <Box surface="default" border padding="compact" display="flex" align="center" gap={2}>
               <Search className="w-4 h-4 text-dim" />
               <input
                 type="text"

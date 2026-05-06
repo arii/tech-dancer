@@ -29,7 +29,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
+          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all">
             <Box display="flex" gap={8} align="start" direction={{ base: "col", sm: "row" }}>
               {Icon && (
                 <Box 
@@ -101,19 +101,19 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
         {images.map((image, index) => (
           <Box
             key={index}
-            as="button"
             aspect="1/1"
             overflow="hidden"
             border
             radius="lg"
-            className="border-line/10 bg-surface/30 group cursor-pointer focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+            className="border-line/10 bg-surface/30 group cursor-pointer"
             onClick={() => setSelectedImage(image.src)}
-            aria-label={`View ${image.alt}`}
           >
             <img
               src={image.src}
               alt={image.alt}
               loading="lazy"
+              width={400}
+              height={300}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           </Box>
@@ -158,9 +158,14 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           rel="noopener noreferrer"
           paddingX={4}
           paddingY={2}
+          minWidth={{ base: 11, md: 0 }}
+          minHeight={{ base: 11, md: 0 }}
+          display="flex"
+          align="center"
+          justify="center"
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
+          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}

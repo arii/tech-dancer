@@ -4,8 +4,6 @@ import { BrandIcon } from '@/components/ui/BrandIcon';
 export function Footer() {
   const legalLinks = [
     { label: 'Contact', href: import.meta.env.BASE_URL + 'contact' },
-    { label: 'Privacy', href: import.meta.env.BASE_URL + 'about#privacy' },
-    { label: 'Terms', href: import.meta.env.BASE_URL + 'about#terms' },
   ];
 
   return (
@@ -25,7 +23,9 @@ export function Footer() {
               href={link.href}
               variant="ghost"
               size="sm"
-              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95"
+              minHeight={{ base: 11, md: 0 }}
+              minWidth={{ base: 11, md: 0 }}
+              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95 flex items-center justify-center"
             >
               <Text
                 variant="mono"
