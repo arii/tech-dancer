@@ -1,0 +1,73 @@
+name: Auto-Resolve Merge Conflicts
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  resolve-conflicts:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Ollama
+        uses: ai-action/setup-ollama@v2
+
+      - name: Start Ollama Server
+        run: |
+          ollama serve > ollama_output.log 2>&1 &
+          # Wait for server to be ready with increased timeout and specific check
+          for i in {1..15}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama server is ready!"
+              # Give it one more second to settle
+              sleep 1
+              exit 0
+            fi
+            echo "Waiting for Ollama server (attempt $i)..."
+            sleep 2
+          done
+          echo "❌ Ollama server failed to start within timeout"
+          cat ollama_output.log
+          exit 1
+
+      - name: Pull Model
+        run: ollama pull qwen2.5-coder:7b
+
+      - name: Find and Resolve Conflicts
+        run: |
+          # Use our unified CLI for resolution
+          python3 dev-tools/td_cli.py resolve-conflicts
+
+      - name: Validate Resolution
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run type-check
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-resolved merge conflicts using MergeLlama"
+          file_pattern: '.'
