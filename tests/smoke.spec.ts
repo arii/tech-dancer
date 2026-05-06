@@ -55,7 +55,12 @@ test('all nav links are reachable and error-free', async ({ page }) => {
 
     const response = await page.goto(href);
     await page.waitForLoadState('networkidle');
-    expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
+
+      // response can be null if it's a fragment navigation
+      if (response !== null) {
+        expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
+      }
+
     const filteredErrors = errors.filter(e =>
       !e.includes("Stack is not defined") &&
       !e.includes("Failed to load resource") &&
@@ -89,7 +94,11 @@ test('all post/content pages load without errors', async ({ page }) => {
       const response = await page.goto(href);
       await page.waitForLoadState('networkidle');
 
-      expect(response?.status(), `Bad status at ${href}`).toBeLessThan(400);
+      // response can be null if it's a fragment navigation
+      if (response !== null) {
+        expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
+      }
+
       const filteredErrors = errors.filter(e =>
         !e.includes("Stack is not defined") &&
         !e.includes("Failed to load resource") &&

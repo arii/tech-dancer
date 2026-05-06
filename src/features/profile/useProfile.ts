@@ -12,12 +12,19 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "dance-background",
       title: "My Dance Background",
-      content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community."
+      content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.",
+      gallery: [
+        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" },
+        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" }
+      ]
     },
     {
       id: "professional",
       title: "What I Do Professionally",
       content: "I provide high-level technical consulting for startups and project-based digital execution for niche brands.",
+      gallery: [
+        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
+      ],
       cards: [
         {
           icon: 'terminal',
@@ -44,6 +51,10 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "wcs-love",
       title: "What I Love About WCS",
+      gallery: [
+        { src: glowBunny, alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event" },
+        { src: wwwAri, alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
+      ],
       items: [
         {
           icon: 'star',
@@ -82,18 +93,6 @@ const PROFILE_DATA: ProfileData = {
           title: "Dance Level",
           description: "Competitive Intermediate Follow"
         }
-      ]
-    },
-    {
-      id: "gallery",
-      eyebrow: "Photo Gallery",
-      title: "WCS Moments",
-      gallery: [
-        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" },
-        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" },
-        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" },
-        { src: glowBunny, alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event" },
-        { src: wwwAri, alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
       ]
     },
     {

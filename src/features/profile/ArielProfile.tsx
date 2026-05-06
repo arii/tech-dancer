@@ -40,23 +40,6 @@ export default function ArielProfile() {
         {section.items && <ProfileItems items={section.items} />}
         {section.gallery && <ProfileGallery images={section.gallery} />}
         {section.links && <ProfileLinks links={section.links} />}
-
-        {section.id === 'gallery' && (
-          <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
-            <Stack id="privacy" gap={4}>
-              <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
-              <Text variant="body" size="base" color="dim">
-                We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
-              </Text>
-            </Stack>
-            <Stack id="terms" gap={4}>
-              <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
-              <Text variant="body" size="base" color="dim">
-                By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
-              </Text>
-            </Stack>
-          </Stack>
-        )}
       </Stack>
     );
   };
@@ -91,19 +74,25 @@ export default function ArielProfile() {
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             <Stack gap={12} className="lg:col-span-8">
               {bio.sections.map(renderSection)}
+
+              <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
+                <Stack id="privacy" gap={4}>
+                  <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
+                  <Text variant="body" size="base" color="dim">
+                    We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
+                  </Text>
+                </Stack>
+                <Stack id="terms" gap={4}>
+                  <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
+                  <Text variant="body" size="base" color="dim">
+                    By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
+                  </Text>
+                </Stack>
+              </Stack>
             </Stack>
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
-                <Box border radius="lg" overflow="hidden" display={{ base: 'none', lg: 'block' }} className="border-line/20 bg-surface shadow-2xl">
-                  <Box
-                    as="img"
-                    src={roboticistPhoto}
-                    alt="Portrait of Ariel Anders, PhD"
-                    loading="lazy"
-                    className="hover:border-accent hover:bg-accent/5 transition-all group focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
-                  />
-                </Box>
                 <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
