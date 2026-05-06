@@ -178,10 +178,10 @@ function getCache() {
     const events = typeof import.meta.glob === 'function' ? import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' }) : {};
 
     const items = {
-      posts: transform<Post>(posts as any),
-      resources: transform<Resource>(resources as any),
-      studies: transform<Study>(studies as any),
-      events: transform<Event>(events as any)
+      posts: transform<Post>(posts as Record<string, string | ContentModule>),
+      resources: transform<Resource>(resources as Record<string, string | ContentModule>),
+      studies: transform<Study>(studies as Record<string, string | ContentModule>),
+      events: transform<Event>(events as Record<string, string | ContentModule>)
     };
 
     const maps = {
