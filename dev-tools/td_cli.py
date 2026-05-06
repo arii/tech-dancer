@@ -106,6 +106,51 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
+
+def parse_review_payload(review_path: str) -> dict:
+    """Extracts the JSON payload from a review markdown file."""
+    if not os.path.exists(review_path):
+        raise CLIError(f"Review file missing: {review_path}")
+
+    with open(review_path, 'r') as f:
+        content = f.read()
+
+    json_match = re.search(r'```json\n(.*?)\n```', content, re.DOTALL)
+    if not json_match:
+        raise CLIError("Could not find JSON block in review document")
+
+    try:
+        return json.loads(json_match.group(1))
+    except json.JSONDecodeError as e:
+        raise CLIError(f"Failed to parse JSON block: {str(e)}")
+
+
+def validate_submit_review_contract(payload: dict) -> list[str]:
+    """Validates fields expected by submit_review.py for create_review payload."""
+    errors = []
+
+    body = payload.get("body")
+    if not isinstance(body, str) or not body.strip():
+        errors.append("payload.body must be a non-empty string")
+
+    comments = payload.get("comments", [])
+    if not isinstance(comments, list):
+        errors.append("payload.comments must be a list when provided")
+    else:
+        for i, comment in enumerate(comments):
+            if not isinstance(comment, dict):
+                errors.append(f"payload.comments[{i}] must be an object")
+                continue
+            for field in ["path", "body"]:
+                if field not in comment or not isinstance(comment[field], str) or not comment[field].strip():
+                    errors.append(f"payload.comments[{i}].{field} must be a non-empty string")
+            has_line = isinstance(comment.get("line"), int)
+            has_position = isinstance(comment.get("position"), int)
+            if not (has_line or has_position):
+                errors.append(f"payload.comments[{i}] must include integer 'line' or 'position'")
+
+    return errors
+
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
@@ -509,6 +554,51 @@ def handle_audit_pr(args):
 
     if args.json: print(json.dumps({"status": "success", "data": res}, indent=2))
 
+def handle_review_smoke(args):
+    pr_num = args.pr
+    review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+    ctx_path = os.path.join(review_dir, f"pr-context-{pr_num}.md")
+    rev_path = os.path.join(review_dir, f"pr-review-{pr_num}.md")
+
+    audit_args = argparse.Namespace(
+        pr_number=str(pr_num),
+        fetch=True,
+        audit=True,
+        submit=False,
+        cleanup=False,
+        dry_run=True,
+        event=None,
+        json=True,
+        base=None,
+        command="audit-pr",
+        func=handle_audit_pr
+    )
+
+    handle_audit_pr(audit_args)
+
+    payload = parse_review_payload(rev_path)
+    contract_errors = validate_submit_review_contract(payload)
+
+    repo = get_github_client().get_repo(get_repo_name())
+    conflicts = detect_conflicts(repo, pr_num)
+    formatted_conflicts = [{"prs": list(k), "files": v} for k, v in conflicts.items()]
+
+    result = {
+        "status": "success" if not contract_errors else "error",
+        "data": {
+            "pr": pr_num,
+            "files": {"context": ctx_path, "review": rev_path},
+            "contract": {"valid": not contract_errors, "errors": contract_errors},
+            "payload": payload,
+            "conflicts": formatted_conflicts
+        }
+    }
+    print(json.dumps(result, indent=2))
+
+    if contract_errors:
+        sys.exit(1)
+
+
 def handle_pre_submit(args):
     if not args.json: print("🔍 Running pre-submission checks...")
     results = {"steps": []}
@@ -895,7 +985,7 @@ def main():
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
                       ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
-                      ("track-review", handle_track_review)]: # fetch-review is alias for audit-pr --fetch
+                      ("track-review", handle_track_review), ("review-smoke", handle_review_smoke)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd, parents=[base_parser])
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -951,6 +1041,8 @@ def main():
             p.add_argument("--auditor", help="Name of the auditor")
             p.add_argument("--conflicts", help="Conflict status")
             p.add_argument("--file", help="Path to tracking file")
+        elif cmd == "review-smoke":
+            p.add_argument("--pr", type=int, required=True, help="PR number to smoke-validate")
         p.set_defaults(func=func)
 
     args = main_parser.parse_args()
