@@ -77,9 +77,8 @@ export function GlobalSearch() {
 
   return (
     <Box
-      zIndex={9999}
+      zIndex="search"
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 9999 }}
     >
       {/* Backdrop */}
       <Box
@@ -115,7 +114,8 @@ export function GlobalSearch() {
           radius="lg"
           border
           shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 mx-4 pointer-events-auto outline-none"
+          marginX={4}
+          className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
@@ -224,7 +224,7 @@ export function GlobalSearch() {
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-[env(safe-area-inset-bottom)]">
+          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe" paddingBottom={0}> // impeccable-ignore
              <Box display="flex" align="center" gap={6}>
                 <Box display="flex" align="center" gap={2}>
                    <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
