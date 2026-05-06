@@ -521,6 +521,40 @@ def handle_pre_submit(args):
         else: print(f"❌ Pre-submission checks failed: {e}")
         sys.exit(1)
 
+def handle_resolve_conflicts(args):
+    """Scan for conflict markers and use MergeLlama to resolve them."""
+    # Exclude common noise directories
+    # We use a pattern to avoid grep finding its own pattern in scripts
+    pattern = "<<<" + "<<<" + "<"
+    grep_cmd = ["grep", "-lR", "--exclude-dir=.git", "--exclude-dir=node_modules", pattern, "."]
+
+    res = run_command(grep_cmd, check=False)
+    conflict_files = [f for f in res.stdout.strip().splitlines() if f]
+
+    if not conflict_files:
+        if not args.json:
+            print("✅ No conflict markers found.")
+        if args.json:
+            print(json.dumps({"status": "success", "message": "No conflicts found"}, indent=2))
+        return
+
+    if not args.json:
+        print(f"🔍 Found {len(conflict_files)} file(s) with conflicts. Starting MergeLlama...")
+
+    mergellama_script = os.path.join(os.path.dirname(__file__), "mergellama.py")
+
+    cmd = [sys.executable, mergellama_script] + conflict_files
+
+    try:
+        run_command(cmd)
+        if not args.json:
+            print("✅ All conflicts resolved successfully.")
+        if args.json:
+            print(json.dumps({"status": "success", "files": conflict_files}, indent=2))
+    except CLIError:
+        log_error("MergeLlama failed to resolve some conflicts.")
+        sys.exit(1)
+
 def handle_repair(args):
     """Wraps repair.py for AI-assisted CI repair."""
     import tempfile
@@ -811,7 +845,8 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("resolve-conflicts", handle_resolve_conflicts),
+                      ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -861,6 +896,7 @@ def main():
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
+        elif cmd == "resolve-conflicts": pass
         p.set_defaults(func=func)
 
     args = parser.parse_args()

@@ -1,0 +1,51 @@
+name: Auto-Resolve Merge Conflicts
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  resolve-conflicts:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Ollama
+        uses: akshgpt7/ollama-action@v2.0.2
+        with:
+          model: 'qwen2.5-coder:7b'
+
+      - name: Find and Resolve Conflicts
+        run: |
+          # Use our unified CLI for resolution
+          python3 dev-tools/td_cli.py resolve-conflicts
+
+      - name: Validate Resolution
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run type-check
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-resolved merge conflicts using MergeLlama"
+          file_pattern: '.'
