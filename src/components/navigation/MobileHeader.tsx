@@ -33,7 +33,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         className="min-h-12 min-w-12 hover:bg-bg/50 active:bg-accent/10 transition-colors"
         aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.98 }}
       >
         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </Box>

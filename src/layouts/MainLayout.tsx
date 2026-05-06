@@ -15,6 +15,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchTargetRef = useRef<EventTarget | null>(null);
   const { pathname, key } = useLocation();
   const navType = useNavigationType();
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
     };
+    touchTargetRef.current = e.target;
   };
 
   const handleTouchEnd = (e: TouchEvent) => {
@@ -80,7 +82,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     // Horizontal swipe check
     if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
       // Ignore swipe if it originates from a horizontally scrollable element
-      const target = e.target as HTMLElement;
+      const target = touchTargetRef.current as HTMLElement;
 
       const isScrollable = (el: HTMLElement | null): boolean => {
         if (!el || el === e.currentTarget) return false;
@@ -125,6 +127,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     }
 
     touchStartRef.current = null;
+    touchTargetRef.current = null;
   };
 
   return (

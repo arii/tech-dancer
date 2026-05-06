@@ -23,7 +23,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
         to={to}
         onClick={onClick}
         className={({ isActive }) => cn(
-          "transition-all relative z-10 block",
+          "transition-all relative z-10 block w-full",
           isMobile
             ? (isActive ? "text-accent border-l-4 border-accent bg-surface-alt" : "text-text-dim border-l-4 border-transparent")
             : (isActive ? "text-accent bg-surface-alt" : "text-text-dim hover:text-accent cursor-pointer hover:bg-surface-alt")
