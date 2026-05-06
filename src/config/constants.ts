@@ -2,7 +2,7 @@ export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog'
 export const SITE_NAME = 'BoomTick.blog';
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
-const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Exploring the intersection of dance, physics, and engineering.";
+const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.";
 
 export const STATIC_SCHEMAS = {
   HOME: {
