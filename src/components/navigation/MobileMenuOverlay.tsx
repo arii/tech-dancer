@@ -78,6 +78,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             type="button"
             cursor="pointer"
             onClick={onSearchClick}
+            aria-label="Search"
             display="flex"
             align="center"
             gap={4}

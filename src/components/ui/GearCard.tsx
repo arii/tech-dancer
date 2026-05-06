@@ -44,6 +44,7 @@ export function GearCard({
       padding={6}
       radius="lg"
       border
+      aria-label={`Gear Review: ${title} in ${category}. ${verdict ? `Verdict: ${verdict}` : ''}`}
       className="group bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30"
     >
       <Box display="flex" align="center" justify="between">

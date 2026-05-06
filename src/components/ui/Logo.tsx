@@ -36,7 +36,7 @@ export function Logo({ className, showText = true }: LogoProps) {
         </filter>
       </defs>
 
-      <g transform="translate(10, 82)">
+      <g transform="translate(10, 82)" aria-hidden="true">
         {/* The "B" Mark - Serif, Bold, Italic */}
         <text
           x="0"
@@ -68,6 +68,7 @@ export function Logo({ className, showText = true }: LogoProps) {
           x="125"
           y="78"
           fill="currentColor"
+          aria-hidden="true"
           style={{
             fontSize: '52px',
             fontWeight: 800,

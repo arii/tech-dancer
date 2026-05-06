@@ -15,6 +15,7 @@ export function EventCard({ name, location, schedule }: EventCardProps) {
       border
       gap={4}
       height="full"
+      aria-label={`Event: ${name} at ${location}, scheduled for ${schedule}`}
       className="bg-surface hover:border-accent/40 transition-all duration-300"
     >
       <Box display="flex" align="center" gap={2}>

@@ -46,6 +46,7 @@ export function ContentCard({
       padding={6}
       radius="lg"
       border
+      aria-label={`Article: ${title} in category ${category}`}
       className="group bg-surface hover:border-accent/40 transition-all duration-300"
       {...cleanMotionProps}
     >

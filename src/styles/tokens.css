@@ -4,7 +4,7 @@
   --raw-color-surface: #0f172a;
   --raw-color-surface-alt: #1e293b;
   --raw-color-line: #334155;
-  --raw-color-accent: #0891b2; /* Cyan 600 for better WCAG contrast */
+  --raw-color-accent: #0ea5e9; /* Cyan 500 for better WCAG contrast against #020617 */
   --raw-color-accent-purple: #8b5cf6;
   --raw-color-accent-magenta: #d946ef;
   --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);

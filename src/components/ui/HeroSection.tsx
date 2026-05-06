@@ -80,44 +80,47 @@ export function HeroSection() {
         </Box>
 
         {/* Visual-style Headline - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
-        <Stack
+        <Box
           as="h1"
           marginTop={{ base: 4, lg: 6 }}
-          align="start"
-          gap={0}
           className="opacity-0 translate-y-2.5 pointer-events-none"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
-          <Text
-            as="span"
-            variant="headline"
-            weight="font-black"
-            color="white"
-            tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+          <Stack
+            align="start"
+            gap={0}
           >
-            Built for dancers.
-          </Text>
-          <Text
-            as="span"
-            variant="headline"
-            weight="font-black"
-            tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
-          >
-            <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
-          </Text>
-          <Text
-            as="span"
-            variant="headline"
-            weight="font-black"
-            color="white"
-            tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
-          >
-            Dance better.
-          </Text>
-        </Stack>
+            <Text
+              as="span"
+              variant="headline"
+              weight="font-black"
+              color="white"
+              tracking="tighter"
+              className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            >
+              Built for dancers.
+            </Text>
+            <Text
+              as="span"
+              variant="headline"
+              weight="font-black"
+              tracking="tighter"
+              className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            >
+              <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
+            </Text>
+            <Text
+              as="span"
+              variant="headline"
+              weight="font-black"
+              color="white"
+              tracking="tighter"
+              className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            >
+              Dance better.
+            </Text>
+          </Stack>
+        </Box>
 
         {/* Gradient Accent Line below headline */}
         <Box

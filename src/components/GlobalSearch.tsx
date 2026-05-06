@@ -125,7 +125,10 @@ export function GlobalSearch() {
                 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
               )).filter(el => {
                 const style = window.getComputedStyle(el);
-                return style.display !== 'none' && style.visibility !== 'hidden' && (el as HTMLElement).offsetWidth > 0;
+                const isVisible = style.display !== 'none' && style.visibility !== 'hidden';
+                // Always include the close button if it's visible, regardless of offsetWidth
+                if (el.getAttribute('aria-label') === 'Close search') return isVisible;
+                return isVisible && (el as HTMLElement).offsetWidth > 0;
               });
 
               if (focusableElements.length === 0) return;
