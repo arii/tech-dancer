@@ -97,6 +97,8 @@ jobs:
         run: ollama pull "$OLLAMA_MODEL"
 
       - name: Fetch Logs & Run Repair
+        env:
+          PYTHONPATH: ${{ github.workspace }}/dev-tools
         run: |
           if [ "$EVENT_NAME" == "workflow_run" ]; then
             TARGET_RUN_ID="$WORKFLOW_RUN_ID"
