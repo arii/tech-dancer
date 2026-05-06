@@ -25,7 +25,9 @@ fi
 
 # Check Ollama status for AI-assisted features
 if ! curl -s http://localhost:11434/api/tags > /dev/null; then
-  echo "⚠️  Ollama is not running. AI-assisted repairs and recommendations will be skipped (using fallbacks)."
+  echo "⚠️  Ollama is not running (http://localhost:11434)."
+  echo "    AI-assisted repairs and recommendations will use rule-based fallbacks."
+  echo "    To enable AI: ensure Ollama is installed and running ('ollama serve')."
 fi
 
 # 3. Get Open PRs in JSON format

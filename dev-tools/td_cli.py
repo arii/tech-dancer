@@ -466,7 +466,9 @@ def handle_audit_pr(args):
 
             # 1. Trigger autonomous repair agent (using Ollama) to fix files in place
             log_diag(f"Starting autonomous repair for PR #{pr_num}...")
-            run_command([sys.executable, os.path.join(os.path.dirname(__file__), "repair.py"), ctx_path], check=False)
+            # Use raw audit output if available for better parsing in repair.py
+            repair_input = output if (args.audit and 'output' in locals() and output) else ctx_path
+            run_command([sys.executable, os.path.join(os.path.dirname(__file__), "repair.py"), repair_input], check=False)
 
             # 2. Use Ollama to generate the final review recommendation if possible
             if os.path.exists(rev_path):
@@ -487,10 +489,13 @@ def handle_audit_pr(args):
 
                     recommendation = recommendation.strip().strip("'\"")
                     # Handle potential long responses or explanations despite instructions
-                    if "Approved" in recommendation:
-                        if "Minor Changes" in recommendation: recommendation = "Approved with Minor Changes"
-                        else: recommendation = "Approved"
-                    elif "Not Approved" in recommendation: recommendation = "Not Approved"
+                        # Order matters: check for rejections first
+                        if "Not Approved" in recommendation:
+                            recommendation = "Not Approved"
+                        elif "Minor Changes" in recommendation:
+                            recommendation = "Approved with Minor Changes"
+                        elif "Approved" in recommendation:
+                            recommendation = "Approved"
 
                     rev_content = rev_content.replace("<Approved | Approved with Minor Changes | Not Approved>", recommendation)
                     with open(rev_path, 'w') as f: f.write(rev_content)

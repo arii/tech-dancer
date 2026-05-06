@@ -86,8 +86,33 @@ def parse_eslint_json(json_path: str) -> List[Dict[str, Any]]:
     except:
         return []
 
+def parse_audit_json(data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Parses anti-pattern audit JSON output."""
+    findings = []
+    violations = data.get("violations", {})
+    for file_path, file_violations in violations.items():
+        for v in file_violations:
+            findings.append({
+                "file": file_path,
+                "line": v.get('line'),
+                "message": f"{v.get('pattern')}: {v.get('message')} (value: {v.get('value', 'N/A')})",
+                "type": "anti-pattern"
+            })
+    return findings
+
 def extract_failing_info(logs):
     findings = []
+    # Try parsing as JSON first
+    if "{" in logs and "}" in logs:
+        try:
+            start = logs.find("{")
+            end = logs.rfind("}") + 1
+            data = json.loads(logs[start:end])
+            if "violations" in data:
+                return parse_audit_json(data)
+        except json.JSONDecodeError:
+            pass
+
     # TS Errors
     ts_errors = re.findall(r"([a-zA-Z0-9_\-\./]+\.[tj]sx?):(\d+):(\d+) - error (TS\d+): (.*)", logs)
     for file_path, line, col, code, msg in ts_errors:
@@ -111,9 +136,11 @@ def construct_prompt(file_path, file_content, error_msg, context="", attempt=0):
         retry_msg = f"\nATTENTION: This is attempt {attempt + 1}. Previous attempts failed to resolve the issue. Please re-examine carefully.\n"
 
     return f"""
-You are an expert software engineer. Fix the following error in {file_path}.
+You are an expert software engineer specializing in React, TypeScript, and Tailwind CSS.
+Fix the following issues in {file_path}. Pay close attention to design system tokens and layout primitives.
+
 {retry_msg}
-ERROR:
+ERRORS/VIOLATIONS:
 {error_msg}
 
 {f"ADDITIONAL CONTEXT FILES Content:{context}" if context else ""}
@@ -210,9 +237,13 @@ def main():
         json_findings = parse_eslint_json(sys.argv[idx+1])
 
     logs = sys.stdin.read() if "--stdin" in sys.argv else ""
-    if not logs and len(sys.argv) > 1 and os.path.exists(sys.argv[1]):
-        with open(sys.argv[1], "r") as f:
-            logs = f.read()
+    if not logs and len(sys.argv) > 1:
+        # Check if the argument is a file or raw JSON
+        if os.path.exists(sys.argv[1]):
+            with open(sys.argv[1], "r") as f:
+                logs = f.read()
+        else:
+            logs = sys.argv[1]
 
     findings = json_findings + extract_failing_info(logs)
 
