@@ -1,14 +1,37 @@
 <svg viewBox="0 0 340 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-<defs>
-<linearGradient id="logo-slash-r0" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0%" stop-color="#00CFFF"/>
-<stop offset="100%" stop-color="#8B2FFF"/>
-</linearGradient>
-</defs>
-<text x="16" y="72" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="60" fill="white">B</text>
-<path d="M 75 22 L 80 22 L 53 72 L 48 72 Z" fill="url(#logo-slash-r0)"/>
-<text x="148" y="69" font-family="Arial, Helvetica Neue, Arial, sans-serif" font-weight="700" font-size="33" fill="white" letter-spacing="-0.5">
-<tspan fill="white">boom</tspan>
-<tspan fill="#00CFFF">tick</tspan>
-</text>
+  <defs>
+    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#40c4ff" />
+      <stop offset="100%" stop-color="#9d27ff" />
+    </linearGradient>
+    <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <g transform="translate(10, 85)">
+    <text
+      x="0"
+      y="0"
+      font-family="'Bodoni MT', 'Bodoni 72', serif"
+      font-weight="700"
+      font-style="italic"
+      font-size="80"
+      fill="white"
+      transform="skewX(-8)"
+    >B</text>
+    <circle
+      cx="75"
+      cy="-25"
+      r="15"
+      fill="url(#logo-grad)"
+      filter="url(#logo-glow)"
+    />
+  </g>
+
+  <text x="130" y="75" font-family="Arial, Helvetica Neue, Arial, sans-serif" font-weight="700" font-size="33" fill="white" letter-spacing="-0.5">
+    <tspan fill="white">boom</tspan>
+    <tspan fill="#00CFFF">tick</tspan>
+  </text>
 </svg>

@@ -8,16 +8,16 @@ interface LogoProps {
 
 /**
  * High-fidelity SVG Logo for BoomTick.
- * Featuring the "B\" mark with a custom gradient slash.
- * The slash is positioned closer to the B per design requirements.
+ * Featuring the serif "B" mark with a glowing gradient dot.
  */
 export function Logo({ className, showText = true }: LogoProps) {
   const titleId = useId();
   const gradientId = useId();
+  const filterId = useId();
 
   return (
     <svg
-      viewBox={showText ? "0 0 450 100" : "0 0 100 100"}
+      viewBox={showText ? "0 0 450 100" : "0 0 120 100"}
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-full w-auto overflow-visible", className)}
       aria-labelledby={titleId}
@@ -26,43 +26,46 @@ export function Logo({ className, showText = true }: LogoProps) {
     >
       <title id={titleId}>BoomTick Logo</title>
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#00CFFF" />
-          <stop offset="100%" stopColor="#8B2FFF" />
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#40c4ff" />
+          <stop offset="100%" stopColor="#9d27ff" />
         </linearGradient>
+        <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
       </defs>
 
-      {/* The "B" Mark */}
-      <text
-        x="0"
-        y="82"
-        fill="currentColor"
-        style={{
-          fontSize: '85px',
-          fontWeight: 900,
-          fontStyle: 'italic',
-          fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
-          letterSpacing: '-4px'
-        }}
-      >
-        B
-      </text>
+      <g transform="translate(10, 82)">
+        {/* The "B" Mark - Serif, Bold, Italic */}
+        <text
+          x="0"
+          y="0"
+          fill="currentColor"
+          transform="skewX(-8)"
+          style={{
+            fontSize: '85px',
+            fontWeight: 700,
+            fontStyle: 'italic',
+            fontFamily: '"Bodoni MT", "Bodoni 72", serif',
+          }}
+        >
+          B
+        </text>
 
-      {/* 
-        The Slanted Forward Slash "/"
-        Design: 
-        - Thinner slash
-        - Positioned to intersect/cut through the B
-      */}
-      <path
-        d="M 85 15 L 91 15 L 56 85 L 50 85 Z"
-        fill={`url(#${gradientId})`}
-        className="drop-shadow-[0_0_8px_rgba(0,207,255,0.4)]"
-      />
+        {/* The Glowing Dot */}
+        <circle
+          cx="82"
+          cy="-28"
+          r="16"
+          fill={`url(#${gradientId})`}
+          filter={`url(#${filterId})`}
+        />
+      </g>
 
       {showText && (
         <text
-          x="85"
+          x="125"
           y="78"
           fill="currentColor"
           style={{
