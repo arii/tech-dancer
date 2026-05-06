@@ -224,7 +224,7 @@ export default function UXAuditor() {
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
               >
-                <Stack gap={1} minWidth="0" flex={1}>
+                <Stack gap={1} minWidth="0" flex={1} overflow="hidden">
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
