@@ -38,6 +38,22 @@ Orchestrates the PR technical audit lifecycle.
   - `--cleanup`: Remove temporary review files on success.
 - **Usage**: `python3 dev-tools/td_cli.py audit-pr 368 --fetch --audit`
 
+
+#### `review-smoke`
+Runs a no-side-effect PR review smoke test by executing `audit-pr` fetch/audit stages, validating the review payload contract required by `submit_review.py`, and returning conflict summary in a single JSON object. Exits non-zero when contract validation fails.
+- **Flags**:
+  - `--pr <PR_NUMBER>`: PR number to validate.
+  - `--json`: Emit machine-readable smoke result payload.
+- **Usage**:
+  - `python3 dev-tools/td_cli.py review-smoke --pr 368 --json`
+
+**Local verification flow before submission**
+```bash
+python3 dev-tools/td_cli.py audit-pr 368 --fetch --audit
+python3 dev-tools/td_cli.py review-smoke --pr 368 --json
+python3 dev-tools/td_cli.py audit-pr 368 --submit --execute
+```
+
 #### `validate-issue <ISSUE_NUMBER>`
 Validates GitHub Issues against repo standards.
 - **Flags**:
