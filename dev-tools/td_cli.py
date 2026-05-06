@@ -114,14 +114,6 @@ def detect_conflicts(repo, target_pr_num=None):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
 
-def add_execution_args(parser):
-    """Registers --dry-run and --execute flags with standardized help strings."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Run in dry-run mode (default). No side effects will be applied.")
-    parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Execute the command and apply side effects (disables dry-run).")
-
-
 # --- CLI Handlers ---
 
 def handle_validate_issue(args):
@@ -399,7 +391,7 @@ def handle_audit_pr(args):
                         m = re.search(r'\+(\d+)', line); line_num = int(m.group(1)) if m else line_num
                         annotated.append(line)
                     elif line.startswith('+'): annotated.append(f"{line_num:4d} |{line}"); line_num += 1
-                    elif line.startswith('-'): annotated.append(f"     |{line}")
+                    elif line.startswith('-'): annotated.append(f"{line_num:4d} |{line}"); line_num += 1
                     else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
             context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
         os.makedirs(review_dir, exist_ok=True)
@@ -426,8 +418,8 @@ def handle_audit_pr(args):
             try:
                 # Use pnpm run audit as requested, passing targets after --
                 # Use execute_raw because audit script exits 1 on violations
-                res = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
-                output = res.stdout
+                res_audit = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
+                output = res_audit.stdout
                 if output:
                     # pnpm might add some noise to stdout before/after the actual JSON if not careful,
                     # but our script uses process.stdout.write for JSON.
