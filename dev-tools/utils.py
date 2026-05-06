@@ -200,3 +200,35 @@ def get_github_client():
     if not token:
         raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
+
+def call_ollama(prompt, model="qwen2.5-coder:7b", url="http://localhost:11434/api/generate", max_retries=3):
+    """
+    Generic network utility for Ollama API calls with exponential backoff.
+    """
+    import time
+    import json
+    import urllib.request
+    import urllib.error
+
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }
+
+    for attempt in range(max_retries):
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(data).encode("utf-8"),
+            headers={"Content-Type": "application/json"}
+        )
+        try:
+            with urllib.request.urlopen(req) as f:
+                response = json.loads(f.read().decode("utf-8"))
+                return response.get("response", "")
+        except urllib.error.URLError as e:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+            else:
+                raise CLIError(f"Ollama API call failed after {max_retries} attempts: {e}")
+    return None
