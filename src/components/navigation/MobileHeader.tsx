@@ -17,7 +17,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       aria-label="Mobile Navigation"
       layout="mobileHeader"
       border="b"
-      className="transition-[backdrop-filter] duration-300 bg-surface border-line" // impeccable-ignore
+      className="transition-backdrop duration-300 bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center">
         <Logo className="h-9" />
