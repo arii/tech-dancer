@@ -29,6 +29,7 @@ export function GearCard({
     image: _image, tags: _tags, affiliateIds: _affiliateIds,
     priceCategory: _priceCategory, updatedDate: _updatedDate,
     durability: _durability, value: _value, specs: _specs,
+    readingTime: _readingTime,
     ...cleanProps
   } = rest as Record<string, unknown>;
 
