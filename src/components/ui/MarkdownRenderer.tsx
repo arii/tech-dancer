@@ -21,11 +21,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           blockquote: ({node: _node, ...props}) => (
             <Box border surface="warning" padding={6} marginY={8} radius="none">
                <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" marginBottom={2} display="block">Key Takeaway</Text>
-               <blockquote className="m-0 p-0 font-medium italic" {...props} />
+               <Box as="blockquote" margin={0} padding={0} className="font-medium italic" {...props} />
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={12} marginBottom={6} className="group" style={{ counterIncrement: 'section' }}>
+            <Box marginTop={12} marginBottom={6} className="group [counter-increment:section]">
               <Text
                 variant="mono"
                 size="tiny"

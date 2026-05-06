@@ -22,12 +22,18 @@ export function SectionHeader({ eyebrow, title, link }: SectionHeaderProps) {
         </Text>
       </Stack>
       {link && (
-        <Link
+        <Text
+          as={Link}
           to={link.to}
-          className="text-xs font-black uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
+          size="xs"
+          weight="font-black"
+          uppercase
+          tracking="widest"
+          color="dim"
+          className="hover:text-accent transition-colors"
         >
           {link.text}
-        </Link>
+        </Text>
       )}
     </Stack>
   );
