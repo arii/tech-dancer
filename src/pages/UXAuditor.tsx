@@ -124,7 +124,8 @@ export default function UXAuditor() {
           direction="row"
           align="center"
           gap={3}
-          className="bg-surface p-2 rounded-lg shadow-sm border border-line"
+          className="bg-surface rounded-lg shadow-sm border border-line"
+          padding={2}
         >
           <Box
             as="input"
@@ -211,7 +212,8 @@ export default function UXAuditor() {
           {activeReport ? (
             <>
               <Stack
-                className="bg-surface p-6 rounded-lg shadow-sm border border-line"
+                className="bg-surface rounded-lg shadow-sm border border-line"
+                padding={6}
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
               >
@@ -304,7 +306,8 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box className="bg-surface-alt border border-line p-5 rounded-lg">
+                              <Box className="bg-surface border border-line rounded-lg"
+                                padding={5}>
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
@@ -316,7 +319,8 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} className="bg-surface p-4 rounded-lg border border-line shadow-sm hover:border-accent transition-all">
+                                  <Box key={idx} className="bg-surface rounded-lg border border-line shadow-sm hover:border-accent transition-all"
+                                    padding={4}>
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
                                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />

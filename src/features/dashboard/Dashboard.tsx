@@ -62,9 +62,20 @@ export default function Home() {
                   <Box
                     as={NavLink}
                     to={`/blog/${post.slug}`}
-                    className="group flex flex-col gap-3 rounded-lg px-3 py-5 transition-colors hover:bg-surface-alt/50 sm:-mx-2 sm:flex-row sm:items-start sm:gap-4 sm:px-5 sm:py-6"
+                    className="group rounded-lg transition-colors hover:bg-surface"
+                    display="flex"
+                    direction={{ base: "col", sm: "row" }}
+                    gap={{ base: 3, sm: 4 }}
+                    paddingX={{ base: 3, sm: 5 }}
+                    paddingY={{ base: 5, sm: 6 }}
+                    marginX={{ sm: -2 }}
+                    align={{ sm: "start" }}
                   >
-                    <Box display="flex" shrink={0} className="flex-wrap items-center gap-2 pt-0.5 sm:w-44 sm:gap-3">
+                    <Box display="flex" shrink={0} className="sm:w-44"
+                      flexWrap="wrap"
+                      align="center"
+                      gap={{ base: 2, sm: 3 }}
+                      paddingTop={0.5}>
                       <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
                         {post.category}
                       </Box>
@@ -73,7 +84,8 @@ export default function Home() {
                       </Text>
                     </Box>
                     <Box>
-                      <Text as="h3" color="main" size="base" weight="font-bold" className="mb-1 transition-colors group-hover:text-accent leading-snug">
+                      <Text as="h3" color="main" size="base" weight="font-bold" className="transition-colors group-hover:text-accent leading-snug"
+                        marginBottom={1}>
                         {post.title}
                       </Text>
                       <Text as="span" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
