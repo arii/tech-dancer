@@ -26,9 +26,6 @@ export const animation = {
   revealDistance: "var(--reveal-distance)",
 };
 
-export const transitions = {
-  default: "all 200ms ease-in-out",
-};
 
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
