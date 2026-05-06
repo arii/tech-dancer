@@ -77,3 +77,31 @@
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
 }
+/* ── Hero Section ────────────────────────────────────── */
+:root {
+  /* Background */
+  --hero-bg: var(--raw-color-bg);
+
+  /* Use mockup colours exactly */
+  --hero-accent: #00CFFF;
+  --hero-slash-gradient: linear-gradient(180deg, #00CFFF 0%, #8B2FFF 100%);
+  --hero-slash-glow: 0 0 32px rgba(0, 207, 255, 0.4), 0 0 64px rgba(139, 47, 255, 0.2);
+}
+
+/* Keyframes used by HeroSection.tsx */
+@keyframes glowPulse {
+  from { box-shadow: 0 0 20px rgba(0, 207, 255, 0.4), 0 0 40px rgba(139, 47, 255, 0.2); }
+  to   { box-shadow: 0 0 48px rgba(0, 207, 255, 0.7), 0 0 96px rgba(139, 47, 255, 0.4); }
+}
+@keyframes bounce {
+  from { transform: scaleY(0.15); }
+  to   { transform: scaleY(1); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

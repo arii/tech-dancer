@@ -3,63 +3,78 @@ import { cn } from '@/lib/utils';
 
 interface LogoProps {
   className?: string;
+  showText?: boolean;
 }
 
-export function Logo({ className }: LogoProps) {
+/**
+ * High-fidelity SVG Logo for BoomTick.
+ * Featuring the "B\" mark with a custom gradient slash.
+ * The slash is positioned closer to the B per design requirements.
+ */
+export function Logo({ className, showText = true }: LogoProps) {
   const titleId = useId();
   const gradientId = useId();
 
   return (
     <svg
-      viewBox="0 0 340 110"
+      viewBox={showText ? "0 0 320 100" : "0 0 100 100"}
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-full w-auto max-w-none overflow-visible", className)}
+      className={cn("h-full w-auto overflow-visible", className)}
       aria-labelledby={titleId}
       fill="none"
       preserveAspectRatio="xMidYMid meet"
     >
       <title id={titleId}>BoomTick Logo</title>
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#0891B2" />
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#00CFFF" />
           <stop offset="100%" stopColor="#8B2FFF" />
         </linearGradient>
       </defs>
 
-
+      {/* The "B" Mark */}
       <text
-        x="16"
-        y="72"
-        fontFamily="Arial Black, Arial, sans-serif"
-        fontWeight="900"
-        fontSize="60"
-        fill="#f1f5f9"
+        x="0"
+        y="82"
+        fill="currentColor"
+        style={{
+          fontSize: '85px',
+          fontWeight: 900,
+          fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
+          letterSpacing: '-4px'
+        }}
       >
         B
       </text>
 
-      <line
-        x1="82"
-        y1="20"
-        x2="112"
-        y2="72"
-        stroke={`url(#${gradientId})`}
-        strokeWidth="12"
-        strokeLinecap="round"
+      {/* 
+        The Slanted Backslash "\" 
+        Design: 
+        - 12 degree skew (tan(12) ≈ 0.21)
+        - Gradient fill matching hero accent
+        - Positioned close to B (x=60)
+      */}
+      <path
+        d="M 46 18 L 58 18 L 72.7 88 L 60.7 88 Z"
+        fill={`url(#${gradientId})`}
+        className="drop-shadow-[0_0_8px_rgba(0,207,255,0.4)]"
       />
 
-      <text
-        x="148"
-        y="69"
-        fontFamily="Arial, Helvetica Neue, Arial, sans-serif"
-        fontWeight="700"
-        fontSize="33"
-        fill="#f1f5f9"
-        letterSpacing="-0.5"
-      >
-        <tspan fill="#f1f5f9">boom</tspan>
-        <tspan fill="#0891B2">tick</tspan>
-      </text>
+      {showText && (
+        <text
+          x="85"
+          y="78"
+          fill="currentColor"
+          style={{
+            fontSize: '52px',
+            fontWeight: 800,
+            fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
+            letterSpacing: '-1.5px'
+          }}
+        >
+          boom<tspan fill="#00CFFF">tick</tspan>
+        </text>
+      )}
     </svg>
   );
 }
