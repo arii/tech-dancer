@@ -4,6 +4,8 @@ import { BrandIcon } from '@/components/ui/BrandIcon';
 export function Footer() {
   const legalLinks = [
     { label: 'Contact', href: import.meta.env.BASE_URL + 'contact' },
+    { label: 'Privacy', href: import.meta.env.BASE_URL + 'about#privacy' },
+    { label: 'Terms', href: import.meta.env.BASE_URL + 'about#terms' },
   ];
 
   return (

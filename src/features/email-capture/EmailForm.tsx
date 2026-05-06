@@ -9,10 +9,11 @@ export function EmailForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (e.currentTarget.checkValidity()) {
+    const form = e.currentTarget;
+    if (form.checkValidity()) {
       submitForm(email);
     } else {
-      e.currentTarget.reportValidity();
+      form.reportValidity();
     }
   };
 
@@ -39,7 +40,8 @@ export function EmailForm() {
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}
-          className="bg-accent-navy hover:bg-accent-navy/90 text-bg"
+          surface="accent"
+          className="hover:bg-accent/90 text-bg border-l border-accent/20"
         >
           <AnimatePresence mode="wait">
             <Stack

@@ -52,7 +52,7 @@ export function NewsletterBanner() {
         className="w-full"
       >
         <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
-          <Box padding="compact" surface="accent" opacity={5} display={{ base: 'none', sm: 'block' }} width={12} height={12}>
+          <Box padding="compact" surface="accent" opacity={0.5} display={{ base: 'none', sm: 'block' }} width={12} height={12} minWidth={12} minHeight={12} flex="none">
             <Mail className="w-5 h-5 text-accent" />
           </Box>
           <Stack gap={0}>

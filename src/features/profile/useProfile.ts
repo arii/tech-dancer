@@ -89,11 +89,11 @@ const PROFILE_DATA: ProfileData = {
       eyebrow: "Photo Gallery",
       title: "WCS Moments",
       gallery: [
-        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension at her first competition" },
-        { src: monterey, alt: "Ariel Anders posing playfully on stage at a West Coast Swing event in Monterey" },
-        { src: madJamAri, alt: "Ariel Anders social dancing with a partner at MADjam West Coast Swing convention" },
-        { src: glowBunny, alt: "Ariel Anders dancing in a creative light-up bunny costume at a themed dance event" },
-        { src: wwwAri, alt: "Ariel Anders maintaining a strong athletic connection during a high-energy dance session" }
+        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" },
+        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" },
+        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" },
+        { src: glowBunny, alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event" },
+        { src: wwwAri, alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
       ]
     },
     {
@@ -109,7 +109,8 @@ const PROFILE_DATA: ProfileData = {
   details: [
     { label: "LOCATION", value: "San Francisco, CA" },
     { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
-    { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" }
+    { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
+    { label: "PORTFOLIO", value: "https://github.com/arii" }
   ],
   links: [
     { label: 'Instagram', url: 'https://instagram.com/' },

@@ -17,9 +17,9 @@ export default function ArielProfile() {
 
   const renderSection = (section: ProfileSection) => {
     return (
-      <Stack key={section.id} gap={4} maxWidth="prose">
+      <Stack key={section.id} gap={6} maxWidth="prose">
         {section.eyebrow && (
-          <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">
+          <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">
             {section.eyebrow}
           </Text>
         )}
@@ -40,6 +40,23 @@ export default function ArielProfile() {
         {section.items && <ProfileItems items={section.items} />}
         {section.gallery && <ProfileGallery images={section.gallery} />}
         {section.links && <ProfileLinks links={section.links} />}
+
+        {section.id === 'gallery' && (
+          <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
+            <Stack id="privacy" gap={4}>
+              <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
+              <Text variant="body" size="base" color="dim">
+                We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
+              </Text>
+            </Stack>
+            <Stack id="terms" gap={4}>
+              <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
+              <Text variant="body" size="base" color="dim">
+                By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
+              </Text>
+            </Stack>
+          </Stack>
+        )}
       </Stack>
     );
   };
@@ -52,50 +69,55 @@ export default function ArielProfile() {
       />
       
       <Stack gap={8} width="full">
+        <Box border radius="lg" overflow="hidden" aspect="21/9" surface="default" className="shadow-2xl border-line/20">
+          <img
+            src={roboticistPhoto}
+            alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+            className="w-full h-full object-cover"
+          />
+        </Box>
         <PageHeader
           label="BIOGRAPHY"
           title={bio.name}
           description={bio.role}
           titleSize="fluid-7"
+          border={false}
+          paddingBottom={0}
         />
-        
-        {/* Featured Portrait for immediate personal branding */}
       </Stack>
 
-      <Stack gap={12} marginTop={8} paddingTop={{ base: 4, lg: 20 }}>
+      <Stack gap={12} marginTop={12}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            <Stack gap={16} className="lg:col-span-8">
-              <Box display={{ base: 'block', lg: 'none' }} marginBottom={8} maxWidth="md" marginX="auto" paddingX={4}>
-                <Box border radius="lg" overflow="hidden" className="aspect-[16/9] bg-surface-alt shadow-inner">
-                  <img
-                    src={roboticistPhoto}
-                    alt="Ariel Anders in a professional robotics environment"
-                    className="w-full h-full object-cover object-[center_20%]"
-                  />
-                </Box>
-              </Box>
+            <Stack gap={12} className="lg:col-span-8">
               {bio.sections.map(renderSection)}
             </Stack>
 
             <Box className="lg:col-span-4 relative">
               <Stack gap={8} position="sticky" top={24}>
                 <Box border radius="lg" overflow="hidden" display={{ base: 'none', lg: 'block' }} className="border-line/20 bg-surface shadow-2xl">
-                  <img
+                  <Box
+                    as="img"
                     src={roboticistPhoto}
                     alt="Portrait of Ariel Anders, PhD"
                     loading="lazy"
-                    className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
+                    className="hover:border-accent hover:bg-accent/5 transition-all group focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-bg focus-visible:outline-none"
                   />
                 </Box>
                 <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
+                    <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
                     <Stack gap={4}>
                       {bio.details.map((detail) => (
                         <Stack key={detail.label} gap={1}>
                           <Text variant="mono" size="micro" color="dim" weight="font-bold" className="uppercase tracking-wider">{detail.label}</Text>
-                          <Text variant="body" size="sm" color="main" weight="font-semibold">{detail.value}</Text>
+                          {detail.value.startsWith('http') ? (
+                            <Box as="a" href={detail.value} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                              <Text variant="body" size="sm" color="main" weight="font-semibold" className="truncate">{detail.value.replace('https://', '')}</Text>
+                            </Box>
+                          ) : (
+                            <Text variant="body" size="sm" color="main" weight="font-semibold">{detail.value}</Text>
+                          )}
                         </Stack>
                       ))}
                     </Stack>
@@ -104,7 +126,7 @@ export default function ArielProfile() {
 
                 <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                    <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                     <ProfileLinks links={bio.links} />
                   </Stack>
                 </Box>
