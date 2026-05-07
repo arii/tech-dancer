@@ -21,6 +21,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
+    const timeouts: number[] = [];
 
     // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
@@ -41,22 +42,42 @@ export function MainLayout({ children }: { children: ReactNode }) {
       }
     } else {
       // 2. New Navigation (PUSH/REPLACE): Reset to top OR scroll to hash
-      requestAnimationFrame(() => {
+      const handleScroll = () => {
         if (!container) return;
 
         if (hash) {
           const id = hash.replace('#', '');
-          const element = document.getElementById(id);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            return;
-          }
+          const performScroll = () => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+              return true;
+            }
+            return false;
+          };
+
+          // We use a small delay to allow the layout to settle (animations, fonts, images)
+          const tid = window.setTimeout(() => {
+            if (!performScroll()) {
+              // Longer fallback for lazy-loaded or deferred content
+              const tid2 = window.setTimeout(performScroll, 500);
+              timeouts.push(tid2);
+            }
+          }, 100);
+          timeouts.push(tid);
+        } else {
+          container.scrollTop = 0;
+          window.scrollTo(0, 0);
         }
-        
-        // Default: Reset to top
-        container.scrollTop = 0;
-        window.scrollTo(0, 0);
-      });
+      };
+
+      const rafId = requestAnimationFrame(handleScroll);
+      return () => {
+        window.removeEventListener('beforeunload', handleSaveScroll);
+        handleSaveScroll();
+        cancelAnimationFrame(rafId);
+        timeouts.forEach(t => window.clearTimeout(t));
+      };
     }
 
     return () => {
