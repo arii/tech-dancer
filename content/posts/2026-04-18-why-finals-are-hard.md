@@ -3,7 +3,7 @@ type: post
 title: "The majority of above average dancers don’t make it to finals"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
-category: "Data & Dev Lab"
+category: "WCS"
 excerpt: "A statistical look at competition heat density and judge variance, explaining why placement is a poor metric for progress."
 image: ""
 tags:

@@ -67,7 +67,7 @@ function ArielProfile() {
         title="About"
         description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
       />
-      
+
       <PageHeader
         label="BIOGRAPHY"
         title={bio.name}
@@ -97,21 +97,22 @@ function ArielProfile() {
             </Stack>
 
             <Box className="lg:col-span-4 relative order-1 lg:order-2">
-              <Stack gap={8} position="sticky" top={24} align={{ base: "center", lg: "start" }}>
-              {/* Single portrait image - Constrained size */}
-              <Box 
-                border 
-                radius="lg" 
-                overflow="hidden" 
-                aspect="1/1" 
-                surface="default" 
-                width="64"
-                className="shadow-2xl border-line/10"
-              >
+              <Stack gap={8} position="sticky" top={12} align={{ base: "center", lg: "start" }}>
+                {/* Profile portrait */}
+                <Box
+                  border
+                  radius="lg"
+                  overflow="hidden"
+                  aspect={{ base: "3/4", lg: "1/1" }}
+                  surface="default"
+                  width={{ base: "48", md: "56", lg: "64" }}
+                  className="shadow-2xl border-line/10 relative"
+                >
+                  {/* Profile photo with optimized focal point for portrait crop */}
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-[center_20%]" // impeccable-ignore
                   />
                 </Box>
 

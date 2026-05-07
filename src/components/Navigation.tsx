@@ -99,11 +99,12 @@ export default function Navigation() {
                 variant="sans"
                 size="sm"
                 weight="font-extrabold"
-                className="tracking-tight leading-none text-white"
+                className="leading-none text-white"
+                style={{ letterSpacing: '0.05em' }}
               >
                 boom
                 <span className="text-accent">tick</span>
-                <span className="text-white/40">.blog</span>
+                <span className="text-white/60 font-light">.blog</span>
               </Text>
             </Box>
           </Box>

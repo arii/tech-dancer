@@ -22,6 +22,7 @@
   /* Fonts */
   --font-sans: var(--raw-font-sans);
   --font-display: var(--raw-font-display);
+  --font-serif: var(--raw-font-serif);
   --font-mono: var(--raw-font-mono);
 
   /* Radius */

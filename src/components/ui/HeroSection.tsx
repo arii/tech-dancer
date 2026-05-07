@@ -55,35 +55,22 @@ export function HeroSection() {
       >
 
 
-        {/* Logo mark — B + \ (backslash) */}
+        {/* Logo mark — B icon only, no redundant wordmark */}
         <Box
           className="opacity-0 translate-y-[-20px] pointer-events-none"
           style={{
             height: 'clamp(60px, 10vw, 120px)',
-            animation: 'fadeUp 0.8s ease forwards 0.2s'
+            animation: 'fadeUp 0.8s ease forwards 0.2s',
+            marginLeft: '-8px', // Optical alignment: compensate for italic slant
           }}
         >
           <Logo className="text-white" showText={false} />
         </Box>
 
-        {/* Wordmark: boomtick.blog */}
-        <Box
-          variant="display"
-          weight="font-bold"
-          className="text-white mt-4 opacity-0 translate-y-2.5 pointer-events-none"
-          style={{
-            fontSize: 'clamp(18px, 4vw, 28px)',
-            letterSpacing: '-0.5px',
-            animation: 'fadeUp 0.7s ease forwards 0.4s',
-          }}
-        >
-          boom<span style={{ color: 'var(--hero-accent)' }}>tick</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>.blog</span>
-        </Box>
-
-        {/* Visual-style Headline - Resized significantly to 'base' per persistent feedback to match "original aesthetic" */}
+        {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 4, lg: 6 }}
+          marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
           className="opacity-0 translate-y-2.5 pointer-events-none"
@@ -91,30 +78,24 @@ export function HeroSection() {
         >
           <Text
             as="span"
-            variant="headline"
-            weight="font-black"
+            variant="hero"
             color="white"
-            tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] text-left"
+            className="text-3xl md:text-5xl lg:text-6xl"
           >
             Built for dancers.
           </Text>
           <Text
             as="span"
-            variant="headline"
-            weight="font-black"
-            tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] text-left"
+            variant="hero"
+            className="text-[2rem] md:text-[3.5rem] lg:text-[4rem]"
           >
             <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
           </Text>
           <Text
             as="span"
-            variant="headline"
-            weight="font-black"
+            variant="hero"
             color="white"
-            tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] text-left"
+            className="text-[2rem] md:text-[3.5rem] lg:text-[4rem]"
           >
             Dance better.
           </Text>
@@ -138,11 +119,13 @@ export function HeroSection() {
           display="flex"
           align="stretch"
           gap={5}
-          marginTop={{ base: 4, lg: 4 }}
+          marginTop={{ base: 6, lg: 8 }}
           maxWidth="2xl"
           className="opacity-0 pointer-events-none"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
+            paddingLeft: 'clamp(0px, 2vw, 32px)', // Mobile inset for readability
+            paddingRight: 'clamp(0px, 2vw, 32px)',
           }}
         >
           <Box
@@ -153,8 +136,13 @@ export function HeroSection() {
           <Text
             as="p"
             variant="body"
-            weight="font-semibold"
-            className="text-base md:text-lg lg:text-xl leading-relaxed text-white/70 text-left"
+            weight="font-normal"
+            className="text-base md:text-lg lg:text-xl text-left"
+            style={{ 
+              lineHeight: '1.8',
+              color: '#A0A0A0',
+              maxWidth: '65ch'
+            }}
           >
             Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
             plus technical deep dives into building the platform with DevAI.
@@ -206,7 +194,17 @@ export function HeroSection() {
           aria-label="Scroll to content"
         >
           <Stack align="center" gap={2} className="animate-bounce">
-            <Text variant="mono" size="micro" color="dim">Read more</Text>
+            <Text 
+              variant="mono" 
+              size="micro" 
+              uppercase
+              style={{ 
+                color: 'var(--hero-accent)',
+                letterSpacing: '0.1em'
+              }}
+            >
+              READ MORE
+            </Text>
             <ChevronDown className="w-5 h-5 text-accent" />
           </Stack>
         </button>

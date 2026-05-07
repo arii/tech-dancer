@@ -5,14 +5,12 @@ import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
 
 export function MainLayout({ children }: { children: ReactNode }) {
-  const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const { pathname, key, hash } = useLocation();
@@ -172,7 +170,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}
             paddingTop={{ base: 16, md: 12 }}
-            paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
+            paddingBottom={{ base: 28, md: 12 }}
             flex={1}
             direction="col"
             marginX={{ base: "auto", lg: 0 }}

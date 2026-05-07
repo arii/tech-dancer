@@ -156,12 +156,14 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
+          display="inline-flex"
+          align="center"
           paddingX={4}
           paddingY={3}
           minHeight={11}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none inline-flex items-center"
+          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}

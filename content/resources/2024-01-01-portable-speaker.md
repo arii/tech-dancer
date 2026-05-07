@@ -5,6 +5,7 @@ date: "2024-01-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings."
+image: "/assets/gear/ue-wonderboom.jpg"
 affiliateIds: ["amazon"]
 tags: ["practice", "music", "travel"]
 rating: 4.8
