@@ -2,14 +2,32 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 import { SITE_METADATA } from '@/config/content';
 
+export type ContentType = 'post' | 'event' | 'resource';
+
 export interface DraftData {
+  type: ContentType;
   title: string;
   category: string;
   excerpt: string;
   author: string;
   date: string;
+  // Post specific
   affiliateLink: string;
   commentary: string;
+  // Event specific
+  location: string;
+  city: string;
+  schedule: string;
+  description: string;
+  // Resource specific
+  affiliateIds: string[];
+  tags: string[];
+  rating: number;
+  verdict: string;
+  priceCategory: string;
+  updatedDate: string;
+  heading: string;
+  content: string;
 }
 
 export interface HistoryEntry {
@@ -30,25 +48,41 @@ const generateId = () => {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 };
 
+const DEFAULT_DATA: DraftData = {
+  type: 'post',
+  title: '',
+  category: 'Lifestyle',
+  excerpt: '',
+  author: SITE_METADATA.author,
+  date: new Date().toISOString().split('T')[0],
+  affiliateLink: '',
+  commentary: '',
+  location: '',
+  city: '',
+  schedule: '',
+  description: '',
+  affiliateIds: [],
+  tags: [],
+  rating: 5,
+  verdict: '',
+  priceCategory: '',
+  updatedDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+  heading: '',
+  content: ''
+};
+
 export function useBlogDrafter() {
   const [data, setData] = useState<DraftData>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return { ...DEFAULT_DATA, ...parsed };
       } catch {
         // Silent fail per audit recommendation
       }
     }
-    return {
-      title: '',
-      category: 'Lifestyle',
-      excerpt: '',
-      author: SITE_METADATA.author,
-      date: new Date().toISOString().split('T')[0],
-      affiliateLink: '',
-      commentary: ''
-    };
+    return DEFAULT_DATA;
   });
 
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
@@ -102,6 +136,45 @@ export function useBlogDrafter() {
   };
 
   const markdownPreview = useMemo(() => {
+    if (data.type === 'event') {
+      return `---
+type: event
+title: "${data.title || 'Untitled Event'}"
+date: "${data.date}"
+author: "${data.author}"
+category: "${data.category}"
+excerpt: "${data.excerpt || ''}"
+location: "${data.location || ''}"
+city: "${data.city || ''}"
+schedule: "${data.schedule || ''}"
+description: "${data.description || ''}"
+---
+# ${data.title || 'Untitled Event'}
+${data.excerpt || ''}
+`;
+    }
+
+    if (data.type === 'resource') {
+      return `---
+type: resource
+title: "${data.title || 'Untitled Resource'}"
+date: "${data.date}"
+author: "${data.author}"
+category: "${data.category}"
+excerpt: "${data.excerpt || ''}"
+affiliateIds: ${JSON.stringify(data.affiliateIds)}
+tags: ${JSON.stringify(data.tags)}
+rating: ${data.rating}
+verdict: "${data.verdict || ''}"
+priceCategory: "${data.priceCategory || ''}"
+updatedDate: "${data.updatedDate || ''}"
+---
+## ${data.heading || ''}
+
+${data.content || ''}
+`;
+    }
+
     return `---
 type: post
 title: "${data.title || 'Untitled Post'}"
@@ -120,13 +193,14 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   const githubIssueUrl = useMemo(() => {
     const repoOwner = SITE_METADATA.repo.owner; 
     const repoName = SITE_METADATA.repo.name;
-    const issueTitle = `Draft: ${data.title || 'New Post'}`;
-    const issueBody = `### New Blog Post Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownPreview}\n\`\`\``;
+    const typeLabel = data.type.toUpperCase();
+    const issueTitle = `Draft [${typeLabel}]: ${data.title || 'New Item'}`;
+    const issueBody = `### New ${data.type} Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownPreview}\n\`\`\``;
     
     return `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
   }, [data, markdownPreview]);
 
-  const updateField = (field: keyof DraftData, value: string) => {
+  const updateField = <K extends keyof DraftData>(field: K, value: DraftData[K]) => {
     setData((prev: DraftData) => ({ ...prev, [field]: value }));
   };
 
@@ -146,28 +220,32 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (str: string) => typeof str === 'string' ? str.replace(/\\n/g, '\n') : str;
+    const normalize = (val: unknown): unknown => {
+      if (typeof val === 'string') return val.replace(/\\n/g, '\n');
+      if (Array.isArray(val)) return val.map(normalize);
+      if (val !== null && typeof val === 'object') {
+        return Object.fromEntries(
+          Object.entries(val).map(([k, v]) => [k, normalize(v)])
+        );
+      }
+      return val;
+    };
 
-    setData((prev: DraftData) => ({
-      ...prev,
-      title: normalize(parsed.title) || prev.title,
-      excerpt: normalize(parsed.excerpt || parsed.description) || prev.excerpt,
-      affiliateLink: parsed.affiliateLink || prev.affiliateLink,
-      commentary: normalize(parsed.commentary) || prev.commentary
-    }));
+    setData((prev: DraftData) => {
+      const next = { ...prev };
+      (Object.keys(parsed) as Array<keyof DraftData>).forEach((key) => {
+        if (key in next) {
+          // @ts-expect-error - Dynamic mapping of normalized values
+          next[key] = normalize(parsed[key]);
+        }
+      });
+      return next;
+    });
     return true;
   };
 
   const clearForm = () => {
-    setData({
-      title: '',
-      category: 'Lifestyle',
-      excerpt: '',
-      author: SITE_METADATA.author,
-      date: new Date().toISOString().split('T')[0],
-      affiliateLink: '',
-      commentary: ''
-    });
+    setData(DEFAULT_DATA);
   };
 
   return {

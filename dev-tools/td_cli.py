@@ -673,6 +673,51 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_resolve_conflicts(args):
+    """Scan codebase for conflict markers and use MergeLlama to resolve them."""
+    if not args.json: print("🔍 Scanning for Git conflict markers...")
+
+    # 1. Find files with conflict markers
+    # Exclude dev-tools to avoid self-detection if this script or others contain markers
+    # Using execute_raw to handle grep exit code 1 (no matches)
+    grep_cmd = ["grep", "-rl", "<<<<<<<", ".", "--exclude-dir=dev-tools", "--exclude-dir=node_modules", "--exclude-dir=.git"]
+    res = run_command(grep_cmd, check=False, log_on_error=False)
+
+    if res.returncode != 0:
+        if not args.json: print("✅ No conflict markers found.")
+        if args.json: print(json.dumps({"status": "success", "resolved": []}))
+        return
+
+    files = res.stdout.strip().splitlines()
+    if not args.json: print(f"🧨 Found {len(files)} file(s) with conflicts.")
+
+    # 2. Call mergellama.py for each file
+    resolved_files = []
+    failed_files = []
+
+    mergellama_path = os.path.join(os.path.dirname(__file__), "mergellama.py")
+
+    for f in files:
+        if not args.json: print(f"🦙 Resolving: {f}...")
+        ml_res = run_command([sys.executable, mergellama_path, f], check=False)
+        if ml_res.returncode == 0:
+            resolved_files.append(f)
+        else:
+            failed_files.append(f)
+            log_error(f"Failed to resolve {f}")
+
+    if args.json:
+        print(json.dumps({
+            "status": "success" if not failed_files else "error",
+            "resolved": resolved_files,
+            "failed": failed_files
+        }, indent=2))
+    else:
+        if resolved_files: print(f"✅ Successfully resolved {len(resolved_files)} file(s).")
+        if failed_files:
+            print(f"❌ Failed to resolve {len(failed_files)} file(s).")
+            sys.exit(1)
+
 def handle_repair_context(args):
     from error_rag import RAGPipeline
     pipeline = RAGPipeline()
@@ -818,7 +863,8 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
+                      ("resolve-conflicts", handle_resolve_conflicts)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
