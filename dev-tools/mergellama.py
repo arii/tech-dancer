@@ -7,41 +7,15 @@ Part of the Tech-Dancer 'Self-Healing' CI pipeline.
 import os
 import sys
 import re
-import json
-import urllib.request
-import urllib.error
 from typing import Optional
+from utils import call_ollama, CLIError
 
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
 CONFLICT_MARKER = "<<<<<<<"
-OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
 
 def log(msg):
     print(f"🦙 [MergeLlama] {msg}")
-
-def call_ollama(prompt: str, model: str = MODEL) -> Optional[str]:
-    """Helper to call local Ollama API."""
-    data = {
-        "model": model,
-        "prompt": prompt,
-        "stream": False
-    }
-
-    req = urllib.request.Request(
-        OLLAMA_URL,
-        data=json.dumps(data).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
-    )
-
-    try:
-        # Standardize timeout to 60s for resolution tasks
-        with urllib.request.urlopen(req, timeout=60) as f:
-            response_data = json.loads(f.read().decode("utf-8"))
-            return response_data.get("response")
-    except Exception as e:
-        log(f"Error calling Ollama: {e}")
-        return None
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
