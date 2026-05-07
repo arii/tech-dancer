@@ -37,7 +37,29 @@ class Orchestrator:
 
         raise RuntimeError("No inference engine available (Ollama unavailable, Gemini fallback disabled).")
 
+    def view_pr(self, pr_number: int) -> dict:
+        pr = self.github.view_pr(pr_number)
+        stats = self.github.diff_stats(pr_number)
+        return {
+            "number": pr.number,
+            "title": pr.title,
+            "author": pr.author,
+            "state": pr.state,
+            **stats,
+        }
+
+    def resolve_pr(self, pr_number: int, dry_run: bool = True) -> str:
+        return self.github.resolve_conflicts(pr_number, dry_run=dry_run)
+
     def dispatch_jules_review(self, pr_number: int) -> str:
         pr = self.github.view_pr(pr_number)
         session = self.jules.dispatch_session(task=f"Review PR #{pr.number}: {pr.title}")
         return session.status
+
+    def env_verify(self) -> dict[str, bool]:
+        return {
+            "ollama_available": self.ollama.is_available(),
+            "gemini_fallback_enabled": self.config.use_gemini_fallback,
+            "jules_configured": bool(self.config.jules_api_url),
+            "repo_configured": bool(self.config.github_repo),
+        }
