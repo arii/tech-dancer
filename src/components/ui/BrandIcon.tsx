@@ -24,8 +24,8 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
 
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#40c4ff" />
-          <stop offset="100%" stopColor="#9d27ff" />
+          <stop offset="0%" stopColor="var(--color-accent-hero, #40c4ff)" />
+          <stop offset="100%" stopColor="var(--color-accent-purple, #9d27ff)" />
         </linearGradient>
         <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="2" result="blur" />

@@ -1,17 +1,10 @@
 <svg viewBox="0 0 450 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-  <style>
-    :root {
-      --brand-accent: #0891b2;
-      --brand-accent-hero: #00CFFF;
-      --brand-accent-purple: #8b5cf6;
-    }
-  </style>
   <defs>
-    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#00CFFF" />
-      <stop offset="100%" stop-color="#8b5cf6" />
+    <linearGradient id="bt-logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="var(--color-accent-hero, #00CFFF)" />
+      <stop offset="100%" stop-color="var(--color-accent-purple, #8b5cf6)" />
     </linearGradient>
-    <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="bt-logo-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="3" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
@@ -35,15 +28,15 @@
       cx="82"
       cy="-28"
       r="16"
-      fill="url(#logo-grad)"
-      filter="url(#logo-glow)"
+      fill="url(#bt-logo-grad)"
+      filter="url(#bt-logo-glow)"
     />
   </g>
 
   <!-- Wordmark - Height calibrated for icon to be 2x proportion -->
   <text x="130" y="78" font-family="'Bricolage Grotesque', Arial, Helvetica, sans-serif" font-weight="800" font-size="52" letter-spacing="-1.5">
     <tspan fill="white">boom</tspan>
-    <tspan fill="#00CFFF">tick</tspan>
+    <tspan fill="var(--color-accent-hero, #00CFFF)">tick</tspan>
     <tspan fill="rgba(255,255,255,0.6)" font-weight="300">.blog</tspan>
   </text>
 </svg>
