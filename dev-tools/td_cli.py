@@ -808,6 +808,66 @@ def handle_manage_reviews(args):
 
     if args.json: print(json.dumps({"status": "success", "prs": prs_data}, indent=2))
 
+
+def handle_track_review(args):
+    tracking_file = "REVIEW_TRACKING.md"
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    header = "# PR Review Tracking\n\n| PR | Status | Auditor | Last Updated |\n|----|--------|---------|--------------|\n"
+
+    if os.path.exists(tracking_file):
+        with open(tracking_file, "r") as f:
+            file_content = f.read()
+    else:
+        file_content = header
+
+    lines = file_content.splitlines()
+    new_lines = []
+    found = False
+
+    in_table = False
+    for line in lines:
+        if line.startswith("|----|") or line.startswith("|---"):
+            in_table = True
+            new_lines.append(line)
+            continue
+
+        if in_table and line.startswith("|"):
+            cols = [c.strip() for c in line.split("|")]
+            if len(cols) > 2 and cols[1] == f"#{args.pr}":
+                new_lines.append(f"| #{args.pr} | {args.status} | {args.auditor} | {now} |")
+                found = True
+                continue
+
+        new_lines.append(line)
+
+    if not found:
+        table_insert_idx = -1
+        for i in range(len(new_lines)-1, -1, -1):
+            if new_lines[i].startswith("|"):
+                table_insert_idx = i + 1
+                break
+
+        if table_insert_idx != -1:
+            new_lines.insert(table_insert_idx, f"| #{args.pr} | {args.status} | {args.auditor} | {now} |")
+        else:
+            if not any(l.startswith("| PR |") for l in new_lines):
+                new_lines.extend(["", "| PR | Status | Auditor | Last Updated |", "|----|--------|---------|--------------|", f"| #{args.pr} | {args.status} | {args.auditor} | {now} |"])
+            else:
+                new_lines.append(f"| #{args.pr} | {args.status} | {args.auditor} | {now} |")
+
+    if not args.dry_run:
+        with open(tracking_file, "w") as f:
+            f.write("\n".join(new_lines) + "\n")
+        if not args.json:
+            print(f"✅ Updated {tracking_file} for PR #{args.pr}")
+    else:
+        if not args.json:
+            print(f"[DRY-RUN] Would update {tracking_file} for PR #{args.pr}")
+
+    if args.json:
+        print(json.dumps({"status": "success", "pr": args.pr, "review_status": args.status}, indent=2))
+
 def main():
     parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
@@ -818,7 +878,7 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context), ("track-review", handle_track_review)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -854,6 +914,11 @@ def main():
         elif cmd == "manage-reviews":
             p.add_argument("--check-responses", action="store_true")
             p.add_argument("--cleanup-comments", action="store_true")
+            add_execution_args(p)
+        elif cmd == "track-review":
+            p.add_argument("--pr", required=True)
+            p.add_argument("--status", required=True)
+            p.add_argument("--auditor", required=True)
             add_execution_args(p)
         elif cmd == "audit-gate": pass # Uses global --json if provided
         elif cmd == "repair-context":
