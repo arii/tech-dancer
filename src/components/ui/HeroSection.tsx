@@ -69,13 +69,12 @@ export function HeroSection() {
 
         {/* Wordmark: boomtick.blog - matches sidebar styling */}
         <Wordmark
-          variant="display"
-          className="text-white mt-3 opacity-0 translate-y-2.5 pointer-events-none"
+          variant="hero"
+          className="mt-3 opacity-0 translate-y-2.5 pointer-events-none"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
             animation: 'fadeUp 0.7s ease forwards 0.4s',
           }}
-          dotBlogStyle={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}
         />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}

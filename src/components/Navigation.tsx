@@ -96,7 +96,7 @@ export default function Navigation() {
             />
             {/* Wordmark */}
             <Box paddingY={0} className="mt-0.5 leading-none">
-              <Wordmark />
+              <Wordmark variant="nav" />
             </Box>
           </Box>
 

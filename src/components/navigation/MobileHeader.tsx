@@ -23,7 +23,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       {/* Logo: B● mark + wordmark — matches sidebar and hero styling */}
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
         <Logo showText={false} className="h-8 w-auto text-white flex-shrink-0" />
-        <Wordmark dotBlogStyle={{ color: 'rgba(255,255,255,0.6)', fontWeight: 300 }} />
+        <Wordmark variant="nav" />
       </Box>
 
       <Box
