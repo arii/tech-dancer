@@ -1,11 +1,4 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    :root {
-      --brand-bg: #020617;
-      --brand-accent: #00CFFF;
-      --brand-accent-purple: #8b5cf6;
-    }
-  </style>
   <rect width="64" height="64" rx="14" fill="#020617"/>
   <defs>
     <linearGradient id="favicon-grad" x1="0%" y1="0%" x2="0%" y2="100%">
