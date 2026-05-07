@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -12,8 +13,24 @@ import {
   ProfileLinks
 } from './components/ProfileComponents';
 
-export default function ArielProfile() {
+function ArielProfile() {
   const { bio } = useProfile();
+
+  // Robust Anchor Scrolling: Handle hashes on mount (important for lazy-loaded routes)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        // Small delay to ensure layout is stable and Suspense has finished
+        const timer = setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
 
   const renderSection = (section: ProfileSection) => {
     return (
@@ -55,24 +72,23 @@ export default function ArielProfile() {
         label="BIOGRAPHY"
         title={bio.name}
         description={bio.role}
-        titleSize="fluid-7"
       />
 
       <Stack gap={12} marginTop={12}>
         <Reveal direction="up">
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            <Stack gap={12} className="lg:col-span-8">
+            <Stack gap={12} className="lg:col-span-8 order-2 lg:order-1">
               {bio.sections.map(renderSection)}
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
-                <Stack id="privacy" gap={4}>
-                  <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
+                <Stack gap={4}>
+                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
                   </Text>
                 </Stack>
-                <Stack id="terms" gap={4}>
-                  <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
+                <Stack gap={4}>
+                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim">
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
@@ -80,10 +96,18 @@ export default function ArielProfile() {
               </Stack>
             </Stack>
 
-            <Box className="lg:col-span-4 relative">
-              <Stack gap={8} position="sticky" top={24}>
-              {/* Single portrait image */}
-              <Box border radius="lg" overflow="hidden" aspect="1/1" surface="default" className="shadow-2xl border-line/10">
+            <Box className="lg:col-span-4 relative order-1 lg:order-2">
+              <Stack gap={8} position="sticky" top={24} align={{ base: "center", lg: "start" }}>
+              {/* Single portrait image - Constrained size */}
+              <Box 
+                border 
+                radius="lg" 
+                overflow="hidden" 
+                aspect="1/1" 
+                surface="default" 
+                width="64"
+                className="shadow-2xl border-line/10"
+              >
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
@@ -91,7 +115,7 @@ export default function ArielProfile() {
                   />
                 </Box>
 
-                <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
+                <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
                     <Stack gap={4}>
@@ -111,7 +135,7 @@ export default function ArielProfile() {
                   </Stack>
                 </Box>
 
-                <Box padding={8} border radius="lg" className="bg-surface/20 border-line/5">
+                <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                     <ProfileLinks links={bio.links} />
@@ -125,3 +149,5 @@ export default function ArielProfile() {
     </Box>
   );
 }
+
+export default ArielProfile;

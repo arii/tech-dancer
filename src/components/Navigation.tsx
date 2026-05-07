@@ -84,11 +84,28 @@ export default function Navigation() {
             as={NavLink}
             to="/"
             display="block"
-            paddingX={4}
-            paddingY={6}
+            paddingX={5}
+            paddingY={3}
             className="group border-b border-line"
           >
-            <Logo className="h-16 w-full transition-opacity group-hover:opacity-80" />
+            {/* B● mark — explicit white so currentColor renders on dark surface */}
+            <Logo
+              showText={false}
+              className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
+            />
+            {/* Wordmark */}
+            <Box paddingY={0} className="mt-0.5 leading-none">
+              <Text
+                variant="sans"
+                size="sm"
+                weight="font-extrabold"
+                className="tracking-tight leading-none text-white"
+              >
+                boom
+                <span className="text-accent">tick</span>
+                <span className="text-white/40">.blog</span>
+              </Text>
+            </Box>
           </Box>
 
           <Stack as="ul" gap={0} flex={1} paddingY={4}>
@@ -121,7 +138,7 @@ export default function Navigation() {
               Written by <strong className="text-accent">Tech Dancer</strong>
             </Text>
             <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
-              © 2026 boomtick.blog
+              2026 boomtick.blog
             </Text>
           </Box>
         </Stack>

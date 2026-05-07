@@ -18,13 +18,12 @@ export function NewsletterBanner() {
       transition={motionTokens.overlay.transition}
       surface="default"
       opacity={0.95}
-      className="backdrop-blur-2xl border-t border-accent/20"
+      className="backdrop-blur-2xl border-t border-accent/20 bottom-16 lg:bottom-0"
       shadow="topOverlay"
       padding="emailBar"
       radius="none"
       marginX="auto"
       position="fixed"
-      bottom={0}
       left={4}
       right={4}
       zIndex="toast"
@@ -34,13 +33,13 @@ export function NewsletterBanner() {
           variant="ghost"
           size="sm"
           onClick={hideBar}
-          aria-label="Dismiss"
-          padding={1}
-          minHeight={0}
-          minWidth={0}
-          className="min-w-0"
+          aria-label="Dismiss newsletter signup"
+          padding={2}
+          minHeight={11}
+          minWidth={11}
+          className="min-w-[44px] min-h-[44px]"
         >
-          <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
+          <X className="w-5 h-5 text-text-dim hover:text-accent transition-colors" />
         </Button>
       </Box>
 
@@ -56,16 +55,50 @@ export function NewsletterBanner() {
             <Mail className="w-5 h-5 text-accent" />
           </Box>
           <Stack gap={0}>
-            <Text variant="display" size="base" uppercase tracking="tight">
-              Weekly Insights
-            </Text>
-            <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="emphasized">
-              Dance Analytics // Gear Reviews // Community Updates
-            </Text>
+            {/* Pill badges for topics */}
+            <Box display="flex" gap={2} align="center">
+              <Box
+                paddingX={2}
+                paddingY={0.5}
+                radius="full"
+                className="bg-accent/10 text-accent"
+              >
+                <Text variant="mono" size="micro" weight="font-bold">
+                  Dance Analytics
+                </Text>
+              </Box>
+              <Box
+                paddingX={2}
+                paddingY={0.5}
+                radius="full"
+                className="bg-accent/10 text-accent"
+              >
+                <Text variant="mono" size="micro" weight="font-bold">
+                  Gear Reviews
+                </Text>
+              </Box>
+              <Box
+                paddingX={2}
+                paddingY={0.5}
+                radius="full"
+                className="bg-accent/10 text-accent"
+              >
+                <Text variant="mono" size="micro" weight="font-bold">
+                  Community Updates
+                </Text>
+              </Box>
+            </Box>
           </Stack>
         </Stack>
-        
-        <EmailForm />
+        <Stack>
+          <EmailForm />
+          {/* Micro‑copy trust text */}
+          <Box mt={2} className="text-dim">
+            <Text variant="sans" size="xs" color="dim">
+              No spam. Unsubscribe anytime.
+            </Text>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   );

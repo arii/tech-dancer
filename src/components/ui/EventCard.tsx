@@ -15,7 +15,7 @@ export function EventCard({ name, location, schedule }: EventCardProps) {
       border
       gap={4}
       height="full"
-      className="bg-surface hover:border-accent/40 transition-all duration-300"
+      className="bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
       <Box display="flex" align="center" gap={2}>
         <MapPin className="w-4 h-4 text-accent" />

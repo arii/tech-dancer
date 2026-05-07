@@ -1,7 +1,7 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Box } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
 
 interface MobileHeaderProps {
@@ -19,9 +19,21 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       border="b"
       className="transition-[backdrop-filter] duration-300 bg-surface border-line"
     >
-      <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center">
-        <Logo className="h-9" />
+      {/* Logo: B● mark + HTML wordmark — matches sidebar treatment */}
+      <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
+        <Logo showText={false} className="h-8 w-auto text-white flex-shrink-0" />
+        <Text
+          variant="sans"
+          size="sm"
+          weight="font-extrabold"
+          className="tracking-tight leading-none text-white"
+        >
+          boom
+          <span className="text-accent">tick</span>
+          <span className="text-white/40">.blog</span>
+        </Text>
       </Box>
+
       <Box
         as={motion.create("button")}
         onClick={onToggle}

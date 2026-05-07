@@ -17,16 +17,16 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           key={v}
           onClick={() => onChange(v)}
           className={cn(
-            'p-2 transition-colors cursor-pointer',
+            'p-3 transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center',
             v === 'card' ? 'border-r border-line' : '',
             view === v 
               ? 'bg-accent-navy text-bg shadow-inner' 
               : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface transition-colors'
           )}
-          aria-label={v === 'card' ? 'Card view' : 'List view'}
+          aria-label={v === 'card' ? 'Grid view' : 'List view'}
           aria-pressed={view === v}
         >
-          {v === 'card' ? <LayoutGrid className="w-4 h-4" /> : <List className="w-4 h-4" />}
+          {v === 'card' ? <LayoutGrid className="w-5 h-5" /> : <List className="w-5 h-5" />}
         </button>
       ))}
     </Box>

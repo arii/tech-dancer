@@ -1,5 +1,6 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
@@ -47,7 +48,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        className="px-6 md:px-12 lg:px-24 pointer-events-none"
+        className="px-8 md:px-12 lg:px-24 pointer-events-none"
         paddingY={{ base: 2, lg: 2 }}
         maxWidth="screen-xl"
         marginX="auto"
@@ -69,7 +70,7 @@ export function HeroSection() {
         <Box
           variant="display"
           weight="font-bold"
-          className="text-white -mt-1 opacity-0 translate-y-2.5 pointer-events-none"
+          className="text-white mt-4 opacity-0 translate-y-2.5 pointer-events-none"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
             letterSpacing: '-0.5px',
@@ -94,7 +95,7 @@ export function HeroSection() {
             weight="font-black"
             color="white"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] text-left"
           >
             Built for dancers.
           </Text>
@@ -103,7 +104,7 @@ export function HeroSection() {
             variant="headline"
             weight="font-black"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] text-left"
           >
             <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
           </Text>
@@ -113,7 +114,7 @@ export function HeroSection() {
             weight="font-black"
             color="white"
             tracking="tighter"
-            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] uppercase italic text-left"
+            className="text-3xl md:text-5xl lg:text-5xl leading-[0.9] text-left"
           >
             Dance better.
           </Text>
@@ -187,6 +188,29 @@ export function HeroSection() {
           ))}
         </Box>
       </Stack>
+
+      {/* Scroll Down Indicator */}
+      <Box
+        position="absolute"
+        inset="bottom"
+        display="flex"
+        justify="center"
+        paddingBottom={8}
+        zIndex={10}
+        className="opacity-0"
+        style={{ animation: 'fadeIn 1s ease forwards 2.5s' }}
+      >
+        <button
+          onClick={() => window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' })}
+          className="cursor-pointer bg-transparent border-0 p-0"
+          aria-label="Scroll to content"
+        >
+          <Stack align="center" gap={2} className="animate-bounce">
+            <Text variant="mono" size="micro" color="dim">Read more</Text>
+            <ChevronDown className="w-5 h-5 text-accent" />
+          </Stack>
+        </button>
+      </Box>
     </section>
   );
 }

@@ -43,34 +43,37 @@ export default function Toolbox() {
           <SearchBox
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search gear (e.g. earplugs, shoes)..."
+            placeholder="Search gear..."
           />
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
         <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
-          <span
+          <button
+            type="button"
             onClick={() => setSelectedPill('all')}
             className={cn(
-              "inline-flex items-center rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-emphasized cursor-pointer",
-              "text-text-dim border-line/50 bg-bg",
+              "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-[44px]",
+              "text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors",
               selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
             )}
           >
             All Gear
-          </span>
+          </button>
           {pills.map((pill) => (
-            <span
+            <button
+              type="button"
               key={pill.label}
               onClick={() => setSelectedPill(pill.value)}
               className={cn(
-                "inline-flex items-center rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-emphasized cursor-pointer",
+                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-[44px]",
                 pill.color,
+                "hover:opacity-90 transition-opacity",
                 selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"
               )}
             >
               {pill.label}
-            </span>
+            </button>
           ))}
         </Box>
       </Box>
