@@ -9,6 +9,11 @@ interface WordmarkProps extends Omit<TextProps, 'variant'> {
   variant?: "nav" | "hero";
 }
 
+const VARIANT_MAP: Record<NonNullable<WordmarkProps["variant"]>, TextProps["variant"]> = {
+  nav: "wordmark",
+  hero: "wordmarkHero",
+};
+
 /**
  * Reusable BoomTick Wordmark component.
  * Enforces brand typography and color rules while allowing standard layout overrides.
@@ -25,11 +30,11 @@ export function Wordmark({
 
   return (
     <Text
-      variant={isHero ? "wordmarkHero" : "wordmark"}
+      variant={VARIANT_MAP[variant]}
       size={size || (isHero ? undefined : "sm")}
-      weight={weight || (isHero ? "font-extrabold" : "font-extrabold")}
+      weight={weight || "font-extrabold"}
       className={cn(className)}
-      style={{ letterSpacing: '0.05em', ...style }}
+      style={style}
       {...props}
     >
       boom
