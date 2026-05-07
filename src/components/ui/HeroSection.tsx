@@ -1,6 +1,5 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
-import { ChevronDown } from 'lucide-react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
