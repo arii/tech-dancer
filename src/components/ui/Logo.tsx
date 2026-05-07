@@ -28,8 +28,8 @@ export function Logo({ className, showText = true }: LogoProps) {
       <title id={titleId}>BoomTick Logo</title>
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#00CFFF" />
-          <stop offset="100%" stopColor="#8b5cf6" />
+          <stop offset="0%" stopColor="var(--hero-accent, #00CFFF)" />
+          <stop offset="100%" stopColor="var(--color-accent-purple, #8B5CF6)" />
         </linearGradient>
         <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" result="blur" />
@@ -76,7 +76,7 @@ export function Logo({ className, showText = true }: LogoProps) {
             letterSpacing: '-1.5px'
           }}
         >
-          boom<tspan fill="#00CFFF">tick</tspan><tspan fill="rgba(255,255,255,0.6)" fontWeight="300">.blog</tspan>
+          boom<tspan fill="var(--hero-accent, #00CFFF)">tick</tspan><tspan fill="var(--color-text-dim, rgba(255,255,255,0.6))" fontWeight="300">.blog</tspan>
         </text>
       )}
     </svg>

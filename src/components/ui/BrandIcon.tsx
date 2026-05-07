@@ -20,12 +20,12 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
       fill="none"
     >
       <title id={titleId}>BoomTick Icon</title>
-      {showBackground && <rect width="64" height="64" rx="12" fill="#0D0E1C" />}
+      {showBackground && <rect width="64" height="64" rx="12" fill="#020617" />}
 
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#40c4ff" />
-          <stop offset="100%" stopColor="#9d27ff" />
+          <stop offset="0%" stopColor="var(--hero-accent, #00CFFF)" />
+          <stop offset="100%" stopColor="var(--color-accent-purple, #8B5CF6)" />
         </linearGradient>
         <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="2" result="blur" />
@@ -39,9 +39,9 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
           y="0"
           fontFamily='"Bodoni MT", "Bodoni 72", serif'
           fontSize="44"
-          fontWeight="700"
+          fontWeight="900"
           fontStyle="italic"
-          fill="#f1f5f9"
+          fill="var(--color-text-main, #f1f5f9)"
           transform="skewX(-8)"
         >
           B
