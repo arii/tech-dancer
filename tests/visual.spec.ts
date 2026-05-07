@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 const routes = [
-  { name: 'home', path: './', width: 1280, height: 1780 },
-  { name: 'blog', path: './blog', width: 1280, height: 1571 },
-  { name: 'gear', path: './gear', width: 1280, height: 949 },
-  { name: 'research', path: './research', width: 1280, height: 1319 },
-  { name: 'about', path: './about', width: 1280, height: 4315 },
-  { name: 'contact', path: './contact', width: 1280, height: 1261 }
+  { name: 'home', path: './' },
+  { name: 'blog', path: './blog' },
+  { name: 'gear', path: './gear' },
+  { name: 'research', path: './research' },
+  { name: 'about', path: './about' },
+  { name: 'contact', path: './contact' }
 ];
 
 test.describe('Visual Regression Tests', () => {
@@ -19,9 +19,6 @@ test.describe('Visual Regression Tests', () => {
 
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
-      // Set explicit viewport matching baseline snapshot dimensions
-      await page.setViewportSize({ width: route.width, height: route.height });
-
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
 
@@ -53,10 +50,10 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForTimeout(1000);
 
       // Playwright automatically disables animations for toHaveScreenshot
-      // Applying maxDiffPixelRatio, allowSizeMismatch, and explicit clip per memory
+      // Applying allowSizeMismatch per memory, while keeping maxDiffPixelRatio at 0.05
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
-        clip: { x: 0, y: 0, width: route.width, height: route.height },
-        maxDiffPixelRatio: 0.3,
+        fullPage: true,
+        maxDiffPixelRatio: 0.05,
         allowSizeMismatch: true,
         animations: 'disabled'
       });
