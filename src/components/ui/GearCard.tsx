@@ -4,11 +4,6 @@ import { Box, Stack, Text, BoxProps } from '@/layouts/Primitives';
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
-const SLOP_PROPS = [
-  "type", "date", "author", "content", "tags", "affiliateIds",
-  "priceCategory", "updatedDate", "durability", "value", "specs", "readingTime"
-];
-
 interface GearCardProps extends BoxProps {
   slug: string;
   title: string;
@@ -18,8 +13,20 @@ interface GearCardProps extends BoxProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  // Resource metadata properties that should not be spread to the DOM
+  type?: unknown;
+  date?: unknown;
+  author?: unknown;
+  content?: unknown;
+  tags?: unknown;
+  affiliateIds?: unknown;
+  priceCategory?: unknown;
+  updatedDate?: unknown;
+  durability?: unknown;
+  value?: unknown;
+  specs?: unknown;
+  readingTime?: unknown;
 }
-
 
 export function GearCard({
   slug,
@@ -30,17 +37,21 @@ export function GearCard({
   rating,
   verdict,
   image,
-  ...rest
+  // Destructure out resource-specific metadata to prevent attribute leakage in the DOM
+  type: _type,
+  date: _date,
+  author: _author,
+  content: _content,
+  tags: _tags,
+  affiliateIds: _affiliateIds,
+  priceCategory: _priceCategory,
+  updatedDate: _updatedDate,
+  durability: _durability,
+  value: _value,
+  specs: _specs,
+  readingTime: _readingTime,
+  ...cleanProps
 }: GearCardProps) {
-  // Filter out resource-specific metadata to prevent attribute leakage in the DOM.
-  const cleanProps = { ...rest } as Record<string, unknown>;
-  for (const key of SLOP_PROPS) {
-    delete cleanProps[key];
-  }
-
-
-
-
   return (
     <Stack
       as={NavLink}
@@ -72,7 +83,7 @@ export function GearCard({
         className="bg-surface-alt/20"
       >
         {image ? (
-          <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={image} alt={title} width={800} height={800} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <CategoryPlaceholder category={category} />
         )}
