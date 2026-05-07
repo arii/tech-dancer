@@ -70,7 +70,7 @@ export function NewsletterBanner() {
               variant="headline" 
               size="2xl" 
               weight="font-black" 
-              color="accent" 
+              color="main"
               className="uppercase tracking-tighter"
             >
               Get the latest dance insights.
@@ -84,7 +84,7 @@ export function NewsletterBanner() {
                   paddingY={1}
                   radius="none"
                   border
-                  className="bg-accent/5 border-accent/20 text-accent"
+                  className="bg-accent/10 border-accent/30 text-text-main"
                 >
                   <Text variant="mono" size="micro" weight="font-bold">
                     {tag}
