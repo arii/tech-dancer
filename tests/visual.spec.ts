@@ -22,9 +22,6 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
 
-      // Globally disable smooth scrolling to accommodate CI environments
-      await page.addStyleTag({ content: '* { scroll-behavior: auto !important; }' });
-
       // Ensure the main content is loaded and visible
       // Relying solely on the main element ensures hydration and layout are ready.
       await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
@@ -46,15 +43,11 @@ test.describe('Visual Regression Tests', () => {
         await new Promise(r => setTimeout(r, 200));
       });
 
-      // 1000ms settlement delay before taking snapshot
-      await page.waitForTimeout(1000);
-
+      // Increased tolerance to 5% to handle minor rendering differences across environments
       // Playwright automatically disables animations for toHaveScreenshot
-      // Applying allowSizeMismatch per memory, while keeping maxDiffPixelRatio at 0.05
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.05,
-        allowSizeMismatch: true,
         animations: 'disabled'
       });
     });
