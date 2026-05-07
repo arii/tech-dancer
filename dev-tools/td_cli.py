@@ -256,7 +256,8 @@ def handle_status_board(args):
     if not args.json: print("# Active Agent Work Board\n| Branch | Issue | Status | Conflicts |\n|--------|-------|--------|-----------|")
 
     for pr in repo.get_pulls(state='open'):
-        m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
+        m = re.search(r'issue-(\d+)', pr.head.ref)
+        issue = f"#{m.group(1)}" if m and m.group(1) else "—"
         if not args.json: print(f"| {pr.head.ref} | {issue} | {'Draft' if pr.draft else 'Open'} | ... |")
         prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
 
@@ -398,7 +399,8 @@ def handle_audit_pr(args):
             if patch != '_No textual diff available._':
                 for line in patch.splitlines():
                     if line.startswith('@@'):
-                        m = re.search(r'\+(\d+)', line); line_num = int(m.group(1)) if m else line_num
+                        m = re.search(r'\+(\d+)', line)
+                        line_num = int(m.group(1)) if m and m.group(1) else line_num
                         annotated.append(line)
                     elif line.startswith('+'): annotated.append(f"{line_num:4d} |{line}"); line_num += 1
                     elif line.startswith('-'): annotated.append(f"     |{line}")
