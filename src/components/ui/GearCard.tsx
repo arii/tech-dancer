@@ -1,8 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BoxProps } from '@/layouts/Primitives';
 
+import { useMemo } from 'react';
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
+
+const SLOP_PROPS = new Set([
+  'type', 'date', 'author', 'content', 'tags', 'affiliateIds',
+  'priceCategory', 'updatedDate', 'durability', 'value', 'specs', 'readingTime'
+]);
 
 interface GearCardProps extends BoxProps {
   slug: string;
@@ -26,22 +32,19 @@ export function GearCard({
   image,
   ...rest
 }: GearCardProps) {
-  // Explicitly construct motion/layout props to avoid leaking data "slop" into the DOM.
-  // This avoids verbose destructuring while maintaining clean HTML output.
-  const slop = new Set([
-    'type', 'date', 'author', 'content', 'tags', 'affiliateIds',
-    'priceCategory', 'updatedDate', 'durability', 'value', 'specs', 'readingTime'
-  ]);
-
-  const cleanMotionProps = Object.fromEntries(
-    Object.entries(rest).filter(([key]) => !slop.has(key))
-  );
+  // Filter out resource-specific metadata to prevent attribute leakage in the DOM.
+  // We use a memoized filter to maintain performance during list re-renders.
+  const cleanProps = useMemo(() => {
+    const filtered = { ...rest } as Record<string, unknown>;
+    SLOP_PROPS.forEach(prop => delete filtered[prop]);
+    return filtered;
+  }, [rest]);
 
   return (
     <Stack
       as={NavLink}
       to={`${basePath}/${slug}`}
-      {...cleanMotionProps}
+      {...cleanProps}
       direction="col"
       gap={3}
       height="full"

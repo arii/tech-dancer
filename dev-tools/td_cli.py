@@ -199,6 +199,41 @@ def handle_detect_conflicts(args):
     if args.json: print(json.dumps({"status": "success", "conflicts": formatted}, indent=2))
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
+def handle_resolve_conflicts(args):
+    """
+    Finds files with conflict markers and attempts to resolve them using MergeLlama.
+    Part of the 'Self-Healing' CI pipeline.
+    """
+    # 1. Find files with conflict markers
+    # We use grep but exclude dev-tools/ to avoid self-detection
+    try:
+        # Using list form of grep for safety. Literal markers are used to comply with Anti-Slop.
+        cmd = ["grep", "-l", "<<<<<<<", "-r", ".", "--exclude-dir=dev-tools", "--exclude-dir=.git", "--exclude-dir=node_modules"]
+        # Use run_command with log_on_error=False because grep exits 1 if no matches found
+        res = run_command(cmd, check=False, log_on_error=False)
+
+        if res.returncode != 0 or not res.stdout.strip():
+            if not args.json: print("✅ No conflict markers found.")
+            return
+
+        files = res.stdout.strip().splitlines()
+        if not args.json: print(f"🔍 Found {len(files)} files with conflicts.")
+
+        # 2. Run mergellama on each file
+        mergellama_path = os.path.join(os.path.dirname(__file__), "mergellama.py")
+
+        for f in files:
+            if not args.json: print(f"🦙 Attempting to resolve: {f}")
+            # Run mergellama.py using current python interpreter
+            res_m = run_command([sys.executable, mergellama_path, f], check=False)
+            if res_m.returncode == 0:
+                if not args.json: print(f"✅ Resolved: {f}")
+            else:
+                if not args.json: print(f"❌ Failed to resolve: {f}")
+
+    except Exception as e:
+        raise CLIError(f"Error during conflict resolution: {e}")
+
 def handle_conflicts(args):
     """
     Squashes commits, attempts auto-resolution of simple conflicts,
@@ -806,7 +841,7 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("resolve-conflicts", handle_resolve_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
@@ -819,6 +854,8 @@ def main():
             p.add_argument("--post-comments", action="store_true")
             add_execution_args(p)
         elif cmd == "conflicts": p.add_argument("--base")
+        elif cmd == "resolve-conflicts":
+            add_execution_args(p)
         elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")

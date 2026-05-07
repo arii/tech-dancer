@@ -8,11 +8,25 @@ import os
 import sys
 import re
 from typing import Optional
-from utils import call_ollama, CLIError
+
 
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+import json
+import urllib.request
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
 CONFLICT_MARKER = "<<<<<<<"
+
+def call_ollama(prompt: str, model: str = MODEL) -> Optional[str]:
+    """Native implementation of Ollama API call."""
+    url = "http://localhost:11434/api/generate"
+    data = {"model": model, "prompt": prompt, "stream": False}
+    try:
+        req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), headers={"Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(req, timeout=60) as response:
+            return json.loads(response.read().decode("utf-8")).get("response")
+    except Exception as e:
+        log(f"Ollama API error: {e}")
+        return None
 
 def log(msg):
     print(f"🦙 [MergeLlama] {msg}")
