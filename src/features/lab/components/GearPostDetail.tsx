@@ -1,5 +1,4 @@
 import { Star } from 'lucide-react';
-import { Box } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { ScoreGrid, ScoreItem, VerdictCallout } from '@/components/layout/DetailElements';
