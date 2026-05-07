@@ -1,5 +1,6 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { BrandIcon } from '@/components/ui/BrandIcon';
+import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 
 export function Footer() {
   const legalLinks = [
@@ -9,7 +10,10 @@ export function Footer() {
   ];
 
   return (
-    <Box as="footer" paddingY={12} paddingX={4} surface="bg" border="t" opacity={80} marginTop="auto">
+    <Box as="footer" marginTop="auto" width="full">
+      <NewsletterBanner />
+      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacity={80}>
+
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={2}>
           <BrandIcon className="w-4 h-4 opacity-50" />
@@ -40,6 +44,7 @@ export function Footer() {
           ))}
         </Stack>
       </Stack>
+      </Box>
     </Box>
   );
 }

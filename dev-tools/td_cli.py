@@ -213,6 +213,13 @@ def handle_conflicts(args):
 
     base_branch = getattr(args, 'base', 'main') or 'main'
 
+    # Ensure git user is configured for CI environments
+    res = run_command(['git', 'config', 'user.name'], check=False, log_on_error=False)
+    if not res.stdout.strip():
+        print("👤 Configuring git user for conflict resolution...")
+        run('git config user.name "github-actions[bot]"')
+        run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
+
     # 1. Squash all commits relative to the base branch
     print("📦 Squashing current branch commits...")
     run("git fetch origin")
@@ -849,7 +856,7 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("resolve-conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
@@ -862,7 +869,7 @@ def main():
             p.add_argument("--all-open", action="store_true")
             p.add_argument("--post-comments", action="store_true")
             add_execution_args(p)
-        elif cmd == "conflicts": p.add_argument("--base")
+        elif cmd in ["conflicts", "resolve-conflicts"]: p.add_argument("--base")
         elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
         elif cmd == "ratchet-any":
             p.add_argument("--baseline-file")

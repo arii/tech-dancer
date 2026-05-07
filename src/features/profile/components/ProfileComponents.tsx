@@ -30,7 +30,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
           <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
-            <Box display="flex" gap={8} align="start" direction={{ base: "col", sm: "row" }}>
+            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
               {Icon && (
                 <Box 
                   width={12} 
@@ -45,15 +45,15 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                   <Icon className="w-6 h-6 text-accent" />
                 </Box>
               )}
-              <Stack gap={2} flex={1}>
+              <Stack gap={2} flex={1} align="start">
                 <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
                   {card.title}
                 </Text>
-                <Text variant="body" size="base" color="dim" className="leading-relaxed opacity-90">
+                <Text variant="body" size="base" color="dim" className="leading-relaxed opacity-90 text-left">
                   {card.content}
                 </Text>
               </Stack>
-            </Box>
+            </Stack>
           </Box>
         );
       })}
@@ -156,8 +156,11 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
+          display="inline-flex"
+          align="center"
           paddingX={4}
-          paddingY={2}
+          paddingY={3}
+          minHeight={11}
           border
           radius="full"
           className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"

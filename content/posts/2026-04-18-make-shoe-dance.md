@@ -3,7 +3,7 @@ type: post
 title: "Make any shoe a dance shoe"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
-category: "Gear Reviews"
+category: "Gear"
 excerpt: "Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response."
 image: ""
 tags:

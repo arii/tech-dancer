@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION } from '@/config/constants';
+import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION, ASSET_PREFIX } from '@/config/constants';
 
 interface SEOProps {
   title: string;
@@ -27,7 +27,7 @@ export function SEO({
   const url = canonical || `${BASE_URL}${pathname}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
-  const defaultImage = `${BASE_URL}/assets/comp_analysis_hero.webp`;
+  const defaultImage = `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`;
 
   // Use a dynamic OG image generator if no specific image is provided for articles
   // Removed Vercel logos to better align with TechDancer brand

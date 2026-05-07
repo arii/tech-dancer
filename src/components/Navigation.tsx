@@ -66,10 +66,10 @@ export default function Navigation() {
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <Box 
+      <Box
         as="nav"
         aria-label="Main Navigation"
-        layout="navRail" 
+        layout="navRail"
         className={cn(
           "transition-[background-color,backdrop-filter] duration-300 border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
@@ -84,14 +84,32 @@ export default function Navigation() {
             as={NavLink}
             to="/"
             display="block"
-            paddingX={4}
-            paddingY={6}
+            paddingX={5}
+            paddingY={3}
             className="group border-b border-line"
           >
-            <Logo className="h-16 w-full transition-opacity group-hover:opacity-80" />
+            {/* B● mark — explicit white so currentColor renders on dark surface */}
+            <Logo
+              showText={false}
+              className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
+            />
+            {/* Wordmark */}
+            <Box paddingY={0} className="mt-0.5 leading-none">
+              <Text
+                variant="sans"
+                size="sm"
+                weight="font-extrabold"
+                className="leading-none text-white"
+                style={{ letterSpacing: '0.05em' }}
+              >
+                boom
+                <span className="text-accent">tick</span>
+                <span className="text-white/60 font-light">.blog</span>
+              </Text>
+            </Box>
           </Box>
 
-          <Stack as="ul" gap={0} flex={1} paddingY={4}>
+          <Stack as="ul" gap={1} flex={1} paddingY={4}>
             <Box as="li">
               <Box
                 as="button"
@@ -106,8 +124,8 @@ export default function Navigation() {
                 paddingX={6}
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
               >
-                <Search className="w-5 h-5 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="sm" weight="font-bold" className="leading-none">Search</Text>
+                <Search className="w-4 h-4 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
               </Box>
             </Box>
 
@@ -118,10 +136,10 @@ export default function Navigation() {
 
           <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
             <Text variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
-              Written by <strong className="text-accent">Tech Dancer</strong>
+              Written by <strong className="text-accent">Tech Dancer </strong>
             </Text>
             <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
-              © 2026 boomtick.blog
+              2026 boomtick.blog
             </Text>
           </Box>
         </Stack>

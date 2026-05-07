@@ -25,8 +25,8 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
         className={({ isActive }) => cn(
           "transition-all relative z-10 block",
           isMobile
-            ? (isActive ? "text-accent border-l-4 border-accent bg-surface-alt" : "text-text-dim border-l-4 border-transparent")
-            : (isActive ? "text-accent bg-surface-alt" : "text-text-dim hover:text-accent cursor-pointer hover:bg-surface-alt")
+            ? (isActive ? "text-accent border-l-4 border-accent bg-accent/10" : "text-text-dim hover:text-accent hover:bg-surface-alt/50 border-l-4 border-transparent cursor-pointer")
+            : (isActive ? "text-accent bg-accent/10 border-l-4 border-accent" : "text-text-dim hover:text-accent cursor-pointer hover:bg-surface-alt border-l-4 border-transparent")
         )}
       >
         {({ isActive }) => (
@@ -38,12 +38,13 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             paddingX={isMobile ? 4 : 6}
             border={isMobile ? "b" : undefined}
             className={cn(
+              "transition-transform duration-200 group-hover:translate-x-1",
               isMobile ? "border-line/50 min-h-[56px]" : "min-h-[48px]",
               isMobile && isActive && "shadow-sm"
             )}
           >
-            <Icon className={cn(`w-5 h-5 ${stroke.thick} flex-shrink-0`, isMobile ? "w-6 h-6" : "")} />
-            <Text variant="sans" size={isMobile ? "lg" : "sm"} weight="font-bold" className="leading-none">
+            <Icon className={cn(`flex-shrink-0 ${stroke.thick}`, isMobile ? "w-5 h-5" : "w-4 h-4")} />
+            <Text variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
               {label}
             </Text>
           </Box>
