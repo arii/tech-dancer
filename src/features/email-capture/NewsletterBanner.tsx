@@ -1,11 +1,19 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
-import { useEmailStore } from './emailStore';
+import { useEmailStore, STORAGE_KEY } from './emailStore';
 import { Button } from '@/layouts/Primitives';
+import { useEffect } from 'react';
 
 export function NewsletterBanner() {
-  const { showEmailBar, hideBar } = useEmailStore();
+  const { showEmailBar, setShowEmailBar, hideBar } = useEmailStore();
+
+  useEffect(() => {
+    const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';
+    if (!isDismissed) {
+      setShowEmailBar(true);
+    }
+  }, [setShowEmailBar]);
 
   if (!showEmailBar) return null;
 

@@ -9,7 +9,7 @@ interface EmailState {
 export const STORAGE_KEY = 'td-newsletter-dismissed';
 
 export const useEmailStore = create<EmailState>((set) => ({
-  showEmailBar: typeof window !== 'undefined' ? sessionStorage.getItem(STORAGE_KEY) !== 'true' : false,
+  showEmailBar: false,
   setShowEmailBar: (show: boolean) => set({ showEmailBar: show }),
   hideBar: () => {
     set({ showEmailBar: false });
