@@ -41,14 +41,10 @@ export function BlogDrafter() {
   };
 
   const handleCopyPrompt = () => {
-    let typeSpecificPrompt = '';
-    if (data.type === 'event') {
-      typeSpecificPrompt = `Ensure the JSON strictly matches the keys: title, category, date, excerpt, location, city, schedule, description.`;
-    } else if (data.type === 'resource') {
-      typeSpecificPrompt = `Ensure the JSON strictly matches the keys: title, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.`;
-    } else {
-      typeSpecificPrompt = `Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.`;
-    }
+    const typeSpecificPrompt =
+      data.type === 'event' ? `Ensure the JSON strictly matches the keys: title, category, date, excerpt, location, city, schedule, description.` :
+      data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
+      `Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.`;
 
     const prompt = `Objective: Expand the following ${data.type} draft JSON for Tech-Dancer.
 Requirements:
@@ -72,7 +68,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
     );
   }
 
-  const types: { id: ContentType; label: string; icon: any }[] = [
+  const types: { id: ContentType; label: string; icon: React.ElementType }[] = [
     { id: 'post', label: 'BLOG POST', icon: PenTool },
     { id: 'event', label: 'EVENT', icon: Calendar },
     { id: 'resource', label: 'RESOURCE', icon: Package },

@@ -200,7 +200,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     return `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
   }, [data, markdownPreview]);
 
-  const updateField = (field: keyof DraftData, value: any) => {
+  const updateField = <K extends keyof DraftData>(field: K, value: DraftData[K]) => {
     setData((prev: DraftData) => ({ ...prev, [field]: value }));
   };
 
@@ -220,18 +220,21 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (val: any) => {
+    const normalize = (val: unknown) => {
       if (typeof val === 'string') return val.replace(/\\n/g, '\n');
       return val;
     };
 
-    setData((prev: DraftData) => ({
-      ...prev,
-      ...Object.keys(parsed).reduce((acc, key) => {
-        acc[key as keyof DraftData] = normalize(parsed[key]);
-        return acc;
-      }, {} as any)
-    }));
+    setData((prev: DraftData) => {
+      const next = { ...prev };
+      (Object.keys(parsed) as Array<keyof DraftData>).forEach((key) => {
+        if (key in next) {
+          // @ts-expect-error - Dynamic mapping of normalized values
+          next[key] = normalize(parsed[key]);
+        }
+      });
+      return next;
+    });
     return true;
   };
 
