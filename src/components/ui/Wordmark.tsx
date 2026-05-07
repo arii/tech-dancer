@@ -29,7 +29,7 @@ export function Wordmark({
       boom
       <span className="text-accent">tick</span>
       <span
-        className={cn("text-white/60 font-light", dotBlogClassName)}
+        className={cn("text-text-body font-light", dotBlogClassName)}
         style={dotBlogStyle}
       >
         .blog

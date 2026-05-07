@@ -806,7 +806,7 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("resolve-conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
