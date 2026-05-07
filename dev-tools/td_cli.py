@@ -666,6 +666,55 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_resolve_conflicts(args):
+    """
+    Finds files with merge conflict markers and attempts to resolve them using LLM.
+    """
+    # Import here to avoid dependency if not used
+    import subprocess
+
+    # 1. Identify files with conflict markers
+    # Exclude dev-tools directory to avoid self-detection
+    # We use literal markers but escape them in grep or use a trick
+    # In Python we can just pass them.
+    log_diag("Searching for conflict markers...")
+
+    try:
+        # Looking for <<<<<<< SEARCH (literal)
+        grep_cmd = ["grep", "-rl", "<<<<<<<", ".", "--exclude-dir=dev-tools", "--exclude-dir=node_modules", "--exclude-dir=.git"]
+        res = run_command(grep_cmd, check=False, log_on_error=False)
+
+        if res.returncode != 0:
+            log_diag("No conflict markers found.")
+            return
+
+        conflicted_files = res.stdout.strip().split('\n')
+        log_diag(f"Found {len(conflicted_files)} files with conflicts: {conflicted_files}")
+
+    except Exception as e:
+        log_error(f"Failed to detect conflicts: {e}")
+        return
+
+    # 2. Call mergellama for each file
+    mergellama_script = os.path.join(os.path.dirname(__file__), "mergellama.py")
+
+    for filepath in conflicted_files:
+        log_diag(f"🤖 Attempting to resolve conflicts in `{filepath}`...")
+
+        cmd = [sys.executable, mergellama_script, filepath]
+        # Mergellama expects certain environment or setup, but we assume it's there (Ollama)
+
+        try:
+            res = run_command(cmd, check=False)
+            if res.returncode == 0:
+                log_diag(f"✅ Resolved conflicts in `{filepath}`")
+            else:
+                log_error(f"❌ Failed to resolve conflicts in `{filepath}` (exit code {res.returncode})")
+                if res.stderr:
+                    print(f"   {res.stderr.strip()}", file=sys.stderr)
+        except Exception as e:
+            log_error(f"Error running mergellama on {filepath}: {e}")
+
 def handle_repair_context(args):
     from error_rag import RAGPipeline
     pipeline = RAGPipeline()
@@ -811,6 +860,7 @@ def main():
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
                       ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
+                      ("resolve-conflicts", handle_resolve_conflicts),
                       ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
