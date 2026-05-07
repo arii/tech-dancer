@@ -1,12 +1,14 @@
 import { Text, TextProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
-interface WordmarkProps extends Omit<TextProps, 'variant'> {
+export type WordmarkVariant = "nav" | "hero";
+
+export interface WordmarkProps extends Omit<TextProps, 'variant'> {
   /**
    * nav: Standard branding used in Sidebar and Mobile Header (Albert Sans)
    * hero: Bold display branding used in the Hero section (Bricolage Grotesque)
    */
-  variant?: "nav" | "hero";
+  variant?: WordmarkVariant;
 }
 
 const VARIANT_MAP: Record<NonNullable<WordmarkProps["variant"]>, TextProps["variant"]> = {
@@ -35,6 +37,7 @@ export function Wordmark({
       weight={weight || "font-extrabold"}
       className={cn(className)}
       style={style}
+      tracking="wordmark"
       {...props}
     >
       boom

@@ -71,4 +71,3 @@ jobs:
         with:
           commit_message: "chore: auto-resolved merge conflicts using MergeLlama"
           file_pattern: '.'
-          push_options: '--force'

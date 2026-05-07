@@ -213,9 +213,9 @@ def handle_conflicts(args):
 
     base_branch = getattr(args, 'base', 'main') or 'main'
 
-    # 0. Set Git identity if not present (common in headless/CI)
-    res_name = run_command(["git", "config", "user.name"], check=False)
-    if not res_name.stdout.strip():
+    # Ensure git user is configured for CI environments
+    res = run_command(['git', 'config', 'user.name'], check=False, log_on_error=False)
+    if not res.stdout.strip():
         print("👤 Configuring git user for conflict resolution...")
         run('git config user.name "github-actions[bot]"')
         run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
