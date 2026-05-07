@@ -213,6 +213,13 @@ def handle_conflicts(args):
 
     base_branch = getattr(args, 'base', 'main') or 'main'
 
+    # Ensure git user is configured for CI environments
+    res = run_command(['git', 'config', 'user.name'], check=False, log_on_error=False)
+    if not res.stdout.strip():
+        print("👤 Configuring git user for conflict resolution...")
+        run('git config user.name "github-actions[bot]"')
+        run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
+
     # 1. Squash all commits relative to the base branch
     print("📦 Squashing current branch commits...")
     run("git fetch origin")

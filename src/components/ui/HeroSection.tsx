@@ -68,7 +68,7 @@ export function HeroSection() {
 
         {/* Wordmark: boomtick.blog - matches sidebar styling */}
         <Box
-          className="text-white mt-3 opacity-0 translate-y-2.5 pointer-events-none"
+          className="text-white mt-3 opacity-0 translate-y-2.5"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
             letterSpacing: '0.05em',
@@ -86,7 +86,7 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 translate-y-2.5 pointer-events-none"
+          className="opacity-0 translate-y-2.5"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
@@ -134,7 +134,7 @@ export function HeroSection() {
           gap={5}
           marginTop={{ base: 6, lg: 8 }}
           maxWidth="2xl"
-          className="opacity-0 pointer-events-none"
+          className="opacity-0"
           style={{
             animation: 'fadeUp 0.7s ease forwards 1.4s',
             paddingLeft: 'clamp(0px, 2vw, 32px)', // Mobile inset for readability
