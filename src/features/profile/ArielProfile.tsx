@@ -16,22 +16,6 @@ import {
 function ArielProfile() {
   const { bio } = useProfile();
 
-  // Robust Anchor Scrolling: Handle hashes on mount (important for lazy-loaded routes)
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const id = hash.replace('#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        // Small delay to ensure layout is stable and Suspense has finished
-        const timer = setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, []);
-
   const renderSection = (section: ProfileSection) => {
     return (
       <Stack key={section.id} gap={6} maxWidth="prose">
@@ -112,6 +96,8 @@ function ArielProfile() {
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                    width={600}
+                    height={600}
                     className="w-full h-full object-cover object-[center_20%]" // impeccable-ignore
                   />
                 </Box>

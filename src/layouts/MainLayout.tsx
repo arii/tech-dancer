@@ -21,6 +21,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
+    const timeouts: number[] = [];
 
     // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
@@ -41,7 +42,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       }
     } else {
       // 2. New Navigation (PUSH/REPLACE): Reset to top OR scroll to hash
-      requestAnimationFrame(() => {
+      const scrollWithRetry = (retryCount = 0) => {
         if (!container) return;
 
         if (hash) {
@@ -49,19 +50,35 @@ export function MainLayout({ children }: { children: ReactNode }) {
           const element = document.getElementById(id);
           if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
+
+            // Retry after a short delay to account for potential layout shifts (e.g. images loading)
+            if (retryCount < 3) {
+              const tid = window.setTimeout(() => scrollWithRetry(retryCount + 1), 200 * (retryCount + 1));
+              timeouts.push(tid);
+            }
             return;
+          } else if (retryCount < 5) {
+             // Element might not be in DOM yet (e.g. due to Suspense)
+             const tid = window.setTimeout(() => scrollWithRetry(retryCount + 1), 100);
+             timeouts.push(tid);
+             return;
           }
         }
         
         // Default: Reset to top
-        container.scrollTop = 0;
-        window.scrollTo(0, 0);
-      });
+        if (!hash) {
+          container.scrollTop = 0;
+          window.scrollTo(0, 0);
+        }
+      };
+
+      requestAnimationFrame(() => scrollWithRetry());
     }
 
     return () => {
       window.removeEventListener('beforeunload', handleSaveScroll);
       handleSaveScroll();
+      timeouts.forEach(t => window.clearTimeout(t));
     };
   }, [pathname, key, hash, navType]);
 
