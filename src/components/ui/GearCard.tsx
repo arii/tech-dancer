@@ -41,10 +41,7 @@ export function GearCard({
 
   return (
     <Stack
-      as={NavLink}
-      to={`${basePath}/${slug}`}
-      aria-label={`Read gear review: ${title}`}
-      role="article"
+      as="article"
       {...cleanProps}
       direction="col"
       gap={3}
@@ -52,8 +49,14 @@ export function GearCard({
       padding={6}
       radius="lg"
       border
-      className="group bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
+      <Box
+        as={NavLink}
+        to={`${basePath}/${slug}`}
+        aria-label={`Read gear review: ${title}`}
+        className="absolute inset-0 z-10"
+      />
       {verdict && (
         <Box display="flex" justify="end">
           <Text variant="mono" size="xs" color="dim" className="text-text-body">

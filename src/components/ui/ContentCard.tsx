@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
-interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
+interface ContentCardProps extends Partial<HTMLMotionProps<"article">> {
   slug: string;
   title: string;
   category: string;
@@ -42,19 +42,22 @@ export function ContentCard({
 
   return (
     <Stack
-      as={motion.create(NavLink)}
-      to={`${basePath}/${slug}`}
-      aria-label={`Read article: ${title}`}
-      role="article"
+      as={motion.create("article")}
       direction="col"
       gap={4}
       height="full"
       padding={6}
       radius="lg"
       border
-      className="group bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
       {...cleanMotionProps}
     >
+      <Box
+        as={NavLink}
+        to={`${basePath}/${slug}`}
+        aria-label={`Read article: ${title}`}
+        className="absolute inset-0 z-10"
+      />
       <Box
         paddingX={2}
         paddingY={1}
