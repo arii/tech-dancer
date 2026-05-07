@@ -103,6 +103,8 @@ export function useBlogDrafter() {
       }
     }
     return DEFAULT_DATA;
+  });
+
 
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     const saved = localStorage.getItem(HISTORY_KEY);
@@ -257,8 +259,8 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
         title: (normalize(parsed.title) as string) || prev.title,
         category: (normalize(parsed.category) as string) || prev.category,
         excerpt: (normalize(parsed.excerpt || parsed.description) as string) || prev.excerpt,
-        affiliateLink: (parsed.affiliateLink as string) || (prev as any).affiliateLink || '',
-        commentary: (normalize(parsed.commentary) as string) || (prev as any).commentary || '',
+        affiliateLink: (parsed.affiliateLink as string) || ((prev as PostDraftData).affiliateLink) || '',
+        commentary: (normalize(parsed.commentary) as string) || ((prev as PostDraftData).commentary) || '',
         author: prev.author,
         date: parsed.date || prev.date
       };

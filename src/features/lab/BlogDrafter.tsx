@@ -503,7 +503,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                       <Box
                         as="button"
                         onClick={() => rollback(entry)}
-                        surface="accent"
+                        surface="alt"
                         paddingX={2}
                         paddingY={1}
                         className="bg-accent/10 text-accent hover:bg-accent hover:text-bg transition-all cursor-pointer"
@@ -618,7 +618,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               align="center"
               justify="center"
               gap={3}
-              surface="accent"
+              surface="alt"
               padding={4}
               className="bg-accent text-bg hover:bg-accent transition-all cursor-pointer group"
             >

@@ -47,7 +47,7 @@ export function NewsletterBanner() {
             >
               DISMISS
             </Text>
-            <X className="w-5 h-5 text-text-dim group-hover/close:text-accent transition-colors" />
+            <X className="w-5 h-5 text-text-body group-hover/close:text-accent transition-colors" />
           </Stack>
         </Button>
       </Box>
@@ -99,7 +99,7 @@ export function NewsletterBanner() {
         </Stack>
         <Stack gap={4} width={{ base: 'full', lg: 'auto' }}>
           <EmailForm />
-          <Text variant="sans" size="xs" color="dim" className="opacity-60">
+          <Text variant="sans" size="xs" color="main">
             No spam. Unsubscribe anytime.
           </Text>
         </Stack>

@@ -1,0 +1,298 @@
+diff --git a/content/events/swingtacular-the-galactic-open.md b/content/events/swingtacular-the-galactic-open.md
+index ebbd4603e..2306b6589 100644
+--- a/content/events/swingtacular-the-galactic-open.md
++++ b/content/events/swingtacular-the-galactic-open.md
+@@ -1,14 +1,17 @@
+ ---
+ type: event
+ title: "Swingtacular: The Galactic Open"
+-date: "2026-08-06"
++date: "2026-08-14"
++startDate: "2026-08-14"
++earlyBirdDate: "2026-06-15"
++hotelCutoffDate: "2026-07-20"
++url: "https://swingtacular.com"
+ author: "Gemini"
+ category: "WSDC Registry Event"
+-excerpt: "A space-themed West Coast Swing extravaganza in the San Francisco Bay Area."
++excerpt: "San Francisco event. Check for roommate pairings on the Facebook group early."
+ location: "Hyatt Regency San Francisco Airport"
+ city: "Burlingame, CA"
+-schedule: "August 6 - 9, 2026"
++schedule: "August 14 - 17, 2026"
+ description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."
+ ---
+-# Swingtacular: The Galactic Open
+-A space-themed West Coast Swing extravaganza in the San Francisco Bay Area.
++San Francisco event. Check for roommate pairings on the Facebook group early.
+diff --git a/content/events/wild-wild-westie.md b/content/events/wild-wild-westie.md
+new file mode 100644
+index 000000000..3384f534c
+--- /dev/null
++++ b/content/events/wild-wild-westie.md
+@@ -0,0 +1,17 @@
++---
++type: event
++title: "Wild Wild Westie"
++date: "2026-07-02"
++startDate: "2026-07-02"
++earlyBirdDate: "2026-05-01"
++hotelCutoffDate: "2026-06-05"
++url: "https://wildwildwestie.com"
++author: "Ariel Anders"
++category: "WSDC Registry Event"
++excerpt: "Dallas event. Book the hotel room block immediately as it fills fast."
++location: "Westin Dallas Fort Worth Airport"
++city: "Dallas, TX"
++schedule: "July 2 - 5, 2026"
++description: "Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere."
++---
++Dallas event. Book the hotel room block immediately as it fills fast.
+diff --git a/src/config/research-tools.ts b/src/config/research-tools.ts
+index 1accd3fc9..86d072062 100644
+--- a/src/config/research-tools.ts
++++ b/src/config/research-tools.ts
+@@ -27,5 +27,12 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
+     category: 'Development Tool',
+     status: 'Active',
+     layman: 'Automated visual regression and UX improvement suggestions across viewports.'
++  },
++  {
++    id: 'wsdc-event-reminders',
++    name: 'WSDC Event Reminders',
++    category: 'Travel Optimization',
++    status: 'Active',
++    layman: 'Secure early bird discounts without overcommitting. Sync verified WSDC travel milestones directly to your calendar.'
+   }
+ ];
+diff --git a/src/config/routes.ts b/src/config/routes.ts
+index 35dc14d77..8568fa1ea 100644
+--- a/src/config/routes.ts
++++ b/src/config/routes.ts
+@@ -53,6 +53,11 @@ export const routes: RouteConfig[] = [
+     lazy: () => import('@/pages/UXAuditor').then(m => ({ Component: m.default })),
+     skeleton: 'grid'
+   },
++  {
++    path: '/research/wsdc-event-reminders',
++    lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
++    skeleton: 'post'
++  },
+   {
+     path: '/about',
+     lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
+diff --git a/src/features/email-capture/NewsletterBanner.tsx b/src/features/email-capture/NewsletterBanner.tsx
+index 244abe34a..6d8f109a6 100644
+--- a/src/features/email-capture/NewsletterBanner.tsx
++++ b/src/features/email-capture/NewsletterBanner.tsx
+@@ -71,7 +71,7 @@ export function NewsletterBanner() {
+               variant="headline"
+               size="2xl"
+               weight="font-black"
+-              color="accent"
++              color="main"
+               className="uppercase tracking-tighter"
+             >
+               Get the latest dance insights.
+diff --git a/src/features/lab/BlogDrafter.tsx b/src/features/lab/BlogDrafter.tsx
+index 33796e60f..8414d5c97 100644
+--- a/src/features/lab/BlogDrafter.tsx
++++ b/src/features/lab/BlogDrafter.tsx
+@@ -1,14 +1,20 @@
+ import { useState, ChangeEvent } from 'react';
+-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
++import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye, Calendar, Package, PenTool } from 'lucide-react';
+ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+ import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
+-import { useBlogDrafter } from './useBlogDrafter';
++import { useBlogDrafter, ContentType } from './useBlogDrafter';
+ import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+ import { CONTENT_CATEGORIES } from '@/config/content';
+ import { FullPreview } from './components/FullPreview';
+ import { inputs } from '@/styles/design-tokens';
+ import { cn } from '@/lib/utils';
+
++const types: { id: ContentType; label: string; icon: React.ElementType }[] = [
++  { id: 'post', label: 'BLOG POST', icon: PenTool },
++  { id: 'event', label: 'EVENT', icon: Calendar },
++  { id: 'resource', label: 'RESOURCE', icon: Package },
++];
++
+ export function BlogDrafter() {
+   const {
+     data,
+@@ -41,12 +47,17 @@ export function BlogDrafter() {
+   };
+
+   const handleCopyPrompt = () => {
+-    const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.
++    const typeSpecificPrompt =
++      data.type === 'event' ? `Ensure the JSON strictly matches the keys: title, category, date, excerpt, location, city, schedule, description.` :
++      data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
++      `Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.`;
++
++    const prompt = `Objective: Expand the following ${data.type} draft JSON for Tech-Dancer.
+ Requirements:
+ 1. Respond ONLY with a valid JSON object.
+ 2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.
+-3. Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.
+-4. The 'commentary' should be rich markdown content.
++3. ${typeSpecificPrompt}
++4. Content should be rich markdown where appropriate.
+
+ Draft Data: ${JSON.stringify(data, null, 2)}`;
+     navigator.clipboard.writeText(prompt);
+@@ -57,13 +68,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
+   if (previewMode === 'full') {
+     return (
+       <FullPreview
+-        title={data.title}
+-        category={data.category}
+-        date={data.date}
+-        author={data.author}
+-        excerpt={data.excerpt}
+-        commentary={data.commentary}
+-        affiliateLink={data.affiliateLink}
++        {...data}
+         onClose={() => setPreviewMode('compact')}
+       />
+     );
+@@ -89,13 +94,43 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
+             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
+           </Box>
+         </Box>
++
++        {/* Type Selector */}
++        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
++          {types.map((type) => {
++            const Icon = type.icon;
++            const isActive = data.type === type.id;
++            return (
++              <Box
++                key={type.id}
++                as="button"
++                onClick={() => updateField('type', type.id)}
++                display="flex"
++                align="center"
++                justify="center"
++                gap={2}
++                paddingY={2}
++                className={cn(
++                  "transition-all cursor-pointer",
++                  isActive
++                    ? "bg-accent text-bg shadow-sm"
++                    : "text-text-dim hover:text-text-main hover:bg-white/5"
++                )}
++              >
++                <Icon className="w-3 h-3" />
++                <Text variant="mono" size="micro" weight="font-bold">{type.label}</Text>
++              </Box>
++            );
++          })}
++        </Grid>
++
+         <Box border padding="compact" className="bg-accent/5 border-accent/20">
+            <Stack gap={2} display="flex" align="baseline" direction="row">
+               <Box as="span" className="shrink-0">
+                 <Info className="w-4 h-4 text-accent" />
+               </Box>
+               <Text variant="body" size="xs">
+-                This tool prepares your blog post for the Tech-Dancer automated pipeline.
++                Drafting as <strong>{data.type.toUpperCase()}</strong>.
+                 Complete the form below to generate a pre-formatted GitHub Issue link.
+               </Text>
+            </Stack>
+@@ -121,19 +156,21 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
+           </Box>
+
+           <Stack gap={6}>
+-            <Stack gap={2}>
+-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
+-              <Box
+-                as="input"
+-                type="text"
+-                value={data.title}
+-                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
+-                placeholder="The Future of WCS..."
+-                className={inputs.base}
+-              />
+-            </Stack>
+
+             <Grid cols={2} gap={4}>
++              <Stack gap={2}>
++                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CONTENT_TYPE</Text>
++                <Box
++                  as="select"
++                  value={data.type}
++                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
++                  className={cn(inputs.base, "appearance-none")}
++                >
++                  <option value="post">Blog Post</option>
++                  <option value="resource">Gear Resource</option>
++                  <option value="event">WCS Event</option>
++                </Box>
++              </Stack>
+               <Stack gap={2}>
+                 <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
+                 <Box
+@@ -142,58 +179,292 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
+                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
+                   className={cn(inputs.base, "appearance-none")}
+                 >
+-                  {CONTENT_CATEGORIES.map(cat => (
++                  {data.type === 'event' ? (
++                     <>
++                       <option value="WSDC Registry Event">WSDC Registry Event</option>
++                       <option value="Local Event">Local Event</option>
++                       <option value="Workshop">Workshop</option>
++                     </>
++                  ) : CONTENT_CATEGORIES.map(cat => (
+                     <option key={cat.id} value={cat.id}>{cat.label}</option>
+                   ))}
+                 </Box>
+               </Stack>
+-              <Stack gap={2}>
+-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DATE</Text>
+-                <Box
+-                  as="input"
+-                  type="date"
+-                  value={data.date}
+-                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+-                  className={inputs.base}
+-                />
+-              </Stack>
+             </Grid>
+
+             <Stack gap={2}>
+-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>EXCERPT_SUMMARY</Text>
++              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
+               <Box
+-                as="textarea"
+-                value={data.excerpt}
+-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
+-                placeholder="A brief overview of the post content..."
+-                height={20}
+-                className={cn(inputs.base, "resize-none")}
++                as="input"
++                type="text"
++                value={data.title}
++                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
++                placeholder="The Future of WCS..."
++                className={inputs.base}
+               />
+             </Stack>
+
+             <Stack gap={2}>
+-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
++              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>PUBLISH_DATE</Text>
+               <Box
+                 as="input"
+-                type="url"
+-                value={data.affiliateLink}
+-                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
+-                placeholder="https://amazon.com/..."
++                type="date"
++                value={data.date}
++                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                 className={inputs.base}
+               />

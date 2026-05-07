@@ -38,7 +38,6 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
     </Stack>
   );
 
->>>>>>> origin/refactor/preview-sidebars-11760790385829217780
   return (
     <Box position="relative">
       <PrimaryActionButton
@@ -57,7 +56,6 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
       </PrimaryActionButton>
 
       <DetailLayout
-<<<<<<< HEAD
         title={props.title || 'Untitled Post'}
         category={props.category}
         date={props.date}
