@@ -1,71 +1,105 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
-import { motionTokens } from '@/styles/motion';
-import { motion } from 'motion/react';
 import { useEmailStore } from './emailStore';
 import { Button } from '@/layouts/Primitives';
 
 export function NewsletterBanner() {
-  const hideBar = useEmailStore((state) => state.hideBar);
+  const { showEmailBar, hideBar } = useEmailStore();
+
+  if (!showEmailBar) return null;
 
   return (
     <Box 
-      as={motion.div}
-      initial={motionTokens.overlay.initial}
-      animate={motionTokens.overlay.animate}
-      exit={motionTokens.overlay.exit}
-      transition={motionTokens.overlay.transition}
-      surface="default"
-      opacity={0.95}
-      className="backdrop-blur-2xl border-t border-accent/20"
-      shadow="topOverlay"
-      padding="emailBar"
+      position="relative"
+      surface="alt"
+      border="y"
+      className="border-accent/40 shadow-glow"
+      paddingX={{ base: 6, md: 12 }}
+      paddingY={{ base: 12, lg: 16 }}
       radius="none"
-      marginX="auto"
-      position="fixed"
-      bottom={0}
-      left={4}
-      right={4}
-      zIndex="toast"
+      width="full"
     >
-      <Box position="absolute" className="top-2 right-2" zIndex="docked">
+      {/* Decorative Brand Accent - No arbitrary width, use standard spacing if possible or raw line */}
+      <Box 
+        position="absolute" 
+        top={0} 
+        left={0} 
+        width="1px" 
+        height="full" 
+        className="bg-accent shadow-glow"
+      />
+
+      {/* Persistent Dismissal */}
+      <Box position="absolute" className="top-4 right-4" zIndex="docked">
         <Button
           variant="ghost"
-          size="sm"
           onClick={hideBar}
-          aria-label="Dismiss"
-          padding={1}
-          minHeight={0}
-          minWidth={0}
-          className="min-w-0"
+          aria-label="Dismiss newsletter signup"
+          padding={2}
+          className="group/close"
         >
-          <X className="w-4 h-4 text-text-dim hover:text-accent transition-colors" />
+          <Stack direction="row" align="center" gap={3}>
+            <Text 
+              variant="mono" 
+              size="micro" 
+              className="opacity-0 group-hover/close:opacity-100 transition-opacity"
+            >
+              DISMISS
+            </Text>
+            <X className="w-5 h-5 text-text-dim group-hover/close:text-accent transition-colors" />
+          </Stack>
         </Button>
       </Box>
 
       <Stack 
-        direction={{ base: 'col', md: 'row' }} 
-        align="center" 
+        direction={{ base: 'col', lg: 'row' }} 
+        align={{ base: 'start', lg: 'center' }} 
         justify="between" 
-        gap={{ base: 4, md: 8 }}
-        className="w-full"
+        gap={8}
+        maxWidth="7xl"
+        marginX="auto"
+        width="full"
       >
-        <Stack direction="row" align="center" gap={4} className="w-full md:w-auto">
-          <Box padding="compact" surface="accent" opacity={0.5} display={{ base: 'none', sm: 'block' }} width={12} height={12} minWidth={12} minHeight={12} flex="none">
-            <Mail className="w-5 h-5 text-accent" />
+        <Stack direction={{ base: 'col', sm: 'row' }} align={{ base: 'start', sm: 'center' }} gap={8} flex={1}>
+          <Box padding={4} surface="accent" opacity={0.1} display={{ base: 'none', md: 'block' }} radius="none">
+            <Mail className="w-6 h-6 text-accent" />
           </Box>
-          <Stack gap={0}>
-            <Text variant="display" size="base" uppercase tracking="tight">
-              Weekly Insights
+          <Stack gap={4}>
+            <Text 
+              variant="headline" 
+              size="2xl" 
+              weight="font-black" 
+              color="accent" 
+              className="uppercase tracking-tighter"
+            >
+              Get the latest dance insights.
             </Text>
-            <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="emphasized">
-              Dance Analytics // Gear Reviews // Community Updates
-            </Text>
+            {/* Pill badges for topics - Sharp edges as requested */}
+            <Box display="flex" gap={2} wrap>
+              {['Dance Analytics', 'Gear Reviews', 'Community Updates'].map(tag => (
+                <Box
+                  key={tag}
+                  paddingX={3}
+                  paddingY={1}
+                  radius="none"
+                  border
+                  className="bg-accent/5 border-accent/20 text-accent"
+                >
+                  <Text variant="mono" size="micro" weight="font-bold">
+                    {tag}
+                  </Text>
+                </Box>
+              ))}
+            </Box>
           </Stack>
         </Stack>
-        
-        <EmailForm />
+        <Stack gap={4} width={{ base: 'full', lg: 'auto' }}>
+          <EmailForm />
+          <Text variant="sans" size="xs" color="dim" className="opacity-60">
+            No spam. Unsubscribe anytime.
+          </Text>
+        </Stack>
       </Stack>
     </Box>
   );

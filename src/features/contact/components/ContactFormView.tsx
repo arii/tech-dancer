@@ -104,7 +104,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             <Box display="flex" justify="end">
               <Button
                 type="submit"
-                variant="professional"
+                variant="primary"
                 disabled={isSubmitting}
                 paddingX={8}
                 className="font-semibold text-base min-h-12"

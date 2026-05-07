@@ -5,21 +5,19 @@ import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import { useEmailStore } from '@/features/email-capture/emailStore';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
 
 export function MainLayout({ children }: { children: ReactNode }) {
-  const showEmailBar = useEmailStore((state) => state.showEmailBar);
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
-  const { pathname, key } = useLocation();
+  const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
   const navigate = useNavigate();
 
-  // Unified Scroll Management: Reset on navigation, Restore on history
+  // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
@@ -42,22 +40,30 @@ export function MainLayout({ children }: { children: ReactNode }) {
         });
       }
     } else {
-      // 2. New Navigation (PUSH/REPLACE): Reset to top
-      // We use requestAnimationFrame to ensure the scroll happens after the content renders
+      // 2. New Navigation (PUSH/REPLACE): Reset to top OR scroll to hash
       requestAnimationFrame(() => {
-        if (container) {
-          container.scrollTop = 0;
+        if (!container) return;
+
+        if (hash) {
+          const id = hash.replace('#', '');
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            return;
+          }
         }
+        
+        // Default: Reset to top
+        container.scrollTop = 0;
+        window.scrollTo(0, 0);
       });
-      // Also ensure the window itself is at the top
-      window.scrollTo(0, 0);
     }
 
     return () => {
       window.removeEventListener('beforeunload', handleSaveScroll);
       handleSaveScroll();
     };
-  }, [pathname, key, navType]);
+  }, [pathname, key, hash, navType]);
 
   const handleTouchStart = (e: TouchEvent) => {
     touchStartRef.current = {
@@ -164,7 +170,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}
             paddingTop={{ base: 16, md: 12 }}
-            paddingBottom={showEmailBar ? { base: 64, md: 80 } : { base: 28, md: 12 }}
+            paddingBottom={{ base: 28, md: 12 }}
             flex={1}
             direction="col"
             marginX={{ base: "auto", lg: 0 }}

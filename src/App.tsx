@@ -11,20 +11,13 @@ import { PageSkeleton } from './components/ui/PageSkeleton';
 import { GlobalErrorBoundary } from './components/GlobalErrorBoundary';
 import { GA_MEASUREMENT_ID } from './config/constants';
 import { routes as routeConfig } from './config/routes';
-import { NewsletterBanner } from './features/email-capture/NewsletterBanner';
 import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
-import { STORAGE_KEY, useEmailStore } from './features/email-capture/emailStore';
-
-const BANNER_DELAY_MS = 30000; // 30s delay
-
 export function RootLayout() {
   const location = useLocation();
-  const showEmailBar = useEmailStore((state) => state.showEmailBar);
-  const setShowEmailBar = useEmailStore((state) => state.setShowEmailBar);
 
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
@@ -65,17 +58,6 @@ export function RootLayout() {
     });
   }, [location]);
 
-  useEffect(() => {
-    const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';
-    if (isDismissed) return;
-
-    const timer = setTimeout(() => {
-      setShowEmailBar(true);
-    }, BANNER_DELAY_MS);
-
-    return () => clearTimeout(timer);
-  }, [setShowEmailBar]);
-
   const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
 
   return (
@@ -97,9 +79,6 @@ export function RootLayout() {
           </Box>
         </AnimatePresence>
       </MainLayout>
-      <AnimatePresence>
-        {showEmailBar && <NewsletterBanner />}
-      </AnimatePresence>
       {import.meta.env.PROD && window.location.hostname !== 'localhost' && <Analytics />}
     </>
   );

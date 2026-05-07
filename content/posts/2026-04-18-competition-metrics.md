@@ -3,7 +3,7 @@ type: post
 title: "Coming Soon: WCS Competition Data Scraper"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
-category: "Dance Research"
+category: "Tech"
 excerpt: "Announcing a new tool for objective, ethical analysis of West Coast Swing competition data."
 image: ""
 tags:

@@ -46,19 +46,26 @@ export function ContentCard({
       padding={6}
       radius="lg"
       border
-      className="group bg-surface hover:border-accent/40 transition-all duration-300"
+      className="group bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
       {...cleanMotionProps}
     >
-      <Text
-        variant="mono"
-        size="tiny"
-        weight="font-black"
-        uppercase
-        tracking="widest"
-        className={getTagColorClass(category)}
+      <Box
+        paddingX={2}
+        paddingY={1}
+        radius="full"
+        border
+        className="border-line w-fit"
       >
-        {category}
-      </Text>
+        <Text
+          variant="mono"
+          size="tiny"
+          weight="font-black"
+          tracking="widest"
+          className={getTagColorClass(category)}
+        >
+          {category}
+        </Text>
+      </Box>
 
       <Stack gap={2}>
         <Text
@@ -77,7 +84,7 @@ export function ContentCard({
       </Stack>
 
       <Box display="flex" align="center" marginTop="auto">
-        <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest" uppercase>
+        <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest">
           Read Article
         </Text>
       </Box>

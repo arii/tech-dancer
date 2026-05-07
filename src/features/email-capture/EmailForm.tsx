@@ -25,7 +25,7 @@ export function EmailForm() {
           as="input"
           name="email"
           type="email"
-          placeholder="Email Address"
+          placeholder="your@email.com"
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
