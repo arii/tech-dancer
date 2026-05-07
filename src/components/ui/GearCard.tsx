@@ -1,14 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BoxProps } from '@/layouts/Primitives';
 
-import { useMemo } from 'react';
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
-const SLOP_PROPS = new Set([
-  'type', 'date', 'author', 'content', 'tags', 'affiliateIds',
-  'priceCategory', 'updatedDate', 'durability', 'value', 'specs', 'readingTime'
-]);
+const SLOP_PROPS = [
+  "type", "date", "author", "content", "tags", "affiliateIds",
+  "priceCategory", "updatedDate", "durability", "value", "specs", "readingTime"
+];
 
 interface GearCardProps extends BoxProps {
   slug: string;
@@ -20,6 +19,7 @@ interface GearCardProps extends BoxProps {
   verdict?: string;
   image?: string;
 }
+
 
 export function GearCard({
   slug,
@@ -33,12 +33,13 @@ export function GearCard({
   ...rest
 }: GearCardProps) {
   // Filter out resource-specific metadata to prevent attribute leakage in the DOM.
-  // We use a memoized filter to maintain performance during list re-renders.
-  const cleanProps = useMemo(() => {
-    const filtered = { ...rest } as Record<string, unknown>;
-    SLOP_PROPS.forEach(prop => delete filtered[prop]);
-    return filtered;
-  }, [rest]);
+  const cleanProps = { ...rest } as Record<string, unknown>;
+  for (const key of SLOP_PROPS) {
+    delete cleanProps[key];
+  }
+
+
+
 
   return (
     <Stack
