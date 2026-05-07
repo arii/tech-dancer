@@ -11,6 +11,12 @@ export const GEAR_FILTERS = [
   { label: "Competition ready", value: "Competition ready", color: "text-error border-error/30 bg-error/10" }
 ] as const;
 
+export const GEAR_CATEGORIES = [
+  { id: 'dance', label: 'Row 1: Dance Equipment', description: 'Technical reviews of competitive social dance footwear and accessories.' },
+  { id: 'fashion', label: 'Row 2: Fashion', description: 'Bright, fun outfits selected for movement, comfort, and style on the dance floor.' },
+  { id: 'travel', label: 'Row 3: Travel Related', description: 'Optimized logistics gear for the convention circuit and bougie-on-a-budget travel.' }
+] as const;
+
 export const SITE_METADATA = {
   title: 'Tech-Dancer',
   author: 'Ariel Anders, PhD',
