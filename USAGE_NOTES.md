@@ -35,6 +35,7 @@ This includes:
 - PR Scope validation
 - Conflict detection (requires `GITHUB_TOKEN`)
 
+
 ## CI Gate Baselines
 
 Technical debt is tracked using **GitHub Actions Variables** instead of local files. This prevents "lockfile-style" churn on small metric changes.
