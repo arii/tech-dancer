@@ -95,6 +95,7 @@ export const tracking = {
   emphasized: "tracking-[0.15em]",
   utility: "tracking-[3px]",
   label: "tracking-[2px]",
+  wordmark: "tracking-[0.05em]",
 };
 
 export const typography = {
