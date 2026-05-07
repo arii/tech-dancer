@@ -76,3 +76,42 @@ export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[])
 
   return matchRoute?.skeleton || 'grid';
 }
+
+/**
+ * Filters out content-specific metadata props that shouldn't bleed to the DOM.
+ */
+export function filterDataProps(props: Record<string, unknown>) {
+  const {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    type: _type,
+    slug: _slug,
+    title: _title,
+    date: _date,
+    author: _author,
+    authorAvatar: _authorAvatar,
+    category: _category,
+    excerpt: _excerpt,
+    content: _content,
+    image: _image,
+    tags: _tags,
+    basePath: _basePath,
+    rating: _rating,
+    verdict: _verdict,
+    priceCategory: _priceCategory,
+    updatedDate: _updatedDate,
+    durability: _durability,
+    value: _value,
+    specs: _specs,
+    readingTime: _readingTime,
+    affiliateIds: _affiliateIds,
+    location: _location,
+    city: _city,
+    schedule: _schedule,
+    description: _description,
+    link: _link,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+    ...rest
+  } = props;
+
+  return rest;
+}
