@@ -114,8 +114,8 @@ export const typography = {
   content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
   headerAccent: `font-mono font-bold ${tracking["wide-editorial"]} uppercase text-accent`,
   sans: "font-sans",
-  wordmark: "font-sans leading-none text-white",
-  wordmarkHero: "font-display leading-none text-white",
+  wordmark: `font-sans leading-none text-white ${tracking.wordmark}`,
+  wordmarkHero: `font-display leading-none text-white ${tracking.wordmark}`,
 };
 
 export const typeSizes = {
