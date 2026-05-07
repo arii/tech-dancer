@@ -161,7 +161,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (val: any): any => {
+    const normalize = (val: unknown): unknown => {
       if (typeof val === 'string') return val.replace(/\\n/g, '\n');
       if (Array.isArray(val)) return val.map(normalize);
       if (val !== null && typeof val === 'object') {

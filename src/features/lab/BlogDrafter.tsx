@@ -121,7 +121,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Box
                   as="select"
                   value={data.type}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as any)}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
                   className={cn(inputs.base, "appearance-none")}
                 >
                   <option value="post">Blog Post</option>
