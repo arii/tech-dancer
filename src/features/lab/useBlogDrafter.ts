@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { SITE_METADATA } from '@/config/content';
 
 export interface DraftData {
+  type: 'post' | 'resource' | 'event';
   title: string;
   category: string;
   excerpt: string;
@@ -10,6 +11,19 @@ export interface DraftData {
   date: string;
   affiliateLink: string;
   commentary: string;
+  // Resource specific
+  rating?: number;
+  durability?: number;
+  value?: number;
+  priceCategory?: string;
+  verdict?: string;
+  specs?: Record<string, string>;
+  // Event specific
+  location?: string;
+  startDate?: string;
+  earlyBirdDate?: string;
+  hotelCutoffDate?: string;
+  url?: string;
 }
 
 export interface HistoryEntry {
@@ -41,6 +55,7 @@ export function useBlogDrafter() {
       }
     }
     return {
+      type: 'post',
       title: '',
       category: 'Lifestyle',
       excerpt: '',
@@ -146,20 +161,43 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (str: string) => typeof str === 'string' ? str.replace(/\\n/g, '\n') : str;
+    const normalize = (val: any): any => {
+      if (typeof val === 'string') return val.replace(/\\n/g, '\n');
+      if (Array.isArray(val)) return val.map(normalize);
+      if (val !== null && typeof val === 'object') {
+        return Object.fromEntries(
+          Object.entries(val).map(([k, v]) => [k, normalize(v)])
+        );
+      }
+      return val;
+    };
 
     setData((prev: DraftData) => ({
       ...prev,
+      type: parsed.type || prev.type,
       title: normalize(parsed.title) || prev.title,
       excerpt: normalize(parsed.excerpt || parsed.description) || prev.excerpt,
       affiliateLink: parsed.affiliateLink || prev.affiliateLink,
-      commentary: normalize(parsed.commentary) || prev.commentary
+      commentary: normalize(parsed.commentary) || prev.commentary,
+      // Specialized fields
+      rating: parsed.rating ?? prev.rating,
+      durability: parsed.durability ?? prev.durability,
+      value: parsed.value ?? prev.value,
+      priceCategory: parsed.priceCategory || prev.priceCategory,
+      verdict: normalize(parsed.verdict) || prev.verdict,
+      specs: normalize(parsed.specs) || prev.specs,
+      location: normalize(parsed.location) || prev.location,
+      startDate: parsed.startDate || prev.startDate,
+      earlyBirdDate: parsed.earlyBirdDate || prev.earlyBirdDate,
+      hotelCutoffDate: parsed.hotelCutoffDate || prev.hotelCutoffDate,
+      url: parsed.url || prev.url
     }));
     return true;
   };
 
   const clearForm = () => {
     setData({
+      type: 'post',
       title: '',
       category: 'Lifestyle',
       excerpt: '',
