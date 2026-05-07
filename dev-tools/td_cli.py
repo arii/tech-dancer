@@ -801,12 +801,45 @@ def handle_manage_reviews(args):
 
     if args.json: print(json.dumps({"status": "success", "prs": prs_data}, indent=2))
 
+
+def handle_resolve_conflicts(args):
+    """
+    Finds files with conflict markers and resolves them using MergeLlama.
+    """
+    log_diag("🔍 Searching for files with merge conflicts...")
+
+    # Use grep to find conflict markers, excluding common non-source directories
+    # We use -l to just get filenames, and -r for recursive
+    # Literal marker to avoid self-detection
+    marker = "<<<<<<<"
+    cmd = f"grep -rl \"{marker}\" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dev-tools"
+
+    res = run_command(cmd, check=False, shell=True, log_on_error=False)
+
+    if res.returncode == 1 or not res.stdout.strip():
+        log_diag("✅ No merge conflicts found.")
+        return
+
+    files = res.stdout.strip().split('\n')
+    log_diag(f"⚠️ Found {len(files)} file(s) with conflicts: {', '.join(files)}")
+
+    # Call mergellama.py for each file
+    mergellama_script = os.path.join(os.path.dirname(__file__), "mergellama.py")
+
+    for file_path in files:
+        log_diag(f"🦙 Resolving conflicts in {file_path}...")
+        ml_res = run_command([sys.executable, mergellama_script, file_path], check=False)
+        if ml_res.returncode != 0:
+            log_error(f"Failed to resolve conflicts in {file_path}")
+            sys.exit(1)
+
+    log_diag("✅ All conflicts resolved successfully!")
 def main():
     parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("resolve-conflicts", handle_resolve_conflicts), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
@@ -879,3 +912,37 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def handle_resolve_conflicts(args):
+    """
+    Finds files with conflict markers and resolves them using MergeLlama.
+    """
+    log_diag("🔍 Searching for files with merge conflicts...")
+
+    # Use grep to find conflict markers, excluding common non-source directories
+    # We use -l to just get filenames, and -r for recursive
+    # Literal marker to avoid self-detection
+    marker = "<<<<<<<"
+    cmd = f"grep -rl \"{marker}\" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dev-tools"
+
+    res = run_command(cmd, check=False, shell=True, log_on_error=False)
+
+    if res.returncode == 1 or not res.stdout.strip():
+        log_diag("✅ No merge conflicts found.")
+        return
+
+    files = res.stdout.strip().split('\n')
+    log_diag(f"⚠️ Found {len(files)} file(s) with conflicts: {', '.join(files)}")
+
+    # Call mergellama.py for each file
+    mergellama_script = os.path.join(os.path.dirname(__file__), "mergellama.py")
+
+    for file_path in files:
+        log_diag(f"🦙 Resolving conflicts in {file_path}...")
+        ml_res = run_command([sys.executable, mergellama_script, file_path], check=False)
+        if ml_res.returncode != 0:
+            log_error(f"Failed to resolve conflicts in {file_path}")
+            sys.exit(1)
+
+    log_diag("✅ All conflicts resolved successfully!")
