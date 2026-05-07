@@ -43,6 +43,8 @@ export function GearCard({
     <Stack
       as={NavLink}
       to={`${basePath}/${slug}`}
+      aria-label={`Read gear review: ${title}`}
+      role="article"
       {...cleanProps}
       direction="col"
       gap={3}
@@ -54,8 +56,8 @@ export function GearCard({
     >
       {verdict && (
         <Box display="flex" justify="end">
-          <Text variant="mono" size="tiny" color="dim">
-            {verdict}
+          <Text variant="mono" size="xs" color="dim" className="text-text-body">
+            Best for: {verdict}
           </Text>
         </Box>
       )}
@@ -91,7 +93,7 @@ export function GearCard({
           radius="full"
           className="bg-accent/80 text-white backdrop-blur-md shadow-sm"
         >
-          <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-widest">
+          <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
             {category}
           </Text>
         </Box>
@@ -107,7 +109,7 @@ export function GearCard({
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
+        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed text-text-body">
            {excerpt}
         </Text>
       </Stack>
@@ -122,8 +124,8 @@ export function GearCard({
           </Box>
         )}
         <Box display="flex" align="center" gap={1}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest">
-            Read Review
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+            Read review
           </Text>
           <ArrowRight className="w-3 h-3 text-accent" />
         </Box>

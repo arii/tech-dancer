@@ -19,7 +19,7 @@ export function FilterBar({ categories }: FilterBarProps) {
       className="bg-bg/80 backdrop-blur-md top-16 lg:top-0 no-scrollbar"
       paddingY={4}
     >
-      <Stack direction="row" gap={6} className="min-w-max">
+      <Stack direction="row" gap={4} className="min-w-max" paddingX={1}>
         {categories.map((cat) => (
           <Box
             key={cat}
@@ -27,10 +27,10 @@ export function FilterBar({ categories }: FilterBarProps) {
             onClick={() => setActiveCategory(cat)}
             aria-current={activeCategory === cat ? 'page' : undefined}
             className={cn(
-              "transition-all duration-300 text-xs font-black uppercase tracking-[0.12em] cursor-pointer whitespace-nowrap",
+              "transition-all duration-300 text-sm font-bold uppercase tracking-wide cursor-pointer whitespace-nowrap min-h-11 px-3 rounded-full",
               activeCategory === cat
-                ? "text-accent"
-                : "text-text-dim hover:text-text-main"
+                ? "text-accent border border-accent/60 bg-accent/10"
+                : "text-text-dim border border-transparent hover:text-text-main hover:border-line"
             )}
           >
             {cat === 'All' ? 'All Posts' : cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}

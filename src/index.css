@@ -134,6 +134,19 @@
   p {
     max-width: 65ch;
     @apply text-text-body break-words;
+    line-height: 1.75;
+  }
+  @media (max-width: 640px) {
+    body { line-height: 1.7; }
+    p { line-height: 1.85; }
+  }
+  :is(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid var(--raw-color-accent);
+    outline-offset: 2px;
+  }
+  article:focus-visible {
+    outline: 2px solid var(--raw-color-accent);
+    outline-offset: 2px;
   }
   .prose a {
     @apply text-accent decoration-accent/30 underline decoration-1 underline-offset-4 transition-all hover:decoration-accent hover:text-accent/80;

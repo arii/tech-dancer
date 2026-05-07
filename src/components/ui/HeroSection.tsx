@@ -27,7 +27,7 @@ export function HeroSection() {
   return (
     <section
       className="relative flex items-center justify-center overflow-hidden"
-      style={{ background: 'var(--hero-bg)', minHeight: '40vh' }}
+      style={{ background: 'var(--hero-bg)', minHeight: '34vh' }}
       aria-label="Site hero"
     >
       <HeroParticleCanvas />

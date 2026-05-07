@@ -21,17 +21,16 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
     >
       {/* Logo: B● mark + wordmark — matches sidebar and hero styling */}
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Logo showText={false} className="h-8 w-auto text-white flex-shrink-0" />
+        <Logo showText={false} className="h-9 w-auto text-white flex-shrink-0" />
         <Text
           variant="sans"
           size="sm"
           weight="font-extrabold"
-          className="leading-none text-white"
-          style={{ letterSpacing: '0.05em' }}
+          className="leading-none text-white tracking-wide"
         >
           boom
           <span className="text-accent">tick</span>
-          <span style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>.blog</span>
+          <span className="text-white/70 font-light">.blog</span>
         </Text>
       </Box>
 

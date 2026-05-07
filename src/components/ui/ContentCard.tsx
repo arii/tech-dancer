@@ -8,6 +8,8 @@ interface ContentCardProps extends Partial<HTMLMotionProps<"a">> {
   category: string;
   excerpt?: string;
   basePath: string;
+  date?: string;
+  readingTime?: string;
 }
 
 export function ContentCard({ 
@@ -16,6 +18,8 @@ export function ContentCard({
   category, 
   excerpt, 
   basePath, 
+  date,
+  readingTime,
   ...motionProps 
 }: ContentCardProps) {
   // Destructure and ignore known data props that shouldn't bleed to the DOM
@@ -40,6 +44,8 @@ export function ContentCard({
     <Stack
       as={motion.create(NavLink)}
       to={`${basePath}/${slug}`}
+      aria-label={`Read article: ${title}`}
+      role="article"
       direction="col"
       gap={4}
       height="full"
@@ -58,9 +64,9 @@ export function ContentCard({
       >
         <Text
           variant="mono"
-          size="tiny"
+          size="xs"
           weight="font-black"
-          tracking="widest"
+          tracking="wide"
           className={getTagColorClass(category)}
         >
           {category}
@@ -78,14 +84,17 @@ export function ContentCard({
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
+        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed text-text-body">
            {excerpt}
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" marginTop="auto">
-        <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest">
-          Read Article
+      <Box display="flex" align="center" justify="between" marginTop="auto">
+        <Text variant="mono" size="xs" color="dim">
+          {[date, readingTime].filter(Boolean).join(' • ') || category}
+        </Text>
+        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+          Read article
         </Text>
       </Box>
     </Stack>
