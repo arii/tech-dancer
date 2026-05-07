@@ -45,7 +45,6 @@ export function ContentCard({
       as={motion.create(NavLink)}
       to={`${basePath}/${slug}`}
       aria-label={`Read article: ${title}`}
-      role="article"
       direction="col"
       gap={4}
       height="full"

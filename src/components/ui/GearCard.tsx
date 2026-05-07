@@ -44,7 +44,6 @@ export function GearCard({
       as={NavLink}
       to={`${basePath}/${slug}`}
       aria-label={`Read gear review: ${title}`}
-      role="article"
       {...cleanProps}
       direction="col"
       gap={3}
