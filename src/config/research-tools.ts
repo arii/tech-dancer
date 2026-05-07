@@ -27,5 +27,12 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Development Tool',
     status: 'Active',
     layman: 'Automated visual regression and UX improvement suggestions across viewports.'
+  },
+  {
+    id: 'wsdc-event-reminders',
+    name: 'WSDC Event Reminders',
+    category: 'Travel Optimization',
+    status: 'Active',
+    layman: 'Secure early bird discounts without overcommitting. Sync verified WSDC travel milestones directly to your calendar.'
   }
 ];
