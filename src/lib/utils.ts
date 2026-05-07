@@ -82,7 +82,6 @@ export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[])
  */
 export function filterDataProps(props: Record<string, unknown>) {
   const {
-    /* eslint-disable @typescript-eslint/no-unused-vars */
     type: _type,
     slug: _slug,
     title: _title,
@@ -109,7 +108,6 @@ export function filterDataProps(props: Record<string, unknown>) {
     schedule: _schedule,
     description: _description,
     link: _link,
-    /* eslint-enable @typescript-eslint/no-unused-vars */
     ...rest
   } = props;
 
