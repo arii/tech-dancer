@@ -26,22 +26,22 @@ export function GearCard({
   image,
   ...rest
 }: GearCardProps) {
-  // Filter out resource-specific data props to prevent them from bleeding into the DOM.
-  // We use a dedicated object to collect valid motion and layout props.
-  const cleanProps = { ...rest } as Record<string, unknown>;
-
-  const slop = [
+  // Explicitly construct motion/layout props to avoid leaking data "slop" into the DOM.
+  // This avoids verbose destructuring while maintaining clean HTML output.
+  const slop = new Set([
     'type', 'date', 'author', 'content', 'tags', 'affiliateIds',
     'priceCategory', 'updatedDate', 'durability', 'value', 'specs', 'readingTime'
-  ];
+  ]);
 
-  slop.forEach(prop => delete cleanProps[prop]);
+  const cleanMotionProps = Object.fromEntries(
+    Object.entries(rest).filter(([key]) => !slop.has(key))
+  );
 
   return (
     <Stack
       as={NavLink}
       to={`${basePath}/${slug}`}
-      {...cleanProps}
+      {...cleanMotionProps}
       direction="col"
       gap={3}
       height="full"
