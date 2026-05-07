@@ -6,11 +6,11 @@
       --brand-accent-purple: #8b5cf6;
     }
   </style>
-  <rect width="64" height="64" rx="14" fill="var(--brand-bg, #020617)"/>
+  <rect width="64" height="64" rx="14" fill="#020617"/>
   <defs>
     <linearGradient id="favicon-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="var(--brand-accent, #00CFFF)" />
-      <stop offset="100%" stop-color="var(--brand-accent-purple, #8b5cf6)" />
+      <stop offset="0%" stop-color="#00CFFF" />
+      <stop offset="100%" stop-color="#8b5cf6" />
     </linearGradient>
     <filter id="favicon-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="2" result="blur" />
@@ -31,7 +31,7 @@
       transform="skewX(-8)"
     >B</text>
     
-    <!-- The Glowing Gradient Dot - Brand colors, properly sized -->
+    <!-- The Glowing Gradient Dot - Brand colors -->
     <circle
       cx="42"
       cy="-14"

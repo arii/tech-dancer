@@ -55,16 +55,30 @@ export function HeroSection() {
       >
 
 
-        {/* Logo mark — B icon only, no redundant wordmark */}
+        {/* Logo mark — B icon with wordmark */}
         <Box
           className="opacity-0 translate-y-[-20px] pointer-events-none"
           style={{
             height: 'clamp(60px, 10vw, 120px)',
             animation: 'fadeUp 0.8s ease forwards 0.2s',
-            marginLeft: '-8px', // Optical alignment: compensate for italic slant
+            marginLeft: '-12px', // Optical alignment: align vertical spine of italic B with text below
           }}
         >
           <Logo className="text-white" showText={false} />
+        </Box>
+
+        {/* Wordmark: boomtick.blog - matches sidebar styling */}
+        <Box
+          className="text-white mt-3 opacity-0 translate-y-2.5 pointer-events-none"
+          style={{
+            fontSize: 'clamp(18px, 4vw, 28px)',
+            letterSpacing: '0.05em',
+            animation: 'fadeUp 0.7s ease forwards 0.4s',
+            fontWeight: 800,
+            fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
+          }}
+        >
+          boom<span className="text-accent">tick</span><span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>.blog</span>
         </Box>
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
@@ -138,9 +152,9 @@ export function HeroSection() {
             variant="body"
             weight="font-normal"
             className="text-base md:text-lg lg:text-xl text-left"
-            style={{ 
+            style={{
               lineHeight: '1.8',
-              color: '#A0A0A0',
+
               maxWidth: '65ch'
             }}
           >
@@ -177,7 +191,7 @@ export function HeroSection() {
         </Box>
       </Stack>
 
-      {/* Scroll Down Indicator */}
+      {/* Scroll Down Indicator - Enhanced Mobile CTA */}
       <Box
         position="absolute"
         inset="bottom"
@@ -188,26 +202,7 @@ export function HeroSection() {
         className="opacity-0"
         style={{ animation: 'fadeIn 1s ease forwards 2.5s' }}
       >
-        <button
-          onClick={() => window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' })}
-          className="cursor-pointer bg-transparent border-0 p-0"
-          aria-label="Scroll to content"
-        >
-          <Stack align="center" gap={2} className="animate-bounce">
-            <Text 
-              variant="mono" 
-              size="micro" 
-              uppercase
-              style={{ 
-                color: 'var(--hero-accent)',
-                letterSpacing: '0.1em'
-              }}
-            >
-              READ MORE
-            </Text>
-            <ChevronDown className="w-5 h-5 text-accent" />
-          </Stack>
-        </button>
+
       </Box>
     </section>
   );

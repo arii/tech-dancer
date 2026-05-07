@@ -43,8 +43,8 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
               isMobile && isActive && "shadow-sm"
             )}
           >
-            <Icon className={cn(`w-5 h-5 ${stroke.thick} flex-shrink-0`, isMobile ? "w-6 h-6" : "")} />
-            <Text variant="sans" size={isMobile ? "lg" : "sm"} weight="font-bold" className="leading-none">
+            <Icon className={cn(`flex-shrink-0 ${stroke.thick}`, isMobile ? "w-5 h-5" : "w-4 h-4")} />
+            <Text variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
               {label}
             </Text>
           </Box>

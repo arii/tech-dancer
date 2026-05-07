@@ -19,18 +19,19 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       border="b"
       className="transition-[backdrop-filter] duration-300 bg-surface border-line"
     >
-      {/* Logo: B● mark + HTML wordmark — matches sidebar treatment */}
+      {/* Logo: B● mark + wordmark — matches sidebar and hero styling */}
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
         <Logo showText={false} className="h-8 w-auto text-white flex-shrink-0" />
         <Text
           variant="sans"
           size="sm"
           weight="font-extrabold"
-          className="tracking-tight leading-none text-white"
+          className="leading-none text-white"
+          style={{ letterSpacing: '0.05em' }}
         >
           boom
           <span className="text-accent">tick</span>
-          <span className="text-white/40">.blog</span>
+          <span style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>.blog</span>
         </Text>
       </Box>
 

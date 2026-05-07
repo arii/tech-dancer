@@ -25,27 +25,30 @@ export default function Home() {
 
         <Stack gap={16} paddingX={{ base: 4, md: 6, lg: 12 }}>
           <Stack gap={6}>
-            <Box width="full" display="flex" justify="between" align="end">
-              <Stack gap={1}>
-                <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest" uppercase>
-                  Latest Updates
-                </Text>
+            <Stack gap={1}>
+              <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest" uppercase>
+                Latest Updates
+              </Text>
+              <Box width="full" display="flex" justify="between" align="end" direction={{ base: "col", sm: "row" }} gap={{ base: 3, sm: 0 }}>
                 <Text as="h2" size="2xl" weight="font-black" color="white">
                   Recent Posts
                 </Text>
-              </Stack>
-              <Box
-                as={NavLink}
-                to="/blog"
-                display="flex"
-                align="center"
-                gap={2}
-                className="text-xs font-bold uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
-              >
-                View all posts
-                <ArrowRight className="w-4 h-4" />
+                <Box
+                  as={NavLink}
+                  to="/blog"
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  paddingY={{ base: 3, sm: 0 }}
+                  paddingX={{ base: 4, sm: 0 }}
+                  radius={{ base: "sm", sm: "none" }}
+                  className="text-xs font-bold uppercase tracking-widest text-accent hover:text-accent/80 transition-colors sm:hover:bg-transparent"
+                >
+                  View all posts
+                  <ArrowRight className="w-4 h-4" />
+                </Box>
               </Box>
-            </Box>
+            </Stack>
 
             <Stack
               direction="col"
@@ -71,10 +74,16 @@ export default function Home() {
                     className="group rounded-lg transition-colors hover:bg-surface"
                   >
                     <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-44">
-                      <Box as="span" border radius="sm" paddingX={2} paddingY={0.5} className="border-line text-xs font-bold text-text-dim/70">
+                      <Box 
+                        as="span" 
+                        radius="sm" 
+                        paddingX={2} 
+                        paddingY={0.5} 
+                        className="text-xs font-bold text-accent border-2 border-accent"
+                      >
                         {post.category}
                       </Box>
-                      <Text variant="mono" tracking="widest" uppercase size="xs" className="whitespace-nowrap text-text-dim/70">
+                      <Text variant="mono" tracking="widest" uppercase size="xs" className="whitespace-nowrap text-text-dim">
                         {post.date}
                       </Text>
                     </Box>
