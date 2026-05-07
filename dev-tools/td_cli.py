@@ -199,6 +199,32 @@ def handle_detect_conflicts(args):
     if args.json: print(json.dumps({"status": "success", "conflicts": formatted}, indent=2))
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
+def handle_resolve_conflicts(args):
+    """
+    Finds files with conflict markers and uses MergeLlama to resolve them.
+    """
+    from mergellama import resolve_file_conflicts
+
+    # Exclude dev-tools to avoid self-detection
+    cmd = ["grep", "-r", "-l", "<<<<<<<", ".", "--exclude-dir=dev-tools", "--exclude-dir=node_modules", "--exclude-dir=.git"]
+    res = run_command(cmd, check=False, log_on_error=False)
+
+    if res.returncode != 0 or not res.stdout.strip():
+        print("✅ No conflict markers found.")
+        return
+
+    files = res.stdout.strip().splitlines()
+    print(f"🦙 Found {len(files)} file(s) with conflicts. Resolving...")
+
+    success_count = 0
+    for f in files:
+        if resolve_file_conflicts(f):
+            success_count += 1
+
+    print(f"✅ Successfully resolved {success_count}/{len(files)} files.")
+    if success_count < len(files):
+        sys.exit(1)
+
 def handle_conflicts(args):
     """
     Squashes commits, attempts auto-resolution of simple conflicts,
@@ -806,7 +832,7 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
+    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("resolve-conflicts", handle_resolve_conflicts), ("detect-conflicts", handle_detect_conflicts),
                       ("status-board", handle_status_board),
                       ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
                       ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),

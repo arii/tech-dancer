@@ -200,3 +200,27 @@ def get_github_client():
     if not token:
         raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
+
+def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b") -> Optional[str]:
+    """Helper to call local Ollama API."""
+    import urllib.request
+    import urllib.error
+
+    url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(req) as f:
+            response = json.loads(f.read().decode("utf-8"))
+            return response.get("response", "")
+    except urllib.error.URLError as e:
+        print(f"⚠️  Error connecting to Ollama: {e}", file=sys.stderr)
+        return None

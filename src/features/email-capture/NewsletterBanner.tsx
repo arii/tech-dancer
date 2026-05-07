@@ -75,7 +75,7 @@ export function NewsletterBanner() {
             >
               Get the latest dance insights.
             </Text>
-            {/* Pill badges for topics - Sharp edges as requested */}
+            {/* Pill badges for topics - Sharp edges as requested. Using text-text-body for WCAG AA contrast. */}
             <Box display="flex" gap={2} wrap>
               {['Dance Analytics', 'Gear Reviews', 'Community Updates'].map(tag => (
                 <Box
@@ -84,9 +84,9 @@ export function NewsletterBanner() {
                   paddingY={1}
                   radius="none"
                   border
-                  className="bg-accent/5 border-accent/20 text-accent"
+                  className="bg-accent/5 border-accent/20"
                 >
-                  <Text variant="mono" size="micro" weight="font-bold">
+                  <Text variant="mono" size="micro" weight="font-bold" color="body">
                     {tag}
                   </Text>
                 </Box>
