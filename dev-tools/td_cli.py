@@ -675,8 +675,8 @@ def handle_audit_gate(args):
 
 def handle_resolve_conflicts(args):
     import mergellama
-    # 1. Search for Git conflict markers using grep, excluding dev-tools/
-    res = run_command(["grep", "-lr", "<<<<<<<", ".", "--exclude-dir=dev-tools"], check=False, log_on_error=False)
+    # 1. Search for Git conflict markers using grep, excluding dev-tools/, node_modules/, dist/, and .git/
+    res = run_command(["grep", "-lr", "<<<<<<<", ".", "--exclude-dir=dev-tools", "--exclude-dir=node_modules", "--exclude-dir=dist", "--exclude-dir=.git"], check=False, log_on_error=False)
 
     files_to_resolve = []
     if res.returncode == 0 and res.stdout:
@@ -856,13 +856,28 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
-                      ("status-board", handle_status_board),
-                      ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
-                      ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context),
-                      ("resolve-conflicts", handle_resolve_conflicts)]: # fetch-review is alias for audit-pr --fetch
+    # Use a dictionary mapping command names to their handlers instead of a list of tuples with duplicates
+    command_registry = {
+        "validate-issue": handle_validate_issue,
+        "conflicts": handle_conflicts,
+        "detect-conflicts": handle_detect_conflicts,
+        "status-board": handle_status_board,
+        "ratchet-any": handle_ratchet_any,
+        "bundle-size": handle_bundle_size,
+        "migrate-tokens": handle_migrate_tokens,
+        "update-issues": handle_update_issues,
+        "audit-pr": handle_audit_pr,
+        "pre-submit": handle_pre_submit,
+        "manage-reviews": handle_manage_reviews,
+        "fetch-review": handle_audit_pr, # fetch-review is alias for audit-pr --fetch
+        "audit-gate": handle_audit_gate,
+        "fix-ci": handle_fix_ci,
+        "repair": handle_repair,
+        "repair-context": handle_repair_context,
+        "resolve-conflicts": handle_resolve_conflicts
+    }
+
+    for cmd, func in command_registry.items():
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
