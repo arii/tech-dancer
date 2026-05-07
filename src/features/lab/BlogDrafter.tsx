@@ -9,6 +9,12 @@ import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 
+const types: { id: ContentType; label: string; icon: React.ElementType }[] = [
+  { id: 'post', label: 'BLOG POST', icon: PenTool },
+  { id: 'event', label: 'EVENT', icon: Calendar },
+  { id: 'resource', label: 'RESOURCE', icon: Package },
+];
+
 export function BlogDrafter() {
   const {
     data,
@@ -67,12 +73,6 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
       />
     );
   }
-
-  const types: { id: ContentType; label: string; icon: React.ElementType }[] = [
-    { id: 'post', label: 'BLOG POST', icon: PenTool },
-    { id: 'event', label: 'EVENT', icon: Calendar },
-    { id: 'resource', label: 'RESOURCE', icon: Package },
-  ];
 
   return (
     <Stack gap={10} height="full">

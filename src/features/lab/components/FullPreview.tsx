@@ -4,25 +4,9 @@ import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { DraftData } from '../useBlogDrafter';
 
-interface FullPreviewProps {
-  data: DraftData;
-  onClose: () => void;
-}
-
-export function FullPreview({
-  data,
-  onClose
-}: FullPreviewProps) {
-  const isEvent = data.type === 'event';
-  const isResource = data.type === 'resource';
-
-  const title = data.title || 'Untitled Draft';
-  const category = data.category;
-  const date = data.date;
-  const author = data.author;
-  const content = isEvent ? data.description : isResource ? data.content : data.commentary;
-
-  const sidebar = isResource ? (
+function ResourceSidebar({ data }: { data: DraftData }) {
+  if (data.type !== 'resource') return null;
+  return (
     <Stack gap={6}>
       <Box border padding={4} surface="muted">
         <Stack gap={4}>
@@ -37,7 +21,7 @@ export function FullPreview({
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={i < data.rating ? "w-3 h-3 text-accent fill-accent" : "w-3 h-3 text-dim"}
+                    className={i < (data.rating || 0) ? "w-3 h-3 text-accent fill-accent" : "w-3 h-3 text-dim"}
                   />
                 ))}
               </Box>
@@ -77,7 +61,12 @@ export function FullPreview({
         </Stack>
       )}
     </Stack>
-  ) : isEvent ? (
+  );
+}
+
+function EventSidebar({ data }: { data: DraftData }) {
+  if (data.type !== 'event') return null;
+  return (
     <Stack gap={6}>
        <Box border padding={4} surface="muted">
         <Stack gap={4}>
@@ -106,6 +95,31 @@ export function FullPreview({
         </Stack>
       </Box>
     </Stack>
+  );
+}
+
+interface FullPreviewProps {
+  data: DraftData;
+  onClose: () => void;
+}
+
+export function FullPreview({
+  data,
+  onClose
+}: FullPreviewProps) {
+  const isEvent = data.type === 'event';
+  const isResource = data.type === 'resource';
+
+  const title = data.title || 'Untitled Draft';
+  const category = data.category;
+  const date = data.date;
+  const author = data.author;
+  const content = isEvent ? data.description : isResource ? data.content : data.commentary;
+
+  const sidebar = isResource ? (
+    <ResourceSidebar data={data} />
+  ) : isEvent ? (
+    <EventSidebar data={data} />
   ) : undefined;
 
   return (
