@@ -4,31 +4,51 @@ import { SITE_METADATA } from '@/config/content';
 
 export type ContentType = 'post' | 'event' | 'resource';
 
-export interface DraftData {
-  type: ContentType;
+export interface BaseDraftData {
   title: string;
   category: string;
   excerpt: string;
   author: string;
   date: string;
-  // Post specific
+  // Common fields that were moved to Base in some versions
+  affiliateLink?: string;
+  commentary?: string;
+}
+
+export interface PostDraftData extends BaseDraftData {
+  type: 'post';
   affiliateLink: string;
   commentary: string;
-  // Event specific
-  location: string;
-  city: string;
-  schedule: string;
-  description: string;
-  // Resource specific
+}
+
+export interface ResourceDraftData extends BaseDraftData {
+  type: 'resource';
+  rating: number;
+  durability?: number;
+  value?: number;
+  priceCategory: string;
+  verdict: string;
+  specs?: Record<string, string>;
   affiliateIds: string[];
   tags: string[];
-  rating: number;
-  verdict: string;
-  priceCategory: string;
   updatedDate: string;
   heading: string;
   content: string;
 }
+
+export interface EventDraftData extends BaseDraftData {
+  type: 'event';
+  location: string;
+  city: string;
+  schedule: string;
+  description: string;
+  startDate?: string;
+  earlyBirdDate?: string;
+  hotelCutoffDate?: string;
+  url?: string;
+}
+
+export type DraftData = PostDraftData | ResourceDraftData | EventDraftData;
 
 export interface HistoryEntry {
   id: string;
@@ -83,7 +103,6 @@ export function useBlogDrafter() {
       }
     }
     return DEFAULT_DATA;
-  });
 
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     const saved = localStorage.getItem(HISTORY_KEY);
@@ -220,26 +239,71 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (val: unknown): unknown => {
+    const normalize = (val: unknown, depth = 0): unknown => {
+      if (depth > 5) return val; // Safety limit
       if (typeof val === 'string') return val.replace(/\\n/g, '\n');
-      if (Array.isArray(val)) return val.map(normalize);
+      if (Array.isArray(val)) return val.map(v => normalize(v, depth + 1));
       if (val !== null && typeof val === 'object') {
         return Object.fromEntries(
-          Object.entries(val).map(([k, v]) => [k, normalize(v)])
+          Object.entries(val).map(([k, v]) => [k, normalize(v, depth + 1)])
         );
       }
       return val;
     };
 
     setData((prev: DraftData) => {
-      const next = { ...prev };
-      (Object.keys(parsed) as Array<keyof DraftData>).forEach((key) => {
-        if (key in next) {
-          // @ts-expect-error - Dynamic mapping of normalized values
-          next[key] = normalize(parsed[key]);
-        }
-      });
-      return next;
+      const type = parsed.type || prev.type;
+      const base = {
+        title: (normalize(parsed.title) as string) || prev.title,
+        category: (normalize(parsed.category) as string) || prev.category,
+        excerpt: (normalize(parsed.excerpt || parsed.description) as string) || prev.excerpt,
+        affiliateLink: (parsed.affiliateLink as string) || (prev as any).affiliateLink || '',
+        commentary: (normalize(parsed.commentary) as string) || (prev as any).commentary || '',
+        author: prev.author,
+        date: parsed.date || prev.date
+      };
+
+      if (type === 'resource') {
+        const pResource = prev.type === 'resource' ? prev : {} as Partial<ResourceDraftData>;
+        return {
+          ...base,
+          type: 'resource',
+          rating: parsed.rating ?? pResource.rating ?? 0,
+          durability: parsed.durability ?? pResource.durability ?? 0,
+          value: parsed.value ?? pResource.value ?? 0,
+          priceCategory: parsed.priceCategory || pResource.priceCategory || '$$',
+          verdict: (normalize(parsed.verdict) as string) || pResource.verdict || '',
+          specs: (normalize(parsed.specs) as Record<string, string>) || pResource.specs || {},
+          affiliateIds: parsed.affiliateIds || pResource.affiliateIds || [],
+          tags: parsed.tags || pResource.tags || [],
+          updatedDate: parsed.updatedDate || pResource.updatedDate || '',
+          heading: parsed.heading || pResource.heading || '',
+          content: parsed.content || pResource.content || '',
+        } as ResourceDraftData;
+      }
+
+      if (type === 'event') {
+        const pEvent = prev.type === 'event' ? prev : {} as Partial<EventDraftData>;
+        return {
+          ...base,
+          type: 'event',
+          location: (normalize(parsed.location) as string) || pEvent.location || '',
+          startDate: parsed.startDate || pEvent.startDate || '',
+          earlyBirdDate: parsed.earlyBirdDate || pEvent.earlyBirdDate || '',
+          hotelCutoffDate: parsed.hotelCutoffDate || pEvent.hotelCutoffDate || '',
+          url: parsed.url || pEvent.url || '',
+          city: parsed.city || pEvent.city || '',
+          schedule: parsed.schedule || pEvent.schedule || '',
+          description: parsed.description || pEvent.description || '',
+        } as EventDraftData;
+      }
+
+      return {
+        ...base,
+        type: 'post',
+        affiliateLink: base.affiliateLink,
+        commentary: base.commentary
+      } as PostDraftData;
     });
     return true;
   };
