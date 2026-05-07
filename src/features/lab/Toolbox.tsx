@@ -11,6 +11,7 @@ import { SearchBox } from '@/components/ui/SearchBox';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GEAR_FILTERS } from "@/config/content";
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
@@ -18,12 +19,6 @@ export default function Toolbox() {
   const allFilteredItems = useMemo(() =>
     filteredCategories.flatMap(cat => cat.items),
   [filteredCategories]);
-
-  const pills = [
-    { label: "Best for travel", value: "Best for travel", color: "text-accent border-accent/30 bg-accent/10" },
-    { label: "Highly recommended", value: "Highly recommended", color: "text-accent-navy border-accent-navy/30 bg-accent-navy/10" },
-    { label: "Competition ready", value: "Competition ready", color: "text-error border-error/30 bg-error/10" }
-  ];
 
   return (
     <Box as="section" paddingY={4}>
@@ -60,7 +55,7 @@ export default function Toolbox() {
           >
             All Gear
           </button>
-          {pills.map((pill) => (
+          {GEAR_FILTERS.map((pill) => (
             <button
               type="button"
               key={pill.label}
