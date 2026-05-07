@@ -1,0 +1,69 @@
+name: Mass Audit PRs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install PyGithub
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup Ollama
+        uses: ai-action/setup-ollama@v2
+
+      - name: Start Ollama Server
+        run: |
+          ollama serve > ollama_output.log 2>&1 &
+          for i in {1..15}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama server is ready!"
+              sleep 1
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Pull Model
+        run: ollama pull qwen2.5-coder:7b
+
+      - name: Run Headless Audit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bash dev-tools/audit_headless.sh --sync
+
+      - name: Commit and Push REVIEW_TRACKING.md
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update PR review tracking"
+          file_pattern: 'REVIEW_TRACKING.md pr_overlaps.txt'

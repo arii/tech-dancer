@@ -673,6 +673,49 @@ def handle_audit_gate(args):
     elif not args.json:
         print("✅ No new violations introduced.")
 
+def handle_resolve_conflicts(args):
+    import mergellama
+    # 1. Search for Git conflict markers using grep, excluding dev-tools/, node_modules/, dist/, and .git/
+    res = run_command(["grep", "-lr", "<<<<<<<", ".", "--exclude-dir=dev-tools", "--exclude-dir=node_modules", "--exclude-dir=dist", "--exclude-dir=.git"], check=False, log_on_error=False)
+
+    files_to_resolve = []
+    if res.returncode == 0 and res.stdout:
+        files_to_resolve = [f.strip() for f in res.stdout.splitlines() if f.strip()]
+    elif res.returncode == 1:
+        # grep exit code 1 means no match found
+        pass
+    else:
+        # Some other grep error
+        if not args.json:
+            print(f"⚠️ grep failed with code {res.returncode}: {res.stderr}")
+
+    if not files_to_resolve:
+        if not args.json:
+            print("✅ No merge conflicts found.")
+        else:
+            print(json.dumps({"status": "success", "resolved_files": []}, indent=2))
+        return
+
+    resolved_files = []
+    failed_files = []
+    for f in files_to_resolve:
+        if mergellama.resolve_file_conflicts(f):
+            resolved_files.append(f)
+        else:
+            failed_files.append(f)
+
+    if failed_files:
+        if args.json:
+            print(json.dumps({"status": "error", "resolved": resolved_files, "failed": failed_files}, indent=2))
+        else:
+            print(f"❌ Failed to resolve conflicts in: {', '.join(failed_files)}")
+        sys.exit(1)
+
+    if args.json:
+        print(json.dumps({"status": "success", "resolved_files": resolved_files}, indent=2))
+    else:
+        print(f"✅ All conflicts resolved successfully in {len(resolved_files)} files.")
+
 def handle_repair_context(args):
     from error_rag import RAGPipeline
     pipeline = RAGPipeline()
@@ -808,17 +851,94 @@ def handle_manage_reviews(args):
 
     if args.json: print(json.dumps({"status": "success", "prs": prs_data}, indent=2))
 
+
+def handle_track_review(args):
+    tracking_file = "REVIEW_TRACKING.md"
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    header = "# PR Review Tracking\n\n| PR | Status | Auditor | Last Updated |\n|----|--------|---------|--------------|\n"
+
+    if os.path.exists(tracking_file):
+        with open(tracking_file, "r") as f:
+            file_content = f.read()
+    else:
+        file_content = header
+
+    lines = file_content.splitlines()
+    new_lines = []
+    found = False
+
+    in_table = False
+    for line in lines:
+        if line.startswith("|----|") or line.startswith("|---"):
+            in_table = True
+            new_lines.append(line)
+            continue
+
+        if in_table and line.startswith("|"):
+            cols = [c.strip() for c in line.split("|")]
+            if len(cols) > 2 and cols[1] == f"#{args.pr}":
+                new_lines.append(f"| #{args.pr} | {args.status} | {args.auditor} | {now} |")
+                found = True
+                continue
+
+        new_lines.append(line)
+
+    if not found:
+        table_insert_idx = -1
+        for i in range(len(new_lines)-1, -1, -1):
+            if new_lines[i].startswith("|"):
+                table_insert_idx = i + 1
+                break
+
+        if table_insert_idx != -1:
+            new_lines.insert(table_insert_idx, f"| #{args.pr} | {args.status} | {args.auditor} | {now} |")
+        else:
+            if not any(l.startswith("| PR |") for l in new_lines):
+                new_lines.extend(["", "| PR | Status | Auditor | Last Updated |", "|----|--------|---------|--------------|", f"| #{args.pr} | {args.status} | {args.auditor} | {now} |"])
+            else:
+                new_lines.append(f"| #{args.pr} | {args.status} | {args.auditor} | {now} |")
+
+    if not args.dry_run:
+        with open(tracking_file, "w") as f:
+            f.write("\n".join(new_lines) + "\n")
+        if not args.json:
+            print(f"✅ Updated {tracking_file} for PR #{args.pr}")
+    else:
+        if not args.json:
+            print(f"[DRY-RUN] Would update {tracking_file} for PR #{args.pr}")
+
+    if args.json:
+        print(json.dumps({"status": "success", "pr": args.pr, "review_status": args.status}, indent=2))
+
 def main():
     parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
 
-    for cmd, func in [("validate-issue", handle_validate_issue), ("conflicts", handle_conflicts), ("resolve-conflicts", handle_conflicts), ("detect-conflicts", handle_detect_conflicts),
-                      ("status-board", handle_status_board),
-                      ("ratchet-any", handle_ratchet_any), ("bundle-size", handle_bundle_size), ("migrate-tokens", handle_migrate_tokens),
-                      ("update-issues", handle_update_issues), ("audit-pr", handle_audit_pr), ("pre-submit", handle_pre_submit),
-                      ("manage-reviews", handle_manage_reviews), ("fetch-review", handle_audit_pr), ("audit-gate", handle_audit_gate),
-                      ("fix-ci", handle_fix_ci), ("repair", handle_repair), ("repair-context", handle_repair_context)]: # fetch-review is alias for audit-pr --fetch
+    # Use a dictionary mapping command names to their handlers instead of a list of tuples with duplicates
+    command_registry = {
+        "validate-issue": handle_validate_issue,
+        "conflicts": handle_conflicts,
+        "detect-conflicts": handle_detect_conflicts,
+        "status-board": handle_status_board,
+        "ratchet-any": handle_ratchet_any,
+        "bundle-size": handle_bundle_size,
+        "migrate-tokens": handle_migrate_tokens,
+        "update-issues": handle_update_issues,
+        "audit-pr": handle_audit_pr,
+        "pre-submit": handle_pre_submit,
+        "manage-reviews": handle_manage_reviews,
+        "fetch-review": handle_audit_pr, # fetch-review is alias for audit-pr --fetch
+        "audit-gate": handle_audit_gate,
+        "fix-ci": handle_fix_ci,
+        "repair": handle_repair,
+        "repair-context": handle_repair_context,
+        "resolve-conflicts": handle_resolve_conflicts,
+        "track-review": handle_track_review
+    }
+
+    for cmd, func in command_registry.items():
         p = subparsers.add_parser(cmd)
         if cmd == "validate-issue":
             p.add_argument("--issue-number", type=int)
@@ -855,6 +975,11 @@ def main():
             p.add_argument("--check-responses", action="store_true")
             p.add_argument("--cleanup-comments", action="store_true")
             add_execution_args(p)
+        elif cmd == "track-review":
+            p.add_argument("--pr", required=True)
+            p.add_argument("--status", required=True)
+            p.add_argument("--auditor", required=True)
+            add_execution_args(p)
         elif cmd == "audit-gate": pass # Uses global --json if provided
         elif cmd == "repair-context":
             p.add_argument("--log", help="Raw log line")
@@ -868,6 +993,8 @@ def main():
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
+        elif cmd == "resolve-conflicts":
+            pass # Uses global --json flag if provided
         p.set_defaults(func=func)
 
     args = parser.parse_args()
