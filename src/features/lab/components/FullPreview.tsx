@@ -1,5 +1,5 @@
-import { ExternalLink, Layout, MapPin, Calendar, Clock, Star, Tag, Info } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { ExternalLink, Layout, MapPin, Calendar, Star, Tag, Info } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { DraftData } from '../useBlogDrafter';

@@ -100,7 +100,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
 
         {/* Type Selector */}
-        <Grid cols={3} gap={2} className="bg-surface-alt p-1 rounded-sm border border-line">
+        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
           {types.map((type) => {
             const Icon = type.icon;
             const isActive = data.type === type.id;
