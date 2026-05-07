@@ -92,9 +92,9 @@ export function NewsletterBanner() {
                   paddingY={1}
                   radius="none"
                   border
-                  className="bg-accent/5 border-accent/20 text-accent"
+                  className="bg-surface border-accent/30"
                 >
-                  <Text variant="mono" size="micro" weight="font-bold">
+                  <Text variant="mono" size="micro" weight="font-bold" color="main">
                     {tag}
                   </Text>
                 </Box>
