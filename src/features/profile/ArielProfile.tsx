@@ -95,8 +95,8 @@ function ArielProfile() {
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
-                    width={600}
-                    height={600}
+                    width={800}
+                    height={800}
                     className="w-full h-full object-cover object-[center_20%]" // impeccable-ignore
                   />
                 </Box>

@@ -200,22 +200,12 @@ def handle_detect_conflicts(args):
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
 def handle_resolve_conflicts(args):
-    """
-    Finds all files with Git conflict markers and attempts to resolve them
-    using MergeLlama (Ollama-based LLM resolution).
-    """
+    """Scans for and attempts to resolve git merge conflicts using MergeLlama."""
     print("🔍 Scanning for merge conflicts...")
 
-    # Use grep to find all files with conflict markers, excluding common non-source dirs
-    # We exclude dev-tools/ to avoid detecting the literal markers in mergellama.py
-    cmd = ["grep", "-r", "-l", "<<<<<<<", ".",
-           "--exclude-dir=node_modules",
-           "--exclude-dir=.git",
-           "--exclude-dir=dev-tools",
-           "--exclude-dir=dist"]
-
-    # We use check=False because grep exits 1 if no matches are found
-    # We use log_on_error=False to suppress the CLI message about expected grep exit code 1
+    # Find files with conflict markers (exclude known non-source/infrastructure dirs)
+    # Use a literal string to avoid self-detection
+    cmd = ["grep", "-r", "-l", "<<<<<<<", ".", "--exclude-dir=node_modules", "--exclude-dir=.git", "--exclude-dir=dev-tools", "--exclude-dir=dist"]
     res = run_command(cmd, check=False, log_on_error=False)
 
     if res.returncode != 0 or not res.stdout.strip():
@@ -223,30 +213,17 @@ def handle_resolve_conflicts(args):
         return
 
     conflict_files = res.stdout.strip().split('\n')
-    print(f"🚧 Found conflicts in {len(conflict_files)} file(s):")
-    for f in conflict_files:
-        print(f"  - {f}")
-
-    # Call mergellama.py to resolve each file
     mergellama_path = os.path.join(os.path.dirname(__file__), "mergellama.py")
 
-    success_count = 0
+    resolved_count = 0
     for f in conflict_files:
-        print(f"🦙 Attempting AI resolution for {f}...")
-        res = run_command([sys.executable, mergellama_path, f], check=False)
-        if res.returncode == 0:
-            print(f"  ✅ Resolved {f}")
-            success_count += 1
-        else:
-            print(f"  ❌ Failed to resolve {f}")
-            if res.stdout: print(res.stdout)
-            if res.stderr: print(res.stderr)
+        print(f"🦙 Resolving {f}...")
+        # mergellama.py handles the resolution via Ollama or mock mode
+        if run_command([sys.executable, mergellama_path, f], check=False).returncode == 0:
+            resolved_count += 1
 
-    if success_count == len(conflict_files):
-        print(f"✨ All {len(conflict_files)} conflicts resolved successfully!")
-    else:
-        print(f"⚠️ Resolution complete: {success_count}/{len(conflict_files)} files fixed.")
-        sys.exit(1)
+    print(f"✨ Resolved {resolved_count}/{len(conflict_files)} conflicts.")
+    if resolved_count < len(conflict_files): sys.exit(1)
 
 def handle_conflicts(args):
     """

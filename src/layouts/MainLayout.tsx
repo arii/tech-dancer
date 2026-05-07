@@ -42,43 +42,47 @@ export function MainLayout({ children }: { children: ReactNode }) {
       }
     } else {
       // 2. New Navigation (PUSH/REPLACE): Reset to top OR scroll to hash
-      const scrollWithRetry = (retryCount = 0) => {
+      const handleScroll = () => {
         if (!container) return;
 
         if (hash) {
           const id = hash.replace('#', '');
-          const element = document.getElementById(id);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-
-            // Retry after a short delay to account for potential layout shifts (e.g. images loading)
-            if (retryCount < 3) {
-              const tid = window.setTimeout(() => scrollWithRetry(retryCount + 1), 200 * (retryCount + 1));
-              timeouts.push(tid);
+          const performScroll = () => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+              return true;
             }
-            return;
-          } else if (retryCount < 5) {
-             // Element might not be in DOM yet (e.g. due to Suspense)
-             const tid = window.setTimeout(() => scrollWithRetry(retryCount + 1), 100);
-             timeouts.push(tid);
-             return;
-          }
-        }
-        
-        // Default: Reset to top
-        if (!hash) {
+            return false;
+          };
+
+          // We use a small delay to allow the layout to settle (animations, fonts, images)
+          const tid = window.setTimeout(() => {
+            if (!performScroll()) {
+              // Longer fallback for lazy-loaded or deferred content
+              const tid2 = window.setTimeout(performScroll, 500);
+              timeouts.push(tid2);
+            }
+          }, 100);
+          timeouts.push(tid);
+        } else {
           container.scrollTop = 0;
           window.scrollTo(0, 0);
         }
       };
 
-      requestAnimationFrame(() => scrollWithRetry());
+      const rafId = requestAnimationFrame(handleScroll);
+      return () => {
+        window.removeEventListener('beforeunload', handleSaveScroll);
+        handleSaveScroll();
+        cancelAnimationFrame(rafId);
+        timeouts.forEach(t => window.clearTimeout(t));
+      };
     }
 
     return () => {
       window.removeEventListener('beforeunload', handleSaveScroll);
       handleSaveScroll();
-      timeouts.forEach(t => window.clearTimeout(t));
     };
   }, [pathname, key, hash, navType]);
 
