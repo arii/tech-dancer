@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text, BoxProps } from '@/layouts/Primitives';
+import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
+import { filterDataProps } from '@/lib/utils';
 
-interface GearCardProps extends BoxProps {
+interface GearCardProps extends BaseProps {
   slug: string;
   title: string;
   category: string;
@@ -37,21 +38,10 @@ export function GearCard({
   rating,
   verdict,
   image,
-  // Destructure out resource-specific metadata to prevent attribute leakage in the DOM
-  type: _type,
-  date: _date,
-  author: _author,
-  content: _content,
-  tags: _tags,
-  affiliateIds: _affiliateIds,
-  priceCategory: _priceCategory,
-  updatedDate: _updatedDate,
-  durability: _durability,
-  value: _value,
-  specs: _specs,
-  readingTime: _readingTime,
-  ...cleanProps
+  ...rest
 }: GearCardProps) {
+  const cleanProps = filterDataProps(rest as Record<string, unknown>);
+
   return (
     <Stack
       as={NavLink}
