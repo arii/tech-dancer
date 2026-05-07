@@ -9,6 +9,7 @@ interface GearCardProps {
   basePath: string;
   rating?: number;
   verdict?: string;
+  image?: string;
 }
 
 export function GearCard({
@@ -19,6 +20,7 @@ export function GearCard({
   basePath,
   rating,
   verdict,
+  image,
   ...rest
 }: GearCardProps) {
   // Destructure and ignore known data props that shouldn't bleed to the DOM
@@ -26,7 +28,7 @@ export function GearCard({
   const {
     // @ts-expect-error - ignoring unused data props
     type: _type, date: _date, author: _author, content: _content,
-    image: _image, tags: _tags, affiliateIds: _affiliateIds,
+    tags: _tags, affiliateIds: _affiliateIds,
     priceCategory: _priceCategory, updatedDate: _updatedDate,
     durability: _durability, value: _value, specs: _specs,
     readingTime: _readingTime,
@@ -62,6 +64,18 @@ export function GearCard({
           {verdict}
         </Text>
       </Box>
+
+      {image && (
+        <Box className="w-full aspect-square overflow-hidden rounded-md mb-2 flex items-center justify-center bg-surface/50">
+          <img
+            src={image}
+            alt={title}
+            width={800}
+            height={800}
+            className="w-full h-full object-contain"
+          />
+        </Box>
+      )}
 
       <Stack gap={2}>
         <Text
