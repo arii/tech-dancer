@@ -67,6 +67,7 @@ export function NewsletterBanner() {
           </Box>
           <Stack gap={4}>
             <Text 
+              as="h2"
               variant="headline" 
               size="2xl" 
               weight="font-black" 
@@ -76,17 +77,19 @@ export function NewsletterBanner() {
               Get the latest dance insights.
             </Text>
             {/* Pill badges for topics - Sharp edges as requested */}
-            <Box display="flex" gap={2} wrap>
+            <Box display="flex" gap={2} wrap role="list" aria-label="Newsletter topics">
               {['Dance Analytics', 'Gear Reviews', 'Community Updates'].map(tag => (
                 <Box
                   key={tag}
+                  as="span"
+                  role="listitem"
                   paddingX={3}
-                  paddingY={1}
+                  paddingY={1.5}
                   radius="none"
                   border
-                  className="bg-accent/5 border-accent/20 text-accent"
+                  className="bg-accent/10 border-accent/30 text-accent"
                 >
-                  <Text variant="mono" size="micro" weight="font-bold">
+                  <Text variant="mono" size="micro" weight="font-bold" tracking="widest" uppercase>
                     {tag}
                   </Text>
                 </Box>

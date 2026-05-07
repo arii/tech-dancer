@@ -202,8 +202,8 @@ export function GlobalSearch() {
                      <Stack gap={0.5} flex className="min-w-0">
                         <Box display="flex" align="center" gap={3}>
                            <Text size="base" weight="font-bold" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
-                           <Box border paddingX={2} paddingY={0.5} radius="none" className="border-accent/20 bg-accent/10 shrink-0">
-                              <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold">{res.type}</Text>
+                           <Box border paddingX={2} paddingY={1} radius="none" className="border-accent/30 bg-accent/10 shrink-0">
+                              <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold" tracking="widest">{res.type}</Text>
                            </Box>
                         </Box>
                         <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate opacity-80">{highlight(res.excerpt)}</Text>
