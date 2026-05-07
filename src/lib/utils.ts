@@ -78,38 +78,21 @@ export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[])
 }
 
 /**
+ * Content-specific metadata props that shouldn't bleed to the DOM.
+ */
+const DATA_PROPS = [
+  'type', 'slug', 'title', 'date', 'author', 'authorAvatar',
+  'category', 'excerpt', 'content', 'image', 'tags', 'basePath',
+  'rating', 'verdict', 'priceCategory', 'updatedDate', 'durability',
+  'value', 'specs', 'readingTime', 'affiliateIds', 'location',
+  'city', 'schedule', 'description', 'link'
+];
+
+/**
  * Filters out content-specific metadata props that shouldn't bleed to the DOM.
  */
 export function filterDataProps(props: Record<string, unknown>) {
-  const {
-    type: _type,
-    slug: _slug,
-    title: _title,
-    date: _date,
-    author: _author,
-    authorAvatar: _authorAvatar,
-    category: _category,
-    excerpt: _excerpt,
-    content: _content,
-    image: _image,
-    tags: _tags,
-    basePath: _basePath,
-    rating: _rating,
-    verdict: _verdict,
-    priceCategory: _priceCategory,
-    updatedDate: _updatedDate,
-    durability: _durability,
-    value: _value,
-    specs: _specs,
-    readingTime: _readingTime,
-    affiliateIds: _affiliateIds,
-    location: _location,
-    city: _city,
-    schedule: _schedule,
-    description: _description,
-    link: _link,
-    ...rest
-  } = props;
-
-  return rest;
+  return Object.fromEntries(
+    Object.entries(props).filter(([key]) => !DATA_PROPS.includes(key))
+  );
 }
