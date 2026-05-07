@@ -213,6 +213,12 @@ def handle_conflicts(args):
 
     base_branch = getattr(args, 'base', 'main') or 'main'
 
+    # 0. Set Git identity if not present (common in headless/CI)
+    res_name = run_command(["git", "config", "user.name"], check=False)
+    if not res_name.stdout.strip():
+        run('git config user.name "github-actions[bot]"')
+        run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
+
     # 1. Squash all commits relative to the base branch
     print("📦 Squashing current branch commits...")
     run("git fetch origin")
