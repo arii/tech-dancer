@@ -1,39 +1,23 @@
-import { Star, Layout } from 'lucide-react';
+import { Layout } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { DraftData } from '../useBlogDrafter';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
 import { EventSidebar } from './sidebar/EventSidebar';
-import { ScoreGrid, ScoreItem } from '@/components/layout/DetailElements';
+import { ResourceScoreGrid } from './ResourceScoreGrid';
 
-interface FullPreviewProps extends DraftData {
+interface FullPreviewProps {
   onClose: () => void;
 }
 
-export function FullPreview({
-  type,
-  title,
-  category,
-  date,
-  author,
-  excerpt,
-  commentary,
-  affiliateLink,
-  rating,
-  durability,
-  value,
-  priceCategory,
-  specs,
-  startDate,
-  earlyBirdDate,
-  hotelCutoffDate,
-  onClose
-}: FullPreviewProps) {
+export function FullPreview(props: FullPreviewProps & DraftData) {
+  const { type, author, onClose } = props;
+
   const sidebar = type === 'resource' ? (
-    <ResourceSidebar affiliateLink={affiliateLink} specs={specs} />
+    <ResourceSidebar affiliateLink={props.affiliateLink} specs={props.specs} />
   ) : type === 'event' ? (
-    <EventSidebar startDate={startDate} earlyBirdDate={earlyBirdDate} hotelCutoffDate={hotelCutoffDate} />
+    <EventSidebar startDate={props.startDate} earlyBirdDate={props.earlyBirdDate} hotelCutoffDate={props.hotelCutoffDate} />
   ) : undefined;
 
   const headerExtras = (
@@ -44,12 +28,12 @@ export function FullPreview({
       </Stack>
 
       {type === 'resource' && (
-        <ScoreGrid>
-          <ScoreItem label="Overall" value={rating ?? 'N/A'} icon={Star} intent="warning" />
-          {durability !== undefined && durability > 0 && <ScoreItem label="Durability" value={`${durability}/5`} />}
-          {value !== undefined && value > 0 && <ScoreItem label="Value" value={`${value}/5`} />}
-          <ScoreItem label="Price" value={priceCategory || '$$'} intent="warning" />
-        </ScoreGrid>
+        <ResourceScoreGrid
+          rating={props.rating}
+          durability={props.durability}
+          value={props.value}
+          priceCategory={props.priceCategory}
+        />
       )}
     </Stack>
   );
@@ -71,19 +55,19 @@ export function FullPreview({
         EXIT_FULL_PREVIEW
       </PrimaryActionButton>
       <DetailLayout
-        title={title || 'Untitled Post'}
-        category={category}
-        date={date}
-        content={commentary}
+        title={props.title || 'Untitled Post'}
+        category={props.category}
+        date={props.date}
+        content={props.commentary}
         onBack={onClose}
         backLabel="Back to Editor"
         headerExtras={headerExtras}
         sidebar={sidebar}
       >
-         {excerpt && (
+         {props.excerpt && (
            <Box marginY={8} border="l" paddingLeft={6} className="border-accent">
              <Text variant="body" size="lg" className="italic opacity-80">
-               {excerpt}
+               {props.excerpt}
              </Text>
            </Box>
          )}

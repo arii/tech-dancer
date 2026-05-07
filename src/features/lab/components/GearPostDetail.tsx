@@ -1,8 +1,8 @@
-import { Star } from 'lucide-react';
 import { Resource } from '@/lib/content';
 import { DetailLayout } from '@/components/layout/DetailLayout';
-import { ScoreGrid, ScoreItem, VerdictCallout } from '@/components/layout/DetailElements';
+import { VerdictCallout } from '@/components/layout/DetailElements';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
+import { ResourceScoreGrid } from './ResourceScoreGrid';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -12,13 +12,14 @@ interface GearPostDetailProps {
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
   const headerExtras = (
-    <ScoreGrid>
-      <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} intent="warning" />
-      {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
-      {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
-      <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
-      <ScoreItem label="Updated" value={post.updatedDate || post.date} />
-    </ScoreGrid>
+    <ResourceScoreGrid
+      rating={post.rating || 0}
+      durability={post.durability}
+      value={post.value}
+      priceCategory={post.priceCategory}
+      updatedDate={post.updatedDate}
+      date={post.date}
+    />
   );
 
   return (

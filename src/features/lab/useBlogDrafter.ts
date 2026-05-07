@@ -2,8 +2,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 import { SITE_METADATA } from '@/config/content';
 
-export interface DraftData {
-  type: 'post' | 'resource' | 'event';
+export interface BaseDraftData {
   title: string;
   category: string;
   excerpt: string;
@@ -11,20 +10,32 @@ export interface DraftData {
   date: string;
   affiliateLink: string;
   commentary: string;
-  // Resource specific
-  rating?: number;
-  durability?: number;
-  value?: number;
-  priceCategory?: string;
-  verdict?: string;
-  specs?: Record<string, string>;
-  // Event specific
-  location?: string;
-  startDate?: string;
-  earlyBirdDate?: string;
-  hotelCutoffDate?: string;
-  url?: string;
 }
+
+export interface PostDraftData extends BaseDraftData {
+  type: 'post';
+}
+
+export interface ResourceDraftData extends BaseDraftData {
+  type: 'resource';
+  rating: number;
+  durability: number;
+  value: number;
+  priceCategory: string;
+  verdict: string;
+  specs: Record<string, string>;
+}
+
+export interface EventDraftData extends BaseDraftData {
+  type: 'event';
+  location: string;
+  startDate: string;
+  earlyBirdDate: string;
+  hotelCutoffDate: string;
+  url: string;
+}
+
+export type DraftData = PostDraftData | ResourceDraftData | EventDraftData;
 
 export interface HistoryEntry {
   id: string;
@@ -161,37 +172,62 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const parsed = cleanAndParseJSON(jsonString);
     if (!parsed) return false;
 
-    const normalize = (val: unknown): unknown => {
+    const normalize = (val: unknown, depth = 0): unknown => {
+      if (depth > 5) return val; // Safety limit
       if (typeof val === 'string') return val.replace(/\\n/g, '\n');
-      if (Array.isArray(val)) return val.map(normalize);
+      if (Array.isArray(val)) return val.map(v => normalize(v, depth + 1));
       if (val !== null && typeof val === 'object') {
         return Object.fromEntries(
-          Object.entries(val).map(([k, v]) => [k, normalize(v)])
+          Object.entries(val).map(([k, v]) => [k, normalize(v, depth + 1)])
         );
       }
       return val;
     };
 
-    setData((prev: DraftData) => ({
-      ...prev,
-      type: parsed.type || prev.type,
-      title: normalize(parsed.title) || prev.title,
-      excerpt: normalize(parsed.excerpt || parsed.description) || prev.excerpt,
-      affiliateLink: parsed.affiliateLink || prev.affiliateLink,
-      commentary: normalize(parsed.commentary) || prev.commentary,
-      // Specialized fields
-      rating: parsed.rating ?? prev.rating,
-      durability: parsed.durability ?? prev.durability,
-      value: parsed.value ?? prev.value,
-      priceCategory: parsed.priceCategory || prev.priceCategory,
-      verdict: normalize(parsed.verdict) || prev.verdict,
-      specs: normalize(parsed.specs) || prev.specs,
-      location: normalize(parsed.location) || prev.location,
-      startDate: parsed.startDate || prev.startDate,
-      earlyBirdDate: parsed.earlyBirdDate || prev.earlyBirdDate,
-      hotelCutoffDate: parsed.hotelCutoffDate || prev.hotelCutoffDate,
-      url: parsed.url || prev.url
-    }));
+    setData((prev: DraftData) => {
+      const type = parsed.type || prev.type;
+      const base = {
+        title: (normalize(parsed.title) as string) || prev.title,
+        category: (normalize(parsed.category) as string) || prev.category,
+        excerpt: (normalize(parsed.excerpt || parsed.description) as string) || prev.excerpt,
+        affiliateLink: (parsed.affiliateLink as string) || prev.affiliateLink,
+        commentary: (normalize(parsed.commentary) as string) || prev.commentary,
+        author: prev.author,
+        date: parsed.date || prev.date
+      };
+
+      if (type === 'resource') {
+        const pResource = prev.type === 'resource' ? prev : {} as Partial<ResourceDraftData>;
+        return {
+          ...base,
+          type: 'resource',
+          rating: parsed.rating ?? pResource.rating ?? 0,
+          durability: parsed.durability ?? pResource.durability ?? 0,
+          value: parsed.value ?? pResource.value ?? 0,
+          priceCategory: parsed.priceCategory || pResource.priceCategory || '$$',
+          verdict: (normalize(parsed.verdict) as string) || pResource.verdict || '',
+          specs: (normalize(parsed.specs) as Record<string, string>) || pResource.specs || {}
+        } as ResourceDraftData;
+      }
+
+      if (type === 'event') {
+        const pEvent = prev.type === 'event' ? prev : {} as Partial<EventDraftData>;
+        return {
+          ...base,
+          type: 'event',
+          location: (normalize(parsed.location) as string) || pEvent.location || '',
+          startDate: parsed.startDate || pEvent.startDate || '',
+          earlyBirdDate: parsed.earlyBirdDate || pEvent.earlyBirdDate || '',
+          hotelCutoffDate: parsed.hotelCutoffDate || pEvent.hotelCutoffDate || '',
+          url: parsed.url || pEvent.url || ''
+        } as EventDraftData;
+      }
+
+      return {
+        ...base,
+        type: 'post'
+      } as PostDraftData;
+    });
     return true;
   };
 
