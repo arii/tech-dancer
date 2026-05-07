@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
+import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
 interface WaveBar {
@@ -67,18 +68,14 @@ export function HeroSection() {
         </Box>
 
         {/* Wordmark: boomtick.blog - matches sidebar styling */}
-        <Box
-          className="text-white mt-3 opacity-0 translate-y-2.5"
+        <Wordmark
+          variant="hero"
+          className="mt-3 opacity-0 translate-y-2.5 pointer-events-none"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
-            letterSpacing: '0.05em',
             animation: 'fadeUp 0.7s ease forwards 0.4s',
-            fontWeight: 800,
-            fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
           }}
-        >
-          boom<span className="text-accent">tick</span><span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>.blog</span>
-        </Box>
+        />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
