@@ -103,6 +103,7 @@ export function useBlogDrafter() {
       }
     }
     return DEFAULT_DATA;
+  });
 
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     const saved = localStorage.getItem(HISTORY_KEY);
