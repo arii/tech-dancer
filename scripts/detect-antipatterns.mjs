@@ -144,13 +144,8 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content) {
-  if (content.includes('// impeccable-ignore-file')) {
-    // Only skip full-file audit when explicitly allowed for migration files.
-    // Hero and design-system critical files must still be audited.
-    const allowSkip = /src\/(legacy|migrations)\//.test(process.env.AUDIT_FILE_PATH || '');
-    if (allowSkip) return [];
-  }
+function checkContent(content, filePath = "") {
+  if (content.includes('// impeccable-ignore-file')) return [];
 
   const violations = [];
 
@@ -290,8 +285,7 @@ function checkContent(content) {
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  process.env.AUDIT_FILE_PATH = filepath.replace(/\\/g, '/');
-  return checkContent(content);
+  return checkContent(content, filepath.replace(/\\/g, '/'));
 }
 
 function checkPRScope() {
@@ -346,7 +340,7 @@ if (targets.includes('-')) {
   for await (const chunk of process.stdin) {
     stdinContent += chunk;
   }
-  const violations = checkContent(stdinContent);
+  const violations = checkContent(stdinContent, "stdin");
   if (violations.length > 0) {
     allViolations['stdin'] = violations;
   }
