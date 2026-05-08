@@ -1,21 +1,24 @@
-import { Calendar, Plane, Hotel, Trophy, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Calendar, Plane, Hotel, Trophy, ShieldCheck, CheckCircle2, type LucideIcon } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { TimelineItem } from './types';
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  'flight-track': <Plane className="w-5 h-5" />,
-  'early-bird': <Trophy className="w-5 h-5" />,
-  'hotel-block': <Hotel className="w-5 h-5" />,
-  'comp-window': <CheckCircle2 className="w-5 h-5" />,
-  'cancel-safety': <ShieldCheck className="w-5 h-5" />,
+const ICON_MAP: Record<string, LucideIcon> = {
+  'flight-track': Plane,
+  'early-bird': Trophy,
+  'hotel-block': Hotel,
+  'comp-window': CheckCircle2,
+  'cancel-safety': ShieldCheck,
 };
 
 interface TimelineRowProps {
   item: TimelineItem;
+  formattedDate: string;
   onSync: (item: TimelineItem) => void;
 }
 
-export function TimelineRow({ item, onSync }: TimelineRowProps) {
+export function TimelineRow({ item, formattedDate, onSync }: TimelineRowProps) {
+  const Icon = ICON_MAP[item.id] || Calendar;
+
   return (
     <Box position="relative" display="flex" gap={{ base: 4, sm: 10 }} className="group">
       {/* Dot / Icon */}
@@ -32,14 +35,14 @@ export function TimelineRow({ item, onSync }: TimelineRowProps) {
         zIndex={10}
         className="shrink-0 group-hover:border-accent transition-colors shadow-sm"
       >
-        {ICON_MAP[item.id] || <Calendar className="w-5 h-5" />}
+        <Icon className="w-5 h-5" />
       </Box>
 
       <Box flex={1} border radius="lg" padding={6} surface="surface" className="hover:border-accent/40 transition-all">
         <Grid cols={{ base: 1, md: 4 }} gap={4} align="center">
           <Box className="md:col-span-1">
             <Text variant="mono" size="xs" color="accent" weight="font-bold">
-              {item.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              {formattedDate}
             </Text>
           </Box>
           <Box className="md:col-span-2">

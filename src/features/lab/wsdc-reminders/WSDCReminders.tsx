@@ -33,7 +33,10 @@ export default function WSDCReminders() {
 
   const timeline = useMemo(() => {
     if (!activeEvent.startDate || !activeEvent.earlyBirdDate || !activeEvent.hotelCutoffDate) return [];
-    return calculateTimeline(activeEvent);
+    return calculateTimeline(activeEvent).map(item => ({
+      ...item,
+      formattedDate: item.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    }));
   }, [activeEvent]);
 
   const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,7 +183,12 @@ export default function WSDCReminders() {
 
             <Stack gap={6}>
               {timeline.map((item) => (
-                <TimelineRow key={item.id} item={item} onSync={handleSingleSync} />
+                <TimelineRow
+                  key={item.id}
+                  item={item}
+                  formattedDate={item.formattedDate!}
+                  onSync={handleSingleSync}
+                />
               ))}
             </Stack>
           </Box>
