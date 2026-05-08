@@ -34,7 +34,7 @@ jobs:
       OLLAMA_MODEL: "qwen2.5-coder:1.5b"
     steps:
       - name: Checkout trusted code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -60,10 +60,10 @@ jobs:
           gh pr checkout "$ISSUE_NUMBER"
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: pnpm
