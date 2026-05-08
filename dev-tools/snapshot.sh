@@ -1,33 +1,51 @@
 #!/bin/bash
-set -e
 
 # Ensure we are in the project root
 cd "$(dirname "$0")/.."
 
-echo "=== Starting Minimal Jules Setup (Base) ==="
+echo "=== DevTools Snapshot & Debug Utility ==="
 
-# Force non-interactive frontend to prevent any hanging prompts
-export DEBIAN_FRONTEND=noninteractive
+CONFIG_FILE="dev-tools/project_config.json"
 
-# Helper for tool checks
-check_tool() {
-  if ! command -v "$1" &> /dev/null; then
-    echo "❌ Error: $1 is not installed. Please install it before running this script."
-    exit 1
-  fi
-}
-
-# 0. Tool presence checks
-echo "Checking prerequisites..."
-check_tool pnpm
-
-# 1. Install Node.js dependencies
-echo "Installing Node dependencies..."
-if ! pnpm install --frozen-lockfile; then
-  echo "❌ Error: pnpm install failed. Check your package.json and pnpm-lock.yaml."
-  exit 1
+if [ -f "$CONFIG_FILE" ]; then
+    echo "Using configuration from $CONFIG_FILE"
+    if command -v jq &> /dev/null; then
+        echo "Configuration state:"
+        jq '.' "$CONFIG_FILE"
+    else
+        echo "jq not installed. Raw configuration:"
+        cat "$CONFIG_FILE"
+    fi
+else
+    echo "⚠️ Warning: $CONFIG_FILE not found. Using defaults."
 fi
 
-echo "=== Base Jules Setup Complete! ==="
-echo "Note: Heavy dependencies (Playwright, Python ETL) are decoupled to reduce snapshot size."
-echo "Refer to AGENTS.md for on-demand setup scripts: setup-playwright.sh, setup-python.sh."
+# Basic environment check
+echo "--- Environment ---"
+echo "Python version: $(python3 --version 2>&1 || echo 'Not installed')"
+echo "Node version: $(node --version 2>&1 || echo 'Not installed')"
+echo "pnpm version: $(pnpm --version 2>&1 || echo 'Not installed')"
+
+# Token check (do not print token!)
+if [ -n "$GITHUB_TOKEN" ] || [ -n "$GH_TOKEN" ]; then
+    echo "GitHub token: Present"
+else
+    echo "GitHub token: Missing"
+fi
+
+if [ -n "$JULES_API_KEY" ]; then
+    echo "Jules API key: Present"
+else
+    echo "Jules API key: Missing"
+fi
+
+if [ -n "$GEMINI_API_KEY" ]; then
+    echo "Gemini API key: Present"
+else
+    echo "Gemini API key: Missing"
+fi
+
+echo "Ollama URL: ${OLLAMA_URL:-http://localhost:11434/api/generate}"
+echo "Ollama Model: ${OLLAMA_MODEL:-qwen2.5-coder:7b}"
+
+echo "=== Snapshot Complete ==="
