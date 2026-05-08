@@ -124,6 +124,23 @@
       linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 20px 20px;
   }
+
+  /* Wordmark Utilities */
+  .wordmark-base {
+    @apply font-extrabold text-white flex items-center tracking-[0.05em];
+  }
+  .wordmark-hero {
+    @apply font-display mt-3 opacity-0;
+    transform: translateY(10px);
+    font-size: clamp(18px, 4vw, 28px);
+    animation: fadeUp 0.7s ease forwards 0.4s;
+  }
+  .wordmark-nav {
+    @apply font-sans text-sm mt-0.5;
+  }
+  .wordmark-mobile {
+    @apply font-sans text-sm;
+  }
 }
 
 @layer base {
