@@ -532,12 +532,10 @@ def handle_repair(args):
     """Wraps repair.py for AI-assisted CI repair."""
     import tempfile
     import shutil
+    from utils import is_ollama_available
 
     # Ensure Ollama is running or at least check it
-    try:
-        import urllib.request
-        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
-    except Exception:
+    if not is_ollama_available():
         if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
 
     logs_source = ""
@@ -674,20 +672,10 @@ def handle_audit_gate(args):
         print("✅ No new violations introduced.")
 
 def handle_resolve_conflicts(args):
-    import mergellama
-    # 1. Search for Git conflict markers using grep, excluding dev-tools/, node_modules/, dist/, and .git/
-    res = run_command(["grep", "-lr", "<<<<<<<", ".", "--exclude-dir=dev-tools", "--exclude-dir=node_modules", "--exclude-dir=dist", "--exclude-dir=.git"], check=False, log_on_error=False)
+    from tdw_services.orchestrator import Orchestrator
+    orch = Orchestrator()
 
-    files_to_resolve = []
-    if res.returncode == 0 and res.stdout:
-        files_to_resolve = [f.strip() for f in res.stdout.splitlines() if f.strip()]
-    elif res.returncode == 1:
-        # grep exit code 1 means no match found
-        pass
-    else:
-        # Some other grep error
-        if not args.json:
-            print(f"⚠️ grep failed with code {res.returncode}: {res.stderr}")
+    files_to_resolve = orch.find_conflict_files()
 
     if not files_to_resolve:
         if not args.json:
@@ -699,7 +687,7 @@ def handle_resolve_conflicts(args):
     resolved_files = []
     failed_files = []
     for f in files_to_resolve:
-        if mergellama.resolve_file_conflicts(f):
+        if orch.resolve_conflict(f):
             resolved_files.append(f)
         else:
             failed_files.append(f)

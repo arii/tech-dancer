@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-import urllib.request
+import requests
 
 
 class OllamaService:
@@ -11,19 +11,22 @@ class OllamaService:
 
     def is_available(self) -> bool:
         try:
-            with urllib.request.urlopen(f"{self.base_url}/api/tags", timeout=2):
-                return True
+            response = requests.get(f"{self.base_url}/api/tags", timeout=2)
+            return response.status_code == 200
         except Exception:
             return False
 
     def generate(self, prompt: str) -> str:
-        payload = json.dumps({"model": self.model, "prompt": prompt, "stream": False}).encode("utf-8")
-        req = urllib.request.Request(
-            f"{self.base_url}/api/generate",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            body = json.loads(resp.read().decode("utf-8"))
-        return body.get("response", "")
+        payload = {"model": self.model, "prompt": prompt, "stream": False}
+        try:
+            response = requests.post(
+                f"{self.base_url}/api/generate",
+                json=payload,
+                timeout=30,
+            )
+            response.raise_for_status()
+            body = response.json()
+            return body.get("response", "")
+        except Exception as e:
+            print(f"⚠️  OllamaService generate failed: {e}")
+            return ""

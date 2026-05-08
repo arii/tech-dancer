@@ -2,9 +2,8 @@ import os
 import subprocess
 import json
 import base64
+import requests
 from typing import Optional, List, Dict, Any
-import urllib.request
-import urllib.parse
 
 class GitHubClient:
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None):
@@ -45,19 +44,19 @@ class GitHubClient:
             "Accept": "application/vnd.github.v3.diff" if is_text else "application/vnd.github.v3+json",
         }
 
-        req_data = None
-        if json_data:
-            req_data = json.dumps(json_data).encode("utf-8")
-            headers["Content-Type"] = "application/json"
-
-        req = urllib.request.Request(url, data=req_data, headers=headers, method=method)
-
         try:
-            with urllib.request.urlopen(req) as response:
-                if is_text:
-                    return response.read().decode('utf-8')
-                return json.loads(response.read().decode('utf-8'))
-        except urllib.error.URLError as e:
+            response = requests.request(
+                method,
+                url,
+                headers=headers,
+                json=json_data,
+                timeout=30
+            )
+            response.raise_for_status()
+            if is_text:
+                return response.text
+            return response.json()
+        except requests.exceptions.RequestException as e:
              raise Exception(f"GitHub API Error: {e}")
 
     def fetch_pr_details(self, number: int) -> Dict[str, Any]:

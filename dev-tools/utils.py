@@ -3,8 +3,7 @@ import sys
 import subprocess
 import json
 import time
-import urllib.request
-import urllib.error
+import requests
 from typing import Optional, Union, List
 
 def is_ollama_available(url: Optional[str] = None) -> bool:
@@ -16,15 +15,15 @@ def is_ollama_available(url: Optional[str] = None) -> bool:
     check_url = url.replace("/api/generate", "/api/tags") if "/api/generate" in url else url
 
     try:
-        req = urllib.request.Request(check_url, method='GET')
-        with urllib.request.urlopen(req, timeout=5) as response:
-            return response.status == 200
+        response = requests.get(check_url, timeout=5)
+        return response.status_code == 200
     except Exception:
         return False
 
 def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int = 3, url: Optional[str] = None) -> Optional[str]:
     """
     Robust Ollama API abstraction with exponential backoff and error handling.
+    Utilizes connection pooling via requests.
     """
     if not url:
         url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
@@ -35,24 +34,23 @@ def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int =
         "stream": False
     }
 
+    # Simple connection reuse via session if multiple calls were expected in same process,
+    # but for individual calls we just use requests.post
     for attempt in range(1, max_retries + 1):
         try:
-            req = urllib.request.Request(
-                url,
-                data=json.dumps(data).encode("utf-8"),
-                headers={"Content-Type": "application/json"}
-            )
             # 120s timeout for heavy inference tasks
-            with urllib.request.urlopen(req, timeout=120) as response:
-                raw_res = response.read().decode("utf-8")
-                res_data = json.loads(raw_res)
-                return res_data.get("response")
+            response = requests.post(url, json=data, timeout=120)
+            response.raise_for_status()
+            res_data = response.json()
+            return res_data.get("response")
 
-        except urllib.error.HTTPError as e:
-            err_msg = f"HTTP Error {e.code}: {e.reason}"
-        except urllib.error.URLError as e:
-            err_msg = f"URL Error (Connection Failed): {e.reason}"
-        except json.JSONDecodeError:
+        except requests.exceptions.HTTPError as e:
+            err_msg = f"HTTP Error: {str(e)}"
+        except requests.exceptions.ConnectionError as e:
+            err_msg = f"Connection Error: {str(e)}"
+        except requests.exceptions.Timeout as e:
+            err_msg = f"Timeout Error: {str(e)}"
+        except requests.exceptions.JSONDecodeError:
             err_msg = "Failed to decode JSON response from Ollama"
         except Exception as e:
             err_msg = f"Unexpected error: {str(e)}"

@@ -11,11 +11,11 @@ from typing import Optional
 
 # Centralized Ollama abstraction
 try:
-    from utils import call_ollama
+    from utils import call_ollama, CLIError
 except ImportError:
     # Handle cases where dev-tools is not in the python path
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-    from utils import call_ollama
+    from utils import call_ollama, CLIError
 
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"

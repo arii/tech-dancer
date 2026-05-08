@@ -1,8 +1,7 @@
 import os
 import json
 import re
-import urllib.request
-import urllib.error
+import requests
 from typing import Optional, Dict, Any, List
 
 # Centralized Ollama abstraction
@@ -44,20 +43,16 @@ class LocalAIClient:
                 "responseSchema": schema
             }
 
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers=headers
-        )
-
         try:
-            with urllib.request.urlopen(req) as response:
-                res_data = json.loads(response.read().decode("utf-8"))
-                if "candidates" in res_data and len(res_data["candidates"]) > 0:
-                    content = res_data["candidates"][0]["content"]["parts"][0]["text"]
-                    return content
-                return None
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
+            response.raise_for_status()
+            res_data = response.json()
+            if "candidates" in res_data and len(res_data["candidates"]) > 0:
+                content = res_data["candidates"][0]["content"]["parts"][0]["text"]
+                return content
+            return None
         except Exception as e:
+            print(f"⚠️  Gemini API call failed: {e}")
             return None
 
     def generate(self, prompt: str, schema: Optional[Dict] = None) -> str:
@@ -91,6 +86,15 @@ class LocalAIClient:
                 content = f.read()
 
             if "<<<<<<<" not in content:
+                return True
+
+            # Backward compatibility for mock mode in tests
+            if os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true":
+                import re
+                mock_pattern = r"<<<<<<<.*?\n(.*?)\n=======.*?\n>>>>>>>.*?\n"
+                resolved = re.sub(mock_pattern, r"\1\n", content, flags=re.DOTALL)
+                with open(file_path, 'w') as f:
+                    f.write(resolved)
                 return True
 
             prompt = f"Resolve the Git merge conflicts in this code. Output ONLY the clean, merged code without markers or explanation.\n\nFILE CONTENT:\n{content}\n\nREPAIRED CONTENT:\n"
