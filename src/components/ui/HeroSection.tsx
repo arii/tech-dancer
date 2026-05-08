@@ -1,30 +1,18 @@
 // impeccable-ignore-file
-import { useMemo } from 'react';
-
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
-interface WaveBar {
-  height: number;
-  dur: string;
-  delay: string;
-}
+// Generate deterministic bar data based on index to prevent visual regression flakiness
+const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
+  height: 20 + ((i * HERO_CONFIG.SEEDS.BAR_HEIGHT) % 36),
+  dur: (0.4 + ((i * HERO_CONFIG.SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
+  delay: ((i * HERO_CONFIG.SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
+})) as const;
 
 export function HeroSection() {
-  const BAR_COUNT = HERO_CONFIG.BAR_COUNT;
-  const SEEDS = HERO_CONFIG.SEEDS;
-
-  // Generate deterministic bar data based on index to prevent visual regression flakiness
-  const bars: WaveBar[] = useMemo(() =>
-    Array.from({ length: BAR_COUNT }, (_, i) => ({
-      height: 20 + ((i * SEEDS.BAR_HEIGHT) % 36),
-      dur: (0.4 + ((i * SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
-      delay: ((i * SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
-    })),
-    [BAR_COUNT, SEEDS]);
 
   return (
     <section
@@ -172,7 +160,7 @@ export function HeroSection() {
           style={{ animation: 'fadeIn 1s ease forwards 2.0s' }}
           aria-hidden="true"
         >
-          {bars.map((bar, i) => (
+          {BARS.map((bar, i) => (
             <Box
               key={i}
               radius="none"
