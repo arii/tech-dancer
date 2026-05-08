@@ -1,13 +1,19 @@
 import { useState, ChangeEvent } from 'react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
+import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye, Calendar, Package, PenTool } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
-import { useBlogDrafter } from './useBlogDrafter';
+import { useBlogDrafter, ContentType } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
+
+const types: { id: ContentType; label: string; icon: React.ElementType }[] = [
+  { id: 'post', label: 'BLOG POST', icon: PenTool },
+  { id: 'event', label: 'EVENT', icon: Calendar },
+  { id: 'resource', label: 'RESOURCE', icon: Package },
+];
 
 export function BlogDrafter() {
   const {
@@ -41,12 +47,17 @@ export function BlogDrafter() {
   };
 
   const handleCopyPrompt = () => {
-    const prompt = `Objective: Expand the following blog post draft JSON for Tech-Dancer.
+    const typeSpecificPrompt =
+      data.type === 'event' ? `Ensure the JSON strictly matches the keys: title, category, date, excerpt, location, city, schedule, description.` :
+      data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
+      `Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.`;
+
+    const prompt = `Objective: Expand the following ${data.type} draft JSON for Tech-Dancer.
 Requirements:
 1. Respond ONLY with a valid JSON object.
 2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.
-3. Ensure the JSON strictly matches the keys: title, excerpt, affiliateLink, commentary.
-4. The 'commentary' should be rich markdown content.
+3. ${typeSpecificPrompt}
+4. Content should be rich markdown where appropriate.
 
 Draft Data: ${JSON.stringify(data, null, 2)}`;
     navigator.clipboard.writeText(prompt);
@@ -57,13 +68,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   if (previewMode === 'full') {
     return (
       <FullPreview
-        title={data.title}
-        category={data.category}
-        date={data.date}
-        author={data.author}
-        excerpt={data.excerpt}
-        commentary={data.commentary}
-        affiliateLink={data.affiliateLink}
+        {...data}
         onClose={() => setPreviewMode('compact')}
       />
     );
@@ -89,13 +94,43 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
           </Box>
         </Box>
+
+        {/* Type Selector */}
+        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+          {types.map((type) => {
+            const Icon = type.icon;
+            const isActive = data.type === type.id;
+            return (
+              <Box
+                key={type.id}
+                as="button"
+                onClick={() => updateField('type', type.id)}
+                display="flex"
+                align="center"
+                justify="center"
+                gap={2}
+                paddingY={2}
+                className={cn(
+                  "transition-all cursor-pointer",
+                  isActive
+                    ? "bg-accent text-bg shadow-sm"
+                    : "text-text-dim hover:text-text-main hover:bg-white/5"
+                )}
+              >
+                <Icon className="w-3 h-3" />
+                <Text variant="mono" size="micro" weight="font-bold">{type.label}</Text>
+              </Box>
+            );
+          })}
+        </Grid>
+
         <Box border padding="compact" className="bg-accent/5 border-accent/20">
            <Stack gap={2} display="flex" align="baseline" direction="row">
               <Box as="span" className="shrink-0">
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
-                This tool prepares your blog post for the Tech-Dancer automated pipeline.
+                Drafting as <strong>{data.type.toUpperCase()}</strong>.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
               </Text>
            </Stack>
@@ -121,6 +156,42 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           </Box>
 
           <Stack gap={6}>
+
+            <Grid cols={2} gap={4}>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CONTENT_TYPE</Text>
+                <Box
+                  as="select"
+                  value={data.type}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
+                  className={cn(inputs.base, "appearance-none")}
+                >
+                  <option value="post">Blog Post</option>
+                  <option value="resource">Gear Resource</option>
+                  <option value="event">WCS Event</option>
+                </Box>
+              </Stack>
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
+                <Box
+                  as="select"
+                  value={data.category}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
+                  className={cn(inputs.base, "appearance-none")}
+                >
+                  {data.type === 'event' ? (
+                     <>
+                       <option value="WSDC Registry Event">WSDC Registry Event</option>
+                       <option value="Local Event">Local Event</option>
+                       <option value="Workshop">Workshop</option>
+                     </>
+                  ) : CONTENT_CATEGORIES.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.label}</option>
+                  ))}
+                </Box>
+              </Stack>
+            </Grid>
+
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
               <Box
@@ -133,31 +204,72 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               />
             </Stack>
 
-            <Grid cols={2} gap={4}>
-              <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
-                <Box
-                  as="select"
-                  value={data.category}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
-                  className={cn(inputs.base, "appearance-none")}
-                >
-                  {CONTENT_CATEGORIES.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.label}</option>
-                  ))}
-                </Box>
-              </Stack>
-              <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DATE</Text>
-                <Box
-                  as="input"
-                  type="date"
-                  value={data.date}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
-                  className={inputs.base}
-                />
-              </Stack>
-            </Grid>
+            <Stack gap={2}>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>PUBLISH_DATE</Text>
+              <Box
+                as="input"
+                type="date"
+                value={data.date}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
+                className={inputs.base}
+              />
+            </Stack>
+
+            {data.type === 'resource' && (
+              <Box border padding={4} surface="muted" radius="md">
+                <Stack gap={4}>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">RESOURCE_METADATA</Text>
+                   <Grid cols={3} gap={4}>
+                      <Stack gap={2}>
+                        <Text variant="mono" size="micro" color="dim">RATING (0-5)</Text>
+                        <Box as="input" type="number" step="0.1" value={data.rating} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('rating', e.target.value)} className={inputs.base} />
+                      </Stack>
+                      <Stack gap={2}>
+                        <Text variant="mono" size="micro" color="dim">DURABILITY</Text>
+                        <Box as="input" type="number" step="0.1" value={data.durability} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('durability', e.target.value)} className={inputs.base} />
+                      </Stack>
+                      <Stack gap={2}>
+                        <Text variant="mono" size="micro" color="dim">VALUE</Text>
+                        <Box as="input" type="number" step="0.1" value={data.value} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('value', e.target.value)} className={inputs.base} />
+                      </Stack>
+                   </Grid>
+                   <Stack gap={2}>
+                      <Text variant="mono" size="micro" color="dim">PRICE_CATEGORY</Text>
+                      <Box as="input" type="text" value={data.priceCategory} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('priceCategory', e.target.value)} placeholder="e.g. $$$" className={inputs.base} />
+                   </Stack>
+                   <Stack gap={2}>
+                      <Text variant="mono" size="micro" color="dim">VERDICT</Text>
+                      <Box as="input" type="text" value={data.verdict} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('verdict', e.target.value)} placeholder="Final summary..." className={inputs.base} />
+                   </Stack>
+                </Stack>
+              </Box>
+            )}
+
+            {data.type === 'event' && (
+              <Box border padding={4} surface="muted" radius="md">
+                <Stack gap={4}>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">EVENT_LOGISTICS</Text>
+                   <Stack gap={2}>
+                      <Text variant="mono" size="micro" color="dim">EVENT_START_DATE</Text>
+                      <Box as="input" type="date" value={data.startDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('startDate', e.target.value)} className={inputs.base} />
+                   </Stack>
+                   <Grid cols={2} gap={4}>
+                      <Stack gap={2}>
+                        <Text variant="mono" size="micro" color="dim">EARLY_BIRD_DEADLINE</Text>
+                        <Box as="input" type="date" value={data.earlyBirdDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('earlyBirdDate', e.target.value)} className={inputs.base} />
+                      </Stack>
+                      <Stack gap={2}>
+                        <Text variant="mono" size="micro" color="dim">HOTEL_CUTOFF</Text>
+                        <Box as="input" type="date" value={data.hotelCutoffDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('hotelCutoffDate', e.target.value)} className={inputs.base} />
+                      </Stack>
+                   </Grid>
+                   <Stack gap={2}>
+                      <Text variant="mono" size="micro" color="dim">OFFICIAL_URL</Text>
+                      <Box as="input" type="url" value={data.url} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('url', e.target.value)} placeholder="https://..." className={inputs.base} />
+                   </Stack>
+                </Stack>
+              </Box>
+            )}
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>EXCERPT_SUMMARY</Text>
@@ -165,35 +277,94 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 as="textarea"
                 value={data.excerpt}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
-                placeholder="A brief overview of the post content..."
+                placeholder="A brief overview of the content..."
                 height={20}
                 className={cn(inputs.base, "resize-none")}
               />
             </Stack>
 
-            <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
-              <Box
-                as="input"
-                type="url"
-                value={data.affiliateLink}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
-                placeholder="https://amazon.com/..."
-                className={inputs.base}
-              />
-            </Stack>
+            {/* Type Specific Fields */}
+            {data.type === 'post' && (
+              <>
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
+                  <Box
+                    as="input"
+                    type="url"
+                    value={data.affiliateLink}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
+                    placeholder="https://amazon.com/..."
+                    className={inputs.base}
+                  />
+                </Stack>
 
-            <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>BODY_COMMENTARY</Text>
-              <Box
-                as="textarea"
-                value={data.commentary}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
-                placeholder="Write your main content here..."
-                height={40}
-                className={cn(inputs.base, "resize-none")}
-              />
-            </Stack>
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>BODY_COMMENTARY</Text>
+                  <Box
+                    as="textarea"
+                    value={data.commentary}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
+                    placeholder="Write your main content here..."
+                    height={40}
+                    className={cn(inputs.base, "resize-none")}
+                  />
+                </Stack>
+
+              </>
+            )}
+
+            {data.type === 'event' && (
+              <>
+                <Grid cols={2} gap={4}>
+                  <Stack gap={2}>
+                    <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>LOCATION</Text>
+                    <Box
+                      as="input"
+                      type="text"
+                      value={data.location}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('location', e.target.value)}
+                      placeholder="Hyatt Regency..."
+                      className={inputs.base}
+                    />
+                  </Stack>
+                  <Stack gap={2}>
+                    <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CITY</Text>
+                    <Box
+                      as="input"
+                      type="text"
+                      value={data.city}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('city', e.target.value)}
+                      placeholder="San Francisco, CA"
+                      className={inputs.base}
+                    />
+                  </Stack>
+                </Grid>
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>SCHEDULE</Text>
+                  <Box
+                    as="input"
+                    type="text"
+                    value={data.schedule}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('schedule', e.target.value)}
+                    placeholder="October 8 - 11, 2026"
+                    className={inputs.base}
+                  />
+                </Stack>
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DESCRIPTION</Text>
+                  <Box
+                    as="textarea"
+                    value={data.description}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('description', e.target.value)}
+                    placeholder="Detailed event description..."
+                    height={40}
+                    className={cn(inputs.base, "resize-none")}
+                  />
+                </Stack>
+
+              </>
+            )}
+
           </Stack>
 
           {/* History Section */}
@@ -216,9 +387,14 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                     className="hover:border-accent/50 transition-colors"
                   >
                     <Stack gap={1}>
-                      <Text variant="mono" size="xs" weight="font-bold">
-                        {entry.data.title || 'Untitled Snapshot'}
-                      </Text>
+                      <Box display="flex" align="center" gap={2}>
+                         <Text variant="mono" size="xs" weight="font-bold">
+                          {entry.data.title || 'Untitled Snapshot'}
+                        </Text>
+                        <Box paddingX={1} className="bg-accent/20 rounded">
+                           <Text variant="mono" size="micro" color="accent">{entry.data.type.toUpperCase()}</Text>
+                        </Box>
+                      </Box>
                       <Text variant="mono" size="micro" color="dim">
                         {new Date(entry.timestamp).toLocaleString()}
                       </Text>
@@ -298,7 +474,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
              </Box>
              <Box display="flex" align="center" gap={2} color="dim">
                 <FileText className="w-3 h-3" />
-                <Text variant="mono" size="micro">v1.3.1</Text>
+                <Text variant="mono" size="micro">v1.4.0</Text>
              </Box>
           </Box>
 

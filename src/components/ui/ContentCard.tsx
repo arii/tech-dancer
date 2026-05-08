@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { filterDataProps } from '@/lib/utils';
 
-interface ContentCardProps extends Partial<HTMLMotionProps<"article">> {
+interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
   category: string;
@@ -22,15 +23,7 @@ export function ContentCard({
   readingTime,
   ...motionProps 
 }: ContentCardProps) {
-  // Destructure and ignore known data props that shouldn't bleed to the DOM
-  // even if they are passed via {...item} in parent components.
-  const {
-    // @ts-expect-error - ignoring unused data props
-    type: _type, date: _date, author: _author, authorAvatar: _authorAvatar,
-    content: _content, image: _image, tags: _tags, affiliateIds: _affiliateIds,
-    readingTime: _readingTime,
-    ...cleanMotionProps
-  } = motionProps as Record<string, unknown>;
+  const cleanMotionProps = filterDataProps(motionProps as Record<string, unknown>);
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();

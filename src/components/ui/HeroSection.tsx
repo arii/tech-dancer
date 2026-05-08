@@ -1,5 +1,6 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
+
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
@@ -47,7 +48,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        className="px-8 md:px-12 lg:px-24 pointer-events-none"
+        className="px-8 md:px-12 lg:px-24"
         paddingY={{ base: 2, lg: 2 }}
         maxWidth="screen-xl"
         marginX="auto"
