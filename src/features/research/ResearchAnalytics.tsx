@@ -1,3 +1,4 @@
+import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
 import { Database, FileText, Search, ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -47,7 +48,7 @@ export default function ResearchAnalytics() {
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" color="dim">
-                      <Search size={20} />
+                      <Icon icon={Search} size="md" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
                       {tool.status}
@@ -64,7 +65,7 @@ export default function ResearchAnalytics() {
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto" color="accent">
                   <Text weight="font-bold" size="xs" uppercase tracking="widest">Launch Console</Text>
-                  <ArrowRight size={14} />
+                  <Icon icon={ArrowRight} />
                 </Box>
               </Stack>
             ))}
@@ -104,7 +105,7 @@ export default function ResearchAnalytics() {
                   </Stack>
                   <Box display="flex" align="center" gap={2} color="accent" marginTop="auto">
                     <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">Read Study</Text>
-                    <FileText size={16} />
+                    <Icon icon={FileText} size="sm" />
                   </Box>
                 </Stack>
               ))}
@@ -113,7 +114,7 @@ export default function ResearchAnalytics() {
             <Box padding={12} border radius="2xl" position="relative" overflow="hidden" surface="surface" textAlign="center">
               <Stack align="center" justify="center" gap={4}>
                 <Box color="dim" opacity={0.5}>
-                  <Database size={48} />
+                  <Icon icon={Database} className="w-12 h-12" />
                 </Box>
                 <Stack gap={2}>
                   <Text as="h2" size="2xl" weight="font-black" marginBottom={3} color="accent" uppercase tracking="tight">

@@ -19,6 +19,9 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   uppercase?: boolean
   lowercase?: boolean
   capitalize?: boolean
+  clamp?: number | boolean
+  truncate?: boolean
+  leading?: "none" | "tight" | "snug" | "normal" | "relaxed" | "loose"
   [key: string]: unknown
 }
 
@@ -27,6 +30,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
+    clamp, truncate, leading,
     ...props 
   }, ref) => {
     return (
@@ -51,6 +55,9 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           uppercase && "uppercase",
           lowercase && "lowercase",
           capitalize && "capitalize",
+          clamp && (typeof clamp === "number" ? `line-clamp-${clamp}` : "line-clamp-none"),
+          truncate && "truncate",
+          leading && `leading-${leading}`,
           className
         )}
         {...props}
