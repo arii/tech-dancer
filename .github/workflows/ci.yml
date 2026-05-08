@@ -90,7 +90,9 @@ jobs:
         run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
-        run: python3 dev-tools/td_cli.py ratchet-any
+        run: |
+          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          python3 dev-tools/td_cli.py ratchet-any
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -119,6 +121,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           pnpm run audit || true
           python3 dev-tools/td_cli.py audit-gate
 
@@ -168,7 +171,9 @@ jobs:
       - name: Bundle Size Check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python3 dev-tools/td_cli.py bundle-size
+        run: |
+          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          python3 dev-tools/td_cli.py bundle-size
 
       - name: Cache Playwright Browsers
         id: playwright-cache
