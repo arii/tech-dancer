@@ -10,6 +10,22 @@ const routes = [
 ];
 
 test.describe('Visual Regression Tests', () => {
+  test.beforeEach(async ({ page }) => {
+    // Use a fixed clock to ensure deterministic date/time rendering (e.g., in footer or events)
+    await page.clock.setFixedTime(new Date('2024-01-01T12:00:00Z'));
+
+    // Disable motion to stabilize non-deterministic CSS/JS animations
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    // Ensure newsletter banner doesn't interfere with visual tests
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
+    });
+  });
+
+  for (const route of routes) {
+    test(`visual comparison for ${route.name}`, async ({ page }) => {
+      await page.goto(route.path);
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
@@ -17,25 +33,38 @@ test.describe('Visual Regression Tests', () => {
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
 
-      // Ensure the main content is loaded and visible
-      // Relying solely on the main element ensures hydration and layout are ready.
-      await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
+      // Wait for hydration and stability
+      await page.waitForLoadState('networkidle');
+      await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
 
-      // Robust scroll to bottom to trigger all lazy-loaded content
+      // Robust scroll-to-settle: triggers lazy loading without hardcoded sleep loops
       await page.evaluate(async () => {
         const scrollable = document.querySelector('main') || document.documentElement;
-        let lastHeight = scrollable.scrollHeight;
-        while (true) {
-          scrollable.scrollTo(0, scrollable.scrollHeight);
-          // Wait for potential content loading
-          await new Promise(r => setTimeout(r, 200));
-          const newHeight = scrollable.scrollHeight;
-          if (newHeight === lastHeight) break;
-          lastHeight = newHeight;
-        }
+
+        const waitForScrollHeightToSettle = async () => {
+          let lastHeight = -1;
+          let unchangedCount = 0;
+
+          while (unchangedCount < 3) {
+            scrollable.scrollTo(0, scrollable.scrollHeight);
+            const currentHeight = scrollable.scrollHeight;
+
+            if (currentHeight === lastHeight) {
+              unchangedCount++;
+            } else {
+              unchangedCount = 0;
+              lastHeight = currentHeight;
+            }
+
+            // Minimal task yield to allow for layout/lazy-loading triggers
+            await new Promise(requestAnimationFrame);
+          }
+        };
+
+        await waitForScrollHeightToSettle();
         scrollable.scrollTo(0, 0);
-        // Small buffer for fixed headers or other UI elements to settle
-        await new Promise(r => setTimeout(r, 200));
+        // Ensure paint settlement
+        await new Promise(requestAnimationFrame);
       });
 
       // Use a strict 2% threshold to catch unintended UI regressions

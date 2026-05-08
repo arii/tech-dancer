@@ -1,25 +1,60 @@
 import os
-import os
 import sys
 import subprocess
 import json
 import time
 import urllib.request
 import urllib.error
+import urllib.parse
+import re
 from typing import Optional, Union, List
 
-def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int = 3) -> Optional[str]:
-    url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+def clean_llm_output(text: str) -> str:
+    """Removes markdown code blocks if present."""
+    match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return text.strip()
+
+def is_ollama_available(url: Optional[str] = None) -> bool:
+    """Checks if Ollama API is reachable."""
+    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    if not base_url.endswith("/"):
+        base_url += "/"
+
+    # Use relative path to preserve any sub-path in base_url
+    tags_url = urllib.parse.urljoin(base_url, "api/tags")
+
+    try:
+        req = urllib.request.Request(tags_url, method='GET')
+        with urllib.request.urlopen(req, timeout=5) as response:
+            return response.status == 200
+    except Exception:
+        return False
+
+def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3) -> Optional[str]:
+    """Unified helper to call local Ollama API with retries using urllib."""
+    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    if not base_url.endswith("/"):
+        base_url += "/"
+
+    # Use relative path to preserve any sub-path in base_url
+    target_url = urllib.parse.urljoin(base_url, "api/generate")
+
+    model = model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+
     data = {
         "model": model,
         "prompt": prompt,
         "stream": False
     }
+
     req = urllib.request.Request(
-        url,
+        target_url,
         data=json.dumps(data).encode("utf-8"),
         headers={"Content-Type": "application/json"}
     )
+
     for attempt in range(1, max_retries + 1):
         try:
             with urllib.request.urlopen(req, timeout=120) as response:
@@ -32,6 +67,7 @@ def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int =
             sleep_time = 2 ** attempt
             print(f"API call failed ({e}). Retrying in {sleep_time}s...", file=sys.stderr)
             time.sleep(sleep_time)
+    return None
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):

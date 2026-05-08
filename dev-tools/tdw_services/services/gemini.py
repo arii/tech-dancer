@@ -1,47 +1,24 @@
 import os
 import json
 import re
-import urllib.request
-import urllib.error
+import requests
 from typing import Optional, Dict, Any, List
+from utils import call_ollama, is_ollama_available, clean_llm_output
+
+# Centralized Ollama abstraction
+from utils import call_ollama, is_ollama_available
 
 class LocalAIClient:
     def __init__(self, ollama_url: str = None, ollama_model: str = None, gemini_api_key: str = None):
-        self.ollama_url = ollama_url or os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+        # Note: ollama_url is now managed centrally in utils.py via OLLAMA_URL env var
         self.ollama_model = ollama_model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
         self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
 
     def is_ollama_available(self) -> bool:
-        try:
-            req = urllib.request.Request(os.environ.get("OLLAMA_URL", "http://localhost:11434/api/tags"), method='GET')
-            with urllib.request.urlopen(req, timeout=5) as response:
-                return response.status == 200
-        except Exception:
-            return False
+        return is_ollama_available()
 
     def call_ollama(self, prompt: str, model: str = None, max_retries: int = 3) -> Optional[str]:
-        model = model or self.ollama_model
-        data = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False
-        }
-        req = urllib.request.Request(
-            self.ollama_url,
-            data=json.dumps(data).encode("utf-8"),
-            headers={"Content-Type": "application/json"}
-        )
-        for attempt in range(1, max_retries + 1):
-            try:
-                with urllib.request.urlopen(req, timeout=120) as response:
-                    res_data = json.loads(response.read().decode("utf-8"))
-                    return res_data.get("response")
-            except Exception as e:
-                import time
-                if attempt == max_retries:
-                    return None
-                time.sleep(2 ** attempt)
-        return None
+        return call_ollama(prompt, model=model or self.ollama_model, max_retries=max_retries)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:
@@ -60,20 +37,16 @@ class LocalAIClient:
                 "responseSchema": schema
             }
 
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers=headers
-        )
-
         try:
-            with urllib.request.urlopen(req) as response:
-                res_data = json.loads(response.read().decode("utf-8"))
-                if "candidates" in res_data and len(res_data["candidates"]) > 0:
-                    content = res_data["candidates"][0]["content"]["parts"][0]["text"]
-                    return content
-                return None
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
+            response.raise_for_status()
+            res_data = response.json()
+            if "candidates" in res_data and len(res_data["candidates"]) > 0:
+                content = res_data["candidates"][0]["content"]["parts"][0]["text"]
+                return content
+            return None
         except Exception as e:
+            print(f"⚠️  Gemini API call failed: {e}")
             return None
 
     def generate(self, prompt: str, schema: Optional[Dict] = None) -> str:
@@ -93,10 +66,7 @@ class LocalAIClient:
         raise EnvironmentError("No inference engine available.")
 
     def clean_llm_output(self, text: str) -> str:
-        match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
-        if match:
-            return match.group(1).strip()
-        return text.strip()
+        return clean_llm_output(text)
 
     def resolve_file_conflicts(self, file_path: str) -> bool:
         if not os.path.exists(file_path):
@@ -107,6 +77,15 @@ class LocalAIClient:
                 content = f.read()
 
             if "<<<<<<<" not in content:
+                return True
+
+            # Backward compatibility for mock mode in tests
+            if os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true":
+                import re
+                mock_pattern = r"<<<<<<<.*?\n(.*?)\n=======.*?\n>>>>>>>.*?\n"
+                resolved = re.sub(mock_pattern, r"\1\n", content, flags=re.DOTALL)
+                with open(file_path, 'w') as f:
+                    f.write(resolved)
                 return True
 
             prompt = f"Resolve the Git merge conflicts in this code. Output ONLY the clean, merged code without markers or explanation.\n\nFILE CONTENT:\n{content}\n\nREPAIRED CONTENT:\n"

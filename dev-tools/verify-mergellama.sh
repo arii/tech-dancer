@@ -27,6 +27,8 @@ echo "📝 Created test file: $TEST_FILE"
 
 # 2. Run resolution in mock mode
 echo "🏃 Running MergeLlama in MOCK mode..."
+# Export PYTHONPATH to ensure dev-tools modules can find each other without sys.path hacks
+export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
 MERGELLAMA_MOCK=true python3 dev-tools/td_cli.py resolve-conflicts
 
 # 3. Verify the result
