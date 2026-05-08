@@ -77,9 +77,9 @@
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
 
-  /* Layout */
-  --width-nav-rail: var(--raw-width-nav-rail);
-  --border-width-grid: var(--raw-border-width-grid);
+  /* Layout Tokens */
+  --spacing-nav-rail: var(--raw-width-nav-rail);
+  --spacing-grid-border: var(--raw-border-width-grid);
 
   /* Font Sizes */
   --text-micro: 9px;
@@ -149,7 +149,7 @@
 .nav-rail {
   @apply hidden lg:flex w-nav-rail border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
-.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-border-width-grid bg-line w-full; }
+.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-grid-border bg-line w-full; }
 .stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
 .tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
 .experience-chip {
