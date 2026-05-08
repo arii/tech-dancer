@@ -44,11 +44,11 @@ def log_diag(msg: str):
     print(f"[{now}] ℹ️  {msg}", file=sys.stderr)
 
 def add_execution_args(parser: argparse.ArgumentParser):
-    """Registers consistent dry-run and execute flags to a subparser."""
+    """Registers --dry-run and --execute flags with standardized help strings."""
     parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Preview actions without side effects (default)")
+                      help="Run in dry-run mode (default). No side effects will be applied.")
     parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Enable actual side effects (e.g., posting to GitHub, modifying files)")
+                      help="Execute the command and apply side effects (disables dry-run).")
 
 def get_env_or_gha(env_var: str) -> str | None:
     """Helper to safely fetch variables avoiding CLI fallback if explicitly empty in CI."""
@@ -106,14 +106,6 @@ def detect_conflicts(repo, target_pr_num=None):
         if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
-
-def add_execution_args(parser):
-    """Registers --dry-run and --execute flags with standardized help strings."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Run in dry-run mode (default). No side effects will be applied.")
-    parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Execute the command and apply side effects (disables dry-run).")
-
 
 # --- CLI Handlers ---
 
@@ -960,8 +952,6 @@ def main():
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
-        elif cmd == "resolve-conflicts":
-            pass # Uses global --json flag if provided
         p.set_defaults(func=func)
 
     args = parser.parse_args()
