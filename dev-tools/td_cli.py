@@ -200,12 +200,7 @@ def handle_detect_conflicts(args):
     elif not conflicts: print("✅ No potential merge conflicts detected.")
 
 def handle_conflicts(args):
-    """
-    Squashes commits, attempts auto-resolution of simple conflicts,
-    and updates snapshots.
-    """
     def run(cmd, exit_on_fail=False):
-        print(f"🏃 Running: {cmd}")
         res = run_command(cmd, check=False, shell=True)
         if res.returncode != 0 and exit_on_fail:
             sys.exit(res.returncode)
@@ -213,15 +208,6 @@ def handle_conflicts(args):
 
     base_branch = getattr(args, 'base', 'main') or 'main'
 
-    # Ensure git user is configured for CI environments
-    res = run_command(['git', 'config', 'user.name'], check=False, log_on_error=False)
-    if not res.stdout.strip():
-        print("👤 Configuring git user for conflict resolution...")
-        run('git config user.name "github-actions[bot]"')
-        run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
-
-    # 1. Squash all commits relative to the base branch
-    print("📦 Squashing current branch commits...")
     run("git fetch origin")
     code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
 
@@ -229,8 +215,6 @@ def handle_conflicts(args):
         run(f"git reset --soft {merge_base}")
         run('git commit -m "chore: squashed commits prior to conflict resolution"')
 
-    # 2. Merge base to auto-resolve simple conflicts
-    print(f"🔄 Merging origin/{base_branch}...")
     merge_code, _ = run(f"git merge origin/{base_branch}")
 
     if merge_code != 0:
@@ -239,11 +223,8 @@ def handle_conflicts(args):
         print("⚠️ Skipping snapshot updates until conflict markers are cleared.")
         return
 
-    # 3. Update snapshots after successful merge
-    print("📸 Updating test snapshots...")
     run("pnpm test -u")
 
-    # Amend the snapshot updates directly into our squashed commit
     run("git add -A")
     run("git commit --amend --no-edit")
 
@@ -616,14 +597,11 @@ def handle_repair(args):
         os.chdir(original_cwd)
 
 def handle_audit_gate(args):
-    # Current violations count
     stdout_current = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only"])
     current_count = int(stdout_current or 0)
 
-    # 1. Try to get baseline from GHA variable or Environment
     baseline_count = resolve_baseline(None, 'AUDIT_BASELINE', -1)
 
-    # 2. If not set, fallback to origin/main comparison (dynamic baseline)
     if baseline_count == -1:
         baseline_count = 0
         try:
