@@ -71,7 +71,7 @@ export function NewsletterBanner() {
               variant="headline" 
               size="2xl" 
               weight="font-black" 
-              color="accent" 
+              color="main"
               className="uppercase tracking-tighter"
             >
               Get the latest dance insights.
