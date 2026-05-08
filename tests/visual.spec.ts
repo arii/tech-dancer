@@ -27,6 +27,8 @@ test.describe('Visual Regression Tests', () => {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
+      // Wait for fonts to be loaded to prevent text-rendering flakiness
+      await page.evaluate(() => document.fonts.ready);
 
       // Ensure the main content is loaded and visible
       // Relying solely on the main element ensures hydration and layout are ready.
