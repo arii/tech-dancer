@@ -201,16 +201,16 @@ export default function UXAuditor() {
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }}>
+        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${reportCardVariants({ overflow: "hidden" })} divide-y divide-line`}>
+          <Stack className={`${reportCardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
             {reports.length === 0 && (
               <EmptyState
                 compact
-                title="No audits recorded"
-                icon={<Icon icon={RefreshCw} size="xl" className="opacity-20" />}
+                title="No history"
+                icon={<Icon icon={RefreshCw} size="sm" className="opacity-30" />}
               />
             )}
             {reports.map((report) => (
@@ -225,10 +225,11 @@ export default function UXAuditor() {
                 }`}
               >
                 <Box
-                  padding={2}
+                  width={9}
+                  height={9}
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
+                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
                   shrink={0}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
@@ -248,7 +249,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} className="lg:col-span-3">
+        <Stack gap={6} span={{ lg: 3 }} minWidth={0}>
           {activeReport ? (
             <>
               <Stack
@@ -309,7 +310,7 @@ export default function UXAuditor() {
                     <Box className={reportCardVariants({ overflow: "hidden" })}>
                       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
                         <Stack direction="row" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
+                          <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
@@ -412,7 +413,7 @@ export default function UXAuditor() {
           ) : (
             <EmptyState
               minHeight={500}
-              icon={<Icon icon={Camera} className="w-16 h-16" />}
+              icon={<Icon icon={Camera} size="xl" className="opacity-10" />}
               title="Ready to Audit"
               description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
             />

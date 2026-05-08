@@ -2,9 +2,10 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-const iconVariants = cva("shrink-0", {
+const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
   variants: {
     size: {
+      xs: "w-3 h-3",
       sm: "w-4 h-4",
       md: "w-5 h-5",
       lg: "w-6 h-6",

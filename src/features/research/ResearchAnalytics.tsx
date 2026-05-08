@@ -111,17 +111,17 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box padding={12} border radius="2xl" position="relative" overflow="hidden" surface="surface" textAlign="center">
-              <Stack align="center" justify="center" gap={4}>
-                <Box color="dim" opacity={0.5}>
-                  <Icon icon={Database} className="w-12 h-12" />
+            <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
+              <Stack align="center" justify="center" gap={2}>
+                <Box color="dim" opacity={0.4}>
+                  <Icon icon={Database} size="lg" />
                 </Box>
-                <Stack gap={2}>
-                  <Text as="h2" size="2xl" weight="font-black" marginBottom={3} color="accent" uppercase tracking="tight">
+                <Stack gap={0.5}>
+                  <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
                     ETL Pipeline Synchronizing...
                   </Text>
-                  <Text marginX="auto" maxWidth="2xl" size="base" color="body">
-                    The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies on judge variance and performance metrics will be available once the baseline analysis is complete.
+                  <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
+                    The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies will be available once baseline analysis is complete.
                   </Text>
                 </Stack>
               </Stack>
