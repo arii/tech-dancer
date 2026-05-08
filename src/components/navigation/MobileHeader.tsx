@@ -1,7 +1,7 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Box } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Box';
 import { Logo } from '@/components/ui/Logo';
 import { Wordmark } from '@/components/ui/Wordmark';
 

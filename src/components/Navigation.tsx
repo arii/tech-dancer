@@ -2,7 +2,9 @@ import { Search } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Box';
+import { Stack } from '@/layouts/Stack';
+import { Text as Typography } from '@/layouts/Text';
 import { Logo } from '@/components/ui/Logo';
 import { Wordmark } from '@/components/ui/Wordmark';
 
@@ -114,7 +116,7 @@ export default function Navigation() {
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
               >
                 <Search className="w-4 h-4 opacity-70 group-hover:opacity-100 flex-shrink-0" />
-                <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
+                <Typography variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Typography>
               </Box>
             </Box>
 
@@ -124,12 +126,12 @@ export default function Navigation() {
           </Stack>
 
           <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
-            <Text variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
+            <Typography variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
               Written by <strong className="text-accent">Tech Dancer </strong>
-            </Text>
-            <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
+            </Typography>
+            <Typography variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
               2026 boomtick.blog
-            </Text>
+            </Typography>
           </Box>
         </Stack>
       </Box>

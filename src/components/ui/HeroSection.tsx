@@ -2,7 +2,9 @@
 import { useMemo } from 'react';
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
-import { Stack, Text, Box } from '@/layouts/Primitives';
+import { Stack } from '@/layouts/Stack';
+import { Box } from '@/layouts/Box';
+import { Text as Typography } from '@/layouts/Text';
 import { Logo } from './Logo';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
@@ -80,29 +82,29 @@ export function HeroSection() {
           className="opacity-0 translate-y-2.5"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
-          <Text
+          <Typography
             as="span"
             variant="hero"
             color="white"
             className="text-3xl md:text-5xl lg:text-6xl"
           >
             Built for dancers.
-          </Text>
-          <Text
+          </Typography>
+          <Typography
             as="span"
             variant="hero"
             className="text-[2rem] md:text-[3.5rem] lg:text-[4rem]"
           >
             <span style={{ color: 'var(--hero-accent)' }}>Train smarter.</span>
-          </Text>
-          <Text
+          </Typography>
+          <Typography
             as="span"
             variant="hero"
             color="white"
             className="text-[2rem] md:text-[3.5rem] lg:text-[4rem]"
           >
             Dance better.
-          </Text>
+          </Typography>
         </Stack>
 
         {/* Gradient Accent Line below headline */}
@@ -137,7 +139,7 @@ export function HeroSection() {
             className="bg-white/20 shrink-0"
             aria-hidden="true"
           />
-          <Text
+          <Typography
             as="p"
             variant="body"
             weight="font-normal"
@@ -150,7 +152,7 @@ export function HeroSection() {
           >
             Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
             plus technical deep dives into building the platform with DevAI.
-          </Text>
+          </Typography>
         </Box>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}

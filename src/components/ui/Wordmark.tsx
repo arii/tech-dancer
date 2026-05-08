@@ -1,4 +1,5 @@
-import { Box, Text } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Box';
+import { Text as Typography } from '@/layouts/Text';
 import { cn } from '@/lib/utils';
 import { CSSProperties } from 'react';
 
@@ -76,7 +77,7 @@ export function Wordmark({ variant = 'default', className }: WordmarkProps) {
   }
 
   const textElement = (
-    <Text
+    <Typography
       variant="sans"
       size={config.textSize}
       weight={config.textWeight}
@@ -84,7 +85,7 @@ export function Wordmark({ variant = 'default', className }: WordmarkProps) {
       style={config.textStyle}
     >
       boom<span className="text-accent">tick</span><span className={config.dotBlogClassName} style={config.dotBlogStyle}>.blog</span>
-    </Text>
+    </Typography>
   );
 
   if (config.containerClassName) {
