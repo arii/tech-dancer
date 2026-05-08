@@ -4,12 +4,6 @@ import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
 import { HERO_CONFIG } from '@/config/hero';
 
-interface WaveBar {
-  height: number;
-  dur: string;
-  delay: string;
-}
-
 // Generate deterministic bar data based on index to prevent visual regression flakiness
 const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
   height: 20 + ((i * HERO_CONFIG.SEEDS.BAR_HEIGHT) % 36),
