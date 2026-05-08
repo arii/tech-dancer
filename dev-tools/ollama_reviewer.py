@@ -5,14 +5,10 @@ ollama_reviewer.py - Standalone Ollama Code Reviewer CLI
 
 import os
 import sys
-import json
-import urllib.request
-import urllib.error
 import argparse
+from utils import call_ollama
 
-OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL = "code-reviewer"
-DEFAULT_TIMEOUT = 60 # Seconds
 MAX_FILE_SIZE_KB = 50
 
 def is_binary(file_path):
@@ -49,40 +45,14 @@ def review_file(file_path, silent=False):
 
     prompt = f"Please review the following code:\n\n```\n{content}\n```"
 
-    data = {
-        "model": MODEL,
-        "prompt": prompt,
-        "stream": False
-    }
-
-    req = urllib.request.Request(
-        OLLAMA_URL,
-        data=json.dumps(data).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
-    )
-
     if not silent:
         print(f"--- Reviewing {file_path} using model '{MODEL}' ---")
 
-    try:
-        with urllib.request.urlopen(req, timeout=DEFAULT_TIMEOUT) as f:
-            response_data = json.loads(f.read().decode("utf-8"))
-            review = response_data.get("response", "No response from model.")
-            print(review)
-    except urllib.error.HTTPError as e:
-        print(f"HTTP Error {e.code}: {e.reason}", file=sys.stderr)
-        sys.exit(1)
-    except urllib.error.URLError as e:
-        print(f"Error connecting to Ollama at {OLLAMA_URL}: {e.reason}", file=sys.stderr)
-        print("Ensure Ollama is running and the model is created.", file=sys.stderr)
-        sys.exit(1)
-    except (TimeoutError, urllib.error.URLError) as e:
-        if isinstance(e, TimeoutError) or "timed out" in str(e):
-            print(f"Request timed out after {DEFAULT_TIMEOUT} seconds.", file=sys.stderr)
-            sys.exit(1)
-        raise e
-    except Exception as e:
-        print(f"An unexpected error occurred during review: {e}", file=sys.stderr)
+    review = call_ollama(prompt, model=MODEL)
+    if review:
+        print(review)
+    else:
+        print(f"Error: Failed to get review from Ollama for {file_path}", file=sys.stderr)
         sys.exit(1)
 
 def main():
