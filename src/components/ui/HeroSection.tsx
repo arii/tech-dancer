@@ -1,5 +1,6 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
+
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
@@ -67,10 +68,9 @@ export function HeroSection() {
           <Logo className="text-white" showText={false} />
         </Box>
 
-        {/* Wordmark: boomtick.blog - matches sidebar styling */}
         <Wordmark
           variant="hero"
-          className="mt-3 opacity-0 translate-y-2.5 pointer-events-none"
+          className="mt-3 opacity-0 translate-y-2.5"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
             animation: 'fadeUp 0.7s ease forwards 0.4s',

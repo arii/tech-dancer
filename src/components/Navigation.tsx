@@ -94,7 +94,6 @@ export default function Navigation() {
               showText={false}
               className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
             />
-            {/* Wordmark */}
             <Box paddingY={0} className="mt-0.5 leading-none">
               <Wordmark variant="nav" />
             </Box>
