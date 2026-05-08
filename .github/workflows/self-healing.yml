@@ -170,3 +170,7 @@ jobs:
           else
             echo "No changes to commit."
           fi
+
+      - name: Cleanup repair tool
+        if: always()
+        run: rm -rf /tmp/repair-tool
