@@ -33,16 +33,7 @@ export function EmptyState({
     >
       <Stack align="center" justify="center" gap={compact ? 2 : 4}>
         {icon && (
-          <Box 
-            color="dim" 
-            opacity={0.5} 
-            display="flex" 
-            align="center" 
-            justify="center"
-            width={compact ? 5 : 10}
-            height={compact ? 5 : 10}
-            marginX="auto"
-          >
+          <Box color="dim" opacity={0.5}>
             {icon}
           </Box>
         )}

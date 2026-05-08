@@ -23,12 +23,12 @@ export function SearchBox({
       surface="default"
       border
       paddingX={4}
-      paddingY={1}
+      paddingY={2}
       maxWidth={maxWidth}
       flex={1}
       minHeight="44px"
       radius="lg"
-      className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
+      className="focus-within:ring-2 focus-within:ring-accent transition-all"
     >
       <Search
         size={18}

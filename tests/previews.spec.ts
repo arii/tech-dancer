@@ -1,16 +1,10 @@
-import { test, expect, Page } from '@playwright/test';
-
-async function gotoPreviewDashboard(page: Page) {
-  const baseURL = page.context()._options.baseURL || 'http://localhost:4173/';
-  // We resolve the previews path against the baseURL which includes the necessary VITE_BASE_PATH
-  const targetUrl = new URL('previews/index.html', baseURL).href;
-  await page.goto(targetUrl);
-  await page.waitForLoadState('networkidle');
-}
+import { test, expect } from '@playwright/test';
 
 test.describe('Preview Dashboard', () => {
   test('should load the dashboard and show initial elements', async ({ page }) => {
-    await gotoPreviewDashboard(page);
+    // Navigate to the preview dashboard using a relative path to ensure correct resolution against baseURL
+    await page.goto(process.env.CI ? './previews/index.html' : '/previews/index.html');
+    await page.waitForLoadState('networkidle');
 
     // Check title
     await expect(page).toHaveTitle(/Preview Environments/);
@@ -29,7 +23,8 @@ test.describe('Preview Dashboard', () => {
   });
 
   test('responsive layout check', async ({ page }) => {
-    await gotoPreviewDashboard(page);
+    await page.goto(process.env.CI ? './previews/index.html' : '/previews/index.html');
+    await page.waitForLoadState('networkidle');
 
     // Desktop view
     await page.setViewportSize({ width: 1440, height: 900 });

@@ -1,19 +1,3 @@
-import { cva } from 'class-variance-authority';
-import { Icon } from '@/components/ui/Icon';
-
-const returnButtonVariants = cva(
-  "group outline-none focus-visible:ring-2 focus-visible:ring-accent",
-  {
-    variants: {},
-  }
-);
-
-const returnButtonInnerVariants = cva(
-  "group-hover:bg-accent group-hover:text-white transition-all shadow-lg group-hover:shadow-accent/20",
-  {
-    variants: {},
-  }
-);
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
@@ -40,7 +24,7 @@ export default function NotFound() {
                 variant="default"
                 padding={0}
                 height="auto"
-                className={returnButtonVariants()}
+                className="group outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 aria-label="Return to Home"
               >
                 <Stack
@@ -51,13 +35,13 @@ export default function NotFound() {
                   surface="accent"
                   paddingX={8}
                   paddingY={4}
-                  className={returnButtonInnerVariants()}
+                  className="group-hover:bg-accent group-hover:text-white transition-all shadow-lg group-hover:shadow-accent/20"
                 >
-                  <Icon icon={Home} />
+                  <Home size={18} />
                   <Text variant="mono" size="sm" weight="font-bold">
                     RETURN TO HOME
                   </Text>
-                  <Icon icon={ChevronRight} size="sm" className="group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Stack>
               </Button>
             }

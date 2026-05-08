@@ -256,27 +256,64 @@ function checkContent(content, filepath = '') {
     });
   }
 
-  // 3. Nesting depth check for CSS
+  // 3. Nesting depth check for CSS (Robust State Machine)
   if (isCssFile) {
     let depth = 0;
+    let inMultiLineComment = false;
+    let inString = null; // ' or "
+
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const openBraces = (line.match(/\{/g) || []).length;
-      const closeBraces = (line.match(/\}/g) || []).length;
+      for (let j = 0; j < line.length; j++) {
+        const char = line[j];
+        const nextChar = line[j + 1];
 
-      if (openBraces > 0) {
-        depth += openBraces;
-        if (depth > 3) {
-          violations.push({
-            line: i + 1,
-            pattern: 'Excessive Nesting',
-            severity: 'minor',
-            value: `Depth: ${depth}`,
-            message: 'CSS nesting depth should not exceed 3 levels.'
-          });
+        if (inMultiLineComment) {
+          if (char === '*' && nextChar === '/') {
+            inMultiLineComment = false;
+            j++;
+          }
+          continue;
+        }
+
+        if (inString) {
+          if (char === inString && line[j - 1] !== '\\') {
+            inString = null;
+          }
+          continue;
+        }
+
+        if (char === '/' && nextChar === '*') {
+          inMultiLineComment = true;
+          j++;
+          continue;
+        }
+
+        if (char === '/' && nextChar === '/') {
+          // Single line comment, skip rest of line
+          break;
+        }
+
+        if (char === "'" || char === '"') {
+          inString = char;
+          continue;
+        }
+
+        if (char === '{') {
+          depth++;
+          if (depth > 3) {
+            violations.push({
+              line: i + 1,
+              pattern: 'Excessive Nesting',
+              severity: 'minor',
+              value: `Depth: ${depth}`,
+              message: 'CSS nesting depth should not exceed 3 levels.'
+            });
+          }
+        } else if (char === '}') {
+          depth--;
         }
       }
-      depth -= closeBraces;
     }
   }
 

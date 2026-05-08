@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
-import { Wordmark } from '@/components/ui/Wordmark';
 
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -94,8 +93,19 @@ export default function Navigation() {
               showText={false}
               className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
             />
+            {/* Wordmark */}
             <Box paddingY={0} className="mt-0.5 leading-none">
-              <Wordmark variant="nav" />
+              <Text
+                variant="sans"
+                size="sm"
+                weight="font-extrabold"
+                className="leading-none text-white"
+                style={{ letterSpacing: '0.05em' }}
+              >
+                boom
+                <span className="text-accent">tick</span>
+                <span className="text-white/60 font-light">.blog</span>
+              </Text>
             </Box>
           </Box>
 
