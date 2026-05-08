@@ -1,15 +1,20 @@
 from __future__ import annotations
+<<<<<<< HEAD
 
 import json
 import requests
 
+=======
+from utils import call_ollama, is_ollama_available
+>>>>>>> origin/consolidate-ollama-api-logic-9180553374366050257
 
 class OllamaService:
-    def __init__(self, model: str = "llama3", base_url: str = "http://localhost:11434"):
+    def __init__(self, model: str = "llama3", base_url: str = None):
         self.model = model
-        self.base_url = base_url.rstrip("/")
+        self.base_url = base_url
 
     def is_available(self) -> bool:
+<<<<<<< HEAD
         try:
             response = requests.get(f"{self.base_url}/api/tags", timeout=2)
             return response.status_code == 200
@@ -30,3 +35,9 @@ class OllamaService:
         except Exception as e:
             print(f"⚠️  OllamaService generate failed: {e}")
             return ""
+=======
+        return is_ollama_available(url=self.base_url)
+
+    def generate(self, prompt: str) -> str:
+        return call_ollama(prompt, model=self.model, url=self.base_url) or ""
+>>>>>>> origin/consolidate-ollama-api-logic-9180553374366050257

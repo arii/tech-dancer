@@ -8,9 +8,7 @@ import os
 import sys
 import re
 from typing import Optional
-
-# Centralized Ollama abstraction
-from utils import call_ollama, CLIError
+from utils import call_ollama, clean_llm_output, CLIError
 
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
@@ -18,14 +16,6 @@ CONFLICT_MARKER = "<<<<<<<"
 
 def log(msg):
     print(f"🦙 [MergeLlama] {msg}")
-
-def clean_llm_output(text: str) -> str:
-    """Removes markdown code blocks if present."""
-    # Robustly handles fenced blocks with or without language tags
-    match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return text.strip()
 
 def resolve_file_conflicts(file_path: str) -> bool:
     if not os.path.exists(file_path):

@@ -52,7 +52,7 @@ def review_file(file_path, silent=False):
     if review:
         print(review)
     else:
-        print(f"Error: Failed to get review from Ollama for {file_path}", file=sys.stderr)
+        print(f"Error: Failed to get review for {file_path}", file=sys.stderr)
         sys.exit(1)
 
 def main():

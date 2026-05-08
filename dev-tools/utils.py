@@ -3,30 +3,45 @@ import sys
 import subprocess
 import json
 import time
-import requests
+import urllib.request
+import urllib.error
+import urllib.parse
+import re
 from typing import Optional, Union, List
 
-def is_ollama_available(url: Optional[str] = None) -> bool:
-    """Checks if the Ollama server is running and accessible."""
-    if not url:
-        url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+def clean_llm_output(text: str) -> str:
+    """Removes markdown code blocks if present."""
+    match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return text.strip()
 
-    # Ensure we use the /tags endpoint for the check
-    check_url = url.replace("/api/generate", "/api/tags") if "/api/generate" in url else url
+def is_ollama_available(url: Optional[str] = None) -> bool:
+    """Checks if Ollama API is reachable."""
+    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    if not base_url.endswith("/"):
+        base_url += "/"
+
+    # Use relative path to preserve any sub-path in base_url
+    tags_url = urllib.parse.urljoin(base_url, "api/tags")
 
     try:
-        response = requests.get(check_url, timeout=5)
-        return response.status_code == 200
+        req = urllib.request.Request(tags_url, method='GET')
+        with urllib.request.urlopen(req, timeout=5) as response:
+            return response.status == 200
     except Exception:
         return False
 
-def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int = 3, url: Optional[str] = None) -> Optional[str]:
-    """
-    Robust Ollama API abstraction with exponential backoff and error handling.
-    Utilizes connection pooling via requests.
-    """
-    if not url:
-        url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3) -> Optional[str]:
+    """Unified helper to call local Ollama API with retries using urllib."""
+    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    if not base_url.endswith("/"):
+        base_url += "/"
+
+    # Use relative path to preserve any sub-path in base_url
+    target_url = urllib.parse.urljoin(base_url, "api/generate")
+
+    model = model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 
     data = {
         "model": model,
@@ -34,34 +49,25 @@ def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int =
         "stream": False
     }
 
-    # Simple connection reuse via session if multiple calls were expected in same process,
-    # but for individual calls we just use requests.post
+    req = urllib.request.Request(
+        target_url,
+        data=json.dumps(data).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+
     for attempt in range(1, max_retries + 1):
         try:
-            # 120s timeout for heavy inference tasks
-            response = requests.post(url, json=data, timeout=120)
-            response.raise_for_status()
-            res_data = response.json()
-            return res_data.get("response")
-
-        except requests.exceptions.HTTPError as e:
-            err_msg = f"HTTP Error: {str(e)}"
-        except requests.exceptions.ConnectionError as e:
-            err_msg = f"Connection Error: {str(e)}"
-        except requests.exceptions.Timeout as e:
-            err_msg = f"Timeout Error: {str(e)}"
-        except requests.exceptions.JSONDecodeError:
-            err_msg = "Failed to decode JSON response from Ollama"
+            with urllib.request.urlopen(req, timeout=120) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                return res_data.get("response")
         except Exception as e:
-            err_msg = f"Unexpected error: {str(e)}"
-
-        if attempt == max_retries:
-            print(f"❌ Ollama API failed after {max_retries} attempts: {err_msg}", file=sys.stderr)
-            return None
-
-        sleep_time = 2 ** attempt
-        print(f"⚠️  Ollama attempt {attempt} failed ({err_msg}). Retrying in {sleep_time}s...", file=sys.stderr)
-        time.sleep(sleep_time)
+            if attempt == max_retries:
+                print(f"API call failed after {max_retries} attempts: {e}", file=sys.stderr)
+                return None
+            sleep_time = 2 ** attempt
+            print(f"API call failed ({e}). Retrying in {sleep_time}s...", file=sys.stderr)
+            time.sleep(sleep_time)
+    return None
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):
