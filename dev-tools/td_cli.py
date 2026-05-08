@@ -225,7 +225,6 @@ def handle_conflicts(args):
 
     run("pnpm test -u")
 
-    # Amend the snapshot updates directly into our squashed commit
     run("git add -A")
     run("git commit --amend --no-edit")
 
