@@ -14,32 +14,21 @@ test.describe('Visual Regression Tests', () => {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
-      // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
-
-      // Ensure the main content is loaded and visible
-      // Relying solely on the main element ensures hydration and layout are ready.
       await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
-
-      // Robust scroll to bottom to trigger all lazy-loaded content
       await page.evaluate(async () => {
         const scrollable = document.querySelector('main') || document.documentElement;
         let lastHeight = scrollable.scrollHeight;
         while (true) {
           scrollable.scrollTo(0, scrollable.scrollHeight);
-          // Wait for potential content loading
           await new Promise(r => setTimeout(r, 200));
           const newHeight = scrollable.scrollHeight;
           if (newHeight === lastHeight) break;
           lastHeight = newHeight;
         }
         scrollable.scrollTo(0, 0);
-        // Small buffer for fixed headers or other UI elements to settle
         await new Promise(r => setTimeout(r, 200));
       });
-
-      // Use a strict 2% threshold to catch unintended UI regressions
-      // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.02,
