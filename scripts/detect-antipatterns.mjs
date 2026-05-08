@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/styles', 'src/App.tsx', 'src/index.css'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -20,7 +20,7 @@ function collectAuditFiles(targets) {
         walk(fullPath);
         continue;
       }
-      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) results.add(fullPath);
+      if (/\.(ts|tsx|css)$/.test(fullPath)) results.add(fullPath);
     }
   };
 
@@ -29,7 +29,7 @@ function collectAuditFiles(targets) {
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
-    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx')) results.add(absoluteTarget);
+    else if (/\.(ts|tsx|css)$/.test(absoluteTarget)) results.add(absoluteTarget);
   }
 
   return Array.from(results);
@@ -108,6 +108,20 @@ const CONFIG = {
       pattern: /className=".*?text-\[\d/g,
       severity: 'minor',
       message: 'Arbitrary text size. Use typeSizes from design-tokens.ts'
+    },
+    {
+      name: 'Hardcoded Color',
+      pattern: /:\s*(#[0-9a-fA-F]{3,8}|rgba?\(.*?\)|(?<!var\(--)red|(?<!var\(--)blue|(?<!var\(--)green|(?<!var\(--)black|(?<!var\(--)white)\b/g,
+      isCssOnly: true,
+      severity: 'minor',
+      message: 'Hardcoded color detected in CSS. Use CSS variables from tokens.css instead.'
+    },
+    {
+      name: 'Cramped Spacing',
+      pattern: /:\s*([0-3]px|0\.[0-2][0-4]?rem)\b/g,
+      isCssOnly: true,
+      severity: 'minor',
+      message: 'Cramped spacing detected (less than 4px). Use standard spacing tokens.'
     }
   ],
   deprecated: {
@@ -126,9 +140,10 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content) {
+function checkContent(content, filepath = '') {
   if (content.includes('// impeccable-ignore-file')) return [];
 
+  const isCssFile = filepath.endsWith('.css');
   const violations = [];
 
   // Helper to get line number from index efficiently
@@ -155,6 +170,14 @@ function checkContent(content) {
   CONFIG.rules
     .filter(r => !r.isClassNameRule)
     .forEach(rule => {
+      if (rule.isCssOnly && !isCssFile) return;
+      if (!rule.isCssOnly && isCssFile && rule.name !== 'Arbitrary Value') return;
+
+      // Skip design token files for rules that would naturally trigger violations in them
+      if (filepath.includes('tokens.css') || filepath.includes('design-tokens.ts')) {
+        if (rule.name === 'Hardcoded Color' || rule.name === 'Arbitrary Value' || rule.name === 'Non-token Color/Size' || rule.name === 'Cramped Spacing') return;
+      }
+
       const regex = new RegExp(rule.pattern.source, rule.name === 'div Layout' ? 'gs' : 'g');
       const matches = content.matchAll(regex);
 
@@ -233,7 +256,31 @@ function checkContent(content) {
     });
   }
 
-  // 3. Contrast safety heuristic for inverse/gradient hero panels.
+  // 3. Nesting depth check for CSS
+  if (isCssFile) {
+    let depth = 0;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const openBraces = (line.match(/\{/g) || []).length;
+      const closeBraces = (line.match(/\}/g) || []).length;
+
+      if (openBraces > 0) {
+        depth += openBraces;
+        if (depth > 3) {
+          violations.push({
+            line: i + 1,
+            pattern: 'Excessive Nesting',
+            severity: 'minor',
+            value: `Depth: ${depth}`,
+            message: 'CSS nesting depth should not exceed 3 levels.'
+          });
+        }
+      }
+      depth -= closeBraces;
+    }
+  }
+
+  // 4. Contrast safety heuristic for inverse/gradient hero panels.
   // Single-pass sliding window: when an industrial gradient line is seen,
   // inspect nearby headline/body Text lines for explicit inverse-safe styling.
   let activeGradientWindowUntil = -1;
@@ -267,7 +314,7 @@ function checkContent(content) {
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  return checkContent(content);
+  return checkContent(content, filepath);
 }
 
 function checkPRScope() {
@@ -322,7 +369,7 @@ if (targets.includes('-')) {
   for await (const chunk of process.stdin) {
     stdinContent += chunk;
   }
-  const violations = checkContent(stdinContent);
+  const violations = checkContent(stdinContent, 'stdin.tsx');
   if (violations.length > 0) {
     allViolations['stdin'] = violations;
   }
@@ -330,11 +377,9 @@ if (targets.includes('-')) {
   const files = collectAuditFiles(targets);
 
   files.forEach(filepath => {
-    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
-      const violations = checkFile(filepath);
-      if (violations.length > 0) {
-        allViolations[path.relative(ROOT, filepath)] = violations;
-      }
+    const violations = checkFile(filepath);
+    if (violations.length > 0) {
+      allViolations[path.relative(ROOT, filepath)] = violations;
     }
   });
 }

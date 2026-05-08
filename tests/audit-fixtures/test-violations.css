@@ -1,0 +1,16 @@
+.cramped {
+  padding: 2px;
+}
+.hardcoded {
+  color: #ff0000;
+  background-color: blue;
+}
+.nested {
+  .child {
+    .grandchild {
+      .great-grandchild {
+        color: red;
+      }
+    }
+  }
+}
