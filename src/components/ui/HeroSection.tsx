@@ -78,7 +78,7 @@ export function HeroSection() {
             fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
           }}
         >
-          boom<span className="text-accent">tick</span><span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>.blog</span>
+          boom<span className="text-accent">tick</span><span className="text-white/70 font-light">.blog</span>
         </Box>
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
@@ -123,7 +123,7 @@ export function HeroSection() {
           radius="full"
           className="opacity-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to right, var(--hero-accent), #8B2FFF)',
+            background: 'var(--hero-slash-gradient)',
             animation: 'fadeIn 1s ease forwards 1.2s'
           }}
         />

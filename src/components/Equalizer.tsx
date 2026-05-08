@@ -42,8 +42,8 @@ export const Equalizer = () => {
           className="w-full max-w-[4px] rounded-full"
           style={{
             backgroundColor: 'transparent',
-            background: `linear-gradient(180deg, #00CFFF, #8B2FFF, #FF00C8)`,
-            boxShadow: `0 0 14px rgba(0,207,255,.2)`,
+            background: `var(--hero-eq-gradient)`,
+            boxShadow: `var(--hero-eq-shadow)`,
             opacity: bar.opacity,
           }}
         />
