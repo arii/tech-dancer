@@ -12,6 +12,7 @@ import os
 import re
 import json
 from datetime import datetime, timezone, timedelta
+from typing import Optional, Union, List, Set, Dict
 from utils import (
     get_github_token,
     get_github_client,
@@ -362,8 +363,8 @@ def handle_update_issues(args):
 
     if args.json: print(json.dumps({"status": "success", "updates": updates}, indent=2))
 
-def handle_audit_pr(args):
-    pr_num = args.pr_number
+def handle_audit_pr(args: argparse.Namespace):
+    pr_num: Optional[Union[int, str]] = args.pr_number
     if not pr_num or str(pr_num).strip().lower() in ('null', '', 'none'):
         raise CLIError("Invalid PR number: received null/empty value. Check caller input.")
 

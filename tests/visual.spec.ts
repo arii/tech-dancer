@@ -26,12 +26,12 @@ test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
+
+      // Wait for initial load and fonts to prevent text-rendering flakiness
       await page.waitForLoadState('networkidle');
-      // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
 
-      // Wait for hydration and stability
-      await page.waitForLoadState('networkidle');
+      // Ensure main content is visible before proceeding
       await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
 
       // Robust scroll-to-settle: triggers lazy loading without hardcoded sleep loops
@@ -65,7 +65,6 @@ test.describe('Visual Regression Tests', () => {
       });
 
       // Use a strict 2% threshold to catch unintended UI regressions
-      // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.02,
