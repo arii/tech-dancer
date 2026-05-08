@@ -2,11 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Preview Dashboard', () => {
   test('should load the dashboard and show initial elements', async ({ page }) => {
-    // The previews dashboard is a static site independent of the React router.
-    // It exists at the root of the server, not nested under the BASE_PATH like the main app.
-    // We construct an absolute URL to avoid Playwright prepending the baseURL (which includes /tech-dancer/)
-    const host = new URL(page.context()._options.baseURL || 'http://localhost:4173').origin;
-    await page.goto(`${host}/previews/index.html`);
+    const baseURL = page.context()._options.baseURL || 'http://localhost:4173/';
+    const targetUrl = new URL('previews/index.html', baseURL).href;
+    await page.goto(targetUrl);
     await page.waitForLoadState('networkidle');
 
     // Check title
@@ -26,8 +24,9 @@ test.describe('Preview Dashboard', () => {
   });
 
   test('responsive layout check', async ({ page }) => {
-    const host = new URL(page.context()._options.baseURL || 'http://localhost:4173').origin;
-    await page.goto(`${host}/previews/index.html`);
+    const baseURL = page.context()._options.baseURL || 'http://localhost:4173/';
+    const targetUrl = new URL('previews/index.html', baseURL).href;
+    await page.goto(targetUrl);
     await page.waitForLoadState('networkidle');
 
     // Desktop view
