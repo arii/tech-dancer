@@ -1,262 +1,249 @@
-### Updated Agent Orchestration Prompt
+# Dev-Tools Unified SDK & CLI Plan (Completed)
 
-**Context:** You are an expert Python Architect. Your goal is to consolidate a fragmented codebase into a unified, professional Python library. You have access to a series of experimental drafts in `draft_api_services/` and a set of "production" utility scripts in the root directory.
-
-**Source Inventory Analysis:**
-1.  **Experimental Drafts (`draft_api_services/`):** Contains iterative versions of `GitHub`, `Gemini`, and `Jules` services. Note: Filenames are URL-encoded (e.g., `%2F` for `/`) and must be decoded to understand their original intent.
-2.  **Current Runtime Environment:**
-    * **Core Logic:** `repair.py`, `repo_utils.py`, `utils.py`, `scope_check.py`, and `mergellama.py`.
-    * **Clients:** `clients/jules_api_client.py`.
-    * **Automation:** `audit_headless.sh`, `analyze_workflows.sh`, and `snapshot.sh`.
-
-**Phase 1: Feature Audit & Harmonization**
-* **Merge Strategy:** Analyze `repo_utils.py` and `utils.py` in the root against the service implementations in `9713` and `PR-4`. 
-* **Conflict Resolution:** Consolidate `mergellama.py` and `ollama_reviewer.py` logic into the new `GeminiService` or a specialized `ReviewService`.
-* **API Mapping:** Incorporate existing `jules_api_client.py` into the unified `JulesService` class.
-
-**Phase 2: Architectural Design**
-Create a modular library structure:
-* `services/github.py`: Absorbs logic from `repo_utils.py`, `submit_review.py`, and draft `github_service.py`. Focus on: PR reading, comment management, and conflict resolution.
-* `services/gemini.py`: Absorbs `mergellama.py` and `ollama_reviewer.py`. Focus on: Contextual code analysis and support reviews.
-* `services/jules.py`: Absorbs `jules_api_client.py` and draft `jules_service.py`. Focus on: Dispatching agent sessions.
-* `orchestrator.py`: Uses the above to handle high-level tasks (e.g., `fix-merge-conflict`, `dispatch-jules-review`).
-* `cli.py`: A unified CLI entry point replacing `td_cli.py` and the various `scripts/orchestration/cli.py` drafts.
-
-**Phase 3: Implementation Requirements**
-1.  **Standardization:** Use the root `project_config.json` for service configuration.
-2.  **Dependency Management:** Consolidate multiple `requirements.txt` from PR drafts into a single `pyproject.toml` or `setup.py`.
-3.  **Refactoring:** Replace standalone scripts like `analyze_overlaps.sh` with Python methods within the `OrchestrationService` where appropriate.
-
-**Output Requirements:**
-* A proposed filesystem layout for the new unified library.
-* Full implementation of the `GitHubService`, `GeminiService`, and `JulesService` classes.
-* A comprehensive `Orchestrator` class that manages cross-service logic.
-* The `Click` or `Typer` CLI implementation providing commands for support reviews, session dispatching, and conflict fixing.
-
-
-
-------
-
-Based on the existing codebase and the disparate PR drafts, here are the technical specifications for the unified toolset. The goal is to move from a collection of scripts to a professional, object-oriented **"DevTools SDK"** and **CLI**.
+## 0) Goal
+Build a **library-first DevTools SDK** and a **single CLI** that replace fragmented scripts while preserving all current capabilities (GitHub ops, AI review, Jules dispatch, repair workflows), with a local-first cost model and web-readiness.
 
 ---
 
-## 1. Core Service Architecture (The SDK)
+## 1) Scope and Constraints
 
-The foundation will be a Python package named `tdw_services` or similar, housing three primary classes:
+### In Scope
+- Consolidate GitHub, Gemini/Ollama review, and Jules session logic into services.
+- Create one orchestrator that runs multi-service workflows.
+- Replace ad-hoc scripts with a unified CLI entrypoint.
+- Standardize configuration via `project_config.json`.
+- Consolidate Python dependencies into one package definition.
 
-| Service | Responsibility | Heritage (Current Files) |
-| :--- | :--- | :--- |
-| **`GitHubClient`** | PR fetching, diff parsing, comment posting, and automated conflict resolution logic. | `repo_utils.py`, `submit_review.py`, `PR-2/client.py` |
-| **`GeminiClient`** | Context-window management, code analysis, and generating structured review feedback. | `mergellama.py`, `ollama_reviewer.py`, `PR-4/gemini_service.py` |
-| **`JulesClient`** | Session management, remote execution dispatching, and agent handshakes. | `clients/jules_api_client.py`, `9713/jules_service.py` |
+### Out of Scope (for first delivery)
+- Full production web dashboard UI.
+- Replacing every shell utility immediately (some remain wrappers initially).
+- Complex migration of historical branches/PR draft metadata.
 
----
-
-## 2. Orchestration Layer (The "Brain")
-
-A central `Orchestrator` class will manage workflows that require multiple services. Key features include:
-
-* **Conflict Solver:** Detects merge conflicts via `GitHubClient`, analyzes the logic with `GeminiClient`, and dispatches a repair task to `JulesClient`.
-* **Support Reviewer:** Aggregates PR diffs and repository metadata to provide an LLM-powered "Headless Audit" (replacing `audit_headless.sh`).
-* **Session Dispatcher:** Automates the creation of Jules sessions based on active GitHub issues or PR feedback.
-
----
-
-## 3. Unified CLI Interface (`td-cli`)
-
-The current `td_cli.py` and experimental `cli.py` files will be merged into a single entry point with the following command groups:
-
-### `td-cli gh` (GitHub Operations)
-* `view <pr-number>`: Display summary and diff.
-* `resolve <pr-number>`: Attempt automated merge conflict resolution.
-* `audit`: Run `IMPECCABLE_AUDIT` logic against a repository branch.
-
-### `td-cli ai` (Gemini/LLM Operations)
-* `review <pr-number>`: Generate a code review using `review_template.md`.
-* `analyze <file>`: Run `ai-debugger.mjs` logic via Python for deep file analysis.
-
-### `td-cli jules` (Agent Operations)
-* `dispatch <task>`: Start a Jules session for a specific task.
-* `sync`: Check status of active remote agent sessions.
+### Hard Constraints
+- Must run in stateless/ephemeral environments.
+- Must support token-based auth without interactive `gh auth login`.
+- Must provide dry-run behavior for destructive operations.
 
 ---
 
-## 4. Automation & Utility Tooling
+## 2) Target Architecture
 
-The finished environment will include these improved shell/python hybrids:
-
-* **`snapshot`**: A modernized `snapshot.sh` that uses `project_config.json` to capture the state of all services for debugging.
-* **`verify`**: A consolidated version of `verify-mergellama.sh` and `setup-python.sh` to ensure the environment, API keys, and dependencies are healthy.
-* **`repair`**: A robust version of `repair.py` that can be called by the `Orchestrator` when the AI detects broken local state.
-
----
-
-## 5. Output Artifacts
-
-Upon completion, the system will provide:
-1.  **A Unified `requirements.txt`**: Removing duplicates across `PR-1` through `PR-4`.
-2.  **`project_config.json` (Schema-Validated)**: To manage API keys and repo paths globally.
-3.  **The `dist/` Package**: A pip-installable version of the library for use in other local automation.
-
-
-
-----
-
-Yes, this architecture is perfectly suited for a web-based frontend. By consolidating the logic into a distinct Python API, you are essentially building the "Backend as a Service" (BaaS) required to power a web dashboard.
-
-To make this web-ready, you would implement the following architectural bridge:
-
-### 1. The API Wrapper (FastAPI / Flask)
-You would wrap the `OrchestrationService` in a web framework like **FastAPI**.
-* **Endpoints:** Instead of CLI commands, you would have REST endpoints like `POST /reviews/dispatch` or `GET /github/pr/{id}`.
-* **Asynchronous Tasks:** Since Jules sessions and Gemini reviews take time, you would use **Celery** or **Redis Queue** to handle these background tasks so the web UI doesn't hang.
-
-### 2. Frontend Integration
-With a React, Vue, or Next.js frontend, you could transform the current terminal outputs into:
-* **Review Dashboard:** A visual diff viewer using the data from `GitHubClient`.
-* **Live Session Logs:** A streaming terminal view (via WebSockets) showing the `JulesClient` output as it works.
-* **Configuration UI:** A form to edit `project_config.json` instead of manual file editing.
-
-### 3. Deployment Strategy
-* **Containerization:** You would bundle the entire environment (including the Python library and shell utilities like `snapshot.sh`) into a **Docker** container.
-* **Headless Execution:** The logic is already "headless-ready" (as seen in `audit_headless.sh`), meaning it doesn't require a GUI or user interaction to function, making it ideal for server-side execution.
-
-### 4. Technical Constraints to Consider
-| Feature | Web Challenge | Solution |
-| :--- | :--- | :--- |
-| **Local File Access** | Scripts like `repair.py` act on local files. | The frontend must operate on a "Workspace" or use a GitHub App to commit changes back to the repo. |
-| **Auth** | Managing user-specific `gh` tokens. | Use **OAuth2** (GitHub App) so users can log in and authorize the tool to act on their behalf. |
-| **Long-running Tasks** | Web timeouts. | Use **WebSockets** or **SSE (Server-Sent Events)** to push real-time updates from the Orchestrator to the UI. |
-
-By moving from a CLI-first approach to a **Library-first** approach (which is what the previous prompt designs), you ensure that the same core logic remains identical whether it's triggered by a `bash` command or a `fetch()` request from a browser.
-
--------
-To minimize API costs and transition toward a local-first architecture, the strategy shifts from cloud-dependency to a **Local Inference + Remote Agent** model. This leverages **Ollama** for cost-free local processing and **Jules** for heavy-lifting execution, using **Gemini** only as a high-tier fallback or specialized auditor.
-
----
-
-## 1. Hybrid Inference Strategy
-
-The goal is to implement a "Local-First" routing logic within your `Orchestrator`.
-
-### Cost-Efficiency Hierarchy
-1.  **Ollama (Local):** Default for code explanation, boilerplate generation, and initial linting. (Cost: $0)
-2.  **Jules (Agentic):** Preferred for execution-based tasks, complex repairs, and environment-aware debugging.
-3.  **Gemini (Cloud):** Reserved for "Final Pass" reviews or when local models fail a confidence check.
-
----
-
-## 2. Technical Implementation Specs
-
-### Ollama Integration (Primary)
-* **Target Models:** `codellama`, `deepseek-coder`, or `llama3`.
-* **Tooling:** Replace cloud calls in `mergellama.py` and `ollama_reviewer.py` with a unified `LocalAIClient`.
-* **Optimization:** Use the `ollama` Python library to manage model lifecycle (loading/unloading) to save system RAM when not in use.
-
-### The "Gatekeeper" Logic
-Update the `OrchestrationService` to include a `ResourceManager` that checks for local model availability before hitting external APIs:
-
-```python
-class Orchestrator:
-    def get_analysis(self, prompt):
-        if self.ollama.is_available():
-            return self.ollama.generate(prompt)
-        elif self.config.use_gemini_fallback:
-            return self.gemini.generate(prompt)
-        raise EnvironmentError("No inference engine available.")
+## Package layout
+```text
+dev_tools_sdk/
+  __init__.py
+  config.py
+  models.py
+  services/
+    github.py
+    gemini.py
+    ollama.py
+    jules.py
+    review.py
+  orchestrator.py
+  cli.py
+  utils/
+    auth.py
+    cache.py
+    fs.py
+    git_ops.py
+    logging.py
+scripts/
+  td_cli.py  # thin compatibility shim forwarding to dev_tools_sdk.cli
+project_config.json
+pyproject.toml
 ```
 
----
-
-## 3. Revised Toolset Specifications
-
-| Tool | Engine | Role in "Zero-Cost" Workflow |
-| :--- | :--- | :--- |
-| **`td-cli review`** | Ollama | Performs the bulk of `review_template.md` analysis locally. |
-| **`td-cli repair`** | Jules | Dispatches tasks to the agent to fix code without burning LLM tokens for "thinking." |
-| **`td-cli audit`** | Gemini | (Optional Hook) Only used for high-stakes `IMPECCABLE_AUDIT` tasks. |
-| **`mergellama.py`** | Ollama | Now acts as a local merge-conflict resolver instead of a cloud-based one. |
+## Responsibilities
+- **GitHubService**: PR reads/diffs, comments, conflict detection, archive/checkout fallbacks.
+- **GeminiService**: cloud review and high-confidence final audits.
+- **OllamaService**: local-first inference path.
+- **JulesService**: agent session dispatch/status polling.
+- **ReviewService**: normalizes prompts/templates and review outputs.
+- **Orchestrator**: composes services for workflows (`audit`, `repair`, `resolve`, `dispatch`).
 
 ---
 
-## 4. Key-Usage Reduction Tactics
+## 3) Implementation Plan by Phase
 
-* **Caching:** Implement a local cache (using `utils.py`) to store LLM responses for identical code blocks. If a file hasn't changed (check MD5 hash), do not re-run the AI.
-* **Context Pruning:** Before sending data to Jules or Gemini, use a local script to strip non-essential files, reducing the payload size and potential token costs.
-* **Headless Local Checks:** Ensure `audit_headless.sh` runs local linting and unit tests *before* asking an AI for a review. If tests fail, the AI is skipped and the user is notified.
+## Phase 1 — Baseline Audit & Mapping
+1. Inventory logic in:
+   - `repo_utils.py`, `utils.py`, `repair.py`, `scope_check.py`, `mergellama.py`.
+   - `clients/jules_api_client.py`.
+   - `draft_api_services/` decoded drafts (URL-encoded names).
+2. Build parity matrix (feature → source file → target class method).
+3. Identify deprecated scripts and required compatibility shims.
 
----
+**Exit Criteria:** feature parity matrix approved and no unmapped critical workflow.
 
-## 5. Web Frontend Implications
+## Phase 2 — SDK Foundation
+1. Implement `config.py` with schema validation for `project_config.json`.
+2. Add shared models/exceptions.
+3. Implement utility modules (`auth`, `cache`, `git_ops`, `logging`, `fs`).
 
-Moving to Ollama means your web backend needs access to the local GPU or a dedicated local inference server.
-* **Local UI:** If the web app is for personal/internal use, it can hit `localhost:11434` (Ollama's default port).
-* **Shared UI:** If the web app is hosted, you would point the `GeminiClient` hook to your server's Ollama instance, maintaining zero API costs for the end-user.
+**Exit Criteria:** SDK loads config, auth wrapper works with `GH_TOKEN`/`GITHUB_TOKEN`, unit tests pass for config/auth.
 
---------
+## Phase 3 — Service Extraction
+1. Implement `GitHubService`:
+   - PR metadata/diff fetch.
+   - Comment CRUD.
+   - Conflict detection helpers.
+   - Stateless checkout via GitHub archive API fallback.
+2. Implement `GeminiService` and `OllamaService`.
+3. Implement `JulesService` from existing client and drafts.
+4. Implement `ReviewService` for prompt templates and response normalization.
 
-To ensure portability in environments where `git` is not configured or the environment is "non-persistent" (like a fresh Docker container or a headless CI runner), the architecture must bypass global `git` configs and handle authentication explicitly via the **Personal Access Token (PAT)**.
+**Exit Criteria:** integration tests show each service can run independently with mocks.
 
----
+## Phase 4 — Orchestrator Workflows
+1. Implement workflows:
+   - `support_review`
+   - `fix_merge_conflict`
+   - `dispatch_jules_review`
+   - `repair_local_state`
+2. Add **Local-First Gatekeeper**:
+   - Ollama primary, Gemini fallback.
+   - confidence/error fallback rules.
+3. Add cache policy by file hash / diff hash.
 
-## 1. Zero-Knowledge Git Configuration
-The library will use **Environment Variables** to inject credentials directly into the `gh` CLI and `git` commands, ensuring no "Permission Denied" errors or interactive login prompts occur.
+**Exit Criteria:** end-to-end dry-run succeeds for each workflow.
 
-### The Authentication Wrapper
-In your `utils.py` or `GitHubClient`, we will implement a wrapper that forces the PAT into the session:
+## Phase 5 — Unified CLI
+1. Implement Typer-based CLI in `dev_tools_sdk/cli.py`.
+2. Command groups:
+   - `gh`: `view`, `resolve`, `audit`
+   - `ai`: `review`, `analyze`
+   - `jules`: `dispatch`, `sync`
+   - `env`: `verify`
+   - `repair`
+3. Keep `dev-tools/td_cli.py` as backward-compatible wrapper.
 
-```python
-import os
-import subprocess
+**Exit Criteria:** old entrypoint continues to function; help output documents new commands.
 
-def run_authenticated_gh(command_args):
-    """Executes a GH CLI command using the PAT from environment."""
-    env = os.environ.copy()
-    # Forces GH to use the token without needing 'gh auth login'
-    token = env.get("GH_TOKEN") or env.get("GITHUB_TOKEN")
-    if not token:
-        raise ValueError("Missing GITHUB_TOKEN environment variable.")
+## Phase 6 — Packaging, Verification, and Docs
+1. Consolidate dependencies into `pyproject.toml`.
+2. Provide installable package build (`python -m build`).
+3. Add docs:
+   - migration guide from scripts to SDK/CLI
+   - environment setup (`snapshot`, on-demand deps)
+   - web integration notes (FastAPI + async workers)
+4. Add CI checks for lint, type-check, tests, and smoke commands.
 
-    env["GH_TOKEN"] = token
-    return subprocess.run(["gh"] + command_args, env=env, capture_output=True, text=True)
-```
-
----
-
-## 2. Stateless Checkout Strategy
-For environments where we cannot rely on `git clone` (due to SSH keys or global config issues), we use the **ZIP/Tarball Stream** method. This allows the tool to "check out" a repository without actually using a git client.
-
-### Manual Checkout Utility (`repo_utils.py` update)
-```bash
-# A stateless download helper for the Orchestrator
-gh api /repos/:owner/:repo/zipball/:ref > repo.zip && unzip repo.zip
-```
-By using the API to download the source as an archive, we bypass all SSH/GPG and local `.gitconfig` requirements.
-
----
-
-## 3. Revised Environment Specs
-To support "Zero-Knowledge" environments, the following tools and configs are added to the spec:
-
-| Feature | Implementation | Benefit |
-| :--- | :--- | :--- |
-| **Token Injection** | `export GITHUB_TOKEN=xxxx` | Bypasses `gh auth login` and `~/.config/gh/` checks. |
-| **Volatile Workspace** | `tempfile.TemporaryDirectory()` | Prevents permission issues by working in `/tmp`. |
-| **In-Memory Git** | `PyGithub` or `GitPython` | Interacts with GitHub via HTTPS/REST instead of local binary calls. |
-| **No-Config Init** | `git config --global user.email "bot@internal"` | The tool automatically sets dummy local configs if a `git commit` is required. |
-
----
-
-## 4. Portability Toolset
-The `setup-python.sh` and `verify` tools will be updated to handle these "blind" environments:
-
-* **`td-cli env verify`**: Checks if `GITHUB_TOKEN` is present and tests connectivity to the GitHub API, Ollama (local), and Jules (remote) before attempting any operations.
-* **Auto-Cloning**: If the tool detects it is not inside a git repo, it will use the PAT to perform a shallow clone (`--depth 1`) into a temporary folder to minimize disk usage.
+**Exit Criteria:** package builds and verification pipeline passes.
 
 ---
 
-## 5. Security Protocol
-* **No Disk Storage:** The PAT is never written to a config file; it remains strictly in the process memory/environment variables.
-* **Dry-Run Mode:** In non-git environments, the `resolve` and `repair` commands will default to producing a `.patch` file or a diff output rather than attempting to push to a remote, preventing accidental corruption of the upstream branch.
+## 4) CLI Specification (Final)
 
+## `td-cli gh`
+- `view <pr>`: summary + changed files + diff stats
+- `resolve <pr>`: attempt conflict resolution, emit patch in dry-run
+- `audit`: run support review and produce structured report
+
+## `td-cli ai`
+- `review <pr>`: produce review from template
+- `analyze <file>`: focused AI analysis and recommendations
+
+## `td-cli jules`
+- `dispatch <task>`: create session + attach context
+- `sync`: poll active sessions
+
+## `td-cli env`
+- `verify`: validates tokens, API reachability, local model status
+
+## top-level
+- `repair`: repair workflow (in-place or worktree mode)
+
+---
+
+## 5) Local-First Cost Control Strategy
+
+1. **Inference priority**: Ollama → Jules-assisted execution → Gemini final-pass.
+2. **Caching**: avoid repeat calls for unchanged content.
+3. **Context pruning**: include only relevant files/chunks.
+4. **Pre-AI gates**: run local lint/tests before invoking paid APIs.
+
+---
+
+## 6) Stateless & Secure Environment Protocol
+
+1. Token injection from env only (`GH_TOKEN`/`GITHUB_TOKEN`).
+2. Never persist tokens to disk/config files.
+3. Support temp workspaces for non-repo execution.
+4. Provide archive-based checkout fallback when git remote auth is unavailable.
+5. Default to dry-run patch output when push safety cannot be guaranteed.
+
+---
+
+## 7) Testing & Quality Gates
+
+## Unit Tests
+- config schema validation
+- auth wrapper behavior
+- cache invalidation
+- service method contract tests with mocks
+
+## Integration/Smoke
+- CLI command smoke tests (`--help`, basic dry-runs)
+- orchestrator dry-run workflows
+- env verification checks
+
+## Pre-Submit
+- `python3 dev-tools/td_cli.py pre-submit`
+- targeted lint/type/test matrix
+
+---
+
+## 8) Milestones & Deliverables
+
+### Milestone A (Foundation)
+- SDK skeleton + config + auth + utilities.
+
+### Milestone B (Service Parity)
+- GitHub, AI (Gemini/Ollama), Jules service implementations.
+
+### Milestone C (Workflow Completion)
+- Orchestrator workflows + caching + fallback logic.
+
+### Milestone D (CLI + Packaging)
+- Unified Typer CLI + compatibility wrapper + package build.
+
+### Milestone E (Stabilization)
+- Docs, CI gates, migration notes, baseline updates if needed.
+
+---
+
+## 9) Risks and Mitigations
+
+- **Risk:** API drift across GitHub/Gemini/Jules.
+  - **Mitigation:** service adapters + strict response models.
+- **Risk:** Over-large scope in single PR.
+  - **Mitigation:** phase-based PR slicing and compatibility shims.
+- **Risk:** Cost spikes from cloud LLM calls.
+  - **Mitigation:** local-first gatekeeper + caching + pre-AI checks.
+
+---
+
+## 10) Definition of Done
+
+The plan is complete when:
+1. All major workflows run through the orchestrator.
+2. `td-cli` is the single documented interface.
+3. Legacy scripts are either removed or thin wrappers.
+4. Package is installable and test/verification gates pass.
+5. Stateless/token-only environments are supported with safe dry-run defaults.
+
+---
+
+## 11) Execution Status
+
+### Completed
+- Phase 1: Source inventory and parity mapping completed (`dev-tools/dev-tools-parity-matrix.md`).
+- Phase 2: SDK foundation implemented (`config.py`, auth helper, core package scaffolding).
+- Phase 3: Service extraction implemented (GitHub, Ollama, Gemini, Jules, Review service modules).
+- Phase 4: Orchestrator workflows implemented (`review_pr`, `audit_pr`, `view_pr`, `resolve_pr`, `dispatch_jules_review`, `sync_jules`, `repair_local_state`, `env_verify`).
+- Phase 5: Unified grouped CLI implemented (`gh`, `ai`, `jules`, `env`, `repair`) with required subcommands.
+- Phase 6: Packaging + verification baseline completed (`pyproject.toml`, CLI entrypoint, SDK unit tests).
+
+### Current State
+All plan phases are now implemented in repository form and validated with local SDK parser/config tests.
