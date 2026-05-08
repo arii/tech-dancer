@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
+import { filterDataProps } from '@/lib/utils';
 
-interface GearCardProps {
+interface GearCardProps extends BaseProps {
   slug: string;
   title: string;
   category: string;
@@ -13,8 +14,20 @@ interface GearCardProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  // Resource metadata properties that should not be spread to the DOM
+  type?: unknown;
+  date?: unknown;
+  author?: unknown;
+  content?: unknown;
+  tags?: unknown;
+  affiliateIds?: unknown;
+  priceCategory?: unknown;
+  updatedDate?: unknown;
+  durability?: unknown;
+  value?: unknown;
+  specs?: unknown;
+  readingTime?: unknown;
 }
-
 
 export function GearCard({
   slug,
@@ -27,17 +40,7 @@ export function GearCard({
   image,
   ...rest
 }: GearCardProps) {
-  // Destructure and ignore known data props that shouldn't bleed to the DOM
-  // even if they are passed via {...item} in parent components.
-  const {
-    // @ts-expect-error - ignoring unused data props
-    type: _type, date: _date, author: _author, content: _content,
-    tags: _tags, affiliateIds: _affiliateIds,
-    priceCategory: _priceCategory, updatedDate: _updatedDate,
-    durability: _durability, value: _value, specs: _specs,
-    readingTime: _readingTime,
-    ...cleanProps
-  } = rest as Record<string, unknown>;
+  const cleanProps = filterDataProps(rest as Record<string, unknown>);
 
   return (
     <Stack
@@ -70,7 +73,7 @@ export function GearCard({
         className="bg-surface-alt/20"
       >
         {image ? (
-          <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={image} alt={title} width={800} height={800} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <CategoryPlaceholder category={category} />
         )}

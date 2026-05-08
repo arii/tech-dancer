@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -15,22 +14,6 @@ import {
 
 function ArielProfile() {
   const { bio } = useProfile();
-
-  // Robust Anchor Scrolling: Handle hashes on mount (important for lazy-loaded routes)
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const id = hash.replace('#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        // Small delay to ensure layout is stable and Suspense has finished
-        const timer = setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, []);
 
   const renderSection = (section: ProfileSection) => {
     return (
@@ -112,6 +95,8 @@ function ArielProfile() {
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
+                    width={960}
+                    height={949}
                     className="w-full h-full object-cover object-[center_20%]" // impeccable-ignore
                   />
                 </Box>

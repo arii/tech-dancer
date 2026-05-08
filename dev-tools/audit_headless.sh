@@ -37,7 +37,7 @@ fi
 # 3. Get Open PRs in JSON format
 echo "🔍 Fetching open PRs..."
 mkdir -p dev-tools/logs
-python3 dev-tools/td_cli.py status-board --json > dev-tools/logs/open_prs.json
+python3 dev-tools/td_cli.py --json status-board > dev-tools/logs/open_prs.json
 
 # 4. Process each PR
 # Using jq to extract PR numbers from the JSON output of status-board
@@ -46,7 +46,7 @@ for pr in $(jq -r '.work[].number' dev-tools/logs/open_prs.json); do
   echo "🚀 Auditing PR #$pr..."
 
   # Fetch and Audit headlessly
-  python3 dev-tools/td_cli.py --yes audit-pr "$pr" --fetch --audit
+  python3 dev-tools/td_cli.py audit-pr "$pr" --fetch --audit
 
   # Track status
   python3 dev-tools/td_cli.py track-review --pr "$pr" --status "Audited (Headless)" --auditor "TechDancer-Bot"

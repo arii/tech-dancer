@@ -87,7 +87,7 @@ export function NewsletterBanner() {
                   paddingY={1.5}
                   radius="none"
                   border
-                  className="bg-accent/10 border-accent/30 text-accent"
+                  className="bg-accent/10 border-accent/30 text-text-main"
                 >
                   <Text variant="mono" size="micro" weight="font-bold" tracking="widest" uppercase>
                     {tag}
@@ -99,7 +99,7 @@ export function NewsletterBanner() {
         </Stack>
         <Stack gap={4} width={{ base: 'full', lg: 'auto' }}>
           <EmailForm />
-          <Text variant="sans" size="xs" color="main">
+          <Text variant="sans" size="xs" color="main" className="opacity-100">
             No spam. Unsubscribe anytime.
           </Text>
         </Stack>
