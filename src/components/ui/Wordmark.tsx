@@ -4,10 +4,6 @@ import { cn } from '@/lib/utils';
 export type WordmarkVariant = "nav" | "hero";
 
 export interface WordmarkProps extends Omit<TextProps, 'variant'> {
-  /**
-   * nav: Standard branding used in Sidebar and Mobile Header (Albert Sans)
-   * hero: Bold display branding used in the Hero section (Bricolage Grotesque)
-   */
   variant?: WordmarkVariant;
 }
 
@@ -16,10 +12,6 @@ const VARIANT_MAP: Record<NonNullable<WordmarkProps["variant"]>, TextProps["vari
   hero: "wordmarkHero",
 };
 
-/**
- * Reusable BoomTick Wordmark component.
- * Enforces brand typography and color rules while allowing standard layout overrides.
- */
 export function Wordmark({
   className,
   style,

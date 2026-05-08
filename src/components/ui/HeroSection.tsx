@@ -48,7 +48,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        className="px-8 md:px-12 lg:px-24 pointer-events-none"
+        className="px-8 md:px-12 lg:px-24"
         paddingY={{ base: 2, lg: 2 }}
         maxWidth="screen-xl"
         marginX="auto"
@@ -82,7 +82,7 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 translate-y-2.5"
+          className="opacity-0 translate-y-2.5 pointer-events-auto"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
