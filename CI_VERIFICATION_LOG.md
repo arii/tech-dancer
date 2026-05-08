@@ -1,23 +1,50 @@
-# CI / Audit Verification Log (2026-05-07)
+# CI / UX Verification Log
 
-Requested verifications were executed in the current environment with the following outcomes:
+Date: 2026-05-07 (UTC)
 
-1. `pnpm audit`
-   - Failed with `ERR_PNPM_AUDIT_BAD_RESPONSE` and `403 Forbidden` from npm audit endpoint.
+## Requested workflow rerun
 
-2. `pnpm run test`
-   - Failed because `vitest` is unavailable (`node_modules` not installed in this environment).
+Repeated the PR UX review workflow and attempted to verify runtime console cleanliness while viewing pages.
 
-3. `python3 dev-tools/td_cli.py pre-submit`
-   - Failed at lint step because `run-p` is unavailable (`node_modules` not installed).
+### 1) Conflict check
+Command:
+```bash
+python3 dev-tools/td_cli.py conflicts
+```
+Result:
+- Could not complete remote checks in this environment because `origin` is not configured (`git fetch origin` fails).
 
-4. Browser navigation console verification
-   - Could not be executed because the runnable app/test stack is not available until dependencies are installed successfully.
+### 2) Anti-pattern audit
+Command:
+```bash
+pnpm run audit
+```
+Result:
+- ✅ Passed (`No anti-patterns detected`).
 
-## Next step to complete verification outside this environment
-- Install dependencies with the required Node version for this repo.
-- Re-run:
-  - `pnpm audit`
-  - `pnpm run test`
-  - `python3 dev-tools/td_cli.py pre-submit`
-- Run browser smoke/navigation checks and inspect console output.
+### 3) Pre-submit gate
+Command:
+```bash
+python3 dev-tools/td_cli.py pre-submit
+```
+Result:
+- ❌ Fails at lint (`run-p: not found`) because dependencies are not installed (`node_modules` missing).
+
+### 4) Environment setup retry
+Command:
+```bash
+./dev-tools/snapshot.sh
+```
+Result:
+- ❌ Fails due to Node engine mismatch: installed Node is `v20.20.2`, but dependency `rollup-plugin-visualizer@7.0.1` requires Node `>=22`.
+
+### 5) Console error verification while viewing
+Status:
+- ⚠️ Not executable in this environment due to unresolved dependency/runtime prerequisite above.
+- Playwright/browser verification should be run after upgrading Node to >=22 and installing dependencies.
+
+## Required follow-up to complete console verification
+1. Install Node `>=22`.
+2. Run `pnpm install`.
+3. Run `./dev-tools/setup-playwright.sh`.
+4. Start app and execute browser smoke/navigation test to assert no console errors.
