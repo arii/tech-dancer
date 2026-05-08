@@ -1,3 +1,43 @@
+import { cva } from 'class-variance-authority';
+import { Icon } from '@/components/ui/Icon';
+
+const actionButtonVariants = cva(
+  "font-bold transition-all text-sm shrink-0 flex items-center gap-2",
+  {
+    variants: {
+      variant: {
+        default: "hover:text-text-main",
+        primary: "bg-accent text-bg hover:opacity-90 shadow-md disabled:opacity-50",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+const reportCardVariants = cva(
+  "bg-surface rounded-lg shadow-sm border border-line",
+  {
+    variants: {
+      interactive: {
+        true: "hover:border-accent transition-all cursor-pointer",
+        false: "",
+      },
+      overflow: {
+        hidden: "overflow-hidden",
+      },
+      span: {
+        1: "col-span-1",
+        2: "col-span-2",
+        3: "col-span-3",
+      }
+    },
+    defaultVariants: {
+      interactive: false,
+    }
+  }
+);
 import { useState, useEffect, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
@@ -12,9 +52,9 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 
 const viewportIcons = {
-  Mobile: <Smartphone className="w-5 h-5" />,
-  Tablet: <Tablet className="w-5 h-5" />,
-  Desktop: <Monitor className="w-5 h-5" />
+  Mobile: <Icon icon={Smartphone} size="md" />,
+  Tablet: <Icon icon={Tablet} size="md" />,
+  Desktop: <Icon icon={Monitor} size="md" />
 };
 
 
@@ -73,11 +113,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
       {isCopying ? (
-        <RefreshCw className="w-3 h-3 animate-spin" />
+        <Icon icon={RefreshCw} className="w-3 h-3 animate-spin" />
       ) : copied ? (
-        <CheckCircle className="w-3 h-3 text-accent" />
+        <Icon icon={CheckCircle} className="w-3 h-3" color="accent" />
       ) : (
-        <Copy className="w-3 h-3" />
+        <Icon icon={Copy} className="w-3 h-3" />
       )}
       <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
     </Box>
@@ -125,7 +165,7 @@ export default function UXAuditor() {
           align="center"
           gap={3}
           padding={2}
-          className="bg-surface rounded-lg shadow-sm border border-line"
+          className={reportCardVariants()}
         >
           <Box
             as="input"
@@ -153,7 +193,7 @@ export default function UXAuditor() {
             paddingY={2}
             radius="md"
           >
-            {isAnalyzing ? <RefreshCw className="animate-spin w-4 h-4" /> : <Camera className="w-4 h-4" />}
+            {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
           </Box>
         </Stack>
@@ -161,16 +201,16 @@ export default function UXAuditor() {
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }}>
+        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className="bg-surface rounded-lg shadow-sm border border-line overflow-hidden divide-y divide-line">
+          <Stack className={`${reportCardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
             {reports.length === 0 && (
               <EmptyState
                 compact
-                title="No audits recorded"
-                icon={<RefreshCw className="w-8 h-8 opacity-20" />}
+                title="No history"
+                icon={<Icon icon={RefreshCw} size="sm" className="opacity-30" />}
               />
             )}
             {reports.map((report) => (
@@ -185,13 +225,14 @@ export default function UXAuditor() {
                 }`}
               >
                 <Box
-                  padding={2}
+                  width={9}
+                  height={9}
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
+                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
                   shrink={0}
                 >
-                  {report.status === 'completed' ? <CheckCircle className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
+                  {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
                 <Box flex={1} minWidth="0">
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
@@ -201,19 +242,19 @@ export default function UXAuditor() {
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
-                <ChevronRight className="w-4 h-4 text-text-dim opacity-50 shrink-0" />
+                <Icon icon={ChevronRight} size="sm" color="muted" />
               </Stack>
             ))}
           </Stack>
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }}>
+        <Stack gap={6} span={{ lg: 3 }} minWidth={0}>
           {activeReport ? (
             <>
               <Stack
                 padding={6}
-                className="bg-surface rounded-lg shadow-sm border border-line"
+                className={reportCardVariants()}
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
               >
@@ -232,14 +273,14 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold hover:text-text-main transition-all text-sm shrink-0" 
+                    className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
                     color="dim"
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
                   >
-                    {isCopiedMarkdown ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
                   </Box>
                   <Box
@@ -249,12 +290,12 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className="font-bold bg-accent text-bg hover:opacity-90 shadow-md transition-all disabled:opacity-50 text-sm shrink-0"
+                    className={actionButtonVariants({ variant: "primary" })}
                     paddingX={6}
                     paddingY={2}
                     radius="xl"
                   >
-                    {isExportingToGithub ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Github className="w-4 h-4" />}
+                    {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
                   </Box>
                 </Stack>
@@ -266,10 +307,10 @@ export default function UXAuditor() {
                   const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
 
                   return (
-                    <Box className="bg-surface rounded-lg shadow-sm border border-line overflow-hidden">
+                    <Box className={reportCardVariants({ overflow: "hidden" })}>
                       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
                         <Stack direction="row" align="center" gap={3}>
-                          <Box padding={2} surface="default" radius="lg" shadow="sm" color="accent">
+                          <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
@@ -294,7 +335,7 @@ export default function UXAuditor() {
                           ) : (
                             <Stack align="center" justify="center" color="dim" className="text-center">
                               <Box marginBottom={2}>
-                                <ImageIcon className="w-12 h-12 opacity-20" />
+                                <Icon icon={ImageIcon} className="w-12 h-12 opacity-20" />
                               </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
@@ -318,7 +359,7 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} padding={4} className="bg-surface rounded-lg border border-line shadow-sm hover:border-accent transition-all">
+                                  <Box key={idx} padding={4} className={reportCardVariants({ interactive: true })}>
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
                                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
@@ -372,7 +413,7 @@ export default function UXAuditor() {
           ) : (
             <EmptyState
               minHeight={500}
-              icon={<Camera className="w-16 h-16" />}
+              icon={<Icon icon={Camera} size="xl" className="opacity-10" />}
               title="Ready to Audit"
               description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
             />
