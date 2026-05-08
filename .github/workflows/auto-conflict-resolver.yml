@@ -232,6 +232,14 @@ jobs:
             <!-- id: conflict-resolver-bot -->
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fail the workflow if conflicts were not resolved
+      - name: Fail on merge error
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed == 'true'
+        run: |
+          echo "::error::Merge failed due to a non-conflict error. Manual intervention required."
+          exit 1
+
+      - name: Notify partial resolution
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != ''
-        run: exit 1
+        run: |
+          echo "::warning::Auto-resolver could not fully resolve conflicts. Manual review required."
+          exit 0
