@@ -71,7 +71,7 @@ const CONFIG = {
       name: 'div Layout',
       pattern: /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g,
       severity: 'minor',
-      message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
+      message: 'Avoid using <div> for layout. Use layout primitives from src/layouts.'
     },
     {
       name: 'HashRouter Usage',
@@ -256,49 +256,19 @@ function checkContent(content, filepath = '') {
     });
   }
 
-  // 3. Nesting depth check for CSS (Robust State Machine)
+  // 3. Nesting depth check for CSS (Simplified but robust)
   if (isCssFile) {
     let depth = 0;
-    let inMultiLineComment = false;
-    let inString = null; // ' or "
+    // Single pass to strip comments and strings globally while preserving newlines
+    const cleanContent = content
+      .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')) // Multi-line comments
+      .replace(/\/\/.*/g, '')                                       // Single-line comments
+      .replace(/(['"])(?:(?!\1|\\).|\\.)*\1/g, (m) => m.replace(/[^\n]/g, ' ')); // Strings
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      for (let j = 0; j < line.length; j++) {
-        const char = line[j];
-        const nextChar = line[j + 1];
-
-        if (inMultiLineComment) {
-          if (char === '*' && nextChar === '/') {
-            inMultiLineComment = false;
-            j++;
-          }
-          continue;
-        }
-
-        if (inString) {
-          if (char === inString && line[j - 1] !== '\\') {
-            inString = null;
-          }
-          continue;
-        }
-
-        if (char === '/' && nextChar === '*') {
-          inMultiLineComment = true;
-          j++;
-          continue;
-        }
-
-        if (char === '/' && nextChar === '/') {
-          // Single line comment, skip rest of line
-          break;
-        }
-
-        if (char === "'" || char === '"') {
-          inString = char;
-          continue;
-        }
-
+    const cleanLines = cleanContent.split('\n');
+    for (let i = 0; i < cleanLines.length; i++) {
+      const line = cleanLines[i];
+      for (const char of line) {
         if (char === '{') {
           depth++;
           if (depth > 3) {
