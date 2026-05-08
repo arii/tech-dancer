@@ -21,8 +21,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
       width="full"
       minHeight="screen"
       className="touch-pan-y"
-      onTouchStart={handleTouchStart as any}
-      onTouchEnd={handleTouchEnd as any}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <Box
         id="route-announcer"
