@@ -1,25 +1,59 @@
 import os
-import os
 import sys
 import subprocess
 import json
 import time
 import urllib.request
 import urllib.error
+import re
 from typing import Optional, Union, List
 
-def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int = 3) -> Optional[str]:
-    url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+def clean_llm_output(text: str) -> str:
+    """Removes markdown code blocks if present."""
+    match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return text.strip()
+
+def is_ollama_available(url: str = None) -> bool:
+    """Checks if Ollama API is reachable."""
+    url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+    # Derive tags URL from generate URL or vice-versa
+    if "/api/generate" in url:
+        tags_url = url.replace("/api/generate", "/api/tags")
+    elif "/api/tags" in url:
+        tags_url = url
+    else:
+        # If the URL is just a base, append /api/tags
+        tags_url = f"{url.rstrip('/')}/api/tags"
+
+    try:
+        req = urllib.request.Request(tags_url, method='GET')
+        with urllib.request.urlopen(req, timeout=5) as response:
+            return response.status == 200
+    except Exception:
+        return False
+
+def call_ollama(prompt: str, model: str = None, url: str = None, max_retries: int = 3) -> Optional[str]:
+    """Unified helper to call local Ollama API with retries using urllib."""
+    url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+    if "/api/" not in url:
+        url = f"{url.rstrip('/')}/api/generate"
+
+    model = model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+
     data = {
         "model": model,
         "prompt": prompt,
         "stream": False
     }
+
     req = urllib.request.Request(
         url,
         data=json.dumps(data).encode("utf-8"),
         headers={"Content-Type": "application/json"}
     )
+
     for attempt in range(1, max_retries + 1):
         try:
             with urllib.request.urlopen(req, timeout=120) as response:

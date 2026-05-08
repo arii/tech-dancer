@@ -19,7 +19,8 @@ from utils import (
     get_gha_variable,
     set_gha_variable,
     CLIError,
-    run_command
+    run_command,
+    is_ollama_available
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from collections import defaultdict
@@ -534,11 +535,8 @@ def handle_repair(args):
     import shutil
 
     # Ensure Ollama is running or at least check it
-    try:
-        import urllib.request
-        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
-    except Exception:
-        if not args.json: print("⚠️ Ollama does not seem to be running on http://localhost:11434. Repair might fail.")
+    if not is_ollama_available():
+        if not args.json: print("⚠️ Ollama does not seem to be running. Repair might fail.")
 
     logs_source = ""
     logs_content = ""
