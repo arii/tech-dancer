@@ -33,7 +33,7 @@ export function FilterBar({ categories }: FilterBarProps) {
                 : "text-text-dim border border-transparent hover:text-text-main hover:border-line"
             )}
           >
-            {cat === 'All' ? 'All Posts' : cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+            {cat === 'All' ? 'All Posts' : cat}
           </Box>
         ))}
       </Stack>
