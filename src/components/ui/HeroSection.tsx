@@ -111,7 +111,7 @@ export function HeroSection() {
             color="white"
             className="text-[2rem] md:text-[3.5rem] lg:text-[4rem]"
           >
-            Dance better.
+            Pack better.
           </Text>
         </Stack>
 
@@ -158,8 +158,8 @@ export function HeroSection() {
               maxWidth: '65ch'
             }}
           >
-            Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
-            plus technical deep dives into building the platform with DevAI.
+            Training notes, travel prep, and field-tested gear for West Coast Swing dancers heading into
+            long event weekends.
           </Text>
         </Box>
 

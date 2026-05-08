@@ -17,13 +17,61 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick.blog: Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."
+        description="BoomTick.blog: Training notes, travel prep, and field-tested gear for West Coast Swing dancers heading into long event weekends."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={16}>
         <HeroSection />
 
         <Stack gap={16} paddingX={{ base: 4, md: 6, lg: 12 }}>
+          <Stack gap={6}>
+            <SectionHeader label="FIELD TESTED" title="What I’m Packing Lately" />
+            <Grid cols={{ base: 1, md: 2 }} gap={4}>
+              {[
+                {
+                  title: 'Loud Ballroom Kit',
+                  body: 'Earplugs that lower the volume without losing the beat, plus the tiny cases that stop them from disappearing.',
+                  href: '/gear',
+                },
+                {
+                  title: 'Dance Floor Fixes',
+                  body: 'Suede sheets, shoe socks, and quick pivots for sticky floors or sneakers that need to move.',
+                  href: '/gear',
+                },
+                {
+                  title: 'Hotel Room Setup',
+                  body: 'Packing cubes, travel bottles, and compact tools that keep event outfits ready between late nights.',
+                  href: '/gear',
+                },
+                {
+                  title: 'Theme Night Staples',
+                  body: 'Low-effort pieces that pack flat, show up under lights, and still let you dance comfortably.',
+                  href: '/gear',
+                },
+              ].map((item) => (
+                <Stack
+                  key={item.title}
+                  as={NavLink}
+                  to={item.href}
+                  gap={2}
+                  padding={5}
+                  radius="lg"
+                  className="border border-line bg-surface/60 hover:bg-surface transition-colors"
+                >
+                  <Text as="h3" size="lg" weight="font-bold" color="white">
+                    {item.title}
+                  </Text>
+                  <Text size="sm" className="text-text-body/80 leading-7">
+                    {item.body}
+                  </Text>
+                  <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+                    Why I pack it
+                  </Text>
+                </Stack>
+              ))}
+            </Grid>
+          </Stack>
+
           <Stack gap={6}>
             <Stack gap={1}>
               <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest" uppercase>

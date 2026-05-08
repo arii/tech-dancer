@@ -27,7 +27,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
-    label: 'Gear Reviews',
+    label: 'Packing & Gear',
     icon: ShoppingBag,
     skeleton: 'grid'
   },
