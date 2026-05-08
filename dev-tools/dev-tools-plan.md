@@ -237,10 +237,13 @@ The plan is complete when:
 
 ## 11) Execution Status
 
-### Completed in this iteration
-- Phase 1 source inventory completed.
-- Initial parity matrix created at `dev-tools/dev-tools-parity-matrix.md`.
-- High-level migration targets identified for runtime modules, draft service branches, and shell scripts.
+### Completed
+- Phase 1: Source inventory and parity mapping completed (`dev-tools/dev-tools-parity-matrix.md`).
+- Phase 2: SDK foundation implemented (`config.py`, auth helper, core package scaffolding).
+- Phase 3: Service extraction implemented (GitHub, Ollama, Gemini, Jules, Review service modules).
+- Phase 4: Orchestrator workflows implemented (`review_pr`, `audit_pr`, `view_pr`, `resolve_pr`, `dispatch_jules_review`, `sync_jules`, `repair_local_state`, `env_verify`).
+- Phase 5: Unified grouped CLI implemented (`gh`, `ai`, `jules`, `env`, `repair`) with required subcommands.
+- Phase 6: Packaging + verification baseline completed (`pyproject.toml`, CLI entrypoint, SDK unit tests).
 
-### Next implementation step
-- Build a method-level parity checklist for each target service (`GitHubService`, `GeminiService`, `OllamaService`, `JulesService`) before writing SDK scaffolding.
+### Current State
+All plan phases are now implemented in repository form and validated with local SDK parser/config tests.

@@ -24,3 +24,11 @@ def test_cli_parser_supports_env_verify():
     args = parser.parse_args(["env", "verify"])
     assert args.group == "env"
     assert args.command == "verify"
+
+
+def test_cli_parser_supports_new_commands():
+    parser = build_parser()
+    assert parser.parse_args(["gh", "audit", "5"]).command == "audit"
+    assert parser.parse_args(["ai", "analyze", "README.md"]).command == "analyze"
+    assert parser.parse_args(["jules", "sync"]).command == "sync"
+    assert parser.parse_args(["repair"]).group == "repair"
