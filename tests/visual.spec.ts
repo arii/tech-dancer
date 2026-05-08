@@ -11,6 +11,12 @@ const routes = [
 
 test.describe('Visual Regression Tests', () => {
   test.beforeEach(async ({ page }) => {
+    // Mock system time for consistent date rendering (e.g., in Lab tools)
+    await page.clock.setFixedTime(new Date('2026-05-08T12:00:00Z'));
+
+    // Enable reduced motion to stop particle animations and other non-deterministic UI
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
     // Ensure newsletter banner doesn't interfere with visual tests
     await page.addInitScript(() => {
       window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
@@ -43,11 +49,11 @@ test.describe('Visual Regression Tests', () => {
         await new Promise(r => setTimeout(r, 200));
       });
 
-      // Increased tolerance to 5% to handle minor rendering differences across environments
+      // Use a strict 2% threshold to catch unintended UI regressions
       // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
-        maxDiffPixelRatio: 0.05,
+        maxDiffPixelRatio: 0.02,
         animations: 'disabled'
       });
     });
