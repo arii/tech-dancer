@@ -5,14 +5,7 @@ import requests
 from typing import Optional, Dict, Any, List
 
 # Centralized Ollama abstraction
-try:
-    from utils import call_ollama, is_ollama_available
-except ImportError:
-    import sys
-    import os
-    # utils.py is in dev-tools/, gemini.py is in dev-tools/tdw_services/services/
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-    from utils import call_ollama, is_ollama_available
+from utils import call_ollama, is_ollama_available
 
 class LocalAIClient:
     def __init__(self, ollama_url: str = None, ollama_model: str = None, gemini_api_key: str = None):
