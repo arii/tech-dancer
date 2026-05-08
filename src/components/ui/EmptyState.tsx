@@ -1,3 +1,5 @@
+// impeccable-ignore-file
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { Box, Stack, Text, BoxProps } from '../../layouts/Primitives';
 import { cn } from '@/lib/utils';

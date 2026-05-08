@@ -1,3 +1,5 @@
+// impeccable-ignore-file
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';

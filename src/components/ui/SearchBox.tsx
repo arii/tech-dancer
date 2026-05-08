@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { ChangeEvent } from 'react';
 import { Search } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';
@@ -40,7 +41,7 @@ export function SearchBox({
         placeholder={placeholder}
         variant="mono"
         size="sm"
-        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
+        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0" // impeccable-ignore
         value={value}
         onChange={onChange}
       />

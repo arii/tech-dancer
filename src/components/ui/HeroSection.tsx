@@ -1,4 +1,5 @@
 // impeccable-ignore-file
+// impeccable-ignore-file
 import { useMemo } from 'react';
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';

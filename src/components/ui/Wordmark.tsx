@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 

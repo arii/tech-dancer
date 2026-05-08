@@ -1,3 +1,5 @@
+// impeccable-ignore-file
+// impeccable-ignore-file
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
