@@ -1,34 +1,23 @@
 // impeccable-ignore-file
-import { useMemo } from 'react';
-
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Logo } from './Logo';
+import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
-interface WaveBar {
-  height: number;
-  dur: string;
-  delay: string;
-}
+// Generate deterministic bar data based on index to prevent visual regression flakiness
+const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
+  height: 20 + ((i * HERO_CONFIG.SEEDS.BAR_HEIGHT) % 36),
+  dur: (0.4 + ((i * HERO_CONFIG.SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
+  delay: ((i * HERO_CONFIG.SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
+})) as const;
 
 export function HeroSection() {
-  const BAR_COUNT = HERO_CONFIG.BAR_COUNT;
-  const SEEDS = HERO_CONFIG.SEEDS;
-
-  // Generate deterministic bar data based on index to prevent visual regression flakiness
-  const bars: WaveBar[] = useMemo(() =>
-    Array.from({ length: BAR_COUNT }, (_, i) => ({
-      height: 20 + ((i * SEEDS.BAR_HEIGHT) % 36),
-      dur: (0.4 + ((i * SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
-      delay: ((i * SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
-    })),
-    [BAR_COUNT, SEEDS]);
 
   return (
     <section
       className="relative flex items-center justify-center overflow-hidden"
-      style={{ background: 'var(--hero-bg)', minHeight: '40vh' }}
+      style={{ background: 'var(--hero-bg)', minHeight: '34vh' }}
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -67,19 +56,14 @@ export function HeroSection() {
           <Logo className="text-white" showText={false} />
         </Box>
 
-        {/* Wordmark: boomtick.blog - matches sidebar styling */}
-        <Box
-          className="text-white mt-3 opacity-0 translate-y-2.5"
+        <Wordmark
+          variant="hero"
+          className="mt-3 opacity-0 translate-y-2.5"
           style={{
             fontSize: 'clamp(18px, 4vw, 28px)',
-            letterSpacing: '0.05em',
             animation: 'fadeUp 0.7s ease forwards 0.4s',
-            fontWeight: 800,
-            fontFamily: '"Bricolage Grotesque", "Albert Sans", sans-serif',
           }}
-        >
-          boom<span className="text-accent">tick</span><span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>.blog</span>
-        </Box>
+        />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
@@ -87,7 +71,7 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 translate-y-2.5"
+          className="opacity-0 translate-y-2.5 pointer-events-auto"
           style={{ animation: 'fadeUp 0.7s ease forwards 0.7s' }}
         >
           <Text
@@ -123,7 +107,7 @@ export function HeroSection() {
           radius="full"
           className="opacity-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to right, var(--hero-accent), #8B2FFF)',
+            background: 'linear-gradient(to right, var(--hero-accent), var(--raw-color-accent-purple))',
             animation: 'fadeIn 1s ease forwards 1.2s'
           }}
         />
@@ -176,7 +160,7 @@ export function HeroSection() {
           style={{ animation: 'fadeIn 1s ease forwards 2.0s' }}
           aria-hidden="true"
         >
-          {bars.map((bar, i) => (
+          {BARS.map((bar, i) => (
             <Box
               key={i}
               radius="none"
