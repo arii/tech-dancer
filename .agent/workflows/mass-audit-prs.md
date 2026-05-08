@@ -1,6 +1,23 @@
+> Follow `.agent/AGENT_CONTRACT.md` before reading anything else.
+
+## Failure Modes (Read Before Starting)
+
+- **DO NOT** read context from any source other than the files specified below.
+- **DO NOT** create new files unless this workflow explicitly says so.
+- **DO NOT** skip steps because an earlier step produced no output.
+- **DO NOT** submit partial JSON — all placeholder values must be replaced.
+- If you are uncertain about a line number, re-read the diff. Never guess.
+
 ---
 description: systematically audit, track, and review multiple GitHub pull requests in bulk
 ---
+
+## Workflow State
+
+Current step: [ ] Step 0 | [ ] Step 1 | [ ] Step 2 | [ ] Step 3 | [ ] Step 4
+
+Instructions: Mark each step complete (`[x]`) before proceeding to the next.
+A step is only complete when its output file exists and contains non-placeholder content.
 
 # Mass Audit PRs Workflow
 

@@ -1,9 +1,8 @@
-import { ExternalLink, Star } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Resource } from '@/lib/content';
-import { affiliateManager } from '@/lib/affiliateManager';
 import { DetailLayout } from '@/components/layout/DetailLayout';
-import { ScoreGrid, ScoreItem, SpecsTable, VerdictCallout } from '@/components/layout/DetailElements';
+import { VerdictCallout } from '@/components/layout/DetailElements';
+import { ResourceSidebar } from './sidebar/ResourceSidebar';
+import { ResourceScoreGrid } from './ResourceScoreGrid';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -12,58 +11,16 @@ interface GearPostDetailProps {
 }
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
-  const affiliateLinks = (post.affiliateIds || [])
-    .map(id => affiliateManager.getLink(id))
-    .filter((link): link is NonNullable<typeof link> => !!link);
-
   const headerExtras = (
-    <ScoreGrid>
-      <ScoreItem label="Overall" value={post.rating ?? 'N/A'} icon={Star} intent="warning" />
-      {post.durability !== undefined && post.durability > 0 && <ScoreItem label="Durability" value={`${post.durability}/5`} />}
-      {post.value !== undefined && post.value > 0 && <ScoreItem label="Value" value={`${post.value}/5`} />}
-      <ScoreItem label="Price" value={post.priceCategory || '$$'} intent="warning" />
-      <ScoreItem label="Updated" value={post.updatedDate || post.date} />
-    </ScoreGrid>
+    <ResourceScoreGrid
+      rating={post.rating || 0}
+      durability={post.durability}
+      value={post.value}
+      priceCategory={post.priceCategory}
+      updatedDate={post.updatedDate}
+      date={post.date}
+    />
   );
-
-  const affiliateLinksView = affiliateLinks.length > 0 && (
-    <Stack gap={4} marginTop={8}>
-      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>Where to Buy</Text>
-      <Box display="grid" gap={3} gridCols={{ base: 1, sm: 2, lg: 1 }}>
-        {affiliateLinks.map(link => (
-          <Box
-            key={link.id}
-            as="a"
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            display="flex"
-            align="center"
-            justify="between"
-            padding={4}
-            surface="default"
-            border
-            className="hover:border-accent group transition-all"
-          >
-            <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-            <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
-          </Box>
-        ))}
-      </Box>
-      <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight italic">
-        * Affiliate link support helps maintain this repository.
-      </Text>
-    </Stack>
-  );
-
-  const sidebar = (post.specs && Object.keys(post.specs).length > 0) || affiliateLinks.length > 0 ? (
-    <>
-      {post.specs && Object.keys(post.specs).length > 0 && <SpecsTable specs={post.specs} />}
-      <Box className="hidden lg:block">
-        {affiliateLinksView}
-      </Box>
-    </>
-  ) : undefined;
 
   return (
     <DetailLayout
@@ -74,13 +31,10 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       image={post.image}
       onBack={onBack}
       backLabel={backLabel}
-      sidebar={sidebar}
+      sidebar={<ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />}
       headerExtras={headerExtras}
     >
       {post.verdict && <VerdictCallout verdict={post.verdict} />}
-      <Box className="lg:hidden">
-        {affiliateLinksView}
-      </Box>
     </DetailLayout>
   );
 }

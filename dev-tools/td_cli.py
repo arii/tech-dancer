@@ -258,7 +258,7 @@ def handle_status_board(args):
     for pr in repo.get_pulls(state='open'):
         m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
         if not args.json: print(f"| {pr.head.ref} | {issue} | {'Draft' if pr.draft else 'Open'} | ... |")
-        prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open"})
+        prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
 
     if args.json: print(json.dumps({"status": "success", "work": prs_data}, indent=2))
 

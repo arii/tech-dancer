@@ -121,6 +121,10 @@ export interface Event {
   description: string;
   link?: string;
   content: string;
+  startDate?: string;
+  earlyBirdDate?: string;
+  hotelCutoffDate?: string;
+  url?: string;
 }
 
 export type ContentItem = Post | Resource | Study | Event;

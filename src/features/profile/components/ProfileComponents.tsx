@@ -113,6 +113,8 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             <img
               src={image.src}
               alt={image.alt}
+              width={800}
+              height={800}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />

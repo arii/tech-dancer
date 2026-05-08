@@ -5,6 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
+import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { WCSScraperTool } from './components/WCSScraperTool';
 import { SEO } from '@/components/SEO';
 import { ComponentType } from 'react';
@@ -15,6 +16,7 @@ import { DetailLayout } from '@/components/layout/DetailLayout';
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
+  'wsdc-event-reminders': WSDCReminders,
 };
 
 export default function ResearchDetail() {

@@ -1,3 +1,13 @@
+> Follow `.agent/AGENT_CONTRACT.md` before reading anything else.
+
+## Failure Modes (Read Before Starting)
+
+- **DO NOT** read context from any source other than the files specified below.
+- **DO NOT** create new files unless this workflow explicitly says so.
+- **DO NOT** skip steps because an earlier step produced no output.
+- **DO NOT** submit partial JSON — all placeholder values must be replaced.
+- If you are uncertain about a line number, re-read the diff. Never guess.
+
 ---
 description: systematically audit, review, and organize open issues in bulk to determine if they should be kept, updated, or abandoned
 ---
