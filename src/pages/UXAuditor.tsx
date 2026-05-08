@@ -26,6 +26,11 @@ const reportCardVariants = cva(
       },
       overflow: {
         hidden: "overflow-hidden",
+      },
+      span: {
+        1: "col-span-1",
+        2: "col-span-2",
+        3: "col-span-3",
       }
     },
     defaultVariants: {
@@ -243,7 +248,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }}>
+        <Stack gap={6} className="lg:col-span-3">
           {activeReport ? (
             <>
               <Stack
