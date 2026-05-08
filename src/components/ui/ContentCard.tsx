@@ -9,6 +9,8 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   category: string;
   excerpt?: string;
   basePath: string;
+  date?: string;
+  readingTime?: string;
 }
 
 export function ContentCard({ 
@@ -17,6 +19,8 @@ export function ContentCard({
   category, 
   excerpt, 
   basePath, 
+  date,
+  readingTime,
   ...motionProps 
 }: ContentCardProps) {
   const cleanMotionProps = filterDataProps(motionProps as Record<string, unknown>);
@@ -31,17 +35,22 @@ export function ContentCard({
 
   return (
     <Stack
-      as={motion.create(NavLink)}
-      to={`${basePath}/${slug}`}
+      as={motion.create("article")}
       direction="col"
       gap={4}
       height="full"
       padding={6}
       radius="lg"
       border
-      className="group bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
       {...cleanMotionProps}
     >
+      <Box
+        as={NavLink}
+        to={`${basePath}/${slug}`}
+        aria-label={`Read article: ${title}`}
+        className="absolute inset-0 z-10"
+      />
       <Box
         paddingX={2}
         paddingY={1}
@@ -51,9 +60,9 @@ export function ContentCard({
       >
         <Text
           variant="mono"
-          size="tiny"
+          size="xs"
           weight="font-black"
-          tracking="widest"
+          tracking="wide"
           className={getTagColorClass(category)}
         >
           {category}
@@ -71,14 +80,17 @@ export function ContentCard({
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed">
+        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed text-text-body">
            {excerpt}
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" marginTop="auto">
-        <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest">
-          Read Article
+      <Box display="flex" align="center" justify="between" marginTop="auto">
+        <Text variant="mono" size="xs" color="dim">
+          {[date, readingTime].filter(Boolean).join(' • ') || category}
+        </Text>
+        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+          Read article
         </Text>
       </Box>
     </Stack>

@@ -1,15 +1,8 @@
 <svg viewBox="0 0 450 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-  <style>
-    :root {
-      --brand-accent: #0891b2;
-      --brand-accent-hero: #00CFFF;
-      --brand-accent-purple: #8b5cf6;
-    }
-  </style>
   <defs>
     <linearGradient id="logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#00CFFF" />
-      <stop offset="100%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#8B5CF6" />
     </linearGradient>
     <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="3" result="blur" />
