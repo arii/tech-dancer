@@ -99,7 +99,7 @@ export function NewsletterBanner() {
         </Stack>
         <Stack gap={4} width={{ base: 'full', lg: 'auto' }}>
           <EmailForm />
-          <Text variant="sans" size="xs" color="main" className="opacity-60">
+          <Text variant="sans" size="xs" color="main">
             No spam. Unsubscribe anytime.
           </Text>
         </Stack>

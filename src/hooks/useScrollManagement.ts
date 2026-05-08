@@ -81,14 +81,14 @@ export function useScrollManagement(
     };
   }, [pathname, key, hash, navType, scrollRef]);
 
-  const handleTouchStart = (e: TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
     touchStartRef.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
     };
   };
 
-  const handleTouchEnd = (e: TouchEvent) => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
     if (!touchStartRef.current) return;
 
     const touchEnd = {
