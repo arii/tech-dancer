@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx', '.github/workflows'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/App.tsx', 'src/main.tsx', '.github/workflows'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -114,6 +114,24 @@ const CONFIG = {
       pattern: /^([ \t]*)env:[ \t]*(?!\r?\n\1[ \t]+)/m,
       severity: 'major',
       message: 'Bare env: keys are invalid in GitHub Actions workflows. Provide values or remove the key.'
+    },
+    {
+      name: 'Inline Font Family',
+      pattern: /fontFamily\s*:\s*['"]/g,
+      severity: 'major',
+      message: 'Inline font family is banned. Use typography tokens.'
+    },
+    {
+      name: 'Raw Hex in Inline Style',
+      pattern: /style=\{\{[^}]*#[0-9A-Fa-f]{3,8}/gs,
+      severity: 'major',
+      message: 'Raw hex found in inline style. Use CSS variables/tokens.'
+    },
+    {
+      name: 'RGBA in Inline Style',
+      pattern: /style=\{\{[^}]*(rgba?|hsla?)\(/gs,
+      severity: 'minor',
+      message: 'Inline color function found. Prefer tokenized CSS variables.'
     }
   ],
   deprecated: {
@@ -132,7 +150,7 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content) {
+function checkContent(content, filePath = "") {
   if (content.includes('// impeccable-ignore-file')) return [];
 
   const violations = [];
@@ -274,7 +292,7 @@ function checkContent(content) {
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  return checkContent(content);
+  return checkContent(content, filepath.replace(/\\/g, '/'));
 }
 
 function checkPRScope() {
@@ -329,7 +347,7 @@ if (targets.includes('-')) {
   for await (const chunk of process.stdin) {
     stdinContent += chunk;
   }
-  const violations = checkContent(stdinContent);
+  const violations = checkContent(stdinContent, "stdin");
   if (violations.length > 0) {
     allViolations['stdin'] = violations;
   }
