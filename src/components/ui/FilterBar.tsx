@@ -1,6 +1,6 @@
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
-import { cn } from '@/lib/utils';
+import { cn, formatCategory } from '@/lib/utils';
 
 interface FilterBarProps {
   categories: string[];
@@ -33,7 +33,7 @@ export function FilterBar({ categories }: FilterBarProps) {
                 : "text-text-dim border border-transparent hover:text-text-main hover:border-line"
             )}
           >
-            {cat === 'All' ? 'All Posts' : cat}
+            {formatCategory(cat)}
           </Box>
         ))}
       </Stack>
