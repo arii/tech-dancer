@@ -8,10 +8,6 @@ The PR review system is centralized in the unified Tech-Dancer CLI.
 
 ## Core Commands
 
-### Environment Setup
-The project requires **Node >=22.0.0** (as specified in `.nvmrc` and `package.json` engines). Ensure you have the correct Node version installed before running local quality gates, or you will encounter dependency errors.
-
-
 ### 1. Single PR Audit
 The recommended way to review a single PR:
 
@@ -38,7 +34,6 @@ This includes:
 - ESLint linting
 - PR Scope validation
 - Conflict detection (requires `GITHUB_TOKEN`)
-
 
 ## CI Gate Baselines
 

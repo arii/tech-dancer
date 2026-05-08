@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/App.tsx', 'src/main.tsx', '.github/workflows'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/styles', 'src/App.tsx', 'src/main.tsx', 'src/index.css', '.github/workflows'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -20,7 +20,7 @@ function collectAuditFiles(targets) {
         walk(fullPath);
         continue;
       }
-      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx') || fullPath.endsWith('.yml')) results.add(fullPath);
+      if (/\.(ts|tsx|css|yml)$/.test(fullPath)) results.add(fullPath);
     }
   };
 
@@ -29,7 +29,7 @@ function collectAuditFiles(targets) {
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
-    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx') || absoluteTarget.endsWith('.yml')) results.add(absoluteTarget);
+    else if (/\.(ts|tsx|css|yml)$/.test(absoluteTarget)) results.add(absoluteTarget);
   }
 
   return Array.from(results);
@@ -71,7 +71,7 @@ const CONFIG = {
       name: 'div Layout',
       pattern: /<div\s+[^>]*?className=["'](.*?(?:flex|grid|p-|m-|gap-).*?)["']/g,
       severity: 'minor',
-      message: 'Avoid using <div> for layout. Use layout primitives from src/layouts/.'
+      message: 'Avoid using <div> for layout. Use layout primitives from src/layouts.'
     },
     {
       name: 'HashRouter Usage',
@@ -132,6 +132,20 @@ const CONFIG = {
       pattern: /style=\{\{[^}]*(rgba?|hsla?)\(/gs,
       severity: 'minor',
       message: 'Inline color function found. Prefer tokenized CSS variables.'
+    },
+    {
+      name: 'Hardcoded Color',
+      pattern: /:\s*(#[0-9a-fA-F]{3,8}|rgba?\(.*?\)|(?<!var\(--)red|(?<!var\(--)blue|(?<!var\(--)green|(?<!var\(--)black|(?<!var\(--)white)\b/g,
+      isCssOnly: true,
+      severity: 'minor',
+      message: 'Hardcoded color detected in CSS. Use CSS variables from tokens.css instead.'
+    },
+    {
+      name: 'Cramped Spacing',
+      pattern: /:\s*([0-3]px|0\.[0-2][0-4]?rem)\b/g,
+      isCssOnly: true,
+      severity: 'minor',
+      message: 'Cramped spacing detected (less than 4px). Use standard spacing tokens.'
     }
   ],
   deprecated: {
@@ -150,9 +164,10 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content, filePath = "") {
-  if (content.includes('// impeccable-ignore-file')) return [];
+function checkContent(content, filepath = '') {
+  if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
 
+  const isCssFile = filepath.endsWith('.css');
   const violations = [];
 
   // Helper to get line number from index efficiently
@@ -179,13 +194,21 @@ function checkContent(content, filePath = "") {
   CONFIG.rules
     .filter(r => !r.isClassNameRule)
     .forEach(rule => {
+      if (rule.isCssOnly && !isCssFile) return;
+      if (!rule.isCssOnly && isCssFile && rule.name !== 'Arbitrary Value') return;
+
+      // Skip design token files for rules that would naturally trigger violations in them
+      if (filepath.includes('tokens.css') || filepath.includes('design-tokens.ts')) {
+        if (rule.name === 'Hardcoded Color' || rule.name === 'Arbitrary Value' || rule.name === 'Non-token Color/Size' || rule.name === 'Cramped Spacing') return;
+      }
+
       const flags = (rule.name === 'div Layout' ? 'gs' : 'g') + (rule.pattern.multiline ? 'm' : '');
       const regex = new RegExp(rule.pattern.source, flags);
       const matches = content.matchAll(regex);
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+        if (lines[lineNum - 1] && (lines[lineNum - 1].includes('// impeccable-ignore') || lines[lineNum - 1].includes('/* impeccable-ignore */'))) continue;
 
         violations.push({
           line: lineNum,
@@ -200,7 +223,7 @@ function checkContent(content, filePath = "") {
   // 2. ClassName Specific Rules (Global Scanner)
   for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
     const lineNum = getLineNumber(match.index);
-    if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+    if (lines[lineNum - 1] && (lines[lineNum - 1].includes('// impeccable-ignore') || lines[lineNum - 1].includes('/* impeccable-ignore */'))) continue;
 
     const classStr = match[1];
     const classes = classStr.split(/\s+/);
@@ -258,7 +281,38 @@ function checkContent(content, filePath = "") {
     });
   }
 
-  // 3. Contrast safety heuristic for inverse/gradient hero panels.
+  // 3. Nesting depth check for CSS (Simplified but robust)
+  if (isCssFile) {
+    let depth = 0;
+    // Single pass to strip comments and strings globally while preserving newlines
+    const cleanContent = content
+      .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')) // Multi-line comments
+      .replace(/\/\/.*/g, '')                                       // Single-line comments
+      .replace(/(['"])(?:(?!\1|\\).|\\.)*\1/g, (m) => m.replace(/[^\n]/g, ' ')); // Strings
+
+    const cleanLines = cleanContent.split('\n');
+    for (let i = 0; i < cleanLines.length; i++) {
+      const line = cleanLines[i];
+      for (const char of line) {
+        if (char === '{') {
+          depth++;
+          if (depth > 3) {
+            violations.push({
+              line: i + 1,
+              pattern: 'Excessive Nesting',
+              severity: 'minor',
+              value: `Depth: ${depth}`,
+              message: 'CSS nesting depth should not exceed 3 levels.'
+            });
+          }
+        } else if (char === '}') {
+          depth--;
+        }
+      }
+    }
+  }
+
+  // 4. Contrast safety heuristic for inverse/gradient hero panels.
   // Single-pass sliding window: when an industrial gradient line is seen,
   // inspect nearby headline/body Text lines for explicit inverse-safe styling.
   let activeGradientWindowUntil = -1;
@@ -270,7 +324,7 @@ function checkContent(content, filePath = "") {
       activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
       continue;
     }
-    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore')) continue;
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore') || line.includes('/* impeccable-ignore */')) continue;
 
     const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
     const hasInverseColor = /color="(?:white|bg)"/.test(line);
@@ -303,13 +357,11 @@ function checkPRScope() {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
   } catch (error) {
-    // If the error message itself is present and is not just a standard shell error, report it
     if (error.stderr && error.stderr.trim()) {
       console.error(`\x1b[31m❌ Scope check failed:\x1b[0m\n${error.stderr}`);
     } else if (error.message) {
       console.error(`\x1b[31m❌ Scope check error:\x1b[0m ${error.message}`);
     }
-    // Don't exit here as scope check is usually a non-blocking warning
   }
 }
 
@@ -347,7 +399,7 @@ if (targets.includes('-')) {
   for await (const chunk of process.stdin) {
     stdinContent += chunk;
   }
-  const violations = checkContent(stdinContent, "stdin");
+  const violations = checkContent(stdinContent, "stdin.tsx");
   if (violations.length > 0) {
     allViolations['stdin'] = violations;
   }
@@ -355,11 +407,9 @@ if (targets.includes('-')) {
   const files = collectAuditFiles(targets);
 
   files.forEach(filepath => {
-    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts') || filepath.endsWith('.yml')) {
-      const violations = checkFile(filepath);
-      if (violations.length > 0) {
-        allViolations[path.relative(ROOT, filepath)] = violations;
-      }
+    const violations = checkFile(filepath);
+    if (violations.length > 0) {
+      allViolations[path.relative(ROOT, filepath)] = violations;
     }
   });
 }

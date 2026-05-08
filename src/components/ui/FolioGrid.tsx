@@ -46,8 +46,6 @@ export default function FolioGrid({
     );
   });
 
-  const searchPlaceholder = basePath.includes('gear') ? 'Search gear…' : 'Search posts…';
-
   return (
     <Box as="section" height="full">
       <Box as="header" marginBottom={12}>
@@ -62,7 +60,6 @@ export default function FolioGrid({
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
           />
           {onViewChange && (
             <ViewToggle view={view} onChange={onViewChange} />

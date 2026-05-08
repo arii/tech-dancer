@@ -16,6 +16,8 @@ concurrency:
   group: "gh-pages-publish"
   cancel-in-progress: false
 
+env:
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

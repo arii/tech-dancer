@@ -30,7 +30,7 @@ from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
 # --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/styles', 'src/App.tsx', 'src/index.css']
 
 # --- Shared Logic ---
 
@@ -606,7 +606,7 @@ def handle_audit_gate(args):
 
             relevant_main_files = []
             for mf in main_files:
-                if not (mf.endswith('.tsx') or mf.endswith('.ts')):
+                if not (mf.endswith('.tsx') or mf.endswith('.ts') or mf.endswith('.css')):
                     continue
                 for check_dir in AUDIT_CHECK_DIRS:
                     if mf == check_dir or mf.startswith(check_dir + '/'):

@@ -1,0 +1,8 @@
+.hardcoded {
+  color: #ff0000;
+  background: rgb(255, 255, 255);
+  border-color: red;
+}
+.themed {
+  color: var(--raw-color-text-main);
+}

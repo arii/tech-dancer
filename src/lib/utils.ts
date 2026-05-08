@@ -96,12 +96,3 @@ export function filterDataProps(props: Record<string, unknown>) {
     Object.entries(props).filter(([key]) => !DATA_PROPS.includes(key))
   );
 }
-
-/**
- * Standardizes category strings to Title Case, splitting on hyphens.
- */
-export function formatCategory(cat: string): string {
-  if (!cat || typeof cat !== 'string') return cat;
-  if (cat === 'All') return 'All Posts';
-  return cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
