@@ -25,6 +25,11 @@ blob-report/
 
 # Logs and OS files
 *.log
+*.tmp
+*.temp
+*.tmp.md
+*.temp.md
+*~
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
@@ -66,8 +71,6 @@ etl/data/*.parquet
 # Since you use pnpm, we ignore other manager lockfiles
 package-lock.json
 yarn.lock
-public/data
-link-validation-report.md
 public/data
 link-validation-report.md
 
