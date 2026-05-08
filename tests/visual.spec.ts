@@ -26,9 +26,6 @@ test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
-  for (const route of routes) {
-    test(`visual comparison for ${route.name}`, async ({ page }) => {
-      await page.goto(route.path);
       await page.waitForLoadState('networkidle');
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
