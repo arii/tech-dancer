@@ -141,7 +141,7 @@ const CONFIG = {
 };
 
 function checkContent(content, filepath = '') {
-  if (content.includes('// impeccable-ignore-file')) return [];
+  if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
 
   const isCssFile = filepath.endsWith('.css');
   const violations = [];
@@ -183,7 +183,7 @@ function checkContent(content, filepath = '') {
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+        if (lines[lineNum - 1] && (lines[lineNum - 1].includes('// impeccable-ignore') || lines[lineNum - 1].includes('/* impeccable-ignore */'))) continue;
 
         violations.push({
           line: lineNum,
@@ -198,7 +198,7 @@ function checkContent(content, filepath = '') {
   // 2. ClassName Specific Rules (Global Scanner)
   for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
     const lineNum = getLineNumber(match.index);
-    if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+    if (lines[lineNum - 1] && (lines[lineNum - 1].includes('// impeccable-ignore') || lines[lineNum - 1].includes('/* impeccable-ignore */'))) continue;
 
     const classStr = match[1];
     const classes = classStr.split(/\s+/);
@@ -292,7 +292,7 @@ function checkContent(content, filepath = '') {
       activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
       continue;
     }
-    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore')) continue;
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore') || line.includes('/* impeccable-ignore */')) continue;
 
     const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
     const hasInverseColor = /color="(?:white|bg)"/.test(line);

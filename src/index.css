@@ -104,7 +104,7 @@
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]; // impeccable-ignore
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]; /* impeccable-ignore */
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
   .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
@@ -142,9 +142,9 @@
 
 .panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
 .nav-rail {
-  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50; // impeccable-ignore
+  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50; /* impeccable-ignore */
 }
-.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; } // impeccable-ignore
+.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; } /* impeccable-ignore */
 .stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
 .tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
 .experience-chip {
