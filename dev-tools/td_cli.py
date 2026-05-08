@@ -43,12 +43,12 @@ def log_diag(msg: str):
     now = datetime.now().strftime("%H:%M:%S")
     print(f"[{now}] ℹ️  {msg}", file=sys.stderr)
 
-def add_execution_args(parser: argparse.ArgumentParser):
+def add_execution_args(parser: argparse.ArgumentParser, default_dry_run: bool = True):
     """Registers --dry-run and --execute flags with standardized help strings."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Run in dry-run mode (default). No side effects will be applied.")
+    parser.add_argument("--dry-run", action="store_true", default=default_dry_run,
+                      help=f"Run in dry-run mode{' (default)' if default_dry_run else ''}. No side effects will be applied.")
     parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Execute the command and apply side effects (disables dry-run).")
+                      help=f"Execute the command and apply side effects{' (disables dry-run)' if default_dry_run else ' (default)'}.")
 
 def get_env_or_gha(env_var: str) -> str | None:
     """Helper to safely fetch variables avoiding CLI fallback if explicitly empty in CI."""
@@ -952,6 +952,8 @@ def main():
             p.add_argument("--logs", help="Path to CI logs file")
             p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
             p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
+        elif cmd == "resolve-conflicts":
+            pass # Uses global --json flag if provided
         p.set_defaults(func=func)
 
     args = parser.parse_args()
