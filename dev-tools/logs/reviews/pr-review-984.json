@@ -1,0 +1,4 @@
+{
+  "body": "## ANTI-AI-SLOP\\nCentralized constant usage reduces logic duplication across the content layer.\\n\\n## FINDINGS\\nThis PR refactors asset path resolution to use `ASSET_PREFIX`. This is critical for reliable subpath deployments on GitHub Pages.\\n\\n## FINAL RECOMMENDATION\\nApproved\\n\\n<!-- td-review-manager-comment -->",
+  "comments": []
+}

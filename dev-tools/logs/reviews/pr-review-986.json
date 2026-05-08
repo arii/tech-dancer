@@ -1,0 +1,4 @@
+{
+  "body": "## ANTI-AI-SLOP\\nNew components follow the layout primitive pattern (`Box`, `Stack`). No raw CSS layout used.\\n\\n## FINDINGS\\nThis PR introduces the foundational components for the Event Guide feature. The components are well-structured and reuse existing primitives effectively.\\n\\n## FINAL RECOMMENDATION\\nApproved\\n\\n<!-- td-review-manager-comment -->",
+  "comments": []
+}
