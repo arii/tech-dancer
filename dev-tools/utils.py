@@ -5,6 +5,7 @@ import json
 import time
 import urllib.request
 import urllib.error
+import urllib.parse
 import re
 from typing import Optional, Union, List
 
@@ -15,17 +16,24 @@ def clean_llm_output(text: str) -> str:
         return match.group(1).strip()
     return text.strip()
 
+def _get_ollama_base_url(url: Optional[str] = None) -> str:
+    """Helper to resolve the base Ollama URL and ensure it ends with a slash."""
+    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+
+    # If the URL already points to an API endpoint, get the base
+    if "/api/generate" in base_url:
+        base_url = base_url.split("/api/generate")[0]
+    elif "/api/tags" in base_url:
+        base_url = base_url.split("/api/tags")[0]
+
+    if not base_url.endswith("/"):
+        base_url += "/"
+    return base_url
+
 def is_ollama_available(url: str = None) -> bool:
     """Checks if Ollama API is reachable."""
-    url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
-    # Derive tags URL from generate URL or vice-versa
-    if "/api/generate" in url:
-        tags_url = url.replace("/api/generate", "/api/tags")
-    elif "/api/tags" in url:
-        tags_url = url
-    else:
-        # If the URL is just a base, append /api/tags
-        tags_url = f"{url.rstrip('/')}/api/tags"
+    base_url = _get_ollama_base_url(url)
+    tags_url = urllib.parse.urljoin(base_url, "api/tags")
 
     try:
         req = urllib.request.Request(tags_url, method='GET')
@@ -36,9 +44,8 @@ def is_ollama_available(url: str = None) -> bool:
 
 def call_ollama(prompt: str, model: str = None, url: str = None, max_retries: int = 3) -> Optional[str]:
     """Unified helper to call local Ollama API with retries using urllib."""
-    url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
-    if "/api/" not in url:
-        url = f"{url.rstrip('/')}/api/generate"
+    base_url = _get_ollama_base_url(url)
+    target_url = urllib.parse.urljoin(base_url, "api/generate")
 
     model = model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 
@@ -49,7 +56,7 @@ def call_ollama(prompt: str, model: str = None, url: str = None, max_retries: in
     }
 
     req = urllib.request.Request(
-        url,
+        target_url,
         data=json.dumps(data).encode("utf-8"),
         headers={"Content-Type": "application/json"}
     )

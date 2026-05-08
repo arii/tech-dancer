@@ -4,7 +4,7 @@ import re
 import urllib.request
 import urllib.error
 from typing import Optional, Dict, Any, List
-from utils import call_ollama, is_ollama_available
+from utils import call_ollama, is_ollama_available, clean_llm_output
 
 class LocalAIClient:
     def __init__(self, ollama_url: str = None, ollama_model: str = None, gemini_api_key: str = None):
