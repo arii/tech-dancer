@@ -80,6 +80,8 @@
   /* Layout Tokens */
   --spacing-nav-rail: var(--raw-width-nav-rail);
   --spacing-grid-border: var(--raw-border-width-grid);
+  --tracking-wordmark: var(--raw-tracking-wordmark);
+  --font-size-wordmark-hero: var(--raw-font-size-wordmark-hero);
 
   /* Font Sizes */
   --text-micro: 9px;
@@ -157,3 +159,12 @@
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }
+
+.wordmark {
+  letter-spacing: var(--tracking-wordmark);
+}
+
+.wordmark-hero {
+  font-size: var(--font-size-wordmark-hero);
+  font-weight: 800;
+}

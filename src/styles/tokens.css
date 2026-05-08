@@ -64,6 +64,8 @@
   /* Layout Sizes */
   --raw-width-nav-rail: 280px;
   --raw-border-width-grid: 1px;
+  --raw-tracking-wordmark: 0.05em;
+  --raw-font-size-wordmark-hero: clamp(1.125rem, 4vw, 1.75rem);
 
   /* Z-Index */
   --raw-z-hide: -1;
