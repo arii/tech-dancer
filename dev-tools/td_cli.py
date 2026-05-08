@@ -44,12 +44,12 @@ def log_diag(msg: str):
     now = datetime.now().strftime("%H:%M:%S")
     print(f"[{now}] ℹ️  {msg}", file=sys.stderr)
 
-def add_execution_args(parser: argparse.ArgumentParser):
-    """Registers consistent dry-run and execute flags to a subparser."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Preview actions without side effects (default)")
+def add_execution_args(parser: argparse.ArgumentParser, default_dry_run: bool = True):
+    """Registers --dry-run and --execute flags with standardized help strings."""
+    parser.add_argument("--dry-run", action="store_true", default=default_dry_run,
+                      help=f"Run in dry-run mode{' (default)' if default_dry_run else ''}. No side effects will be applied.")
     parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Enable actual side effects (e.g., posting to GitHub, modifying files)")
+                      help=f"Execute the command and apply side effects{' (disables dry-run)' if default_dry_run else ' (default)'}.")
 
 def get_env_or_gha(env_var: str) -> str | None:
     """Helper to safely fetch variables avoiding CLI fallback if explicitly empty in CI."""
@@ -107,14 +107,6 @@ def detect_conflicts(repo, target_pr_num=None):
         if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
-
-def add_execution_args(parser):
-    """Registers --dry-run and --execute flags with standardized help strings."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Run in dry-run mode (default). No side effects will be applied.")
-    parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Execute the command and apply side effects (disables dry-run).")
-
 
 # --- CLI Handlers ---
 
