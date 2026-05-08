@@ -16,23 +16,13 @@ def clean_llm_output(text: str) -> str:
         return match.group(1).strip()
     return text.strip()
 
-def _get_ollama_base_url(url: Optional[str] = None) -> str:
-    """Helper to resolve the base Ollama URL and ensure it ends with a slash."""
+def is_ollama_available(url: Optional[str] = None) -> bool:
+    """Checks if Ollama API is reachable."""
     base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
-
-    # If the URL already points to an API endpoint, get the base
-    if "/api/generate" in base_url:
-        base_url = base_url.split("/api/generate")[0]
-    elif "/api/tags" in base_url:
-        base_url = base_url.split("/api/tags")[0]
-
     if not base_url.endswith("/"):
         base_url += "/"
-    return base_url
 
-def is_ollama_available(url: str = None) -> bool:
-    """Checks if Ollama API is reachable."""
-    base_url = _get_ollama_base_url(url)
+    # Use relative path to preserve any sub-path in base_url
     tags_url = urllib.parse.urljoin(base_url, "api/tags")
 
     try:
@@ -42,9 +32,13 @@ def is_ollama_available(url: str = None) -> bool:
     except Exception:
         return False
 
-def call_ollama(prompt: str, model: str = None, url: str = None, max_retries: int = 3) -> Optional[str]:
+def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3) -> Optional[str]:
     """Unified helper to call local Ollama API with retries using urllib."""
-    base_url = _get_ollama_base_url(url)
+    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    if not base_url.endswith("/"):
+        base_url += "/"
+
+    # Use relative path to preserve any sub-path in base_url
     target_url = urllib.parse.urljoin(base_url, "api/generate")
 
     model = model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
@@ -73,6 +67,7 @@ def call_ollama(prompt: str, model: str = None, url: str = None, max_retries: in
             sleep_time = 2 ** attempt
             print(f"API call failed ({e}). Retrying in {sleep_time}s...", file=sys.stderr)
             time.sleep(sleep_time)
+    return None
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):
