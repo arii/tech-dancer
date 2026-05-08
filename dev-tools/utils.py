@@ -1,8 +1,37 @@
 import os
+import os
 import sys
 import subprocess
 import json
+import time
+import urllib.request
+import urllib.error
 from typing import Optional, Union, List
+
+def call_ollama(prompt: str, model: str = "qwen2.5-coder:7b", max_retries: int = 3) -> Optional[str]:
+    url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    for attempt in range(1, max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                return res_data.get("response")
+        except Exception as e:
+            if attempt == max_retries:
+                print(f"API call failed after {max_retries} attempts: {e}", file=sys.stderr)
+                return None
+            sleep_time = 2 ** attempt
+            print(f"API call failed ({e}). Retrying in {sleep_time}s...", file=sys.stderr)
+            time.sleep(sleep_time)
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):

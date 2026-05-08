@@ -82,6 +82,8 @@ export function DetailLayout({
               <img
                 src={image}
                 alt={title}
+                width={1280}
+                height={720}
                 loading="lazy"
                 className="w-full h-full object-cover transition-transform duration-700"
               />
