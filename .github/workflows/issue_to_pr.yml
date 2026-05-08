@@ -9,7 +9,6 @@ permissions:
   pull-requests: write
   issues: read
 
-env:
 
 jobs:
   create-pr:
