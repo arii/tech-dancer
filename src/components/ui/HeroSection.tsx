@@ -29,7 +29,7 @@ export function HeroSection() {
   return (
     <section
       className="relative flex items-center justify-center overflow-hidden"
-      style={{ background: 'var(--hero-bg)', minHeight: '40vh' }}
+      style={{ background: 'var(--hero-bg)', minHeight: '34vh' }}
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -119,7 +119,7 @@ export function HeroSection() {
           radius="full"
           className="opacity-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to right, var(--hero-accent), #8B2FFF)',
+            background: 'linear-gradient(to right, var(--hero-accent), var(--raw-color-accent-purple))',
             animation: 'fadeIn 1s ease forwards 1.2s'
           }}
         />

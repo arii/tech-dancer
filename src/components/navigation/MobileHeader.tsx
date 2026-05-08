@@ -21,7 +21,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       className="transition-[backdrop-filter] duration-300 bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Logo showText={false} className="h-8 w-auto text-white flex-shrink-0" />
+        <Logo showText={false} className="h-9 w-auto text-white flex-shrink-0" />
         <Wordmark variant="nav" />
       </Box>
 
