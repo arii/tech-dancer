@@ -1,2 +1,0 @@
-[console_scripts]
-td-cli = tdw_services.cli:cli
