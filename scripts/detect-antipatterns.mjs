@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/App.tsx', 'src/main.tsx'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -108,6 +108,24 @@ const CONFIG = {
       pattern: /className=".*?text-\[\d/g,
       severity: 'minor',
       message: 'Arbitrary text size. Use typeSizes from design-tokens.ts'
+    },
+    {
+      name: 'Inline Font Family',
+      pattern: /fontFamily\s*:\s*['"]/g,
+      severity: 'major',
+      message: 'Inline font family is banned. Use typography tokens.'
+    },
+    {
+      name: 'Raw Hex in Inline Style',
+      pattern: /style=\{\{[^}]*#[0-9A-Fa-f]{3,8}/gs,
+      severity: 'major',
+      message: 'Raw hex found in inline style. Use CSS variables/tokens.'
+    },
+    {
+      name: 'RGBA in Inline Style',
+      pattern: /style=\{\{[^}]*(rgba?|hsla?)\(/gs,
+      severity: 'minor',
+      message: 'Inline color function found. Prefer tokenized CSS variables.'
     }
   ],
   deprecated: {
@@ -127,7 +145,12 @@ const CONFIG = {
 };
 
 function checkContent(content) {
-  if (content.includes('// impeccable-ignore-file')) return [];
+  if (content.includes('// impeccable-ignore-file')) {
+    // Only skip full-file audit when explicitly allowed for migration files.
+    // Hero and design-system critical files must still be audited.
+    const allowSkip = /src\/(legacy|migrations)\//.test(process.env.AUDIT_FILE_PATH || '');
+    if (allowSkip) return [];
+  }
 
   const violations = [];
 
@@ -267,6 +290,7 @@ function checkContent(content) {
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
+  process.env.AUDIT_FILE_PATH = filepath.replace(/\\/g, '/');
   return checkContent(content);
 }
 
