@@ -11,4 +11,5 @@ export interface TimelineItem {
   date: Date;
   label: string;
   description: string;
+  formattedDate?: string;
 }
