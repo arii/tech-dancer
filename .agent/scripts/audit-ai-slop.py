@@ -155,6 +155,7 @@ class AISlopAuditor:
     
     def run(self) -> str:
         """Execute full audit"""
+        assert self.config_path.exists(), f"Config not found at {self.config_path}. Do not hardcode rules in workflows."
         self.search_violations()
         self.prioritize_violations()
         return self.generate_report()
