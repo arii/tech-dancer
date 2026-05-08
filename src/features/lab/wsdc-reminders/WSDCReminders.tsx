@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar, Download, Plus, Search, Globe, AlertCircle } from 'lucide-react';
+import { Download, Plus, Search, Globe, AlertCircle } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 import { calculateTimeline } from './lib/timeline-engine';
