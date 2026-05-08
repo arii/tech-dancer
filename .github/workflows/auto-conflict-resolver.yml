@@ -33,7 +33,6 @@ on:
         type: string
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   TARGET: ${{ inputs.target_branch || 'main' }}
   SOURCE: ${{ inputs.source_branch }}
   PR_NUMBER: ${{ inputs.pr_number || github.event.issue.number || '0' }}
@@ -89,7 +88,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -161,7 +160,7 @@ jobs:
       - name: Resolve conflicts
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true'
         id: resolve
-        uses: VeyronSakai/conflict-resolver@7d650534ba240658a381241823f8b4f13861c2ad # pin to v0.5.1
+        uses: VeyronSakai/conflict-resolver@v0.5
 
       - name: Commit and create PR
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files == ''

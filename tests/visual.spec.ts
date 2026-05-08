@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/visual';
 
 const routes = [
   { name: 'home', path: './' },
@@ -26,6 +26,12 @@ test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
+  for (const route of routes) {
+    test(`visual comparison for ${route.name}`, async ({ page }) => {
+      await page.goto(route.path);
+      await page.waitForLoadState('networkidle');
+      // Wait for fonts to be loaded to prevent text-rendering flakiness
+      await page.evaluate(() => document.fonts.ready);
 
       // Wait for hydration and stability
       await page.waitForLoadState('networkidle');
@@ -61,7 +67,8 @@ test.describe('Visual Regression Tests', () => {
         await new Promise(requestAnimationFrame);
       });
 
-      // Strict adherence to 2% pixel ratio for high-fidelity regression tracking
+      // Use a strict 2% threshold to catch unintended UI regressions
+      // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.02,
