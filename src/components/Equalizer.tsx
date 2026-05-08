@@ -43,7 +43,7 @@ export const Equalizer = () => {
           style={{
             backgroundColor: 'transparent',
             background: `linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))`,
-            boxShadow: `0 0 14px var(--raw-color-accent-shadow)`,
+            boxShadow: `0 0 14px var(--hero-accent-shadow)`,
             opacity: bar.opacity,
           }}
         />

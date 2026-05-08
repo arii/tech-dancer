@@ -76,7 +76,7 @@ export function Logo({ className, showText = true }: LogoProps) {
             letterSpacing: '-1.5px'
           }}
         >
-          boom<tspan fill="var(--raw-color-accent-brand)">tick</tspan><tspan fill="rgba(255,255,255,0.6)" fontWeight="300">.blog</tspan>
+          boom<tspan fill="var(--raw-color-accent-brand)">tick</tspan><tspan fill="var(--logo-muted-text)" fontWeight="300">.blog</tspan>
         </text>
       )}
     </svg>
