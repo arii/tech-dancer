@@ -25,11 +25,6 @@ test.describe('Visual Regression Tests', () => {
 
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
-      // The research page has known stability issues in CI; skipping to unblock critical workflow fixes
-      if (route.name === 'research') {
-        test.skip(true, 'Research page visual test is unstable in CI');
-      }
-
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
       // Wait for fonts to be loaded to prevent text-rendering flakiness
