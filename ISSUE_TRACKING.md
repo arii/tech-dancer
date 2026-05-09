@@ -15,9 +15,9 @@
 | 863 | update blog post drafter tool to support adding events and resource cards | 2026-05-07T03:51:16Z | Keep | | Dev productivity tool update. |
 | 982 | UI: Build Event Guide Components | 2026-05-08T23:14:09Z | Abandon | Close | Duplicate of 980. |
 | 981 | Data Layer: Update Event Schema and Parser | 2026-05-08T23:14:09Z | Keep | | Necessary for new feature. |
-| 980 | UI: Build Event Guide Components | 2026-05-08T23:14:09Z | Keep | | Necessary for new feature. |
-| 974 | fix: guard null PR number in `audit_headless.sh` and `td_cli.py` | 2026-05-08T23:14:09Z | Keep | | Important stability fix. |
-| 973 | fix: remove bare `env:` from workflow files | 2026-05-08T23:14:09Z | Abandon | Close | Resolved in recent workflow fixes. |
+| 980 | UI: Build Event Guide Components | 2026-05-08T23:14:09Z | Keep | Merged | Necessary for new feature. |
+| 974 | fix: guard null PR number in `audit_headless.sh` and `td_cli.py` | 2026-05-08T23:14:09Z | Keep | Merged | Important stability fix. |
+| 973 | fix: remove bare `env:` from workflow files | 2026-05-08T23:14:09Z | Abandon | Close (Merged) | Resolved in recent workflow fixes. |
 | 965 | Update `audit` to verify new special-purpose style files | 2026-05-08T23:14:09Z | Keep | | Tooling improvement. |
 | 963 | update post regarding color scheme | 2026-05-08T23:14:09Z | Keep | | Content update. |
 | 903 | Decouple CLI changes | 2026-05-08T23:14:09Z | Keep | | Structural improvement. |
@@ -26,7 +26,7 @@
 | 899 | Move constant definitions outside component body | 2026-05-08T23:17:44Z | Keep | | Performance/Cleanliness. |
 | 898 | Abstract FullPreview Sidebar Components | 2026-05-08T23:17:44Z | Keep | | Architecture improvement. |
 | 897 | Unused imports in HeroSection.tsx | 2026-05-08T23:17:44Z | Abandon | Close | No unused imports found. |
-| 896 | Redundant function definition in td_cli.py | 2026-05-08T23:17:44Z | Keep | | Valid bug (duplicated function). |
+| 896 | Redundant function definition in td_cli.py | 2026-05-08T23:17:44Z | Keep | Merged | Valid bug (duplicated function). |
 | 895 | Remove implicit environment side effects from CLI | 2026-05-08T23:17:44Z | Keep | | Reliability. |
-| 894 | Refactor asset path resolution | 2026-05-08T23:17:44Z | Keep | | Necessary refactor. |
+| 894 | Refactor asset path resolution | 2026-05-08T23:17:44Z | Keep | Merged | Necessary refactor. |
 | 893 | Refactor Wordmark Props to use Enums/Variants | 2026-05-08T23:17:44Z | Keep | | Component improvement. |
