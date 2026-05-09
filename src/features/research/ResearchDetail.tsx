@@ -7,6 +7,7 @@ import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { WCSScraperTool } from './components/WCSScraperTool';
+import ColorPaletteExplorer from '@/features/design/ColorPaletteExplorer';
 import { SEO } from '@/components/SEO';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
@@ -17,6 +18,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
+  'color-palette-explorer': ColorPaletteExplorer,
 };
 
 export default function ResearchDetail() {
