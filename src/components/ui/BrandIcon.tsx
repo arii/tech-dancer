@@ -1,11 +1,16 @@
 import { useId } from 'react';
 import { cn } from '@/lib/utils';
+import { BrandDefs } from './BrandDefs';
 
 interface BrandIconProps {
   className?: string;
   showBackground?: boolean;
 }
 
+/**
+ * Brand icon variant (typically for favicons or small branding elements).
+ * Uses shared BrandDefs for consistency.
+ */
 export function BrandIcon({ className, showBackground = false }: BrandIconProps) {
   const titleId = useId();
   const gradientId = useId();
@@ -22,27 +27,15 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
       <title id={titleId}>BoomTick Icon</title>
       {showBackground && <rect width="64" height="64" rx="12" fill="var(--raw-color-surface)" />}
 
-      <defs>
-        <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="var(--raw-color-accent-brand)" />
-          <stop offset="100%" stopColor="var(--raw-color-accent-purple)" />
-        </linearGradient>
-        <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
+      <BrandDefs gradientId={gradientId} filterId={filterId} stdDeviation={2} />
 
       <g transform="translate(8, 50)">
         <text
           x="0"
           y="0"
-          fontFamily='"Bodoni MT", "Bodoni 72", serif'
-          fontSize="44"
-          fontWeight="700"
-          fontStyle="italic"
           fill="var(--raw-color-text-main)"
           transform="skewX(-8)"
+          className="brand-b-mark-sm"
         >
           B
         </text>

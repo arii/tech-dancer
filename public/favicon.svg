@@ -1,11 +1,17 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="14" fill="#020617"/>
+  <style>
+    .bt-favicon-bg { fill: #020617; --brand-bg: #020617; }
+    .bt-favicon-grad-stop-0 { stop-color: #00CFFF; --brand-accent: var(--raw-color-accent-brand); }
+    .bt-favicon-grad-stop-1 { stop-color: #8B5CF6; --brand-accent-purple: #8b5cf6; }
+    .bt-favicon-text { fill: white; }
+  </style>
+  <rect width="64" height="64" rx="14" class="bt-favicon-bg" fill="#020617"/>
   <defs>
-    <linearGradient id="favicon-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#00CFFF" />
-      <stop offset="100%" stop-color="#8B5CF6" />
+    <linearGradient id="bt-favicon-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" class="bt-favicon-grad-stop-0" stop-color="var(--raw-color-accent-brand)" />
+      <stop offset="100%" class="bt-favicon-grad-stop-1" stop-color="#8b5cf6" />
     </linearGradient>
-    <filter id="favicon-glow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="bt-favicon-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="2" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
@@ -20,6 +26,7 @@
       font-weight="900"
       font-style="italic"
       font-size="44"
+      class="bt-favicon-text"
       fill="white"
       transform="skewX(-8)"
     >B</text>
@@ -29,8 +36,8 @@
       cx="42"
       cy="-14"
       r="8"
-      fill="url(#favicon-grad)"
-      filter="url(#favicon-glow)"
+      fill="url(#bt-favicon-grad)"
+      filter="url(#bt-favicon-glow)"
     />
   </g>
 </svg>

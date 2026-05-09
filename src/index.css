@@ -125,6 +125,24 @@
     background-size: 20px 20px;
   }
 
+  /* Brand SVG Typography */
+  .brand-b-mark {
+    @apply font-serif italic;
+    font-size: 85px;
+    font-weight: 700;
+  }
+  .brand-b-mark-sm {
+    @apply font-serif italic;
+    font-size: 44px;
+    font-weight: 700;
+  }
+  .brand-wordmark-text {
+    @apply font-display;
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+  }
+
   /* Wordmark Utilities */
   .wordmark-base {
     @apply font-extrabold text-white flex items-center tracking-[0.05em];
