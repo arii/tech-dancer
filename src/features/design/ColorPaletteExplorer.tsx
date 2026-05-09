@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Palette, Home, Layout, Type, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
@@ -10,10 +10,10 @@ import { useThemeOverrides } from '@/hooks/useThemeOverrides';
  */
 export default function ColorPaletteExplorer() {
   const [activePalette, setActivePalette] = useState(PALETTES[0]);
-  const { applyOverrides } = useThemeOverrides();
+  const { applyOverrides, clearOverrides } = useThemeOverrides();
 
   const themeOverrides = useMemo(() => {
-    const vars = {
+    return {
       '--raw-color-bg': activePalette.colors.bg,
       '--raw-color-surface': activePalette.colors.surface,
       '--raw-color-surface-alt': activePalette.colors.surfaceAlt,
@@ -29,13 +29,13 @@ export default function ColorPaletteExplorer() {
       '--raw-color-text-dim': activePalette.colors.textDim,
       '--btn-text': getContrastText(activePalette.colors.accent),
     };
-    return vars as React.CSSProperties;
   }, [activePalette]);
 
-  const handlePaletteChange = (p: typeof activePalette) => {
-    setActivePalette(p);
-    applyOverrides(themeOverrides as Record<string, string>);
-  };
+  // Sync theme context with active selection
+  useEffect(() => {
+    applyOverrides(themeOverrides);
+    return () => clearOverrides();
+  }, [themeOverrides, applyOverrides, clearOverrides]);
 
   const accentColorStyle = useMemo(() => ({ color: 'var(--raw-color-accent)' }), []);
   const accentMagentaStyle = useMemo(() => ({ color: 'var(--raw-color-accent-magenta)' }), []);
@@ -43,17 +43,16 @@ export default function ColorPaletteExplorer() {
   const accentPurpleBgStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent-purple)' }), []);
   const accentMagentaBgStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent-magenta)' }), []);
   const accentRawStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent)', color: 'var(--btn-text)' }), []);
-  const accentRawBorderStype = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent)', borderColor: 'var(--raw-color-accent-magenta)' }), []);
+  const accentRawBorderStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent)', borderColor: 'var(--raw-color-accent-magenta)' }), []);
 
   return (
     <Box
       width="full"
       padding={{ base: 4, md: 8 }}
       radius="xl"
-      style={themeOverrides}
       className="transition-all duration-500 bg-bg text-text-body"
     >
-      <Stack gap={8} maxWidth="6xl" marginX="auto">
+      <Stack gap={{ base: 6, md: 8 }} maxWidth="6xl" marginX="auto">
 
         {/* Header */}
         <Stack
@@ -65,7 +64,7 @@ export default function ColorPaletteExplorer() {
           paddingBottom={8}
           className="border-line"
         >
-          <Box>
+          <Box width="full">
             <Stack direction="row" align="center" gap={2} marginBottom={2}>
               <Icon icon={ShieldCheck} size="sm" style={accentColorStyle} />
               <Text
@@ -79,14 +78,14 @@ export default function ColorPaletteExplorer() {
                 WCAG 2.1 Compliant
               </Text>
             </Stack>
-            <Text as="h1" variant="serif" size="5xl" weight="font-bold" color="main" marginBottom={2}>
+            <Text as="h1" variant="serif" size={{ base: "3xl", md: "5xl" }} weight="font-bold" color="main" marginBottom={2}>
               Accessible Victorian
             </Text>
             <Text variant="body" size="lg" color="dim" maxWidth="xl">
               Historical vibrancy met with modern readability standards.
             </Text>
           </Box>
-          <Stack direction="row" wrap gap={2}>
+          <Stack direction={{ base: "col", sm: "row" }} wrap gap={2} width={{ base: "full", sm: "auto" }}>
             {PALETTES.map(p => {
               const isActive = activePalette.id === p.id;
               const buttonStyle = {
@@ -100,14 +99,16 @@ export default function ColorPaletteExplorer() {
                 <Box
                   key={p.id}
                   as="button"
-                  onClick={() => handlePaletteChange(p)}
+                  onClick={() => setActivePalette(p)}
                   paddingX={4}
                   paddingY={2}
                   radius="lg"
                   border={true}
                   display="flex"
                   align="center"
+                  justify={{ base: "center", sm: "start" }}
                   gap={2}
+                  width={{ base: "full", sm: "auto" }}
                   className={`transition-all font-medium ${isActive ? 'ring-2 ring-offset-2 ring-offset-black' : 'opacity-60 hover:opacity-100'}`}
                   style={buttonStyle}
                 >
@@ -124,7 +125,7 @@ export default function ColorPaletteExplorer() {
 
           {/* Swatches Sidebar */}
           <Stack gap={6}>
-            <Box padding={6} radius="2xl" border={true} surface="surface" className="border-line">
+            <Box padding={{ base: 4, md: 6 }} radius="2xl" border={true} surface="surface" className="border-line">
               <Stack gap={4}>
                 <Stack direction="row" align="center" gap={2}>
                   <Icon icon={Palette} size="sm" style={accentColorStyle} />
@@ -168,7 +169,7 @@ export default function ColorPaletteExplorer() {
           {/* Visualization Mockup */}
           <Stack gap={6} span={{ lg: 2 }}>
             <Box
-              padding={8}
+              padding={{ base: 4, sm: 8 }}
               radius="3xl"
               border={true}
               surface="alt"
@@ -184,13 +185,13 @@ export default function ColorPaletteExplorer() {
                    <Icon icon={Home} style={accentNavyStyle} />
                 </Box>
                 <Box>
-                  <Text as="h3" variant="serif" size="2xl" weight="font-bold" color="main">San Francisco Heritage</Text>
+                  <Text as="h3" variant="serif" size={{ base: "xl", md: "2xl" }} weight="font-bold" color="main">San Francisco Heritage</Text>
                   <Text variant="body" size="sm" color="dim" className="opacity-70">Readability Score: 100/100</Text>
                 </Box>
               </Stack>
 
               <Grid cols={{ base: 1, md: 2 }} gap={6}>
-                <Box padding={6} radius="xl" border={true} surface="surface" className="shadow-md border-line">
+                <Box padding={{ base: 4, md: 6 }} radius="xl" border={true} surface="surface" className="shadow-md border-line">
                   <Stack gap={4}>
                     <Stack direction="row" align="center" gap={2}>
                       <Icon icon={Layout} size="sm" color="brand" />
@@ -206,7 +207,7 @@ export default function ColorPaletteExplorer() {
                         paddingX={8}
                         paddingY={3}
                         radius="xl"
-                        className="font-bold shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0"
+                        className="font-bold shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto"
                         style={accentRawStyle}
                       >
                         Click to Explore
@@ -215,7 +216,7 @@ export default function ColorPaletteExplorer() {
                   </Stack>
                 </Box>
 
-                <Box padding={6} radius="xl" border={true} surface="surface" className="shadow-md border-line">
+                <Box padding={{ base: 4, md: 6 }} radius="xl" border={true} surface="surface" className="shadow-md border-line">
                   <Stack gap={4}>
                     <Stack direction="row" align="center" gap={2}>
                       <Icon icon={Type} size="sm" style={accentMagentaStyle} />
@@ -246,7 +247,7 @@ export default function ColorPaletteExplorer() {
                 className="border-line"
               >
                   <Box width={10} height={16} radius="t-lg" className="shadow-sm" style={accentPurpleBgStyle} />
-                  <Box width={14} height={24} radius="t-lg" border="r" className="shadow-md" style={accentRawBorderStype} />
+                  <Box width={14} height={24} radius="t-lg" border="r" className="shadow-md" style={accentRawBorderStyle} />
                   <Box width={24} height={28} radius="t-lg" position="relative" surface="surface" className="shadow-lg">
                     <Box position="absolute" top={4} left={6} right={6} height={8} radius="standard" border={true} className="border-accent-navy" />
                   </Box>
@@ -313,14 +314,14 @@ function Swatch({ label, color, check }: SwatchProps) {
     <Box display="flex" align="center" justify="between" className="group">
       <Stack direction="row" align="center" gap={3}>
         <Box
-          width={10}
-          height={10}
+          width={{ base: 8, sm: 10 }}
+          height={{ base: 8, sm: 10 }}
           radius="lg"
           className="shadow-md border border-white/10 ring-1 ring-black/5"
           style={swatchStyle}
         />
         <Stack gap={0}>
-          <Text variant="sans" size="sm" weight="font-semibold" color="main">{label}</Text>
+          <Text variant="sans" size={{ base: "xs", sm: "sm" }} weight="font-semibold" color="main" clamp={1}>{label}</Text>
           <Text variant="mono" size="micro" color="dim" uppercase tracking="tighter" className="opacity-60">{color}</Text>
         </Stack>
       </Stack>
@@ -329,7 +330,7 @@ function Swatch({ label, color, check }: SwatchProps) {
         paddingY={0.5}
         radius="standard"
         border={true}
-        className="opacity-70 uppercase border-line"
+        className="opacity-70 uppercase border-line whitespace-nowrap"
       >
         <Text variant="mono" color="dim" size="micro">{check}</Text>
       </Box>
