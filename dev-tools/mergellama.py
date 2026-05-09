@@ -8,9 +8,9 @@ import os
 import sys
 import re
 from typing import Optional
-from utils import call_ollama, clean_llm_output, CLIError
+from utils import call_ollama, clean_llm_output, OLLAMA_MODEL
 
-MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+MODEL = OLLAMA_MODEL
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
 CONFLICT_MARKER = "<<<<<<<"
 

@@ -7,7 +7,11 @@ import urllib.request
 import urllib.error
 import urllib.parse
 import re
+import random
 from typing import Optional, Union, List
+
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
@@ -18,7 +22,7 @@ def clean_llm_output(text: str) -> str:
 
 def is_ollama_available(url: Optional[str] = None) -> bool:
     """Checks if Ollama API is reachable."""
-    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    base_url = url or OLLAMA_URL
     if not base_url.endswith("/"):
         base_url += "/"
 
@@ -34,14 +38,14 @@ def is_ollama_available(url: Optional[str] = None) -> bool:
 
 def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3) -> Optional[str]:
     """Unified helper to call local Ollama API with retries using urllib."""
-    base_url = url or os.environ.get("OLLAMA_URL", "http://localhost:11434")
+    base_url = url or OLLAMA_URL
     if not base_url.endswith("/"):
         base_url += "/"
 
     # Use relative path to preserve any sub-path in base_url
     target_url = urllib.parse.urljoin(base_url, "api/generate")
 
-    model = model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+    model = model or OLLAMA_MODEL
 
     data = {
         "model": model,
@@ -60,13 +64,28 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
             with urllib.request.urlopen(req, timeout=120) as response:
                 res_data = json.loads(response.read().decode("utf-8"))
                 return res_data.get("response")
-        except Exception as e:
-            if attempt == max_retries:
-                print(f"API call failed after {max_retries} attempts: {e}", file=sys.stderr)
+        except (urllib.error.HTTPError, urllib.error.URLError) as e:
+            # Retry on 429 (Too Many Requests) or 5xx (Server Error)
+            is_retryable = False
+            if isinstance(e, urllib.error.HTTPError):
+                if e.code == 429 or 500 <= e.code < 600:
+                    is_retryable = True
+            else:
+                # Network/DNS errors are usually retryable
+                is_retryable = True
+
+            if not is_retryable or attempt == max_retries:
+                print(f"API call failed after {attempt} attempts: {e}", file=sys.stderr)
                 return None
-            sleep_time = 2 ** attempt
-            print(f"API call failed ({e}). Retrying in {sleep_time}s...", file=sys.stderr)
+
+            # Exponential backoff with jitter
+            sleep_time = (2 ** attempt) + random.uniform(0, 1)
+            print(f"API call failed ({e}). Retrying in {sleep_time:.2f}s...", file=sys.stderr)
             time.sleep(sleep_time)
+        except Exception as e:
+            # Non-retryable exceptions (e.g. JSON parse error)
+            print(f"Unexpected error during API call: {e}", file=sys.stderr)
+            return None
     return None
 
 class CLIError(Exception):
