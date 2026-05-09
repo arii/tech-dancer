@@ -1,6 +1,6 @@
 import { useEffect, MutableRefObject, useMemo } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
-import { throttle } from "@/hooks/utils/throttle";
+import { throttle } from "@/lib/timing";
 
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];

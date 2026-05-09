@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { throttle } from "@/hooks/utils/throttle";
+import { throttle } from "@/lib/timing";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';

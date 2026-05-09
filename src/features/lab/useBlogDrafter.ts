@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { SITE_METADATA } from '@/config/content';
-import { debounce } from "@/hooks/utils/debounce";
+import { debounce } from "@/lib/timing";
 
 export type ContentType = 'post' | 'event' | 'resource';
 

@@ -5,7 +5,7 @@ import { getHighlightedParts } from '@/lib/utils';
 import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-import { debounce } from "@/hooks/utils/debounce";
+import { debounce } from "@/lib/timing";
 
 
 interface SearchResult {

@@ -33,7 +33,7 @@ export default function Navigation() {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timer.current!);
+      if (timer.current) clearTimeout(timer.current);
     };
   }, []);
 
