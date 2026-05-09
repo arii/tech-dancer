@@ -1,36 +1,56 @@
-// impeccable-ignore-file
 import { useState, useMemo } from 'react';
 import { Palette, Home, Layout, Type, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { PALETTES, getContrastText } from './palette-utils';
+import { useThemeOverrides } from '@/hooks/useThemeOverrides';
 
+/**
+ * Component to demonstrate dynamic theme switching for the "Accessible Victorian" research tool.
+ */
 export default function ColorPaletteExplorer() {
   const [activePalette, setActivePalette] = useState(PALETTES[0]);
+  const { applyOverrides } = useThemeOverrides();
 
-  const cssVars = useMemo(() => ({
-    '--raw-color-bg': activePalette.colors.bg,
-    '--raw-color-surface': activePalette.colors.surface,
-    '--raw-color-surface-alt': activePalette.colors.surfaceAlt,
-    '--raw-color-line': activePalette.colors.line,
-    '--raw-color-accent': activePalette.colors.accent,
-    '--raw-color-accent-purple': activePalette.colors.accentPurple,
-    '--raw-color-accent-magenta': activePalette.colors.accentMagenta,
-    '--raw-color-accent-shadow': activePalette.colors.accentShadow,
-    '--raw-color-accent-navy': activePalette.colors.accentNavy,
-    '--raw-color-accent-brand': activePalette.colors.accentBrand,
-    '--raw-color-text-main': activePalette.colors.textMain,
-    '--raw-color-text-body': activePalette.colors.textBody,
-    '--raw-color-text-dim': activePalette.colors.textDim,
-    '--btn-text': getContrastText(activePalette.colors.accent),
-  }), [activePalette]);
+  const themeOverrides = useMemo(() => {
+    const vars = {
+      '--raw-color-bg': activePalette.colors.bg,
+      '--raw-color-surface': activePalette.colors.surface,
+      '--raw-color-surface-alt': activePalette.colors.surfaceAlt,
+      '--raw-color-line': activePalette.colors.line,
+      '--raw-color-accent': activePalette.colors.accent,
+      '--raw-color-accent-purple': activePalette.colors.accentPurple,
+      '--raw-color-accent-magenta': activePalette.colors.accentMagenta,
+      '--raw-color-accent-shadow': activePalette.colors.accentShadow,
+      '--raw-color-accent-navy': activePalette.colors.accentNavy,
+      '--raw-color-accent-brand': activePalette.colors.accentBrand,
+      '--raw-color-text-main': activePalette.colors.textMain,
+      '--raw-color-text-body': activePalette.colors.textBody,
+      '--raw-color-text-dim': activePalette.colors.textDim,
+      '--btn-text': getContrastText(activePalette.colors.accent),
+    };
+    return vars as React.CSSProperties;
+  }, [activePalette]);
+
+  const handlePaletteChange = (p: typeof activePalette) => {
+    setActivePalette(p);
+    applyOverrides(themeOverrides as Record<string, string>);
+  };
+
+  const accentColorStyle = useMemo(() => ({ color: 'var(--raw-color-accent)' }), []);
+  const accentMagentaStyle = useMemo(() => ({ color: 'var(--raw-color-accent-magenta)' }), []);
+  const accentNavyStyle = useMemo(() => ({ color: 'var(--raw-color-accent-navy)' }), []);
+  const accentPurpleBgStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent-purple)' }), []);
+  const accentMagentaBgStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent-magenta)' }), []);
+  const accentRawStyle = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent)', color: 'var(--btn-text)' }), []);
+  const accentRawBorderStype = useMemo(() => ({ backgroundColor: 'var(--raw-color-accent)', borderColor: 'var(--raw-color-accent-magenta)' }), []);
 
   return (
     <Box
       width="full"
       padding={{ base: 4, md: 8 }}
       radius="xl"
-      style={cssVars as React.CSSProperties}
+      style={themeOverrides}
       className="transition-all duration-500 bg-bg text-text-body"
     >
       <Stack gap={8} maxWidth="6xl" marginX="auto">
@@ -47,14 +67,14 @@ export default function ColorPaletteExplorer() {
         >
           <Box>
             <Stack direction="row" align="center" gap={2} marginBottom={2}>
-              <Icon icon={ShieldCheck} size="sm" style={{ color: 'var(--raw-color-accent)' }} />
+              <Icon icon={ShieldCheck} size="sm" style={accentColorStyle} />
               <Text
                 variant="mono"
                 size="xs"
                 weight="font-bold"
                 uppercase
                 tracking="widest"
-                style={{ color: 'var(--raw-color-accent)' }}
+                style={accentColorStyle}
               >
                 WCAG 2.1 Compliant
               </Text>
@@ -67,30 +87,35 @@ export default function ColorPaletteExplorer() {
             </Text>
           </Box>
           <Stack direction="row" wrap gap={2}>
-            {PALETTES.map(p => (
-              <Box
-                key={p.id}
-                as="button"
-                onClick={() => setActivePalette(p)}
-                paddingX={4}
-                paddingY={2}
-                radius="lg"
-                border={true}
-                display="flex"
-                align="center"
-                gap={2}
-                className={`transition-all font-medium ${activePalette.id === p.id ? 'ring-2 ring-offset-2 ring-offset-black' : 'opacity-60 hover:opacity-100'}`}
-                style={{
-                  backgroundColor: activePalette.id === p.id ? 'var(--raw-color-accent)' : 'var(--raw-color-surface)',
-                  color: activePalette.id === p.id ? 'var(--btn-text)' : 'var(--raw-color-text-main)',
-                  borderColor: 'var(--raw-color-line)',
-                  '--tw-ring-color': 'var(--raw-color-accent)'
-                } as React.CSSProperties}
-              >
-                {activePalette.id === p.id && <Icon icon={CheckCircle2} size="sm" />}
-                <Text variant="sans" weight="font-medium">{p.name}</Text>
-              </Box>
-            ))}
+            {PALETTES.map(p => {
+              const isActive = activePalette.id === p.id;
+              const buttonStyle = {
+                backgroundColor: isActive ? 'var(--raw-color-accent)' : 'var(--raw-color-surface)',
+                color: isActive ? 'var(--btn-text)' : 'var(--raw-color-text-main)',
+                borderColor: 'var(--raw-color-line)',
+                '--tw-ring-color': 'var(--raw-color-accent)'
+              } as React.CSSProperties;
+
+              return (
+                <Box
+                  key={p.id}
+                  as="button"
+                  onClick={() => handlePaletteChange(p)}
+                  paddingX={4}
+                  paddingY={2}
+                  radius="lg"
+                  border={true}
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  className={`transition-all font-medium ${isActive ? 'ring-2 ring-offset-2 ring-offset-black' : 'opacity-60 hover:opacity-100'}`}
+                  style={buttonStyle}
+                >
+                  {isActive && <Icon icon={CheckCircle2} size="sm" />}
+                  <Text variant="sans" weight="font-medium">{p.name}</Text>
+                </Box>
+              );
+            })}
           </Stack>
         </Stack>
 
@@ -102,14 +127,14 @@ export default function ColorPaletteExplorer() {
             <Box padding={6} radius="2xl" border={true} surface="surface" className="border-line">
               <Stack gap={4}>
                 <Stack direction="row" align="center" gap={2}>
-                  <Icon icon={Palette} size="sm" style={{ color: 'var(--raw-color-accent)' }} />
+                  <Icon icon={Palette} size="sm" style={accentColorStyle} />
                   <Text
                     variant="mono"
                     size="xs"
                     weight="font-bold"
                     uppercase
                     tracking="widest"
-                    style={{ color: 'var(--raw-color-accent)' }}
+                    style={accentColorStyle}
                   >
                     Color Audit
                   </Text>
@@ -155,8 +180,8 @@ export default function ColorPaletteExplorer() {
               <Box position="absolute" inset="top" height={2} className="bg-accent" />
 
               <Stack direction="row" align="center" gap={4} marginBottom={8}>
-                <Box padding={3} radius="xl" className="shadow-lg" style={{ backgroundColor: 'var(--raw-color-accent-purple)' }}>
-                   <Icon icon={Home} style={{ color: 'var(--raw-color-accent-navy)' }} />
+                <Box padding={3} radius="xl" className="shadow-lg" style={accentPurpleBgStyle}>
+                   <Icon icon={Home} style={accentNavyStyle} />
                 </Box>
                 <Box>
                   <Text as="h3" variant="serif" size="2xl" weight="font-bold" color="main">San Francisco Heritage</Text>
@@ -174,7 +199,7 @@ export default function ColorPaletteExplorer() {
                       </Text>
                     </Stack>
                     <Box height={2} width="2/3" radius="full" className="bg-accent-purple" />
-                    <Box height={2} width="full" radius="full" className="opacity-60" style={{ backgroundColor: 'var(--raw-color-accent-magenta)' }} />
+                    <Box height={2} width="full" radius="full" className="opacity-60" style={accentMagentaBgStyle} />
                     <Box paddingTop={2}>
                       <Box
                         as="button"
@@ -182,7 +207,7 @@ export default function ColorPaletteExplorer() {
                         paddingY={3}
                         radius="xl"
                         className="font-bold shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0"
-                        style={{ backgroundColor: 'var(--raw-color-accent)', color: 'var(--btn-text)' } as React.CSSProperties}
+                        style={accentRawStyle}
                       >
                         Click to Explore
                       </Box>
@@ -193,8 +218,8 @@ export default function ColorPaletteExplorer() {
                 <Box padding={6} radius="xl" border={true} surface="surface" className="shadow-md border-line">
                   <Stack gap={4}>
                     <Stack direction="row" align="center" gap={2}>
-                      <Icon icon={Type} size="sm" style={{ color: 'var(--raw-color-accent-magenta)' }} />
-                      <Text variant="mono" size="xs" weight="font-bold" className="uppercase tracking-wider" style={{ color: 'var(--raw-color-accent-magenta)' }}>
+                      <Icon icon={Type} size="sm" style={accentMagentaStyle} />
+                      <Text variant="mono" size="xs" weight="font-bold" className="uppercase tracking-wider" style={accentMagentaStyle}>
                         Typography AA
                       </Text>
                     </Stack>
@@ -220,46 +245,53 @@ export default function ColorPaletteExplorer() {
                 height={32}
                 className="border-line"
               >
-                  <Box width={10} height={16} radius="t-lg" className="shadow-sm" style={{ backgroundColor: 'var(--raw-color-accent-purple)' }} />
-                  <Box width={14} height={24} radius="t-lg" border="r" className="shadow-md" style={{ backgroundColor: 'var(--raw-color-accent)', borderColor: 'var(--raw-color-accent-magenta)' }} />
+                  <Box width={10} height={16} radius="t-lg" className="shadow-sm" style={accentPurpleBgStyle} />
+                  <Box width={14} height={24} radius="t-lg" border="r" className="shadow-md" style={accentRawBorderStype} />
                   <Box width={24} height={28} radius="t-lg" position="relative" surface="surface" className="shadow-lg">
                     <Box position="absolute" top={4} left={6} right={6} height={8} radius="standard" border={true} className="border-accent-navy" />
                   </Box>
                   <Box width={14} height={20} radius="t-lg" className="shadow-md bg-accent-brand" />
-                  <Box width={10} height={12} radius="t-lg" className="shadow-sm" style={{ backgroundColor: 'var(--raw-color-accent-magenta)' }} />
+                  <Box width={10} height={12} radius="t-lg" className="shadow-sm" style={accentMagentaBgStyle} />
               </Box>
             </Box>
 
             {/* Contrast Grid */}
             <Grid cols={{ base: 2, md: 4 }} gap={4}>
-               {(['accent', 'accentPurple', 'accentMagenta', 'accentBrand'] as const).map(key => (
-                 <Stack key={key} padding={4} radius="xl" border={true} surface="surface" align="center" gap={3} className="border-line">
-                   <Box
-                      height={10}
-                      width={10}
-                      radius="full"
-                      display="flex"
-                      align="center"
-                      justify="center"
-                      className="shadow-inner font-bold"
-                      size="micro"
-                      style={{
-                        backgroundColor: `var(--raw-color-${key === 'accent' ? 'accent' : key.replace(/[A-Z]/g, m => '-' + m.toLowerCase())})`,
-                        color: getContrastText(activePalette.colors[key])
-                      } as React.CSSProperties}
-                   >
-                     AA
-                   </Box>
-                   <Box
-                      height={1.5}
-                      width="full"
-                      radius="full"
-                      style={{
-                        backgroundColor: `var(--raw-color-${key === 'accent' ? 'accent' : key.replace(/[A-Z]/g, m => '-' + m.toLowerCase())})`
-                      } as React.CSSProperties}
-                   />
-                 </Stack>
-               ))}
+               {(['accent', 'accentPurple', 'accentMagenta', 'accentBrand'] as const).map(key => {
+                 const colorValue = activePalette.colors[key];
+                 const kebabKey = key === 'accent' ? 'accent' : key.replace(/[A-Z]/g, m => '-' + m.toLowerCase());
+                 const contrastTextStyle = {
+                    backgroundColor: `var(--raw-color-${kebabKey})`,
+                    color: getContrastText(colorValue)
+                 };
+                 const colorStripStyle = {
+                    backgroundColor: `var(--raw-color-${kebabKey})`
+                 };
+
+                 return (
+                   <Stack key={key} padding={4} radius="xl" border={true} surface="surface" align="center" gap={3} className="border-line">
+                     <Box
+                        height={10}
+                        width={10}
+                        radius="full"
+                        display="flex"
+                        align="center"
+                        justify="center"
+                        className="shadow-inner font-bold"
+                        size="micro"
+                        style={contrastTextStyle}
+                     >
+                       AA
+                     </Box>
+                     <Box
+                        height={1.5}
+                        width="full"
+                        radius="full"
+                        style={colorStripStyle}
+                     />
+                   </Stack>
+                 );
+               })}
             </Grid>
           </Stack>
         </Grid >
@@ -268,7 +300,15 @@ export default function ColorPaletteExplorer() {
   );
 }
 
-function Swatch({ label, color, check }: { label: string; color: string; check: string }) {
+interface SwatchProps {
+  label: string;
+  color: string;
+  check: string;
+}
+
+function Swatch({ label, color, check }: SwatchProps) {
+  const swatchStyle = useMemo(() => ({ backgroundColor: color }), [color]);
+
   return (
     <Box display="flex" align="center" justify="between" className="group">
       <Stack direction="row" align="center" gap={3}>
@@ -277,7 +317,7 @@ function Swatch({ label, color, check }: { label: string; color: string; check: 
           height={10}
           radius="lg"
           className="shadow-md border border-white/10 ring-1 ring-black/5"
-          style={{ backgroundColor: color }}
+          style={swatchStyle}
         />
         <Stack gap={0}>
           <Text variant="sans" size="sm" weight="font-semibold" color="main">{label}</Text>
