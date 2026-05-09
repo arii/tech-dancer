@@ -355,7 +355,15 @@ def handle_update_issues(args):
     if args.json: print(json.dumps({"status": "success", "updates": updates}, indent=2))
 
 def handle_audit_pr(args):
-    pr_num = args.pr_number; review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+    pr_num = args.pr_number
+    if not pr_num or pr_num in ["null", "None"]:
+        raise CLIError(f"Invalid PR number: {pr_num}")
+    try:
+        int(pr_num)
+    except ValueError:
+        raise CLIError(f"Invalid PR number, must be an integer: {pr_num}")
+
+    review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
     ctx_path = os.path.join(review_dir, f"pr-context-{pr_num}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_num}.md")
 
     res = {"pr": pr_num, "files": {}}
