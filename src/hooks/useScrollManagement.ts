@@ -1,5 +1,6 @@
-import { useEffect, MutableRefObject } from 'react';
+import { useEffect, MutableRefObject, useMemo } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
+import { throttle } from "@/hooks/utils/throttle";
 
 const SWIPE_THRESHOLD = 50;
 const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
@@ -11,6 +12,11 @@ export function useScrollManagement(
   const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
   const navigate = useNavigate();
+
+  const throttledNavigate = useMemo(
+    () => throttle((route: string) => navigate(route), 500),
+    [navigate]
+  );
 
   // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
@@ -137,7 +143,7 @@ export function useScrollManagement(
         }
 
         if (targetRoute) {
-          navigate(targetRoute);
+          throttledNavigate(targetRoute);
           // Optional: announce to screen readers
           const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
           const announcer = document.getElementById('route-announcer');

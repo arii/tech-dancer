@@ -1,6 +1,6 @@
-
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useMemo } from "react";
+import { throttle } from "@/hooks/utils/throttle";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import {
@@ -251,19 +251,11 @@ export function useUXAuditor() {
     },
   });
 
-  const isThrottled = useRef(false);
 
-  const runUXAudit = useCallback((targetUrl: string) => {
-    if (isThrottled.current) return;
-
-    isThrottled.current = true;
-    auditMutation.mutate(targetUrl);
-
-    setTimeout(() => {
-      isThrottled.current = false;
-    }, 2000);
-  }, [auditMutation]);
-
+  const runUXAudit = useMemo(
+    () => throttle((targetUrl: string) => auditMutation.mutate(targetUrl), 2000),
+    [auditMutation]
+  );
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
     const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;

@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { SITE_METADATA } from '@/config/content';
+import { debounce } from "@/hooks/utils/debounce";
 
 export type ContentType = 'post' | 'event' | 'resource';
 
@@ -10,7 +10,6 @@ export interface BaseDraftData {
   excerpt: string;
   author: string;
   date: string;
-  // Common fields that were moved to Base in some versions
   affiliateLink?: string;
   commentary?: string;
 }
@@ -60,7 +59,6 @@ const STORAGE_KEY = 'tech-dancer-blog-draft';
 const HISTORY_KEY = 'tech-dancer-blog-history';
 const DEBOUNCE_WAIT = 1000; // 1 second
 
-// Safe ID generator with fallback for legacy browsers
 const generateId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
@@ -93,49 +91,51 @@ const DEFAULT_DATA: DraftData = {
 
 export function useBlogDrafter() {
   const [data, setData] = useState<DraftData>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
         const parsed = JSON.parse(saved);
         return { ...DEFAULT_DATA, ...parsed };
-      } catch {
-        // Silent fail per audit recommendation
       }
+    } catch {
+      // Silent fail
     }
     return DEFAULT_DATA;
   });
 
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
-    const saved = localStorage.getItem(HISTORY_KEY);
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (saved) {
         return JSON.parse(saved);
-      } catch {
-        // Silent fail per audit recommendation
       }
+    } catch {
+      // Silent fail
     }
     return [];
   });
 
-  // Debounced persistence for manual edits
-  const saveTimer = useRef<NodeJS.Timeout | null>(null);
-
-  const debouncedSave = useCallback((nextData: DraftData) => {
-    if (saveTimer.current) {
-      clearTimeout(saveTimer.current);
-    }
-    saveTimer.current = setTimeout(() => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
-    }, DEBOUNCE_WAIT);
-  }, []);
+  const debouncedSave = useMemo(
+    () => debounce((nextData: DraftData) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
+      } catch {
+        // Silent fail
+      }
+    }, DEBOUNCE_WAIT),
+    []
+  );
 
   useEffect(() => {
     debouncedSave(data);
   }, [data, debouncedSave]);
 
-  // History persistence
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch {
+      // Silent fail
+    }
   }, [history]);
 
   const saveToHistory = useCallback(() => {
@@ -228,7 +228,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     const cleanAndParseJSON = (str: string) => {
       try {
         let clean = str.trim();
-        // Remove markdown code blocks if present
         clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
         clean = clean.trim();
         return JSON.parse(clean);
@@ -241,7 +240,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     if (!parsed) return false;
 
     const normalize = (val: unknown, depth = 0): unknown => {
-      if (depth > 5) return val; // Safety limit
+      if (depth > 5) return val;
       if (typeof val === 'string') return val.replace(/\\n/g, '\n');
       if (Array.isArray(val)) return val.map(v => normalize(v, depth + 1));
       if (val !== null && typeof val === 'object') {
