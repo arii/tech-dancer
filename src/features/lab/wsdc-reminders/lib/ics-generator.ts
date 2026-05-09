@@ -1,35 +1,52 @@
 import { TimelineItem } from '../types';
 
+const ESCAPE_MAP: Record<string, string> = {
+  '\\': '\\\\',
+  ',': '\\,',
+  ';': '\\;',
+  '\n': '\\n',
+  '\r': '',
+};
+
 /**
  * Escapes special characters for iCalendar format as per RFC 5545.
  */
 function escapeICS(str: string): string {
   if (!str) return "";
-  return str
-    .replace(/\\/g, "\\\\")
-    .replace(/,/g, "\\,")
-    .replace(/;/g, "\\;")
-    .replace(/\r?\n/g, "\\n");
+  return str.replace(/[\\,;\n\r]/g, (match) => ESCAPE_MAP[match] ?? "");
 }
 
 /**
  * Folds lines longer than 75 characters as per RFC 5545.
+ * Limits lines to 75 octets.
  */
 function foldLine(line: string): string {
-  const MAX_LENGTH = 75;
-  if (line.length <= MAX_LENGTH) return line;
+  const MAX_OCTETS = 75;
+  const encoder = new TextEncoder();
 
-  let result = line.substring(0, MAX_LENGTH);
-  let remaining = line.substring(MAX_LENGTH);
+  if (encoder.encode(line).length <= MAX_OCTETS) return line;
 
-  while (remaining.length > 0) {
-    result += "\r\n ";
-    // Next chunk should be at most 74 chars because of the leading space
-    const chunkSize = MAX_LENGTH - 1;
-    result += remaining.substring(0, chunkSize);
-    remaining = remaining.substring(chunkSize);
+  let result = "";
+  let currentLineOctets = 0;
+  let isFirstLine = true;
+  let currentLine = "";
+
+  for (const char of line) {
+    const charOctets = encoder.encode(char).length;
+    const limit = isFirstLine ? MAX_OCTETS : MAX_OCTETS - 1;
+
+    if (currentLineOctets + charOctets > limit) {
+      result += currentLine + "\r\n ";
+      currentLine = char;
+      currentLineOctets = charOctets;
+      isFirstLine = false;
+    } else {
+      currentLine += char;
+      currentLineOctets += charOctets;
+    }
   }
 
+  result += currentLine;
   return result;
 }
 
