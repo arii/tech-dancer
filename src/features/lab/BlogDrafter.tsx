@@ -1,19 +1,14 @@
 import { useState, ChangeEvent } from 'react';
-import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye, Calendar, Package, PenTool } from 'lucide-react';
+import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
-import { useBlogDrafter, ContentType } from './useBlogDrafter';
+import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
-
-const types: { id: ContentType; label: string; icon: React.ElementType }[] = [
-  { id: 'post', label: 'BLOG POST', icon: PenTool },
-  { id: 'event', label: 'EVENT', icon: Calendar },
-  { id: 'resource', label: 'RESOURCE', icon: Package },
-];
+import { types, EVENT_TYPES } from './constants';
 
 export function BlogDrafter() {
   const {
@@ -180,11 +175,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   className={cn(inputs.base, "appearance-none")}
                 >
                   {data.type === 'event' ? (
-                     <>
-                       <option value="WSDC Registry Event">WSDC Registry Event</option>
-                       <option value="Local Event">Local Event</option>
-                       <option value="Workshop">Workshop</option>
-                     </>
+                    EVENT_TYPES.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))
                   ) : CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
                   ))}
