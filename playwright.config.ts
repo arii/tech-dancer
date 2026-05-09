@@ -15,6 +15,12 @@ export default defineConfig({
     baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
     trace: 'on-first-retry',
   },
+  expect: {
+    // Enforce strict 2% pixel threshold globally for visual regression
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.02,
+    },
+  },
   projects: [
     {
       name: 'chromium',
