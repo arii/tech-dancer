@@ -355,13 +355,22 @@ def handle_update_issues(args):
     if args.json: print(json.dumps({"status": "success", "updates": updates}, indent=2))
 
 def handle_audit_pr(args):
-    pr_num = args.pr_number; review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+    pr_num = args.pr_number
+    if not pr_num or str(pr_num).strip() in ('null', '', 'None'):
+        raise CLIError("Invalid PR number: received null/empty value. Check caller input.")
+
+    try:
+        int_pr_num = int(pr_num)
+    except (ValueError, TypeError):
+        raise CLIError(f"Invalid PR number format: '{pr_num}'. Must be an integer.")
+
+    review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
     ctx_path = os.path.join(review_dir, f"pr-context-{pr_num}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_num}.md")
 
     res = {"pr": pr_num, "files": {}}
 
     if args.fetch:
-        repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(int(pr_num))
+        repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(int_pr_num)
         title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
         context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## Files Changed"]
         for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
