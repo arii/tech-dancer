@@ -3,7 +3,6 @@ import path from 'path';
 import sharp from 'sharp';
 
 const TOKENS_PATH = path.join(process.cwd(), 'src/styles/tokens.css');
-const LOGO_SVG_PATH = path.join(process.cwd(), 'boomtick_logo.svg');
 const FAVICON_SVG_PATH = path.join(process.cwd(), 'public/favicon.svg');
 const PWA_192_PATH = path.join(process.cwd(), 'public/pwa-192x192.png');
 const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
@@ -12,6 +11,7 @@ interface DesignTokens {
   heroAccent: string | null;
   accentPurple: string | null;
   rawColorBg: string | null;
+  mutedText: string | null;
 }
 
 function getTokens(): DesignTokens | null {
@@ -27,78 +27,62 @@ function getTokens(): DesignTokens | null {
     return match ? match[1].trim() : null;
   };
 
+  // Note: --logo-muted-text is defined in tokens.css under a different :root block or computed.
+  // We'll use a fallback if not found directly.
   return {
-    heroAccent: extract('--hero-accent'),
+    heroAccent: extract('--raw-color-accent-brand'),
     accentPurple: extract('--raw-color-accent-purple'),
     rawColorBg: extract('--raw-color-bg'),
+    mutedText: 'rgba(255,255,255,0.6)', // Fallback for sharp generation
   };
 }
 
 /**
- * Safely updates SVG content by targeting specific color attributes and style variables.
+ * Injects a temporary <style> block into the SVG content for PNG rendering.
+ * This allows Sharp to render the SVG with the correct brand colors without
+ * needing the styles to be present in the source SVG file.
  */
-function updateSVGContent(content: string, tokenMap: Record<string, string | null>) {
-  let updatedContent = content;
+function prepareSVGForRendering(content: string, tokens: DesignTokens) {
+  const styleBlock = `
+    <style>
+      .brand-stop-accent { stop-color: ${tokens.heroAccent}; }
+      .brand-stop-purple { stop-color: ${tokens.accentPurple}; }
+      .brand-text-white { fill: white; }
+      .brand-text-accent { fill: ${tokens.heroAccent}; }
+      .brand-text-muted { fill: ${tokens.mutedText}; }
+      .brand-bg-rect { fill: ${tokens.rawColorBg}; }
+      .brand-b-mark, .brand-b-mark-sm {
+        fill: white;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 900;
+      }
+      .brand-wordmark-text {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-weight: 800;
+      }
+    </style>
+  `;
 
-  for (const [variableName, newValue] of Object.entries(tokenMap)) {
-    if (!newValue) continue;
-
-    // Find the current value of the variable in the SVG's <style> block
-    const varRegex = new RegExp(`${variableName}:\\s*([^;]+);`);
-    const match = updatedContent.match(varRegex);
-
-    if (match) {
-      const oldValue = match[1].trim();
-      const escapedOldValue = oldValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-      // Update the variable itself in the style block
-      updatedContent = updatedContent.replace(varRegex, `${variableName}: ${newValue};`);
-
-      // Targeted replacement in attributes to avoid corrupting path data or other non-color strings
-      // Matches fill="#OLD", stop-color="#OLD", stroke="#OLD"
-      const attrRegex = new RegExp(`(fill|stop-color|stroke)="(${escapedOldValue})"`, 'gi');
-      updatedContent = updatedContent.replace(attrRegex, `$1="${newValue}"`);
-    }
+  if (content.includes('</defs>')) {
+    return content.replace('</defs>', `${styleBlock}</defs>`);
+  } else {
+    return content.replace('>', `>${styleBlock}`);
   }
-
-  return updatedContent;
 }
 
-async function updateLogo(tokens: DesignTokens) {
-  if (!fs.existsSync(LOGO_SVG_PATH)) {
-    console.warn(`Warning: Logo SVG not found at ${LOGO_SVG_PATH}`);
-    return;
-  }
-
-  const content = fs.readFileSync(LOGO_SVG_PATH, 'utf-8');
-  const updatedContent = updateSVGContent(content, {
-    '--brand-accent-hero': tokens.heroAccent,
-    '--brand-accent-purple': tokens.accentPurple
-  });
-
-  fs.writeFileSync(LOGO_SVG_PATH, updatedContent);
-  console.log(`Updated ${LOGO_SVG_PATH}`);
-}
-
-async function updateFaviconAndPNGs(tokens: DesignTokens) {
+async function generatePNGs(tokens: DesignTokens) {
   if (!fs.existsSync(FAVICON_SVG_PATH)) {
     console.warn(`Warning: Favicon SVG not found at ${FAVICON_SVG_PATH}`);
     return;
   }
 
+  console.log('Generating PNG assets from favicon.svg...');
   const content = fs.readFileSync(FAVICON_SVG_PATH, 'utf-8');
-  const updatedContent = updateSVGContent(content, {
-    '--brand-bg': tokens.rawColorBg,
-    '--brand-accent': tokens.heroAccent,
-    '--brand-accent-purple': tokens.accentPurple
-  });
+  const renderableContent = prepareSVGForRendering(content, tokens);
 
-  fs.writeFileSync(FAVICON_SVG_PATH, updatedContent);
-  console.log(`Updated ${FAVICON_SVG_PATH}`);
-
-  // Generate PNGs
   try {
-    const svgBuffer = Buffer.from(updatedContent);
+    const svgBuffer = Buffer.from(renderableContent);
 
     await sharp(svgBuffer)
       .resize(192, 192)
@@ -122,8 +106,12 @@ async function main() {
 
   console.log('Syncing assets with tokens:', tokens);
 
-  await updateLogo(tokens);
-  await updateFaviconAndPNGs(tokens);
+  // Since SVGs now use global CSS classes, we no longer need to update
+  // the SVG files themselves on disk when tokens change.
+  // They will inherit colors from index.css in the app.
+  // We only need to ensure PNGs are regenerated with the new token values.
+
+  await generatePNGs(tokens);
 }
 
 main().catch(console.error);

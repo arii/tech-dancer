@@ -33,7 +33,6 @@ export function Logo({ className, showText = true }: LogoProps) {
         <text
           x="0"
           y="0"
-          fill="currentColor"
           transform="skewX(-8)"
           className="brand-b-mark"
         >
@@ -54,10 +53,11 @@ export function Logo({ className, showText = true }: LogoProps) {
         <text
           x="125"
           y="78"
-          fill="currentColor"
           className="brand-wordmark-text"
         >
-          boom<tspan fill="var(--raw-color-accent-brand)">tick</tspan><tspan fill="var(--logo-muted-text)" fontWeight="300">.blog</tspan>
+          <tspan className="brand-text-white">boom</tspan>
+          <tspan className="brand-text-accent">tick</tspan>
+          <tspan className="brand-text-muted" fontWeight="300">.blog</tspan>
         </text>
       )}
     </svg>

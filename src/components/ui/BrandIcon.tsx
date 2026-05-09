@@ -33,7 +33,6 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
         <text
           x="0"
           y="0"
-          fill="var(--raw-color-text-main)"
           transform="skewX(-8)"
           className="brand-b-mark-sm"
         >

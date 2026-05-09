@@ -125,16 +125,18 @@
     background-size: 20px 20px;
   }
 
-  /* Brand SVG Typography */
+  /* Brand SVG Typography & Colors */
   .brand-b-mark {
     @apply font-serif italic;
     font-size: 85px;
-    font-weight: 700;
+    font-weight: 900;
+    fill: white;
   }
   .brand-b-mark-sm {
     @apply font-serif italic;
     font-size: 44px;
-    font-weight: 700;
+    font-weight: 900;
+    fill: white;
   }
   .brand-wordmark-text {
     @apply font-display;
@@ -142,6 +144,13 @@
     font-weight: 800;
     letter-spacing: -1.5px;
   }
+  .brand-text-white { fill: white; }
+  .brand-text-accent { fill: var(--raw-color-accent-brand); }
+  .brand-text-muted { fill: var(--logo-muted-text); }
+
+  .brand-stop-accent { stop-color: var(--raw-color-accent-brand); }
+  .brand-stop-purple { stop-color: var(--raw-color-accent-purple); }
+  .brand-bg-rect { fill: var(--raw-color-bg); }
 
   /* Wordmark Utilities */
   .wordmark-base {

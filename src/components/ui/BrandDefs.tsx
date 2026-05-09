@@ -13,8 +13,8 @@ export function BrandDefs({ gradientId, filterId, stdDeviation = 3 }: BrandDefsP
   return (
     <defs>
       <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="var(--raw-color-accent-brand)" />
-        <stop offset="100%" stopColor="var(--raw-color-accent-purple)" />
+        <stop offset="0%" className="brand-stop-accent" />
+        <stop offset="100%" className="brand-stop-purple" />
       </linearGradient>
       <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation={stdDeviation} result="blur" />
