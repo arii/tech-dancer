@@ -17,13 +17,6 @@ export default function EventGuide() {
     enabled: !!slug
   });
 
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   if (isLoading) {
     return (
       <Box padding="panel" textAlign="center">
@@ -77,8 +70,8 @@ export default function EventGuide() {
             {tabs.map((tab) => (
               <Box
                 key={tab.id}
-                as="button"
-                onClick={() => scrollToSection(tab.id)}
+                as="a"
+                href={`#${tab.id}`}
                 paddingY={4}
                 className="group relative cursor-pointer"
               >
