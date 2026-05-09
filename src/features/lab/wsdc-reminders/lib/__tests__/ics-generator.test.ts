@@ -60,10 +60,6 @@ describe('ics-generator', () => {
 
   it('should fold based on octets, not string length', () => {
     // 🌟 is 4 bytes in UTF-8
-    // "SUMMARY:Action: " is 16 bytes
-    // 75 - 16 = 59 bytes available for the rest of the line
-    // 59 / 4 = 14.75 -> 14 emojis (56 bytes) + 3 bytes space? no, characters are not split.
-    // 14 emojis = 56 bytes. 16 + 56 = 72 bytes. Next emoji would make it 76.
 
     const emojis = "🌟".repeat(20);
     const items: TimelineItem[] = [
@@ -85,5 +81,28 @@ describe('ics-generator', () => {
     const secondLineEmojis = "🌟".repeat(7);
 
     expect(ics).toContain(`SUMMARY:WCS Action: ${firstLineEmojis}\r\n ${secondLineEmojis} (Event)`);
+  });
+
+  it('should not split multi-byte characters at the 75-octet boundary', () => {
+    // Exact boundary test
+    // "SUMMARY:WCS Action: " is 20 bytes.
+    // 75 - 20 = 55 bytes available.
+    // 54 bytes of 'A' + 4-byte emoji = 78 bytes (must fold before emoji).
+
+    const label = "A".repeat(54) + "🌟";
+    const items: TimelineItem[] = [
+      {
+        id: '5',
+        label: label,
+        description: 'Boundary',
+        date: new Date('2023-01-01T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('Event', items);
+
+    // SUMMARY:WCS Action: (20) + A*54 (54) = 74 bytes.
+    // 74 + 4 (emoji) = 78 > 75.
+    // Should fold after the 54th 'A'.
+    expect(ics).toContain(`SUMMARY:WCS Action: ${"A".repeat(54)}\r\n 🌟 (Event)`);
   });
 });
