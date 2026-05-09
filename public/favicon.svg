@@ -3,6 +3,7 @@
     :root {
       --brand-bg: #020617;
       --brand-accent: #22d3ee;
+      --brand-accent-hero: #22d3ee;
       --brand-accent-purple: #8b5cf6;
     }
   </style>

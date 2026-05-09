@@ -1,6 +1,8 @@
 <svg viewBox="0 0 450 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
   <style>
     :root {
+      --brand-bg: #020617;
+      --brand-accent: #22d3ee;
       --brand-accent-hero: #22d3ee;
       --brand-accent-purple: #8b5cf6;
     }
