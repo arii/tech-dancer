@@ -23,14 +23,21 @@ A step is only complete when its output file exists and contains non-placeholder
 
 // turbo-all
 
-0. **Pre-flight validation**:
+0. **Environment Setup & Pre-flight validation**:
 ```bash
+bash dev-tools/verify.sh
+source .venv/bin/activate
+export PYTHONPATH=$(pwd)/dev-tools
+
+td-cli gh conflicts --pr PR_NUMBER
+td-cli gh validate-issue --issue-number RELATED_ISSUE_NUMBER
 PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh detect-conflicts --pr PR_NUMBER
 PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh validate-issue --issue-number RELATED_ISSUE_NUMBER
 ```
 
 1. **Generate the review documents**:
 ```bash
+td-cli gh audit-pr PR_NUMBER --fetch
 PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR_NUMBER --fetch
 ```
 (This creates `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` for reading, and `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` for writing).
@@ -48,5 +55,6 @@ PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR
 
 4. **Submit & Cleanup**: Parse the document and submit the review in one step. Use `--cleanup` to remove the working files on success:
 ```bash
+td-cli gh audit-pr PR_NUMBER --submit --cleanup
 PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR_NUMBER --submit --cleanup
 ```
