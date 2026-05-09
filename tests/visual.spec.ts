@@ -43,7 +43,6 @@ test.describe('Visual Regression Tests', () => {
       }
 
       // Wait for hydration and stability
-      await page.waitForLoadState('networkidle');
       await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
 
       // Robust scroll-to-settle: triggers lazy loading without hardcoded sleep loops
