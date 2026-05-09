@@ -7,4 +7,3 @@ export const EVENT_TABS = [
 ] as const;
 
 export const SECTION_SPACING = "section-spacing";
-export const SCROLL_OFFSET = 24;
