@@ -8,9 +8,27 @@ from tdw_services.services.jules import JulesClient
 
 class Orchestrator:
     def __init__(self):
-        self.github = GitHubClient()
-        self.ai = LocalAIClient()
-        self.jules = JulesClient()
+        self._github = None
+        self._ai = None
+        self._jules = None
+
+    @property
+    def github(self) -> GitHubClient:
+        if self._github is None:
+            self._github = GitHubClient()
+        return self._github
+
+    @property
+    def ai(self) -> LocalAIClient:
+        if self._ai is None:
+            self._ai = LocalAIClient()
+        return self._ai
+
+    @property
+    def jules(self) -> JulesClient:
+        if self._jules is None:
+            self._jules = JulesClient()
+        return self._jules
 
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
@@ -44,6 +62,29 @@ class Orchestrator:
         Detects merge conflicts via GitHubClient (implicit local git), analyzes logic with AI.
         """
         return self.ai.resolve_file_conflicts(file_path)
+
+    def find_conflict_files(self) -> List[str]:
+        """
+        Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.
+        """
+        from utils import run_command
+        # More robust than simple grep: handles varying markers and excludes common noise
+        try:
+            res = run_command([
+                "grep", "-lrE", "^<<<<<<<|^=======|^>>>>>>>", ".",
+                "--exclude-dir=dev-tools",
+                "--exclude-dir=node_modules",
+                "--exclude-dir=dist",
+                "--exclude-dir=.git",
+                "--exclude-dir=build",
+                "--exclude-dir=target"
+            ], check=False, log_on_error=False)
+
+            if res.returncode == 0 and res.stdout:
+                return [f.strip() for f in res.stdout.splitlines() if f.strip()]
+        except Exception:
+            pass
+        return []
 
     def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
         """

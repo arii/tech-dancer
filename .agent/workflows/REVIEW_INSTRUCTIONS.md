@@ -40,3 +40,6 @@ At the bottom of pr-review-<PR_NUMBER>.md, there is a JSON block. You must write
 - **Always provide at least one comment** in the `comments` array. If the PR is flawless, mention it is clean in the main body but still provide at least one commendation comment.
 - **Line Numbers**: The `line` property in your comment must match an actual added or modified line (`+`) in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON. Escape double quotes `\"` and newlines `\n` within the string values.
+
+## 3. Tooling Guidelines
+Agents must not directly use git or gh commands but reuse existing tooling. Agents should not use Copilot, but may use Ollama.

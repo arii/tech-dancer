@@ -10,6 +10,22 @@ const routes = [
 ];
 
 test.describe('Visual Regression Tests', () => {
+  test.beforeEach(async ({ page }) => {
+    // Use a fixed clock to ensure deterministic date/time rendering (e.g., in footer or events)
+    await page.clock.setFixedTime(new Date('2024-01-01T12:00:00Z'));
+
+    // Disable motion to stabilize non-deterministic CSS/JS animations
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    // Ensure newsletter banner doesn't interfere with visual tests
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
+    });
+  });
+
+  for (const route of routes) {
+    test(`visual comparison for ${route.name}`, async ({ page }) => {
+      await page.goto(route.path);
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
