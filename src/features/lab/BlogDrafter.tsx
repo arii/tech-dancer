@@ -8,7 +8,7 @@ import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
-import { types, EVENT_TYPES } from './constants';
+import { types, EVENT_TYPES } from './config';
 
 export function BlogDrafter() {
   const {
