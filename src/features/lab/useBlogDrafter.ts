@@ -93,26 +93,26 @@ const DEFAULT_DATA: DraftData = {
 
 export function useBlogDrafter() {
   const [data, setData] = useState<DraftData>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
         const parsed = JSON.parse(saved);
         return { ...DEFAULT_DATA, ...parsed };
-      } catch {
-        // Silent fail per audit recommendation
       }
+    } catch {
+      // Silent fail per audit recommendation
     }
     return DEFAULT_DATA;
   });
 
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
-    const saved = localStorage.getItem(HISTORY_KEY);
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (saved) {
         return JSON.parse(saved);
-      } catch {
-        // Silent fail per audit recommendation
       }
+    } catch {
+      // Silent fail per audit recommendation
     }
     return [];
   });
@@ -125,7 +125,11 @@ export function useBlogDrafter() {
       clearTimeout(saveTimer.current);
     }
     saveTimer.current = setTimeout(() => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
+      } catch {
+        // Silent fail in restricted environments
+      }
     }, DEBOUNCE_WAIT);
   }, []);
 
@@ -135,7 +139,11 @@ export function useBlogDrafter() {
 
   // History persistence
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch {
+      // Silent fail
+    }
   }, [history]);
 
   const saveToHistory = useCallback(() => {

@@ -5,6 +5,7 @@ import {
   FileJson,
   FileText
 } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import {
   Box,
   Stack,
@@ -158,6 +159,7 @@ export function WCSScraperTool() {
   const {
     filteredData,
     isLoading,
+    error,
     searchTerm,
     setSearchTerm,
     filterPromoted,
@@ -165,6 +167,18 @@ export function WCSScraperTool() {
     scoreDistribution,
     trendData
   } = useWCSData();
+
+  if (error) {
+    return (
+      <Box border surface="muted" padding="card" display="flex" align="center" gap={4} className="border-red-500/20 bg-red-500/5">
+        <AlertCircle className="w-6 h-6 text-red-500" />
+        <Stack gap={1}>
+          <Text variant="mono" size="sm" weight="font-bold" color="main" className="text-red-500">DATA_LOAD_FAILURE</Text>
+          <Text variant="body" size="xs" color="dim">{error}</Text>
+        </Stack>
+      </Box>
+    );
+  }
 
   if (isLoading) {
     return (
