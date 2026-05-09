@@ -38,7 +38,7 @@ test.describe('Global Search Modal', () => {
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
-    await searchInput.fill('ai');
+    await searchInput.fill('swing');
 
     const resultButton = page.getByTestId('search-result').first();
     await expect(resultButton).toBeVisible();
