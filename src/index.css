@@ -128,19 +128,19 @@
   /* Brand SVG Typography & Colors */
   .brand-b-mark {
     @apply font-serif italic;
-    font-size: 85px;
+    font-size: var(--text-brand-logo);
     font-weight: 900;
     fill: white;
   }
   .brand-b-mark-sm {
     @apply font-serif italic;
-    font-size: 44px;
+    font-size: var(--text-brand-logo-sm);
     font-weight: 900;
     fill: white;
   }
   .brand-wordmark-text {
     @apply font-display;
-    font-size: 52px;
+    font-size: var(--text-brand-wordmark);
     font-weight: 800;
     letter-spacing: -1.5px;
   }

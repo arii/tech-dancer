@@ -58,6 +58,11 @@
   --raw-icon-lg: 24px;
   --raw-icon-xl: 32px;
 
+  /* Brand Typography */
+  --text-brand-logo: 85px;
+  --text-brand-logo-sm: 44px;
+  --text-brand-wordmark: 52px;
+
   /* Image Sizes */
   --raw-image-profile: 400px;
 

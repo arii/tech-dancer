@@ -12,6 +12,9 @@ interface DesignTokens {
   accentPurple: string | null;
   rawColorBg: string | null;
   mutedText: string | null;
+  brandLogoSize: string | null;
+  brandLogoSmSize: string | null;
+  brandWordmarkSize: string | null;
 }
 
 function getTokens(): DesignTokens | null {
@@ -34,6 +37,9 @@ function getTokens(): DesignTokens | null {
     accentPurple: extract('--raw-color-accent-purple'),
     rawColorBg: extract('--raw-color-bg'),
     mutedText: 'rgba(255,255,255,0.6)', // Fallback for sharp generation
+    brandLogoSize: extract('--text-brand-logo'),
+    brandLogoSmSize: extract('--text-brand-logo-sm'),
+    brandWordmarkSize: extract('--text-brand-wordmark'),
   };
 }
 
@@ -51,15 +57,24 @@ function prepareSVGForRendering(content: string, tokens: DesignTokens) {
       .brand-text-accent { fill: ${tokens.heroAccent}; }
       .brand-text-muted { fill: ${tokens.mutedText}; }
       .brand-bg-rect { fill: ${tokens.rawColorBg}; }
-      .brand-b-mark, .brand-b-mark-sm {
+      .brand-b-mark {
         fill: white;
         font-family: 'Playfair Display', serif;
         font-style: italic;
         font-weight: 900;
+        font-size: ${tokens.brandLogoSize || '85px'};
+      }
+      .brand-b-mark-sm {
+        fill: white;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 900;
+        font-size: ${tokens.brandLogoSmSize || '44px'};
       }
       .brand-wordmark-text {
         font-family: 'Bricolage Grotesque', sans-serif;
         font-weight: 800;
+        font-size: ${tokens.brandWordmarkSize || '52px'};
       }
     </style>
   `;
