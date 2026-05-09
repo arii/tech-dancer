@@ -6,7 +6,8 @@ const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
 
 export function useScrollManagement(
   scrollRef: MutableRefObject<HTMLElement | null>,
-  touchStartRef: MutableRefObject<{ x: number; y: number } | null>
+  touchStartRef: MutableRefObject<{ x: number; y: number } | null>,
+  containerRef?: MutableRefObject<HTMLElement | null>
 ) {
   const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
@@ -81,45 +82,50 @@ export function useScrollManagement(
     };
   }, [pathname, key, hash, navType, scrollRef]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartRef.current = {
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    };
-  };
+  useEffect(() => {
+    const el = containerRef?.current;
+    if (!el) return;
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartRef.current) return;
-
-    const touchEnd = {
-      x: e.changedTouches[0].clientX,
-      y: e.changedTouches[0].clientY,
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
     };
 
-    const deltaX = touchEnd.x - touchStartRef.current.x;
-    const deltaY = touchEnd.y - touchStartRef.current.y;
+    const onTouchEnd = (e: TouchEvent) => {
+      if (!touchStartRef.current) return;
 
-    // Horizontal swipe check
-    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
-      // Ignore swipe if it originates from a horizontally scrollable element
-      // We check the event path to handle nested/sibling scroll containers efficiently
-      const path = e.nativeEvent.composedPath();
+      const touchEnd = {
+        x: e.changedTouches[0].clientX,
+        y: e.changedTouches[0].clientY,
+      };
 
-      const isAnyScrollable = path.some(el => {
-        if (!(el instanceof HTMLElement) || el === e.currentTarget) return false;
+      const deltaX = touchEnd.x - touchStartRef.current.x;
+      const deltaY = touchEnd.y - touchStartRef.current.y;
 
-        const style = window.getComputedStyle(el);
-        const overflowX = style.getPropertyValue('overflow-x');
-        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
+      // Horizontal swipe check
+      if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Ignore swipe if it originates from a horizontally scrollable element
+        // We check the event path to handle nested/sibling scroll containers efficiently
+        const path = e.composedPath();
 
-        if (isScrollableX) {
-          if (deltaX > 0 && el.scrollLeft > 0) return true;
-          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
-        }
-        return false;
-      });
+        const isAnyScrollable = path.some(target => {
+          if (!(target instanceof HTMLElement) || target === el) return false;
 
-      if (isAnyScrollable) return;
+          const style = window.getComputedStyle(target);
+          const overflowX = style.getPropertyValue('overflow-x');
+          const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && target.scrollWidth > target.clientWidth;
+
+          if (isScrollableX) {
+            if (deltaX > 0 && target.scrollLeft > 0) return true;
+            if (deltaX < 0 && Math.ceil(target.scrollLeft) < target.scrollWidth - target.clientWidth) return true;
+          }
+          return false;
+        });
+
+        if (isAnyScrollable) return;
+      }
 
       const currentIndex = MAIN_ROUTES.indexOf(pathname);
       if (currentIndex !== -1) {
@@ -134,16 +140,23 @@ export function useScrollManagement(
 
         if (targetRoute) {
           navigate(targetRoute);
-          // Optional: announce to screen readers
           const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
           const announcer = document.getElementById('route-announcer');
           if (announcer) announcer.textContent = msg;
         }
       }
-    }
 
-    touchStartRef.current = null;
-  };
+      touchStartRef.current = null;
+    };
 
-  return { handleTouchStart, handleTouchEnd };
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [pathname, navigate, touchStartRef, containerRef]);
+
+  return {};
 }
