@@ -9,8 +9,28 @@ function escapeICS(str: string): string {
     .replace(/\\/g, "\\\\")
     .replace(/,/g, "\\,")
     .replace(/;/g, "\\;")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "");
+    .replace(/\r?\n/g, "\\n");
+}
+
+/**
+ * Folds lines longer than 75 characters as per RFC 5545.
+ */
+function foldLine(line: string): string {
+  const MAX_LENGTH = 75;
+  if (line.length <= MAX_LENGTH) return line;
+
+  let result = line.substring(0, MAX_LENGTH);
+  let remaining = line.substring(MAX_LENGTH);
+
+  while (remaining.length > 0) {
+    result += "\r\n ";
+    // Next chunk should be at most 74 chars because of the leading space
+    const chunkSize = MAX_LENGTH - 1;
+    result += remaining.substring(0, chunkSize);
+    remaining = remaining.substring(chunkSize);
+  }
+
+  return result;
 }
 
 export function generateICS(eventTitle: string, items: TimelineItem[], url?: string) {
@@ -39,11 +59,11 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
       "SEQUENCE:0",
       "TRANSP:TRANSPARENT",
       "END:VEVENT"
-    ].join("\r\n");
+    ].map(foldLine).join("\r\n");
   });
 
   const footer = ["END:VCALENDAR"];
-  return [...header, ...body, ...footer].join("\r\n");
+  return [...header.map(foldLine), ...body, ...footer.map(foldLine)].join("\r\n");
 }
 
 export function downloadICS(filename: string, content: string) {
