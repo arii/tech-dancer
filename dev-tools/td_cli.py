@@ -355,8 +355,8 @@ def handle_update_issues(args):
     if args.json: print(json.dumps({"status": "success", "updates": updates}, indent=2))
 
 def handle_audit_pr(args):
-    pr_num = args.pr_number
-    if not pr_num or str(pr_num).strip() in ('null', '', 'None'):
+    pr_num = str(args.pr_number).strip() if args.pr_number is not None else ""
+    if not pr_num or pr_num.lower() in ('null', 'none'):
         raise CLIError("Invalid PR number: received null/empty value. Check caller input.")
 
     try:

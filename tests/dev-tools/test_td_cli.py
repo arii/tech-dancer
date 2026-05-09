@@ -100,7 +100,9 @@ class TestTDCliCrash(unittest.TestCase):
             (None, "Invalid PR number"),
             ("", "Invalid PR number"),
             ("abc", "Invalid PR number format"),
-            ("None", "Invalid PR number")
+            ("None", "Invalid PR number"),
+            ("  null  ", "Invalid PR number"),
+            ("   ", "Invalid PR number")
         ]
 
         for pr_num, expected_msg in cases:
