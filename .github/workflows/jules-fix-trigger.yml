@@ -57,5 +57,7 @@ jobs:
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           JULES_SOURCE_ID: ${{ vars.JULES_SOURCE_ID }}
         run: |
+          # Export PYTHONPATH to ensure modules can find each other
+          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           # Capture both stdout and stderr for better diagnostic visibility
           python3 dev-tools/td_cli.py fix-ci --pr-number ${{ github.event.issue.number }} --execute 2>&1

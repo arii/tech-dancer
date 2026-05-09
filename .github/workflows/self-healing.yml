@@ -41,7 +41,7 @@ jobs:
       - name: Prepare trusted repair script
         run: |
           mkdir -p /tmp/repair-tool
-          cp dev-tools/repair.py /tmp/repair-tool/repair.py
+          cp -r dev-tools/. /tmp/repair-tool/
           chmod +x /tmp/repair-tool/repair.py
 
       - name: Checkout failing branch
@@ -97,7 +97,7 @@ jobs:
 
       - name: Fetch Logs & Run Repair
         env:
-          PYTHONPATH: ${{ github.workspace }}/dev-tools
+          PYTHONPATH: /tmp/repair-tool
         run: |
           if [ "$EVENT_NAME" == "workflow_run" ]; then
             TARGET_RUN_ID="$WORKFLOW_RUN_ID"
@@ -170,3 +170,7 @@ jobs:
           else
             echo "No changes to commit."
           fi
+
+      - name: Cleanup repair tool
+        if: always()
+        run: rm -rf /tmp/repair-tool

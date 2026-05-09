@@ -6,7 +6,6 @@ import click
 from tdw_services.orchestrator import Orchestrator
 
 # Import legacy utils for backwards compatibility during migration
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
 from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
