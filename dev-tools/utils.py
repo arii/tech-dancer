@@ -65,14 +65,8 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
                 res_data = json.loads(response.read().decode("utf-8"))
                 return res_data.get("response")
         except (urllib.error.HTTPError, urllib.error.URLError) as e:
-            # Retry on 429 (Too Many Requests) or 5xx (Server Error)
-            is_retryable = False
-            if isinstance(e, urllib.error.HTTPError):
-                if e.code == 429 or 500 <= e.code < 600:
-                    is_retryable = True
-            else:
-                # Network/DNS errors are usually retryable
-                is_retryable = True
+            # Retry on 429 (Too Many Requests), 5xx (Server Error), or network errors
+            is_retryable = not isinstance(e, urllib.error.HTTPError) or (e.code == 429 or 500 <= e.code < 600)
 
             if not is_retryable or attempt == max_retries:
                 print(f"API call failed after {attempt} attempts: {e}", file=sys.stderr)
