@@ -21,7 +21,6 @@ on:
     - cron: '45 4 * * 6'
   workflow_dispatch:
 
-env:
 
 jobs:
   analyze:

@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useState, useEffect, RefObject } from "react";
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';

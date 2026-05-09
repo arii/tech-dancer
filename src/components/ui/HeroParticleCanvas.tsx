@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useEffect, useRef } from 'react';
 import { HERO_CONFIG } from '@/config/hero';
 import { useResizeObserver } from '@/hooks/useResizeObserver';

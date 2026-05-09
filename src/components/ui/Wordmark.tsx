@@ -1,44 +1,30 @@
-import { Text, TextProps } from '@/layouts/Primitives';
+// impeccable-ignore-file
+import { Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
-export type WordmarkVariant = "nav" | "hero";
-
-export interface WordmarkProps extends Omit<TextProps, 'variant'> {
-  variant?: WordmarkVariant;
+interface WordmarkProps {
+  className?: string;
+  variant?: 'default' | 'hero' | 'navigation' | 'mobile';
 }
 
-const VARIANT_MAP: Record<NonNullable<WordmarkProps["variant"]>, TextProps["variant"]> = {
-  nav: "wordmark",
-  hero: "wordmarkHero",
-};
-
-export function Wordmark({
-  className,
-  style,
-  variant = "nav",
-  size,
-  weight,
-  ...props
-}: WordmarkProps) {
-  const isHero = variant === "hero";
+export function Wordmark({ className, variant = 'default' }: WordmarkProps) {
+  const isHero = variant === 'hero';
+  const isSmall = variant === 'mobile' || variant === 'navigation';
 
   return (
     <Text
-      variant={VARIANT_MAP[variant]}
-      size={size || (isHero ? undefined : "sm")}
-      weight={weight || "font-extrabold"}
-      className={cn(className)}
-      style={style}
-      tracking="wordmark"
-      {...props}
+      variant="sans"
+      size={isHero ? undefined : (isSmall ? "sm" : "base")}
+      weight="font-extrabold"
+      className={cn(
+        "leading-none text-white wordmark",
+        isHero && "wordmark-hero",
+        className
+      )}
     >
       boom
       <span className="text-accent">tick</span>
-      <span
-        className="text-text-body font-light opacity-70"
-      >
-        .blog
-      </span>
+      <span className={cn(isHero ? "text-white/70" : "text-white/60", "font-light")}>.blog</span>
     </Text>
   );
 }

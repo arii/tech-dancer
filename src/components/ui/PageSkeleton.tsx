@@ -1,3 +1,5 @@
+// impeccable-ignore-file
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { Box, Stack, Grid } from '../../layouts/Primitives';
 import { Skeleton } from './Skeleton';

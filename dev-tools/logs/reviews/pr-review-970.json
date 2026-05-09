@@ -1,0 +1,4 @@
+{
+  "body": "## ANTI-AI-SLOP\\nCSS tokens properly implemented in `tokens.css`. Auditor rules use robust regex patterns.\\n\\n## FINDINGS\\nThis PR introduces hero-specific design tokens and strengthens the audit scanner with rules for inline styles (fonts, hex colors, rgba).\\n\\n## FINAL RECOMMENDATION\\nApproved\\n\\n<!-- td-review-manager-comment -->",
+  "comments": []
+}

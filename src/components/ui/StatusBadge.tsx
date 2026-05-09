@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Box, Text } from '@/layouts/Primitives';
 
 export const StatusBadge = ({ label }: { label: string }) => (

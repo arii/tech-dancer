@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { routes } from './App.tsx';
+import { Stack } from '@/layouts/Primitives';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -82,7 +82,11 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider 
           router={router} 
-          fallbackElement={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>} 
+          fallbackElement={
+            <Stack height="screen" align="center" justify="center" bg="bg">
+              <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+            </Stack>
+          } 
         />
       </QueryClientProvider>
     </HelmetProvider>

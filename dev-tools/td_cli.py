@@ -12,6 +12,7 @@ import os
 import re
 import json
 from datetime import datetime, timezone, timedelta
+from typing import Optional, Union, List, Set, Dict
 from utils import (
     get_github_token,
     get_github_client,
@@ -29,7 +30,7 @@ from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
 # --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/styles', 'src/App.tsx', 'src/index.css']
 
 # --- Shared Logic ---
 
@@ -43,12 +44,12 @@ def log_diag(msg: str):
     now = datetime.now().strftime("%H:%M:%S")
     print(f"[{now}] ℹ️  {msg}", file=sys.stderr)
 
-def add_execution_args(parser: argparse.ArgumentParser):
-    """Registers consistent dry-run and execute flags to a subparser."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Preview actions without side effects (default)")
+def add_execution_args(parser: argparse.ArgumentParser, default_dry_run: bool = True):
+    """Registers --dry-run and --execute flags with standardized help strings."""
+    parser.add_argument("--dry-run", action="store_true", default=default_dry_run,
+                      help=f"Run in dry-run mode{' (default)' if default_dry_run else ''}. No side effects will be applied.")
     parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Enable actual side effects (e.g., posting to GitHub, modifying files)")
+                      help=f"Execute the command and apply side effects{' (disables dry-run)' if default_dry_run else ' (default)'}.")
 
 def get_env_or_gha(env_var: str) -> str | None:
     """Helper to safely fetch variables avoiding CLI fallback if explicitly empty in CI."""
@@ -106,14 +107,6 @@ def detect_conflicts(repo, target_pr_num=None):
         if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
             conflicts[tuple(sorted(prs))].append(filename)
     return conflicts
-
-def add_execution_args(parser):
-    """Registers --dry-run and --execute flags with standardized help strings."""
-    parser.add_argument("--dry-run", action="store_true", default=True,
-                      help="Run in dry-run mode (default). No side effects will be applied.")
-    parser.add_argument("--execute", action="store_false", dest="dry_run",
-                      help="Execute the command and apply side effects (disables dry-run).")
-
 
 # --- CLI Handlers ---
 
@@ -362,8 +355,12 @@ def handle_update_issues(args):
 
     if args.json: print(json.dumps({"status": "success", "updates": updates}, indent=2))
 
-def handle_audit_pr(args):
-    pr_num = args.pr_number; review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+def handle_audit_pr(args: argparse.Namespace):
+    pr_num: Optional[Union[int, str]] = args.pr_number
+    if not pr_num or str(pr_num).strip().lower() in ('null', '', 'none'):
+        raise CLIError("Invalid PR number: received null/empty value. Check caller input.")
+
+    review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
     ctx_path = os.path.join(review_dir, f"pr-context-{pr_num}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_num}.md")
 
     res = {"pr": pr_num, "files": {}}
@@ -609,7 +606,7 @@ def handle_audit_gate(args):
 
             relevant_main_files = []
             for mf in main_files:
-                if not (mf.endswith('.tsx') or mf.endswith('.ts')):
+                if not (mf.endswith('.tsx') or mf.endswith('.ts') or mf.endswith('.css')):
                     continue
                 for check_dir in AUDIT_CHECK_DIRS:
                     if mf == check_dir or mf.startswith(check_dir + '/'):

@@ -1,0 +1,12 @@
+.outer {
+  /* Comment with { brace */
+  color: red;
+  .inner {
+    content: "string with { brace";
+    .deep {
+      .too-deep {
+        color: blue;
+      }
+    }
+  }
+}

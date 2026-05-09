@@ -1,15 +1,12 @@
-# Pull Request Review Tracking
+# PR Review Tracking
 
-| PR Number | Title | Author | Status | Notes |
-|---|---|---|---|---|
-| #948 | Update GitHub Actions and remove Node 24 force environment variable | @arii | Pending | |
-| #947 | Refactor Wordmark Props to use Enums/Variants | @arii | Pending | |
-| #946 | Centralize Ollama API Abstraction | @arii | Pending | |
-| #945 | Consolidate Ollama API implementation | @arii | Pending | |
-| #944 | Revert Visual Regression Loosening and Stabilize Tests | @arii | Pending | |
-| #943 | Refactor WSDCReminders into sub-components | @arii | Pending | |
-| #942 | Refactor HeroSection to remove unused useMemo and optimize static data | @arii | Pending | |
-| #941 | Remove implicit environment side effects from CLI | @arii | Pending | |
-| #928 | Refactor ResearchAnalytics to use design primitives; add front-end design review and usage notes tweak | @arii | Pending | |
-| #926 | Improve mobile readability and interaction affordances | @arii | Pending | |
-| #922 | chore: Consolidated Branding Improvements | @arii | Pending | |
+| PR # | Title | Author | Status | Conflicts | Last Review |
+|------|-------|--------|--------|-----------|-------------|
+| 991 | Fix impeccable ignore workarounds | @arii | Merged | Yes | 2026-05-08 |
+| 990 | Remove bare env: keys from workflows | @arii | Merged | Yes | 2026-05-08 |
+| 989 | fix: guard null PR number in audit_headless.sh | @arii | Merged | Yes | 2026-05-08 |
+| 987 | Remove redundant function definitions in td_cli.py | @arii | Merged | Yes | 2026-05-08 |
+| 986 | UI: Build Event Guide Components | @arii | Merged | Yes | 2026-05-08 |
+| 984 | Refactor asset path resolution | @arii | Merged | Yes | 2026-05-08 |
+| 970 | Introduce hero CSS tokens | @arii | Merged | Yes | 2026-05-08 |
+| 969 | Expand audit tool coverage | @arii | Merged | Yes | 2026-05-08 |

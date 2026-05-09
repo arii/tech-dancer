@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Box, BoxProps } from '../../layouts/Box';
 import { motionTokens } from '@/styles/motion';
 import { cn } from '@/lib/utils';

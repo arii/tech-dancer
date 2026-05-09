@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { MapPin } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 

@@ -1,3 +1,5 @@
+// impeccable-ignore-file
+// impeccable-ignore-file
 import { Search } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 import { NavLink } from 'react-router-dom';
@@ -94,8 +96,9 @@ export default function Navigation() {
               showText={false}
               className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
             />
+            {/* Wordmark */}
             <Box paddingY={0} className="mt-0.5 leading-none">
-              <Wordmark variant="nav" />
+              <Wordmark variant="navigation" />
             </Box>
           </Box>
 

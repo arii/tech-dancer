@@ -1,0 +1,4 @@
+.valid {
+  padding: var(--raw-spacing-compact);
+  color: var(--raw-color-accent);
+}

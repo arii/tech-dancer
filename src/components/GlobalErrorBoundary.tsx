@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 

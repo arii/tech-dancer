@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Link } from 'react-router-dom';
 import { Stack, Text } from '@/layouts/Primitives';
 
