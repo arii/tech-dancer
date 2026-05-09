@@ -10,7 +10,6 @@ permissions:
   issues: write
   actions: read
 
-env:
 
 jobs:
   trigger-jules:
