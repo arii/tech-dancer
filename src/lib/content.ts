@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ASSET_PREFIX } from '@/config/constants';
+
 /**
  * Lightweight browser-safe frontmatter parser.
  */
@@ -151,10 +153,8 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
       if (data.image === "") {
         data.image = undefined;
       } else if (typeof data.image === 'string' && data.image.startsWith('/')) {
-        // Prepend BASE_URL to absolute asset paths to support subpath deployments (GH Pages)
-        // We use import.meta.env.BASE_URL directly here to avoid circular dependency with constants.ts if it were to import from there
-        const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-        data.image = `${base}${data.image}`;
+        // Prepend ASSET_PREFIX to absolute asset paths to support subpath deployments
+        data.image = `${ASSET_PREFIX}${data.image}`;
       }
 
       return {
