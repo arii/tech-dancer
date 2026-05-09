@@ -3,8 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 test.describe('accessibility', () => {
   test('homepage should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('./');
-    await page.waitForLoadState('networkidle');
+    await page.goto('./'); await expect(page.locator('main')).toBeVisible();
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
@@ -12,8 +11,7 @@ test.describe('accessibility', () => {
   });
 
   test('search modal should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('./');
-    await page.waitForLoadState('networkidle');
+    await page.goto('./'); await expect(page.locator('main')).toBeVisible();
 
     // Open search modal
     await page.keyboard.press('Control+k');
@@ -27,8 +25,7 @@ test.describe('accessibility', () => {
   });
 
   test('search modal should trap focus', async ({ page }) => {
-    await page.goto('./');
-    await page.waitForLoadState('networkidle');
+    await page.goto('./'); await expect(page.locator('main')).toBeVisible();
 
     // Open search modal
     await page.keyboard.press('Control+k');

@@ -8,13 +8,11 @@ async function validateUrlNavigation(page: Page, href: string) {
     const [baseUrl, fragment] = href.split('#');
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
       await page.goto(baseUrl);
-      await page.waitForLoadState('networkidle');
     }
     const locator = page.locator(`#${fragment}`);
     await expect(locator).toBeVisible({ timeout: 5000 });
   } else {
     const response = await page.goto(href);
-    await page.waitForLoadState('networkidle');
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
     }
@@ -46,7 +44,6 @@ test.beforeEach(async ({ page }) => {
 
 test('homepage loads without console errors', async ({ page }) => {
   await page.goto('./');
-  await page.waitForLoadState('networkidle');
   const errors = getPageErrors(page);
   // Filter out known environment-specific errors
   const filteredErrors = errors.filter(e =>
@@ -59,7 +56,6 @@ test('homepage loads without console errors', async ({ page }) => {
 
 test('all nav links are reachable and error-free', async ({ page }) => {
   await page.goto('./');
-  await page.waitForLoadState('networkidle');
 
   const links = await page.$$eval('nav a[href]', (anchors) =>
     anchors
@@ -90,7 +86,6 @@ test('all post/content pages load without errors', async ({ page }) => {
     const exists = await page.$('main');
     if (!exists) continue;
 
-    await page.waitForLoadState('networkidle');
 
     const contentLinks = await page.$$eval('a[href]', (anchors) =>
       anchors

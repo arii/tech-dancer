@@ -5,7 +5,6 @@ async function gotoPreviewDashboard(page: Page) {
   // We resolve the previews path against the baseURL which includes the necessary VITE_BASE_PATH
   const targetUrl = new URL('previews/index.html', baseURL).href;
   await page.goto(targetUrl);
-  await page.waitForLoadState('networkidle');
 }
 
 test.describe('Preview Dashboard', () => {

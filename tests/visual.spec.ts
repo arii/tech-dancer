@@ -28,22 +28,22 @@ test.describe('Visual Regression Tests', () => {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
 
+      // Wait for the main content to be visible as a base stability measure
+      await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
+
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
 
       // Route-specific stability waits
       if (route.name === 'research') {
-        // Wait for research studies to be loaded from the API
-        await page.getByText('Read Study').first().waitFor();
+        // Wait for research studies to be loaded
+        await expect(page.getByText('Read Study').first()).toBeVisible({ timeout: 10000 });
       }
 
       if (route.name === 'preview') {
         // Ensure preview components are visible
         await expect(page.getByText('Component Preview')).toBeVisible();
       }
-
-      // Wait for hydration and stability
-      await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
 
       // Robust scroll-to-settle: triggers lazy loading without hardcoded sleep loops
       await page.evaluate(async () => {
@@ -76,7 +76,6 @@ test.describe('Visual Regression Tests', () => {
       });
 
       // Snapshots use global maxDiffPixelRatio threshold defined in playwright.config.ts
-      // Playwright automatically disables animations for toHaveScreenshot
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
         animations: 'disabled'
