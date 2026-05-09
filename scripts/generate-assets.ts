@@ -88,7 +88,7 @@ function updateSVGContent(content: string, tokens: DesignTokens, specificMap: Re
       root.walkDecls(decl => {
         oldValues[decl.prop] = decl.value.trim();
       });
-  } catch (_e) {
+  } catch {
       console.warn('Warning: Failed to parse existing SVG style block with PostCSS. Falling back to attribute replacement only.');
     }
   }
