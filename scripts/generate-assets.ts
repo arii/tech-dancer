@@ -22,15 +22,28 @@ function getTokens(): DesignTokens | null {
 
   const content = fs.readFileSync(TOKENS_PATH, 'utf-8');
 
-  const extract = (key: string) => {
-    const match = content.match(new RegExp(`${key}:\\s*([^;]+);`));
-    return match ? match[1].trim() : null;
+  const tokens: Record<string, string> = {};
+  const lines = content.split('\n');
+  lines.forEach(line => {
+    const match = line.match(/^\s*(--[\w-]+):\s*([^;]+);/);
+    if (match) {
+      tokens[match[1].trim()] = match[2].trim();
+    }
+  });
+
+  const resolve = (value: string | undefined): string | null => {
+    if (!value) return null;
+    const varMatch = value.match(/var\((--[\w-]+)\)/);
+    if (varMatch) {
+      return resolve(tokens[varMatch[1]]);
+    }
+    return value;
   };
 
   return {
-    heroAccent: extract('--hero-accent'),
-    accentPurple: extract('--raw-color-accent-purple'),
-    rawColorBg: extract('--raw-color-bg'),
+    heroAccent: resolve(tokens['--hero-accent']),
+    accentPurple: resolve(tokens['--raw-color-accent-purple']),
+    rawColorBg: resolve(tokens['--raw-color-bg']),
   };
 }
 
