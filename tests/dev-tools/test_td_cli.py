@@ -90,50 +90,28 @@ class TestTDCLI(unittest.TestCase):
         self.assertEqual(baseline, 42)
         mock_gha_get.assert_called_with("FAKE_VAR")
 
-if __name__ == '__main__':
-    unittest.main()
-
 class TestTDCliCrash(unittest.TestCase):
     @patch('td_cli.get_github_client')
     @patch('td_cli.get_repo_name')
-    def test_handle_audit_pr_null_error(self, mock_repo, mock_client):
-        args = MagicMock()
-        args.pr_number = "null"
-        args.fetch = True
+    def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client):
+        """Test handle_audit_pr raises CLIError for various invalid PR numbers"""
+        cases = [
+            ("null", "Invalid PR number"),
+            (None, "Invalid PR number"),
+            ("", "Invalid PR number"),
+            ("abc", "Invalid PR number format"),
+            ("None", "Invalid PR number")
+        ]
 
-        with self.assertRaises(td_cli.CLIError) as cm:
-            td_cli.handle_audit_pr(args)
-        self.assertIn("Invalid PR number", cm.exception.message)
+        for pr_num, expected_msg in cases:
+            with self.subTest(pr_num=pr_num):
+                args = MagicMock()
+                args.pr_number = pr_num
+                args.fetch = True
 
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
-    def test_handle_audit_pr_none_error(self, mock_repo, mock_client):
-        args = MagicMock()
-        args.pr_number = None
-        args.fetch = True
+                with self.assertRaises(td_cli.CLIError) as cm:
+                    td_cli.handle_audit_pr(args)
+                self.assertIn(expected_msg, cm.exception.message)
 
-        with self.assertRaises(td_cli.CLIError) as cm:
-            td_cli.handle_audit_pr(args)
-        self.assertIn("Invalid PR number", cm.exception.message)
-
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
-    def test_handle_audit_pr_empty_error(self, mock_repo, mock_client):
-        args = MagicMock()
-        args.pr_number = ""
-        args.fetch = True
-
-        with self.assertRaises(td_cli.CLIError) as cm:
-            td_cli.handle_audit_pr(args)
-        self.assertIn("Invalid PR number", cm.exception.message)
-
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
-    def test_handle_audit_pr_non_numeric_error(self, mock_repo, mock_client):
-        args = MagicMock()
-        args.pr_number = "abc"
-        args.fetch = True
-
-        with self.assertRaises(td_cli.CLIError) as cm:
-            td_cli.handle_audit_pr(args)
-        self.assertIn("Invalid PR number format", cm.exception.message)
+if __name__ == '__main__':
+    unittest.main()
