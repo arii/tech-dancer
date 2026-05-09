@@ -20,9 +20,9 @@ def clean_llm_output(text: str) -> str:
         return match.group(1).strip()
     return text.strip()
 
-def is_ollama_available(url: Optional[str] = None) -> bool:
+def is_ollama_available() -> bool:
     """Checks if Ollama API is reachable."""
-    base_url = url or OLLAMA_URL
+    base_url = OLLAMA_URL
     if not base_url.endswith("/"):
         base_url += "/"
 
@@ -38,7 +38,7 @@ def is_ollama_available(url: Optional[str] = None) -> bool:
 
 def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3) -> Optional[str]:
     """Unified helper to call local Ollama API with retries using urllib."""
-    base_url = url or OLLAMA_URL
+    base_url = OLLAMA_URL
     if not base_url.endswith("/"):
         base_url += "/"
 
