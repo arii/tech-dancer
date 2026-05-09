@@ -102,28 +102,26 @@ export function useScrollManagement(
     // Horizontal swipe check
     if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
       // Ignore swipe if it originates from a horizontally scrollable element
-      const target = e.target as HTMLElement;
+      // We check all elements at the touch point to handle sibling/cousin scroll containers
+      const elementsAtPoint = document.elementsFromPoint(touchEnd.x, touchEnd.y);
 
-      const isScrollable = (el: HTMLElement | null): boolean => {
-        if (!el || el === e.currentTarget) return false;
+      const isAnyScrollable = elementsAtPoint.some(el => {
+        let current: HTMLElement | null = el as HTMLElement;
+        while (current && current !== e.currentTarget) {
+          const style = window.getComputedStyle(current);
+          const overflowX = style.getPropertyValue('overflow-x');
+          const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && current.scrollWidth > current.clientWidth;
 
-        const style = window.getComputedStyle(el);
-        const overflowX = style.getPropertyValue('overflow-x');
-        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
-
-        if (isScrollableX) {
-          // Check if we are at a boundary to allow swiping to the next page
-          // If swiping right (deltaX > 0), only block if we can scroll left (scrollLeft > 0)
-          // If swiping left (deltaX < 0), only block if we can scroll right (scrollLeft < scrollWidth - clientWidth)
-          if (deltaX > 0 && el.scrollLeft > 0) return true;
-          // Use Math.ceil for scrollWidth/clientWidth to handle fractional pixels on high-DPI screens without magic numbers
-          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
+          if (isScrollableX) {
+            if (deltaX > 0 && current.scrollLeft > 0) return true;
+            if (deltaX < 0 && Math.ceil(current.scrollLeft) < current.scrollWidth - current.clientWidth) return true;
+          }
+          current = current.parentElement;
         }
+        return false;
+      });
 
-        return isScrollable(el.parentElement);
-      };
-
-      if (isScrollable(target)) return;
+      if (isAnyScrollable) return;
 
       const currentIndex = MAIN_ROUTES.indexOf(pathname);
       if (currentIndex !== -1) {
