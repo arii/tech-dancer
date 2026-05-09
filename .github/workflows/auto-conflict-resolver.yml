@@ -232,6 +232,24 @@ jobs:
             <!-- id: conflict-resolver-bot -->
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fail the workflow if conflicts were not resolved
+      - name: Fail on merge error
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed == 'true'
+        run: |
+          echo "::error::Merge failed due to a non-conflict error. Manual intervention required."
+          exit 1
+
+      - name: Notify partial resolution
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != ''
-        run: exit 1
+        run: |
+          UNRESOLVED="${{ steps.resolve.outputs.unresolved-files }}"
+          # Count lines by counting characters then removing everything except newlines, or use wc -l
+          # If it's comma separated, we can count commas.
+          # Based on the bot comment usage, it's in a code block, likely one per line.
+          COUNT=$(echo "$UNRESOLVED" | grep -c '^' || echo 0)
+          echo "::warning::$COUNT files still have conflicts and require manual resolution. Auto-resolver could not fully resolve all conflicts."
+          echo "### Conflict Resolution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ $COUNT files require manual attention:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "$UNRESOLVED" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          exit 0

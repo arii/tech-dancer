@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx', '.github/workflows'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -20,7 +20,7 @@ function collectAuditFiles(targets) {
         walk(fullPath);
         continue;
       }
-      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) results.add(fullPath);
+      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx') || fullPath.endsWith('.yml')) results.add(fullPath);
     }
   };
 
@@ -29,7 +29,7 @@ function collectAuditFiles(targets) {
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
-    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx')) results.add(absoluteTarget);
+    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx') || absoluteTarget.endsWith('.yml')) results.add(absoluteTarget);
   }
 
   return Array.from(results);
@@ -108,6 +108,12 @@ const CONFIG = {
       pattern: /className=".*?text-\[\d/g,
       severity: 'minor',
       message: 'Arbitrary text size. Use typeSizes from design-tokens.ts'
+    },
+    {
+      name: 'Bare env: Key',
+      pattern: /^([ \t]*)env:[ \t]*(?!\r?\n\1[ \t]+)/m,
+      severity: 'major',
+      message: 'Bare env: keys are invalid in GitHub Actions workflows. Provide values or remove the key.'
     }
   ],
   deprecated: {
@@ -155,7 +161,8 @@ function checkContent(content) {
   CONFIG.rules
     .filter(r => !r.isClassNameRule)
     .forEach(rule => {
-      const regex = new RegExp(rule.pattern.source, rule.name === 'div Layout' ? 'gs' : 'g');
+      const flags = (rule.name === 'div Layout' ? 'gs' : 'g') + (rule.pattern.multiline ? 'm' : '');
+      const regex = new RegExp(rule.pattern.source, flags);
       const matches = content.matchAll(regex);
 
       for (const match of matches) {
@@ -330,7 +337,7 @@ if (targets.includes('-')) {
   const files = collectAuditFiles(targets);
 
   files.forEach(filepath => {
-    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts')) {
+    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts') || filepath.endsWith('.yml')) {
       const violations = checkFile(filepath);
       if (violations.length > 0) {
         allViolations[path.relative(ROOT, filepath)] = violations;
