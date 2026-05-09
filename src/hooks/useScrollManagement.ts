@@ -1,4 +1,4 @@
-import { useEffect, MutableRefObject, useRef } from 'react';
+import { useEffect, MutableRefObject } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 
 const SWIPE_THRESHOLD = 50;
@@ -8,7 +8,6 @@ export function useScrollManagement(
   scrollRef: MutableRefObject<HTMLElement | null>,
   touchStartRef: MutableRefObject<{ x: number; y: number } | null>
 ) {
-  const isNavigating = useRef(false);
   const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
   const navigate = useNavigate();
@@ -137,15 +136,8 @@ export function useScrollManagement(
           targetRoute = MAIN_ROUTES[currentIndex + 1];
         }
 
-        if (targetRoute && !isNavigating.current) {
-          isNavigating.current = true;
+        if (targetRoute) {
           navigate(targetRoute);
-
-          // Reset navigation lock after a short delay
-          setTimeout(() => {
-            isNavigating.current = false;
-          }, 500);
-
           // Optional: announce to screen readers
           const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
           const announcer = document.getElementById('route-announcer');

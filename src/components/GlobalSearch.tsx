@@ -243,6 +243,7 @@ export function GlobalSearch() {
                 {results.length} RESULTS FOUND
               </Text>
             </Box>
+          </Box>
         </Box>
       </Box>
     );
