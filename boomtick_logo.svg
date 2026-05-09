@@ -33,6 +33,6 @@
   <text x="130" y="78" class="brand-wordmark-text">
     <tspan class="brand-text-white">boom</tspan>
     <tspan class="brand-text-accent">tick</tspan>
-    <tspan class="brand-text-muted" font-weight="300">.blog</tspan>
+    <tspan class="brand-text-muted">.blog</tspan>
   </text>
 </svg>

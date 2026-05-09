@@ -57,7 +57,7 @@ export function Logo({ className, showText = true }: LogoProps) {
         >
           <tspan className="brand-text-white">boom</tspan>
           <tspan className="brand-text-accent">tick</tspan>
-          <tspan className="brand-text-muted" fontWeight="300">.blog</tspan>
+          <tspan className="brand-text-muted">.blog</tspan>
         </text>
       )}
     </svg>

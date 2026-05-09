@@ -25,7 +25,7 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
       fill="none"
     >
       <title id={titleId}>BoomTick Icon</title>
-      {showBackground && <rect width="64" height="64" rx="12" fill="var(--raw-color-surface)" />}
+      {showBackground && <rect width="64" height="64" rx="12" className="brand-bg-surface" />}
 
       <BrandDefs gradientId={gradientId} filterId={filterId} stdDeviation={2} />
 

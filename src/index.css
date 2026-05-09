@@ -146,11 +146,12 @@
   }
   .brand-text-white { fill: white; }
   .brand-text-accent { fill: var(--raw-color-accent-brand); }
-  .brand-text-muted { fill: var(--logo-muted-text); }
+  .brand-text-muted { fill: var(--logo-muted-text); font-weight: 300; }
 
   .brand-stop-accent { stop-color: var(--raw-color-accent-brand); }
   .brand-stop-purple { stop-color: var(--raw-color-accent-purple); }
   .brand-bg-rect { fill: var(--raw-color-bg); }
+  .brand-bg-surface { fill: var(--raw-color-surface); }
 
   /* Wordmark Utilities */
   .wordmark-base {
