@@ -172,9 +172,6 @@
 .main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
 .stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
 .tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
-  .pb-safe-area { padding-bottom: env(safe-area-inset-bottom); }
-  .pb-safe-area-plus-12 { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
-  .max-h-search-results-mobile { max-height: calc(60vh - env(safe-area-inset-bottom)); }
 .experience-chip {
   @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }

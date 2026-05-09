@@ -40,6 +40,9 @@ export default {
       },
       animation: {
         gradient: 'gradient 8s ease infinite',
+      },
+      spacing: {
+        'safe-bottom': 'env(safe-area-inset-bottom)',
       }
     },
   },

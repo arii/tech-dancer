@@ -102,21 +102,19 @@ export function useScrollManagement(
     // Horizontal swipe check
     if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
       // Ignore swipe if it originates from a horizontally scrollable element
-      // We check all elements at the touch point to handle sibling/cousin scroll containers
-      const elementsAtPoint = document.elementsFromPoint(touchEnd.x, touchEnd.y);
+      // We check the event path to handle nested/sibling scroll containers efficiently
+      const path = e.nativeEvent.composedPath();
 
-      const isAnyScrollable = elementsAtPoint.some(el => {
-        let current: HTMLElement | null = el as HTMLElement;
-        while (current && current !== e.currentTarget) {
-          const style = window.getComputedStyle(current);
-          const overflowX = style.getPropertyValue('overflow-x');
-          const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && current.scrollWidth > current.clientWidth;
+      const isAnyScrollable = path.some(el => {
+        if (!(el instanceof HTMLElement) || el === e.currentTarget) return false;
 
-          if (isScrollableX) {
-            if (deltaX > 0 && current.scrollLeft > 0) return true;
-            if (deltaX < 0 && Math.ceil(current.scrollLeft) < current.scrollWidth - current.clientWidth) return true;
-          }
-          current = current.parentElement;
+        const style = window.getComputedStyle(el);
+        const overflowX = style.getPropertyValue('overflow-x');
+        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
+
+        if (isScrollableX) {
+          if (deltaX > 0 && el.scrollLeft > 0) return true;
+          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
         }
         return false;
       });
