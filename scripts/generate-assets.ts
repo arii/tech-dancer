@@ -66,9 +66,10 @@ function prepareSVGForRendering(content: string, tokens: DesignTokens) {
 
   if (content.includes('</defs>')) {
     return content.replace('</defs>', `${styleBlock}</defs>`);
-  } else {
-    return content.replace('>', `>${styleBlock}`);
   }
+
+  // Fallback: Inject after the opening <svg> tag
+  return content.replace(/(<svg[^>]*>)/i, `$1${styleBlock}`);
 }
 
 async function generatePNGs(tokens: DesignTokens) {
