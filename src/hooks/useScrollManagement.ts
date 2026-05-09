@@ -153,8 +153,10 @@ export function useScrollManagement(
     el.addEventListener('touchend', onTouchEnd, { passive: true });
 
     return () => {
-      el.removeEventListener('touchstart', onTouchStart);
-      el.removeEventListener('touchend', onTouchEnd);
+      if (el) {
+        el.removeEventListener('touchstart', onTouchStart);
+        el.removeEventListener('touchend', onTouchEnd);
+      }
     };
   }, [pathname, navigate, touchStartRef, containerRef]);
 
