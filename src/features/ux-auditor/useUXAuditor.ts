@@ -261,6 +261,7 @@ export function useUXAuditor() {
     const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
 
     try {
+      if (!apiKey) throw new Error("API Key missing");
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

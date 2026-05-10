@@ -158,6 +158,7 @@ export function WCSScraperTool() {
   const {
     filteredData,
     isLoading,
+    error,
     searchTerm,
     setSearchTerm,
     filterPromoted,
@@ -186,6 +187,26 @@ export function WCSScraperTool() {
           </Stack>
         </Grid>
       </Stack>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box border surface="muted" padding="card" textAlign="center">
+        <Stack gap={4} align="center">
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" uppercase tracking="widest">
+            {error.includes('DATA_LOAD_FAILURE') ? 'Data Load Failure' : 'System Error'}
+          </Text>
+          <Text variant="body" size="xs" color="dim" className="max-w-md">
+            {error.includes('DATA_LOAD_FAILURE')
+              ? "The WCS preliminary dataset could not be retrieved from the server. This may happen in local development or preview environments where the data pipeline hasn't run."
+              : error}
+          </Text>
+          <Box border paddingX={4} paddingY={2} radius="none" className="border-accent/30 bg-accent/10" marginTop={4}>
+             <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold" tracking="widest">ERR_CODE: {error.split(':')[0]}</Text>
+          </Box>
+        </Stack>
+      </Box>
     );
   }
 

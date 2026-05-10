@@ -18,10 +18,13 @@ export function useWCSData() {
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const loadData = async () => {
       try {
         const res = await fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`);
+        if (!res.ok) throw new Error(`DATA_LOAD_FAILURE: ${res.status}`);
         const arrayBuffer = await res.arrayBuffer();
 
         const objects = await parquetReadObjects({ file: arrayBuffer });
@@ -33,8 +36,10 @@ export function useWCSData() {
 
         setData(formattedObjects as unknown as WCSRecord[]);
         setIsLoading(false);
+        setError(null);
       } catch (err) {
         console.error("Failed to load WCS data:", err);
+        setError(err instanceof Error ? err.message : String(err));
         setIsLoading(false);
       }
     };
@@ -103,6 +108,7 @@ export function useWCSData() {
     data,
     filteredData,
     isLoading,
+    error,
     searchTerm,
     setSearchTerm,
     filterPromoted,
