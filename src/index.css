@@ -125,6 +125,21 @@
     background-size: 20px 20px;
   }
 
+  /* Brand SVG Utilities */
+  .brand-b-mark {
+    font-family: var(--raw-font-serif);
+    font-weight: 900;
+    font-style: italic;
+  }
+  .brand-wordmark {
+    font-family: var(--raw-font-display);
+    font-weight: 800;
+  }
+  .brand-text-accent { fill: var(--raw-color-accent-brand); }
+  .brand-text-muted { fill: var(--logo-muted-text); }
+  .brand-stop-accent { stop-color: var(--raw-color-accent-brand); }
+  .brand-stop-purple { stop-color: var(--raw-color-accent-purple); }
+
   /* Wordmark Utilities */
   .wordmark-base {
     @apply font-extrabold text-white flex items-center tracking-[0.05em];
