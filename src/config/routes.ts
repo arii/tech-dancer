@@ -37,6 +37,11 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
+    path: '/events/:slug',
+    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'Data & Development Lab',
