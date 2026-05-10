@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/visual-auditor-tool-and-hero-refactor-9863198860810042197/sitemap.xml
