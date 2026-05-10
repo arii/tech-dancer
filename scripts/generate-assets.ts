@@ -87,7 +87,6 @@ function updateSVGContent(content: string, tokens: DesignTokens) {
   // 1. Extract old hex values from the first matching .brand-stop-accent or similar
   const oldAccentMatch = content.match(/\.brand-stop-accent\s*{\s*stop-color:\s*([^;]+);/);
   const oldPurpleMatch = content.match(/\.brand-stop-purple\s*{\s*stop-color:\s*([^;]+);/);
-  const oldBgMatch = content.match(/fill="([^"]+)"/); // Simplistic for bg rect
 
   // 2. Replace the entire <style> block
   const sharedStyles = getSharedSVGStyles(tokens);
