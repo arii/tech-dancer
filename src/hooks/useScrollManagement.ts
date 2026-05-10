@@ -107,21 +107,18 @@ export function useScrollManagement(
       // Horizontal swipe check
       if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
         // Ignore swipe if it originates from a horizontally scrollable element
-        // We check the event path to handle nested/sibling scroll containers efficiently
+        // We check the event path for overflow settings instead of querying geometry to avoid layout thrashing
         const path = e.composedPath();
 
         const isAnyScrollable = path.some(target => {
           if (!(target instanceof HTMLElement) || target === el) return false;
 
+          // Check common tags or attributes first to avoid expensive getComputedStyle
+          if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return true;
+
           const style = window.getComputedStyle(target);
           const overflowX = style.getPropertyValue('overflow-x');
-          const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && target.scrollWidth > target.clientWidth;
-
-          if (isScrollableX) {
-            if (deltaX > 0 && target.scrollLeft > 0) return true;
-            if (deltaX < 0 && Math.ceil(target.scrollLeft) < target.scrollWidth - target.clientWidth) return true;
-          }
-          return false;
+          return overflowX === 'auto' || overflowX === 'scroll';
         });
 
         if (isAnyScrollable) return;
