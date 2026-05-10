@@ -29,6 +29,7 @@ export function EmailForm() {
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
+          height={11}
           minHeight={11}
           width="full"
         />
