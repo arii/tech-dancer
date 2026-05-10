@@ -41,7 +41,11 @@ python3 dev-tools/td_cli.py --json status-board > dev-tools/logs/open_prs.json
 
 # 4. Process each PR
 # Using jq to extract PR numbers from the JSON output of status-board
-for pr in $(jq -r '.work[].number' dev-tools/logs/open_prs.json); do
+for pr in $(jq -r '.work[].number // empty' dev-tools/logs/open_prs.json); do
+  if [[ -z "$pr" || "$pr" == "null" ]]; then
+    echo "⚠️  Skipping invalid PR number: '$pr'" >&2
+    continue
+  fi
   echo "----------------------------------------"
   echo "🚀 Auditing PR #$pr..."
 

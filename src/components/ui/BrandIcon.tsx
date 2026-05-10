@@ -20,12 +20,12 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
       fill="none"
     >
       <title id={titleId}>BoomTick Icon</title>
-      {showBackground && <rect width="64" height="64" rx="12" fill="var(--raw-color-surface)" />}
+      {showBackground && <rect width="64" height="64" rx="12" fill="var(--raw-color-surface, #0f172a)" />}
 
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="var(--raw-color-accent-brand)" />
-          <stop offset="100%" stopColor="var(--raw-color-accent-purple)" />
+          <stop offset="0%" stopColor="var(--raw-color-accent-brand, #22d3ee)" />
+          <stop offset="100%" stopColor="var(--raw-color-accent-purple, #8b5cf6)" />
         </linearGradient>
         <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="2" result="blur" />
@@ -41,7 +41,7 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
           fontSize="44"
           fontWeight="700"
           fontStyle="italic"
-          fill="var(--raw-color-text-main)"
+          fill="var(--raw-color-text-main, #f1f5f9)"
           transform="skewX(-8)"
         >
           B

@@ -1,12 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+import crypto from 'crypto';
+import { fileURLToPath } from 'url';
 
 const TOKENS_PATH = path.join(process.cwd(), 'src/styles/tokens.css');
 const LOGO_SVG_PATH = path.join(process.cwd(), 'boomtick_logo.svg');
 const FAVICON_SVG_PATH = path.join(process.cwd(), 'public/favicon.svg');
 const PWA_192_PATH = path.join(process.cwd(), 'public/pwa-192x192.png');
 const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
+const CACHE_DIR = path.join(process.cwd(), 'node_modules/.cache');
+const HASH_FILE = path.join(CACHE_DIR, 'generate-assets.hash');
 
 interface DesignTokens {
   heroAccent: string | null;
@@ -14,48 +18,92 @@ interface DesignTokens {
   rawColorBg: string | null;
 }
 
-function getTokens(): DesignTokens | null {
+/**
+ * Shared SVG variable template to ensure a single source of truth for brand colors.
+ */
+function getSharedSVGStyles(tokens: DesignTokens) {
+  return `
+  <style>
+    :root {
+      --brand-bg: ${tokens.rawColorBg};
+      --brand-accent: ${tokens.heroAccent};
+      --brand-accent-hero: ${tokens.heroAccent};
+      --brand-accent-purple: ${tokens.accentPurple};
+    }
+  </style>`;
+}
+
+function getTokensHash(): string | null {
+  if (!fs.existsSync(TOKENS_PATH)) return null;
+  const content = fs.readFileSync(TOKENS_PATH);
+  return crypto.createHash('md5').update(content).digest('hex');
+}
+
+export function getTokens(): DesignTokens | null {
   if (!fs.existsSync(TOKENS_PATH)) {
     console.warn(`Warning: Tokens file not found at ${TOKENS_PATH}`);
     return null;
   }
 
   const content = fs.readFileSync(TOKENS_PATH, 'utf-8');
+  const tokens: Record<string, string> = {};
 
-  const extract = (key: string) => {
-    const match = content.match(new RegExp(`${key}:\\s*([^;]+);`));
-    return match ? match[1].trim() : null;
+  // Simple Regex-based CSS variable extraction
+  const declRegex = /(--[\w-]+):\s*([^;]+);/g;
+  let match;
+  while ((match = declRegex.exec(content)) !== null) {
+    tokens[match[1]] = match[2].trim();
+  }
+
+  const resolve = (value: string | undefined): string | null => {
+    if (!value) return null;
+    const varMatch = value.match(/var\((--[\w-]+)\)/);
+    if (varMatch) {
+      return resolve(tokens[varMatch[1]]);
+    }
+    return value;
   };
 
   return {
-    heroAccent: extract('--hero-accent'),
-    accentPurple: extract('--raw-color-accent-purple'),
-    rawColorBg: extract('--raw-color-bg'),
+    heroAccent: resolve(tokens['--hero-accent']),
+    accentPurple: resolve(tokens['--raw-color-accent-purple']),
+    rawColorBg: resolve(tokens['--raw-color-bg']),
   };
 }
 
 /**
- * Safely updates SVG content by targeting specific color attributes and style variables.
+ * Safely updates SVG content by injecting shared styles and targeting specific color attributes.
+ * Strictly replaces the entire <style> tag contents based on the generated template.
  */
-function updateSVGContent(content: string, tokenMap: Record<string, string | null>) {
+function updateSVGContent(content: string, tokens: DesignTokens, specificMap: Record<string, string | null>) {
   let updatedContent = content;
+  const oldValues: Record<string, string> = {};
 
-  for (const [variableName, newValue] of Object.entries(tokenMap)) {
-    if (!newValue) continue;
+  // 1. Extract old values using Regex from the existing style block if it exists
+  const styleMatch = updatedContent.match(/<style>([\s\S]*?)<\/style>/);
+  if (styleMatch) {
+    const styleContent = styleMatch[1];
+    const declRegex = /(--[\w-]+):\s*([^;]+);/g;
+    let match;
+    while ((match = declRegex.exec(styleContent)) !== null) {
+      oldValues[match[1]] = match[2].trim();
+    }
+  }
 
-    // Find the current value of the variable in the SVG's <style> block
-    const varRegex = new RegExp(`${variableName}:\\s*([^;]+);`);
-    const match = updatedContent.match(varRegex);
+  // 2. Strictly replace the entire <style> tag contents with the shared template
+  const sharedStyles = getSharedSVGStyles(tokens);
+  if (styleMatch) {
+    updatedContent = updatedContent.replace(/<style>[\s\S]*?<\/style>/, sharedStyles.trim());
+  } else {
+    updatedContent = updatedContent.replace(/(<svg[^>]*>)/, `$1\n${sharedStyles}`);
+  }
 
-    if (match) {
-      const oldValue = match[1].trim();
+  // 3. Targeted replacement in attributes based on extracted old values
+  for (const [variableName, newValue] of Object.entries(specificMap)) {
+    const oldValue = oldValues[variableName];
+    if (oldValue && newValue && oldValue !== newValue) {
       const escapedOldValue = oldValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-      // Update the variable itself in the style block
-      updatedContent = updatedContent.replace(varRegex, `${variableName}: ${newValue};`);
-
       // Targeted replacement in attributes to avoid corrupting path data or other non-color strings
-      // Matches fill="#OLD", stop-color="#OLD", stroke="#OLD"
       const attrRegex = new RegExp(`(fill|stop-color|stroke)="(${escapedOldValue})"`, 'gi');
       updatedContent = updatedContent.replace(attrRegex, `$1="${newValue}"`);
     }
@@ -71,7 +119,7 @@ async function updateLogo(tokens: DesignTokens) {
   }
 
   const content = fs.readFileSync(LOGO_SVG_PATH, 'utf-8');
-  const updatedContent = updateSVGContent(content, {
+  const updatedContent = updateSVGContent(content, tokens, {
     '--brand-accent-hero': tokens.heroAccent,
     '--brand-accent-purple': tokens.accentPurple
   });
@@ -87,7 +135,7 @@ async function updateFaviconAndPNGs(tokens: DesignTokens) {
   }
 
   const content = fs.readFileSync(FAVICON_SVG_PATH, 'utf-8');
-  const updatedContent = updateSVGContent(content, {
+  const updatedContent = updateSVGContent(content, tokens, {
     '--brand-bg': tokens.rawColorBg,
     '--brand-accent': tokens.heroAccent,
     '--brand-accent-purple': tokens.accentPurple
@@ -117,6 +165,15 @@ async function updateFaviconAndPNGs(tokens: DesignTokens) {
 }
 
 async function main() {
+  const currentHash = getTokensHash();
+  if (currentHash && fs.existsSync(HASH_FILE)) {
+    const savedHash = fs.readFileSync(HASH_FILE, 'utf-8');
+    if (currentHash === savedHash) {
+      console.log('Tokens unchanged, skipping asset generation.');
+      return;
+    }
+  }
+
   const tokens = getTokens();
   if (!tokens) return;
 
@@ -124,6 +181,15 @@ async function main() {
 
   await updateLogo(tokens);
   await updateFaviconAndPNGs(tokens);
+
+  if (currentHash) {
+    if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR, { recursive: true });
+    fs.writeFileSync(HASH_FILE, currentHash);
+  }
 }
 
-main().catch(console.error);
+// Only run main if this script is executed directly
+const isMain = process.argv[1] && (process.argv[1] === fileURLToPath(import.meta.url) || process.argv[1].endsWith('generate-assets.ts'));
+if (isMain) {
+  main().catch(console.error);
+}
