@@ -10,24 +10,24 @@ export default function ComponentPreview() {
       <Stack gap={12}>
         <Text variant="headline" size="4xl">Component Preview</Text>
 
-        <Box border padding={6} radius="lg">
-          <Text variant="mono" size="sm" marginBottom={4}>EventHero (with image and whyAttending)</Text>
+        <Box>
+          <Text variant="mono" size="sm" marginBottom={4} paddingX={6}>EventHero (Particle Fallback)</Text>
           <EventHero
-            title="Sample Event"
-            location="San Francisco, CA"
-            date="Oct 24-26, 2026"
-            whyAttending="This is the biggest event in the West Coast Swing calendar, known for its incredible atmosphere and high-level competition."
-            image="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=1200"
+            title="WSDC 2026"
+            location="Las Vegas, NV"
+            date="Dec 28, 2025 - Jan 1, 2026"
+            whyAttending="The ultimate New Year's Eve celebration for swing dancers."
           />
         </Box>
 
-        <Box border padding={6} radius="lg">
-          <Text variant="mono" size="sm" marginBottom={4}>EventHero (with particle fallback)</Text>
+        <Box>
+          <Text variant="mono" size="sm" marginBottom={4} paddingX={6} marginTop={12}>EventHero (With Image)</Text>
           <EventHero
-            title="Another Great Event"
-            location="Austin, TX"
-            date="Dec 12-14, 2026"
-            whyAttending="Experience the local flavor and community of Texas Westie."
+            title="The Open"
+            location="Burbank, CA"
+            date="Nov 26-29, 2026"
+            image="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=2070"
+            whyAttending="The most prestigious competition in the West Coast Swing world."
           />
         </Box>
 

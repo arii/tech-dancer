@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Clock, ExternalLink, Palette, Briefcase, CheckCircle2, Bell, Plane, StickyNote } from 'lucide-react';
+import { MapPin, Calendar, Clock, ExternalLink, Palette, Briefcase, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
@@ -79,10 +79,10 @@ export function EventDetails({ event }: EventDetailsProps) {
         </Stack>
       </Box>
 
-      <Box id="theme" as="section">
-        <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Event Theme</Text>
-          {event.theme ? (
+      {event.theme && (
+        <Box id="theme" as="section">
+          <Stack gap={8}>
+            <Text variant="headline" size="3xl" weight="font-black">Event Theme</Text>
             <Box border radius="lg" padding={8} surface="surface">
               <Stack gap={6}>
                 <Box display="flex" gap={4}>
@@ -97,18 +97,14 @@ export function EventDetails({ event }: EventDetailsProps) {
                 </Box>
               </Stack>
             </Box>
-          ) : (
-            <Box border radius="lg" padding={8} surface="surface" borderStyle="dashed">
-              <Text variant="body" color="dim">Theme details coming soon.</Text>
-            </Box>
-          )}
-        </Stack>
-      </Box>
+          </Stack>
+        </Box>
+      )}
 
-      <Box id="gear" as="section">
-        <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Gear Recommendations</Text>
-          {event.gear ? (
+      {event.gear && (
+        <Box id="gear" as="section">
+          <Stack gap={8}>
+            <Text variant="headline" size="3xl" weight="font-black">Gear Recommendations</Text>
             <Grid cols={{ base: 1, md: 2 }} gap={6}>
               <Box border radius="lg" padding={6} surface="surface">
                 <Stack gap={4}>
@@ -143,46 +139,33 @@ export function EventDetails({ event }: EventDetailsProps) {
                 </Stack>
               </Box>
             </Grid>
-          ) : (
-            <Box border radius="lg" padding={8} surface="surface" borderStyle="dashed">
-              <Text variant="body" color="dim">Gear recommendations coming soon.</Text>
-            </Box>
-          )}
-        </Stack>
-      </Box>
+          </Stack>
+        </Box>
+      )}
 
       <Box id="reminders" as="section">
         <Stack gap={8}>
           <Text variant="headline" size="3xl" weight="font-black">Event Reminders</Text>
-          <Box border radius="lg" padding={8} surface="surface" borderStyle="dashed">
-            <Stack gap={4} align="center" textAlign="center">
-              <Bell className="w-8 h-8 text-accent/40" />
-              <Text variant="body" color="dim">Stay tuned for important event deadlines and reminders.</Text>
-            </Stack>
+          <Box border radius="lg" padding={8} surface="surface">
+            <Text color="dim">Stay tuned for specific event deadline reminders and notification settings.</Text>
           </Box>
         </Stack>
       </Box>
 
       <Box id="travel" as="section">
         <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Travel & Logistics</Text>
-          <Box border radius="lg" padding={8} surface="surface" borderStyle="dashed">
-            <Stack gap={4} align="center" textAlign="center">
-              <Plane className="w-8 h-8 text-accent/40" />
-              <Text variant="body" color="dim">Travel tips, hotel information, and local logistics will be updated here.</Text>
-            </Stack>
+          <Text variant="headline" size="3xl" weight="font-black">Travel & Lodging</Text>
+          <Box border radius="lg" padding={8} surface="surface">
+            <Text color="dim">Travel logistics, hotel blocks, and venue access information will be populated here.</Text>
           </Box>
         </Stack>
       </Box>
 
       <Box id="notes" as="section">
         <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Personal Notes</Text>
-          <Box border radius="lg" padding={8} surface="surface" borderStyle="dashed">
-            <Stack gap={4} align="center" textAlign="center">
-              <StickyNote className="w-8 h-8 text-accent/40" />
-              <Text variant="body" color="dim">A space for your personal event notes and planning.</Text>
-            </Stack>
+          <Text variant="headline" size="3xl" weight="font-black">Field Notes</Text>
+          <Box border radius="lg" padding={8} surface="surface">
+            <Text color="dim">Expert insights and community notes for {event.title}.</Text>
           </Box>
         </Stack>
       </Box>

@@ -146,13 +146,13 @@ export interface Event {
   schedule: string;
   description: string;
   link?: string;
-  whyAttending?: string;
-  heroImage?: string;
   content: string;
   startDate?: string;
   earlyBirdDate?: string;
   hotelCutoffDate?: string;
   url?: string;
+  whyAttending?: string;
+  heroImage?: string;
   theme?: {
     name: string;
     description: string;

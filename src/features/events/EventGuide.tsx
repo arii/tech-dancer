@@ -52,9 +52,9 @@ export default function EventGuide() {
         title={event.title}
         location={event.city}
         date={event.schedule}
-        eyebrow={event.category}
-        whyAttending={event.whyAttending}
         image={event.heroImage}
+        whyAttending={event.whyAttending}
+        eyebrow={event.category}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
