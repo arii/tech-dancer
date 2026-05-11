@@ -1,9 +1,9 @@
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { EventHero } from '@/features/events/components/EventHero';
-import { ThemeSpotlight } from '@/features/events/components/ThemeSpotlight';
-import { CuratedGear } from '@/features/events/components/CuratedGear';
-import { RelatedEvents } from '@/features/events/components/RelatedEvents';
-import { Event } from '@/lib/content';
+import { Box, Stack, Text } from '../layouts/Primitives';
+import { EventHero } from '../features/events/components/EventHero';
+import { ThemeSpotlight } from '../features/events/components/ThemeSpotlight';
+import { CuratedGear } from '../features/events/components/CuratedGear';
+import { RelatedEvents } from '../features/events/components/RelatedEvents';
+import { Event } from '../lib/content';
 
 /**
  * Factory for mock events to keep preview data consistent and typed.

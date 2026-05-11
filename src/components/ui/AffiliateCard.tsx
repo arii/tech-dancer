@@ -1,6 +1,6 @@
 import { ExternalLink, Tag } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { AffiliateLink } from '@/types';
+import { Box, Stack, Text } from '../../layouts/Primitives';
+import { AffiliateLink } from '../../types';
 
 interface AffiliateCardProps {
   link: AffiliateLink;

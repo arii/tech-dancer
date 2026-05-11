@@ -1,8 +1,8 @@
-import { Stack, Grid, Box, Text } from '@/layouts/Primitives';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { affiliateManager } from '@/lib/affiliateManager';
-import { Event } from '@/lib/content';
+import { Stack, Grid, Box, Text } from '../../../layouts/Primitives';
+import { SectionHeader } from '../../../components/ui/SectionHeader';
+import { AffiliateCard } from '../../../components/ui/AffiliateCard';
+import { affiliateManager } from '../../../lib/affiliateManager';
+import { Event } from '../../../lib/content';
 
 interface CuratedGearProps {
   event: Event;
