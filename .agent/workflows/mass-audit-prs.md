@@ -25,7 +25,7 @@ This workflow standardizes the process for auditing multiple open Pull Requests,
 
 // turbo-all
 
-0. **Environment Setup**: Set up the environment to use `td-cli`.
+0. **Environment Setup**: Set up the environment to use `td-cli`. **Node >=22** is required for full visual regression testing.
 ```bash
 bash dev-tools/verify.sh
 source .venv/bin/activate
@@ -50,17 +50,17 @@ Review output and determine safe merge order before proceeding.
 td-cli gh audit-pr PR_NUMBER --fetch
 ```
 
-5. **Audit the PRs**: For each PR, READ the instructions in `.agent/workflows/REVIEW_INSTRUCTIONS.md` and the diffs in `pr-context-<PR_NUMBER>.md`.
+5. **Audit the PRs**: For each PR, READ the instructions in `.agent/workflows/REVIEW_INSTRUCTIONS.md` and the diffs in `pr-context-<PR_NUMBER>.md`. The audit scope includes `src/features`, `src/pages`, `src/components`, and `src/layouts`.
 
 6. **Draft the Review**:
    - **DO NOT** edit the `pr-context-<PR_NUMBER>.md` markdown file.
    - **EDIT** the `pr-review-<PR_NUMBER>.md` file.
-   - You **MUST** evaluate the code against the checklist and physically mark each `- [ ]` box as `- [x]`.
-   - Add your general findings, final recommendation, and specific inline comments mapped to exact line numbers into the json block at the bottom of the file.
+   - You **MUST** evaluate the code against the checklist and physically mark each `- [ ]` box as `- [x]`. The **Anti-AI-Slop checklist** is mandatory for all reviews.
+   - Add your general findings, final recommendation, and specific inline comments mapped to exact line numbers into the json block at the bottom of the file. Ensure the output strictly follows the required JSON schema.
 
-7. **Submit the Review**: Run the submission script against the populated review file.
+7. **Submit the Review**: Run the submission script against the populated review file. If programmatic approval is restricted (e.g., self-approval constraints), use the `--event COMMENT` flag.
 ```bash
-td-cli gh audit-pr PR_NUMBER --submit
+td-cli gh audit-pr PR_NUMBER --submit [--event COMMENT]
 ```
 
 8. **Track & Repeat**: Update `REVIEW_TRACKING.md` with the outcome ("Approved", "Changes Requested") and proceed to the next PR.

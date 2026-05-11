@@ -6,7 +6,7 @@ You will record your findings in the writeable pr-review-<PR_NUMBER>.md file.
 
 ## 1. Audit Checklist Verification
 
-The pr-review-<PR_NUMBER>.md file contains a checklist. You MUST systematically verify each item against the diff context and check it off (- [x]).
+The pr-review-<PR_NUMBER>.md file contains a checklist. You MUST systematically verify each item against the diff context and check it off (- [x]). The **Anti-AI-Slop checklist** is mandatory for all reviews to ensure code quality and adherence to repository standards.
 
 - **Dead abstractions**: Did they introduce a new class, context, or hook that a simpler primitive could handle?
 - **Unnecessary indirection**: Does this add a layer of wrapping where a direct function call would suffice?
@@ -21,9 +21,11 @@ At the bottom of pr-review-<PR_NUMBER>.md, there is a JSON block. You must write
 
 ### The JSON Schema:
 
+All review submissions MUST follow this JSON schema exactly.
+
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n<findings>\n\n## FINDINGS\n<summary>\n\n## FINAL RECOMMENDATION\n<Approved | Approved with Minor Changes | Not Approved>",
+  "body": "## ANTI-AI-SLOP\n- [x] No dead abstractions\n- [x] No unnecessary indirection\n- [x] No responsibility creep\n- [x] No import bloat\n- [x] Token compliance verified\n- [x] Audit ratio satisfied\n\n## FINDINGS\n<summary of key findings and observations>\n\n## FINAL RECOMMENDATION\n<Approved | Approved with Minor Changes | Not Approved>",
   "comments": [
     {
       "path": "src/example.tsx",

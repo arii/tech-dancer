@@ -23,7 +23,7 @@ A step is only complete when its output file exists and contains non-placeholder
 
 // turbo-all
 
-0. **Environment Setup & Pre-flight validation**:
+0. **Environment Setup & Pre-flight validation**: **Node >=22** is required for full visual regression testing.
 ```bash
 bash dev-tools/verify.sh
 source .venv/bin/activate
@@ -43,18 +43,18 @@ PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR
 (This creates `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` for reading, and `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` for writing).
 
 2. **Read the Context & Instructions**:
-   - Read `.agent/workflows/REVIEW_INSTRUCTIONS.md` to understand the audit criteria.
+   - Read `.agent/workflows/REVIEW_INSTRUCTIONS.md` to understand the audit criteria. The audit scope includes `src/features`, `src/pages`, `src/components`, and `src/layouts`.
    - Read `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` to analyze the code diffs, stats, and **Last Commit Time**.
 
 3. **Draft the Feedback (Output)**:
    - Open the generated `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` file.
-   - Explicitly mark every `- [ ]` checklist item as `- [x]` or note the violation. This step is mandatory.
-   - Fill in the `body` string within the JSON block at the bottom of the file with your overall findings and final recommendation.
+   - Explicitly mark every `- [ ]` checklist item as `- [x]` or note the violation. The **Anti-AI-Slop checklist** is mandatory for all reviews.
+   - Fill in the `body` string within the JSON block at the bottom of the file with your overall findings and final recommendation. Ensure the output strictly follows the required JSON schema.
    - Populate the `comments` array within the JSON block with specific inline feedback. Ensure path and line match the diff exactly.
    - **Do not edit the pr-context file.**
 
-4. **Submit & Cleanup**: Parse the document and submit the review in one step. Use `--cleanup` to remove the working files on success:
+4. **Submit & Cleanup**: Parse the document and submit the review in one step. If programmatic approval is restricted (e.g., self-approval constraints), use the `--event COMMENT` flag. Use `--cleanup` to remove the working files on success:
 ```bash
-td-cli gh audit-pr PR_NUMBER --submit --cleanup
-PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR_NUMBER --submit --cleanup
+td-cli gh audit-pr PR_NUMBER --submit --cleanup [--event COMMENT]
+PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR_NUMBER --submit --cleanup [--event COMMENT]
 ```
