@@ -35,6 +35,9 @@ export default defineConfig(({mode}) => {
     }
   }
 
+  // Robust normalization to ensure leading and trailing slashes
+  base = `/${base.replace(/^\/|\/$/g, '')}/`.replace(/\/+/g, '/');
+
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
     if (process.env.VERCEL_ENV === 'production') return 'https://boomtick.blog';
