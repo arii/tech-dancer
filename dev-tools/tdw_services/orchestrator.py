@@ -1,10 +1,30 @@
-from typing import Dict, Any, List, Optional
 import hashlib
 import os
+import re
+import json
+import sys
+from datetime import datetime, timezone
+from typing import Dict, Any, List, Optional
+from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
 from tdw_services.services.jules import JulesClient
+from utils import (
+    get_github_token,
+    get_github_client,
+    get_repo_name,
+    get_gha_variable,
+    set_gha_variable,
+    CLIError,
+    run_command,
+    is_ollama_available
+)
+from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
+from scope_check import verify_pr_scope, get_project_config
+
+PROJECT_CONFIG = get_project_config()
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
 
 class Orchestrator:
     def __init__(self):
@@ -39,22 +59,12 @@ class Orchestrator:
         """
         pr_details = self.github.fetch_pr_details(pr_number)
         pr_diff = self.github.fetch_pr_diff(pr_number)
-
-        # Basic hashing to simulate caching
         diff_hash = self._hash_content(pr_diff)
         cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
-
         if os.path.exists(cache_file):
-            import json
-            with open(cache_file, 'r') as f:
-                return json.load(f)
-
+            with open(cache_file, 'r') as f: return json.load(f)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
-
-        import json
-        with open(cache_file, 'w') as f:
-            json.dump(review_result, f)
-
+        with open(cache_file, 'w') as f: json.dump(review_result, f)
         return review_result
 
     def resolve_conflict(self, file_path: str) -> bool:
@@ -67,8 +77,6 @@ class Orchestrator:
         """
         Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.
         """
-        from utils import run_command
-        # More robust than simple grep: handles varying markers and excludes common noise
         try:
             res = run_command([
                 "grep", "-lrE", "^<<<<<<<|^=======|^>>>>>>>", ".",
@@ -79,11 +87,9 @@ class Orchestrator:
                 "--exclude-dir=build",
                 "--exclude-dir=target"
             ], check=False, log_on_error=False)
-
             if res.returncode == 0 and res.stdout:
                 return [f.strip() for f in res.stdout.splitlines() if f.strip()]
-        except Exception:
-            pass
+        except Exception: pass
         return []
 
     def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
@@ -91,46 +97,381 @@ class Orchestrator:
         Automates the creation of Jules sessions.
         """
         source_id = self.jules.discover_source_id(self.github.repo)
-        if not source_id:
-            raise ValueError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
-
+        if not source_id: raise ValueError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
         session = self.jules.create_session_from_source(source_id, branch, prompt)
         return session
 
-    def repair_ci(self, file_path: str, errors: List[str]) -> bool:
-        """
-        Agent loop to fix CI errors using local LLM.
-        """
-        if not os.path.exists(file_path):
-            return False
+    # --- Helper methods ported from td_cli ---
 
-        with open(file_path, "r") as f:
-            content = f.read()
+    def get_env_or_gha(self, env_var: str) -> str | None:
+        if env_var in os.environ: return os.environ[env_var]
+        return get_gha_variable(env_var)
 
-        error_msg = "\n".join(errors)
-        prompt = f"""You are an expert software engineer. Fix the following error in {file_path}.
-ERROR:
-{error_msg}
+    def resolve_baseline(self, file_path: str | None, env_var: str, fallback_value: int) -> int:
+        if file_path and os.path.exists(file_path):
+            with open(file_path, 'r') as f: return int(f.read().strip() or fallback_value)
+        val = self.get_env_or_gha(env_var)
+        if val is not None and str(val).strip() != "": return int(val)
+        return fallback_value
 
-CURRENT FILE CONTENT ({file_path}):
-```typescript
-{content}
-```
+    def get_audit_results(self, content: str = None, targets: list[str] = None):
+        cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
+        if targets: cmd.extend(targets)
+        elif content is not None: cmd.append("-")
+        res = run_command(cmd, check=False, input_str=content)
+        try: return json.loads(res.stdout)
+        except json.JSONDecodeError: return {"violations": {}, "config": {}}
 
-INSTRUCTIONS:
-1. Fix the error.
-2. Provide ONLY the full corrected version of the file content.
-3. Wrap your response in a single markdown code block.
-4. No explanations.
+    def extract_code_blocks(self, text: str) -> list[str]:
+        return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
 
-REPAIRED CONTENT:
-"""
-        repaired_content = self.ai.generate(prompt)
-        if not repaired_content:
-            return False
+    def get_pr_files(self, pr) -> set[str]:
+        return {f.filename for f in pr.get_files()}
 
-        clean_content = self.ai.clean_llm_output(repaired_content)
-        with open(file_path, "w") as f:
-            f.write(clean_content)
+    def detect_conflicts(self, target_pr_num=None):
+        repo = get_github_client().get_repo(get_repo_name())
+        open_prs = list(repo.get_pulls(state='open'))
+        file_to_prs = defaultdict(list)
+        for pr in open_prs:
+            for f in self.get_pr_files(pr): file_to_prs[f].append(pr.number)
+        conflicts = defaultdict(list)
+        for filename, prs in file_to_prs.items():
+            if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
+                conflicts[tuple(sorted(prs))].append(filename)
+        return conflicts
 
-        return True
+    def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
+        repo = get_github_client().get_repo(get_repo_name())
+        issues = []
+        if all_open: issues = list(repo.get_issues(state='open'))
+        elif issue_number: issues = [repo.get_issue(issue_number)]
+        else: raise CLIError("Provide --issue-number or --all-open")
+
+        results = []
+        total_findings = 0
+        audit_base = self.get_audit_results(content="")
+        config = audit_base.get("config", {})
+
+        for issue in issues:
+            findings, warnings = [], []; body = issue.body or ''; title = issue.title or ''
+            for i, block in enumerate(self.extract_code_blocks(body)):
+                res = self.get_audit_results(content=block)
+                violations = res.get("violations", {}).get("stdin", [])
+                for v in violations:
+                    val = v.get('value', 'N/A')
+                    findings.append(f"Code block {i+1}: {v['message']} (value: {val})")
+                for comp, path in config.get('existingComponents', {}).items():
+                    if re.search(rf'(create|build|make|add|new)\s+.*{comp}', block, re.IGNORECASE):
+                        warnings.append(f"Code block {i+1}: Suggests `{comp}` (exists at `{path}`)")
+            for comp, path in config.get('existingComponents', {}).items():
+                if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
+                    warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
+            if title.startswith('Draft:') and '```markdown' in body:
+                md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
+                if md_match:
+                    for field in config.get('requiredContentFields', []):
+                        if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE):
+                            findings.append(f"Missing frontmatter: `{field}`")
+            if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
+                warnings.append("No acceptance criteria.")
+            if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
+                warnings.append("Mentions Tailwind but not layout primitives.")
+
+            issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
+            results.append(issue_result)
+            total_findings += len(findings)
+            if post_comments and (findings or warnings):
+                comment = "## 🤖 Issue Quality Review\n\n"
+                if findings: comment += "### ❌ Violations\n" + "\n".join(f"- {f}" for f in findings) + "\n\n"
+                if warnings: comment += "### ⚠️ Warnings\n" + "\n".join(f"- {w}" for w in warnings) + "\n"
+                if not dry_run: issue.create_comment(comment + "\n---\n*Generated by `td_cli validate-issue`*")
+
+        return {"status": "success" if total_findings == 0 else "error", "issues": results, "total_findings": total_findings}
+
+    def handle_detect_conflicts(self, pr_num=None):
+        conflicts = self.detect_conflicts(pr_num)
+        formatted = []
+        for pr_pair, files in conflicts.items():
+            formatted.append({"prs": list(pr_pair), "files": files})
+        return formatted
+
+    def handle_conflicts(self, base_branch='main'):
+        def run(cmd):
+            res = run_command(cmd, check=False, shell=True)
+            return res.returncode, res.stdout.strip()
+        run("git fetch origin")
+        code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
+        if code == 0 and merge_base:
+            run(f"git reset --soft {merge_base}")
+            run('git commit -m "chore: squashed commits prior to conflict resolution"')
+        merge_code, _ = run(f"git merge origin/{base_branch}")
+        if merge_code != 0:
+            return {"status": "manual_intervention_required", "message": "Complex conflicts remain. Please resolve manually."}
+        run("pnpm test -u")
+        run("git add -A")
+        run("git commit --amend --no-edit")
+        return {"status": "success", "message": "Conflict handling and snapshot updates complete!"}
+
+    def handle_status_board(self):
+        repo = get_github_client().get_repo(get_repo_name())
+        prs_data = []
+        for pr in repo.get_pulls(state='open'):
+            m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
+            prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
+        return prs_data
+
+    def ratchet_any(self, update=False, baseline_file=None, dry_run=True):
+        current = get_any_count()
+        baseline = self.resolve_baseline(baseline_file, 'ANY_COUNT_BASELINE', 0)
+        res = {"current": current, "baseline": baseline, "status": "success" if current <= baseline else "error"}
+        if current > baseline: res["message"] = f"'any' count increased from {baseline} to {current}."
+        if update:
+            if not dry_run:
+                if baseline_file:
+                    with open(baseline_file, 'w') as f: f.write(str(current))
+                else: set_gha_variable('ANY_COUNT_BASELINE', str(current))
+            res["updated"] = not dry_run
+        return res
+
+    def check_bundle_size(self, update=False, baseline_file=None, threshold=50, dry_run=True):
+        size = get_bundle_size()
+        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3000)
+        threshold_kb = baseline + threshold
+        res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": threshold_kb, "status": "success" if size <= threshold_kb else "error"}
+        if size > threshold_kb: res["message"] = f"Bundle size exceeds threshold ({size}KB > {threshold_kb}KB)."
+        if update:
+            if not dry_run:
+                if baseline_file:
+                    with open(baseline_file, 'w') as f: f.write(str(size))
+                else: set_gha_variable('BUNDLE_BASELINE_KB', str(size))
+            res["updated"] = not dry_run
+        return res
+
+    def migrate_tokens(self, find=None, migrate=None, dry_run=True):
+        root_dir = 'src'; matches = []
+        if find:
+            for filepath in walk_tsx(root_dir):
+                findings = find_patterns_in_file(filepath, [(re.escape(find), "Found")])
+                for ln, _, content in findings:
+                    matches.append({"file": filepath, "line": ln, "content": content.strip()})
+        elif migrate:
+            old, new = migrate
+            for filepath in walk_tsx(root_dir):
+                with open(filepath, 'r') as f: c = f.read()
+                if old in c:
+                    matches.append({"file": filepath})
+                    if not dry_run:
+                        with open(filepath, 'w') as f: f.write(c.replace(old, new))
+        return matches
+
+    def update_issues(self, dry_run=True):
+        repo = get_github_client().get_repo(get_repo_name()); updates = []
+        audit_base = self.get_audit_results(content=""); config = audit_base.get("config", {})
+        deprecated = config.get("deprecated", {})
+        for issue in repo.get_issues(state='open'):
+            body = issue.body or ''; findings = []
+            for old, new in deprecated.get('assets', {}).items():
+                if old in body: findings.append(f"References deprecated name `{old}`. Use `{new}` instead.")
+            for old, new in deprecated.get('paths', {}).items():
+                if old in body: findings.append(f"References deprecated path `{old}`. New location: `{new}`")
+            res = self.get_audit_results(content=body)
+            violations = res.get("violations", {}).get("stdin", [])
+            for v in violations: findings.append(f"Contains banned pattern: {v['message']} (value: {v.get('value', 'N/A')})")
+            if findings:
+                updates.append({"number": issue.number, "findings": findings})
+                if not dry_run: issue.create_comment("## 🤖 Automated Issue Update\n\n" + "\n".join(f"- {f}" for f in findings) + "\n\n---\n*Generated by `td_cli update-issues`*")
+        return updates
+
+    def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event=None):
+        review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+        ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
+        res = {"pr": pr_number, "files": {}}
+        if fetch:
+            repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(pr_number)
+            title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
+            context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## Files Changed"]
+            for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
+            context_lines.append("\n## Diffs")
+            for f in pr.get_files():
+                context_lines.append(f"\n### `{f.filename}` ({f.status})")
+                patch = f.patch or '_No textual diff available._'; annotated = []; line_num = 0
+                if patch != '_No textual diff available._':
+                    for line in patch.splitlines():
+                        if line.startswith('@@'):
+                            m = re.search(r'\+(\d+)', line); line_num = int(m.group(1)) if m else line_num
+                            annotated.append(line)
+                        elif line.startswith('+'): annotated.append(f"{line_num:4d} |{line}"); line_num += 1
+                        elif line.startswith('-'): annotated.append(f"     |{line}")
+                        else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
+                context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
+            os.makedirs(review_dir, exist_ok=True)
+            with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
+            template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
+            if os.path.exists(template_path):
+                with open(template_path) as f: template = f.read().format(pr_num=pr_number, head_sha=pr.head.sha)
+            else: template = f"# PR Review: #{pr_number}\n- SHA: {pr.head.sha}\n"
+            with open(rev_path, "w") as f: f.write(template)
+            res["files"]["context"] = ctx_path; res["files"]["review"] = rev_path
+        if audit:
+            if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
+            with open(ctx_path) as f: context = f.read()
+            changed_files = re.findall(r'### `([^`]+)`', context); auto_findings = []
+            scope_warning = verify_pr_scope(changed_files)
+            if scope_warning: auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
+            files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
+            if files_to_audit:
+                audit_res = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
+                output = audit_res.stdout
+                if output and "{" in output:
+                    try:
+                        json_start = output.find("{")
+                        json_end = output.rfind("}") + 1
+                        audit_data = json.loads(output[json_start:json_end])
+                        for filepath, violations in audit_data.items():
+                            for v in violations:
+                                auto_findings.append({"path": filepath, "issue": f"{v['pattern']}: {v['message']} (value: {v.get('value', 'N/A')})", "severity": v.get('severity', 'minor')})
+                    except Exception: pass
+            res["auto_findings"] = auto_findings
+            run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+        if submit:
+            from submit_review import submit_review
+            submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
+        return res
+
+    def pre_submit_checks(self):
+        results = {"steps": []}
+        def run_step(name, cmd):
+            try:
+                run_command(cmd)
+                results["steps"].append({"name": name, "status": "success"})
+            except CLIError as e:
+                results["steps"].append({"name": name, "status": "failure", "error": str(e)})
+                raise e
+        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
+        run_step("TypeScript", ["pnpm", "run", "type-check"])
+        run_step("Lint", ["pnpm", "run", "lint"])
+        missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
+        if missing_vars: results["steps"].append({"name": "Baseline Check", "status": "warning", "message": f"Missing GHA variables: {', '.join(missing_vars)}"})
+        else: results["steps"].append({"name": "Baseline Check", "status": "success"})
+        scope_warning = verify_pr_scope()
+        if scope_warning: results["steps"].append({"name": "PR Scope Check", "status": "warning", "message": scope_warning})
+        try:
+            conflicts = self.detect_conflicts()
+            results["conflicts"] = [{"prs": list(p), "files": f} for p, f in conflicts.items()]
+        except Exception: pass
+        return results
+
+    def repair_local(self, logs_path=None, stdin=False, worktree=False):
+        logs_content = ""
+        if stdin: logs_content = sys.stdin.read()
+        elif logs_path:
+            if os.path.exists(logs_path):
+                with open(logs_path, 'r') as f: logs_content = f.read()
+            else: raise CLIError(f"Log file not found: {logs_path}")
+        else:
+            res_lint = run_command(["pnpm", "run", "lint:ox"], check=False)
+            res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
+            logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
+        if not logs_content.strip(): return {"status": "success", "message": "No errors found."}
+        import tempfile, shutil
+        original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "dev-tools", "repair.py"))
+        worktree_path = None; branch_name = None
+        try:
+            if worktree:
+                branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
+                worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
+                run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
+                os.chdir(worktree_path)
+                if os.path.exists(os.path.join(original_cwd, "node_modules")):
+                    os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
+            with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False) as tmp_log:
+                tmp_log.write(logs_content); tmp_log_path = tmp_log.name
+            cmd = [sys.executable, repair_script, tmp_log_path]
+            proc = run_command(cmd, check=False)
+            os.unlink(tmp_log_path)
+            if proc.returncode == 0: return {"status": "success", "message": "Repair completed.", "worktree": worktree_path, "branch": branch_name}
+            else: return {"status": "error", "message": f"Repair failed with code {proc.returncode}"}
+        finally: os.chdir(original_cwd)
+
+    def handle_audit_gate(self):
+        current_count = int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only"]) or 0)
+        baseline_count = self.resolve_baseline(None, 'AUDIT_BASELINE', -1)
+        if baseline_count == -1:
+            baseline_count = 0
+            try:
+                main_files = run_command(["git", "ls-tree", "-r", "origin/main", "--name-only"]).splitlines()
+                relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
+                for mf in relevant:
+                    res_show = run_command(["git", "show", f"origin/main:{mf}"], check=False, log_on_error=False)
+                    if res_show.returncode == 0:
+                        baseline_count += int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"], input_str=res_show.stdout) or 0)
+            except Exception: pass
+        return {"current": current_count, "baseline": baseline_count, "status": "success" if current_count <= baseline_count else "error"}
+
+    def fix_ci(self, pr_number=None, branch=None, api_key=None, dry_run=True):
+        repo_name = get_repo_name(); g = get_github_client(); repo = g.get_repo(repo_name)
+        if pr_number: pr = repo.get_pull(int(pr_number)); branch = pr.head.ref
+        elif branch: pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
+        else:
+            branch = run_command(['git', 'branch', '--show-current']).strip()
+            pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
+        if api_key: self.jules.api_key = api_key
+        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
+        session_name = "dry-run-session"
+        if not dry_run:
+            res = self.jules.create_session_from_source(source_id, branch, "Analyze the failing CI logs and fix the errors.")
+            if res: session_name = res.get("name")
+            else: raise CLIError("Jules API session creation failed")
+        feedback = f"🤖 **Jules is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
+        if pr and not dry_run: pr.create_issue_comment(feedback)
+        return {"session": session_name, "branch": branch, "feedback": feedback}
+
+    def manage_reviews(self, check_responses=False, cleanup_comments=False, dry_run=True):
+        g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
+        for pr in repo.get_pulls(state='open', sort='updated', direction='desc'):
+            last_review = next((r for r in pr.get_reviews().reversed if r.user.login == login), None)
+            status = "ACTION: Needs Review" if not last_review else f"ACTION: Needs Re-Review" if last_review.commit_id != pr.head.sha else "STATE: Up-To-Date"
+            item = {"number": pr.number, "title": pr.title, "status": status, "unaddressed": []}
+            if check_responses:
+                our_coms = [c for c in pr.get_review_comments() if c.user.login == login]
+                after_coms = [c for c in pr.get_review_comments() if c.user.login != login and any(c.in_reply_to_id == oc.id for oc in our_coms)]
+                if our_coms and not after_coms: item["unaddressed"] = [f"{c.path}:{c.position}" for c in our_coms]
+            if cleanup_comments:
+                for c in pr.get_issue_comments():
+                    if c.user.login == login and "<!-- td-review-manager-comment -->" in c.body:
+                        if not dry_run: c.delete()
+            prs_data.append(item)
+        return prs_data
+
+    def track_review(self, pr_num, status, auditor, dry_run=True):
+        tracking_file = "REVIEW_TRACKING.md"; now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        content = open(tracking_file).read() if os.path.exists(tracking_file) else "# PR Review Tracking\n\n| PR | Status | Auditor | Last Updated |\n|----|--------|---------|--------------|\n"
+        lines = content.splitlines(); new_lines = []; found = False
+        for line in lines:
+            if line.startswith("|") and f"| #{pr_num} |" in line:
+                new_lines.append(f"| #{pr_num} | {status} | {auditor} | {now} |"); found = True
+            else: new_lines.append(line)
+        if not found: new_lines.append(f"| #{pr_num} | {status} | {auditor} | {now} |")
+        if not dry_run:
+            with open(tracking_file, "w") as f: f.write("\n".join(new_lines) + "\n")
+        return {"pr": pr_num, "status": status, "updated": not dry_run}
+
+    def resolve_conflicts_headless(self):
+        files = self.find_conflict_files(); resolved, failed = [], []
+        for f in files:
+            if self.resolve_conflict(f): resolved.append(f)
+            else: failed.append(f)
+        if failed: raise CLIError(f"Failed to resolve: {', '.join(failed)}")
+        return resolved
+
+    def repair_context(self, log=None, log_file=None):
+        from error_rag import RAGPipeline
+        pipeline = RAGPipeline(); prompts = []
+        if log: prompts.append(pipeline.generate_prompt(log))
+        elif log_file:
+            with open(log_file) as f:
+                for line in f:
+                    p = pipeline.generate_prompt(line)
+                    if p: prompts.append(p)
+        return prompts
