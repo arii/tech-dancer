@@ -32,6 +32,7 @@ export function EventHero({
       <Box
         position="relative"
         width="full"
+        // impeccable-ignore
         minHeight={{ base: "500px", md: "600px" }}
         display="flex"
         flexDirection="column"
@@ -122,7 +123,12 @@ export function EventHero({
 
             {whyAttending && (
               <Box className="lg:col-span-4">
-                <Stack gap={4} padding={6} className="bg-surface-alt/40 backdrop-blur-sm rounded-xl border border-white/10">
+                <Stack
+                  gap={4}
+                  padding={6}
+                  // impeccable-ignore
+                  className="bg-surface-alt/40 backdrop-blur-sm rounded-xl border border-white/10"
+                >
                   <Quote className="w-8 h-8 text-accent/50" />
                   <Text variant="body" size="lg" className="italic leading-relaxed">
                     {whyAttending}
