@@ -1,5 +1,6 @@
 import { Plane, Calendar, Hotel, Users, ShieldAlert } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 
 export function EventHeaderExtras({ author }: { author: string }) {
   return (
@@ -76,10 +77,10 @@ export function EventSidebar({ startDate, earlyBirdDate, hotelCutoffDate }: Even
               className="hover:border-accent transition-colors"
             >
               <Stack gap={2}>
-                <Box display="flex" align="center" gap={2} color="brand">
-                  <reminder.icon className="w-4 h-4" />
+                <Stack direction="row" align="center" gap={2} color="brand">
+                  <Icon icon={reminder.icon} size="sm" />
                   <Text variant="mono" size="xs" weight="font-bold">{reminder.label.toUpperCase()}</Text>
-                </Box>
+                </Stack>
                 <Text variant="mono" size="tiny" color="dim">
                   Target: {reminder.date!.toLocaleDateString()}
                 </Text>
