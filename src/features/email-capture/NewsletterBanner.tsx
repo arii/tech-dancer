@@ -16,7 +16,7 @@ export function NewsletterBanner() {
       border="y"
       className="border-accent/40 shadow-glow"
       paddingX={{ base: 6, md: 12 }}
-      paddingY={{ base: 12, lg: 16 }}
+      paddingY={{ base: 8, lg: 16 }}
       radius="none"
       width="full"
     >

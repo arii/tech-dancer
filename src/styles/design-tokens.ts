@@ -26,6 +26,11 @@ export const animation = {
   revealDistance: "var(--reveal-distance)",
 };
 
+export const transitions = {
+  default: "all 200ms ease-in-out",
+  slow: "all 300ms ease-in-out",
+};
+
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
@@ -105,7 +110,7 @@ export const typography = {
   headline: "font-display font-bold tracking-tighter leading-[0.9]",
   hero: "font-serif font-black tracking-tight leading-[1.2]",
   display: "font-display font-bold tracking-tight leading-none",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
+  body: "font-sans leading-relaxed text-text-body max-w-[70ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: `font-mono ${tracking.utility} uppercase`,
   label: `font-mono font-bold uppercase ${tracking.label}`,

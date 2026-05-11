@@ -21,22 +21,25 @@ export function EmailForm() {
   return (
     <Box as="form" onSubmit={handleSubmit} noValidate width={{ base: "full", md: "auto" }} maxWidth="md">
       <Stack direction="row" gap={0} position="relative" width="full">
+        <label htmlFor="email-input" className="sr-only">Email Address</label>
         <Box
           as="input"
+          id="email-input"
           name="email"
           type="email"
           placeholder="your@email.com"
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
-          minHeight={11}
+          minHeight="44px"
           width="full"
+          autoComplete="email"
         />
         <Button
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          minHeight={11}
+          minHeight="44px"
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}

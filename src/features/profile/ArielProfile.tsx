@@ -17,15 +17,15 @@ function ArielProfile() {
 
   const renderSection = (section: ProfileSection) => {
     return (
-      <Stack key={section.id} gap={6} maxWidth="prose">
+      <Stack key={section.id} gap={6} maxWidth="70ch">
         {section.eyebrow && (
-          <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">
+          <Text variant="mono" size="xs" color="brand" weight="font-bold" className="tracking-widest">
             {section.eyebrow}
           </Text>
         )}
 
         {section.title && (
-          <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
+          <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
             {section.title}
           </Text>
         )}
@@ -65,13 +65,13 @@ function ArielProfile() {
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>
-                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Privacy Policy</Text>
+                  <Text id="privacy" as="h2" variant="headline" size="xl" weight="font-bold">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance and analytics. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
                   </Text>
                 </Stack>
                 <Stack gap={4}>
-                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">Terms of Use</Text>
+                  <Text id="terms" as="h2" variant="headline" size="xl" weight="font-bold">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim">
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
@@ -95,19 +95,20 @@ function ArielProfile() {
                   <img
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
-                    width={960}
-                    height={949}
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover object-center-20"
+                    style={{ aspectRatio: "1 / 1" }}
                   />
                 </Box>
 
                 <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
-                    <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
+                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="tracking-widest">At a Glance</Text>
                     <Stack gap={4}>
                       {bio.details.map((detail) => (
                         <Stack key={detail.label} gap={1}>
-                          <Text variant="mono" size="micro" color="dim" weight="font-bold" className="uppercase tracking-wider">{detail.label}</Text>
+                          <Text variant="mono" size="micro" color="dim" weight="font-bold" className="tracking-wider uppercase">{detail.label}</Text>
                           {detail.value.startsWith('http') ? (
                             <Box as="a" href={detail.value} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
                               <Text variant="body" size="sm" color="main" weight="font-semibold" className="truncate">{detail.value.replace('https://', '')}</Text>
@@ -123,7 +124,7 @@ function ArielProfile() {
 
                 <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
-                    <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                    <Text variant="mono" size="xs" color="brand" weight="font-bold" className="tracking-widest">Connect</Text>
                     <ProfileLinks links={bio.links} />
                   </Stack>
                 </Box>
