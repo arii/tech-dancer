@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ExternalLink, Layout } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
@@ -37,44 +38,47 @@ const PostBodyExtras = ({ affiliateLink }: { affiliateLink?: string }) => {
 export function FullPreview(props: FullPreviewProps & DraftData) {
   const { onClose } = props;
 
-  const previewConfig = {
-    post: (data: PostDraftData) => ({
-      sidebar: undefined,
-      headerExtras: <PostHeaderExtras author={data.author} />,
-      content: data.commentary,
-      bodyExtras: <PostBodyExtras affiliateLink={data.affiliateLink} />
-    }),
-    resource: (data: ResourceDraftData) => ({
-      sidebar: <ResourceSidebar affiliateLink={data.affiliateLink} specs={data.specs} />,
-      headerExtras: (
-        <ResourceHeaderExtras
-          author={data.author}
-          rating={data.rating}
-          durability={data.durability}
-          value={data.value}
-          priceCategory={data.priceCategory}
-        />
-      ),
-      content: data.content,
-      bodyExtras: <ResourceBodyExtras heading={data.heading} />
-    }),
-    event: (data: EventDraftData) => ({
-      sidebar: <EventSidebar startDate={data.startDate} earlyBirdDate={data.earlyBirdDate} hotelCutoffDate={data.hotelCutoffDate} />,
-      headerExtras: <EventHeaderExtras author={data.author} />,
-      content: data.description,
-      bodyExtras: <EventBodyExtras />
-    })
-  };
-
-  const getPreview = () => {
+  const { sidebar, headerExtras, content, bodyExtras } = useMemo(() => {
     switch (props.type) {
-      case 'post': return previewConfig.post(props);
-      case 'resource': return previewConfig.resource(props);
-      case 'event': return previewConfig.event(props);
+      case 'post': {
+        const data = props as PostDraftData;
+        return {
+          sidebar: undefined,
+          headerExtras: <PostHeaderExtras author={data.author} />,
+          content: data.commentary,
+          bodyExtras: <PostBodyExtras affiliateLink={data.affiliateLink} />
+        };
+      }
+      case 'resource': {
+        const data = props as ResourceDraftData;
+        return {
+          sidebar: <ResourceSidebar affiliateLink={data.affiliateLink} specs={data.specs} />,
+          headerExtras: (
+            <ResourceHeaderExtras
+              author={data.author}
+              rating={data.rating}
+              durability={data.durability}
+              value={data.value}
+              priceCategory={data.priceCategory}
+            />
+          ),
+          content: data.content,
+          bodyExtras: <ResourceBodyExtras heading={data.heading} />
+        };
+      }
+      case 'event': {
+        const data = props as EventDraftData;
+        return {
+          sidebar: <EventSidebar startDate={data.startDate} earlyBirdDate={data.earlyBirdDate} hotelCutoffDate={data.hotelCutoffDate} />,
+          headerExtras: <EventHeaderExtras author={data.author} />,
+          content: data.description,
+          bodyExtras: <EventBodyExtras />
+        };
+      }
+      default:
+        return { sidebar: undefined, headerExtras: undefined, content: '', bodyExtras: undefined };
     }
-  };
-
-  const { sidebar, headerExtras, content, bodyExtras } = getPreview();
+  }, [props]);
 
   return (
     <Box position="relative">
