@@ -86,7 +86,7 @@ export function ContentCard({
       <Box
         as={NavLink}
         to={`${basePath}/${slug}`}
-        aria-label={`Read article: ${title}`}
+        aria-label={`Read article: ${title} in category ${category}`}
         className="absolute inset-0 z-10"
       />
       <Box

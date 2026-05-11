@@ -79,7 +79,7 @@ export function GearCard({
       <Box
         as={NavLink}
         to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
+        aria-label={`Read gear review: ${title} in category ${category}${rating ? `, rated ${rating.toFixed(1)} out of 5` : ''}`}
         className="absolute inset-0 z-10"
       />
       {verdict && (

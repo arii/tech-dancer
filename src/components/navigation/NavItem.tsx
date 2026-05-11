@@ -41,7 +41,7 @@ export function NavItem({ to, label, icon, onClick, isMobile, "aria-label": aria
             border={isMobile ? "b" : undefined}
             className={cn(
               "transition-transform duration-200 group-hover:translate-x-1",
-              isMobile ? "border-line/50 min-h-[56px]" : "min-h-[48px]",
+              isMobile ? "border-line/50 min-h-14" : "min-h-12",
               isMobile && isActive && "shadow-sm"
             )}
           >

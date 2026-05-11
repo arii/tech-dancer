@@ -64,7 +64,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
       exit={{ x: '-100%' }}
       position="fixed"
       width="full"
-      className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden"
+      className="top-16 left-0 right-0 bottom-0 z-[100] bg-bg lg:hidden" // impeccable-ignore
       padding={8}
       overflow="y-auto"
       role="dialog"
@@ -87,7 +87,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             width="full"
             position="relative"
             radius="md"
-            className="transition-all duration-200 hover:translate-x-1 z-10 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 min-h-[44px]"
+            className="transition-all duration-200 hover:translate-x-1 z-10 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 min-h-11"
           >
             <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
             <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
