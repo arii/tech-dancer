@@ -1,16 +1,71 @@
 import { TimelineItem } from '../types';
 
+const ESCAPE_MAP: Record<string, string> = {
+  '\\': '\\\\',
+  ',': '\\,',
+  ';': '\\;',
+  '\n': '\\n',
+  '\r': '',
+};
+
 /**
  * Escapes special characters for iCalendar format as per RFC 5545.
  */
 function escapeICS(str: string): string {
   if (!str) return "";
-  return str
-    .replace(/\\/g, "\\\\")
-    .replace(/,/g, "\\,")
-    .replace(/;/g, "\\;")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "");
+  return str.replace(/[\\,;\n\r]/g, (match) => ESCAPE_MAP[match] ?? "");
+}
+
+/**
+ * Folds lines longer than 75 octets as per RFC 5545.
+ * Uses a buffer-aware approach to avoid O(n^2) encoding and emoji splitting.
+ */
+function foldLine(line: string): string {
+  const MAX_OCTETS = 75;
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(line);
+
+  if (bytes.length <= MAX_OCTETS) return line;
+
+  const decoder = new TextDecoder();
+  let result = "";
+  let pos = 0;
+  let isFirstLine = true;
+
+  while (pos < bytes.length) {
+    const limit = isFirstLine ? MAX_OCTETS : MAX_OCTETS - 1;
+    let end = pos + limit;
+
+    if (end >= bytes.length) {
+      const chunk = bytes.subarray(pos);
+      if (!isFirstLine) result += "\r\n ";
+      result += decoder.decode(chunk);
+      break;
+    }
+
+    // Don't split in the middle of a multi-byte UTF-8 character.
+    // Bytes starting with 10xxxxxx (0x80-0xBF) are continuation bytes.
+    while (end > pos && (bytes[end] & 0xC0) === 0x80) {
+      end--;
+    }
+
+    // Fallback: if a single character is longer than the limit (should not happen with 75 octets),
+    // we must at least move forward by one character.
+    if (end === pos) {
+      end = pos + limit + 1;
+      while (end < bytes.length && (bytes[end] & 0xC0) === 0x80) {
+        end++;
+      }
+    }
+
+    const chunk = bytes.subarray(pos, end);
+    if (!isFirstLine) result += "\r\n ";
+    result += decoder.decode(chunk);
+    pos = end;
+    isFirstLine = false;
+  }
+
+  return result;
 }
 
 export function generateICS(eventTitle: string, items: TimelineItem[], url?: string) {
@@ -39,11 +94,11 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
       "SEQUENCE:0",
       "TRANSP:TRANSPARENT",
       "END:VEVENT"
-    ].join("\r\n");
+    ].map(foldLine).join("\r\n");
   });
 
   const footer = ["END:VCALENDAR"];
-  return [...header, ...body, ...footer].join("\r\n");
+  return [...header.map(foldLine), ...body, ...footer.map(foldLine)].join("\r\n");
 }
 
 export function downloadICS(filename: string, content: string) {

@@ -7,7 +7,8 @@ const routes = [
   { name: 'research', path: './research' },
   { name: 'about', path: './about' },
   { name: 'contact', path: './contact' },
-  { name: 'preview', path: './preview' }
+  { name: 'preview', path: './preview' },
+  { name: 'event-guide', path: './events/boogie-by-the-bay' }
 ];
 
 test.describe('Visual Regression Tests', () => {
@@ -27,13 +28,23 @@ test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
-      await page.waitForLoadState('networkidle');
+
+      // Wait for the main content to be visible as a base stability measure
+      await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
+
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
 
-      // Wait for hydration and stability
-      await page.waitForLoadState('networkidle');
-      await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
+      // Route-specific stability waits
+      if (route.name === 'research') {
+        // Wait for research studies to be loaded
+        await expect(page.getByText('Read Study').first()).toBeVisible({ timeout: 10000 });
+      }
+
+      if (route.name === 'preview') {
+        // Ensure preview components are visible
+        await expect(page.getByText('Component Preview')).toBeVisible();
+      }
 
       // Robust scroll-to-settle: triggers lazy loading without hardcoded sleep loops
       await page.evaluate(async () => {
@@ -65,11 +76,9 @@ test.describe('Visual Regression Tests', () => {
         await new Promise(requestAnimationFrame);
       });
 
-      // Use a strict 2% threshold to catch unintended UI regressions
-      // Playwright automatically disables animations for toHaveScreenshot
+      // Snapshots use global maxDiffPixelRatio threshold defined in playwright.config.ts
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
-        maxDiffPixelRatio: 0.02,
         animations: 'disabled'
       });
     });

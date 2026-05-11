@@ -7,7 +7,7 @@ class OllamaService:
         self.base_url = base_url
 
     def is_available(self) -> bool:
-        return is_ollama_available(url=self.base_url)
+        return is_ollama_available()
 
     def generate(self, prompt: str) -> str:
         return call_ollama(prompt, model=self.model, url=self.base_url) or ""

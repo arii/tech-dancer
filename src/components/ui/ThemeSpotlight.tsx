@@ -7,7 +7,7 @@ interface ThemeSpotlightProps {
   accentColor?: string;
 }
 
-export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent)' }: ThemeSpotlightProps) {
+export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent, #22d3ee)' }: ThemeSpotlightProps) {
   return (
     <Box
       border

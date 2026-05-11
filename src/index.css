@@ -75,6 +75,7 @@
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
+  --section-spacing: 4rem;
 
   /* Font Sizes */
   --text-micro: 9px;
@@ -125,6 +126,21 @@
     background-size: 20px 20px;
   }
 
+  /* Brand SVG Utilities */
+  .brand-b-mark {
+    font-family: var(--raw-font-serif);
+    font-weight: 900;
+    font-style: italic;
+  }
+  .brand-wordmark {
+    font-family: var(--raw-font-display);
+    font-weight: 800;
+  }
+  .brand-text-accent { fill: var(--raw-color-accent-brand); }
+  .brand-text-muted { fill: var(--logo-muted-text); }
+  .brand-stop-accent { stop-color: var(--raw-color-accent-brand); }
+  .brand-stop-purple { stop-color: var(--raw-color-accent-purple); }
+
   /* Wordmark Utilities */
   .wordmark-base {
     @apply font-extrabold text-white flex items-center tracking-[0.05em];
@@ -172,6 +188,9 @@
 .main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
 .stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
 .tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
+  .pb-safe-area { padding-bottom: env(safe-area-inset-bottom); }
+  .pb-safe-area-search { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .max-h-search-mobile { max-height: calc(60vh - env(safe-area-inset-bottom)); }
 .experience-chip {
   @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
