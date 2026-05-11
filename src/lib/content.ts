@@ -159,6 +159,13 @@ export interface Event {
     recommendations: string[];
     essentials: string[];
   };
+  curatedGear?: {
+    outfits?: string[];
+    accessories?: string[];
+    shoes?: string[];
+    essentials?: string[];
+    travel?: string[];
+  };
 }
 
 export type ContentItem = Post | Resource | Study | Event;

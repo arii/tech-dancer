@@ -1,34 +1,57 @@
-import { Resource } from '@/lib/content';
-import { Stack, Grid } from '@/layouts/Primitives';
+import { Stack, Grid, Box, Text } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GearCard } from '@/components/ui/GearCard';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { affiliateManager } from '@/lib/affiliateManager';
+import { Event } from '@/lib/content';
 
 interface CuratedGearProps {
-  title?: string;
-  items: Resource[];
+  event: Event;
 }
 
-export function CuratedGear({ title = "Recommended Gear", items }: CuratedGearProps) {
-  if (!items || items.length === 0) return null;
+export function CuratedGear({ event }: CuratedGearProps) {
+  const { curatedGear } = event;
+
+  if (!curatedGear) return null;
+
+  const categories = [
+    { id: 'outfits', label: 'Outfits', ids: curatedGear.outfits },
+    { id: 'accessories', label: 'Accessories', ids: curatedGear.accessories },
+    { id: 'shoes', label: 'Shoes', ids: curatedGear.shoes },
+    { id: 'essentials', label: 'Essentials', ids: curatedGear.essentials },
+    { id: 'travel', label: 'Travel', ids: curatedGear.travel },
+  ];
+
+  const sections = categories
+    .map(cat => ({
+      ...cat,
+      links: (cat.ids || [])
+        .map(id => affiliateManager.getLink(id))
+        .filter((link): link is NonNullable<typeof link> => !!link)
+    }))
+    .filter(section => section.links.length > 0);
+
+  if (sections.length === 0) return null;
 
   return (
-    <Stack gap={8}>
-      <SectionHeader eyebrow="TOOLS" title={title} />
-      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
-        {items.map((item) => (
-          <GearCard
-            key={item.slug}
-            slug={item.slug}
-            title={item.title}
-            category={item.category}
-            excerpt={item.excerpt}
-            basePath="/gear"
-            rating={item.rating}
-            verdict={item.verdict}
-            image={item.image}
-          />
+    <Stack gap={12}>
+      <SectionHeader eyebrow="PACKING LIST" title="Curated Gear" />
+
+      <Stack gap={10}>
+        {sections.map(section => (
+          <Stack key={section.id} gap={4}>
+            <Box borderBottom className="border-line/30" paddingBottom={2}>
+              <Text variant="mono" size="xs" weight="font-black" color="dim" uppercase tracking="widest">
+                {section.label}
+              </Text>
+            </Box>
+            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
+              {section.links.map((link) => (
+                <AffiliateCard key={link.id} link={link} />
+              ))}
+            </Grid>
+          </Stack>
         ))}
-      </Grid>
+      </Stack>
     </Stack>
   );
 }

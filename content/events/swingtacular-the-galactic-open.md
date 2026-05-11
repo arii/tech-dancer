@@ -23,5 +23,17 @@ gear:
   essentials:
     - "Water bottle"
     - "Phone charger"
+curatedGear:
+  outfits:
+    - "rave-fan"
+  shoes:
+    - "bloch-grecian"
+    - "suede-sheets"
+  essentials:
+    - "loop-experience"
+    - "listerine-tabs"
+  travel:
+    - "compression-cubes"
+    - "hanging-toiletry-bag"
 ---
 San Francisco event. Check for roommate pairings on the Facebook group early.
