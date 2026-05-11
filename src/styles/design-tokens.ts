@@ -107,8 +107,8 @@ export const typography = {
   h1: "font-display font-black tracking-tighter leading-h1",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
-  headline: "font-display font-bold tracking-tighter leading-headline",
-  hero: "font-serif font-black tracking-tight leading-hero",
+  headline: "font-display font-bold tracking-tighter leading-[1.1]", // impeccable-ignore
+  hero: "font-serif font-black tracking-tight leading-[1.2]",
   display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[70ch]",
   mono: "font-mono tracking-widest uppercase",

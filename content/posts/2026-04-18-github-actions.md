@@ -62,7 +62,7 @@ To maintain the "Impeccable" design standards of this site, I've integrated a cu
       - name: UI Anti-Pattern Audit
         run: |
           pnpm run audit || true
-          python3 dev-tools/td_cli.py audit-gate
+          python3 dev-tools/td_cli.py gh audit-gate
 ```
 
 #### 3. Build & E2E Testing

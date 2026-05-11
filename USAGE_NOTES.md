@@ -17,20 +17,20 @@ The recommended way to review a single PR:
 
 ```bash
 # Step 1: Fetch metadata and generate context
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch
+python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch
 
 # Step 2: Run automated audit and (optionally) AI review
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
+python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit
 
 # Step 3: Submit the review to GitHub and clean up logs
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup --execute
+python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup --execute
 ```
 
 ### 2. Pre-Submission Quality Gate
 Before pushing code or opening a PR, run the full suite of local checks:
 
 ```bash
-python3 dev-tools/td_cli.py pre-submit
+python3 dev-tools/td_cli.py gh pre-submit
 ```
 This includes:
 - UI Anti-pattern audit

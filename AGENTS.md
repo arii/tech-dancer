@@ -84,7 +84,7 @@ These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adh
 
 ### Parallel Work Protocol
 When multiple agents work simultaneously:
-1. **Run conflict check first**: `python3 dev-tools/td_cli.py conflicts`
+1. **Run conflict check first**: `python3 dev-tools/td_cli.py gh conflicts`
 2. **Stagger feature files**: Agents should not touch the same component file.
 3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` to communicate scope (e.g. `feat/issue-247-gear-card`).
 4. **Shared primitives**: Never modify `src/layouts/*.tsx` in a feature branch without coordinating.
@@ -94,20 +94,20 @@ When multiple agents work simultaneously:
 The `dev-tools/td_cli.py` tool is the unified entry point for repository automation and PR reviews.
 
 ### PR Review Lifecycle
-1. **Fetch Context**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch`
-2. **Perform Audit**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit`
-3. **Submit Review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
+1. **Fetch Context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch`
+2. **Perform Audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit`
+3. **Submit Review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup`
 
 ### Quality Gates & Submission Protocol
 - **Autonomous Repair**: If you encounter persistent linting or TypeScript errors, you can use the autonomous repair agent:
   ```bash
   # Triage current local errors and attempt to fix them in-place
-  python3 dev-tools/td_cli.py repair
+  python3 dev-tools/td_cli.py jules repair
 
   # Attempt repairs in an isolated git worktree and branch
-  python3 dev-tools/td_cli.py repair --worktree
+  python3 dev-tools/td_cli.py jules repair --worktree
   ```
-- **Pre-Submit Check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing.
+- **Pre-Submit Check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing.
 - **No Monolithic PRs**: Keep PRs focused. A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
 - **Manual Confirmation**: Every merge command MUST be preceded by a specific `notify_user` request for approval.
 - **Code Review Standards**: Evaluate for dead abstractions, unnecessary indirection, responsibility creep, and token compliance.
@@ -163,7 +163,7 @@ This hook runs a targeted audit on changed `.tsx` files.
 
 Before submitting a PR, it is recommended to run the full pre-submission check:
 ```bash
-python3 dev-tools/td_cli.py pre-submit
+python3 dev-tools/td_cli.py gh pre-submit
 ```
 
 ### 🧪 Pre-Commit Checklist

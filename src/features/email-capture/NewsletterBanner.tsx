@@ -12,7 +12,7 @@ export function NewsletterBanner() {
 
   return (
     <Box 
-      position="relative"
+      position={{ base: "fixed", lg: "relative" }} bottom={{ base: 16, lg: "auto" }} zIndex="sticky"
       surface="alt"
       border="y"
       className="border-accent/40 shadow-glow"

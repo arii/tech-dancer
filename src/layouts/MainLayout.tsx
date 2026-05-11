@@ -49,7 +49,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}
             paddingTop={{ base: 16, md: 12 }}
-            paddingBottom={{ base: 28, md: 12 }}
+            paddingBottom={{ base: 64, md: 12 }}
             flex={1}
             direction="col"
             marginX={{ base: "auto", lg: 0 }}

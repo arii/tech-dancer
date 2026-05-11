@@ -24,7 +24,7 @@ export function SectionHeader({ eyebrow, title, link }: SectionHeaderProps) {
       {link && (
         <Link
           to={link.to}
-          className="text-xs font-black uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
+          className="text-xs font-black uppercase tracking-widest text-accent hover:text-accent/80 transition-colors"
         >
           {link.text}
         </Link>

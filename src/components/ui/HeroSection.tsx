@@ -106,8 +106,8 @@ export function HeroSection() {
           align="stretch"
           gap={5}
           marginTop={{ base: 6, lg: 8 }}
-          maxWidth="2xl"
-          className="opacity-0 hero-tagline-anim"
+          maxWidth="4xl"
+          className="opacity-0 pointer-events-auto hero-tagline-anim"
         >
           <Box
             width="2px"

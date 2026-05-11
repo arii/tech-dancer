@@ -53,7 +53,6 @@ export default function Home() {
             <Stack
               direction="col"
               gap={0}
-              className="divide-y divide-line"
               as={motion.div}
               variants={motionTokens.staggerContainer}
               initial="initial"
@@ -61,7 +60,7 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
             >
               {recentPosts.map((post) => (
-                <Box key={post.slug} paddingY={4} as={motion.div} variants={motionTokens.staggerItem}>
+                <Box key={post.slug} as={motion.div} variants={motionTokens.staggerItem} >
                   <Stack
                     as={NavLink}
                     to={`/blog/${post.slug}`}
@@ -71,9 +70,9 @@ export default function Home() {
                     paddingY={{ base: 5, sm: 6 }}
                     marginX={{ sm: -2 }}
                     align={{ sm: "start" }}
-                    className="group rounded-lg transition-colors hover:bg-surface"
+
                   >
-                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-44">
+                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="md:w-44">
                       <Box 
                         as="span" 
                         radius="sm" 
@@ -91,7 +90,7 @@ export default function Home() {
                       <Text as="h3" color="main" size="base" weight="font-bold" marginBottom={1} className="transition-colors group-hover:text-accent leading-snug">
                         {post.title}
                       </Text>
-                      <Text as="span" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
+                      <Text as="span" size="sm" clamp={2} className="leading-7 text-text-body/72">
                         {post.excerpt}
                       </Text>
                     </Box>
