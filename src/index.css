@@ -251,16 +251,20 @@
   }
 }
 
-.transition-bg-blur {
-  transition-property: background-color, backdrop-filter;
-  transition-duration: 300ms;
-}
+@layer utilities {
+  .transition-bg-blur {
+    transition-property: background-color, backdrop-filter;
+    transition-duration: 300ms;
+  }
 
-.transition-blur {
-  transition-property: backdrop-filter;
-  transition-duration: 300ms;
-}
+  .transition-blur {
+    transition-property: backdrop-filter;
+    transition-duration: 300ms;
+  }
 
-.mobile-header {
-  @apply lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full transition-blur;
+  .mobile-header {
+    @apply lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full;
+    transition-property: backdrop-filter;
+    transition-duration: 300ms;
+  }
 }
