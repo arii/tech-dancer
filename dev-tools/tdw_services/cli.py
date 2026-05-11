@@ -177,7 +177,6 @@ def manage_reviews(ctx, check_responses, cleanup_comments, dry_run):
 @gh.command()
 @click.pass_context
 def audit_gate(ctx):
-    """UI Anti-Pattern Audit Gate (Baseline comparison)"""
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.handle_audit_gate()
     msg = f"UI Anti-Pattern Audit: Current={res['current']}, Baseline={res['baseline']}"
@@ -185,12 +184,6 @@ def audit_gate(ctx):
         err(ctx, msg, data=res)
     else:
         out(ctx, msg, data=res)
-
-@cli.command(name="audit-gate")
-@click.pass_context
-def audit_gate_alias(ctx):
-    """Alias for gh audit-gate"""
-    ctx.invoke(audit_gate)
 
 @gh.command()
 @click.option('--pr', required=True, type=int)

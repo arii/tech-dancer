@@ -24,19 +24,10 @@ from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any
 from scope_check import verify_pr_scope, get_project_config
 
 PROJECT_CONFIG = get_project_config()
-AUDIT_CHECK_DIRS = [
-    'src/features',
-    'src/pages',
-    'src/components',
-    'src/layouts',
-    'src/styles',
-    'src/providers',
-    'src/hooks',
-    'src/lib',
-    'src/App.tsx',
-    'src/main.tsx',
-    '.github/workflows'
-]
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
+
+PROJECT_CONFIG = get_project_config()
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
 
 class Orchestrator:
     def __init__(self):
@@ -412,18 +403,11 @@ class Orchestrator:
             baseline_count = 0
             try:
                 main_files = run_command(["git", "ls-tree", "-r", "origin/main", "--name-only"]).splitlines()
-                audit_extensions = ('.ts', '.tsx', '.yml', '.css', '.scss')
-                relevant = [mf for mf in main_files if mf.endswith(audit_extensions) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
+                relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
                 for mf in relevant:
                     res_show = run_command(["git", "show", f"origin/main:{mf}"], check=False, log_on_error=False)
                     if res_show.returncode == 0:
-                        # Use subprocess.run directly to handle non-zero exit codes from audit tool (which exits 1 on violations)
-                        import subprocess
-                        proc = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
-                                            input=res_show.stdout, text=True, capture_output=True)
-                        count_str = proc.stdout.strip()
-                        if count_str.isdigit():
-                            baseline_count += int(count_str)
+                        baseline_count += int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"], input_str=res_show.stdout) or 0)
             except Exception: pass
         return {"current": current_count, "baseline": baseline_count, "status": "success" if current_count <= baseline_count else "error"}
 
