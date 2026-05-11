@@ -15,6 +15,31 @@ export const test = base.extend({
       window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
     });
 
+    // Global CSS stabilization: hide scrollbars, carets, and focus rings
+    await page.addStyleTag({
+      content: `
+        *, *::before, *::after {
+          -moz-osx-font-smoothing: grayscale !important;
+          -webkit-font-smoothing: antialiased !important;
+          transition: none !important;
+          animation: none !important;
+        }
+        ::-webkit-scrollbar {
+          display: none !important;
+        }
+        html {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        input, textarea {
+          caret-color: transparent !important;
+        }
+        :focus {
+          outline: none !important;
+        }
+      `
+    });
+
     await use(page);
   },
 });

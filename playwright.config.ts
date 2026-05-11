@@ -16,9 +16,13 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   expect: {
-    // Enforce strict 2% pixel threshold globally for visual regression
     toHaveScreenshot: {
+      // Sensitivity threshold for color differences (0 to 1)
+      threshold: 0.2,
+      // Total allowed difference in pixels as a ratio (0 to 1)
       maxDiffPixelRatio: 0.02,
+      // Total allowed difference in pixels (absolute)
+      maxDiffPixels: 100,
     },
   },
   projects: [

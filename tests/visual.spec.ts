@@ -12,19 +12,6 @@ const routes = [
 ];
 
 test.describe('Visual Regression Tests', () => {
-  test.beforeEach(async ({ page }) => {
-    // Use a fixed clock to ensure deterministic date/time rendering (e.g., in footer or events)
-    await page.clock.setFixedTime(new Date('2024-01-01T12:00:00Z'));
-
-    // Disable motion to stabilize non-deterministic CSS/JS animations
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-
-    // Ensure newsletter banner doesn't interfere with visual tests
-    await page.addInitScript(() => {
-      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
-    });
-  });
-
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
       await page.goto(route.path);
@@ -79,7 +66,17 @@ test.describe('Visual Regression Tests', () => {
       // Snapshots use global maxDiffPixelRatio threshold defined in playwright.config.ts
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
         fullPage: true,
-        animations: 'disabled'
+        animations: 'disabled',
+        mask: [
+          page.getByTestId('content-date'),
+          page.getByTestId('detail-metadata'),
+          page.getByTestId('footer-copyright'),
+          // Mask external images which might fail to load or change
+          page.locator('img[src^="https://"]'),
+          // Mask UX Auditor dynamic content
+          page.locator('[class*="animate-pulse"]'),
+          page.locator('text=/\\d{1,2}:\\d{2}:\\d{2}/'), // Matches timestamps like 12:00:00
+        ]
       });
     });
   }
