@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
@@ -85,11 +86,11 @@ export default function ResearchDetail() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Search size={48} className="opacity-20" />
+          <Icon icon={Search} size="xl" opacity={0.2} />
           <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
+          <Button variant="ghost" onClick={() => navigate('/research')} color="dim" className="hover:text-accent">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
-          </Box>
+          </Button>
         </Stack>
       </Box>
     );
@@ -104,19 +105,18 @@ export default function ResearchDetail() {
         schema={structuredData}
       />
       <Stack gap={12}>
-        <Box 
-          as="button" 
+        <Button
+          variant="ghost"
           onClick={() => navigate('/research')}
-          display="flex" 
-          align="center" 
+          display="flex"
+          align="center"
           gap={2}
           color="dim"
-          className="hover:text-accent transition-all group"
-          cursor="pointer"
+          className="hover:text-accent group"
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Lab</Text>
-        </Box>
+          <Icon icon={ArrowLeft} size="sm" className="group-hover:-translate-x-1 transition-transform" />
+          <Text variant="mono" size="xs" weight="font-bold">Back to Lab</Text>
+        </Button>
 
         <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
           <Stack gap={12}>
@@ -142,24 +142,24 @@ export default function ResearchDetail() {
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
-                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                      <Activity className="w-4 h-4 text-accent" />
+                    <Stack direction="row" border radius="md" padding="compact" align="center" gap={3}>
+                      <Icon icon={Activity} size="sm" color="accent" />
                       <StatusBadge label={tool.status} />
-                    </Box>
+                    </Stack>
                   </Stack>
                   <Stack gap={4}>
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
-                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                      <Database className="w-4 h-4 text-accent" />
+                    <Stack direction="row" border radius="md" padding="compact" align="center" gap={3}>
+                      <Icon icon={Database} size="sm" color="accent" />
                       <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
-                    </Box>
+                    </Stack>
                   </Stack>
                 </Grid>
 
                 {tool.status === 'Coming Soon' && (
                   <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
-                      <Search className="w-8 h-8 text-accent opacity-50" />
+                      <Icon icon={Search} size="xl" color="accent" opacity={0.5} />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">

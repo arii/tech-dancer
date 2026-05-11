@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
@@ -55,9 +55,9 @@ export default function GearPost() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Review Not Found</Text>
-          <Box as="button" onClick={() => navigate('/gear')} className="hover:text-accent transition-colors">
+          <Button variant="ghost" onClick={() => navigate('/gear')} color="dim" className="hover:text-accent">
             <Text variant="mono" size="xs">Back to Toolbox</Text>
-          </Box>
+          </Button>
         </Stack>
       </Box>
     );

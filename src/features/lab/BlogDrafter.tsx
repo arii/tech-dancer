@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -72,28 +73,29 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   return (
     <Stack gap={10} height="full">
       <Stack gap={4}>
-        <Box display="flex" align="center" justify="between" width="full">
-          <Box display="flex" align="center" gap={3}>
-             <Terminal className="w-5 h-5 text-accent" />
+        <Stack direction="row" align="center" justify="between" width="full">
+          <Stack direction="row" align="center" gap={3}>
+             <Icon icon={Terminal} size="md" color="accent" />
              <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
-          </Box>
-          <Box
-            as="button"
+          </Stack>
+          <Button
+            variant="ghost"
             onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
             display="flex"
             align="center"
             gap={2}
-            className="text-text-dim hover:text-accent transition-colors cursor-pointer"
+            color="dim"
+            className="hover:text-accent"
           >
-            <RotateCcw className="w-4 h-4" />
+            <Icon icon={RotateCcw} size="sm" />
             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
-          </Box>
-        </Box>
+          </Button>
+        </Stack>
 
         {/* Type Selector */}
-        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border>
           {types.map((type) => {
-            const Icon = type.icon;
+            const TypeIcon = type.icon;
             const isActive = data.type === type.id;
             return (
               <Box
@@ -105,14 +107,15 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 justify="center"
                 gap={2}
                 paddingY={2}
+                cursor="pointer"
                 className={cn(
-                  "transition-all cursor-pointer",
+                  "transition-all",
                   isActive
                     ? "bg-accent text-bg shadow-sm"
                     : "text-text-dim hover:text-text-main hover:bg-white/5"
                 )}
               >
-                <Icon className="w-3 h-3" />
+                <Icon icon={TypeIcon} size="xs" />
                 <Text variant="mono" size="micro" weight="font-bold">{type.label}</Text>
               </Box>
             );
@@ -120,9 +123,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Grid>
 
         <Box border padding="compact" className="bg-accent/5 border-accent/20">
-           <Stack gap={2} display="flex" align="baseline" direction="row">
-              <Box as="span" className="shrink-0">
-                <Info className="w-4 h-4 text-accent" />
+           <Stack gap={2} align="baseline" direction="row">
+              <Box as="span" shrink={0}>
+                <Icon icon={Info} size="sm" color="accent" />
               </Box>
               <Text variant="body" size="xs">
                 Drafting as <strong>{data.type.toUpperCase()}</strong>.
@@ -135,7 +138,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
       <Grid cols={{ base: 1, md: 2 }} gap={12}>
         {/* Form Column */}
         <Stack gap={8}>
-          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
+          <Stack direction="row" border="b" paddingBottom={2} justify="between" align="center">
              <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
              <Box
                as="button"
@@ -143,12 +146,13 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                display="flex"
                align="center"
                gap={2}
-               className="text-accent hover:opacity-70 transition-all cursor-pointer"
+               cursor="pointer"
+               className="text-accent hover:opacity-70 transition-all"
              >
-                <Save className="w-3 h-3" />
+                <Icon icon={Save} size="xs" />
                 <Text variant="mono" size="micro" weight="font-bold">SNAPSHOT_NOW</Text>
              </Box>
-          </Box>
+          </Stack>
 
           <Stack gap={6}>
 
@@ -363,10 +367,10 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           {/* History Section */}
           {history.length > 0 && (
             <Stack gap={4} marginTop={4}>
-              <Box border="b" paddingBottom={2} display="flex" align="center" gap={2}>
-                <History className="w-3 h-3 text-accent" />
+              <Stack direction="row" border="b" paddingBottom={2} align="center" gap={2}>
+                <Icon icon={History} size="xs" color="accent" />
                 <Text variant="mono" size="micro" color="brand">VERSION_HISTORY</Text>
-              </Box>
+              </Stack>
               <Stack gap={2}>
                 {history.map((entry) => (
                   <Box
@@ -380,14 +384,14 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                     className="hover:border-accent/50 transition-colors"
                   >
                     <Stack gap={1}>
-                      <Box display="flex" align="center" gap={2}>
+                      <Stack direction="row" align="center" gap={2}>
                          <Text variant="mono" size="xs" weight="font-bold">
                           {entry.data.title || 'Untitled Snapshot'}
                         </Text>
-                        <Box paddingX={1} className="bg-accent/20 rounded">
+                        <Box paddingX={1} radius="xs" className="bg-accent/20">
                            <Text variant="mono" size="micro" color="accent">{entry.data.type.toUpperCase()}</Text>
                         </Box>
-                      </Box>
+                      </Stack>
                       <Text variant="mono" size="micro" color="dim">
                         {new Date(entry.timestamp).toLocaleString()}
                       </Text>
@@ -399,16 +403,18 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                         surface="accent"
                         paddingX={2}
                         paddingY={1}
-                        className="bg-accent/10 text-accent hover:bg-accent hover:text-bg transition-all cursor-pointer"
+                        cursor="pointer"
+                        className="bg-accent/10 text-accent hover:bg-accent hover:text-bg transition-all"
                       >
                         <Text variant="mono" size="micro" weight="font-bold">ROLLBACK</Text>
                       </Box>
                       <Box
                         as="button"
                         onClick={() => deleteHistoryEntry(entry.id)}
-                        className="text-dim hover:text-warning transition-colors cursor-pointer"
+                        cursor="pointer"
+                        className="text-dim hover:text-warning transition-colors"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Icon icon={Trash2} size="sm" />
                       </Box>
                     </Box>
                   </Box>
@@ -420,15 +426,15 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
         {/* Preview Column */}
         <Stack gap={8}>
-          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
+          <Stack direction="row" border="b" paddingBottom={2} justify="between" align="center">
              <Text variant="mono" size="micro" color="brand">AI_INTEGRATION</Text>
              {showAppliedSuccess && (
-                <Box display="flex" align="center" gap={2}>
-                  <Check className="w-3 h-3 text-accent" />
+                <Stack direction="row" align="center" gap={2}>
+                  <Icon icon={Check} size="xs" color="accent" />
                   <Text variant="mono" size="micro" color="brand" weight="font-bold">APPLIED_SUCCESSFULLY</Text>
-                </Box>
+                </Stack>
              )}
-          </Box>
+          </Stack>
 
           <Stack gap={4}>
             <Box
@@ -444,13 +450,13 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               gap={3}
               padding={4}
             >
-              <Send className="w-4 h-4" />
+              <Icon icon={Send} size="sm" />
               APPLY_RESPONSE
             </PrimaryActionButton>
           </Stack>
 
-          <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Box display="flex" align="center" gap={2}>
+          <Stack direction="row" border="b" paddingBottom={2} justify="between" align="center">
+             <Stack direction="row" align="center" gap={2}>
                <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
                <Box
                  as="button"
@@ -459,17 +465,18 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                  align="center"
                  gap={1}
                  paddingLeft={4}
-                 className="text-accent hover:opacity-70 transition-all cursor-pointer"
+                 cursor="pointer"
+                 className="text-accent hover:opacity-70 transition-all"
                >
-                 <Eye className="w-3 h-3" />
+                 <Icon icon={Eye} size="xs" />
                  <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>
                </Box>
-             </Box>
-             <Box display="flex" align="center" gap={2} color="dim">
-                <FileText className="w-3 h-3" />
+             </Stack>
+             <Stack direction="row" align="center" gap={2} color="dim">
+                <Icon icon={FileText} size="xs" />
                 <Text variant="mono" size="micro">v1.4.0</Text>
-             </Box>
-          </Box>
+             </Stack>
+          </Stack>
 
           <Box
             flex
@@ -494,9 +501,10 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               surface={copied ? "accent" : "muted"}
               border
               padding={4}
-              className={`hover:bg-line transition-all cursor-pointer group ${copied ? 'bg-accent/10 border-accent text-accent' : ''}`}
+              cursor="pointer"
+              className={cn("transition-all group", copied ? 'bg-accent/10 border-accent text-accent' : 'hover:bg-line')}
             >
-              {copied ? <Check className="w-5 h-5" /> : <Terminal className="w-5 h-5" />}
+              <Icon icon={copied ? Check : Terminal} size="md" />
               <Text variant="mono" size="xs" weight="font-bold">
                 {copied ? 'PROMPT COPIED ✓' : 'COPY AI PROMPT'}
               </Text>
@@ -513,11 +521,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               gap={3}
               surface="accent"
               padding={4}
-              className="bg-accent text-bg hover:bg-accent transition-all cursor-pointer group"
+              cursor="pointer"
+              className="bg-accent text-bg hover:bg-accent transition-all group"
             >
-              <Github className="w-5 h-5" />
+              <Icon icon={Github} size="md" />
               <Text variant="display" size="base" weight="font-bold">SUBMIT DRAFT</Text>
-              <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+              <Icon icon={ExternalLink} size="sm" className="opacity-50 group-hover:opacity-100 transition-opacity" />
             </Box>
           </Grid>
         </Stack>
