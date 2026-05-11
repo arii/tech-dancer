@@ -20,11 +20,13 @@ export function useScrollManagement(
 
   // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const timeouts: number[] = [];
+    // Force a small delay to ensure refs are attached
+    const tid_init = window.setTimeout(() => {
+      const container = scrollRef.current;
+      if (!container) return;
+      const timeouts: number[] = [];
 
-    // Save scroll position for the CURRENT page before we navigate away
+      // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
       if (container) {
         sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
@@ -48,24 +50,34 @@ export function useScrollManagement(
 
         if (hash) {
           const id = hash.replace('#', '');
-          const performScroll = () => {
+          const performScroll = (attempt = 0) => {
             const el = document.getElementById(id);
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth' });
-              return true;
+            if (el && container) {
+              const elementRect = el.getBoundingClientRect();
+              const containerRect = container.getBoundingClientRect();
+              const relativeTop = elementRect.top - containerRect.top;
+              const scrollTarget = Math.round(container.scrollTop + relativeTop - 64); // 64 for scroll-padding-top
+
+              if (attempt === 0) {
+                container.scrollTop = scrollTarget;
+              } else {
+                container.scrollTo({
+                  top: scrollTarget,
+                  behavior: 'smooth'
+                });
+              }
             }
-            return false;
+
+            // Always schedule next retry until we reach the max attempts,
+            // as layout may shift even after the element is found.
+            const delays = [100, 500, 1000, 2000];
+            if (attempt < delays.length) {
+              const tid = window.setTimeout(() => performScroll(attempt + 1), delays[attempt]);
+              timeouts.push(tid);
+            }
           };
 
-          // We use a small delay to allow the layout to settle (animations, fonts, images)
-          const tid = window.setTimeout(() => {
-            if (!performScroll()) {
-              // Longer fallback for lazy-loaded or deferred content
-              const tid2 = window.setTimeout(performScroll, 500);
-              timeouts.push(tid2);
-            }
-          }, 100);
-          timeouts.push(tid);
+          performScroll();
         } else {
           container.scrollTop = 0;
           window.scrollTo(0, 0);
@@ -81,10 +93,12 @@ export function useScrollManagement(
       };
     }
 
-    return () => {
-      window.removeEventListener('beforeunload', handleSaveScroll);
-      handleSaveScroll();
-    };
+      return () => {
+        window.removeEventListener('beforeunload', handleSaveScroll);
+        handleSaveScroll();
+      };
+    }, 10);
+    return () => window.clearTimeout(tid_init);
   }, [pathname, key, hash, navType, scrollRef]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
