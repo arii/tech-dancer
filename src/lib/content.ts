@@ -146,6 +146,8 @@ export interface Event {
   schedule: string;
   description: string;
   link?: string;
+  whyAttending?: string;
+  heroImage?: string;
   content: string;
   startDate?: string;
   earlyBirdDate?: string;

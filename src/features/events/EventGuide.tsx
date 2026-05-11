@@ -6,7 +6,6 @@ import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
 
-import { EventNavigation } from './components/EventNavigation';
 import { EventDetails } from './components/EventDetails';
 import { EventSidebar } from './components/EventSidebar';
 import { SECTION_SPACING } from './constants';
@@ -54,9 +53,9 @@ export default function EventGuide() {
         location={event.city}
         date={event.schedule}
         eyebrow={event.category}
+        whyAttending={event.whyAttending}
+        image={event.heroImage}
       />
-
-      <EventNavigation />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         <Grid cols={{ base: 1, lg: 3 }} gap={16}>
