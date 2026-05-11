@@ -118,6 +118,17 @@ export const typography = {
   wordmarkHero: `font-display leading-none text-white ${tracking.wordmark}`,
 };
 
+export const theme = {
+  height: {
+    hero: {
+      mobile: "var(--hero-height-base)",
+      desktop: "var(--hero-height-desktop)",
+    }
+  }
+};
+
+export const heights = theme.height;
+
 export const typeSizes = {
   micro: "text-micro",
   tiny: "text-tiny",

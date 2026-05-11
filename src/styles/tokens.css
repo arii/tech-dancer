@@ -77,6 +77,10 @@
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
+
+  /* Hero Heights */
+  --hero-height-base: 500px;
+  --hero-height-desktop: 600px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {

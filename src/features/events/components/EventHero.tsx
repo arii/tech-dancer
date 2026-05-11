@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 import { MapPin, Calendar, Quote } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
+import { theme } from '@/styles/design-tokens';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
-import { EVENT_TABS } from '../constants';
 
 interface EventHeroProps {
   title: string;
@@ -28,16 +28,15 @@ export function EventHero({
   }), []);
 
   return (
-    <>
-      <Box
-        position="relative"
-        width="full"
-        minHeight={{ base: "500px", md: "600px" }} // impeccable-ignore
-        display="flex"
-        flexDirection="column"
-        overflow="hidden"
-        className="bg-bg"
-      >
+    <Box
+      position="relative"
+      width="full"
+      minHeight={{ base: theme.height.hero.mobile, md: theme.height.hero.desktop }}
+      display="flex"
+      flexDirection="column"
+      overflow="hidden"
+      className="bg-bg"
+    >
         {/* Background Layer */}
         <Box position="absolute" inset zIndex={0}>
           {image ? (
@@ -125,7 +124,8 @@ export function EventHero({
                 <Stack
                   gap={4}
                   padding={6}
-                  className="bg-surface-alt/40 backdrop-blur-sm rounded-xl border border-white/10" // impeccable-ignore
+                  radius="xl"
+                  className="hero-glass-card"
                 >
                   <Quote className="w-8 h-8 text-accent/50" />
                   <Text variant="body" size="lg" className="italic leading-relaxed">
@@ -139,42 +139,6 @@ export function EventHero({
             )}
           </Grid>
         </Box>
-      </Box>
-
-      {/* Navigation Tabs Overlay */}
-      <Box
-        width="full"
-        position="sticky"
-        top={0}
-        zIndex={50}
-        className="bg-surface/90 backdrop-blur-md border-y border-white/10"
-      >
-        <Box
-          maxWidth="screen-xl"
-          marginX="auto"
-          paddingX={{ base: 4, md: 12, lg: 24 }}
-          display="flex"
-          align="center"
-          className="overflow-x-auto no-scrollbar"
-        >
-          {EVENT_TABS.map((tab) => (
-            <Box
-              as="a"
-              key={tab.id}
-              href={`#${tab.id}`}
-              display="flex"
-              align="center"
-              gap={2}
-              paddingX={6}
-              paddingY={4}
-              className="text-sm font-medium border-b-2 border-transparent hover:text-accent hover:border-accent transition-all whitespace-nowrap"
-            >
-              <tab.icon className="w-4 h-4" />
-              {tab.label}
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    </>
+    </Box>
   );
 }

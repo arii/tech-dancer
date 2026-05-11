@@ -1,5 +1,7 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EventHero } from '@/features/events/components/EventHero';
+import { EventNavigation } from '@/features/events/components/EventNavigation';
+import { EVENT_TABS } from '@/features/events/constants';
 import { ThemeSpotlight } from '@/features/events/components/ThemeSpotlight';
 import { CuratedGear } from '@/features/events/components/CuratedGear';
 import { RelatedEvents } from '@/features/events/components/RelatedEvents';
@@ -18,6 +20,7 @@ export default function ComponentPreview() {
             date="Dec 28, 2025 - Jan 1, 2026"
             whyAttending="The ultimate New Year's Eve celebration for swing dancers."
           />
+          <EventNavigation tabs={EVENT_TABS} />
         </Box>
 
         <Box>

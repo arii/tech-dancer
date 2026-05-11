@@ -5,6 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
+import { EventNavigation } from './components/EventNavigation';
 
 import { EventDetails } from './components/EventDetails';
 import { EventSidebar } from './components/EventSidebar';
@@ -56,6 +57,8 @@ export default function EventGuide() {
         whyAttending={event.whyAttending}
         eyebrow={event.category}
       />
+
+      <EventNavigation tabs={EVENT_TABS} />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         <Grid cols={{ base: 1, lg: 3 }} gap={16}>
