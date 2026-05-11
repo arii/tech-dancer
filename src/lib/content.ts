@@ -151,14 +151,36 @@ export interface Event {
   earlyBirdDate?: string;
   hotelCutoffDate?: string;
   url?: string;
+  whyAttending?: string;
+  heroImage?: string;
+  registrationDeadline?: string;
+  packingReminderDate?: string;
+  relatedEvents?: string[];
   theme?: {
     name: string;
-    description: string;
+    label?: string;
+    description?: string;
+    image?: string;
+    outfitIds?: string[];
+    accessoryIds?: string[];
   };
   gear?: {
-    recommendations: string[];
-    essentials: string[];
+    recommendations?: string[];
+    essentials?: string[];
+    outfitIds?: string[];
+    accessoryIds?: string[];
+    shoeIds?: string[];
+    essentialIds?: string[];
+    travelIds?: string[];
   };
+  // Flat alternatives for YAML compatibility
+  themeOutfitIds?: string[];
+  themeAccessoryIds?: string[];
+  gearOutfitIds?: string[];
+  gearAccessoryIds?: string[];
+  gearShoeIds?: string[];
+  gearEssentialIds?: string[];
+  gearTravelIds?: string[];
 }
 
 export type ContentItem = Post | Resource | Study | Event;
@@ -182,11 +204,34 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
       const contentStr = typeof raw === 'string' ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
 
-      if (data.image === "") {
-        data.image = undefined;
-      } else if (typeof data.image === 'string' && data.image.startsWith('/')) {
-        // Prepend ASSET_PREFIX to absolute asset paths to support subpath deployments
-        data.image = `${ASSET_PREFIX}${data.image}`;
+      const normalizeAsset = (val: unknown) => {
+        if (val === "") return undefined;
+        return (typeof val === 'string' && val.startsWith('/')) ? `${ASSET_PREFIX}${val}` : val;
+      };
+
+      data.image = normalizeAsset(data.image);
+      data.heroImage = normalizeAsset(data.heroImage);
+
+      if (data.theme && typeof data.theme === 'object' && !Array.isArray(data.theme)) {
+        const theme = data.theme as Record<string, unknown>;
+        theme.image = normalizeAsset(theme.image);
+      }
+
+      if (data.type === 'event') {
+        if (!data.theme || typeof data.theme !== 'object' || Array.isArray(data.theme)) data.theme = {};
+        if (!data.gear || typeof data.gear !== 'object' || Array.isArray(data.gear)) data.gear = {};
+
+        const theme = data.theme as Record<string, any>;
+        const gear = data.gear as Record<string, any>;
+
+        if (data.themeOutfitIds) theme.outfitIds = data.themeOutfitIds;
+        if (data.themeAccessoryIds) theme.accessoryIds = data.themeAccessoryIds;
+
+        if (data.gearOutfitIds) gear.outfitIds = data.gearOutfitIds;
+        if (data.gearAccessoryIds) gear.accessoryIds = data.gearAccessoryIds;
+        if (data.gearShoeIds) gear.shoeIds = data.gearShoeIds;
+        if (data.gearEssentialIds) gear.essentialIds = data.gearEssentialIds;
+        if (data.gearTravelIds) gear.travelIds = data.gearTravelIds;
       }
 
       return {
