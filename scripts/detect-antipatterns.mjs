@@ -237,9 +237,9 @@ function checkContent(content) {
       }
 
       // Colors check
-      if (/\b(bg-|text-|fill-)\b/.test(cls)) {
+      if (/^(?:[a-z-]+:)?(bg|text|fill)-/.test(cls)) {
         if (CONFIG.allowedColors.includes(cls) || cls.startsWith('brand-')) return;
-        const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)\b/);
+        const colorMatch = cls.match(/^(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)$/);
         if (colorMatch) {
           const prefix = colorMatch[1];
           const baseColor = colorMatch[2].split('/')[0];

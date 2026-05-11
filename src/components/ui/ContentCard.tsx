@@ -124,7 +124,7 @@ export function ContentCard({
       </Stack>
 
       <Box display="flex" align="center" justify="between" marginTop="auto">
-        <Text variant="mono" size="xs" color="dim">
+        <Text variant="mono" size="xs" color="dim" data-testid="content-date">
           {[date, readingTime].filter(Boolean).join(' • ') || category}
         </Text>
         <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
