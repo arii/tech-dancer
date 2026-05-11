@@ -17,7 +17,18 @@ for (const port of ports) {
   try {
     if (isWindows) {
       // Windows implementation
-      const stdout = execSync(`netstat -ano | findstr :${port}`, { stdio: ['ignore', 'pipe', 'ignore'] });
+      let stdout;
+      try {
+        stdout = execSync(`netstat -ano | findstr :${port}`, {
+          stdio: ['ignore', 'pipe', 'ignore'],
+          timeout: 5000
+        });
+      } catch (error) {
+        // findstr exits with code 1 if no match is found, which is expected
+        if (error.status === 1) continue;
+        throw error;
+      }
+
       const lines = stdout.toString().trim().split('\n');
       const pids = new Set();
 
@@ -31,20 +42,37 @@ for (const port of ports) {
 
       for (const pid of pids) {
         console.log(`  - Found process on port ${port}: ${pid}. Killing...`);
-        execSync(`taskkill /F /PID ${pid}`, { stdio: 'ignore' });
+        execSync(`taskkill /F /PID ${pid}`, {
+          stdio: 'ignore',
+          timeout: 5000
+        });
       }
     } else {
       // Unix-like implementation
-      const stdout = execSync(`lsof -t -i :${port}`, { stdio: ['ignore', 'pipe', 'ignore'] });
+      let stdout;
+      try {
+        stdout = execSync(`lsof -t -i :${port}`, {
+          stdio: ['ignore', 'pipe', 'ignore'],
+          timeout: 5000
+        });
+      } catch (error) {
+        // lsof exits with code 1 if no processes are found, which is expected
+        if (error.status === 1) continue;
+        throw error;
+      }
+
       const pids = stdout.toString().trim().split('\n').filter(Boolean);
 
       if (pids.length > 0) {
         console.log(`  - Found processes on port ${port}: ${pids.join(', ')}. Killing...`);
-        execSync(`kill -9 ${pids.join(' ')}`, { stdio: 'ignore' });
+        execSync(`kill -9 ${pids.join(' ')}`, {
+          stdio: 'ignore',
+          timeout: 5000
+        });
       }
     }
-  } catch {
-    // Expected if no processes are found on the port
+  } catch (error) {
+    console.error(`❌ Unexpected error cleaning up port ${port}:`, error.message);
   }
 }
 
