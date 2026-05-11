@@ -78,26 +78,6 @@ export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[])
 }
 
 /**
- * Content-specific metadata props that shouldn't bleed to the DOM.
- */
-const DATA_PROPS = [
-  'type', 'slug', 'title', 'date', 'author', 'authorAvatar',
-  'category', 'excerpt', 'content', 'image', 'tags', 'basePath',
-  'rating', 'verdict', 'priceCategory', 'updatedDate', 'durability',
-  'value', 'specs', 'readingTime', 'affiliateIds', 'location',
-  'city', 'schedule', 'description', 'link'
-];
-
-/**
- * Filters out content-specific metadata props that shouldn't bleed to the DOM.
- */
-export function filterDataProps(props: Record<string, unknown>) {
-  return Object.fromEntries(
-    Object.entries(props).filter(([key]) => !DATA_PROPS.includes(key))
-  );
-}
-
-/**
  * Standardizes category strings to Title Case, splitting on hyphens.
  */
 export function formatCategory(cat: string): string {
