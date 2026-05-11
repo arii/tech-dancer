@@ -60,6 +60,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           leading && `leading-${leading}`,
           className
         )}
+        // impeccable-ignore - Required for Safari line-clamp support
         style={clamp ? {
           WebkitLineClamp: typeof clamp === 'number' ? clamp : undefined,
           WebkitBoxOrient: 'vertical',
