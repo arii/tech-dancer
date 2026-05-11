@@ -120,6 +120,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           pnpm run audit || true
           python3 dev-tools/td_cli.py gh audit-gate
@@ -171,6 +172,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           python3 dev-tools/td_cli.py gh bundle-size
 
