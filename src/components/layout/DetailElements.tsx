@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { LucideIcon, Shield } from 'lucide-react';

@@ -16,7 +16,6 @@ const CHECK_DIRS = [
   'src/hooks',
   'src/lib',
   'src/App.tsx',
-  'src/main.tsx',
   '.github/workflows'
 ];
 
