@@ -130,7 +130,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Info className="w-4 h-4 text-accent" />
               </Box>
               <Text variant="body" size="xs">
-                Drafting as <strong>{data.type.toUpperCase()}</strong>.
+                Drafting as <strong>{data.type?.toUpperCase()}</strong>.
                 Complete the form below to generate a pre-formatted GitHub Issue link.
               </Text>
            </Stack>
@@ -392,7 +392,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                           {entry.data.title || 'Untitled Snapshot'}
                         </Text>
                         <Box paddingX={1} className="bg-accent/20 rounded">
-                           <Text variant="mono" size="micro" color="accent">{entry.data.type.toUpperCase()}</Text>
+                           <Text variant="mono" size="micro" color="accent">{entry.data.type?.toUpperCase()}</Text>
                         </Box>
                       </Box>
                       <Text variant="mono" size="micro" color="dim">

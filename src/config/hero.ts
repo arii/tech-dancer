@@ -5,7 +5,7 @@ export const HERO_CONFIG = {
   PARTICLE_VELOCITY_FACTOR: 0.3,
   PARTICLE_ALPHA_MIN: 0.1,
   PARTICLE_ALPHA_MAX: 0.4,
-  PARTICLE_HUES: [190, 270],
+  PARTICLE_HUES: [11, 357], // Heritage Vibrant accent (orange) and magenta hues
   BAR_COUNT: 48,
   MOBILE_PY: 4,
   DESKTOP_PY: 4,
