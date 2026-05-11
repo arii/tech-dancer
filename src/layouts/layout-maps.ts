@@ -25,6 +25,7 @@ export const SPACING_MAP: Record<string | number, string> = {
 
 export const RADIUS_MAP: Record<string, string> = {
   none: 'rounded-none',
+  industrial: 'rounded-industrial',
   sm: 'rounded-sm',
   md: 'rounded-md',
   lg: 'rounded-lg',

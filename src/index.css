@@ -60,9 +60,12 @@
   --z-skip-link: var(--raw-z-skip-link);
   --z-toast: var(--raw-z-toast);
   --z-top: var(--raw-z-top);
-  --z-search: var(--raw-z-search);
-  --z-mobile-header: 250;
-  --z-mobile-menu: 300;
+  --z-search: 700;
+  --z-mobile-header: 500;
+  --z-mobile-menu: 600;
+
+  /* Radius */
+  --radius-industrial: 2px;
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
@@ -200,10 +203,11 @@
   }
 
   .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pb-safe-area-search { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
 
   /* Infrastructure Component Utilities */
   .btn-primary-effects {
-    @apply relative overflow-hidden transition-all duration-200;
+    @apply relative transition-all duration-200;
   }
   .btn-primary-effects:hover {
     @apply -translate-y-[2px] shadow-primary-hover;

@@ -33,7 +33,7 @@ export const variants = {
   },
   radius: {
     none: "rounded-none",
-    industrial: "rounded-subtle",
+    industrial: "rounded-industrial",
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
