@@ -9,6 +9,16 @@ location: "Ashland Hills Hotel & Suites"
 city: "Ashland, OR"
 schedule: "May 14 - 17, 2026"
 description: "SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing."
+theme:
+  name: "Westie Hospitality"
+  description: "Charming, community-focused atmosphere with Oregon charm."
+gear:
+  recommendations:
+    - "Outdoor attire for sightseeing"
+    - "Comfortable dance shoes"
+  essentials:
+    - "Light jacket"
+    - "Refillable water bottle"
 ---
 # SOswing
 A charming West Coast Swing experience in the heart of Southern Oregon.
