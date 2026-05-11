@@ -20,9 +20,11 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       as="nav"
       aria-label="Mobile Navigation"
       layout="mobileHeader"
+      border="b"
+      className="mobile-header-blur bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Logo showText={false} className="h-9 w-auto text-white" shrink={false} />
+        <Logo showText={false} className="h-9 w-auto text-white shrink-0" />
         <Wordmark variant="navigation" />
       </Box>
 
@@ -34,8 +36,8 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         align="center"
         justify="center"
         radius="full"
-        className="min-h-12 min-w-12 hover:bg-bg/50 active:bg-accent/10 transition-colors"
-        aria-label={isOpen ? "Close Menu" : "Open Menu"}
+        className="hit-area-md hit-area-md hover:bg-bg/50 active:bg-accent/10 transition-colors"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}
         whileTap={{ scale: 0.95 }}
       >

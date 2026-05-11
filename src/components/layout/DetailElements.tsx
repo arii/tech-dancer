@@ -14,14 +14,7 @@ interface ScoreItemProps {
 
 export function ScoreItem({ label, value, icon: ScoreIcon, color, intent }: ScoreItemProps) {
   return (
-    <Stack
-      gap={1}
-      align="center"
-      flex
-      paddingX={{ base: 2, md: 4 }}
-      paddingY={2}
-      minWidth={{ base: "[100px]", sm: "[120px]" }}
-    >
+    <Stack gap={1} align="center" flex={1} paddingX={{ base: 2, md: 4 }} paddingY={2} minWidth={{ base: 24, sm: 32 }}>
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
       <Stack direction="row" align="center" gap={1} intent={intent} className={color || ''}>
         {ScoreIcon && <Icon icon={ScoreIcon} size="sm" />}
@@ -44,9 +37,8 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
         display="flex"
         wrap
         justify="center"
-        width="full"
         gapY={{ base: 4, md: 0 }}
-        className="divide-x-0 md:divide-x divide-line/30"
+        className="w-full divide-x-0 md:divide-x divide-line/30"
       >
         {children}
       </Box>
@@ -59,18 +51,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
   return (
     <Stack gap={4}>
-      <Text
-        variant="mono"
-        size="tiny"
-        weight="font-bold"
-        color="dim"
-        uppercase
-        border="b"
-        paddingBottom={2}
-        className="tracking-widest"
-      >
-        Technical Specs
-      </Text>
+      <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase tracking="widest" border="b" paddingBottom={2} className="border-line">Technical Specs</Text>
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>

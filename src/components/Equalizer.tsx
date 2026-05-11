@@ -1,5 +1,6 @@
 // impeccable-ignore-file
 import { useMemo } from 'react';
+import { motion } from 'motion/react';
 import { Box, Stack } from '@/layouts/Primitives';
 
 const NUM_BARS = 28;
@@ -33,46 +34,47 @@ export const Equalizer = () => {
       direction="row"
       align="end"
       justify="center"
+      gap={1}
       height="full"
       width="full"
-      gap="[4px]"
       overflow="hidden"
       paddingX={4}
-      paddingBottom="[18px]"
-      position="relative"
-      className="pointer-events-none"
+      paddingBottom={4.5}
+      className="pointer-events-none relative"
     >
       <Box
+        as={motion.div}
         aria-hidden
         position="absolute"
         inset="x"
         bottom={0}
         height={24}
-        opacity={0.22}
-        className="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl"
+        className="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-20"
       />
-      {bars.map((bar, i) => {
-        const barVars = {
-          ...barStyle,
-          '--min-h': bar.minH / 64,
-          '--max-h': bar.maxH / 64,
-          '--duration': `${bar.duration}s`,
-          '--delay': `${bar.delay}s`,
-          opacity: bar.opacity,
-        } as React.CSSProperties;
-
-        return (
-          <Box
-            key={i}
-            width="full"
-            maxWidth="[4px]"
-            height="[64px]"
-            radius="full"
-            className="animate-equalizer-bar"
-            style={barVars}
-          />
-        );
-      })}
+      {bars.map((bar, i) => (
+        <Box
+          as={motion.div}
+          key={i}
+          animate={{
+            height: [bar.minH, bar.maxH, bar.minH],
+          }}
+          transition={{
+            duration: bar.duration,
+            repeat: Infinity,
+            delay: bar.delay,
+            ease: "easeInOut",
+          }}
+          width="full"
+          maxWidth={1}
+          radius="full"
+          style={{
+            backgroundColor: 'transparent',
+            background: `linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))`,
+            boxShadow: `0 0 14px var(--hero-accent-shadow)`,
+            opacity: bar.opacity,
+          }}
+        />
+      ))}
     </Stack>
   );
 };

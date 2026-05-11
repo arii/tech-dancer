@@ -116,6 +116,7 @@ export function GlobalSearch() {
           border
           marginX={4}
           shadow="topOverlay"
+          marginX={4}
           className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
@@ -126,7 +127,10 @@ export function GlobalSearch() {
                 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
               )).filter(el => {
                 const style = window.getComputedStyle(el);
-                return style.display !== 'none' && style.visibility !== 'hidden' && (el as HTMLElement).offsetWidth > 0;
+                const rect = el.getBoundingClientRect();
+                return style.display !== 'none' &&
+                       style.visibility !== 'hidden' &&
+                       (rect.width > 0 || rect.height > 0);
               });
 
               if (focusableElements.length === 0) return;
@@ -225,7 +229,7 @@ export function GlobalSearch() {
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} paddingBottom="safe-search" surface="alt" display="flex" justify="between" align="center">
+          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="global-search-footer">
             <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">

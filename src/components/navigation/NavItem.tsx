@@ -11,9 +11,10 @@ export interface NavItemProps {
   icon?: LucideIcon;
   onClick?: () => void;
   isMobile?: boolean;
+  "aria-label"?: string;
 }
 
-export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
+export function NavItem({ to, label, icon, onClick, isMobile, "aria-label": ariaLabel }: NavItemProps) {
   if (!icon) {
     console.warn(`Navigation icon missing for route: ${label}. Falling back to Terminal icon.`);
   }
@@ -23,6 +24,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
       <NavLink
         to={to}
         onClick={onClick}
+        aria-label={ariaLabel}
         className={({ isActive }) => cn(
           "transition-all duration-200 relative z-10 block",
           isMobile
@@ -40,7 +42,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             border={isMobile ? "b" : undefined}
             className={cn(
               "transition-transform duration-200 group-hover:translate-x-1",
-              isMobile ? "border-line/50 min-h-[56px]" : "min-h-[48px]",
+              isMobile ? "border-line/50 hit-area-lg" : "hit-area-md",
               isMobile && isActive && "shadow-sm"
             )}
           >

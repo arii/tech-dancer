@@ -77,7 +77,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail"
         className={cn(
-          "transition-bg-blur border-r border-line bg-surface",
+          "nav-rail-transition border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -118,13 +118,19 @@ export default function Navigation() {
                 paddingX={6}
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
               >
-                <Box as={Search} width={4} height={4} shrink={false} className="opacity-70 group-hover:opacity-100" />
+                <Box as={Search} size={16} opacity={0.7} className="group-hover:opacity-100 shrink-0" />
                 <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
               </Box>
             </Box>
 
             {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+              <NavItem
+                key={item.path}
+                to={item.path}
+                label={item.label}
+                icon={item.icon}
+                aria-label={`Go to ${item.label}`}
+              />
             ))}
           </Stack>
 

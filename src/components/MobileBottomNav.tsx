@@ -14,8 +14,7 @@ export function MobileBottomNav() {
       inset="bottom"
       zIndex="mobileHeader"
       border="t"
-      paddingBottom="safe"
-      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line"
+      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line pb-safe-area"
     >
       <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
@@ -27,7 +26,7 @@ export function MobileBottomNav() {
                 to={item.path}
                 minHeight="touchTarget"
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center h-full transition-colors",
+                  "flex flex-col items-center justify-center h-full transition-colors hit-area-sm",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >

@@ -14,20 +14,20 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
     <Box display="flex" border radius="none" overflow="hidden">
       {(['card', 'list'] as ViewMode[]).map((v) => (
+        <Box
           as="button"
           key={v}
           onClick={() => onChange(v)}
+          padding={3}
           display="flex"
           align="center"
           justify="center"
-          minHeight="touchTarget"
-          minWidth="touchTarget"
           className={cn(
-            'p-3 transition-colors cursor-pointer',
+            'transition-colors cursor-pointer hit-area-sm hit-area-sm',
             v === 'card' ? 'border-r border-line' : '',
             view === v 
               ? 'bg-accent-navy text-bg shadow-inner' 
-              : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface transition-colors'
+              : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface'
           )}
           aria-label={v === 'card' ? 'Grid view' : 'List view'}
           aria-pressed={view === v}

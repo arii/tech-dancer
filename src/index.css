@@ -318,19 +318,24 @@
 }
 
 @layer utilities {
-  .transition-bg-blur {
-    transition-property: background-color, backdrop-filter;
-    transition-duration: 300ms;
-  }
+  .hit-area-sm { min-height: 2.75rem; min-width: 2.75rem; } /* 44px */
+  .hit-area-md { min-height: 3rem; min-width: 3rem; } /* 48px */
+  .hit-area-lg { min-height: 3.5rem; min-width: 3.5rem; } /* 56px */
+}
 
-  .transition-blur {
-    transition-property: backdrop-filter;
-    transition-duration: 300ms;
-  }
+@theme {
+  --z-mobile-menu: 100;
+  --size-hit-area-sm: 2.75rem;
+  --size-hit-area-md: 3rem;
+  --size-hit-area-lg: 3.5rem;
+}
 
-  .mobile-header {
-    @apply lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full;
-    transition-property: backdrop-filter;
-    transition-duration: 300ms;
-  }
+@layer utilities {
+  .hit-area-sm { min-height: var(--size-hit-area-sm); min-width: var(--size-hit-area-sm); }
+  .hit-area-md { min-height: var(--size-hit-area-md); min-width: var(--size-hit-area-md); }
+  .hit-area-lg { min-height: var(--size-hit-area-lg); min-width: var(--size-hit-area-lg); }
+  .pb-safe-area { padding-bottom: env(safe-area-inset-bottom); }
+  .pb-safe-area-search { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .nav-rail-transition { transition: background-color 0.3s, backdrop-filter 0.3s; }
+  .mobile-header-blur { transition: backdrop-filter 0.3s; }
 }

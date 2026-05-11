@@ -48,7 +48,7 @@ export default function Toolbox() {
             type="button"
             onClick={() => setSelectedPill('all')}
             className={cn(
-              "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
+              "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer hit-area-sm",
               "text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors",
               selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
             )}
@@ -61,7 +61,7 @@ export default function Toolbox() {
               key={pill.label}
               onClick={() => setSelectedPill(pill.value)}
               className={cn(
-                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
+                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer hit-area-sm",
                 pill.color,
                 "hover:opacity-90 transition-opacity",
                 selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"

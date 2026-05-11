@@ -37,7 +37,8 @@ export function Logo({ className, showText = true }: LogoProps) {
           y="0"
           fill="currentColor"
           transform="skewX(-8)"
-          className="brand-b-mark text-9xl"
+          aria-hidden="true"
+          className="brand-b-mark text-fluid-7"
         >
           B
         </text>
@@ -57,7 +58,8 @@ export function Logo({ className, showText = true }: LogoProps) {
           x="125"
           y="78"
           fill="currentColor"
-          className="brand-wordmark text-6xl tracking-tighter"
+          aria-hidden="true"
+          className="brand-wordmark text-fluid-6 tracking-tight"
         >
           boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
         </text>
