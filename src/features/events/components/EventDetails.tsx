@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Clock, ExternalLink, Palette, Briefcase, CheckCircle2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, ExternalLink, Briefcase, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
