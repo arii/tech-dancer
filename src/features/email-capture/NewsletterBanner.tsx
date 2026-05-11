@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';

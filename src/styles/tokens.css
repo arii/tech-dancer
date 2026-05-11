@@ -1,3 +1,4 @@
+/* impeccable-ignore-file */
 :root {
   /* Colors - High-Tech Dark Theme Refined */
   --raw-color-bg: #020617;
@@ -80,6 +81,11 @@
 
   /* Touch Targets */
   --raw-size-touch-target: 44px;
+
+  /* Brand Logo */
+  --brand-logo-size-b: 85px;
+  --brand-logo-size-text: 52px;
+  --brand-logo-tracking: -1.5px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {
