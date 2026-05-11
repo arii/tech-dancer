@@ -151,6 +151,8 @@ export interface Event {
   earlyBirdDate?: string;
   hotelCutoffDate?: string;
   url?: string;
+  whyAttending?: string;
+  heroImage?: string;
   theme?: {
     name: string;
     description: string;

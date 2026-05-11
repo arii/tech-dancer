@@ -147,6 +147,33 @@ export function EventDetails({ event }: EventDetailsProps) {
           </Stack>
         </Box>
       )}
+
+      <Box id="reminders" as="section">
+        <Stack gap={8}>
+          <Text variant="headline" size="3xl" weight="font-black">Event Reminders</Text>
+          <Box border radius="lg" padding={8} surface="surface">
+            <Text color="dim">Stay tuned for specific event deadline reminders and notification settings.</Text>
+          </Box>
+        </Stack>
+      </Box>
+
+      <Box id="travel" as="section">
+        <Stack gap={8}>
+          <Text variant="headline" size="3xl" weight="font-black">Travel & Lodging</Text>
+          <Box border radius="lg" padding={8} surface="surface">
+            <Text color="dim">Travel logistics, hotel blocks, and venue access information will be populated here.</Text>
+          </Box>
+        </Stack>
+      </Box>
+
+      <Box id="notes" as="section">
+        <Stack gap={8}>
+          <Text variant="headline" size="3xl" weight="font-black">Field Notes</Text>
+          <Box border radius="lg" padding={8} surface="surface">
+            <Text color="dim">Expert insights and community notes for {event.title}.</Text>
+          </Box>
+        </Stack>
+      </Box>
     </Stack>
   );
 }

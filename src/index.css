@@ -274,6 +274,11 @@
 }
 .product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
 .content-card { @apply bg-surface p-8 rounded-none border border-line; }
+  .hero-glass-card {
+    background: color-mix(in srgb, var(--raw-color-surface-alt) 40%, transparent);
+    backdrop-filter: blur(8px);
+    @apply border border-white/10;
+  }
 @layer utilities { .object-center-20 { object-position: center 20%; } }
 
 @layer utilities {

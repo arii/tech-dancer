@@ -1,28 +1,10 @@
-import { Box, Stack, Text } from '../layouts/Primitives';
-import { EventHero } from '../features/events/components/EventHero';
-import { ThemeSpotlight } from '../features/events/components/ThemeSpotlight';
-import { CuratedGear } from '../features/events/components/CuratedGear';
-import { RelatedEvents } from '../features/events/components/RelatedEvents';
-import { Event } from '../lib/content';
-
-/**
- * Factory for mock events to keep preview data consistent and typed.
- */
-const createMockEvent = (overrides: Partial<Event> = {}): Event => ({
-  type: 'event',
-  slug: 'mock-event',
-  title: 'Mock Event',
-  date: '2026-01-01',
-  author: 'Mock Author',
-  category: 'Mock Category',
-  excerpt: 'Mock excerpt for testing.',
-  location: 'Mock Location',
-  city: 'Mock City',
-  schedule: 'January 1-3, 2026',
-  description: 'Mock description.',
-  content: 'Mock content body.',
-  ...overrides,
-});
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { EventHero } from '@/features/events/components/EventHero';
+import { EventNavigation } from '@/features/events/components/EventNavigation';
+import { EVENT_TABS } from '@/features/events/constants';
+import { ThemeSpotlight } from '@/features/events/components/ThemeSpotlight';
+import { CuratedGear } from '@/features/events/components/CuratedGear';
+import { RelatedEvents } from '@/features/events/components/RelatedEvents';
 
 export default function ComponentPreview() {
   return (
@@ -30,12 +12,25 @@ export default function ComponentPreview() {
       <Stack gap={12}>
         <Text variant="headline" size="4xl">Component Preview</Text>
 
-        <Box border padding={6} radius="lg">
-          <Text variant="mono" size="sm" marginBottom={4}>EventHero</Text>
+        <Box>
+          <Text variant="mono" size="sm" marginBottom={4} paddingX={6}>EventHero (Particle Fallback)</Text>
           <EventHero
-            title="Sample Event"
-            location="San Francisco, CA"
-            date="Oct 24-26, 2026"
+            title="WSDC 2026"
+            location="Las Vegas, NV"
+            date="Dec 28, 2025 - Jan 1, 2026"
+            whyAttending="The ultimate New Year's Eve celebration for swing dancers."
+          />
+          <EventNavigation tabs={EVENT_TABS} />
+        </Box>
+
+        <Box>
+          <Text variant="mono" size="sm" marginBottom={4} paddingX={6} marginTop={12}>EventHero (With Image)</Text>
+          <EventHero
+            title="The Open"
+            location="Burbank, CA"
+            date="Nov 26-29, 2026"
+            image="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=2070"
+            whyAttending="The most prestigious competition in the West Coast Swing world."
           />
         </Box>
 

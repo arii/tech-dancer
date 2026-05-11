@@ -8,7 +8,7 @@ const routes = [
   { name: 'about', path: './about' },
   { name: 'contact', path: './contact' },
   { name: 'preview', path: './preview' },
-  { name: 'event-guide', path: './events/boogie-by-the-bay' }
+  { name: 'event-guide', path: './events/jack-and-jill-orama' }
 ];
 
 test.describe('Visual Regression Tests', () => {
