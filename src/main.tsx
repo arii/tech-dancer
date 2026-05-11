@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/ThemeProvider';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack } from './layouts/Primitives';
 import { routes } from './App.tsx';
 import './index.css';
 
