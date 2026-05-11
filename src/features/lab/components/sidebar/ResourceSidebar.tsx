@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
 import { ResourceScoreGrid } from '../ResourceScoreGrid';
@@ -73,10 +74,11 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 padding={4}
                 surface="default"
                 border
+                cursor="pointer"
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <Icon icon={ExternalLink} size="sm" color="accent" opacity={0.3} className="group-hover:opacity-100" />
               </Box>
             ))}
             {affiliateLink && (
@@ -91,10 +93,11 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 padding={4}
                 surface="default"
                 border
+                cursor="pointer"
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <Icon icon={ExternalLink} size="sm" color="accent" opacity={0.3} className="group-hover:opacity-100" />
               </Box>
             )}
           </Box>

@@ -315,3 +315,12 @@
     animation: fadeIn 1s ease forwards 2.5s;
   }
 }
+@keyframes equalizer-wave {
+  0%, 100% { transform: scaleY(var(--min-h)); }
+  50% { transform: scaleY(var(--max-h)); }
+}
+.animate-equalizer-bar {
+  animation: equalizer-wave var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+  transform-origin: bottom;
+}
