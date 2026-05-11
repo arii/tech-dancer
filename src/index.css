@@ -149,15 +149,6 @@
     margin-right: 0.5rem;
   }
 
-  /* Brand SVG Utilities */
-  .brand-wordmark {
-    font-family: var(--raw-font-display);
-    font-weight: 800;
-    font-size: var(--brand-logo-size-text);
-    letter-spacing: var(--brand-logo-tracking);
-  }
-  .brand-text-accent { fill: var(--raw-color-accent-brand); }
-  .brand-text-muted { fill: var(--logo-muted-text); }
 
   /* Wordmark Utilities */
   .wordmark-base {
