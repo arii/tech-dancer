@@ -61,7 +61,7 @@ export function RootLayout() {
   const skeletonVariant = getSkeletonVariant(location.pathname, routeConfig);
 
   return (
-    <>
+    <Box height="full">
       <MainLayout>
         <AnimatePresence mode="wait">
           <Box
@@ -80,7 +80,7 @@ export function RootLayout() {
         </AnimatePresence>
       </MainLayout>
       {import.meta.env.PROD && window.location.hostname !== 'localhost' && <Analytics />}
-    </>
+    </Box>
   );
 }
 
