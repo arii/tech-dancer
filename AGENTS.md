@@ -167,8 +167,11 @@ python3 dev-tools/td_cli.py pre-submit
 ```
 
 ### 🧪 Pre-Commit Checklist
-Before submitting any PR that modifies `.tsx` files:
+Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss` files:
 1. **Run the Audit**: `pnpm run audit`.
 2. **Review the Report**: Check `TODO_ANTIPATTERNS.md` for any new violations introduced by your changes.
-3. **Enforce Compliance**: Fix all identified anti-patterns or use `// impeccable-ignore` for intentional deviations.
-4. **Clean Slate**: Ensure your changes do not increase the total count of violations in the target files.
+3. **Enforce Compliance**: Fix all identified anti-patterns.
+4. **Intentional Deviations**:
+   - For TSX/TS files, use `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file).
+   - For CSS/SCSS files, use `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file).
+5. **Clean Slate**: Ensure your changes do not introduce new violations in the target files.
