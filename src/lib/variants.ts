@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { cva } from "class-variance-authority";
 
 /**

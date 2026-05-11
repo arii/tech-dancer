@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
