@@ -9,7 +9,7 @@ Repeated the PR UX review workflow and attempted to verify runtime console clean
 ### 1) Conflict check
 Command:
 ```bash
-python3 dev-tools/td_cli.py conflicts
+python3 dev-tools/td_cli.py gh conflicts
 ```
 Result:
 - Could not complete remote checks in this environment because `origin` is not configured (`git fetch origin` fails).
@@ -25,7 +25,7 @@ Result:
 ### 3) Pre-submit gate
 Command:
 ```bash
-python3 dev-tools/td_cli.py pre-submit
+python3 dev-tools/td_cli.py gh pre-submit
 ```
 Result:
 - ❌ Fails at lint (`run-p: not found`) because dependencies are not installed (`node_modules` missing).
