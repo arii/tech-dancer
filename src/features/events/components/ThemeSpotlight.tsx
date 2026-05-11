@@ -9,7 +9,7 @@ interface ThemeSpotlightProps {
 }
 
 export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent)' }: ThemeSpotlightProps) {
-  const accentStyle = useMemo(() => ({ background: accentColor }), [accentColor]);
+  const accentStyle = useMemo(() => ({ backgroundColor: accentColor } as React.CSSProperties), [accentColor]);
 
   return (
     <Box
@@ -19,7 +19,7 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
       surface="surface"
       className="group hover:border-accent/30 transition-all duration-300"
     >
-      <Box display="flex" direction={{ base: "col", md: "row" }} align="stretch">
+      <Stack direction={{ base: "col", md: "row" }} align="stretch">
         {/* Content Section */}
         <Stack gap={6} padding={8} flex={1} justify="center">
           <Stack gap={2}>
@@ -69,11 +69,12 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
             <Box
               position="absolute"
               inset
-              className="theme-spotlight-image-overlay hidden md:block"
+              display={{ base: "none", md: "block" }}
+              className="theme-spotlight-image-overlay"
             />
           </Box>
         )}
-      </Box>
+      </Stack>
     </Box>
   );
 }
