@@ -128,6 +128,8 @@ const CONFIG = {
     'FolioGrid': 'src/components/ui/FolioGrid.tsx', 'Skeleton': 'src/components/ui/Skeleton.tsx',
     'ViewToggle': 'src/components/ui/ViewToggle.tsx', 'ListRow': 'src/components/ui/ListRow.tsx',
     'MarkdownRenderer': 'src/components/ui/MarkdownRenderer.tsx', 'DetailLayout': 'src/components/layout/DetailLayout.tsx',
+    'EventSidebar': 'src/features/lab/components/sidebar/EventSidebar.tsx',
+    'ResourceSidebar': 'src/features/lab/components/sidebar/ResourceSidebar.tsx',
     'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
   },
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
