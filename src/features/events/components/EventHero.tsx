@@ -32,8 +32,7 @@ export function EventHero({
       <Box
         position="relative"
         width="full"
-        // impeccable-ignore
-        minHeight={{ base: "500px", md: "600px" }}
+        minHeight={{ base: "500px", md: "600px" }} // impeccable-ignore
         display="flex"
         flexDirection="column"
         overflow="hidden"
@@ -126,8 +125,7 @@ export function EventHero({
                 <Stack
                   gap={4}
                   padding={6}
-                  // impeccable-ignore
-                  className="bg-surface-alt/40 backdrop-blur-sm rounded-xl border border-white/10"
+                  className="bg-surface-alt/40 backdrop-blur-sm rounded-xl border border-white/10" // impeccable-ignore
                 >
                   <Quote className="w-8 h-8 text-accent/50" />
                   <Text variant="body" size="lg" className="italic leading-relaxed">
