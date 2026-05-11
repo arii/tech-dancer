@@ -91,7 +91,6 @@ createRoot(document.getElementById('root')!).render(
                   <Box
                     width={8}
                     height={8}
-                    border={true}
                     radius="full"
                     className="border-4 border-accent border-t-transparent animate-spin"
                   />

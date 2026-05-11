@@ -11,6 +11,7 @@ import sys
 import os
 import re
 import json
+import subprocess
 from datetime import datetime, timezone, timedelta
 from utils import (
     get_github_token,
@@ -29,7 +30,7 @@ from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
 # --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx', 'src/main.tsx']
 
 # --- Shared Logic ---
 
@@ -626,10 +627,17 @@ def handle_audit_gate(args):
                         continue
 
                     content = res_show.stdout
-                    stdout_baseline = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
-                                               input_str=content)
-                    baseline_count += int(stdout_baseline or 0)
-                except (CLIError) as e:
+                    # Use execute_raw style to handle audit tool exit codes correctly
+                    proc = subprocess.run(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
+                                       input=content, text=True, capture_output=True)
+
+                    # Even if proc.returncode is non-zero, we might get the count if it's just violations
+                    count_str = proc.stdout.strip()
+                    if count_str.isdigit():
+                        baseline_count += int(count_str)
+                    elif not args.json:
+                        print(f"⚠️  Warning: Unexpected audit output for baseline {mf}: {proc.stderr}", file=sys.stderr)
+                except Exception as e:
                     print(f"⚠️  Warning: Failed to calculate baseline for {mf}: {e}", file=sys.stderr)
                     continue
         except (CLIError) as e:
