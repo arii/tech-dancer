@@ -1,8 +1,7 @@
-import { MapPin, Calendar, Clock, ExternalLink, Briefcase, CheckCircle2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, ExternalLink, Palette, Briefcase, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
-import { ThemeSpotlight } from './ThemeSpotlight';
 import { SECTION_SPACING } from '../constants';
 
 interface EventDetailsProps {
@@ -84,7 +83,20 @@ export function EventDetails({ event }: EventDetailsProps) {
         <Box id="theme" as="section">
           <Stack gap={8}>
             <Text variant="headline" size="3xl" weight="font-black">Event Theme</Text>
-            <ThemeSpotlight theme={event.theme} />
+            <Box border radius="lg" padding={8} surface="surface">
+              <Stack gap={6}>
+                <Box display="flex" gap={4}>
+                  <Palette className="w-5 h-5 text-accent shrink-0" />
+                  <Stack gap={1}>
+                    <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">Theme Name</Text>
+                    <Text variant="body" size="lg" weight="font-bold">{event.theme.name}</Text>
+                  </Stack>
+                </Box>
+                <Box paddingLeft={9}>
+                  <Text variant="body" color="dim">{event.theme.description}</Text>
+                </Box>
+              </Stack>
+            </Box>
           </Stack>
         </Box>
       )}

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import palettesData from '@/data/victorian-palettes.json';
 
 export interface PaletteData {

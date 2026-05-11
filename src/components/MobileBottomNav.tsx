@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';

@@ -82,8 +82,8 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
-          pip install PyGithub pytest click
-          PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
+          pip install PyGithub pytest
+          PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_td_cli.py
 
       - name: Check for dead code
         run: pnpm run knip
@@ -91,7 +91,7 @@ jobs:
       - name: TypeScript `any` Ratchet
         run: |
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          python3 dev-tools/td_cli.py gh ratchet-any
+          python3 dev-tools/td_cli.py ratchet-any
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -120,10 +120,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           pnpm run audit || true
-          python3 dev-tools/td_cli.py gh audit-gate
+          python3 dev-tools/td_cli.py audit-gate
 
       - name: Design Token Compliance
         run: |
@@ -172,9 +171,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          python3 dev-tools/td_cli.py gh bundle-size
+          python3 dev-tools/td_cli.py bundle-size
 
       - name: Cache Playwright Browsers
         id: playwright-cache

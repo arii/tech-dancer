@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { LayoutGrid, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box } from '@/layouts/Primitives';

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 

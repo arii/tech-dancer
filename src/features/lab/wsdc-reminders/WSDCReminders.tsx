@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useState, useMemo } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';

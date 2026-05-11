@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 /**
  * Design Tokens for the Portfolio.
  * Standardizes radius, spacing, and border treatments to ensure

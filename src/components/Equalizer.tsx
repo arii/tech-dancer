@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
 

@@ -59,10 +59,6 @@ class GitHubClient:
         except requests.exceptions.RequestException as e:
              raise Exception(f"GitHub API Error: {e}")
 
-    def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
-        """Fetches the list of files changed in a PR."""
-        return self._request('GET', f'/repos/{self.repo}/pulls/{number}/files')
-
     def fetch_pr_details(self, number: int) -> Dict[str, Any]:
         return self._request('GET', f'/repos/{self.repo}/pulls/{number}')
 

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { ChangeEvent } from 'react';
 import { Search } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';

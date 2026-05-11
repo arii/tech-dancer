@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { BarChart2, TrendingUp } from 'lucide-react';
 import {
   ResponsiveContainer,

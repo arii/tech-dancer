@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
