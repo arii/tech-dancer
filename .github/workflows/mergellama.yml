@@ -33,6 +33,9 @@ jobs:
       - name: Setup Ollama
         uses: ai-action/setup-ollama@v2
 
+      - name: Install Click
+        run: pip install click
+
       - name: Start Ollama Server
         run: |
           ollama serve > ollama_output.log 2>&1 &
@@ -59,7 +62,7 @@ jobs:
           # Use our unified CLI for resolution
           # Setting PYTHONPATH ensures modules can find each other without sys.path hacks
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          python3 dev-tools/td_cli.py resolve-conflicts
+          python3 dev-tools/td_cli.py gh resolve
 
       - name: Validate Resolution
         run: |

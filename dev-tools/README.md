@@ -25,44 +25,44 @@ The unified entry point for all repository automation. It supports both human-re
 
 ### Commands
 
-#### `pre-submit`
+#### `gh pre-submit`
 Runs the full local quality suite: Anti-pattern audit, TypeScript check, Lint, PR Scope check, and Conflict check.
-- **Usage**: `python3 dev-tools/td_cli.py pre-submit`
+- **Usage**: `python3 dev-tools/td_cli.py gh pre-submit`
 
-#### `audit-pr <PR_NUMBER>`
+#### `gh audit-pr <PR_NUMBER>`
 Orchestrates the PR technical audit lifecycle.
 - **Flags**:
   - `--fetch`: Fetch PR metadata and generate context files.
   - `--audit`: Run deterministic checks and invoke AI auditor.
   - `--submit`: Submit the completed review to GitHub (requires `--execute`).
   - `--cleanup`: Remove temporary review files on success.
-- **Usage**: `python3 dev-tools/td_cli.py audit-pr 368 --fetch --audit`
+- **Usage**: `python3 dev-tools/td_cli.py gh audit-pr 368 --fetch --audit`
 
-#### `validate-issue <ISSUE_NUMBER>`
+#### `gh validate-issue <ISSUE_NUMBER>`
 Validates GitHub Issues against repo standards.
 - **Flags**:
   - `--all-open`: Check all open issues.
   - `--post-comments`: Post findings as comments to the issue (requires `--execute`).
-- **Usage**: `python3 dev-tools/td_cli.py validate-issue --issue-number 247`
+- **Usage**: `python3 dev-tools/td_cli.py gh validate-issue --issue-number 247`
 
-#### `conflicts`
+#### `gh conflicts`
 Detects potential merge conflicts across all open PRs.
 - **Flags**:
   - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
-- **Usage**: `python3 dev-tools/td_cli.py conflicts`
+- **Usage**: `python3 dev-tools/td_cli.py gh conflicts`
 
-#### `repair-context`
+#### `jules repair-context`
 Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
 - **Flags**:
   - `--log <LOG_LINE>`: Process a single raw log line.
   - `--file <FILE_PATH>`: Process all errors in a log file.
 - **Usage**:
   - `pnpm repair-context --log "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"`
-  - `python3 dev-tools/td_cli.py repair-context --file logs/ci_failure.log`
+  - `python3 dev-tools/td_cli.py jules repair-context --file logs/ci_failure.log`
 
-#### `ratchet-any` / `bundle-size`
+#### `gh ratchet-any` / `gh bundle-size`
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
-- **Usage**: `python3 dev-tools/td_cli.py bundle-size`
+- **Usage**: `python3 dev-tools/td_cli.py gh bundle-size`
 
 ---
 
