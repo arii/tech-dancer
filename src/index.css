@@ -81,6 +81,7 @@
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
   --section-spacing: 4rem;
+  --spacing-touch-target: var(--raw-size-touch-target);
 
   /* Font Sizes */
   --text-micro: 9px;
@@ -315,12 +316,21 @@
     animation: fadeIn 1s ease forwards 2.5s;
   }
 }
-@keyframes equalizer-wave {
-  0%, 100% { transform: scaleY(var(--min-h)); }
-  50% { transform: scaleY(var(--max-h)); }
-}
-.animate-equalizer-bar {
-  animation: equalizer-wave var(--duration) ease-in-out infinite;
-  animation-delay: var(--delay);
-  transform-origin: bottom;
+
+@layer utilities {
+  .transition-bg-blur {
+    transition-property: background-color, backdrop-filter;
+    transition-duration: 300ms;
+  }
+
+  .transition-blur {
+    transition-property: backdrop-filter;
+    transition-duration: 300ms;
+  }
+
+  .mobile-header {
+    @apply lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full;
+    transition-property: backdrop-filter;
+    transition-duration: 300ms;
+  }
 }

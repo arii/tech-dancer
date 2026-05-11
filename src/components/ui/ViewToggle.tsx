@@ -14,19 +14,17 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
     <Box display="flex" border radius="none" overflow="hidden">
       {(['card', 'list'] as ViewMode[]).map((v) => (
-        <Box
           as="button"
           key={v}
           onClick={() => onChange(v)}
-          padding={3}
           display="flex"
           align="center"
           justify="center"
-          minWidth={11}
-          minHeight={11}
-          border={v === 'card' ? 'r' : false}
+          minHeight="touchTarget"
+          minWidth="touchTarget"
           className={cn(
-            'transition-colors cursor-pointer',
+            'p-3 transition-colors cursor-pointer',
+            v === 'card' ? 'border-r border-line' : '',
             view === v 
               ? 'bg-accent-navy text-bg shadow-inner' 
               : 'bg-bg text-text-dim hover:text-text-main hover:bg-surface transition-colors'

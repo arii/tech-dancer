@@ -77,8 +77,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail"
         className={cn(
-          animation.navRail,
-          "border-r border-line bg-surface",
+          "transition-bg-blur border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -99,6 +98,7 @@ export default function Navigation() {
             <Logo
               showText={false}
               className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
+              shrink={false}
             />
             <Wordmark variant="navigation" />
           </Box>
@@ -118,7 +118,7 @@ export default function Navigation() {
                 paddingX={6}
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
               >
-                <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" />
+                <Box as={Search} width={4} height={4} shrink={false} className="opacity-70 group-hover:opacity-100" />
                 <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
               </Box>
             </Box>

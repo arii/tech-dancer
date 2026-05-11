@@ -11,9 +11,9 @@
   --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
   --raw-color-accent-navy: #f1f5f9;
   --raw-color-accent-brand: #22d3ee;
-  --raw-color-text-main: #f1f5f9;
-  --raw-color-text-body: #e2e8f0;
-  --raw-color-text-dim: #cbd5e1; /* Slate 300 for better contrast against surface */
+  --raw-color-text-main: #ffffff;
+  --raw-color-text-body: #f8fafc;
+  --raw-color-text-dim: #e2e8f0; /* Slate 200 for better contrast against surface */
   --raw-color-error: #ef4444;
   --raw-color-error-bg: #1a0a0a;
 
@@ -78,6 +78,9 @@
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
+
+  /* Touch Targets */
+  --raw-size-touch-target: 44px;
 
   /* Brand Logo */
   --brand-logo-size-b: 85px;

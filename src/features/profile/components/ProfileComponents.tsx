@@ -74,7 +74,7 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
             <Stack gap={3}>
               {Icon && <Icon className="w-4 h-4 text-accent" />}
               {item.title && (
-                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="uppercase tracking-widest">
+                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="tracking-widest">
                   {item.title}
                 </Text>
               )}
@@ -113,8 +113,8 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             <img
               src={image.src}
               alt={image.alt}
-              width={800}
-              height={800}
+              width={400}
+              height={400}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
@@ -135,7 +135,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
             <img
               src={selectedImage}
-              alt="Expanded view"
+              alt="Expanded view of profile gallery image"
               className="max-w-full max-h-full object-contain"
             />
           </Box>
@@ -160,9 +160,11 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           rel="noopener noreferrer"
           display="inline-flex"
           align="center"
-          paddingX={4}
+          justify="center"
+          paddingX={6}
           paddingY={3}
-          minHeight={11}
+          minHeight="touchTarget"
+          minWidth="touchTarget"
           border
           radius="full"
           className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"

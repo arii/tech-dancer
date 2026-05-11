@@ -35,7 +35,7 @@ export const animation = {
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
-  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface flex items-center justify-between px-8 border-b border-line w-full",
+  mobileHeader: "mobile-header",
   panel: "panel h-full overflow-y-auto w-full",
   card: "bg-surface border border-line rounded-none transition-all duration-300 w-full",
   interactive: "cursor-pointer",
@@ -110,7 +110,7 @@ export const typography = {
   headline: "font-display font-bold tracking-tighter leading-headline",
   hero: "font-serif font-black tracking-tight leading-hero",
   display: "font-display font-bold tracking-tight leading-none",
-  body: "font-sans leading-relaxed text-text-body max-w-prose-body",
+  body: "font-sans leading-relaxed text-text-body max-w-[70ch]",
   mono: "font-mono tracking-widest uppercase",
   utility: `font-mono ${tracking.utility} uppercase`,
   label: `font-mono font-bold uppercase ${tracking.label}`,

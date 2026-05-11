@@ -14,7 +14,7 @@ const PROFILE_DATA: ProfileData = {
       title: "My Dance Background",
       content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.",
       gallery: [
-        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" }
+        { src: firstComp, alt: "Ariel Anders performing a WCS extension with technical precision during a competition" }
       ]
     },
     {
@@ -22,7 +22,7 @@ const PROFILE_DATA: ProfileData = {
       title: "What I Do Professionally",
       content: "I provide high-level technical consulting for startups and project-based digital execution for niche brands.",
       gallery: [
-        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" }
+        { src: monterey, alt: "Ariel Anders presenting on stage at Monterey Swing Fest, bridging technology and dance" }
       ],
       cards: [
         {
@@ -47,14 +47,14 @@ const PROFILE_DATA: ProfileData = {
       title: "Why I Built This Site",
       content: "boomtick.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that helps, event tips, and the small optimizations that make a big difference over a season of dancing.",
       gallery: [
-        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
+        { src: madJamAri, alt: "Ariel Anders social dancing with expression at the MADjam convention" }
       ]
     },
     {
       id: "wcs-love",
       title: "What I Love About WCS",
       gallery: [
-        { src: glowBunny, alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event" }
+        { src: glowBunny, alt: "Ariel Anders wearing a custom LED light-up bunny costume for a late-night social dance" }
       ],
       items: [
         {
@@ -79,7 +79,7 @@ const PROFILE_DATA: ProfileData = {
       title: "Financial Strategies for WCS",
       content: "I love maximizing credit card perks and hotel benefits, which helps me make the WCS event lifestyle both high-end and feasible. The goal is to spend more energy dancing and less energy stressing over the logistics.",
       gallery: [
-        { src: wwwAri, alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
+        { src: wwwAri, alt: "Ariel Anders demonstrating an athletic connection during a high-energy session" }
       ]
     },
     {

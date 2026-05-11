@@ -22,10 +22,12 @@ export function MobileBottomNav() {
           const Icon = item.icon;
           return (
             <Box as="li" key={item.path} flex={1}>
-              <NavLink
+              <Box
+                as={NavLink}
                 to={item.path}
+                minHeight="touchTarget"
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center h-full transition-colors touch-target",
+                  "flex flex-col items-center justify-center h-full transition-colors",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >
@@ -33,7 +35,7 @@ export function MobileBottomNav() {
                 <Text variant="mono" size="micro" weight="font-bold" marginTop={1}>
                   {item.label.split(' ')[0]}
                 </Text>
-              </NavLink>
+              </Box>
             </Box>
           );
         })}

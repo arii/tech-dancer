@@ -22,7 +22,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         as={as}
         ref={ref as Ref<HTMLDivElement>}
         cursor="pointer"
-        touchTarget
+        minHeight="touchTarget"
+        minWidth="touchTarget"
         className={cn(buttonVariants({ variant, intent, size, fullWidth }), className)}
         {...props}
       >
