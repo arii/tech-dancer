@@ -1,5 +1,6 @@
 import { Cpu, Globe, Camera, Heart, HelpCircle, type LucideIcon } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 
 export function getCategoryIcon(category: string): LucideIcon {
   const norm = (category || '').toLowerCase();
@@ -16,13 +17,13 @@ interface CategoryPlaceholderProps {
 }
 
 export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlaceholderProps) {
-  const sizeClasses = {
-    sm: 'w-5 h-5',
-    md: 'w-8 h-8',
-    lg: 'w-24 h-24 opacity-10'
-  };
+  const sizeMap = {
+    sm: 'md',
+    md: 'xl',
+    lg: undefined // Use custom for lg
+  } as const;
 
-  const Icon = getCategoryIcon(category);
+  const icon = getCategoryIcon(category);
 
   return (
     <Box 
@@ -34,7 +35,9 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
       className="text-accent"
     >
       <Icon
-        className={sizeClasses[size]}
+        icon={icon}
+        size={sizeMap[size]}
+        className={size === 'lg' ? 'w-24 h-24 opacity-10' : ''}
         strokeWidth={2}
       />
     </Box>
