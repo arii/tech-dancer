@@ -21,10 +21,13 @@ export const SPACING_MAP: Record<string | number, string> = {
   80: '80',
   'section-spacing': 'section-spacing',
   auto: 'auto',
+  'safe': 'safe',
+  'safe-search': 'safe-area-search',
 };
 
 export const RADIUS_MAP: Record<string, string> = {
   none: 'rounded-none',
+  industrial: 'rounded-industrial',
   sm: 'rounded-sm',
   md: 'rounded-md',
   lg: 'rounded-lg',

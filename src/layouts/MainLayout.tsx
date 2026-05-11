@@ -31,7 +31,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
         className="sr-only"
       />
       <Box display="flex" minHeight="screen" width="full">
-        <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
@@ -63,6 +62,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             <Footer />
           </Stack>
         </Stack>
+        <Navigation />
       </Box>
 
       <GlobalSearch />

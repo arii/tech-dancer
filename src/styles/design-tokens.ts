@@ -25,6 +25,8 @@ export const animation = {
   // Framer Motion requires numeric arrays for JS-driven easing
   ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
   revealDistance: "var(--reveal-distance)",
+  mobileHeader: "mobile-header-transition",
+  navRail: "nav-rail-transition",
 };
 
 /**
@@ -33,7 +35,7 @@ export const animation = {
 export const layout = {
   root: "flex min-h-screen bg-bg",
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
-  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
+  mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface flex items-center justify-between px-8 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
   card: "bg-surface border border-line rounded-none transition-all duration-300 w-full",
   interactive: "cursor-pointer",
@@ -53,13 +55,13 @@ export const inputs = {
 export const shadows = {
   topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
-  glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
+  glow: "shadow-glow",
 };
 
 
 export const stroke = {
-  thin: "stroke-[0.5]",
-  thick: "stroke-[1.5]",
+  thin: "stroke-thin",
+  thick: "stroke-thick",
 };
 
 export const iconSizes = {
@@ -83,6 +85,8 @@ export const zIndex = {
   toast: "toast",
   top: "top",
   search: "search",
+  mobileHeader: "mobile-header",
+  mobileMenu: "mobile-menu",
 };
 
 export const tracking = {
@@ -93,26 +97,26 @@ export const tracking = {
   wider: "tracking-wider",
   widest: "tracking-widest",
   "wide-editorial": "tracking-wide-editorial",
-  emphasized: "tracking-[0.15em]",
-  utility: "tracking-[3px]",
-  label: "tracking-[2px]",
-  wordmark: "tracking-[0.05em]",
+  emphasized: "tracking-emphasized",
+  utility: "tracking-utility",
+  label: "tracking-label",
+  wordmark: "tracking-wordmark",
 };
 
 export const typography = {
-  h1: "font-display font-black tracking-tighter leading-[0.95]",
+  h1: "font-display font-black tracking-tighter leading-h1",
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
-  headline: "font-display font-bold tracking-tighter leading-[0.9]",
-  hero: "font-serif font-black tracking-tight leading-[1.2]",
+  headline: "font-display font-bold tracking-tighter leading-headline",
+  hero: "font-serif font-black tracking-tight leading-hero",
   display: "font-display font-bold tracking-tight leading-none",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
+  body: "font-sans leading-relaxed text-text-body max-w-prose-body",
   mono: "font-mono tracking-widest uppercase",
   utility: `font-mono ${tracking.utility} uppercase`,
   label: `font-mono font-bold uppercase ${tracking.label}`,
   micro: "font-mono uppercase tracking-widest",
-  tight: "tracking-[0.15em] uppercase",
-  content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
+  tight: "tracking-emphasized uppercase",
+  content: "font-sans leading-relaxed text-text-body max-w-prose-content",
   headerAccent: `font-mono font-bold ${tracking["wide-editorial"]} uppercase text-accent`,
   sans: "font-sans",
   wordmark: `font-sans leading-none text-white ${tracking.wordmark}`,

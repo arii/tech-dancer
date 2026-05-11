@@ -1,0 +1,25 @@
+
+> react-example@0.0.0 dev /app
+> shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && vite --port=3000 --host=0.0.0.0
+
+
+  VITE v6.4.2  ready in 571 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.0.2:3000/
+4:29:23 AM [vite] (client) page reload playwright-report/index.html
+4:32:53 AM [vite] (client) page reload playwright-report/index.html
+4:43:05 AM [vite] (client) page reload playwright-report/index.html
+5:34:22 PM [vite] (client) page reload playwright-report/index.html
+5:34:22 PM [vite] (client) page reload playwright-report/index.html
+5:43:44 PM [vite] (client) page reload playwright-report/index.html
+5:53:35 PM [vite] (client) page reload playwright-report/index.html
+5:55:24 PM [vite] (client) page reload playwright-report/index.html
+6:00:25 PM [vite] (client) page reload playwright-report/index.html
+6:02:48 PM [vite] (client) page reload playwright-report/index.html
+6:07:11 PM [vite] (client) page reload playwright-report/index.html
+6:12:14 PM [vite] (client) page reload playwright-report/index.html
+6:21:04 PM [vite] (client) page reload playwright-report/index.html
+6:27:15 PM [vite] (client) page reload playwright-report/index.html
+6:29:55 PM [vite] (client) page reload playwright-report/index.html
+6:36:13 PM [vite] (client) page reload playwright-report/index.html

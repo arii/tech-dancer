@@ -113,4 +113,7 @@ export const tailwindSafelist = [
   'lg:gap-8',
   'md:gap-6',
   'md:gap-8',
+  'z-mobile-header',
+  'z-mobile-menu',
+  'z-search',
 ];
