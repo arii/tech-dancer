@@ -2,8 +2,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getEventBySlug } from '@/lib/content';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { EventHero } from '@/components/ui/EventHero';
 import { SEO } from '@/components/SEO';
+
+import { EventHero } from './components/EventHero';
 
 import { EventNavigation } from './components/EventNavigation';
 import { EventDetails } from './components/EventDetails';

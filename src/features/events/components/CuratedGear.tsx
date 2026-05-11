@@ -1,7 +1,7 @@
 import { Resource } from '@/lib/content';
 import { Stack, Grid } from '@/layouts/Primitives';
-import { SectionHeader } from './SectionHeader';
-import { GearCard } from './GearCard';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { GearCard } from '@/components/ui/GearCard';
 
 interface CuratedGearProps {
   title?: string;
