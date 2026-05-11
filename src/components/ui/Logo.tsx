@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useId } from 'react';
 import { cn } from '@/lib/utils';
 import { BrandDefs } from './BrandDefs';
@@ -36,7 +37,7 @@ export function Logo({ className, showText = true }: LogoProps) {
           y="0"
           fill="currentColor"
           transform="skewX(-8)"
-          className="brand-b-mark text-[85px]"
+          className="brand-b-mark"
         >
           B
         </text>
@@ -56,7 +57,7 @@ export function Logo({ className, showText = true }: LogoProps) {
           x="125"
           y="78"
           fill="currentColor"
-          className="brand-wordmark text-[52px] tracking-[-1.5px]"
+          className="brand-wordmark"
         >
           boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
         </text>

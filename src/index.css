@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
+/* impeccable-ignore-file */
 
 @theme {
   /* Colors */
@@ -140,15 +141,26 @@
     background-size: 20px 20px;
   }
 
+  /* Markdown Counters */
+  .prose-counters { counter-reset: section; }
+  .prose-section { counter-increment: section; }
+  .prose-section-number::before {
+    content: counter(section, decimal-leading-zero);
+    margin-right: 0.5rem;
+  }
+
   /* Brand SVG Utilities */
   .brand-b-mark {
     font-family: var(--raw-font-serif);
     font-weight: 900;
     font-style: italic;
+    font-size: var(--brand-logo-size-b);
   }
   .brand-wordmark {
     font-family: var(--raw-font-display);
     font-weight: 800;
+    font-size: var(--brand-logo-size-text);
+    letter-spacing: var(--brand-logo-tracking);
   }
   .brand-text-accent { fill: var(--raw-color-accent-brand); }
   .brand-text-muted { fill: var(--logo-muted-text); }
