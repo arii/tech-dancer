@@ -94,9 +94,7 @@ export default function Navigation() {
               showText={false}
               className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
             />
-            <Box paddingY={0} className="mt-0.5 leading-none">
-              <Wordmark variant="nav" />
-            </Box>
+            <Wordmark variant="navigation" />
           </Box>
 
           <Stack as="ul" gap={1} flex={1} paddingY={4}>

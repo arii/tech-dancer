@@ -55,11 +55,7 @@ export function HeroSection() {
           <Logo className="text-white" showText={false} />
         </Box>
 
-        <Wordmark
-          variant="hero"
-          marginTop={3}
-          className="opacity-0 hero-wordmark-anim"
-        />
+        <Wordmark variant="hero" />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack

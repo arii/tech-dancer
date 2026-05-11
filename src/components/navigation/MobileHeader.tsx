@@ -22,7 +22,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
         <Logo showText={false} className="h-9 w-auto text-white flex-shrink-0" />
-        <Wordmark variant="nav" />
+        <Wordmark variant="navigation" />
       </Box>
 
       <Box
