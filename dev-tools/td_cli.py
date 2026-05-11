@@ -15,8 +15,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 try:
     from tdw_services.cli import cli
 except ImportError as e:
-    print(f"Error: Could not import tdw_services. Ensure your environment is set up correctly.")
+    print(f"Error: Could not import tdw_services or its dependencies.")
     print(f"Details: {e}")
+    print("\nTroubleshooting:")
+    print("1. Ensure dependencies are installed: pip install -e dev-tools/")
+    print("2. Ensure PYTHONPATH includes the dev-tools directory.")
+    print("   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools")
     sys.exit(1)
 
 def main():
