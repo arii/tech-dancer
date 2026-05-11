@@ -22,11 +22,11 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
       display="flex" align="center" border="b"
       className="group hover:bg-surface/50 transition-colors"
     >
-      <Box shrink={0} className="w-1 self-stretch bg-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-      <Box width={12} height={12} margin={4} shrink={0} radius="md" overflow="hidden" display="flex" align="center" justify="center" className="bg-surface-alt/30 border border-line/30">
+      <Box width={1} shrink={0} self="stretch" opacity={0} className="bg-accent group-hover:opacity-100 transition-opacity" />
+      <Box width={12} height={12} margin={4} shrink={0} radius="md" overflow="hidden" display="flex" align="center" justify="center" border className="bg-surface-alt/30 border-line/30">
         <CategoryPlaceholder category={category} size="md" />
       </Box>
-      <Stack gap={1} flex className="py-3 min-w-0">
+      <Stack gap={1} flex paddingY={3} className="min-w-0">
         <Box display="flex" align="center" gap={3}>
           <Text variant="mono" size="micro" color="brand" className="uppercase shrink-0">{category}</Text>
           <Text variant="mono" size="micro" color="dim">{date}</Text>
@@ -34,9 +34,9 @@ export function ListRow({ slug, title, category, excerpt, date, basePath, conten
         <Text variant="display" size="sm" weight="font-bold" className="line-clamp-1">{title}</Text>
         <Text variant="body" size="xs" color="dim" className="truncate">{excerpt}</Text>
       </Stack>
-      <Box display="flex" align="center" gap={3} padding={4} shrink={0} className="text-text-dim">
-        <Text variant="mono" size="micro">{rt} min</Text>
-        <ChevronRight className="w-3.5 h-3.5 opacity-30 group-hover:opacity-100 transition-opacity" />
+      <Box display="flex" align="center" gap={3} padding={4} shrink={0}>
+        <Text variant="mono" size="micro" color="dim">{rt} min</Text>
+        <ChevronRight className="w-3.5 h-3.5 opacity-30 group-hover:opacity-100 transition-opacity text-text-dim" />
       </Box>
     </Box>
   );

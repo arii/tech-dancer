@@ -108,7 +108,8 @@ export function GearCard({
         <Box
           position="absolute"
           inset
-          className="bg-black/15 pointer-events-none"
+          opacity={15}
+          className="bg-black pointer-events-none"
           aria-hidden="true"
         />
         {/* Category badge */}
@@ -119,7 +120,8 @@ export function GearCard({
           paddingX={2}
           paddingY={1}
           radius="full"
-          className="bg-accent/80 text-white backdrop-blur-md shadow-sm"
+          opacity={80}
+          className="bg-accent text-white backdrop-blur-md shadow-sm"
         >
           <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
             {category}
@@ -142,7 +144,7 @@ export function GearCard({
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} className="border-t border-line/30">
+      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         {rating !== undefined && (
           <Box display="flex" align="center" gap={1}>
             <Star size={16} className="text-accent fill-accent" />

@@ -77,6 +77,11 @@
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
+
+  /* Brand Logo */
+  --brand-logo-size-b: 85px;
+  --brand-logo-size-text: 52px;
+  --brand-logo-tracking: -1.5px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {
