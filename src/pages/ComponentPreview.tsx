@@ -22,8 +22,13 @@ export default function ComponentPreview() {
         <Box border padding={6} radius="lg">
           <Text variant="mono" size="sm" marginBottom={4}>ThemeSpotlight</Text>
           <ThemeSpotlight
-            title="Theme Title"
-            description="Theme description goes here."
+            theme={{
+              name: "Galactic Night",
+              label: "Saturday Night Theme",
+              description: "A high-production space theme featuring deep blues, neon accents, and cosmic energy. Expect immersive lighting and interstellar social vibes.",
+              outfitIds: ["loop-quiet", "bloch-grecian"],
+              accessoryIds: ["rave-fan", "neck-fan"]
+            }}
           />
         </Box>
 
