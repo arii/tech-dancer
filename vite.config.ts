@@ -7,33 +7,18 @@ import Inspect from 'vite-plugin-inspect';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import Sitemap from 'vite-plugin-sitemap';
 import { getAllRoutes } from './src/lib/routes-discovery';
+import { getBasePath } from './scripts/base-path.js';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production';
 
-  // Dynamic base path for GitHub Pages vs Vercel vs Local Override
+  // Standardized base path resolution
+  const base = getBasePath();
+
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
-  const isGHAction = process.env.GITHUB_ACTIONS === 'true';
   const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
-
-  // Determine the GitHub branch for base path constructing
-  const ghBranch = process.env.GITHUB_REF_NAME;
-  const isMainBranch = ghBranch === 'main' || !ghBranch;
-
-  // Use VITE_BASE_PATH if specified, otherwise construct based on environment
-  let base = process.env.VITE_BASE_PATH;
-  if (!base) {
-    if (isVercel) {
-      base = '/';
-    } else if (isGHAction) {
-      // If we're on a branch other than main in GH Actions, include the branch name in the base path
-      base = isMainBranch ? '/tech-dancer/' : `/tech-dancer/${ghBranch}/`;
-    } else {
-      base = '/';
-    }
-  }
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
