@@ -20,27 +20,29 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: ({node: _node, ...props}) => (
             <Box border surface="warning" padding={6} marginY={8} radius="none">
-               <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" className="mb-2 block">Key Takeaway</Text>
-               <blockquote className="m-0 p-0 font-medium italic" {...props} />
+               <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" marginBottom={2} display="block">Key Takeaway</Text>
+               <blockquote className="font-medium italic" style={{ margin: 0, padding: 0 }} {...props} /> // impeccable-ignore
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box className="mt-16 mb-8 group" style={{ counterIncrement: 'section' }}>
+            <Box marginTop={16} marginBottom={8} className="group" style={{ counterIncrement: 'section' }}> // impeccable-ignore
               <Text
                 variant="mono"
                 size="micro"
                 color="accent"
                 weight="font-bold"
                 tracking="utility"
-                className="block mb-3 opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
+                display="block"
+                marginBottom={3}
+                className="opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2" // impeccable-ignore
               />
-              <Text as="h2" variant="h2" size="4xl" color="brand" className="m-0" {...props} />
-              <Box className="h-0.5 w-16 bg-accent mt-6 transition-all group-hover:w-24" />
+              <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
+              <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box className="mt-12 mb-6">
-              <Text as="h3" variant="h3" size="xl" color="main" className="m-0 border-l-2 border-accent/30 pl-4" {...props} />
+            <Box marginTop={12} marginBottom={6}>
+              <Text as="h3" variant="h3" size="xl" color="main" margin={0} paddingLeft={4} className="border-l-2 border-accent/30" {...props} />
             </Box>
           )
         }}

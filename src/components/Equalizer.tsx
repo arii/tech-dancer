@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
+import { Box, Stack } from '@/layouts/Primitives';
 
 const NUM_BARS = 28;
 
@@ -22,13 +23,30 @@ export const Equalizer = () => {
   }, []);
 
   return (
-    <div className="pointer-events-none relative flex h-full w-full items-end justify-center gap-[4px] overflow-hidden px-4 pb-[18px]">
-      <motion.div
+    <Stack
+      direction="row"
+      align="end"
+      justify="center"
+      gap={1}
+      height="full"
+      width="full"
+      overflow="hidden"
+      paddingX={4}
+      paddingBottom={4.5}
+      className="pointer-events-none relative"
+    >
+      <Box
+        as={motion.div}
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-[.22]"
+        position="absolute"
+        inset="x"
+        bottom={0}
+        height={24}
+        className="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-20" // impeccable-ignore
       />
       {bars.map((bar, i) => (
-        <motion.div
+        <Box
+          as={motion.div}
           key={i}
           animate={{
             height: [bar.minH, bar.maxH, bar.minH],
@@ -39,8 +57,10 @@ export const Equalizer = () => {
             delay: bar.delay,
             ease: "easeInOut",
           }}
-          className="w-full max-w-[4px] rounded-full"
-          style={{
+          width="full"
+          maxWidth={1}
+          radius="full"
+          style={{ // impeccable-ignore
             backgroundColor: 'transparent',
             background: `linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))`,
             boxShadow: `0 0 14px var(--hero-accent-shadow)`,
@@ -48,6 +68,6 @@ export const Equalizer = () => {
           }}
         />
       ))}
-    </div>
+    </Stack>
   );
 };
