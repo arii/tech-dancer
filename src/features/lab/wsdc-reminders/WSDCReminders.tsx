@@ -61,7 +61,7 @@ export default function WSDCReminders() {
 
   return (
     <Stack gap={10} width="full">
-      <Box border radius="xl" padding={6} surface="surface" className="border-line/60">
+      <Box border radius="xl" padding={6} surface="surface">
         <Stack gap={6}>
           <EventSelector
             events={events}
@@ -117,7 +117,7 @@ export default function WSDCReminders() {
           </Box>
         </Stack>
       ) : (
-        <Box border radius="xl" padding={12} className="border-dashed border-line/60 bg-surface/30">
+        <Box border radius="xl" padding={12} className="border-dashed" surface="muted">
           <Stack align="center" gap={4} textAlign="center">
             <AlertCircle className="w-12 h-12 text-dim opacity-20" />
             <Stack gap={2}>

@@ -8,7 +8,7 @@ interface CustomEventFormProps {
 
 export function CustomEventForm({ customEvent, onChange }: CustomEventFormProps) {
   return (
-    <Box border radius="lg" padding={6} surface="default" className="bg-bg/50">
+    <Box border radius="lg" padding={6} surface="alt">
       <Grid cols={{ base: 1, md: 2 }} gap={4}>
         <Stack gap={2}>
           <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Event Title</Text>
