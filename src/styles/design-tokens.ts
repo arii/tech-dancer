@@ -118,10 +118,6 @@ export const typography = {
   wordmarkHero: `font-display leading-none text-white ${tracking.wordmark}`,
 };
 
-export const size = {
-  touchTarget: "size-touch-target",
-};
-
 export const typeSizes = {
   micro: "text-micro",
   tiny: "text-tiny",

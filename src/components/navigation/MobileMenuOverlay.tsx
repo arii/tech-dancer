@@ -86,7 +86,8 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             width="full"
             position="relative"
             radius="md"
-            className="transition-all duration-200 hover:translate-x-1 z-10 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 min-h-[44px]"
+            minHeight="touchTarget"
+            className="transition-all duration-200 hover:translate-x-1 z-10 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50"
           >
             <Search className={`w-6 h-6 ${stroke.thick} flex-shrink-0`} />
             <Text variant="sans" size="xl" weight="font-bold" className="leading-none">

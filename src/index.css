@@ -76,6 +76,7 @@
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
   --section-spacing: 4rem;
+  --spacing-touch-target: var(--raw-size-touch-target);
 
   /* Font Sizes */
   --text-micro: 9px;
