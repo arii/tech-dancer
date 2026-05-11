@@ -3,6 +3,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
 import { SECTION_SPACING } from '../constants';
+import { CuratedGear } from './CuratedGear';
 
 interface EventDetailsProps {
   event: Event;
@@ -101,7 +102,11 @@ export function EventDetails({ event }: EventDetailsProps) {
         </Box>
       )}
 
-      {event.gear && (
+      {event.curatedGear ? (
+        <Box id="gear" as="section">
+          <CuratedGear event={event} />
+        </Box>
+      ) : event.gear && (
         <Box id="gear" as="section">
           <Stack gap={8}>
             <Text variant="headline" size="3xl" weight="font-black">Gear Recommendations</Text>
