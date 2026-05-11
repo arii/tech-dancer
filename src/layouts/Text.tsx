@@ -60,6 +60,11 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           leading && `leading-${leading}`,
           className
         )}
+        style={clamp ? {
+          WebkitLineClamp: typeof clamp === 'number' ? clamp : undefined,
+          WebkitBoxOrient: 'vertical',
+          display: '-webkit-box',
+        } : undefined}
         {...props}
       />
     )
