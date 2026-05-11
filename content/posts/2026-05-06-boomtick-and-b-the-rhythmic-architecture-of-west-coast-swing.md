@@ -62,10 +62,6 @@ The aesthetic of BoomTick.blog is as intentional as a well-timed anchor. We’ve
 
 This design system uses a palette of high-contrast teals, corals, and plums, ensuring that every insight is legible regardless of your device or visual environment. We believe that professional-grade data shouldn’t just be accurate; it should be beautiful and inclusive.
 
-You can explore our interactive color schemes and WCAG 2.1 compliance audits in our laboratory:
-
-[**Explore the Color Palette Explorer**](/research/color-palette-explorer)
-
 ## Sources
 
 * [World Swing Dance Council - Skippy Blair](https://www.worldsdc.com/special-recognition/skippy-blair/)
