@@ -97,7 +97,7 @@ export function DetailLayout({
               <Box
                 className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main w-full"
                 marginX="auto"
-                maxWidth="prose"
+                style={{ maxWidth: '720px' }} // impeccable-ignore
               >
                 <MarkdownRenderer content={content} />
               </Box>

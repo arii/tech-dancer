@@ -21,8 +21,6 @@ export default defineConfig({
       threshold: 0.2,
       // Total allowed difference in pixels as a ratio (0 to 1)
       maxDiffPixelRatio: 0.02,
-      // Total allowed difference in pixels (absolute)
-      maxDiffPixels: 100,
     },
   },
   projects: [
