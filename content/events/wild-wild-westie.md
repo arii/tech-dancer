@@ -13,5 +13,15 @@ location: "Westin Dallas Fort Worth Airport"
 city: "Dallas, TX"
 schedule: "July 2 - 5, 2026"
 description: "Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere."
+theme:
+  name: "Texas Spirit"
+  description: "High energy, competitive atmosphere with big Texas personality."
+gear:
+  recommendations:
+    - "Western-inspired dance wear"
+    - "Performance-ready shoes"
+  essentials:
+    - "Hydration tablets"
+    - "Shoe brush"
 ---
 Dallas event. Book the hotel room block immediately as it fills fast.

@@ -28,4 +28,30 @@ describe('Content loading', () => {
       expect(item.slug.length).toBeGreaterThan(0);
     });
   });
+
+  it('should parse nested frontmatter objects', () => {
+    const markdown = `---
+title: "Test"
+theme:
+  name: "Galactic"
+  description: "Space themed event"
+gear:
+  recommendations:
+    - "Comfortable shoes"
+    - "Water bottle"
+  essentials: ["Earplugs", "Towel"]
+---
+Body content`;
+
+    const { data } = content.parseFrontmatter(markdown);
+    expect(data.title).toBe("Test");
+    expect(data.theme).toEqual({
+      name: "Galactic",
+      description: "Space themed event"
+    });
+    expect(data.gear).toEqual({
+      recommendations: ["Comfortable shoes", "Water bottle"],
+      essentials: ["Earplugs", "Towel"]
+    });
+  });
 });

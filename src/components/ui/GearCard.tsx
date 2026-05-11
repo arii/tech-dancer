@@ -3,7 +3,6 @@ import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
-import { filterDataProps } from '@/lib/utils';
 
 interface GearCardProps extends BaseProps {
   slug: string;
@@ -27,6 +26,12 @@ interface GearCardProps extends BaseProps {
   value?: unknown;
   specs?: unknown;
   readingTime?: unknown;
+  authorAvatar?: unknown;
+  location?: unknown;
+  city?: unknown;
+  schedule?: unknown;
+  description?: unknown;
+  link?: unknown;
 }
 
 export function GearCard({
@@ -38,14 +43,31 @@ export function GearCard({
   rating,
   verdict,
   image,
+  // Content metadata props to be ignored
+  type: _type,
+  date: _date,
+  author: _author,
+  authorAvatar: _authorAvatar,
+  content: _content,
+  tags: _tags,
+  affiliateIds: _affiliateIds,
+  priceCategory: _priceCategory,
+  updatedDate: _updatedDate,
+  durability: _durability,
+  value: _value,
+  specs: _specs,
+  readingTime: _readingTime,
+  location: _location,
+  city: _city,
+  schedule: _schedule,
+  description: _description,
+  link: _link,
   ...rest
 }: GearCardProps) {
-  const cleanProps = filterDataProps(rest as Record<string, unknown>);
-
   return (
     <Stack
       as="article"
-      {...cleanProps}
+      {...rest}
       direction="col"
       gap={3}
       height="full"

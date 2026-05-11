@@ -6,7 +6,7 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx', '.github/workflows'];
+const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx', '.github/workflows'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -46,13 +46,14 @@ const LAYOUT_SUGGESTIONS = {
 // Modularized linting configuration
 const CONFIG = {
   allowedColors: [
-    'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
-    'accent-purple', 'accent-magenta',
+    'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
+    'accent-purple', 'accent-magenta', 'brand-text-muted',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-    'amber-500', 'success', 'error', 'warning'
+    'amber-500', 'success', 'error', 'warning',
+    'gradient-to-t', 'gradient-to-b', 'gradient-to-r'
   ],
-  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
+  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic', 'pretty'],
   allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
   rules: [
     {
@@ -128,6 +129,8 @@ const CONFIG = {
     'FolioGrid': 'src/components/ui/FolioGrid.tsx', 'Skeleton': 'src/components/ui/Skeleton.tsx',
     'ViewToggle': 'src/components/ui/ViewToggle.tsx', 'ListRow': 'src/components/ui/ListRow.tsx',
     'MarkdownRenderer': 'src/components/ui/MarkdownRenderer.tsx', 'DetailLayout': 'src/components/layout/DetailLayout.tsx',
+    'EventSidebar': 'src/features/lab/components/sidebar/EventSidebar.tsx',
+    'ResourceSidebar': 'src/features/lab/components/sidebar/ResourceSidebar.tsx',
     'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
   },
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']

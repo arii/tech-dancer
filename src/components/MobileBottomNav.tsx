@@ -15,15 +15,15 @@ export function MobileBottomNav() {
       border="t"
       className="lg:hidden bg-surface/90 backdrop-blur-xl border-line pb-[safe-area-inset-bottom]"
     >
-      <Box as="ul" display="flex" justify="around" align="stretch" width="full" height={16}>
+      <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
           const Icon = item.icon;
           return (
-            <Box as="li" key={item.path} flex={1} display="flex">
+            <Box as="li" key={item.path} flex={1}>
               <NavLink
                 to={item.path}
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center w-full h-full transition-colors min-h-[44px]",
+                  "flex flex-col items-center justify-center h-full transition-colors min-h-[44px]",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >

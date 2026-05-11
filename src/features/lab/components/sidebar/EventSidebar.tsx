@@ -1,6 +1,21 @@
 import { Plane, Calendar, Hotel, Users, ShieldAlert } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
+export function EventHeaderExtras({ author }: { author: string }) {
+  return (
+    <Stack gap={6} marginTop={6}>
+      <Stack direction="row" align="center" gap={2} color="dim">
+        <Box width={8} height={8} radius="full" surface="muted" />
+        <Text variant="mono" size="xs">{author}</Text>
+      </Stack>
+    </Stack>
+  );
+}
+
+export function EventBodyExtras() {
+  return null;
+}
+
 interface EventSidebarProps {
   startDate?: string;
   earlyBirdDate?: string;

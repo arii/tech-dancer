@@ -1,8 +1,8 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { EventHero } from '@/components/ui/EventHero';
-import { ThemeSpotlight } from '@/components/ui/ThemeSpotlight';
-import { CuratedGear } from '@/components/ui/CuratedGear';
-import { RelatedEvents } from '@/components/ui/RelatedEvents';
+import { EventHero } from '@/features/events/components/EventHero';
+import { ThemeSpotlight } from '@/features/events/components/ThemeSpotlight';
+import { CuratedGear } from '@/features/events/components/CuratedGear';
+import { RelatedEvents } from '@/features/events/components/RelatedEvents';
 
 export default function ComponentPreview() {
   return (

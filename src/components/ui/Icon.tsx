@@ -26,12 +26,13 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
 
 export interface IconProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof iconVariants> {
   icon: React.ElementType
+  strokeWidth?: number
 }
 
-export function Icon({ icon: LucideIcon, size, color, className, ...props }: IconProps) {
+export function Icon({ icon: LucideIcon, size, color, className, strokeWidth, ...props }: IconProps) {
   return (
     <span className={cn(iconVariants({ size, color }), className)} {...props}>
-      <LucideIcon width="100%" height="100%" />
+      <LucideIcon width="100%" height="100%" strokeWidth={strokeWidth} />
     </span>
   )
 }

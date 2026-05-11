@@ -31,7 +31,10 @@ export default function Navigation() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timer.current) clearTimeout(timer.current);
+    };
   }, []);
 
   const handleSearchClick = () => {
