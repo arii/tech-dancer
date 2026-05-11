@@ -136,10 +136,10 @@
     font-family: var(--raw-font-display);
     font-weight: 800;
   }
-  .brand-text-accent { fill: var(--raw-color-accent-brand); }
-  .brand-text-muted { fill: var(--logo-muted-text); }
-  .brand-stop-accent { stop-color: var(--raw-color-accent-brand); }
-  .brand-stop-purple { stop-color: var(--raw-color-accent-purple); }
+  .brand-text-accent { fill: var(--raw-color-accent); }
+  .brand-text-muted { fill: var(--raw-color-text-dim); }
+  .brand-stop-1 { stop-color: var(--raw-color-accent); }
+  .brand-stop-2 { stop-color: var(--raw-color-accent-brand); }
 
   /* Wordmark Utilities */
   .wordmark-base {

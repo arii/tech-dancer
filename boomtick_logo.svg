@@ -1,9 +1,9 @@
 <svg viewBox="0 0 450 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
-    .brand-stop-purple { stop-color: #8b5cf6; }
-    .brand-text-accent { fill: #22d3ee; }
-    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    .brand-stop-1 { stop-color: #F46241; }
+    .brand-stop-2 { stop-color: #38A3A5; }
+    .brand-text-accent { fill: #F46241; }
+    .brand-text-muted { fill: #B8D6D4; }
     .brand-b-mark {
       font-family: 'Playfair Display', serif;
       font-weight: 900;
@@ -16,8 +16,8 @@
   </style>
   <defs>
     <linearGradient id="logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" class="brand-stop-accent" stop-color="#22d3ee" />
-      <stop offset="100%" class="brand-stop-purple" stop-color="#8b5cf6" />
+      <stop offset="0%" class="brand-stop-1" stop-color="#F46241" />
+      <stop offset="100%" class="brand-stop-2" stop-color="#38A3A5" />
     </linearGradient>
     <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="3" result="blur" />
@@ -32,7 +32,6 @@
       y="0"
       font-size="85"
       fill="white"
-      transform="skewX(-8)"
       class="brand-b-mark"
     >B</text>
     
@@ -49,7 +48,7 @@
   <!-- Wordmark -->
   <text x="130" y="78" font-size="52" letter-spacing="-1.5" class="brand-wordmark">
     <tspan fill="white">boom</tspan>
-    <tspan class="brand-text-accent" fill="#22d3ee">tick</tspan>
-    <tspan class="brand-text-muted" fill="rgba(241,245,249,0.6)" font-weight="300">.blog</tspan>
+    <tspan class="brand-text-accent" fill="#F46241">tick</tspan>
+    <tspan class="brand-text-muted" fill="#B8D6D4" font-weight="300">.blog</tspan>
   </text>
 </svg>

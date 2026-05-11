@@ -1,18 +1,18 @@
 :root {
   /* Colors - High-Tech Dark Theme Refined */
-  --raw-color-bg: #020617;
-  --raw-color-surface: #0f172a;
-  --raw-color-surface-alt: #1e293b;
-  --raw-color-line: #334155;
-  --raw-color-accent: #22d3ee; /* Cyan 400 for WCAG AA contrast on dark surfaces */
-  --raw-color-accent-purple: #8b5cf6;
-  --raw-color-accent-magenta: #d946ef;
-  --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
-  --raw-color-accent-navy: #f1f5f9;
-  --raw-color-accent-brand: #22d3ee;
-  --raw-color-text-main: #f1f5f9;
-  --raw-color-text-body: #e2e8f0;
-  --raw-color-text-dim: #cbd5e1; /* Slate 300 for better contrast against surface */
+  --raw-color-bg: #091B21;
+  --raw-color-surface: #1B434B;
+  --raw-color-surface-alt: #26545F;
+  --raw-color-line: #4B7E8A;
+  --raw-color-accent: #F46241;
+  --raw-color-accent-purple: #5E364A;
+  --raw-color-accent-magenta: #D14D54;
+  --raw-color-accent-shadow: rgba(244, 98, 65, 0.2);
+  --raw-color-accent-navy: #FFF9F0;
+  --raw-color-accent-brand: #38A3A5;
+  --raw-color-text-main: #FFF9F0;
+  --raw-color-text-body: #E2F2F1;
+  --raw-color-text-dim: #B8D6D4;
   --raw-color-error: #ef4444;
   --raw-color-error-bg: #1a0a0a;
 

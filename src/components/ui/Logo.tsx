@@ -34,8 +34,7 @@ export function Logo({ className, showText = true }: LogoProps) {
         <text
           x="0"
           y="0"
-          fill="currentColor"
-          transform="skewX(-8)"
+          fill="var(--raw-color-text-main)"
           className="brand-b-mark text-[85px]"
         >
           B

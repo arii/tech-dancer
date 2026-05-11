@@ -1,8 +1,8 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
-    .brand-stop-purple { stop-color: #8b5cf6; }
-    .brand-text-accent { fill: #22d3ee; }
+    .brand-stop-accent { stop-color: #38A3A5; }
+    .brand-stop-purple { stop-color: #5E364A; }
+    .brand-text-accent { fill: #38A3A5; }
     .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
     .brand-b-mark {
       font-family: 'Playfair Display', serif;
@@ -17,8 +17,8 @@
   <rect width="64" height="64" rx="14" fill="#020617"/>
   <defs>
     <linearGradient id="favicon-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" class="brand-stop-accent" stop-color="#22d3ee" />
-      <stop offset="100%" class="brand-stop-purple" stop-color="#8b5cf6" />
+      <stop offset="0%" class="brand-stop-accent" stop-color="#38A3A5" />
+      <stop offset="100%" class="brand-stop-purple" stop-color="#5E364A" />
     </linearGradient>
     <filter id="favicon-glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="2" result="blur" />

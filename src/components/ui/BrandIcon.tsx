@@ -1,11 +1,16 @@
 import { useId } from 'react';
 import { cn } from '@/lib/utils';
+import { BrandDefs } from './BrandDefs';
 
 interface BrandIconProps {
   className?: string;
   showBackground?: boolean;
 }
 
+/**
+ * Standardized Brand Icon (B-mark + Dot).
+ * Uses shared BrandDefs for visual consistency.
+ */
 export function BrandIcon({ className, showBackground = false }: BrandIconProps) {
   const titleId = useId();
   const gradientId = useId();
@@ -13,44 +18,33 @@ export function BrandIcon({ className, showBackground = false }: BrandIconProps)
 
   return (
     <svg
-      viewBox="0 0 64 64"
+      viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-6 w-6", className)}
+      className={cn("h-6 w-6 overflow-visible", className)}
       aria-labelledby={titleId}
       fill="none"
     >
       <title id={titleId}>BoomTick Icon</title>
-      {showBackground && <rect width="64" height="64" rx="12" fill="var(--raw-color-surface, #0f172a)" />}
+      <BrandDefs gradientId={gradientId} filterId={filterId} />
+      
+      {showBackground && (
+        <rect width="100" height="100" rx="20" fill="var(--raw-color-surface)" />
+      )}
 
-      <defs>
-        <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="var(--raw-color-accent-brand, #22d3ee)" />
-          <stop offset="100%" stopColor="var(--raw-color-accent-purple, #8b5cf6)" />
-        </linearGradient>
-        <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
-
-      <g transform="translate(8, 50)">
+      <g transform="translate(10, 85)">
         <text
           x="0"
           y="0"
-          fontFamily='"Bodoni MT", "Bodoni 72", serif'
-          fontSize="44"
-          fontWeight="700"
-          fontStyle="italic"
-          fill="var(--raw-color-text-main, #f1f5f9)"
-          transform="skewX(-8)"
+          fill="var(--raw-color-text-main)"
+          className="brand-b-mark text-[85px]"
         >
           B
         </text>
 
         <circle
-          cx="42"
-          cy="-14"
-          r="8"
+          cx="82"
+          cy="-28"
+          r="16"
           fill={`url(#${gradientId})`}
           filter={`url(#${filterId})`}
         />

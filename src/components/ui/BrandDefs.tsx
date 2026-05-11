@@ -20,8 +20,8 @@ export function BrandDefs({ gradientId, filterId }: BrandDefsProps) {
   return (
     <defs>
       <linearGradient id={finalGradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" className="brand-stop-accent" />
-        <stop offset="100%" className="brand-stop-purple" />
+        <stop offset="0%" stopColor="var(--raw-color-accent)" />
+        <stop offset="100%" stopColor="var(--raw-color-accent-brand)" />
       </linearGradient>
       <filter id={finalFilterId} x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="3" result="blur" />
