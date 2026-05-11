@@ -66,7 +66,15 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
     })
   };
 
-  const { sidebar, headerExtras, content, bodyExtras } = previewConfig[props.type](props as any);
+  const getPreview = () => {
+    switch (props.type) {
+      case 'post': return previewConfig.post(props);
+      case 'resource': return previewConfig.resource(props);
+      case 'event': return previewConfig.event(props);
+    }
+  };
+
+  const { sidebar, headerExtras, content, bodyExtras } = getPreview();
 
   return (
     <Box position="relative">
