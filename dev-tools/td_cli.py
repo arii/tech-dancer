@@ -29,7 +29,7 @@ from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
 # --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
+AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx', 'src/main.tsx']
 
 # --- Shared Logic ---
 
@@ -605,8 +605,18 @@ def handle_audit_gate(args):
     if baseline_count == -1:
         baseline_count = 0
         try:
-            ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-            main_files = run_command(ls_cmd).splitlines()
+            # Try to find the best base branch ref
+            base_ref = "origin/main"
+            res_check = run_command(["git", "rev-parse", "--verify", base_ref], check=False, log_on_error=False)
+            if res_check.returncode != 0:
+                base_ref = "main"
+
+            ls_cmd = ["git", "ls-tree", "-r", base_ref, "--name-only"]
+            res_ls = run_command(ls_cmd, check=False)
+            if res_ls.returncode != 0:
+                raise CLIError(f"Failed to list files from {base_ref}")
+
+            main_files = res_ls.stdout.splitlines()
 
             relevant_main_files = []
             for mf in main_files:
@@ -617,10 +627,12 @@ def handle_audit_gate(args):
                         relevant_main_files.append(mf)
                         break
 
+            if not args.json:
+                print(f"🔍 Calculating dynamic baseline from {base_ref} ({len(relevant_main_files)} files)...")
+
             for mf in relevant_main_files:
                 try:
-                    show_cmd = ["git", "show", f"origin/main:{mf}"]
-                    # Don't log error here as it might be expected if file is new
+                    show_cmd = ["git", "show", f"{base_ref}:{mf}"]
                     res_show = run_command(show_cmd, check=False, log_on_error=False)
                     if res_show.returncode != 0:
                         continue
@@ -629,10 +641,10 @@ def handle_audit_gate(args):
                     stdout_baseline = run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"],
                                                input_str=content)
                     baseline_count += int(stdout_baseline or 0)
-                except (CLIError) as e:
+                except Exception as e:
                     print(f"⚠️  Warning: Failed to calculate baseline for {mf}: {e}", file=sys.stderr)
                     continue
-        except (CLIError) as e:
+        except Exception as e:
             print(f"⚠️  Warning: Failed to resolve dynamic audit baseline: {e}", file=sys.stderr)
 
     if not args.json:
