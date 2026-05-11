@@ -107,7 +107,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 variant="primary"
                 disabled={isSubmitting}
                 paddingX={8}
-                className="font-semibold text-base min-h-12"
+                className="font-semibold text-base hit-area-md"
               >
                 {isSubmitting ? (
                   <Stack direction="row" align="center" gap={3}>

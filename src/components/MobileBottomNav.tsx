@@ -13,7 +13,7 @@ export function MobileBottomNav() {
       inset="bottom"
       zIndex="sticky"
       border="t"
-      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line pb-safe-area" /* impeccable-ignore */
+      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line pb-safe-area"
     >
       <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
@@ -23,7 +23,7 @@ export function MobileBottomNav() {
               <NavLink
                 to={item.path}
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center h-full transition-colors min-h-11",
+                  "flex flex-col items-center justify-center h-full transition-colors hit-area-sm",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >

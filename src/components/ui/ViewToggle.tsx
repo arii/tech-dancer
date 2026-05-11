@@ -22,7 +22,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           align="center"
           justify="center"
           className={cn(
-            'transition-colors cursor-pointer min-h-11 min-w-11',
+            'transition-colors cursor-pointer hit-area-sm hit-area-sm',
             v === 'card' ? 'border-r border-line' : '',
             view === v 
               ? 'bg-accent-navy text-bg shadow-inner' 

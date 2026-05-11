@@ -75,7 +75,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail"
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300 border-r border-line bg-surface" /* impeccable-ignore */,
+          "nav-rail-transition border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >

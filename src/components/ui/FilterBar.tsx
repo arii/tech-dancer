@@ -27,7 +27,7 @@ export function FilterBar({ categories }: FilterBarProps) {
             onClick={() => setActiveCategory(cat)}
             aria-pressed={activeCategory === cat}
             className={cn(
-              "transition-all duration-300 text-sm font-bold uppercase tracking-wide cursor-pointer whitespace-nowrap min-h-11 px-3 rounded-full",
+              "transition-all duration-300 text-sm font-bold uppercase tracking-wide cursor-pointer whitespace-nowrap hit-area-sm px-3 rounded-full",
               activeCategory === cat
                 ? "text-accent border border-accent/60 bg-accent/10"
                 : "text-text-dim border border-transparent hover:text-text-main hover:border-line"

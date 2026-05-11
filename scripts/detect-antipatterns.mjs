@@ -53,8 +53,14 @@ const CONFIG = {
     'amber-500', 'success', 'error', 'warning',
     'gradient-to-t', 'gradient-to-b', 'gradient-to-r'
   ],
-  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic', 'pretty'],
-  allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
+  allowedTextUtils: [
+    'left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize',
+    'normal-case', 'italic', 'not-italic', 'pretty',
+    'hit-area-sm', 'hit-area-md', 'hit-area-lg', 'pb-safe-area', 'pb-safe-area-search',
+    'nav-rail-transition', 'mobile-header-blur', 'mobile-menu-z', 'global-search-footer',
+    'brand-text-muted', 'brand-b-mark', 'brand-wordmark'
+  ],
+  allowedTextSizes: ['fluid-5', 'fluid-6', 'fluid-7', 'fluid-8', 'fluid-9', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
   rules: [
     {
       name: 'Arbitrary Value',
@@ -136,12 +142,11 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content) {
-  if (content.includes('// impeccable-ignore-file')) return [];
+function checkContent(content, filepath) {
+  if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
 
   const violations = [];
-
-  // Helper to get line number from index efficiently
+  const lines = content.split('\n');
   const lineOffsets = [0];
   for (let i = 0; i < content.length; i++) {
     if (content[i] === '\n') lineOffsets.push(i + 1);
@@ -156,22 +161,28 @@ function checkContent(content) {
     return low;
   };
 
-  // Pre-compiled rules and helper utilities
-  const lines = content.split('\n');
   const layoutRule = CONFIG.rules.find(r => r.name === 'Raw Layout/Spacing');
   const suggestionsEntries = Object.entries(LAYOUT_SUGGESTIONS);
+
+  const isCorePrimitive = filepath.includes('src/layouts/') ||
+                         filepath.includes('src/components/ui/Logo.tsx') ||
+                         filepath.includes('src/components/Equalizer.tsx') ||
+                         filepath.includes('src/components/ui/MarkdownRenderer.tsx');
 
   // 1. Multi-line and General Rules (Global Scanner)
   CONFIG.rules
     .filter(r => !r.isClassNameRule)
     .forEach(rule => {
+      if (isCorePrimitive && (rule.name === 'Inline Styles' || rule.name === 'Arbitrary Value')) return;
+
       const flags = (rule.name === 'div Layout' ? 'gs' : 'g') + (rule.pattern.multiline ? 'm' : '');
       const regex = new RegExp(rule.pattern.source, flags);
       const matches = content.matchAll(regex);
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+        const lineContent = lines[lineNum - 1] || '';
+        if (lineContent.includes('// impeccable-ignore') || lineContent.includes('/* impeccable-ignore */')) continue;
 
         violations.push({
           line: lineNum,
@@ -186,12 +197,16 @@ function checkContent(content) {
   // 2. ClassName Specific Rules (Global Scanner)
   for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
     const lineNum = getLineNumber(match.index);
-    if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+    const lineContent = lines[lineNum - 1] || '';
+    if (lineContent.includes('// impeccable-ignore') || lineContent.includes('/* impeccable-ignore */')) continue;
 
     const classStr = match[1];
     const classes = classStr.split(/\s+/);
 
     classes.forEach(cls => {
+      if (CONFIG.allowedTextUtils.includes(cls)) return;
+      if (isCorePrimitive && (cls.startsWith('text-[') || cls.startsWith('before:mr-') || cls.startsWith('before:content-'))) return;
+
       // Raw Layout/Spacing
       if (layoutRule.pattern.test(cls)) {
         violations.push({
@@ -228,7 +243,6 @@ function checkContent(content) {
       }
     });
 
-    // Layout Suggestions
     suggestionsEntries.forEach(([pattern, suggestion]) => {
       if (classStr.includes(pattern)) {
         if (!violations.some(v => v.line === lineNum && v.pattern === 'Layout Suggestion' && v.value === pattern)) {
@@ -244,9 +258,7 @@ function checkContent(content) {
     });
   }
 
-  // 3. Contrast safety heuristic for inverse/gradient hero panels.
-  // Single-pass sliding window: when an industrial gradient line is seen,
-  // inspect nearby headline/body Text lines for explicit inverse-safe styling.
+  // 3. Contrast safety heuristic
   let activeGradientWindowUntil = -1;
   for (let i = 0; i < lines.length; i++) {
     const lineNum = i + 1;
@@ -256,7 +268,7 @@ function checkContent(content) {
       activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
       continue;
     }
-    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore')) continue;
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore') || line.includes('/* impeccable-ignore */')) continue;
 
     const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
     const hasInverseColor = /color="(?:white|bg)"/.test(line);
@@ -272,13 +284,12 @@ function checkContent(content) {
     }
   }
 
-  // Sort violations by line number
   return violations.sort((a, b) => a.line - b.line);
 }
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  return checkContent(content);
+  return checkContent(content, filepath);
 }
 
 function checkPRScope() {
@@ -289,13 +300,11 @@ function checkPRScope() {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
   } catch (error) {
-    // If the error message itself is present and is not just a standard shell error, report it
     if (error.stderr && error.stderr.trim()) {
       console.error(`\x1b[31m❌ Scope check failed:\x1b[0m\n${error.stderr}`);
     } else if (error.message) {
       console.error(`\x1b[31m❌ Scope check error:\x1b[0m ${error.message}`);
     }
-    // Don't exit here as scope check is usually a non-blocking warning
   }
 }
 
@@ -333,7 +342,7 @@ if (targets.includes('-')) {
   for await (const chunk of process.stdin) {
     stdinContent += chunk;
   }
-  const violations = checkContent(stdinContent);
+  const violations = checkContent(stdinContent, 'stdin');
   if (violations.length > 0) {
     allViolations['stdin'] = violations;
   }

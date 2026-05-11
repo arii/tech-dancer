@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useId } from 'react';
 import { cn } from '@/lib/utils';
 import { BrandDefs } from './BrandDefs';
@@ -38,8 +37,7 @@ export function Logo({ className, showText = true }: LogoProps) {
           fill="currentColor"
           transform="skewX(-8)"
           aria-hidden="true"
-          className="brand-b-mark"
-          style={{ fontSize: '85px' }} /* impeccable-ignore */
+          className="brand-b-mark text-fluid-7"
         >
           B
         </text>
@@ -60,10 +58,9 @@ export function Logo({ className, showText = true }: LogoProps) {
           y="78"
           fill="currentColor"
           aria-hidden="true"
-          className="brand-wordmark"
-          style={{ fontSize: '52px', letterSpacing: '-1.5px' }} /* impeccable-ignore */
+          className="brand-wordmark text-fluid-6 tracking-tight"
         >
-          boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light" /* impeccable-ignore-file */>.blog</tspan>
+          boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
         </text>
       )}
     </svg>

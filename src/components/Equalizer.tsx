@@ -42,7 +42,7 @@ export const Equalizer = () => {
         inset="x"
         bottom={0}
         height={24}
-        className="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-20" /* impeccable-ignore */
+        className="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl opacity-20"
       />
       {bars.map((bar, i) => (
         <Box
@@ -60,7 +60,7 @@ export const Equalizer = () => {
           width="full"
           maxWidth={1}
           radius="full"
-          style={{ /* impeccable-ignore */
+          style={{
             backgroundColor: 'transparent',
             background: `linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))`,
             boxShadow: `0 0 14px var(--hero-accent-shadow)`,
