@@ -177,9 +177,11 @@ export function WCSScraperTool() {
             <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
             <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
           </Stack>
-          <Button variant="secondary" onClick={() => window.location.reload()} className="mt-4">
-            Retry Connection
-          </Button>
+          <Box paddingTop={4}>
+            <Button variant="secondary" onClick={() => window.location.reload()}>
+              Retry Connection
+            </Button>
+          </Box>
         </Stack>
       </Box>
     );
