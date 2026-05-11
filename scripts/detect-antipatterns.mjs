@@ -204,8 +204,8 @@ function checkContent(content) {
       }
 
       // Colors check
-      if (/\b(bg-|text-)\b/.test(cls)) {
-        const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
+      if (/^(?:[a-z-]+:)?(bg|text)-/.test(cls)) {
+        const colorMatch = cls.match(/^(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)$/);
         if (colorMatch) {
           const prefix = colorMatch[1];
           const baseColor = colorMatch[2].split('/')[0];

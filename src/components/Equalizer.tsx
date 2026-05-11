@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { motion } from 'motion/react';
 import { Box, Stack } from '@/layouts/Primitives';
 
 const NUM_BARS = 28;
@@ -43,7 +42,6 @@ export const Equalizer = () => {
       className="pointer-events-none"
     >
       <Box
-        as={motion.div}
         aria-hidden
         position="absolute"
         inset="x"
@@ -52,28 +50,28 @@ export const Equalizer = () => {
         opacity={0.22}
         className="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent blur-2xl"
       />
-      {bars.map((bar, i) => (
-        <Box
-          key={i}
-          as={motion.div}
-          animate={{
-            height: [bar.minH, bar.maxH, bar.minH],
-          }}
-          transition={{
-            duration: bar.duration,
-            repeat: Infinity,
-            delay: bar.delay,
-            ease: "easeInOut",
-          }}
-          width="full"
-          maxWidth="[4px]"
-          radius="full"
-          style={{
-            ...barStyle,
-            opacity: bar.opacity,
-          }}
-        />
-      ))}
+      {bars.map((bar, i) => {
+        const barVars = {
+          ...barStyle,
+          '--min-h': bar.minH / 64,
+          '--max-h': bar.maxH / 64,
+          '--duration': `${bar.duration}s`,
+          '--delay': `${bar.delay}s`,
+          opacity: bar.opacity,
+        } as React.CSSProperties;
+
+        return (
+          <Box
+            key={i}
+            width="full"
+            maxWidth="[4px]"
+            height="[64px]"
+            radius="full"
+            className="animate-equalizer-bar"
+            style={barVars}
+          />
+        );
+      })}
     </Stack>
   );
 };
