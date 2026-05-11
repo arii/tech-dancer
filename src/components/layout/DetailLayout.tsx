@@ -95,8 +95,9 @@ export function DetailLayout({
             <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main mx-auto w-full"
-                style={{ maxWidth: '720px' }}
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main w-full"
+                marginX="auto"
+                maxWidth="prose"
               >
                 <MarkdownRenderer content={content} />
               </Box>

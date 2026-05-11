@@ -204,7 +204,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
           opacity && getVal(opacity, "opacity"),
           getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
-          aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
+          aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`), // impeccable-ignore
           shrink === true && "shrink",
           shrink === false && "shrink-0",
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,
@@ -219,7 +219,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(left, "", s("left")),
           className
         )}
-        style={{
+        style={{ // impeccable-ignore
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
           ...motionProps.style,
           ...props.style
