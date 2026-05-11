@@ -1,12 +1,13 @@
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { BrandIcon } from '@/components/ui/BrandIcon';
 import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
+import { Link } from 'react-router-dom';
 
 export function Footer() {
   const legalLinks = [
-    { label: 'Contact', href: import.meta.env.BASE_URL + 'contact' },
-    { label: 'Privacy', href: import.meta.env.BASE_URL + 'about#privacy' },
-    { label: 'Terms', href: import.meta.env.BASE_URL + 'about#terms' },
+    { label: 'Contact', to: '/contact' },
+    { label: 'Privacy', to: '/about#privacy' },
+    { label: 'Terms', to: '/about#terms' },
   ];
 
   return (
@@ -25,8 +26,8 @@ export function Footer() {
           {legalLinks.map((link) => (
             <Button
               key={link.label}
-              as="a"
-              href={link.href}
+              as={Link}
+              to={link.to}
               variant="ghost"
               size="sm"
               className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95"

@@ -44,7 +44,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
           width="full"
           surface="bg"
           direction="col"
-          scrollBehavior="smooth"
           scrollPaddingTop={64}
         >
           <Stack
