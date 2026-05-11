@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react';
-import { Download, Plus, Search, Globe, AlertCircle } from 'lucide-react';
-import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
+import { Download, Globe, AlertCircle } from 'lucide-react';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 import { calculateTimeline } from './lib/timeline-engine';
 import { generateICS, downloadICS } from './lib/ics-generator';
 import { EventAnchors, TimelineItem } from './types';
 import { TimelineRow } from './TimelineRow';
+import { EventSelector } from './EventSelector';
+import { CustomEventForm } from './CustomEventForm';
 
 export default function WSDCReminders() {
   const events = useMemo(() => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate), []);
@@ -61,96 +63,17 @@ export default function WSDCReminders() {
     <Stack gap={10} width="full">
       <Box border radius="xl" padding={6} surface="surface" className="border-line/60">
         <Stack gap={6}>
-          <Box display="flex" align="center" gap={3}>
-            <Search className="w-5 h-5 text-accent" />
-            <Text variant="headline" size="lg" weight="font-bold">Select WCS Event</Text>
-          </Box>
-
-          <Box display="flex" gap={2} wrap>
-            {events.map(event => (
-              <Button
-                key={event.slug}
-                variant={selectedEventId === event.slug ? 'primary' : 'outline'}
-                onClick={() => setSelectedEventId(event.slug)}
-                size="sm"
-                className="rounded-full"
-              >
-                {event.title}
-              </Button>
-            ))}
-            <Button
-              variant={selectedEventId === 'custom' ? 'primary' : 'outline'}
-              onClick={() => setSelectedEventId('custom')}
-              size="sm"
-              className="rounded-full"
-            >
-              <Box as="span" marginRight={1}>
-                <Plus className="w-3 h-3" />
-              </Box>
-              Add My Own
-            </Button>
-          </Box>
+          <EventSelector
+            events={events}
+            selectedEventId={selectedEventId}
+            onSelect={setSelectedEventId}
+          />
 
           {selectedEventId === 'custom' && (
-            <Box border radius="lg" padding={6} surface="default" className="bg-bg/50">
-              <Grid cols={{ base: 1, md: 2 }} gap={4}>
-                <Stack gap={2}>
-                  <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Event Title</Text>
-                  <Box as="input"
-                    name="title"
-                    value={customEvent.title}
-                    onChange={handleCustomChange}
-                    placeholder="e.g. My Local Workshop"
-                    paddingX={4}
-                    className="w-full h-11 rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
-                  />
-                </Stack>
-                <Stack gap={2}>
-                  <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Event Website (Optional)</Text>
-                  <Box as="input"
-                    name="url"
-                    value={customEvent.url}
-                    onChange={handleCustomChange}
-                    placeholder="https://..."
-                    paddingX={4}
-                    className="w-full h-11 rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
-                  />
-                </Stack>
-                <Stack gap={2}>
-                  <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Start Date</Text>
-                  <Box as="input"
-                    type="date"
-                    name="startDate"
-                    value={customEvent.startDate}
-                    onChange={handleCustomChange}
-                    paddingX={4}
-                    className="w-full h-11 rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
-                  />
-                </Stack>
-                <Stack gap={2}>
-                  <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Early Bird Deadline</Text>
-                  <Box as="input"
-                    type="date"
-                    name="earlyBirdDate"
-                    value={customEvent.earlyBirdDate}
-                    onChange={handleCustomChange}
-                    paddingX={4}
-                    className="w-full h-11 rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
-                  />
-                </Stack>
-                <Stack gap={2}>
-                  <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Hotel Cutoff Date</Text>
-                  <Box as="input"
-                    type="date"
-                    name="hotelCutoffDate"
-                    value={customEvent.hotelCutoffDate}
-                    onChange={handleCustomChange}
-                    paddingX={4}
-                    className="w-full h-11 rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
-                  />
-                </Stack>
-              </Grid>
-            </Box>
+            <CustomEventForm
+              customEvent={customEvent}
+              onChange={handleCustomChange}
+            />
           )}
         </Stack>
       </Box>
