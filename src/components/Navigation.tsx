@@ -121,7 +121,13 @@ export default function Navigation() {
             </Box>
 
             {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
+              <NavItem
+                key={item.path}
+                to={item.path}
+                label={item.label}
+                icon={item.icon}
+                aria-label={`Go to ${item.label}`}
+              />
             ))}
           </Stack>
 

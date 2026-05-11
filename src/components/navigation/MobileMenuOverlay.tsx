@@ -76,6 +76,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
           <Box
             as="button"
             type="button"
+            aria-label="Open search"
             cursor="pointer"
             onClick={onSearchClick}
             display="flex"
@@ -102,6 +103,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             icon={item.icon}
             onClick={onClose}
             isMobile
+            aria-label={`Go to ${item.label}`}
           />
         ))}
       </Box>

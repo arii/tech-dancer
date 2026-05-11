@@ -25,7 +25,7 @@ export function FilterBar({ categories }: FilterBarProps) {
             key={cat}
             as="button"
             onClick={() => setActiveCategory(cat)}
-            aria-current={activeCategory === cat ? 'page' : undefined}
+            aria-pressed={activeCategory === cat}
             className={cn(
               "transition-all duration-300 text-sm font-bold uppercase tracking-wide cursor-pointer whitespace-nowrap min-h-11 px-3 rounded-full",
               activeCategory === cat
