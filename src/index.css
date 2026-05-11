@@ -62,6 +62,7 @@
   --z-top: var(--raw-z-top);
   --z-search: var(--raw-z-search);
   --z-mobile-header: 110;
+  --z-mobile-menu: 100;
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
@@ -188,6 +189,10 @@
   }
   .wordmark-mobile {
     @apply font-sans text-sm;
+  }
+
+  .mobile-header-transition {
+    @apply transition-[backdrop-filter] duration-300;
   }
 
   /* Infrastructure Component Utilities */

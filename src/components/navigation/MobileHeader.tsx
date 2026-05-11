@@ -18,10 +18,10 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       aria-label="Mobile Navigation"
       layout="mobileHeader"
       border="b"
-      className="transition-[backdrop-filter] duration-300 bg-surface border-line"
+      className="mobile-header-transition bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Logo showText={false} className="h-9 w-auto text-white flex-shrink-0" />
+        <Logo showText={false} shrink={false} className="h-9 w-auto text-white" />
         <Wordmark variant="navigation" />
       </Box>
 
