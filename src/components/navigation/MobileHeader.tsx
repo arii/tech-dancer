@@ -17,11 +17,12 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       as="nav"
       aria-label="Mobile Navigation"
       layout="mobileHeader"
+      zIndex="mobileHeader"
       border="b"
       className="mobile-header-transition bg-surface border-line"
     >
-      <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Logo showText={false} shrink={false} className="h-9 w-auto text-white" />
+      <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2} shrink={false}>
+        <Logo showText={false} className="h-9 w-auto text-white" />
         <Wordmark variant="navigation" />
       </Box>
 

@@ -61,8 +61,8 @@
   --z-toast: var(--raw-z-toast);
   --z-top: var(--raw-z-top);
   --z-search: var(--raw-z-search);
-  --z-mobile-header: 110;
-  --z-mobile-menu: 100;
+  --z-mobile-header: 250;
+  --z-mobile-menu: 300;
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
@@ -194,6 +194,12 @@
   .mobile-header-transition {
     @apply transition-[backdrop-filter] duration-300;
   }
+
+  .nav-rail-transition {
+    @apply transition-[background-color,backdrop-filter] duration-300;
+  }
+
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
 
   /* Infrastructure Component Utilities */
   .btn-primary-effects {

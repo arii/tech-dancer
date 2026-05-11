@@ -82,6 +82,8 @@ export const zIndex = {
   toast: "toast",
   top: "top",
   search: "search",
+  mobileHeader: "mobile-header",
+  mobileMenu: "mobile-menu",
 };
 
 export const tracking = {
