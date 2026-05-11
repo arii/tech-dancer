@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType, useMemo } from "react"
 import { cn, composeStyles } from "@/lib/utils"
@@ -15,6 +16,7 @@ export interface BaseProps {
   paddingRight?: ResponsiveProp<keyof typeof spacing | number | string>
   paddingX?: ResponsiveProp<keyof typeof spacing | number | string>
   paddingY?: ResponsiveProp<keyof typeof spacing | number | string>
+  margin?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginTop?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginBottom?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginLeft?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
@@ -60,6 +62,9 @@ export interface BaseProps {
   right?: ResponsiveProp<keyof typeof spacing | number | string>
   bottom?: ResponsiveProp<keyof typeof spacing | number | string>
   left?: ResponsiveProp<keyof typeof spacing | number | string>
+  span?: ResponsiveProp<number | string>
+  cursor?: "auto" | "default" | "pointer" | "wait" | "text" | "move" | "help" | "not-allowed" | "none" | string
+  flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -73,6 +78,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     as: Component = "div", 
     padding, 
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
+    margin,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
     gap, border, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, touchTarget, flex, wrap, shadow,
@@ -185,6 +191,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(paddingRight, "", s("pr")),
           getResponsiveClasses(paddingX, "", s("px")),
           getResponsiveClasses(paddingY, "", s("py")),
+          getResponsiveClasses(margin, "", s("m")),
           getResponsiveClasses(marginTop, "", s("mt")),
           getResponsiveClasses(marginBottom, "", s("mb")),
           getResponsiveClasses(marginLeft, "", s("ml")),

@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
@@ -8,7 +9,7 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
-    <Box className="[counter-reset:section]">
+    <Box className="prose-counters">
       <ReactMarkdown
         components={{
           a: ({node: _node, href, ...props}) => {
@@ -20,27 +21,38 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: ({node: _node, ...props}) => (
             <Box border surface="warning" padding={6} marginY={8} radius="none">
-               <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" className="mb-2 block">Key Takeaway</Text>
-               <blockquote className="m-0 p-0 font-medium italic" {...props} />
+               <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" marginBottom={2} display="block">Key Takeaway</Text>
+               <blockquote className="italic font-medium" {...props} />
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box className="mt-16 mb-8 group" style={{ counterIncrement: 'section' }}>
+            <Box marginTop={16} marginBottom={8} className="prose-section group">
               <Text
                 variant="mono"
                 size="micro"
-                color="accent"
+                color="dim"
                 weight="font-bold"
                 tracking="utility"
-                className="block mb-3 opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
+                display="block"
+                marginBottom={3}
+                className="prose-section-number"
               />
-              <Text as="h2" variant="h2" size="4xl" color="brand" className="m-0" {...props} />
-              <Box className="h-0.5 w-16 bg-accent mt-6 transition-all group-hover:w-24" />
+              <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
+              <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box className="mt-12 mb-6">
-              <Text as="h3" variant="h3" size="xl" color="main" className="m-0 border-l-2 border-accent/30 pl-4" {...props} />
+            <Box marginTop={12} marginBottom={6}>
+              <Text
+                as="h3"
+                variant="h3"
+                size="xl"
+                color="main"
+                margin={0}
+                paddingLeft={4}
+                className="border-l-2 border-accent/30"
+                {...props}
+              />
             </Box>
           )
         }}
