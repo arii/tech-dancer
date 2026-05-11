@@ -29,7 +29,17 @@ from scope_check import verify_pr_scope, get_project_config
 PROJECT_CONFIG = get_project_config()
 
 # --- Anti-Pattern Audit Configuration ---
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx']
+AUDIT_CHECK_DIRS = [
+  'src/features',
+  'src/pages',
+  'src/components',
+  'src/layouts',
+  'src/styles',
+  'src/providers',
+  'src/hooks',
+  'src/lib',
+  'src/App.tsx'
+]
 
 # --- Shared Logic ---
 

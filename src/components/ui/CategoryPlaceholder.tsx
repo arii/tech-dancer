@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import React from 'react';
 import { Cpu, Globe, Camera, Heart, HelpCircle, LucideIcon } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';

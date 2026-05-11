@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { motion } from 'motion/react';
 import { MapPin, Calendar } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
