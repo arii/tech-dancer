@@ -39,7 +39,7 @@ export function Logo({ className, showText = true }: LogoProps) {
           transform="skewX(-8)"
           aria-hidden="true"
           className="brand-b-mark"
-          style={{ fontSize: '85px' }} // impeccable-ignore
+          style={{ fontSize: '85px' }} /* impeccable-ignore */
         >
           B
         </text>
@@ -61,7 +61,7 @@ export function Logo({ className, showText = true }: LogoProps) {
           fill="currentColor"
           aria-hidden="true"
           className="brand-wordmark"
-          style={{ fontSize: '52px', letterSpacing: '-1.5px' }} // impeccable-ignore
+          style={{ fontSize: '52px', letterSpacing: '-1.5px' }} /* impeccable-ignore */
         >
           boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light" /* impeccable-ignore-file */>.blog</tspan>
         </text>

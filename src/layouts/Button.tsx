@@ -21,7 +21,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         as={as}
         ref={ref as Ref<HTMLDivElement>}
         cursor="pointer"
-        className={cn(buttonVariants({ variant, intent, size, fullWidth }), "min-h-[44px] min-w-[44px]", className)} // impeccable-ignore
+        className={cn(buttonVariants({ variant, intent, size, fullWidth }), "min-h-[44px] min-w-[44px]", className)} /* impeccable-ignore */
         {...props}
       >
         {children}

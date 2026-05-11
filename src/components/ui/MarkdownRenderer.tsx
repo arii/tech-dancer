@@ -21,11 +21,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           blockquote: ({node: _node, ...props}) => (
             <Box border surface="warning" padding={6} marginY={8} radius="none">
                <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" marginBottom={2} display="block">Key Takeaway</Text>
-               <blockquote className="font-medium italic" style={{ margin: 0, padding: 0 }} {...props} /> // impeccable-ignore
+               <blockquote className="font-medium italic" style={{ margin: 0, padding: 0 }} {...props} /> /* impeccable-ignore */
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={8} className="group" style={{ counterIncrement: 'section' }}> // impeccable-ignore
+            <Box marginTop={16} marginBottom={8} className="group" style={{ counterIncrement: 'section' }}> /* impeccable-ignore */
               <Text
                 variant="mono"
                 size="micro"
@@ -34,7 +34,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 tracking="utility"
                 display="block"
                 marginBottom={3}
-                className="opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2" // impeccable-ignore
+                className="opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2" /* impeccable-ignore */
               />
               <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
               <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
