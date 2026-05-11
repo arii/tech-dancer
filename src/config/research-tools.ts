@@ -34,12 +34,5 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Travel Optimization',
     status: 'Active',
     layman: 'Secure early bird discounts without overcommitting. Sync verified WSDC travel milestones directly to your calendar.'
-  },
-  {
-    id: 'color-palette-explorer',
-    name: 'Accessible Victorian Explorer',
-    category: 'Design System',
-    status: 'Active',
-    layman: 'Interactive color scheme explorer for the "Accessible Victorian" design language, ensuring WCAG 2.1 compliance.'
   }
 ];

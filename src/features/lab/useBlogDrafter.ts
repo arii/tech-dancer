@@ -13,6 +13,25 @@ export interface BaseDraftData {
   // Common fields that were moved to Base in some versions
   affiliateLink?: string;
   commentary?: string;
+  // Extended fields for Resource and Event support across types
+  rating?: number;
+  verdict?: string;
+  priceCategory?: string;
+  updatedDate?: string;
+  affiliateIds?: string[];
+  tags?: string[];
+  heading?: string;
+  content?: string;
+  location?: string;
+  city?: string;
+  schedule?: string;
+  description?: string;
+  startDate?: string;
+  earlyBirdDate?: string;
+  hotelCutoffDate?: string;
+  url?: string;
+  durability?: number;
+  value?: number;
 }
 
 export interface PostDraftData extends BaseDraftData {
@@ -177,28 +196,25 @@ city: "${data.city || ''}"
 schedule: "${data.schedule || ''}"
 description: "${data.description || ''}"
 ---
-# ${data.title || 'Untitled Event'}
+# ${data.title || ''}
 ${data.excerpt || ''}
 `;
     }
 
     if (data.type === 'resource') {
-      return `---
-type: resource
-title: "${data.title || 'Untitled Resource'}"
+      return `type: resource
+title: "${data.title || ''}"
 date: "${data.date}"
 author: "${data.author}"
 category: "${data.category}"
 excerpt: "${data.excerpt || ''}"
-affiliateIds: ${JSON.stringify(data.affiliateIds)}
-tags: ${JSON.stringify(data.tags)}
-rating: ${data.rating}
+affiliateIds: ${JSON.stringify(data.affiliateIds ?? [])}
+tags: ${JSON.stringify(data.tags ?? [])}
+rating: ${data.rating ?? 0}
 verdict: "${data.verdict || ''}"
 priceCategory: "${data.priceCategory || ''}"
 updatedDate: "${data.updatedDate || ''}"
----
-## ${data.heading || ''}
-
+${data.heading || ''}
 ${data.content || ''}
 `;
     }
@@ -268,7 +284,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
         excerpt: (normalize(parsed.excerpt || parsed.description) as string) || prev.excerpt,
         affiliateLink: (parsed.affiliateLink as string) || (prev.type === 'post' ? prev.affiliateLink : ''),
         commentary: (normalize(parsed.commentary) as string) || (prev.type === 'post' ? prev.commentary : ''),
-        author: prev.author,
+        author: (normalize(parsed.author) as string) || prev.author,
         date: parsed.date || prev.date
       };
 
