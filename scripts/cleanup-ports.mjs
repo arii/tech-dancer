@@ -43,7 +43,7 @@ for (const port of ports) {
         execSync(`kill -9 ${pids.join(' ')}`, { stdio: 'ignore' });
       }
     }
-  } catch (error) {
+  } catch {
     // Expected if no processes are found on the port
   }
 }
