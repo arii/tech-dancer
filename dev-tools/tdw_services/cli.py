@@ -174,7 +174,7 @@ def manage_reviews(ctx, check_responses, cleanup_comments, dry_run):
     prs = orch.manage_reviews(check_responses=check_responses, cleanup_comments=cleanup_comments, dry_run=dry_run)
     out(ctx, f"Checked {len(prs)} PRs.", data={"prs": prs})
 
-@cli.command()
+@gh.command()
 @click.pass_context
 def audit_gate(ctx):
     """UI Anti-Pattern Audit Gate (Baseline comparison)"""
@@ -185,6 +185,12 @@ def audit_gate(ctx):
         err(ctx, msg, data=res)
     else:
         out(ctx, msg, data=res)
+
+@cli.command(name="audit-gate")
+@click.pass_context
+def audit_gate_alias(ctx):
+    """Alias for gh audit-gate"""
+    ctx.invoke(audit_gate)
 
 @gh.command()
 @click.option('--pr', required=True, type=int)
