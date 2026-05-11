@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { AffiliateLink } from '@/lib/affiliateManager';
 
 interface ThemeSpotlightProps {
   theme?: {
@@ -17,18 +18,19 @@ interface ThemeSpotlightProps {
 
 /**
  * Resolves a list of affiliate link objects from a list of IDs.
+ * Private utility function to handle the affiliateManager calls consistently.
  */
-function resolveAffiliateLinks(ids: string[] = []) {
+function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
   return ids
     .map(id => affiliateManager.getLink(id))
-    .filter((link): link is NonNullable<typeof link> => !!link);
+    .filter((link): link is AffiliateLink => !!link);
 }
 
 export function ThemeSpotlight({
   theme,
   accentColor = 'var(--raw-color-accent)'
 }: ThemeSpotlightProps) {
-  // Always define hooks at the top level
+  // Always define hooks at the top level to avoid React Hook violations
   const accentStyle = useMemo(() => ({ background: accentColor }), [accentColor]);
 
   const outfitLinks = useMemo(() =>
