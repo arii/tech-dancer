@@ -59,20 +59,14 @@ const LAYOUT_SUGGESTIONS = {
 // Modularized linting configuration
 const CONFIG = {
   allowedColors: [
-    'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
+    'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
     'accent-purple', 'accent-magenta',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
     'amber-500', 'success', 'error', 'warning'
   ],
-  allowedTextUtils: [
-    'left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize',
-    'normal-case', 'italic', 'not-italic', 'pretty',
-    'hit-area-sm', 'hit-area-md', 'hit-area-lg', 'pb-safe-area', 'pb-safe-area-search',
-    'nav-rail-transition', 'mobile-header-blur', 'mobile-menu-z', 'global-search-footer',
-    'brand-text-muted', 'brand-b-mark', 'brand-wordmark'
-  ],
-  allowedTextSizes: ['fluid-5', 'fluid-6', 'fluid-7', 'fluid-8', 'fluid-9', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
+  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
+  allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
   rules: [
     {
       name: 'Arbitrary Value',
@@ -164,8 +158,11 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content, filepath) {
+function checkContent(content) {
   if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
+
+  // Remove comments before running global regex rules to avoid false positives
+  const contentWithoutComments = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, (match) => ' '.repeat(match.length));
 
   const violations = [];
   const lines = content.split('\n');
@@ -203,8 +200,8 @@ function checkContent(content, filepath) {
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        const lineContent = lines[lineNum - 1] || '';
-        if (lineContent.includes('// impeccable-ignore') || lineContent.includes('/* impeccable-ignore */')) continue;
+        const lineText = lines[lineNum - 1] || '';
+        if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
 
         violations.push({
           line: lineNum,
@@ -216,11 +213,11 @@ function checkContent(content, filepath) {
       }
     });
 
-  // 2. ClassName Specific Rules (Global Scanner)
-  for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
-    const lineNum = getLineNumber(match.index);
-    const lineContent = lines[lineNum - 1] || '';
-    if (lineContent.includes('// impeccable-ignore') || lineContent.includes('/* impeccable-ignore */')) continue;
+  // 2. ClassName/Apply Specific Rules (Global Scanner)
+  const stylingPatterns = [
+    { regex: /className=["'](.*?)["']/gs, group: 1 },
+    { regex: /@apply (.*?);/gs, group: 1 }
+  ];
 
   for (const { regex, group } of stylingPatterns) {
     for (const match of content.matchAll(regex)) {
@@ -290,7 +287,13 @@ function checkContent(content, filepath) {
     }
   }
 
-  // 3. Contrast safety heuristic
+  // 3. CSS Specific checks (excluding @apply which is handled above)
+  // For CSS files, we want to ensure standard properties don't use raw hex/px
+  // though they are already covered by the global rules in step 1.
+
+  // 4. Contrast safety heuristic for inverse/gradient hero panels.
+  // Single-pass sliding window: when an industrial gradient line is seen,
+  // inspect nearby headline/body Text lines for explicit inverse-safe styling.
   let activeGradientWindowUntil = -1;
   for (let i = 0; i < lines.length; i++) {
     const lineNum = i + 1;
@@ -363,18 +366,7 @@ const targets = args.filter(arg => !arg.startsWith('--'));
 
 const allViolations = {};
 
-if (targets.includes('-')) {
-  let stdinContent = '';
-  process.stdin.setEncoding('utf8');
-  for await (const chunk of process.stdin) {
-    stdinContent += chunk;
-  }
-  const violations = checkContent(stdinContent, 'stdin');
-  if (violations.length > 0) {
-    allViolations['stdin'] = violations;
-  }
-} else {
-  const files = collectAuditFiles(targets);
+export { checkContent, collectAuditFiles, checkFile };
 
 async function runAudit() {
   // Prevent running the main logic when imported as a module in tests

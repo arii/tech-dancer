@@ -44,10 +44,10 @@ jobs:
         run: |
           # 1. Determine Base Path
           if [ "$REF_NAME" = "main" ]; then
-            export VITE_BASE_PATH=/$REPO_NAME/
+            export VITE_BASE_PATH="/$REPO_NAME/"
             export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"
           else
-            export VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/
+            export VITE_BASE_PATH="/$REPO_NAME/$REF_NAME/"
             export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/$REF_NAME/"
           fi
 
