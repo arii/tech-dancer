@@ -59,13 +59,13 @@ const LAYOUT_SUGGESTIONS = {
 // Modularized linting configuration
 const CONFIG = {
   allowedColors: [
-    'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
+    'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
     'accent-purple', 'accent-magenta',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
     'amber-500', 'success', 'error', 'warning'
   ],
-  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
+  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic', 'pretty', 'font-light'],
   allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
   rules: [
     {
@@ -237,8 +237,9 @@ function checkContent(content) {
       }
 
       // Colors check
-      if (/\b(bg-|text-)\b/.test(cls)) {
-        const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
+      if (/^(?:[a-z-]+:)?(bg|text|fill)-/.test(cls)) {
+        if (CONFIG.allowedColors.includes(cls) || cls.startsWith('brand-')) return;
+        const colorMatch = cls.match(/^(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)$/);
         if (colorMatch) {
           const prefix = colorMatch[1];
           const baseColor = colorMatch[2].split('/')[0];
@@ -246,7 +247,9 @@ function checkContent(content) {
           const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
                             CONFIG.allowedColors.includes(fullToken) ||
                             CONFIG.allowedTextUtils.includes(baseColor) ||
-                            CONFIG.allowedTextSizes.includes(baseColor);
+                            CONFIG.allowedTextSizes.includes(baseColor) ||
+                            baseColor.startsWith('brand-') ||
+                            fullToken.startsWith('brand-');
 
           if (!isAllowed) {
             violations.push({
