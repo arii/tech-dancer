@@ -9,7 +9,7 @@ interface ThemeSpotlightProps {
 }
 
 export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent)' }: ThemeSpotlightProps) {
-  const accentStyle = useMemo(() => ({ '--theme-accent-color': accentColor } as React.CSSProperties), [accentColor]);
+  const accentStyle = useMemo(() => ({ backgroundColor: accentColor } as React.CSSProperties), [accentColor]);
 
   return (
     <Box
@@ -29,7 +29,6 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
               radius="full"
               marginBottom={2}
               style={accentStyle}
-              className="bg-[var(--theme-accent-color)]" // impeccable-ignore
             />
             <Text
               as="h3"

@@ -205,6 +205,7 @@ function checkContent(content) {
 
       // Colors check
       if (/\b(bg-|text-|fill-)\b/.test(cls)) {
+        if (CONFIG.allowedColors.includes(cls)) return;
         const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)\b/);
         if (colorMatch) {
           const prefix = colorMatch[1];

@@ -108,8 +108,7 @@ export function GearCard({
         <Box
           position="absolute"
           inset
-          opacity={15}
-          className="bg-black pointer-events-none"
+          className="bg-black/15 pointer-events-none"
           aria-hidden="true"
         />
         {/* Category badge */}
