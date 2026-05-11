@@ -1,32 +1,16 @@
 #!/usr/bin/env python3
 """
-td_cli.py - Unified Tech-Dancer Developer CLI
+td_cli.py - Tech-Dancer Developer CLI Shim
 
-Consolidates multiple fragmented scripts into a single entry point for repo automation.
-Supports structured JSON output for tool integration.
+This script is a thin wrapper around the unified tdw_services CLI.
+It maintains backward compatibility for existing scripts and CI workflows.
 """
 
-import argparse
 import sys
 import os
-import re
-import json
-from datetime import datetime, timezone, timedelta
-from utils import (
-    get_github_token,
-    get_github_client,
-    get_repo_name,
-    get_gha_variable,
-    set_gha_variable,
-    CLIError,
-    run_command,
-    is_ollama_available
-)
-from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from collections import defaultdict
 
-from scope_check import verify_pr_scope, get_project_config
-PROJECT_CONFIG = get_project_config()
+# Add the dev-tools directory to sys.path so we can import tdw_services
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # --- Anti-Pattern Audit Configuration ---
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
@@ -895,104 +879,8 @@ def handle_track_review(args):
         print(json.dumps({"status": "success", "pr": args.pr, "review_status": args.status}, indent=2))
 
 def main():
-    parser = argparse.ArgumentParser(description="Tech-Dancer Repository CLI")
-    parser.add_argument("--json", action="store_true", help="Output results in JSON format")
-    subparsers = parser.add_subparsers(dest="command", help="Command to run")
-
-    # Use a dictionary mapping command names to their handlers instead of a list of tuples with duplicates
-    command_registry = {
-        "validate-issue": handle_validate_issue,
-        "conflicts": handle_conflicts,
-        "detect-conflicts": handle_detect_conflicts,
-        "status-board": handle_status_board,
-        "ratchet-any": handle_ratchet_any,
-        "bundle-size": handle_bundle_size,
-        "migrate-tokens": handle_migrate_tokens,
-        "update-issues": handle_update_issues,
-        "audit-pr": handle_audit_pr,
-        "pre-submit": handle_pre_submit,
-        "manage-reviews": handle_manage_reviews,
-        "fetch-review": handle_audit_pr, # fetch-review is alias for audit-pr --fetch
-        "audit-gate": handle_audit_gate,
-        "fix-ci": handle_fix_ci,
-        "repair": handle_repair,
-        "repair-context": handle_repair_context,
-        "resolve-conflicts": handle_resolve_conflicts,
-        "track-review": handle_track_review
-    }
-
-    for cmd, func in command_registry.items():
-        p = subparsers.add_parser(cmd)
-        if cmd == "validate-issue":
-            p.add_argument("--issue-number", type=int)
-            p.add_argument("--all-open", action="store_true")
-            p.add_argument("--post-comments", action="store_true")
-            add_execution_args(p)
-        elif cmd in ["conflicts", "resolve-conflicts"]: p.add_argument("--base")
-        elif cmd == "detect-conflicts": p.add_argument("--pr", type=int)
-        elif cmd == "ratchet-any":
-            p.add_argument("--baseline-file")
-            p.add_argument("--update", action="store_true")
-            add_execution_args(p)
-        elif cmd == "bundle-size":
-            p.add_argument("--baseline-file")
-            p.add_argument("--threshold", type=int, default=50)
-            p.add_argument("--update", action="store_true")
-            add_execution_args(p)
-        elif cmd == "migrate-tokens":
-            p.add_argument("--find")
-            p.add_argument("--migrate", nargs=2, metavar=('OLD', 'NEW'))
-            add_execution_args(p)
-        elif cmd == "update-issues":
-            add_execution_args(p)
-        elif cmd in ["audit-pr", "fetch-review"]:
-            p.add_argument("pr_number")
-            p.add_argument("--fetch", action="store_true")
-            p.add_argument("--audit", action="store_true")
-            p.add_argument("--submit", action="store_true")
-            p.add_argument("--cleanup", action="store_true")
-            add_execution_args(p)
-            p.add_argument("--event")
-            p.add_argument("--base")
-        elif cmd == "manage-reviews":
-            p.add_argument("--check-responses", action="store_true")
-            p.add_argument("--cleanup-comments", action="store_true")
-            add_execution_args(p)
-        elif cmd == "track-review":
-            p.add_argument("--pr", required=True)
-            p.add_argument("--status", required=True)
-            p.add_argument("--auditor", required=True)
-            add_execution_args(p)
-        elif cmd == "audit-gate": pass # Uses global --json if provided
-        elif cmd == "repair-context":
-            p.add_argument("--log", help="Raw log line")
-            p.add_argument("--file", help="Path to log file")
-        elif cmd == "fix-ci":
-            p.add_argument("--pr-number", help="PR number to fix (auto-detected if omitted)")
-            p.add_argument("--branch", help="Branch name to fix (auto-detected if omitted)")
-            p.add_argument("--api-key", help="Jules API Key (falls back to JULES_API_KEY env var)")
-            add_execution_args(p)
-        elif cmd == "repair":
-            p.add_argument("--logs", help="Path to CI logs file")
-            p.add_argument("--stdin", action="store_true", help="Read logs from stdin")
-            p.add_argument("--worktree", action="store_true", help="Run repair in a isolated git worktree")
-        elif cmd == "resolve-conflicts":
-            pass # Uses global --json flag if provided
-        p.set_defaults(func=func)
-
-    args = parser.parse_args()
-    if not args.command: parser.print_help(); sys.exit(1)
-
-    try:
-        args.func(args)
-    except CLIError as e:
-        if args.json: print(json.dumps({"status": "error", "message": e.message, "code": e.code, "data": e.data}, indent=2))
-        else: print(f"❌ Error: {e.message}")
-        sys.exit(e.code)
-    except Exception as e:
-        if args.json: print(json.dumps({"status": "error", "message": str(e)}, indent=2))
-        else: raise e
-        sys.exit(1)
+    # click entry point automatically handles sys.argv
+    cli(obj={})
 
 if __name__ == "__main__":
     main()

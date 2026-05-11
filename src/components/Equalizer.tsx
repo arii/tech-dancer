@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useMemo } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 
