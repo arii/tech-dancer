@@ -14,10 +14,16 @@ export default defineConfig({
     // Standardize baseURL for local and CI
     baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
     trace: 'on-first-retry',
+    // Standardize rendering environment for visual regression
+    contextOptions: {
+      reducedMotion: 'reduce',
+    },
   },
   expect: {
-    // Enforce strict 2% pixel threshold globally for visual regression
     toHaveScreenshot: {
+      // Sensitivity threshold for color differences (0 to 1)
+      threshold: 0.2,
+      // Total allowed difference in pixels as a ratio (0 to 1)
       maxDiffPixelRatio: 0.02,
     },
   },

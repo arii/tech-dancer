@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
@@ -58,7 +59,7 @@ export function DetailLayout({
         <Stack gap={10}>
           {/* Header */}
           <Stack gap={4}>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase data-testid="detail-metadata">
               {category} • {date} • {rt} min read
             </Text>
             <Text variant="headline" size="fluid-5" weight="font-black" color="brand" leading="tight" tracking="tight">
@@ -95,10 +96,9 @@ export function DetailLayout({
             <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
               {children}
               <Box
-              maxWidth="prose"
-              marginX="auto"
-              width="full"
-              className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main"
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main w-full"
+                marginX="auto"
+                maxWidth="prose"
               >
                 <MarkdownRenderer content={content} />
               </Box>

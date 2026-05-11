@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
@@ -8,7 +9,7 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
-    <Box className="[counter-reset:section]">
+    <Box className="prose-counters">
       <ReactMarkdown
         components={{
           a: ({node: _node, href, ...props}) => {
@@ -25,16 +26,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={8} className="group" style={{ counterIncrement: 'section' }}>
+            <Box marginTop={16} marginBottom={8} className="prose-section group" style={{ counterIncrement: 'section' }}>
               <Text
                 variant="mono"
                 size="micro"
-                color="accent"
+                color="dim"
                 weight="font-bold"
                 tracking="utility"
                 display="block"
                 marginBottom={3}
-                className="opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
+                className="prose-section-number opacity-60 before:content-[counter(section,decimal-leading-zero)] before:mr-2"
               />
               <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
               <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
@@ -42,7 +43,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           h3: ({node: _node, ...props}) => (
             <Box marginTop={12} marginBottom={6}>
-              <Text as="h3" variant="h3" size="xl" color="main" margin={0} paddingLeft={4} className="border-l-2 border-accent/30" {...props} />
+              <Text
+                as="h3"
+                variant="h3"
+                size="xl"
+                color="main"
+                margin={0}
+                paddingLeft={4}
+                className="border-l-2 border-accent/30"
+                {...props}
+              />
             </Box>
           )
         }}

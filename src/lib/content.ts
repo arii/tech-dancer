@@ -154,6 +154,10 @@ export interface Event {
   theme?: {
     name: string;
     description: string;
+    label?: string;
+    image?: string;
+    outfitIds?: string[];
+    accessoryIds?: string[];
   };
   gear?: {
     recommendations: string[];

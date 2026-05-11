@@ -329,6 +329,7 @@ export default function UXAuditor() {
                               src={imgUrl}
                               alt={`${vp.name} snapshot`}
                               loading="lazy"
+                              data-testid="ux-analysis-snapshot"
                               className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />

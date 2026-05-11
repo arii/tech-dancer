@@ -6,7 +6,20 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx', '.github/workflows'];
+const CHECK_DIRS = [
+  'src/features',
+  'src/pages',
+  'src/components',
+  'src/layouts',
+  'src/styles',
+  'src/providers',
+  'src/hooks',
+  'src/lib',
+  'src/App.tsx',
+  '.github/workflows'
+];
+
+const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -20,7 +33,7 @@ function collectAuditFiles(targets) {
         walk(fullPath);
         continue;
       }
-      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx') || fullPath.endsWith('.yml')) results.add(fullPath);
+      if (AUDIT_EXTENSIONS.some(ext => fullPath.endsWith(ext))) results.add(fullPath);
     }
   };
 
@@ -29,7 +42,7 @@ function collectAuditFiles(targets) {
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
-    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx') || absoluteTarget.endsWith('.yml')) results.add(absoluteTarget);
+    else if (AUDIT_EXTENSIONS.some(ext => absoluteTarget.endsWith(ext))) results.add(absoluteTarget);
   }
 
   return Array.from(results);
@@ -47,20 +60,22 @@ const LAYOUT_SUGGESTIONS = {
 const CONFIG = {
   allowedColors: [
     'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
-    'accent-purple', 'accent-magenta', 'brand-text-muted',
+    'accent-purple', 'accent-magenta',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-    'amber-500', 'success', 'error', 'warning',
-    'gradient-to-t', 'gradient-to-b', 'gradient-to-r'
+    'amber-500', 'success', 'error', 'warning'
   ],
   allowedTextUtils: [
     'left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize',
-    'normal-case', 'italic', 'not-italic', 'pretty',
+    'normal-case', 'italic', 'not-italic', 'pretty', 'font-light',
     'hit-area-sm', 'hit-area-md', 'hit-area-lg', 'pb-safe-area', 'pb-safe-area-search',
     'nav-rail-transition', 'mobile-header-blur', 'mobile-menu-z', 'global-search-footer',
     'brand-text-muted', 'brand-b-mark', 'brand-wordmark'
   ],
-  allowedTextSizes: ['fluid-5', 'fluid-6', 'fluid-7', 'fluid-8', 'fluid-9', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
+  allowedTextSizes: [
+    'fluid-5', 'fluid-6', 'fluid-7', 'fluid-8', 'fluid-9',
+    'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'
+  ],
   rules: [
     {
       name: 'Arbitrary Value',
@@ -122,6 +137,18 @@ const CONFIG = {
       pattern: /^([ \t]*)env:[ \t]*(?!\r?\n\1[ \t]+)/m,
       severity: 'major',
       message: 'Bare env: keys are invalid in GitHub Actions workflows. Provide values or remove the key.'
+    },
+    {
+      name: 'Raw Hex Color (CSS)',
+      pattern: /(?<!#|[\w-])#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\w-])/g,
+      severity: 'minor',
+      message: 'Raw hex color in CSS. Use design tokens or CSS variables.'
+    },
+    {
+      name: 'Hardcoded Pixel Value (CSS)',
+      pattern: /(?<![\w-])\d+px(?![\w-])/g,
+      severity: 'minor',
+      message: 'Avoid hardcoded pixel values in CSS. Use design tokens.'
     }
   ],
   deprecated: {
@@ -135,15 +162,16 @@ const CONFIG = {
     'FolioGrid': 'src/components/ui/FolioGrid.tsx', 'Skeleton': 'src/components/ui/Skeleton.tsx',
     'ViewToggle': 'src/components/ui/ViewToggle.tsx', 'ListRow': 'src/components/ui/ListRow.tsx',
     'MarkdownRenderer': 'src/components/ui/MarkdownRenderer.tsx', 'DetailLayout': 'src/components/layout/DetailLayout.tsx',
-    'EventSidebar': 'src/features/lab/components/sidebar/EventSidebar.tsx',
-    'ResourceSidebar': 'src/features/lab/components/sidebar/ResourceSidebar.tsx',
     'useSearchParam': 'src/hooks/useSearchParam.ts', 'useHotkeys': 'src/hooks/useHotkeys.ts', 'safeSearch': 'src/lib/utils.ts',
   },
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content, filepath) {
+function checkContent(content, filepath = 'stdin') {
   if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
+
+  // Remove comments before running global regex rules to avoid false positives
+  const contentWithoutComments = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, (match) => ' '.repeat(match.length));
 
   const violations = [];
   const lines = content.split('\n');
@@ -177,12 +205,12 @@ function checkContent(content, filepath) {
 
       const flags = (rule.name === 'div Layout' ? 'gs' : 'g') + (rule.pattern.multiline ? 'm' : '');
       const regex = new RegExp(rule.pattern.source, flags);
-      const matches = content.matchAll(regex);
+      const matches = contentWithoutComments.matchAll(regex);
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        const lineContent = lines[lineNum - 1] || '';
-        if (lineContent.includes('// impeccable-ignore') || lineContent.includes('/* impeccable-ignore */')) continue;
+        const lineText = lines[lineNum - 1] || '';
+        if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
 
         violations.push({
           line: lineNum,
@@ -194,71 +222,87 @@ function checkContent(content, filepath) {
       }
     });
 
-  // 2. ClassName Specific Rules (Global Scanner)
-  for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
-    const lineNum = getLineNumber(match.index);
-    const lineContent = lines[lineNum - 1] || '';
-    if (lineContent.includes('// impeccable-ignore') || lineContent.includes('/* impeccable-ignore */')) continue;
+  // 2. ClassName/Apply Specific Rules (Global Scanner)
+  const stylingPatterns = [
+    { regex: /className=["'](.*?)["']/gs, group: 1 },
+    { regex: /@apply (.*?);/gs, group: 1 }
+  ];
 
-    const classStr = match[1];
-    const classes = classStr.split(/\s+/);
+  for (const { regex, group } of stylingPatterns) {
+    for (const match of content.matchAll(regex)) {
+      const lineNum = getLineNumber(match.index);
+      const lineText = lines[lineNum - 1] || '';
+      if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
 
-    classes.forEach(cls => {
-      if (CONFIG.allowedTextUtils.includes(cls)) return;
-      if (isCorePrimitive && (cls.startsWith('text-[') || cls.startsWith('before:mr-') || cls.startsWith('before:content-'))) return;
+      const classStr = match[group];
+      const classes = classStr.split(/\s+/);
 
-      // Raw Layout/Spacing
-      if (layoutRule.pattern.test(cls)) {
-        violations.push({
-          line: lineNum,
-          pattern: layoutRule.name,
-          severity: layoutRule.severity || 'minor',
-          value: cls,
-          message: layoutRule.message
-        });
-      }
+      classes.forEach(cls => {
+        if (CONFIG.allowedTextUtils.includes(cls)) return;
+        if (isCorePrimitive && (cls.startsWith('text-[') || cls.startsWith('before:mr-') || cls.startsWith('before:content-'))) return;
 
-      // Colors check
-      if (/\b(bg-|text-)\b/.test(cls)) {
-        const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text)-([a-z0-9/-]+)\b/);
-        if (colorMatch) {
-          const prefix = colorMatch[1];
-          const baseColor = colorMatch[2].split('/')[0];
-          const fullToken = `${prefix}-${baseColor}`;
-          const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
-                            CONFIG.allowedColors.includes(fullToken) ||
-                            CONFIG.allowedTextUtils.includes(baseColor) ||
-                            CONFIG.allowedTextSizes.includes(baseColor);
+        // Raw Layout/Spacing
+        if (layoutRule.pattern.test(cls)) {
+          violations.push({
+            line: lineNum,
+            pattern: layoutRule.name,
+            severity: layoutRule.severity || 'minor',
+            value: cls,
+            message: layoutRule.message
+          });
+        }
 
-          if (!isAllowed) {
+        // Colors check
+        if (/^(?:[a-z-]+:)?(bg|text|fill)-/.test(cls)) {
+          if (CONFIG.allowedColors.includes(cls) || cls.startsWith('brand-')) return;
+          const colorMatch = cls.match(/^(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)$/);
+          if (colorMatch) {
+            const prefix = colorMatch[1];
+            const baseColor = colorMatch[2].split('/')[0];
+            const fullToken = `${prefix}-${baseColor}`;
+            const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
+                              CONFIG.allowedColors.includes(fullToken) ||
+                              CONFIG.allowedTextUtils.includes(baseColor) ||
+                              CONFIG.allowedTextSizes.includes(baseColor) ||
+                              baseColor.startsWith('brand-') ||
+                              fullToken.startsWith('brand-');
+
+            if (!isAllowed) {
+              violations.push({
+                line: lineNum,
+                pattern: 'Non-token Color/Size',
+                severity: 'minor',
+                value: cls,
+                message: `Class '${cls}' uses a value that is not a recognized design token.`
+              });
+            }
+          }
+        }
+      });
+
+      suggestionsEntries.forEach(([pattern, suggestion]) => {
+        if (classStr.includes(pattern)) {
+          if (!violations.some(v => v.line === lineNum && v.pattern === 'Layout Suggestion' && v.value === pattern)) {
             violations.push({
               line: lineNum,
-              pattern: 'Non-token Color/Size',
+              pattern: 'Layout Suggestion',
               severity: 'minor',
-              value: cls,
-              message: `Class '${cls}' uses a value that is not a recognized design token.`
+              value: pattern,
+              message: `Consider replacing '${pattern}' with ${suggestion}`
             });
           }
         }
-      }
-    });
-
-    suggestionsEntries.forEach(([pattern, suggestion]) => {
-      if (classStr.includes(pattern)) {
-        if (!violations.some(v => v.line === lineNum && v.pattern === 'Layout Suggestion' && v.value === pattern)) {
-          violations.push({
-            line: lineNum,
-            pattern: 'Layout Suggestion',
-            severity: 'minor',
-            value: pattern,
-            message: `Consider replacing '${pattern}' with ${suggestion}`
-          });
-        }
-      }
-    });
+      });
+    }
   }
 
-  // 3. Contrast safety heuristic
+  // 3. CSS Specific checks (excluding @apply which is handled above)
+  // For CSS files, we want to ensure standard properties don't use raw hex/px
+  // though they are already covered by the global rules in step 1.
+
+  // 4. Contrast safety heuristic for inverse/gradient hero panels.
+  // Single-pass sliding window: when an industrial gradient line is seen,
+  // inspect nearby headline/body Text lines for explicit inverse-safe styling.
   let activeGradientWindowUntil = -1;
   for (let i = 0; i < lines.length; i++) {
     const lineNum = i + 1;
@@ -329,67 +373,76 @@ const isCountOnly = args.includes('--count-only');
 const shouldGenerateTodo = args.includes('--todo');
 const targets = args.filter(arg => !arg.startsWith('--'));
 
-if (!isJson && !isCountOnly) {
-  console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
-  checkPRScope();
-}
-
 const allViolations = {};
 
-if (targets.includes('-')) {
-  let stdinContent = '';
-  process.stdin.setEncoding('utf8');
-  for await (const chunk of process.stdin) {
-    stdinContent += chunk;
-  }
-  const violations = checkContent(stdinContent, 'stdin');
-  if (violations.length > 0) {
-    allViolations['stdin'] = violations;
-  }
-} else {
-  const files = collectAuditFiles(targets);
+export { checkContent, collectAuditFiles, checkFile };
 
-  files.forEach(filepath => {
-    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts') || filepath.endsWith('.yml')) {
-      const violations = checkFile(filepath);
-      if (violations.length > 0) {
-        allViolations[path.relative(ROOT, filepath)] = violations;
+async function runAudit() {
+  // Prevent running the main logic when imported as a module in tests
+  if (process.argv[1] !== fileURLToPath(import.meta.url)) return;
+
+  if (!isJson && !isCountOnly) {
+    console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+    checkPRScope();
+  }
+
+  if (targets.includes('-')) {
+    let stdinContent = '';
+    process.stdin.setEncoding('utf8');
+    for await (const chunk of process.stdin) {
+      stdinContent += chunk;
+    }
+    const violations = checkContent(stdinContent);
+    if (violations.length > 0) {
+      allViolations['stdin'] = violations;
+    }
+  } else {
+    const files = collectAuditFiles(targets);
+
+    files.forEach(filepath => {
+      if (AUDIT_EXTENSIONS.some(ext => filepath.endsWith(ext))) {
+        const violations = checkFile(filepath);
+        if (violations.length > 0) {
+          allViolations[path.relative(ROOT, filepath)] = violations;
+        }
       }
-    }
-  });
-}
-
-const totalViolations = Object.values(allViolations).flat().length;
-
-if (isCountOnly) {
-  process.stdout.write(totalViolations.toString() + '\n');
-  process.exit(0);
-}
-
-if (isJson) {
-  process.stdout.write(JSON.stringify({
-    violations: allViolations,
-    config: {
-      deprecated: CONFIG.deprecated,
-      existingComponents: CONFIG.existingComponents,
-      requiredContentFields: CONFIG.requiredContentFields
-    }
-  }, null, 2));
-  process.exit(totalViolations > 0 ? 1 : 0);
-}
-
-if (totalViolations === 0) {
-  console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  if (shouldGenerateTodo) generateTodoFile({});
-} else {
-  console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
-  for (const [file, violations] of Object.entries(allViolations)) {
-    console.log(`\x1b[36m${file}\x1b[0m`);
-    violations.forEach(v => {
-      console.log(`  \x1b[90mLine ${v.line}:\x1b[0m [${v.pattern}] \x1b[33m${v.value}\x1b[0m - ${v.message}`);
     });
-    console.log();
   }
-  if (shouldGenerateTodo) generateTodoFile(allViolations);
-  process.exit(1);
+
+  const totalViolations = Object.values(allViolations).flat().length;
+
+  if (isCountOnly) {
+    process.stdout.write(totalViolations.toString() + '\n');
+    process.exit(0);
+  }
+
+  if (isJson) {
+    process.stdout.write(JSON.stringify({
+      violations: allViolations,
+      config: {
+        deprecated: CONFIG.deprecated,
+        existingComponents: CONFIG.existingComponents,
+        requiredContentFields: CONFIG.requiredContentFields
+      }
+    }, null, 2));
+    process.exit(totalViolations > 0 ? 1 : 0);
+  }
+
+  if (totalViolations === 0) {
+    console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
+    if (shouldGenerateTodo) generateTodoFile({});
+  } else {
+    console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
+    for (const [file, violations] of Object.entries(allViolations)) {
+      console.log(`\x1b[36m${file}\x1b[0m`);
+      violations.forEach(v => {
+        console.log(`  \x1b[90mLine ${v.line}:\x1b[0m [${v.pattern}] \x1b[33m${v.value}\x1b[0m - ${v.message}`);
+      });
+      console.log();
+    }
+    if (shouldGenerateTodo) generateTodoFile(allViolations);
+    process.exit(1);
+  }
 }
+
+runAudit();
