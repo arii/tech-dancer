@@ -88,7 +88,13 @@ createRoot(document.getElementById('root')!).render(
             fallbackElement={
               <Box minHeight="screen" surface="bg" display="flex" align="center" justify="center">
                 <Stack align="center" justify="center">
-                  <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+                  <Box
+                    width={8}
+                    height={8}
+                    border={true}
+                    radius="full"
+                    className="border-4 border-accent border-t-transparent animate-spin"
+                  />
                 </Stack>
               </Box>
             }
