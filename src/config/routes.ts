@@ -1,4 +1,4 @@
-import { Home, BookOpen, ShoppingBag, Database, User, Send } from 'lucide-react';
+import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -37,8 +37,15 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
+    path: '/events',
+    lazy: () => import('@/pages/Events').then(m => ({ Component: m.default })),
+    label: 'Events',
+    icon: Calendar,
+    skeleton: 'grid'
+  },
+  {
     path: '/events/:slug',
-    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
+    lazy: () => import('@/pages/EventDetail').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
   {
@@ -90,5 +97,5 @@ export const routes: RouteConfig[] = [
 ];
 
 export const MOBILE_NAV_ROUTES = routes.filter((r): r is RouteConfig & { label: string, icon: LucideIcon } =>
-  !!(r.label && r.icon && ['/', '/blog', '/gear', '/research'].includes(r.path))
+  !!(r.label && r.icon && ['/', '/blog', '/gear', '/events', '/research'].includes(r.path))
 );
