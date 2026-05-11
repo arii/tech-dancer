@@ -6,7 +6,20 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = ['src/features', 'src/pages', 'src/App.tsx', '.github/workflows'];
+const CHECK_DIRS = [
+  'src/features',
+  'src/pages',
+  'src/components',
+  'src/layouts',
+  'src/styles',
+  'src/providers',
+  'src/hooks',
+  'src/lib',
+  'src/App.tsx',
+  '.github/workflows'
+];
+
+const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -20,7 +33,7 @@ function collectAuditFiles(targets) {
         walk(fullPath);
         continue;
       }
-      if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx') || fullPath.endsWith('.yml')) results.add(fullPath);
+      if (AUDIT_EXTENSIONS.some(ext => fullPath.endsWith(ext))) results.add(fullPath);
     }
   };
 
@@ -29,7 +42,7 @@ function collectAuditFiles(targets) {
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
-    else if (absoluteTarget.endsWith('.ts') || absoluteTarget.endsWith('.tsx') || absoluteTarget.endsWith('.yml')) results.add(absoluteTarget);
+    else if (AUDIT_EXTENSIONS.some(ext => absoluteTarget.endsWith(ext))) results.add(absoluteTarget);
   }
 
   return Array.from(results);
@@ -115,6 +128,18 @@ const CONFIG = {
       pattern: /^([ \t]*)env:[ \t]*(?!\r?\n\1[ \t]+)/m,
       severity: 'major',
       message: 'Bare env: keys are invalid in GitHub Actions workflows. Provide values or remove the key.'
+    },
+    {
+      name: 'Raw Hex Color (CSS)',
+      pattern: /(?<!#|[\w-])#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\w-])/g,
+      severity: 'minor',
+      message: 'Raw hex color in CSS. Use design tokens or CSS variables.'
+    },
+    {
+      name: 'Hardcoded Pixel Value (CSS)',
+      pattern: /(?<![\w-])\d+px(?![\w-])/g,
+      severity: 'minor',
+      message: 'Avoid hardcoded pixel values in CSS. Use design tokens.'
     }
   ],
   deprecated: {
@@ -134,7 +159,10 @@ const CONFIG = {
 };
 
 function checkContent(content) {
-  if (content.includes('// impeccable-ignore-file')) return [];
+  if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
+
+  // Remove comments before running global regex rules to avoid false positives
+  const contentWithoutComments = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, (match) => ' '.repeat(match.length));
 
   const violations = [];
 
@@ -164,11 +192,12 @@ function checkContent(content) {
     .forEach(rule => {
       const flags = (rule.name === 'div Layout' ? 'gs' : 'g') + (rule.pattern.multiline ? 'm' : '');
       const regex = new RegExp(rule.pattern.source, flags);
-      const matches = content.matchAll(regex);
+      const matches = contentWithoutComments.matchAll(regex);
 
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
-        if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+        const lineText = lines[lineNum - 1] || '';
+        if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
 
         violations.push({
           line: lineNum,
@@ -180,12 +209,19 @@ function checkContent(content) {
       }
     });
 
-  // 2. ClassName Specific Rules (Global Scanner)
-  for (const match of content.matchAll(/className=["'](.*?)["']/gs)) {
-    const lineNum = getLineNumber(match.index);
-    if (lines[lineNum - 1] && lines[lineNum - 1].includes('// impeccable-ignore')) continue;
+  // 2. ClassName/Apply Specific Rules (Global Scanner)
+  const stylingPatterns = [
+    { regex: /className=["'](.*?)["']/gs, group: 1 },
+    { regex: /@apply (.*?);/gs, group: 1 }
+  ];
 
-    const classStr = match[1];
+  for (const { regex, group } of stylingPatterns) {
+    for (const match of content.matchAll(regex)) {
+      const lineNum = getLineNumber(match.index);
+      const lineText = lines[lineNum - 1] || '';
+      if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
+
+      const classStr = match[group];
     const classes = classStr.split(/\s+/);
 
     classes.forEach(cls => {
@@ -239,9 +275,14 @@ function checkContent(content) {
         }
       }
     });
+    }
   }
 
-  // 3. Contrast safety heuristic for inverse/gradient hero panels.
+  // 3. CSS Specific checks (excluding @apply which is handled above)
+  // For CSS files, we want to ensure standard properties don't use raw hex/px
+  // though they are already covered by the global rules in step 1.
+
+  // 4. Contrast safety heuristic for inverse/gradient hero panels.
   // Single-pass sliding window: when an industrial gradient line is seen,
   // inspect nearby headline/body Text lines for explicit inverse-safe styling.
   let activeGradientWindowUntil = -1;
@@ -253,7 +294,7 @@ function checkContent(content) {
       activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
       continue;
     }
-    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore')) continue;
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore') || line.includes('/* impeccable-ignore */')) continue;
 
     const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
     const hasInverseColor = /color="(?:white|bg)"/.test(line);
@@ -317,67 +358,76 @@ const isCountOnly = args.includes('--count-only');
 const shouldGenerateTodo = args.includes('--todo');
 const targets = args.filter(arg => !arg.startsWith('--'));
 
-if (!isJson && !isCountOnly) {
-  console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
-  checkPRScope();
-}
-
 const allViolations = {};
 
-if (targets.includes('-')) {
-  let stdinContent = '';
-  process.stdin.setEncoding('utf8');
-  for await (const chunk of process.stdin) {
-    stdinContent += chunk;
-  }
-  const violations = checkContent(stdinContent);
-  if (violations.length > 0) {
-    allViolations['stdin'] = violations;
-  }
-} else {
-  const files = collectAuditFiles(targets);
+export { checkContent, collectAuditFiles, checkFile };
 
-  files.forEach(filepath => {
-    if (filepath.endsWith('.tsx') || filepath.endsWith('.ts') || filepath.endsWith('.yml')) {
-      const violations = checkFile(filepath);
-      if (violations.length > 0) {
-        allViolations[path.relative(ROOT, filepath)] = violations;
+async function runAudit() {
+  // Prevent running the main logic when imported as a module in tests
+  if (process.argv[1] !== fileURLToPath(import.meta.url)) return;
+
+  if (!isJson && !isCountOnly) {
+    console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
+    checkPRScope();
+  }
+
+  if (targets.includes('-')) {
+    let stdinContent = '';
+    process.stdin.setEncoding('utf8');
+    for await (const chunk of process.stdin) {
+      stdinContent += chunk;
+    }
+    const violations = checkContent(stdinContent);
+    if (violations.length > 0) {
+      allViolations['stdin'] = violations;
+    }
+  } else {
+    const files = collectAuditFiles(targets);
+
+    files.forEach(filepath => {
+      if (AUDIT_EXTENSIONS.some(ext => filepath.endsWith(ext))) {
+        const violations = checkFile(filepath);
+        if (violations.length > 0) {
+          allViolations[path.relative(ROOT, filepath)] = violations;
+        }
       }
-    }
-  });
-}
-
-const totalViolations = Object.values(allViolations).flat().length;
-
-if (isCountOnly) {
-  process.stdout.write(totalViolations.toString() + '\n');
-  process.exit(0);
-}
-
-if (isJson) {
-  process.stdout.write(JSON.stringify({
-    violations: allViolations,
-    config: {
-      deprecated: CONFIG.deprecated,
-      existingComponents: CONFIG.existingComponents,
-      requiredContentFields: CONFIG.requiredContentFields
-    }
-  }, null, 2));
-  process.exit(totalViolations > 0 ? 1 : 0);
-}
-
-if (totalViolations === 0) {
-  console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
-  if (shouldGenerateTodo) generateTodoFile({});
-} else {
-  console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
-  for (const [file, violations] of Object.entries(allViolations)) {
-    console.log(`\x1b[36m${file}\x1b[0m`);
-    violations.forEach(v => {
-      console.log(`  \x1b[90mLine ${v.line}:\x1b[0m [${v.pattern}] \x1b[33m${v.value}\x1b[0m - ${v.message}`);
     });
-    console.log();
   }
-  if (shouldGenerateTodo) generateTodoFile(allViolations);
-  process.exit(1);
+
+  const totalViolations = Object.values(allViolations).flat().length;
+
+  if (isCountOnly) {
+    process.stdout.write(totalViolations.toString() + '\n');
+    process.exit(0);
+  }
+
+  if (isJson) {
+    process.stdout.write(JSON.stringify({
+      violations: allViolations,
+      config: {
+        deprecated: CONFIG.deprecated,
+        existingComponents: CONFIG.existingComponents,
+        requiredContentFields: CONFIG.requiredContentFields
+      }
+    }, null, 2));
+    process.exit(totalViolations > 0 ? 1 : 0);
+  }
+
+  if (totalViolations === 0) {
+    console.log('\x1b[32m✔ No anti-patterns detected!\x1b[0m');
+    if (shouldGenerateTodo) generateTodoFile({});
+  } else {
+    console.log(`\x1b[31m✖ ${totalViolations} anti-patterns detected:\x1b[0m\n`);
+    for (const [file, violations] of Object.entries(allViolations)) {
+      console.log(`\x1b[36m${file}\x1b[0m`);
+      violations.forEach(v => {
+        console.log(`  \x1b[90mLine ${v.line}:\x1b[0m [${v.pattern}] \x1b[33m${v.value}\x1b[0m - ${v.message}`);
+      });
+      console.log();
+    }
+    if (shouldGenerateTodo) generateTodoFile(allViolations);
+    process.exit(1);
+  }
 }
+
+runAudit();
