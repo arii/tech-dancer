@@ -22,11 +22,11 @@ export function useScrollManagement(
   useEffect(() => {
     // Force a small delay to ensure refs are attached
     const tid_init = window.setTimeout(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const timeouts: number[] = [];
+      const container = scrollRef.current;
+      if (!container) return;
+      const timeouts: number[] = [];
 
-    // Save scroll position for the CURRENT page before we navigate away
+      // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
       if (container) {
         sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
@@ -93,10 +93,10 @@ export function useScrollManagement(
       };
     }
 
-    return () => {
-      window.removeEventListener('beforeunload', handleSaveScroll);
-      handleSaveScroll();
-    };
+      return () => {
+        window.removeEventListener('beforeunload', handleSaveScroll);
+        handleSaveScroll();
+      };
     }, 10);
     return () => window.clearTimeout(tid_init);
   }, [pathname, key, hash, navType, scrollRef]);
