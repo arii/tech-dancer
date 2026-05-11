@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { describe, it, expect, vi } from 'vitest';
 import { getTokens } from '../../../scripts/generate-assets';
 import fs from 'fs';
