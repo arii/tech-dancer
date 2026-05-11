@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface ThemeSpotlightProps {
@@ -7,7 +8,9 @@ interface ThemeSpotlightProps {
   accentColor?: string;
 }
 
-export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent, #22d3ee)' }: ThemeSpotlightProps) {
+export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent)' }: ThemeSpotlightProps) {
+  const accentStyle = useMemo(() => ({ background: accentColor }), [accentColor]);
+
   return (
     <Box
       border
@@ -25,7 +28,7 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
               height={1}
               radius="full"
               marginBottom={2}
-              style={{ background: accentColor }}
+              style={accentStyle}
             />
             <Text
               as="h3"
@@ -55,7 +58,7 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
             minHeight={{ base: 48, md: "auto" }}
             position="relative"
             overflow="hidden"
-            className="bg-surface-alt/50"
+            className="theme-spotlight-image-bg"
           >
             <img
               src={image}
@@ -66,7 +69,7 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
             <Box
               position="absolute"
               inset
-              className="bg-gradient-to-r from-surface via-transparent to-transparent hidden md:block"
+              className="theme-spotlight-image-overlay hidden md:block"
             />
           </Box>
         )}

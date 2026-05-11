@@ -1,7 +1,7 @@
 import { Event } from '@/lib/content';
 import { Stack, Grid } from '@/layouts/Primitives';
-import { SectionHeader } from './SectionHeader';
-import { EventCard } from './EventCard';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { EventCard } from '@/components/ui/EventCard';
 
 interface RelatedEventsProps {
   title?: string;

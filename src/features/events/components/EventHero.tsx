@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { motion } from 'motion/react';
 import { MapPin, Calendar } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -12,6 +13,10 @@ interface EventHeroProps {
 }
 
 export function EventHero({ title, location, date, image, eyebrow = "Event Guide" }: EventHeroProps) {
+  const accentGradient = useMemo(() => ({
+    background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
+  }), []);
+
   return (
     <Box
       position="relative"
@@ -34,7 +39,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
           <Box
             position="absolute"
             inset
-            className="bg-gradient-to-b from-bg/80 via-bg/40 to-bg"
+            className="event-hero-overlay"
           />
         </Box>
       )}
@@ -47,9 +52,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
         width={{ base: "full", md: "1/2" }}
         height="full"
         className="pointer-events-none opacity-20"
-        style={{
-          background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
-        }}
+        style={accentGradient}
       />
 
       <Stack
