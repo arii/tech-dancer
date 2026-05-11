@@ -46,13 +46,14 @@ const LAYOUT_SUGGESTIONS = {
 // Modularized linting configuration
 const CONFIG = {
   allowedColors: [
-    'bg', 'surface', 'accent', 'accent-brand', 'accent-navy',
-    'accent-purple', 'accent-magenta',
+    'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
+    'accent-purple', 'accent-magenta', 'brand-text-muted',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
-    'amber-500', 'success', 'error', 'warning'
+    'amber-500', 'success', 'error', 'warning',
+    'gradient-to-t', 'gradient-to-b', 'gradient-to-r'
   ],
-  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic'],
+  allowedTextUtils: ['left', 'right', 'center', 'justify', 'uppercase', 'lowercase', 'capitalize', 'normal-case', 'italic', 'not-italic', 'pretty'],
   allowedTextSizes: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
   rules: [
     {

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Cpu, Globe, Camera, Heart, HelpCircle, LucideIcon } from 'lucide-react';
+import { Cpu, Globe, Camera, Heart, HelpCircle, type LucideIcon } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';
 
 export function getCategoryIcon(category: string): LucideIcon {
@@ -23,7 +22,7 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
     lg: 'w-24 h-24 opacity-10'
   };
 
-  const icon = getCategoryIcon(category);
+  const Icon = getCategoryIcon(category);
 
   return (
     <Box 
@@ -34,10 +33,10 @@ export function CategoryPlaceholder({ category, size = 'lg' }: CategoryPlacehold
       justify="center"
       className="text-accent"
     >
-      {React.createElement(icon, { 
-        className: sizeClasses[size], 
-        strokeWidth: 2 
-      })}
+      <Icon
+        className={sizeClasses[size]}
+        strokeWidth={2}
+      />
     </Box>
   );
 }
