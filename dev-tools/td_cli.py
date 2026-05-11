@@ -19,9 +19,6 @@ except ImportError as e:
     print(f"Details: {e}")
     sys.exit(1)
 
-def main():
+if __name__ == "__main__":
     # click entry point automatically handles sys.argv
     cli(obj={})
-
-if __name__ == "__main__":
-    main()

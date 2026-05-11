@@ -36,7 +36,9 @@ export default defineConfig(({mode}) => {
   }
 
   // Robust normalization to ensure leading and trailing slashes
-  base = `/${base.replace(/^\/|\/$/g, '')}/`.replace(/\/+/g, '/');
+  base = (process.env.VITE_BASE_PATH || base || '/').replace(/\/+/g, '/');
+  if (!base.startsWith('/')) base = '/' + base;
+  if (!base.endsWith('/')) base = base + '/';
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
