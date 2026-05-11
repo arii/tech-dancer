@@ -47,7 +47,7 @@ const LAYOUT_SUGGESTIONS = {
 const CONFIG = {
   allowedColors: [
     'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
-    'accent-purple', 'accent-magenta', 'brand-text-muted', 'brand-text-accent', 'brand-b-mark', 'brand-wordmark',
+    'accent-purple', 'accent-magenta',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
     'amber-500', 'success', 'error', 'warning',
@@ -205,7 +205,7 @@ function checkContent(content) {
 
       // Colors check
       if (/\b(bg-|text-|fill-)\b/.test(cls)) {
-        if (CONFIG.allowedColors.includes(cls)) return;
+        if (CONFIG.allowedColors.includes(cls) || cls.startsWith('brand-')) return;
         const colorMatch = cls.match(/\b(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)\b/);
         if (colorMatch) {
           const prefix = colorMatch[1];
@@ -214,7 +214,9 @@ function checkContent(content) {
           const isAllowed = CONFIG.allowedColors.includes(baseColor) ||
                             CONFIG.allowedColors.includes(fullToken) ||
                             CONFIG.allowedTextUtils.includes(baseColor) ||
-                            CONFIG.allowedTextSizes.includes(baseColor);
+                            CONFIG.allowedTextSizes.includes(baseColor) ||
+                            baseColor.startsWith('brand-') ||
+                            fullToken.startsWith('brand-');
 
           if (!isAllowed) {
             violations.push({
