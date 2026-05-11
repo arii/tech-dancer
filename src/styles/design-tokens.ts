@@ -127,8 +127,6 @@ export const theme = {
   }
 };
 
-export const heights = theme.height;
-
 export const typeSizes = {
   micro: "text-micro",
   tiny: "text-tiny",
