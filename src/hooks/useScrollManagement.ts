@@ -6,8 +6,7 @@ const MAIN_ROUTES = ['/', '/blog', '/gear', '/research'];
 
 export function useScrollManagement(
   scrollRef: MutableRefObject<HTMLElement | null>,
-  touchStartRef: MutableRefObject<{ x: number; y: number } | null>,
-  containerRef?: MutableRefObject<HTMLElement | null>
+  touchStartRef: MutableRefObject<{ x: number; y: number } | null>
 ) {
   const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
@@ -88,47 +87,49 @@ export function useScrollManagement(
     };
   }, [pathname, key, hash, navType, scrollRef]);
 
-  useEffect(() => {
-    const el = containerRef?.current;
-    if (!el) return;
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  };
 
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+
+    const touchEnd = {
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
     };
 
-    const onTouchEnd = (e: TouchEvent) => {
-      if (!touchStartRef.current) return;
+    const deltaX = touchEnd.x - touchStartRef.current.x;
+    const deltaY = touchEnd.y - touchStartRef.current.y;
 
-      const touchEnd = {
-        x: e.changedTouches[0].clientX,
-        y: e.changedTouches[0].clientY,
+    // Horizontal swipe check
+    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Ignore swipe if it originates from a horizontally scrollable element
+      const target = e.target as HTMLElement;
+
+      const isScrollable = (el: HTMLElement | null): boolean => {
+        if (!el || el === e.currentTarget) return false;
+
+        const style = window.getComputedStyle(el);
+        const overflowX = style.getPropertyValue('overflow-x');
+        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
+
+        if (isScrollableX) {
+          // Check if we are at a boundary to allow swiping to the next page
+          // If swiping right (deltaX > 0), only block if we can scroll left (scrollLeft > 0)
+          // If swiping left (deltaX < 0), only block if we can scroll right (scrollLeft < scrollWidth - clientWidth)
+          if (deltaX > 0 && el.scrollLeft > 0) return true;
+          // Use Math.ceil for scrollWidth/clientWidth to handle fractional pixels on high-DPI screens without magic numbers
+          if (deltaX < 0 && Math.ceil(el.scrollLeft) < el.scrollWidth - el.clientWidth) return true;
+        }
+
+        return isScrollable(el.parentElement);
       };
 
-      const deltaX = touchEnd.x - touchStartRef.current.x;
-      const deltaY = touchEnd.y - touchStartRef.current.y;
-
-      // Horizontal swipe check
-      if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Ignore swipe if it originates from a horizontally scrollable element
-        // We check the event path for overflow settings instead of querying geometry to avoid layout thrashing
-        const path = e.composedPath();
-
-        const isAnyScrollable = path.some(target => {
-          if (!(target instanceof HTMLElement) || target === el) return false;
-
-          // Check common tags or attributes first to avoid expensive getComputedStyle
-          if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return true;
-
-          const style = window.getComputedStyle(target);
-          const overflowX = style.getPropertyValue('overflow-x');
-          return overflowX === 'auto' || overflowX === 'scroll';
-        });
-
-        if (isAnyScrollable) return;
-      }
+      if (isScrollable(target)) return;
 
       const currentIndex = MAIN_ROUTES.indexOf(pathname);
       if (currentIndex !== -1) {
@@ -144,25 +145,16 @@ export function useScrollManagement(
         if (targetRoute && !isNavigating.current) {
           isNavigating.current = true;
           navigate(targetRoute);
+          // Optional: announce to screen readers
           const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;
           const announcer = document.getElementById('route-announcer');
           if (announcer) announcer.textContent = msg;
         }
       }
+    }
 
-      touchStartRef.current = null;
-    };
+    touchStartRef.current = null;
+  };
 
-    el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    return () => {
-      if (el) {
-        el.removeEventListener('touchstart', onTouchStart);
-        el.removeEventListener('touchend', onTouchEnd);
-      }
-    };
-  }, [pathname, navigate, touchStartRef, containerRef]);
-
-  return {};
+  return { handleTouchStart, handleTouchEnd };
 }

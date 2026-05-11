@@ -3,15 +3,12 @@ import json
 import re
 import requests
 from typing import Optional, Dict, Any, List
-from utils import call_ollama, is_ollama_available, clean_llm_output
-
-# Centralized Ollama abstraction
-from utils import call_ollama, is_ollama_available
+from utils import call_ollama, is_ollama_available, clean_llm_output, get_ollama_model
 
 class LocalAIClient:
     def __init__(self, ollama_url: str = None, ollama_model: str = None, gemini_api_key: str = None):
-        # Note: ollama_url is now managed centrally in utils.py via OLLAMA_URL env var
-        self.ollama_model = ollama_model or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+        # Note: ollama_url is now managed centrally in utils.py via get_ollama_url()
+        self.ollama_model = ollama_model or get_ollama_model()
         self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
 
     def is_ollama_available(self) -> bool:

@@ -9,20 +9,20 @@ import { useScrollManagement } from '@/hooks/useScrollManagement';
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
-  const containerRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
-  useScrollManagement(scrollRef, touchStartRef, containerRef);
+  const { handleTouchStart, handleTouchEnd } = useScrollManagement(scrollRef, touchStartRef);
 
   return (
     <Box
-      ref={containerRef}
       layout="root"
       position="relative"
       overflowX="hidden"
       width="full"
       minHeight="screen"
       className="touch-pan-y"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <Box
         id="route-announcer"

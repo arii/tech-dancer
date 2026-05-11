@@ -179,7 +179,7 @@ export function GlobalSearch() {
             </Box>
           </Box>
 
-          <Box padding={2} overflow="y-auto" maxHeight={{ base: "max-h-search-mobile", lg: "60vh" }} className="pb-safe-area">
+          <Box padding={2} overflow="y-auto" maxHeight="60vh">
             {results.length > 0 ? (
               <Stack gap={1}>
                 {results.map((res: SearchResult) => (
