@@ -31,7 +31,7 @@ export function EmailForm() {
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
-          minHeight="44px"
+          minHeight="touchTarget"
           width="full"
           autoComplete="email"
         />
@@ -39,7 +39,7 @@ export function EmailForm() {
           type="submit"
           variant="primary"
           disabled={status === 'loading' || status === 'success'}
-          minHeight="44px"
+          minHeight="touchTarget"
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}

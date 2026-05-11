@@ -29,7 +29,11 @@ export function Footer() {
               href={link.href}
               variant="ghost"
               size="sm"
-              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95 min-h-[44px] flex items-center justify-center"
+              align="center"
+              justify="center"
+              display="flex"
+              minHeight="touchTarget"
+              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95"
             >
               <Text
                 variant="mono"

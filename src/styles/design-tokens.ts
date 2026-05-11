@@ -26,11 +26,6 @@ export const animation = {
   revealDistance: "var(--reveal-distance)",
 };
 
-export const transitions = {
-  default: "all 200ms ease-in-out",
-  slow: "all 300ms ease-in-out",
-};
-
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
  */
@@ -121,6 +116,10 @@ export const typography = {
   sans: "font-sans",
   wordmark: `font-sans leading-none text-white ${tracking.wordmark}`,
   wordmarkHero: `font-display leading-none text-white ${tracking.wordmark}`,
+};
+
+export const size = {
+  touchTarget: "size-touch-target",
 };
 
 export const typeSizes = {

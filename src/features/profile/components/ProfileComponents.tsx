@@ -117,7 +117,6 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
               height={400}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              style={{ aspectRatio: "1 / 1" }}
             />
           </Box>
         ))}
@@ -164,8 +163,8 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           justify="center"
           paddingX={6}
           paddingY={3}
-          minHeight="44px"
-          minWidth="44px"
+          minHeight="touchTarget"
+          minWidth="touchTarget"
           border
           radius="full"
           className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"

@@ -98,7 +98,6 @@ function ArielProfile() {
                     width={400}
                     height={400}
                     className="w-full h-full object-cover object-center-20"
-                    style={{ aspectRatio: "1 / 1" }}
                   />
                 </Box>
 

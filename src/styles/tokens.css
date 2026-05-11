@@ -77,6 +77,9 @@
 
   /* Shadows */
   --raw-shadow-top-overlay: 0 -10px 40px rgba(0,0,0,0.3);
+
+  /* Touch Targets */
+  --raw-size-touch-target: 44px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {
