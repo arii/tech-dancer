@@ -1,4 +1,4 @@
-import { useEffect, MutableRefObject } from 'react';
+import { useEffect, MutableRefObject, useRef } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 
 const SWIPE_THRESHOLD = 50;
@@ -11,6 +11,12 @@ export function useScrollManagement(
   const { pathname, key, hash } = useLocation();
   const navType = useNavigationType();
   const navigate = useNavigate();
+  const isNavigating = useRef(false);
+
+  // Reset navigation throttle on route change
+  useEffect(() => {
+    isNavigating.current = false;
+  }, [pathname]);
 
   // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
@@ -136,7 +142,8 @@ export function useScrollManagement(
           targetRoute = MAIN_ROUTES[currentIndex + 1];
         }
 
-        if (targetRoute) {
+        if (targetRoute && !isNavigating.current) {
+          isNavigating.current = true;
           navigate(targetRoute);
           // Optional: announce to screen readers
           const msg = `Navigating to ${targetRoute === '/' ? 'Home' : targetRoute.slice(1).charAt(0).toUpperCase() + targetRoute.slice(2)}`;

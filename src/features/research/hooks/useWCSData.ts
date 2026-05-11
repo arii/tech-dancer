@@ -15,6 +15,7 @@ export interface WCSRecord {
 export function useWCSData() {
   const [data, setData] = useState<WCSRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
 
@@ -35,6 +36,7 @@ export function useWCSData() {
         setIsLoading(false);
       } catch (err) {
         console.error("Failed to load WCS data:", err);
+        setError("Failed to load dataset. Please ensure the data source is available.");
         setIsLoading(false);
       }
     };
@@ -105,6 +107,7 @@ export function useWCSData() {
     isLoading,
     searchTerm,
     setSearchTerm,
+    error,
     filterPromoted,
     setFilterPromoted,
     scoreDistribution,

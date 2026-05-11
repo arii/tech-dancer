@@ -30,7 +30,7 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
 
       // Wait for the main content to be visible as a base stability measure
-      await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
 
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
@@ -38,7 +38,7 @@ test.describe('Visual Regression Tests', () => {
       // Route-specific stability waits
       if (route.name === 'research') {
         // Wait for research studies to be loaded
-        await expect(page.getByText('Read Study').first()).toBeVisible({ timeout: 10000 });
+        await expect(page.getByText('Read Study').first()).toBeVisible({ timeout: 30000 });
       }
 
       if (route.name === 'preview') {

@@ -3,7 +3,8 @@ import {
   Search,
   Download,
   FileJson,
-  FileText
+  FileText,
+  AlertCircle
 } from 'lucide-react';
 import {
   Box,
@@ -158,6 +159,7 @@ export function WCSScraperTool() {
   const {
     filteredData,
     isLoading,
+    error,
     searchTerm,
     setSearchTerm,
     filterPromoted,
@@ -165,6 +167,25 @@ export function WCSScraperTool() {
     scoreDistribution,
     trendData
   } = useWCSData();
+
+  if (error) {
+    return (
+      <Box border surface="muted" padding="card" className="border-accent/20">
+        <Stack align="center" gap={4} paddingY={10}>
+          <AlertCircle className="w-12 h-12 text-accent opacity-50" />
+          <Stack align="center" gap={1}>
+            <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
+            <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
+          </Stack>
+          <Box paddingTop={4}>
+            <Button variant="secondary" onClick={() => window.location.reload()}>
+              Retry Connection
+            </Button>
+          </Box>
+        </Stack>
+      </Box>
+    );
+  }
 
   if (isLoading) {
     return (
