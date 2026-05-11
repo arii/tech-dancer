@@ -8,23 +8,28 @@ interface CuratedGearProps {
   event: Event;
 }
 
+type CuratedGearCategory = {
+  id: keyof NonNullable<Event['curatedGear']>;
+  label: string;
+};
+
+const GEAR_CATEGORIES: CuratedGearCategory[] = [
+  { id: 'outfits', label: 'Outfits' },
+  { id: 'accessories', label: 'Accessories' },
+  { id: 'shoes', label: 'Shoes' },
+  { id: 'essentials', label: 'Essentials' },
+  { id: 'travel', label: 'Travel' },
+];
+
 export function CuratedGear({ event }: CuratedGearProps) {
   const { curatedGear } = event;
 
   if (!curatedGear) return null;
 
-  const categories = [
-    { id: 'outfits', label: 'Outfits', ids: curatedGear.outfits },
-    { id: 'accessories', label: 'Accessories', ids: curatedGear.accessories },
-    { id: 'shoes', label: 'Shoes', ids: curatedGear.shoes },
-    { id: 'essentials', label: 'Essentials', ids: curatedGear.essentials },
-    { id: 'travel', label: 'Travel', ids: curatedGear.travel },
-  ];
-
-  const sections = categories
+  const sections = GEAR_CATEGORIES
     .map(cat => ({
       ...cat,
-      links: (cat.ids || [])
+      links: (curatedGear[cat.id] || [])
         .map(id => affiliateManager.getLink(id))
         .filter((link): link is NonNullable<typeof link> => !!link)
     }))

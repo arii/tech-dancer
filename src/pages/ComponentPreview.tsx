@@ -3,6 +3,26 @@ import { EventHero } from '@/features/events/components/EventHero';
 import { ThemeSpotlight } from '@/features/events/components/ThemeSpotlight';
 import { CuratedGear } from '@/features/events/components/CuratedGear';
 import { RelatedEvents } from '@/features/events/components/RelatedEvents';
+import { Event } from '@/lib/content';
+
+/**
+ * Factory for mock events to keep preview data consistent and typed.
+ */
+const createMockEvent = (overrides: Partial<Event> = {}): Event => ({
+  type: 'event',
+  slug: 'mock-event',
+  title: 'Mock Event',
+  date: '2026-01-01',
+  author: 'Mock Author',
+  category: 'Mock Category',
+  excerpt: 'Mock excerpt for testing.',
+  location: 'Mock Location',
+  city: 'Mock City',
+  schedule: 'January 1-3, 2026',
+  description: 'Mock description.',
+  content: 'Mock content body.',
+  ...overrides,
+});
 
 export default function ComponentPreview() {
   return (
@@ -30,23 +50,12 @@ export default function ComponentPreview() {
         <Box border padding={6} radius="lg">
           <Text variant="mono" size="sm" marginBottom={4}>CuratedGear</Text>
           <CuratedGear
-            event={{
-              type: 'event',
-              slug: 'sample-event',
-              title: 'Sample Event',
-              date: '2026-10-24',
-              author: 'Admin',
-              category: 'Event',
-              excerpt: 'Sample event',
-              location: 'Venue',
-              city: 'San Francisco, CA',
-              schedule: 'Oct 24-26, 2026',
-              description: 'Sample description',
-              content: 'Sample content',
+            event={createMockEvent({
+              title: 'Gear Preview Event',
               curatedGear: {
                 essentials: ['loop-experience']
               }
-            }}
+            })}
           />
         </Box>
 
