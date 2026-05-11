@@ -92,7 +92,7 @@ export function EventDetails({ event }: EventDetailsProps) {
                     <Text variant="body" size="lg" weight="font-bold">{event.theme.name}</Text>
                   </Stack>
                 </Box>
-                <Box className="pl-9">
+                <Box paddingLeft={9}>
                   <Text variant="body" color="dim">{event.theme.description}</Text>
                 </Box>
               </Stack>

@@ -15,12 +15,12 @@ export function parseFrontmatter(content: string) {
 
   const yaml = match[1];
   const body = match[2];
-  const data: Record<string, any> = {};
+  const data: Record<string, unknown> = {};
 
-  let currentRoot: any = data;
+  let currentRoot = data as Record<string, unknown>;
   let lastKey = '';
   let lastIndent = -1;
-  const stack: { key: string; obj: any; indent: number }[] = [];
+  const stack: { key: string; obj: Record<string, unknown>; indent: number }[] = [];
 
   yaml.split('\n').forEach(line => {
     const trimmed = line.trim();
@@ -49,7 +49,7 @@ export function parseFrontmatter(content: string) {
             if (!currentRoot[lastKey] || typeof currentRoot[lastKey] !== 'object' || Array.isArray(currentRoot[lastKey])) {
               currentRoot[lastKey] = {};
             }
-            currentRoot = currentRoot[lastKey];
+            currentRoot = currentRoot[lastKey] as Record<string, unknown>;
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
