@@ -50,7 +50,7 @@ export interface BaseProps {
   zIndex?: number | string
   opacity?: number | string
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
-  aspect?: "square" | "video" | "auto" | string
+  aspect?: ResponsiveProp<"square" | "video" | "auto" | string>
   shrink?: number | boolean
   self?: "start" | "center" | "end" | "stretch" | "auto"
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly"
@@ -211,7 +211,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
           opacity && getVal(opacity, "opacity"),
           getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
-          aspect && (aspect === "square" || aspect === "video" ? `aspect-${aspect}` : `aspect-[${aspect}]`),
+          getResponsiveClasses(aspect, "aspect-", (v) => {
+            if (v === "square" || v === "video") return v;
+            return v ? `[${v}]` : "";
+          }),
           shrink === true && "shrink",
           shrink === false && "shrink-0",
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,

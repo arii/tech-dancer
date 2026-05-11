@@ -22,7 +22,6 @@ export function useScrollManagement(
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
-    const timeouts: number[] = [];
 
     // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
@@ -38,52 +37,65 @@ export function useScrollManagement(
       const savedPosition = sessionStorage.getItem(`scroll-${key}`);
       if (savedPosition) {
         requestAnimationFrame(() => {
-          if (container) container.scrollTop = parseInt(savedPosition, 10);
+          if (container) {
+            container.scrollTop = parseInt(savedPosition, 10);
+            window.scrollTo(0, parseInt(savedPosition, 10));
+          }
         });
       }
-    } else {
-      // 2. New Navigation (PUSH/REPLACE): Reset to top OR scroll to hash
-      const handleScroll = () => {
-        if (!container) return;
+    } else if (hash) {
+      // 2. Hash Navigation: Scroll to target element with ResizeObserver
+      const id = hash.replace('#', '');
+      let settleTimer: number;
+      let lastHeight = container.scrollHeight;
+      let attempts = 0;
+      const MAX_ATTEMPTS = 10;
+      const SETTLE_TIME = 2000;
 
-        if (hash) {
-          const id = hash.replace('#', '');
-          const performScroll = () => {
-            const el = document.getElementById(id);
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth' });
-              return true;
-            }
-            return false;
-          };
-
-          // We use a small delay to allow the layout to settle (animations, fonts, images)
-          const tid = window.setTimeout(() => {
-            if (!performScroll()) {
-              // Longer fallback for lazy-loaded or deferred content
-              const tid2 = window.setTimeout(performScroll, 500);
-              timeouts.push(tid2);
-            }
-          }, 100);
-          timeouts.push(tid);
-        } else {
-          container.scrollTop = 0;
-          window.scrollTo(0, 0);
+      const performScroll = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return true;
         }
+        return false;
       };
 
-      const rafId = requestAnimationFrame(handleScroll);
+      const observer = new ResizeObserver(() => {
+        const currentHeight = container.scrollHeight;
+        if (currentHeight !== lastHeight) {
+          lastHeight = currentHeight;
+          performScroll();
+          attempts++;
+
+          if (attempts >= MAX_ATTEMPTS) {
+            observer.disconnect();
+          }
+        }
+      });
+
+      observer.observe(container);
+
+      // Initial attempt
+      performScroll();
+
+      // Disconnect after settle time to prevent infinite observer
+      settleTimer = window.setTimeout(() => {
+        observer.disconnect();
+      }, SETTLE_TIME);
+
       return () => {
-        window.removeEventListener('beforeunload', handleSaveScroll);
-        handleSaveScroll();
-        cancelAnimationFrame(rafId);
-        timeouts.forEach(t => window.clearTimeout(t));
+        observer.disconnect();
+        window.clearTimeout(settleTimer);
       };
+    } else {
+      // 3. New Navigation: Reset to top
+      container.scrollTop = 0;
+      window.scrollTo(0, 0);
     }
 
     return () => {
       window.removeEventListener('beforeunload', handleSaveScroll);
-      handleSaveScroll();
     };
   }, [pathname, key, hash, navType, scrollRef]);
 
