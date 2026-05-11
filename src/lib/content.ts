@@ -157,7 +157,7 @@ export interface Event {
   packingReminderDate?: string;
   relatedEvents?: string[];
   theme?: {
-    name: string;
+    name?: string;
     label?: string;
     description?: string;
     image?: string;
@@ -218,20 +218,28 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
       }
 
       if (data.type === 'event') {
-        if (!data.theme || typeof data.theme !== 'object' || Array.isArray(data.theme)) data.theme = {};
-        if (!data.gear || typeof data.gear !== 'object' || Array.isArray(data.gear)) data.gear = {};
+        const hasFlatTheme = data.themeOutfitIds || data.themeAccessoryIds;
+        if (hasFlatTheme && (!data.theme || typeof data.theme !== 'object' || Array.isArray(data.theme))) {
+          data.theme = {};
+        }
+        if (data.theme && typeof data.theme === 'object' && !Array.isArray(data.theme)) {
+          const theme = data.theme as Record<string, unknown>;
+          if (data.themeOutfitIds) theme['outfitIds'] = data.themeOutfitIds;
+          if (data.themeAccessoryIds) theme['accessoryIds'] = data.themeAccessoryIds;
+        }
 
-        const theme = data.theme as Record<string, any>;
-        const gear = data.gear as Record<string, any>;
-
-        if (data.themeOutfitIds) theme.outfitIds = data.themeOutfitIds;
-        if (data.themeAccessoryIds) theme.accessoryIds = data.themeAccessoryIds;
-
-        if (data.gearOutfitIds) gear.outfitIds = data.gearOutfitIds;
-        if (data.gearAccessoryIds) gear.accessoryIds = data.gearAccessoryIds;
-        if (data.gearShoeIds) gear.shoeIds = data.gearShoeIds;
-        if (data.gearEssentialIds) gear.essentialIds = data.gearEssentialIds;
-        if (data.gearTravelIds) gear.travelIds = data.gearTravelIds;
+        const hasFlatGear = data.gearOutfitIds || data.gearAccessoryIds || data.gearShoeIds || data.gearEssentialIds || data.gearTravelIds;
+        if (hasFlatGear && (!data.gear || typeof data.gear !== 'object' || Array.isArray(data.gear))) {
+          data.gear = {};
+        }
+        if (data.gear && typeof data.gear === 'object' && !Array.isArray(data.gear)) {
+          const gear = data.gear as Record<string, unknown>;
+          if (data.gearOutfitIds) gear['outfitIds'] = data.gearOutfitIds;
+          if (data.gearAccessoryIds) gear['accessoryIds'] = data.gearAccessoryIds;
+          if (data.gearShoeIds) gear['shoeIds'] = data.gearShoeIds;
+          if (data.gearEssentialIds) gear['essentialIds'] = data.gearEssentialIds;
+          if (data.gearTravelIds) gear['travelIds'] = data.gearTravelIds;
+        }
       }
 
       return {
@@ -241,6 +249,11 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         excerpt: String(data.excerpt || ''),
         date: String(data.date || ''),
         author: String(data.author || ''),
+        startDate: data.startDate ? String(data.startDate) : undefined,
+        earlyBirdDate: data.earlyBirdDate ? String(data.earlyBirdDate) : undefined,
+        registrationDeadline: data.registrationDeadline ? String(data.registrationDeadline) : undefined,
+        hotelCutoffDate: data.hotelCutoffDate ? String(data.hotelCutoffDate) : undefined,
+        packingReminderDate: data.packingReminderDate ? String(data.packingReminderDate) : undefined,
         tags: Array.isArray(data.tags) ? data.tags : [],
         content: content || '',
         slug: slugFrom(path)
