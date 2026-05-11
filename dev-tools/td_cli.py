@@ -603,10 +603,25 @@ def handle_audit_gate(args):
     baseline_count = resolve_baseline(None, 'AUDIT_BASELINE', -1)
 
     if baseline_count == -1:
+        if not args.json: print("ℹ️  AUDIT_BASELINE not set. Calculating dynamic baseline...")
         baseline_count = 0
         try:
-            ls_cmd = ["git", "ls-tree", "-r", "origin/main", "--name-only"]
-            main_files = run_command(ls_cmd).splitlines()
+            # Try to fetch origin/main if not present
+            run_command(["git", "fetch", "origin", "main"], check=False, log_on_error=False)
+
+            # Use merge-base to find the point where this branch diverged from main
+            res_base = run_command(["git", "merge-base", "origin/main", "HEAD"], check=False, log_on_error=False)
+            base_ref = res_base.stdout.strip() if res_base.returncode == 0 else "origin/main"
+
+            if not base_ref: base_ref = "origin/main"
+
+            ls_cmd = ["git", "ls-tree", "-r", base_ref, "--name-only"]
+            res_ls = run_command(ls_cmd, check=False, log_on_error=False)
+            if res_ls.returncode != 0:
+                 if not args.json: print(f"⚠️  Warning: {base_ref} not found. Falling back to baseline=0.")
+                 baseline_count = 0
+            else:
+                main_files = res_ls.stdout.splitlines()
 
             relevant_main_files = []
             for mf in main_files:
@@ -619,7 +634,7 @@ def handle_audit_gate(args):
 
             for mf in relevant_main_files:
                 try:
-                    show_cmd = ["git", "show", f"origin/main:{mf}"]
+                    show_cmd = ["git", "show", f"{base_ref}:{mf}"]
                     # Don't log error here as it might be expected if file is new
                     res_show = run_command(show_cmd, check=False, log_on_error=False)
                     if res_show.returncode != 0:
