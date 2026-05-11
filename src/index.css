@@ -34,6 +34,7 @@
   --radius-lg: var(--raw-radius-lg);
   --radius-xl: var(--raw-radius-xl);
   --radius-full: var(--raw-radius-full);
+  --radius-industrial: 2px;
 
   /* Spacing */
   --spacing-container-sm: var(--raw-spacing-container-sm);
@@ -60,12 +61,9 @@
   --z-skip-link: var(--raw-z-skip-link);
   --z-toast: var(--raw-z-toast);
   --z-top: var(--raw-z-top);
-  --z-search: 700;
-  --z-mobile-header: 500;
-  --z-mobile-menu: 600;
-
-  /* Radius */
-  --radius-industrial: 2px;
+  --z-search: 1200;
+  --z-mobile-header: 1000;
+  --z-mobile-menu: 1100;
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
@@ -195,11 +193,16 @@
   }
 
   .mobile-header-transition {
-    @apply transition-[backdrop-filter] duration-300;
+    transition: backdrop-filter 300ms;
   }
 
   .nav-rail-transition {
-    @apply transition-[background-color,backdrop-filter] duration-300;
+    transition: background-color 300ms, backdrop-filter 300ms;
+  }
+
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 
   .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
@@ -207,7 +210,7 @@
 
   /* Infrastructure Component Utilities */
   .btn-primary-effects {
-    @apply relative transition-all duration-200;
+    @apply relative overflow-hidden transition-all duration-200;
   }
   .btn-primary-effects:hover {
     @apply -translate-y-[2px] shadow-primary-hover;

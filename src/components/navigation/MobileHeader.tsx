@@ -1,8 +1,10 @@
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { cn } from '@/lib/utils';
 import { Box } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
+import { animation } from '@/styles/design-tokens';
 import { Wordmark } from '@/components/ui/Wordmark';
 
 interface MobileHeaderProps {
@@ -19,7 +21,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       layout="mobileHeader"
       zIndex="mobileHeader"
       border="b"
-      className="mobile-header-transition bg-surface border-line"
+      className={cn(animation.mobileHeader, "bg-surface border-line")}
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2} shrink={false}>
         <Logo showText={false} className="h-9 w-auto text-white" />

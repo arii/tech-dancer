@@ -13,6 +13,7 @@ import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
+import { animation } from '@/styles/design-tokens';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,7 +76,8 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail"
         className={cn(
-          "nav-rail-transition border-r border-line bg-surface",
+          animation.navRail,
+          "border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >

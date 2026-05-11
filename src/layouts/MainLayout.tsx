@@ -31,14 +31,12 @@ export function MainLayout({ children }: { children: ReactNode }) {
         className="sr-only"
       />
       <Box display="flex" minHeight="screen" width="full">
-        <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
           ref={scrollRef}
           flex={1}
           position="relative"
-          zIndex="base"
           overflowY="auto"
           paddingTop={{ base: 16, lg: 0 }}
           maxWidth="full"
@@ -64,6 +62,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             <Footer />
           </Stack>
         </Stack>
+        <Navigation />
       </Box>
 
       <GlobalSearch />

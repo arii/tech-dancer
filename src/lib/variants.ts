@@ -28,7 +28,7 @@ export const variants = {
     outline: "border border-line bg-transparent",
     ghost: "bg-transparent hover:bg-line/10",
     primary: "bg-accent text-white font-mono tracking-widest text-xs px-8 btn-primary-effects",
-    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal", // impeccable-ignore
+    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-95 normal-case tracking-normal",
     fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
   },
   radius: {
