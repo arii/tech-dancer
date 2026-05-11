@@ -60,12 +60,7 @@ export default function Home() {
               viewport={{ once: true, margin: "-50px" }}
             >
               {recentPosts.map((post) => (
-                <Box
-                  key={post.slug}
-                  as={motion.div}
-                  variants={motionTokens.staggerItem}
-                  className="group rounded-lg transition-colors hover:bg-surface"
-                >
+                <Box key={post.slug} as={motion.div} variants={motionTokens.staggerItem} >
                   <Stack
                     as={NavLink}
                     to={`/blog/${post.slug}`}
@@ -75,6 +70,7 @@ export default function Home() {
                     paddingY={{ base: 5, sm: 6 }}
                     marginX={{ sm: -2 }}
                     align={{ sm: "start" }}
+
                   >
                     <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="md:w-44">
                       <Box 
