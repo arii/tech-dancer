@@ -155,6 +155,7 @@ export interface Event {
     name: string;
     description: string;
     label?: string;
+    image?: string;
     outfitIds?: string[];
     accessoryIds?: string[];
   };

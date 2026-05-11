@@ -26,6 +26,7 @@ export default function ComponentPreview() {
               name: "Galactic Night",
               label: "Saturday Night Theme",
               description: "A high-production space theme featuring deep blues, neon accents, and cosmic energy. Expect immersive lighting and interstellar social vibes.",
+              image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000",
               outfitIds: ["loop-quiet", "bloch-grecian"],
               accessoryIds: ["rave-fan", "neck-fan"]
             }}

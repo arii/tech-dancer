@@ -8,27 +8,36 @@ interface ThemeSpotlightProps {
     name: string;
     description: string;
     label?: string;
+    image?: string;
     outfitIds?: string[];
     accessoryIds?: string[];
   };
-  image?: string;
   accentColor?: string;
 }
 
-export function ThemeSpotlight({ theme, image, accentColor = 'var(--raw-color-accent)' }: ThemeSpotlightProps) {
+/**
+ * Resolves a list of affiliate link objects from a list of IDs.
+ */
+function resolveAffiliateLinks(ids: string[] = []) {
+  return ids
+    .map(id => affiliateManager.getLink(id))
+    .filter((link): link is NonNullable<typeof link> => !!link);
+}
+
+export function ThemeSpotlight({
+  theme,
+  accentColor = 'var(--raw-color-accent)'
+}: ThemeSpotlightProps) {
+  // Always define hooks at the top level
   const accentStyle = useMemo(() => ({ background: accentColor }), [accentColor]);
 
   const outfitLinks = useMemo(() =>
-    (theme?.outfitIds || [])
-      .map(id => affiliateManager.getLink(id))
-      .filter((link): link is NonNullable<typeof link> => !!link),
+    resolveAffiliateLinks(theme?.outfitIds),
     [theme?.outfitIds]
   );
 
   const accessoryLinks = useMemo(() =>
-    (theme?.accessoryIds || [])
-      .map(id => affiliateManager.getLink(id))
-      .filter((link): link is NonNullable<typeof link> => !!link),
+    resolveAffiliateLinks(theme?.accessoryIds),
     [theme?.accessoryIds]
   );
 
@@ -82,8 +91,8 @@ export function ThemeSpotlight({ theme, image, accentColor = 'var(--raw-color-ac
             </Text>
           </Stack>
 
-          {/* Image Section (Restored for backward compatibility) */}
-          {image && (
+          {/* Image Section */}
+          {theme.image && (
             <Box
               width={{ base: "full", md: "2/5" }}
               minHeight={{ base: 48, md: "auto" }}
@@ -92,7 +101,7 @@ export function ThemeSpotlight({ theme, image, accentColor = 'var(--raw-color-ac
               className="theme-spotlight-image-bg"
             >
               <img
-                src={image}
+                src={theme.image}
                 alt=""
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 aria-hidden="true"
