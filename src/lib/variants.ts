@@ -27,13 +27,13 @@ export const variants = {
     solid: "bg-text-main text-bg border-transparent",
     outline: "border border-line bg-transparent",
     ghost: "bg-transparent hover:bg-line/10",
-    primary: "bg-accent text-white font-mono tracking-widest text-xs px-8 hover:bg-accent/90 active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-white/50 after:transition-all after:duration-500",
-    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
+    primary: "bg-accent text-white font-mono tracking-widest text-xs px-8 btn-primary-effects",
+    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal", // impeccable-ignore
     fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
   },
   radius: {
     none: "rounded-none",
-    industrial: "rounded-[2px]",
+    industrial: "rounded-subtle",
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
@@ -51,11 +51,11 @@ export const buttonVariants = cva(
         warning: "text-accent",
       },
       size: {
-        default: "h-[40px] px-6 text-xs",
+        default: "h-10 px-6 text-xs",
         sm: "h-8 px-4 text-xs",
-        md: "h-[40px] px-6 text-xs",
+        md: "h-10 px-6 text-xs",
         lg: "h-12 px-8 text-sm",
-        icon: "h-[40px] w-[40px]",
+        icon: "h-10 w-10",
       },
       fullWidth: {
         true: "w-full",

@@ -61,10 +61,12 @@
   --z-toast: var(--raw-z-toast);
   --z-top: var(--raw-z-top);
   --z-search: var(--raw-z-search);
+  --z-mobile-header: 110;
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
   --shadow-glow: 0 0 15px var(--raw-color-accent-shadow);
+  --shadow-primary-hover: 0 4px 12px var(--color-accent-shadow);
 
   /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
@@ -80,6 +82,22 @@
   /* Font Sizes */
   --text-micro: 9px;
   --text-tiny: 10px;
+
+  /* Custom Infrastructure Tokens */
+  --tracking-emphasized: 0.15em;
+  --tracking-utility: 3px;
+  --tracking-label: 2px;
+  --tracking-wordmark: 0.05em;
+
+  --leading-h1: 0.95;
+  --leading-headline: 0.9;
+  --leading-hero: 1.2;
+
+  --max-w-prose-body: 65ch;
+  --max-w-prose-content: 70ch;
+
+  --stroke-thin: 0.5;
+  --stroke-thick: 1.5;
 }
 
 @layer utilities {
@@ -170,6 +188,24 @@
   }
   .wordmark-mobile {
     @apply font-sans text-sm;
+  }
+
+  /* Infrastructure Component Utilities */
+  .btn-primary-effects {
+    @apply relative overflow-hidden transition-all duration-200;
+  }
+  .btn-primary-effects:hover {
+    @apply -translate-y-[2px] shadow-primary-hover;
+  }
+  .btn-primary-effects:active {
+    @apply translate-y-0;
+  }
+  .btn-primary-effects::after {
+    content: "";
+    @apply absolute bottom-0 left-0 h-[1px] w-0 bg-white/50 transition-all duration-500;
+  }
+  .btn-primary-effects:hover::after {
+    @apply w-full;
   }
 }
 
