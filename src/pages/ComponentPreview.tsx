@@ -29,7 +29,25 @@ export default function ComponentPreview() {
 
         <Box border padding={6} radius="lg">
           <Text variant="mono" size="sm" marginBottom={4}>CuratedGear</Text>
-          <CuratedGear items={[]} />
+          <CuratedGear
+            event={{
+              type: 'event',
+              slug: 'sample-event',
+              title: 'Sample Event',
+              date: '2026-10-24',
+              author: 'Admin',
+              category: 'Event',
+              excerpt: 'Sample event',
+              location: 'Venue',
+              city: 'San Francisco, CA',
+              schedule: 'Oct 24-26, 2026',
+              description: 'Sample description',
+              content: 'Sample content',
+              curatedGear: {
+                essentials: ['loop-experience']
+              }
+            }}
+          />
         </Box>
 
         <Box border padding={6} radius="lg">

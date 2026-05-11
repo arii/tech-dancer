@@ -19,7 +19,8 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
       padding={5}
       radius="lg"
       border
-      className="group bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      surface="default"
+      className="group hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
       <Box display="flex" align="center" justify="between">
         <Box
@@ -27,7 +28,8 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
           paddingY={1}
           radius="full"
           border
-          className="border-line w-fit bg-surface-alt/50"
+          surface="alt"
+          className="border-line w-fit opacity-50"
         >
           <Stack direction="row" align="center" gap={1.5}>
             <Tag size={10} className="text-accent" />
