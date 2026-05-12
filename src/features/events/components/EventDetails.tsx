@@ -1,5 +1,5 @@
-import { MapPin, Calendar, Clock, ExternalLink } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { MapPin, Calendar, Clock, ExternalLink, Briefcase, CheckCircle2 } from 'lucide-react';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
 import { SECTION_SPACING } from '../constants';
@@ -78,6 +78,52 @@ export function EventDetails({ event }: EventDetailsProps) {
           </Box>
         </Stack>
       </Box>
+
+      {event.gear && (event.gear.recommendations?.length > 0 || event.gear.essentials?.length > 0) && (
+        <Box id="gear-details" as="section">
+          <Stack gap={8}>
+            <Text variant="headline" size="3xl" weight="font-black">Gear Recommendations</Text>
+            <Grid cols={{ base: 1, md: 2 }} gap={6}>
+              {event.gear.recommendations && event.gear.recommendations.length > 0 && (
+                <Box border radius="lg" padding={6} surface="surface">
+                  <Stack gap={4}>
+                    <Box display="flex" gap={3} align="center">
+                      <Briefcase className="w-5 h-5 text-accent" />
+                      <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">Recommendations</Text>
+                    </Box>
+                    <Stack gap={2}>
+                      {event.gear.recommendations.map((item, idx) => (
+                        <Box key={idx} display="flex" gap={2} align="center">
+                          <CheckCircle2 className="w-4 h-4 text-accent/60" />
+                          <Text variant="body" size="sm">{item}</Text>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </Stack>
+                </Box>
+              )}
+              {event.gear.essentials && event.gear.essentials.length > 0 && (
+                <Box border radius="lg" padding={6} surface="surface">
+                  <Stack gap={4}>
+                    <Box display="flex" gap={3} align="center">
+                      <CheckCircle2 className="w-5 h-5 text-accent" />
+                      <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">Essentials</Text>
+                    </Box>
+                    <Stack gap={2}>
+                      {event.gear.essentials.map((item, idx) => (
+                        <Box key={idx} display="flex" gap={2} align="center">
+                          <CheckCircle2 className="w-4 h-4 text-accent/60" />
+                          <Text variant="body" size="sm">{item}</Text>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </Stack>
+                </Box>
+              )}
+            </Grid>
+          </Stack>
+        </Box>
+      )}
     </Stack>
   );
 }
