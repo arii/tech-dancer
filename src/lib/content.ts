@@ -133,8 +133,23 @@ export interface Study {
   author: string;
 }
 
+export interface EventTheme {
+  name: string;
+  label?: string;
+  outfitIds?: string[];
+  accessoryIds?: string[];
+}
+
+export interface EventGear {
+  outfitIds?: string[];
+  accessoryIds?: string[];
+  shoeIds?: string[];
+  essentialIds?: string[];
+  travelIds?: string[];
+}
+
 export interface Event {
-  type: 'event';
+  type: "event";
   slug: string;
   title: string;
   date: string;
@@ -147,33 +162,21 @@ export interface Event {
   description: string;
   link?: string;
   content: string;
+  url?: string;
+  heroImage?: string;
+  whyAttending?: string;
+  // Reminder tool anchors
   startDate?: string;
   earlyBirdDate?: string;
-  hotelCutoffDate?: string;
-  url?: string;
-  whyAttending?: string;
-  heroImage?: string;
   registrationDeadline?: string;
+  hotelCutoffDate?: string;
   packingReminderDate?: string;
-  relatedEvents?: string[];
-  theme?: {
-    name?: string;
-    label?: string;
-    description?: string;
-    image?: string;
-    outfitIds?: string[];
-    accessoryIds?: string[];
-  };
-  gear?: {
-    recommendations?: string[];
-    essentials?: string[];
-    outfitIds?: string[];
-    accessoryIds?: string[];
-    shoeIds?: string[];
-    essentialIds?: string[];
-    travelIds?: string[];
-  };
-  // Flat alternatives for YAML compatibility
+  // Gear and theme (resolved from affiliate IDs at render time)
+  theme?: EventTheme;
+  gear?: EventGear;
+  // Flat alternatives for YAML parsers that don't handle nesting
+  themeName?: string;
+  themeLabel?: string;
   themeOutfitIds?: string[];
   themeAccessoryIds?: string[];
   gearOutfitIds?: string[];
@@ -181,6 +184,7 @@ export interface Event {
   gearShoeIds?: string[];
   gearEssentialIds?: string[];
   gearTravelIds?: string[];
+  relatedEvents?: string[];
 }
 
 export type ContentItem = Post | Resource | Study | Event;
@@ -212,51 +216,73 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
       data.image = normalizeAsset(data.image);
       data.heroImage = normalizeAsset(data.heroImage);
 
-      if (data.theme && typeof data.theme === 'object' && !Array.isArray(data.theme)) {
-        const theme = data.theme as Record<string, unknown>;
-        theme.image = normalizeAsset(theme.image);
-      }
+      // Promote flat gear/theme fields into structured objects
+      // so components only need to read event.theme and event.gear
+      const flatTheme: EventTheme | undefined =
+        data.themeOutfitIds || data.themeAccessoryIds
+          ? {
+              name: String(data.themeName || ""),
+              label: data.themeLabel ? String(data.themeLabel) : undefined,
+              outfitIds: Array.isArray(data.themeOutfitIds)
+                ? (data.themeOutfitIds as string[])
+                : [],
+              accessoryIds: Array.isArray(data.themeAccessoryIds)
+                ? (data.themeAccessoryIds as string[])
+                : [],
+            }
+          : undefined;
 
-      if (data.type === 'event') {
-        const hasFlatTheme = data.themeOutfitIds || data.themeAccessoryIds;
-        if (hasFlatTheme && (!data.theme || typeof data.theme !== 'object' || Array.isArray(data.theme))) {
-          data.theme = {};
-        }
-        if (data.theme && typeof data.theme === 'object' && !Array.isArray(data.theme)) {
-          const theme = data.theme as Record<string, unknown>;
-          if (data.themeOutfitIds) theme['outfitIds'] = data.themeOutfitIds;
-          if (data.themeAccessoryIds) theme['accessoryIds'] = data.themeAccessoryIds;
-        }
-
-        const hasFlatGear = data.gearOutfitIds || data.gearAccessoryIds || data.gearShoeIds || data.gearEssentialIds || data.gearTravelIds;
-        if (hasFlatGear && (!data.gear || typeof data.gear !== 'object' || Array.isArray(data.gear))) {
-          data.gear = {};
-        }
-        if (data.gear && typeof data.gear === 'object' && !Array.isArray(data.gear)) {
-          const gear = data.gear as Record<string, unknown>;
-          if (data.gearOutfitIds) gear['outfitIds'] = data.gearOutfitIds;
-          if (data.gearAccessoryIds) gear['accessoryIds'] = data.gearAccessoryIds;
-          if (data.gearShoeIds) gear['shoeIds'] = data.gearShoeIds;
-          if (data.gearEssentialIds) gear['essentialIds'] = data.gearEssentialIds;
-          if (data.gearTravelIds) gear['travelIds'] = data.gearTravelIds;
-        }
-      }
+      const flatGear: EventGear | undefined =
+        data.gearOutfitIds ||
+        data.gearAccessoryIds ||
+        data.gearShoeIds ||
+        data.gearEssentialIds ||
+        data.gearTravelIds
+          ? {
+              outfitIds: Array.isArray(data.gearOutfitIds)
+                ? (data.gearOutfitIds as string[])
+                : [],
+              accessoryIds: Array.isArray(data.gearAccessoryIds)
+                ? (data.gearAccessoryIds as string[])
+                : [],
+              shoeIds: Array.isArray(data.gearShoeIds)
+                ? (data.gearShoeIds as string[])
+                : [],
+              essentialIds: Array.isArray(data.gearEssentialIds)
+                ? (data.gearEssentialIds as string[])
+                : [],
+              travelIds: Array.isArray(data.gearTravelIds)
+                ? (data.gearTravelIds as string[])
+                : [],
+            }
+          : undefined;
 
       return {
         ...data,
-        title: String(data.title || 'Untitled'),
-        category: String(data.category || 'General'),
-        excerpt: String(data.excerpt || ''),
-        date: String(data.date || ''),
-        author: String(data.author || ''),
+        title: String(data.title || "Untitled"),
+        category: String(data.category || "General"),
+        excerpt: String(data.excerpt || ""),
+        date: String(data.date || ""),
+        author: String(data.author || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
         earlyBirdDate: data.earlyBirdDate ? String(data.earlyBirdDate) : undefined,
-        registrationDeadline: data.registrationDeadline ? String(data.registrationDeadline) : undefined,
-        hotelCutoffDate: data.hotelCutoffDate ? String(data.hotelCutoffDate) : undefined,
-        packingReminderDate: data.packingReminderDate ? String(data.packingReminderDate) : undefined,
+        registrationDeadline: data.registrationDeadline
+          ? String(data.registrationDeadline)
+          : undefined,
+        hotelCutoffDate: data.hotelCutoffDate
+          ? String(data.hotelCutoffDate)
+          : undefined,
+        packingReminderDate: data.packingReminderDate
+          ? String(data.packingReminderDate)
+          : undefined,
         tags: Array.isArray(data.tags) ? data.tags : [],
-        content: content || '',
-        slug: slugFrom(path)
+        theme: (data.theme as EventTheme | undefined) ?? flatTheme,
+        gear: (data.gear as EventGear | undefined) ?? flatGear,
+        relatedEvents: Array.isArray(data.relatedEvents)
+          ? data.relatedEvents
+          : [],
+        content: content || "",
+        slug: slugFrom(path),
       } as unknown as T;
     })
     .sort((a, b) => {
