@@ -27,37 +27,43 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
         <Text variant="mono" size="micro" color="dim">{data.length} RECORDS FOUND</Text>
       </Box>
       <Box className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-line">
-              <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Date</Box>
-              <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Competitor</Box>
-              <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Event</Box>
-              <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Score</Box>
-              <Box as="th" padding={4} className="text-xs font-mono text-dim uppercase font-normal">Status</Box>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Date</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Competitor</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Event</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Score</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Status</Text>
             </tr>
           </thead>
           <tbody>
             {data.slice(0, 20).map((record, i) => (
               <tr key={`${record.Dancer_ID}-${record.result_id}-${i}`} className="border-b border-line/50 transition-colors">
-                <Box as="td" padding={4} className="font-mono text-xs text-dim">{record.event_date}</Box>
+                <Text as="td" padding={4} variant="mono" size="xs" color="dim">{record.event_date}</Text>
                 <Box as="td" padding={4}>
                   <Stack gap={0}>
                     <Text variant="body" size="xs" weight="font-bold">{record.competitor_name}</Text>
                     <Text variant="mono" size="micro" color="dim">#{record.Dancer_ID}</Text>
                   </Stack>
                 </Box>
-                <Box as="td" padding={4} className="text-xs text-dim">{record.event_title}</Box>
-                <Box as="td" padding={4} className="font-mono text-xs">{record.Registry_Points_Sum.toFixed(1)}</Box>
+                <Text as="td" padding={4} size="xs" color="dim">{record.event_title}</Text>
+                <Text as="td" padding={4} variant="mono" size="xs">{record.Registry_Points_Sum.toFixed(1)}</Text>
                 <Box as="td" padding={4}>
-                  <Box
+                  <Text
+                    as="div"
+                    display="inline-block"
                     paddingX={2}
                     paddingY={0.5}
                     surface={record.Promoted ? 'accent' : 'muted'}
-                    className={`inline-block text-xs font-black uppercase tracking-widest ${record.Promoted ? 'text-accent-navy' : 'text-dim opacity-50'}`}
+                    size="xs"
+                    weight="font-black"
+                    uppercase
+                    tracking="widest"
+                    className={record.Promoted ? 'text-accent-navy' : 'text-text-dim opacity-50'}
                   >
                     {record.Promoted ? 'Promoted' : 'Held'}
-                  </Box>
+                  </Text>
                 </Box>
               </tr>
             ))}
@@ -101,10 +107,10 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
         <Stack gap={3}>
           <Button
             variant="secondary"
-            className="w-full"
+            width="full"
             onClick={() => exportCSV(data)}
           >
-            <Box display="flex" align="center" gap={3} width="full" className="text-left">
+            <Box display="flex" align="center" gap={3} width="full" textAlign="left">
               <FileJson className="w-4 h-4 shrink-0" />
               <Stack gap={0}>
                 <Text variant="mono" size="micro" weight="font-bold">EXPORT_CSV</Text>
@@ -114,10 +120,10 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
           </Button>
           <Button
             variant="secondary"
-            className="w-full"
+            width="full"
             onClick={handleExportPDF}
           >
-            <Box display="flex" align="center" gap={3} width="full" className="text-left">
+            <Box display="flex" align="center" gap={3} width="full" textAlign="left">
               <FileText className="w-4 h-4 shrink-0" />
               <Stack gap={0}>
                 <Text variant="mono" size="micro" weight="font-bold">EXPORT_PDF_REPORT</Text>
@@ -239,9 +245,11 @@ export function WCSScraperTool() {
                   <Button
                     variant={filterPromoted === filter ? 'primary' : 'secondary'}
                     onClick={() => setFilterPromoted(filter)}
-                    className="w-full uppercase text-xs tracking-tighter"
+                    width="full"
                   >
-                    {filter.replace('-', ' ')}
+                    <Text uppercase size="xs" tracking="tighter">
+                      {filter.replace('-', ' ')}
+                    </Text>
                   </Button>
                 </Box>
               ))}
