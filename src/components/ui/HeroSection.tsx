@@ -2,7 +2,6 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-import { Logo } from './Logo';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
@@ -49,14 +48,7 @@ export function HeroSection() {
       >
 
 
-        {/* Logo mark — B icon with wordmark */}
-        <Box
-          className="opacity-0 pointer-events-none hero-logo-anim"
-        >
-          <Logo className="text-white" showText={false} />
-        </Box>
-
-        <Wordmark variant="hero" />
+        <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack

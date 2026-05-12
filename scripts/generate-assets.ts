@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
 const TOKENS_PATH = path.join(process.cwd(), 'src/styles/tokens.css');
-const LOGO_SVG_PATH = path.join(process.cwd(), 'boomtick_logo.svg');
+const LOGO_SVG_PATH = path.join(process.cwd(), 'public/boomtick_logo.svg');
 const FAVICON_SVG_PATH = path.join(process.cwd(), 'public/favicon.svg');
 const PWA_192_PATH = path.join(process.cwd(), 'public/pwa-192x192.png');
 const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
@@ -28,11 +28,6 @@ function getSharedSVGStyles(tokens: DesignTokens) {
     .brand-stop-purple { stop-color: ${tokens.accentPurple}; }
     .brand-text-accent { fill: ${tokens.heroAccent}; }
     .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
-    .brand-b-mark {
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-style: italic;
-    }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;

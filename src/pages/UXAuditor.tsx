@@ -1,43 +1,4 @@
-import { cva } from 'class-variance-authority';
 import { Icon } from '@/components/ui/Icon';
-
-const actionButtonVariants = cva(
-  "font-bold transition-all text-sm shrink-0 flex items-center gap-2",
-  {
-    variants: {
-      variant: {
-        default: "hover:text-text-main",
-        primary: "bg-accent text-bg hover:opacity-90 shadow-md disabled:opacity-50",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-);
-
-const reportCardVariants = cva(
-  "bg-surface rounded-lg shadow-sm border border-line",
-  {
-    variants: {
-      interactive: {
-        true: "hover:border-accent transition-all cursor-pointer",
-        false: "",
-      },
-      overflow: {
-        hidden: "overflow-hidden",
-      },
-      span: {
-        1: "col-span-1",
-        2: "col-span-2",
-        3: "col-span-3",
-      }
-    },
-    defaultVariants: {
-      interactive: false,
-    }
-  }
-);
 import { useState, useEffect, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
@@ -50,6 +11,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -165,7 +127,7 @@ export default function UXAuditor() {
           align="center"
           gap={3}
           padding={2}
-          className={reportCardVariants()}
+          className={cardVariants()}
         >
           <Box
             as="input"
@@ -205,7 +167,7 @@ export default function UXAuditor() {
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${reportCardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
+          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -220,9 +182,7 @@ export default function UXAuditor() {
                 direction="row"
                 onClick={() => setActiveReport(report)}
                 width="full" align="center" gap={3} padding={4} 
-                className={`text-left hover:bg-surface transition-all ${
-                  activeReport?.id === report.id ? 'bg-bg border-l-4 border-accent' : 'border-l-4 border-transparent'
-                }`}
+                className={listRowVariants({ active: activeReport?.id === report.id })}
               >
                 <Box
                   width={9}
@@ -254,7 +214,7 @@ export default function UXAuditor() {
             <>
               <Stack
                 padding={6}
-                className={reportCardVariants()}
+                className={cardVariants()}
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
               >
@@ -307,7 +267,7 @@ export default function UXAuditor() {
                   const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
 
                   return (
-                    <Box className={reportCardVariants({ overflow: "hidden" })}>
+                    <Box key={vp.name} className={cardVariants({ overflow: "hidden" })}>
                       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
                         <Stack direction="row" align="center" gap={3}>
                           <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -360,7 +320,7 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} padding={4} className={reportCardVariants({ interactive: true })}>
+                                  <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
                                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />

@@ -6,6 +6,9 @@ test.describe('accessibility', () => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
 
+    // Wait for hero animations to complete to ensure stable contrast checks
+    await page.waitForTimeout(2000);
+
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
