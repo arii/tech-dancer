@@ -22,10 +22,10 @@ export function ScoreItem({ label, value, icon: Icon, color, intent }: ScoreItem
       minWidth={{ base: 24, sm: 32 }}
     >
       <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
-      <Box display="flex" align="center" gap={1} intent={intent} className={color || ''}>
+      <Stack direction="row" align="center" gap={1} className={color || ''}>
         {Icon && <Icon className="w-4 h-4" />}
-        <Text variant="display" size="xl" weight="font-bold">{value}</Text>
-      </Box>
+        <Text variant="display" size="xl" weight="font-bold" intent={intent}>{value}</Text>
+      </Stack>
     </Stack>
   );
 }
@@ -39,17 +39,16 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
       width="full"
       className="border-line/50"
     >
-      <Box
-        display="flex"
-        flexDirection="row"
-        flexWrap="wrap"
+      <Stack
+        direction="row"
+        wrap
         justify="center"
         width="full"
         gap={{ base: 4, md: 0 }}
         className="divide-x-0 md:divide-x divide-line/30"
       >
         {children}
-      </Box>
+      </Stack>
     </Box>
   );
 }
@@ -74,7 +73,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" className="uppercase opacity-50">{key}</Text>
+            <Text variant="mono" size="tiny" color="dim" uppercase className="opacity-50">{key}</Text>
             <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
           </Stack>
         ))}
@@ -88,10 +87,10 @@ export function VerdictCallout({ verdict }: { verdict: string }) {
   return (
     <Box border padding={8} surface="accent" marginBottom={12} radius="lg" className="border-accent/30">
        <Stack gap={3}>
-          <Box display="flex" align="center" gap={3}>
+          <Stack direction="row" align="center" gap={3}>
              <Shield className="w-6 h-6 text-accent" />
              <Text variant="display" size="2xl" weight="font-black" color="accent" uppercase>THE VERDICT</Text>
-          </Box>
+          </Stack>
           <Text variant="body" size="lg" italic leading="relaxed" weight="font-medium" color="main">
             "{verdict}"
           </Text>

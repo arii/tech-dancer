@@ -39,21 +39,20 @@ export function DetailLayout({
     <Box as="article" padding="panel">
       <Stack gap={12} maxWidth="4xl" marginX="auto" width="full">
         {/* Navigation */}
-        <Box
+        <Stack
           as="button"
+          direction="row"
           onClick={onBack}
-          display="flex"
           align="center"
           gap={2}
-          color="main"
-          className="hover:text-accent transition-colors group"
+          className="text-text-main hover:text-accent transition-colors group"
           cursor="pointer"
         >
           <ArrowLeft className="w-4 h-4 text-accent transition-transform group-hover:-translate-x-1" />
           <Text variant="mono" size="xs" weight="font-bold" className="normal-case tracking-widest">
             {backLabel.toUpperCase()}
           </Text>
-        </Box>
+        </Stack>
 
         <Stack gap={10}>
           {/* Header */}
