@@ -78,7 +78,13 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
   ];
 
   const body = items.map(item => {
-    const dateStr = item.date.toISOString().split('T')[0].replace(/-/g, "");
+    const startStr = item.date.toISOString().split('T')[0].replace(/-/g, "");
+
+    // DTEND is non-inclusive for DATE values, so it must be set to the day AFTER the intended end.
+    const end = item.endDate || item.date;
+    const nextDay = new Date(end.getTime() + 24 * 60 * 60 * 1000);
+    const endStr = nextDay.toISOString().split('T')[0].replace(/-/g, "");
+
     const rawDesc = url ? `${item.description}\n\nEvent URL: ${url}` : item.description;
 
     const escapedSummary = escapeICS(`WCS Action: ${item.label} (${eventTitle})`);
@@ -86,8 +92,8 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
 
     return [
       "BEGIN:VEVENT",
-      `DTSTART;VALUE=DATE:${dateStr}`,
-      `DTEND;VALUE=DATE:${dateStr}`,
+      `DTSTART;VALUE=DATE:${startStr}`,
+      `DTEND;VALUE=DATE:${endStr}`,
       `SUMMARY:${escapedSummary}`,
       `DESCRIPTION:${escapedDescription}`,
       "STATUS:CONFIRMED",
