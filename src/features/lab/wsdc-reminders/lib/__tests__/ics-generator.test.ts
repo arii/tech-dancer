@@ -1,8 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { generateICS } from '../ics-generator';
 import { TimelineItem } from '../../types';
 
 describe('ics-generator', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it('should escape reserved characters in SUMMARY and DESCRIPTION and handle folding', () => {
     const items: TimelineItem[] = [
       {
@@ -104,5 +108,84 @@ describe('ics-generator', () => {
     // 74 + 4 (emoji) = 78 > 75.
     // Should fold after the 54th 'A'.
     expect(ics).toContain(`SUMMARY:WCS Action: ${"A".repeat(54)}\r\n 🌟 (Event)`);
+  });
+
+  it('should handle multi-day events by correctly setting DTEND to the non-inclusive next day', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '6',
+        label: 'Multi-day Event',
+        description: 'Starts Jan 1, ends Jan 3',
+        date: new Date('2023-01-01T00:00:00Z'),
+        endDate: new Date('2023-01-03T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('Test Event', items);
+
+    expect(ics).toContain('DTSTART;VALUE=DATE:20230101');
+    // DTEND should be Jan 4th because Jan 3rd is the last day and DTEND is exclusive
+    expect(ics).toContain('DTEND;VALUE=DATE:20230104');
+  });
+
+  it('should handle single-day events by setting DTEND to the next day', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '7',
+        label: 'Single-day Event',
+        description: 'Jan 1 only',
+        date: new Date('2023-01-01T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('Test Event', items);
+
+    expect(ics).toContain('DTSTART;VALUE=DATE:20230101');
+    expect(ics).toContain('DTEND;VALUE=DATE:20230102');
+  });
+
+  it('should be consistent across timezones and match local date entry', () => {
+    // When a user enters "2023-01-01", we want that literal date in the ICS.
+    // toISOString() would shift it depending on the system's TZ if the date was created without a TZ.
+    // Our implementation now uses local Date methods.
+
+    // Test with EST
+    vi.stubEnv('TZ', 'America/New_York');
+    const itemsEST: TimelineItem[] = [{
+      id: '8',
+      label: 'TZ Test',
+      description: 'Desc',
+      date: new Date(2023, 0, 1), // Jan 1st local
+    }];
+    const icsEST = generateICS('Event', itemsEST);
+    expect(icsEST).toContain('DTSTART;VALUE=DATE:20230101');
+
+    // Test with AEST
+    vi.stubEnv('TZ', 'Australia/Sydney');
+    const itemsAEST: TimelineItem[] = [{
+      id: '8',
+      label: 'TZ Test',
+      description: 'Desc',
+      date: new Date(2023, 0, 1), // Jan 1st local
+    }];
+    const icsAEST = generateICS('Event', itemsAEST);
+    expect(icsAEST).toContain('DTSTART;VALUE=DATE:20230101');
+  });
+
+  it('should escape double backslashes correctly', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '9',
+        label: 'Backslash \\ Test',
+        description: 'Path: C:\\Users\\Test',
+        date: new Date('2023-01-01T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('Test Event', items);
+
+    // Summary: WCS Action: Backslash \\ Test (Test Event)
+    // Escaped: WCS Action: Backslash \\\\ Test (Test Event)
+    expect(ics).toContain('SUMMARY:WCS Action: Backslash \\\\ Test (Test Event)');
+    // Description: Path: C:\\Users\\Test
+    // Escaped: Path: C:\\\\Users\\\\Test
+    expect(ics).toContain('DESCRIPTION:Path: C:\\\\Users\\\\Test');
   });
 });
