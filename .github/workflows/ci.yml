@@ -170,6 +170,10 @@ jobs:
           export VITE_BASE_PATH=/$REPO_NAME/
           pnpm run build
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Bundle Size Check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
