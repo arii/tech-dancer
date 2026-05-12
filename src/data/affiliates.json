@@ -96,5 +96,89 @@
     "url": "https://amazon.com",
     "category": "recovery",
     "description": "Essential recovery tools for muscle maintenance and massage."
+  },
+  "rainbow-fringe-dress": {
+    "id": "rainbow-fringe-dress",
+    "name": "Rainbow Fringe Dance Dress",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Vibrant fringe dress perfect for the Rainbow theme."
+  },
+  "sequin-bomber-jacket": {
+    "id": "sequin-bomber-jacket",
+    "name": "Sequin Bomber Jacket",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Shiny and eye-catching jacket for theme nights."
+  },
+  "ombre-dance-dress": {
+    "id": "ombre-dance-dress",
+    "name": "Ombre Dance Dress",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Flowy dress with a beautiful color gradient."
+  },
+  "rainbow-earrings": {
+    "id": "rainbow-earrings",
+    "name": "Rainbow Earrings",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Colorful earrings to match your rainbow outfit."
+  },
+  "pride-sunglasses": {
+    "id": "pride-sunglasses",
+    "name": "Pride Sunglasses",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Stay cool and show your pride with these sunglasses."
+  },
+  "rainbow-fan": {
+    "id": "rainbow-fan",
+    "name": "Rainbow Folding Fan",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Stay cool on the dance floor with this vibrant fan."
+  },
+  "elegant-dance-dress": {
+    "id": "elegant-dance-dress",
+    "name": "Elegant Evening Dance Dress",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "A sophisticated dress for prestigious event nights."
+  },
+  "mens-dance-shirt": {
+    "id": "mens-dance-shirt",
+    "name": "Professional Men's Dance Shirt",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Breathable, moisture-wicking shirt designed for movement."
+  },
+  "patriotic-dance-top": {
+    "id": "patriotic-dance-top",
+    "name": "Red, White & Blue Dance Top",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Perfect for Fourth of July or patriotic-themed events."
+  },
+  "metallic-leggings": {
+    "id": "metallic-leggings",
+    "name": "Metallic Dance Leggings",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Shiny leggings that catch the light on the dance floor."
+  },
+  "western-dance-boots": {
+    "id": "western-dance-boots",
+    "name": "Western Style Dance Boots",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Lightweight and flexible boots with a Western aesthetic."
+  },
+  "liquid-iv": {
+    "id": "liquid-iv",
+    "name": "Liquid I.V. Hydration Multiplier",
+    "url": "https://amazon.com",
+    "category": "recovery",
+    "description": "Essential for staying hydrated during long dance weekends."
   }
 }

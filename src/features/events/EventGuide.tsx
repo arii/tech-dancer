@@ -1,6 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getEventBySlug } from '@/lib/content';
+import { useNavigate } from 'react-router-dom';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -10,16 +8,11 @@ import { EventNavigation } from './components/EventNavigation';
 import { EventDetails } from './components/EventDetails';
 import { EventSidebar } from './components/EventSidebar';
 import { SECTION_SPACING } from './constants';
+import { useEventDetail } from './useEventDetail';
 
 export default function EventGuide() {
-  const { slug } = useParams();
   const navigate = useNavigate();
-
-  const { data: event, isLoading } = useQuery({
-    queryKey: ['events', slug],
-    queryFn: () => slug ? getEventBySlug(slug) : undefined,
-    enabled: !!slug
-  });
+  const { event, isLoading, themeOutfits, themeAccessories, gearSections, relatedEvents } = useEventDetail();
 
   if (isLoading) {
     return (
@@ -54,6 +47,8 @@ export default function EventGuide() {
         location={event.city}
         date={event.schedule}
         eyebrow={event.category}
+        image={event.heroImage}
+        whyAttending={event.whyAttending}
       />
 
       <EventNavigation />
@@ -61,9 +56,14 @@ export default function EventGuide() {
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         <Grid cols={{ base: 1, lg: 3 }} gap={16}>
           <Box className="lg:col-span-2">
-            <EventDetails event={event} />
+            <EventDetails
+              event={event}
+              themeOutfits={themeOutfits}
+              themeAccessories={themeAccessories}
+              gearSections={gearSections}
+            />
           </Box>
-          <EventSidebar event={event} />
+          <EventSidebar event={event} relatedEvents={relatedEvents} />
         </Grid>
       </Box>
     </Box>
