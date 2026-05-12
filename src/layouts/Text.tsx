@@ -22,7 +22,6 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   capitalize?: ResponsiveProp<boolean>
   clamp?: ResponsiveProp<number | boolean>
   truncate?: ResponsiveProp<boolean>
-  nowrap?: ResponsiveProp<boolean>
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
   [key: string]: unknown
 }
@@ -32,7 +31,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
-    clamp, truncate, nowrap, leading,
+    clamp, truncate, leading,
     ...props 
   }, ref) => {
     // Standard JIT fallback for arbitrary values
@@ -77,7 +76,6 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
-          getResponsiveClasses(nowrap, "", (v) => v ? "whitespace-nowrap" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           className
         )}
