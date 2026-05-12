@@ -30,7 +30,7 @@ export function HeroParticleCanvas({
   seeds = HERO_CONFIG.SEEDS,
 }: HeroParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>();
+  const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>(200);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -57,8 +57,17 @@ export function HeroParticleCanvas({
     }));
 
     let rafId: number;
+    let lastFrameTime = performance.now();
+    const frameInterval = 1000 / 60; // Target 60 FPS
 
-    const draw = () => {
+    const draw = (currentTime: number) => {
+      rafId = requestAnimationFrame(draw);
+      const deltaTime = currentTime - lastFrameTime;
+
+      if (deltaTime < frameInterval) return;
+
+      lastFrameTime = currentTime - (deltaTime % frameInterval);
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const p of particles) {
         ctx.beginPath();
@@ -72,9 +81,8 @@ export function HeroParticleCanvas({
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
       }
-      rafId = requestAnimationFrame(draw);
     };
-    draw();
+    rafId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(rafId);

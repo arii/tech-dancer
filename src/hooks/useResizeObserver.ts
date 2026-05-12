@@ -5,16 +5,25 @@ interface ResizeEntry {
   height: number;
 }
 
-export function useResizeObserver<T extends HTMLElement>() {
+export function useResizeObserver<T extends HTMLElement>(debounceMs?: number) {
   const [size, setSize] = useState<ResizeEntry>({ width: 0, height: 0 });
   const elementRef = useRef<T>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const observerCallback = useCallback((entries: ResizeObserverEntry[]) => {
     for (const entry of entries) {
       const { width, height } = entry.contentRect;
-      setSize({ width, height });
+
+      if (debounceMs) {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+          setSize({ width, height });
+        }, debounceMs);
+      } else {
+        setSize({ width, height });
+      }
     }
-  }, []);
+  }, [debounceMs]);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -25,6 +34,7 @@ export function useResizeObserver<T extends HTMLElement>() {
 
     return () => {
       observer.disconnect();
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [observerCallback]);
 
