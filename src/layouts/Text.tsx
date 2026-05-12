@@ -36,9 +36,20 @@ export const Text = forwardRef<HTMLElement, TextProps>(
   }, ref) => {
     // Standard JIT fallback for arbitrary values
     const resolveJIT = (val: string | number, prefix: string) => {
-      if (typeof val === "number") return `${prefix}-${val}`
-      if (val.startsWith("[") && val.endsWith("]")) return `${prefix}-${val}`
-      return `${prefix}-[${val}]`
+      if (!val) return ""
+      const pfx = prefix ? `${prefix}-` : ""
+
+      // Standard Tailwind tokens (numbers or specific strings without CSS units)
+      const isToken = typeof val === "number" ||
+        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
+
+      if (isToken) return `${pfx}${val}`
+
+      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
+        ? val
+        : `[${val}]`
+
+      return `${pfx}${value}`
     }
 
     return (
@@ -59,13 +70,13 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           getResponsiveClasses(weight, ""),
           getResponsiveClasses(align, "text-"),
-          getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || (v ? resolveJIT(v as string | number, "tracking") : "")),
+          getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v as string | number, "tracking")),
           getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),
           getResponsiveClasses(lowercase, "", (v) => v ? "lowercase" : "normal-case"),
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
-          getResponsiveClasses(leading, "", (v) => (v ? resolveJIT(v as string | number, "leading") : "")),
+          getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           className
         )}
         {...props}
