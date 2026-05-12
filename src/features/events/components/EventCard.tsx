@@ -12,6 +12,7 @@ export function EventCard({ event, onClick }: EventCardProps) {
     <Box
       as="button"
       onClick={onClick}
+      aria-label={`View details for ${event.title} in ${event.city}`}
       border
       radius="lg"
       padding={6}
