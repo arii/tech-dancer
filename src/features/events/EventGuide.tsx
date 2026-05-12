@@ -5,7 +5,6 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
-
 import { EventNavigation } from './components/EventNavigation';
 import { EventDetails } from './components/EventDetails';
 import { EventSidebar } from '@/components/ui/EventSidebar';
