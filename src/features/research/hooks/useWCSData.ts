@@ -24,7 +24,18 @@ export function useWCSData() {
     const loadData = async () => {
       const startTime = performance.now();
       try {
-        const file = await asyncBufferFromUrl({ url: `${import.meta.env.BASE_URL}data/wcs_prelims.parquet` });
+        // Construct robust URL for both local and subpath environments
+        const parquetUrl = new URL(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`, window.location.origin).href;
+
+        let file;
+        try {
+          file = await asyncBufferFromUrl({ url: parquetUrl });
+        } catch (rangeErr) {
+          console.warn("Range requests failed, falling back to full fetch:", rangeErr);
+          const res = await fetch(parquetUrl);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          file = await res.arrayBuffer();
+        }
 
         const objects = await parquetReadObjects({ file });
 
