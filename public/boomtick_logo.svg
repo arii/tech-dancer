@@ -12,8 +12,8 @@
 
   <!-- Wordmark -->
   <text x="0" y="75" font-size="52" letter-spacing="-1.5" class="brand-wordmark">
-    <tspan fill="white">B</tspan>
-    <tspan class="brand-text-accent" fill="#22d3ee">T</tspan>
+    <tspan fill="white">boom</tspan>
+    <tspan class="brand-text-accent" fill="#22d3ee">tick</tspan>
     <tspan class="brand-text-muted" fill="rgba(241,245,249,0.6)" font-weight="300">.blog</tspan>
   </text>
 </svg>

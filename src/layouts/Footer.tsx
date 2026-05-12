@@ -16,7 +16,7 @@ export function Footer() {
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={2}>
           <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest" data-testid="footer-copyright">
-            © 2026 BT.BLOG
+            © 2026 BOOMTICK.BLOG
           </Text>
         </Stack>
         <Stack direction="row" gap={2} align="center">

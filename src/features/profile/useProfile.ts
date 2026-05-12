@@ -33,7 +33,7 @@ const PROFILE_DATA: ProfileData = {
         {
           icon: 'zap',
           title: "AI Strategy (DevAI)",
-          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include BT.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my GitHub at github.com/arii."
+          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my GitHub at github.com/arii."
         },
         {
           icon: 'globe',
@@ -45,7 +45,7 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "why-built",
       title: "Why I Built This Site",
-      content: "BT.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that helps, event tips, and the small optimizations that make a big difference over a season of dancing.",
+      content: "boomtick.blog is where I share the systems behind a sustainable WCS lifestyle: practical travel advice, gear that helps, event tips, and the small optimizations that make a big difference over a season of dancing.",
       gallery: [
         { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
       ]

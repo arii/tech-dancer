@@ -6,8 +6,8 @@ interface LogoProps {
 }
 
 /**
- * High-fidelity SVG Logo for BT.
- * Consists of the 'BT.blog' wordmark.
+ * High-fidelity SVG Logo for BoomTick.
+ * Consists of the 'boomtick.blog' wordmark.
  */
 export function Logo({ className }: LogoProps) {
   const titleId = useId();
@@ -21,7 +21,7 @@ export function Logo({ className }: LogoProps) {
       fill="none"
       preserveAspectRatio="xMidYMid meet"
     >
-      <title id={titleId}>BT Logo</title>
+      <title id={titleId}>BoomTick Logo</title>
 
       <text
         x="0"
@@ -29,7 +29,7 @@ export function Logo({ className }: LogoProps) {
         fill="currentColor"
         className="brand-wordmark"
       >
-        B<tspan className="brand-text-accent">T</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
+        boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
       </text>
     </svg>
   );

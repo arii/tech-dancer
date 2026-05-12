@@ -72,7 +72,7 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
   const header = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//BT//WSDCReminders//EN",
+    "PRODID:-//BoomTick//WSDCReminders//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH"
   ];
