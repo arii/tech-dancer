@@ -15,12 +15,14 @@ export interface WCSRecord {
 export function useWCSData() {
   const [data, setData] = useState<WCSRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [latency, setLatency] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
 
   useEffect(() => {
     const loadData = async () => {
+      const startTime = performance.now();
       try {
         const file = await asyncBufferFromUrl({ url: `${import.meta.env.BASE_URL}data/wcs_prelims.parquet` });
 
@@ -32,6 +34,7 @@ export function useWCSData() {
         }));
 
         setData(formattedObjects as unknown as WCSRecord[]);
+        setLatency(performance.now() - startTime);
         setIsLoading(false);
       } catch (err) {
         console.error("Failed to load WCS data:", err);
@@ -106,6 +109,7 @@ export function useWCSData() {
     data,
     filteredData,
     isLoading,
+    latency,
     searchTerm,
     setSearchTerm,
     error,
