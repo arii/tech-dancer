@@ -22,7 +22,7 @@ export default function NotFound() {
             cta={
               <Button
                 onClick={() => navigate('/')}
-                emphasis="professional"
+                variant="professional"
                 paddingX={8}
                 paddingY={6}
                 height="auto"

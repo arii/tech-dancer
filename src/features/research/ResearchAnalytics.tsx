@@ -28,7 +28,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -87,8 +87,8 @@ export default function ResearchAnalytics() {
                   className={cardVariants({ interactive: true })}
                 >
                   <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold">{study.category}</Text>
+                    <Text variant="mono" size="micro" color="dim" lowercase>{study.date}</Text>
                   </Box>
                   <Stack gap={2}>
                     <Text variant="display" size="2xl" weight="font-black">
