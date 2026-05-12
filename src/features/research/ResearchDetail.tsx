@@ -135,12 +135,12 @@ export default function ResearchDetail() {
             ) : (
               <Stack gap={12}>
                 <Stack gap={4}>
-                    <Text variant="mono" color="dim" size="xs" weight="font-semibold" tracking="widest" uppercase>
-                      LABORATORY_ACCESS // {tool.category}
-                    </Text>
-                    <Text as="h1" variant="headline" size="fluid-5" weight="font-black" leading="tight" tracking="tight">
-                      {tool.name}
-                    </Text>
+                    <PageHeader
+                      label={`LABORATORY_ACCESS // ${tool.category}`}
+                      title={tool.name}
+                      paddingBottom={0}
+                      border="none"
+                    />
                   <Box border radius="md" surface="default" padding="compact">
                     <Text variant="body" size="lg" color="dim">{tool.layman}</Text>
                   </Box>

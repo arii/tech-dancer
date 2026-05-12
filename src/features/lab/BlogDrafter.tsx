@@ -2,6 +2,7 @@
 import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
@@ -74,10 +75,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
     <Stack gap={10} height="full">
       <Stack gap={4}>
         <Box display="flex" align="center" justify="between" width="full">
-          <Box display="flex" align="center" gap={3}>
-             <Terminal className="w-5 h-5 text-accent" />
-             <Text variant="display" size="2xl">CONTENT PIPELINE</Text>
-          </Box>
+          <PageHeader
+            label="LABORATORY"
+            title="CONTENT PIPELINE"
+            paddingBottom={0}
+            border="none"
+          />
           <Box
             as="button"
             onClick={() => { if(window.confirm('Clear all draft data?')) clearForm(); }}
