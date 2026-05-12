@@ -18,13 +18,17 @@ export function useGlobalSearch() {
     setSearchState('');
   }, [setSearchState]);
 
-  const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
+  const queries = useQueries({
     queries: [
       { queryKey: ['posts'], queryFn: getPosts },
       { queryKey: ['resources'], queryFn: getResources },
       { queryKey: ['studies'], queryFn: getStudies },
     ],
   });
+
+  const [postsQuery, resourcesQuery, studiesQuery] = queries;
+
+  const isLoading = queries.some(q => q.isLoading);
 
   const allContent = useMemo(() => {
     return [
@@ -58,6 +62,7 @@ export function useGlobalSearch() {
     results,
     isOpen,
     open,
-    close
+    close,
+    isLoading
   };
 }
