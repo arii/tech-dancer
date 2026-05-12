@@ -12,6 +12,10 @@ permissions:
 jobs:
   resolve-conflicts:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer/ollama-base:latest
+      env:
+        OLLAMA_MODELS: /root/.ollama/models
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
     steps:
       - name: Checkout Code
@@ -28,32 +32,22 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
 
-      - name: Setup Ollama
-        uses: ai-action/setup-ollama@v2
-
       - name: Install Click
         run: pip install click
 
       - name: Start Ollama Server
         run: |
           ollama serve > ollama_output.log 2>&1 &
-          # Wait for server to be ready with increased timeout and specific check
-          for i in {1..15}; do
+          # Wait for server with 30s timeout
+          for i in {1..30}; do
             if curl -s http://localhost:11434/api/tags > /dev/null; then
-              echo "Ollama server is ready!"
-              # Give it one more second to settle
-              sleep 1
               exit 0
             fi
-            echo "Waiting for Ollama server (attempt $i)..."
-            sleep 2
+            sleep 1
           done
-          echo "❌ Ollama server failed to start within timeout"
+          echo "Ollama server failed to start"
           cat ollama_output.log
           exit 1
-
-      - name: Pull Model
-        run: ollama pull qwen2.5-coder:7b
 
       - name: Find and Resolve Conflicts
         run: |

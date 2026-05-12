@@ -12,6 +12,11 @@ jobs:
   handle-command:
     if: github.event.issue.pull_request && (startsWith(github.event.comment.body, '/ollama-fix') || startsWith(github.event.comment.body, '/ollama-review'))
     runs-on: ubuntu-latest
+    container:
+      # GHCR requires lowercase repository names
+      image: ghcr.io/arii/tech-dancer/ollama-base:latest
+      env:
+        OLLAMA_MODELS: /root/.ollama/models
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,9 +30,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-
-      - name: Setup Ollama
-        run: curl -fsSL https://ollama.com/install.sh | sh
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -55,11 +57,19 @@ jobs:
       - name: Start Ollama Server
         run: |
           ollama serve > ollama_output.log 2>&1 &
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
+          # Wait for server with 30s timeout
+          for i in {1..30}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Ollama server failed to start"
+          cat ollama_output.log
+          exit 1
 
-      - name: Pull & Build Models
+      - name: Build Custom Models
         run: |
-          ollama pull qwen2.5-coder:7b
           ollama create code-reviewer -f dev-tools/CodeReviewer.mf
 
       - name: Resolve PR Branch
