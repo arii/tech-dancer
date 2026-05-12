@@ -9,6 +9,7 @@ export interface EventAnchors {
 export interface TimelineItem {
   id: string;
   date: Date;
+  endDate?: Date;
   label: string;
   description: string;
   formattedDate?: string;
