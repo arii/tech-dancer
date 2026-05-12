@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Box } from '@/layouts/Primitives';
+import { Logo } from '@/components/ui/Logo';
 import { Wordmark } from '@/components/ui/Wordmark';
 
 interface MobileHeaderProps {
@@ -21,7 +22,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       className="transition-[backdrop-filter] duration-300 bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Wordmark variant="navigation" />
+        <Logo className="h-9 w-auto text-white flex-shrink-0" />
       </Box>
 
       <Box
