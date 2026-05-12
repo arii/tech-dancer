@@ -125,7 +125,7 @@ export default function Navigation() {
               Written by <strong className="text-accent">Tech Dancer </strong>
             </Text>
             <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
-              2026 boomtick.blog
+              2026 BT.blog
             </Text>
           </Box>
         </Stack>
