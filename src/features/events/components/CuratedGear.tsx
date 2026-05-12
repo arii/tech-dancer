@@ -1,34 +1,37 @@
-import { Resource } from '@/lib/content';
-import { Stack, Grid } from '@/layouts/Primitives';
+import { Stack, Grid, Box, Text } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GearCard } from '@/components/ui/GearCard';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { ResolvedGearSection } from '../useEventDetail';
 
 interface CuratedGearProps {
   title?: string;
-  items: Resource[];
+  sections?: ResolvedGearSection[];
 }
 
-export function CuratedGear({ title = "Recommended Gear", items }: CuratedGearProps) {
-  if (!items || items.length === 0) return null;
+export function CuratedGear({ title = "Recommended Gear", sections = [] }: CuratedGearProps) {
+  if (sections.length === 0) return null;
 
   return (
-    <Stack gap={8}>
+    <Stack gap={12}>
       <SectionHeader eyebrow="TOOLS" title={title} />
-      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
-        {items.map((item) => (
-          <GearCard
-            key={item.slug}
-            slug={item.slug}
-            title={item.title}
-            category={item.category}
-            excerpt={item.excerpt}
-            basePath="/gear"
-            rating={item.rating}
-            verdict={item.verdict}
-            image={item.image}
-          />
-        ))}
-      </Grid>
+
+      {sections.map((section, idx) => (
+        <Stack key={idx} gap={6}>
+          <Box border="b" paddingBottom={2} className="border-line/20">
+            <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+              {section.label}
+            </Text>
+          </Box>
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+            {section.items.map((item) => (
+              <AffiliateCard
+                key={item.id}
+                link={item}
+              />
+            ))}
+          </Grid>
+        </Stack>
+      ))}
     </Stack>
   );
 }

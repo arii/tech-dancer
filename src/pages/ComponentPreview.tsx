@@ -24,12 +24,14 @@ export default function ComponentPreview() {
           <ThemeSpotlight
             title="Theme Title"
             description="Theme description goes here."
+            themeOutfits={[]}
+            themeAccessories={[]}
           />
         </Box>
 
         <Box border padding={6} radius="lg">
           <Text variant="mono" size="sm" marginBottom={4}>CuratedGear</Text>
-          <CuratedGear items={[]} />
+          <CuratedGear sections={[]} />
         </Box>
 
         <Box border padding={6} radius="lg">
