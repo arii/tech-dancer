@@ -26,6 +26,8 @@ export default defineConfig({
     },
     // Ensure screenshots trigger on failure for debugging
     screenshot: 'only-on-failure',
+    // Trace on first retry
+    trace: 'on-first-retry',
   },
   expect: {
     toHaveScreenshot: {
