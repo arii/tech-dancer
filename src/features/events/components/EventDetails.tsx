@@ -1,14 +1,21 @@
-import { MapPin, Calendar, Clock, ExternalLink, Palette, Briefcase, CheckCircle2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, ExternalLink, Briefcase } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
 import { SECTION_SPACING } from '../constants';
+import { ResolvedGearSection } from '../useEventDetail';
+import { AffiliateLink } from '@/types';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { ThemeSpotlight } from './ThemeSpotlight';
 
 interface EventDetailsProps {
   event: Event;
+  themeOutfits?: AffiliateLink[];
+  themeAccessories?: AffiliateLink[];
+  gearSections?: ResolvedGearSection[];
 }
 
-export function EventDetails({ event }: EventDetailsProps) {
+export function EventDetails({ event, gearSections = [] }: EventDetailsProps) {
   return (
     <Stack gap={SECTION_SPACING}>
       <Box id="overview" as="section">
@@ -83,61 +90,37 @@ export function EventDetails({ event }: EventDetailsProps) {
         <Box id="theme" as="section">
           <Stack gap={8}>
             <Text variant="headline" size="3xl" weight="font-black">Event Theme</Text>
-            <Box border radius="lg" padding={8} surface="surface">
-              <Stack gap={6}>
-                <Box display="flex" gap={4}>
-                  <Palette className="w-5 h-5 text-accent shrink-0" />
-                  <Stack gap={1}>
-                    <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">Theme Name</Text>
-                    <Text variant="body" size="lg" weight="font-bold">{event.theme.name}</Text>
-                  </Stack>
-                </Box>
-                <Box paddingLeft={9}>
-                  <Text variant="body" color="dim">{event.theme.description}</Text>
-                </Box>
-              </Stack>
-            </Box>
+            <ThemeSpotlight
+              title={event.theme.name || "Event Theme"}
+              description={event.theme.description || ""}
+              image={event.theme.image}
+              outfitIds={event.theme.outfitIds}
+              accessoryIds={event.theme.accessoryIds}
+            />
           </Stack>
         </Box>
       )}
 
-      {event.gear && (
+      {gearSections.length > 0 && (
         <Box id="gear" as="section">
           <Stack gap={8}>
             <Text variant="headline" size="3xl" weight="font-black">Gear Recommendations</Text>
             <Grid cols={{ base: 1, md: 2 }} gap={6}>
-              <Box border radius="lg" padding={6} surface="surface">
-                <Stack gap={4}>
-                  <Box display="flex" gap={3} align="center">
-                    <Briefcase className="w-5 h-5 text-accent" />
-                    <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">Recommendations</Text>
-                  </Box>
-                  <Stack gap={2}>
-                    {event.gear.recommendations.map((item, idx) => (
-                      <Box key={idx} display="flex" gap={2} align="center">
-                        <CheckCircle2 className="w-4 h-4 text-accent/60" />
-                        <Text variant="body" size="sm">{item}</Text>
-                      </Box>
-                    ))}
+              {gearSections.map((section, idx) => (
+                <Box key={idx} border radius="lg" padding={6} surface="surface">
+                  <Stack gap={4}>
+                    <Box display="flex" gap={3} align="center">
+                      <Briefcase className="w-5 h-5 text-accent" />
+                      <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">{section.label}</Text>
+                    </Box>
+                    <Grid cols={{ base: 1, sm: 2 }} gap={4}>
+                      {section.items.map(link => (
+                        <AffiliateCard key={link.id} link={link} />
+                      ))}
+                    </Grid>
                   </Stack>
-                </Stack>
-              </Box>
-              <Box border radius="lg" padding={6} surface="surface">
-                <Stack gap={4}>
-                  <Box display="flex" gap={3} align="center">
-                    <CheckCircle2 className="w-5 h-5 text-accent" />
-                    <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">Essentials</Text>
-                  </Box>
-                  <Stack gap={2}>
-                    {event.gear.essentials.map((item, idx) => (
-                      <Box key={idx} display="flex" gap={2} align="center">
-                        <CheckCircle2 className="w-4 h-4 text-accent/60" />
-                        <Text variant="body" size="sm">{item}</Text>
-                      </Box>
-                    ))}
-                  </Stack>
-                </Stack>
-              </Box>
+                </Box>
+              ))}
             </Grid>
           </Stack>
         </Box>

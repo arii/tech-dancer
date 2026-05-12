@@ -4,15 +4,23 @@ import { Event } from "@/lib/content";
 
 interface EventCardProps {
   event: Event;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export function EventCard({ event, onClick }: EventCardProps) {
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      window.location.href = `/events/${event.slug}`;
+    }
+  };
+
   return (
     <Box
       as="button"
       type="button"
-      onClick={onClick}
+      onClick={handleClick}
       aria-label={`View details for ${event.title} in ${event.city}`}
       border
       radius="lg"

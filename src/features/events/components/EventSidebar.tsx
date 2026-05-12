@@ -1,11 +1,13 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Event } from '@/lib/content';
+import { RelatedEvents } from './RelatedEvents';
 
 interface EventSidebarProps {
   event: Event;
+  relatedEvents?: Event[];
 }
 
-export function EventSidebar({ event }: EventSidebarProps) {
+export function EventSidebar({ event, relatedEvents = [] }: EventSidebarProps) {
   return (
     <Box as="aside">
       <Stack gap={8} className="sticky top-24">
@@ -26,6 +28,10 @@ export function EventSidebar({ event }: EventSidebarProps) {
             </Stack>
           </Stack>
         </Box>
+
+        {relatedEvents.length > 0 && (
+          <RelatedEvents events={relatedEvents} />
+        )}
       </Stack>
     </Box>
   );

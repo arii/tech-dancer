@@ -10,9 +10,17 @@ interface EventHeroProps {
   date: string;
   image?: string;
   eyebrow?: string;
+  whyAttending?: string;
 }
 
-export function EventHero({ title, location, date, image, eyebrow = "Event Guide" }: EventHeroProps) {
+export function EventHero({
+  title,
+  location,
+  date,
+  image,
+  eyebrow = "Event Guide",
+  whyAttending
+}: EventHeroProps) {
   const accentGradient = useMemo(() => ({
     background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
   }), []);
@@ -107,6 +115,14 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
             </Text>
           </Box>
         </Box>
+
+        {whyAttending && (
+          <Box maxWidth="prose" marginTop={4}>
+            <Text variant="body" size="lg" color="dim" className="leading-relaxed italic">
+              "{whyAttending}"
+            </Text>
+          </Box>
+        )}
       </Stack>
     </Box>
   );
