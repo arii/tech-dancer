@@ -2,6 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useSearchParam } from './useSearchParam';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
+import { withSimulationDelay } from '@/lib/utils';
 import Fuse from 'fuse.js';
 
 export function useGlobalSearch() {
@@ -20,39 +21,9 @@ export function useGlobalSearch() {
 
   const queries = useQueries({
     queries: [
-      {
-        queryKey: ['posts'],
-        queryFn: async () => {
-          const simulate = import.meta.env.VITE_SIMULATE_LOADING ||
-            (typeof window !== 'undefined' && (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING);
-          if (simulate) {
-            await new Promise(r => setTimeout(r, 1000));
-          }
-          return getPosts();
-        }
-      },
-      {
-        queryKey: ['resources'],
-        queryFn: async () => {
-          const simulate = import.meta.env.VITE_SIMULATE_LOADING ||
-            (typeof window !== 'undefined' && (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING);
-          if (simulate) {
-            await new Promise(r => setTimeout(r, 1000));
-          }
-          return getResources();
-        }
-      },
-      {
-        queryKey: ['studies'],
-        queryFn: async () => {
-          const simulate = import.meta.env.VITE_SIMULATE_LOADING ||
-            (typeof window !== 'undefined' && (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING);
-          if (simulate) {
-            await new Promise(r => setTimeout(r, 1000));
-          }
-          return getStudies();
-        }
-      },
+      { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts) },
+      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources) },
+      { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies) },
     ],
   });
 
