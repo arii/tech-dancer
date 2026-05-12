@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/hide-mobile-scrollbar-filter-chips-13911567775212714205/sitemap.xml
