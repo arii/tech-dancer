@@ -1,18 +1,23 @@
 import { Page, ConsoleMessage } from '@playwright/test';
+import { IGNORED_ERROR_PATTERNS } from '../test-constants';
 
-export const IGNORED_ERRORS = [
-  "Vercel Web Analytics",
-  "gtag is not defined",
-  "chrome-extension",
-];
-
-export function isIgnored(msg: string): boolean {
-  return IGNORED_ERRORS.some(ignored => msg.includes(ignored));
+export interface ErrorMonitoringOptions {
+  ignoredPatterns?: (string | RegExp)[];
+  customFilter?: (msg: string) => boolean;
 }
 
-export function setupErrorMonitoring(page: Page) {
+export function setupErrorMonitoring(page: Page, options: ErrorMonitoringOptions = {}) {
   const consoleErrors: string[] = [];
   const pageErrors: string[] = [];
+
+  const patterns = options.ignoredPatterns || IGNORED_ERROR_PATTERNS;
+
+  const isIgnored = (msg: string) => {
+    if (options.customFilter && options.customFilter(msg)) return true;
+    return patterns.some(pattern =>
+      pattern instanceof RegExp ? pattern.test(msg) : msg.includes(pattern)
+    );
+  };
 
   page.on('console', (msg: ConsoleMessage) => {
     if (msg.type() === 'error' && !isIgnored(msg.text())) {

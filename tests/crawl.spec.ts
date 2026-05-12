@@ -1,6 +1,32 @@
 import { test, expect } from '@playwright/test';
 import { setupErrorMonitoring } from './fixtures/error-monitoring';
 
+/**
+ * Normalizes a URL for crawling.
+ * Preserves essential query parameters while stripping tracking tokens.
+ */
+function cleanUrl(url: string): string {
+  const u = new URL(url);
+  u.hash = '';
+
+  // Define tracking parameters to strip
+  const trackingParams = ['utm_', 'fbclid', 'gclid', 'msclkid', '_hsenc', '_hsmi'];
+
+  const params = new URLSearchParams(u.search);
+  const keysToDelete: string[] = [];
+
+  for (const key of params.keys()) {
+    if (trackingParams.some(p => key.startsWith(p))) {
+      keysToDelete.push(key);
+    }
+  }
+
+  keysToDelete.forEach(key => params.delete(key));
+  u.search = params.toString();
+
+  return u.toString();
+}
+
 function isInternal(url: string, baseUrl: string): boolean {
   try {
     const u = new URL(url, baseUrl);
@@ -9,13 +35,6 @@ function isInternal(url: string, baseUrl: string): boolean {
   } catch {
     return false;
   }
-}
-
-function cleanUrl(url: string): string {
-  const u = new URL(url);
-  u.hash = '';
-  u.search = '';
-  return u.toString();
 }
 
 test.describe('Automated UX/Console Error Crawler', () => {
