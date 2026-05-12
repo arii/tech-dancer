@@ -46,7 +46,6 @@ export function useScrollManagement(
     } else if (hash) {
       // 2. Hash Navigation: Scroll to target element with ResizeObserver
       const id = hash.replace('#', '');
-      let settleTimer: number;
       let lastHeight = container.scrollHeight;
       let attempts = 0;
       const MAX_ATTEMPTS = 10;
@@ -80,7 +79,7 @@ export function useScrollManagement(
       performScroll();
 
       // Disconnect after settle time to prevent infinite observer
-      settleTimer = window.setTimeout(() => {
+      const settleTimer = window.setTimeout(() => {
         observer.disconnect();
       }, SETTLE_TIME);
 

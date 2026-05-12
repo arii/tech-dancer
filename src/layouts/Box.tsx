@@ -57,6 +57,7 @@ export interface BaseProps {
   align?: "start" | "center" | "end" | "baseline" | "stretch"
   scrollBehavior?: "smooth" | "auto"
   scrollPaddingTop?: number | string
+  scrollMarginTop?: ResponsiveProp<keyof typeof spacing | number | string>
   top?: ResponsiveProp<keyof typeof spacing | number | string>
   right?: ResponsiveProp<keyof typeof spacing | number | string>
   bottom?: ResponsiveProp<keyof typeof spacing | number | string>
@@ -83,7 +84,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap,
-    justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop,
+    justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
@@ -227,6 +228,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(right, "", s("right")),
           getResponsiveClasses(bottom, "", s("bottom")),
           getResponsiveClasses(left, "", s("left")),
+          getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
           className
         )}
         style={{
