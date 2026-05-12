@@ -45,8 +45,10 @@ test.describe('Automated UX/Console Error Crawler', () => {
     const visited = new Set<string>();
     const toVisit: string[] = [baseURL];
 
-    // Limit the number of pages to crawl to prevent excessive run times
+    // Limit the number of pages and total time to crawl to prevent excessive run times
     const MAX_PAGES = 50;
+    const MAX_TIME = 5 * 60 * 1000; // 5 minutes
+    const startTime = Date.now();
     let pageCount = 0;
 
     const { consoleErrors, pageErrors, clearErrors } = setupErrorMonitoring(page);
@@ -57,6 +59,11 @@ test.describe('Automated UX/Console Error Crawler', () => {
     });
 
     while (toVisit.length > 0 && pageCount < MAX_PAGES) {
+      if (Date.now() - startTime > MAX_TIME) {
+        console.warn('Crawler reached MAX_TIME, stopping crawl.');
+        break;
+      }
+
       const currentUrl = toVisit.shift()!;
       const normalizedUrl = cleanUrl(currentUrl);
 
@@ -69,7 +76,10 @@ test.describe('Automated UX/Console Error Crawler', () => {
       // Clear errors from previous navigation before going to next page
       clearErrors();
 
-      const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
+      const response = await page.goto(normalizedUrl, {
+        waitUntil: 'networkidle',
+        timeout: 30000,
+      });
 
       // Verify status code
       if (response) {
