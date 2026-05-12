@@ -1,4 +1,20 @@
 ---
+themeOutfitIds:
+  - loop-experience
+themeAccessoryIds:
+  - loop-quiet
+gearOutfitIds:
+  - dance-socks
+gearAccessoryIds:
+  - rave-fan
+gearShoeIds:
+  - bloch-grecian
+gearEssentialIds:
+  - listerine-tabs
+gearTravelIds:
+  - garment-steamer
+relatedEvents:
+  - mission-city-swing
 type: event
 title: "Swingtacular: The Galactic Open"
 date: "2026-08-14"
