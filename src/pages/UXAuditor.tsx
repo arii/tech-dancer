@@ -164,27 +164,32 @@ export default function UXAuditor() {
               {isAnalyzing ? 'Auditing...' : 'Start Audit'}
             </Box>
           </Stack>
-          <Stack
-            direction="row"
-            align="center"
-            gap={3}
-            padding={2}
-            className={cardVariants()}
-          >
-            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
-            <Box
-              as="input"
-              type="password"
-              value={customApiKey}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-              flex={1}
-              paddingX={4}
-              paddingY={2}
-              radius="lg"
-              placeholder="OpenAI or Gemini API Key (optional override)"
-              aria-label="API Key"
-            />
+          <Stack gap={2}>
+            <Stack
+              direction="row"
+              align="center"
+              gap={3}
+              padding={2}
+              className={cardVariants()}
+            >
+              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
+              <Box
+                as="input"
+                type="password"
+                value={customApiKey}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
+                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                flex={1}
+                paddingX={4}
+                paddingY={2}
+                radius="lg"
+                placeholder="OpenAI or Gemini API Key (optional override)"
+                aria-label="API Key"
+              />
+            </Stack>
+            <Text variant="sans" size="xs" color="warning" paddingX={2} weight="font-medium">
+              ⚠️ API keys are stored in your browser's local storage for convenience.
+            </Text>
           </Stack>
           <Stack
             direction="row"

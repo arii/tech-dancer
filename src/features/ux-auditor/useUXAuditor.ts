@@ -200,10 +200,10 @@ export function useUXAuditor() {
           if (snapshotService) {
             // Support custom snapshot service URL (e.g. local playwright proxy)
             snapshotUrl = snapshotService
-              .replace('{url}', encodeURIComponent(targetUrl))
-              .replace('{width}', vp.width.toString())
-              .replace('{height}', vp.height.toString())
-              .replace('{viewport}', vp.name.toLowerCase());
+              .replaceAll('{url}', encodeURIComponent(targetUrl))
+              .replaceAll('{width}', vp.width.toString())
+              .replaceAll('{height}', vp.height.toString())
+              .replaceAll('{viewport}', vp.name.toLowerCase());
           } else if (isLocalhost) {
             // Fallback to local files if generated via CLI
             snapshotUrl = `/ux-audits/audit-${vp.name.toLowerCase()}.png`;
