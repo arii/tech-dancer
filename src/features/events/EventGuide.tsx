@@ -58,9 +58,9 @@ export default function EventGuide() {
 
       <EventNavigation />
 
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={{ base: 8, md: SECTION_SPACING }}>
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={{ base: 8, lg: SECTION_SPACING }}>
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
-          <Box className="lg:col-span-2">
+          <Box span={{ base: 1, lg: 2 }}>
             <EventDetails event={event} />
           </Box>
           <EventSidebar event={event} />

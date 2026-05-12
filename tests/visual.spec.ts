@@ -33,6 +33,18 @@ test.describe('Visual Regression Tests', () => {
         await expect(page.getByText('Component Preview')).toBeVisible();
       }
 
+      if (route.name === 'event-guide') {
+        // Handle collapsible sidebar for visual consistency
+        const sidebarTitle = page.getByTestId('sidebar-title');
+        const isMobile = await page.evaluate(() => window.innerWidth < 1024);
+
+        if (isMobile && await sidebarTitle.isVisible()) {
+          await sidebarTitle.click();
+          // Small wait for animation settlement
+          await page.waitForTimeout(500);
+        }
+      }
+
       // Robust scroll-to-settle: triggers lazy loading without hardcoded sleep loops
       await page.evaluate(async () => {
         const scrollable = document.querySelector('main') || document.documentElement;
