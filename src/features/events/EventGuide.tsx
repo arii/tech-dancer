@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -9,20 +8,18 @@ import { EventSidebar } from './components/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
 import { RelatedEvents } from './components/RelatedEvents';
-import { useEventDetail } from '@/features/events/useEventDetail';
+import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
 
 export default function EventGuide() {
-  const navigate = useNavigate();
   const {
     event,
+    isLoading,
     themeOutfits,
     themeAccessories,
     gearSections,
     relatedEvents,
-    isLoading,
-    isError,
-    error
+    navigate,
   } = useEventDetail();
 
   if (isLoading) {
@@ -33,18 +30,13 @@ export default function EventGuide() {
     );
   }
 
-  if (isError || !event) {
+  if (!event) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">
-            {isError ? 'Error Loading Event' : 'Event Not Found'}
-          </Text>
-          {isError && error && (
-            <Text color="dim" size="sm">{(error as Error).message}</Text>
-          )}
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Research</Text>
+          <Text variant="display" size="2xl">Event Not Found</Text>
+          <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors">
+            <Text variant="mono" size="xs">Back to Events</Text>
           </Box>
         </Stack>
       </Box>
@@ -74,22 +66,29 @@ export default function EventGuide() {
               <EventDetails event={event} />
 
               {event.theme && (
-                <Box id="theme" as="section">
-                  <ThemeSpotlight
-                    title={event.theme.name || 'Event Theme'}
-                    description={event.theme.description || ''}
-                    image={event.theme.image}
-                    themeOutfits={themeOutfits}
-                    themeAccessories={themeAccessories}
-                  />
-                </Box>
+                <ThemeSpotlight
+                  id="theme"
+                  title={event.theme.name}
+                  description={event.theme.description || ''}
+                  outfits={themeOutfits}
+                  accessories={themeAccessories}
+                />
               )}
 
-              <Box id="gear" as="section">
-                <CuratedGear sections={gearSections} />
-              </Box>
+              {gearSections.length > 0 && (
+                <CuratedGear
+                  id="gear"
+                  title={`Gear for ${event.title}`}
+                  sections={gearSections}
+                />
+              )}
 
-              <RelatedEvents events={relatedEvents} />
+              {relatedEvents.length > 0 && (
+                <RelatedEvents
+                  id="related"
+                  events={relatedEvents}
+                />
+              )}
             </Stack>
           </Box>
           <EventSidebar event={event} />

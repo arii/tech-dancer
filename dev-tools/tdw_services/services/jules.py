@@ -43,9 +43,9 @@ class JulesClient:
             "prompt": prompt,
             "sourceContext": {
                 "source": f"sources/{clean_source_id}",
-                "githubRepoContext": { "branch": branch }
+                "githubRepoContext": { "startingBranch": branch }
             },
-            "automationMode": "FULLY_AUTOMATED"
+            "automationMode": "AUTO_CREATE_PR"
         }
 
         print(f"DEBUG: Creating Jules session at {url}")

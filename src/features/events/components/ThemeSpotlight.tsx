@@ -4,26 +4,29 @@ import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { AffiliateLink } from '@/types';
 
 interface ThemeSpotlightProps {
+  id?: string;
   title: string;
   description: string;
   image?: string;
-  themeOutfits?: AffiliateLink[];
-  themeAccessories?: AffiliateLink[];
+  outfits?: AffiliateLink[];
+  accessories?: AffiliateLink[];
   accentColor?: string;
 }
 
 export function ThemeSpotlight({
+  id,
   title,
   description,
   image,
-  themeOutfits = [],
-  themeAccessories = [],
+  outfits = [],
+  accessories = [],
   accentColor = 'var(--raw-color-accent)'
 }: ThemeSpotlightProps) {
   const accentStyle = useMemo(() => ({ backgroundColor: accentColor } as React.CSSProperties), [accentColor]);
 
   return (
     <Box
+      id={id}
       border
       radius="xl"
       overflow="hidden"
@@ -62,13 +65,13 @@ export function ThemeSpotlight({
           </Text>
 
           {/* Outfit Recommendations */}
-          {themeOutfits.length > 0 && (
+          {outfits.length > 0 && (
             <Stack gap={4} marginTop={4}>
               <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
                 Recommended Outfits
               </Text>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                {themeOutfits.map(link => (
+                {outfits.map(link => (
                   <AffiliateCard key={link.id} link={link} />
                 ))}
               </Grid>
@@ -76,13 +79,13 @@ export function ThemeSpotlight({
           )}
 
           {/* Accessory Recommendations */}
-          {themeAccessories.length > 0 && (
+          {accessories.length > 0 && (
             <Stack gap={4} marginTop={4}>
               <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
                 Recommended Accessories
               </Text>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                {themeAccessories.map(link => (
+                {accessories.map(link => (
                   <AffiliateCard key={link.id} link={link} />
                 ))}
               </Grid>

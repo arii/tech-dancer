@@ -1,32 +1,37 @@
-import { Stack, Grid, Box, Text } from '@/layouts/Primitives';
+import { Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { ResolvedGearSection } from '@/features/events/useEventDetail';
+import { GearCard } from '@/components/ui/GearCard';
+import { ResolvedGearSection } from '../useEventDetail';
 
 interface CuratedGearProps {
+  id?: string;
   title?: string;
-  sections?: ResolvedGearSection[];
+  sections: ResolvedGearSection[];
 }
 
-export function CuratedGear({ title = "Recommended Gear", sections = [] }: CuratedGearProps) {
-  if (sections.length === 0) return null;
+export function CuratedGear({ id, title = "Recommended Gear", sections }: CuratedGearProps) {
+  if (!sections || sections.length === 0) return null;
 
   return (
-    <Stack gap={12}>
+    <Stack id={id} gap={12}>
       <SectionHeader eyebrow="TOOLS" title={title} />
 
-      {sections.map((section, idx) => (
-        <Stack key={idx} gap={6}>
-          <Box border="b" paddingBottom={2} className="border-line/20">
-            <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
-              {section.label}
-            </Text>
-          </Box>
+      {sections.map((section) => (
+        <Stack key={section.label} gap={8}>
+          <SectionHeader
+            title={section.label}
+            size="sm"
+          />
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
             {section.items.map((item) => (
-              <AffiliateCard
+              <GearCard
                 key={item.id}
-                link={item}
+                slug={item.id}
+                title={item.name}
+                category={item.category}
+                excerpt={item.description}
+                basePath="/gear"
+                image="#" // Fallback image since affiliate links don't have images yet
               />
             ))}
           </Grid>
