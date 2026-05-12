@@ -1,6 +1,8 @@
 /**
  * Automation script to configure Vercel Log Drains via the REST API.
  *
+ * Uses the Vercel Drains API (v1/drains) which supports PATCH for updates.
+ *
  * Usage:
  *   VERCEL_TOKEN=xxx \
  *   VERCEL_PROJECT_ID=xxx \
@@ -39,21 +41,25 @@ async function configureLogDrain() {
   if (VERCEL_TEAM_ID) queryParams.append('teamId', VERCEL_TEAM_ID);
 
   const queryString = queryParams.toString();
-  const listUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+  const urlWithTeam = (url) => queryString ? `${url}?${queryString}` : url;
 
   const headers = {
     'Authorization': `Bearer ${VERCEL_TOKEN}`,
     'Content-Type': 'application/json',
   };
 
+  const targetHeaders = {
+    'Authorization': `Bearer ${LOG_DRAIN_TOKEN}`
+  };
+
   try {
     console.log(`🔍 Checking for existing Log Drain: ${DRAIN_NAME}...`);
 
-    const listResponse = await fetch(listUrl, { headers });
+    const listResponse = await fetch(urlWithTeam(baseUrl), { headers });
 
     if (!listResponse.ok) {
-      const errorData = await listResponse.json();
-      throw new Error(`Failed to list drains: ${JSON.stringify(errorData)}`);
+      const errorData = await listResponse.json().catch(() => ({}));
+      throw new Error(`Failed to list drains: ${listResponse.status} ${JSON.stringify(errorData)}`);
     }
 
     const { drains } = await listResponse.json();
@@ -64,35 +70,46 @@ async function configureLogDrain() {
 
       // Compare configuration for idempotency
       const currentUrl = existingDrain.delivery?.endpoint;
-      const currentAuthHeader = existingDrain.delivery?.headers?.Authorization;
-      const targetAuthHeader = `Bearer ${LOG_DRAIN_TOKEN}`;
+      const currentHeaders = existingDrain.delivery?.headers;
+      const currentProjectIds = existingDrain.projectIds || [];
 
       const isUrlMatch = currentUrl === LOG_DRAIN_URL;
-      const isAuthMatch = currentAuthHeader === targetAuthHeader;
-      const isProjectMatch = existingDrain.projectIds?.includes(VERCEL_PROJECT_ID);
+      const isHeadersMatch = JSON.stringify(currentHeaders) === JSON.stringify(targetHeaders);
+      const isProjectMatch = currentProjectIds.includes(VERCEL_PROJECT_ID);
 
-      if (isUrlMatch && isAuthMatch && isProjectMatch) {
+      if (isUrlMatch && isHeadersMatch && isProjectMatch) {
         console.log('✅ Configuration matches target. No updates required.');
         return;
       }
 
-      console.log('⚠️ Configuration mismatch detected. Updating existing drain...');
-      // Note: Vercel API for PATCH /v1/drains/:id might have specific requirements
-      // For simplicity and to ensure correct state, we recommend manual update or re-creation
-      // but here we'll log what's different.
-      if (!isUrlMatch) console.log(`  - URL: "${currentUrl}" -> "${LOG_DRAIN_URL}"`);
-      if (!isAuthMatch) console.log('  - Authorization Token mismatch');
-      if (!isProjectMatch) console.log(`  - Project ID "${VERCEL_PROJECT_ID}" missing from drain`);
+      console.log('⚠️ Configuration mismatch detected. Updating existing drain via PATCH...');
 
-      // We will proceed to create a new one or the user should delete the old one.
-      // In a more robust script, we would PATCH here.
-      console.log('💡 Recommendation: Delete the existing drain in Vercel Dashboard and re-run this script, or update it manually.');
+      const patchBody = {
+        projectIds: Array.from(new Set([...currentProjectIds, VERCEL_PROJECT_ID])),
+        delivery: {
+          type: 'http',
+          endpoint: LOG_DRAIN_URL,
+          encoding: 'json',
+          headers: targetHeaders
+        }
+      };
+
+      const patchResponse = await fetch(urlWithTeam(`${baseUrl}/${existingDrain.id}`), {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify(patchBody),
+      });
+
+      if (!patchResponse.ok) {
+        const errorData = await patchResponse.json().catch(() => ({}));
+        throw new Error(`Failed to update drain: ${patchResponse.status} ${JSON.stringify(errorData)}`);
+      }
+
+      console.log(`✨ Successfully synchronized Log Drain: ${existingDrain.id}`);
       return;
     }
 
     console.log(`🚀 Creating new Log Drain: ${DRAIN_NAME}...`);
-
-    const createUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
     const body = {
       name: DRAIN_NAME,
@@ -104,9 +121,7 @@ async function configureLogDrain() {
         type: 'http',
         endpoint: LOG_DRAIN_URL,
         encoding: 'json',
-        headers: {
-          'Authorization': `Bearer ${LOG_DRAIN_TOKEN}`
-        }
+        headers: targetHeaders
       },
       sampling: [
         {
@@ -117,15 +132,15 @@ async function configureLogDrain() {
       ]
     };
 
-    const createResponse = await fetch(createUrl, {
+    const createResponse = await fetch(urlWithTeam(baseUrl), {
       method: 'POST',
       headers,
       body: JSON.stringify(body),
     });
 
     if (!createResponse.ok) {
-      const errorData = await createResponse.json();
-      throw new Error(`Failed to create drain: ${JSON.stringify(errorData)}`);
+      const errorData = await createResponse.json().catch(() => ({}));
+      throw new Error(`Failed to create drain: ${createResponse.status} ${JSON.stringify(errorData)}`);
     }
 
     const result = await createResponse.json();
