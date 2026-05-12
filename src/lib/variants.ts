@@ -73,17 +73,32 @@ export const buttonVariants = cva(
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
 export const actionButtonVariants = cva(
-  "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  "font-bold transition-all shrink-0 flex items-center gap-2 disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "hover:text-text-main",
         primary: "bg-accent text-bg hover:opacity-90 shadow-md",
         ghost: "hover:bg-line/10 text-text-dim hover:text-text-main",
+        outline: "border border-line hover:border-accent hover:text-accent bg-transparent",
+        secondary: "bg-surface-alt border border-line hover:border-accent hover:text-accent",
       },
+      size: {
+        xs: "px-3 py-1 text-xs",
+        sm: "px-4 py-2 text-sm",
+        md: "px-6 py-2 text-sm",
+      },
+      radius: {
+        md: "rounded-md",
+        lg: "rounded-lg",
+        xl: "rounded-xl",
+        full: "rounded-full",
+      }
     },
     defaultVariants: {
       variant: "default",
+      size: "sm",
+      radius: "md",
     },
   }
 );

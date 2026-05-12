@@ -64,22 +64,14 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       onClick={handleCopy}
       disabled={isCopying}
       marginTop={2}
-      display="flex"
-      align="center"
-      gap={1}
-      paddingX={3}
-      paddingY={1}
-      radius="md"
-      surface="default"
-      border={true}
-      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
+      className={actionButtonVariants({ variant: "secondary", size: "xs" })}
     >
       {isCopying ? (
-        <Icon icon={RefreshCw} className="w-3 h-3 animate-spin" />
+        <Icon icon={RefreshCw} size="xs" className="animate-spin" />
       ) : copied ? (
-        <Icon icon={CheckCircle} className="w-3 h-3" color="accent" />
+        <Icon icon={CheckCircle} size="xs" color="accent" />
       ) : (
-        <Icon icon={Copy} className="w-3 h-3" />
+        <Icon icon={Copy} size="xs" />
       )}
       <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
     </Box>
@@ -147,13 +139,7 @@ export default function UXAuditor() {
             as="button"
             onClick={() => runUXAudit(url)}
             disabled={isAnalyzing}
-            display="flex"
-            align="center"
-            gap={2}
-            className="bg-accent hover:opacity-90 text-bg font-bold transition-all disabled:opacity-50"
-            paddingX={6}
-            paddingY={2}
-            radius="md"
+            className={actionButtonVariants({ variant: "primary", size: "md" })}
           >
             {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
             {isAnalyzing ? 'Auditing...' : 'Start Audit'}
@@ -189,8 +175,11 @@ export default function UXAuditor() {
                   height={9}
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+                  display="flex"
+                  align="center"
+                  justify="center"
                   shrink={0}
+                  opacity={report.status !== 'completed' ? 0.7 : 1}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
@@ -230,15 +219,7 @@ export default function UXAuditor() {
                   <Box
                     as="button"
                     onClick={copyMarkdown}
-                    display="flex"
-                    align="center"
-                    gap={2}
-                    className={actionButtonVariants({ variant: "default" })}
-                    surface="muted" 
-                    color="dim"
-                    paddingX={4}
-                    paddingY={2}
-                    radius="xl"
+                    className={actionButtonVariants({ variant: "outline", size: "sm", radius: "xl" })}
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -247,13 +228,7 @@ export default function UXAuditor() {
                     as="button"
                     onClick={exportToGithub}
                     disabled={activeReport.status !== 'completed' || isExportingToGithub}
-                    display="flex"
-                    align="center"
-                    gap={2}
-                    className={actionButtonVariants({ variant: "primary" })}
-                    paddingX={6}
-                    paddingY={2}
-                    radius="xl"
+                    className={actionButtonVariants({ variant: "primary", size: "md", radius: "xl" })}
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
@@ -323,7 +298,7 @@ export default function UXAuditor() {
                                   <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
-                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
+                                        <Box width={2} height={2} radius="full" surface={imp.severity > 7 ? 'error' : 'warning'} shadow="sm" />
                                         <Text variant="sans" size="sm" weight="font-black">
                                           {imp.element}
                                         </Text>

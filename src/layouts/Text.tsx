@@ -17,6 +17,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   weight?: ResponsiveProp<string>
   align?: ResponsiveProp<"left" | "center" | "right" | "justify">
   tracking?: ResponsiveProp<keyof typeof trackingTokens | string>
+  nowrap?: ResponsiveProp<boolean>
   uppercase?: ResponsiveProp<boolean>
   lowercase?: ResponsiveProp<boolean>
   capitalize?: ResponsiveProp<boolean>
@@ -30,7 +31,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
-    uppercase, lowercase, capitalize,
+    nowrap, uppercase, lowercase, capitalize,
     clamp, truncate, leading,
     ...props 
   }, ref) => {
@@ -71,11 +72,12 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(weight, ""),
           getResponsiveClasses(align, "text-"),
           getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v as string | number, "tracking")),
+          getResponsiveClasses(nowrap, "", (v) => v ? "whitespace-nowrap" : ""),
           getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),
           getResponsiveClasses(lowercase, "", (v) => v ? "lowercase" : "normal-case"),
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
-          getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
-          getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
+          getResponsiveClasses(clamp, "", (v) => (v === false || v === "none") ? "line-clamp-none" : (typeof v === "number" ? `line-clamp-${v}` : "")),
+          getResponsiveClasses(truncate, "", (v) => v ? "truncate" : (v === false ? "overflow-visible whitespace-normal text-clip" : "")),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           className
         )}
