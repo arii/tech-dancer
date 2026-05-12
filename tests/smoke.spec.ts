@@ -30,7 +30,7 @@ test.describe('Navigation Smoke Tests', () => {
   test('homepage loads without console errors', async ({ page, pageErrors }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
-    const filteredErrors = pageErrors.filter(e => !isIgnored(e));
+    const filteredErrors = pageErrors.errors.filter(e => !isIgnored(e));
     expect(filteredErrors).toHaveLength(0);
   });
 
@@ -45,12 +45,9 @@ test.describe('Navigation Smoke Tests', () => {
     );
 
     for (const href of links) {
-      // Note: pageErrors fixture accumulates errors across the test if we navigate in a loop
-      // For smoke tests, it might be better to split these into individual tests or clear manually if the fixture supports it
-      // But standard fixture doesn't easily clear. Let's filter by URL if needed, but since we are navigating,
-      // the fixture currently just appends.
+      pageErrors.clear();
       await validateUrlNavigation(page, href);
-      const filteredErrors = pageErrors.filter(e => e.includes(href) && !isIgnored(e));
+      const filteredErrors = pageErrors.errors.filter(e => !isIgnored(e));
       expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
     }
   });
@@ -72,8 +69,9 @@ test.describe('Navigation Smoke Tests', () => {
       );
 
       for (const href of contentLinks) {
+        pageErrors.clear();
         await validateUrlNavigation(page, href);
-        const filteredErrors = pageErrors.filter(e => e.includes(href) && !isIgnored(e));
+        const filteredErrors = pageErrors.errors.filter(e => !isIgnored(e));
         expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
       }
     }

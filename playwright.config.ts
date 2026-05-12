@@ -14,6 +14,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI to avoid heavy CPU thread thrashing if necessary */
   workers: process.env.CI ? 1 : undefined,
+  /* Stop after 10 failures on CI */
+  maxFailures: process.env.CI ? 10 : 0,
   /* Reporter to use. */
   reporter: 'html',
   use: {

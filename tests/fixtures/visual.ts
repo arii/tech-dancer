@@ -1,15 +1,19 @@
 import { test as base, expect } from '@playwright/test';
+import { disableAnimations } from '../utils/playwright-helpers';
 
 export { expect };
 
-export const test = base.extend<{ pageErrors: string[] }>({
+export const test = base.extend<{ pageErrors: { errors: string[], clear: () => void } }>({
   pageErrors: async ({ page }, use) => {
     const errors: string[] = [];
     page.on('console', msg => {
       if (msg.type() === 'error') errors.push(`[CONSOLE ERROR @ ${page.url()}] ${msg.text()}`);
     });
     page.on('pageerror', err => errors.push(`[PAGE ERROR @ ${page.url()}] ${err.message}`));
-    await use(errors);
+    await use({
+      errors,
+      clear: () => { errors.length = 0; }
+    });
   },
   page: async ({ page }, use) => {
     // Mock system time for consistent date rendering (e.g., in Lab tools)
@@ -21,16 +25,7 @@ export const test = base.extend<{ pageErrors: string[] }>({
     });
 
     // Control CSS Animations and Transitions to prevent visual flakiness
-    await page.addStyleTag({
-      content: `
-        *, *::before, *::after {
-          animation: none !important;
-          transition: none !important;
-          animation-duration: 0s !important;
-          transition-duration: 0s !important;
-        }
-      `
-    });
+    await disableAnimations(page);
 
     await use(page);
   },

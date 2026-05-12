@@ -1,6 +1,7 @@
 import { chromium } from 'playwright';
 import path from 'path';
 import fs from 'fs';
+import { disableAnimations } from '../tests/utils/playwright-helpers';
 
 async function capture(url: string, width: number, height: number, outputPath: string) {
   const browser = await chromium.launch();
@@ -13,14 +14,7 @@ async function capture(url: string, width: number, height: number, outputPath: s
     await page.goto(url, { waitUntil: 'networkidle' });
 
     // Inject styles to hide common popups or banners if needed
-    await page.addStyleTag({
-      content: `
-        *, *::before, *::after {
-          animation: none !important;
-          transition: none !important;
-        }
-      `
-    });
+    await disableAnimations(page);
 
     console.log(`Capturing screenshot (${width}x${height})...`);
     await page.screenshot({ path: outputPath, fullPage: false });
