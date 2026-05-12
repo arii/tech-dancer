@@ -60,14 +60,16 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         className={composeStyles(
           variant && typography[variant],
           intent && variants.intent[intent],
-          !intent && color === "main" && "text-text-main",
-          !intent && color === "body" && "text-text-body",
-          !intent && color === "dim" && "text-text-dim",
-          !intent && color === "accent" && "text-accent",
-          !intent && color === "brand" && "text-accent-navy font-bold",
-          !intent && color === "white" && "text-white",
-          !intent && color === "bg" && "text-bg",
-          !intent && color === "error" && "text-error",
+          !intent && (
+            color === "main" ? "text-text-main" :
+            color === "body" ? "text-text-body" :
+            color === "dim" ? "text-text-dim" :
+            color === "accent" ? "text-accent" :
+            color === "brand" ? "text-accent-navy font-bold" :
+            color === "white" ? "text-white" :
+            color === "bg" ? "text-bg" :
+            color === "error" ? "text-error" : ""
+          ),
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           getResponsiveClasses(weight, ""),
           getResponsiveClasses(align, "text-"),
@@ -76,8 +78,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),
           getResponsiveClasses(lowercase, "", (v) => v ? "lowercase" : "normal-case"),
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
-          getResponsiveClasses(clamp, "", (v) => (v === false || v === "none") ? "line-clamp-none" : (typeof v === "number" ? `line-clamp-${v}` : "")),
-          getResponsiveClasses(truncate, "", (v) => v ? "truncate" : (v === false ? "overflow-visible whitespace-normal text-clip" : "")),
+          getResponsiveClasses(clamp, "line-clamp-", (v) => v === false || v === "none" ? "none" : v),
+          getResponsiveClasses(truncate, "", (v) => v ? "truncate" : v === false ? "overflow-visible whitespace-normal text-clip" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           className
         )}
