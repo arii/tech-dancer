@@ -385,7 +385,7 @@ export function useUXAuditor() {
     customApiKey,
     setCustomApiKey: updateApiKey,
     snapshotService,
-    setSnapshotService: updateSnapshotService,
+    setSnapshotService,
     isCopiedMarkdown,
     isExportingToGithub,
     runUXAudit,
