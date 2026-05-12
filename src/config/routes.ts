@@ -1,4 +1,3 @@
-import { lazy } from 'react';
 import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, LucideIcon } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
@@ -37,14 +36,14 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/events',
-    Component: lazy(() => import('@/features/events/EventsIndex')),
+    lazy: () => import('@/features/events/EventsIndex.tsx').then(m => ({ Component: m.default })),
     label: 'Events',
     icon: Calendar,
     skeleton: 'grid'
   },
   {
     path: '/events/:slug',
-    Component: lazy(() => import('@/features/events/EventGuide')),
+    lazy: () => import('@/features/events/EventGuide.tsx').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
   {

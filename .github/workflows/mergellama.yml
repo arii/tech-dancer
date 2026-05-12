@@ -15,21 +15,21 @@ jobs:
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Ollama
-        run: curl -fsSL https://ollama.com/install.sh | sh
+        uses: ai-action/setup-ollama@v2
 
       - name: Install Click
         run: pip install click
@@ -37,7 +37,20 @@ jobs:
       - name: Start Ollama Server
         run: |
           ollama serve > ollama_output.log 2>&1 &
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
+          # Wait for server to be ready with increased timeout and specific check
+          for i in {1..15}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama server is ready!"
+              # Give it one more second to settle
+              sleep 1
+              exit 0
+            fi
+            echo "Waiting for Ollama server (attempt $i)..."
+            sleep 2
+          done
+          echo "❌ Ollama server failed to start within timeout"
+          cat ollama_output.log
+          exit 1
 
       - name: Pull Model
         run: ollama pull qwen2.5-coder:7b
@@ -55,7 +68,7 @@ jobs:
           pnpm run type-check
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: auto-resolved merge conflicts using MergeLlama"
           file_pattern: '.'
