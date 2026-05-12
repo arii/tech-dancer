@@ -1,11 +1,11 @@
-// impeccable-ignore-file
+
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
-import { cn } from '@/lib/utils';
 
 interface DetailLayoutProps {
   title: string;
@@ -38,23 +38,27 @@ export function DetailLayout({
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
+      <Stack gap={12} maxWidth="4xl" marginX="auto" width="full">
         {/* Navigation */}
-        <Box
+        <Stack
           as="button"
+          direction="row"
           onClick={onBack}
-          display="flex"
           align="center"
           gap={2}
-          color="main"
-          className="hover:text-accent transition-colors group"
+          className="text-text-main hover:text-accent transition-colors group"
           cursor="pointer"
         >
-          <ArrowLeft className="w-4 h-4 text-accent transition-transform group-hover:-translate-x-1" />
-          <Text variant="mono" size="xs" weight="font-bold" className="normal-case tracking-widest">
+          <Icon
+            icon={ArrowLeft}
+            size="sm"
+            color="accent"
+            className="transition-transform group-hover:-translate-x-1"
+          />
+          <Text variant="mono" size="xs" weight="font-bold" uppercase={false}>
             {backLabel.toUpperCase()}
           </Text>
-        </Box>
+        </Stack>
 
         <Stack gap={10}>
           {/* Header */}
@@ -91,14 +95,19 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10}>
             {/* Content - first on mobile via order classes */}
-            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
+            <Box
+              span={{ base: 1, lg: sidebar ? 2 : 1 }}
+              width="full"
+              className="order-1 lg:order-2"
+            >
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main w-full"
+                width="full"
                 marginX="auto"
                 maxWidth="prose"
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main"
               >
                 <MarkdownRenderer content={content} />
               </Box>
@@ -107,7 +116,7 @@ export function DetailLayout({
             {/* Sidebar - second on mobile via order classes */}
             {sidebar && (
               <Box className="order-2 lg:order-1">
-                <Stack gap={4} className="lg:sticky lg:top-32">
+                <Stack gap={4} position="sticky" top={32}>
                    {sidebar}
                 </Stack>
               </Box>

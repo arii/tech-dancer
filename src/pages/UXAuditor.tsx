@@ -75,11 +75,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
       {isCopying ? (
-        <Icon icon={RefreshCw} className="w-3 h-3 animate-spin" />
+        <Icon icon={RefreshCw} size="xs" className="animate-spin" />
       ) : copied ? (
-        <Icon icon={CheckCircle} className="w-3 h-3" color="accent" />
+        <Icon icon={CheckCircle} size="xs" color="accent" />
       ) : (
-        <Icon icon={Copy} className="w-3 h-3" />
+        <Icon icon={Copy} size="xs" />
       )}
       <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
     </Box>
@@ -94,6 +94,10 @@ export default function UXAuditor() {
     setActiveReport,
     url,
     setUrl,
+    customApiKey,
+    setCustomApiKey,
+    snapshotService,
+    setSnapshotService,
     isCopiedMarkdown,
     isExportingToGithub,
     runUXAudit,
@@ -122,42 +126,93 @@ export default function UXAuditor() {
           />
         </Box>
 
-        <Stack
-          direction="row"
-          align="center"
-          gap={3}
-          padding={2}
-          className={cardVariants()}
-        >
-          <Box
-            as="input"
-            type="text"
-            value={url}
-            title={url}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-            className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-            width={{ base: "full", sm: 64, md: 80 }}
-            paddingX={4}
-            paddingY={2}
-            radius="lg"
-            placeholder="https://..."
-            aria-label="URL to audit"
-          />
-          <Box
-            as="button"
-            onClick={() => runUXAudit(url)}
-            disabled={isAnalyzing}
-            display="flex"
+        <Stack gap={4}>
+          <Stack
+            direction="row"
             align="center"
-            gap={2}
-            className="bg-accent hover:opacity-90 text-bg font-bold transition-all disabled:opacity-50"
-            paddingX={6}
-            paddingY={2}
-            radius="md"
+            gap={3}
+            padding={2}
+            className={cardVariants()}
           >
-            {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
-            {isAnalyzing ? 'Auditing...' : 'Start Audit'}
-          </Box>
+            <Box
+              as="input"
+              type="text"
+              value={url}
+              title={url}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+              width={{ base: "full", sm: 64, md: 80 }}
+              paddingX={4}
+              paddingY={2}
+              radius="lg"
+              placeholder="https://..."
+              aria-label="URL to audit"
+            />
+            <Box
+              as="button"
+              onClick={() => runUXAudit(url)}
+              disabled={isAnalyzing}
+              display="flex"
+              align="center"
+              gap={2}
+              className="bg-accent hover:opacity-90 text-bg font-bold transition-all disabled:opacity-50"
+              paddingX={6}
+              paddingY={2}
+              radius="md"
+            >
+              {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
+              {isAnalyzing ? 'Auditing...' : 'Start Audit'}
+            </Box>
+          </Stack>
+          <Stack gap={2}>
+            <Stack
+              direction="row"
+              align="center"
+              gap={3}
+              padding={2}
+              className={cardVariants()}
+            >
+              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
+              <Box
+                as="input"
+                type="password"
+                value={customApiKey}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
+                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                flex={1}
+                paddingX={4}
+                paddingY={2}
+                radius="lg"
+                placeholder="OpenAI or Gemini API Key (optional override)"
+                aria-label="API Key"
+              />
+            </Stack>
+            <Text variant="sans" size="xs" color="warning" paddingX={2} weight="font-medium">
+              ⚠️ API keys are stored in your browser's local storage for convenience.
+            </Text>
+          </Stack>
+          <Stack
+            direction="row"
+            align="center"
+            gap={3}
+            padding={2}
+            className={cardVariants()}
+          >
+            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
+            <Box
+              as="input"
+              type="text"
+              value={snapshotService}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
+              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+              flex={1}
+              paddingX={4}
+              paddingY={2}
+              radius="lg"
+              placeholder="Custom service URL with {url}, {width}, {height} (optional)"
+              aria-label="Snapshot Service URL"
+            />
+          </Stack>
         </Stack>
       </Stack>
 
@@ -172,7 +227,7 @@ export default function UXAuditor() {
               <EmptyState
                 compact
                 title="No history"
-                icon={<Icon icon={RefreshCw} size="sm" className="opacity-30" />}
+                icon={<Icon icon={RefreshCw} size="sm" color="muted" />}
               />
             )}
             {reports.map((report) => (
@@ -296,7 +351,7 @@ export default function UXAuditor() {
                           ) : (
                             <Stack align="center" justify="center" color="dim" className="text-center">
                               <Box marginBottom={2}>
-                                <Icon icon={ImageIcon} className="w-12 h-12 opacity-20" />
+                                <Icon icon={ImageIcon} size="2xl" color="muted" />
                               </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
@@ -374,7 +429,7 @@ export default function UXAuditor() {
           ) : (
             <EmptyState
               minHeight={500}
-              icon={<Icon icon={Camera} size="xl" className="opacity-10" />}
+              icon={<Icon icon={Camera} size="xl" color="muted" />}
               title="Ready to Audit"
               description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
             />
