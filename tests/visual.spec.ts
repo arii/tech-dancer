@@ -7,6 +7,7 @@ const routes = [
   { name: 'research', path: './research' },
   { name: 'about', path: './about' },
   { name: 'contact', path: './contact' },
+  { name: 'ux-auditor', path: './ux-auditor' },
   { name: 'preview', path: './preview' },
   { name: 'event-guide', path: './events/boogie-by-the-bay' }
 ];

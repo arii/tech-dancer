@@ -50,7 +50,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 10
 }
 
 // --- Configuration & Constants ---
-const apiKey = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem('ux-auditor-api-key') || "";
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || sessionStorage.getItem('ux-auditor-api-key') || "";
 declare const __app_id: string | undefined;
 declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
@@ -89,7 +89,7 @@ export function useUXAuditor() {
   const [user, setUser] = useState<User | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
-  const [customApiKey, setCustomApiKey] = useState(localStorage.getItem('ux-auditor-api-key') || "");
+  const [customApiKey, setCustomApiKey] = useState(sessionStorage.getItem('ux-auditor-api-key') || "");
   const { snapshotService, setSnapshotService, getSnapshotUrl, fetchSnapshot } = useSnapshotManager();
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
@@ -371,7 +371,7 @@ export function useUXAuditor() {
 
   const updateApiKey = (key: string) => {
     setCustomApiKey(key);
-    localStorage.setItem('ux-auditor-api-key', key);
+    sessionStorage.setItem('ux-auditor-api-key', key);
   };
 
   return {
