@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { useState, useMemo } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 import { calculateTimeline } from './lib/timeline-engine';
@@ -11,8 +12,20 @@ import { EventSelector } from './EventSelector';
 import { CustomEventForm } from './CustomEventForm';
 
 export default function WSDCReminders() {
-  const events = useMemo(() => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate), []);
-  const [selectedEventId, setSelectedEventId] = useState<string>(events[0]?.slug || 'custom');
+  const { data: events = [] } = useQuery({
+    queryKey: ['events', 'reminders'],
+    queryFn: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
+  });
+
+  const [selectedEventId, setSelectedEventId] = useState<string>('custom');
+
+  // Sync initial selection when events load
+  const [hasInitialized, setHasInitialized] = useState(false);
+  if (!hasInitialized && events.length > 0 && selectedEventId === 'custom' && !customEvent.title) {
+    setSelectedEventId(events[0].slug);
+    setHasInitialized(true);
+  }
+
   const [customEvent, setCustomEvent] = useState<EventAnchors>({
     title: '',
     startDate: '',
