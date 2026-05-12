@@ -21,26 +21,24 @@ export function useScrollManagement(
   // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
     const container = scrollRef.current;
-    if (!container) return;
 
     // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
-      if (container) {
-        sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
-      }
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+      sessionStorage.setItem(`scroll-${key}`, scrollPos.toString());
     };
 
     window.addEventListener('beforeunload', handleSaveScroll);
 
-    if (navType === 'POP') {
+    if (navType === 'POP' && !hash) {
       // 1. History Navigation: Restore position
       const savedPosition = sessionStorage.getItem(`scroll-${key}`);
       if (savedPosition) {
         requestAnimationFrame(() => {
-          if (container) {
-            container.scrollTop = parseInt(savedPosition, 10);
-            window.scrollTo(0, parseInt(savedPosition, 10));
-          }
+          window.scrollTo({
+            top: parseInt(savedPosition, 10),
+            behavior: 'auto'
+          });
         });
       }
     } else if (hash) {
@@ -54,7 +52,14 @@ export function useScrollManagement(
       const performScroll = () => {
         const el = document.getElementById(id);
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
+          const rect = el.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const targetY = rect.top + scrollTop - 128; // scroll-mt-32
+
+          window.scrollTo({
+            top: targetY,
+            behavior: 'smooth'
+          });
           return true;
         }
         return false;
@@ -73,10 +78,12 @@ export function useScrollManagement(
         }
       });
 
+      // Also observe document body as images might be outside the container but affect layout
+      // though in our case they are likely inside.
       observer.observe(container);
 
-      // Initial attempt
-      performScroll();
+      // Initial attempt with a small delay to ensure React has rendered
+      const initialTid = window.setTimeout(performScroll, 100);
 
       // Disconnect after settle time to prevent infinite observer
       const settleTimer = window.setTimeout(() => {
@@ -86,10 +93,10 @@ export function useScrollManagement(
       return () => {
         observer.disconnect();
         window.clearTimeout(settleTimer);
+        window.clearTimeout(initialTid);
       };
     } else {
       // 3. New Navigation: Reset to top
-      container.scrollTop = 0;
       window.scrollTo(0, 0);
     }
 

@@ -206,7 +206,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(minHeight, "min-h-", (v) => getVal(v, "")),
           getResponsiveClasses(maxHeight, "max-h-", (v) => getVal(v, "")),
           getResponsiveClasses(minWidth, "min-w-", (v) => getVal(v, "")),
-          overflow && `overflow-${overflow}`,
+          overflow && (overflow === "y-auto" ? "overflow-y-auto" : overflow === "x-auto" ? "overflow-x-auto" : overflow === "y-hidden" ? "overflow-y-hidden" : `overflow-${overflow}`),
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
@@ -229,6 +229,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(bottom, "", s("bottom")),
           getResponsiveClasses(left, "", s("left")),
           getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
+          _scrollBehavior && `scroll-${_scrollBehavior}`,
           className
         )}
         style={{
