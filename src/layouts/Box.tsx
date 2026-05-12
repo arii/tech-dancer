@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType, useMemo } from "react"
 import { cn, composeStyles } from "@/lib/utils"
@@ -141,19 +140,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
       if (!val) return ""
       const pfx = prefix ? prefix + "-" : ""
-
-      // Standard Tailwind tokens (numbers or specific strings without CSS units)
-      const isToken = typeof val === "number" ||
-        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
-
-      if (isToken) return pfx + val
-
-      // Arbitrary values - split to avoid audit detection
-      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
-        ? val
-        : "[" + val + "]"
-
-      return pfx + value
+      return pfx + val
     }
 
     const s = (prefix: string) => (v: string | number | boolean | undefined | null) => {

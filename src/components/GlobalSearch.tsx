@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -85,8 +84,9 @@ export function GlobalSearch() {
       <Box
         position="absolute"
         inset={true}
+        surface="backdrop"
         data-testid="search-backdrop"
-        className="bg-bg/80 backdrop-blur-md pointer-events-auto"
+        className="pointer-events-auto"
         onClick={close}
       />
 
@@ -116,7 +116,8 @@ export function GlobalSearch() {
           border
           marginX={4}
           shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
+          surface="glass"
+          className="border-accent/20 pointer-events-auto outline-none"
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {

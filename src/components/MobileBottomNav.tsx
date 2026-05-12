@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
@@ -14,8 +13,9 @@ export function MobileBottomNav() {
       inset="bottom"
       zIndex="mobileHeader"
       border="t"
+      surface="glassAlt"
       paddingBottom="safe"
-      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line"
+      display={{ base: "block", lg: "none" }}
     >
       <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
