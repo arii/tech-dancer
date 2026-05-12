@@ -2,6 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useSearchParam } from './useSearchParam';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
+import { withSimulationDelay } from '@/lib/utils';
 import Fuse from 'fuse.js';
 
 export function useGlobalSearch() {
@@ -20,9 +21,9 @@ export function useGlobalSearch() {
 
   const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [
-      { queryKey: ['posts'], queryFn: getPosts },
-      { queryKey: ['resources'], queryFn: getResources },
-      { queryKey: ['studies'], queryFn: getStudies },
+      { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts) },
+      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources) },
+      { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies) },
     ],
   });
 

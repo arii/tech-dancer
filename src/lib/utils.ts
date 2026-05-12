@@ -85,3 +85,16 @@ export function formatCategory(cat: string): string {
   if (cat === 'All') return 'All Posts';
   return cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
+
+/**
+ * Wraps a fetch function with an optional artificial delay for UI simulation.
+ * Enabled via VITE_SIMULATE_LOADING environmental variable.
+ */
+export function withSimulationDelay<T>(fn: () => T | Promise<T>, delayMs = 800) {
+  return async (): Promise<T> => {
+    if (import.meta.env.VITE_SIMULATE_LOADING === 'true') {
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+    return fn();
+  };
+}
