@@ -20,5 +20,7 @@ gear:
     - "MINTs"
     - "Hand sanitizer"
 ---
+
 # Boogie by the Bay
+
 The flagship event of The Next Generation Swing Dance Club, held every Columbus Day weekend.

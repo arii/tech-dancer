@@ -15,24 +15,30 @@ The scraper is built with a modular architecture following the Single Responsibi
 ## Usage
 
 ### Prerequisites
+
 Install dependencies:
+
 ```bash
 pip install -r etl/requirements.txt
 playwright install chromium
 ```
 
 ### Run a Historical Crawl
+
 By default, the scraper crawls the last 5 years of data:
+
 ```bash
 python etl/scraper.py
 ```
 
 To crawl a specific number of years:
+
 ```bash
 python etl/scraper.py --years 2
 ```
 
 ### Scrape a Single URL
+
 ```bash
 python etl/scraper.py https://scoring.dance/enUS/events/338/results/5415.html
 ```
@@ -40,14 +46,19 @@ python etl/scraper.py https://scoring.dance/enUS/events/338/results/5415.html
 ## Data Management
 
 ### Central Ledger
+
 The primary data artifact is `etl/data/wcs_prelims.parquet`.
+
 - **Entries**: 1,652 unique dancer-competition records.
 - **Unique Identifier**: `REF_ID: {bib_number}-{result_id}`, ensuring stability across different events.
 
 ### Frontend Integration
+
 The frontend application directly consumes the Parquet ledger using `hyparquet`.
+
 - During the build process, `wcs_prelims.parquet` is copied to the `public/data/` directory.
 - This approach eliminates intermediate JSON or Markdown files and ensures the frontend has immediate, zero-overhead access to the full historical dataset.
 
 ## Automated Workflow
+
 A GitHub Action (`.github/workflows/wcs_etl.yml`) runs weekly to perform a rolling 1-year crawl, keeping the ledger up to date with the latest results.

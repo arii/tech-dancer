@@ -19,6 +19,7 @@ Halloween social dancing requires Dance gear that doesn't restrict you.
 ### The Pumpkin Outfit
 
 I've stress-tested a specific **Pumpkin outfit** that works perfectly for the social floor. It includes:
+
 - **Headband:** Low profile, doesn't catch on partner's arms during turns.
 - **Jack O' Lantern Stickers:** Lightweight, zero drag.
 

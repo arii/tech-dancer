@@ -9,8 +9,8 @@
 - If you are uncertain about a line number, re-read the diff. Never guess.
 
 ---
-description: review a single GitHub pull request with in-depth inline feedback using decoupled files
----
+
+## description: review a single GitHub pull request with in-depth inline feedback using decoupled files
 
 ## Workflow State
 
@@ -24,6 +24,7 @@ A step is only complete when its output file exists and contains non-placeholder
 // turbo-all
 
 0. **Environment Setup & Pre-flight validation**: **Node >=22** is required for full visual regression testing.
+
 ```bash
 bash dev-tools/verify.sh
 source .venv/bin/activate
@@ -36,10 +37,12 @@ PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh validate-is
 ```
 
 1. **Generate the review documents**:
+
 ```bash
 td-cli gh audit-pr PR_NUMBER --fetch
 PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR_NUMBER --fetch
 ```
+
 (This creates `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` for reading, and `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` for writing).
 
 2. **Read the Context & Instructions**:
@@ -54,6 +57,7 @@ PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR
    - **Do not edit the pr-context file.**
 
 4. **Submit & Cleanup**: Parse the document and submit the review in one step. If programmatic approval is restricted (e.g., self-approval constraints), use the `--event COMMENT` flag. Use `--cleanup` to remove the working files on success:
+
 ```bash
 td-cli gh audit-pr PR_NUMBER --submit --cleanup [--event COMMENT]
 PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR_NUMBER --submit --cleanup [--event COMMENT]

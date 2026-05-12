@@ -9,14 +9,15 @@
 - If you are uncertain about a line number, re-read the diff. Never guess.
 
 ---
-description: systematically audit, review, and organize open issues in bulk to determine if they should be kept, updated, or abandoned
----
+
+## description: systematically audit, review, and organize open issues in bulk to determine if they should be kept, updated, or abandoned
 
 # Mass Audit Issues Workflow
 
 This workflow standardizes the process for auditing multiple open issues, allowing agents to systematically review the issue backlog, determine if they are still relevant, and act accordingly (keep, update, abandon). To avoid API abuse and noise, process issues in small batches and include artificial delays if scripting automated actions.
 
 1. **Fetch open issues**:
+
 ```bash
 gh issue list --limit 100 --json number,title,author,updatedAt,labels,body
 ```

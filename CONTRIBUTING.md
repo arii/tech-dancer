@@ -15,6 +15,7 @@ This guide explains how to add new content to the site using GitHub Issues and t
    \```
 
 ## Checklist
+
 - [ ] Issue title starts with `Draft:`
 - [ ] Body contains a single `\```markdown` block
 - [ ] Frontmatter includes required fields (see root README.md)

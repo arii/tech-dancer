@@ -1,4 +1,5 @@
 # BoomTick.blog — Frontend Migration Guide
+
 ## Event Resource Guide Landing Pages
 
 > **Prerequisites:** Complete the data format update described in `event-resource-guide-format.md` before starting this migration. This guide assumes your event `.md` files already contain the new frontmatter fields.
@@ -64,7 +65,7 @@ export interface EventGear {
 }
 
 export interface Event {
-  type: 'event';
+  type: "event";
   slug: string;
   title: string;
   date: string;
@@ -111,29 +112,40 @@ The existing `parseFrontmatter` function parses arrays like `themeOutfitIds: [..
 // Promote flat gear/theme fields into structured objects
 // so components only need to read event.theme and event.gear
 const flatTheme: EventTheme | undefined =
-  (data.themeOutfitIds || data.themeAccessoryIds)
+  data.themeOutfitIds || data.themeAccessoryIds
     ? {
-        name: String(data.themeName || ''),
+        name: String(data.themeName || ""),
         label: data.themeLabel ? String(data.themeLabel) : undefined,
-        outfitIds: Array.isArray(data.themeOutfitIds) ? data.themeOutfitIds : [],
-        accessoryIds: Array.isArray(data.themeAccessoryIds) ? data.themeAccessoryIds : [],
+        outfitIds: Array.isArray(data.themeOutfitIds)
+          ? data.themeOutfitIds
+          : [],
+        accessoryIds: Array.isArray(data.themeAccessoryIds)
+          ? data.themeAccessoryIds
+          : [],
       }
     : undefined;
 
 const flatGear: EventGear | undefined =
-  (data.gearOutfitIds || data.gearShoeIds || data.gearEssentialIds || data.gearTravelIds)
+  data.gearOutfitIds ||
+  data.gearShoeIds ||
+  data.gearEssentialIds ||
+  data.gearTravelIds
     ? {
         outfitIds: Array.isArray(data.gearOutfitIds) ? data.gearOutfitIds : [],
-        accessoryIds: Array.isArray(data.gearAccessoryIds) ? data.gearAccessoryIds : [],
+        accessoryIds: Array.isArray(data.gearAccessoryIds)
+          ? data.gearAccessoryIds
+          : [],
         shoeIds: Array.isArray(data.gearShoeIds) ? data.gearShoeIds : [],
-        essentialIds: Array.isArray(data.gearEssentialIds) ? data.gearEssentialIds : [],
+        essentialIds: Array.isArray(data.gearEssentialIds)
+          ? data.gearEssentialIds
+          : [],
         travelIds: Array.isArray(data.gearTravelIds) ? data.gearTravelIds : [],
       }
     : undefined;
 
 return {
   ...data,
-  title: String(data.title || 'Untitled'),
+  title: String(data.title || "Untitled"),
   // ... all existing fields ...
   theme: (data.theme as EventTheme | undefined) ?? flatTheme,
   gear: (data.gear as EventGear | undefined) ?? flatGear,
@@ -178,7 +190,7 @@ Then add `/events` to the `MOBILE_NAV_ROUTES` filter if you want it in the botto
 
 ```ts
 // Update the MOBILE_NAV_ROUTES filter condition:
-['/', '/blog', '/gear', '/events'].includes(r.path)
+["/", "/blog", "/gear", "/events"].includes(r.path);
 ```
 
 ---
@@ -190,14 +202,14 @@ These are thin wrappers that follow the existing pattern (e.g. `src/pages/Blog.t
 ### `src/pages/Events.tsx`
 
 ```tsx
-import EventsIndex from '@/features/events/EventsIndex';
+import EventsIndex from "@/features/events/EventsIndex";
 export default EventsIndex;
 ```
 
 ### `src/pages/EventDetail.tsx`
 
 ```tsx
-import EventDetail from '@/features/events/EventDetailPage';
+import EventDetail from "@/features/events/EventDetailPage";
 export default EventDetail;
 ```
 
@@ -209,35 +221,37 @@ This replaces the bare event cards on the home page with a searchable, filterabl
 
 ```tsx
 // src/features/events/EventsIndex.tsx
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getEvents } from '@/lib/content';
-import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { SearchBox } from '@/components/ui/SearchBox';
-import { SEO } from '@/components/SEO';
-import { useSearchParam } from '@/hooks/useSearchParam';
-import { safeSearch } from '@/lib/utils';
-import { MapPin, ArrowRight } from 'lucide-react';
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getEvents } from "@/lib/content";
+import { Box, Grid, Stack, Text } from "@/layouts/Primitives";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { SearchBox } from "@/components/ui/SearchBox";
+import { SEO } from "@/components/SEO";
+import { useSearchParam } from "@/hooks/useSearchParam";
+import { safeSearch } from "@/lib/utils";
+import { MapPin, ArrowRight } from "lucide-react";
 
 export default function EventsIndex() {
   const navigate = useNavigate();
-  const [search, setSearch] = useSearchParam('search');
+  const [search, setSearch] = useSearchParam("search");
 
   const { data: events = [] } = useQuery({
-    queryKey: ['events'],
+    queryKey: ["events"],
     queryFn: getEvents,
     initialData: getEvents,
   });
 
-  const filtered = useMemo(() =>
-    events.filter(e =>
-      safeSearch(e.title, search) ||
-      safeSearch(e.city, search) ||
-      safeSearch(e.schedule, search)
-    ),
-    [events, search]
+  const filtered = useMemo(
+    () =>
+      events.filter(
+        (e) =>
+          safeSearch(e.title, search) ||
+          safeSearch(e.city, search) ||
+          safeSearch(e.schedule, search),
+      ),
+    [events, search],
   );
 
   return (
@@ -255,13 +269,13 @@ export default function EventsIndex() {
 
         <SearchBox
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           placeholder="Search events, cities…"
           maxWidth="lg"
         />
 
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
-          {filtered.map(event => (
+          {filtered.map((event) => (
             <Box
               key={event.slug}
               as="button"
@@ -276,26 +290,56 @@ export default function EventsIndex() {
               <Stack gap={4}>
                 <Box display="flex" align="center" gap={2}>
                   <MapPin className="w-4 h-4 text-accent" />
-                  <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                  <Text
+                    variant="mono"
+                    size="micro"
+                    color="accent"
+                    weight="font-bold"
+                    uppercase
+                    tracking="widest"
+                  >
                     {event.schedule}
                   </Text>
                 </Box>
                 <Stack gap={1}>
-                  <Text variant="body" size="lg" weight="font-bold" className="group-hover:text-accent transition-colors leading-tight">
+                  <Text
+                    variant="body"
+                    size="lg"
+                    weight="font-bold"
+                    className="group-hover:text-accent transition-colors leading-tight"
+                  >
                     {event.title}
                   </Text>
-                  <Text size="sm" color="dim">{event.location}</Text>
-                  <Text size="sm" color="dim">{event.city}</Text>
+                  <Text size="sm" color="dim">
+                    {event.location}
+                  </Text>
+                  <Text size="sm" color="dim">
+                    {event.city}
+                  </Text>
                 </Stack>
                 {event.theme && (
-                  <Box border paddingX={3} paddingY={1} radius="full" className="border-accent/30 bg-accent/5 w-fit">
+                  <Box
+                    border
+                    paddingX={3}
+                    paddingY={1}
+                    radius="full"
+                    className="border-accent/30 bg-accent/5 w-fit"
+                  >
                     <Text variant="mono" size="micro" color="accent">
                       Theme: {event.theme.name}
                     </Text>
                   </Box>
                 )}
-                <Box display="flex" align="center" gap={2} marginTop="auto" color="accent">
-                  <Text variant="mono" size="xs" weight="font-bold">View Guide</Text>
+                <Box
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  marginTop="auto"
+                  color="accent"
+                >
+                  <Text variant="mono" size="xs" weight="font-bold">
+                    View Guide
+                  </Text>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </Box>
               </Stack>
@@ -316,12 +360,12 @@ Create `src/features/events/useEventDetail.ts`. This resolves all affiliate IDs 
 
 ```ts
 // src/features/events/useEventDetail.ts
-import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getEventBySlug, getEvents, Event } from '@/lib/content';
-import { affiliateManager } from '@/lib/affiliateManager';
-import { AffiliateLink } from '@/types';
+import { useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getEventBySlug, getEvents, Event } from "@/lib/content";
+import { affiliateManager } from "@/lib/affiliateManager";
+import { AffiliateLink } from "@/types";
 
 export interface ResolvedGearSection {
   label: string;
@@ -333,30 +377,32 @@ export function useEventDetail() {
   const navigate = useNavigate();
 
   const { data: event } = useQuery({
-    queryKey: ['event', slug],
-    queryFn: () => slug ? getEventBySlug(slug) : undefined,
+    queryKey: ["event", slug],
+    queryFn: () => (slug ? getEventBySlug(slug) : undefined),
     enabled: !!slug,
   });
 
   const { data: allEvents = [] } = useQuery({
-    queryKey: ['events'],
+    queryKey: ["events"],
     queryFn: getEvents,
     initialData: getEvents,
   });
 
   // Resolve theme gear from affiliate IDs
-  const themeOutfits = useMemo(() =>
-    (event?.theme?.outfitIds ?? [])
-      .map(id => affiliateManager.getLink(id))
-      .filter((l): l is AffiliateLink => !!l),
-    [event]
+  const themeOutfits = useMemo(
+    () =>
+      (event?.theme?.outfitIds ?? [])
+        .map((id) => affiliateManager.getLink(id))
+        .filter((l): l is AffiliateLink => !!l),
+    [event],
   );
 
-  const themeAccessories = useMemo(() =>
-    (event?.theme?.accessoryIds ?? [])
-      .map(id => affiliateManager.getLink(id))
-      .filter((l): l is AffiliateLink => !!l),
-    [event]
+  const themeAccessories = useMemo(
+    () =>
+      (event?.theme?.accessoryIds ?? [])
+        .map((id) => affiliateManager.getLink(id))
+        .filter((l): l is AffiliateLink => !!l),
+    [event],
   );
 
   // Resolve gear sections
@@ -365,22 +411,28 @@ export function useEventDetail() {
     const g = event.gear;
 
     const resolve = (ids: string[] = []) =>
-      ids.map(id => affiliateManager.getLink(id)).filter((l): l is AffiliateLink => !!l);
+      ids
+        .map((id) => affiliateManager.getLink(id))
+        .filter((l): l is AffiliateLink => !!l);
 
     return [
-      { label: 'Outfits', items: resolve(g.outfitIds) },
-      { label: 'Accessories', items: resolve(g.accessoryIds) },
-      { label: 'Shoes & Essentials', items: resolve([...(g.shoeIds ?? []), ...(g.essentialIds ?? [])]) },
-      { label: 'Travel Extras', items: resolve(g.travelIds) },
-    ].filter(s => s.items.length > 0);
+      { label: "Outfits", items: resolve(g.outfitIds) },
+      { label: "Accessories", items: resolve(g.accessoryIds) },
+      {
+        label: "Shoes & Essentials",
+        items: resolve([...(g.shoeIds ?? []), ...(g.essentialIds ?? [])]),
+      },
+      { label: "Travel Extras", items: resolve(g.travelIds) },
+    ].filter((s) => s.items.length > 0);
   }, [event]);
 
   // Resolve related events
-  const relatedEvents = useMemo((): Event[] =>
-    (event?.relatedEvents ?? [])
-      .map(slug => allEvents.find(e => e.slug === slug))
-      .filter((e): e is Event => !!e),
-    [event, allEvents]
+  const relatedEvents = useMemo(
+    (): Event[] =>
+      (event?.relatedEvents ?? [])
+        .map((slug) => allEvents.find((e) => e.slug === slug))
+        .filter((e): e is Event => !!e),
+    [event, allEvents],
   );
 
   return {
@@ -406,18 +458,18 @@ This renders the event title, location, date, the personal "Why I'm attending" b
 
 ```tsx
 // src/features/events/components/EventHero.tsx
-import { MapPin, Calendar } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Event } from '@/lib/content';
+import { MapPin, Calendar } from "lucide-react";
+import { Box, Stack, Text } from "@/layouts/Primitives";
+import { Event } from "@/lib/content";
 
-export type EventTab = 'theme' | 'gear' | 'reminders' | 'travel' | 'notes';
+export type EventTab = "theme" | "gear" | "reminders" | "travel" | "notes";
 
 const TABS: { id: EventTab; label: string }[] = [
-  { id: 'theme',     label: 'Theme'     },
-  { id: 'gear',      label: 'Gear'      },
-  { id: 'reminders', label: 'Reminders' },
-  { id: 'travel',    label: 'Travel'    },
-  { id: 'notes',     label: 'Notes'     },
+  { id: "theme", label: "Theme" },
+  { id: "gear", label: "Gear" },
+  { id: "reminders", label: "Reminders" },
+  { id: "travel", label: "Travel" },
+  { id: "notes", label: "Notes" },
 ];
 
 interface EventHeroProps {
@@ -431,38 +483,71 @@ export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
     <Box border="b" paddingBottom={0}>
       <Stack gap={6} paddingBottom={0}>
         {/* Breadcrumb */}
-        <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+        <Text
+          variant="mono"
+          size="micro"
+          color="dim"
+          uppercase
+          tracking="widest"
+        >
           Event Guides › {event.title}
         </Text>
 
-        <Stack direction={{ base: 'col', md: 'row' }} gap={8} align="start">
+        <Stack direction={{ base: "col", md: "row" }} gap={8} align="start">
           {/* Left: event copy */}
           <Stack gap={4} flex={1}>
             <Stack gap={2}>
-              <Text variant="headline" size="fluid-5" weight="font-black" color="main" leading="tight">
+              <Text
+                variant="headline"
+                size="fluid-5"
+                weight="font-black"
+                color="main"
+                leading="tight"
+              >
                 {event.title}
               </Text>
               <Box display="flex" align="center" gap={4} wrap>
                 <Box display="flex" align="center" gap={1}>
                   <MapPin className="w-4 h-4 text-accent shrink-0" />
-                  <Text size="sm" color="dim">{event.city}</Text>
+                  <Text size="sm" color="dim">
+                    {event.city}
+                  </Text>
                 </Box>
                 <Box display="flex" align="center" gap={1}>
                   <Calendar className="w-4 h-4 text-accent shrink-0" />
-                  <Text size="sm" color="dim">{event.schedule}</Text>
+                  <Text size="sm" color="dim">
+                    {event.schedule}
+                  </Text>
                 </Box>
               </Box>
             </Stack>
 
             {event.whyAttending && (
-              <Box border="l" paddingLeft={5} className="border-accent/40 max-w-prose">
-                <Text variant="body" size="sm" color="dim" className="italic leading-relaxed">
-                  <Text as="span" size="xs" weight="font-bold" color="accent" className="block mb-1 not-italic">
+              <Box
+                border="l"
+                paddingLeft={5}
+                className="border-accent/40 max-w-prose"
+              >
+                <Text
+                  variant="body"
+                  size="sm"
+                  color="dim"
+                  className="italic leading-relaxed"
+                >
+                  <Text
+                    as="span"
+                    size="xs"
+                    weight="font-bold"
+                    color="accent"
+                    className="block mb-1 not-italic"
+                  >
                     WHY I'M ATTENDING
                   </Text>
                   {event.whyAttending}
                 </Text>
-                <Text size="xs" color="dim" className="mt-2 not-italic">— BoomTick</Text>
+                <Text size="xs" color="dim" className="mt-2 not-italic">
+                  — BoomTick
+                </Text>
               </Box>
             )}
 
@@ -481,7 +566,9 @@ export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
                 radius="full"
                 className="border-accent/30 hover:border-accent bg-accent/5 hover:bg-accent/10 transition-all w-fit text-accent"
               >
-                <Text variant="mono" size="xs" weight="font-bold">Official Event Site ↗</Text>
+                <Text variant="mono" size="xs" weight="font-bold">
+                  Official Event Site ↗
+                </Text>
               </Box>
             )}
           </Stack>
@@ -507,11 +594,27 @@ export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <Stack align="center" gap={1} paddingX={4} className="text-center">
-                <Text variant="display" size="4xl" weight="font-black" color="accent">
-                  {event.title.split(' ').map(w => w[0]).join('').slice(0, 3)}
+              <Stack
+                align="center"
+                gap={1}
+                paddingX={4}
+                className="text-center"
+              >
+                <Text
+                  variant="display"
+                  size="4xl"
+                  weight="font-black"
+                  color="accent"
+                >
+                  {event.title
+                    .split(" ")
+                    .map((w) => w[0])
+                    .join("")
+                    .slice(0, 3)}
                 </Text>
-                <Text variant="mono" size="micro" color="dim">{event.city}</Text>
+                <Text variant="mono" size="micro" color="dim">
+                  {event.city}
+                </Text>
               </Stack>
             )}
           </Box>
@@ -525,7 +628,7 @@ export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
           className="no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0"
           marginTop={4}
         >
-          {TABS.map(tab => (
+          {TABS.map((tab) => (
             <Box
               key={tab.id}
               as="button"
@@ -536,12 +639,20 @@ export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
               border="b"
               className={`whitespace-nowrap transition-colors ${
                 activeTab === tab.id
-                  ? 'border-accent text-accent'
-                  : 'border-transparent text-text-dim hover:text-text-main'
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-dim hover:text-text-main"
               }`}
-              style={{ borderBottomWidth: activeTab === tab.id ? '2px' : '2px' }}
+              style={{
+                borderBottomWidth: activeTab === tab.id ? "2px" : "2px",
+              }}
             >
-              <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">
+              <Text
+                variant="mono"
+                size="xs"
+                weight="font-bold"
+                uppercase
+                tracking="widest"
+              >
                 {tab.label}
               </Text>
             </Box>
@@ -557,10 +668,10 @@ export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
 
 ```tsx
 // src/features/events/components/ThemeSpotlight.tsx
-import { ExternalLink } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { EventTheme } from '@/lib/content';
-import { AffiliateLink } from '@/types';
+import { ExternalLink } from "lucide-react";
+import { Box, Stack, Text, Grid } from "@/layouts/Primitives";
+import { EventTheme } from "@/lib/content";
+import { AffiliateLink } from "@/types";
 
 interface ThemeSpotlightProps {
   theme: EventTheme;
@@ -591,44 +702,89 @@ function GearItemCard({ item }: { item: AffiliateLink }) {
         overflow="hidden"
         className="bg-surface-alt flex items-center justify-center"
       >
-        <Text size="xs" color="dim" className="opacity-40">IMG</Text>
+        <Text size="xs" color="dim" className="opacity-40">
+          IMG
+        </Text>
       </Box>
       <Stack gap={1}>
-        <Text size="xs" weight="font-bold" className="group-hover:text-accent transition-colors line-clamp-2">
+        <Text
+          size="xs"
+          weight="font-bold"
+          className="group-hover:text-accent transition-colors line-clamp-2"
+        >
           {item.name}
         </Text>
         <Text size="xs" color="dim" className="line-clamp-2 leading-relaxed">
           {item.description}
         </Text>
       </Stack>
-      <Box display="flex" align="center" gap={1} color="accent" className="opacity-0 group-hover:opacity-100 transition-opacity">
-        <Text variant="mono" size="micro">Shop</Text>
+      <Box
+        display="flex"
+        align="center"
+        gap={1}
+        color="accent"
+        className="opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <Text variant="mono" size="micro">
+          Shop
+        </Text>
         <ExternalLink className="w-3 h-3" />
       </Box>
     </Box>
   );
 }
 
-export function ThemeSpotlight({ theme, outfits, accessories }: ThemeSpotlightProps) {
+export function ThemeSpotlight({
+  theme,
+  outfits,
+  accessories,
+}: ThemeSpotlightProps) {
   return (
     <Stack gap={8}>
       {/* Theme header */}
       <Stack gap={2}>
-        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+        <Text
+          variant="mono"
+          size="micro"
+          color="accent"
+          weight="font-bold"
+          uppercase
+          tracking="widest"
+        >
           ✦ THEME SPOTLIGHT
         </Text>
         <Stack gap={1}>
           {theme.label && (
-            <Text size="sm" color="dim">{theme.label}:</Text>
+            <Text size="sm" color="dim">
+              {theme.label}:
+            </Text>
           )}
-          <Text variant="headline" size="4xl" weight="font-black" color="accent">
+          <Text
+            variant="headline"
+            size="4xl"
+            weight="font-black"
+            color="accent"
+          >
             {theme.name}
           </Text>
         </Stack>
         {/* Color swatches — purely decorative, swap hex values per theme */}
         <Box display="flex" gap={2} marginTop={2}>
-          {['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6'].map(c => (
-            <Box key={c} width={5} height={5} radius="full" style={{ backgroundColor: c }} />
+          {[
+            "#ef4444",
+            "#f97316",
+            "#eab308",
+            "#22c55e",
+            "#3b82f6",
+            "#8b5cf6",
+          ].map((c) => (
+            <Box
+              key={c}
+              width={5}
+              height={5}
+              radius="full"
+              style={{ backgroundColor: c }}
+            />
           ))}
         </Box>
       </Stack>
@@ -636,11 +792,20 @@ export function ThemeSpotlight({ theme, outfits, accessories }: ThemeSpotlightPr
       {/* Outfit inspiration */}
       {outfits.length > 0 && (
         <Stack gap={4}>
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+          <Text
+            variant="mono"
+            size="xs"
+            weight="font-bold"
+            color="dim"
+            uppercase
+            tracking="widest"
+          >
             Outfit Inspiration
           </Text>
           <Grid cols={{ base: 2, md: 3, lg: 4 }} gap={4}>
-            {outfits.map(item => <GearItemCard key={item.id} item={item} />)}
+            {outfits.map((item) => (
+              <GearItemCard key={item.id} item={item} />
+            ))}
           </Grid>
         </Stack>
       )}
@@ -648,11 +813,20 @@ export function ThemeSpotlight({ theme, outfits, accessories }: ThemeSpotlightPr
       {/* Accessory ideas */}
       {accessories.length > 0 && (
         <Stack gap={4}>
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+          <Text
+            variant="mono"
+            size="xs"
+            weight="font-bold"
+            color="dim"
+            uppercase
+            tracking="widest"
+          >
             Accessory Ideas
           </Text>
           <Grid cols={{ base: 2, md: 3, lg: 4 }} gap={4}>
-            {accessories.map(item => <GearItemCard key={item.id} item={item} />)}
+            {accessories.map((item) => (
+              <GearItemCard key={item.id} item={item} />
+            ))}
           </Grid>
         </Stack>
       )}
@@ -665,9 +839,9 @@ export function ThemeSpotlight({ theme, outfits, accessories }: ThemeSpotlightPr
 
 ```tsx
 // src/features/events/components/CuratedGear.tsx
-import { ExternalLink } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { ResolvedGearSection } from '../useEventDetail';
+import { ExternalLink } from "lucide-react";
+import { Box, Stack, Text, Grid } from "@/layouts/Primitives";
+import { ResolvedGearSection } from "../useEventDetail";
 
 interface CuratedGearProps {
   eventTitle: string;
@@ -680,31 +854,50 @@ export function CuratedGear({ eventTitle, sections }: CuratedGearProps) {
   return (
     <Stack gap={8}>
       <Stack gap={2}>
-        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+        <Text
+          variant="mono"
+          size="micro"
+          color="accent"
+          weight="font-bold"
+          uppercase
+          tracking="widest"
+        >
           🌈 CURATED GEAR
         </Text>
         <Text variant="headline" size="2xl" weight="font-black">
-          Shop the {eventTitle.split(' ')[0]}
+          Shop the {eventTitle.split(" ")[0]}
         </Text>
         <Text size="sm" color="dim" className="max-w-prose">
           Handpicked picks to help you shine on the dance floor.
         </Text>
       </Stack>
 
-      {sections.map(section => (
+      {sections.map((section) => (
         <Stack key={section.label} gap={4}>
           <Box display="flex" align="center" justify="between">
-            <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-bold"
+              color="dim"
+              uppercase
+              tracking="widest"
+            >
               {section.label}
             </Text>
             {section.items.length > 4 && (
-              <Text variant="mono" size="micro" color="accent" className="cursor-pointer hover:underline">
+              <Text
+                variant="mono"
+                size="micro"
+                color="accent"
+                className="cursor-pointer hover:underline"
+              >
                 View all →
               </Text>
             )}
           </Box>
           <Grid cols={{ base: 2, md: 4, lg: 5 }} gap={4}>
-            {section.items.slice(0, 5).map(item => (
+            {section.items.slice(0, 5).map((item) => (
               <Box
                 key={item.id}
                 as="a"
@@ -724,13 +917,21 @@ export function CuratedGear({ eventTitle, sections }: CuratedGearProps) {
                     radius="md"
                     className="bg-surface-alt flex items-center justify-center"
                   >
-                    <Text size="micro" color="dim" className="opacity-30">IMG</Text>
+                    <Text size="micro" color="dim" className="opacity-30">
+                      IMG
+                    </Text>
                   </Box>
-                  <Text size="xs" weight="font-bold" className="group-hover:text-accent transition-colors line-clamp-2 leading-snug">
+                  <Text
+                    size="xs"
+                    weight="font-bold"
+                    className="group-hover:text-accent transition-colors line-clamp-2 leading-snug"
+                  >
                     {item.name}
                   </Text>
                   <Box display="flex" align="center" gap={1} color="accent">
-                    <Text variant="mono" size="micro">Shop</Text>
+                    <Text variant="mono" size="micro">
+                      Shop
+                    </Text>
                     <ExternalLink className="w-3 h-3" />
                   </Box>
                 </Stack>
@@ -750,16 +951,16 @@ This wraps the existing `WSDCReminders` component with event data pre-populated 
 
 ```tsx
 // src/features/events/components/ReminderSignups.tsx
-import { useState } from 'react';
-import { Bell, Check } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Event } from '@/lib/content';
+import { useState } from "react";
+import { Bell, Check } from "lucide-react";
+import { Box, Stack, Text, Grid } from "@/layouts/Primitives";
+import { Event } from "@/lib/content";
 
 interface Deadline {
   id: string;
   label: string;
   date: string;
-  type: 'Discount' | 'Deadline' | 'Reminder';
+  type: "Discount" | "Deadline" | "Reminder";
   color: string;
 }
 
@@ -768,49 +969,51 @@ interface ReminderSignupsProps {
 }
 
 const NOTIFICATION_CHANNELS = [
-  { id: 'email',    label: 'Email'          },
-  { id: 'browser',  label: 'Browser Push'   },
-  { id: 'sms',      label: 'Text (SMS)'     },
-  { id: 'ical',     label: 'Calendar (iCal)' },
+  { id: "email", label: "Email" },
+  { id: "browser", label: "Browser Push" },
+  { id: "sms", label: "Text (SMS)" },
+  { id: "ical", label: "Calendar (iCal)" },
 ];
 
 export function ReminderSignups({ event }: ReminderSignupsProps) {
-  const [channels, setChannels] = useState<Set<string>>(new Set(['email', 'ical']));
+  const [channels, setChannels] = useState<Set<string>>(
+    new Set(["email", "ical"]),
+  );
   const [signed, setSigned] = useState(false);
 
   const deadlines: Deadline[] = [
     event.earlyBirdDate && {
-      id: 'early-bird',
-      label: 'Early-bird discount ends',
+      id: "early-bird",
+      label: "Early-bird discount ends",
       date: event.earlyBirdDate,
-      type: 'Discount' as const,
-      color: 'text-red-400 border-red-400/30 bg-red-400/10',
+      type: "Discount" as const,
+      color: "text-red-400 border-red-400/30 bg-red-400/10",
     },
     event.registrationDeadline && {
-      id: 'registration',
-      label: 'Registration deadline',
+      id: "registration",
+      label: "Registration deadline",
       date: event.registrationDeadline,
-      type: 'Deadline' as const,
-      color: 'text-orange-400 border-orange-400/30 bg-orange-400/10',
+      type: "Deadline" as const,
+      color: "text-orange-400 border-orange-400/30 bg-orange-400/10",
     },
     event.hotelCutoffDate && {
-      id: 'hotel',
-      label: 'Hotel deadline',
+      id: "hotel",
+      label: "Hotel deadline",
       date: event.hotelCutoffDate,
-      type: 'Deadline' as const,
-      color: 'text-yellow-400 border-yellow-400/30 bg-yellow-400/10',
+      type: "Deadline" as const,
+      color: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
     },
     event.packingReminderDate && {
-      id: 'packing',
-      label: 'Packing reminder',
+      id: "packing",
+      label: "Packing reminder",
       date: event.packingReminderDate,
-      type: 'Reminder' as const,
-      color: 'text-blue-400 border-blue-400/30 bg-blue-400/10',
+      type: "Reminder" as const,
+      color: "text-blue-400 border-blue-400/30 bg-blue-400/10",
     },
   ].filter(Boolean) as Deadline[];
 
   const toggleChannel = (id: string) =>
-    setChannels(prev => {
+    setChannels((prev) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
@@ -835,7 +1038,7 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         {/* Deadlines list */}
         <Stack gap={3}>
-          {deadlines.map(d => (
+          {deadlines.map((d) => (
             <Box
               key={d.id}
               border
@@ -848,10 +1051,14 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
               surface="surface"
             >
               <Stack gap={0.5}>
-                <Text size="sm" weight="font-bold">{d.label}</Text>
+                <Text size="sm" weight="font-bold">
+                  {d.label}
+                </Text>
                 <Text variant="mono" size="xs" color="dim">
-                  {new Date(d.date).toLocaleDateString('en-US', {
-                    month: 'short', day: 'numeric', year: 'numeric'
+                  {new Date(d.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
                   })}
                 </Text>
               </Stack>
@@ -862,7 +1069,9 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
                 radius="full"
                 className={d.color}
               >
-                <Text variant="mono" size="micro" weight="font-bold">{d.type}</Text>
+                <Text variant="mono" size="micro" weight="font-bold">
+                  {d.type}
+                </Text>
               </Box>
             </Box>
           ))}
@@ -871,11 +1080,18 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
         {/* Channel picker + CTA */}
         <Stack gap={6}>
           <Stack gap={3}>
-            <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-bold"
+              color="dim"
+              uppercase
+              tracking="widest"
+            >
               How you'll be notified
             </Text>
             <Grid cols={2} gap={3}>
-              {NOTIFICATION_CHANNELS.map(ch => (
+              {NOTIFICATION_CHANNELS.map((ch) => (
                 <Box
                   key={ch.id}
                   as="button"
@@ -890,8 +1106,8 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
                   cursor="pointer"
                   className={`transition-all ${
                     channels.has(ch.id)
-                      ? 'border-accent bg-accent/10 text-accent'
-                      : 'border-line text-text-dim hover:border-accent/40'
+                      ? "border-accent bg-accent/10 text-accent"
+                      : "border-line text-text-dim hover:border-accent/40"
                   }`}
                 >
                   <Box
@@ -902,23 +1118,41 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
                     display="flex"
                     align="center"
                     justify="center"
-                    className={channels.has(ch.id) ? 'border-accent bg-accent' : 'border-line'}
+                    className={
+                      channels.has(ch.id)
+                        ? "border-accent bg-accent"
+                        : "border-line"
+                    }
                   >
-                    {channels.has(ch.id) && <Check className="w-3 h-3 text-bg" />}
+                    {channels.has(ch.id) && (
+                      <Check className="w-3 h-3 text-bg" />
+                    )}
                   </Box>
-                  <Text size="xs" weight="font-bold">{ch.label}</Text>
+                  <Text size="xs" weight="font-bold">
+                    {ch.label}
+                  </Text>
                 </Box>
               ))}
             </Grid>
           </Stack>
 
           {signed ? (
-            <Box border radius="lg" padding={4} surface="accent" className="border-accent/30 bg-accent/10 text-center">
+            <Box
+              border
+              radius="lg"
+              padding={4}
+              surface="accent"
+              className="border-accent/30 bg-accent/10 text-center"
+            >
               <Box display="flex" align="center" justify="center" gap={2}>
                 <Check className="w-5 h-5 text-accent" />
-                <Text weight="font-bold" color="accent">You're signed up!</Text>
+                <Text weight="font-bold" color="accent">
+                  You're signed up!
+                </Text>
               </Box>
-              <Text size="xs" color="dim" className="mt-1">You can update preferences anytime.</Text>
+              <Text size="xs" color="dim" className="mt-1">
+                You can update preferences anytime.
+              </Text>
             </Box>
           ) : (
             <Box
@@ -948,10 +1182,10 @@ export function ReminderSignups({ event }: ReminderSignupsProps) {
 
 ```tsx
 // src/features/events/components/RelatedEvents.tsx
-import { useNavigate } from 'react-router-dom';
-import { MapPin, ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { Event } from '@/lib/content';
+import { useNavigate } from "react-router-dom";
+import { MapPin, ArrowRight } from "lucide-react";
+import { Box, Stack, Text, Grid } from "@/layouts/Primitives";
+import { Event } from "@/lib/content";
 
 interface RelatedEventsProps {
   events: Event[];
@@ -964,17 +1198,26 @@ export function RelatedEvents({ events }: RelatedEventsProps) {
   return (
     <Stack gap={6}>
       <Stack gap={1}>
-        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+        <Text
+          variant="mono"
+          size="micro"
+          color="accent"
+          weight="font-bold"
+          uppercase
+          tracking="widest"
+        >
           WSDC Pacific Northwest Event Guides
         </Text>
         <Text variant="headline" size="2xl" weight="font-black">
           More Events
         </Text>
-        <Text size="sm" color="dim">Your go-to resource hub for events across the region.</Text>
+        <Text size="sm" color="dim">
+          Your go-to resource hub for events across the region.
+        </Text>
       </Stack>
 
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
-        {events.map(event => (
+        {events.map((event) => (
           <Box
             key={event.slug}
             border
@@ -996,8 +1239,17 @@ export function RelatedEvents({ events }: RelatedEventsProps) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Text variant="display" size="3xl" weight="font-black" color="accent">
-                  {event.title.split(' ').map(w => w[0]).join('').slice(0, 3)}
+                <Text
+                  variant="display"
+                  size="3xl"
+                  weight="font-black"
+                  color="accent"
+                >
+                  {event.title
+                    .split(" ")
+                    .map((w) => w[0])
+                    .join("")
+                    .slice(0, 3)}
                 </Text>
               )}
             </Box>
@@ -1005,21 +1257,37 @@ export function RelatedEvents({ events }: RelatedEventsProps) {
             {/* Info + actions */}
             <Stack gap={3} padding={4}>
               <Stack gap={1}>
-                <Text size="sm" weight="font-bold" className="group-hover:text-accent transition-colors leading-tight">
+                <Text
+                  size="sm"
+                  weight="font-bold"
+                  className="group-hover:text-accent transition-colors leading-tight"
+                >
                   {event.title}
                 </Text>
                 <Box display="flex" align="center" gap={1}>
                   <MapPin className="w-3 h-3 text-accent" />
-                  <Text size="xs" color="dim">{event.city}</Text>
+                  <Text size="xs" color="dim">
+                    {event.city}
+                  </Text>
                 </Box>
               </Stack>
 
               <Stack gap={2}>
                 {[
-                  { label: 'Event guide',     action: () => navigate(`/events/${event.slug}`) },
-                  { label: 'Theme gear',      action: () => navigate(`/events/${event.slug}?tab=gear`) },
-                  { label: 'Reminder alerts', action: () => navigate(`/events/${event.slug}?tab=reminders`) },
-                ].map(item => (
+                  {
+                    label: "Event guide",
+                    action: () => navigate(`/events/${event.slug}`),
+                  },
+                  {
+                    label: "Theme gear",
+                    action: () => navigate(`/events/${event.slug}?tab=gear`),
+                  },
+                  {
+                    label: "Reminder alerts",
+                    action: () =>
+                      navigate(`/events/${event.slug}?tab=reminders`),
+                  },
+                ].map((item) => (
                   <Box
                     key={item.label}
                     as="button"
@@ -1034,8 +1302,15 @@ export function RelatedEvents({ events }: RelatedEventsProps) {
                     cursor="pointer"
                     className="hover:border-accent/40 hover:bg-accent/5 transition-all text-left"
                   >
-                    <Box width={3} height={3} radius="full" className="bg-accent/40 shrink-0" />
-                    <Text size="xs" weight="font-bold">{item.label}</Text>
+                    <Box
+                      width={3}
+                      height={3}
+                      radius="full"
+                      className="bg-accent/40 shrink-0"
+                    />
+                    <Text size="xs" weight="font-bold">
+                      {item.label}
+                    </Text>
                     <ArrowRight className="w-3 h-3 ml-auto opacity-30 group-hover:opacity-100" />
                   </Box>
                 ))}
@@ -1057,18 +1332,18 @@ Create `src/features/events/EventDetailPage.tsx`. This is the orchestrator — i
 
 ```tsx
 // src/features/events/EventDetailPage.tsx
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { SEO } from '@/components/SEO';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import { useEventDetail } from './useEventDetail';
-import { EventHero, EventTab } from './components/EventHero';
-import { ThemeSpotlight } from './components/ThemeSpotlight';
-import { CuratedGear } from './components/CuratedGear';
-import { ReminderSignups } from './components/ReminderSignups';
-import { RelatedEvents } from './components/RelatedEvents';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { Box, Stack, Text } from "@/layouts/Primitives";
+import { SEO } from "@/components/SEO";
+import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
+import { useEventDetail } from "./useEventDetail";
+import { EventHero, EventTab } from "./components/EventHero";
+import { ThemeSpotlight } from "./components/ThemeSpotlight";
+import { CuratedGear } from "./components/CuratedGear";
+import { ReminderSignups } from "./components/ReminderSignups";
+import { RelatedEvents } from "./components/RelatedEvents";
 
 // Divider between sections
 function SectionDivider() {
@@ -1076,12 +1351,18 @@ function SectionDivider() {
 }
 
 export default function EventDetailPage() {
-  const { event, themeOutfits, themeAccessories, gearSections, relatedEvents, navigate } =
-    useEventDetail();
+  const {
+    event,
+    themeOutfits,
+    themeAccessories,
+    gearSections,
+    relatedEvents,
+    navigate,
+  } = useEventDetail();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const tabParam = searchParams.get('tab') as EventTab | null;
-  const [activeTab, setActiveTab] = useState<EventTab>(tabParam ?? 'theme');
+  const tabParam = searchParams.get("tab") as EventTab | null;
+  const [activeTab, setActiveTab] = useState<EventTab>(tabParam ?? "theme");
 
   // Sync tab from URL (e.g. links from RelatedEvents component)
   useEffect(() => {
@@ -1092,16 +1373,26 @@ export default function EventDetailPage() {
     setActiveTab(tab);
     setSearchParams({ tab }, { replace: true });
     // Scroll to the section
-    document.getElementById(`section-${tab}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document
+      .getElementById(`section-${tab}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   if (!event) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">Event Guide Not Found</Text>
-          <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors cursor-pointer">
-            <Text variant="mono" size="xs">Back to Events</Text>
+          <Text variant="display" size="2xl">
+            Event Guide Not Found
+          </Text>
+          <Box
+            as="button"
+            onClick={() => navigate("/events")}
+            className="hover:text-accent transition-colors cursor-pointer"
+          >
+            <Text variant="mono" size="xs">
+              Back to Events
+            </Text>
           </Box>
         </Stack>
       </Box>
@@ -1120,34 +1411,45 @@ export default function EventDetailPage() {
         {/* Back nav */}
         <Box
           as="button"
-          onClick={() => navigate('/events')}
+          onClick={() => navigate("/events")}
           display="flex"
           align="center"
           gap={2}
           className="hover:text-accent transition-colors group cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 text-accent transition-transform group-hover:-translate-x-1" />
-          <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">
+          <Text
+            variant="mono"
+            size="xs"
+            weight="font-bold"
+            uppercase
+            tracking="widest"
+          >
             All Event Guides
           </Text>
         </Box>
 
         {/* Section 2 — Event Hero (always visible) */}
-        <EventHero event={event} activeTab={activeTab} onTabChange={handleTabChange} />
+        <EventHero
+          event={event}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
 
         {/* Section 3 — Theme Spotlight */}
-        {event.theme && (themeOutfits.length > 0 || themeAccessories.length > 0) && (
-          <>
-            <SectionDivider />
-            <Box id="section-theme" scrollPaddingTop={80}>
-              <ThemeSpotlight
-                theme={event.theme}
-                outfits={themeOutfits}
-                accessories={themeAccessories}
-              />
-            </Box>
-          </>
-        )}
+        {event.theme &&
+          (themeOutfits.length > 0 || themeAccessories.length > 0) && (
+            <>
+              <SectionDivider />
+              <Box id="section-theme" scrollPaddingTop={80}>
+                <ThemeSpotlight
+                  theme={event.theme}
+                  outfits={themeOutfits}
+                  accessories={themeAccessories}
+                />
+              </Box>
+            </>
+          )}
 
         {/* Section 4 — Curated Gear */}
         {gearSections.length > 0 && (
@@ -1204,15 +1506,15 @@ Open `src/components/ui/EventCard.tsx`. The current component accepts `name`, `l
 
 ```tsx
 // src/components/ui/EventCard.tsx
-import { MapPin, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { MapPin, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Box, Stack, Text } from "@/layouts/Primitives";
 
 interface EventCardProps {
   name: string;
   location: string;
   schedule: string;
-  slug?: string;   // NEW — links to /events/:slug when provided
+  slug?: string; // NEW — links to /events/:slug when provided
 }
 
 export function EventCard({ name, location, schedule, slug }: EventCardProps) {
@@ -1221,35 +1523,52 @@ export function EventCard({ name, location, schedule, slug }: EventCardProps) {
 
   return (
     <Stack
-      as={isClickable ? 'button' : 'div'}
+      as={isClickable ? "button" : "div"}
       onClick={isClickable ? () => navigate(`/events/${slug}`) : undefined}
       padding={8}
       radius="md"
       border
       gap={4}
       height="full"
-      cursor={isClickable ? 'pointer' : undefined}
+      cursor={isClickable ? "pointer" : undefined}
       className={`bg-surface transition-all duration-300 hover:-translate-y-0.5 text-left group ${
-        isClickable ? 'hover:border-accent/40' : ''
+        isClickable ? "hover:border-accent/40" : ""
       }`}
     >
       <Box display="flex" align="center" gap={2}>
         <MapPin className="w-4 h-4 text-accent" />
-        <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
+        <Text
+          variant="mono"
+          size="micro"
+          weight="font-bold"
+          color="accent"
+          uppercase
+          tracking="widest"
+        >
           {schedule}
         </Text>
       </Box>
 
       <Stack gap={1} flex={1}>
-        <Text as="h4" variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight group-hover:text-accent transition-colors">
+        <Text
+          as="h4"
+          variant="body"
+          size="lg"
+          weight="font-bold"
+          className="text-text-main leading-tight group-hover:text-accent transition-colors"
+        >
           {name}
         </Text>
-        <Text size="sm" color="dim">{location}</Text>
+        <Text size="sm" color="dim">
+          {location}
+        </Text>
       </Stack>
 
       {isClickable && (
         <Box display="flex" align="center" gap={1} color="accent">
-          <Text variant="mono" size="xs" weight="font-bold">View Guide</Text>
+          <Text variant="mono" size="xs" weight="font-bold">
+            View Guide
+          </Text>
           <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
         </Box>
       )}
@@ -1280,7 +1599,7 @@ Also update the "Upcoming Events" section header in `Dashboard.tsx` to link to `
 <SectionHeader
   label="COMPETE"
   title="Upcoming Events"
-  link={{ text: 'All guides', to: '/events' }}   // ADD link prop
+  link={{ text: "All guides", to: "/events" }} // ADD link prop
 />
 ```
 
@@ -1293,20 +1612,23 @@ In `EventDetailPage.tsx`, replace the `<SEO>` component with one that includes `
 ```tsx
 // Inside EventDetailPage.tsx, before the return statement:
 
-const structuredData = useMemo(() => ({
-  "@context": "https://schema.org",
-  "@type": "Event",
-  "name": event.title,
-  "description": event.description || event.excerpt,
-  "startDate": event.startDate || event.date,
-  "location": {
-    "@type": "Place",
-    "name": event.location,
-    "address": { "@type": "PostalAddress", "addressLocality": event.city }
-  },
-  "url": event.url,
-  "organizer": { "@type": "Organization", "name": "BoomTick.blog" }
-}), [event]);
+const structuredData = useMemo(
+  () => ({
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.description || event.excerpt,
+    startDate: event.startDate || event.date,
+    location: {
+      "@type": "Place",
+      name: event.location,
+      address: { "@type": "PostalAddress", addressLocality: event.city },
+    },
+    url: event.url,
+    organizer: { "@type": "Organization", name: "BoomTick.blog" },
+  }),
+  [event],
+);
 ```
 
 Then add `import { useMemo } from 'react'` and pass `schema={structuredData}` to `<SEO>`.
@@ -1342,14 +1664,17 @@ If a gear section is empty in the UI, the ID in frontmatter doesn't match a key 
 
 **Nested YAML not parsing**
 The existing `parseFrontmatter` in `content.ts` doesn't recurse into nested objects. Use the flat field alternatives (`themeOutfitIds`, `gearShoeIds`, etc.) until a proper YAML parser is added, or switch to the `js-yaml` package:
+
 ```bash
 npm install js-yaml
 npm install --save-dev @types/js-yaml
 ```
+
 Then replace the `parseFrontmatter` call in `transform()` with `yaml.load(match[1])`.
 
 **`getEventBySlug` returning undefined on first render**
 This is a React Query timing issue. The `EventDetailPage` already handles it with the `if (!event)` guard. The page will flash the "not found" state briefly on hard refresh — fix by adding `initialData` to the query:
+
 ```ts
 initialData: () => slug ? getEventBySlug(slug) : undefined,
 ```
@@ -1362,4 +1687,4 @@ Wrap the card in a `MemoryRouter` in your test setup, or check that the slug is 
 
 ---
 
-*Plan smarter. Pack lighter. Dance more. — BoomTick.blog*
+_Plan smarter. Pack lighter. Dance more. — BoomTick.blog_

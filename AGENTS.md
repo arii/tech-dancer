@@ -20,83 +20,105 @@ These are **rules for writing clean `.tsx` files** so UI code consistently follo
 ---
 
 ## 1) ❌ No Raw Tailwind in App/Feature Layers
+
 - No arbitrary values (`text-[11px]`, `tracking-[3px]`, `shadow-[...]`)
 - No direct layout classes (`flex`, `grid`, `items-center`)
 - No direct spacing (`px-*`, `py-*`)
 - No color classes (`bg-*`, `text-*`) outside tokens
 
 ## 2) ✅ Only Use Approved Styling Sources
+
 - Design tokens (`spacing`, `radius`, `typography`, `motion`)
 - CVA variants
 - Primitives (`Box`, `Stack`, `Text`, `Grid`)
 - Composed components (e.g., `Button`, `Card`)
 
 ## 3) 🧱 Primitives Must Be Used for Layout
+
 - Layout uses `Stack`, `Grid`, `Box`, etc.
 - No manual flex/grid usage
 - Responsive behavior handled via primitive props (not `className`)
 
 ## 4) 🎨 Typography Must Be Tokenized
+
 - No raw `text-*` classes
 - All text uses `<Text />` or equivalent abstraction
 
 ## 5) 🎛 Variants Must Be Standardized
+
 - Variant names match global system (e.g., `default`, `accent`, `ghost`)
 
 ## 6) ⚙️ No Business Logic in UI Components
+
 - Logic extracted into hooks (`useX`)
 - No DOM querying (`querySelector`, `getElementById`)
 
 ## 7) 🧩 Components Must Be Declarative
+
 - UI is predictable and compositional
 
 ## 8) 📦 Feature Isolation Required
+
 - Features belong in `features/<feature-name>/`
 
 ## 9) 🧭 Routing Is Declarative
+
 - Navigation uses route config (not hardcoded)
 - Do **not** use `HashRouter`
 
 ## 10) 🎞 Motion Must Use Tokens
+
 - Motion values come from `motionTokens`
 
 ## 11) 🧼 No Inline Styles or Magic Numbers
+
 - No inline `style` usage
 - Everything mapped to tokens
 
 ## 12) 🧱 Composition Over Configuration
+
 - Repeated patterns extracted into specialized components
 
 ## 13) 🔌 No Direct DOM Access
+
 - Controlled inputs used
 
 ## 14) 🧪 Hooks Are Reusable & Pure
+
 - Side effects properly isolated
 
 ## 15) 🧭 App Layer = Composition Only
+
 - `App.tsx` only composes layout, routes, and global UI
 
 ## 16) 🧩 Avoid “God Components”
+
 - Components are small and focused
 
 ## 17) 📐 Responsive Design via System
+
 - Responsive behavior handled via system props
 
 ## 18) 🚫 No System Bypass via `className`
+
 - `className` should **not** introduce new design decisions
 
 ## 19) 🏗 Modular Architecture
+
 - Layout primitives (`Box`, `Grid`, `Stack`) must reside in `src/layouts/`
 - Page-level compositors must reside in `src/pages/`
 - Component imports must use the `@/layouts/` or `@/pages/` alias
 
 ## 20) 🛤 SPA Routing & Parallel Work Protocol
+
 - Application routes must be code-split using `React.lazy()`
 - Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries
 - Ensure environment-agnostic routing (handle base URLs cleanly for GitHub Pages)
 
 ### Parallel Work Protocol
+
 When multiple agents work simultaneously:
+
 1. **Run conflict check first**: `python3 dev-tools/td_cli.py conflicts`
 2. **Stagger feature files**: Agents should not touch the same component file
 3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`)
@@ -107,11 +129,13 @@ When multiple agents work simultaneously:
 `dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
 
 ### PR Review Lifecycle
+
 1. **Fetch context**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch`
 2. **Perform audit**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit`
 3. **Submit review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
 
 ### Quality Gates & Submission Protocol
+
 - **Autonomous repair** (for persistent lint/type errors):
   ```bash
   python3 dev-tools/td_cli.py repair
@@ -122,6 +146,7 @@ When multiple agents work simultaneously:
 - **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
 
 ### Baseline Maintenance
+
 - CI enforces bundle size and TypeScript `any` count via GitHub Actions variables
 - After intentional approved debt increases, update baselines:
   ```bash
@@ -138,14 +163,17 @@ To prepare the base environment (Node.js/pnpm):
 ```
 
 ### On-Demand Dependencies
+
 Heavy dependencies are installed only when needed:
 
 **E2E testing / browser automation:**
+
 ```bash
 ./dev-tools/setup-playwright.sh
 ```
 
 **Python ETL / data processing:**
+
 ```bash
 ./dev-tools/setup-python.sh
 ```
@@ -155,27 +183,36 @@ Heavy dependencies are installed only when needed:
 The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) identifies arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
 
 ### Planning Phase
+
 Before starting a UI task:
+
 ```bash
 pnpm run audit
 cat TODO_ANTIPATTERNS.md
 ```
+
 Integrate existing anti-pattern cleanup into your implementation plan.
 
 ### Pre-Submission Audit Gates
+
 Install local pre-push hook:
+
 ```bash
 git config core.hooksPath .githooks
 ```
+
 The hook runs targeted audit on changed `.tsx` files.
 
 Before submitting a PR, run:
+
 ```bash
 python3 dev-tools/td_cli.py pre-submit
 ```
 
 ### Pre-Commit Checklist
+
 Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
+
 1. Run `pnpm run audit`
 2. Review `TODO_ANTIPATTERNS.md` for violations introduced by your changes
 3. Fix all identified anti-patterns
