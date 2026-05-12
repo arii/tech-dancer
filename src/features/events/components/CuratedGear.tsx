@@ -1,7 +1,7 @@
 import { Stack, Grid, Box, Text } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { ResolvedGearSection } from '@/features/events/useEventDetail';
+import { ResolvedGearSection } from '../useEventDetail';
 
 interface CuratedGearProps {
   title?: string;
