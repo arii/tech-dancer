@@ -11,6 +11,7 @@ export function EventCard({ event, onClick }: EventCardProps) {
   return (
     <Box
       as="button"
+      type="button"
       onClick={onClick}
       aria-label={`View details for ${event.title} in ${event.city}`}
       border

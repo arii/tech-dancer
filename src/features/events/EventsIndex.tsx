@@ -11,8 +11,6 @@ import { useSearchParam } from "@/hooks/useSearchParam";
 import { safeSearch } from "@/lib/utils";
 import { EventCard } from "./components/EventCard";
 
-const INITIAL_EVENTS = getEvents();
-
 export default function EventsIndex() {
   const navigate = useNavigate();
   const [search, setSearch] = useSearchParam("search");
@@ -20,7 +18,7 @@ export default function EventsIndex() {
   const { data: events = [] } = useQuery({
     queryKey: ["events"],
     queryFn: async () => getEvents(),
-    initialData: INITIAL_EVENTS,
+    initialData: [],
   });
 
   const filtered = useMemo(
