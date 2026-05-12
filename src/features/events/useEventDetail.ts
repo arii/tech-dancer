@@ -25,6 +25,22 @@ function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
 }
 
 /**
+ * Static helper to map gear data into resolved sections.
+ */
+function getGearSections(gear?: Event['gear']): ResolvedGearSection[] {
+  if (!gear) return [];
+  return [
+    { label: "Outfits", items: resolveAffiliateLinks(gear.outfitIds) },
+    { label: "Accessories", items: resolveAffiliateLinks(gear.accessoryIds) },
+    {
+      label: "Shoes & Essentials",
+      items: resolveAffiliateLinks([...(gear.shoeIds ?? []), ...(gear.essentialIds ?? [])]),
+    },
+    { label: "Travel Extras", items: resolveAffiliateLinks(gear.travelIds) },
+  ].filter((s) => s.items.length > 0);
+}
+
+/**
  * Unified hook for fetching and resolving event resource guide data.
  * Fetches event by slug, resolves all affiliate IDs into full objects,
  * and handles loading/error states for the detail page.
@@ -52,48 +68,19 @@ export function useEventDetail() {
     queryFn: getEvents,
   });
 
-  // Resolve theme gear from affiliate IDs
-  const themeOutfits = useMemo(
-    () => resolveAffiliateLinks(event?.theme?.outfitIds),
-    [event],
-  );
-
-  const themeAccessories = useMemo(
-    () => resolveAffiliateLinks(event?.theme?.accessoryIds),
-    [event],
-  );
-
-  // Resolve gear sections
-  const gearSections = useMemo((): ResolvedGearSection[] => {
-    if (!event?.gear) return [];
-    const g = event.gear;
-
-    return [
-      { label: "Outfits", items: resolveAffiliateLinks(g.outfitIds) },
-      { label: "Accessories", items: resolveAffiliateLinks(g.accessoryIds) },
-      {
-        label: "Shoes & Essentials",
-        items: resolveAffiliateLinks([...(g.shoeIds ?? []), ...(g.essentialIds ?? [])]),
-      },
-      { label: "Travel Extras", items: resolveAffiliateLinks(g.travelIds) },
-    ].filter((s) => s.items.length > 0);
-  }, [event]);
-
-  // Resolve related events
-  const relatedEvents = useMemo(
-    (): Event[] =>
-      (event?.relatedEvents ?? [])
-        .map((slug) => allEvents.find((e) => e.slug === slug))
-        .filter((e): e is Event => !!e),
-    [event, allEvents],
-  );
+  // Consolidate derived state to reduce re-renders
+  const resolved = useMemo(() => ({
+    themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
+    themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
+    gearSections: getGearSections(event?.gear),
+    relatedEvents: (event?.relatedEvents ?? [])
+      .map((s) => allEvents.find((e) => e.slug === s))
+      .filter((e): e is Event => !!e),
+  }), [event, allEvents]);
 
   return {
     event,
-    themeOutfits,
-    themeAccessories,
-    gearSections,
-    relatedEvents,
+    ...resolved,
     isLoading: isEventLoading || areEventsLoading,
     isError: isEventError || areEventsError,
     error: eventError,
