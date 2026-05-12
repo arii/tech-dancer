@@ -40,21 +40,15 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
           <tbody>
             {data.slice(0, 20).map((record, i) => (
               <tr key={`${record.Dancer_ID}-${record.result_id}-${i}`} className="border-b border-line/50 transition-colors">
-                <Box as="td" padding={4}>
-                  <Text variant="mono" size="xs" color="dim">{record.event_date}</Text>
-                </Box>
+                <Text as="td" padding={4} variant="mono" size="xs" color="dim">{record.event_date}</Text>
                 <Box as="td" padding={4}>
                   <Stack gap={0}>
                     <Text variant="body" size="xs" weight="font-bold">{record.competitor_name}</Text>
                     <Text variant="mono" size="micro" color="dim">#{record.Dancer_ID}</Text>
                   </Stack>
                 </Box>
-                <Box as="td" padding={4}>
-                  <Text size="xs" color="dim">{record.event_title}</Text>
-                </Box>
-                <Box as="td" padding={4}>
-                  <Text variant="mono" size="xs">{record.Registry_Points_Sum.toFixed(1)}</Text>
-                </Box>
+                <Text as="td" padding={4} size="xs" color="dim">{record.event_title}</Text>
+                <Text as="td" padding={4} variant="mono" size="xs">{record.Registry_Points_Sum.toFixed(1)}</Text>
                 <Box as="td" padding={4}>
                   <Text
                     as="div"
