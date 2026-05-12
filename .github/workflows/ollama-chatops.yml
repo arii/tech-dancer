@@ -29,10 +29,28 @@ jobs:
       - name: Setup Ollama
         uses: ollama/setup-ollama@v1
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', 'dev-tools/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - name: Install Dependencies
         run: |
-          pip install click PyGithub requests
-          pnpm install --frozen-lockfile
+          if ! python3 -c "import click, github, requests" 2>/dev/null; then
+            pip install click PyGithub requests
+          fi
+          if [ ! -d "node_modules" ]; then
+            pnpm install --frozen-lockfile
+          fi
 
       - name: Start Ollama Server
         run: |

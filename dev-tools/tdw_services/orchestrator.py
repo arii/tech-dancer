@@ -10,6 +10,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
 from tdw_services.services.jules import JulesClient
+from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
     get_github_client,
@@ -343,15 +344,10 @@ class Orchestrator:
 
     def handle_comment_command(self, pr_number: int, command: str, comment_id: Optional[str] = None) -> Dict[str, Any]:
         """
-        Handles incoming slash commands from PR comments.
+        Delegates command handling to the CommandHandler.
         """
-        command = command.strip().lower()
-        if command.startswith("/ollama-review"):
-            return self._handle_ollama_review(pr_number)
-        elif command.startswith("/ollama-fix"):
-            return self._handle_ollama_fix(pr_number)
-        else:
-            return {"status": "ignored", "message": f"Unknown command: {command}"}
+        handler = CommandHandler(self)
+        return handler.handle(pr_number, command, comment_id)
 
     def _handle_ollama_review(self, pr_number: int) -> Dict[str, Any]:
         review_data = self.review_pr(pr_number)
