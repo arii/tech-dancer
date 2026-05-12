@@ -66,21 +66,27 @@ export function useEventDetail() {
   } = useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  // Consolidate derived state to reduce re-renders
-  const resolved = useMemo(() => ({
+  // Memoize event-specific resources independently from list resolution
+  const resources = useMemo(() => ({
     themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
     themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
     gearSections: getGearSections(event?.gear),
-    relatedEvents: (event?.relatedEvents ?? [])
+  }), [event]);
+
+  // Memoize related events independently to prevent reconstruction on resource-only changes
+  const relatedEvents = useMemo(() =>
+    (event?.relatedEvents ?? [])
       .map((s) => allEvents.find((e) => e.slug === s))
       .filter((e): e is Event => !!e),
-  }), [event, allEvents]);
+  [event?.relatedEvents, allEvents]);
 
   return {
     event,
-    ...resolved,
+    ...resources,
+    relatedEvents,
     isLoading: isEventLoading || areEventsLoading,
     isError: isEventError || areEventsError,
     error: eventError,
