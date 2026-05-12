@@ -25,7 +25,7 @@ test.describe('Global Search Modal UX Refinement', () => {
   test('should show "SEARCHING..." state when simulated loading is active', async ({ page }) => {
     // Enable simulated loading via window property
     await page.addInitScript(() => {
-      (window as any).__SIMULATE_LOADING = true;
+      (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING = true;
     });
 
     // Reload to ensure the init script takes effect for any immediate queries

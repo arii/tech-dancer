@@ -20,24 +20,39 @@ export function useGlobalSearch() {
 
   const queries = useQueries({
     queries: [
-      { queryKey: ['posts'], queryFn: async () => {
-        if (import.meta.env.VITE_SIMULATE_LOADING || (typeof window !== 'undefined' && (window as any).__SIMULATE_LOADING)) {
-          await new Promise(r => setTimeout(r, 1000));
+      {
+        queryKey: ['posts'],
+        queryFn: async () => {
+          const simulate = import.meta.env.VITE_SIMULATE_LOADING ||
+            (typeof window !== 'undefined' && (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING);
+          if (simulate) {
+            await new Promise(r => setTimeout(r, 1000));
+          }
+          return getPosts();
         }
-        return getPosts();
-      } },
-      { queryKey: ['resources'], queryFn: async () => {
-        if (import.meta.env.VITE_SIMULATE_LOADING || (typeof window !== 'undefined' && (window as any).__SIMULATE_LOADING)) {
-          await new Promise(r => setTimeout(r, 1000));
+      },
+      {
+        queryKey: ['resources'],
+        queryFn: async () => {
+          const simulate = import.meta.env.VITE_SIMULATE_LOADING ||
+            (typeof window !== 'undefined' && (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING);
+          if (simulate) {
+            await new Promise(r => setTimeout(r, 1000));
+          }
+          return getResources();
         }
-        return getResources();
-      } },
-      { queryKey: ['studies'], queryFn: async () => {
-        if (import.meta.env.VITE_SIMULATE_LOADING || (typeof window !== 'undefined' && (window as any).__SIMULATE_LOADING)) {
-          await new Promise(r => setTimeout(r, 1000));
+      },
+      {
+        queryKey: ['studies'],
+        queryFn: async () => {
+          const simulate = import.meta.env.VITE_SIMULATE_LOADING ||
+            (typeof window !== 'undefined' && (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING);
+          if (simulate) {
+            await new Promise(r => setTimeout(r, 1000));
+          }
+          return getStudies();
         }
-        return getStudies();
-      } },
+      },
     ],
   });
 
