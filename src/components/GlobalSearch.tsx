@@ -225,8 +225,17 @@ export function GlobalSearch() {
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search">
-            <Box display="flex" align="center" gap={6}>
+          <Box
+            border="t"
+            paddingX={{ base: 4, md: 5 }}
+            paddingY={3}
+            surface="alt"
+            display="flex"
+            justify={{ base: "center", md: "between" }}
+            align="center"
+            className="pb-safe-area-search"
+          >
+            <Box display={{ base: "none", md: "flex" }} align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
@@ -240,7 +249,7 @@ export function GlobalSearch() {
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
               </Box>
             </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70 whitespace-nowrap text-center">
               {results.length} RESULTS FOUND
             </Text>
           </Box>
