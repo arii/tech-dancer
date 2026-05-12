@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import { setupErrorMonitoring } from './fixtures/error-monitoring';
+import { test, expect } from './fixtures/visual';
 
 /**
  * Normalizes a URL for crawling.
@@ -38,11 +37,8 @@ function isInternal(url: string, baseUrl: string): boolean {
 }
 
 test.describe('Automated UX/Console Error Crawler', () => {
-  test('crawls routes and verifies no errors', async ({ page, baseURL }) => {
+  test('crawls routes and verifies no errors', async ({ page, baseURL, pageErrors }) => {
     if (!baseURL) throw new Error('baseURL is required for crawling');
-
-    // Set a 5-minute timeout for the entire crawl test
-    test.setTimeout(5 * 60 * 1000);
 
     // State is local to the test to ensure isolation during retries
     const visited = new Set<string>();
@@ -51,8 +47,6 @@ test.describe('Automated UX/Console Error Crawler', () => {
     // Limit the number of pages to crawl to prevent excessive run times
     const MAX_PAGES = 50;
     let pageCount = 0;
-
-    const { consoleErrors, pageErrors, clearErrors } = setupErrorMonitoring(page);
 
     // Ensure newsletter banner doesn't interfere (added once per page instance)
     await page.addInitScript(() => {
@@ -70,12 +64,9 @@ test.describe('Automated UX/Console Error Crawler', () => {
       console.log(`Crawling (${pageCount}/${MAX_PAGES}): ${normalizedUrl}`);
 
       // Clear errors from previous navigation before going to next page
-      clearErrors();
+      pageErrors.clearErrors();
 
-      const response = await page.goto(normalizedUrl, {
-        waitUntil: 'networkidle',
-        timeout: 30000,
-      });
+      const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
 
       // Verify status code
       if (response) {
@@ -100,8 +91,8 @@ test.describe('Automated UX/Console Error Crawler', () => {
       }
 
       // Assert no errors for this page
-      expect(consoleErrors, `Console errors on ${normalizedUrl}:\n${consoleErrors.join('\n')}`).toHaveLength(0);
-      expect(pageErrors, `Page errors on ${normalizedUrl}:\n${pageErrors.join('\n')}`).toHaveLength(0);
+      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors];
+      expect(filteredErrors, `Errors on ${normalizedUrl}:\n${filteredErrors.join('\n')}`).toHaveLength(0);
     }
 
     console.log(`Crawling complete. Visited ${pageCount} pages.`);

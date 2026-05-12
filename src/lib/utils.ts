@@ -85,20 +85,3 @@ export function formatCategory(cat: string): string {
   if (cat === 'All') return 'All Posts';
   return cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
-
-/**
- * Wraps a fetch function with an artificial delay if simulation is active.
- * Used for testing loading transitions in E2E.
- */
-export function withSimulationDelay<T>(fn: () => Promise<T>): () => Promise<T> {
-  return async () => {
-    const isSimulated = typeof import.meta !== 'undefined' && import.meta.env.VITE_SIMULATE_LOADING;
-    const isE2ESimulated = typeof window !== 'undefined' &&
-      (window as Window & { __SIMULATE_LOADING?: boolean }).__SIMULATE_LOADING;
-
-    if (isSimulated || isE2ESimulated) {
-      await new Promise(r => setTimeout(r, 1000));
-    }
-    return fn();
-  };
-}

@@ -127,7 +127,8 @@ const CONFIG = {
       name: 'Bare env: Key',
       pattern: /^([ \t]*)env:[ \t]*(?!\r?\n\1[ \t]+)/m,
       severity: 'major',
-      message: 'Bare env: keys are invalid in GitHub Actions workflows. Provide values or remove the key.'
+      message: 'Bare env: keys are invalid in GitHub Actions workflows. Provide values or remove the key.',
+      filePattern: /\.yml$/
     },
     {
       name: 'Raw Hex Color (CSS)',
@@ -158,10 +159,8 @@ const CONFIG = {
   requiredContentFields: ['type', 'title', 'date', 'author', 'category', 'excerpt']
 };
 
-function checkContent(content) {
+function checkContent(content, filepath = 'unknown') {
   if (content.includes('// impeccable-ignore-file') || content.includes('/* impeccable-ignore-file */')) return [];
-
-  // Remove comments before running global regex rules to avoid false positives
   const contentWithoutComments = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, (match) => ' '.repeat(match.length));
 
   const violations = [];
@@ -190,6 +189,7 @@ function checkContent(content) {
   CONFIG.rules
     .filter(r => !r.isClassNameRule)
     .forEach(rule => {
+      if (rule.filePattern && !rule.filePattern.test(filepath)) return;
       const flags = (rule.name === 'div Layout' ? 'gs' : 'g') + (rule.pattern.multiline ? 'm' : '');
       const regex = new RegExp(rule.pattern.source, flags);
       const matches = contentWithoutComments.matchAll(regex);
@@ -319,7 +319,7 @@ function checkContent(content) {
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  return checkContent(content);
+  return checkContent(content, filepath);
 }
 
 function checkPRScope() {

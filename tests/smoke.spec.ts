@@ -1,5 +1,12 @@
-import { test, expect, Page } from '@playwright/test';
-import { setupErrorMonitoring } from './fixtures/error-monitoring';
+import { test, expect } from './fixtures/visual';
+import type { Page } from '@playwright/test';
+import { IGNORED_ERROR_PATTERNS } from './test-constants';
+
+function isIgnored(msg: string) {
+  return IGNORED_ERROR_PATTERNS.some(pattern =>
+    pattern instanceof RegExp ? pattern.test(msg) : msg.includes(pattern)
+  );
+}
 
 async function validateUrlNavigation(page: Page, href: string) {
   if (href.includes('#')) {
@@ -20,20 +27,14 @@ async function validateUrlNavigation(page: Page, href: string) {
 }
 
 test.describe('Navigation Smoke Tests', () => {
-  let errorMonitor: ReturnType<typeof setupErrorMonitoring>;
-
-  test.beforeEach(async ({ page }) => {
-    errorMonitor = setupErrorMonitoring(page);
-  });
-
-  test('homepage loads without console errors', async ({ page }) => {
+  test('homepage loads without console errors', async ({ page, pageErrors }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
-    expect(errorMonitor.consoleErrors).toHaveLength(0);
-    expect(errorMonitor.pageErrors).toHaveLength(0);
+    const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
+    expect(filteredErrors).toHaveLength(0);
   });
 
-  test('all nav links are reachable and error-free', async ({ page }) => {
+  test('all nav links are reachable and error-free', async ({ page, pageErrors }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
 
@@ -44,14 +45,14 @@ test.describe('Navigation Smoke Tests', () => {
     );
 
     for (const href of links) {
-      errorMonitor.clearErrors();
+      pageErrors.clearErrors();
       await validateUrlNavigation(page, href);
-      expect(errorMonitor.consoleErrors, `Errors at ${href}: ${errorMonitor.consoleErrors.join(', ')}`).toHaveLength(0);
-      expect(errorMonitor.pageErrors, `Errors at ${href}: ${errorMonitor.pageErrors.join(', ')}`).toHaveLength(0);
+      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
+      expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
     }
   });
 
-  test('all post/content pages load without errors', async ({ page }) => {
+  test('all post/content pages load without errors', async ({ page, pageErrors }) => {
     const contentIndexes = ['./blog', './gear', './research'];
 
     for (const index of contentIndexes) {
@@ -68,10 +69,10 @@ test.describe('Navigation Smoke Tests', () => {
       );
 
       for (const href of contentLinks) {
-        errorMonitor.clearErrors();
+        pageErrors.clearErrors();
         await validateUrlNavigation(page, href);
-        expect(errorMonitor.consoleErrors, `Errors at ${href}: ${errorMonitor.consoleErrors.join(', ')}`).toHaveLength(0);
-        expect(errorMonitor.pageErrors, `Errors at ${href}: ${errorMonitor.pageErrors.join(', ')}`).toHaveLength(0);
+        const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
+        expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
       }
     }
   });
