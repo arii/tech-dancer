@@ -11,7 +11,7 @@
   </style>
   <rect width="64" height="64" rx="14" fill="#020617"/>
   
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="24" class="brand-wordmark">
+  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="22" class="brand-wordmark">
     <tspan fill="white">B</tspan>
     <tspan class="brand-text-accent" fill="#22d3ee">T</tspan>
   </text>
