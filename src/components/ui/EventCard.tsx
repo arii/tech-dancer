@@ -32,7 +32,7 @@ export function EventCard({ name, location, schedule, onClick }: EventCardProps)
       </Box>
 
       <Stack gap={1}>
-        <Text variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
+        <Text variant="body" size="lg" weight="font-bold" color="main" leading="tight">
           {name}
         </Text>
         <Text size="sm" color="dim">

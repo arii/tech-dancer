@@ -113,12 +113,14 @@ export function ContentCard({
           variant="body"
           size="lg"
           weight="font-bold"
-          className="text-text-main leading-tight group-hover:text-accent transition-colors line-clamp-2"
+            color="main"
+            leading="tight"
+            className="group-hover:text-accent transition-colors line-clamp-2"
         >
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" className="line-clamp-3 leading-relaxed text-text-body">
+        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
            {excerpt}
         </Text>
       </Stack>

@@ -4,7 +4,7 @@ import { SEO } from '@/components/SEO';
 import { EventHero } from './components/EventHero';
 import { EventNavigation } from './components/EventNavigation';
 import { EventDetails } from './components/EventDetails';
-import { EventSidebar } from './components/EventSidebar';
+import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
 import { RelatedEvents } from './components/RelatedEvents';

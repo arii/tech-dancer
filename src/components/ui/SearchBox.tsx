@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { ChangeEvent } from 'react';
 import { Search } from 'lucide-react';
-import { Box } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 
 interface SearchBoxProps {
   value: string;
@@ -31,9 +31,11 @@ export function SearchBox({
       radius="lg"
       className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
     >
-      <Search
+      <Text
+        as={Search}
         size={18}
-        className="text-text-dim absolute left-4 pointer-events-none"
+        color="dim"
+        className="absolute left-4 pointer-events-none"
       />
       <Box
         as="input"

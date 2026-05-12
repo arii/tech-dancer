@@ -17,17 +17,24 @@ export function SectionHeader({ eyebrow, title, link }: SectionHeaderProps) {
         <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
           {eyebrow}
         </Text>
-        <Text as="h3" size="3xl" weight="font-black" className="text-accent-navy">
+        <Text as="h3" size="3xl" weight="font-black" color="brand">
           {title}
         </Text>
       </Stack>
       {link && (
-        <Link
+        <Text
+          as={Link}
           to={link.to}
-          className="text-xs font-black uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
+          variant="mono"
+          size="xs"
+          weight="font-black"
+          color="dim"
+          uppercase
+          tracking="widest"
+          className="hover:text-accent transition-colors"
         >
           {link.text}
-        </Link>
+        </Text>
       )}
     </Stack>
   );
