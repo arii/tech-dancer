@@ -7,7 +7,15 @@ RUN apt-get update && apt-get install -y \
     git \
     python3 \
     python3-pip \
+    zstd \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Python packages required for dev-tools
+# We use --break-system-packages because this is a dedicated container image
+RUN pip3 install --no-cache-dir --break-system-packages \
+    click \
+    PyGithub \
+    requests
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh

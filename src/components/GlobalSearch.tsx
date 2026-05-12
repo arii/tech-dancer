@@ -16,7 +16,7 @@ interface SearchResult {
 }
 
 export function GlobalSearch() {
-  const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
+  const { query, setQuery, results, isOpen, open, close, isLoading } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -217,16 +217,29 @@ export function GlobalSearch() {
               <Box padding={20} display="flex" align="center" justify="center">
                 <Stack align="center" gap={4} className="opacity-60">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
-                  <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                     {query ? "No coordinates found" : "Calibrating Variance..."}
+                  <Text variant="mono" size="xs" color="dim" tracking="widest" uppercase weight="font-bold">
+                    {isLoading
+                      ? "Searching..."
+                      : query
+                        ? "No results found"
+                        : "Ready to search"}
                   </Text>
                 </Stack>
               </Box>
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search">
-            <Box display="flex" align="center" gap={6}>
+          <Box
+            border="t"
+            paddingX={{ base: 4, md: 5 }}
+            paddingY={3}
+            surface="alt"
+            display="flex"
+            justify={{ base: "center", md: "between" }}
+            align="center"
+            className="pb-safe-area-search"
+          >
+            <Box display={{ base: "none", md: "flex" }} align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
@@ -240,7 +253,7 @@ export function GlobalSearch() {
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
               </Box>
             </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" align="center" className="opacity-70 whitespace-nowrap">
               {results.length} RESULTS FOUND
             </Text>
           </Box>
