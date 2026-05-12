@@ -21,69 +21,87 @@ export function useScrollManagement(
   // Unified Scroll Management: Reset on navigation, Restore on history, Handle anchors
   useEffect(() => {
     const container = scrollRef.current;
-    if (!container) return;
-    const timeouts: number[] = [];
 
     // Save scroll position for the CURRENT page before we navigate away
     const handleSaveScroll = () => {
-      if (container) {
-        sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
-      }
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+      sessionStorage.setItem(`scroll-${key}`, scrollPos.toString());
     };
 
     window.addEventListener('beforeunload', handleSaveScroll);
 
-    if (navType === 'POP') {
+    if (navType === 'POP' && !hash) {
       // 1. History Navigation: Restore position
       const savedPosition = sessionStorage.getItem(`scroll-${key}`);
       if (savedPosition) {
         requestAnimationFrame(() => {
-          if (container) container.scrollTop = parseInt(savedPosition, 10);
+          window.scrollTo({
+            top: parseInt(savedPosition, 10),
+            behavior: 'auto'
+          });
         });
       }
-    } else {
-      // 2. New Navigation (PUSH/REPLACE): Reset to top OR scroll to hash
-      const handleScroll = () => {
-        if (!container) return;
+    } else if (hash) {
+      // 2. Hash Navigation: Scroll to target element with ResizeObserver
+      const id = hash.replace('#', '');
+      let lastHeight = container.scrollHeight;
+      let attempts = 0;
+      const MAX_ATTEMPTS = 10;
+      const SETTLE_TIME = 2000;
 
-        if (hash) {
-          const id = hash.replace('#', '');
-          const performScroll = () => {
-            const el = document.getElementById(id);
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth' });
-              return true;
-            }
-            return false;
-          };
+      const performScroll = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const targetY = rect.top + scrollTop - 128; // scroll-mt-32
 
-          // We use a small delay to allow the layout to settle (animations, fonts, images)
-          const tid = window.setTimeout(() => {
-            if (!performScroll()) {
-              // Longer fallback for lazy-loaded or deferred content
-              const tid2 = window.setTimeout(performScroll, 500);
-              timeouts.push(tid2);
-            }
-          }, 100);
-          timeouts.push(tid);
-        } else {
-          container.scrollTop = 0;
-          window.scrollTo(0, 0);
+          window.scrollTo({
+            top: targetY,
+            behavior: 'smooth'
+          });
+          return true;
         }
+        return false;
       };
 
-      const rafId = requestAnimationFrame(handleScroll);
+      const observer = new ResizeObserver(() => {
+        const currentHeight = container.scrollHeight;
+        if (currentHeight !== lastHeight) {
+          lastHeight = currentHeight;
+          performScroll();
+          attempts++;
+
+          if (attempts >= MAX_ATTEMPTS) {
+            observer.disconnect();
+          }
+        }
+      });
+
+      // Also observe document body as images might be outside the container but affect layout
+      // though in our case they are likely inside.
+      observer.observe(container);
+
+      // Initial attempt with a small delay to ensure React has rendered
+      const initialTid = window.setTimeout(performScroll, 100);
+
+      // Disconnect after settle time to prevent infinite observer
+      const settleTimer = window.setTimeout(() => {
+        observer.disconnect();
+      }, SETTLE_TIME);
+
       return () => {
-        window.removeEventListener('beforeunload', handleSaveScroll);
-        handleSaveScroll();
-        cancelAnimationFrame(rafId);
-        timeouts.forEach(t => window.clearTimeout(t));
+        observer.disconnect();
+        window.clearTimeout(settleTimer);
+        window.clearTimeout(initialTid);
       };
+    } else {
+      // 3. New Navigation: Reset to top
+      window.scrollTo(0, 0);
     }
 
     return () => {
       window.removeEventListener('beforeunload', handleSaveScroll);
-      handleSaveScroll();
     };
   }, [pathname, key, hash, navType, scrollRef]);
 

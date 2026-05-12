@@ -186,6 +186,12 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  html, body, #root {
+    height: 100%;
+  }
   body {
     @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
     line-height: 1.6;

@@ -38,14 +38,11 @@ export function MainLayout({ children }: { children: ReactNode }) {
           ref={scrollRef}
           flex={1}
           position="relative"
-          overflowY="auto"
           paddingTop={{ base: 16, lg: 0 }}
           maxWidth="full"
           width="full"
           surface="bg"
           direction="col"
-          scrollBehavior="smooth"
-          scrollPaddingTop={64}
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}

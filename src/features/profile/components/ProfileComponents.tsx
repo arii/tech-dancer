@@ -102,7 +102,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           <Box
             key={index}
             as="button"
-            aspect="1/1"
+            aspect="square"
             overflow="hidden"
             border
             radius="lg"
