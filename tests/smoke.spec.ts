@@ -1,7 +1,6 @@
 import { test, expect } from './fixtures/visual';
 import type { Page } from '@playwright/test';
 import { IGNORED_ERROR_PATTERNS } from './test-constants';
-import { setupErrorMonitoring } from './fixtures/error-monitoring';
 function isIgnored(msg: string) {
   return IGNORED_ERROR_PATTERNS.some(pattern =>
     pattern instanceof RegExp ? pattern.test(msg) : msg.includes(pattern)
