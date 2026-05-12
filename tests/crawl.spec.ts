@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { setupErrorMonitoring } from './fixtures/error-monitoring';
 
 function isInternal(url: string, baseUrl: string): boolean {
   try {
@@ -17,16 +18,6 @@ function cleanUrl(url: string): string {
   return u.toString();
 }
 
-const IGNORED_ERRORS = [
-  "Vercel Web Analytics",
-  "gtag is not defined",
-  "chrome-extension",
-];
-
-function isIgnored(msg: string): boolean {
-  return IGNORED_ERRORS.some(ignored => msg.includes(ignored));
-}
-
 test.describe('Automated UX/Console Error Crawler', () => {
   test('crawls routes and verifies no errors', async ({ page, baseURL }) => {
     if (!baseURL) throw new Error('baseURL is required for crawling');
@@ -38,6 +29,8 @@ test.describe('Automated UX/Console Error Crawler', () => {
     // Limit the number of pages to crawl to prevent excessive run times
     const MAX_PAGES = 50;
     let pageCount = 0;
+
+    const { consoleErrors, pageErrors, clearErrors } = setupErrorMonitoring(page);
 
     // Ensure newsletter banner doesn't interfere (added once per page instance)
     await page.addInitScript(() => {
@@ -54,20 +47,8 @@ test.describe('Automated UX/Console Error Crawler', () => {
 
       console.log(`Crawling (${pageCount}/${MAX_PAGES}): ${normalizedUrl}`);
 
-      const currentConsoleErrors: string[] = [];
-      const currentPageErrors: string[] = [];
-
-      page.on('console', msg => {
-        if (msg.type() === 'error' && !isIgnored(msg.text())) {
-          currentConsoleErrors.push(msg.text());
-        }
-      });
-
-      page.on('pageerror', err => {
-        if (!isIgnored(err.message)) {
-          currentPageErrors.push(err.message);
-        }
-      });
+      // Clear errors from previous navigation before going to next page
+      clearErrors();
 
       const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
 
@@ -94,12 +75,8 @@ test.describe('Automated UX/Console Error Crawler', () => {
       }
 
       // Assert no errors for this page
-      expect(currentConsoleErrors, `Console errors on ${normalizedUrl}:\n${currentConsoleErrors.join('\n')}`).toHaveLength(0);
-      expect(currentPageErrors, `Page errors on ${normalizedUrl}:\n${currentPageErrors.join('\n')}`).toHaveLength(0);
-
-      // Remove listeners for next page
-      page.removeAllListeners('console');
-      page.removeAllListeners('pageerror');
+      expect(consoleErrors, `Console errors on ${normalizedUrl}:\n${consoleErrors.join('\n')}`).toHaveLength(0);
+      expect(pageErrors, `Page errors on ${normalizedUrl}:\n${pageErrors.join('\n')}`).toHaveLength(0);
     }
 
     console.log(`Crawling complete. Visited ${pageCount} pages.`);
