@@ -25,16 +25,33 @@ export function useWCSData() {
       const startTime = performance.now();
       try {
         // Construct robust URL for both local and subpath environments
-        const parquetUrl = new URL(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`, window.location.origin).href;
+        // Use ASSET_PREFIX which handles relative base paths correctly in production
+        const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+          ? import.meta.env.BASE_URL
+          : `${import.meta.env.BASE_URL}/`;
+
+        const parquetUrl = new URL(`${baseUrl}data/wcs_prelims.parquet`, window.location.origin).href;
 
         let file;
         try {
+          // Attempt Stage 1: Lazy loading (Range requests)
           file = await asyncBufferFromUrl({ url: parquetUrl });
         } catch (rangeErr) {
-          console.warn("Range requests failed, falling back to full fetch:", rangeErr);
+          console.warn("Stage 1 (Lazy Load) failed, falling back to Stage 2 (Full Fetch):", rangeErr);
+          // Stage 2: Standard fetch fallback
           const res = await fetch(parquetUrl);
           if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: rangeErr });
           file = await res.arrayBuffer();
+        }
+
+        // Final verification: If it's an ArrayBuffer (Full Fetch), check for PAR1 magic bytes
+        // This helps catch 404 pages that return status 200 with HTML content
+        if (file instanceof ArrayBuffer) {
+          const header = new Uint8Array(file.slice(0, 4));
+          const magic = String.fromCharCode(...header);
+          if (magic !== 'PAR1') {
+            throw new Error("Invalid Parquet file signature. Data source might be unavailable or returning an error page.");
+          }
         }
 
         const objects = await parquetReadObjects({ file });
