@@ -341,6 +341,55 @@ class Orchestrator:
             submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
         return res
 
+    def handle_comment_command(self, pr_number: int, command: str, comment_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Handles incoming slash commands from PR comments.
+        """
+        command = command.strip().lower()
+        if command.startswith("/ollama-review"):
+            return self._handle_ollama_review(pr_number)
+        elif command.startswith("/ollama-fix"):
+            return self._handle_ollama_fix(pr_number)
+        else:
+            return {"status": "ignored", "message": f"Unknown command: {command}"}
+
+    def _handle_ollama_review(self, pr_number: int) -> Dict[str, Any]:
+        review_data = self.review_pr(pr_number)
+        recommendation = review_data.get("recommendation", "COMMENT")
+
+        # Map recommendation to GH event
+        event = "COMMENT"
+        if recommendation == "Approved":
+            event = "APPROVE"
+        elif recommendation == "Not Approved":
+            event = "REQUEST_CHANGES"
+
+        comment_body = f"## 🤖 AI Code Review\n\n{review_data.get('reviewComment', 'No comment provided.')}\n\n**Recommendation:** {recommendation}"
+
+        self.github.create_review(pr_number, comment_body, [], event)
+
+        return {"status": "success", "message": f"Submitted {event} review for PR #{pr_number}", "review": review_data}
+
+    def _handle_ollama_fix(self, pr_number: int) -> Dict[str, Any]:
+        # First, ensure we have the conflict files
+        conflict_files = self.find_conflict_files()
+        if not conflict_files:
+             return {"status": "error", "message": "No merge conflicts detected locally. Ensure you have merged the base branch and markers are present."}
+
+        resolved = []
+        failed = []
+        for file_path in conflict_files:
+            if self.resolve_conflict(file_path):
+                resolved.append(file_path)
+            else:
+                failed.append(file_path)
+
+        if failed:
+            msg = f"Failed to resolve conflicts in: {', '.join(failed)}"
+            return {"status": "partial_success" if resolved else "error", "message": msg, "resolved": resolved, "failed": failed}
+
+        return {"status": "success", "message": f"Successfully resolved conflicts in {len(resolved)} files.", "resolved": resolved}
+
     def pre_submit_checks(self):
         results = {"steps": []}
 
