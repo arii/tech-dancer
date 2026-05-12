@@ -10,8 +10,12 @@ RUN apt-get update && apt-get install -y \
     zstd \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js (v22 to match .nvmrc)
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install Python packages required for dev-tools
-# We use --break-system-packages because this is a dedicated container image
 RUN pip3 install --no-cache-dir --break-system-packages \
     click \
     PyGithub \
@@ -21,11 +25,9 @@ RUN pip3 install --no-cache-dir --break-system-packages \
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Set environment variable for model storage
-# GH Actions overrides HOME to /github/home, so we need to point to the baked-in models
 ENV OLLAMA_MODELS=/root/.ollama/models
 
 # Pre-pull models
-# We start the server, wait for it to be ready, pull models, then the process ends
 RUN (ollama serve &) && \
     until curl -s http://localhost:11434/api/tags > /dev/null; do sleep 1; done && \
     ollama pull llama3.2 && \
