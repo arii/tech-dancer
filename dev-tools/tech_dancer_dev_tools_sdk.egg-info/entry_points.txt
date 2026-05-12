@@ -1,2 +1,0 @@
-[console_scripts]
-td-sdk-cli = dev_tools_sdk.cli:main

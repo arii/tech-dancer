@@ -1,7 +1,0 @@
-Metadata-Version: 2.4
-Name: tech-dancer-dev-tools-sdk
-Version: 0.1.0
-Summary: Unified SDK and CLI for Tech Dancer dev-tools
-Requires-Python: >=3.11
-License-File: LICENSE
-Dynamic: license-file
