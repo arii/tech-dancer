@@ -51,6 +51,8 @@ export default defineConfig(({mode}) => {
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
       'import.meta.env.VITE_APP_URL': JSON.stringify(fullAppUrl),
+      '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
+      '__COMMIT_SHA__': JSON.stringify(process.env.GITHUB_SHA || 'dev'),
     },
     plugins: [
       react(),

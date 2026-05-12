@@ -14,9 +14,22 @@ export function Footer() {
       <Box paddingY={12} paddingX={4} surface="bg" border="t" opacity={80}>
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Stack direction="row" align="center" gap={2}>
+        <Stack direction="row" align="center" gap={4}>
           <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest" data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
+          </Text>
+          <Box className="hidden md:block w-px h-3 bg-white/10" />
+          <Text variant="mono" size="xs" color="body" className="hover:opacity-100 transition-opacity">
+            v{__APP_VERSION__} (
+            <a
+              href={`https://github.com/arii/tech-dancer/commit/${__COMMIT_SHA__}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
+            >
+              {__COMMIT_SHA__.substring(0, 7)}
+            </a>
+            )
           </Text>
         </Stack>
         <Stack direction="row" gap={2} align="center">
