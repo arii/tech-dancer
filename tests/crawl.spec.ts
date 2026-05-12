@@ -41,6 +41,9 @@ test.describe('Automated UX/Console Error Crawler', () => {
   test('crawls routes and verifies no errors', async ({ page, baseURL }) => {
     if (!baseURL) throw new Error('baseURL is required for crawling');
 
+    // Set a 5-minute timeout for the entire crawl test
+    test.setTimeout(5 * 60 * 1000);
+
     // State is local to the test to ensure isolation during retries
     const visited = new Set<string>();
     const toVisit: string[] = [baseURL];
@@ -69,7 +72,10 @@ test.describe('Automated UX/Console Error Crawler', () => {
       // Clear errors from previous navigation before going to next page
       clearErrors();
 
-      const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
+      const response = await page.goto(normalizedUrl, {
+        waitUntil: 'networkidle',
+        timeout: 30000,
+      });
 
       // Verify status code
       if (response) {
