@@ -78,7 +78,23 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
   ];
 
   const body = items.map(item => {
-    const dateStr = item.date.toISOString().split('T')[0].replace(/-/g, "");
+    // For all-day events (VALUE=DATE), we must use the date relative to the user's local time,
+    // as that's how they entered it. toISOString() uses UTC and can shift the date.
+    const formatDate = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}${month}${day}`;
+    };
+
+    const startStr = formatDate(item.date);
+
+    // DTEND is non-inclusive for DATE values, so it must be set to the day AFTER the intended end.
+    const end = item.endDate || item.date;
+    const nextDay = new Date(end);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const endStr = formatDate(nextDay);
+
     const rawDesc = url ? `${item.description}\n\nEvent URL: ${url}` : item.description;
 
     const escapedSummary = escapeICS(`WCS Action: ${item.label} (${eventTitle})`);
@@ -86,8 +102,8 @@ export function generateICS(eventTitle: string, items: TimelineItem[], url?: str
 
     return [
       "BEGIN:VEVENT",
-      `DTSTART;VALUE=DATE:${dateStr}`,
-      `DTEND;VALUE=DATE:${dateStr}`,
+      `DTSTART;VALUE=DATE:${startStr}`,
+      `DTEND;VALUE=DATE:${endStr}`,
       `SUMMARY:${escapedSummary}`,
       `DESCRIPTION:${escapedDescription}`,
       "STATUS:CONFIRMED",
