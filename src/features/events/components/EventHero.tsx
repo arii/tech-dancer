@@ -27,6 +27,10 @@ export function EventHero({
     background: 'linear-gradient(to bottom, transparent, var(--color-bg))',
   }), []);
 
+  const glassStyle = useMemo(() => ({
+    background: 'color-mix(in srgb, var(--raw-color-surface-alt) 40%, transparent)',
+  }), []);
+
   return (
     <Box
       position="relative"
@@ -121,20 +125,25 @@ export function EventHero({
 
             {whyAttending && (
               <Box className="lg:col-span-4">
-                <Stack
-                  gap={4}
-                  padding={6}
+                <Box
                   radius="xl"
-                  className="hero-glass-card"
+                  border
+                  className="backdrop-blur-md border-white/10"
+                  style={glassStyle}
                 >
-                  <Quote className="w-8 h-8 text-accent/50" />
-                  <Text variant="body" size="lg" className="italic leading-relaxed">
-                    {whyAttending}
-                  </Text>
-                  <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
-                    Why Attend
-                  </Text>
-                </Stack>
+                  <Stack
+                    gap={4}
+                    padding={6}
+                  >
+                    <Quote className="w-8 h-8 text-accent/50" />
+                    <Text variant="body" size="lg" className="italic leading-relaxed">
+                      {whyAttending}
+                    </Text>
+                    <Text variant="mono" size="xs" color="dim" uppercase tracking="wider">
+                      Why Attend
+                    </Text>
+                  </Stack>
+                </Box>
               </Box>
             )}
           </Grid>
