@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -28,18 +30,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r etl/requirements.txt
 
-      - name: Cache Playwright Browsers
-        id: cache-playwright
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-etl-${{ runner.os }}-chromium-v1
-          restore-keys: |
-            playwright-etl-${{ runner.os }}-chromium-
-
-      - name: Install Playwright Chromium
-        if: steps.cache-playwright.outputs.cache-hit != 'true'
-        run: playwright install chromium
 
       - name: Run Pytest (Data Validation)
         run: |

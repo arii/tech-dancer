@@ -17,6 +17,8 @@ jobs:
       contents: write
       pull-requests: write
       actions: write
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
     steps:
       - name: Create initial comment
         id: initial-comment
@@ -54,8 +56,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
 
       - name: Build project
         run: pnpm run build

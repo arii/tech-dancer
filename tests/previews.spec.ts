@@ -1,4 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 async function gotoPreviewDashboard(page: Page) {
   const baseURL = page.context()._options.baseURL || 'http://localhost:4173/';
