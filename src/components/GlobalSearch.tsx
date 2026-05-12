@@ -16,7 +16,7 @@ interface SearchResult {
 }
 
 export function GlobalSearch() {
-  const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
+  const { query, setQuery, results, isOpen, open, close, isLoading } = useGlobalSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -217,8 +217,12 @@ export function GlobalSearch() {
               <Box padding={20} display="flex" align="center" justify="center">
                 <Stack align="center" gap={4} className="opacity-60">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
-                  <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                     {query ? "No coordinates found" : "Calibrating Variance..."}
+                  <Text variant="mono" size="xs" color="dim" tracking="widest" uppercase weight="font-bold">
+                    {isLoading
+                      ? "Searching..."
+                      : query
+                        ? "No results found"
+                        : "Ready to search"}
                   </Text>
                 </Stack>
               </Box>
