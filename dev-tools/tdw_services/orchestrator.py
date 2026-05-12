@@ -19,7 +19,8 @@ from utils import (
     set_gha_variable,
     CLIError,
     run_command,
-    is_ollama_available
+    is_ollama_available,
+    extract_failing_info
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope, get_project_config
@@ -303,6 +304,14 @@ class Orchestrator:
                     context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
                     if run.get('conclusion') == 'failure':
                         logs = self.github.fetch_check_run_logs(run.get('id'))
+
+                        # Structured failure analysis
+                        findings = extract_failing_info(logs)
+                        if findings:
+                            context_lines.append("  **Failing Tests/Build Errors:**")
+                            for f in findings:
+                                context_lines.append(f"  - 🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})")
+
                         # Extract a snippet of the logs (last 50 lines or search for 'error')
                         log_lines = logs.splitlines()
                         error_lines = [l for l in log_lines if 'error' in l.lower() or 'fail' in l.lower()]
@@ -503,14 +512,22 @@ class Orchestrator:
         # Analyze failing check runs
         check_runs = self.github.fetch_check_runs(pr.head.sha)
         failing_logs = []
+        structured_failures = []
         for run in check_runs:
             if run.get('conclusion') == 'failure':
                 logs = self.github.fetch_check_run_logs(run.get('id'))
                 failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{logs[-2000:]}") # Last 2000 chars
 
+                findings = extract_failing_info(logs)
+                for f in findings:
+                    structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
+
         prompt = "Analyze the failing CI logs and fix the errors."
+        if structured_failures:
+            prompt += "\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
+
         if failing_logs:
-            prompt += "\n\nFailing Logs:\n" + "\n---\n".join(failing_logs)
+            prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
         source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
         if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")

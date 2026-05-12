@@ -37,11 +37,11 @@ class GitHubClient:
             raise Exception(f"GH command failed: {proc.stderr}")
         return proc.stdout
 
-    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False) -> Any:
+    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None) -> Any:
         url = f"{self.base_url}{path}"
         headers = {
             "Authorization": f"Bearer {self.token}",
-            "Accept": "application/vnd.github.v3.diff" if is_text else "application/vnd.github.v3+json",
+            "Accept": accept or ("application/vnd.github.v3.diff" if is_text else "application/vnd.github.v3+json"),
         }
 
         try:
@@ -89,7 +89,8 @@ class GitHubClient:
         """Fetches logs for a specific check run."""
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
-            return self._request('GET', f'/repos/{self.repo}/check-runs/{check_run_id}/logs', is_text=True)
+            # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
+            return self._request('GET', f'/repos/{self.repo}/check-runs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
         except Exception as e:
             return f"Failed to fetch logs for check run {check_run_id}: {str(e)}"
 

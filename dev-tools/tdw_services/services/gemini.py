@@ -108,13 +108,23 @@ class LocalAIClient:
     def generate_code_review(self, pr: Dict, diff: str) -> Dict:
         checks_summary = "\\n".join([f"- {c.get('name')}: {c.get('status')} ({c.get('conclusion', 'Pending')})" for c in pr.get('checkResults', [])]) if pr.get('checkResults') else "No checks found."
 
+        failing_context = ""
+        if pr.get('checkResults'):
+            failures = [c for c in pr.get('checkResults') if c.get('conclusion') == 'failure']
+            if failures:
+                failing_context = "\nCRITICAL CI FAILURES DETECTED:\n"
+                for f in failures:
+                    failing_context += f"- {f.get('name')} FAILED\n"
+
         prompt = f"""Perform Code Review for PR #{pr.get('number')} - "{pr.get('title')}".
 Description: {pr.get('body', 'No description')}
 Checks: {checks_summary}
+{failing_context}
 
 IMPORTANT:
 - If ANY critical CI check has failed (conclusion='failure'), you MUST NOT recommend 'Approved'.
-- Analyze any failing test logs provided in the description or check results to suggest specific fixes.
+- Analyze any failing test logs provided in the description, check results, or failing context to suggest specific fixes.
+- Your reviewComment should include actionable feedback for fixing test failures if they exist.
 
 Diff: {diff[:45000]}"""
 
