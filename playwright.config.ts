@@ -6,19 +6,27 @@ const BASE_PATH = getBasePath();
 
 export default defineConfig({
   testDir: './tests',
+  /* Run tests in files in parallel */
   fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI to avoid heavy CPU thread thrashing if necessary */
   workers: process.env.CI ? 1 : undefined,
+  /* Stop after 10 failures on CI */
+  maxFailures: process.env.CI ? 10 : 0,
+  /* Reporter to use. */
   reporter: 'html',
   use: {
     // Standardize baseURL for local and CI
     baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
-    trace: 'on-first-retry',
     // Standardize rendering environment for visual regression
     contextOptions: {
       reducedMotion: 'reduce',
     },
+    // Ensure screenshots trigger on failure for debugging
+    screenshot: 'only-on-failure',
   },
   expect: {
     toHaveScreenshot: {
@@ -41,8 +49,6 @@ export default defineConfig({
     stdout: 'ignore',
     stderr: 'pipe',
     timeout: 60 * 1000,
-    env: {
-      VITE_BASE_PATH: BASE_PATH
-    }
+    env: { VITE_BASE_PATH: String(BASE_PATH || '/') }, // impeccable-ignore
   },
 });
