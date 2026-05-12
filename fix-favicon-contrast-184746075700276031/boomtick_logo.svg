@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true" class="h-full w-auto max-w-none overflow-visible" style="--brand-bg:#020617;--brand-accent:#22d3ee;--brand-text-main:#f1f5f9;--brand-text-muted:rgba(241, 245, 249, 0.6)" viewBox="0 0 325 100"><style>@media (prefers-color-scheme:light){:root{--brand-bg:#ffffff;--brand-text-main:#020617;--brand-text-muted:rgba(2, 6, 23, 0.6)}}</style><text y="75" font-size="52" letter-spacing="-1.5" style="font-family:&quot;Bricolage Grotesque&quot;,sans-serif;font-weight:800">
+    <tspan style="fill:var(--brand-text-main)">boom</tspan>
+    <tspan style="fill:var(--brand-accent)">tick</tspan>
+    <tspan font-weight="300" style="fill:var(--brand-text-muted)">.blog</tspan>
+  </text></svg>

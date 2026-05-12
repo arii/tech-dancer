@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" style="--brand-bg:#020617;--brand-accent:#22d3ee;--brand-text-main:#f1f5f9;--brand-text-muted:rgba(241, 245, 249, 0.6)" viewBox="0 0 64 64"><style>@media (prefers-color-scheme:light){:root{--brand-bg:#ffffff;--brand-text-main:#020617;--brand-text-muted:rgba(2, 6, 23, 0.6)}}</style><rect width="64" height="64" rx="14" style="fill:var(--brand-bg)"/><text x="50%" y="50%" dominant-baseline="middle" font-size="12" style="font-family:&quot;Bricolage Grotesque&quot;,sans-serif;font-weight:800" text-anchor="middle">
+    <tspan style="fill:var(--brand-text-main)">boom</tspan>
+    <tspan style="fill:var(--brand-accent)">tick</tspan>
+  </text></svg>
