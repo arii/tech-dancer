@@ -64,15 +64,15 @@ export default function Home() {
                   <Stack
                     as={NavLink}
                     to={`/blog/${post.slug}`}
-                    direction={{ base: "col", sm: "row" }}
-                    gap={{ base: 3, sm: 4 }}
-                    paddingX={{ base: 3, sm: 5 }}
-                    paddingY={{ base: 5, sm: 6 }}
-                    marginX={{ sm: -2 }}
-                    align={{ sm: "start" }}
-
+                    direction={{ base: "col", md: "row" }}
+                    gap={{ base: 3, md: 4 }}
+                    paddingX={{ base: 3, md: 5 }}
+                    paddingY={{ base: 5, md: 6 }}
+                    marginX={{ md: -2 }}
+                    align={{ md: "start" }}
+                    className="group rounded-lg transition-colors hover:bg-surface"
                   >
-                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="md:w-44">
+                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, md: 3 }} paddingTop={0.5} className="md:w-44">
                       <Box 
                         as="span" 
                         radius="sm" 
