@@ -43,33 +43,43 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
-          <button
-            type="button"
-            onClick={() => setSelectedPill('all')}
-            className={cn(
-              "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
-              "text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors",
-              selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
-            )}
-          >
-            All Gear
-          </button>
-          {GEAR_PILLS.map((pill) => (
+        <Box
+          marginBottom={8}
+          marginTop={8}
+          border
+          radius="2xl"
+          shadow="sm"
+          overflowX="auto"
+          className="border-line/80 bg-surface/60 no-scrollbar"
+        >
+          <Stack direction="row" gap={2} padding={3} className="min-w-max">
             <button
               type="button"
-              key={pill.label}
-              onClick={() => setSelectedPill(pill.value)}
+              onClick={() => setSelectedPill('all')}
               className={cn(
-                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
-                pill.color,
-                "hover:opacity-90 transition-opacity",
-                selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"
+                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11 whitespace-nowrap",
+                "text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors",
+                selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
               )}
             >
-              {pill.label}
+              All Gear
             </button>
-          ))}
+            {GEAR_PILLS.map((pill) => (
+              <button
+                type="button"
+                key={pill.label}
+                onClick={() => setSelectedPill(pill.value)}
+                className={cn(
+                  "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11 whitespace-nowrap",
+                  pill.color,
+                  "hover:opacity-90 transition-opacity",
+                  selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"
+                )}
+              >
+                {pill.label}
+              </button>
+            ))}
+          </Stack>
         </Box>
       </Box>
 

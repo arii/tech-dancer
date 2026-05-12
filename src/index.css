@@ -141,6 +141,14 @@
     background-size: 20px 20px;
   }
 
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   /* Markdown Counters */
   .prose-counters { counter-reset: section; }
   .prose-section { counter-increment: section; }
