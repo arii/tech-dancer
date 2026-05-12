@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSnapshotManager } from './useSnapshotManager';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import {
@@ -89,7 +90,7 @@ export function useUXAuditor() {
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
   const [customApiKey, setCustomApiKey] = useState(localStorage.getItem('ux-auditor-api-key') || "");
-  const [snapshotService, setSnapshotService] = useState(localStorage.getItem('ux-auditor-snapshot-service') || "");
+  const { snapshotService, setSnapshotService, getSnapshotUrl, fetchSnapshot } = useSnapshotManager();
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 
@@ -194,38 +195,11 @@ export function useUXAuditor() {
         let base64DataUri = "";
 
         try {
-          const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-          let snapshotUrl = "";
-          if (snapshotService) {
-            // Support custom snapshot service URL (e.g. local playwright proxy)
-            snapshotUrl = snapshotService
-              .replaceAll('{url}', encodeURIComponent(targetUrl))
-              .replaceAll('{width}', vp.width.toString())
-              .replaceAll('{height}', vp.height.toString())
-              .replaceAll('{viewport}', vp.name.toLowerCase());
-          } else if (isLocalhost) {
-            // Fallback to local files if generated via CLI
-            snapshotUrl = `/ux-audits/audit-${vp.name.toLowerCase()}.png`;
-          } else {
-            // Standard fallback to mshots if no custom service is provided
-            const scaledW = Math.floor(vp.width * 0.5);
-            const scaledH = Math.floor(vp.height * 0.5);
-            snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
-          }
-
-          const res = await fetch(snapshotUrl);
-          if (res.ok) {
-            const blob = await res.blob();
-            base64DataUri = await new Promise<string>((resolve) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result as string);
-              reader.readAsDataURL(blob);
-            });
-            mockImg = base64DataUri;
-          }
+          const snapshotUrl = getSnapshotUrl(targetUrl, vp);
+          base64DataUri = await fetchSnapshot(snapshotUrl);
+          mockImg = base64DataUri;
         } catch {
-          console.error("Failed to fetch Playwright snapshot, using placeholder");
+          console.error("Failed to fetch snapshot, using placeholder");
         }
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
@@ -398,11 +372,6 @@ export function useUXAuditor() {
   const updateApiKey = (key: string) => {
     setCustomApiKey(key);
     localStorage.setItem('ux-auditor-api-key', key);
-  };
-
-  const updateSnapshotService = (service: string) => {
-    setSnapshotService(service);
-    localStorage.setItem('ux-auditor-snapshot-service', service);
   };
 
   return {

@@ -35,9 +35,14 @@ const viewports = [
 
 (async () => {
   const outputDir = path.join(process.cwd(), 'public', 'ux-audits');
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
+
+  // Cache eviction: cleanup existing audits before run
+  if (fs.existsSync(outputDir)) {
+    console.log(`Cleaning up existing audits in ${outputDir}...`);
+    fs.rmSync(outputDir, { recursive: true, force: true });
   }
+
+  fs.mkdirSync(outputDir, { recursive: true });
 
   for (const vp of viewports) {
     const filename = `audit-${vp.name}.png`;
