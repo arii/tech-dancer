@@ -1,11 +1,10 @@
-// impeccable-ignore-file
+
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
-import { cn } from '@/lib/utils';
 
 interface DetailLayoutProps {
   title: string;
@@ -38,7 +37,7 @@ export function DetailLayout({
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" className="w-full">
+      <Stack gap={12} maxWidth="4xl" marginX="auto" width="full">
         {/* Navigation */}
         <Box
           as="button"
@@ -91,14 +90,19 @@ export function DetailLayout({
             </Box>
           )}
 
-          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10} className={!sidebar ? "lg:grid-cols-1" : ""}>
+          <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10}>
             {/* Content - first on mobile via order classes */}
-            <Box className={cn(sidebar ? "lg:col-span-2" : "w-full", "order-1 lg:order-2")}>
+            <Box
+              span={{ base: 1, lg: sidebar ? 2 : 1 }}
+              width="full"
+              className="order-1 lg:order-2"
+            >
               {children}
               <Box
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main w-full"
+                width="full"
                 marginX="auto"
                 maxWidth="prose"
+                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main"
               >
                 <MarkdownRenderer content={content} />
               </Box>
@@ -107,7 +111,7 @@ export function DetailLayout({
             {/* Sidebar - second on mobile via order classes */}
             {sidebar && (
               <Box className="order-2 lg:order-1">
-                <Stack gap={4} className="lg:sticky lg:top-32">
+                <Stack gap={4} position="sticky" top={32}>
                    {sidebar}
                 </Stack>
               </Box>
