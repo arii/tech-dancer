@@ -33,7 +33,7 @@ export function useWCSData() {
         } catch (rangeErr) {
           console.warn("Range requests failed, falling back to full fetch:", rangeErr);
           const res = await fetch(parquetUrl);
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: rangeErr });
           file = await res.arrayBuffer();
         }
 
