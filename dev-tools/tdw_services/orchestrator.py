@@ -345,18 +345,13 @@ class Orchestrator:
         results = {"steps": []}
 
         # 1. Node Runtime Check (Fail Fast)
+        from utils import validate_node_version
         try:
-            with open(".nvmrc", "r") as f:
-                pinned_version = f.read().strip().lstrip('v')
-            current_version = run_command(["node", "-v"]).strip().lstrip('v')
-            if current_version != pinned_version:
-                error_msg = f"Node version mismatch! Expected: {pinned_version}, Actual: {current_version}. Please use the pinned runtime requirement."
-                results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": error_msg})
-                # We raise CLIError to stop execution if it doesn't match
-                raise CLIError(error_msg)
-            results["steps"].append({"name": "Node Runtime Check", "status": "success"})
-        except FileNotFoundError:
-            results["steps"].append({"name": "Node Runtime Check", "status": "warning", "message": ".nvmrc missing"})
+            res = validate_node_version()
+            results["steps"].append({"name": "Node Runtime Check", **res})
+        except CLIError as e:
+            results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": str(e)})
+            raise e
 
         def run_step(name, cmd):
             try:

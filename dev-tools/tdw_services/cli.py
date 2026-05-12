@@ -8,7 +8,15 @@ from tdw_services.orchestrator import Orchestrator
 # Import legacy utils for backwards compatibility during migration
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
-from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
+from utils import (
+    get_github_client,
+    get_repo_name,
+    CLIError,
+    run_command,
+    set_gha_variable,
+    get_gha_variable,
+    validate_node_version
+)
 
 # CLI Group
 @click.group()
@@ -310,6 +318,29 @@ def repair(ctx, logs, stdin, worktree):
         out(ctx, res['message'], data=res)
     else:
         err(ctx, res['message'], data=res)
+
+# ==========================================
+# ENV COMMAND GROUP
+# ==========================================
+@cli.group()
+def env():
+    """Environment & Runtime validation"""
+    pass
+
+@env.command()
+@click.pass_context
+def check_node(ctx):
+    """Validates Node.js version against .nvmrc"""
+    try:
+        res = validate_node_version()
+        if res['status'] == 'success':
+            out(ctx, f"✅ Node version matches .nvmrc (v{res['pinned']})", data=res)
+        elif res['status'] == 'warning':
+            out(ctx, f"⚠️  Warning: {res['message']}", data=res)
+        else:
+            err(ctx, res['message'], data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
 
 if __name__ == "__main__":
     cli(obj={})
