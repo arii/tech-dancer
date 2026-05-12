@@ -287,6 +287,26 @@ def set_gha_variable(name: str, value: str) -> bool:
     """Helper function to set a GHA variable via the global manager."""
     return GHAConfigManager().set_variable(name, value)
 
+def extract_failing_info(logs: str) -> List[dict]:
+    """Extracts failing test and build information from logs."""
+    findings = []
+    # TS Errors
+    ts_errors = re.findall(r"([a-zA-Z0-9_\-\./]+\.[tj]sx?):(\d+):(\d+) - error (TS\d+): (.*)", logs)
+    for file_path, line, col, code, msg in ts_errors:
+        findings.append({"file": file_path, "line": line, "message": f"{code}: {msg}", "type": "typescript"})
+
+    # Vitest Errors (Basic)
+    vitest_matches = re.finditer(r"FAIL\s+(.*?)\n.*?❯ (.*?):(\d+):(\d+)", logs)
+    for m in vitest_matches:
+        findings.append({
+            "file": m.group(2),
+            "line": m.group(3),
+            "message": f"Test Failure in {m.group(1)}",
+            "type": "vitest"
+        })
+
+    return findings
+
 def get_github_client():
     from github import Github, Auth
     token = get_github_token()
