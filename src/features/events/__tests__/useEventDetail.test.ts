@@ -7,8 +7,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useEventDetail } from '../useEventDetail';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { Event } from '@/lib/content';
+import { AffiliateLink } from '@/types';
 
 vi.mock('react-router-dom', () => ({
   useParams: vi.fn(),
@@ -47,14 +49,14 @@ describe('useEventDetail', () => {
         travelIds: ['travel-1'],
       },
       relatedEvents: ['related-1'],
-    };
+    } as unknown as Event;
 
     const mockAllEvents = [
       mockEvent,
-      { slug: 'related-1', title: 'Related Event 1' },
+      { slug: 'related-1', title: 'Related Event 1' } as unknown as Event,
     ];
 
-    const mockAffiliateLink = {
+    const mockAffiliateLink: AffiliateLink = {
       id: 'outfit-1',
       name: 'Outfit 1',
       url: 'http://example.com',
@@ -62,18 +64,20 @@ describe('useEventDetail', () => {
       description: 'Test description',
     };
 
-    (useParams as any).mockReturnValue({ slug: 'test-event' });
-    (useNavigate as any).mockReturnValue(vi.fn());
-    (useQuery as any).mockImplementation(({ queryKey }: any) => {
-      if (queryKey[0] === 'event') {
-        return { data: mockEvent, isLoading: false, isError: false };
+    vi.mocked(useParams).mockReturnValue({ slug: 'test-event' });
+    vi.mocked(useNavigate).mockReturnValue(vi.fn());
+    vi.mocked(useQuery).mockImplementation(({ queryKey }) => {
+      if (Array.isArray(queryKey)) {
+        if (queryKey[0] === 'event') {
+          return { data: mockEvent, isLoading: false, isError: false } as UseQueryResult<Event | undefined>;
+        }
+        if (queryKey[0] === 'events') {
+          return { data: mockAllEvents, isLoading: false, isError: false } as UseQueryResult<Event[]>;
+        }
       }
-      if (queryKey[0] === 'events') {
-        return { data: mockAllEvents, isLoading: false, isError: false };
-      }
-      return { data: undefined, isLoading: false, isError: false };
+      return { data: undefined, isLoading: false, isError: false } as UseQueryResult<unknown>;
     });
-    (affiliateManager.getLink as any).mockReturnValue(mockAffiliateLink);
+    vi.mocked(affiliateManager.getLink).mockReturnValue(mockAffiliateLink);
 
     const { result } = renderHook(() => useEventDetail());
 
@@ -88,8 +92,8 @@ describe('useEventDetail', () => {
   });
 
   it('should handle missing event', () => {
-    (useParams as any).mockReturnValue({ slug: 'non-existent' });
-    (useQuery as any).mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    vi.mocked(useParams).mockReturnValue({ slug: 'non-existent' });
+    vi.mocked(useQuery).mockReturnValue({ data: undefined, isLoading: false, isError: false } as UseQueryResult<unknown>);
 
     const { result } = renderHook(() => useEventDetail());
 
@@ -101,12 +105,12 @@ describe('useEventDetail', () => {
   });
 
   it('should reflect loading state', () => {
-    (useParams as any).mockReturnValue({ slug: 'test-event' });
-    (useQuery as any).mockImplementation(({ queryKey }: any) => {
-      if (queryKey[0] === 'event') {
-        return { data: undefined, isLoading: true, isError: false };
+    vi.mocked(useParams).mockReturnValue({ slug: 'test-event' });
+    vi.mocked(useQuery).mockImplementation(({ queryKey }) => {
+      if (Array.isArray(queryKey) && queryKey[0] === 'event') {
+        return { data: undefined, isLoading: true, isError: false } as UseQueryResult<Event | undefined>;
       }
-      return { data: [], isLoading: false, isError: false };
+      return { data: [], isLoading: false, isError: false } as UseQueryResult<Event[]>;
     });
 
     const { result } = renderHook(() => useEventDetail());
@@ -114,12 +118,12 @@ describe('useEventDetail', () => {
   });
 
   it('should reflect error state', () => {
-    (useParams as any).mockReturnValue({ slug: 'test-event' });
-    (useQuery as any).mockImplementation(({ queryKey }: any) => {
-      if (queryKey[0] === 'event') {
-        return { data: undefined, isLoading: false, isError: true, error: new Error('Failed to fetch') };
+    vi.mocked(useParams).mockReturnValue({ slug: 'test-event' });
+    vi.mocked(useQuery).mockImplementation(({ queryKey }) => {
+      if (Array.isArray(queryKey) && queryKey[0] === 'event') {
+        return { data: undefined, isLoading: false, isError: true, error: new Error('Failed to fetch') } as UseQueryResult<Event | undefined>;
       }
-      return { data: [], isLoading: false, isError: false };
+      return { data: [], isLoading: false, isError: false } as UseQueryResult<Event[]>;
     });
 
     const { result } = renderHook(() => useEventDetail());
