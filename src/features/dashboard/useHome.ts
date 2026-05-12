@@ -8,25 +8,11 @@ export function useHome() {
   const { data: recentPosts = [] } = useQuery({
     queryKey: ['posts', 'recent'],
     queryFn: () => getPosts().slice(0, 3),
-    initialData: () => {
-      try {
-        return getPosts().slice(0, 3);
-      } catch {
-        return [];
-      }
-    },
   });
 
   const { data: upcomingEvents = [] } = useQuery({
     queryKey: ['events', 'upcoming'],
     queryFn: () => getEvents().slice(0, 3),
-    initialData: () => {
-      try {
-        return getEvents().slice(0, 3);
-      } catch {
-        return [];
-      }
-    },
   });
 
   const dancerPaths = [
