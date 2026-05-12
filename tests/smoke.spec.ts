@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { setupErrorMonitoring } from './fixtures/error-monitoring';
 
-async function validateUrlNavigation(page: any, href: string) {
+async function validateUrlNavigation(page: Page, href: string) {
   if (href.includes('#')) {
     const [baseUrl, fragment] = href.split('#');
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
@@ -20,7 +20,7 @@ async function validateUrlNavigation(page: any, href: string) {
 }
 
 test.describe('Navigation Smoke Tests', () => {
-  let errorMonitor: any;
+  let errorMonitor: ReturnType<typeof setupErrorMonitoring>;
 
   test.beforeEach(async ({ page }) => {
     errorMonitor = setupErrorMonitoring(page);
