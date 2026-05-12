@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
 const TOKENS_PATH = path.join(process.cwd(), 'src/styles/tokens.css');
-const LOGO_SVG_PATH = path.join(process.cwd(), 'boomtick_logo.svg');
+const LOGO_SVG_PATH = path.join(process.cwd(), 'public/boomtick_logo.svg');
 const FAVICON_SVG_PATH = path.join(process.cwd(), 'public/favicon.svg');
 const PWA_192_PATH = path.join(process.cwd(), 'public/pwa-192x192.png');
 const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
