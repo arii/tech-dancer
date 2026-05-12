@@ -2,7 +2,7 @@
 
 | PR # | Title                                         | CI Status | Outcome  | Recommendation | Overlap Notes                         |
 | :--- | :-------------------------------------------- | :-------- | :------- | :------------- | :------------------------------------ |
-| 1197 | CI Optimization: Custom Docker image          | 🟢 SUCCESS| ✅ PASS   | **APPROVE**    | Infra: Ollama chatops.                |
+| 1197 | CI Optimization: Custom Docker image          | 🟢 SUCCESS| 🔴 FAIL   | **BLOCK**      | Slop: 35 unrelated files changed.     |
 | 1200 | Standardize UI patterns and enhance Text      | 🟢 SUCCESS| ✅ PASS   | **APPROVE**    | Design: Phase 1 & 2.                  |
 | 1195 | Icon Normalization Helper                     | 🟢 SUCCESS| ✅ PASS   | **APPROVE**    | Design: Phase 3.                      |
 | 1194 | Design System Compliance Audit and Fix        | ⏳ PEND   | ✅ PASS   | **WAIT**       | Compliance: CI in progress.           |
@@ -21,15 +21,14 @@
 
 The following PRs have passed all CI checks and are ready for merge:
 
-1. **Infra**: #1197 (Custom Docker Image)
-2. **Design**: #1200, #1195, #1109
-3. **Features/UX**: #1203, #1199, #1155
+1. **Design**: #1200, #1195, #1109
+2. **Features/UX**: #1203, #1199, #1155
 
 ## Pending Stabilization
 
 The following PRs are blocked by CI failures or are in progress:
 
-- **Blocked**: #1178 (Lints ci.yml error), #1202 (Type errors), #1198 (E2E failure), #1112 (Requires #1178 fix).
+- **Blocked**: #1197 (Kitchen Sink: 35 unrelated files), #1178 (Lints ci.yml error), #1202 (Type errors), #1198 (E2E failure), #1112 (Requires #1178 fix).
 - **In Progress**: #1194, #1192, #1150.
 - **Reject**: #1193.
 
