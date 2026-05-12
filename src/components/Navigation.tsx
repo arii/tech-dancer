@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
-import { Wordmark } from '@/components/ui/Wordmark';
 
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
