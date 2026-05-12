@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getEvents } from "@/lib/content";
-import { Box, Grid, Stack, Text } from "@/layouts/Primitives";
+import { Box, Grid, Stack } from "@/layouts/Primitives";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SearchBox } from "@/components/ui/SearchBox";
 import { SEO } from "@/components/SEO";
@@ -17,8 +17,8 @@ export default function EventsIndex() {
 
   const { data: events = [] } = useQuery({
     queryKey: ["events"],
-    queryFn: getEvents,
-    initialData: getEvents,
+    queryFn: async () => getEvents(),
+    initialData: getEvents(),
   });
 
   const filtered = useMemo(
