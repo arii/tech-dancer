@@ -26,6 +26,24 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   [key: string]: unknown
 }
 
+// Standard JIT fallback for arbitrary values
+const resolveJIT = (val: string | number | boolean | undefined | null, prefix: string) => {
+  if (!val || typeof val === "boolean") return ""
+  const pfx = prefix ? `${prefix}-` : ""
+
+  // Standard Tailwind tokens (numbers or specific strings without CSS units)
+  const isToken = typeof val === "number" ||
+    (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
+
+  if (isToken) return `${pfx}${val}`
+
+  const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
+    ? val
+    : `[${val}]`
+
+  return `${pfx}${value}`
+}
+
 export const Text = forwardRef<HTMLElement, TextProps>(
   ({ 
     className, as: Component = "span", 
@@ -34,24 +52,6 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     clamp, truncate, leading,
     ...props 
   }, ref) => {
-    // Standard JIT fallback for arbitrary values
-    const resolveJIT = (val: string | number, prefix: string) => {
-      if (!val) return ""
-      const pfx = prefix ? `${prefix}-` : ""
-
-      // Standard Tailwind tokens (numbers or specific strings without CSS units)
-      const isToken = typeof val === "number" ||
-        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
-
-      if (isToken) return `${pfx}${val}`
-
-      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
-        ? val
-        : `[${val}]`
-
-      return `${pfx}${value}`
-    }
-
     return (
       <Box
         as={Component}
@@ -70,13 +70,13 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           getResponsiveClasses(weight, ""),
           getResponsiveClasses(align, "text-"),
-          getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v as string | number, "tracking")),
+          getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v, "tracking")),
           getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),
           getResponsiveClasses(lowercase, "", (v) => v ? "lowercase" : "normal-case"),
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
-          getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
+          getResponsiveClasses(leading, "", (v) => resolveJIT(v, "leading")),
           className
         )}
         {...props}
