@@ -6,6 +6,7 @@ interface Particle {
   x: number; y: number; r: number;
   vx: number; vy: number;
   alpha: number; hue: number;
+  fillStyle: string;
 }
 
 interface HeroParticleCanvasProps {
@@ -30,7 +31,7 @@ export function HeroParticleCanvas({
   seeds = HERO_CONFIG.SEEDS,
 }: HeroParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>(200);
+  const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>(HERO_CONFIG.RESIZE_DEBOUNCE_MS);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -46,19 +47,24 @@ export function HeroParticleCanvas({
     canvas.height = height;
 
     // Build particles deterministically for visual regression testing
-    const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => ({
-      x: ((i * seeds.PARTICLE_X) % 1) * width,
-      y: ((i * seeds.PARTICLE_Y) % 1) * height,
-      r: ((i * seeds.PARTICLE_R) % 1) * (radiusMax - radiusMin) + radiusMin,
-      vx: (((i * seeds.PARTICLE_VX) % 1) - 0.5) * velocityFactor,
-      vy: (((i * seeds.PARTICLE_VY) % 1) - 0.5) * velocityFactor,
-      alpha: ((i * seeds.PARTICLE_ALPHA) % 1) * (alphaMax - alphaMin) + alphaMin,
-      hue: i % 2 === 0 ? hues[0] : hues[1],
-    }));
+    const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => {
+      const alpha = ((i * seeds.PARTICLE_ALPHA) % 1) * (alphaMax - alphaMin) + alphaMin;
+      const hue = i % 2 === 0 ? hues[0] : hues[1];
+      return {
+        x: ((i * seeds.PARTICLE_X) % 1) * width,
+        y: ((i * seeds.PARTICLE_Y) % 1) * height,
+        r: ((i * seeds.PARTICLE_R) % 1) * (radiusMax - radiusMin) + radiusMin,
+        vx: (((i * seeds.PARTICLE_VX) % 1) - 0.5) * velocityFactor,
+        vy: (((i * seeds.PARTICLE_VY) % 1) - 0.5) * velocityFactor,
+        alpha,
+        hue,
+        fillStyle: `hsla(${hue}, 100%, 70%, ${alpha})`,
+      };
+    });
 
     let rafId: number;
     let lastFrameTime = 0; // Set to 0 to ensure the first frame is rendered immediately
-    const frameInterval = 1000 / 60; // Target 60 FPS
+    const frameInterval = 1000 / HERO_CONFIG.TARGET_FPS;
 
     const draw = (currentTime: number) => {
       rafId = requestAnimationFrame(draw);
@@ -66,8 +72,8 @@ export function HeroParticleCanvas({
       // Calculate delta since last frame
       const deltaTime = currentTime - lastFrameTime;
 
-      // Throttle to 60 FPS, using a small buffer (0.1ms) to handle slight timing jitter
-      if (lastFrameTime !== 0 && deltaTime < frameInterval - 0.1) return;
+      // Throttle to target FPS, using a small buffer to handle slight timing jitter
+      if (lastFrameTime !== 0 && deltaTime < frameInterval - HERO_CONFIG.FRAME_JITTER) return;
 
       lastFrameTime = currentTime - (lastFrameTime === 0 ? 0 : deltaTime % frameInterval);
 
@@ -75,7 +81,7 @@ export function HeroParticleCanvas({
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.alpha})`;
+        ctx.fillStyle = p.fillStyle;
         ctx.fill();
         p.x += p.vx;
         p.y += p.vy;

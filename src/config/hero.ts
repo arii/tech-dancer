@@ -9,6 +9,10 @@ export const HERO_CONFIG = {
   BAR_COUNT: 48,
   MOBILE_PY: 4,
   DESKTOP_PY: 4,
+  // Performance tuning
+  TARGET_FPS: 60,
+  FRAME_JITTER: 0.1,
+  RESIZE_DEBOUNCE_MS: 200,
   // Deterministic seeds for stable animations
   SEEDS: {
     BAR_HEIGHT: 137.5,
