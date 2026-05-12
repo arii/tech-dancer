@@ -79,9 +79,9 @@ jobs:
           COMMAND_BODY: ${{ github.event.comment.body }}
         run: |
           python3 dev-tools/td_cli.py ai comment \
-            --pr ${{ github.event.issue.number }} \
+            --pr "${{ github.event.issue.number }}" \
             --command "$COMMAND_BODY" \
-            --comment-id ${{ github.event.comment.id }}
+            --comment-id "${{ github.event.comment.id }}"
 
       - name: Commit Fixes
         if: startsWith(github.event.comment.body, '/ollama-fix')
