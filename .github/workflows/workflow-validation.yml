@@ -25,23 +25,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Validate workflow YAML syntax with PyYAML
-        run: |
-          python3 -m pip install --disable-pip-version-check pyyaml
-          python3 - <<'PY'
-          from pathlib import Path
-          import yaml
-
-          workflow_dir = Path('.github/workflows')
-          files = sorted(workflow_dir.glob('*.yml')) + sorted(workflow_dir.glob('*.yaml'))
-          if not files:
-              raise SystemExit('No workflow files found.')
-
-          for file in files:
-              with file.open('r', encoding='utf-8') as fp:
-                  yaml.safe_load(fp)
-              print(f'✅ Parsed: {file}')
-          PY
-
       - name: Lint workflow logic with actionlint
         uses: rhysd/actionlint@v1
