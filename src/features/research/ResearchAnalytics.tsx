@@ -45,8 +45,8 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" color="dim">
-                      <Icon icon={Search} size="md" />
+                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
+                      <Icon icon={Search} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
                       {tool.status}
@@ -61,9 +61,9 @@ export default function ResearchAnalytics() {
                     </Text>
                   </Stack>
                 </Stack>
-                <Box display="flex" align="center" gap={2} marginTop="auto" color="accent">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest">Launch Console</Text>
-                  <Icon icon={ArrowRight} />
+                <Box display="flex" align="center" gap={2} marginTop="auto">
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Launch Console</Text>
+                  <Icon icon={ArrowRight} size="sm" color="accent" />
                 </Box>
               </Stack>
             ))}
@@ -98,9 +98,9 @@ export default function ResearchAnalytics() {
                       {study.excerpt}
                     </Text>
                   </Stack>
-                  <Box display="flex" align="center" gap={2} color="accent" marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">Read Study</Text>
-                    <Icon icon={FileText} size="sm" />
+                  <Box display="flex" align="center" gap={2} marginTop="auto">
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Study</Text>
+                    <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
                 </Stack>
               ))}
@@ -108,8 +108,8 @@ export default function ResearchAnalytics() {
           ) : (
             <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
               <Stack align="center" justify="center" gap={2}>
-                <Box color="dim" opacity={0.4}>
-                  <Icon icon={Database} size="lg" />
+                <Box color="dim">
+                  <Icon icon={Database} size="lg" color="muted" />
                 </Box>
                 <Stack gap={0.5}>
                   <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
