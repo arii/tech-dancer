@@ -50,8 +50,6 @@ test('homepage loads without console errors', async ({ page }) => {
   const errors = getPageErrors(page);
   // Filter out known environment-specific errors
   const filteredErrors = errors.filter(e =>
-    !e.includes("Stack is not defined") &&
-    !e.includes("Failed to load resource") &&
     !e.includes("Vercel Web Analytics")
   );
   expect(filteredErrors).toHaveLength(0);
@@ -74,8 +72,6 @@ test('all nav links are reachable and error-free', async ({ page }) => {
     await validateUrlNavigation(page, href);
 
     const filteredErrors = errors.filter(e =>
-      !e.includes("Stack is not defined") &&
-      !e.includes("Failed to load resource") &&
       !e.includes("Vercel Web Analytics")
     );
     expect(filteredErrors, `Console errors at ${href}: ${errors.join(', ')}`).toHaveLength(0);
@@ -106,8 +102,6 @@ test('all post/content pages load without errors', async ({ page }) => {
       await validateUrlNavigation(page, href);
 
       const filteredErrors = errors.filter(e =>
-        !e.includes("Stack is not defined") &&
-        !e.includes("Failed to load resource") &&
         !e.includes("Vercel Web Analytics")
       );
       expect(

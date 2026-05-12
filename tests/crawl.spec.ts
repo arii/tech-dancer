@@ -18,8 +18,6 @@ function cleanUrl(url: string): string {
 }
 
 const IGNORED_ERRORS = [
-  "Stack is not defined",
-  "Failed to load resource",
   "Vercel Web Analytics",
   "gtag is not defined",
   "chrome-extension",
