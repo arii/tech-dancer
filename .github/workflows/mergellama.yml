@@ -32,7 +32,7 @@ jobs:
         uses: ai-action/setup-ollama@v2
 
       - name: Install Click
-        run: pip install click
+        run: python3 -m pip install click
 
       - name: Start Ollama Server
         run: |

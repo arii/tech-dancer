@@ -46,7 +46,7 @@ jobs:
       - name: Install Dependencies
         run: |
           if ! python3 -c "import click, github, requests" 2>/dev/null; then
-            pip install click PyGithub requests
+            python3 -m pip install click PyGithub requests
           fi
           if [ ! -d "node_modules" ]; then
             pnpm install --frozen-lockfile

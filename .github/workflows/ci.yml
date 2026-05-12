@@ -82,7 +82,7 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
-          pip install PyGithub pytest click
+          python3 -m pip install PyGithub pytest click
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
@@ -120,7 +120,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pip install PyGithub click
+          python3 -m pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           pnpm run audit || true
           python3 dev-tools/td_cli.py gh audit-gate
@@ -171,14 +171,14 @@ jobs:
           pnpm run build
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Bundle Size Check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pip install PyGithub click
+          python3 -m pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           python3 dev-tools/td_cli.py gh bundle-size
 

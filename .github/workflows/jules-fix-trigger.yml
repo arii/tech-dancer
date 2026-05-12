@@ -31,7 +31,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install PyGithub requests click
+          python3 -m pip install PyGithub requests click
 
       - name: Pre-check Jules Credentials
         run: |
