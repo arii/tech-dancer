@@ -13,6 +13,30 @@ import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
 
+interface FilterButtonProps {
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+  variant?: string;
+}
+
+function FilterButton({ label, isActive, onClick, variant }: FilterButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11 whitespace-nowrap transition-all duration-200",
+        variant || "text-text-dim border-line/50 bg-bg hover:bg-surface",
+        isActive && "ring-2 ring-offset-2 ring-offset-bg ring-current",
+        !isActive && variant && "hover:opacity-90"
+      )}
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
 
@@ -43,33 +67,31 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
-          <button
-            type="button"
-            onClick={() => setSelectedPill('all')}
-            className={cn(
-              "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
-              "text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors",
-              selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
-            )}
-          >
-            All Gear
-          </button>
-          {GEAR_PILLS.map((pill) => (
-            <button
-              type="button"
-              key={pill.label}
-              onClick={() => setSelectedPill(pill.value)}
-              className={cn(
-                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
-                pill.color,
-                "hover:opacity-90 transition-opacity",
-                selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"
-              )}
-            >
-              {pill.label}
-            </button>
-          ))}
+        <Box
+          marginBottom={8}
+          marginTop={8}
+          border
+          radius="2xl"
+          shadow="sm"
+          overflowX="auto"
+          className="border-line/80 bg-surface/60 no-scrollbar"
+        >
+          <Stack direction="row" gap={2} padding={3} className="min-w-max">
+            <FilterButton
+              label="All Gear"
+              isActive={selectedPill === 'all'}
+              onClick={() => setSelectedPill('all')}
+            />
+            {GEAR_PILLS.map((pill) => (
+              <FilterButton
+                key={pill.label}
+                label={pill.label}
+                isActive={selectedPill === pill.value}
+                onClick={() => setSelectedPill(pill.value)}
+                variant={pill.color}
+              />
+            ))}
+          </Stack>
         </Box>
       </Box>
 
