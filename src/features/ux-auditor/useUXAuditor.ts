@@ -49,7 +49,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 10
 }
 
 // --- Configuration & Constants ---
-const apiKey = ""; // Provided by environment
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem('ux-auditor-api-key') || "";
 declare const __app_id: string | undefined;
 declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
@@ -88,6 +88,8 @@ export function useUXAuditor() {
   const [user, setUser] = useState<User | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
+  const [customApiKey, setCustomApiKey] = useState(localStorage.getItem('ux-auditor-api-key') || "");
+  const [snapshotService, setSnapshotService] = useState(localStorage.getItem('ux-auditor-snapshot-service') || "");
   const [isCopiedMarkdown, setIsCopiedMarkdown] = useState(false);
   const [isExportingToGithub, setIsExportingToGithub] = useState(false);
 
@@ -192,9 +194,26 @@ export function useUXAuditor() {
         let base64DataUri = "";
 
         try {
-          const scaledW = Math.floor(vp.width * 0.5);
-          const scaledH = Math.floor(vp.height * 0.5);
-          const snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
+          const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+          let snapshotUrl = "";
+          if (snapshotService) {
+            // Support custom snapshot service URL (e.g. local playwright proxy)
+            snapshotUrl = snapshotService
+              .replace('{url}', encodeURIComponent(targetUrl))
+              .replace('{width}', vp.width.toString())
+              .replace('{height}', vp.height.toString())
+              .replace('{viewport}', vp.name.toLowerCase());
+          } else if (isLocalhost) {
+            // Fallback to local files if generated via CLI
+            snapshotUrl = `/ux-audits/audit-${vp.name.toLowerCase()}.png`;
+          } else {
+            // Standard fallback to mshots if no custom service is provided
+            const scaledW = Math.floor(vp.width * 0.5);
+            const scaledH = Math.floor(vp.height * 0.5);
+            snapshotUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(targetUrl)}?w=${scaledW}&h=${scaledH}`;
+          }
+
           const res = await fetch(snapshotUrl);
           if (res.ok) {
             const blob = await res.blob();
@@ -206,7 +225,7 @@ export function useUXAuditor() {
             mockImg = base64DataUri;
           }
         } catch {
-          console.error("Failed to fetch realistic snapshot, using placeholder");
+          console.error("Failed to fetch Playwright snapshot, using placeholder");
         }
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
@@ -269,11 +288,12 @@ export function useUXAuditor() {
     const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
 
     try {
-      if (!apiKey) {
+      const effectiveApiKey = customApiKey || apiKey;
+      if (!effectiveApiKey) {
         throw new Error("API Key missing");
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${effectiveApiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -315,7 +335,7 @@ export function useUXAuditor() {
         improvements: [
           {
             element: "Manual Audit Required",
-            issue: "No automated analysis generated.",
+            issue: "No automated analysis generated. To use Playwright snapshots locally, run: npx tsx scripts/ux-capture.ts <URL>",
             suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
             severity: 5
           }
@@ -375,6 +395,16 @@ export function useUXAuditor() {
     }
   };
 
+  const updateApiKey = (key: string) => {
+    setCustomApiKey(key);
+    localStorage.setItem('ux-auditor-api-key', key);
+  };
+
+  const updateSnapshotService = (service: string) => {
+    setSnapshotService(service);
+    localStorage.setItem('ux-auditor-snapshot-service', service);
+  };
+
   return {
     user,
     reports,
@@ -383,6 +413,10 @@ export function useUXAuditor() {
     setActiveReport: (r: UXReport | null) => setActiveReportId(r?.id || null),
     url,
     setUrl,
+    customApiKey,
+    setCustomApiKey: updateApiKey,
+    snapshotService,
+    setSnapshotService: updateSnapshotService,
     isCopiedMarkdown,
     isExportingToGithub,
     runUXAudit,

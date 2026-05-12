@@ -6,10 +6,15 @@ const BASE_PATH = getBasePath();
 
 export default defineConfig({
   testDir: './tests',
+  /* Run tests in files in parallel */
   fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI to avoid heavy CPU thread thrashing if necessary */
   workers: process.env.CI ? 1 : undefined,
+  /* Reporter to use. */
   reporter: 'html',
   use: {
     // Standardize baseURL for local and CI
@@ -19,6 +24,8 @@ export default defineConfig({
     contextOptions: {
       reducedMotion: 'reduce',
     },
+    // Ensure screenshots trigger on failure for debugging
+    screenshot: 'only-on-failure',
   },
   expect: {
     toHaveScreenshot: {

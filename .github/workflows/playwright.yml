@@ -1,0 +1,80 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Allows the workflow to be triggered by a PR comment
+  issue_comment:
+    types: [created]
+jobs:
+  test:
+    name: Run Playwright Tests
+    # Trigger on standard push/PR OR when someone types /update-snapshots in a PR comment
+    if: |
+      github.event_name != 'issue_comment' ||
+      (github.event.issue.pull_request && contains(github.event.comment.body, '/update-snapshots'))
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    # Permissions needed to push updated snapshot commits back to the PR
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # 1. Checkout Code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history so we can push commits back if triggered by a comment
+          fetch-depth: 0
+
+      # 2. Handle PR branch checkout for comment triggers
+      - name: Checkout PR branch (for /update-snapshots)
+        if: contains(github.event.comment.body, '/update-snapshots')
+        run: |
+          gh pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+
+      # 4. Install Project Dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 5. Install Playwright Browsers (or use Docker if preferred)
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 6. RUN TESTS (Standard Mode)
+      - name: Run Playwright tests
+        if: "!contains(github.event.comment.body, '/update-snapshots')"
+        run: npx playwright test
+
+      # 7. UPDATE SNAPSHOTS (Triggered by comment)
+      - name: Update Playwright Snapshots
+        if: contains(github.event.comment.body, '/update-snapshots')
+        run: npx playwright test --update-snapshots
+
+      # 8. Commit & Push Updated Snapshots back to branch
+      - name: Commit and push updated snapshots
+        if: contains(github.event.comment.body, '/update-snapshots')
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update playwright snapshots [skip ci]"
+          file_pattern: '**/*.png' # Adjust extension if you use jpeg or webp
+
+      # 9. Upload test report if tests failed
+      - name: Upload Playwright Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
