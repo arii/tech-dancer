@@ -20,14 +20,14 @@ export function Footer() {
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10" />
           <Text variant="mono" size="xs" color="body" className="hover:opacity-100 transition-opacity">
-            v{__APP_VERSION__} (
+            v{import.meta.env.VITE_APP_VERSION} (
             <a
-              href={`https://github.com/arii/tech-dancer/commit/${__COMMIT_SHA__}`}
+              href={`https://github.com/arii/tech-dancer/commit/${import.meta.env.VITE_COMMIT_SHA}`}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
             >
-              {__COMMIT_SHA__.substring(0, 7)}
+              {import.meta.env.VITE_COMMIT_SHA.substring(0, 7)}
             </a>
             )
           </Text>

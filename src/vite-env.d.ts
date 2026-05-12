@@ -7,5 +7,12 @@ interface Window {
   dataLayer: unknown[];
 }
 
-declare const __APP_VERSION__: string;
-declare const __COMMIT_SHA__: string;
+interface ImportMetaEnv {
+  readonly VITE_APP_URL: string;
+  readonly VITE_APP_VERSION: string;
+  readonly VITE_COMMIT_SHA: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
