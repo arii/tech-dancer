@@ -9,7 +9,7 @@ import { SearchBox } from "@/components/ui/SearchBox";
 import { SEO } from "@/components/SEO";
 import { useSearchParam } from "@/hooks/useSearchParam";
 import { safeSearch } from "@/lib/utils";
-import { MapPin, ArrowRight } from "lucide-react";
+import { EventCard } from "./components/EventCard";
 
 export default function EventsIndex() {
   const navigate = useNavigate();
@@ -54,74 +54,11 @@ export default function EventsIndex() {
 
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
           {filtered.map((event) => (
-            <Box
+            <EventCard
               key={event.slug}
-              as="button"
+              event={event}
               onClick={() => navigate(`/events/${event.slug}`)}
-              border
-              radius="lg"
-              padding={6}
-              surface="surface"
-              cursor="pointer"
-              className="group text-left hover:border-accent/40 transition-all hover:-translate-y-0.5"
-            >
-              <Stack gap={4}>
-                <Box display="flex" align="center" gap={2}>
-                  <MapPin className="w-4 h-4 text-accent" />
-                  <Text
-                    variant="mono"
-                    size="micro"
-                    color="accent"
-                    weight="font-bold"
-                    uppercase
-                    tracking="widest"
-                  >
-                    {event.schedule}
-                  </Text>
-                </Box>
-                <Stack gap={1}>
-                  <Text
-                    variant="body"
-                    size="lg"
-                    weight="font-bold"
-                    className="group-hover:text-accent transition-colors leading-tight"
-                  >
-                    {event.title}
-                  </Text>
-                  <Text size="sm" color="dim">
-                    {event.location}
-                  </Text>
-                  <Text size="sm" color="dim">
-                    {event.city}
-                  </Text>
-                </Stack>
-                {event.theme && (
-                  <Box
-                    border
-                    paddingX={3}
-                    paddingY={1}
-                    radius="full"
-                    className="border-accent/30 bg-accent/5 w-fit"
-                  >
-                    <Text variant="mono" size="micro" color="accent">
-                      Theme: {event.theme.name}
-                    </Text>
-                  </Box>
-                )}
-                <Box
-                  display="flex"
-                  align="center"
-                  gap={2}
-                  marginTop="auto"
-                  color="accent"
-                >
-                  <Text variant="mono" size="xs" weight="font-bold">
-                    View Guide
-                  </Text>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </Box>
-              </Stack>
-            </Box>
+            />
           ))}
         </Grid>
       </Stack>
