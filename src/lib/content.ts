@@ -202,62 +202,27 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
-function transform<T extends { date?: string }>(modules: Record<string, string | ContentModule>): T[] {
+function transform<T extends { date?: string }>(
+  modules: Record<string, string | ContentModule>,
+): T[] {
+  const asArray = (val: unknown) => (Array.isArray(val) ? (val as string[]) : []);
+
   return Object.entries(modules)
     .map(([path, raw]) => {
-      const contentStr = typeof raw === 'string' ? raw : raw.default;
+      const contentStr = typeof raw === "string" ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
 
       const normalizeAsset = (val: unknown) => {
         if (val === "") return undefined;
-        return (typeof val === 'string' && val.startsWith('/')) ? `${ASSET_PREFIX}${val}` : val;
+        return typeof val === "string" && val.startsWith("/")
+          ? `${ASSET_PREFIX}${val}`
+          : val;
       };
 
       data.image = normalizeAsset(data.image);
       data.heroImage = normalizeAsset(data.heroImage);
 
-      // Promote flat gear/theme fields into structured objects
-      // so components only need to read event.theme and event.gear
-      const flatTheme: EventTheme | undefined =
-        data.themeOutfitIds || data.themeAccessoryIds
-          ? {
-              name: String(data.themeName || ""),
-              label: data.themeLabel ? String(data.themeLabel) : undefined,
-              outfitIds: Array.isArray(data.themeOutfitIds)
-                ? (data.themeOutfitIds as string[])
-                : [],
-              accessoryIds: Array.isArray(data.themeAccessoryIds)
-                ? (data.themeAccessoryIds as string[])
-                : [],
-            }
-          : undefined;
-
-      const flatGear: EventGear | undefined =
-        data.gearOutfitIds ||
-        data.gearAccessoryIds ||
-        data.gearShoeIds ||
-        data.gearEssentialIds ||
-        data.gearTravelIds
-          ? {
-              outfitIds: Array.isArray(data.gearOutfitIds)
-                ? (data.gearOutfitIds as string[])
-                : [],
-              accessoryIds: Array.isArray(data.gearAccessoryIds)
-                ? (data.gearAccessoryIds as string[])
-                : [],
-              shoeIds: Array.isArray(data.gearShoeIds)
-                ? (data.gearShoeIds as string[])
-                : [],
-              essentialIds: Array.isArray(data.gearEssentialIds)
-                ? (data.gearEssentialIds as string[])
-                : [],
-              travelIds: Array.isArray(data.gearTravelIds)
-                ? (data.gearTravelIds as string[])
-                : [],
-            }
-          : undefined;
-
-      return {
+      const result: Record<string, unknown> = {
         ...data,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
@@ -265,7 +230,9 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         date: String(data.date || ""),
         author: String(data.author || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
-        earlyBirdDate: data.earlyBirdDate ? String(data.earlyBirdDate) : undefined,
+        earlyBirdDate: data.earlyBirdDate
+          ? String(data.earlyBirdDate)
+          : undefined,
         registrationDeadline: data.registrationDeadline
           ? String(data.registrationDeadline)
           : undefined,
@@ -275,15 +242,51 @@ function transform<T extends { date?: string }>(modules: Record<string, string |
         packingReminderDate: data.packingReminderDate
           ? String(data.packingReminderDate)
           : undefined,
-        tags: Array.isArray(data.tags) ? data.tags : [],
-        theme: (data.theme as EventTheme | undefined) ?? flatTheme,
-        gear: (data.gear as EventGear | undefined) ?? flatGear,
-        relatedEvents: Array.isArray(data.relatedEvents)
-          ? data.relatedEvents
-          : [],
+        tags: asArray(data.tags),
         content: content || "",
         slug: slugFrom(path),
-      } as unknown as T;
+      };
+
+      if (data.type === "event") {
+        // Promote flat gear/theme fields into structured objects
+        const hasFlatTheme =
+          data.themeName ||
+          data.themeLabel ||
+          data.themeOutfitIds ||
+          data.themeAccessoryIds;
+
+        const flatTheme: EventTheme | undefined = hasFlatTheme
+          ? {
+              name: String(data.themeName || ""),
+              label: data.themeLabel ? String(data.themeLabel) : undefined,
+              outfitIds: asArray(data.themeOutfitIds),
+              accessoryIds: asArray(data.themeAccessoryIds),
+            }
+          : undefined;
+
+        const hasFlatGear =
+          data.gearOutfitIds ||
+          data.gearAccessoryIds ||
+          data.gearShoeIds ||
+          data.gearEssentialIds ||
+          data.gearTravelIds;
+
+        const flatGear: EventGear | undefined = hasFlatGear
+          ? {
+              outfitIds: asArray(data.gearOutfitIds),
+              accessoryIds: asArray(data.gearAccessoryIds),
+              shoeIds: asArray(data.gearShoeIds),
+              essentialIds: asArray(data.gearEssentialIds),
+              travelIds: asArray(data.gearTravelIds),
+            }
+          : undefined;
+
+        result.theme = (data.theme as EventTheme | undefined) ?? flatTheme;
+        result.gear = (data.gear as EventGear | undefined) ?? flatGear;
+        result.relatedEvents = asArray(data.relatedEvents);
+      }
+
+      return result as unknown as T;
     })
     .sort((a, b) => {
       const timeA = a.date ? new Date(a.date).getTime() : 0;
@@ -317,7 +320,8 @@ export const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
-export const getEventBySlug = (slug: string) => maps.events.get(slug);
+export const getEventBySlug = (slug: string) =>
+  maps.events.get(slug);
 
 /**
  * Calculates estimated reading time in minutes.
