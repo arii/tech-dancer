@@ -18,7 +18,8 @@ from utils import (
     set_gha_variable,
     CLIError,
     run_command,
-    is_ollama_available
+    is_ollama_available,
+    validate_node_version
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope, get_project_config
@@ -345,7 +346,6 @@ class Orchestrator:
         results = {"steps": []}
 
         # 1. Node Runtime Check (Fail Fast)
-        from utils import validate_node_version
         try:
             res = validate_node_version()
             results["steps"].append({"name": "Node Runtime Check", **res})

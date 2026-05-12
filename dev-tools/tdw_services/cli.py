@@ -333,12 +333,16 @@ def check_node(ctx):
     """Validates Node.js version against .nvmrc"""
     try:
         res = validate_node_version()
-        if res['status'] == 'success':
-            out(ctx, f"✅ Node version matches .nvmrc (v{res['pinned']})", data=res)
-        elif res['status'] == 'warning':
-            out(ctx, f"⚠️  Warning: {res['message']}", data=res)
-        else:
-            err(ctx, res['message'], data=res)
+        status = res.get('status')
+
+        message_map = {
+            'success': (out, f"✅ Node version matches .nvmrc (v{res.get('pinned')})"),
+            'warning': (out, f"⚠️  Warning: {res.get('message')}"),
+            'error': (err, res.get('message'))
+        }
+
+        handler, message = message_map.get(status, (err, "Unknown validation status"))
+        handler(ctx, message, data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
 
