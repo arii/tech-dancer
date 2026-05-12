@@ -376,13 +376,9 @@ class Orchestrator:
         if not conflict_files:
              return {"status": "error", "message": "No merge conflicts detected locally. Ensure you have merged the base branch and markers are present."}
 
-        resolved = []
-        failed = []
-        for file_path in conflict_files:
-            if self.resolve_conflict(file_path):
-                resolved.append(file_path)
-            else:
-                failed.append(file_path)
+        results = [(f, self.resolve_conflict(f)) for f in conflict_files]
+        resolved = [f for f, success in results if success]
+        failed = [f for f, success in results if not success]
 
         if failed:
             msg = f"Failed to resolve conflicts in: {', '.join(failed)}"

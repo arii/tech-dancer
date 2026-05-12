@@ -14,22 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: 10
+        uses: pnpm/action-setup@v4
 
       - name: Setup Ollama
-        uses: ai-action/setup-ollama@v2
+        uses: ollama/setup-ollama@v1
 
       - name: Install Dependencies
         run: |
@@ -39,18 +37,7 @@ jobs:
       - name: Start Ollama Server
         run: |
           ollama serve > ollama_output.log 2>&1 &
-          for i in {1..15}; do
-            if curl -s http://localhost:11434/api/tags > /dev/null; then
-              echo "Ollama server is ready!"
-              sleep 1
-              exit 0
-            fi
-            echo "Waiting for Ollama server (attempt $i)..."
-            sleep 2
-          done
-          echo "❌ Ollama server failed to start within timeout"
-          cat ollama_output.log
-          exit 1
+          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
 
       - name: Pull & Build Models
         run: |
@@ -79,7 +66,7 @@ jobs:
 
       - name: Commit Fixes
         if: startsWith(github.event.comment.body, '/ollama-fix')
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-resolved merge conflicts using /ollama-fix"
           branch: ${{ env.HEAD_REF }}
