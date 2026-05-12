@@ -46,12 +46,12 @@ class LocalAIClient:
             print(f"⚠️  Gemini API call failed: {e}")
             return None
 
-    def generate(self, prompt: str, schema: Optional[Dict] = None) -> str:
+    def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
         if self.is_ollama_available():
             # For JSON schema, we just append instruction for Ollama
             if schema:
                 prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
-            res = self.call_ollama(prompt)
+            res = self.call_ollama(prompt, model=model)
             if res:
                 return res
 
@@ -122,7 +122,8 @@ Diff: {diff[:45000]}"""
             },
             "required": ["reviewComment", "labels", "recommendation"]
         }
-        res = self.generate(prompt, schema)
+        # Use code-reviewer model specifically if possible
+        res = self.generate(prompt, schema, model="code-reviewer")
         try:
             # Clean markdown JSON block if Ollama returned it
             res = self.clean_llm_output(res)
