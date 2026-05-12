@@ -76,6 +76,7 @@ class GitHubClient:
         try:
             data = self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-runs')
             return [{
+                'id': run.get('id'),
                 'name': run.get('name'),
                 'status': run.get('status'),
                 'conclusion': run.get('conclusion'),
@@ -83,6 +84,14 @@ class GitHubClient:
             } for run in data.get('check_runs', [])]
         except:
             return []
+
+    def fetch_check_run_logs(self, check_run_id: int) -> str:
+        """Fetches logs for a specific check run."""
+        try:
+            # GitHub API returns a 302 redirect to a URL that expires after a few minutes
+            return self._request('GET', f'/repos/{self.repo}/check-runs/{check_run_id}/logs', is_text=True)
+        except Exception as e:
+            return f"Failed to fetch logs for check run {check_run_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})

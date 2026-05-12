@@ -37,20 +37,28 @@ class JulesClient:
 
     def create_session_from_source(self, source_id: str, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
         url = f"{self.base_url}/sessions"
+        # Sanitize source_id to avoid double-prefixing
+        clean_source_id = source_id.replace("sources/", "")
         payload = {
             "prompt": prompt,
             "sourceContext": {
-                "source": f"sources/{source_id}",
-                "githubRepoContext": { "branch": branch }
+                "source": f"sources/{clean_source_id}",
+                "githubRepoContext": { "startingBranch": branch }
             },
-            "automationMode": "FULLY_AUTOMATED"
+            "automationMode": "AUTO_CREATE_PR"
         }
+
+        print(f"DEBUG: Creating Jules session at {url}")
+        print(f"DEBUG: Payload: {payload}")
+
         try:
             response = requests.post(url, headers=self.headers, json=payload, timeout=15)
             response.raise_for_status()
             return response.json()
         except Exception as e:
             print(f"⚠️  Jules API create_session failed: {e}")
+            if hasattr(e, 'response') and e.response is not None:
+                print(f"DEBUG: Response Body: {e.response.text}")
             return None
 
     def create_session(self, prompt: str, branch: str, title: str, owner: str, repo_name: str) -> str:

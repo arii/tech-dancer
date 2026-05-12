@@ -47,6 +47,7 @@ export function useHome() {
   return { 
     recentPosts, 
     upcomingEvents: upcomingEvents.map(event => ({
+      slug: event.slug,
       name: event.title,
       location: event.location,
       schedule: event.schedule,
