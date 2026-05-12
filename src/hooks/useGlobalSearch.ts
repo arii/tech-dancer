@@ -20,9 +20,24 @@ export function useGlobalSearch() {
 
   const queries = useQueries({
     queries: [
-      { queryKey: ['posts'], queryFn: getPosts },
-      { queryKey: ['resources'], queryFn: getResources },
-      { queryKey: ['studies'], queryFn: getStudies },
+      { queryKey: ['posts'], queryFn: async () => {
+        if (import.meta.env.VITE_SIMULATE_LOADING || (typeof window !== 'undefined' && (window as any).__SIMULATE_LOADING)) {
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        return getPosts();
+      } },
+      { queryKey: ['resources'], queryFn: async () => {
+        if (import.meta.env.VITE_SIMULATE_LOADING || (typeof window !== 'undefined' && (window as any).__SIMULATE_LOADING)) {
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        return getResources();
+      } },
+      { queryKey: ['studies'], queryFn: async () => {
+        if (import.meta.env.VITE_SIMULATE_LOADING || (typeof window !== 'undefined' && (window as any).__SIMULATE_LOADING)) {
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        return getStudies();
+      } },
     ],
   });
 

@@ -9,13 +9,6 @@ test.describe('Global Search Modal UX Refinement', () => {
   test('should show "READY TO SEARCH" when modal is opened with no query', async ({ page }) => {
     const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
     await searchButton.click();
-
-    // We expect "READY TO SEARCH" (uppercase because of variant="mono" which has uppercase: true in some contexts or just the text itself)
-    // Actually I wrote "Ready to search" in code, but Text component with variant="mono" might uppercase it if configured.
-    // Let's check GlobalSearch.tsx again.
-    // <Text variant="mono" size="xs" color="dim" tracking="widest" uppercase weight="font-bold">
-    // So it will be uppercased.
-
     await expect(page.getByText('READY TO SEARCH')).toBeVisible();
   });
 
@@ -29,6 +22,23 @@ test.describe('Global Search Modal UX Refinement', () => {
     await expect(page.getByText('NO RESULTS FOUND')).toBeVisible();
   });
 
-  // Loading state "SEARCHING..." is hard to catch reliably in a fast local environment
-  // without mocking the network/queries to stay in loading state.
+  test('should show "SEARCHING..." state when simulated loading is active', async ({ page }) => {
+    // Enable simulated loading via window property
+    await page.addInitScript(() => {
+      (window as any).__SIMULATE_LOADING = true;
+    });
+
+    // Reload to ensure the init script takes effect for any immediate queries
+    await page.reload();
+    await expect(page.locator('main')).toBeVisible();
+
+    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    await searchButton.click();
+
+    // The "SEARCHING..." text should be visible because of the 1s delay
+    await expect(page.getByText('SEARCHING...')).toBeVisible();
+
+    // After delay, it should transition to READY TO SEARCH (since query is empty)
+    await expect(page.getByText('READY TO SEARCH')).toBeVisible({ timeout: 5000 });
+  });
 });
