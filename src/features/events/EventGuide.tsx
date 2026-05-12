@@ -9,7 +9,7 @@ import { EventSidebar } from './components/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
 import { RelatedEvents } from './components/RelatedEvents';
-import { useEventDetail } from './useEventDetail';
+import { useEventDetail } from '@/features/events/useEventDetail';
 import { SECTION_SPACING } from './constants';
 
 export default function EventGuide() {
