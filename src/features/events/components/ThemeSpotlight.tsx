@@ -1,15 +1,40 @@
 import { useMemo } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { AffiliateLink } from '@/types';
+
+// Simple mockup of a resolver since we don't have a backend or affiliate links DB.
+function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
+  return ids.map(id => ({
+    id,
+    name: `Recommended ${id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`,
+    url: '#',
+    category: 'gear',
+    description: `Highly recommended ${id.replace('-', ' ')} for this theme.`
+  }));
+}
 
 interface ThemeSpotlightProps {
   title: string;
   description: string;
   image?: string;
+  outfitIds?: string[];
+  accessoryIds?: string[];
   accentColor?: string;
 }
 
-export function ThemeSpotlight({ title, description, image, accentColor = 'var(--raw-color-accent)' }: ThemeSpotlightProps) {
+export function ThemeSpotlight({
+  title,
+  description,
+  image,
+  outfitIds = [],
+  accessoryIds = [],
+  accentColor = 'var(--raw-color-accent)'
+}: ThemeSpotlightProps) {
   const accentStyle = useMemo(() => ({ backgroundColor: accentColor } as React.CSSProperties), [accentColor]);
+
+  const resolvedOutfits = useMemo(() => resolveAffiliateLinks(outfitIds), [outfitIds]);
+  const resolvedAccessories = useMemo(() => resolveAffiliateLinks(accessoryIds), [accessoryIds]);
 
   return (
     <Box
@@ -49,6 +74,34 @@ export function ThemeSpotlight({ title, description, image, accentColor = 'var(-
           >
             {description}
           </Text>
+
+          {/* Outfit Recommendations */}
+          {resolvedOutfits.length > 0 && (
+            <Stack gap={4} marginTop={4}>
+              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+                Recommended Outfits
+              </Text>
+              <Grid cols={{ base: 1, sm: 2 }} gap={4}>
+                {resolvedOutfits.map(link => (
+                  <AffiliateCard key={link.id} link={link} />
+                ))}
+              </Grid>
+            </Stack>
+          )}
+
+          {/* Accessory Recommendations */}
+          {resolvedAccessories.length > 0 && (
+            <Stack gap={4} marginTop={4}>
+              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+                Recommended Accessories
+              </Text>
+              <Grid cols={{ base: 1, sm: 2 }} gap={4}>
+                {resolvedAccessories.map(link => (
+                  <AffiliateCard key={link.id} link={link} />
+                ))}
+              </Grid>
+            </Stack>
+          )}
         </Stack>
 
         {/* Image Section */}
