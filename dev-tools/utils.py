@@ -293,30 +293,3 @@ def get_github_client():
     if not token:
         raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
-
-def validate_node_version():
-    """
-    Checks the current node version against .nvmrc.
-    Returns a dict with status and details.
-    Raises CLIError on version mismatch.
-    """
-    nvmrc_path = os.path.join(os.path.dirname(__file__), "..", ".nvmrc")
-    try:
-        with open(nvmrc_path, "r") as f:
-            pinned_version = f.read().strip().lstrip('v')
-    except FileNotFoundError:
-        return {"status": "warning", "message": ".nvmrc missing", "pinned": None, "actual": None}
-
-    try:
-        current_version = run_command(["node", "-v"], log_on_error=False).strip().lstrip('v')
-    except (CLIError, FileNotFoundError):
-        return {"status": "error", "message": "Node.js not installed", "pinned": pinned_version, "actual": None}
-
-    # Robust version check: ensure pinned parts match actual parts
-    pinned_parts = pinned_version.split('.')
-    actual_parts = current_version.split('.')
-    if actual_parts[:len(pinned_parts)] != pinned_parts:
-        error_msg = f"Node version mismatch! Expected: v{pinned_version}, Actual: v{current_version}. Please use the pinned runtime requirement."
-        raise CLIError(error_msg)
-
-    return {"status": "success", "pinned": pinned_version, "actual": current_version}
