@@ -335,14 +335,14 @@ def check_node(ctx):
         res = validate_node_version()
         status = res.get('status')
 
-        message_map = {
-            'success': (out, f"✅ Node version matches .nvmrc (v{res.get('pinned')})"),
-            'warning': (out, f"⚠️  Warning: {res.get('message')}"),
-            'error': (err, res.get('message'))
-        }
-
-        handler, message = message_map.get(status, (err, "Unknown validation status"))
-        handler(ctx, message, data=res)
+        if status == 'success':
+            out(ctx, f"✅ Node version matches .nvmrc (v{res.get('pinned')})", data=res)
+        elif status == 'warning':
+            out(ctx, f"⚠️  Warning: {res.get('message')}", data=res)
+        elif status == 'error':
+            err(ctx, res.get('message'), data=res)
+        else:
+            err(ctx, f"Unknown validation status: {status}", data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
 
