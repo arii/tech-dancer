@@ -51,7 +51,6 @@ export function useHome() {
       name: event.title,
       location: event.location,
       schedule: event.schedule,
-      slug: event.slug,
     })),
     dancerPaths,
     hirePaths,
