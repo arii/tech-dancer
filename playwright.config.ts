@@ -21,14 +21,13 @@ export default defineConfig({
   use: {
     // Standardize baseURL for local and CI
     baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
+    trace: 'on-first-retry',
     // Standardize rendering environment for visual regression
     contextOptions: {
       reducedMotion: 'reduce',
     },
     // Ensure screenshots trigger on failure for debugging
     screenshot: 'only-on-failure',
-    // Trace on first retry
-    trace: 'on-first-retry',
   },
   expect: {
     toHaveScreenshot: {
