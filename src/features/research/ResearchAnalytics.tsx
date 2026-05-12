@@ -63,7 +63,7 @@ export default function ResearchAnalytics() {
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
                   <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Launch Console</Text>
-                  <Icon icon={ArrowRight} size="sm" color="accent" />
+                  <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>
             ))}
@@ -108,7 +108,7 @@ export default function ResearchAnalytics() {
           ) : (
             <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
               <Stack align="center" justify="center" gap={2}>
-                <Box color="dim">
+                <Box>
                   <Icon icon={Database} size="lg" color="muted" />
                 </Box>
                 <Stack gap={0.5}>
