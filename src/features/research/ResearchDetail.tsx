@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -20,9 +20,18 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
 };
 
 export default function ResearchDetail() {
-  const { id } = useParams();
+  const { id: paramId } = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { getTool, getStudy } = useResearch();
+
+  const id = useMemo(() => {
+    if (paramId) return paramId;
+    if (pathname.startsWith('/research/')) {
+      return pathname.split('/').filter(Boolean).pop();
+    }
+    return null;
+  }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
