@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures/visual';
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { IGNORED_ERROR_PATTERNS } from './test-constants';
 
 function isIgnored(msg: string) {
@@ -30,7 +30,7 @@ test.describe('Navigation Smoke Tests', () => {
   test('homepage loads without console errors', async ({ page, pageErrors }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
-    const filteredErrors = pageErrors.errors.filter(e => !isIgnored(e));
+    const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
     expect(filteredErrors).toHaveLength(0);
   });
 
@@ -45,9 +45,9 @@ test.describe('Navigation Smoke Tests', () => {
     );
 
     for (const href of links) {
-      pageErrors.clear();
+      pageErrors.clearErrors();
       await validateUrlNavigation(page, href);
-      const filteredErrors = pageErrors.errors.filter(e => !isIgnored(e));
+      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
       expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
     }
   });
@@ -69,9 +69,9 @@ test.describe('Navigation Smoke Tests', () => {
       );
 
       for (const href of contentLinks) {
-        pageErrors.clear();
+        pageErrors.clearErrors();
         await validateUrlNavigation(page, href);
-        const filteredErrors = pageErrors.errors.filter(e => !isIgnored(e));
+        const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
         expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
       }
     }

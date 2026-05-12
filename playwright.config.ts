@@ -49,8 +49,6 @@ export default defineConfig({
     stdout: 'ignore',
     stderr: 'pipe',
     timeout: 60 * 1000,
-    env: {
-      VITE_BASE_PATH: BASE_PATH
-    }
+    env: { VITE_BASE_PATH: String(BASE_PATH || '/') }, // impeccable-ignore
   },
 });

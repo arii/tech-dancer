@@ -1,4 +1,4 @@
-import { Page, ConsoleMessage } from '@playwright/test';
+import type { Page, ConsoleMessage } from '@playwright/test';
 import { IGNORED_ERROR_PATTERNS } from '../test-constants';
 
 export interface ErrorMonitoringOptions {

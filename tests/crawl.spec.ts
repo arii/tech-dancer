@@ -64,7 +64,7 @@ test.describe('Automated UX/Console Error Crawler', () => {
       console.log(`Crawling (${pageCount}/${MAX_PAGES}): ${normalizedUrl}`);
 
       // Clear errors from previous navigation before going to next page
-      pageErrors.clear();
+      pageErrors.clearErrors();
 
       const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
 
@@ -91,7 +91,8 @@ test.describe('Automated UX/Console Error Crawler', () => {
       }
 
       // Assert no errors for this page
-      expect(pageErrors.errors, `Errors on ${normalizedUrl}:\n${pageErrors.errors.join('\n')}`).toHaveLength(0);
+      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors];
+      expect(filteredErrors, `Errors on ${normalizedUrl}:\n${filteredErrors.join('\n')}`).toHaveLength(0);
     }
 
     console.log(`Crawling complete. Visited ${pageCount} pages.`);
