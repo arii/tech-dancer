@@ -5,6 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
+import { cardVariants } from '@/lib/variants';
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
@@ -36,14 +37,11 @@ export default function ResearchAnalytics() {
                 as="button"
                 onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 padding={6}
-                radius="lg"
-                border
                 gap={4}
                 height="full"
-                cursor="pointer"
-                surface="surface"
                 align="start"
                 textAlign="left"
+                className={cardVariants({ interactive: true })}
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
@@ -84,12 +82,9 @@ export default function ResearchAnalytics() {
                 <Stack
                   key={study.slug}
                   padding={8}
-                  radius="lg"
-                  border
-                  surface="surface"
                   gap={4}
-                  cursor="pointer"
                   onClick={() => navigate(`/research/${study.slug}`)}
+                  className={cardVariants({ interactive: true })}
                 >
                   <Box display="flex" justify="between" align="center">
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
