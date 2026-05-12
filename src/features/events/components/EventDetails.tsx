@@ -15,7 +15,12 @@ interface EventDetailsProps {
   gearSections?: ResolvedGearSection[];
 }
 
-export function EventDetails({ event, gearSections = [] }: EventDetailsProps) {
+export function EventDetails({
+  event,
+  themeOutfits = [],
+  themeAccessories = [],
+  gearSections = []
+}: EventDetailsProps) {
   return (
     <Stack gap={SECTION_SPACING}>
       <Box id="overview" as="section">
@@ -94,8 +99,8 @@ export function EventDetails({ event, gearSections = [] }: EventDetailsProps) {
               title={event.theme.name || "Event Theme"}
               description={event.theme.description || ""}
               image={event.theme.image}
-              outfitIds={event.theme.outfitIds}
-              accessoryIds={event.theme.accessoryIds}
+              outfits={themeOutfits}
+              accessories={themeAccessories}
             />
           </Stack>
         </Box>

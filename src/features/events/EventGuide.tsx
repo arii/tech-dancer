@@ -36,7 +36,7 @@ export default function EventGuide() {
   }
 
   return (
-    <Box as="main">
+    <Box>
       <SEO
         title={`${event.title} | Event Guide`}
         description={event.excerpt}
