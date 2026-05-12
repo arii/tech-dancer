@@ -48,6 +48,7 @@ jobs:
   lint-typecheck:
     name: Lint & Type Check
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -98,6 +99,7 @@ jobs:
   audit:
     name: Anti-Pattern Audit
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -143,6 +145,7 @@ jobs:
     name: Build & E2E
     needs: lint-typecheck
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -215,3 +218,4 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+          if-no-files-found: ignore
