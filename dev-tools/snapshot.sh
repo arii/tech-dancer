@@ -23,7 +23,23 @@ fi
 # Basic environment check
 echo "--- Environment ---"
 echo "Python version: $(python3 --version 2>&1 || echo 'Not installed')"
-echo "Node version: $(node --version 2>&1 || echo 'Not installed')"
+
+# Node version validation
+NODE_VERSION=$(node --version 2>&1 | sed 's/^v//' || echo 'Not installed')
+echo "Node version: v$NODE_VERSION"
+
+if [ -f ".nvmrc" ]; then
+    PINNED_NODE=$(cat .nvmrc | sed 's/^v//')
+    if [ "$NODE_VERSION" != "$PINNED_NODE" ]; then
+        echo "❌ Error: Node version mismatch!"
+        echo "   Expected: v$PINNED_NODE (from .nvmrc)"
+        echo "   Actual:   v$NODE_VERSION"
+        echo "   Please install and use the pinned version."
+    else
+        echo "✅ Node version matches .nvmrc"
+    fi
+fi
+
 echo "pnpm version: $(pnpm --version 2>&1 || echo 'Not installed')"
 
 # Token check (do not print token!)
