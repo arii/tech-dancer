@@ -62,6 +62,7 @@ class Orchestrator:
         Fetches a PR, its diff, and generates a code review using LocalAI/Gemini.
         """
         pr_details = self.github.fetch_pr_details(pr_number)
+        pr_details['checkResults'] = self.github.fetch_check_runs(pr_details.get('head', {}).get('sha'))
         pr_diff = self.github.fetch_pr_diff(pr_number)
         diff_hash = self._hash_content(pr_diff)
         cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
@@ -293,7 +294,24 @@ class Orchestrator:
         if fetch:
             repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(pr_number)
             title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
-            context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## Files Changed"]
+            context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## CI Status"]
+
+            check_runs = self.github.fetch_check_runs(pr.head.sha)
+            if check_runs:
+                for run in check_runs:
+                    status_icon = '✅' if run.get('conclusion') == 'success' else '❌' if run.get('conclusion') == 'failure' else '⏳'
+                    context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
+                    if run.get('conclusion') == 'failure':
+                        logs = self.github.fetch_check_run_logs(run.get('id'))
+                        # Extract a snippet of the logs (last 50 lines or search for 'error')
+                        log_lines = logs.splitlines()
+                        error_lines = [l for l in log_lines if 'error' in l.lower() or 'fail' in l.lower()]
+                        snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
+                        context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
+            else:
+                context_lines.append("_No check runs found._")
+
+            context_lines.extend(["\n## Files Changed"])
             for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
             context_lines.append("\n## Diffs")
             for f in pr.get_files():
@@ -469,17 +487,36 @@ class Orchestrator:
 
     def fix_ci(self, pr_number=None, branch=None, api_key=None, dry_run=True):
         repo_name = get_repo_name(); g = get_github_client(); repo = g.get_repo(repo_name)
-        if pr_number: pr = repo.get_pull(int(pr_number)); branch = pr.head.ref
+        if pr_number:
+            pr = repo.get_pull(int(pr_number))
+            branch = pr.head.ref
         elif branch: pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
         else:
             branch = run_command(['git', 'branch', '--show-current']).strip()
             pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
+
+        if not pr:
+            raise CLIError(f"Could not find PR for branch {branch}")
+
         if api_key: self.jules.api_key = api_key
+
+        # Analyze failing check runs
+        check_runs = self.github.fetch_check_runs(pr.head.sha)
+        failing_logs = []
+        for run in check_runs:
+            if run.get('conclusion') == 'failure':
+                logs = self.github.fetch_check_run_logs(run.get('id'))
+                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{logs[-2000:]}") # Last 2000 chars
+
+        prompt = "Analyze the failing CI logs and fix the errors."
+        if failing_logs:
+            prompt += "\n\nFailing Logs:\n" + "\n---\n".join(failing_logs)
+
         source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
         if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
-            res = self.jules.create_session_from_source(source_id, branch, "Analyze the failing CI logs and fix the errors.")
+            res = self.jules.create_session_from_source(source_id, branch, prompt)
             if res: session_name = res.get("name")
             else: raise CLIError("Jules API session creation failed")
         feedback = f"🤖 **Jules is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."

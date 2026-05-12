@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
@@ -6,21 +5,23 @@ interface EventCardProps {
   name: string;
   location: string;
   schedule: string;
-  slug?: string;
+  onClick?: () => void;
 }
 
-export function EventCard({ name, location, schedule, slug }: EventCardProps) {
-  const isLink = !!slug;
-
+export function EventCard({ name, location, schedule, onClick }: EventCardProps) {
   return (
     <Stack
-      as={isLink ? NavLink : 'div'}
-      {...(isLink ? { to: `/events/${slug}` } : {})}
+      as={onClick ? "button" : "div"}
+      type={onClick ? "button" : undefined}
+      onClick={onClick}
       padding={8}
       radius="md"
       border
       gap={4}
       height="full"
+      width="full"
+      textAlign="left"
+      cursor={onClick ? "pointer" : "default"}
       className="bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
       <Box display="flex" align="center" gap={2}>
@@ -31,7 +32,7 @@ export function EventCard({ name, location, schedule, slug }: EventCardProps) {
       </Box>
 
       <Stack gap={1}>
-        <Text as="h4" variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
+        <Text variant="body" size="lg" weight="font-bold" className="text-text-main leading-tight">
           {name}
         </Text>
         <Text size="sm" color="dim">

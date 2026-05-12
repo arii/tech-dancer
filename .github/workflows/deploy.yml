@@ -171,8 +171,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          repository-name: arii/arii.github.io
-          branch: main
+          branch: gh-pages
           folder: root-seo
           clean: false # Do not delete other files in arii.github.io
 
@@ -181,8 +180,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
-          repository-name: arii/arii.github.io
-          branch: main
+          branch: gh-pages
           folder: dist
           target-folder: tech-dancer
           clean: true
