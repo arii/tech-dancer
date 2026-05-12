@@ -9,14 +9,14 @@ export function EventNavigation() {
       zIndex={40}
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }}>
-        <Box display="flex" gap={8}>
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 4, md: 12, lg: 24 }}>
+        <Box display="flex" gap={{ base: 3, md: 8 }}>
           {EVENT_TABS.map((tab) => (
             <Box
               key={tab.id}
               as="a"
               href={`#${tab.id}`}
-              paddingY={4}
+              paddingY={{ base: 3, md: 4 }}
               className="group relative cursor-pointer"
             >
               <Box display="flex" align="center" gap={2} color="dim" className="group-hover:text-accent transition-colors">

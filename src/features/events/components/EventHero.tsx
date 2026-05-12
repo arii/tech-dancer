@@ -21,7 +21,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
     <Box
       position="relative"
       width="full"
-      minHeight={{ base: "30vh", md: "50vh" }}
+      minHeight={{ base: "25vh", md: "50vh" }}
       display="flex"
       align="center"
       overflow="hidden"
@@ -58,9 +58,9 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
       <Stack
         relative
         zIndex={10}
-        gap={6}
+        gap={{ base: 3, md: 6 }}
         paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingY={{ base: 8, md: 12 }}
+        paddingY={{ base: 4, md: 12 }}
         maxWidth="screen-xl"
         marginX="auto"
         width="full"
@@ -83,7 +83,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
           <Text
             as="h1"
             variant="headline"
-            size="fluid-9"
+            size={{ base: "2xl", md: "fluid-9" }}
             weight="font-black"
             color="white"
             leading="tight"
@@ -93,16 +93,16 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
           </Text>
         </Stack>
 
-        <Box display="flex" wrap gap={6} align="center">
+        <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center">
           <Box display="flex" align="center" gap={2}>
             <Calendar className="w-5 h-5 text-accent" />
-            <Text variant="body" size="lg" weight="font-medium">
+            <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
               {date}
             </Text>
           </Box>
           <Box display="flex" align="center" gap={2}>
             <MapPin className="w-5 h-5 text-accent" />
-            <Text variant="body" size="lg" weight="font-medium">
+            <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
               {location}
             </Text>
           </Box>

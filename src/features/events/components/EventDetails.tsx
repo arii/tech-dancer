@@ -10,10 +10,10 @@ interface EventDetailsProps {
 
 export function EventDetails({ event }: EventDetailsProps) {
   return (
-    <Stack gap={SECTION_SPACING}>
+    <Stack gap={{ base: 6, lg: SECTION_SPACING }}>
       <Box id="overview" as="section">
-        <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Event Overview</Text>
+        <Stack gap={{ base: 3, lg: 8 }}>
+          <Text variant="headline" size={{ base: "lg", lg: "3xl" }} weight="font-black">Event Overview</Text>
           <Box className="prose prose-invert max-w-none">
             <MarkdownRenderer content={event.content} />
           </Box>
@@ -36,9 +36,9 @@ export function EventDetails({ event }: EventDetailsProps) {
       </Box>
 
       <Box id="schedule" as="section">
-        <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Schedule Details</Text>
-          <Box border radius="lg" padding={8} surface="surface">
+        <Stack gap={{ base: 3, lg: 8 }}>
+          <Text variant="headline" size={{ base: "lg", lg: "3xl" }} weight="font-black">Schedule Details</Text>
+          <Box border radius="lg" padding={{ base: 4, lg: 8 }} surface="surface">
             <Stack gap={6}>
               <Box display="flex" gap={4}>
                 <Calendar className="w-5 h-5 text-accent shrink-0" />
@@ -62,9 +62,9 @@ export function EventDetails({ event }: EventDetailsProps) {
       </Box>
 
       <Box id="location" as="section">
-        <Stack gap={8}>
-          <Text variant="headline" size="3xl" weight="font-black">Location & Venue</Text>
-          <Box border radius="lg" padding={8} surface="surface">
+        <Stack gap={{ base: 3, lg: 8 }}>
+          <Text variant="headline" size={{ base: "lg", lg: "3xl" }} weight="font-black">Location & Venue</Text>
+          <Box border radius="lg" padding={{ base: 4, lg: 8 }} surface="surface">
             <Stack gap={6}>
               <Box display="flex" gap={4}>
                 <MapPin className="w-5 h-5 text-accent shrink-0" />

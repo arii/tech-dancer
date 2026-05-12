@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -10,6 +10,14 @@ interface EventSidebarProps {
 
 export function EventSidebar({ event }: EventSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkIsDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    checkIsDesktop();
+    window.addEventListener('resize', checkIsDesktop);
+    return () => window.removeEventListener('resize', checkIsDesktop);
+  }, []);
 
   return (
     <Box as="aside">
@@ -36,7 +44,7 @@ export function EventSidebar({ event }: EventSidebarProps) {
             </Box>
 
             <AnimatePresence initial={false}>
-              {(isOpen || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
+              {(isOpen || isDesktop) && (
                 <Box
                   id="sidebar-intelligence-content"
                   display={{ base: "block", lg: "block" }}
