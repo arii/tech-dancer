@@ -57,16 +57,19 @@ export function HeroParticleCanvas({
     }));
 
     let rafId: number;
-    let lastFrameTime = performance.now();
+    let lastFrameTime = 0; // Set to 0 to ensure the first frame is rendered immediately
     const frameInterval = 1000 / 60; // Target 60 FPS
 
     const draw = (currentTime: number) => {
       rafId = requestAnimationFrame(draw);
+
+      // Calculate delta since last frame
       const deltaTime = currentTime - lastFrameTime;
 
-      if (deltaTime < frameInterval) return;
+      // Throttle to 60 FPS, using a small buffer (0.1ms) to handle slight timing jitter
+      if (lastFrameTime !== 0 && deltaTime < frameInterval - 0.1) return;
 
-      lastFrameTime = currentTime - (deltaTime % frameInterval);
+      lastFrameTime = currentTime - (lastFrameTime === 0 ? 0 : deltaTime % frameInterval);
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const p of particles) {

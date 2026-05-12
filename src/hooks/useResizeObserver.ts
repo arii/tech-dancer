@@ -10,17 +10,20 @@ export function useResizeObserver<T extends HTMLElement>(debounceMs?: number) {
   const elementRef = useRef<T>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const isFirstUpdate = useRef(true);
+
   const observerCallback = useCallback((entries: ResizeObserverEntry[]) => {
     for (const entry of entries) {
       const { width, height } = entry.contentRect;
 
-      if (debounceMs) {
+      if (debounceMs && !isFirstUpdate.current) {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
           setSize({ width, height });
         }, debounceMs);
       } else {
         setSize({ width, height });
+        isFirstUpdate.current = false;
       }
     }
   }, [debounceMs]);
