@@ -7,17 +7,20 @@
 ## Contents
 
 ### Automation Configuration
+
 - **audit.config.yaml** - Unified configuration defining all banned language categories, terms, and standard fixes.
 
 ### Workflows
 
 Located in `.agent/workflows/`:
+
 - **ai-slop-audit-[DATE].md** - Auto-generated audit results (latest run)
 - Other workflows: mass-audit-issues, review-pr, review-ux, etc.
 
 ### Scripts
 
 Located in `.agent/scripts/`:
+
 - **audit-ai-slop.py** - Automated auditor that searches codebase and generates action plan. Consumes `audit.config.yaml`.
 
 ---
@@ -31,6 +34,7 @@ python3 .agent/scripts/audit-ai-slop.py
 ```
 
 This generates a timestamped report in `.agent/workflows/ai-slop-audit-[DATE].md` with:
+
 - All violations found (grouped by category and priority)
 - Exact file paths and line numbers
 - Context for each violation
@@ -39,6 +43,7 @@ This generates a timestamped report in `.agent/workflows/ai-slop-audit-[DATE].md
 ### Apply Fixes
 
 Follow the audit report to fix violations in priority order:
+
 1. Critical (About page, home page)
 2. High (Content/blog posts)
 3. Normal (Other files)

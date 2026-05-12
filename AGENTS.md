@@ -1,177 +1,222 @@
 # TSX File System Checklist (For Coding Agents)
 
-These are **Rules for writing clean .tsx files** to ensure every `.tsx` file adheres to your design system, architecture, and modern frontend best practices.
+These are **rules for writing clean `.tsx` files** so UI code consistently follows the design system, architecture, and modern frontend best practices.
 
 ## 🧠 Core Principle
 
-> **A `.tsx` file should Build UI using standard pieces**
+> **A `.tsx` file should build UI using standard pieces.**
 
-## 1. ❌ No Raw Tailwind in App/Feature Layers
+---
+
+## 0) Quick Start (Run at the beginning of UI work)
+
+1. `python3 dev-tools/td_cli.py conflicts`
+2. `pnpm run audit`
+3. Read `TODO_ANTIPATTERNS.md`
+4. Implement changes using primitives/tokens only
+5. Re-run `pnpm run audit`
+6. Run `python3 dev-tools/td_cli.py pre-submit`
+
+---
+
+## 1) ❌ No Raw Tailwind in App/Feature Layers
+
 - No arbitrary values (`text-[11px]`, `tracking-[3px]`, `shadow-[...]`)
 - No direct layout classes (`flex`, `grid`, `items-center`)
 - No direct spacing (`px-*`, `py-*`)
 - No color classes (`bg-*`, `text-*`) outside tokens
 
-## 2. ✅ Only Use Approved Styling Sources
+## 2) ✅ Only Use Approved Styling Sources
+
 - Design tokens (`spacing`, `radius`, `typography`, `motion`)
 - CVA variants
 - Primitives (`Box`, `Stack`, `Text`, `Grid`)
-- Composed components (e.g. `Button`, `Card`)
+- Composed components (e.g., `Button`, `Card`)
 
-## 3. 🧱 Primitives Must Be Used for Layout
+## 3) 🧱 Primitives Must Be Used for Layout
+
 - Layout uses `Stack`, `Grid`, `Box`, etc.
 - No manual flex/grid usage
-- Responsive behavior handled via primitive props (not className)
+- Responsive behavior handled via primitive props (not `className`)
 
-## 4. 🎨 Typography Must Be Tokenized
+## 4) 🎨 Typography Must Be Tokenized
+
 - No raw `text-*` classes
 - All text uses `<Text />` or equivalent abstraction
 
-## 5. 🎛 Variants Must Be Standardized
-- Variant names match global system (e.g. `default`, `accent`, `ghost`)
+## 5) 🎛 Variants Must Be Standardized
 
-## 6. ⚙️ No Business Logic in UI Components
+- Variant names match global system (e.g., `default`, `accent`, `ghost`)
+
+## 6) ⚙️ No Business Logic in UI Components
+
 - Logic extracted into hooks (`useX`)
 - No DOM querying (`querySelector`, `getElementById`)
 
-## 7. 🧩 Components Must Be Declarative
+## 7) 🧩 Components Must Be Declarative
+
 - UI is predictable and compositional
 
-## 8. 📦 Feature Isolation Required
+## 8) 📦 Feature Isolation Required
+
 - Features belong in `features/<feature-name>/`
 
-## 9. 🧭 Routing Is Declarative
-- Navigation uses route config (not hardcoded)
-- Do NOT use `HashRouter`.
+## 9) 🧭 Routing Is Declarative
 
-## 10. 🎞 Motion Must Use Tokens
+- Navigation uses route config (not hardcoded)
+- Do **not** use `HashRouter`
+
+## 10) 🎞 Motion Must Use Tokens
+
 - Motion values come from `motionTokens`
 
-## 11. 🧼 No Inline Styles or Magic Numbers
+## 11) 🧼 No Inline Styles or Magic Numbers
+
 - No inline `style` usage
 - Everything mapped to tokens
 
-## 12. 🧱 Composition Over Configuration
+## 12) 🧱 Composition Over Configuration
+
 - Repeated patterns extracted into specialized components
 
-## 13. 🔌 No Direct DOM Access
+## 13) 🔌 No Direct DOM Access
+
 - Controlled inputs used
 
-## 14. 🧪 Hooks Are Reusable & Pure
+## 14) 🧪 Hooks Are Reusable & Pure
+
 - Side effects properly isolated
 
-## 15. 🧭 App Layer = Composition Only
-- App.tsx only composes layout, routes, and global UI.
+## 15) 🧭 App Layer = Composition Only
 
-## 16. 🧩 Avoid “God Components”
+- `App.tsx` only composes layout, routes, and global UI
+
+## 16) 🧩 Avoid “God Components”
+
 - Components are small and focused
 
-## 18. 📐 Responsive Design via System
-- Responsive handled via props
+## 17) 📐 Responsive Design via System
 
-## 20. 🚫 No System Bypass via `className`
-- `className` should NOT introduce new design decisions
+- Responsive behavior handled via system props
 
-## 21. 🏗 Modular Architecture
-- Layout primitives (`Box`, `Grid`, `Stack`) MUST reside in `src/layouts/`
-- Page-level compositors MUST reside in `src/pages/`
-- Component imports MUST use the `@/layouts/` or `@/pages/` alias
+## 18) 🚫 No System Bypass via `className`
 
-## 22. 🛤 SPA Routing & Parallel Work Protocol
-- Application routes MUST be code-split using `React.lazy()` to keep bundles small.
-- Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries.
-- Ensure environment-agnostic routing (handling base URLs cleanly for GitHub Pages).
+- `className` should **not** introduce new design decisions
+
+## 19) 🏗 Modular Architecture
+
+- Layout primitives (`Box`, `Grid`, `Stack`) must reside in `src/layouts/`
+- Page-level compositors must reside in `src/pages/`
+- Component imports must use the `@/layouts/` or `@/pages/` alias
+
+## 20) 🛤 SPA Routing & Parallel Work Protocol
+
+- Application routes must be code-split using `React.lazy()`
+- Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries
+- Ensure environment-agnostic routing (handle base URLs cleanly for GitHub Pages)
 
 ### Parallel Work Protocol
+
 When multiple agents work simultaneously:
+
 1. **Run conflict check first**: `python3 dev-tools/td_cli.py conflicts`
-2. **Stagger feature files**: Agents should not touch the same component file.
-3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` to communicate scope (e.g. `feat/issue-247-gear-card`).
-4. **Shared primitives**: Never modify `src/layouts/*.tsx` in a feature branch without coordinating.
+2. **Stagger feature files**: Agents should not touch the same component file
+3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`)
+4. **Shared primitives**: Do not modify `src/layouts/*.tsx` in feature branches without coordination
 
-## 23. 🤝 Collaborative GitHub Workflows
+## 21) 🤝 Collaborative GitHub Workflows
 
-The `dev-tools/td_cli.py` tool is the unified entry point for repository automation and PR reviews.
+`dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
 
 ### PR Review Lifecycle
-1. **Fetch Context**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch`
-2. **Perform Audit**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit`
-3. **Submit Review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
+
+1. **Fetch context**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch`
+2. **Perform audit**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit`
+3. **Submit review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
 
 ### Quality Gates & Submission Protocol
-- **Autonomous Repair**: If you encounter persistent linting or TypeScript errors, you can use the autonomous repair agent:
-  ```bash
-  # Triage current local errors and attempt to fix them in-place
-  python3 dev-tools/td_cli.py repair
 
-  # Attempt repairs in an isolated git worktree and branch
+- **Autonomous repair** (for persistent lint/type errors):
+  ```bash
+  python3 dev-tools/td_cli.py repair
   python3 dev-tools/td_cli.py repair --worktree
   ```
-- **Pre-Submit Check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing.
-- **No Monolithic PRs**: Keep PRs focused. A single PR should ideally modify no more than 3 files in `src/layouts/` or `src/components/`.
-- **Manual Confirmation**: Every merge command MUST be preceded by a specific `notify_user` request for approval.
-- **Code Review Standards**: Evaluate for dead abstractions, unnecessary indirection, responsibility creep, and token compliance.
+- **Pre-submit check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing
+- **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
+- **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
 
 ### Baseline Maintenance
-- **Automated Gates**: CI enforces bundle size and TypeScript `any` counts via GitHub Actions Variables.
-- **Updating Baselines**: After intentional, approved changes that increase technical debt, update the variables using the GitHub CLI:
+
+- CI enforces bundle size and TypeScript `any` count via GitHub Actions variables
+- After intentional approved debt increases, update baselines:
   ```bash
   gh variable set BUNDLE_BASELINE_KB --body 1250
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 
-## 24. Setup (Jules Environment)
+## 22) Setup (Jules Environment)
 
-To prepare the base environment (Node.js/pnpm), execute the minimal setup script:
+To prepare the base environment (Node.js/pnpm):
 
 ```bash
 ./dev-tools/snapshot.sh
 ```
 
 ### On-Demand Dependencies
-To keep the environment snapshot small, heavy dependencies are installed only when needed using these provided scripts:
 
-**For E2E Testing / Browser Automation:**
+Heavy dependencies are installed only when needed:
+
+**E2E testing / browser automation:**
+
 ```bash
 ./dev-tools/setup-playwright.sh
 ```
 
-**For Python ETL / Data Processing:**
+**Python ETL / data processing:**
+
 ```bash
 ./dev-tools/setup-python.sh
 ```
 
-## 25. UI Auditing Workflow
+## 23) UI Auditing Workflow
 
-The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) helps maintain design system integrity by identifying arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
+The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) identifies arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
 
-### 🧠 Planning Phase
-Before starting a UI task, run the audit to identify existing tech debt in the feature or page you are modifying:
+### Planning Phase
+
+Before starting a UI task:
+
 ```bash
 pnpm run audit
 cat TODO_ANTIPATTERNS.md
 ```
-Incorporate fixing these anti-patterns into your implementation plan.
 
-### 🛡️ Pre-Submission Audit Gates
-A local pre-push hook is available to prevent pushing code with anti-patterns.
-To install:
+Integrate existing anti-pattern cleanup into your implementation plan.
+
+### Pre-Submission Audit Gates
+
+Install local pre-push hook:
+
 ```bash
 git config core.hooksPath .githooks
 ```
-This hook runs a targeted audit on changed `.tsx` files.
 
-Before submitting a PR, it is recommended to run the full pre-submission check:
+The hook runs targeted audit on changed `.tsx` files.
+
+Before submitting a PR, run:
+
 ```bash
 python3 dev-tools/td_cli.py pre-submit
 ```
 
-### 🧪 Pre-Commit Checklist
-Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss` files:
-1. **Run the Audit**: `pnpm run audit`.
-2. **Review the Report**: Check `TODO_ANTIPATTERNS.md` for any new violations introduced by your changes.
-3. **Enforce Compliance**: Fix all identified anti-patterns.
-4. **Intentional Deviations**:
-   - For TSX/TS files, use `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file).
-   - For CSS/SCSS files, use `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file).
-5. **Clean Slate**: Ensure your changes do not introduce new violations in the target files.
+### Pre-Commit Checklist
+
+Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
+
+1. Run `pnpm run audit`
+2. Review `TODO_ANTIPATTERNS.md` for violations introduced by your changes
+3. Fix all identified anti-patterns
+4. For intentional deviations:
+   - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
+   - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
+5. Ensure your changes introduce no new violations in touched files

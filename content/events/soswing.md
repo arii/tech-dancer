@@ -20,5 +20,7 @@ gear:
     - "Light jacket"
     - "Refillable water bottle"
 ---
+
 # SOswing
+
 A charming West Coast Swing experience in the heart of Southern Oregon.

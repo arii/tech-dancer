@@ -20,5 +20,7 @@ gear:
     - "Towel"
     - "Portable fan"
 ---
+
 # Jack & Jill O'Rama
+
 The ultimate West Coast Swing party and competition weekend in Southern California.

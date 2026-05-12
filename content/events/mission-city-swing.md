@@ -20,5 +20,7 @@ gear:
     - "Water"
     - "Deodorant"
 ---
+
 # Mission City Swing
+
 Weekly social dance in San Jose.

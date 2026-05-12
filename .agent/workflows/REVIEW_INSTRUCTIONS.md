@@ -44,4 +44,5 @@ All review submissions MUST follow this JSON schema exactly.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON. Escape double quotes `\"` and newlines `\n` within the string values.
 
 ## 3. Tooling Guidelines
+
 Agents must not directly use git or gh commands but reuse existing tooling. Agents should not use Copilot, but may use Ollama.

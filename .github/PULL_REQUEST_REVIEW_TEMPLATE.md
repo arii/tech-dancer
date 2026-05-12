@@ -50,6 +50,7 @@ Evaluate EVERY changed file against the following criteria:
 7. Audit ratio — if additions > 100 lines, find at least 10 lines to cut.
 
 Mandatory response sections (fill these in the Submission body below):
+
 - ANTI-AI-SLOP: verbose/over-engineered patterns found, or confirmed absent
 - FINDINGS: per-file critical feedback with specific line numbers
 - FINAL RECOMMENDATION: Approved | Approved with Minor Changes | Not Approved
@@ -67,17 +68,19 @@ Mandatory response sections (fill these in the Submission body below):
 Note: Do NOT skip any file. Leave a comment for every file, even if clean.
 
 {{FOR_EACH_FILE}}
-<!-- BEGIN_FILE_AUDIT: {{FILENAME}} -->
----
+
+## <!-- BEGIN_FILE_AUDIT: {{FILENAME}} -->
 
 ### File: `{{FILENAME}}` {{FILE_STATS}} ({{FILE_STATUS}})
 
 Diff:
+
 ```diff
 {{DIFF}}
 ```
 
 Audit checklist (mark [x] when confirmed clean, or write the violation inline):
+
 - [ ] Architecture: Logic belongs in this layer, no leaky abstractions, no cross-domain coupling
 - [ ] Design System: Uses design tokens — no magic numbers, no arbitrary Tailwind values
 - [ ] Types: Strict — no `any`, no implicit types
@@ -86,6 +89,7 @@ Audit checklist (mark [x] when confirmed clean, or write the violation inline):
 Proposed inline comments — add one block per issue found. Copy the block to add more.
 Do NOT remove the backtick fences. Do NOT leave placeholder text in `body`.
 At minimum one comment per file is required, even if just confirming the file is clean.
+
 ```json
 {
   "path": "{{FILENAME}}",
@@ -95,6 +99,7 @@ At minimum one comment per file is required, even if just confirming the file is
 ```
 
 Add additional blocks below for other issues in this file:
+
 ```json
 {
   "path": "{{FILENAME}}",
@@ -102,7 +107,9 @@ Add additional blocks below for other issues in this file:
   "body": "<optional second comment — delete this block if not needed>"
 }
 ```
+
 <!-- END_FILE_AUDIT: {{FILENAME}} -->
+
 {{END_FOR_EACH}}
 
 ---
@@ -112,6 +119,7 @@ Add additional blocks below for other issues in this file:
 After completing every file block above, fill in the body below and run the command.
 
 <!-- BEGIN_SUBMISSION_JSON -->
+
 ```json
 {
   "body": "## ANTI-AI-SLOP\n<findings or confirmed absent>\n\n## FINDINGS\n<per-file summary with line references>\n\n## FINAL RECOMMENDATION\n<!-- Approved | Approved with Minor Changes | Not Approved -->",
@@ -120,9 +128,11 @@ After completing every file block above, fill in the body below and run the comm
   ]
 }
 ```
+
 <!-- END_SUBMISSION_JSON -->
 
 Command:
+
 ```bash
 python3 dev-tools/submit_pr_review_data.py plan-pr-review-{{NUMBER}}.md
 ```

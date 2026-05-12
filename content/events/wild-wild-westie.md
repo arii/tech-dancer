@@ -24,4 +24,5 @@ gear:
     - "Hydration tablets"
     - "Shoe brush"
 ---
+
 Dallas event. Book the hotel room block immediately as it fills fast.
