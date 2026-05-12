@@ -9,10 +9,7 @@ interface AffiliateCardProps {
 export function AffiliateCard({ link }: AffiliateCardProps) {
   return (
     <Stack
-      as="a"
-      href={link.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      position="relative"
       direction="col"
       gap={3}
       height="full"
@@ -49,11 +46,14 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
 
       <Stack gap={1.5}>
         <Text
-          as="h4"
+          as="a"
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
           variant="body"
-          size="md"
+          size="xs"
           weight="font-bold"
-          className="text-text-main group-hover:text-accent transition-colors line-clamp-1"
+          className="text-text-main group-hover:text-accent transition-colors line-clamp-1 after:absolute after:inset-0"
         >
           {link.name}
         </Text>
@@ -69,7 +69,5 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         </Text>
       </Box>
     </Stack>
-  );
-}
   );
 }

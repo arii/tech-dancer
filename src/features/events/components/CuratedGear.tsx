@@ -3,23 +3,11 @@ import { SectionHeader } from '../../../components/ui/SectionHeader';
 import { AffiliateCard } from '../../../components/ui/AffiliateCard';
 import { affiliateManager } from '../../../lib/affiliateManager';
 import { Event } from '../../../lib/content';
+import { GEAR_CATEGORIES } from '../constants';
 
 interface CuratedGearProps {
   event: Event;
 }
-
-type CuratedGearCategory = {
-  id: keyof NonNullable<Event['curatedGear']>;
-  label: string;
-};
-
-const GEAR_CATEGORIES: CuratedGearCategory[] = [
-  { id: 'outfits', label: 'Outfits' },
-  { id: 'accessories', label: 'Accessories' },
-  { id: 'shoes', label: 'Shoes' },
-  { id: 'essentials', label: 'Essentials' },
-  { id: 'travel', label: 'Travel' },
-];
 
 export function CuratedGear({ event }: CuratedGearProps) {
   const { curatedGear } = event;
@@ -29,8 +17,7 @@ export function CuratedGear({ event }: CuratedGearProps) {
   const sections = GEAR_CATEGORIES
     .map(cat => ({
       ...cat,
-      links: (curatedGear[cat.id] || [])
-        .map(id => affiliateManager.getLink(id))
+      links: (curatedGear[cat.id]?.map(id => affiliateManager.getLink(id)) ?? [])
         .filter((link): link is NonNullable<typeof link> => !!link)
     }))
     .filter(section => section.links.length > 0);
