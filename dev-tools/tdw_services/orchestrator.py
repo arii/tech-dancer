@@ -19,7 +19,8 @@ from utils import (
     set_gha_variable,
     CLIError,
     run_command,
-    is_ollama_available
+    is_ollama_available,
+    validate_node_version
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope, get_project_config
@@ -387,17 +388,11 @@ class Orchestrator:
 
         # 1. Node Runtime Check (Fail Fast)
         try:
-            with open(".nvmrc", "r") as f:
-                pinned_version = f.read().strip().lstrip('v')
-            current_version = run_command(["node", "-v"]).strip().lstrip('v')
-            if current_version != pinned_version:
-                error_msg = f"Node version mismatch! Expected: {pinned_version}, Actual: {current_version}. Please use the pinned runtime requirement."
-                results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": error_msg})
-                # We raise CLIError to stop execution if it doesn't match
-                raise CLIError(error_msg)
-            results["steps"].append({"name": "Node Runtime Check", "status": "success"})
-        except FileNotFoundError:
-            results["steps"].append({"name": "Node Runtime Check", "status": "warning", "message": ".nvmrc missing"})
+            res = validate_node_version()
+            results["steps"].append({"name": "Node Runtime Check", **res})
+        except CLIError as e:
+            results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": str(e)})
+            raise e
 
         def run_step(name, cmd):
             try:
