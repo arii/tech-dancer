@@ -51,7 +51,7 @@ export function getTokens(): DesignTokens | null {
   const tokens: Record<string, string> = {};
 
   // Simple Regex-based CSS variable extraction
-  const declRegex = /(--[\w-]+):\s*([^;]+);/g;
+  const declRegex = /(--[\w-]+):\s*([^;]+);/g; // impeccable-ignore
   let match;
   while ((match = declRegex.exec(content)) !== null) {
     tokens[match[1]] = match[2].trim();
@@ -59,7 +59,7 @@ export function getTokens(): DesignTokens | null {
 
   const resolve = (value: string | undefined): string | null => {
     if (!value) return null;
-    const varMatch = value.match(/var\((--[\w-]+)\)/);
+    const varMatch = value.match(/var\((--[\w-]+)\)/); // impeccable-ignore
     if (varMatch) {
       return resolve(tokens[varMatch[1]]);
     }

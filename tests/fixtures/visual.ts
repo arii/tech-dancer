@@ -1,8 +1,16 @@
 import { test as base, expect } from '@playwright/test';
+import { disableAnimations } from '../utils/playwright-helpers';
+import { setupErrorMonitoring } from './error-monitoring';
 
 export { expect };
 
-export const test = base.extend({
+type ErrorMonitor = ReturnType<typeof setupErrorMonitoring>;
+
+export const test = base.extend<{ pageErrors: ErrorMonitor }>({
+  pageErrors: async ({ page }, use) => {
+    const monitor = setupErrorMonitoring(page);
+    await use(monitor);
+  },
   page: async ({ page }, use) => {
     // Mock system time for consistent date rendering (e.g., in Lab tools)
     await page.clock.setFixedTime(new Date('2024-01-01T12:00:00Z'));
@@ -11,6 +19,9 @@ export const test = base.extend({
     await page.addInitScript(() => {
       window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
     });
+
+    // Control CSS Animations and Transitions to prevent visual flakiness
+    await disableAnimations(page);
 
     await use(page);
   },

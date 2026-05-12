@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { parquetReadObjects } from 'hyparquet';
+import { parquetReadObjects, asyncBufferFromUrl } from 'hyparquet';
 import { useSearchParam } from '@/hooks/useSearchParam';
 
 export interface WCSRecord {
@@ -15,17 +15,43 @@ export interface WCSRecord {
 export function useWCSData() {
   const [data, setData] = useState<WCSRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [latency, setLatency] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [filterPromoted, setFilterPromoted] = useSearchParam<'all' | 'promoted' | 'not-promoted'>('filter', 'all');
 
   useEffect(() => {
     const loadData = async () => {
+      const startTime = performance.now();
       try {
-        const res = await fetch(`${import.meta.env.BASE_URL}data/wcs_prelims.parquet`);
-        const arrayBuffer = await res.arrayBuffer();
+        const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+          ? import.meta.env.BASE_URL
+          : `${import.meta.env.BASE_URL}/`;
+        const parquetUrl = new URL(`${baseUrl}data/wcs_prelims.parquet`, window.location.origin).href;
 
-        const objects = await parquetReadObjects({ file: arrayBuffer });
+        let objects;
+        try {
+          // Attempt 1: Lazy Load
+          const file = await asyncBufferFromUrl({ url: parquetUrl });
+          // Must call parser immediately to catch footer errors (footer != PAR1) in this block
+          objects = await parquetReadObjects({ file });
+        } catch (lazyErr) {
+          console.warn("Lazy load failed or invalid Parquet footer, falling back to full fetch:", lazyErr);
+
+          // Attempt 2: Full Fetch Fallback
+          const res = await fetch(parquetUrl);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: lazyErr });
+          const buffer = await res.arrayBuffer();
+
+          // Verify magic bytes before parsing
+          const header = new Uint8Array(buffer.slice(0, 4));
+          const magic = String.fromCharCode(...header);
+          if (magic !== 'PAR1') {
+            throw new Error("Invalid Parquet signature (not PAR1). Data source may be returning an error page.", { cause: lazyErr });
+          }
+
+          objects = await parquetReadObjects({ file: buffer });
+        }
 
         const formattedObjects = objects.map((obj: Record<string, unknown>) => ({
           ...obj,
@@ -33,6 +59,7 @@ export function useWCSData() {
         }));
 
         setData(formattedObjects as unknown as WCSRecord[]);
+        setLatency(performance.now() - startTime);
         setIsLoading(false);
       } catch (err) {
         console.error("Failed to load WCS data:", err);
@@ -44,39 +71,40 @@ export function useWCSData() {
     loadData();
   }, []);
 
-  const filteredData = useMemo(() => {
-    return data.filter(record => {
+  const { filteredData, scoreDistribution, trendData } = useMemo(() => {
+    const filteredResults: WCSRecord[] = [];
+    const bins = new Map<string, number>();
+    const byDate = new Map<string, { total: number; count: number }>();
+
+    const searchLower = searchTerm.toLowerCase();
+
+    for (const record of data) {
       const matchesSearch =
-        record.competitor_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.competitor_name.toLowerCase().includes(searchLower) ||
         record.Dancer_ID.includes(searchTerm) ||
-        record.event_title.toLowerCase().includes(searchTerm.toLowerCase());
+        record.event_title.toLowerCase().includes(searchLower);
 
       const matchesFilter =
         filterPromoted === 'all' ||
         (filterPromoted === 'promoted' && record.Promoted) ||
         (filterPromoted === 'not-promoted' && !record.Promoted);
 
-      return matchesSearch && matchesFilter;
-    });
-  }, [data, searchTerm, filterPromoted]);
+      if (matchesSearch && matchesFilter) {
+        filteredResults.push(record);
 
-  const { scoreDistribution, trendData } = useMemo(() => {
-    const bins = new Map<string, number>();
-    const byDate = new Map<string, { total: number; count: number }>();
+        // Score Distribution
+        const bin = Math.floor(record.Registry_Points_Sum).toString();
+        bins.set(bin, (bins.get(bin) || 0) + 1);
 
-    for (const r of filteredData) {
-      // Score Distribution
-      const bin = Math.floor(r.Registry_Points_Sum).toString();
-      bins.set(bin, (bins.get(bin) || 0) + 1);
-
-      // Trend Analysis
-      const parts = r.event_date.split('/');
-      if (parts.length >= 3) {
-        const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
-        const stats = byDate.get(monthYear) || { total: 0, count: 0 };
-        stats.total += r.Registry_Points_Sum;
-        stats.count += 1;
-        byDate.set(monthYear, stats);
+        // Trend Analysis
+        const parts = record.event_date.split('/');
+        if (parts.length >= 3) {
+          const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
+          const stats = byDate.get(monthYear) || { total: 0, count: 0 };
+          stats.total += record.Registry_Points_Sum;
+          stats.count += 1;
+          byDate.set(monthYear, stats);
+        }
       }
     }
 
@@ -96,15 +124,17 @@ export function useWCSData() {
       });
 
     return {
+      filteredData: filteredResults,
       scoreDistribution: calculatedScoreDistribution,
       trendData: calculatedTrendData,
     };
-  }, [filteredData]);
+  }, [data, searchTerm, filterPromoted]);
 
   return {
     data,
     filteredData,
     isLoading,
+    latency,
     searchTerm,
     setSearchTerm,
     error,

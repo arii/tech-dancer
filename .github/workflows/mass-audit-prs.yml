@@ -42,6 +42,7 @@ jobs:
       - name: Start Ollama Server
         run: |
           ollama serve > ollama_output.log 2>&1 &
+          sleep 5
           curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
 
       - name: Pull Model
