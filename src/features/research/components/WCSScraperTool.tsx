@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Search,
   Download,
@@ -83,6 +83,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
   const handleExportPDF = useCallback(() => {
+    window.gtag?.('event', 'data_export', { format: 'pdf', tool: 'wcs_scraper' });
     exportPDF({
       title: 'WCS Prelim Scoring Analysis',
       filename: 'wcs_prelims',
@@ -97,6 +98,11 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
     });
   }, [data, exportPDF]);
 
+  const handleExportCSV = useCallback(() => {
+    window.gtag?.('event', 'data_export', { format: 'csv', tool: 'wcs_scraper' });
+    exportCSV(data);
+  }, [data, exportCSV]);
+
   return (
     <Box border surface="default" padding="card">
       <Stack gap={6}>
@@ -108,7 +114,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
           <Button
             variant="secondary"
             width="full"
-            onClick={() => exportCSV(data)}
+            onClick={handleExportCSV}
           >
             <Box display="flex" align="center" gap={3} width="full" textAlign="left">
               <FileJson className="w-4 h-4 shrink-0" />
@@ -173,6 +179,19 @@ export function WCSScraperTool() {
     scoreDistribution,
     trendData
   } = useWCSData();
+
+  useEffect(() => {
+    if (!searchTerm) return;
+    const timer = setTimeout(() => {
+      window.gtag?.('event', 'search', { search_term: searchTerm, tool: 'wcs_scraper' });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const handleFilterChange = useCallback((filter: 'all' | 'promoted' | 'not-promoted') => {
+    setFilterPromoted(filter);
+    window.gtag?.('event', 'filter_change', { filter_type: 'promotion', value: filter, tool: 'wcs_scraper' });
+  }, [setFilterPromoted]);
 
   if (error) {
     return (
@@ -244,7 +263,7 @@ export function WCSScraperTool() {
                 <Box key={filter} flex={1}>
                   <Button
                     variant={filterPromoted === filter ? 'primary' : 'secondary'}
-                    onClick={() => setFilterPromoted(filter)}
+                    onClick={() => handleFilterChange(filter)}
                     width="full"
                   >
                     <Text uppercase size="xs" tracking="tighter">
