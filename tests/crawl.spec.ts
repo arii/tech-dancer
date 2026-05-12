@@ -41,14 +41,15 @@ test.describe('Automated UX/Console Error Crawler', () => {
   test('crawls routes and verifies no errors', async ({ page, baseURL }) => {
     if (!baseURL) throw new Error('baseURL is required for crawling');
 
+    // Set a 5-minute timeout for the entire crawl test
+    test.setTimeout(5 * 60 * 1000);
+
     // State is local to the test to ensure isolation during retries
     const visited = new Set<string>();
     const toVisit: string[] = [baseURL];
 
-    // Limit the number of pages and total time to crawl to prevent excessive run times
+    // Limit the number of pages to crawl to prevent excessive run times
     const MAX_PAGES = 50;
-    const MAX_TIME = 5 * 60 * 1000; // 5 minutes
-    const startTime = Date.now();
     let pageCount = 0;
 
     const { consoleErrors, pageErrors, clearErrors } = setupErrorMonitoring(page);
@@ -59,11 +60,6 @@ test.describe('Automated UX/Console Error Crawler', () => {
     });
 
     while (toVisit.length > 0 && pageCount < MAX_PAGES) {
-      if (Date.now() - startTime > MAX_TIME) {
-        console.warn('Crawler reached MAX_TIME, stopping crawl.');
-        break;
-      }
-
       const currentUrl = toVisit.shift()!;
       const normalizedUrl = cleanUrl(currentUrl);
 
