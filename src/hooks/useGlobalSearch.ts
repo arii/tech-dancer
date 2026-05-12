@@ -2,7 +2,6 @@ import { useMemo, useCallback } from 'react';
 import { useSearchParam } from './useSearchParam';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
-import { withSimulationDelay } from '@/lib/utils';
 import Fuse from 'fuse.js';
 
 export function useGlobalSearch() {
@@ -19,17 +18,13 @@ export function useGlobalSearch() {
     setSearchState('');
   }, [setSearchState]);
 
-  const queries = useQueries({
+  const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [
-      { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts) },
-      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources) },
-      { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies) },
+      { queryKey: ['posts'], queryFn: getPosts },
+      { queryKey: ['resources'], queryFn: getResources },
+      { queryKey: ['studies'], queryFn: getStudies },
     ],
   });
-
-  const [postsQuery, resourcesQuery, studiesQuery] = queries;
-
-  const isLoading = queries.some(q => q.isLoading);
 
   const allContent = useMemo(() => {
     return [
@@ -63,7 +58,6 @@ export function useGlobalSearch() {
     results,
     isOpen,
     open,
-    close,
-    isLoading
+    close
   };
 }

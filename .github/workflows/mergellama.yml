@@ -19,18 +19,21 @@ jobs:
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
 
       - name: Install Click
         run: pip install click
@@ -62,7 +65,7 @@ jobs:
           pnpm run type-check
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-resolved merge conflicts using MergeLlama"
           file_pattern: '.'

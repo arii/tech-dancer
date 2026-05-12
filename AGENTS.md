@@ -220,11 +220,3 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
    - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
    - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
 5. Ensure your changes introduce no new violations in touched files
-
-## 24) Environment & Runtime Stability
-
-To ensure compatibility with cloud deployment platforms (e.g., Vercel) and consistent local development:
-
-1. **Major-Only Node.js Versions**: Always specify Node.js versions by their **major version only** (e.g., `22`) in `package.json` (`engines`), `.nvmrc`, and `.node-version`. Avoid specific patch versions (e.g., `22.22.1`) which are often unsupported by Vercel's build engine.
-2. **Unified pnpm Constraint**: The version of `pnpm` should be controlled primarily via the `packageManager` field in `package.json`. Do not override the pnpm version in GitHub Actions workflows (e.g., via `version: 10`) unless there is a critical infrastructure requirement.
-3. **Lockfile Integrity**: Always run `pnpm install` after modifying `package.json` to ensure the lockfile is synchronized and follows the specified constraints.
