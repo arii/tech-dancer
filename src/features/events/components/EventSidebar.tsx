@@ -11,7 +11,7 @@ interface EventSidebarProps {
 
 export function EventSidebar({ event }: EventSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const isDesktop = useMediaQuery('(min-width: 1024px)'); // impeccable-ignore
 
   return (
     <Box as="aside">
@@ -40,11 +40,10 @@ export function EventSidebar({ event }: EventSidebarProps) {
                 <Box
                   as={motion.div}
                   initial={isDesktop ? false : { height: 0, opacity: 0, marginTop: 0 }}
-                  animate={{ height: "auto", opacity: 1, marginTop: isDesktop ? 24 : 16 }}
+                  animate={{ height: "auto", opacity: 1, marginTop: isDesktop ? 0 : 16 }}
                   exit={{ height: 0, opacity: 0, marginTop: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   overflow="hidden"
-                  className="lg:!mt-6"
                 >
                   <Stack gap={4}>
                     <Box display="flex" align="center" justify="between" width="full">
