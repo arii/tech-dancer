@@ -25,7 +25,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
       display="flex"
       align="center"
       overflow="hidden"
-      className="bg-bg"
+      surface="bg"
     >
       {/* Background Image with Overlay */}
       {image && (
@@ -93,7 +93,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
           </Text>
         </Stack>
 
-        <Box display="flex" wrap gap={6} align="center">
+        <Box display="flex" flexWrap="wrap" gap={6} align="center">
           <Box display="flex" align="center" gap={2}>
             <Calendar className="w-5 h-5 text-accent" />
             <Text variant="body" size="lg" weight="font-medium">

@@ -13,7 +13,7 @@ export function RelatedEvents({ title = "Related Events", events }: RelatedEvent
 
   return (
     <Stack gap={8}>
-      <SectionHeader eyebrow="EXPLORE" title={title} />
+      <SectionHeader label="EXPLORE" title={title} />
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
         {events.map((event) => (
           <EventCard

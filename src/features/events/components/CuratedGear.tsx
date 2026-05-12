@@ -13,7 +13,7 @@ export function CuratedGear({ title = "Recommended Gear", items }: CuratedGearPr
 
   return (
     <Stack gap={8}>
-      <SectionHeader eyebrow="TOOLS" title={title} />
+      <SectionHeader label="TOOLS" title={title} />
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
         {items.map((item) => (
           <GearCard

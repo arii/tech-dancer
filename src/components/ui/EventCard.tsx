@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
@@ -5,11 +6,16 @@ interface EventCardProps {
   name: string;
   location: string;
   schedule: string;
+  slug?: string;
 }
 
-export function EventCard({ name, location, schedule }: EventCardProps) {
+export function EventCard({ name, location, schedule, slug }: EventCardProps) {
+  const isLink = !!slug;
+
   return (
     <Stack
+      as={isLink ? NavLink : 'div'}
+      {...(isLink ? { to: `/events/${slug}` } : {})}
       padding={8}
       radius="md"
       border

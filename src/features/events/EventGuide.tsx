@@ -8,7 +8,7 @@ import { EventHero } from './components/EventHero';
 
 import { EventNavigation } from './components/EventNavigation';
 import { EventDetails } from './components/EventDetails';
-import { EventSidebar } from './components/EventSidebar';
+import { EventSidebar } from '@/components/ui/EventSidebar';
 import { SECTION_SPACING } from './constants';
 
 export default function EventGuide() {

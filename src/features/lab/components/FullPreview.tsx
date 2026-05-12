@@ -5,7 +5,7 @@ import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { DraftData, EventDraftData, PostDraftData, ResourceDraftData } from '../useBlogDrafter';
 import { ResourceSidebar, ResourceHeaderExtras, ResourceBodyExtras } from './sidebar/ResourceSidebar';
-import { EventSidebar, EventHeaderExtras, EventBodyExtras } from './sidebar/EventSidebar';
+import { EventSidebar, EventHeaderExtras, EventBodyExtras } from '@/components/ui/EventSidebar';
 
 interface FullPreviewProps {
   onClose: () => void;
