@@ -28,11 +28,6 @@ function getSharedSVGStyles(tokens: DesignTokens) {
     .brand-stop-purple { stop-color: ${tokens.accentPurple}; }
     .brand-text-accent { fill: ${tokens.heroAccent}; }
     .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
-    .brand-b-mark {
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-style: italic;
-    }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;

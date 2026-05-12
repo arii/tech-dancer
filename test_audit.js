@@ -1,7 +1,7 @@
 const CONFIG = {
   allowedColors: [
     'bg', 'surface', 'surface-alt', 'accent', 'accent-brand', 'accent-navy',
-    'accent-purple', 'accent-magenta', 'brand-text-muted', 'brand-text-accent', 'brand-b-mark', 'brand-wordmark',
+    'accent-purple', 'accent-magenta', 'brand-text-muted', 'brand-text-accent', 'brand-wordmark',
     'text-main', 'text-body', 'text-dim', 'line', 'white', 'black',
     'transparent', 'current', 'yellow-400', 'emerald-500', 'red-500',
     'amber-500', 'success', 'error', 'warning',
