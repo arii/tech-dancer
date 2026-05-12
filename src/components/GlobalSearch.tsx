@@ -240,7 +240,7 @@ export function GlobalSearch() {
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
               </Box>
             </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" className="opacity-70 whitespace-nowrap">
               {results.length} RESULTS FOUND
             </Text>
           </Box>

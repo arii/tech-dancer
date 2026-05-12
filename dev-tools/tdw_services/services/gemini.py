@@ -111,6 +111,11 @@ class LocalAIClient:
         prompt = f"""Perform Code Review for PR #{pr.get('number')} - "{pr.get('title')}".
 Description: {pr.get('body', 'No description')}
 Checks: {checks_summary}
+
+IMPORTANT:
+- If ANY critical CI check has failed (conclusion='failure'), you MUST NOT recommend 'Approved'.
+- Analyze any failing test logs provided in the description or check results to suggest specific fixes.
+
 Diff: {diff[:45000]}"""
 
         schema = {
@@ -127,6 +132,14 @@ Diff: {diff[:45000]}"""
         try:
             # Clean markdown JSON block if Ollama returned it
             res = self.clean_llm_output(res)
-            return json.loads(res)
+            review = json.loads(res)
+
+            # Enforce CI status check logic
+            has_failures = any(c.get('conclusion') == 'failure' for c in pr.get('checkResults', []))
+            if has_failures and review.get('recommendation') == 'Approved':
+                 review['recommendation'] = 'Not Approved'
+                 review['reviewComment'] = "CI checks are failing. Review recommendation downgraded to 'Not Approved'.\n\n" + review['reviewComment']
+
+            return review
         except Exception:
             return {"reviewComment": "Failed to parse AI review", "labels": [], "recommendation": "Not Approved"}

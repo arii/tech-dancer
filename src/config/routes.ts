@@ -56,6 +56,16 @@ export const routes: RouteConfig[] = [
     skeleton: 'grid'
   },
   {
+    path: '/research/wcs-scraper',
+    lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
+    path: '/research/wsdc-event-reminders',
+    lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
     path: '/research/:id',
     lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
     skeleton: 'post'
