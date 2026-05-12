@@ -249,7 +249,7 @@ export function GlobalSearch() {
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
               </Box>
             </Box>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" opacity={0.7} nowrap align="center">
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="widest" nowrap align="center" className="opacity-70">
               {results.length} RESULTS FOUND
             </Text>
           </Box>
