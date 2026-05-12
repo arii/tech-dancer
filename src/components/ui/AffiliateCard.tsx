@@ -9,17 +9,14 @@ interface AffiliateCardProps {
 export function AffiliateCard({ link }: AffiliateCardProps) {
   return (
     <Box
-      as="a"
-      href={link.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      position="relative"
       display="flex"
       direction="col"
       padding={5}
       surface="default"
       border
       radius="lg"
-      className="hover:border-accent group transition-all h-full"
+      className="group transition-all h-full hover:border-accent"
     >
       <Stack gap={2} flex={1}>
         <Box display="flex" align="center" justify="between">
@@ -30,10 +27,12 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         </Box>
 
         <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors">
-          {link.name}
+          <a href={link.url} target="_blank" rel="noopener noreferrer" className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+            {link.name}
+          </a>
         </Text>
 
-        <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed">
+        <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed">
           {link.description}
         </Text>
       </Stack>
