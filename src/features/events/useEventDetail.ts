@@ -4,7 +4,7 @@
  */
 
 import { useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getEventBySlug, getEvents, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
@@ -16,13 +16,21 @@ export interface ResolvedGearSection {
 }
 
 /**
+ * Static helper to resolve affiliate IDs into full link objects.
+ */
+function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
+  return ids
+    .map((id) => affiliateManager.getLink(id))
+    .filter((l): l is AffiliateLink => !!l);
+}
+
+/**
  * Unified hook for fetching and resolving event resource guide data.
  * Fetches event by slug, resolves all affiliate IDs into full objects,
  * and handles loading/error states for the detail page.
  */
 export function useEventDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
 
   const {
     data: event,
@@ -46,18 +54,12 @@ export function useEventDetail() {
 
   // Resolve theme gear from affiliate IDs
   const themeOutfits = useMemo(
-    () =>
-      (event?.theme?.outfitIds ?? [])
-        .map((id) => affiliateManager.getLink(id))
-        .filter((l): l is AffiliateLink => !!l),
+    () => resolveAffiliateLinks(event?.theme?.outfitIds),
     [event],
   );
 
   const themeAccessories = useMemo(
-    () =>
-      (event?.theme?.accessoryIds ?? [])
-        .map((id) => affiliateManager.getLink(id))
-        .filter((l): l is AffiliateLink => !!l),
+    () => resolveAffiliateLinks(event?.theme?.accessoryIds),
     [event],
   );
 
@@ -66,19 +68,14 @@ export function useEventDetail() {
     if (!event?.gear) return [];
     const g = event.gear;
 
-    const resolve = (ids: string[] = []) =>
-      ids
-        .map((id) => affiliateManager.getLink(id))
-        .filter((l): l is AffiliateLink => !!l);
-
     return [
-      { label: "Outfits", items: resolve(g.outfitIds) },
-      { label: "Accessories", items: resolve(g.accessoryIds) },
+      { label: "Outfits", items: resolveAffiliateLinks(g.outfitIds) },
+      { label: "Accessories", items: resolveAffiliateLinks(g.accessoryIds) },
       {
         label: "Shoes & Essentials",
-        items: resolve([...(g.shoeIds ?? []), ...(g.essentialIds ?? [])]),
+        items: resolveAffiliateLinks([...(g.shoeIds ?? []), ...(g.essentialIds ?? [])]),
       },
-      { label: "Travel Extras", items: resolve(g.travelIds) },
+      { label: "Travel Extras", items: resolveAffiliateLinks(g.travelIds) },
     ].filter((s) => s.items.length > 0);
   }, [event]);
 
@@ -100,6 +97,5 @@ export function useEventDetail() {
     isLoading: isEventLoading || areEventsLoading,
     isError: isEventError || areEventsError,
     error: eventError,
-    navigate,
   };
 }

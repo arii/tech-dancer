@@ -6,7 +6,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useEventDetail } from '../useEventDetail';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { Event } from '@/lib/content';
@@ -14,7 +14,6 @@ import { AffiliateLink } from '@/types';
 
 vi.mock('react-router-dom', () => ({
   useParams: vi.fn(),
-  useNavigate: vi.fn(),
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -65,7 +64,6 @@ describe('useEventDetail', () => {
     };
 
     vi.mocked(useParams).mockReturnValue({ slug: 'test-event' });
-    vi.mocked(useNavigate).mockReturnValue(vi.fn());
     vi.mocked(useQuery).mockImplementation(({ queryKey }) => {
       if (Array.isArray(queryKey)) {
         if (queryKey[0] === 'event') {
