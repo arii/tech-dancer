@@ -75,9 +75,9 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "chore: update playwright snapshots"
             git push origin HEAD:${{ env.HEAD_REF }}
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Update comment on success

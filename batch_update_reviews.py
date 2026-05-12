@@ -31,7 +31,7 @@ for pr_num, content in reviews.items():
     if os.path.exists(file_path):
         with open(file_path, "r") as f:
             lines = f.readlines()
-        
+
         # Find where to insert the JSON
         with open(file_path, "w") as f:
             for line in lines:
