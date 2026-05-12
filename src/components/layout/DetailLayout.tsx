@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 
@@ -48,8 +49,13 @@ export function DetailLayout({
           className="text-text-main hover:text-accent transition-colors group"
           cursor="pointer"
         >
-          <ArrowLeft className="w-4 h-4 text-accent transition-transform group-hover:-translate-x-1" />
-          <Text variant="mono" size="xs" weight="font-bold" className="normal-case tracking-widest">
+          <Icon
+            icon={ArrowLeft}
+            size="sm"
+            color="accent"
+            className="transition-transform group-hover:-translate-x-1"
+          />
+          <Text variant="mono" size="xs" weight="font-bold" uppercase={false}>
             {backLabel.toUpperCase()}
           </Text>
         </Stack>
