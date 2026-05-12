@@ -1,34 +1,42 @@
-import { Resource } from '@/lib/content';
 import { Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GearCard } from '@/components/ui/GearCard';
+import { ResolvedGearSection } from '../useEventDetail';
 
 interface CuratedGearProps {
+  id?: string;
   title?: string;
-  items: Resource[];
+  sections: ResolvedGearSection[];
 }
 
-export function CuratedGear({ title = "Recommended Gear", items }: CuratedGearProps) {
-  if (!items || items.length === 0) return null;
+export function CuratedGear({ id, title = "Recommended Gear", sections }: CuratedGearProps) {
+  if (!sections || sections.length === 0) return null;
 
   return (
-    <Stack gap={8}>
+    <Stack id={id} gap={12}>
       <SectionHeader eyebrow="TOOLS" title={title} />
-      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
-        {items.map((item) => (
-          <GearCard
-            key={item.slug}
-            slug={item.slug}
-            title={item.title}
-            category={item.category}
-            excerpt={item.excerpt}
-            basePath="/gear"
-            rating={item.rating}
-            verdict={item.verdict}
-            image={item.image}
+
+      {sections.map((section) => (
+        <Stack key={section.label} gap={8}>
+          <SectionHeader
+            title={section.label}
+            size="sm"
           />
-        ))}
-      </Grid>
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+            {section.items.map((item) => (
+              <GearCard
+                key={item.id}
+                slug={item.id}
+                title={item.name}
+                category={item.category}
+                excerpt={item.description}
+                basePath="/gear"
+                image="#" // Fallback image since affiliate links don't have images yet
+              />
+            ))}
+          </Grid>
+        </Stack>
+      ))}
     </Stack>
   );
 }
