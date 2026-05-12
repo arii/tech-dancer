@@ -24,37 +24,34 @@ export function useWCSData() {
     const loadData = async () => {
       const startTime = performance.now();
       try {
-        // Construct robust URL for both local and subpath environments
-        // Use ASSET_PREFIX which handles relative base paths correctly in production
         const baseUrl = import.meta.env.BASE_URL.endsWith('/')
           ? import.meta.env.BASE_URL
           : `${import.meta.env.BASE_URL}/`;
-
         const parquetUrl = new URL(`${baseUrl}data/wcs_prelims.parquet`, window.location.origin).href;
 
-        let file;
+        let objects;
         try {
-          // Attempt Stage 1: Lazy loading (Range requests)
-          file = await asyncBufferFromUrl({ url: parquetUrl });
-        } catch (rangeErr) {
-          console.warn("Stage 1 (Lazy Load) failed, falling back to Stage 2 (Full Fetch):", rangeErr);
-          // Stage 2: Standard fetch fallback
-          const res = await fetch(parquetUrl);
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: rangeErr });
-          file = await res.arrayBuffer();
-        }
+          // Attempt 1: Lazy Load
+          const file = await asyncBufferFromUrl({ url: parquetUrl });
+          // Must call parser immediately to catch footer errors (footer != PAR1) in this block
+          objects = await parquetReadObjects({ file });
+        } catch (lazyErr) {
+          console.warn("Lazy load failed or invalid Parquet footer, falling back to full fetch:", lazyErr);
 
-        // Final verification: If it's an ArrayBuffer (Full Fetch), check for PAR1 magic bytes
-        // This helps catch 404 pages that return status 200 with HTML content
-        if (file instanceof ArrayBuffer) {
-          const header = new Uint8Array(file.slice(0, 4));
+          // Attempt 2: Full Fetch Fallback
+          const res = await fetch(parquetUrl);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: lazyErr });
+          const buffer = await res.arrayBuffer();
+
+          // Verify magic bytes before parsing
+          const header = new Uint8Array(buffer.slice(0, 4));
           const magic = String.fromCharCode(...header);
           if (magic !== 'PAR1') {
-            throw new Error("Invalid Parquet file signature. Data source might be unavailable or returning an error page.");
+            throw new Error("Invalid Parquet signature (not PAR1). Data source may be returning an error page.", { cause: lazyErr });
           }
-        }
 
-        const objects = await parquetReadObjects({ file });
+          objects = await parquetReadObjects({ file: buffer });
+        }
 
         const formattedObjects = objects.map((obj: Record<string, unknown>) => ({
           ...obj,
