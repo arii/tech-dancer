@@ -10,6 +10,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
 from tdw_services.services.jules import JulesClient
+from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
     get_github_client,
@@ -341,6 +342,46 @@ class Orchestrator:
             from submit_review import submit_review
             submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
         return res
+
+    def handle_comment_command(self, pr_number: int, command: str, comment_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Delegates command handling to the CommandHandler.
+        """
+        handler = CommandHandler(self)
+        return handler.handle(pr_number, command, comment_id)
+
+    def _handle_ollama_review(self, pr_number: int) -> Dict[str, Any]:
+        review_data = self.review_pr(pr_number)
+        recommendation = review_data.get("recommendation", "COMMENT")
+
+        # Map recommendation to GH event
+        event = "COMMENT"
+        if recommendation == "Approved":
+            event = "APPROVE"
+        elif recommendation == "Not Approved":
+            event = "REQUEST_CHANGES"
+
+        comment_body = f"## 🤖 AI Code Review\n\n{review_data.get('reviewComment', 'No comment provided.')}\n\n**Recommendation:** {recommendation}"
+
+        self.github.create_review(pr_number, comment_body, [], event)
+
+        return {"status": "success", "message": f"Submitted {event} review for PR #{pr_number}", "review": review_data}
+
+    def _handle_ollama_fix(self, pr_number: int) -> Dict[str, Any]:
+        # First, ensure we have the conflict files
+        conflict_files = self.find_conflict_files()
+        if not conflict_files:
+             return {"status": "error", "message": "No merge conflicts detected locally. Ensure you have merged the base branch and markers are present."}
+
+        results = [(f, self.resolve_conflict(f)) for f in conflict_files]
+        resolved = [f for f, success in results if success]
+        failed = [f for f, success in results if not success]
+
+        if failed:
+            msg = f"Failed to resolve conflicts in: {', '.join(failed)}"
+            return {"status": "partial_success" if resolved else "error", "message": msg, "resolved": resolved, "failed": failed}
+
+        return {"status": "success", "message": f"Successfully resolved conflicts in {len(resolved)} files.", "resolved": resolved}
 
     def pre_submit_checks(self):
         results = {"steps": []}
