@@ -142,24 +142,31 @@ describe('ics-generator', () => {
     expect(ics).toContain('DTEND;VALUE=DATE:20230102');
   });
 
-  it('should be consistent across timezones by using UTC ISO strings', () => {
-    const items: TimelineItem[] = [
-      {
-        id: '8',
-        label: 'Timezone Test',
-        description: 'Testing TZ consistency',
-        date: new Date('2023-01-01T00:00:00Z'),
-      }
-    ];
+  it('should be consistent across timezones and match local date entry', () => {
+    // When a user enters "2023-01-01", we want that literal date in the ICS.
+    // toISOString() would shift it depending on the system's TZ if the date was created without a TZ.
+    // Our implementation now uses local Date methods.
 
     // Test with EST
     vi.stubEnv('TZ', 'America/New_York');
-    const icsEST = generateICS('Test Event', items);
+    const itemsEST: TimelineItem[] = [{
+      id: '8',
+      label: 'TZ Test',
+      description: 'Desc',
+      date: new Date(2023, 0, 1), // Jan 1st local
+    }];
+    const icsEST = generateICS('Event', itemsEST);
     expect(icsEST).toContain('DTSTART;VALUE=DATE:20230101');
 
     // Test with AEST
     vi.stubEnv('TZ', 'Australia/Sydney');
-    const icsAEST = generateICS('Test Event', items);
+    const itemsAEST: TimelineItem[] = [{
+      id: '8',
+      label: 'TZ Test',
+      description: 'Desc',
+      date: new Date(2023, 0, 1), // Jan 1st local
+    }];
+    const icsAEST = generateICS('Event', itemsAEST);
     expect(icsAEST).toContain('DTSTART;VALUE=DATE:20230101');
   });
 
