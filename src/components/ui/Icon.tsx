@@ -10,9 +10,11 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
       md: "w-5 h-5",
       lg: "w-6 h-6",
       xl: "w-8 h-8",
+      "2xl": "w-12 h-12",
+      "3xl": "w-16 h-16",
     },
     color: {
-      default: "text-text-main",
+      primary: "text-text-main",
       dim: "text-text-dim",
       accent: "text-accent",
       muted: "text-text-dim opacity-50",
@@ -20,7 +22,7 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
   },
   defaultVariants: {
     size: "md",
-    color: "default",
+    color: "primary",
   },
 })
 

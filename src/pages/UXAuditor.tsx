@@ -75,11 +75,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
       {isCopying ? (
-        <Icon icon={RefreshCw} className="w-3 h-3 animate-spin" />
+        <Icon icon={RefreshCw} size="xs" className="animate-spin" />
       ) : copied ? (
-        <Icon icon={CheckCircle} className="w-3 h-3" color="accent" />
+        <Icon icon={CheckCircle} size="xs" color="accent" />
       ) : (
-        <Icon icon={Copy} className="w-3 h-3" />
+        <Icon icon={Copy} size="xs" />
       )}
       <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
     </Box>
@@ -227,7 +227,7 @@ export default function UXAuditor() {
               <EmptyState
                 compact
                 title="No history"
-                icon={<Icon icon={RefreshCw} size="sm" className="opacity-30" />}
+                icon={<Icon icon={RefreshCw} size="sm" color="muted" />}
               />
             )}
             {reports.map((report) => (
@@ -351,7 +351,7 @@ export default function UXAuditor() {
                           ) : (
                             <Stack align="center" justify="center" color="dim" className="text-center">
                               <Box marginBottom={2}>
-                                <Icon icon={ImageIcon} className="w-12 h-12 opacity-20" />
+                                <Icon icon={ImageIcon} size="2xl" color="muted" />
                               </Box>
                               <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
                                 Awaiting Frame...
@@ -429,7 +429,7 @@ export default function UXAuditor() {
           ) : (
             <EmptyState
               minHeight={500}
-              icon={<Icon icon={Camera} size="xl" className="opacity-10" />}
+              icon={<Icon icon={Camera} size="xl" color="muted" />}
               title="Ready to Audit"
               description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
             />
