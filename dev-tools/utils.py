@@ -295,8 +295,10 @@ def extract_failing_info(logs: str) -> List[dict]:
     for file_path, line, col, code, msg in ts_errors:
         findings.append({"file": file_path, "line": line, "message": f"{code}: {msg}", "type": "typescript"})
 
-    # Vitest Errors (Basic)
-    vitest_matches = re.finditer(r"FAIL\s+(.*?)\n.*?❯ (.*?):(\d+):(\d+)", logs)
+    # Vitest Errors (Robust)
+    # Matches FAIL followed by the test file, then non-greedily finds the first ❯ trace
+    # (?!FAIL) ensures we don't skip over another FAIL block
+    vitest_matches = re.finditer(r"FAIL\s+([^\n]+)(?:(?!FAIL).)*?❯\s+([^\n:]+):(\d+):(\d+)", logs, re.DOTALL)
     for m in vitest_matches:
         findings.append({
             "file": m.group(2),
