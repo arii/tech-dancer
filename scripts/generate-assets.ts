@@ -9,6 +9,7 @@ const LOGO_SVG_PATH = path.join(process.cwd(), 'public/boomtick_logo.svg');
 const FAVICON_SVG_PATH = path.join(process.cwd(), 'public/favicon.svg');
 const PWA_192_PATH = path.join(process.cwd(), 'public/pwa-192x192.png');
 const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
+const FAVICON_ICO_PATH = path.join(process.cwd(), 'public/favicon.ico');
 const CACHE_DIR = path.join(process.cwd(), 'node_modules/.cache');
 const HASH_FILE = path.join(CACHE_DIR, 'generate-assets.hash');
 
@@ -16,6 +17,7 @@ interface DesignTokens {
   heroAccent: string | null;
   accentPurple: string | null;
   rawColorBg: string | null;
+  textMain: string | null;
 }
 
 /**
@@ -24,10 +26,25 @@ interface DesignTokens {
 function getSharedSVGStyles(tokens: DesignTokens) {
   return `
   <style>
-    .brand-stop-accent { stop-color: ${tokens.heroAccent}; }
-    .brand-stop-purple { stop-color: ${tokens.accentPurple}; }
-    .brand-text-accent { fill: ${tokens.heroAccent}; }
-    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    :root {
+      --brand-bg: ${tokens.rawColorBg || '#020617'};
+      --brand-accent: ${tokens.heroAccent || '#22d3ee'};
+      --brand-text-main: ${tokens.textMain || '#f1f5f9'};
+      --brand-text-muted: rgba(241, 245, 249, 0.6);
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --brand-bg: #ffffff;
+        --brand-text-main: #020617;
+        --brand-text-muted: rgba(2, 6, 23, 0.6);
+      }
+    }
+    .brand-bg { fill: var(--brand-bg); }
+    .brand-stop-accent { stop-color: var(--brand-accent); }
+    .brand-stop-purple { stop-color: ${tokens.accentPurple || '#8b5cf6'}; }
+    .brand-text-accent { fill: var(--brand-accent); }
+    .brand-text-main { fill: var(--brand-text-main); }
+    .brand-text-muted { fill: var(--brand-text-muted); }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
@@ -70,6 +87,7 @@ export function getTokens(): DesignTokens | null {
     heroAccent: resolve(tokens['--hero-accent']),
     accentPurple: resolve(tokens['--raw-color-accent-purple']),
     rawColorBg: resolve(tokens['--raw-color-bg']),
+    textMain: resolve(tokens['--raw-color-text-main']),
   };
 }
 
@@ -117,13 +135,15 @@ async function updateFaviconAndPNGs(tokens: DesignTokens) {
   fs.writeFileSync(FAVICON_SVG_PATH, updatedContent);
   console.log(`Updated ${FAVICON_SVG_PATH}`);
 
-  // Generate PNGs
+  // Generate PNGs and ICO
   try {
     const svgBuffer = Buffer.from(updatedContent);
     await sharp(svgBuffer).resize(192, 192).png().toFile(PWA_192_PATH);
     console.log(`Generated ${PWA_192_PATH}`);
     await sharp(svgBuffer).resize(512, 512).png().toFile(PWA_512_PATH);
     console.log(`Generated ${PWA_512_PATH}`);
+    await sharp(svgBuffer).resize(32, 32).png().toFile(FAVICON_ICO_PATH);
+    console.log(`Generated ${FAVICON_ICO_PATH}`);
   } catch (error) {
     console.error('Error generating PNGs:', error);
   }

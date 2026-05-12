@@ -12,6 +12,7 @@ describe('getTokens', () => {
         --raw-color-bg: #020617;
         --raw-color-accent-brand: #22d3ee;
         --raw-color-accent-purple: #8b5cf6;
+        --raw-color-text-main: #f1f5f9;
         --hero-accent: var(--raw-color-accent-brand);
       }
     `;
@@ -25,6 +26,7 @@ describe('getTokens', () => {
       heroAccent: '#22d3ee',
       accentPurple: '#8b5cf6',
       rawColorBg: '#020617',
+      textMain: '#f1f5f9',
     });
   });
 

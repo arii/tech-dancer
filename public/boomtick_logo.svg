@@ -1,9 +1,24 @@
 <svg viewBox="0 0 325 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
+    :root {
+      --brand-bg: #020617;
+      --brand-accent: #22d3ee;
+      --brand-text-main: #f1f5f9;
+      --brand-text-muted: rgba(241, 245, 249, 0.6);
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --brand-bg: #ffffff;
+        --brand-text-main: #020617;
+        --brand-text-muted: rgba(2, 6, 23, 0.6);
+      }
+    }
+    .brand-bg { fill: var(--brand-bg); }
+    .brand-stop-accent { stop-color: var(--brand-accent); }
     .brand-stop-purple { stop-color: #8b5cf6; }
-    .brand-text-accent { fill: #22d3ee; }
-    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    .brand-text-accent { fill: var(--brand-accent); }
+    .brand-text-main { fill: var(--brand-text-main); }
+    .brand-text-muted { fill: var(--brand-text-muted); }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
@@ -12,8 +27,8 @@
 
   <!-- Wordmark -->
   <text x="0" y="75" font-size="52" letter-spacing="-1.5" class="brand-wordmark">
-    <tspan fill="white">boom</tspan>
-    <tspan class="brand-text-accent" fill="#22d3ee">tick</tspan>
-    <tspan class="brand-text-muted" fill="rgba(241,245,249,0.6)" font-weight="300">.blog</tspan>
+    <tspan fill="white" class="brand-text-main">boom</tspan>
+    <tspan fill="#22d3ee" class="brand-text-accent">tick</tspan>
+    <tspan fill="rgba(241,245,249,0.6)" class="brand-text-muted" font-weight="300">.blog</tspan>
   </text>
 </svg>
