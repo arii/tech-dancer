@@ -256,6 +256,19 @@ def analyze(ctx, file):
     res = orch.resolve_conflict(file) # Placeholder for analyze
     out(ctx, f"✅ Analyzed {file}", data={"result": res})
 
+@ai.command()
+@click.option('--pr', required=True, type=int)
+@click.option('--command', required=True)
+@click.option('--comment-id')
+@click.pass_context
+def comment(ctx, pr, command, comment_id):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.handle_comment_command(pr, command, comment_id)
+    if res.get('status') == 'error':
+        err(ctx, res.get('message'), data=res)
+    else:
+        out(ctx, res.get('message'), data=res)
+
 # ==========================================
 # JULES COMMAND GROUP
 # ==========================================

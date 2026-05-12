@@ -54,15 +54,15 @@ jobs:
 To maintain the "Impeccable" design standards of this site, I've integrated a custom audit script.
 
 ```yaml
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: pnpm install
-      - name: UI Anti-Pattern Audit
-        run: |
-          pnpm run audit || true
-          python3 dev-tools/td_cli.py audit-gate
+audit:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - run: pnpm install
+    - name: UI Anti-Pattern Audit
+      run: |
+        pnpm run audit || true
+        python3 dev-tools/td_cli.py audit-gate
 ```
 
 #### 3. Build & E2E Testing
@@ -70,16 +70,16 @@ To maintain the "Impeccable" design standards of this site, I've integrated a cu
 Before deployment, the application is subjected to end-to-end (E2E) tests.
 
 ```yaml
-  test-build:
-    needs: lint-typecheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: pnpm install
-      - name: Build App
-        run: pnpm run build
-      - name: Run Playwright Smoke Test
-        run: pnpm run test:e2e
+test-build:
+  needs: lint-typecheck
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - run: pnpm install
+    - name: Build App
+      run: pnpm run build
+    - name: Run Playwright Smoke Test
+      run: pnpm run test:e2e
 ```
 
 ### Troubleshooting Common Issues

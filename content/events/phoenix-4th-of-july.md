@@ -20,5 +20,7 @@ gear:
     - "Sunscreen"
     - "Stay-cool dance wear"
 ---
+
 # Phoenix 4th of July
+
 Celebrate Independence Day at one of the most luxurious resorts on the swing circuit.

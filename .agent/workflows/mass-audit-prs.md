@@ -9,8 +9,8 @@
 - If you are uncertain about a line number, re-read the diff. Never guess.
 
 ---
-description: systematically audit, track, and review multiple GitHub pull requests in bulk
----
+
+## description: systematically audit, track, and review multiple GitHub pull requests in bulk
 
 ## Workflow State
 
@@ -26,6 +26,7 @@ This workflow standardizes the process for auditing multiple open Pull Requests,
 // turbo-all
 
 0. **Environment Setup**: Set up the environment to use `td-cli`. **Node >=22** is required for full visual regression testing.
+
 ```bash
 bash dev-tools/verify.sh
 source .venv/bin/activate
@@ -33,19 +34,23 @@ export PYTHONPATH=$(pwd)/dev-tools
 ```
 
 1. **Fetch open PRs**:
+
 ```bash
 gh pr list --state open --json number,title,author --jq '.[] | "- #\(.number) \(.title) (@\(.author.login))"'
 ```
 
 2. **Check for conflicts**:
+
 ```bash
 td-cli gh conflicts
 ```
+
 Review output and determine safe merge order before proceeding.
 
 3. **Update Tracking**: Create or update `REVIEW_TRACKING.md` in the project root with a summary table tracking PR statuses and the chronological list of PRs to review.
 
 4. **Generate Review Context & Output Templates**: For a selected batch of PRs, run the fetch script. This will generate a read-only `pr-context-<PR>.md` and a writeable `pr-review-<PR>.md` for each.
+
 ```bash
 td-cli gh audit-pr PR_NUMBER --fetch
 ```
@@ -59,6 +64,7 @@ td-cli gh audit-pr PR_NUMBER --fetch
    - Add your general findings, final recommendation, and specific inline comments mapped to exact line numbers into the json block at the bottom of the file. Ensure the output strictly follows the required JSON schema.
 
 7. **Submit the Review**: Run the submission script against the populated review file. If programmatic approval is restricted (e.g., self-approval constraints), use the `--event COMMENT` flag.
+
 ```bash
 td-cli gh audit-pr PR_NUMBER --submit [--event COMMENT]
 ```

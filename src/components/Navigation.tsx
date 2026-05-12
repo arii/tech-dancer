@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
-import { Wordmark } from '@/components/ui/Wordmark';
 
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -93,12 +92,7 @@ export default function Navigation() {
             paddingY={3}
             className="group border-b border-line"
           >
-            {/* B● mark — explicit white so currentColor renders on dark surface */}
-            <Logo
-              showText={false}
-              className="h-8 w-auto text-white transition-opacity group-hover:opacity-80"
-            />
-            <Wordmark variant="navigation" />
+            <Logo className="h-8 w-auto text-white transition-opacity group-hover:opacity-80" />
           </Box>
 
           <Stack as="ul" gap={1} flex={1} paddingY={4}>

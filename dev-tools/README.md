@@ -11,9 +11,11 @@ This directory contains repository automation scripts and quality gate configura
 The unified entry point for all repository automation. It supports both human-readable terminal output and structured JSON for tool integration.
 
 ### Global Options
+
 - `--json`: Output results in structured JSON format.
 
 ### Standard Error Format (with `--json`)
+
 ```json
 {
   "status": "error",
@@ -26,11 +28,15 @@ The unified entry point for all repository automation. It supports both human-re
 ### Commands
 
 #### `gh pre-submit`
+
 Runs the full local quality suite: Anti-pattern audit, TypeScript check, Lint, PR Scope check, and Conflict check.
+
 - **Usage**: `python3 dev-tools/td_cli.py gh pre-submit`
 
 #### `gh audit-pr <PR_NUMBER>`
+
 Orchestrates the PR technical audit lifecycle.
+
 - **Flags**:
   - `--fetch`: Fetch PR metadata and generate context files.
   - `--audit`: Run deterministic checks and invoke AI auditor.
@@ -39,20 +45,26 @@ Orchestrates the PR technical audit lifecycle.
 - **Usage**: `python3 dev-tools/td_cli.py gh audit-pr 368 --fetch --audit`
 
 #### `gh validate-issue <ISSUE_NUMBER>`
+
 Validates GitHub Issues against repo standards.
+
 - **Flags**:
   - `--all-open`: Check all open issues.
   - `--post-comments`: Post findings as comments to the issue (requires `--execute`).
 - **Usage**: `python3 dev-tools/td_cli.py gh validate-issue --issue-number 247`
 
 #### `gh conflicts`
+
 Detects potential merge conflicts across all open PRs.
+
 - **Flags**:
   - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
 - **Usage**: `python3 dev-tools/td_cli.py gh conflicts`
 
 #### `jules repair-context`
+
 Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
+
 - **Flags**:
   - `--log <LOG_LINE>`: Process a single raw log line.
   - `--file <FILE_PATH>`: Process all errors in a log file.
@@ -61,7 +73,9 @@ Generates a high-precision prompt for fixing a specific CI error. It maps the er
   - `python3 dev-tools/td_cli.py jules repair-context --file logs/ci_failure.log`
 
 #### `gh ratchet-any` / `gh bundle-size`
+
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
+
 - **Usage**: `python3 dev-tools/td_cli.py gh bundle-size`
 
 ---

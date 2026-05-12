@@ -24,4 +24,5 @@ gear:
     - "Water bottle"
     - "Phone charger"
 ---
+
 San Francisco event. Check for roommate pairings on the Facebook group early.

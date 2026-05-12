@@ -28,10 +28,10 @@ Instead of paying the $180 "dance shoe tax" for flimsy professional shoes, I use
 
 ### Required Gear
 
-| Asset | What it does | Value |
-|---|---|---|
-| Adhesive Suede | Better grip | High |
-| Barge Cement | Strong glue | Critical |
+| Asset             | What it does    | Value     |
+| ----------------- | --------------- | --------- |
+| Adhesive Suede    | Better grip     | High      |
+| Barge Cement      | Strong glue     | Critical  |
 | Isopropyl Alcohol | Cleans the sole | Essential |
 
 ### Step-by-Step Protocol
@@ -49,11 +49,13 @@ A key to effective traction is selecting the right coverage pattern for your mov
 - **Entire Sticker Coverage (My Preferred Method):** The most consistent friction profile across the entire foot, ensuring safety and predictable slip during complex patterns.
 
 ## Performance Notes
+
 These modification have survived 8+ hour social sets at major conventions. The bond is permanent and the friction is highly consistent.
 
 ## Verdict
+
 Suede your own shoes. It's the only way to get a truly robust connection on unpredictable ballroom floors.
 
 ---
 
-*Affiliate disclosure: Links in this guide may earn a commission at no cost to you.*
+_Affiliate disclosure: Links in this guide may earn a commission at no cost to you._
