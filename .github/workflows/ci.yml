@@ -156,6 +156,11 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
     steps:
+      - name: Install system utilities
+        run: |
+          apt-get update
+          apt-get install -y lsof
+
       - name: Checkout
         uses: actions/checkout@v6
 
@@ -205,6 +210,7 @@ jobs:
       - name: Run Lighthouse CI
         run: |
           export VITE_BASE_PATH=/$REPO_NAME/
+          export CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())")
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
