@@ -42,7 +42,9 @@ export function parseFrontmatter(content: string) {
     } else {
       const colonIdx = line.indexOf(':');
       if (colonIdx !== -1) {
-        const key = line.slice(0, colonIdx).trim();
+        const rawKey = line.slice(0, colonIdx).trim();
+        if (rawKey === '__proto__' || rawKey === 'constructor' || rawKey === 'prototype') continue;
+        const key = rawKey;
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
@@ -55,7 +57,8 @@ export function parseFrontmatter(content: string) {
             ) {
               currentRoot[lastKey] = {};
             }
-            currentRoot = currentRoot[lastKey] as Record<string, unknown>;
+            const nextRoot = currentRoot[lastKey] as Record<string, unknown>;
+            currentRoot = nextRoot;
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
