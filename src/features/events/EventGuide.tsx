@@ -9,6 +9,7 @@ import { CuratedGear } from './components/CuratedGear';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
+import { getEventSchema } from './schema';
 
 export default function EventGuide() {
   const {
@@ -56,6 +57,7 @@ export default function EventGuide() {
       <SEO
         title={`${event.title} | Event Guide`}
         description={event.excerpt}
+        jsonLd={getEventSchema(event)}
       />
 
       <EventHero
