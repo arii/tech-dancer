@@ -10,6 +10,8 @@ export interface WCSRecord {
   event_date: string;
   Registry_Points_Sum: number;
   Promoted: boolean;
+  event_url: string;
+  location: string;
 }
 
 export function useWCSData() {
@@ -33,7 +35,6 @@ export function useWCSData() {
         try {
           // Attempt 1: Lazy Load
           const file = await asyncBufferFromUrl({ url: parquetUrl });
-          // Must call parser immediately to catch footer errors (footer != PAR1) in this block
           objects = await parquetReadObjects({ file });
         } catch (lazyErr) {
           console.warn("Lazy load failed or invalid Parquet footer, falling back to full fetch:", lazyErr);
@@ -71,7 +72,7 @@ export function useWCSData() {
     loadData();
   }, []);
 
-  const { filteredData, scoreDistribution, trendData } = useMemo(() => {
+  const { filteredData, scoreDistribution, trendData, totalEvents, lastSync } = useMemo(() => {
     const filteredResults: WCSRecord[] = [];
     const bins = new Map<string, number>();
     const byDate = new Map<string, { total: number; count: number }>();
@@ -93,15 +94,22 @@ export function useWCSData() {
         filteredResults.push(record);
 
         // Score Distribution
-        const bin = Math.floor(record.Registry_Points_Sum).toString();
-        bins.set(bin, (bins.get(bin) || 0) + 1);
+        const scoreVal = Number(record.Registry_Points_Sum);
+        if (!isNaN(scoreVal)) {
+          const bin = Math.floor(scoreVal).toString();
+          bins.set(bin, (bins.get(bin) || 0) + 1);
+        }
 
         // Trend Analysis
-        const parts = record.event_date.split('/');
+        const dateStr = record.event_date || '';
+        const parts = dateStr.split('/');
         if (parts.length >= 3) {
-          const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
+          const year = parts.length > 3 ? parts[3] : parts[2];
+          const month = parts[0];
+          const monthYear = `${month}/${year}`;
+          
           const stats = byDate.get(monthYear) || { total: 0, count: 0 };
-          stats.total += record.Registry_Points_Sum;
+          stats.total += isNaN(scoreVal) ? 0 : scoreVal;
           stats.count += 1;
           byDate.set(monthYear, stats);
         }
@@ -123,10 +131,31 @@ export function useWCSData() {
         return y1 !== y2 ? y1 - y2 : m1 - m2;
       });
 
+    const uniqueEvents = new Set(data.map(r => r.result_id)).size;
+
+    const lastSyncDate = data.reduce((latest, r) => {
+      if (!r.event_date) return latest;
+      const parts1 = r.event_date.split('/');
+      const parts2 = latest.split('/');
+      if (parts1.length < 3 || parts2.length < 3) return latest;
+      
+      const [m1, d1] = [Number(parts1[0]), Number(parts1[1])];
+      const y1 = Number(parts1.length > 3 ? parts1[3] : parts1[2]);
+      
+      const [m2, d2] = [Number(parts2[0]), Number(parts2[1])];
+      const y2 = Number(parts2.length > 3 ? parts2[3] : parts2[2]);
+      
+      const date1 = new Date(y1, m1 - 1, d1);
+      const date2 = new Date(y2, m2 - 1, d2);
+      return date1 > date2 ? r.event_date : latest;
+    }, '01/01/2023');
+
     return {
       filteredData: filteredResults,
       scoreDistribution: calculatedScoreDistribution,
       trendData: calculatedTrendData,
+      totalEvents: uniqueEvents,
+      lastSync: lastSyncDate
     };
   }, [data, searchTerm, filterPromoted]);
 
@@ -141,6 +170,8 @@ export function useWCSData() {
     filterPromoted,
     setFilterPromoted,
     scoreDistribution,
-    trendData
+    trendData,
+    totalEvents,
+    lastSync
   };
 }
