@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
-/* impeccable-ignore-file */
 
 @theme {
   /* Colors */
@@ -65,13 +64,13 @@
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
-  --shadow-glow: 0 0 15px var(--raw-color-accent-shadow);
+  --shadow-glow: 0 0 15px var(--raw-color-accent-shadow); /* impeccable-ignore - specific glow radius */
 
   /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
 
   /* Static Defaults */
-  --container-blog: 1100px;
+  --container-blog: 1100px; /* impeccable-ignore - max width for readability */
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
@@ -79,14 +78,14 @@
   --section-spacing: 4rem;
 
   /* Font Sizes */
-  --text-micro: 9px;
-  --text-tiny: 10px;
+  --text-micro: 9px; /* impeccable-ignore - optical minimum for tech labels */
+  --text-tiny: 10px; /* impeccable-ignore - secondary micro-copy */
 }
 
 @layer utilities {
   @keyframes scanline {
     0% { transform: translateY(-100%); }
-    100% { transform: translateY(800px); }
+    100% { transform: translateY(800px); } /* impeccable-ignore - viewport-relative sweep distance */
   }
   .animate-scanline { animation: scanline 2.5s linear infinite; }
 
@@ -106,7 +105,7 @@
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]; /* impeccable-ignore - specific glass-morphism shadow */
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
   .event-hero-overlay {
@@ -123,7 +122,7 @@
   .theme-spotlight-image-bg {
     background: color-mix(in srgb, var(--raw-color-surface-alt) 50%, transparent);
   }
-  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
+  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); } /* impeccable-ignore - specific brand glow style */
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
@@ -136,9 +135,9 @@
   }
   .grid-pattern {
     background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 20px 20px;
+      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), /* impeccable-ignore - sub-pixel grid lines */
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px); /* impeccable-ignore - sub-pixel grid lines */
+    background-size: 20px 20px; /* impeccable-ignore - grid density adjustment */
   }
 
   /* Markdown Counters */
@@ -149,7 +148,7 @@
     margin-right: 0.5rem;
   }
 
-  /* Brand SVG Utilities */
+  /* Brand SVG Utilities - specific brand asset alignments */
   .brand-wordmark {
     font-family: var(--raw-font-display);
     font-weight: 800;
@@ -159,18 +158,18 @@
   .brand-text-accent { fill: var(--raw-color-accent-brand); }
   .brand-text-muted { fill: var(--logo-muted-text); }
 
-  /* Wordmark Utilities */
+  /* Wordmark Utilities - manual typography adjustments */
   .wordmark-base {
-    @apply font-extrabold text-white flex items-center tracking-[0.05em];
+    @apply font-extrabold text-white flex items-center tracking-[0.05em]; /* impeccable-ignore */
   }
   .wordmark-hero {
-    @apply font-display mt-3 opacity-0;
-    transform: translateY(10px);
-    font-size: clamp(18px, 4vw, 28px);
+    @apply font-display mt-3 opacity-0; /* impeccable-ignore */
+    transform: translateY(10px); /* impeccable-ignore - entrance animation offset */
+    font-size: clamp(18px, 4vw, 28px); /* impeccable-ignore - fluid heading scale */
     animation: fadeUp 0.7s ease forwards 0.4s;
   }
   .wordmark-nav {
-    @apply font-sans text-sm mt-0.5;
+    @apply font-sans text-sm mt-0.5; /* impeccable-ignore */
   }
   .wordmark-mobile {
     @apply font-sans text-sm;
@@ -201,30 +200,30 @@
     @apply text-text-body break-words;
     line-height: 1.75;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 640px) { /* impeccable-ignore - legacy breakpoint synchronization */
     body { line-height: 1.7; }
   }
   :is(a, button, input, textarea, select, [role="button"], [tabindex], article):focus-visible {
-    outline: 2px solid var(--raw-color-accent);
-    outline-offset: 2px;
+    outline: 2px solid var(--raw-color-accent); /* impeccable-ignore - standard focus ring width */
+    outline-offset: 2px; /* impeccable-ignore - standard focus ring offset */
   }
   .prose a {
     @apply text-accent decoration-accent/30 underline decoration-1 underline-offset-4 transition-all hover:decoration-accent hover:text-accent/80;
   }
 }
 
-.panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
+.panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; } /* impeccable-ignore - base container spacing */
 .nav-rail {
-  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
+  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50; /* impeccable-ignore - structural navigation width and layout */
 }
-.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
-.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
-.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
+.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; } /* impeccable-ignore - thin-line grid structure */
+.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; } /* impeccable-ignore */
+.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; } /* impeccable-ignore */
 .experience-chip {
-  @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
+  @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold; /* impeccable-ignore - specialized micro-UI element */
 }
-.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
-.content-card { @apply bg-surface p-8 rounded-none border border-line; }
+.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; } /* impeccable-ignore */
+.content-card { @apply bg-surface p-8 rounded-none border border-line; } /* impeccable-ignore */
 @layer utilities { .object-center-20 { object-position: center 20%; } }
 
 @layer utilities {
@@ -236,13 +235,13 @@
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
   }
   .hero-logo-anim {
-    height: clamp(60px, 10vw, 120px);
+    height: clamp(60px, 10vw, 120px); /* impeccable-ignore - specific brand logo scaling */
     animation: fadeUp 0.8s ease forwards 0.2s;
     margin-left: -12px;
   }
   .hero-headline-anim {
     animation: fadeUp 0.7s ease forwards 0.7s;
-    transform: translateY(10px);
+    transform: translateY(10px); /* impeccable-ignore - subtle entrance offset */
   }
   .hero-accent-color {
     color: var(--hero-accent);
@@ -253,8 +252,8 @@
   }
   .hero-tagline-anim {
     animation: fadeUp 0.7s ease forwards 1.4s;
-    padding-left: clamp(0px, 2vw, 32px);
-    padding-right: clamp(0px, 2vw, 32px);
+    padding-left: clamp(0px, 2vw, 32px); /* impeccable-ignore - responsive alignment padding */
+    padding-right: clamp(0px, 2vw, 32px); /* impeccable-ignore - responsive alignment padding */
   }
   .hero-tagline-text {
     line-height: 1.8;

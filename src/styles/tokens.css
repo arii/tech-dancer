@@ -1,4 +1,8 @@
-/* impeccable-ignore-file */
+/**
+ * Design Tokens - Source of Truth
+ * This file contains the raw CSS variables for the theme.
+ * Excluded from audit via scripts/detect-antipatterns.mjs
+ */
 :root {
   /* Colors - High-Tech Dark Theme Refined */
   --raw-color-bg: #020617;

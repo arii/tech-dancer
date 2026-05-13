@@ -1,6 +1,7 @@
-// impeccable-ignore-file
 /**
  * Design Tokens for the Portfolio.
+ * Source of truth for TypeScript-based layout and style fragments.
+ * Excluded from audit via scripts/detect-antipatterns.mjs
  * Standardizes radius, spacing, and border treatments to ensure
  * consistency across all components.
  */

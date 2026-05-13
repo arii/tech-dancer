@@ -21,6 +21,16 @@ const CHECK_DIRS = [
 
 const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss'];
 
+/**
+ * Files excluded from the audit.
+ * These are typically auto-generated files or the source of truth for design tokens.
+ */
+const GLOBAL_EXCLUSIONS = [
+  'src/styles/tokens.css',
+  'src/styles/design-tokens.ts',
+  'src/styles/safelist.ts',
+];
+
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
   const results = new Set();
@@ -28,11 +38,16 @@ function collectAuditFiles(targets) {
   const walk = (dir) => {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const fullPath = path.join(dir, entry.name);
+      const relativePath = path.relative(ROOT, fullPath);
+
       if (entry.isDirectory()) {
         if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
         walk(fullPath);
         continue;
       }
+
+      if (GLOBAL_EXCLUSIONS.includes(relativePath)) continue;
+
       if (AUDIT_EXTENSIONS.some(ext => fullPath.endsWith(ext))) results.add(fullPath);
     }
   };
@@ -40,6 +55,10 @@ function collectAuditFiles(targets) {
   for (const target of resolvedTargets) {
     const absoluteTarget = path.isAbsolute(target) ? target : path.join(ROOT, target);
     if (!fs.existsSync(absoluteTarget)) continue;
+
+    const relativeTarget = path.relative(ROOT, absoluteTarget);
+    if (GLOBAL_EXCLUSIONS.includes(relativeTarget)) continue;
+
     const stat = fs.statSync(absoluteTarget);
     if (stat.isDirectory()) walk(absoluteTarget);
     else if (AUDIT_EXTENSIONS.some(ext => absoluteTarget.endsWith(ext))) results.add(absoluteTarget);
