@@ -43,47 +43,58 @@ class ScoringDanceCrawler:
         response.raise_for_status()
         return response.text
 
-    def get_recent_events(self, years=5):
-        """Generator that yields event URLs within the given timeframe."""
-        cutoff_date = datetime.now() - timedelta(days=years*365)
+    def get_recent_events(self, years=5, stop_set=None, legacy_stop_set=None):
+        """Crawls the 'Recent Results' pages to find event links."""
         page = 1
-
-        while True:
+        cutoff_date = datetime.now() - timedelta(days=years*365)
+        logging.info(f"Discovering events from the last {years} years...")
+        
+        while page <= 100:  # Safety limit
             url = f"{self.base_url}/enUS/recent?page={page}"
-            logging.info(f"Crawling recent events page {page}...")
+            logging.debug(f"Crawling discovery page {page}: {url}")
             try:
-                html_content = self._fetch_page_text(url)
-            except requests.RequestException as e:
-                logging.error(f"Failed to fetch recent events page {page}: {e}")
-                break
+                response = requests.get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
+                if response.status_code != 200: break
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                links = soup.find_all('a', href=re.compile(r'/events/\d+/results/'))
+                
+                if not links: break
+                
+                page_has_valid_date = False
+                for link in links:
+                    event_url = urljoin(self.base_url, link['href'])
+                    event_title = link.get_text().strip()
+                    event_date_str = self._extract_date_near_element(link)
 
-            soup = BeautifulSoup(html_content, 'html.parser')
-            links_found = soup.find_all('a', href=re.compile(r'/events/\d+/results/?$'))
+                    # Check if we should stop because we've hit known territory
+                    if stop_set and event_url in stop_set:
+                        logging.info(f"Reached known event URL: {event_url}. Stopping discovery.")
+                        return
+                    
+                    if legacy_stop_set and (event_title, event_date_str) in legacy_stop_set:
+                        logging.info(f"Reached known legacy event: {event_title} ({event_date_str}). Stopping discovery.")
+                        return
 
-            if not links_found:
-                break
-
-            page_has_valid_date = False
-            for link in links_found:
-                href = link['href']
-                event_url = urljoin(self.base_url, href)
-
-                found_date = self._extract_date_near_element(link)
-
-                if found_date:
-                    if found_date >= cutoff_date:
+                    if event_date_str:
+                        try:
+                            found_date = datetime.strptime(event_date_str, "%m/%d/%p/%Y" if "/p/" in event_date_str else "%m/%d/%Y")
+                            if found_date >= cutoff_date:
+                                yield event_url
+                                page_has_valid_date = True
+                        except:
+                            yield event_url
+                            page_has_valid_date = True
+                    else:
                         yield event_url
                         page_has_valid_date = True
-                else:
-                    # Fallback: yield and assume it's recent enough
-                    yield event_url
-                    page_has_valid_date = True
 
-            if not page_has_valid_date and page > 1:
-                break
-
-            page += 1
-            if page > 100:
+                if not page_has_valid_date and page > 1:
+                    break
+                
+                page += 1
+            except Exception as e:
+                logging.error(f"Error crawling page {page}: {e}")
                 break
 
     def _extract_date_near_element(self, element):
@@ -262,18 +273,25 @@ class ETLPipeline:
         self.output_manager = output_manager
         self.queue_path = queue_path
         self.processed_result_ids = set()
+        self.known_event_urls = set()
+        self.known_events_legacy = set()
         self.event_queue = []
         self._load_existing_ids()
         self._load_queue()
 
     def _load_existing_ids(self):
-        """Loads existing result IDs from the ledger to enable incremental scraping."""
+        """Loads existing result IDs and event URLs from the ledger."""
         if os.path.exists(self.output_manager.ledger_path):
             try:
                 df = pd.read_parquet(self.output_manager.ledger_path)
                 if 'result_id' in df.columns:
                     self.processed_result_ids = set(df['result_id'].astype(str).unique())
-                    logging.info(f"Loaded {len(self.processed_result_ids)} existing result IDs from ledger.")
+                if 'event_url' in df.columns:
+                    self.known_event_urls = set(df['event_url'].unique())
+                if 'event_title' in df.columns and 'event_date' in df.columns:
+                    # Legacy fallback: use title + date to identify known events
+                    self.known_events_legacy = set(zip(df['event_title'], df['event_date']))
+                logging.info(f"Loaded {len(self.processed_result_ids)} results and {len(self.known_events_legacy)} known events.")
             except Exception as e:
                 logging.error(f"Failed to load existing ledger for incremental check: {e}")
 
@@ -327,17 +345,25 @@ class ETLPipeline:
     async def run_historical(self, years=5, limit=None):
         logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
         
-        # Discovery Phase (only if queue is empty)
-        if not self.event_queue:
-            logging.info("Queue is empty. Discovering events...")
-            self.event_queue = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
+        # Discovery Phase (Always check for NEW events, but prepend to queue)
+        logging.info("Checking for new events...")
+        # We pass known_event_urls and legacy set to stop discovery early
+        new_events = list(dict.fromkeys(self.crawler.get_recent_events(
+            years=years, 
+            stop_set=self.known_event_urls,
+            legacy_stop_set=self.known_events_legacy
+        )))
+        
+        if new_events:
+            logging.info(f"Discovered {len(new_events)} new events.")
+            # Prepend new events to the existing queue
+            self.event_queue = list(dict.fromkeys(new_events + self.event_queue))
             self._save_queue()
-            print(f"\n📊 Discovered {len(self.event_queue)} events in the last {years} years.\n")
         else:
-            logging.info(f"Using existing queue with {len(self.event_queue)} events.")
+            logging.info("No new events discovered.")
 
         if not self.event_queue:
-            logging.info("No events found to process.")
+            logging.info("No events in queue to process.")
             return 0
 
         async with async_playwright() as p:
@@ -371,6 +397,7 @@ class ETLPipeline:
                         try:
                             content = await self._fetch_page(context, res_url)
                             raw_df = self.parser.parse_results(content, res_url)
+                            raw_df['event_url'] = event_url
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
                             event_has_new_data = True
