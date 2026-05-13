@@ -13,7 +13,8 @@ export default function GearPost() {
   const { data: resource } = useQuery({
     queryKey: ['resources', slug],
     queryFn: () => slug ? getResourceBySlug(slug) : undefined,
-    enabled: !!slug
+    enabled: !!slug,
+    initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
 
   const structuredData = useMemo(() => {
