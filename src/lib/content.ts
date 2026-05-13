@@ -46,7 +46,7 @@ export function parseFrontmatter(content: string) {
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
-          if (lastKey) {
+          if (lastKey && lastKey !== '__proto__' && lastKey !== 'constructor' && lastKey !== 'prototype') {
             stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
             if (
               !currentRoot[lastKey] ||

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getEventBySlug, getEvents, Event } from "@/lib/content";
+import { getEventBySlug, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
 import { AffiliateLink } from "@/types";
 
