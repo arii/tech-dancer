@@ -328,6 +328,7 @@ function checkContent(content, filepath = 'unknown') {
       activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
       continue;
     }
+
     const prevLineText = lines[i - 1] || '';
     const isIgnored = line.includes('// impeccable-ignore') ||
                       line.includes('/* impeccable-ignore') ||
