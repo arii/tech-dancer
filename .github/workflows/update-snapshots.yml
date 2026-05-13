@@ -30,14 +30,19 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Resolve PR details
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api "repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}" \
-            --jq '"HEAD_REF=" + .head.ref, "HEAD_REPO=" + .head.repo.full_name' >> "$GITHUB_ENV"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            core.exportVariable('HEAD_REF', pr.data.head.ref);
+            core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
 
       - name: Checkout source branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.HEAD_REF }}
           repository: ${{ env.HEAD_REPO }}
@@ -45,10 +50,10 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: pnpm

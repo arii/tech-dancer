@@ -14,13 +14,18 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Install system dependencies (git-lfs, gh)
+        run: |
+          apt-get update && apt-get install -y git-lfs gh
+          git lfs install
+
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           lfs: true
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -31,13 +36,13 @@ jobs:
 
       - name: Run Pytest (Data Validation)
         run: |
-          PYTHONPATH=etl pytest etl/tests/
+          PYTHONPATH=. pytest etl/tests/
 
       - name: Execute Extraction Script
         run: |
           # Run crawl for a single year in automated workflow to keep it efficient
           # Markdown files are generated in content/studies/ but ignored by .gitignore
-          python etl/scraper.py --years 1
+          PYTHONPATH=. python etl/scraper.py --years 1
 
       - name: Validate Output
         run: |
