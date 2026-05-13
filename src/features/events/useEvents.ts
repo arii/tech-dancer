@@ -9,6 +9,7 @@ export function useEvents() {
   const { data: events = [] } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
+    initialData: getEvents,
     staleTime: 3600000, // 1 hour
   });
   const [activeCategory] = useSearchParam('category', 'All');

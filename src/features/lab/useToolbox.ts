@@ -10,6 +10,7 @@ export function useToolbox() {
   const { data: resources = [] } = useQuery({
     queryKey: ['resources'],
     queryFn: getResources,
+    initialData: getResources,
   });
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, ButtonHTMLAttributes, ElementType, Ref } from "react"
 import { cn } from "@/lib/utils"
@@ -22,7 +21,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         as={as}
         ref={ref as Ref<HTMLDivElement>}
         cursor="pointer"
-        className={cn(buttonVariants({ variant, intent, size, fullWidth }), "min-h-[44px] min-w-[44px]", className)}
+        className={cn(buttonVariants({ variant, intent, size, fullWidth }), "tap-target", className)}
         {...props}
       >
         {children}
