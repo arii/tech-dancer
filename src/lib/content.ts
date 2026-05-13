@@ -15,7 +15,7 @@ export function parseFrontmatter(content: string) {
 
   const yaml = match[1];
   const body = match[2];
-  const data: Record<string, unknown> = {};
+  const data: Record<string, unknown> = Object.create(null);
 
   let currentRoot = data as Record<string, unknown>;
   let lastKey = '';
@@ -47,7 +47,8 @@ export function parseFrontmatter(content: string) {
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
-          if (lastKey && lastKey !== '__proto__' && lastKey !== 'constructor' && lastKey !== 'prototype') {
+          const forbidden = ['__proto__', 'constructor', 'prototype'];
+          if (lastKey && !forbidden.includes(lastKey)) {
             stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
 
             const nextObj = currentRoot[lastKey];
@@ -56,9 +57,13 @@ export function parseFrontmatter(content: string) {
               typeof nextObj !== 'object' ||
               Array.isArray(nextObj)
             ) {
-              currentRoot[lastKey] = {};
+              currentRoot[lastKey] = Object.create(null);
             }
-            currentRoot = currentRoot[lastKey] as Record<string, unknown>;
+
+            const target = currentRoot[lastKey];
+            if (target && typeof target === 'object' && !Array.isArray(target)) {
+              currentRoot = target as Record<string, unknown>;
+            }
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {

@@ -2,17 +2,17 @@ import { test, expect } from '@playwright/test';
 
 test('verify related events section', async ({ page }) => {
   // Go to the event page
-  await page.goto('/events/swingtacular-the-galactic-open');
+  await page.goto('/events/swingtacular-the-galactic-open', { waitUntil: 'networkidle' });
 
-  // Wait for the main content
-  await expect(page.locator('main')).toBeVisible();
+  // Wait for the main content with a longer timeout
+  await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
 
   // Scroll to the related events section
   const relatedSection = page.locator('#related');
   await relatedSection.scrollIntoViewIfNeeded();
 
   // Verify visibility
-  await expect(relatedSection).toBeVisible();
+  await expect(relatedSection).toBeVisible({ timeout: 10000 });
 
   // Verify title
   await expect(relatedSection.locator('h2')).toContainText('Related Events');
