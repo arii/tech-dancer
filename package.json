@@ -24,7 +24,9 @@
     "knip": "knip",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
-    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context"
+    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context",
+    "review:ux:desktop": "tsx scripts/ux-capture.ts desktop",
+    "review:ux:mobile": "tsx scripts/ux-capture.ts mobile"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
