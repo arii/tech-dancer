@@ -1,10 +1,14 @@
 /// <reference types="vite/client" />
 
-interface Window {
-  __ROUTER_BASENAME__?: string;
-  Buffer: typeof import('buffer').Buffer;
-  gtag?: (...args: any[]) => void;
-  dataLayer?: any[];
+declare global {
+  interface Window {
+    __ROUTER_BASENAME__?: string;
+    Buffer: typeof import('buffer').Buffer;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    gtag?: (...args: any[]) => void;
+    dataLayer?: any[];
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+  }
 }
 
 interface ImportMetaEnv {
