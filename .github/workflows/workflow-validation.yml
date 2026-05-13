@@ -1,0 +1,35 @@
+name: Workflow Validation
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - '.yamllint.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+      - '.yamllint.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-workflows:
+    name: Validate all workflow files
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download actionlint
+        id: get_actionlint
+        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+        shell: bash
+
+      - name: Lint workflow logic with actionlint
+        run: ${{ steps.get_actionlint.outputs.executable }} -color
+        shell: bash
