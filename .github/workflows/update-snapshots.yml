@@ -11,7 +11,7 @@ env:
 
 jobs:
   update-snapshots:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '@update-snapshots')
+    if: github.event.issue.pull_request && (contains(github.event.comment.body, '/update-snapshots') || contains(github.event.comment.body, '@update-snapshots'))
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
@@ -20,6 +20,12 @@ jobs:
       pull-requests: write
       actions: write
     steps:
+      - name: Install system utilities
+        run: |
+          apt-get update
+          apt-get install -y lsof git-lfs
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Create initial comment
         id: initial-comment
         uses: peter-evans/create-or-update-comment@v5
@@ -72,18 +78,11 @@ jobs:
 
       - name: Commit and push changes
         id: commit
-        run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: update playwright snapshots"
-            git push origin HEAD:${{ env.HEAD_REF }}
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update playwright snapshots"
+          branch: ${{ env.HEAD_REF }}
+          file_pattern: 'tests/**/*.png'
 
       - name: Update comment on success
         if: success()
@@ -91,7 +90,7 @@ jobs:
         with:
           comment-id: ${{ steps.initial-comment.outputs.comment-id }}
           body: |
-            ✅ Playwright snapshots updated successfully.
+            ${{ steps.commit.outputs.changes_detected == 'true' && '✅ Playwright snapshots updated successfully.' || 'info: No snapshot changes detected.' }}
           edit-mode: replace
           token: ${{ secrets.GITHUB_TOKEN }}
 
