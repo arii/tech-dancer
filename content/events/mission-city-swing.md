@@ -13,11 +13,7 @@ url: "https://missioncityswing.com"
 heroImage: ""
 description: "Mission City Swing is a weekly social dance event in San Jose, California, featuring West Coast Swing. It's a great opportunity to practice, learn, and connect with the local dance community."
 
-whyAttending: >
-  Mission City Swing is the heartbeat of the South Bay WCS community. Whether
-  you're a beginner or a seasoned pro, the welcoming atmosphere and consistent
-  quality of instruction make it a weekly must-visit.
-
+whyAttending: "Mission City Swing is the heartbeat of the South Bay WCS community. Whether you're a beginner or a seasoned pro, the welcoming atmosphere and consistent quality of instruction make it a weekly must-visit."
 theme:
   name: "Community Social"
   label: "Weekly Style"

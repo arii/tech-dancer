@@ -13,12 +13,7 @@ url: "https://jackandjillorama.com"
 heroImage: ""
 description: "Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events on the circuit. It is famous for its creative competition formats, high-energy social dancing, and prime location near Disneyland."
 
-whyAttending: >
-  Jack & Jill O'Rama is the quintessential Southern California WCS experience.
-  The energy is infectious, the competitions are uniquely creative, and the
-  community atmosphere is unparalleled. It's the perfect blend of high-level
-  dancing and pure social fun.
-
+whyAttending: "Jack & Jill O'Rama is the quintessential Southern California WCS experience. The energy is infectious, the competitions are uniquely creative, and the community atmosphere is unparalleled. It's the perfect blend of high-level dancing and pure social fun."
 theme:
   name: "Rainbow"
   label: "NorCal Dancers Theme"

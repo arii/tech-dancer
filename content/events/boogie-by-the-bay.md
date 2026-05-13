@@ -13,12 +13,7 @@ url: "https://boogiebythebay.org"
 heroImage: ""
 description: "One of the longest-running and most prestigious events in the world. Boogie by the Bay features the Champions/All-Star Jack & Jill, professional intensives, and a massive ballroom floor that hosts dancers from every corner of the globe."
 
-whyAttending: >
-  Boogie by the Bay is a cornerstone of the West Coast Swing calendar. It's where
-  tradition meets high-level competition, all in a beautiful setting. The atmosphere
-  is electric, especially during the Champions Jack & Jill, making it an unmissable
-  experience for any serious dancer.
-
+whyAttending: "Boogie by the Bay is a cornerstone of the West Coast Swing calendar. It's where tradition meets high-level competition, all in a beautiful setting. The atmosphere is electric, especially during the Champions Jack & Jill, making it an unmissable experience for any serious dancer."
 theme:
   name: "Classic San Francisco"
   label: "Flagship Theme"

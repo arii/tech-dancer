@@ -13,11 +13,7 @@ url: "https://soswing.com"
 heroImage: ""
 description: "SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing."
 
-whyAttending: >
-  SOswing has the most welcoming, community-first atmosphere on the
-  Pacific Northwest circuit. It's a perfect event to focus on dancing
-  without the pressure of a huge comp field.
-
+whyAttending: "SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge comp field."
 theme:
   name: "Pacific Wildflower"
   label: "SOswing Theme"

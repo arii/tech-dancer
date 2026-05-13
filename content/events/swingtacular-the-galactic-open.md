@@ -13,12 +13,7 @@ url: "https://swingtacular.com"
 heroImage: ""
 description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."
 
-whyAttending: >
-  Swingtacular lives up to its name with top-notch production values and a
-  vibrant, international community. The galactic theme is consistently
-  creative, and the quality of both the competitions and the social dancing
-  is world-class.
-
+whyAttending: "Swingtacular lives up to its name with top-notch production values and a vibrant, international community. The galactic theme is consistently creative, and the quality of both the competitions and the social dancing is world-class."
 theme:
   name: "Galactic"
   label: "Space Theme"
