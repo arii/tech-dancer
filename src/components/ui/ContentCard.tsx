@@ -3,7 +3,7 @@ import { motion, HTMLMotionProps } from 'motion/react';
 import { MapPin } from 'lucide-react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 
-interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
+interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"article">> {
   slug?: string;
   title: string;
   category?: string;
@@ -80,7 +80,7 @@ export function ContentCard({
   if (variant === 'event') {
     return (
       <Stack
-        as={onClick ? "button" : motion.create("article")}
+        as={onClick ? motion.create("button") : motion.create("article")}
         type={onClick ? "button" : undefined}
         onClick={onClick}
         direction="col"

@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
+import type { TextProps } from '@/layouts/Primitives';
 
 interface PageHeaderProps {
   label: string;
@@ -11,7 +12,7 @@ interface PageHeaderProps {
   paddingBottom?: BaseProps['paddingBottom'];
   border?: BaseProps['border'];
   descriptionMaxWidth?: BaseProps['maxWidth'];
-  titleSize?: "fluid-5" | "fluid-6" | "fluid-7" | "fluid-8";
+  titleSize?: TextProps['size'];
   cta?: ReactNode;
 }
 

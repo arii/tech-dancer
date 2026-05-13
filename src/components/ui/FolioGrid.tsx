@@ -89,6 +89,7 @@ export default function FolioGrid({
                 <ContentCard
                   {...item}
                   basePath={basePath}
+                  variant={basePath.includes('events') ? 'event' : 'default'}
                 />
               </Box>
             ))}

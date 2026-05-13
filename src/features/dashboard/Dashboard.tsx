@@ -116,7 +116,7 @@ export default function Home() {
                 >
                   <ContentCard
                     variant="event"
-                    title={event.name}
+                    title={event.title}
                     location={event.location}
                     schedule={event.schedule}
                     onClick={() => handleNavigate(`/events/${event.slug}`)}

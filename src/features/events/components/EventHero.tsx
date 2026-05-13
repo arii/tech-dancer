@@ -6,6 +6,7 @@ import { motionTokens } from '@/styles/motion';
 import { Logo } from '@/components/ui/Logo';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
 import { EventNavigation } from './EventNavigation';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 interface EventHeroProps {
   title: string;
@@ -85,29 +86,13 @@ export function EventHero({
         transition={motionTokens.page.transition}
       >
         <Stack gap={6}>
-          <Stack gap={2}>
-            <Text
-              variant="mono"
-              size="xs"
-              weight="font-bold"
-              color="accent"
-              uppercase
-              tracking="widest"
-            >
-              {eyebrow}
-            </Text>
-            <Text
-              as="h1"
-              variant="headline"
-              size={{ base: "fluid-5", md: "fluid-7" }}
-              weight="font-black"
-              color="white"
-              leading="tight"
-              tracking="tight"
-            >
-              {title}
-            </Text>
-          </Stack>
+          <PageHeader
+            label={eyebrow}
+            title={title}
+            paddingBottom={0}
+            border="none"
+            titleSize={{ base: "fluid-5", md: "fluid-7" }}
+          />
 
           <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center">
             <Box display="flex" align="center" gap={2}>
