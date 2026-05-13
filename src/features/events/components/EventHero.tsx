@@ -87,7 +87,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
             weight="font-black"
             color="white"
             leading="tight"
-            tracking="tighter"
+            tracking="tight"
           >
             {title}
           </Text>
