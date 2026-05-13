@@ -39,11 +39,34 @@ jobs:
         run: |
           PYTHONPATH=. pytest etl/tests/
 
-      - name: Execute Extraction Script
+      - name: Execute Extraction Script (Incremental Batching)
         run: |
-          # Run crawl for a single year in automated workflow to keep it efficient
-          # Markdown files are generated in content/studies/ but ignored by .gitignore
-          PYTHONPATH=. python etl/scraper.py --years 1
+          # Configure Git for intermediate commits
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+          # Run scraper in batches of 10 events
+          # The loop will stop when the script exits with code 100 (no new data) 
+          # or when it reaches a safety limit of 10 batches.
+          for i in {1..10}; do
+            echo "Starting Batch $i..."
+            PYTHONPATH=. python etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
+            EXIT_CODE=$?
+            
+            if [ $EXIT_CODE -eq 100 ]; then
+              echo "✅ No new events to process. Finishing."
+              break
+            elif [ $EXIT_CODE -eq 0 ]; then
+              echo "📦 Batch $i completed. Committing and pushing..."
+              git add etl/data/wcs_prelims.parquet
+              git commit -m "chore(etl): update wcs ledger (batch $i)" || echo "No changes to commit"
+              git push origin HEAD:${{ github.ref }} || echo "Push failed, continuing..."
+            else
+              echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
+              exit 1
+            fi
+          done
 
       - name: Validate Output
         run: |

@@ -260,6 +260,19 @@ class ETLPipeline:
         self.crawler = crawler
         self.parser = parser
         self.output_manager = output_manager
+        self.processed_result_ids = set()
+        self._load_existing_ids()
+
+    def _load_existing_ids(self):
+        """Loads existing result IDs from the ledger to enable incremental scraping."""
+        if os.path.exists(self.output_manager.ledger_path):
+            try:
+                df = pd.read_parquet(self.output_manager.ledger_path)
+                if 'result_id' in df.columns:
+                    self.processed_result_ids = set(df['result_id'].astype(str).unique())
+                    logging.info(f"Loaded {len(self.processed_result_ids)} existing result IDs from ledger.")
+            except Exception as e:
+                logging.error(f"Failed to load existing ledger for incremental check: {e}")
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def _fetch_page(self, browser_context, url):
@@ -286,39 +299,61 @@ class ETLPipeline:
             ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
 
-    async def run_historical(self, years=5):
-        logging.info(f"Starting historical scrape for past {years} years")
+    async def run_historical(self, years=5, limit=None):
+        logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent=USER_AGENT)
 
-            # Collect events first so tqdm knows the total count
-            # Deduplicate to avoid processing the same event multiple times
+            # Collect events first
             events = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
             print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
 
+            processed_count = 0
             for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):
+                if limit and processed_count >= limit:
+                    logging.info(f"Reached batch limit of {limit} events. Stopping.")
+                    break
+
                 logging.info(f"Processing event: {event_url}")
                 try:
                     result_links = self.crawler.get_result_links(event_url)
+                    event_has_new_data = False
+
                     for res_url in result_links:
+                        # Extract result_id for incremental check
+                        result_id_match = re.search(r'/results/(\d+)\.html', res_url)
+                        res_id = result_id_match.group(1) if result_id_match else None
+
+                        if res_id and res_id in self.processed_result_ids:
+                            logging.debug(f"Skipping already processed result: {res_id}")
+                            continue
+
                         logging.info(f"Scraping result: {res_url}")
                         try:
                             content = await self._fetch_page(context, res_url)
                             raw_df = self.parser.parse_results(content, res_url)
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
+                            event_has_new_data = True
                             await ethical_throttle()
                         except Exception as e:
                             logging.error(f"Failed to process {res_url}: {e}")
+
+                    if event_has_new_data:
+                        processed_count += 1
+
                 except Exception as e:
                     logging.error(f"Failed to process event {event_url}: {e}")
+
             await browser.close()
+            return processed_count
 
 async def main():
     parser = argparse.ArgumentParser(description="Scoring.dance ETL Scraper")
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")
+    parser.add_argument("--limit", type=int, default=None, help="Max number of new events to process")
     parser.add_argument("--ledger", default="etl/data/wcs_prelims.parquet", help="Path to Parquet ledger")
     parser.add_argument("--studies", default="content/studies", help="Directory for Markdown output")
     args = parser.parse_args()
@@ -332,7 +367,13 @@ async def main():
     if args.url:
         await pipeline.run_single(args.url)
     else:
-        await pipeline.run_historical(years=args.years)
+        processed = await pipeline.run_historical(years=args.years, limit=args.limit)
+        # Signal to GHA if we processed anything
+        if processed == 0:
+            logging.info("No new events to process.")
+            sys.exit(100) # Special exit code for "finished/nothing to do"
+        else:
+            logging.info(f"Batch completed. Processed {processed} events.")
 
 if __name__ == "__main__":
     asyncio.run(main())
