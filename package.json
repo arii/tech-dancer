@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "setup:playwright": "./dev-tools/setup-playwright.sh",
     "dev": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && vite --port=3000 --host=0.0.0.0",
     "prebuild": "tsx scripts/generate-assets.ts",
     "build": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build",
@@ -24,6 +25,9 @@
     "knip": "knip",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
+    "review:ux:prep": "pnpm run setup:playwright && pnpm run audit",
+    "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
+    "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
     "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context"
   },
   "dependencies": {
