@@ -50,13 +50,13 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#0f172a',
+                  backgroundColor: 'var(--raw-color-surface)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   fontSize: '10px',
                   fontFamily: 'var(--font-mono)'
                 }}
               />
-              <Bar dataKey="count" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -96,7 +96,7 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#0f172a',
+                  backgroundColor: 'var(--raw-color-surface)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   fontSize: '10px',
                   fontFamily: 'var(--font-mono)'
@@ -105,9 +105,9 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
               <Line
                 type="monotone"
                 dataKey="avg"
-                stroke="#3b82f6"
+                stroke="var(--raw-color-accent-brand)"
                 strokeWidth={2}
-                dot={{ r: 4, fill: '#3b82f6' }}
+                dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
                 activeDot={{ r: 6 }}
               />
             </LineChart>
