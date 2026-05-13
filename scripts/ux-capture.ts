@@ -4,7 +4,7 @@ import fs from 'fs';
 import { disableAnimations } from '../tests/utils/playwright-helpers';
 
 async function capture(url: string, width: number, height: number, outputPath: string) {
-  const isHeadless = process.env.HEADLESS === 'true' || !process.env.DISPLAY;
+  const isHeadless = process.env.HEADLESS !== 'false';
   const browser = await chromium.launch({ headless: isHeadless });
   const page = await browser.newPage({
     viewport: { width, height }

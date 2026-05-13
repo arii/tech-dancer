@@ -19,7 +19,7 @@ export default defineConfig({
   /* Reporter to use. */
   reporter: 'html',
   use: {
-    headless: process.env.HEADLESS === 'true' || !process.env.DISPLAY,
+    headless: process.env.HEADLESS !== 'false',
     // Standardize baseURL for local and CI
     baseURL: process.env.BASE_URL || `http://localhost:${PORT}${BASE_PATH}`,
     // Standardize rendering environment for visual regression
