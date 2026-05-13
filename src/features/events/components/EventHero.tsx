@@ -142,7 +142,7 @@ export function EventHero({
                   tracking="widest"
                   color="dim"
                 >
-                  Intelligence Briefing
+                  Why I'm Attending
                 </Text>
               </Box>
               <Text
