@@ -18,6 +18,7 @@ jobs:
         run: |
           apt-get update && apt-get install -y git-lfs gh
           git lfs install
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Repository
         uses: actions/checkout@v4
