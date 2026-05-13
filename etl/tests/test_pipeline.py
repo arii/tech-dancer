@@ -64,7 +64,8 @@ def test_process_for_ledger():
         'Promoted': [True, True, False],
         'result_id': ['2945', '2945', '2945'],
         'event_title': ['Mock Event', 'Mock Event', 'Mock Event'],
-        'event_date': ['01/01/2025', '01/01/2025', '01/01/2025']
+        'event_date': ['01/01/2025', '01/01/2025', '01/01/2025'],
+        'event_url': ['http://mock.com/1', 'http://mock.com/1', 'http://mock.com/1']
     })
     df = process_for_ledger(raw_data)
     assert len(df) == 2
@@ -82,7 +83,8 @@ def test_update_ledger_hygiene(tmp_path):
         'Registry_Points_Sum': [10.0, 10.0],
         'Promoted': [True, False],
         'event_title': ['Mock Event', 'Mock Event'],
-        'event_date': ['01/01/2025', '01/01/2025']
+        'event_date': ['01/01/2025', '01/01/2025'],
+        'event_url': ['http://mock.com/1', 'http://mock.com/1']
     })
     manager.update_ledger(data1)
 
@@ -93,7 +95,8 @@ def test_update_ledger_hygiene(tmp_path):
         'Registry_Points_Sum': [5.0, 5.0],
         'Promoted': [True, False],
         'event_title': ['Mock Event 2', 'Mock Event 2'],
-        'event_date': ['01/02/2025', '01/02/2025']
+        'event_date': ['01/02/2025', '01/02/2025'],
+        'event_url': ['http://mock.com/2', 'http://mock.com/2']
     })
     manager.update_ledger(data2)
 

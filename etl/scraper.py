@@ -53,10 +53,8 @@ class ScoringDanceCrawler:
             url = f"{self.base_url}/enUS/recent?page={page}"
             logging.debug(f"Crawling discovery page {page}: {url}")
             try:
-                response = requests.get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
-                if response.status_code != 200: break
-                
-                soup = BeautifulSoup(response.text, 'html.parser')
+                html_content = self._fetch_page_text(url)
+                soup = BeautifulSoup(html_content, 'html.parser')
                 links = soup.find_all('a', href=re.compile(r'/events/\d+/results/'))
                 
                 if not links: break
@@ -243,7 +241,7 @@ class OutputManager:
         os.makedirs(self.studies_dir, exist_ok=True)
 
     def _validate_schema(self, df):
-        required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
+        required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum', 'event_url']
         missing_cols = [col for col in required_cols if col not in df.columns]
         if missing_cols:
             raise ValueError(f"DataFrame missing required columns: {missing_cols}")
