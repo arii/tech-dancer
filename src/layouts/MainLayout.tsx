@@ -50,7 +50,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             paddingBottom={{ base: 28, md: 12 }}
             flex={1}
             direction="col"
-            marginX={{ base: "auto", lg: 0 }}
+            marginX="auto"
             maxWidth="7xl"
             width="full"
           >
