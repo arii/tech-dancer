@@ -1,10 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts, getEvents } from '@/lib/content';
 
 /** Matches `artifacts/boomtick/index.html` “Where Dancers Go” cards (venue + location + cadence). */
 export function useHome() {
-  const navigate = useNavigate();
   const { data: recentPosts = [] } = useQuery({
     queryKey: ['posts', 'recent'],
     queryFn: () => getPosts().slice(0, 3),
@@ -28,10 +26,6 @@ export function useHome() {
     { label: "About/Contact page", path: "/about" }
   ];
 
-  const handleNavigateToBlog = () => navigate('/blog');
-  const handleNavigateToPost = (slug: string) => navigate(`/blog/${slug}`);
-  const handleNavigate = (path: string) => navigate(path);
-
   return { 
     recentPosts, 
     upcomingEvents: upcomingEvents.map(event => ({
@@ -42,8 +36,5 @@ export function useHome() {
     })),
     dancerPaths,
     hirePaths,
-    handleNavigateToBlog,
-    handleNavigateToPost,
-    handleNavigate
   };
 }
