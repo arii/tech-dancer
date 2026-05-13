@@ -114,6 +114,42 @@ Use raw `gh` only when `td_cli.py` does not expose the needed operation.
 
 If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `CODEX_GH_TOKEN`.
 
+
+### Verification Commands (Post-Setup)
+
+Run these commands after setup to verify GitHub/dev-tools workflows:
+
+```bash
+source ./.agent-env.sh 2>/dev/null || true
+python3 dev-tools/td_cli.py gh --help
+python3 dev-tools/td_cli.py gh status-board
+python3 dev-tools/td_cli.py gh conflicts
+```
+
+For PR review flow (example PR number):
+
+```bash
+source ./.agent-env.sh 2>/dev/null || true
+python3 dev-tools/td_cli.py gh audit-pr 123 --fetch --audit
+```
+
+For issue workflow checks:
+
+```bash
+source ./.agent-env.sh 2>/dev/null || true
+python3 dev-tools/td_cli.py gh validate-issue --issue-number 123
+```
+
+If you need to create an issue and the repo CLI does not expose that operation directly, use raw `gh` as fallback:
+
+```bash
+gh issue create --title "<title>" --body "<details>"
+```
+
+If auth fails, report this exact issue (do not run interactive auth):
+
+> GitHub CLI is not authenticated. Please add a Codex environment secret named `CODEX_GH_TOKEN` with a repo-scoped GitHub token.
+
 ## 🚀 Repository CLI (`td_cli.py`)
 
 The unified entry point for all repository automation. It supports both human-readable terminal output and structured JSON for tool integration.
