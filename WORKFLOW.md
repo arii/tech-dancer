@@ -24,7 +24,7 @@ We use **GitHub Actions Variables** to manage thresholds for technical debt. Thi
 | -------------------- | ------- | ------------------------------------------------------------------------------- |
 | `BUNDLE_BASELINE_KB` | `3000`  | The baseline size of the production bundle. CI fails if size > baseline + 50KB. |
 | `ANY_COUNT_BASELINE` | `0`     | The maximum allowed number of `any` types in the codebase.                      |
-| `scripts/suppression-baseline.json` | `{"count": 28}` | The version-controlled baseline for 'impeccable-ignore-file' suppressions. |
+| `scripts/suppression-baseline.json` | `{"count": 21}` | The version-controlled baseline for 'impeccable-ignore-file' suppressions. |
 
 ### Updating Baselines
 
