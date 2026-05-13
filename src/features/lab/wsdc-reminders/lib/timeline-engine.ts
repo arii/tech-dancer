@@ -1,27 +1,5 @@
 import { EventAnchors, TimelineItem } from '../types';
-
-/**
- * Normalizes a date string to a Date object, ensuring that YYYY-MM-DD
- * strings are parsed as local time instead of UTC to prevent off-by-one errors.
- */
-function parseDate(dateStr: string): Date {
-  if (dateStr.includes('T')) {
-    return new Date(dateStr);
-  }
-  // For YYYY-MM-DD, parse as local
-  const [year, month, day] = dateStr.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
-
-/**
- * Adds or subtracts days from a Date object safely, handling DST transitions
- * by using local Date methods instead of millisecond math.
- */
-function addDays(date: Date, days: number): Date {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
+import { parseDate, addDays } from '@/lib/utils';
 
 export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
   const start = parseDate(event.startDate);
