@@ -98,3 +98,26 @@ export function withSimulationDelay<T>(fn: () => T | Promise<T>, delayMs = 800) 
     return fn();
   };
 }
+
+/**
+ * Normalizes a date string to a Date object, ensuring that YYYY-MM-DD
+ * strings are parsed as local time instead of UTC to prevent off-by-one errors.
+ */
+export function parseDate(dateStr: string): Date {
+  if (dateStr.includes('T')) {
+    return new Date(dateStr);
+  }
+  // For YYYY-MM-DD, parse as local
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/**
+ * Adds or subtracts days from a Date object safely, handling DST transitions
+ * by using local Date methods instead of millisecond math.
+ */
+export function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
