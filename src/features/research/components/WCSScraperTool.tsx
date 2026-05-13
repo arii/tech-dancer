@@ -143,7 +143,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
   );
 }
 
-function WCSScraperStats({ latency }: { latency: number | null }) {
+function WCSScraperStats({ latency, totalEvents }: { latency: number | null, totalEvents: number | null }) {
   return (
     <Box paddingX={4} paddingY={6}>
       <Stack gap={4}>
@@ -158,6 +158,10 @@ function WCSScraperStats({ latency }: { latency: number | null }) {
             <Text variant="mono" size="xs" color="brand" weight="font-bold">
               {latency ? `${(latency / 1000).toFixed(2)}s` : '---'}
             </Text>
+          </Box>
+          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+            <Text variant="body" size="xs" color="dim">Events Scraped</Text>
+            <Text variant="mono" size="xs" color="brand" weight="font-bold">{totalEvents || '---'}</Text>
           </Box>
           <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Ethical Backoff</Text>
@@ -180,7 +184,8 @@ export function WCSScraperTool() {
     filterPromoted,
     setFilterPromoted,
     scoreDistribution,
-    trendData
+    trendData,
+    totalEvents
   } = useWCSData();
 
   useEffect(() => {
@@ -291,7 +296,7 @@ export function WCSScraperTool() {
 
         <Stack gap={8}>
           <WCSExportConsole data={filteredData} />
-          <WCSScraperStats latency={latency} />
+          <WCSScraperStats latency={latency} totalEvents={totalEvents} />
         </Stack>
       </Grid>
     </Stack>

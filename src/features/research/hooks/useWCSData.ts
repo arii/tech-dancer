@@ -92,16 +92,24 @@ export function useWCSData() {
       if (matchesSearch && matchesFilter) {
         filteredResults.push(record);
 
-        // Score Distribution
-        const bin = Math.floor(record.Registry_Points_Sum).toString();
-        bins.set(bin, (bins.get(bin) || 0) + 1);
+        // Score Distribution - Use safe floor and handle NaN
+        const scoreVal = Number(record.Registry_Points_Sum);
+        if (!isNaN(scoreVal)) {
+          const bin = Math.floor(scoreVal).toString();
+          bins.set(bin, (bins.get(bin) || 0) + 1);
+        }
 
-        // Trend Analysis
-        const parts = record.event_date.split('/');
+        // Trend Analysis - Support both MM/DD/YYYY and MM/DD/p/YYYY
+        const dateStr = record.event_date || '';
+        const parts = dateStr.split('/');
         if (parts.length >= 3) {
-          const monthYear = `${parts[0]}/${parts[2]}`; // MM/YYYY
+          // If it has '/p/', the year is index 3
+          const year = parts.length > 3 ? parts[3] : parts[2];
+          const month = parts[0];
+          const monthYear = `${month}/${year}`; // MM/YYYY
+          
           const stats = byDate.get(monthYear) || { total: 0, count: 0 };
-          stats.total += record.Registry_Points_Sum;
+          stats.total += isNaN(scoreVal) ? 0 : scoreVal;
           stats.count += 1;
           byDate.set(monthYear, stats);
         }
@@ -123,10 +131,13 @@ export function useWCSData() {
         return y1 !== y2 ? y1 - y2 : m1 - m2;
       });
 
+    const uniqueEvents = new Set(data.map(r => r.result_id)).size;
+
     return {
       filteredData: filteredResults,
       scoreDistribution: calculatedScoreDistribution,
       trendData: calculatedTrendData,
+      totalEvents: uniqueEvents
     };
   }, [data, searchTerm, filterPromoted]);
 
@@ -141,6 +152,7 @@ export function useWCSData() {
     filterPromoted,
     setFilterPromoted,
     scoreDistribution,
-    trendData
+    trendData,
+    totalEvents
   };
 }

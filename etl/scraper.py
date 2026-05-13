@@ -131,13 +131,17 @@ class ScoringDanceParser:
         d_id = link.get('data-wsdc')
         if not d_id and link.get('href'):
             href = link.get('href')
-            path_parts = href.split('/')
-            if path_parts and path_parts[-1].isdigit():
-                d_id = path_parts[-1]
+            # Extract number from /dancer/123 or /wsdc/registry/123.html
+            match = re.search(r'/(?:dancer|registry)/(\d+)', href)
+            if match:
+                d_id = match.group(1)
             else:
-                match = re.search(r'/(\d+)$', href)
-                if match:
-                    d_id = match.group(1)
+                # Fallback to last digit part of the path
+                path_parts = href.split('/')
+                if path_parts:
+                    last_part = path_parts[-1].replace('.html', '')
+                    if last_part.isdigit():
+                        d_id = last_part
 
         if not d_id:
             d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
