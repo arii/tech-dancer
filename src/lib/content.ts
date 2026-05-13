@@ -4,16 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
 
 /**
- * Lightweight browser-safe frontmatter parser.
+ * Lightweight browser-safe frontmatter parser using a vetted library.
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
   if (!match) return { data: {}, content };
 
-  const yaml = match[1];
+  const yamlStr = match[1];
   const body = match[2];
   const data: Record<string, unknown> = {};
 
@@ -127,7 +128,13 @@ export function parseFrontmatter(content: string) {
     }
   }
 
-  return { data, content: body };
+  try {
+    const data = parse(yamlStr);
+    return { data: data || {}, content: body };
+  } catch (e) {
+    console.error('Error parsing frontmatter:', e);
+    return { data: {}, content: body };
+  }
 }
 
 export interface Post {
