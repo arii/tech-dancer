@@ -15,6 +15,7 @@ export default function WSDCReminders() {
   const { data: events = [] } = useQuery({
     queryKey: ['events', 'reminders'],
     queryFn: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
+    initialData: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
   });
 
   const [selectedEventId, setSelectedEventId] = useState<string>('custom');

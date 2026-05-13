@@ -53,11 +53,13 @@ export function useEventDetail() {
     queryKey: ["events", slug],
     queryFn: () => (slug ? getEventBySlug(slug) : undefined),
     enabled: !!slug,
+    initialData: () => (slug ? getEventBySlug(slug) : undefined),
   });
 
   const { data: allEvents = [] } = useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
+    initialData: getEvents,
     staleTime: 3600000, // 1 hour
   });
 

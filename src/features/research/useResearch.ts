@@ -6,6 +6,7 @@ export function useResearch() {
   const { data: studies = [] } = useQuery({
     queryKey: ['studies'],
     queryFn: getStudies,
+    initialData: getStudies,
   });
 
   const getTool = (id: string) => RESEARCH_TOOLS.find(t => t.id === id);

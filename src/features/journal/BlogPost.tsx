@@ -13,7 +13,8 @@ export default function BlogPost() {
   const { data: post } = useQuery({
     queryKey: ['posts', slug],
     queryFn: () => slug ? getPostBySlug(slug) : undefined,
-    enabled: !!slug
+    enabled: !!slug,
+    initialData: () => slug ? getPostBySlug(slug) : undefined,
   });
 
   const structuredData = useMemo(() => {
