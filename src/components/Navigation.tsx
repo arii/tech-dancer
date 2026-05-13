@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { Search } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 import { NavLink } from 'react-router-dom';
@@ -75,7 +75,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         layout="navRail"
         className={cn(
-          "transition-[background-color,backdrop-filter] duration-300 border-r border-line bg-surface",
+          "transition-nav border-r border-line bg-surface",
           scrolled ? "backdrop-blur-xl bg-surface/90" : ""
         )}
       >
@@ -110,7 +110,9 @@ export default function Navigation() {
                 paddingX={6}
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
               >
-                <Search className="w-4 h-4 opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                <Box shrink={false}>
+                  <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" />
+                </Box>
                 <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
               </Box>
             </Box>
@@ -121,7 +123,7 @@ export default function Navigation() {
           </Stack>
 
           <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
-            <Text variant="sans" size="xs" color="dim" className="mb-1 leading-normal">
+            <Text variant="sans" size="xs" color="dim" marginBottom={1} className="leading-normal">
               Written by <strong className="text-accent">Tech Dancer </strong>
             </Text>
             <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">

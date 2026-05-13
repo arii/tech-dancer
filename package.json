@@ -24,7 +24,9 @@
     "knip": "knip",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
-    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context"
+    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context",
+    "review:ux:desktop": "tsx scripts/ux-capture.ts desktop",
+    "review:ux:mobile": "tsx scripts/ux-capture.ts mobile"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -69,7 +71,7 @@
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "1.49.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.14.0",
     "@types/papaparse": "^5.5.2",
@@ -80,7 +82,7 @@
     "knip": "^6.7.0",
     "npm-run-all": "^4.1.5",
     "oxlint": "^1.61.0",
-    "playwright": "^1.59.1",
+    "playwright": "1.49.0",
     "rollup-plugin-visualizer": "^7.0.1",
     "sharp": "^0.34.5",
     "shx": "^0.4.0",

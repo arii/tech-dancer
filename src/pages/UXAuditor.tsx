@@ -3,7 +3,7 @@ import { useState, useEffect, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
-  ChevronRight, Github
+  ChevronRight, Github, Trash2
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
@@ -186,9 +186,24 @@ export default function UXAuditor() {
                 placeholder="OpenAI or Gemini API Key (optional override)"
                 aria-label="API Key"
               />
+              {customApiKey && (
+                <Box
+                  as="button"
+                  onClick={() => setCustomApiKey("")}
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  padding={2}
+                  radius="md"
+                  className="hover:bg-surface-alt text-dim hover:text-error transition-colors"
+                  title="Clear API Key"
+                >
+                  <Icon icon={Trash2} size="sm" />
+                </Box>
+              )}
             </Stack>
             <Text variant="sans" size="xs" color="warning" paddingX={2} weight="font-medium">
-              ⚠️ API keys are stored in your browser's local storage for convenience.
+              ⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices.
             </Text>
           </Stack>
           <Stack
