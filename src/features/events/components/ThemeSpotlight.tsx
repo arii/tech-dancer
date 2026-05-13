@@ -6,20 +6,24 @@ import { AffiliateLink } from '@/types';
 interface ThemeSpotlightProps {
   id?: string;
   title: string;
+  label?: string;
   description: string;
   image?: string;
   outfits?: AffiliateLink[];
   accessories?: AffiliateLink[];
+  colors?: string[];
   accentColor?: string;
 }
 
 export function ThemeSpotlight({
   id,
   title,
+  label,
   description,
   image,
   outfits = [],
   accessories = [],
+  colors = [],
   accentColor = 'var(--raw-color-accent)'
 }: ThemeSpotlightProps) {
   const accentStyle = useMemo(() => ({ backgroundColor: accentColor } as React.CSSProperties), [accentColor]);
@@ -37,12 +41,25 @@ export function ThemeSpotlight({
         {/* Content Section */}
         <Stack gap={6} padding={8} flex={1} justify="center">
           <Stack gap={2}>
+            {label && (
+              <Text
+                variant="mono"
+                size="xs"
+                weight="font-bold"
+                color="accent"
+                uppercase
+                tracking="widest"
+                marginBottom={1}
+              >
+                {label}
+              </Text>
+            )}
             <Box
               width={12}
               height={1}
               radius="full"
               marginBottom={2}
-              style={accentStyle}
+              style={accentStyle} // impeccable-ignore - Dynamic theme-driven accent color requires inline style.
             />
             <Text
               as="h3"
@@ -55,6 +72,24 @@ export function ThemeSpotlight({
               {title}
             </Text>
           </Stack>
+
+          {colors.length > 0 && (
+            <Stack direction="row" gap={3} align="center">
+              {colors.map((color, i) => (
+                <Box
+                  key={`${color}-${i}`}
+                  width={6}
+                  height={6}
+                  radius="full"
+                  border
+                  style={{ backgroundColor: color }} // impeccable-ignore - Dynamic color swatches require inline styles for arbitrary data-driven colors.
+                  className="hover:scale-110 transition-transform cursor-help shadow-sm"
+                  title={color}
+                />
+              ))}
+            </Stack>
+          )}
+
           <Text
             variant="body"
             size="base"
