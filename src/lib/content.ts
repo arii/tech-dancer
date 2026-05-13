@@ -15,7 +15,7 @@ export function parseFrontmatter(content: string) {
 
   const yaml = match[1];
   const body = match[2];
-  const data: Record<string, unknown> = {};
+  const data: Record<string, unknown> = Object.create(null);
 
   let currentRoot = data as Record<string, unknown>;
   let lastKey = '';
@@ -30,7 +30,7 @@ export function parseFrontmatter(content: string) {
     const indent = line.search(/\S/);
 
     if (trimmed.startsWith('- ')) {
-      if (lastKey) {
+      if (lastKey && lastKey !== '__proto__' && lastKey !== 'constructor' && lastKey !== 'prototype') {
         if (!currentRoot[lastKey] || !Array.isArray(currentRoot[lastKey])) {
           currentRoot[lastKey] = [];
         }
@@ -43,19 +43,27 @@ export function parseFrontmatter(content: string) {
       const colonIdx = line.indexOf(':');
       if (colonIdx !== -1) {
         const key = line.slice(0, colonIdx).trim();
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
           if (lastKey && lastKey !== '__proto__' && lastKey !== 'constructor' && lastKey !== 'prototype') {
             stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
+
+            const nextObj = currentRoot[lastKey];
             if (
-              !currentRoot[lastKey] ||
-              typeof currentRoot[lastKey] !== 'object' ||
-              Array.isArray(currentRoot[lastKey])
+              !nextObj ||
+              typeof nextObj !== 'object' ||
+              Array.isArray(nextObj)
             ) {
-              currentRoot[lastKey] = {};
+              currentRoot[lastKey] = Object.create(null);
             }
-            currentRoot = currentRoot[lastKey] as Record<string, unknown>;
+
+            // Re-verify it is our own property and not a polluted one
+            const target = currentRoot[lastKey];
+            if (target && typeof target === 'object' && !Array.isArray(target)) {
+               currentRoot = target as Record<string, unknown>;
+            }
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
