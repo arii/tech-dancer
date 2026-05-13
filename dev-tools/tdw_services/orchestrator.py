@@ -384,7 +384,8 @@ class Orchestrator:
             with open(".nvmrc", "r") as f:
                 pinned_version = f.read().strip().lstrip('v')
             current_version = run_command(["node", "-v"]).strip().lstrip('v')
-            if current_version != pinned_version:
+            # Allow minor/patch variations if only major is pinned, or exact match
+            if not current_version.startswith(pinned_version):
                 error_msg = f"Node version mismatch! Expected: {pinned_version}, Actual: {current_version}. Please use the pinned runtime requirement."
                 results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": error_msg})
                 # We raise CLIError to stop execution if it doesn't match
