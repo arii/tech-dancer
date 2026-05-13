@@ -42,5 +42,14 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
     }
   ];
 
+  if (event.registrationDeadline) {
+    timeline.push({
+      id: 'registration-deadline',
+      date: parseDate(event.registrationDeadline),
+      label: "Final Registration Deadline",
+      description: `Last chance to register for ${event.title}. Online registration typically closes on this date.`,
+    });
+  }
+
   return timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
 };

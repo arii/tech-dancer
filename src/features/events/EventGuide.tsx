@@ -7,6 +7,7 @@ import { EventDetails } from './components/EventDetails';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
+import { ReminderSignups } from './components/ReminderSignups';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
@@ -91,6 +92,11 @@ export default function EventGuide() {
                   sections={gearSections}
                 />
               )}
+
+              <ReminderSignups
+                id="reminders"
+                event={event}
+              />
 
               {relatedEvents.length > 0 && (
                 <RelatedEvents

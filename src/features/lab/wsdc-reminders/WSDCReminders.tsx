@@ -11,25 +11,30 @@ import { TimelineRow } from './TimelineRow';
 import { EventSelector } from './EventSelector';
 import { CustomEventForm } from './CustomEventForm';
 
-export default function WSDCReminders() {
+interface WSDCRemindersProps {
+  initialEventId?: string;
+}
+
+export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
   const { data: events = [] } = useQuery({
     queryKey: ['events', 'reminders'],
     queryFn: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
     initialData: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
   });
 
-  const [selectedEventId, setSelectedEventId] = useState<string>('custom');
+  const [selectedEventId, setSelectedEventId] = useState<string>(initialEventId || 'custom');
   const [customEvent, setCustomEvent] = useState<EventAnchors>({
     title: '',
     startDate: '',
     earlyBirdDate: '',
     hotelCutoffDate: '',
+    registrationDeadline: '',
     url: ''
   });
 
   // Sync initial selection when events load
   const [hasInitialized, setHasInitialized] = useState(false);
-  if (!hasInitialized && events.length > 0 && selectedEventId === 'custom' && !customEvent.title) {
+  if (!hasInitialized && events.length > 0 && !initialEventId && selectedEventId === 'custom' && !customEvent.title) {
     setSelectedEventId(events[0].slug);
     setHasInitialized(true);
   }
@@ -43,6 +48,7 @@ export default function WSDCReminders() {
       startDate: found.startDate!,
       earlyBirdDate: found.earlyBirdDate!,
       hotelCutoffDate: found.hotelCutoffDate!,
+      registrationDeadline: found.registrationDeadline,
       url: found.url
     };
   }, [selectedEventId, events, customEvent]);
