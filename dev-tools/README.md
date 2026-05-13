@@ -99,6 +99,21 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
   - `bash dev-tools/audit_headless.sh`
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
 
+
+### Codex / Jules GitHub Command Pattern
+
+Prefer repository CLI commands over raw `gh`:
+
+```bash
+source ./.agent-env.sh 2>/dev/null || true
+python3 dev-tools/td_cli.py gh --help
+python3 dev-tools/td_cli.py gh <repo-command>
+```
+
+Use raw `gh` only when `td_cli.py` does not expose the needed operation.
+
+If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `CODEX_GH_TOKEN`.
+
 ## 🚀 Repository CLI (`td_cli.py`)
 
 The unified entry point for all repository automation. It supports both human-readable terminal output and structured JSON for tool integration.
