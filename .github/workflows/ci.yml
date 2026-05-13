@@ -162,7 +162,8 @@ jobs:
       - name: Install system utilities
         run: |
           apt-get update
-          apt-get install -y lsof
+          apt-get install -y lsof gh
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
         uses: actions/checkout@v4
