@@ -99,7 +99,7 @@ export function EventHero({
             <Text
               as="h1"
               variant="headline"
-              size="fluid-7"
+              size={{ base: "fluid-5", md: "fluid-7" }}
               weight="font-black"
               color="white"
               leading="tight"
@@ -109,16 +109,16 @@ export function EventHero({
             </Text>
           </Stack>
 
-          <Box display="flex" wrap gap={6} align="center">
+          <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center">
             <Box display="flex" align="center" gap={2}>
-              <Calendar className="w-5 h-5 text-accent" />
-              <Text variant="body" size="lg" weight="font-medium">
+              <Calendar className="w-4 h-4 md:w-5 md:h-5 text-accent" />
+              <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
                 {date}
               </Text>
             </Box>
             <Box display="flex" align="center" gap={2}>
-              <MapPin className="w-5 h-5 text-accent" />
-              <Text variant="body" size="lg" weight="font-medium">
+              <MapPin className="w-4 h-4 md:w-5 md:h-5 text-accent" />
+              <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
                 {location}
               </Text>
             </Box>
@@ -127,18 +127,30 @@ export function EventHero({
 
         {whyAttending && (
           <Box
-            padding={6}
+            padding={{ base: 4, md: 6 }}
             radius="lg"
             className="glass-panel max-w-2xl border-l-4 border-l-accent"
           >
-            <Stack gap={4}>
+            <Stack gap={{ base: 3, md: 4 }}>
               <Box display="flex" align="center" gap={3}>
-                <Logo className="h-4" />
-                <Text variant="mono" size="tiny" weight="font-bold" uppercase tracking="widest" color="dim">
+                <Logo className="h-3 md:h-4" />
+                <Text
+                  variant="mono"
+                  size="tiny"
+                  weight="font-bold"
+                  uppercase
+                  tracking="widest"
+                  color="dim"
+                >
                   Intelligence Briefing
                 </Text>
               </Box>
-              <Text variant="body" size="sm" leading="relaxed" className="italic text-white/90">
+              <Text
+                variant="body"
+                size="sm"
+                leading="relaxed"
+                className="italic text-white/90"
+              >
                 {whyAttending}
               </Text>
             </Stack>
