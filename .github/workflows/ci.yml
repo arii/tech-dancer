@@ -95,7 +95,8 @@ jobs:
 
       - name: TypeScript `any` Ratchet
         run: |
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          export PYTHONPATH
           python3 dev-tools/td_cli.py gh ratchet-any
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -131,7 +132,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 -m pip install PyGithub click
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          export PYTHONPATH
           pnpm run audit || true
           python3 dev-tools/td_cli.py gh audit-gate
 
@@ -141,7 +143,7 @@ jobs:
           VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
             --include="*.tsx" \
             | grep -v "design-tokens\|tokens.css\|// impeccable-ignore" \
-            | wc -l)
+            | grep -c '#[0-9a-fA-F]\{3,6\}' || true)
           if [ "$VIOLATIONS" -gt 0 ]; then
             echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
             grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
@@ -196,12 +198,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 -m pip install PyGithub click
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
 
       - name: Run Playwright Smoke Test
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
+          VITE_BASE_PATH="/$REPO_NAME/"
+          export VITE_BASE_PATH
           pnpm run test:e2e
         env:
           CI: true
@@ -210,8 +214,10 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
-          export CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())")
+          VITE_BASE_PATH="/$REPO_NAME/"
+          export VITE_BASE_PATH
+          CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())")
+          export CHROME_PATH
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

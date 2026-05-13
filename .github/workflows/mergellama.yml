@@ -52,7 +52,8 @@ jobs:
         run: |
           # Use our unified CLI for resolution
           # Setting PYTHONPATH ensures modules can find each other without sys.path hacks
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          export PYTHONPATH
           python3 dev-tools/td_cli.py gh resolve
 
       - name: Validate Resolution

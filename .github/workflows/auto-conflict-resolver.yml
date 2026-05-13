@@ -54,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          PR_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" https://api.github.com/repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }})
+          PR_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GH_REPO}/pulls/${PR_NUMBER}")
 
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 
@@ -104,7 +104,7 @@ jobs:
             exit 0
           fi
 
-          git remote add fork "https://github.com/${{ env.HEAD_REPO || github.repository }}.git"
+          git remote add fork "https://github.com/${HEAD_REPO:-$GITHUB_REPOSITORY}.git"
 
           if ! git ls-remote --exit-code --heads fork "$SOURCE" > /dev/null 2>&1; then
             echo "::warning::Source branch $SOURCE missing in fork. Skipping resolver."
@@ -119,8 +119,10 @@ jobs:
 
           # Fetch the target branch from origin
           git fetch origin "$TARGET"
-          echo "base_sha=$(git rev-parse origin/"$TARGET")" >> $GITHUB_OUTPUT
-          echo "skipped=false" >> $GITHUB_OUTPUT
+          {
+            echo "base_sha=$(git rev-parse origin/"$TARGET")"
+            echo "skipped=false"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Comment on validation failure
         if: steps.validate_branches.outputs.skipped == 'true' && env.PR_NUMBER && env.PR_NUMBER != '0'
@@ -191,7 +193,7 @@ jobs:
           *Note: This PR was automatically generated to resolve merge conflicts from ${TARGET}.*"
 
           PR_URL=$(gh pr create \
-            --repo "${{ github.repository }}" \
+            --repo "$GITHUB_REPOSITORY" \
             --head "$RESOLVE_BRANCH" \
             --base "$TARGET" \
             --title "$PR_TITLE" \
@@ -247,9 +249,11 @@ jobs:
           # Based on the bot comment usage, it's in a code block, likely one per line.
           COUNT=$(echo "$UNRESOLVED" | grep -c '^' || echo 0)
           echo "::warning::$COUNT files still have conflicts and require manual resolution. Auto-resolver could not fully resolve all conflicts."
-          echo "### Conflict Resolution Summary" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ $COUNT files require manual attention:" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "$UNRESOLVED" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### Conflict Resolution Summary"
+            echo "⚠️ $COUNT files require manual attention:"
+            echo '```'
+            echo "$UNRESOLVED"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
           exit 0
