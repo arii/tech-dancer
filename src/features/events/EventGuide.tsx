@@ -15,6 +15,8 @@ export default function EventGuide() {
   const {
     event,
     isLoading,
+    isError,
+    error,
     themeOutfits,
     themeAccessories,
     gearSections,
@@ -30,11 +32,18 @@ export default function EventGuide() {
     );
   }
 
-  if (!event) {
+  if (isError || !event) {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">Event Not Found</Text>
+          <Text variant="display" size="2xl">
+            {isError ? "Error Loading Event" : "Event Not Found"}
+          </Text>
+          {isError && error && (
+            <Text variant="body" color="dim" size="sm">
+              {error instanceof Error ? error.message : "An unexpected error occurred."}
+            </Text>
+          )}
           <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Events</Text>
           </Box>
