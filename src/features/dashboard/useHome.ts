@@ -8,6 +8,7 @@ export function useHome() {
   const { data: recentPosts = [] } = useQuery({
     queryKey: ['posts', 'recent'],
     queryFn: () => getPosts().slice(0, 3),
+    initialData: () => getPosts().slice(0, 3),
   });
 
   const { data: upcomingEvents = [] } = useQuery({

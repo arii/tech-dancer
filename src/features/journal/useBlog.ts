@@ -10,6 +10,7 @@ export function useBlog() {
   const { data: posts = [] } = useQuery({
     queryKey: ['posts'],
     queryFn: getPosts,
+    initialData: getPosts,
   });
   const [activeCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');

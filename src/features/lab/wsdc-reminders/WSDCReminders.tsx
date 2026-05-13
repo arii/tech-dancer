@@ -11,13 +11,11 @@ import { TimelineRow } from './TimelineRow';
 import { EventSelector } from './EventSelector';
 import { CustomEventForm } from './CustomEventForm';
 
-const initialReminders = getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate);
-
 export default function WSDCReminders() {
   const { data: events = [] } = useQuery({
     queryKey: ['events', 'reminders'],
     queryFn: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
-    initialData: initialReminders,
+    initialData: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
   });
 
   const [selectedEventId, setSelectedEventId] = useState<string>('custom');
