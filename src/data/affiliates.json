@@ -96,5 +96,110 @@
     "url": "https://amazon.com",
     "category": "recovery",
     "description": "Essential recovery tools for muscle maintenance and massage."
+  },
+  "rainbow-fringe-dress": {
+    "id": "rainbow-fringe-dress",
+    "name": "Rainbow Fringe Dance Dress",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Vibrant fringe dress perfect for theme nights."
+  },
+  "sequin-bomber-jacket": {
+    "id": "sequin-bomber-jacket",
+    "name": "Sequin Bomber Jacket",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Flashy jacket to stand out on the social floor."
+  },
+  "ombre-dance-dress": {
+    "id": "ombre-dance-dress",
+    "name": "Ombre Flowy Dance Dress",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Gradient dress that moves beautifully with every turn."
+  },
+  "rainbow-earrings": {
+    "id": "rainbow-earrings",
+    "name": "Rainbow Statement Earrings",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Bold accessories to complete your theme outfit."
+  },
+  "pride-sunglasses": {
+    "id": "pride-sunglasses",
+    "name": "Pride Heart Sunglasses",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Fun sunglasses for pool parties and daytime events."
+  },
+  "portable-charger": {
+    "id": "portable-charger",
+    "name": "Anker Portable Power Bank",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "High-capacity charger to keep your phone alive during long event days."
+  },
+  "travel-pillow": {
+    "id": "travel-pillow",
+    "name": "Memory Foam Travel Pillow",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Essential for catching some sleep on flights or between sessions."
+  },
+  "microfiber-towel": {
+    "id": "microfiber-towel",
+    "name": "Quick-Dry Microfiber Towel",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Compact and fast-drying towel for the gym or pool."
+  },
+  "dry-shampoo": {
+    "id": "dry-shampoo",
+    "name": "Batiste Dry Shampoo",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Refresh your hair quickly between workshops and social dancing."
+  },
+  "electric-fan": {
+    "id": "electric-fan",
+    "name": "Handheld Mini Fan",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "A life-saver on a crowded, hot dance floor."
+  },
+  "liquid-iv": {
+    "id": "liquid-iv",
+    "name": "Liquid I.V. Hydration Multiplier",
+    "url": "https://amazon.com",
+    "category": "recovery",
+    "description": "Stay hydrated and maintain electrolyte balance during intense weekends."
+  },
+  "shoe-brush": {
+    "id": "shoe-brush",
+    "name": "Suede Shoe Brush",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Keep your suede soles clean and grippy."
+  },
+  "mints": {
+    "id": "mints",
+    "name": "Altoids Peppermint Mints",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Essential for social dancing confidence."
+  },
+  "hand-sanitizer": {
+    "id": "hand-sanitizer",
+    "name": "Purell Advanced Hand Sanitizer",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Stay healthy while dancing with hundreds of people."
+  },
+  "rainbow-fan": {
+    "id": "rainbow-fan",
+    "name": "Rainbow Folding Fan",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Show your pride while staying cool."
   }
 }
