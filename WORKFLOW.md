@@ -24,6 +24,7 @@ We use **GitHub Actions Variables** to manage thresholds for technical debt. Thi
 | -------------------- | ------- | ------------------------------------------------------------------------------- |
 | `BUNDLE_BASELINE_KB` | `3000`  | The baseline size of the production bundle. CI fails if size > baseline + 50KB. |
 | `ANY_COUNT_BASELINE` | `0`     | The maximum allowed number of `any` types in the codebase.                      |
+| `scripts/suppression-baseline.json` | `{"count": 28}` | The version-controlled baseline for 'impeccable-ignore-file' suppressions. |
 
 ### Updating Baselines
 
@@ -35,6 +36,9 @@ gh variable set BUNDLE_BASELINE_KB --body <NEW_KB_VALUE>
 
 # Update any-count baseline
 gh variable set ANY_COUNT_BASELINE --body <NEW_COUNT>
+
+# Update suppression baseline (local file change)
+echo '{"count": <NEW_COUNT>}' > scripts/suppression-baseline.json
 ```
 
 ## 🛡️ Quality Gates (Local vs CI)

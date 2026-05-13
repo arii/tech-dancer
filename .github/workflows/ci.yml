@@ -133,6 +133,7 @@ jobs:
           python3 -m pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           pnpm run audit || true
+          pnpm run audit:suppressions
           python3 dev-tools/td_cli.py gh audit-gate
 
       - name: Design Token Compliance

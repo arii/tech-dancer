@@ -434,6 +434,7 @@ class Orchestrator:
                 results["steps"].append({"name": name, "status": "failure", "error": str(e)})
                 raise e
         run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
+        run_step("Suppression Audit", ["pnpm", "run", "audit:suppressions"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
