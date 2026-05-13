@@ -52,7 +52,7 @@ def test_parse_results():
     # Test fallback for Bob Brown who has no link (based on cell text)
     bob_brown = df[df['competitor_name'] == 'Bob Brown']
     assert not bob_brown.empty
-    assert bob_brown['Dancer_ID'].iloc[0] == 'TEMP_Bob_Brown'
+    assert bob_brown['Dancer_ID'].iloc[0] == 'TEMP_103_Bob_Brown'
     assert 103 in bob_brown['competitor_bib'].values
 
 def test_process_for_ledger():
@@ -64,7 +64,9 @@ def test_process_for_ledger():
         'Promoted': [True, True, False],
         'result_id': ['2945', '2945', '2945'],
         'event_title': ['Mock Event', 'Mock Event', 'Mock Event'],
-        'event_date': ['01/01/2025', '01/01/2025', '01/01/2025']
+        'event_date': ['01/01/2025', '01/01/2025', '01/01/2025'],
+        'event_url': ['http://mock.com/1', 'http://mock.com/1', 'http://mock.com/1'],
+        'location': ['City A', 'City A', 'City B']
     })
     df = process_for_ledger(raw_data)
     assert len(df) == 2
@@ -82,7 +84,9 @@ def test_update_ledger_hygiene(tmp_path):
         'Registry_Points_Sum': [10.0, 10.0],
         'Promoted': [True, False],
         'event_title': ['Mock Event', 'Mock Event'],
-        'event_date': ['01/01/2025', '01/01/2025']
+        'event_date': ['01/01/2025', '01/01/2025'],
+        'event_url': ['http://mock.com/1', 'http://mock.com/1'],
+        'location': ['City A', 'City A']
     })
     manager.update_ledger(data1)
 
@@ -93,7 +97,9 @@ def test_update_ledger_hygiene(tmp_path):
         'Registry_Points_Sum': [5.0, 5.0],
         'Promoted': [True, False],
         'event_title': ['Mock Event 2', 'Mock Event 2'],
-        'event_date': ['01/02/2025', '01/02/2025']
+        'event_date': ['01/02/2025', '01/02/2025'],
+        'event_url': ['http://mock.com/2', 'http://mock.com/2'],
+        'location': ['City B', 'City B']
     })
     manager.update_ledger(data2)
 
@@ -120,5 +126,7 @@ def test_get_recent_events(mocker):
 
     crawler = ScoringDanceCrawler()
     links = list(crawler.get_recent_events(years=1))
-    assert f"{BASE_URL}/enUS/events/338/results/" in links
+    # get_recent_events yields tuples of (url, location)
+    urls = [url for url, _ in links]
+    assert f"{BASE_URL}/enUS/events/338/results/" in urls
 
