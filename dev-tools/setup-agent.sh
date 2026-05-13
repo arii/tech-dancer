@@ -134,7 +134,7 @@ normalize_nvmrc_for_snapshot() {
 }
 
 ensure_corepack_pnpm() { ensure_node; normalize_nvmrc_for_snapshot; have corepack && corepack enable || true; have corepack && corepack prepare "pnpm@${PNPM_VERSION}" --activate || true; have pnpm || npm install -g "pnpm@${PNPM_VERSION}"; }
-install_python_deps() { have python3 || err "python3 is required."; pip_install --root-user-action=ignore --upgrade pip setuptools wheel; if [ -f "dev-tools/pyproject.toml" ]; then (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .); fi; [ -f "etl/requirements.txt" ] && pip_install --root-user-action=ignore -r etl/requirements.txt; }
+install_python_deps() { have python3 || err "python3 is required."; pip_install --root-user-action=ignore --upgrade pip setuptools wheel; if [ -f "dev-tools/pyproject.toml" ]; then (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .); fi; pip_install --root-user-action=ignore pyyaml; [ -f "etl/requirements.txt" ] && pip_install --root-user-action=ignore -r etl/requirements.txt; }
 install_node_deps() { have pnpm || err "pnpm is required."; [ -f "package.json" ] || return 0; [ -f "pnpm-lock.yaml" ] && pnpm install --frozen-lockfile || pnpm install; }
 install_playwright() { [ "$SKIP_PLAYWRIGHT" = "1" ] && return 0; [ -f "package.json" ] || return 0; pnpm exec playwright install --with-deps chromium || npx --yes playwright install --with-deps chromium || warn "Playwright install failed; continuing."; }
 configure_remote_origin() { configure_github_auth_env; ensure_remote_origin; }
