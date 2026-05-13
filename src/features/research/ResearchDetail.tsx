@@ -8,6 +8,7 @@ import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { WCSScraperTool } from './components/WCSScraperTool';
 import { SEO } from '@/components/SEO';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 
