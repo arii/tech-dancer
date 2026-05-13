@@ -11,7 +11,6 @@ from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_exponential
 import requests
 import random
-import asyncio
 from urllib.parse import urljoin
 from tqdm import tqdm
 from etl.processor import process_for_ledger
@@ -43,74 +42,90 @@ class ScoringDanceCrawler:
         response.raise_for_status()
         return response.text
 
-    def get_recent_events(self, years=5):
-        """Generator that yields event URLs within the given timeframe."""
-        cutoff_date = datetime.now() - timedelta(days=years*365)
+    def get_recent_events(self, years=5, stop_set=None, legacy_stop_set=None):
+        """Crawls the 'Recent Results' pages to find event links."""
         page = 1
-
-        while True:
+        cutoff_date = datetime.now() - timedelta(days=years*365)
+        logging.info(f"Discovering events from the last {years} years...")
+        
+        while page <= 100:  # Safety limit
             url = f"{self.base_url}/enUS/recent?page={page}"
-            logging.info(f"Crawling recent events page {page}...")
+            logging.debug(f"Crawling discovery page {page}: {url}")
             try:
                 html_content = self._fetch_page_text(url)
-            except requests.RequestException as e:
-                logging.error(f"Failed to fetch recent events page {page}: {e}")
-                break
+                soup = BeautifulSoup(html_content, 'html.parser')
+                links = soup.find_all('a', href=re.compile(r'/events/\d+/results/'))
+                
+                if not links: break
+                
+                page_has_valid_date = False
+                for link in links:
+                    event_url = urljoin(self.base_url, link['href'])
+                    event_title = link.get_text().strip()
+                    event_date_str = self._extract_date_near_element(link)
+                    location = self._extract_location_near_element(link)
 
-            soup = BeautifulSoup(html_content, 'html.parser')
-            links_found = soup.find_all('a', href=re.compile(r'/events/\d+/results/?$'))
+                    # Check if we should stop because we've hit known territory
+                    if stop_set and event_url in stop_set:
+                        logging.info(f"Reached known event URL: {event_url}. Stopping discovery.")
+                        return
+                    
+                    if legacy_stop_set and (event_title, event_date_str) in legacy_stop_set:
+                        logging.info(f"Reached known legacy event: {event_title} ({event_date_str}). Stopping discovery.")
+                        return
 
-            if not links_found:
-                break
-
-            page_has_valid_date = False
-            for link in links_found:
-                href = link['href']
-                event_url = urljoin(self.base_url, href)
-
-                found_date = self._extract_date_near_element(link)
-
-                if found_date:
-                    if found_date >= cutoff_date:
-                        yield event_url
+                    if event_date_str:
+                        try:
+                            found_date = datetime.strptime(event_date_str, "%m/%d/%p/%Y" if "/p/" in event_date_str else "%m/%d/%Y")
+                            if found_date >= cutoff_date:
+                                yield (event_url, location)
+                                page_has_valid_date = True
+                        except:
+                            yield (event_url, location)
+                            page_has_valid_date = True
+                    else:
+                        yield (event_url, location)
                         page_has_valid_date = True
-                else:
-                    # Fallback: yield and assume it's recent enough
-                    yield event_url
-                    page_has_valid_date = True
 
-            if not page_has_valid_date and page > 1:
+                if not page_has_valid_date and page > 1:
+                    break
+                
+                page += 1
+            except Exception as e:
+                logging.error(f"Error crawling page {page}: {e}")
                 break
-
-            page += 1
-            if page > 100:
-                break
-
+        
     def _extract_date_near_element(self, element):
         parent = element.find_parent()
+        if not parent: return None
         for _ in range(4):
+            date_icon = parent.find('i', class_=re.compile(r'fa-calendar'))
+            if date_icon:
+                sibling = date_icon.find_next_sibling(string=True)
+                if sibling:
+                    return sibling.strip()
+            parent = parent.find_parent()
             if not parent: break
-            text = parent.get_text()
-            date_matches = re.findall(r'(\d{2}/\d{2}/\d{4})', text)
-            if date_matches:
-                try:
-                    return datetime.strptime(date_matches[-1], '%m/%d/%Y')
-                except ValueError:
-                    pass
-            parent = parent.parent
         return None
 
-    def get_result_links(self, event_url):
-        """Extracts individual competition result links from an event page."""
-        try:
-            html_content = self._fetch_page_text(event_url)
-        except requests.RequestException as e:
-            logging.error(f"Failed to fetch event page {event_url}: {e}")
-            return []
+    def _extract_location_near_element(self, element):
+        parent = element.find_parent()
+        if not parent: return "Unknown"
+        for _ in range(4):
+            location_icon = parent.find('i', class_=re.compile(r'fa-map-marker'))
+            if location_icon:
+                sibling = location_icon.find_next_sibling(string=True)
+                if sibling:
+                    return sibling.strip()
+            parent = parent.find_parent()
+            if not parent: break
+        return "Unknown"
 
+    def extract_results_links(self, html_content, event_url):
+        """Extracts individual competition result links from an event page."""
         soup = BeautifulSoup(html_content, 'html.parser')
         links = soup.find_all('a', href=re.compile(r'/results/\d+\.html'))
-        return [urljoin(self.base_url, l['href']) for l in links]
+        return [urljoin(event_url, link['href']) for link in links]
 
 class ScoringDanceParser:
     """Handles parsing of individual result pages."""
@@ -122,23 +137,33 @@ class ScoringDanceParser:
         d_id = link.get('data-wsdc')
         if not d_id and link.get('href'):
             href = link.get('href')
-            path_parts = href.split('/')
-            if path_parts and path_parts[-1].isdigit():
-                d_id = path_parts[-1]
+            # Extract number from /dancer/123 or /wsdc/registry/123.html
+            match = re.search(r'/(?:dancer|registry)/(\d+)', href)
+            if match:
+                d_id = match.group(1)
             else:
-                match = re.search(r'/(\d+)$', href)
-                if match:
-                    d_id = match.group(1)
+                # Fallback to last digit part of the path
+                path_parts = href.split('/')
+                if path_parts:
+                    last_part = path_parts[-1].replace('.html', '')
+                    if last_part.isdigit():
+                        d_id = last_part
 
         if not d_id:
             d_id = f"TEMP_{link.get_text(strip=True).replace(' ', '_')}"
         return str(d_id).strip()
 
     def _extract_competitor_data(self, row):
+        cells = row.find_all(['td', 'th'])
+        bib = "000"
+        if cells:
+            bib_text = cells[0].get_text(strip=True)
+            if bib_text.isdigit():
+                bib = bib_text
+
         competitor_elem = row.find('td', class_='competitor-name')
         if not competitor_elem:
             # Fallback: Many results use the second cell for the competitor name
-            cells = row.find_all('td')
             if len(cells) >= 2:
                 competitor_elem = cells[1]
             else:
@@ -149,7 +174,8 @@ class ScoringDanceParser:
         competitor_name = " & ".join(names) if names else competitor_elem.get_text(strip=True)
 
         dancer_ids = [self._extract_single_dancer_id(link) for link in links]
-        dancer_id = " & ".join(dancer_ids) if dancer_ids else f"TEMP_{competitor_name.replace(' ', '_')}"
+        # Use Bib + Name for TEMP IDs to increase reliability when registry links are missing
+        dancer_id = " & ".join(dancer_ids) if dancer_ids else f"TEMP_{bib}_{competitor_name.replace(' ', '_')}"
 
         return competitor_name, dancer_id
 
@@ -160,9 +186,13 @@ class ScoringDanceParser:
             return promoted_text in ['yes', 'y']
         return False
 
-    def parse_results(self, html_content, url):
+    def parse_results(self, html_content, url, event_url=None, location="Unknown"):
         soup = BeautifulSoup(html_content, 'html.parser')
         results = []
+        
+        # Use the provided event_url or fallback to the parent of the result URL
+        if not event_url:
+            event_url = url.split('/results/')[0] + '/results/'
 
         title_tag = soup.find('h1')
         title = title_tag.get_text(strip=True) if title_tag else "Unknown Result"
@@ -219,6 +249,8 @@ class ScoringDanceParser:
                         'wsdc_points': self.standardize_mark(mark_text),
                         'event_title': title,
                         'event_date': date_str,
+                        'location': location,
+                        'event_url': event_url,
                         'result_id': result_id
                     })
 
@@ -232,7 +264,7 @@ class OutputManager:
         os.makedirs(self.studies_dir, exist_ok=True)
 
     def _validate_schema(self, df):
-        required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum']
+        required_cols = ['Dancer_ID', 'result_id', 'competitor_name', 'Registry_Points_Sum', 'event_url', 'location']
         missing_cols = [col for col in required_cols if col not in df.columns]
         if missing_cols:
             raise ValueError(f"DataFrame missing required columns: {missing_cols}")
@@ -254,12 +286,96 @@ class OutputManager:
         final_ledger.to_parquet(self.ledger_path, index=False)
         logging.info(f"Updated ledger: {self.ledger_path}")
 
+    def generate_study_report(self, new_data_df):
+        """Generates a markdown study report for a processed batch."""
+        if new_data_df.empty: return
+        
+        batch_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filepath = os.path.join(self.studies_dir, f"batch_report_{batch_id}.md")
+        
+        event_count = new_data_df['event_title'].nunique()
+        dancer_count = new_data_df['Dancer_ID'].nunique()
+        top_events = new_data_df['event_title'].value_counts().head(5).to_dict()
+        
+        report = f"""---
+title: "Scraper Batch Report: {batch_id}"
+date: "{datetime.now().strftime('%Y-%m-%d')}"
+category: "Automated Data Audit"
+excerpt: "Batch processing complete for {event_count} events involving {dancer_count} unique competitors."
+---
+
+# Automated Batch Audit
+
+The ETL pipeline has successfully synchronized a new batch of West Coast Swing competition data.
+
+## Batch Statistics
+- **Total Events Processed**: {event_count}
+- **Unique Competitors Indexed**: {dancer_count}
+- **New Records Added**: {len(new_data_df)}
+
+## Event Geographic Coverage
+Top events in this batch:
+"""
+        for event, count in top_events.items():
+            report += f"- **{event}**: {count} records\n"
+
+        report += "\n## Data Integrity Check\n- Schema Validation: PASSED\n- Deduplication: ACTIVE\n"
+        
+        with open(filepath, "w") as f:
+            f.write(report)
+        logging.info(f"Generated study report: {filepath}")
+
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
-    def __init__(self, crawler, parser, output_manager):
+    def __init__(self, crawler, parser, output_manager, queue_path=None):
         self.crawler = crawler
         self.parser = parser
         self.output_manager = output_manager
+        self.queue_path = queue_path
+        self.processed_result_ids = set()
+        self.known_event_urls = set()
+        self.known_events_legacy = set()
+        self.event_queue = []
+        self._load_existing_ids()
+        self._load_queue()
+
+    def _load_existing_ids(self):
+        """Loads existing result IDs and event URLs from the ledger."""
+        if os.path.exists(self.output_manager.ledger_path):
+            try:
+                df = pd.read_parquet(self.output_manager.ledger_path)
+                if 'result_id' in df.columns:
+                    self.processed_result_ids = set(df['result_id'].astype(str).unique())
+                if 'event_url' in df.columns:
+                    self.known_event_urls = set(df['event_url'].unique())
+                if 'event_title' in df.columns and 'event_date' in df.columns:
+                    # Legacy fallback: use title + date to identify known events
+                    self.known_events_legacy = set(zip(df['event_title'], df['event_date']))
+                logging.info(f"Loaded {len(self.processed_result_ids)} results and {len(self.known_events_legacy)} known events.")
+            except Exception as e:
+                logging.error(f"Failed to load existing ledger for incremental check: {e}")
+
+    def _load_queue(self):
+        """Loads the event queue from a JSON file."""
+        if self.queue_path and os.path.exists(self.queue_path):
+            try:
+                import json
+                with open(self.queue_path, 'r') as f:
+                    self.event_queue = json.load(f)
+                logging.info(f"Loaded {len(self.event_queue)} events from queue: {self.queue_path}")
+            except Exception as e:
+                logging.error(f"Failed to load queue from {self.queue_path}: {e}")
+
+    def _save_queue(self):
+        """Saves the remaining event queue to a JSON file."""
+        if self.queue_path:
+            try:
+                import json
+                with open(self.queue_path, 'w') as f:
+                    json.dump(self.event_queue, f, indent=2)
+                logging.debug(f"Saved {len(self.event_queue)} events to queue: {self.queue_path}")
+            except Exception as e:
+                logging.error(f"Failed to save queue to {self.queue_path}: {e}")
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def _fetch_page(self, browser_context, url):
@@ -267,7 +383,7 @@ class ETLPipeline:
         try:
             await page.goto(url, timeout=30000)
             try:
-                await page.wait_for_selector('table.results-table', state='attached', timeout=10000)
+                await page.wait_for_selector('table', state='attached', timeout=10000)
             except PlaywrightTimeoutError:
                 logging.debug(f"Timeout waiting for results table on {url}.")
             content = await page.content()
@@ -282,43 +398,111 @@ class ETLPipeline:
             content = await self._fetch_page(context, url)
             await browser.close()
 
-            raw_df = self.parser.parse_results(content, url)
+            raw_df = self.parser.parse_results(content, url, event_url=url)
             ledger_df = process_for_ledger(raw_df)
             self.output_manager.update_ledger(ledger_df)
 
-    async def run_historical(self, years=5):
-        logging.info(f"Starting historical scrape for past {years} years")
+    async def run_historical(self, years=5, limit=None):
+        logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
+        
+        # Discovery Phase (Always check for NEW events, but prepend to queue)
+        logging.info("Checking for new events...")
+        discovered = list(self.crawler.get_recent_events(
+            years=years, 
+            stop_set=self.known_event_urls,
+            legacy_stop_set=self.known_events_legacy
+        ))
+        
+        if discovered:
+            logging.info(f"Discovered {len(discovered)} new events.")
+            # Prepend new events to the existing queue
+            new_queue = []
+            seen_urls = set()
+            for item in discovered:
+                url = item[0] if isinstance(item, (tuple, list)) else item
+                if url not in seen_urls:
+                    new_queue.append(item)
+                    seen_urls.add(url)
+            
+            for item in self.event_queue:
+                url = item[0] if isinstance(item, (tuple, list)) else item
+                if url not in seen_urls:
+                    new_queue.append(item)
+                    seen_urls.add(url)
+            
+            self.event_queue = new_queue
+            self._save_queue()
+        else:
+            logging.info("No new events discovered.")
+
+        if not self.event_queue:
+            logging.info("No events in queue to process.")
+            return 0
+
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent=USER_AGENT)
 
-            # Collect events first so tqdm knows the total count
-            # Deduplicate to avoid processing the same event multiple times
-            events = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
-            print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
+            processed_count = 0
+            batch_new_records = []
+            # Work on a copy of the queue for iteration
+            queue_to_process = list(self.event_queue)
+            
+            for item in tqdm(queue_to_process, desc="Scraping Events", unit="event", dynamic_ncols=True):
+                if limit and processed_count >= limit:
+                    logging.info(f"Reached batch limit of {limit}. Stopping.")
+                    break
+                
+                event_url = item[0] if isinstance(item, (tuple, list)) else item
+                location = item[1] if isinstance(item, (tuple, list)) else "Unknown"
 
-            for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):
-                logging.info(f"Processing event: {event_url}")
                 try:
-                    result_links = self.crawler.get_result_links(event_url)
-                    for res_url in result_links:
-                        logging.info(f"Scraping result: {res_url}")
+                    # Discover specific results pages for this event
+                    discovery_html = await self._fetch_page(context, event_url)
+                    results_links = self.crawler.extract_results_links(discovery_html, event_url)
+                    
+                    event_has_new_data = False
+                    for res_url in results_links:
+                        res_id_match = re.search(r'/results/(\d+)\.html', res_url)
+                        res_id = res_id_match.group(1) if res_id_match else None
+                        
+                        if res_id and res_id in self.processed_result_ids:
+                            continue
+
                         try:
                             content = await self._fetch_page(context, res_url)
-                            raw_df = self.parser.parse_results(content, res_url)
+                            raw_df = self.parser.parse_results(content, res_url, event_url=event_url, location=location)
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
+                            batch_new_records.append(ledger_df)
+                            event_has_new_data = True
                             await ethical_throttle()
                         except Exception as e:
                             logging.error(f"Failed to process {res_url}: {e}")
+
+                    if event_has_new_data:
+                        processed_count += 1
+                    
+                    # Remove from queue after processing (even if no new data, it's "done")
+                    self.event_queue = [q for q in self.event_queue if (q[0] if isinstance(q, (tuple, list)) else q) != event_url]
+                    self._save_queue()
+
                 except Exception as e:
                     logging.error(f"Failed to process event {event_url}: {e}")
+
+            if batch_new_records:
+                all_new_df = pd.concat(batch_new_records, ignore_index=True)
+                self.output_manager.generate_study_report(all_new_df)
+
             await browser.close()
+            return processed_count
 
 async def main():
     parser = argparse.ArgumentParser(description="Scoring.dance ETL Scraper")
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")
+    parser.add_argument("--limit", type=int, default=None, help="Max number of new events to process")
+    parser.add_argument("--queue", default="etl/data/event_queue.json", help="Path to event discovery queue")
     parser.add_argument("--ledger", default="etl/data/wcs_prelims.parquet", help="Path to Parquet ledger")
     parser.add_argument("--studies", default="content/studies", help="Directory for Markdown output")
     args = parser.parse_args()
@@ -326,13 +510,20 @@ async def main():
     pipeline = ETLPipeline(
         ScoringDanceCrawler(),
         ScoringDanceParser(),
-        OutputManager(args.ledger, args.studies)
+        OutputManager(args.ledger, args.studies),
+        queue_path=args.queue
     )
 
     if args.url:
         await pipeline.run_single(args.url)
     else:
-        await pipeline.run_historical(years=args.years)
+        processed = await pipeline.run_historical(years=args.years, limit=args.limit)
+        # Signal to GHA if we processed anything
+        if processed == 0:
+            logging.info("No new events to process.")
+            sys.exit(100) # Special exit code for "finished/nothing to do"
+        else:
+            logging.info(f"Batch completed. Processed {processed} events.")
 
 if __name__ == "__main__":
     asyncio.run(main())
