@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Event } from '@/lib/content';
 import { Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { EventCard } from '@/components/ui/EventCard';
+import { ContentCard } from '@/components/ui/ContentCard';
 
 interface RelatedEventsProps {
   id?: string;
@@ -19,9 +19,10 @@ export function RelatedEvents({ id, title = "Related Events", events }: RelatedE
       <SectionHeader eyebrow="EXPLORE" title={title} />
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
         {events.map((event) => (
-          <EventCard
+          <ContentCard
             key={event.slug}
-            name={event.title}
+            variant="event"
+            title={event.title}
             location={event.location}
             schedule={event.schedule}
             onClick={() => navigate(`/events/${event.slug}`)}

@@ -8,7 +8,7 @@ import { STATIC_SCHEMAS } from '@/config/constants';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
-import { EventCard } from '@/components/ui/EventCard';
+import { ContentCard } from '@/components/ui/ContentCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
@@ -34,7 +34,7 @@ export default function Home() {
                   paddingBottom={0}
                   border="none"
                   as="h2"
-                  titleSize="fluid-6"
+                  titleSize={{ base: "fluid-5", lg: "fluid-6" }}
                 />
                 <Box
                   as={NavLink}
@@ -114,8 +114,11 @@ export default function Home() {
                   variants={motionTokens.staggerItem}
                   className="h-full"
                 >
-                  <EventCard
-                    {...event}
+                  <ContentCard
+                    variant="event"
+                    title={event.name}
+                    location={event.location}
+                    schedule={event.schedule}
                     onClick={() => handleNavigate(`/events/${event.slug}`)}
                   />
                 </Box>
