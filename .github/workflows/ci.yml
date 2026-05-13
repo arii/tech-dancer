@@ -143,7 +143,7 @@ jobs:
           VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
             --include="*.tsx" \
             | grep -v "design-tokens\|tokens.css\|// impeccable-ignore" \
-            | wc -l)
+            | grep -c '^' || echo 0)
           if [ "$VIOLATIONS" -gt 0 ]; then
             echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
             grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css\|// impeccable-ignore"

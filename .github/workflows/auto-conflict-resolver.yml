@@ -119,8 +119,8 @@ jobs:
 
           # Fetch the target branch from origin
           git fetch origin "$TARGET"
-          echo "base_sha=$(git rev-parse origin/"$TARGET")" >> $GITHUB_OUTPUT
-          echo "skipped=false" >> $GITHUB_OUTPUT
+          echo "base_sha=$(git rev-parse origin/"$TARGET")" >> "$GITHUB_OUTPUT"
+          echo "skipped=false" >> "$GITHUB_OUTPUT"
 
       - name: Comment on validation failure
         if: steps.validate_branches.outputs.skipped == 'true' && env.PR_NUMBER && env.PR_NUMBER != '0'

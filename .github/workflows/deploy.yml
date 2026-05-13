@@ -87,7 +87,7 @@ jobs:
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.git"
           MAX_RETRIES=5
 
-          for i in $(seq 1 $MAX_RETRIES); do
+          for i in $(seq 1 "$MAX_RETRIES"); do
             echo "Deployment attempt $i..."
             rm -rf ../gh-pages-repo
 
