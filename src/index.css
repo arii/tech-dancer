@@ -109,8 +109,8 @@
 
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
+  /* impeccable-ignore - specific glass-morphism shadow */
   .glass-panel {
-    /* impeccable-ignore - specific glass-morphism shadow */
     @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
@@ -140,14 +140,11 @@
     @apply opacity-100;
     animation: scanline 3s linear infinite;
   }
+  /* impeccable-ignore - sub-pixel grid lines and density adjustments */
   .grid-pattern {
-        /* impeccable-ignore - sub-pixel grid lines and density adjustments */
     background-image: 
-      /* impeccable-ignore */
       linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-      /* impeccable-ignore */
       linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-    /* impeccable-ignore */
     background-size: 20px 20px;
   }
 
@@ -170,12 +167,12 @@
   .brand-text-muted { fill: var(--logo-muted-text); }
 
   /* Wordmark Utilities - manual typography adjustments */
+  /* impeccable-ignore */
   .wordmark-base {
-    /* impeccable-ignore */
     @apply font-extrabold text-white flex items-center tracking-[0.05em];
   }
+  /* impeccable-ignore */
   .wordmark-hero {
-    /* impeccable-ignore */
     @apply font-display mt-3 opacity-0;
     /* impeccable-ignore - entrance animation offset */
     transform: translateY(10px);
@@ -183,8 +180,8 @@
     font-size: clamp(18px, 4vw, 28px);
     animation: fadeUp 0.7s ease forwards 0.4s;
   }
+  /* impeccable-ignore */
   .wordmark-nav {
-    /* impeccable-ignore */
     @apply font-sans text-sm mt-0.5;
   }
   .wordmark-mobile {
@@ -236,7 +233,6 @@
 
 /* impeccable-ignore - structural navigation width and layout */
 .nav-rail {
-  /* impeccable-ignore */
   @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
 
@@ -251,7 +247,6 @@
 
 /* impeccable-ignore - specialized micro-UI element */
 .experience-chip {
-  /* impeccable-ignore */
   @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
 
@@ -271,8 +266,8 @@
   .hero-bottom-gradient {
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
   }
+  /* impeccable-ignore - specific brand logo scaling */
   .hero-logo-anim {
-    /* impeccable-ignore - specific brand logo scaling */
     height: clamp(60px, 10vw, 120px);
     animation: fadeUp 0.8s ease forwards 0.2s;
     margin-left: -12px;
