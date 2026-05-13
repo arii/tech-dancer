@@ -61,23 +61,15 @@ export function useEventDetail() {
     staleTime: 3600000, // 1 hour
   });
 
-  // Resolve theme gear from affiliate IDs
-  // Split from other resolutions to minimize re-computations
-  const themeOutfits = useMemo(
-    () => resolveAffiliateLinks(event?.theme?.outfitIds),
-    [event?.theme?.outfitIds],
-  );
-
-  const themeAccessories = useMemo(
-    () => resolveAffiliateLinks(event?.theme?.accessoryIds),
-    [event?.theme?.accessoryIds],
-  );
-
-  // Resolve gear sections separately from related events
-  // Prevents unnecessary object reconstruction if only one subset changes
-  const gearSections = useMemo(
-    () => getGearSections(event?.gear),
-    [event?.gear],
+  // Consolidate event-specific derived state into a single memoization block
+  // to reduce dependency chains and potential extra re-renders.
+  const { themeOutfits, themeAccessories, gearSections } = useMemo(
+    () => ({
+      themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
+      themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
+      gearSections: getGearSections(event?.gear),
+    }),
+    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
   );
 
   // Resolve related events
