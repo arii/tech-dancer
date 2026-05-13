@@ -36,6 +36,11 @@ jobs:
           gh api "repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}" \
             --jq '"HEAD_REF=" + .head.ref, "HEAD_REPO=" + .head.repo.full_name' >> "$GITHUB_ENV"
 
+      - name: Install system utilities
+        run: |
+          apt-get update
+          apt-get install -y git-lfs
+
       - name: Checkout source branch
         uses: actions/checkout@v4
         with:

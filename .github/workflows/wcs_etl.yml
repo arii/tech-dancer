@@ -14,6 +14,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Install git-lfs
+        run: |
+          apt-get update && apt-get install -y git-lfs
+
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:

@@ -159,7 +159,7 @@ jobs:
       - name: Install system utilities
         run: |
           apt-get update
-          apt-get install -y lsof
+          apt-get install -y lsof git-lfs
 
       - name: Checkout
         uses: actions/checkout@v4
