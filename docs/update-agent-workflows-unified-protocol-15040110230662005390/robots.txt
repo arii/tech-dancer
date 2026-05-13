@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/docs/update-agent-workflows-unified-protocol-15040110230662005390/sitemap.xml
