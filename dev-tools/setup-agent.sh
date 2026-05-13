@@ -82,9 +82,22 @@ ensure_remote_origin() {
   local current repo_slug
   current="$(git remote get-url origin 2>/dev/null || true)"
   if [ -n "$current" ]; then log "remote.origin already configured: ${current}"; return 0; fi
+
+  # If another remote exists (e.g. upstream), mirror its URL into origin.
+  local fallback_remote fallback_url
+  fallback_remote="$(git remote | head -n 1 || true)"
+  if [ -n "$fallback_remote" ]; then
+    fallback_url="$(git remote get-url "$fallback_remote" 2>/dev/null || true)"
+    if [ -n "$fallback_url" ]; then
+      git remote add origin "$fallback_url"
+      log "Configured remote.origin from existing remote '${fallback_remote}' => ${fallback_url}"
+      return 0
+    fi
+  fi
+
   repo_slug="$(repo_slug_from_gh || true)"
   if [ -z "$repo_slug" ]; then
-    warn "No remote.origin and could not infer repo slug. Set GITHUB_REPOSITORY=owner/repo or REPO_SLUG=owner/repo."
+    warn "No remote.origin and could not infer repo slug. Set GITHUB_REPOSITORY, REPO_SLUG, or CODEX_REPOSITORY to owner/repo."
     return 0
   fi
   git remote add origin "https://github.com/${repo_slug}.git"

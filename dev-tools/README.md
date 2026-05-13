@@ -34,7 +34,7 @@ This script installs and configures:
 |---|---|---|
 | `CODEX_GH_TOKEN` | **Recommended (preferred)** | Primary secret for Codex/Jules agent runs; setup maps it to `GH_TOKEN`/`GITHUB_TOKEN` for `gh` + dev-tools commands. |
 | `GITHUB_TOKEN` or `GH_TOKEN` | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
-| `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing. |
+| `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
 | `JULES_API_KEY` | Optional | Enables `td_cli.py jules ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 | `OLLAMA_URL` | Optional | Override local Ollama endpoint (default shown by `snapshot.sh`). |
