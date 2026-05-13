@@ -256,12 +256,15 @@ class OutputManager:
 
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
-    def __init__(self, crawler, parser, output_manager):
+    def __init__(self, crawler, parser, output_manager, queue_path=None):
         self.crawler = crawler
         self.parser = parser
         self.output_manager = output_manager
+        self.queue_path = queue_path
         self.processed_result_ids = set()
+        self.event_queue = []
         self._load_existing_ids()
+        self._load_queue()
 
     def _load_existing_ids(self):
         """Loads existing result IDs from the ledger to enable incremental scraping."""
@@ -273,6 +276,28 @@ class ETLPipeline:
                     logging.info(f"Loaded {len(self.processed_result_ids)} existing result IDs from ledger.")
             except Exception as e:
                 logging.error(f"Failed to load existing ledger for incremental check: {e}")
+
+    def _load_queue(self):
+        """Loads the event queue from a JSON file."""
+        if self.queue_path and os.path.exists(self.queue_path):
+            try:
+                import json
+                with open(self.queue_path, 'r') as f:
+                    self.event_queue = json.load(f)
+                logging.info(f"Loaded {len(self.event_queue)} events from queue: {self.queue_path}")
+            except Exception as e:
+                logging.error(f"Failed to load queue from {self.queue_path}: {e}")
+
+    def _save_queue(self):
+        """Saves the remaining event queue to a JSON file."""
+        if self.queue_path:
+            try:
+                import json
+                with open(self.queue_path, 'w') as f:
+                    json.dump(self.event_queue, f, indent=2)
+                logging.debug(f"Saved {len(self.event_queue)} events to queue: {self.queue_path}")
+            except Exception as e:
+                logging.error(f"Failed to save queue to {self.queue_path}: {e}")
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def _fetch_page(self, browser_context, url):
@@ -301,16 +326,29 @@ class ETLPipeline:
 
     async def run_historical(self, years=5, limit=None):
         logging.info(f"Starting historical scrape for past {years} years (Limit: {limit})")
+        
+        # Discovery Phase (only if queue is empty)
+        if not self.event_queue:
+            logging.info("Queue is empty. Discovering events...")
+            self.event_queue = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
+            self._save_queue()
+            print(f"\n📊 Discovered {len(self.event_queue)} events in the last {years} years.\n")
+        else:
+            logging.info(f"Using existing queue with {len(self.event_queue)} events.")
+
+        if not self.event_queue:
+            logging.info("No events found to process.")
+            return 0
+
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(user_agent=USER_AGENT)
 
-            # Collect events first
-            events = list(dict.fromkeys(self.crawler.get_recent_events(years=years)))
-            print(f"\n📊 Found {len(events)} events in the last {years} years. Starting processing...\n")
-
             processed_count = 0
-            for event_url in tqdm(events, desc="Scraping Events", unit="event", dynamic_ncols=True):
+            # Work on a copy of the queue for iteration
+            queue_to_process = list(self.event_queue)
+            
+            for event_url in tqdm(queue_to_process, desc="Scraping Events", unit="event", dynamic_ncols=True):
                 if limit and processed_count >= limit:
                     logging.info(f"Reached batch limit of {limit} events. Stopping.")
                     break
@@ -342,6 +380,11 @@ class ETLPipeline:
 
                     if event_has_new_data:
                         processed_count += 1
+                    
+                    # Remove from queue after processing (even if no new data, it's "done")
+                    if event_url in self.event_queue:
+                        self.event_queue.remove(event_url)
+                        self._save_queue()
 
                 except Exception as e:
                     logging.error(f"Failed to process event {event_url}: {e}")
@@ -354,6 +397,7 @@ async def main():
     parser.add_argument("url", nargs="?", help="Single result URL to scrape")
     parser.add_argument("--years", type=int, default=5, help="Years to crawl back (default: 5)")
     parser.add_argument("--limit", type=int, default=None, help="Max number of new events to process")
+    parser.add_argument("--queue", default="etl/data/event_queue.json", help="Path to event discovery queue")
     parser.add_argument("--ledger", default="etl/data/wcs_prelims.parquet", help="Path to Parquet ledger")
     parser.add_argument("--studies", default="content/studies", help="Directory for Markdown output")
     args = parser.parse_args()
@@ -361,7 +405,8 @@ async def main():
     pipeline = ETLPipeline(
         ScoringDanceCrawler(),
         ScoringDanceParser(),
-        OutputManager(args.ledger, args.studies)
+        OutputManager(args.ledger, args.studies),
+        queue_path=args.queue
     )
 
     if args.url:

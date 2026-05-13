@@ -59,8 +59,8 @@ jobs:
               break
             elif [ $EXIT_CODE -eq 0 ]; then
               echo "📦 Batch $i completed. Committing and pushing..."
-              git add etl/data/wcs_prelims.parquet
-              git commit -m "chore(etl): update wcs ledger (batch $i)" || echo "No changes to commit"
+              git add etl/data/wcs_prelims.parquet etl/data/event_queue.json
+              git commit -m "chore(etl): update wcs ledger and queue (batch $i)" || echo "No changes to commit"
               git push origin HEAD:${{ github.ref }} || echo "Push failed, continuing..."
             else
               echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
@@ -78,6 +78,6 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git lfs track "*.parquet"
           # Only track and add the Parquet ledger; Markdown studies are ignored
-          git add etl/data/wcs_prelims.parquet .gitattributes
+          git add etl/data/wcs_prelims.parquet etl/data/event_queue.json .gitattributes
 
           git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)
