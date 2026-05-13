@@ -1,0 +1,5 @@
+ITEM ID: loop-experience
+STATUS: direct image verified
+DIRECT IMAGE URL: https://us.loopearplugs.com/cdn/shop/files/PDP_EXPERIENCE2_SILVER_04.jpg?v=1715847636&width=1946
+SOURCE PAGE: https://us.loopearplugs.com/products/experience
+NOTES: Official Loop Experience product image; verified by opening image URL.

@@ -1,0 +1,10 @@
+ITEM ID: electric-fan
+STATUS: real source page collected, direct image still needed
+SOURCE PAGE: https://www.academy.com/p/academy-sports-outdoors-mini-handheld-fan
+DIRECT IMAGE URL: 
+NOTES: Real handheld fan page.
+
+ACTION REQUIRED:
+1. Open the source page or search the exact affiliate/product name.
+2. Save a real product image as 01_REAL_REFERENCES_READY/{item_id}.jpg.
+3. Do not generate the sketch until the real reference image is saved.

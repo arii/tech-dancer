@@ -1,0 +1,5 @@
+ITEM ID: garment-steamer
+STATUS: direct image verified
+DIRECT IMAGE URL: https://cdn.shopify.com/s/files/1/2781/4384/products/Voila-front-image1.png?v=1654717068&width=240
+SOURCE PAGE: https://dupray.com/en-us/products/voila-clothes-steamer
+NOTES: Dupray Voilà product image; verified by opening image URL.
