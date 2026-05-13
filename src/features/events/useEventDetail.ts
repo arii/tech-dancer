@@ -53,6 +53,7 @@ export function useEventDetail() {
   const { data: allEvents = [] } = useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
+    initialData: getEvents,
     staleTime: 3600000, // 1 hour
   });
 

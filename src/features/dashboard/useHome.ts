@@ -13,6 +13,7 @@ export function useHome() {
   const { data: upcomingEvents = [] } = useQuery({
     queryKey: ['events', 'upcoming'],
     queryFn: () => getEvents().slice(0, 3),
+    initialData: () => getEvents().slice(0, 3),
   });
 
   const dancerPaths = [

@@ -5,10 +5,13 @@ import { getEvents } from '@/lib/content';
 import { safeSearch } from '@/lib/utils';
 import { ViewMode } from '@/components/ui/ViewToggle';
 
+const cachedEvents = getEvents();
+
 export function useEvents() {
   const { data: events = [] } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
+    initialData: cachedEvents,
     staleTime: 3600000, // 1 hour
   });
   const [activeCategory] = useSearchParam('category', 'All');
