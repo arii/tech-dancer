@@ -43,6 +43,12 @@ export function parseFrontmatter(content: string) {
       const colonIdx = line.indexOf(':');
       if (colonIdx !== -1) {
         const key = line.slice(0, colonIdx).trim();
+
+        // Prevent prototype pollution
+        if (['__proto__', 'constructor', 'prototype'].includes(key)) {
+          continue;
+        }
+
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
