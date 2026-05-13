@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -18,10 +18,12 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       aria-label="Mobile Navigation"
       layout="mobileHeader"
       border="b"
-      className="transition-[backdrop-filter] duration-300 bg-surface border-line"
+      className="transition-nav bg-surface border-line"
     >
       <Box as={NavLink} to="/" onClick={onClose} display="flex" align="center" gap={2}>
-        <Logo className="h-9 w-auto text-white flex-shrink-0" />
+        <Box shrink={false}>
+          <Logo className="h-9 w-auto text-white" />
+        </Box>
       </Box>
 
       <Box

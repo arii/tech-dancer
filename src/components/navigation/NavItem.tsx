@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { LucideIcon, Terminal } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
@@ -40,11 +40,13 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             border={isMobile ? "b" : undefined}
             className={cn(
               "transition-transform duration-200 group-hover:translate-x-1",
-              isMobile ? "border-line/50 min-h-[56px]" : "min-h-[48px]",
+              isMobile ? "border-line/50 nav-item-mobile-height" : "nav-item-height",
               isMobile && isActive && "shadow-sm"
             )}
           >
-            <Icon className={cn(`flex-shrink-0 ${stroke.thick}`, isMobile ? "w-5 h-5" : "w-4 h-4")} />
+            <Box shrink={false}>
+              <Icon className={cn(`${stroke.thick}`, isMobile ? "w-5 h-5" : "w-4 h-4")} />
+            </Box>
             <Text variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
               {label}
             </Text>
