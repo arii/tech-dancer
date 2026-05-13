@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
 import { Plane, Calendar, Hotel, Users, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Event } from '@/lib/content';
