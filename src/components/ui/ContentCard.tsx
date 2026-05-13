@@ -92,7 +92,7 @@ export function ContentCard({
         textAlign="left"
         cursor={onClick ? "pointer" : "default"}
         className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
-        {...(motionProps as any)}
+        {...(motionProps as HTMLMotionProps<"article">)}
       >
         {!onClick && slug && basePath && (
           <Box
