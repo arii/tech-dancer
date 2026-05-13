@@ -19,7 +19,7 @@ export function RelatedEvents({ id, title = "Related Events", events }: RelatedE
     <Box id={id} as="section">
       <Stack gap={8}>
         <SectionHeader eyebrow="EXPLORE" title={title} />
-        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} className="sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
             <EventCard
               key={event.slug}
