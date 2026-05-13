@@ -188,4 +188,98 @@ describe('ics-generator', () => {
     // Escaped: Path: C:\\\\Users\\\\Test
     expect(ics).toContain('DESCRIPTION:Path: C:\\\\Users\\\\Test');
   });
+
+  it('should handle missing descriptions by using an empty string', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '10',
+        label: 'No Description',
+        description: '',
+        date: new Date('2023-01-01T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('Test Event', items);
+    expect(ics).toContain('DESCRIPTION:');
+  });
+
+  it('should correctly handle overnight dance events (e.g. Sat-Sun)', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '11',
+        label: 'Saturday Night Social',
+        description: 'Dance from Sat night to Sun morning',
+        date: new Date('2023-06-10T00:00:00Z'), // Saturday
+        endDate: new Date('2023-06-11T00:00:00Z'), // Sunday
+      }
+    ];
+    const ics = generateICS('WCS Event', items);
+
+    // Starts 10th, ends 11th inclusive (all day)
+    // DTSTART: 20230610
+    // DTEND: 20230612 (exclusive)
+    expect(ics).toContain('DTSTART;VALUE=DATE:20230610');
+    expect(ics).toContain('DTEND;VALUE=DATE:20230612');
+  });
+
+  it('should handle complex mixed escaping in DESCRIPTION', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '12',
+        label: 'Complex Escaping',
+        description: 'Commas, Semicolons; Backslashes\\ and \nNewlines',
+        date: new Date('2023-01-01T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('Event', items);
+
+    // Escaped: Commas\, Semicolons\; Backslashes\\ and \nNewlines
+    expect(ics).toContain('DESCRIPTION:Commas\\, Semicolons\\; Backslashes\\\\ and \\nNewlines');
+  });
+
+  it('should handle multi-month duration intervals (e.g. month end boundary)', () => {
+    const items: TimelineItem[] = [
+      {
+        id: '13',
+        label: 'End of Month Event',
+        description: 'Starts Feb 28, ends March 1',
+        date: new Date('2023-02-28T00:00:00Z'),
+        endDate: new Date('2023-03-01T00:00:00Z'),
+      }
+    ];
+    const ics = generateICS('WCS Event', items);
+
+    // DTSTART: 20230228
+    // DTEND: 20230302 (exclusive next day after March 1)
+    expect(ics).toContain('DTSTART;VALUE=DATE:20230228');
+    expect(ics).toContain('DTEND;VALUE=DATE:20230302');
+  });
+
+  describe('Timezone variance', () => {
+    const createItems = () => [
+      {
+        id: '14',
+        label: 'TZ Stability Test',
+        description: 'Should stay same date',
+        date: new Date(2023, 5, 15), // June 15th local
+      }
+    ];
+
+    it('should output consistent DATE strings in UTC', () => {
+      vi.stubEnv('TZ', 'UTC');
+      const ics = generateICS('Event', createItems());
+      expect(ics).toContain('DTSTART;VALUE=DATE:20230615');
+    });
+
+    it('should output consistent DATE strings in PST (Negative Offset)', () => {
+      vi.stubEnv('TZ', 'America/Los_Angeles');
+      const ics = generateICS('Event', createItems());
+      expect(ics).toContain('DTSTART;VALUE=DATE:20230615');
+    });
+
+    it('should output consistent DATE strings in AEST (Positive Offset)', () => {
+      vi.stubEnv('TZ', 'Australia/Sydney');
+      const ics = generateICS('Event', createItems());
+      expect(ics).toContain('DTSTART;VALUE=DATE:20230615');
+    });
+  });
 });

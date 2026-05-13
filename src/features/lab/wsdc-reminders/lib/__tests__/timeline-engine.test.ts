@@ -61,4 +61,19 @@ describe('timeline-engine', () => {
     const expectedDate = new Date(new Date(mockEvent.startDate).getTime() - (5 * 24 * 60 * 60 * 1000));
     expect(cancelSafety?.date.toISOString()).toBe(expectedDate.toISOString());
   });
+
+  it('should handle date calculations spanning month boundaries', () => {
+    const marchEvent: EventAnchors = {
+      ...mockEvent,
+      startDate: '2024-03-05',
+    };
+    const timeline = calculateTimeline(marchEvent);
+    const cancelSafety = timeline.find(item => item.id === 'cancel-safety');
+
+    // March 5th minus 5 days = Feb 29th (2024 is a leap year)
+    // We expect the local date to be Feb 29th.
+    expect(cancelSafety?.date.getFullYear()).toBe(2024);
+    expect(cancelSafety?.date.getMonth()).toBe(1); // February
+    expect(cancelSafety?.date.getDate()).toBe(29);
+  });
 });

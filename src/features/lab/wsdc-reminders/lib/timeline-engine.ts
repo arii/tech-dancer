@@ -1,17 +1,40 @@
 import { EventAnchors, TimelineItem } from '../types';
 
+/**
+ * Normalizes a date string to a Date object, ensuring that YYYY-MM-DD
+ * strings are parsed as local time instead of UTC to prevent off-by-one errors.
+ */
+function parseDate(dateStr: string): Date {
+  if (dateStr.includes('T')) {
+    return new Date(dateStr);
+  }
+  // For YYYY-MM-DD, parse as local
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/**
+ * Adds or subtracts days from a Date object safely, handling DST transitions
+ * by using local Date methods instead of millisecond math.
+ */
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
 export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
-  const start = new Date(event.startDate);
-  const early = new Date(event.earlyBirdDate);
-  const hotel = new Date(event.hotelCutoffDate);
+  const start = parseDate(event.startDate);
+  const early = parseDate(event.earlyBirdDate);
+  const hotel = parseDate(event.hotelCutoffDate);
 
   // Use a 2-day buffer for Early Bird as per the guide
-  const earlyBuffer = new Date(early.getTime() - (2 * 24 * 60 * 60 * 1000));
+  const earlyBuffer = addDays(early, -2);
 
   const timeline: TimelineItem[] = [
     {
       id: 'flight-track',
-      date: new Date(start.getTime() - (90 * 24 * 60 * 60 * 1000)),
+      date: addDays(start, -90),
       label: "Start Flight Tracking",
       description: "Set United/Delta price alerts. Book Main Cabin to preserve credit flexibility.",
     },
@@ -29,13 +52,13 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
     },
     {
       id: 'comp-window',
-      date: new Date(start.getTime() - (14 * 24 * 60 * 60 * 1000)),
+      date: addDays(start, -14),
       label: "Competition Signups",
       description: "Finalize Jack & Jill entries. Note: Competition fees are usually non-refundable.",
     },
     {
       id: 'cancel-safety',
-      date: new Date(start.getTime() - (5 * 24 * 60 * 60 * 1000)),
+      date: addDays(start, -5),
       label: "Cancel Safety Check",
       description: "Execute final 'Go/No-Go' decision. Cancel or transfer hotel rooms to avoid penalties.",
     }
