@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
@@ -234,7 +233,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           _scrollBehavior && `scroll-${_scrollBehavior}`,
           className
         )}
-        style={{
+        style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
           ...motionProps.style,
           ...props.style

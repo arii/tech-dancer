@@ -185,6 +185,28 @@
   }
 }
 
+@utility tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@utility transition-nav {
+  transition-property: background-color, backdrop-filter, border-color;
+  transition-duration: 300ms;
+}
+
+@utility safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility nav-item-height {
+  min-height: 48px;
+}
+
+@utility nav-item-mobile-height {
+  min-height: 56px;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
