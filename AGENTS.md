@@ -169,7 +169,7 @@ Heavy dependencies are installed only when needed:
 **E2E testing / browser automation:**
 
 ```bash
-./dev-tools/setup-playwright.sh
+pnpm run setup:playwright
 ```
 
 **Python ETL / data processing:**
