@@ -21,7 +21,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
     <Box
       position="relative"
       width="full"
-      minHeight={{ base: "30vh", md: "50vh" }}
+      minHeight={{ base: "30vh", md: "40vh" }}
       display="flex"
       align="center"
       overflow="hidden"
@@ -60,7 +60,7 @@ export function EventHero({ title, location, date, image, eyebrow = "Event Guide
         zIndex={10}
         gap={6}
         paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingY={{ base: 8, md: 12 }}
+        paddingY={8}
         maxWidth="screen-xl"
         marginX="auto"
         width="full"
