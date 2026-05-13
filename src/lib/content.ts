@@ -8,6 +8,7 @@ import { ASSET_PREFIX } from '@/config/constants';
 
 /**
  * Lightweight browser-safe frontmatter parser.
+ * Refactored to use Map to satisfy static analysis for prototype pollution.
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
@@ -15,15 +16,15 @@ export function parseFrontmatter(content: string) {
 
   const yaml = match[1];
   const body = match[2];
-  const data: Record<string, unknown> = Object.create(null);
+
+  const dataMap = new Map<string, unknown>();
+  let currentMap = dataMap;
+  let lastKey = '';
+  let lastIndent = -1;
+  const stack: { key: string; map: Map<string, unknown>; indent: number }[] = [];
 
   const isSafe = (k: string) =>
     k !== '__proto__' && k !== 'constructor' && k !== 'prototype';
-
-  let currentRoot = data as Record<string, unknown>;
-  let lastKey = '';
-  let lastIndent = -1;
-  const stack: { key: string; obj: Record<string, unknown>; indent: number }[] = [];
 
   const lines = yaml.split('\n');
   for (let i = 0; i < lines.length; i++) {
@@ -33,105 +34,101 @@ export function parseFrontmatter(content: string) {
     const indent = line.search(/\S/);
 
     if (trimmed.startsWith('- ')) {
-      if (lastKey) {
-        if (!currentRoot[lastKey] || !Array.isArray(currentRoot[lastKey])) {
-          currentRoot[lastKey] = [];
+      if (lastKey && isSafe(lastKey)) {
+        const existing = currentMap.get(lastKey);
+        if (!Array.isArray(existing)) {
+          const newList: string[] = [];
+          currentMap.set(lastKey, newList);
+          let val = trimmed.slice(2).trim();
+          if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+          else if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+          newList.push(val);
+        } else {
+          let val = trimmed.slice(2).trim();
+          if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+          else if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+          existing.push(val);
         }
-        let val = trimmed.slice(2).trim();
-        if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
-        else if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
-        currentRoot[lastKey].push(val);
       }
     } else {
       const colonIdx = line.indexOf(':');
       if (colonIdx !== -1) {
         const key = line.slice(0, colonIdx).trim();
-
-        // Prevent prototype pollution
-        if (['__proto__', 'constructor', 'prototype'].includes(key)) {
-          continue;
-        }
+        if (!isSafe(key)) continue;
 
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
           if (lastKey && isSafe(lastKey)) {
-            stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
-            const existingNode = currentRoot[lastKey];
-            if (
-              !existingNode ||
-              typeof existingNode !== 'object' ||
-              Array.isArray(existingNode)
-            ) {
-              const newNode = Object.create(null);
-              currentRoot[lastKey] = newNode;
-              currentRoot = newNode;
+            stack.push({ key: lastKey, map: currentMap, indent: lastIndent });
+            const existingNode = currentMap.get(lastKey);
+            if (!(existingNode instanceof Map)) {
+              const newMap = new Map<string, unknown>();
+              currentMap.set(lastKey, newMap);
+              currentMap = newMap;
             } else {
-              currentRoot = existingNode as Record<string, unknown>;
+              currentMap = existingNode as Map<string, unknown>;
             }
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
             const popped = stack.pop()!;
-            currentRoot = popped.obj;
+            currentMap = popped.map;
           }
         }
 
-        if (isSafe(key)) {
-          if (value === '>' || value === '|') {
-            const isFolded = value === '>';
-            const scalarLines: string[] = [];
-            let j = i + 1;
-            while (j < lines.length) {
-              const nextLine = lines[j];
-              if (nextLine.trim() === '') {
-                scalarLines.push('');
-                j++;
-                continue;
-              }
-              const nextIndent = nextLine.search(/\S/);
-              if (nextIndent > indent) {
-                scalarLines.push(nextLine.slice(nextIndent));
-                j++;
-              } else {
-                break;
-              }
+        if (value === '>' || value === '|') {
+          const isFolded = value === '>';
+          const scalarLines: string[] = [];
+          let j = i + 1;
+          while (j < lines.length) {
+            const nextLine = lines[j];
+            if (nextLine.trim() === '') {
+              scalarLines.push('');
+              j++;
+              continue;
             }
-            i = j - 1;
-            if (isFolded) {
-              // Folded: newlines are spaces, unless it's a blank line
-              value = scalarLines
-                .join('\n')
-                .replace(/([^\n])\n([^\n])/g, '$1 $2')
-                .trim();
+            const nextIndent = nextLine.search(/\S/);
+            if (nextIndent > indent) {
+              scalarLines.push(nextLine.slice(nextIndent));
+              j++;
             } else {
-              value = scalarLines.join('\n').trim();
+              break;
             }
-            currentRoot[key] = value;
-          } else if (value.startsWith('[') && value.endsWith(']')) {
-            const inner = value.slice(1, -1).trim();
-            currentRoot[key] = inner
-              ? inner.split(',').map(v => {
-                  let item = v.trim();
-                  if (item.startsWith('"') && item.endsWith('"'))
-                    item = item.slice(1, -1);
-                  else if (item.startsWith("'") && item.endsWith("'"))
-                    item = item.slice(1, -1);
-                  return item;
-                })
-              : [];
-          } else if (value) {
-            if (value.startsWith('"') && value.endsWith('"'))
-              value = value.slice(1, -1);
-            else if (value.startsWith("'") && value.endsWith("'"))
-              value = value.slice(1, -1);
-
-            if (['rating', 'durability', 'value'].includes(key))
-              currentRoot[key] = parseFloat(value);
-            else currentRoot[key] = value;
-          } else {
-            currentRoot[key] = undefined;
           }
+          i = j - 1;
+          if (isFolded) {
+            value = scalarLines
+              .join('\n')
+              .replace(/([^\n])\n([^\n])/g, '$1 $2')
+              .trim();
+          } else {
+            value = scalarLines.join('\n').trim();
+          }
+          currentMap.set(key, value);
+        } else if (value.startsWith('[') && value.endsWith(']')) {
+          const inner = value.slice(1, -1).trim();
+          currentMap.set(key, inner
+            ? inner.split(',').map(v => {
+                let item = v.trim();
+                if (item.startsWith('"') && item.endsWith('"'))
+                  item = item.slice(1, -1);
+                else if (item.startsWith("'") && item.endsWith("'"))
+                  item = item.slice(1, -1);
+                return item;
+              })
+            : []);
+        } else if (value) {
+          if (value.startsWith('"') && value.endsWith('"'))
+            value = value.slice(1, -1);
+          else if (value.startsWith("'") && value.endsWith("'"))
+            value = value.slice(1, -1);
+
+          if (['rating', 'durability', 'value'].includes(key))
+            currentMap.set(key, parseFloat(value));
+          else currentMap.set(key, value);
+        } else {
+          currentMap.set(key, undefined);
         }
 
         lastKey = key;
@@ -140,7 +137,19 @@ export function parseFrontmatter(content: string) {
     }
   }
 
-  return { data, content: body };
+  function mapToObject(map: Map<string, unknown>): Record<string, unknown> {
+    const obj = Object.create(null);
+    for (const [key, value] of map.entries()) {
+      if (value instanceof Map) {
+        obj[key] = mapToObject(value);
+      } else {
+        obj[key] = value;
+      }
+    }
+    return obj;
+  }
+
+  return { data: mapToObject(dataMap), content: body };
 }
 
 export interface Post {
