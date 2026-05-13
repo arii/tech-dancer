@@ -216,7 +216,13 @@ function checkContent(content, filepath = 'unknown') {
       for (const match of matches) {
         const lineNum = getLineNumber(match.index);
         const lineText = lines[lineNum - 1] || '';
-        if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
+        const prevLineText = lines[lineNum - 2] || '';
+        const isIgnored = lineText.includes('// impeccable-ignore') ||
+                          lineText.includes('/* impeccable-ignore') ||
+                          prevLineText.includes('// impeccable-ignore') ||
+                          prevLineText.includes('/* impeccable-ignore');
+
+        if (isIgnored) continue;
 
         violations.push({
           line: lineNum,
@@ -238,7 +244,13 @@ function checkContent(content, filepath = 'unknown') {
     for (const match of content.matchAll(regex)) {
       const lineNum = getLineNumber(match.index);
       const lineText = lines[lineNum - 1] || '';
-      if (lineText.includes('// impeccable-ignore') || lineText.includes('/* impeccable-ignore */')) continue;
+      const prevLineText = lines[lineNum - 2] || '';
+      const isIgnored = lineText.includes('// impeccable-ignore') ||
+                        lineText.includes('/* impeccable-ignore') ||
+                        prevLineText.includes('// impeccable-ignore') ||
+                        prevLineText.includes('/* impeccable-ignore');
+
+      if (isIgnored) continue;
 
       const classStr = match[group];
     const classes = classStr.split(/\s+/);
@@ -316,7 +328,13 @@ function checkContent(content, filepath = 'unknown') {
       activeGradientWindowUntil = Math.max(activeGradientWindowUntil, lineNum + 30);
       continue;
     }
-    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || line.includes('// impeccable-ignore') || line.includes('/* impeccable-ignore */')) continue;
+    const prevLineText = lines[i - 1] || '';
+    const isIgnored = line.includes('// impeccable-ignore') ||
+                      line.includes('/* impeccable-ignore') ||
+                      prevLineText.includes('// impeccable-ignore') ||
+                      prevLineText.includes('/* impeccable-ignore');
+
+    if (activeGradientWindowUntil < lineNum || !line.includes('<Text') || isIgnored) continue;
 
     const isHeadlineOrBody = /variant="(?:headline|body)"/.test(line);
     const hasInverseColor = /color="(?:white|bg)"/.test(line);

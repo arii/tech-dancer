@@ -64,13 +64,15 @@
 
   /* Shadows */
   --shadow-top-overlay: var(--raw-shadow-top-overlay);
-  --shadow-glow: 0 0 15px var(--raw-color-accent-shadow); /* impeccable-ignore - specific glow radius */
+  /* impeccable-ignore - specific glow radius */
+  --shadow-glow: 0 0 15px var(--raw-color-accent-shadow);
 
   /* Animation */
   --ease-smooth: var(--raw-ease-smooth);
 
   /* Static Defaults */
-  --container-blog: 1100px; /* impeccable-ignore - max width for readability */
+  /* impeccable-ignore - max width for readability */
+  --container-blog: 1100px;
   --padding-panel: clamp(1.5rem, 5vw, 4rem);
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
@@ -78,14 +80,17 @@
   --section-spacing: 4rem;
 
   /* Font Sizes */
-  --text-micro: 9px; /* impeccable-ignore - optical minimum for tech labels */
-  --text-tiny: 10px; /* impeccable-ignore - secondary micro-copy */
+  /* impeccable-ignore - optical minimum for tech labels */
+  --text-micro: 9px;
+  /* impeccable-ignore - secondary micro-copy */
+  --text-tiny: 10px;
 }
 
 @layer utilities {
   @keyframes scanline {
     0% { transform: translateY(-100%); }
-    100% { transform: translateY(800px); } /* impeccable-ignore - viewport-relative sweep distance */
+    /* impeccable-ignore - viewport-relative sweep distance */
+    100% { transform: translateY(800px); }
   }
   .animate-scanline { animation: scanline 2.5s linear infinite; }
 
@@ -104,8 +109,9 @@
 
   @keyframes shimmer { 100% { transform: translateX(100%); } }
 
-  .glass-panel {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]; /* impeccable-ignore - specific glass-morphism shadow */
+    .glass-panel {
+      .glass-panel {
+    @apply /* impeccable-ignore - specific glass-morphism shadow */ bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
   .event-hero-overlay {
@@ -122,7 +128,8 @@
   .theme-spotlight-image-bg {
     background: color-mix(in srgb, var(--raw-color-surface-alt) 50%, transparent);
   }
-  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); } /* impeccable-ignore - specific brand glow style */
+  /* impeccable-ignore - specific brand glow style */
+  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
@@ -135,9 +142,12 @@
   }
   .grid-pattern {
     background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), /* impeccable-ignore - sub-pixel grid lines */
-      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px); /* impeccable-ignore - sub-pixel grid lines */
-    background-size: 20px 20px; /* impeccable-ignore - grid density adjustment */
+      /* impeccable-ignore - sub-pixel grid lines */
+      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+      /* impeccable-ignore - sub-pixel grid lines */
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    /* impeccable-ignore - grid density adjustment */
+    background-size: 20px 20px;
   }
 
   /* Markdown Counters */
@@ -160,16 +170,21 @@
 
   /* Wordmark Utilities - manual typography adjustments */
   .wordmark-base {
-    @apply font-extrabold text-white flex items-center tracking-[0.05em]; /* impeccable-ignore */
+    /* impeccable-ignore */
+    @apply font-extrabold text-white flex items-center tracking-[0.05em];
   }
   .wordmark-hero {
-    @apply font-display mt-3 opacity-0; /* impeccable-ignore */
-    transform: translateY(10px); /* impeccable-ignore - entrance animation offset */
-    font-size: clamp(18px, 4vw, 28px); /* impeccable-ignore - fluid heading scale */
+    /* impeccable-ignore */
+    @apply font-display mt-3 opacity-0;
+    /* impeccable-ignore - entrance animation offset */
+    transform: translateY(10px);
+    /* impeccable-ignore - fluid heading scale */
+    font-size: clamp(18px, 4vw, 28px);
     animation: fadeUp 0.7s ease forwards 0.4s;
   }
   .wordmark-nav {
-    @apply font-sans text-sm mt-0.5; /* impeccable-ignore */
+    /* impeccable-ignore */
+    @apply font-sans text-sm mt-0.5;
   }
   .wordmark-mobile {
     @apply font-sans text-sm;
@@ -200,30 +215,39 @@
     @apply text-text-body break-words;
     line-height: 1.75;
   }
-  @media (max-width: 640px) { /* impeccable-ignore - legacy breakpoint synchronization */
+  /* impeccable-ignore - legacy breakpoint synchronization */
+  @media (max-width: 640px) {
     body { line-height: 1.7; }
   }
   :is(a, button, input, textarea, select, [role="button"], [tabindex], article):focus-visible {
-    outline: 2px solid var(--raw-color-accent); /* impeccable-ignore - standard focus ring width */
-    outline-offset: 2px; /* impeccable-ignore - standard focus ring offset */
+    /* impeccable-ignore - standard focus ring width */
+    outline: 2px solid var(--raw-color-accent);
+    /* impeccable-ignore - standard focus ring offset */
+    outline-offset: 2px;
   }
   .prose a {
     @apply text-accent decoration-accent/30 underline decoration-1 underline-offset-4 transition-all hover:decoration-accent hover:text-accent/80;
   }
 }
 
-.panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; } /* impeccable-ignore - base container spacing */
+/* impeccable-ignore - base container spacing */
+.panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
 .nav-rail {
-  @apply hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50; /* impeccable-ignore - structural navigation width and layout */
+  @apply /* impeccable-ignore - structural navigation width and layout */ hidden lg:flex w-[280px] border-r border-line flex-col p-8 justify-between min-h-screen sticky top-0 bg-surface z-50;
 }
-.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; } /* impeccable-ignore - thin-line grid structure */
-.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; } /* impeccable-ignore */
-.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; } /* impeccable-ignore */
+/* impeccable-ignore - thin-line grid structure */
+.main-grid { @apply flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-line w-full; }
+/* impeccable-ignore */
+.stats-widget { @apply bg-surface p-6 border border-line shadow-none rounded-none; }
+/* impeccable-ignore */
+.tech-specs-code { @apply font-mono text-xs bg-bg p-4 text-accent border border-line rounded-none; }
 .experience-chip {
-  @apply text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold; /* impeccable-ignore - specialized micro-UI element */
+  @apply /* impeccable-ignore - specialized micro-UI element */ text-tiny border border-line px-3 py-1 rounded-none text-text-dim bg-surface tracking-wider font-bold;
 }
-.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; } /* impeccable-ignore */
-.content-card { @apply bg-surface p-8 rounded-none border border-line; } /* impeccable-ignore */
+/* impeccable-ignore */
+.product-card { @apply bg-surface border border-line p-6 rounded-none transition-all duration-300; }
+/* impeccable-ignore */
+.content-card { @apply bg-surface p-8 rounded-none border border-line; }
 @layer utilities { .object-center-20 { object-position: center 20%; } }
 
 @layer utilities {
@@ -235,13 +259,15 @@
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
   }
   .hero-logo-anim {
-    height: clamp(60px, 10vw, 120px); /* impeccable-ignore - specific brand logo scaling */
+    /* impeccable-ignore - specific brand logo scaling */
+    height: clamp(60px, 10vw, 120px);
     animation: fadeUp 0.8s ease forwards 0.2s;
     margin-left: -12px;
   }
   .hero-headline-anim {
     animation: fadeUp 0.7s ease forwards 0.7s;
-    transform: translateY(10px); /* impeccable-ignore - subtle entrance offset */
+    /* impeccable-ignore - subtle entrance offset */
+    transform: translateY(10px);
   }
   .hero-accent-color {
     color: var(--hero-accent);
@@ -252,8 +278,10 @@
   }
   .hero-tagline-anim {
     animation: fadeUp 0.7s ease forwards 1.4s;
-    padding-left: clamp(0px, 2vw, 32px); /* impeccable-ignore - responsive alignment padding */
-    padding-right: clamp(0px, 2vw, 32px); /* impeccable-ignore - responsive alignment padding */
+    /* impeccable-ignore - responsive alignment padding */
+    padding-left: clamp(0px, 2vw, 32px);
+    /* impeccable-ignore - responsive alignment padding */
+    padding-right: clamp(0px, 2vw, 32px);
   }
   .hero-tagline-text {
     line-height: 1.8;
