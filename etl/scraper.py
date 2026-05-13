@@ -280,7 +280,7 @@ class ETLPipeline:
         try:
             await page.goto(url, timeout=30000)
             try:
-                await page.wait_for_selector('table.results-table', state='attached', timeout=10000)
+                await page.wait_for_selector('table', state='attached', timeout=10000)
             except PlaywrightTimeoutError:
                 logging.debug(f"Timeout waiting for results table on {url}.")
             content = await page.content()
