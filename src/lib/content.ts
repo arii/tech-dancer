@@ -15,7 +15,7 @@ export function parseFrontmatter(content: string) {
 
   const yaml = match[1];
   const body = match[2];
-  const data: Record<string, unknown> = Object.create(null);
+  const data: Record<string, unknown> = {};
 
   let currentRoot = data as Record<string, unknown>;
   let lastKey = '';
@@ -56,14 +56,9 @@ export function parseFrontmatter(content: string) {
               typeof nextObj !== 'object' ||
               Array.isArray(nextObj)
             ) {
-              currentRoot[lastKey] = Object.create(null);
+              currentRoot[lastKey] = {};
             }
-
-            // Re-verify it is our own property and not a polluted one
-            const target = currentRoot[lastKey];
-            if (target && typeof target === 'object' && !Array.isArray(target)) {
-               currentRoot = target as Record<string, unknown>;
-            }
+            currentRoot = currentRoot[lastKey] as Record<string, unknown>;
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
@@ -280,6 +275,10 @@ function transform<T extends { date?: string }>(
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
         author: String(data.author || ""),
+        location: String(data.location || ""),
+        city: String(data.city || ""),
+        schedule: String(data.schedule || ""),
+        description: String(data.description || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
         earlyBirdDate: data.earlyBirdDate
           ? String(data.earlyBirdDate)

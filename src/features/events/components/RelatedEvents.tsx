@@ -32,6 +32,7 @@ export function RelatedEvents({
     queryKey: ["events"],
     queryFn: getEvents,
     enabled: slugs.length > 0 && !directEvents,
+    initialData: getEvents,
     staleTime: 3600000, // 1 hour
   });
 
@@ -68,9 +69,9 @@ export function RelatedEvents({
               height="full"
             >
               <EventCard
-                name={event.title}
-                location={event.location}
-                schedule={event.schedule}
+                name={event.title || "Untitled Event"}
+                location={event.location || event.city || "Location TBA"}
+                schedule={event.schedule || "Date TBA"}
                 onClick={() => navigate(`/events/${event.slug}`)}
               />
             </Box>
