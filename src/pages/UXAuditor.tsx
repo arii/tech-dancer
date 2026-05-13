@@ -132,7 +132,8 @@ export default function UXAuditor() {
             align="center"
             gap={3}
             padding={2}
-            className={cardVariants()}
+            className="border border-line rounded-lg"
+            surface="muted"
           >
             <Box
               as="input"
@@ -170,9 +171,10 @@ export default function UXAuditor() {
               align="center"
               gap={3}
               padding={2}
-              className={cardVariants()}
+              className="border border-line rounded-lg"
+              surface="muted"
             >
-              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
+              <Text variant="mono" size="xs" color="main" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
               <Box
                 as="input"
                 type="password"
@@ -193,7 +195,9 @@ export default function UXAuditor() {
                   display="flex"
                   align="center"
                   justify="center"
-                  padding={2}
+                  padding={3}
+                  minHeight={11}
+                  minWidth={11}
                   radius="md"
                   className="hover:bg-surface-alt text-dim hover:text-error transition-colors"
                   title="Clear API Key"
@@ -211,9 +215,10 @@ export default function UXAuditor() {
             align="center"
             gap={3}
             padding={2}
-            className={cardVariants()}
+            className="border border-line rounded-lg"
+            surface="muted"
           >
-            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
+            <Text variant="mono" size="xs" color="main" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
             <Box
               as="input"
               type="text"
@@ -231,13 +236,13 @@ export default function UXAuditor() {
         </Stack>
       </Stack>
 
-      <Grid cols={{ base: 1, lg: 4 }} gap={8}>
+      <Grid cols={{ base: 1, lg: 4 }} gap={8} className="md:grid-cols-4">
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
-          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
+        <Stack gap={4} span={{ lg: 1 }} className="md:col-span-1" minWidth={0}>
+          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="main" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
+          <Stack className="border border-line rounded-lg overflow-hidden divide-y divide-line" surface="muted" minWidth={0}>
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -279,13 +284,14 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth={0}>
+        <Stack gap={6} span={{ lg: 3 }} className="md:col-span-3" minWidth={0}>
           {activeReport ? (
             <>
               <Stack
                 padding={6}
-                className={cardVariants()}
-                justify="between" align={{ base: "start", md: "center" }} 
+                className="border border-line rounded-lg"
+                surface="alt"
+                justify="start" align="start"
                 gap={6} direction={{ base: "col", md: "row" }}
               >
                 <Stack gap={1} minWidth="0" flex={1}>
@@ -303,10 +309,8 @@ export default function UXAuditor() {
                     display="flex"
                     align="center"
                     gap={2}
-                    className={actionButtonVariants({ variant: "default" })}
-                    surface="muted" 
-                    color="dim"
-                    paddingX={4}
+                    className={actionButtonVariants({ variant: "primary" })}
+                    paddingX={6}
                     paddingY={2}
                     radius="xl"
                   >
@@ -347,7 +351,7 @@ export default function UXAuditor() {
                             {vp.name} Analysis
                           </Text>
                         </Stack>
-                        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                        <Text variant="mono" size="xs" weight="font-bold" color="main" uppercase tracking="widest">
                           {vp.width}w × {vp.height}h
                         </Text>
                       </Stack>
@@ -390,7 +394,7 @@ export default function UXAuditor() {
                               </Box>
                               <Stack gap={4}>
                                 {data.improvements?.map((imp, idx) => (
-                                  <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
+                                  <Box key={idx} padding={4} className="border border-line rounded-lg hover:border-accent cursor-pointer transition-all" surface="muted">
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
                                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
@@ -398,11 +402,11 @@ export default function UXAuditor() {
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="main" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
                                     </Box>
-                                    <Text variant="sans" size="xs" color="dim" marginBottom={3}>
+                                    <Text variant="sans" size="xs" color="main" marginBottom={3}>
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
