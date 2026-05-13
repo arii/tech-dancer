@@ -11,11 +11,14 @@ import { ASSET_PREFIX } from '@/config/constants';
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
-  if (!match) return { data: {}, content };
+  if (!match) return { data: Object.create(null), content };
 
   const yaml = match[1];
   const body = match[2];
   const data: Record<string, unknown> = Object.create(null);
+
+  const isSafe = (k: string) =>
+    k !== '__proto__' && k !== 'constructor' && k !== 'prototype';
 
   let currentRoot = data as Record<string, unknown>;
   let lastKey = '';
@@ -52,16 +55,20 @@ export function parseFrontmatter(content: string) {
         let value = line.slice(colonIdx + 1).trim();
 
         if (indent > lastIndent) {
-          if (lastKey && !['__proto__', 'constructor', 'prototype'].includes(lastKey)) {
+          if (lastKey && isSafe(lastKey)) {
             stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
+            const existingNode = currentRoot[lastKey];
             if (
-              !currentRoot[lastKey] ||
-              typeof currentRoot[lastKey] !== 'object' ||
-              Array.isArray(currentRoot[lastKey])
+              !existingNode ||
+              typeof existingNode !== 'object' ||
+              Array.isArray(existingNode)
             ) {
-              currentRoot[lastKey] = Object.create(null);
+              const newNode = Object.create(null);
+              currentRoot[lastKey] = newNode;
+              currentRoot = newNode;
+            } else {
+              currentRoot = existingNode as Record<string, unknown>;
             }
-            currentRoot = currentRoot[lastKey] as Record<string, unknown>;
           }
         } else if (indent < lastIndent) {
           while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
@@ -70,59 +77,61 @@ export function parseFrontmatter(content: string) {
           }
         }
 
-        if (value === '>' || value === '|') {
-          const isFolded = value === '>';
-          const scalarLines: string[] = [];
-          let j = i + 1;
-          while (j < lines.length) {
-            const nextLine = lines[j];
-            if (nextLine.trim() === '') {
-              scalarLines.push('');
-              j++;
-              continue;
+        if (isSafe(key)) {
+          if (value === '>' || value === '|') {
+            const isFolded = value === '>';
+            const scalarLines: string[] = [];
+            let j = i + 1;
+            while (j < lines.length) {
+              const nextLine = lines[j];
+              if (nextLine.trim() === '') {
+                scalarLines.push('');
+                j++;
+                continue;
+              }
+              const nextIndent = nextLine.search(/\S/);
+              if (nextIndent > indent) {
+                scalarLines.push(nextLine.slice(nextIndent));
+                j++;
+              } else {
+                break;
+              }
             }
-            const nextIndent = nextLine.search(/\S/);
-            if (nextIndent > indent) {
-              scalarLines.push(nextLine.slice(nextIndent));
-              j++;
+            i = j - 1;
+            if (isFolded) {
+              // Folded: newlines are spaces, unless it's a blank line
+              value = scalarLines
+                .join('\n')
+                .replace(/([^\n])\n([^\n])/g, '$1 $2')
+                .trim();
             } else {
-              break;
+              value = scalarLines.join('\n').trim();
             }
-          }
-          i = j - 1;
-          if (isFolded) {
-            // Folded: newlines are spaces, unless it's a blank line
-            value = scalarLines
-              .join('\n')
-              .replace(/([^\n])\n([^\n])/g, '$1 $2')
-              .trim();
-          } else {
-            value = scalarLines.join('\n').trim();
-          }
-          currentRoot[key] = value;
-        } else if (value.startsWith('[') && value.endsWith(']')) {
-          const inner = value.slice(1, -1).trim();
-          currentRoot[key] = inner
-            ? inner.split(',').map(v => {
-                let item = v.trim();
-                if (item.startsWith('"') && item.endsWith('"'))
-                  item = item.slice(1, -1);
-                else if (item.startsWith("'") && item.endsWith("'"))
-                  item = item.slice(1, -1);
-                return item;
-              })
-            : [];
-        } else if (value) {
-          if (value.startsWith('"') && value.endsWith('"'))
-            value = value.slice(1, -1);
-          else if (value.startsWith("'") && value.endsWith("'"))
-            value = value.slice(1, -1);
+            currentRoot[key] = value;
+          } else if (value.startsWith('[') && value.endsWith(']')) {
+            const inner = value.slice(1, -1).trim();
+            currentRoot[key] = inner
+              ? inner.split(',').map(v => {
+                  let item = v.trim();
+                  if (item.startsWith('"') && item.endsWith('"'))
+                    item = item.slice(1, -1);
+                  else if (item.startsWith("'") && item.endsWith("'"))
+                    item = item.slice(1, -1);
+                  return item;
+                })
+              : [];
+          } else if (value) {
+            if (value.startsWith('"') && value.endsWith('"'))
+              value = value.slice(1, -1);
+            else if (value.startsWith("'") && value.endsWith("'"))
+              value = value.slice(1, -1);
 
-          if (['rating', 'durability', 'value'].includes(key))
-            currentRoot[key] = parseFloat(value);
-          else currentRoot[key] = value;
-        } else {
-          currentRoot[key] = undefined;
+            if (['rating', 'durability', 'value'].includes(key))
+              currentRoot[key] = parseFloat(value);
+            else currentRoot[key] = value;
+          } else {
+            currentRoot[key] = undefined;
+          }
         }
 
         lastKey = key;
