@@ -13,7 +13,7 @@ export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
   if (!match) return { data: {}, content };
 
-  const yaml = match[1];
+  const yamlStr = match[1];
   const body = match[2];
   const data: Record<string, unknown> = {};
 
@@ -22,7 +22,7 @@ export function parseFrontmatter(content: string) {
   let lastIndent = -1;
   const stack: { key: string; obj: Record<string, unknown>; indent: number }[] = [];
 
-  const lines = yaml.split('\n');
+  const lines = yamlStr.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
