@@ -54,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          PR_INFO=$(gh api "repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }}")
+          PR_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" https://api.github.com/repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }})
 
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 
