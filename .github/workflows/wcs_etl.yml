@@ -40,6 +40,8 @@ jobs:
           PYTHONPATH=. pytest etl/tests/
 
       - name: Execute Extraction Script (Incremental Batching)
+        env:
+          GITHUB_REF: ${{ github.ref }}
         run: |
           # Configure Git for intermediate commits
           git config --global user.name "github-actions[bot]"
@@ -61,7 +63,7 @@ jobs:
               echo "📦 Batch $i completed. Committing and pushing..."
               git add etl/data/wcs_prelims.parquet etl/data/event_queue.json
               git commit -m "chore(etl): update wcs ledger and queue (batch $i)" || echo "No changes to commit"
-              git push origin HEAD:${{ github.ref }} || echo "Push failed, continuing..."
+              git push origin HEAD:"$GITHUB_REF" || echo "Push failed, continuing..."
             else
               echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
               exit 1

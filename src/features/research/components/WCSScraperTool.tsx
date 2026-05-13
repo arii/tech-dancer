@@ -59,7 +59,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
                     variant="body"
                     size="xs"
                     color="dim"
-                    className="hover:text-brand transition-colors underline-offset-4 hover:underline"
+                    className="transition-colors underline-offset-4 hover:underline hover:color-accent"
                   >
                     {record.event_title}
                   </Text>
@@ -86,8 +86,10 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-12 text-center">
-                  <Text variant="body" size="sm" color="dim">No results found for this search.</Text>
+                <td colSpan={6}>
+                  <Box paddingY={12} textAlign="center">
+                    <Text variant="body" size="sm" color="dim">No results found for this search.</Text>
+                  </Box>
                 </td>
               </tr>
             )}
@@ -304,7 +306,7 @@ export function WCSScraperTool() {
                 <Text size="sm" color="body">
                   Using multi-point verification (Result ID, Event URL, and Dancer Metadata) to ensure data accuracy across various event formats.
                 </Text>
-                <Box height="1px" surface="muted" />
+                <Box height={0.5} surface="muted" />
                 <Box display="flex" justify="between" align="center">
                   <Text variant="mono" size="xs" weight="font-bold" color="dim">LAST SYNC</Text>
                   <Text variant="mono" size="micro" color="accent">{isLoading ? 'PENDING' : lastSync || 'RECENT'}</Text>

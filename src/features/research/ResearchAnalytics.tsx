@@ -19,9 +19,9 @@ export default function ResearchAnalytics() {
       />
       <Stack gap={12}>
         <PageHeader
-          label="TECHNICAL LABORATORY"
-          title="Intelligence & Analysis"
-          description="Sophisticated data pipelines and interactive tools designed to quantify the art of West Coast Swing."
+          label="TECHNICAL PORTFOLIO"
+          title="Data & Development Lab"
+          description="Technical portfolio showcasing DevAI-driven analysis tools and machine learning research applied to West Coast Swing."
           as="h1"
         />
 
