@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -31,16 +31,9 @@ export default function EventGuide() {
   } = useEventDetail();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const tabParam = searchParams.get("tab") as EventTab | null;
-  const [activeTab, setActiveTab] = useState<EventTab>(tabParam ?? "notes");
-
-  // Sync tab from URL
-  useEffect(() => {
-    if (tabParam && tabParam !== activeTab) setActiveTab(tabParam);
-  }, [tabParam, activeTab]);
+  const activeTab = (searchParams.get("tab") as EventTab | null) ?? "notes";
 
   const handleTabChange = (tab: EventTab) => {
-    setActiveTab(tab);
     setSearchParams({ tab }, { replace: true });
     // Scroll to the section
     const element = document.getElementById(`section-${tab}`);
@@ -48,6 +41,18 @@ export default function EventGuide() {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
+
+  // Optional: Scroll to initial tab on load if present in URL
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) {
+      const element = document.getElementById(`section-${tab}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "instant", block: "start" });
+      }
+    }
+    // Only run once on mount
+  }, [searchParams]);
 
   if (isLoading) {
     return (
