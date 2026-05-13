@@ -1,6 +1,7 @@
 import { MapPin } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+
+import { NavLink } from 'react-router-dom';
 
 interface EventCardProps {
   slug?: string;

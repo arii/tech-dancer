@@ -105,7 +105,7 @@ export default function Home() {
           </Stack>
 
           <Stack gap={8}>
-            <SectionHeader label="COMPETE" title="Upcoming Events" />
+            <SectionHeader eyebrow="COMPETE" title="Upcoming Events" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (
                 <Box
@@ -115,7 +115,10 @@ export default function Home() {
                   className="h-full"
                 >
                   <EventCard
-                    {...event}
+                    slug={event.slug}
+                    name={event.title}
+                    location={event.location}
+                    schedule={event.schedule}
                   />
                 </Box>
               ))}
