@@ -30,11 +30,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Resolve PR details
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -s -H "Authorization: token $GH_TOKEN" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} | jq -r \
-            '. | "HEAD_REF=" + .head.ref, "HEAD_REPO=" + .head.repo.full_name' >> "$GITHUB_ENV"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            core.exportVariable('HEAD_REF', pr.data.head.ref);
+            core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
 
       - name: Checkout source branch
         uses: actions/checkout@v4
