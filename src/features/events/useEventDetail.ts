@@ -44,7 +44,12 @@ export function useEventDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
-  const { data: event, isLoading } = useQuery({
+  const {
+    data: event,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["events", slug],
     queryFn: () => (slug ? getEventBySlug(slug) : undefined),
     enabled: !!slug,
@@ -88,6 +93,8 @@ export function useEventDetail() {
   return {
     event,
     isLoading,
+    isError,
+    error,
     themeOutfits,
     themeAccessories,
     gearSections,
