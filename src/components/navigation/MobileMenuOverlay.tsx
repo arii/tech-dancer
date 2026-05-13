@@ -65,8 +65,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
       exit={{ x: '-100%' }}
       position="fixed"
       width="full"
-      zIndex="top"
-      className="top-16 left-0 right-0 bottom-0 bg-bg lg:hidden"
+      className="top-16 left-0 right-0 bottom-0 z-top bg-bg lg:hidden"
       padding={8}
       overflow="y-auto"
       role="dialog"
