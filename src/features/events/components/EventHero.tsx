@@ -1,111 +1,195 @@
-import { useMemo } from 'react';
-import { motion } from 'motion/react';
-import { MapPin, Calendar } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { motionTokens } from '@/styles/motion';
+import { MapPin, Calendar } from "lucide-react";
+import { Box, Stack, Text } from "@/layouts/Primitives";
+import { Event } from "@/lib/content";
+import { EVENT_TABS } from "../constants";
+
+export type EventTab = "theme" | "gear" | "reminders" | "travel" | "notes";
 
 interface EventHeroProps {
-  title: string;
-  location: string;
-  date: string;
-  image?: string;
-  eyebrow?: string;
+  event: Event;
+  activeTab: EventTab;
+  onTabChange: (tab: EventTab) => void;
 }
 
-export function EventHero({ title, location, date, image, eyebrow = "Event Guide" }: EventHeroProps) {
-  const accentGradient = useMemo(() => ({
-    background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
-  }), []);
-
+export function EventHero({ event, activeTab, onTabChange }: EventHeroProps) {
   return (
-    <Box
-      position="relative"
-      width="full"
-      minHeight={{ base: "30vh", md: "40vh" }}
-      display="flex"
-      align="center"
-      overflow="hidden"
-      className="bg-bg"
-    >
-      {/* Background Image with Overlay */}
-      {image && (
-        <Box position="absolute" inset zIndex={0}>
-          <img
-            src={image}
-            alt=""
-            className="w-full h-full object-cover opacity-40"
-            aria-hidden="true"
-          />
+    <Box border="b" paddingBottom={0}>
+      <Stack gap={6} paddingBottom={0}>
+        {/* Breadcrumb */}
+        <Text
+          variant="mono"
+          size="micro"
+          color="dim"
+          uppercase
+          tracking="widest"
+        >
+          Event Guides › {event.title}
+        </Text>
+
+        <Stack direction={{ base: "col", md: "row" }} gap={8} align="start">
+          {/* Left: event copy */}
+          <Stack gap={4} flex={1}>
+            <Stack gap={2}>
+              <Text
+                variant="headline"
+                size="fluid-5"
+                weight="font-black"
+                color="white"
+                leading="tight"
+              >
+                {event.title}
+              </Text>
+              <Box display="flex" align="center" gap={4} wrap>
+                <Box display="flex" align="center" gap={1}>
+                  <MapPin className="w-4 h-4 text-accent shrink-0" />
+                  <Text size="sm" color="dim">
+                    {event.city}
+                  </Text>
+                </Box>
+                <Box display="flex" align="center" gap={1}>
+                  <Calendar className="w-4 h-4 text-accent shrink-0" />
+                  <Text size="sm" color="dim">
+                    {event.schedule}
+                  </Text>
+                </Box>
+              </Box>
+            </Stack>
+
+            {event.whyAttending && (
+              <Box
+                border="l"
+                paddingLeft={5}
+                className="border-accent/40 max-w-prose"
+              >
+                <Text
+                  variant="body"
+                  size="sm"
+                  color="dim"
+                  className="italic leading-relaxed"
+                >
+                  <Text
+                    as="span"
+                    size="xs"
+                    weight="font-bold"
+                    color="accent"
+                    marginBottom={1}
+                    className="block not-italic"
+                  >
+                    WHY I'M ATTENDING
+                  </Text>
+                  {event.whyAttending}
+                </Text>
+                <Text size="xs" color="dim" marginTop={2} className="not-italic">
+                  — BoomTick
+                </Text>
+              </Box>
+            )}
+
+            {event.url && (
+              <Box
+                as="a"
+                href={event.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                display="inline-flex"
+                align="center"
+                gap={2}
+                border
+                paddingX={4}
+                paddingY={2}
+                radius="full"
+                className="border-accent/30 hover:border-accent bg-accent/5 hover:bg-accent/10 transition-all w-fit text-accent"
+              >
+                <Text variant="mono" size="xs" weight="font-bold">
+                  Official Event Site ↗
+                </Text>
+              </Box>
+            )}
+          </Stack>
+
+          {/* Right: event badge / image */}
           <Box
-            position="absolute"
-            inset
-            className="event-hero-overlay"
-          />
-        </Box>
-      )}
-
-      {/* Decorative accent */}
-      <Box
-        position="absolute"
-        top={0}
-        right={0}
-        width={{ base: "full", md: "1/2" }}
-        height="full"
-        className="pointer-events-none opacity-20"
-        style={accentGradient}
-      />
-
-      <Stack
-        relative
-        zIndex={10}
-        gap={6}
-        paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingY={8}
-        maxWidth="screen-xl"
-        marginX="auto"
-        width="full"
-        as={motion.div}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={motionTokens.page.transition}
-      >
-        <Stack gap={2}>
-          <Text
-            variant="mono"
-            size="xs"
-            weight="font-bold"
-            color="accent"
-            uppercase
-            tracking="widest"
+            width={48}
+            height={48}
+            shrink={false}
+            radius="xl"
+            border
+            overflow="hidden"
+            surface="surface"
+            display="flex"
+            align="center"
+            justify="center"
+            className="border-line/40"
           >
-            {eyebrow}
-          </Text>
-          <Text
-            as="h1"
-            variant="headline"
-            size="fluid-7"
-            weight="font-black"
-            color="white"
-            leading="tight"
-            tracking="tight"
-          >
-            {title}
-          </Text>
+            {event.heroImage ? (
+              <img
+                src={event.heroImage}
+                alt={`${event.title} event badge`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <Stack
+                align="center"
+                gap={1}
+                paddingX={4}
+                className="text-center"
+              >
+                <Text
+                  variant="display"
+                  size="4xl"
+                  weight="font-black"
+                  color="accent"
+                >
+                  {event.title
+                    .split(" ")
+                    .map((w) => w[0])
+                    .join("")
+                    .slice(0, 3)}
+                </Text>
+                <Text variant="mono" size="micro" color="dim">
+                  {event.city}
+                </Text>
+              </Stack>
+            )}
+          </Box>
         </Stack>
 
-        <Box display="flex" wrap gap={6} align="center">
-          <Box display="flex" align="center" gap={2}>
-            <Calendar className="w-5 h-5 text-accent" />
-            <Text variant="body" size="lg" weight="font-medium">
-              {date}
-            </Text>
-          </Box>
-          <Box display="flex" align="center" gap={2}>
-            <MapPin className="w-5 h-5 text-accent" />
-            <Text variant="body" size="lg" weight="font-medium">
-              {location}
-            </Text>
-          </Box>
+        {/* Tab bar */}
+        <Box
+          display="flex"
+          gap={0}
+          overflowX="auto"
+          className="no-scrollbar"
+          marginX={{ base: -4, lg: 0 }}
+          paddingX={{ base: 4, lg: 0 }}
+          marginTop={4}
+        >
+          {EVENT_TABS.map((tab) => (
+            <Box
+              key={tab.id}
+              as="button"
+              onClick={() => onTabChange(tab.id as EventTab)}
+              paddingX={5}
+              paddingY={3}
+              cursor="pointer"
+              border="b"
+              className={`whitespace-nowrap transition-colors border-b-2 ${
+                activeTab === tab.id
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-dim hover:text-text-main"
+              }`}
+            >
+              <Text
+                variant="mono"
+                size="xs"
+                weight="font-bold"
+                uppercase
+                tracking="widest"
+              >
+                {tab.label}
+              </Text>
+            </Box>
+          ))}
         </Box>
       </Stack>
     </Box>
