@@ -22,9 +22,11 @@ export function parseFrontmatter(content: string) {
   let lastIndent = -1;
   const stack: { key: string; obj: Record<string, unknown>; indent: number }[] = [];
 
-  yaml.split('\n').forEach(line => {
+  const lines = yaml.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     const trimmed = line.trim();
-    if (!trimmed) return;
+    if (!trimmed) continue;
     const indent = line.search(/\S/);
 
     if (trimmed.startsWith('- ')) {
@@ -46,7 +48,11 @@ export function parseFrontmatter(content: string) {
         if (indent > lastIndent) {
           if (lastKey) {
             stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
-            if (!currentRoot[lastKey] || typeof currentRoot[lastKey] !== 'object' || Array.isArray(currentRoot[lastKey])) {
+            if (
+              !currentRoot[lastKey] ||
+              typeof currentRoot[lastKey] !== 'object' ||
+              Array.isArray(currentRoot[lastKey])
+            ) {
               currentRoot[lastKey] = {};
             }
             currentRoot = currentRoot[lastKey] as Record<string, unknown>;
@@ -58,19 +64,56 @@ export function parseFrontmatter(content: string) {
           }
         }
 
-        if (value.startsWith('[') && value.endsWith(']')) {
+        if (value === '>' || value === '|') {
+          const isFolded = value === '>';
+          const scalarLines: string[] = [];
+          let j = i + 1;
+          while (j < lines.length) {
+            const nextLine = lines[j];
+            if (nextLine.trim() === '') {
+              scalarLines.push('');
+              j++;
+              continue;
+            }
+            const nextIndent = nextLine.search(/\S/);
+            if (nextIndent > indent) {
+              scalarLines.push(nextLine.slice(nextIndent));
+              j++;
+            } else {
+              break;
+            }
+          }
+          i = j - 1;
+          if (isFolded) {
+            // Folded: newlines are spaces, unless it's a blank line
+            value = scalarLines
+              .join('\n')
+              .replace(/([^\n])\n([^\n])/g, '$1 $2')
+              .trim();
+          } else {
+            value = scalarLines.join('\n').trim();
+          }
+          currentRoot[key] = value;
+        } else if (value.startsWith('[') && value.endsWith(']')) {
           const inner = value.slice(1, -1).trim();
-          currentRoot[key] = inner ? inner.split(',').map(v => {
-            let item = v.trim();
-            if (item.startsWith('"') && item.endsWith('"')) item = item.slice(1, -1);
-            else if (item.startsWith("'") && item.endsWith("'")) item = item.slice(1, -1);
-            return item;
-          }) : [];
+          currentRoot[key] = inner
+            ? inner.split(',').map(v => {
+                let item = v.trim();
+                if (item.startsWith('"') && item.endsWith('"'))
+                  item = item.slice(1, -1);
+                else if (item.startsWith("'") && item.endsWith("'"))
+                  item = item.slice(1, -1);
+                return item;
+              })
+            : [];
         } else if (value) {
-          if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
-          else if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+          if (value.startsWith('"') && value.endsWith('"'))
+            value = value.slice(1, -1);
+          else if (value.startsWith("'") && value.endsWith("'"))
+            value = value.slice(1, -1);
 
-          if (['rating', 'durability', 'value'].includes(key)) currentRoot[key] = parseFloat(value);
+          if (['rating', 'durability', 'value'].includes(key))
+            currentRoot[key] = parseFloat(value);
           else currentRoot[key] = value;
         } else {
           currentRoot[key] = undefined;
@@ -80,7 +123,7 @@ export function parseFrontmatter(content: string) {
         lastIndent = indent;
       }
     }
-  });
+  }
 
   return { data, content: body };
 }

@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Database, FileText, Search, ArrowRight } from 'lucide-react';
+import { Search, ArrowRight, Activity, Database, FileText } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -14,21 +14,23 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="Research"
-        description="Technical studies and data analysis at the intersection of robotics and West Coast Swing. Exploring kinematics, competition data, and biomechanics."
+        title="Research & Analytics"
+        description="Technical studies and real-time data pipelines at the intersection of robotics and West Coast Swing."
       />
       <Stack gap={12}>
         <PageHeader
           label="TECHNICAL PORTFOLIO"
           title="Data & Development Lab"
-          description="Sophisticated pages for interactive data science, software development, and specialized tools to optimize the WCS lifestyle."
+          description="Technical portfolio showcasing DevAI-driven analysis tools and machine learning research applied to West Coast Swing."
           as="h1"
         />
 
+
+
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Tools Ecosystem</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Intelligence Tools</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} CONSOLES</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -46,7 +48,7 @@ export default function ResearchAnalytics() {
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
-                      <Icon icon={Search} size="md" color="dim" />
+                      <Icon icon={tool.id === 'wcs-scraper' ? Activity : Search} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
                       {tool.status}
@@ -62,7 +64,7 @@ export default function ResearchAnalytics() {
                   </Stack>
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Launch Console</Text>
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Open Console</Text>
                   <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>
@@ -72,7 +74,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Studies</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Published Studies</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} ARTICLES</Text>
           </Box>
 
@@ -99,7 +101,7 @@ export default function ResearchAnalytics() {
                     </Text>
                   </Stack>
                   <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Study</Text>
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Paper</Text>
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
                 </Stack>

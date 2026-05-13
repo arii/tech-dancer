@@ -24,86 +24,99 @@ interface TrendData {
 }
 
 export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
-  <Box border surface="default" padding="card">
-    <Stack gap={4}>
+  <Box border surface="default" padding="card" height="[350px]">
+    <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <BarChart2 className="w-4 h-4 text-accent" />
         <Text variant="mono" size="micro" weight="font-bold" uppercase>Score Distribution</Text>
       </Box>
-      <Box height={48}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(var(--color-line), 0.1)" />
-            <XAxis
-              dataKey="score"
-              fontSize={10}
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
-            />
-            <YAxis
-              fontSize={10}
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(var(--color-surface), 1)',
-                border: '1px solid rgba(var(--color-line), 1)',
-                fontSize: '10px',
-                fontFamily: 'var(--font-mono)'
-              }}
-            />
-            <Bar dataKey="count" fill="var(--color-accent)" radius={[2, 2, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+      <Box flex={1} minHeight={0}>
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+              <XAxis
+                dataKey="score"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <YAxis
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--raw-color-surface)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  fontSize: '10px',
+                  fontFamily: 'var(--font-mono)'
+                }}
+              />
+              <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <Box display="flex" align="center" justify="center" height="full">
+            <Text variant="mono" size="xs" color="dim">NO_DISTRIBUTION_DATA</Text>
+          </Box>
+        )}
       </Box>
     </Stack>
   </Box>
 );
 
 export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
-  <Box border surface="default" padding="card">
-    <Stack gap={4}>
+  <Box border surface="default" padding="card" height="[350px]">
+    <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <TrendingUp className="w-4 h-4 text-accent" />
         <Text variant="mono" size="micro" weight="font-bold" uppercase>Avg Score Trend</Text>
       </Box>
-      <Box height={48}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(var(--color-line), 0.1)" />
-            <XAxis
-              dataKey="date"
-              fontSize={10}
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
-            />
-            <YAxis
-              fontSize={10}
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: 'rgba(var(--color-text-dim), 0.7)' }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(var(--color-surface), 1)',
-                border: '1px solid rgba(var(--color-line), 1)',
-                fontSize: '10px',
-                fontFamily: 'var(--font-mono)'
-              }}
-            />
-            <Line
-              type="monotone"
-              dataKey="avg"
-              stroke="var(--color-accent)"
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <Box flex={1} minHeight={0}>
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+              <XAxis
+                dataKey="date"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <YAxis
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--raw-color-surface)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  fontSize: '10px',
+                  fontFamily: 'var(--font-mono)'
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="avg"
+                stroke="var(--raw-color-accent-brand)"
+                strokeWidth={2}
+                dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <Box display="flex" align="center" justify="center" height="full">
+            <Text variant="mono" size="xs" color="dim">NO_TREND_DATA</Text>
+          </Box>
+        )}
       </Box>
     </Stack>
   </Box>
