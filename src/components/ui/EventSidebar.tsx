@@ -1,6 +1,7 @@
 import { Plane, Calendar, Hotel, Users, ShieldAlert } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Event } from '@/lib/content';
+import { parseDate, addDays } from '@/lib/utils';
 
 export function EventHeaderExtras({ author }: { author: string }) {
   return (
@@ -89,36 +90,36 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
 }
 
 function getReminders(startDate: string, earlyBirdDate?: string, hotelCutoffDate?: string) {
-  const start = new Date(startDate);
+  const start = parseDate(startDate);
 
   return [
     {
       label: 'Flight Tracking',
-      date: new Date(start.getTime() - 90 * 24 * 60 * 60 * 1000),
+      date: addDays(start, -90),
       icon: Plane,
       description: 'Book flights ~90 days out for best rates.'
     },
     {
       label: 'Early Bird',
-      date: earlyBirdDate ? new Date(new Date(earlyBirdDate).getTime() - 2 * 24 * 60 * 60 * 1000) : null,
+      date: earlyBirdDate ? addDays(parseDate(earlyBirdDate), -2) : null,
       icon: Calendar,
       description: 'Register before early bird rates expire.'
     },
     {
       label: 'Hotel Cutoff',
-      date: hotelCutoffDate ? new Date(hotelCutoffDate) : null,
+      date: hotelCutoffDate ? parseDate(hotelCutoffDate) : null,
       icon: Hotel,
       description: 'Room block availability deadline.'
     },
     {
       label: 'Comp Signups',
-      date: new Date(start.getTime() - 14 * 24 * 60 * 60 * 1000),
+      date: addDays(start, -14),
       icon: Users,
       description: 'Registration for competitions typically closes 14 days prior.'
     },
     {
       label: 'Cancel Safety',
-      date: new Date(start.getTime() - 5 * 24 * 60 * 60 * 1000),
+      date: addDays(start, -5),
       icon: ShieldAlert,
       description: 'Last chance to cancel without full penalty.'
     }
