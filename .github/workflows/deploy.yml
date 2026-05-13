@@ -44,11 +44,15 @@ jobs:
         run: |
           # 1. Determine Base Path
           if [ "$REF_NAME" = "main" ]; then
-            export VITE_BASE_PATH=/$REPO_NAME/
-            export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"
+            VITE_BASE_PATH="/$REPO_NAME/"
+            export VITE_BASE_PATH
+            VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"
+            export VITE_APP_URL
           else
-            export VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/
-            export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/$REF_NAME/"
+            VITE_BASE_PATH="/$REPO_NAME/$REF_NAME/"
+            export VITE_BASE_PATH
+            VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/$REF_NAME/"
+            export VITE_APP_URL
           fi
 
           # 2. Build the Application
@@ -57,11 +61,13 @@ jobs:
           # 3. SEO Aggregation (Only on Main)
           if [ "$REF_NAME" = "main" ]; then
             # Generate robots.txt pointing at canonical sitemap location
-            echo "User-agent: *" > dist/robots.txt
-            echo "Allow: /$REPO_NAME/" >> dist/robots.txt
-            echo "Disallow: /$REPO_NAME/previews/" >> dist/robots.txt
-            echo "Disallow: /$REPO_NAME/404.html" >> dist/robots.txt
-            echo "Sitemap: https://$OWNER.github.io/$REPO_NAME/sitemap.xml" >> dist/robots.txt
+            {
+              echo "User-agent: *"
+              echo "Allow: /$REPO_NAME/"
+              echo "Disallow: /$REPO_NAME/previews/"
+              echo "Disallow: /$REPO_NAME/404.html"
+              echo "Sitemap: https://$OWNER.github.io/$REPO_NAME/sitemap.xml"
+            } > dist/robots.txt
 
             echo "SEO assets generated successfully."
           fi

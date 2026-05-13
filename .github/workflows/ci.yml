@@ -204,7 +204,8 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
+          VITE_BASE_PATH="/$REPO_NAME/"
+          export VITE_BASE_PATH
           pnpm run test:e2e
         env:
           CI: true
