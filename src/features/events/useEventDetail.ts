@@ -56,13 +56,6 @@ export function useEventDetail() {
     initialData: () => (slug ? getEventBySlug(slug) : undefined),
   });
 
-  const { data: allEvents = [] } = useQuery({
-    queryKey: ["events"],
-    queryFn: getEvents,
-    initialData: getEvents,
-    staleTime: 3600000, // 1 hour
-  });
-
   // Consolidate event-specific derived state into a single memoization block
   // to reduce dependency chains and potential extra re-renders.
   const { themeOutfits, themeAccessories, gearSections } = useMemo(
@@ -74,16 +67,6 @@ export function useEventDetail() {
     [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
   );
 
-  // Resolve related events
-  // Dependent on both the current event and the full list
-  const relatedEvents = useMemo(
-    (): Event[] =>
-      (event?.relatedEvents ?? [])
-        .map((slug) => allEvents.find((e) => e.slug === slug))
-        .filter((e): e is Event => !!e),
-    [event?.relatedEvents, allEvents],
-  );
-
   return {
     event,
     isLoading,
@@ -92,7 +75,6 @@ export function useEventDetail() {
     themeOutfits,
     themeAccessories,
     gearSections,
-    relatedEvents,
     navigate,
   };
 }

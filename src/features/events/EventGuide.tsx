@@ -19,7 +19,6 @@ export default function EventGuide() {
     themeOutfits,
     themeAccessories,
     gearSections,
-    relatedEvents,
     navigate,
   } = useEventDetail();
 
@@ -91,10 +90,10 @@ export default function EventGuide() {
                 />
               )}
 
-              {relatedEvents.length > 0 && (
+              {event.relatedEvents && event.relatedEvents.length > 0 && (
                 <RelatedEvents
                   id="related"
-                  events={relatedEvents}
+                  slugs={event.relatedEvents}
                 />
               )}
             </Stack>
