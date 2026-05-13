@@ -1,6 +1,6 @@
-import { Stack, Grid } from '@/layouts/Primitives';
+import { Stack, Grid, Text } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GearCard } from '@/components/ui/GearCard';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { ResolvedGearSection } from '../useEventDetail';
 
 interface CuratedGearProps {
@@ -17,22 +17,21 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
       <SectionHeader eyebrow="TOOLS" title={title} />
 
       {sections.map((section) => (
-        <Stack key={section.label} gap={8}>
-          <SectionHeader
-            title={section.label}
-            size="sm"
-          />
+        <Stack key={section.label} gap={6}>
+          <Text
+            as="h4"
+            variant="mono"
+            size="xs"
+            weight="font-bold"
+            color="dim"
+            uppercase
+            tracking="widest"
+          >
+            {section.label}
+          </Text>
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
             {section.items.map((item) => (
-              <GearCard
-                key={item.id}
-                slug={item.id}
-                title={item.name}
-                category={item.category}
-                excerpt={item.description}
-                basePath="/gear"
-                image="#" // Fallback image since affiliate links don't have images yet
-              />
+              <AffiliateCard key={item.id} link={item} />
             ))}
           </Grid>
         </Stack>
