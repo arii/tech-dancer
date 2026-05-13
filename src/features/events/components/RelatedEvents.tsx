@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Event } from '@/lib/content';
 import { Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -11,7 +10,6 @@ interface RelatedEventsProps {
 }
 
 export function RelatedEvents({ id, title = "Related Events", events }: RelatedEventsProps) {
-  const navigate = useNavigate();
   if (!events || events.length === 0) return null;
 
   return (
@@ -21,10 +19,10 @@ export function RelatedEvents({ id, title = "Related Events", events }: RelatedE
         {events.map((event) => (
           <EventCard
             key={event.slug}
-            name={event.title}
+            title={event.title}
+            slug={event.slug}
             location={event.location}
             schedule={event.schedule}
-            onClick={() => navigate(`/events/${event.slug}`)}
           />
         ))}
       </Grid>
