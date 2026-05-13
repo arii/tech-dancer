@@ -253,7 +253,7 @@ export function WCSScraperTool() {
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
             <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Scraper Console v4.2</Text>
-            <StatusBadge status="active" />
+            <StatusBadge label="active" />
           </Box>
           <Stack gap={2}>
             <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
@@ -267,9 +267,6 @@ export function WCSScraperTool() {
 
       {/* Harvesting & Impact Dashboard */}
       <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden">
-        <Box position="absolute" bottom={-20} right={-20} padding={8} opacity={0.02}>
-          <Icon icon={ShieldCheck} size="12xl" />
-        </Box>
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>
             <Stack gap={2}>
