@@ -11,18 +11,14 @@ interface SectionHeaderProps {
   };
 }
 
-export function SectionHeader({ eyebrow, title, size = 'lg', link }: SectionHeaderProps) {
-  const titleSize = size === 'sm' ? 'xl' : size === 'md' ? '2xl' : '3xl';
-
+export function SectionHeader({ eyebrow, title, link }: SectionHeaderProps) {
   return (
-    <Stack direction="row" align="end" justify="between" marginBottom={size === 'sm' ? 2 : 4}>
+    <Stack direction="row" align="end" justify="between" marginBottom={4}>
       <Stack direction="col" gap={1}>
-        {eyebrow && (
-          <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
-            {eyebrow}
-          </Text>
-        )}
-        <Text as="h3" size={titleSize} weight="font-black" color="brand">
+        <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
+          {eyebrow}
+        </Text>
+        <Text as="h3" size="3xl" weight="font-black" color="brand">
           {title}
         </Text>
       </Stack>

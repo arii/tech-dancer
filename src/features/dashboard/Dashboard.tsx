@@ -116,7 +116,7 @@ export default function Home() {
                 >
                   <EventCard
                     slug={event.slug}
-                    name={event.title}
+                    name={event.name}
                     location={event.location}
                     schedule={event.schedule}
                   />
