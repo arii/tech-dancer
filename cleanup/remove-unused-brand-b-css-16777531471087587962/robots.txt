@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/cleanup/remove-unused-brand-b-css-16777531471087587962/sitemap.xml
