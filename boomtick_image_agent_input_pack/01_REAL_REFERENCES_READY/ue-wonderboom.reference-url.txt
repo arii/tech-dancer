@@ -1,0 +1,5 @@
+ITEM ID: ue-wonderboom
+STATUS: direct image verified
+DIRECT IMAGE URL: https://resource.ultimateears.com/w_1440%2Ch_810%2Car_16%3A9%2Cc_fill%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/logitech/en/products/speakers/bluetooth-speakers/wonderboom-4/wonderboom4-intro-image.jpg
+SOURCE PAGE: https://www.ultimateears.com/en-us/shop/p/wonderboom-4.984-001879
+NOTES: Official Ultimate Ears Wonderboom 4 product/hero image; verified by opening image URL.

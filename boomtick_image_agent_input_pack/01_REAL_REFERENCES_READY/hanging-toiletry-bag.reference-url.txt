@@ -1,0 +1,5 @@
+ITEM ID: hanging-toiletry-bag
+STATUS: direct image URL discovered, not downloaded
+DIRECT IMAGE URL: https://relavelbag.com/cdn/shop/products/Relavel-Travel-Hanging-Toiletry-Bag-Black-01_600x.jpg?v=1690450210
+SOURCE PAGE: https://relavelbag.com/products/relavel-travel-hanging-toiletry-bag-black
+NOTES: Real Relavel product image URL exposed by product page. Browser returned image URL through click; cache fetch failed in the tool but URL is direct CDN image.

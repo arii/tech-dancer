@@ -1,0 +1,10 @@
+ITEM ID: liquid-iv
+STATUS: real source page collected, direct image still needed
+SOURCE PAGE: https://www.liquid-iv.com/products/tropical-punch-hydration-multiplier
+DIRECT IMAGE URL: 
+NOTES: Official Liquid I.V. product page.
+
+ACTION REQUIRED:
+1. Open the source page or search the exact affiliate/product name.
+2. Save a real product image as 01_REAL_REFERENCES_READY/{item_id}.jpg.
+3. Do not generate the sketch until the real reference image is saved.

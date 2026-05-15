@@ -1,0 +1,5 @@
+ITEM ID: loop-quiet
+STATUS: direct image verified
+DIRECT IMAGE URL: https://us.loopearplugs.com/cdn/shop/files/PDP_QUIET_WHITE_01_5c4f02a0-c049-4e88-893e-68c9ef020d54.png?v=1725885762&width=1946
+SOURCE PAGE: https://us.loopearplugs.com/products/quiet
+NOTES: Official Loop Quiet 2 product image; verified by opening image URL.

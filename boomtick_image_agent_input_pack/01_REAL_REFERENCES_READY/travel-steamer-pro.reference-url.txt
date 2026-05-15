@@ -1,0 +1,5 @@
+ITEM ID: travel-steamer-pro
+STATUS: approved local image provided
+DIRECT IMAGE URL: local:/mnt/data/travel-steamer.jpg
+SOURCE PAGE: 
+NOTES: User-supplied approved sketch reference. Need exact real product photo if this is different from Dupray Voilà.
