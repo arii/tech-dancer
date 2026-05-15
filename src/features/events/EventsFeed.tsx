@@ -3,6 +3,8 @@ import { useEvents } from './useEvents';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
+import { EventCard } from '@/components/ui/EventCard';
+import { Event } from '@/lib/content';
 
 export default function EventsFeed() {
   const { events, categories, view, setView } = useEvents();
@@ -22,6 +24,17 @@ export default function EventsFeed() {
         basePath="/events"
         view={view}
         onViewChange={setView}
+        renderItem={(item) => {
+          const event = item as Event;
+          return (
+            <EventCard
+              title={event.title}
+              slug={event.slug}
+              location={event.location}
+              schedule={event.schedule}
+            />
+          );
+        }}
       >
         <Box marginTop={8}>
           <FilterBar

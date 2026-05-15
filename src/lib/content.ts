@@ -12,18 +12,22 @@ import { ASSET_PREFIX } from '@/config/constants';
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
-  if (!match) return { data: {}, content };
+  if (!match) return { data: Object.create(null), content };
 
   const yamlStr = match[1];
   const body = match[2];
 
   try {
     const data = parse(yamlStr);
-    return { data: data || {}, content: body };
+    // Convert to null-prototype object for safety
+    const safeData = Object.create(null);
+    if (data && typeof data === 'object') {
+      Object.assign(safeData, data);
+    }
+    return { data: safeData, content: body };
   } catch (e) {
     console.error('Error parsing frontmatter:', e);
-    return { data: {}, content: body };
-
+    return { data: Object.create(null), content: body };
   }
 }
 
