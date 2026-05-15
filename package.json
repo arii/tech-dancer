@@ -25,6 +25,7 @@
     "knip": "knip",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
+    "audit:inventory": "node scripts/check-suppression-inventory.mjs",
     "review:ux:prep": "pnpm run setup:playwright && pnpm run audit",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
@@ -62,7 +63,6 @@
     "unist-util-visit": "^5.1.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
-    "yaml": "^2.9.0",
     "zod": "^3.23.8",
     "zustand": "^5.0.12"
   },

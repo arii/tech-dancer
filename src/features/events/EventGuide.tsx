@@ -79,9 +79,7 @@ export default function EventGuide() {
                 <ThemeSpotlight
                   id="theme"
                   title={event.theme.name}
-                  label={event.theme.label}
                   description={event.theme.description || ''}
-                  colors={event.theme.colors}
                   outfits={themeOutfits}
                   accessories={themeAccessories}
                 />
