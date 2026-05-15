@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Event } from '@/lib/content';
 import { Stack, Grid, Box } from '@/layouts/Primitives';
@@ -13,7 +12,6 @@ interface RelatedEventsProps {
 }
 
 export function RelatedEvents({ id, title = "Related Events", events }: RelatedEventsProps) {
-  const navigate = useNavigate();
   if (!events || events.length === 0) return null;
 
   return (
@@ -37,10 +35,10 @@ export function RelatedEvents({ id, title = "Related Events", events }: RelatedE
               height="full"
             >
               <EventCard
-                name={event.title || "Untitled Event"}
+                title={event.title || "Untitled Event"}
+                slug={event.slug}
                 location={event.location || event.city || "Location TBA"}
                 schedule={event.schedule || "Date TBA"}
-                onClick={() => navigate(`/events/${event.slug}`)}
               />
             </Box>
           ))}
