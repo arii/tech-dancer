@@ -1,31 +1,44 @@
 import { Event } from '@/lib/content';
+import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 /**
- * Generates Schema.org structured data for an event.
+ * Generates JSON-LD structured data for an Event.
+ * Maps Event content to schema.org/Event format.
  */
 export function getEventSchema(event: Event) {
-  const [city, state] = (event.city || '').split(',').map(s => s.trim());
+  const eventUrl = `${BASE_URL}/events/${event.slug}`;
+
+  // event.heroImage already contains ASSET_PREFIX if it was a relative path
+  const imageUrl = event.heroImage
+    ? (event.heroImage.startsWith('http') ? event.heroImage : `${BASE_URL}${event.heroImage}`)
+    : undefined;
+
+  // Split city and state (e.g., "Burlingame, CA")
+  const [locality, region] = event.city.split(',').map(s => s.trim());
 
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Event',
-    name: event.title,
-    description: event.description || event.excerpt,
-    startDate: event.startDate || event.date,
-    location: {
-      '@type': 'Place',
-      name: event.location,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: city,
-        addressRegion: state,
-      },
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": event.title,
+    "description": event.description || event.excerpt,
+    "image": imageUrl,
+    "startDate": event.startDate || event.date,
+    "url": eventUrl,
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": event.location,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": locality,
+        "addressRegion": region,
+      }
     },
-    url: event.url || event.link,
-    organizer: {
-      '@type': 'Organization',
-      name: 'BoomTick.blog',
-    },
-    image: event.heroImage,
+    "organizer": {
+      "@type": "Organization",
+      "name": SITE_NAME,
+      "url": BASE_URL
+    }
   };
 }

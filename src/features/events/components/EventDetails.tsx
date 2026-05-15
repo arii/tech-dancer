@@ -1,5 +1,6 @@
 import { MapPin, Calendar, Clock, ExternalLink } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Event } from '@/lib/content';
 import { SECTION_SPACING } from '../constants';
 
@@ -13,9 +14,9 @@ export function EventDetails({ event }: EventDetailsProps) {
       <Box id="overview" as="section">
         <Stack gap={8}>
           <Text variant="headline" size="3xl" weight="font-black">Event Overview</Text>
-          <Text variant="body" size="lg" color="dim" leading="relaxed">
-            {event.description || event.excerpt}
-          </Text>
+          <Box className="prose prose-invert max-w-none">
+            <MarkdownRenderer content={event.content} />
+          </Box>
           {event.link && (
             <Box
               as="a"
@@ -60,7 +61,7 @@ export function EventDetails({ event }: EventDetailsProps) {
         </Stack>
       </Box>
 
-      <Box id="travel" as="section">
+      <Box id="location" as="section">
         <Stack gap={8}>
           <Text variant="headline" size="3xl" weight="font-black">Location & Venue</Text>
           <Box border radius="lg" padding={8} surface="surface">

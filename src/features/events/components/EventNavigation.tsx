@@ -1,12 +1,7 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
-interface EventNavigationProps {
-  activeTab?: string;
-  onTabClick?: (id: string) => void;
-}
-
-export function EventNavigation({ activeTab, onTabClick }: EventNavigationProps) {
+export function EventNavigation() {
   return (
     <Box
       position="sticky"
@@ -22,54 +17,43 @@ export function EventNavigation({ activeTab, onTabClick }: EventNavigationProps)
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}
         >
-          {EVENT_TABS.map(tab => {
-            const isActive = activeTab === tab.id;
-            return (
+          {EVENT_TABS.map(tab => (
+            <Box
+              key={tab.id}
+              as="a"
+              href={`#${tab.id}`}
+              paddingY={4}
+              shrink={false}
+              className="group relative cursor-pointer"
+            >
               <Box
-                key={tab.id}
-                as="a"
-                href={`#${tab.id}`}
-                onClick={(e) => {
-                  if (onTabClick) {
-                    e.preventDefault();
-                    onTabClick(tab.id);
-                  }
-                }}
-                paddingY={4}
-                shrink={false}
-                className="group relative cursor-pointer"
+                display="flex"
+                align="center"
+                gap={2}
+                color="dim"
+                className="group-hover:text-accent transition-colors whitespace-nowrap"
               >
-                <Box
-                  display="flex"
-                  align="center"
-                  gap={2}
-                  color={isActive ? "main" : "dim"}
-                  className="group-hover:text-accent transition-colors whitespace-nowrap"
+                <tab.icon size={14} />
+                <Text
+                  variant="mono"
+                  size="xs"
+                  weight="font-bold"
+                  uppercase
+                  tracking="widest"
                 >
-                  <tab.icon size={14} className={isActive ? "text-accent" : ""} />
-                  <Text
-                    variant="mono"
-                    size="xs"
-                    weight="font-bold"
-                    uppercase
-                    tracking="widest"
-                  >
-                    {tab.label}
-                  </Text>
-                </Box>
-                <Box
-                  position="absolute"
-                  bottom={0}
-                  left={0}
-                  right={0}
-                  height={0.5}
-                  className={`bg-accent transition-transform origin-left ${
-                    isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                  }`}
-                />
+                  {tab.label}
+                </Text>
               </Box>
-            );
-          })}
+              <Box
+                position="absolute"
+                bottom={0}
+                left={0}
+                right={0}
+                height={0.5}
+                className="bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+              />
+            </Box>
+          ))}
         </Box>
       </Box>
     </Box>

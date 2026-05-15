@@ -1,7 +1,5 @@
-import { useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 
 import { EventHero } from './components/EventHero';
 import { EventDetails } from './components/EventDetails';
@@ -9,11 +7,9 @@ import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
 import { RelatedEvents } from './components/RelatedEvents';
-import { ReminderSignups } from './components/ReminderSignups';
 import { useEventDetail } from './useEventDetail';
-import { SECTION_SPACING, EVENT_TABS } from './constants';
+import { SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
-import { useScrollSpy } from '@/hooks/useScrollSpy';
 
 export default function EventGuide() {
   const {
@@ -27,11 +23,6 @@ export default function EventGuide() {
     relatedEvents,
     navigate,
   } = useEventDetail();
-
-  const sectionIds = useMemo(() => ['overview', ...EVENT_TABS.map(t => t.id)], []);
-  const { activeTab, scrollToSection } = useScrollSpy({ sectionIds });
-
-  const structuredData = useMemo(() => event ? getEventSchema(event) : null, [event]);
 
   if (isLoading) {
     return (
@@ -66,7 +57,7 @@ export default function EventGuide() {
       <SEO
         title={`${event.title} | Event Guide`}
         description={event.excerpt}
-        schema={structuredData || undefined}
+        jsonLd={getEventSchema(event)}
       />
 
       <EventHero
@@ -76,8 +67,6 @@ export default function EventGuide() {
         eyebrow={event.category}
         image={event.heroImage}
         whyAttending={event.whyAttending}
-        activeTab={activeTab}
-        onTabChange={scrollToSection}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
@@ -90,7 +79,9 @@ export default function EventGuide() {
                 <ThemeSpotlight
                   id="theme"
                   title={event.theme.name}
+                  label={event.theme.label}
                   description={event.theme.description || ''}
+                  colors={event.theme.colors}
                   outfits={themeOutfits}
                   accessories={themeAccessories}
                 />
@@ -102,24 +93,6 @@ export default function EventGuide() {
                   title={`Gear for ${event.title}`}
                   sections={gearSections}
                 />
-              )}
-
-              {(event.earlyBirdDate || event.hotelCutoffDate) && (
-                <ReminderSignups
-                  id="reminders"
-                  event={event}
-                />
-              )}
-
-              {event.content?.trim() && (
-                <Box id="notes" as="section">
-                   <Stack gap={8}>
-                    <Text variant="headline" size="3xl" weight="font-black">Event Notes</Text>
-                    <Box className="prose prose-invert max-w-none">
-                      <MarkdownRenderer content={event.content} />
-                    </Box>
-                  </Stack>
-                </Box>
               )}
 
               {relatedEvents.length > 0 && (
