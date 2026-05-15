@@ -90,7 +90,7 @@ class GitHubClient:
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
-            return self._request('GET', f'/repos/{self.repo}/check-runs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
         except Exception as e:
             return f"Failed to fetch logs for check run {check_run_id}: {str(e)}"
 
