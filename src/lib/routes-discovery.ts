@@ -13,22 +13,29 @@ import { RESEARCH_TOOLS } from '../config/research-tools.ts';
  */
 export function getAllRoutes() {
   // 1. Static routes from configuration (excluding parameterized and catch-all)
+  // Use canonicalPath if available, and filter out routes marked as sitemap: false
   const staticRoutes = routes
-    .map(r => r.path)
-    .filter(path => path !== '*' && !path.includes(':'));
+    .filter(r => r.sitemap !== false && r.path !== '*' && !r.path.includes(':'))
+    .map(r => r.canonicalPath || r.path);
 
   // 2. Dynamic research tool routes
-  const toolRoutes = RESEARCH_TOOLS.map(tool => `/research/${tool.id}`);
+  // Use canonicalPath if available to avoid duplicates (e.g. /ux-auditor vs /research/ux-auditor)
+  const toolRoutes = RESEARCH_TOOLS.map(tool => tool.canonicalPath || `/research/${tool.id}`);
 
   // 3. Dynamic content routes discovered from file system
   const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
     getContentSlugs(dir, prefix)
   );
 
+  const allRoutes = [...staticRoutes, ...toolRoutes, ...contentRoutes];
+
+  // Deduplicate routes to ensure each path is only listed once
+  const uniqueRoutes = Array.from(new Set(allRoutes));
+
   return {
     static: staticRoutes,
     tools: toolRoutes,
     content: contentRoutes,
-    all: [...staticRoutes, ...toolRoutes, ...contentRoutes]
+    all: uniqueRoutes
   };
 }

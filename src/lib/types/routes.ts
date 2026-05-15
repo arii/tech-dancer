@@ -9,4 +9,6 @@ export interface RouteConfig extends Omit<RouteObject, 'children'> {
   description?: string;
   children?: RouteConfig[];
   skeleton?: SkeletonVariant;
+  sitemap?: boolean;
+  canonicalPath?: string;
 }

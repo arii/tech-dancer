@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -24,6 +24,13 @@ export default function ResearchDetail() {
   const { id: paramId } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
+  useEffect(() => {
+    if (paramId === 'ux-auditor') {
+      navigate('/ux-auditor', { replace: true });
+    }
+  }, [paramId, navigate]);
   const { getTool, getStudy } = useResearch();
 
   const id = useMemo(() => {
