@@ -12,7 +12,7 @@ import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents, handleNavigate } = useHome();
+  const { recentPosts, upcomingEvents } = useHome();
 
   return (
     <Box as="section">
@@ -114,10 +114,7 @@ export default function Home() {
                   variants={motionTokens.staggerItem}
                   className="h-full"
                 >
-                  <EventCard
-                    {...event}
-                    onClick={() => handleNavigate(`/events/${event.slug}`)}
-                  />
+                  <EventCard {...event} />
                 </Box>
               ))}
             </Grid>
