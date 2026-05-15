@@ -31,6 +31,7 @@ export function ThemeSpotlight({
   return (
     <Box
       id={id}
+      data-testid="theme"
       border
       radius="xl"
       overflow="hidden"

@@ -15,7 +15,7 @@ export function RelatedEvents({ id, title = "Related Events", events }: RelatedE
   if (!events || events.length === 0) return null;
 
   return (
-    <Box as="section" id={id}>
+    <Box id={id} as="section" data-testid="related">
       <Stack gap={8}>
         <SectionHeader eyebrow="EXPLORE" title={title} />
         <Grid
