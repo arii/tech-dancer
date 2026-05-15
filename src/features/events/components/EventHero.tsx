@@ -14,6 +14,8 @@ interface EventHeroProps {
   image?: string;
   eyebrow?: string;
   whyAttending?: string;
+  activeTab?: string;
+  onTabChange?: (id: string) => void;
 }
 
 export function EventHero({
@@ -22,7 +24,9 @@ export function EventHero({
   date,
   image,
   eyebrow = "Event Guide",
-  whyAttending
+  whyAttending,
+  activeTab,
+  onTabChange
 }: EventHeroProps) {
   const accentGradient = useMemo(() => ({
     background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
@@ -159,7 +163,7 @@ export function EventHero({
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
+        <EventNavigation activeTab={activeTab} onTabClick={onTabChange} />
       </Box>
     </Box>
   );
