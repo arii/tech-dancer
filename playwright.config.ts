@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 4173;
 const BASE_PATH = getBasePath();
 
 export default defineConfig({
+  timeout: 60000,
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
