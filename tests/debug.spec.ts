@@ -9,9 +9,9 @@ test('check for console errors on /events', async ({ page }) => {
     errors.push(err.message);
   });
 
-  const baseUrl = process.env.BASE_URL || 'http://localhost:4173/';
-  const url = new URL('events', baseUrl).toString();
-  await page.goto(url);
+  // The playwright config sets baseURL correctly using VITE_BASE_PATH
+  // We can just use relative navigation which will automatically append to baseURL
+  await page.goto('./events');
   // Wait a bit for the app to load
   await page.waitForTimeout(2000);
 
