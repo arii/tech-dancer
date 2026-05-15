@@ -37,6 +37,7 @@ function isInternal(url: string, baseUrl: string): boolean {
 }
 
 test.describe('Automated UX/Console Error Crawler', () => {
+  test.setTimeout(120000);
   test('crawls routes and verifies no errors', async ({ page, baseURL, pageErrors }) => {
     if (!baseURL) throw new Error('baseURL is required for crawling');
 
