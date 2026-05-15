@@ -76,4 +76,16 @@ describe('timeline-engine', () => {
     expect(cancelSafety?.date.getMonth()).toBe(1); // February
     expect(cancelSafety?.date.getDate()).toBe(29);
   });
+
+  it('should include registration deadline if provided', () => {
+    const eventWithReg: EventAnchors = {
+      ...mockEvent,
+      registrationDeadline: '2024-05-25T00:00:00Z',
+    };
+    const timeline = calculateTimeline(eventWithReg);
+    expect(timeline).toHaveLength(6);
+
+    const regDeadline = timeline.find(item => item.id === 'reg-deadline');
+    expect(regDeadline?.date.toISOString()).toBe(new Date(eventWithReg.registrationDeadline!).toISOString());
+  });
 });

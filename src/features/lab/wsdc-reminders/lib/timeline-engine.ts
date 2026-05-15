@@ -5,6 +5,7 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
   const start = parseDate(event.startDate);
   const early = parseDate(event.earlyBirdDate);
   const hotel = parseDate(event.hotelCutoffDate);
+  const registration = event.registrationDeadline ? parseDate(event.registrationDeadline) : null;
 
   // Use a 2-day buffer for Early Bird as per the guide
   const earlyBuffer = addDays(early, -2);
@@ -41,6 +42,15 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       description: "Execute final 'Go/No-Go' decision. Cancel or transfer hotel rooms to avoid penalties.",
     }
   ];
+
+  if (registration) {
+    timeline.push({
+      id: 'reg-deadline',
+      date: registration,
+      label: "Registration Deadline",
+      description: `Final window to register for ${event.title}. Online registration typically closes after this date.`,
+    });
+  }
 
   return timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
 };

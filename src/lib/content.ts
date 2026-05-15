@@ -4,26 +4,132 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
 
+const BANNED_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
 /**
- * Lightweight browser-safe frontmatter parser using a vetted library.
+ * Lightweight browser-safe frontmatter parser.
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
   if (!match) return { data: {}, content };
 
-  const yamlStr = match[1];
+  const yaml = match[1];
   const body = match[2];
+  const data: Record<string, unknown> = {};
 
-  try {
-    const data = parse(yamlStr);
-    return { data: data || {}, content: body };
-  } catch (e) {
-    console.error('Error parsing frontmatter:', e);
-    return { data: {}, content: body };
+  let currentRoot = data as Record<string, unknown>;
+  let lastKey = '';
+  let lastIndent = -1;
+  const stack: { key: string; obj: Record<string, unknown>; indent: number }[] = [];
+
+  const lines = yaml.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const indent = line.search(/\S/);
+
+    if (trimmed.startsWith('- ')) {
+      if (lastKey && !BANNED_KEYS.has(lastKey)) {
+        if (!Array.isArray(currentRoot[lastKey])) {
+          currentRoot[lastKey] = [];
+        }
+        let val = trimmed.slice(2).trim();
+        if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+        else if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+        currentRoot[lastKey].push(val);
+      }
+    } else {
+      const colonIdx = line.indexOf(':');
+      if (colonIdx !== -1) {
+        const key = line.slice(0, colonIdx).trim();
+        let value = line.slice(colonIdx + 1).trim();
+
+        if (BANNED_KEYS.has(key)) continue;
+
+        if (indent > lastIndent) {
+          if (lastKey && !BANNED_KEYS.has(lastKey)) {
+            stack.push({ key: lastKey, obj: currentRoot, indent: lastIndent });
+            if (
+              !currentRoot[lastKey] ||
+              typeof currentRoot[lastKey] !== 'object' ||
+              Array.isArray(currentRoot[lastKey])
+            ) {
+              currentRoot[lastKey] = {};
+            }
+            currentRoot = currentRoot[lastKey];
+          }
+        } else if (indent < lastIndent) {
+          while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
+            const popped = stack.pop()!;
+            currentRoot = popped.obj;
+          }
+        }
+
+        if (value === '>' || value === '|') {
+          const isFolded = value === '>';
+          const scalarLines: string[] = [];
+          let j = i + 1;
+          while (j < lines.length) {
+            const nextLine = lines[j];
+            if (nextLine.trim() === '') {
+              scalarLines.push('');
+              j++;
+              continue;
+            }
+            const nextIndent = nextLine.search(/\S/);
+            if (nextIndent > indent) {
+              scalarLines.push(nextLine.slice(nextIndent));
+              j++;
+            } else {
+              break;
+            }
+          }
+          i = j - 1;
+          if (isFolded) {
+            // Folded: newlines are spaces, unless it's a blank line
+            value = scalarLines
+              .join('\n')
+              .replace(/([^\n])\n([^\n])/g, ' ')
+              .trim();
+          } else {
+            value = scalarLines.join('\n').trim();
+          }
+          currentRoot[key] = value;
+        } else if (value.startsWith('[') && value.endsWith(']')) {
+          const inner = value.slice(1, -1).trim();
+          currentRoot[key] = inner
+            ? inner.split(',').map(v => {
+                let item = v.trim();
+                if (item.startsWith('"') && item.endsWith('"'))
+                  item = item.slice(1, -1);
+                else if (item.startsWith("'") && item.endsWith("'"))
+                  item = item.slice(1, -1);
+                return item;
+              })
+            : [];
+        } else if (value) {
+          if (value.startsWith('"') && value.endsWith('"'))
+            value = value.slice(1, -1);
+          else if (value.startsWith("'") && value.endsWith("'"))
+            value = value.slice(1, -1);
+
+          if (['rating', 'durability', 'value'].includes(key))
+            currentRoot[key] = parseFloat(value);
+          else currentRoot[key] = value;
+        } else {
+          currentRoot[key] = undefined;
+        }
+
+        lastKey = key;
+        lastIndent = indent;
+      }
+    }
   }
+
+  return { data, content: body };
 }
 
 export interface Post {

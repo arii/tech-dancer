@@ -75,6 +75,19 @@ export function CustomEventForm({ customEvent, onChange }: CustomEventFormProps)
             className="w-full rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
           />
         </Stack>
+        <Stack gap={2}>
+          <Text size="xs" weight="font-bold" color="dim" uppercase tracking="widest">Registration Deadline (Optional)</Text>
+          <Box as="input"
+            type="date"
+            name="registrationDeadline"
+            value={customEvent.registrationDeadline || ''}
+            onChange={onChange}
+            paddingX={4}
+            height={11}
+            minHeight={11}
+            className="w-full rounded-md border border-line bg-surface text-sm focus:border-accent outline-none"
+          />
+        </Stack>
       </Grid>
     </Box>
   );
