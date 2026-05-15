@@ -17,8 +17,8 @@ class GitHubClient:
 
     def _detect_repo(self) -> str:
         try:
-            res = self.run_authenticated_gh(['config', '--get', 'remote.origin.url'])
-            url = res.strip()
+            proc = subprocess.run(['git', 'config', '--get', 'remote.origin.url'], capture_output=True, text=True)
+            url = proc.stdout.strip()
             import re
             match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
             return match.group(1) if match else url
@@ -74,25 +74,32 @@ class GitHubClient:
 
     def fetch_check_runs(self, ref: str) -> List[Dict[str, Any]]:
         try:
-            data = self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-runs')
+            res = self.run_authenticated_gh(['api', f'/repos/{self.repo}/commits/{ref}/check-runs'])
+            data = json.loads(res)
             return [{
                 'id': run.get('id'),
                 'name': run.get('name'),
                 'status': run.get('status'),
                 'conclusion': run.get('conclusion'),
-                'url': run.get('html_url')
+                'url': run.get('html_url'),
+                'external_id': run.get('external_id')
             } for run in data.get('check_runs', [])]
-        except:
+        except Exception:
             return []
 
-    def fetch_check_run_logs(self, check_run_id: int) -> str:
-        """Fetches logs for a specific check run."""
+    def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
+        """Fetches logs for a specific check run, using external_id (job_id) if available."""
         try:
-            # GitHub API returns a 302 redirect to a URL that expires after a few minutes
-            # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
-            return self._request('GET', f'/repos/{self.repo}/check-runs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+            # If it's a GitHub Action, the external_id is the job ID.
+            job_id = external_id
+            if not job_id:
+                # Fallback: try to find the job ID from the check run if possible
+                # But usually external_id is what we want.
+                return f"Cannot fetch logs without job ID (external_id) for check run {check_run_id}"
+
+            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True)
         except Exception as e:
-            return f"Failed to fetch logs for check run {check_run_id}: {str(e)}"
+            return f"Failed to fetch logs for job {external_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})
@@ -107,5 +114,11 @@ class GitHubClient:
 
     def download_zipball(self, ref: str, dest: str = "repo.zip") -> None:
         """A stateless download helper for the Orchestrator"""
-        self.run_authenticated_gh(["api", f"/repos/{self.repo}/zipball/{ref}", ">", dest])
+        url = f"{self.base_url}/repos/{self.repo}/zipball/{ref}"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        response = requests.get(url, headers=headers, stream=True)
+        response.raise_for_status()
+        with open(dest, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
         subprocess.run(["unzip", "-o", dest], check=True)

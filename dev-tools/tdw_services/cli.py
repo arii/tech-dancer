@@ -305,10 +305,11 @@ def fix_ci(ctx, pr_number, branch, api_key, dry_run):
 @jules.command()
 @click.option('--log')
 @click.option('--file')
+@click.option('--pr', type=int)
 @click.pass_context
-def repair_context(ctx, log, file):
+def repair_context(ctx, log, file, pr):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.repair_context(log=log, log_file=file)
+    res = orch.repair_context(log=log, log_file=file, pr_number=pr)
     out(ctx, f"Generated {len(res)} prompts.", data={"prompts": res})
 
 @jules.command()
