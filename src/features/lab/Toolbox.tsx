@@ -12,6 +12,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
+import { FilterButton } from './components/FilterButton';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
@@ -44,31 +45,20 @@ export default function Toolbox() {
         </Box>
 
         <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
-          <button
-            type="button"
+          <FilterButton
+            label="All Gear"
             onClick={() => setSelectedPill('all')}
-            className={cn(
-              "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
-              "text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors",
-              selectedPill === 'all' && "ring-2 ring-offset-2 ring-offset-bg ring-current"
-            )}
-          >
-            All Gear
-          </button>
+            isActive={selectedPill === 'all'}
+            className="text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors"
+          />
           {GEAR_PILLS.map((pill) => (
-            <button
-              type="button"
+            <FilterButton
               key={pill.label}
+              label={pill.label}
               onClick={() => setSelectedPill(pill.value)}
-              className={cn(
-                "inline-flex items-center rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-emphasized cursor-pointer min-h-11",
-                pill.color,
-                "hover:opacity-90 transition-opacity",
-                selectedPill === pill.value && "ring-2 ring-offset-2 ring-offset-bg ring-current"
-              )}
-            >
-              {pill.label}
-            </button>
+              isActive={selectedPill === pill.value}
+              className={cn(pill.color, "hover:opacity-90 transition-opacity")}
+            />
           ))}
         </Box>
       </Box>
