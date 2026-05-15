@@ -1,19 +1,18 @@
 import { MapPin } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface EventCardProps {
-  name: string;
+  title: string;
+  slug: string;
   location: string;
   schedule: string;
-  onClick?: () => void;
 }
 
-export function EventCard({ name, location, schedule, onClick }: EventCardProps) {
+export function EventCard({ title, slug, location, schedule }: EventCardProps) {
   return (
     <Stack
-      as={onClick ? "button" : "div"}
-      type={onClick ? "button" : undefined}
-      onClick={onClick}
+      as="article"
       padding={8}
       radius="md"
       border
@@ -21,9 +20,13 @@ export function EventCard({ name, location, schedule, onClick }: EventCardProps)
       height="full"
       width="full"
       textAlign="left"
-      cursor={onClick ? "pointer" : "default"}
-      className="bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
+      <NavLink
+        to={`/events/${slug}`}
+        className="absolute inset-0 z-10"
+        aria-label={`View event: ${title}`}
+      />
       <Box display="flex" align="center" gap={2}>
         <MapPin className="w-4 h-4 text-accent" />
         <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
@@ -32,8 +35,15 @@ export function EventCard({ name, location, schedule, onClick }: EventCardProps)
       </Box>
 
       <Stack gap={1}>
-        <Text variant="body" size="lg" weight="font-bold" color="main" leading="tight">
-          {name}
+        <Text
+          variant="body"
+          size="lg"
+          weight="font-bold"
+          color="main"
+          leading="tight"
+          className="group-hover:text-accent transition-colors"
+        >
+          {title}
         </Text>
         <Text size="sm" color="dim">
           {location}

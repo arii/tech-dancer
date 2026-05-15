@@ -26,7 +26,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
     <Box border surface="default">
       <Box padding="compact" borderBottom display="flex" justify="between" align="center">
         <Text variant="mono" size="xs" weight="font-bold" uppercase>Live Dataset</Text>
-        <Text variant="mono" size="micro" color="dim">{data.length} RECORDS FOUND</Text>
+        <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
       </Box>
       <Box className="overflow-x-auto">
         <table className="w-full border-collapse">
@@ -35,9 +35,9 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
               <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Date</Text>
               <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Competitor</Text>
               <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Event</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Location</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal" className="hidden md:table-cell">Location</Text>
               <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Score</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Status</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal" className="hidden sm:table-cell">Status</Text>
             </tr>
           </thead>
           <tbody>
@@ -64,9 +64,9 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
                     {record.event_title}
                   </Text>
                 </Box>
-                <Text as="td" padding={4} size="xs" color="dim">{record.location}</Text>
+                <Text as="td" padding={4} size="xs" color="dim" className="hidden md:table-cell">{record.location}</Text>
                 <Text as="td" padding={4} variant="mono" size="xs">{record.Registry_Points_Sum.toFixed(1)}</Text>
-                <Box as="td" padding={4}>
+                <Box as="td" padding={4} className="hidden sm:table-cell">
                   <Text
                     as="div"
                     display="inline-block"

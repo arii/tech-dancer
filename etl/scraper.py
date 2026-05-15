@@ -66,13 +66,14 @@ class ScoringDanceCrawler:
                     location = self._extract_location_near_element(link)
 
                     # Check if we should stop because we've hit known territory
+                    # For historical backfill, we continue discovery but skip processing known URLs
                     if stop_set and event_url in stop_set:
-                        logging.info(f"Reached known event URL: {event_url}. Stopping discovery.")
-                        return
+                        logging.debug(f"Skipping known event URL: {event_url}")
+                        continue
                     
                     if legacy_stop_set and (event_title, event_date_str) in legacy_stop_set:
-                        logging.info(f"Reached known legacy event: {event_title} ({event_date_str}). Stopping discovery.")
-                        return
+                        logging.debug(f"Skipping known legacy event: {event_title}")
+                        continue
 
                     if event_date_str:
                         try:
@@ -286,45 +287,6 @@ class OutputManager:
         final_ledger.to_parquet(self.ledger_path, index=False)
         logging.info(f"Updated ledger: {self.ledger_path}")
 
-    def generate_study_report(self, new_data_df):
-        """Generates a markdown study report for a processed batch."""
-        if new_data_df.empty: return
-        
-        batch_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filepath = os.path.join(self.studies_dir, f"batch_report_{batch_id}.md")
-        
-        event_count = new_data_df['event_title'].nunique()
-        dancer_count = new_data_df['Dancer_ID'].nunique()
-        top_events = new_data_df['event_title'].value_counts().head(5).to_dict()
-        
-        report = f"""---
-title: "Scraper Batch Report: {batch_id}"
-date: "{datetime.now().strftime('%Y-%m-%d')}"
-category: "Automated Data Audit"
-excerpt: "Batch processing complete for {event_count} events involving {dancer_count} unique competitors."
----
-
-# Automated Batch Audit
-
-The ETL pipeline has successfully synchronized a new batch of West Coast Swing competition data.
-
-## Batch Statistics
-- **Total Events Processed**: {event_count}
-- **Unique Competitors Indexed**: {dancer_count}
-- **New Records Added**: {len(new_data_df)}
-
-## Event Geographic Coverage
-Top events in this batch:
-"""
-        for event, count in top_events.items():
-            report += f"- **{event}**: {count} records\n"
-
-        report += "\n## Data Integrity Check\n- Schema Validation: PASSED\n- Deduplication: ACTIVE\n"
-        
-        with open(filepath, "w") as f:
-            f.write(report)
-        logging.info(f"Generated study report: {filepath}")
-
 class ETLPipeline:
     """Orchestrates the scraping and processing flow."""
     def __init__(self, crawler, parser, output_manager, queue_path=None):
@@ -419,15 +381,17 @@ class ETLPipeline:
             new_queue = []
             seen_urls = set()
             for item in discovered:
-                url = item[0] if isinstance(item, (tuple, list)) else item
+                url = item[0] if isinstance(item, (tuple, list)) else (item["url"] if isinstance(item, dict) else item)
                 if url not in seen_urls:
-                    new_queue.append(item)
+                    loc = item[1] if isinstance(item, (tuple, list)) else (item["loc"] if isinstance(item, dict) else "Unknown")
+                    new_queue.append([url, loc])
                     seen_urls.add(url)
             
             for item in self.event_queue:
-                url = item[0] if isinstance(item, (tuple, list)) else item
+                url = item[0] if isinstance(item, (tuple, list)) else (item["url"] if isinstance(item, dict) else item)
                 if url not in seen_urls:
-                    new_queue.append(item)
+                    loc = item[1] if isinstance(item, (tuple, list)) else (item["loc"] if isinstance(item, dict) else "Unknown")
+                    new_queue.append([url, loc])
                     seen_urls.add(url)
             
             self.event_queue = new_queue
@@ -444,7 +408,6 @@ class ETLPipeline:
             context = await browser.new_context(user_agent=USER_AGENT)
 
             processed_count = 0
-            batch_new_records = []
             # Work on a copy of the queue for iteration
             queue_to_process = list(self.event_queue)
             
@@ -453,8 +416,8 @@ class ETLPipeline:
                     logging.info(f"Reached batch limit of {limit}. Stopping.")
                     break
                 
-                event_url = item[0] if isinstance(item, (tuple, list)) else item
-                location = item[1] if isinstance(item, (tuple, list)) else "Unknown"
+                event_url = item[0] if isinstance(item, (tuple, list)) else (item["url"] if isinstance(item, dict) else item)
+                location = item[1] if isinstance(item, (tuple, list)) else (item["loc"] if isinstance(item, dict) else "Unknown")
 
                 try:
                     # Discover specific results pages for this event
@@ -474,7 +437,6 @@ class ETLPipeline:
                             raw_df = self.parser.parse_results(content, res_url, event_url=event_url, location=location)
                             ledger_df = process_for_ledger(raw_df)
                             self.output_manager.update_ledger(ledger_df)
-                            batch_new_records.append(ledger_df)
                             event_has_new_data = True
                             await ethical_throttle()
                         except Exception as e:
@@ -484,15 +446,14 @@ class ETLPipeline:
                         processed_count += 1
                     
                     # Remove from queue after processing (even if no new data, it's "done")
-                    self.event_queue = [q for q in self.event_queue if (q[0] if isinstance(q, (tuple, list)) else q) != event_url]
+                    self.event_queue = [
+                        q for q in self.event_queue
+                        if (q[0] if isinstance(q, (tuple, list)) else (q["url"] if isinstance(q, dict) else q)) != event_url
+                    ]
                     self._save_queue()
 
                 except Exception as e:
                     logging.error(f"Failed to process event {event_url}: {e}")
-
-            if batch_new_records:
-                all_new_df = pd.concat(batch_new_records, ignore_index=True)
-                self.output_manager.generate_study_report(all_new_df)
 
             await browser.close()
             return processed_count
