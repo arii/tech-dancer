@@ -90,14 +90,9 @@ class GitHubClient:
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
         """Fetches logs for a specific check run, using external_id (job_id) if available."""
         try:
-            # If it's a GitHub Action, the external_id is the job ID.
-            job_id = external_id
-            if not job_id:
-                # Fallback: try to find the job ID from the check run if possible
-                # But usually external_id is what we want.
-                return f"Cannot fetch logs without job ID (external_id) for check run {check_run_id}"
-
-            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True)
+            # GitHub API returns a 302 redirect to a URL that expires after a few minutes
+            # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
+            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
         except Exception as e:
             return f"Failed to fetch logs for job {external_id}: {str(e)}"
 
