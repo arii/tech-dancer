@@ -13,7 +13,7 @@ describe('ics-generator', () => {
         id: '1',
         label: 'Special; Item, with \\ characters',
         description: 'Multi\nline\ndescription; with symbols, like \\ and ;',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const eventTitle = 'Test; Event, with \\ characters';
@@ -36,7 +36,7 @@ describe('ics-generator', () => {
         id: '2',
         label: '',
         description: '',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('', items);
@@ -51,7 +51,7 @@ describe('ics-generator', () => {
         id: '3',
         label: 'Long Item',
         description: longDescription,
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Long Event', items);
@@ -71,7 +71,7 @@ describe('ics-generator', () => {
         id: '4',
         label: emojis,
         description: 'Short',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Event', items);
@@ -99,7 +99,7 @@ describe('ics-generator', () => {
         id: '5',
         label: label,
         description: 'Boundary',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Event', items);
@@ -116,8 +116,8 @@ describe('ics-generator', () => {
         id: '6',
         label: 'Multi-day Event',
         description: 'Starts Jan 1, ends Jan 3',
-        date: new Date('2023-01-01T00:00:00Z'),
-        endDate: new Date('2023-01-03T00:00:00Z'),
+        date: new Date(2023, 0, 1),
+        endDate: new Date(2023, 0, 3),
       }
     ];
     const ics = generateICS('Test Event', items);
@@ -133,7 +133,7 @@ describe('ics-generator', () => {
         id: '7',
         label: 'Single-day Event',
         description: 'Jan 1 only',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Test Event', items);
@@ -176,7 +176,7 @@ describe('ics-generator', () => {
         id: '9',
         label: 'Backslash \\ Test',
         description: 'Path: C:\\Users\\Test',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Test Event', items);
@@ -195,7 +195,7 @@ describe('ics-generator', () => {
         id: '10',
         label: 'No Description',
         description: '',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Test Event', items);
@@ -208,8 +208,8 @@ describe('ics-generator', () => {
         id: '11',
         label: 'Saturday Night Social',
         description: 'Dance from Sat night to Sun morning',
-        date: new Date('2023-06-10T00:00:00Z'), // Saturday
-        endDate: new Date('2023-06-11T00:00:00Z'), // Sunday
+        date: new Date(2023, 5, 10), // Saturday
+        endDate: new Date(2023, 5, 11), // Sunday
       }
     ];
     const ics = generateICS('WCS Event', items);
@@ -227,7 +227,7 @@ describe('ics-generator', () => {
         id: '12',
         label: 'Complex Escaping',
         description: 'Commas, Semicolons; Backslashes\\ and \nNewlines',
-        date: new Date('2023-01-01T00:00:00Z'),
+        date: new Date(2023, 0, 1),
       }
     ];
     const ics = generateICS('Event', items);
@@ -242,8 +242,8 @@ describe('ics-generator', () => {
         id: '13',
         label: 'End of Month Event',
         description: 'Starts Feb 28, ends March 1',
-        date: new Date('2023-02-28T00:00:00Z'),
-        endDate: new Date('2023-03-01T00:00:00Z'),
+        date: new Date(2023, 1, 28),
+        endDate: new Date(2023, 2, 1),
       }
     ];
     const ics = generateICS('WCS Event', items);

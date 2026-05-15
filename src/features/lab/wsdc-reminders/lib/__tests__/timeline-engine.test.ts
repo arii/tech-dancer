@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { calculateTimeline } from '../timeline-engine';
+import { parseDate, addDays } from '@/lib/utils';
 import { EventAnchors } from '../../types';
 
 describe('timeline-engine', () => {
   const mockEvent: EventAnchors = {
     title: 'Test Convention',
-    startDate: '2024-06-01T00:00:00Z',
-    earlyBirdDate: '2024-04-01T00:00:00Z',
-    hotelCutoffDate: '2024-05-01T00:00:00Z',
+    startDate: '2024-06-01',
+    earlyBirdDate: '2024-04-01',
+    hotelCutoffDate: '2024-05-01',
     url: 'https://example.com/event'
   };
 
@@ -27,39 +28,39 @@ describe('timeline-engine', () => {
     const timeline = calculateTimeline(mockEvent);
     const flightTrack = timeline.find(item => item.id === 'flight-track');
 
-    const expectedDate = new Date(new Date(mockEvent.startDate).getTime() - (90 * 24 * 60 * 60 * 1000));
-    expect(flightTrack?.date.toISOString()).toBe(expectedDate.toISOString());
+    const expectedDate = addDays(parseDate(mockEvent.startDate), -90);
+    expect(flightTrack?.date.getTime()).toBe(expectedDate.getTime());
   });
 
   it('should calculate early bird with 2-day buffer', () => {
     const timeline = calculateTimeline(mockEvent);
     const earlyBird = timeline.find(item => item.id === 'early-bird');
 
-    const expectedDate = new Date(new Date(mockEvent.earlyBirdDate).getTime() - (2 * 24 * 60 * 60 * 1000));
-    expect(earlyBird?.date.toISOString()).toBe(expectedDate.toISOString());
+    const expectedDate = addDays(parseDate(mockEvent.earlyBirdDate), -2);
+    expect(earlyBird?.date.getTime()).toBe(expectedDate.getTime());
   });
 
   it('should use hotel cutoff date exactly', () => {
     const timeline = calculateTimeline(mockEvent);
     const hotelBlock = timeline.find(item => item.id === 'hotel-block');
 
-    expect(hotelBlock?.date.toISOString()).toBe(new Date(mockEvent.hotelCutoffDate).toISOString());
+    expect(hotelBlock?.date.getTime()).toBe(parseDate(mockEvent.hotelCutoffDate).getTime());
   });
 
   it('should calculate competition window 14 days before start', () => {
     const timeline = calculateTimeline(mockEvent);
     const compWindow = timeline.find(item => item.id === 'comp-window');
 
-    const expectedDate = new Date(new Date(mockEvent.startDate).getTime() - (14 * 24 * 60 * 60 * 1000));
-    expect(compWindow?.date.toISOString()).toBe(expectedDate.toISOString());
+    const expectedDate = addDays(parseDate(mockEvent.startDate), -14);
+    expect(compWindow?.date.getTime()).toBe(expectedDate.getTime());
   });
 
   it('should calculate cancel safety check 5 days before start', () => {
     const timeline = calculateTimeline(mockEvent);
     const cancelSafety = timeline.find(item => item.id === 'cancel-safety');
 
-    const expectedDate = new Date(new Date(mockEvent.startDate).getTime() - (5 * 24 * 60 * 60 * 1000));
-    expect(cancelSafety?.date.toISOString()).toBe(expectedDate.toISOString());
+    const expectedDate = addDays(parseDate(mockEvent.startDate), -5);
+    expect(cancelSafety?.date.getTime()).toBe(expectedDate.getTime());
   });
 
   it('should handle date calculations spanning month boundaries', () => {
