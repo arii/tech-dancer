@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Download, Calendar as CalendarIcon } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
 import { generateICS, downloadICS } from '@/features/lab/wsdc-reminders/lib/ics-generator';
@@ -73,7 +73,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
             left={5}
             top={0}
             bottom={0}
-            width="2px"
+            width={0.5}
             className="bg-line/40 hidden sm:block"
           />
 
