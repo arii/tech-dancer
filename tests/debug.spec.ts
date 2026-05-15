@@ -9,7 +9,9 @@ test('check for console errors on /events', async ({ page }) => {
     errors.push(err.message);
   });
 
-  await page.goto('http://localhost:4173/events');
+  const baseUrl = process.env.BASE_URL || 'http://localhost:4173/';
+  const url = new URL('events', baseUrl).toString();
+  await page.goto(url);
   // Wait a bit for the app to load
   await page.waitForTimeout(2000);
 
