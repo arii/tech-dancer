@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup:playwright": "playwright install --with-deps chromium",
+    "setup:playwright": "./dev-tools/setup-playwright.sh",
     "dev": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && vite --port=3000 --host=0.0.0.0",
     "prebuild": "tsx scripts/generate-assets.ts",
     "build": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build",
@@ -62,7 +62,6 @@
     "unist-util-visit": "^5.1.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
-    "yaml": "^2.9.0",
     "zod": "^3.23.8",
     "zustand": "^5.0.12"
   },

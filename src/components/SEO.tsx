@@ -10,7 +10,6 @@ interface SEOProps {
   image?: string;
   canonical?: string;
   schema?: Record<string, unknown> | Record<string, unknown>[];
-  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   googleVerification?: string;
 }
 
@@ -21,7 +20,6 @@ export function SEO({
   image,
   canonical,
   schema,
-  jsonLd,
   googleVerification = GOOGLE_SITE_VERIFICATION
 }: SEOProps) {
   const { pathname } = useLocation();
@@ -37,19 +35,15 @@ export function SEO({
     ? `https://og-image.vercel.app/${encodeURIComponent(title)}.png?theme=light&md=1&fontSize=100px`
     : defaultImage);
 
-  const combinedSchema = useMemo(() => {
-    if (!schema && !jsonLd) return null;
-    const schemas = [];
-    if (schema) schemas.push(schema);
-    if (jsonLd) schemas.push(jsonLd);
-
+  const serializedSchema = useMemo(() => {
+    if (!schema) return null;
     try {
-      return JSON.stringify(schemas.length === 1 ? schemas[0] : schemas);
+      return JSON.stringify(schema);
     } catch (e) {
       console.error('Failed to serialize Schema.org markup:', e);
       return null;
     }
-  }, [schema, jsonLd]);
+  }, [schema]);
 
   return (
     <Helmet>
@@ -74,9 +68,9 @@ export function SEO({
       <meta name="twitter:image" content={seoImage} />
 
       {/* Structured Data */}
-      {combinedSchema && (
+      {serializedSchema && (
         <script type="application/ld+json">
-          {combinedSchema}
+          {serializedSchema}
         </script>
       )}
     </Helmet>

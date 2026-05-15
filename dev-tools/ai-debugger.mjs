@@ -15,7 +15,7 @@ async function generateAiFixQuery(url, selector = 'body') {
 
   let browser;
   try {
-    browser = await chromium.launch({ headless: process.env.HEADLESS !== 'false' });
+    browser = await chromium.launch();
     const page = await browser.newPage();
 
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
