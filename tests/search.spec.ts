@@ -6,9 +6,16 @@ test.describe('Global Search Modal', () => {
     await expect(page.locator('main')).toBeVisible();
   });
 
-  test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+  test('should open and close search modal via button', async ({ page, isMobile }) => {
+    const searchButton = isMobile
+      ? page.getByRole('navigation', { name: 'Mobile Navigation' }).getByRole('button', { name: /Open menu/i })
+      : page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+
     await searchButton.click();
+
+    if (isMobile) {
+      await page.getByRole('button', { name: 'Search' }).click();
+    }
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     const closeButton = page.getByLabel('Close search');
@@ -16,16 +23,26 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
-  test('should close search modal when pressing Escape', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+  test('should close search modal when pressing Escape', async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.getByRole('navigation', { name: 'Mobile Navigation' }).getByRole('button', { name: /Open menu/i }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    }
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.keyboard.press('Escape');
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
   });
 
-  test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+  test('should close search modal on route change', async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.getByRole('navigation', { name: 'Mobile Navigation' }).getByRole('button', { name: /Open menu/i }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    }
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
     await page.goto('./gear');
@@ -34,8 +51,13 @@ test.describe('Global Search Modal', () => {
     await expect(page).toHaveURL(/.*gear/);
   });
 
-  test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+  test('should close search modal when a search result is clicked', async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.getByRole('navigation', { name: 'Mobile Navigation' }).getByRole('button', { name: /Open menu/i }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    }
     const searchInput = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
     await searchInput.fill('ai');
 
@@ -49,12 +71,17 @@ test.describe('Global Search Modal', () => {
 
 test.describe('Search and Filter URL Persistence', () => {
 
-  test('Global Search parameter should persist after reload', async ({ page }) => {
+  test('Global Search parameter should persist after reload', async ({ page, isMobile }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
 
-    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButton.click();
+    if (isMobile) {
+      await page.getByRole('navigation', { name: 'Mobile Navigation' }).getByRole('button', { name: /Open menu/i }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
+      await searchButton.click();
+    }
 
     const searchInput = page.getByPlaceholder(/SEARCH REPOSITORY/i);
     await expect(searchInput).toBeVisible();
