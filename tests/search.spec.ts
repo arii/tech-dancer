@@ -69,9 +69,9 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(searchInputReload).toBeVisible({ timeout: 10000 });
     await expect(searchInputReload).toHaveValue('swing');
 
-    const resultsText = page.getByText(/RESULTS/i);
-    await expect(resultsText).toBeVisible({ timeout: 10000 });
-    await expect(resultsText).not.toHaveText('0 RESULTS', { timeout: 10000 });
+    const resultsCount = page.getByTestId('search-dialog').getByTestId('search-results-count');
+    await expect(resultsCount).toBeVisible({ timeout: 10000 });
+    await expect(resultsCount).not.toHaveText('0 RESULTS FOUND', { timeout: 10000 });
   });
 
   test('Blog category filter should persist after reload', async ({ page }) => {

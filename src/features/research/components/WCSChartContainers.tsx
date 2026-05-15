@@ -9,7 +9,8 @@ import {
   CartesianGrid,
   Tooltip,
   LineChart,
-  Line
+  Line,
+  Brush
 } from 'recharts';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
@@ -23,8 +24,16 @@ interface TrendData {
   avg: number;
 }
 
+const customTooltipStyle = {
+  backgroundColor: 'var(--raw-color-surface)',
+  border: '1px solid rgba(255,255,255,0.1)',
+  fontSize: '11px',
+  fontFamily: 'var(--font-mono)',
+  padding: '8px'
+};
+
 export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
-  <Box border surface="default" padding="card" height="[350px]">
+  <Box border surface="default" padding="card" height="[400px]">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <BarChart2 className="w-4 h-4 text-accent" />
@@ -33,7 +42,7 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
       <Box flex={1} minHeight={0}>
         {data.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
+            <BarChart data={data} margin={{ bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
               <XAxis
                 dataKey="score"
@@ -48,15 +57,15 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
                 axisLine={false}
                 tick={{ fill: 'rgba(255,255,255,0.5)' }}
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'var(--raw-color-surface)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  fontSize: '10px',
-                  fontFamily: 'var(--font-mono)'
-                }}
-              />
+              <Tooltip contentStyle={customTooltipStyle} />
               <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
+              <Brush
+                dataKey="score"
+                height={20}
+                stroke="var(--raw-color-accent-brand)"
+                fill="var(--raw-color-surface-muted)"
+                travellerWidth={10}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -70,7 +79,7 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
 );
 
 export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
-  <Box border surface="default" padding="card" height="[350px]">
+  <Box border surface="default" padding="card" height="[400px]">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <TrendingUp className="w-4 h-4 text-accent" />
@@ -79,7 +88,7 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
       <Box flex={1} minHeight={0}>
         {data.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <LineChart data={data} margin={{ bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
               <XAxis
                 dataKey="date"
@@ -94,14 +103,7 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
                 axisLine={false}
                 tick={{ fill: 'rgba(255,255,255,0.5)' }}
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'var(--raw-color-surface)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  fontSize: '10px',
-                  fontFamily: 'var(--font-mono)'
-                }}
-              />
+              <Tooltip contentStyle={customTooltipStyle} />
               <Line
                 type="monotone"
                 dataKey="avg"
@@ -109,6 +111,13 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
                 strokeWidth={2}
                 dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
                 activeDot={{ r: 6 }}
+              />
+              <Brush
+                dataKey="date"
+                height={20}
+                stroke="var(--raw-color-accent-brand)"
+                fill="var(--raw-color-surface-muted)"
+                travellerWidth={10}
               />
             </LineChart>
           </ResponsiveContainer>
