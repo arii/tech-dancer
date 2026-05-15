@@ -65,5 +65,5 @@ Status:
 
 1. Install Node `>=22`.
 2. Run `pnpm install`.
-3. Run `pnpm run setup:playwright`.
+3. Run `./dev-tools/setup-playwright.sh`.
 4. Start app and execute browser smoke/navigation test to assert no console errors.

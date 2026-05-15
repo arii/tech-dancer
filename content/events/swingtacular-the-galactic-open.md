@@ -22,11 +22,6 @@ whyAttending: >
 theme:
   name: "Galactic"
   label: "Space Theme"
-  description: "Swingtacular's signature theme is consistently creative and out of this world. People take it seriously—think metallics, neons, and anything space-inspired for the Saturday night social."
-  colors:
-    - "#6366f1"
-    - "#a855f7"
-    - "#ec4899"
   outfitIds:
     - "sequin-bomber-jacket"
     - "rainbow-fringe-dress"

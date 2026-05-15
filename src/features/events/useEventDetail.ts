@@ -46,49 +46,43 @@ export function useEventDetail() {
 
   const {
     data: event,
-    isLoading,
-    isError,
-    error,
+    isLoading: isEventLoading,
+    isError: isEventError,
+    error: eventError,
   } = useQuery({
     queryKey: ["events", slug],
     queryFn: () => (slug ? getEventBySlug(slug) : undefined),
     enabled: !!slug,
-    initialData: () => (slug ? getEventBySlug(slug) : undefined),
   });
 
-  const { data: allEvents = [] } = useQuery({
+  const {
+    data: allEvents = [],
+    isLoading: isAllLoading
+  } = useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
-    initialData: getEvents,
     staleTime: 3600000, // 1 hour
   });
 
   // Consolidate event-specific derived state into a single memoization block
   // to reduce dependency chains and potential extra re-renders.
-  const { themeOutfits, themeAccessories, gearSections } = useMemo(
+  const { themeOutfits, themeAccessories, gearSections, relatedEvents } = useMemo(
     () => ({
       themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
       themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
       gearSections: getGearSections(event?.gear),
-    }),
-    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
-  );
-
-  // Resolve related events
-  // Dependent on both the current event and the full list
-  const relatedEvents = useMemo(
-    (): Event[] =>
-      (event?.relatedEvents ?? [])
+      relatedEvents: (event?.relatedEvents ?? [])
         .map((slug) => allEvents.find((e) => e.slug === slug))
         .filter((e): e is Event => !!e),
-    [event?.relatedEvents, allEvents],
+    }),
+    [event, allEvents],
   );
 
   return {
     event,
-    isLoading,
-    isError,
-    error,
+    isLoading: isEventLoading || isAllLoading,
+    isError: isEventError,
+    error: eventError,
     themeOutfits,
     themeAccessories,
     gearSections,

@@ -77,8 +77,6 @@ export interface Study {
 export interface EventTheme {
   name: string;
   label?: string;
-  description?: string;
-  colors?: string[];
   outfitIds?: string[];
   accessoryIds?: string[];
 }
@@ -120,8 +118,6 @@ export interface Event {
   // Flat alternatives for YAML parsers that don't handle nesting
   themeName?: string;
   themeLabel?: string;
-  themeDescription?: string;
-  themeColors?: string[];
   themeOutfitIds?: string[];
   themeAccessoryIds?: string[];
   gearOutfitIds?: string[];
@@ -174,6 +170,10 @@ function transform<T extends { date?: string }>(
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
         author: String(data.author || ""),
+        location: String(data.location || ""),
+        city: String(data.city || ""),
+        schedule: String(data.schedule || ""),
+        description: String(data.description || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
         earlyBirdDate: data.earlyBirdDate
           ? String(data.earlyBirdDate)
@@ -197,8 +197,6 @@ function transform<T extends { date?: string }>(
         const hasFlatTheme =
           data.themeName ||
           data.themeLabel ||
-          data.themeDescription ||
-          data.themeColors ||
           data.themeOutfitIds ||
           data.themeAccessoryIds;
 
@@ -206,10 +204,6 @@ function transform<T extends { date?: string }>(
           ? {
               name: String(data.themeName || ""),
               label: data.themeLabel ? String(data.themeLabel) : undefined,
-              description: data.themeDescription
-                ? String(data.themeDescription)
-                : undefined,
-              colors: asArray(data.themeColors),
               outfitIds: asArray(data.themeOutfitIds),
               accessoryIds: asArray(data.themeAccessoryIds),
             }
