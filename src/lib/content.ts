@@ -23,6 +23,7 @@ export function parseFrontmatter(content: string) {
   } catch (e) {
     console.error('Error parsing frontmatter:', e);
     return { data: {}, content: body };
+
   }
 }
 
