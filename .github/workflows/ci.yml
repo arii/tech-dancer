@@ -95,7 +95,7 @@ jobs:
 
       - name: TypeScript `any` Ratchet
         run: |
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools" || true
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           python3 dev-tools/td_cli.py gh ratchet-any
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -131,16 +131,16 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 -m pip install PyGithub click
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools" || true
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           pnpm run audit || true
           python3 dev-tools/td_cli.py gh audit-gate
 
       - name: Design Token Compliance
         run: |
           # Check for raw hex colors not in tokens.css
-          VIOLATIONS=$(grep -crn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
+          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
             --include="*.tsx" \
-            | grep -v "design-tokens\|tokens.css\|// impeccable-ignore" || true)
+            | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || true)
           if [ "$VIOLATIONS" -gt 0 ]; then
             echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
             grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
@@ -187,7 +187,7 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
           # Use consistent base path for CI tests to match visual snapshots
-          export VITE_BASE_PATH=/$REPO_NAME/
+          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
           pnpm run build
 
       - name: Bundle Size Check
@@ -195,12 +195,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 -m pip install PyGithub click
-          export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools" || true
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
 
       - name: Run Playwright Smoke Test
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/
+          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
           pnpm run test:e2e
         env:
           CI: true
@@ -209,8 +209,8 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          export VITE_BASE_PATH=/$REPO_NAME/ || true
-          export CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())") || true
+          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
+          CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())"); export CHROME_PATH
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
