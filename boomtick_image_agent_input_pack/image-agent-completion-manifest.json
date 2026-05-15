@@ -1,0 +1,226 @@
+[
+  {
+    "item_id": "portable-charger",
+    "reference_image": "references/portable-charger.jpg",
+    "final_output": "public/assets/gear/portable-charger.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "dance-socks",
+    "reference_image": "references/dance-socks.jpg",
+    "final_output": "public/assets/gear/dance-socks.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "sequin-bomber-jacket",
+    "reference_image": "references/sequin-bomber-jacket.jpg",
+    "final_output": "public/assets/gear/sequin-bomber-jacket.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "microfiber-towel",
+    "reference_image": "references/microfiber-towel.jpg",
+    "final_output": "public/assets/gear/microfiber-towel.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "shoe-brush",
+    "reference_image": "references/shoe-brush.jpg",
+    "final_output": "public/assets/gear/shoe-brush.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "neck-fan",
+    "reference_image": "references/neck-fan.jpg",
+    "final_output": "public/assets/gear/neck-fan.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "ue-wonderboom",
+    "reference_image": "references/ue-wonderboom.jpg",
+    "final_output": "public/assets/gear/ue-wonderboom.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "electric-fan",
+    "reference_image": "references/electric-fan.jpg",
+    "final_output": "public/assets/gear/electric-fan.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "hand-sanitizer",
+    "reference_image": "references/hand-sanitizer.jpg",
+    "final_output": "public/assets/gear/hand-sanitizer.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "hanging-toiletry-bag",
+    "reference_image": "references/hanging-toiletry-bag.jpg",
+    "final_output": "public/assets/gear/hanging-toiletry-bag.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "liquid-iv",
+    "reference_image": "references/liquid-iv.jpg",
+    "final_output": "public/assets/gear/liquid-iv.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "rainbow-fan",
+    "reference_image": "references/rainbow-fan.jpg",
+    "final_output": "public/assets/gear/rainbow-fan.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "bloch-grecian",
+    "reference_image": "references/bloch-grecian.jpg",
+    "final_output": "public/assets/gear/bloch-grecian.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "travel-steamer-pro",
+    "reference_image": "references/travel-steamer-pro.jpg",
+    "final_output": "public/assets/gear/travel-steamer-pro.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "epsom-salt",
+    "reference_image": "references/epsom-salt.jpg",
+    "final_output": "public/assets/gear/epsom-salt.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "listerine-tabs",
+    "reference_image": "references/listerine-tabs.jpg",
+    "final_output": "public/assets/gear/listerine-tabs.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "rainbow-earrings",
+    "reference_image": "references/rainbow-earrings.jpg",
+    "final_output": "public/assets/gear/rainbow-earrings.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "garment-steamer",
+    "reference_image": "references/garment-steamer.jpg",
+    "final_output": "public/assets/gear/garment-steamer.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "pride-sunglasses",
+    "reference_image": "references/pride-sunglasses.jpg",
+    "final_output": "public/assets/gear/pride-sunglasses.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "loop-experience",
+    "reference_image": "references/loop-experience.jpg",
+    "final_output": "public/assets/gear/loop-experience.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "travel-pillow",
+    "reference_image": "references/travel-pillow.jpg",
+    "final_output": "public/assets/gear/travel-pillow.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "mints",
+    "reference_image": "references/mints.jpg",
+    "final_output": "public/assets/gear/mints.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "travel-bottles",
+    "reference_image": "references/travel-bottles.jpg",
+    "final_output": "public/assets/gear/travel-bottles.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "loop-quiet",
+    "reference_image": "references/loop-quiet.jpg",
+    "final_output": "public/assets/gear/loop-quiet.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "rainbow-fringe-dress",
+    "reference_image": "references/rainbow-fringe-dress.jpg",
+    "final_output": "public/assets/gear/rainbow-fringe-dress.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "compression-cubes",
+    "reference_image": "references/compression-cubes.jpg",
+    "final_output": "public/assets/gear/compression-cubes.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "barge-cement",
+    "reference_image": "references/barge-cement.jpg",
+    "final_output": "public/assets/gear/barge-cement.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "rave-fan",
+    "reference_image": "references/rave-fan.jpg",
+    "final_output": "public/assets/gear/rave-fan.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "foam-roller",
+    "reference_image": "references/foam-roller.jpg",
+    "final_output": "public/assets/gear/foam-roller.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "suede-sheets",
+    "reference_image": "references/suede-sheets.jpg",
+    "final_output": "public/assets/gear/suede-sheets.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "dry-shampoo",
+    "reference_image": "references/dry-shampoo.jpg",
+    "final_output": "public/assets/gear/dry-shampoo.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  },
+  {
+    "item_id": "ombre-dance-dress",
+    "reference_image": "references/ombre-dance-dress.jpg",
+    "final_output": "public/assets/gear/ombre-dance-dress.jpg",
+    "status": "complete",
+    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
+  }
+]
