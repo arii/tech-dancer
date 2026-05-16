@@ -132,15 +132,15 @@ jobs:
         run: |
           python3 -m pip install PyGithub click
           export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools" || true
-          pnpm run audit || true
+          pnpm run audit || echo "Audit failed"
           python3 dev-tools/td_cli.py gh audit-gate
 
       - name: Design Token Compliance
         run: |
           # Check for raw hex colors not in tokens.css
-          VIOLATIONS=$(grep -crn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
+          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
             --include="*.tsx" \
-            | grep -v "design-tokens\|tokens.css\|// impeccable-ignore" || true)
+            | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || true)
           if [ "$VIOLATIONS" -gt 0 ]; then
             echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
             grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"

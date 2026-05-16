@@ -72,8 +72,8 @@ jobs:
 
       - name: Native Auto-Fix
         run: |
-          pnpm eslint . --fix || true
-          pnpm oxlint --fix || true
+          pnpm eslint . --fix || echo "eslint failed"
+          pnpm oxlint --fix || echo "oxlint failed"
 
       - name: Install Ollama
         run: |
@@ -109,7 +109,7 @@ jobs:
             gh run view "$TARGET_RUN_ID" --log > ci_logs.txt
 
             # Generate fresh structured logs from current state
-            pnpm eslint . --format json > eslint-errors.json || true
+            pnpm eslint . --format json > eslint-errors.json || echo "eslint failed"
 
             python3 /tmp/repair-tool/repair.py ci_logs.txt --eslint-json eslint-errors.json
           else
@@ -161,7 +161,7 @@ jobs:
 
             if [ "$EVENT_NAME" == "workflow_run" ]; then
               if [ "$HEAD_REPO" == "$REPO" ]; then
-                gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH" || true
+                gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH" || echo "PR creation failed"
               fi
             else
               gh pr comment "$ISSUE_NUMBER" --body "🤖 I've attempted to fix the CI failures. $PR_MSG. See the proposed changes in branch \`$NEW_BRANCH\`."
