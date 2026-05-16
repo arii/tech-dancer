@@ -83,7 +83,6 @@ ensure_remote_origin() {
   current="$(git remote get-url origin 2>/dev/null || true)"
   if [ -n "$current" ]; then log "remote.origin already configured: ${current}"; return 0; fi
 
-  # If another remote exists (e.g. upstream), mirror its URL into origin.
   local fallback_remote fallback_url
   fallback_remote="$(git remote | head -n 1 || true)"
   if [ -n "$fallback_remote" ]; then
@@ -127,7 +126,7 @@ install_apt_tools() {
   if ! have apt-get; then warn "apt-get not available; skipping OS package install."; return 0; fi
   log "Installing system tools..."
   run_sudo apt-get update -y || return 0
-  run_sudo apt-get install -y ca-certificates curl git jq unzip xz-utils gpg python3 python3-pip python3-venv python3-setuptools python3-wheel build-essential || warn "Some OS packages could not be installed."
+  run_sudo apt-get install -y ca-certificates curl git jq unzip xz-utils gpg gh python3 python3-pip python3-venv python3-setuptools python3-wheel build-essential || warn "Some OS packages could not be installed."
 }
 
 ensure_node() { have node || err "node is required."; have npm || err "npm is required."; }
