@@ -217,17 +217,22 @@ class GHAConfigManager:
 
         # 3. Fetch from gh CLI
         try:
+            # First fetch all variables since 'gh variable get' is not a valid command
             result = run_command(
-                ["gh", "variable", "get", name],
+                ["gh", "variable", "list"],
                 check=False,
                 log_on_error=False
             )
 
             if result.returncode == 0:
-                val = result.stdout.strip()
-                self.cache[name] = val
-                self._save_cache()
-                return val
+                for line in result.stdout.splitlines():
+                    parts = line.split('\t')
+                    if len(parts) >= 2 and parts[0] == name:
+                        val = parts[1].strip()
+                        self.cache[name] = val
+                        self._save_cache()
+                        return val
+                return None
 
             stderr = result.stderr.lower()
             if "not authenticated" in stderr or "not logged in" in stderr or "gh_token" in stderr:
