@@ -3,6 +3,13 @@ import { routes } from '../config/routes.ts';
 import { RESEARCH_TOOLS } from '../config/research-tools.ts';
 
 /**
+ * Resolves the canonical path for a route or tool.
+ */
+function resolveCanonical(path: string, config?: { canonicalPath?: string }): string {
+  return config?.canonicalPath || path;
+}
+
+/**
  * Discovers all application routes from various sources.
  * Centralizes discovery logic to prevent duplication and drift.
  *
@@ -16,11 +23,13 @@ export function getAllRoutes() {
   // Use canonicalPath if available, and filter out routes marked as sitemap: false
   const staticRoutes = routes
     .filter(r => r.sitemap !== false && r.path !== '*' && !r.path.includes(':'))
-    .map(r => r.canonicalPath || r.path);
+    .map(r => resolveCanonical(r.path, r));
 
   // 2. Dynamic research tool routes
   // Use canonicalPath if available to avoid duplicates (e.g. /ux-auditor vs /research/ux-auditor)
-  const toolRoutes = RESEARCH_TOOLS.map(tool => tool.canonicalPath || `/research/${tool.id}`);
+  const toolRoutes = RESEARCH_TOOLS.map(tool =>
+    resolveCanonical(`/research/${tool.id}`, tool)
+  );
 
   // 3. Dynamic content routes discovered from file system
   const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>

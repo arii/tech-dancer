@@ -1,5 +1,5 @@
-import { useMemo, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useParams, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -22,15 +22,8 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
 
 export default function ResearchDetail() {
   const { id: paramId } = useParams();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  useEffect(() => {
-    if (paramId === 'ux-auditor') {
-      navigate('/ux-auditor', { replace: true });
-    }
-  }, [paramId, navigate]);
   const { getTool, getStudy } = useResearch();
 
   const id = useMemo(() => {
@@ -42,6 +35,12 @@ export default function ResearchDetail() {
   }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
+
+  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
+  // Check both paramId and tool.canonicalPath to support centralized config
+  if (paramId === 'ux-auditor' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
+    return <Navigate to={tool?.canonicalPath || "/ux-auditor"} replace />;
+  }
   const study = !tool && id ? getStudy(id) : null;
 
   const structuredData = useMemo(() => {
