@@ -234,7 +234,7 @@ export function WCSScraperTool() {
         <Stack align="center" gap={4} paddingY={10}>
           <AlertCircle className="w-12 h-12 text-accent opacity-50" />
           <Stack align="center" gap={1}>
-            <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
+            <Text as="h1" variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
             <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
           </Stack>
           <Box paddingTop={4}>
@@ -256,7 +256,7 @@ export function WCSScraperTool() {
             <StatusBadge label="active" />
           </Box>
           <Stack gap={2}>
-            <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
+            <Text as="h1" variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
               Research tool for extracting and analyzing public West Coast Swing competition results.
               Providing transparency on scoring patterns and promotion trends.

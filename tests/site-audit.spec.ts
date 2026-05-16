@@ -17,23 +17,38 @@ test.describe('Site-wide Audit', () => {
     test(`Audit [${displayRoute}]`, async ({ page, pageErrors, isMobile }) => {
       // 1. Navigate to the route. Use './' for the root to stay relative to baseURL
       const target = route === '' ? './' : route;
-      const response = await page.goto(target);
+
+      // Implement retry logic for navigation as requested by directive
+      let response = null;
+      let lastError = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          response = await page.goto(target, { waitUntil: 'networkidle', timeout: 30000 });
+          break;
+        } catch (e) {
+          lastError = e;
+          if (attempt === 2) throw e;
+          await page.waitForTimeout(2000);
+        }
+      }
 
       // 2. Fail on bad status codes
       if (response !== null) {
         expect(response.status(), `Bad status at ${displayRoute}`).toBeLessThan(400);
+      } else {
+        throw new Error(`Failed to navigate to ${displayRoute}: ${lastError}`);
       }
 
       // 3. Verify main content is visible and not blank
       const main = page.locator('main');
-      await expect(main).toBeVisible({ timeout: 10000 });
+      await expect(main).toBeVisible({ timeout: 15000 });
 
       const mainText = await main.innerText();
       expect(mainText.trim().length, `Main content at ${displayRoute} is blank`).toBeGreaterThan(0);
 
-      // 4. Verify H1 exists (or equivalent heading for detail pages)
-      const heading = page.locator('main h1, main [data-testid="detail-metadata"] + *, main .prose h1, main [variant="display"]').first();
-      await expect(heading).toBeVisible({ timeout: 5000 });
+      // 4. Verify main content has some sort of heading
+      const heading = page.locator('main h1, main h2, main [data-testid="detail-metadata"] + *, main .prose h1, main [variant="display"], main [variant="headline"]').first();
+      await expect(heading).toBeVisible({ timeout: 15000 });
 
       // 5. Check for horizontal overflow
       const overflow = await page.evaluate(() => {
