@@ -37,7 +37,7 @@ class GitHubClient:
             raise Exception(f"GH command failed: {proc.stderr}")
         return proc.stdout
 
-    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None) -> Any:
+    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
         headers = {
             "Authorization": f"Bearer {self.token}",
@@ -50,8 +50,12 @@ class GitHubClient:
                 url,
                 headers=headers,
                 json=json_data,
-                timeout=30
+                timeout=30,
+                allow_redirects=allow_redirects
             )
+            if not allow_redirects and response.status_code in (301, 302, 307, 308):
+                return response
+
             response.raise_for_status()
             if is_text:
                 return response.text
@@ -90,7 +94,24 @@ class GitHubClient:
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
-            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+            response = self._request(
+                'GET',
+                f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs',
+                is_text=True,
+                accept="application/vnd.github.v3+json",
+                allow_redirects=False
+            )
+
+            if hasattr(response, 'status_code') and response.status_code in (301, 302, 307, 308):
+                log_url = response.headers.get("Location")
+                if log_url:
+                    # Fetch from the redirect URL without our GitHub token headers
+                    log_response = requests.get(log_url, timeout=30)
+                    log_response.raise_for_status()
+                    return log_response.text
+
+            # If it didn't redirect, response is already the text (or we handle an error)
+            return response if isinstance(response, str) else ""
         except Exception as e:
             return f"Failed to fetch logs for check run {check_run_id}: {str(e)}"
 

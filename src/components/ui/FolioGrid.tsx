@@ -21,6 +21,7 @@ interface FolioGridProps {
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
+  renderItem?: (item: ContentItem) => ReactNode;
 }
 
 export default function FolioGrid({
@@ -32,7 +33,8 @@ export default function FolioGrid({
   children,
   view = 'card',
   onViewChange,
-  as
+  as,
+  renderItem
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -86,10 +88,14 @@ export default function FolioGrid({
                 height="full"
                 className="bg-transparent"
               >
-                <ContentCard
-                  {...item}
-                  basePath={basePath}
-                />
+                {renderItem ? (
+                  renderItem(item)
+                ) : (
+                  <ContentCard
+                    {...item}
+                    basePath={basePath}
+                  />
+                )}
               </Box>
             ))}
           </Grid>
