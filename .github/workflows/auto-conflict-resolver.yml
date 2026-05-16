@@ -145,16 +145,16 @@ jobs:
             # Check if it failed due to a real error or just a conflict
             if git status | grep -q "Unmerged paths"; then
               echo "Merge resulted in conflicts. Proceeding to resolver."
-              echo "merge_failed=false" >> "$GITHUB_OUTPUT"
+              echo "merge_failed=false" >> "${GITHUB_OUTPUT}"
             else
               echo "::error::Merge failed due to a non-conflict error."
-              echo "merge_failed=true" >> "$GITHUB_OUTPUT"
+              echo "merge_failed=true" >> "${GITHUB_OUTPUT}"
               git merge --abort || true
               # Will fail workflow later
             fi
           else
             echo "Merge succeeded cleanly. No conflicts to resolve."
-            echo "merge_failed=false" >> "$GITHUB_OUTPUT"
+            echo "merge_failed=false" >> "${GITHUB_OUTPUT}"
           fi
 
       - name: Resolve conflicts
@@ -175,9 +175,9 @@ jobs:
           git checkout -b "${RESOLVE_BRANCH}"
 
           # Push to the base repository
-          git push -u origin "$RESOLVE_BRANCH" --force
+          git push -u origin "${RESOLVE_BRANCH}" --force
 
-          echo "resolved_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "resolved_sha=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
 
           # Create a pull request in the base repository against the target branch to suggest the fix
           if [ "$ORIGINAL_BODY" = "null" ] || [ -z "$ORIGINAL_BODY" ]; then
