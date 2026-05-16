@@ -54,8 +54,8 @@ jobs:
         if: env.EVENT_NAME == 'issue_comment'
         run: |
           PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,headRefOid)
-          echo "HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> $GITHUB_ENV
-          echo "HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> $GITHUB_ENV
+          echo "HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> "${GITHUB_ENV}"
+          echo "HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> "${GITHUB_ENV}"
           gh pr checkout "$ISSUE_NUMBER"
 
       - name: Setup pnpm
@@ -81,7 +81,7 @@ jobs:
           ollama serve &
 
           echo "Waiting for Ollama to be ready..."
-          for i in {1..20}; do
+          for _i in {1..20}; do
             if curl -s http://localhost:11434/api/tags > /dev/null; then
               echo "Ollama is ready!"
               exit 0
@@ -123,11 +123,11 @@ jobs:
           echo "Verifying repairs..."
           if pnpm run lint:ox && pnpm run type-check; then
             echo "Repair verified successfully!"
-            echo "success=true" >> $GITHUB_OUTPUT
+            echo "success=true" >> "${GITHUB_OUTPUT}"
           else
             echo "Repair failed verification or only partially fixed."
             if [ -n "$(git status --porcelain)" ]; then
-               echo "success=partial" >> $GITHUB_OUTPUT
+               echo "success=partial" >> "${GITHUB_OUTPUT}"
             else
                echo "success=false" >> $GITHUB_OUTPUT
             fi

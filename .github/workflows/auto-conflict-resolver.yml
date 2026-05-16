@@ -168,11 +168,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add .
-          git commit -m "Auto-resolve merge conflicts by merging $TARGET"
+          git commit -m "Auto-resolve merge conflicts by merging ${TARGET}"
 
           # Create a new branch and push it to the base repository (origin)
           RESOLVE_BRANCH="auto-resolve/${SOURCE}"
-          git checkout -b "$RESOLVE_BRANCH"
+          git checkout -b "${RESOLVE_BRANCH}"
 
           # Push to the base repository
           git push -u origin "$RESOLVE_BRANCH" --force
@@ -246,10 +246,10 @@ jobs:
           # If it's comma separated, we can count commas.
           # Based on the bot comment usage, it's in a code block, likely one per line.
           COUNT=$(echo "$UNRESOLVED" | grep -c '^' || echo 0)
-          echo "::warning::$COUNT files still have conflicts and require manual resolution. Auto-resolver could not fully resolve all conflicts."
-          echo "### Conflict Resolution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "::warning::${COUNT} files still have conflicts and require manual resolution. Auto-resolver could not fully resolve all conflicts."
+          echo "### Conflict Resolution Summary" >> "${GITHUB_STEP_SUMMARY}"
           echo "⚠️ $COUNT files require manual attention:" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "$UNRESOLVED" >> $GITHUB_STEP_SUMMARY
+          echo "${UNRESOLVED}" >> "${GITHUB_STEP_SUMMARY}"
           echo '```' >> $GITHUB_STEP_SUMMARY
           exit 0
