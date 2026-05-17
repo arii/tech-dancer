@@ -9,7 +9,7 @@ fi
 export GITHUB_TOKEN="$TOKEN"
 
 echo "### Mass PR Audit Started at $(date)"
-
+echo ""
 
 SUMMARY_FILE="AUDIT_SUMMARY.md"
 echo "### PR Audit Summary - $(date)" > "$SUMMARY_FILE"
@@ -69,9 +69,9 @@ while read -r pr; do
         NOTES="Clean audit."
     fi
     
-    echo "| ${PR_NUM} | ${PR_TITLE} | ${STATUS} | ${OUTCOME} | ${REC} | ${NOTES} |"
-    echo "| ${PR_NUM} | ${PR_TITLE} | ${CI_ICON} | ${STATUS} | ${OUTCOME} |" >> "${SUMMARY_FILE}"
+    echo "| $PR_NUM | $PR_TITLE | $STATUS | $OUTCOME | $REC | $NOTES |"
+    echo "| $PR_NUM | $PR_TITLE | $CI_ICON | $STATUS | $OUTCOME |" >> "$SUMMARY_FILE"
 done <<< "$PRS"
 
-
+echo ""
 echo "### Mass PR Audit Completed at $(date)"

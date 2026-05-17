@@ -25,9 +25,9 @@ jobs:
           git checkout -b temp-merge-test
           if git merge --no-commit --no-ff origin/main; then
             echo "✅ Branch merges cleanly into main"
-            git merge --abort 2>/dev/null || echo "Nothing to abort"
+            git merge --abort 2>/dev/null || true
           else
             echo "❌ Branch cannot merge cleanly into main"
-            git merge --abort 2>/dev/null || echo "Nothing to abort"
+            git merge --abort 2>/dev/null || true
             exit 1
           fi
