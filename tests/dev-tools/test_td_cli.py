@@ -12,12 +12,10 @@ from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
-    @patch('td_cli.get_github_token')
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
-    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token):
+    @patch('tdw_services.orchestrator.get_github_client')
+    def test_validate_issue_dry_run_default(self, mock_get_client):
         """Test that validate-issue defaults to dry-run True"""
-        mock_repo.return_value = "owner/repo"
+        mock_get_client.return_value = MagicMock()
 
         mock_issue = MagicMock()
         mock_issue.number = 123
@@ -26,6 +24,7 @@ class TestTDCLI(unittest.TestCase):
 
         mock_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
+
         args = MagicMock()
         args.issue_number = 123
         args.all_open = False
@@ -33,7 +32,10 @@ class TestTDCLI(unittest.TestCase):
         args.dry_run = True  # Default
         args.json = False
 
-        td_cli.handle_validate_issue(args)
+        from tdw_services.orchestrator import Orchestrator
+        orch = Orchestrator()
+        orch._github = mock_get_client.return_value
+        res = orch.validate_issue(issue_number=123, all_open=False, post_comments=True, dry_run=True)
 
         # Verify comment was NOT created
         mock_issue.create_comment.assert_not_called()
@@ -47,7 +49,7 @@ class TestTDCLI(unittest.TestCase):
         """Test that submit_review defaults to dry-run True"""
         mock_exists.return_value = True
         mock_token.return_value = "fake-token"
-        mock_repo.return_value = "owner/repo"
+        mock_get_client.return_value = MagicMock()
 
         mock_pr = MagicMock()
         mock_get_client.return_value.get_repo.return_value.get_pull.return_value = mock_pr
@@ -66,7 +68,7 @@ class TestTDCLI(unittest.TestCase):
         """Test that submit_review executes when dry_run is False"""
         mock_exists.return_value = True
         mock_token.return_value = "fake-token"
-        mock_repo.return_value = "owner/repo"
+        mock_get_client.return_value = MagicMock()
 
         mock_pr = MagicMock()
         mock_get_client.return_value.get_repo.return_value.get_pull.return_value = mock_pr
@@ -76,7 +78,7 @@ class TestTDCLI(unittest.TestCase):
         # Verify review WAS created
         mock_pr.create_review.assert_called_once()
 
-    @patch('td_cli.get_gha_variable')
+    @patch('tdw_services.orchestrator.get_gha_variable')
     @patch('os.path.exists')
     @patch('os.environ.get')
     def test_resolve_baseline_fallback_to_gha(self, mock_env_get, mock_exists, mock_gha_get):
@@ -85,14 +87,16 @@ class TestTDCLI(unittest.TestCase):
         mock_env_get.return_value = None
         mock_gha_get.return_value = "42"
 
-        baseline = td_cli.resolve_baseline(None, "FAKE_VAR", 100)
+        from tdw_services.orchestrator import Orchestrator
+        orch = Orchestrator()
+        baseline = orch.resolve_baseline(None, "FAKE_VAR", 100)
 
         self.assertEqual(baseline, 42)
         mock_gha_get.assert_called_with("FAKE_VAR")
 
 class TestTDCliCrash(unittest.TestCase):
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
+    @patch('tdw_services.orchestrator.get_github_client')
+    @patch('tdw_services.orchestrator.get_repo_name')
     def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client):
         """Test handle_audit_pr raises CLIError for various invalid PR numbers"""
         cases = [
@@ -111,9 +115,13 @@ class TestTDCliCrash(unittest.TestCase):
                 args.pr_number = pr_num
                 args.fetch = True
 
-                with self.assertRaises(td_cli.CLIError) as cm:
-                    td_cli.handle_audit_pr(args)
-                self.assertIn(expected_msg, cm.exception.message)
+                from tdw_services.orchestrator import Orchestrator
+                from utils import CLIError
+                orch = Orchestrator()
+                with patch('tdw_services.orchestrator.Orchestrator.github', new_callable=MagicMock):
+                    with self.assertRaises(CLIError) as cm:
+                        orch.audit_pr(pr_num, fetch=True)
+                    self.assertIn(expected_msg, cm.exception.message)
 
 if __name__ == '__main__':
     unittest.main()

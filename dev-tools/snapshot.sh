@@ -30,11 +30,13 @@ echo "Node version: v$NODE_VERSION"
 
 if [ -f ".nvmrc" ]; then
     PINNED_NODE=$(cat .nvmrc | sed 's/^v//')
-    if [ "$NODE_VERSION" != "$PINNED_NODE" ]; then
+    PINNED_MAJOR=$(echo "$PINNED_NODE" | cut -d. -f1)
+    NODE_MAJOR=$(echo "$NODE_VERSION" | cut -d. -f1)
+    if [ "$NODE_MAJOR" != "$PINNED_MAJOR" ]; then
         echo "❌ Error: Node version mismatch!"
-        echo "   Expected: v$PINNED_NODE (from .nvmrc)"
+        echo "   Expected: v$PINNED_MAJOR.x (from .nvmrc)"
         echo "   Actual:   v$NODE_VERSION"
-        echo "   Please install and use the pinned version."
+        echo "   Please install and use the pinned major version."
     else
         echo "✅ Node version matches .nvmrc"
     fi

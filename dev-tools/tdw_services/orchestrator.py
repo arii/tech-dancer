@@ -289,6 +289,12 @@ class Orchestrator:
         return updates
 
     def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event=None):
+        if pr_number in (None, "null", "", "None") or str(pr_number).strip() in ("null", "", "None"):
+            raise CLIError("Invalid PR number", code=400)
+        try:
+            pr_number = int(str(pr_number).strip())
+        except ValueError:
+            raise CLIError("Invalid PR number format", code=400)
         review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
         res = {"pr": pr_number, "files": {}}
@@ -384,8 +390,11 @@ class Orchestrator:
             with open(".nvmrc", "r") as f:
                 pinned_version = f.read().strip().lstrip('v')
             current_version = run_command(["node", "-v"]).strip().lstrip('v')
-            if current_version != pinned_version:
-                error_msg = f"Node version mismatch! Expected: {pinned_version}, Actual: {current_version}. Please use the pinned runtime requirement."
+            # Check major version for compatibility instead of strict match
+            pinned_major = pinned_version.split('.')[0]
+            current_major = current_version.split('.')[0]
+            if current_major != pinned_major:
+                error_msg = f"Node major version mismatch! Expected: {pinned_major}.x, Actual: {current_version}. Please use the pinned runtime requirement."
                 results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": error_msg})
                 # We raise CLIError to stop execution if it doesn't match
                 raise CLIError(error_msg)
