@@ -12,7 +12,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
-import { FilterButton } from './components/FilterButton';
+import { FilterButton } from '@/components/ui/FilterButton';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
