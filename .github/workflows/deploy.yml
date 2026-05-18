@@ -46,11 +46,11 @@ jobs:
         run: |
           # 1. Determine Base Path
           if [ "$REF_NAME" = "main" ]; then
-            export VITE_BASE_PATH=/$REPO_NAME/
-            export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"
+            VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
+            VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"; export VITE_APP_URL
           else
-            export VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/
-            export VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/$REF_NAME/"
+            VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/; export VITE_BASE_PATH
+            VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/$REF_NAME/"; export VITE_APP_URL
           fi
 
           # 2. Build the Application
@@ -170,7 +170,7 @@ jobs:
           cp dist/sitemap.xml root-seo/
           cp dist/robots.txt root-seo/
 
-      - name: Deploy SEO Assets to Root Domain (arii.github.io)
+      - name: Deploy SEO Assets to Root Domain - arii.github.io
         if: github.ref_name == 'main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -179,7 +179,7 @@ jobs:
           folder: root-seo
           clean: false # Do not delete other files in arii.github.io
 
-      - name: Deploy Full Site to Root Domain Subdirectory (arii.github.io)
+      - name: Deploy Full Site to Root Domain Subdirectory - arii.github.io
         if: github.ref_name == 'main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:

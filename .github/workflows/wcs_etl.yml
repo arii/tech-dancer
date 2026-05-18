@@ -1,4 +1,4 @@
-name: WCS Data Pipeline (Wednesday Build)
+name: WCS Data Pipeline - Wednesday Build
 
 on:
   schedule:
@@ -14,7 +14,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Install system dependencies (git-lfs, gh)
+      - name: Install system dependencies - git-lfs, gh
         run: |
           apt-get update && apt-get install -y git-lfs gh
           git lfs install
@@ -35,11 +35,11 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install -r etl/requirements.txt
 
-      - name: Run Pytest (Data Validation)
+      - name: Run Pytest - Data Validation
         run: |
           PYTHONPATH=. pytest etl/tests/
 
-      - name: Execute Extraction Script (Incremental Batching)
+      - name: Execute Extraction Script - Incremental Batching
         env:
           GITHUB_REF: ${{ github.ref }}
         run: |
@@ -52,7 +52,7 @@ jobs:
           # The loop will stop when the script exits with code 100 (no new data) 
           # or when it reaches a safety limit of 10 batches.
           for i in {1..10}; do
-            echo "Starting Batch $i..."
+            echo "Starting Batch ${i}..."
             PYTHONPATH=. python etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
             EXIT_CODE=$?
             
@@ -60,10 +60,10 @@ jobs:
               echo "✅ No new events to process. Finishing."
               break
             elif [ $EXIT_CODE -eq 0 ]; then
-              echo "📦 Batch $i completed. Committing and pushing..."
+              echo "📦 Batch ${i} completed. Committing and pushing..."
               git add etl/data/wcs_prelims.parquet etl/data/event_queue.json
-              git commit -m "chore(etl): update wcs ledger and queue (batch $i)" || echo "No changes to commit"
-              git push origin HEAD:"$GITHUB_REF" || echo "Push failed, continuing..."
+              if ! git commit -m "chore(etl): update wcs ledger and queue (batch ${i})"; then echo "No changes to commit"; fi
+              if ! git push origin HEAD:"$GITHUB_REF"; then echo "Push failed, continuing..."; fi
             else
               echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
               exit 1
