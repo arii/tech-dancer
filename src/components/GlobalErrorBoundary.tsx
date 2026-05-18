@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ActionButton } from '@/components/ui/ActionButton';
 
 export function GlobalErrorBoundary() {
   const error = useRouteError();
@@ -71,18 +72,22 @@ export function GlobalErrorBoundary() {
         </Box>
 
         <Stack direction="row" gap={4}>
-          <Button 
-            variant="ghost" 
+          <ActionButton
+            variant="ghost"
+            paddingX={6}
+            paddingY={3}
             onClick={() => window.location.reload()}
           >
             Reload Page
-          </Button>
-          <Button 
-            variant="accent" 
+          </ActionButton>
+          <ActionButton
+            variant="accent"
+            paddingX={6}
+            paddingY={3}
             onClick={() => navigate('/')}
           >
             Go to Home
-          </Button>
+          </ActionButton>
         </Stack>
       </Stack>
     </Box>

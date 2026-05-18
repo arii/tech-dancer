@@ -16,8 +16,9 @@ const returnButtonInnerVariants = cva(
 );
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { ActionButton } from '@/components/ui/ActionButton';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -35,31 +36,23 @@ export default function NotFound() {
             titleSize="fluid-7"
             descriptionMaxWidth="prose"
             cta={
-              <Button
+              <ActionButton
                 onClick={() => navigate('/')}
-                variant="default"
-                padding={0}
-                height="auto"
-                className={returnButtonVariants()}
+                paddingX={8}
+                paddingY={4}
+                radius="none"
+                border
+                className={cn(returnButtonVariants(), returnButtonInnerVariants())}
                 aria-label="Return to Home"
               >
-                <Stack
-                  direction="row"
-                  align="center"
-                  gap={2}
-                  border
-                  surface="accent"
-                  paddingX={8}
-                  paddingY={4}
-                  className={returnButtonInnerVariants()}
-                >
+                <Stack direction="row" align="center" gap={2}>
                   <Icon icon={Home} />
                   <Text variant="mono" size="sm" weight="font-bold">
                     RETURN TO HOME
                   </Text>
                   <Icon icon={ChevronRight} size="sm" className="group-hover:translate-x-1 transition-transform" />
                 </Stack>
-              </Button>
+              </ActionButton>
             }
           />
         </Box>
