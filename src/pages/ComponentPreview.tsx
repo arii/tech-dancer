@@ -1,4 +1,5 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { SEO } from '@/components/SEO';
 import { EventHero } from '@/features/events/components/EventHero';
 import { ThemeSpotlight } from '@/features/events/components/ThemeSpotlight';
 import { CuratedGear } from '@/features/events/components/CuratedGear';
@@ -7,6 +8,11 @@ import { RelatedEvents } from '@/features/events/components/RelatedEvents';
 export default function ComponentPreview() {
   return (
     <Box padding={8}>
+      <SEO
+        title="Component Preview"
+        description="Development environment for testing UI components in isolation."
+        noindex={true}
+      />
       <Stack gap={12}>
         <Text variant="headline" size="4xl">Component Preview</Text>
 
