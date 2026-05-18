@@ -15,6 +15,13 @@ For EVERY changed file, verify against these standards. Mark as `- [x]` when ver
 - [ ] Token compliance: Uses established design tokens (no raw Tailwind values or inline styles).
 - [ ] Audit ratio: If > 100 lines added, identified at least 10 lines to refactor/remove.
 
+## CI Log Triage
+
+(Populated if CI failures detected)
+- **Failed Checks:**
+- **Root Cause Analysis:**
+- **Remediation Steps:**
+
 ## Output JSON
 
 Provide your findings and inline comments in the JSON block below.

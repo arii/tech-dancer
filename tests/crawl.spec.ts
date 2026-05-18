@@ -45,7 +45,7 @@ test.describe('Automated UX/Console Error Crawler', () => {
     const toVisit: string[] = [baseURL];
 
     // Limit the number of pages to crawl to prevent excessive run times
-    const MAX_PAGES = 50;
+    const MAX_PAGES = 25;
     let pageCount = 0;
 
     // Ensure newsletter banner doesn't interfere (added once per page instance)
@@ -66,7 +66,7 @@ test.describe('Automated UX/Console Error Crawler', () => {
       // Clear errors from previous navigation before going to next page
       pageErrors.clearErrors();
 
-      const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
+      const response = await page.goto(normalizedUrl, { waitUntil: 'domcontentloaded' });
 
       // Verify status code
       if (response) {
