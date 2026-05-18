@@ -22,7 +22,6 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
 
 export default function ResearchDetail() {
   const { id: paramId } = useParams();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const { getTool, getStudy } = useResearch();
