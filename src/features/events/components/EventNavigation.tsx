@@ -9,13 +9,24 @@ export function EventNavigation() {
       zIndex={40}
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }}>
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
+        {/* Right fade indicator for mobile horizontal scroll */}
+        <Box
+          position="absolute"
+          top={0}
+          right={0}
+          bottom={0}
+          width={12}
+          display={{ base: "block", md: "none" }}
+          className="bg-gradient-to-l from-bg to-transparent pointer-events-none z-10"
+        />
+
         <Box
           display="flex"
           gap={{ base: 8, md: 10 }}
           overflowX="auto"
           className="no-scrollbar scroll-smooth"
-          paddingX={{ base: 8, md: 0 }}
+          paddingX={{ base: 6, md: 0 }}
         >
           {EVENT_TABS.map(tab => (
             <Box

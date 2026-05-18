@@ -75,10 +75,10 @@ export function EventHero({
       <Stack
         relative
         zIndex={10}
-        gap={10}
+        gap={{ base: 6, md: 10 }}
         paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingTop={12}
-        paddingBottom={8}
+        paddingTop={{ base: 8, md: 12 }}
+        paddingBottom={{ base: 6, md: 8 }}
         maxWidth="screen-xl"
         marginX="auto"
         width="full"
@@ -134,6 +134,7 @@ export function EventHero({
             data-testid="why-attending"
             padding={{ base: 4, md: 6 }}
             radius="lg"
+            width={{ base: "full", md: "auto" }}
             className="glass-panel max-w-2xl border-l-4 border-l-accent"
           >
             <Stack gap={{ base: 3, md: 4 }}>
