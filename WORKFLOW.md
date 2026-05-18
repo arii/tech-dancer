@@ -25,6 +25,20 @@ We use **GitHub Actions Variables** to manage thresholds for technical debt. Thi
 | `BUNDLE_BASELINE_KB` | `3000`  | The baseline size of the production bundle. CI fails if size > baseline + 50KB. |
 | `ANY_COUNT_BASELINE` | `0`     | The maximum allowed number of `any` types in the codebase.                      |
 
+### Suppression Inventory
+
+To prevent the proliferation of `impeccable-ignore-file` markers, we track a suppression inventory in `audit-baseline.json`. CI will fail if the total number of suppressions in the `src/` directory exceeds the count in this file.
+
+To check the inventory locally:
+```bash
+pnpm run audit:inventory
+```
+
+To update the baseline (if new suppressions are justified):
+```bash
+pnpm run audit:inventory --update-baseline
+```
+
 ### Updating Baselines
 
 If a change legitimately increases the bundle size or `any` count (and has been approved), update the baseline variable after the PR is merged:
