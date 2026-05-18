@@ -22,8 +22,8 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
 
 export default function ResearchDetail() {
   const { id: paramId } = useParams();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
+
   const { getTool, getStudy } = useResearch();
 
   const id = useMemo(() => {
@@ -73,6 +73,12 @@ export default function ResearchDetail() {
     }
     return null;
   }, [tool, study]);
+
+  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
+  // Check both paramId and tool.canonicalPath to support centralized config
+  if (paramId === 'ux-auditor' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
+    return <Navigate to={tool?.canonicalPath || "/ux-auditor"} replace />;
+  }
 
   if (study) {
     return (

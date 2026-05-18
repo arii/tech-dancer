@@ -3,6 +3,13 @@ import { routes } from '../config/routes.ts';
 import { RESEARCH_TOOLS } from '../config/research-tools.ts';
 
 /**
+ * Resolves the canonical path for a route or tool.
+ */
+function resolveCanonical(path: string, config?: { canonicalPath?: string }): string {
+  return config?.canonicalPath || path;
+}
+
+/**
  * Discovers all application routes from various sources.
  * Centralizes discovery logic to prevent duplication and drift.
  *
@@ -13,27 +20,31 @@ import { RESEARCH_TOOLS } from '../config/research-tools.ts';
  */
 export function getAllRoutes() {
   // 1. Static routes from configuration (excluding parameterized and catch-all)
+  // Use canonicalPath if available, and filter out routes marked as sitemap: false
   const staticRoutes = routes
     .filter(r => r.sitemap !== false && r.path !== '*' && !r.path.includes(':'))
-    .map(r => r.canonicalPath || r.path);
+    .map(r => resolveCanonical(r.path, r));
 
   // 2. Dynamic research tool routes
-  const toolRoutes = RESEARCH_TOOLS
-    .filter(tool => tool.sitemap !== false)
-    .map(tool => tool.canonicalPath || `/research/${tool.id}`);
+  // Use canonicalPath if available to avoid duplicates (e.g. /ux-auditor vs /research/ux-auditor)
+  const toolRoutes = RESEARCH_TOOLS.map(tool =>
+    resolveCanonical(`/research/${tool.id}`, tool)
+  );
 
   // 3. Dynamic content routes discovered from file system
   const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
     getContentSlugs(dir, prefix)
   );
 
-  // Use a Set to ensure unique routes
-  const allRoutes = Array.from(new Set([...staticRoutes, ...toolRoutes, ...contentRoutes]));
+  const allRoutes = [...staticRoutes, ...toolRoutes, ...contentRoutes];
+
+  // Deduplicate routes to ensure each path is only listed once
+  const uniqueRoutes = Array.from(new Set(allRoutes));
 
   return {
     static: staticRoutes,
     tools: toolRoutes,
     content: contentRoutes,
-    all: allRoutes
+    all: uniqueRoutes
   };
 }

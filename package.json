@@ -26,6 +26,7 @@
     "knip": "knip",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
+    "audit:inventory": "node scripts/check-suppression-inventory.mjs",
     "review:ux:prep": "pnpm run setup:playwright && pnpm run audit",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
