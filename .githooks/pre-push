@@ -2,13 +2,20 @@
 # .githooks/pre-push
 # Install: git config core.hooksPath .githooks
 
-BRANCH=$(git symbolic-ref --short HEAD)
-if [[ "$BRANCH" == "main" ]]; then
-  echo "Refusing direct push to main. Use a PR."
-  exit 1
-fi
+remote="$1"
+url="$2"
+
+while read local_ref local_sha remote_ref remote_sha
+do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "❌ Error: Refusing push to main branch on $remote ($url)."
+    echo "Direct pushes and merges to main are prohibited. Please use a Pull Request."
+    exit 1
+  fi
+done
 
 # Run audit on changed tsx files only (fast path)
+# We only do this if we are not pushing to main (which is already blocked above)
 CHANGED_TSX=$(git diff --name-only origin/main...HEAD | grep '\.tsx$' | head -20)
 if [ -n "$CHANGED_TSX" ]; then
   echo "🔍 Running targeted audit on changed files..."
