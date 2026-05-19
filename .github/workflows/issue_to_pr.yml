@@ -10,6 +10,9 @@ permissions:
   issues: read
 
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   create-pr:
     if: contains(github.event.issue.title, 'Draft:') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
