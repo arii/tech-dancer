@@ -16,6 +16,7 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Zap, ShieldCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { cn } from '@/lib/utils';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
