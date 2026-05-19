@@ -197,7 +197,7 @@ jobs:
             --title "$PR_TITLE" \
             --body "$PR_BODY")
 
-          echo "pr_url=${PR_URL}" >> $GITHUB_OUTPUT
+          echo "pr_url=${PR_URL}" >> "$GITHUB_OUTPUT"
 
           # Manually trigger workflows to run on the new PR
           gh workflow run ci.yml --ref "$RESOLVE_BRANCH" || true
@@ -247,9 +247,11 @@ jobs:
           # Based on the bot comment usage, it's in a code block, likely one per line.
           COUNT=$(echo "$UNRESOLVED" | grep -c '^' || echo 0)
           echo "::warning::$COUNT files still have conflicts and require manual resolution. Auto-resolver could not fully resolve all conflicts."
-          echo "### Conflict Resolution Summary" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ $COUNT files require manual attention:" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "$UNRESOLVED" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### Conflict Resolution Summary"
+            echo "⚠️ $COUNT files require manual attention:"
+            echo '```'
+            echo "$UNRESOLVED"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
           exit 0
