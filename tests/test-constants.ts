@@ -7,4 +7,5 @@ export const IGNORED_ERROR_PATTERNS = [
   /gtag is not defined/,
   /chrome-extension/,
   /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/, // Common adblocker/extension interference
+  /Invalid Parquet signature/, // Ignore LFS placeholder issues in CI
 ];

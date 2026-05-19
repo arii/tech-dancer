@@ -4,6 +4,7 @@ export interface ResearchTool {
   category: string;
   status: string;
   layman: string;
+  sitemap?: boolean;
   canonicalPath?: string;
 }
 
@@ -28,6 +29,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Development Tool',
     status: 'Active',
     layman: 'Automated visual regression and UX improvement suggestions across viewports.',
+    sitemap: false,
     canonicalPath: '/ux-auditor'
   },
   {

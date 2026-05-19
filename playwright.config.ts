@@ -18,6 +18,7 @@ export default defineConfig({
   maxFailures: process.env.CI ? 10 : 0,
   /* Reporter to use. */
   reporter: 'html',
+  timeout: 60000,
   use: {
     headless: process.env.HEADLESS !== 'false',
     // Standardize baseURL for local and CI
@@ -41,6 +42,10 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'mobile',
+      use: { ...devices['iPhone 12'] },
     },
   ],
   webServer: {

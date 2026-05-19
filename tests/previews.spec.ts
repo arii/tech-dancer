@@ -28,16 +28,20 @@ test.describe('Preview Dashboard', () => {
     await expect(page.locator('#stat-active')).toBeVisible();
   });
 
-  test('responsive layout check', async ({ page }) => {
+  test('responsive layout check', async ({ page, isMobile }) => {
     await gotoPreviewDashboard(page);
 
-    // Desktop view
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await expect(page.locator('h1')).toBeVisible();
+    if (!isMobile) {
+      // Desktop view
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await expect(page.locator('h1')).toBeVisible();
 
-    // Mobile view
-    await page.setViewportSize({ width: 375, height: 667 });
-    await expect(page.locator('h1')).toBeVisible();
+      // Mobile view
+      await page.setViewportSize({ width: 375, height: 667 });
+      await expect(page.locator('h1')).toBeVisible();
+    } else {
+      await expect(page.locator('h1')).toBeVisible();
+    }
 
     // Header buttons should be visible and smaller on mobile
     const trackingLink = page.locator('#tracking-link');
