@@ -39,7 +39,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Events',
+    label: 'Event Resource Guides',
     icon: Calendar,
     skeleton: 'grid'
   },
