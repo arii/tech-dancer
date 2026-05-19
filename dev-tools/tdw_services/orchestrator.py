@@ -63,7 +63,30 @@ class Orchestrator:
         Fetches a PR, its diff, and generates a code review using LocalAI/Gemini.
         """
         pr_details = self.github.fetch_pr_details(pr_number)
-        pr_details['checkResults'] = self.github.fetch_check_runs(pr_details.get('head', {}).get('sha'))
+        sha = pr_details.get('head', {}).get('sha')
+        check_runs = self.github.fetch_check_runs(sha)
+        pr_details['checkResults'] = check_runs
+
+        # Fetch logs for failing checks
+        failing_logs = {}
+        structured_failures = []
+        for run in check_runs:
+            if run.get('conclusion') == 'failure':
+                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                failing_logs[run.get('name')] = logs[-5000:]  # Keep last 5k chars
+                findings = extract_failing_info(logs)
+                for f in findings:
+                    structured_failures.append({
+                        "check": run.get('name'),
+                        "file": f['file'],
+                        "line": f['line'],
+                        "message": f['message'],
+                        "type": f['type']
+                    })
+
+        pr_details['failingLogs'] = failing_logs
+        pr_details['structuredFailures'] = structured_failures
+
         pr_diff = self.github.fetch_pr_diff(pr_number)
         diff_hash = self._hash_content(pr_diff)
         cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
@@ -303,7 +326,7 @@ class Orchestrator:
                     status_icon = '✅' if run.get('conclusion') == 'success' else '❌' if run.get('conclusion') == 'failure' else '⏳'
                     context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
                     if run.get('conclusion') == 'failure':
-                        logs = self.github.fetch_check_run_logs(run.get('id'))
+                        logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
 
                         # Structured failure analysis
                         findings = extract_failing_info(logs)
@@ -384,10 +407,11 @@ class Orchestrator:
             with open(".nvmrc", "r") as f:
                 pinned_version = f.read().strip().lstrip('v')
             current_version = run_command(["node", "-v"]).strip().lstrip('v')
-            if current_version != pinned_version:
+            pinned_major = pinned_version.split('.')[0]
+            current_major = current_version.split('.')[0]
+            if current_major != pinned_major:
                 error_msg = f"Node version mismatch! Expected: {pinned_version}, Actual: {current_version}. Please use the pinned runtime requirement."
                 results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": error_msg})
-                # We raise CLIError to stop execution if it doesn't match
                 raise CLIError(error_msg)
             results["steps"].append({"name": "Node Runtime Check", "status": "success"})
         except FileNotFoundError:
@@ -482,7 +506,7 @@ class Orchestrator:
         structured_failures = []
         for run in check_runs:
             if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'))
+                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
                 failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{logs[-2000:]}") # Last 2000 chars
 
                 findings = extract_failing_info(logs)
@@ -545,7 +569,7 @@ class Orchestrator:
         if failed: raise CLIError(f"Failed to resolve: {', '.join(failed)}")
         return resolved
 
-    def repair_context(self, log=None, log_file=None):
+    def repair_context(self, log=None, log_file=None, pr_number=None):
         from error_rag import RAGPipeline
         pipeline = RAGPipeline(); prompts = []
         if log: prompts.append(pipeline.generate_prompt(log))
@@ -554,4 +578,16 @@ class Orchestrator:
                 for line in f:
                     p = pipeline.generate_prompt(line)
                     if p: prompts.append(p)
+        elif pr_number:
+            repo_name = get_repo_name()
+            g = get_github_client()
+            repo = g.get_repo(repo_name)
+            pr = repo.get_pull(pr_number)
+            check_runs = self.github.fetch_check_runs(pr.head.sha)
+            for run in check_runs:
+                if run.get('conclusion') == 'failure':
+                    logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                    for line in logs.splitlines():
+                        p = pipeline.generate_prompt(line)
+                        if p: prompts.append(p)
         return prompts

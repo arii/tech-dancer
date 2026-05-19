@@ -39,7 +39,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Events',
+    label: 'Event Resource Guides',
     icon: Calendar,
     skeleton: 'grid'
   },
@@ -54,16 +54,6 @@ export const routes: RouteConfig[] = [
     label: 'Data & Development Lab',
     icon: Database,
     skeleton: 'grid'
-  },
-  {
-    path: '/research/wcs-scraper',
-    lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
-    skeleton: 'post'
-  },
-  {
-    path: '/research/wsdc-event-reminders',
-    lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
-    skeleton: 'post'
   },
   {
     path: '/research/:id',
@@ -92,7 +82,8 @@ export const routes: RouteConfig[] = [
   {
     path: '/preview',
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
-    skeleton: 'grid'
+    skeleton: 'grid',
+    sitemap: false
   },
   {
     path: '*',

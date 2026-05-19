@@ -54,8 +54,8 @@ jobs:
         if: env.EVENT_NAME == 'issue_comment'
         run: |
           PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,headRefOid)
-          echo "HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> $GITHUB_ENV
-          echo "HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> $GITHUB_ENV
+          echo "HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> "$GITHUB_ENV"
+          echo "HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> "$GITHUB_ENV"
           gh pr checkout "$ISSUE_NUMBER"
 
       - name: Setup pnpm
@@ -72,16 +72,18 @@ jobs:
 
       - name: Native Auto-Fix
         run: |
-          pnpm eslint . --fix || true
-          pnpm oxlint --fix || true
+          if ! pnpm eslint . --fix; then echo "eslint failed"; exit 1; fi
+          if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
 
       - name: Install Ollama
         run: |
-          curl -fsSL https://ollama.com/install.sh | sh
+          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
+          sh install_ollama.sh
+          rm install_ollama.sh
           ollama serve &
 
           echo "Waiting for Ollama to be ready..."
-          for i in {1..20}; do
+          for _ in {1..20}; do
             if curl -s http://localhost:11434/api/tags > /dev/null; then
               echo "Ollama is ready!"
               exit 0
@@ -109,7 +111,7 @@ jobs:
             gh run view "$TARGET_RUN_ID" --log > ci_logs.txt
 
             # Generate fresh structured logs from current state
-            pnpm eslint . --format json > eslint-errors.json || true
+            if ! pnpm eslint . --format json > eslint-errors.json; then echo "eslint failed"; exit 1; fi
 
             python3 /tmp/repair-tool/repair.py ci_logs.txt --eslint-json eslint-errors.json
           else
@@ -123,13 +125,13 @@ jobs:
           echo "Verifying repairs..."
           if pnpm run lint:ox && pnpm run type-check; then
             echo "Repair verified successfully!"
-            echo "success=true" >> $GITHUB_OUTPUT
+            echo "success=true" >> "$GITHUB_OUTPUT"
           else
             echo "Repair failed verification or only partially fixed."
             if [ -n "$(git status --porcelain)" ]; then
-               echo "success=partial" >> $GITHUB_OUTPUT
+               echo "success=partial" >> "$GITHUB_OUTPUT"
             else
-               echo "success=false" >> $GITHUB_OUTPUT
+               echo "success=false" >> "$GITHUB_OUTPUT"
             fi
           fi
 
@@ -161,7 +163,7 @@ jobs:
 
             if [ "$EVENT_NAME" == "workflow_run" ]; then
               if [ "$HEAD_REPO" == "$REPO" ]; then
-                gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH" || true
+                if ! gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH"; then echo "PR creation failed"; exit 1; fi
               fi
             else
               gh pr comment "$ISSUE_NUMBER" --body "🤖 I've attempted to fix the CI failures. $PR_MSG. See the proposed changes in branch \`$NEW_BRANCH\`."

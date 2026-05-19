@@ -31,8 +31,18 @@ pnpm run audit
 
 2. **Start the Application**:
 
+**Interactive (Headed)**:
 ```bash
 pnpm run dev &
+```
+
+**Automation-Safe (Headless)**:
+```bash
+# Start with output piped to logs for process lifecycle management
+pnpm run dev > dev-server.log 2>&1 &
+
+# Mandatory health check
+curl --silent --fail --retry 5 --retry-connrefused http://localhost:3000/ || exit 1
 ```
 
 3. **Desktop Visual Audit (1440x900)**:
@@ -75,9 +85,16 @@ playwright-cli screenshot --filename=mobile-home.png
 
 5. **Cleanup**:
 
+**Interactive**:
 ```bash
 playwright-cli close-all
 npx kill-port 3000
+```
+
+**Automation-Safe (Graceful Shutdown)**:
+```bash
+# Stop the process gracefully in headless scenarios
+kill $(lsof -t -i :3000) 2>/dev/null || true
 ```
 
 6. **Evaluate Against Core Design Principles**:

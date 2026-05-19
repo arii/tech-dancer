@@ -29,7 +29,18 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
     repo = get_github_client().get_repo(repo_name)
     pr = repo.get_pull(int(pr_number))
 
+    # CI Status Check Integration: Block approvals on failing CI
+    from tdw_services.services.github import GitHubClient
+    gh_client = GitHubClient()
+    check_runs = gh_client.fetch_check_runs(pr.head.sha)
+    failing_checks = [run.get('name') for run in check_runs if run.get('conclusion') == 'failure']
+
     event = event_override or ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","") else "APPROVE" if "Approved" in payload.get("body","") else "COMMENT")
+
+    if failing_checks and event == "APPROVE":
+        event = "COMMENT"
+        warning = f"> ⚠️ **BLOCKING CI FAILURE**: Approval overridden to COMMENT because the following checks are failing: {', '.join(failing_checks)}. Please resolve CI issues before approval.\n\n"
+        payload["body"] = warning + payload.get("body", "")
 
     if not dry_run:
         pr.create_review(body=payload.get("body",""), comments=payload.get("comments",[]), event=event)

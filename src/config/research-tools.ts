@@ -4,6 +4,7 @@ export interface ResearchTool {
   category: string;
   status: string;
   layman: string;
+  canonicalPath?: string;
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
@@ -26,7 +27,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     name: 'Visual UX Auditor',
     category: 'Development Tool',
     status: 'Active',
-    layman: 'Automated visual regression and UX improvement suggestions across viewports.'
+    layman: 'Automated visual regression and UX improvement suggestions across viewports.',
+    canonicalPath: '/ux-auditor'
   },
   {
     id: 'wsdc-event-reminders',
