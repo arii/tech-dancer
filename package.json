@@ -16,6 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "audit:site": "playwright test tests/site-audit.spec.ts",
     "lighthouse": "lhci autorun",
     "clean": "rm -rf dist",
     "lint": "run-p lint:*",
