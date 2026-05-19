@@ -78,7 +78,6 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
           <PageHeader
             label="LABORATORY"
             title="CONTENT PIPELINE"
-            as="h1"
             paddingBottom={0}
             border="none"
           />
