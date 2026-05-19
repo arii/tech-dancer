@@ -1,5 +1,5 @@
-import { useMemo, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useParams, useLocation, Navigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -36,12 +36,6 @@ export default function ResearchDetail() {
 
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
-
-  useEffect(() => {
-    if (id === 'ux-auditor') {
-      navigate('/ux-auditor', { replace: true });
-    }
-  }, [id, navigate]);
 
   const structuredData = useMemo(() => {
     if (tool) {
@@ -106,7 +100,7 @@ export default function ResearchDetail() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Search size={48} className="opacity-20" />
-          <Text as="h1" variant="display" size="2xl">Content Not Found</Text>
+          <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
           </Box>
@@ -181,7 +175,7 @@ export default function ResearchDetail() {
                     <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
-                        <Text as="h1" variant="display" size="xl">Work in Progress</Text>
+                        <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
                           This specialized module is currently being integrated into the Tech-Dancer platform. We are finalizing the analysis models and UI components.
                         </Text>

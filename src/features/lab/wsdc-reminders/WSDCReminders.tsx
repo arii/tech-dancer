@@ -96,7 +96,7 @@ export default function WSDCReminders() {
         <Stack gap={8}>
           <Box display="flex" justify="between" align="center" border="b" paddingBottom={4}>
             <Stack gap={1}>
-              <Text as="h1" variant="display" size="2xl" weight="font-black" uppercase>Action Timeline</Text>
+              <Text variant="display" size="2xl" weight="font-black" uppercase>Action Timeline</Text>
               <Text size="sm" color="dim">{activeEvent.title} Logistics Plan</Text>
             </Stack>
             <Button onClick={handleBulkSync} variant="primary">
