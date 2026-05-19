@@ -35,23 +35,9 @@
     "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
   },
   {
-    "item_id": "neck-fan",
-    "reference_image": "references/neck-fan.jpg",
-    "final_output": "public/assets/gear/neck-fan.jpg",
-    "status": "complete",
-    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
-  },
-  {
     "item_id": "ue-wonderboom",
     "reference_image": "references/ue-wonderboom.jpg",
     "final_output": "public/assets/gear/ue-wonderboom.jpg",
-    "status": "complete",
-    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
-  },
-  {
-    "item_id": "electric-fan",
-    "reference_image": "references/electric-fan.jpg",
-    "final_output": "public/assets/gear/electric-fan.jpg",
     "status": "complete",
     "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
   },
@@ -143,13 +129,6 @@
     "item_id": "travel-pillow",
     "reference_image": "references/travel-pillow.jpg",
     "final_output": "public/assets/gear/travel-pillow.jpg",
-    "status": "complete",
-    "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
-  },
-  {
-    "item_id": "mints",
-    "reference_image": "references/mints.jpg",
-    "final_output": "public/assets/gear/mints.jpg",
     "status": "complete",
     "qa_notes": "Algorithmic sketch styling applied (OpenCV contouring, shadow hatching)."
   },
