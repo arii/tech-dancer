@@ -1,5 +1,6 @@
 dev-tools/
 scripts/
 setup-agent.sh
+**/setup-agent.sh
 public/previews/
 tests/
