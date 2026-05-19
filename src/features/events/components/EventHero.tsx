@@ -34,7 +34,7 @@ export function EventHero({
       width="full"
       minHeight={{ base: "30vh", md: "40vh" }}
       display="flex"
-      direction="column"
+      direction="col"
       overflow="hidden"
       className="bg-bg"
     >
@@ -75,7 +75,7 @@ export function EventHero({
         paddingX={{ base: 6, md: 12, lg: 24 }}
         paddingTop={12}
         paddingBottom={8}
-        maxWidth="screen-xl"
+        maxWidth="100vw"
         marginX="auto"
         width="full"
         flex="1 1 auto"

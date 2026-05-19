@@ -30,7 +30,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Box display="flex" minHeight="screen" width="full">
+      <Box display="flex" minHeight="screen" width="full" minWidth="0">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -40,6 +40,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           position="relative"
           paddingTop={{ base: 16, lg: 0 }}
           maxWidth="full"
+          minWidth="0"
           width="full"
           surface="bg"
           direction="col"

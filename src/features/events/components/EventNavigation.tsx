@@ -9,7 +9,7 @@ export function EventNavigation() {
       zIndex={40}
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }}>
+      <Box maxWidth="100vw" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }}>
         <Box
           display="flex"
           gap={{ base: 6, md: 8 }}
