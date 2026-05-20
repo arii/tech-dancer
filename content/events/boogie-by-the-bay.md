@@ -9,6 +9,9 @@ excerpt: "The flagship event of The Next Generation Swing Dance Club, held every
 location: "Hyatt Regency San Francisco Airport"
 city: "Burlingame, CA"
 schedule: "October 8 - 11, 2026"
+region: "West Coast"
+guideStatus:
+  - "Coming Soon"
 url: "https://boogiebythebay.org"
 heroImage: ""
 description: "One of the longest-running and most prestigious events in the world. Boogie by the Bay features the Champions/All-Star Jack & Jill, professional intensives, and a massive ballroom floor that hosts dancers from every corner of the globe."
