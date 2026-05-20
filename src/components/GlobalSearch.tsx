@@ -120,6 +120,10 @@ export function GlobalSearch() {
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key === 'Escape') {
+              close();
+              return;
+            }
             if (e.key === 'Tab') {
               const dialog = e.currentTarget;
               const focusableElements = Array.from(dialog.querySelectorAll(
