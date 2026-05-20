@@ -1,11 +1,9 @@
 import { Icon } from '@/components/ui/Icon';
-import { cn } from '@/lib/utils';
 
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
 
 export default function NotFound() {
   const navigate = useNavigate();

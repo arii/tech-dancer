@@ -1,7 +1,7 @@
 import * as React from "react"
 import { forwardRef, ButtonHTMLAttributes, ElementType, Ref } from "react"
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/lib/variants"
+import { buttonVariants, actionButtonVariants } from "@/lib/variants"
 import { type VariantProps } from "class-variance-authority"
 import { Box, BaseProps } from "./Box"
 
@@ -12,16 +12,24 @@ interface ButtonProps
   as?: ElementType
   href?: string
   loading?: boolean
+  useActionVariants?: boolean
+  actionVariant?: VariantProps<typeof actionButtonVariants>['variant']
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, ...props }, ref) => {
+  ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, useActionVariants, actionVariant, ...props }, ref) => {
     return (
       <Box
         as={as}
         ref={ref as Ref<HTMLDivElement>}
         cursor="pointer"
-        className={cn(buttonVariants({ variant, intent, size, fullWidth }), "tap-target", className)}
+        className={cn(
+          useActionVariants
+            ? actionButtonVariants({ variant: actionVariant })
+            : buttonVariants({ variant, intent, size, fullWidth }),
+          "tap-target",
+          className
+        )}
         {...props}
       >
         {children}

@@ -97,10 +97,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     top, right, bottom, left, bgGradient, borderStyle, truncate, clamp, bg, whiteSpace,
     animation, divide, divideColor,
     // Motion props filtering
-    initial, animate: animateProp, exit, transition, variants: variantsProp,
-    whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
-    layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
-    onUpdate, custom,
+    initial: _initial, animate: _animateProp, exit: _exit, transition: _transition, variants: _variantsProp,
+    whileHover: _whileHover, whileTap: _whileTap, whileFocus: _whileFocus, whileDrag: _whileDrag, whileInView: _whileInView, viewport: _viewport,
+    layout: _layoutProp, layoutId: _layoutId, onAnimationStart: _onAnimationStart, onAnimationComplete: _onAnimationComplete,
+    onUpdate: _onUpdate, custom: _custom,
     ...props 
   }, ref) => {
     const isMotion = typeof Component !== "string"
@@ -115,10 +115,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const motionProps: Record<string, unknown> = {}
     if (isMotion) {
       const allMotionProps = {
-        initial, animate: _animateProp, exit, transition, variants: variantsProp,
-        whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
-        layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
-        onUpdate, custom
+        initial: _initial, animate: _animateProp, exit: _exit, transition: _transition, variants: _variantsProp,
+        whileHover: _whileHover, whileTap: _whileTap, whileFocus: _whileFocus, whileDrag: _whileDrag, whileInView: _whileInView, viewport: _viewport,
+        layout: _layoutProp, layoutId: _layoutId, onAnimationStart: _onAnimationStart, onAnimationComplete: _onAnimationComplete,
+        onUpdate: _onUpdate, custom: _custom
       };
 
       Object.entries(allMotionProps).forEach(([key, value]) => {
@@ -177,7 +177,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
         ref={ref}
         className={composeStyles(
           panel && layoutTokens.panel,
-          layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
+          _layoutProp && typeof _layoutProp === "string" && layoutTokens[_layoutProp as keyof typeof layoutTokens],
           shadow && SHADOW_MAP[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
           bgGradient,
