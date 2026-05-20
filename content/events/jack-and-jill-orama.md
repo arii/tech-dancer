@@ -94,7 +94,7 @@ Use the outfit, accessory, shoes, essentials, and travel sections above as your 
 
 ## NorCal BestCal Merch Picks (With Photos)
 
-Browse the full collection at https://boomtick.printful.me/, or start with these 11 featured grid items and price points:
+Browse the full collection at https://boomtick.printful.me/, or start with these 11 featured grid items and price points. Bonus: use the Printful referral link for $5 off your order: https://www.printful.com/give-5-get-5/GZB6C4.
 
 | Item | Preview | Price | Link |
 | :--- | :---: | :--- | :--- |
