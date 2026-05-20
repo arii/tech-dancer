@@ -48,7 +48,7 @@ export default function Navigation() {
       <MobileBottomNav />
 
       {/* Mobile Header */}
-      <MobileHeader onClose={() => {}} />
+      <MobileHeader />
 
       {/* Desktop Sidebar */}
       <Box

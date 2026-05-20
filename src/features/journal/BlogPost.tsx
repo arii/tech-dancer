@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 import { useQuery } from '@tanstack/react-query';
 import { getPostBySlug } from '@/lib/content';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -17,14 +18,7 @@ export default function BlogPost() {
     initialData: () => slug ? getPostBySlug(slug) : undefined,
   });
 
-
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-      return;
-    }
-    navigate('/blog');
-  };
+  const handleBack = useSmartBackNavigation('/blog');
 
   const structuredData = useMemo(() => {
     if (!post) return null;

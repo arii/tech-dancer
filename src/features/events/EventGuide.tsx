@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -13,6 +12,7 @@ import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 
 export default function EventGuide() {
   const {
@@ -24,17 +24,9 @@ export default function EventGuide() {
     themeAccessories,
     gearSections,
     relatedEvents,
-    navigate,
   } = useEventDetail();
 
-
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-      return;
-    }
-    navigate('/events');
-  };
+  const handleBack = useSmartBackNavigation('/events');
 
   if (isLoading) {
     return (
@@ -49,15 +41,15 @@ export default function EventGuide() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">
-            {isError ? "Error Loading Event" : "Event Not Found"}
+            {isError ? 'Error Loading Event' : 'Event Not Found'}
           </Text>
           {isError && error && (
             <Text variant="body" color="dim" size="sm">
-              {error instanceof Error ? error.message : "An unexpected error occurred."}
+              {error instanceof Error ? error.message : 'An unexpected error occurred.'}
             </Text>
           )}
           <Box as="button" onClick={handleBack} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Events</Text>
+            <Text variant="mono" size="xs">Back</Text>
           </Box>
         </Stack>
       </Box>
@@ -87,42 +79,36 @@ export default function EventGuide() {
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
               {event.theme && (
-                <Box id="theme" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><ThemeSpotlight
-                                    title={event.theme.name}
+                <ThemeSpotlight
+                  id="theme"
+                  title={event.theme.name}
                   label={event.theme.label}
                   description={event.theme.description || ''}
                   colors={event.theme.colors}
                   outfits={themeOutfits}
                   accessories={themeAccessories}
                 />
-                </Box>
               )}
 
               {gearSections.length > 0 && (
-                <Box id="gear" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><CuratedGear
-                                    title={`Gear for ${event.title}`}
+                <CuratedGear
+                  id="gear"
+                  title={`Gear for ${event.title}`}
                   sections={gearSections}
                 />
-                </Box>
               )}
 
-              <Box id="reminders" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><EventReminders id="reminders" event={event} />
+              <EventReminders id="reminders" event={event} />
 
-              </Box>
+              <EventTravel id="travel" notes={event.description} />
 
-              <Box id="travel" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><EventTravel id="travel" notes={event.description} />
-
-              </Box>
-
-              <Box id="notes" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><EventNotes id="notes" content={event.content} />
+              <EventNotes id="notes" content={event.content} />
 
               {relatedEvents.length > 0 && (
-                </Box>
-
-              <Box id="related" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><RelatedEvents
-                                    events={relatedEvents}
+                <RelatedEvents
+                  id="related"
+                  events={relatedEvents}
                 />
-                </Box>
               )}
             </Stack>
           </Box>
