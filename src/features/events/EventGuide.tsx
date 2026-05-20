@@ -44,15 +44,18 @@ export default function EventGuide() {
       });
     }, options);
 
+    const elements: HTMLElement[] = [];
     EVENT_TABS.forEach((tab) => {
       const element = document.getElementById(tab.id);
       if (element) {
         observerRef.current?.observe(element);
+        elements.push(element);
       }
     });
 
     return () => {
       if (observerRef.current) {
+        elements.forEach(el => observerRef.current?.unobserve(el));
         observerRef.current.disconnect();
       }
     };

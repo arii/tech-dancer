@@ -185,9 +185,6 @@
   }
 }
 
-@utility scroll-touch {
-  -webkit-overflow-scrolling: touch;
-}
 
 @utility transition-nav {
   transition-property: background-color, backdrop-filter, border-color;
