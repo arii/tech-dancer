@@ -2,6 +2,8 @@ import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GearCard } from '@/components/ui/GearCard';
 import { ResolvedGearSection } from '../useEventDetail';
+import { NavLink } from 'react-router-dom';
+import { Text } from '@/layouts/Primitives';
 
 interface CuratedGearProps {
   id?: string;
@@ -19,11 +21,22 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
 
         {sections.map((section) => (
           <Stack key={section.label} gap={8}>
-            <SectionHeader
-              title={section.label}
-              size="sm"
-            />
-            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+            <Box display="flex" justify="between" align="center" gap={4}>
+              <SectionHeader
+                title={section.label}
+                size="sm"
+              />
+              <Box
+                as={NavLink}
+                to={section.ctaHref}
+                aria-label={`${section.ctaLabel} from ${section.label}`}
+              >
+                <Text variant="mono" size="xs" color="accent" tracking="wide">
+                  {section.ctaLabel}
+                </Text>
+              </Box>
+            </Box>
+            <Grid cols={{ base: 1, sm: 2 }} gap={6}>
               {section.items.map((item) => (
                 <GearCard
                   key={item.id}

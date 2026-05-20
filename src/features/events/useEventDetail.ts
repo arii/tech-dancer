@@ -6,7 +6,10 @@ import { affiliateManager } from "@/lib/affiliateManager";
 import { AffiliateLink } from "@/types";
 
 export interface ResolvedGearSection {
+  key: "outfits" | "accessories" | "shoes-essentials" | "travel-extras";
   label: string;
+  ctaLabel: string;
+  ctaHref: string;
   items: AffiliateLink[];
 }
 
@@ -27,16 +30,37 @@ export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
   if (!gear) return [];
 
   return [
-    { label: "Outfits", items: resolveAffiliateLinks(gear.outfitIds) },
-    { label: "Accessories", items: resolveAffiliateLinks(gear.accessoryIds) },
     {
+      key: "outfits",
+      label: "Outfits",
+      ctaLabel: "Shop the look",
+      ctaHref: "/gear?category=outfit",
+      items: resolveAffiliateLinks(gear.outfitIds),
+    },
+    {
+      key: "accessories",
+      label: "Accessories",
+      ctaLabel: "View all accessories",
+      ctaHref: "/gear?category=accessory",
+      items: resolveAffiliateLinks(gear.accessoryIds),
+    },
+    {
+      key: "shoes-essentials",
       label: "Shoes & Essentials",
+      ctaLabel: "Pack dance essentials",
+      ctaHref: "/gear?category=essentials",
       items: resolveAffiliateLinks([
         ...(gear.shoeIds ?? []),
         ...(gear.essentialIds ?? []),
       ]),
     },
-    { label: "Travel Extras", items: resolveAffiliateLinks(gear.travelIds) },
+    {
+      key: "travel-extras",
+      label: "Travel Extras",
+      ctaLabel: "Pack for this event",
+      ctaHref: "/gear?category=travel",
+      items: resolveAffiliateLinks(gear.travelIds),
+    },
   ].filter((s) => s.items.length > 0);
 }
 
