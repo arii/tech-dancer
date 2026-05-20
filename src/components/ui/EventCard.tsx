@@ -14,6 +14,23 @@ interface EventCardProps {
   variant?: 'default' | 'compact';
 }
 
+const VARIANT_CONFIGS = {
+  default: {
+    padding: 8,
+    gap: 4,
+    titleSize: "lg" as const,
+    iconClass: "w-4 h-4",
+    footerMarginTop: 2,
+  },
+  compact: {
+    padding: { base: 4, sm: 6 },
+    gap: 2,
+    titleSize: "md" as const,
+    iconClass: "w-3 h-3",
+    footerMarginTop: 1,
+  },
+} as const;
+
 export function EventCard({
   title,
   slug,
@@ -24,20 +41,19 @@ export function EventCard({
   hasReminders,
   variant = 'default'
 }: EventCardProps) {
-  const isCompact = variant === 'compact';
+  const config = VARIANT_CONFIGS[variant];
 
   return (
     <Stack
       as="article"
-      padding={isCompact ? 4 : 8}
+      padding={config.padding}
       radius="md"
       border
-      gap={isCompact ? 2 : 4}
+      gap={config.gap}
       height="full"
       width="full"
       textAlign="left"
       className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
-      padding={isCompact ? { base: 4, sm: 6 } : 8}
     >
       <NavLink
         to={`/events/${slug}`}
@@ -47,7 +63,7 @@ export function EventCard({
 
       <Box display="flex" justify="between" align="center" width="full">
         <Box display="flex" align="center" gap={2}>
-          <MapPin className={cn("text-accent", isCompact ? "w-3 h-3" : "w-4 h-4")} />
+          <MapPin className={cn("text-accent", config.iconClass)} />
           <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
             {schedule}
           </Text>
@@ -74,7 +90,7 @@ export function EventCard({
       <Stack gap={1}>
         <Text
           variant="body"
-          size={isCompact ? "md" : "lg"}
+          size={config.titleSize}
           weight="font-bold"
           color="main"
           leading="tight"
@@ -87,7 +103,7 @@ export function EventCard({
         </Text>
       </Stack>
 
-      <Box display="flex" gap={3} marginTop={isCompact ? 1 : 2}>
+      <Box display="flex" gap={3} marginTop={config.footerMarginTop}>
         {hasTheme && (
           <Box display="flex" align="center" gap={1} color="brand">
             <Zap className="w-3 h-3" />
