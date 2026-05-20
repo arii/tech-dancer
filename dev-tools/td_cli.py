@@ -15,9 +15,18 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 try:
     from tdw_services.cli import cli
     # Expose utilities for legacy tests
+    import utils
     from utils import get_github_token, get_repo_name, get_gha_variable, CLIError, get_github_client
-    from tdw_services.orchestrator import Orchestrator
 
+    # Force tdw_services.orchestrator to use the same utility functions as td_cli
+    # so that legacy tests patching td_cli.get_github_client etc. will work.
+    import tdw_services.orchestrator
+    tdw_services.orchestrator.get_github_client = get_github_client
+    tdw_services.orchestrator.get_repo_name = get_repo_name
+    tdw_services.orchestrator.get_github_token = get_github_token
+    tdw_services.orchestrator.get_gha_variable = get_gha_variable
+
+    from tdw_services.orchestrator import Orchestrator
     _orch = Orchestrator()
     resolve_baseline = _orch.resolve_baseline
 
