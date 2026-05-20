@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Share2, Check } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Stack, Text } from '@/layouts/Primitives';
 
 interface ArticleActionsProps {
   title: string;
