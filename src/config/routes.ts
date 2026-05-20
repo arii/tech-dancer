@@ -66,6 +66,13 @@ export const routes: RouteConfig[] = [
     skeleton: 'grid'
   },
   {
+    path: '/merch',
+    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
+    label: 'Merch',
+    icon: ShoppingBag,
+    skeleton: 'grid'
+  },
+  {
     path: '/about',
     lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
     label: 'About',
@@ -93,5 +100,5 @@ export const routes: RouteConfig[] = [
 ];
 
 export const MOBILE_NAV_ROUTES = routes.filter((r): r is RouteConfig & { label: string, icon: LucideIcon } =>
-  !!(r.label && r.icon && ['/', '/blog', '/gear', '/events', '/research'].includes(r.path))
+  !!(r.label && r.icon && ['/', '/blog', '/gear', '/merch', '/events'].includes(r.path))
 );
