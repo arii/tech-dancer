@@ -7,10 +7,9 @@ interface EventCardProps {
   slug: string;
   location: string;
   schedule: string;
-  guideStatus?: string[];
 }
 
-export function EventCard({ title, slug, location, schedule, guideStatus = [] }: EventCardProps) {
+export function EventCard({ title, slug, location, schedule }: EventCardProps) {
   return (
     <Stack
       as="article"
@@ -62,11 +61,6 @@ export function EventCard({ title, slug, location, schedule, guideStatus = [] }:
         <Text size="sm" color="dim">
           {location}
         </Text>
-        {guideStatus.length > 0 && (
-          <Text size="xs" color="dim" variant="mono">
-            {guideStatus.join(' • ')}
-          </Text>
-        )}
       </Stack>
     </Stack>
   );

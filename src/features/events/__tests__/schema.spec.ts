@@ -51,9 +51,18 @@ describe('getEventSchema', () => {
     });
   });
 
-  it('uses excerpt if description is missing', () => {
-    const eventWithoutDescription = { ...mockEvent, description: '' };
-    const schema = getEventSchema(eventWithoutDescription as Event);
+  it('prioritizes whyAttending over description and excerpt', () => {
+    const eventWithWhyAttending = {
+      ...mockEvent,
+      whyAttending: 'Why attend this event'
+    };
+    const schema = getEventSchema(eventWithWhyAttending as Event);
+    expect(schema.description).toBe('Why attend this event');
+  });
+
+  it('uses excerpt if description and whyAttending are missing', () => {
+    const minimalEvent = { ...mockEvent, description: '', whyAttending: '' };
+    const schema = getEventSchema(minimalEvent as Event);
     expect(schema.description).toBe('Test excerpt');
   });
 
