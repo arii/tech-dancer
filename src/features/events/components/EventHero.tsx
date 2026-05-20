@@ -6,6 +6,7 @@ import { motionTokens } from '@/styles/motion';
 import { Logo } from '@/components/ui/Logo';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
 import { EventNavigation } from './EventNavigation';
+import { EventSectionId } from '../constants';
 
 interface EventHeroProps {
   title: string;
@@ -15,7 +16,7 @@ interface EventHeroProps {
   eyebrow?: string;
   whyAttending?: string;
   id?: string;
-  sectionIds: string[];
+  sectionIds: EventSectionId[];
 }
 
 export function EventHero({

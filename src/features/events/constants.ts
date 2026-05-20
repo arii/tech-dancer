@@ -9,4 +9,23 @@ export const EVENT_TABS = [
   { id: 'related', label: 'Related', icon: Briefcase },
 ] as const;
 
+export type EventSectionId = (typeof EVENT_TABS)[number]['id'];
+
+interface EventSectionVisibility {
+  hasTheme: boolean;
+  hasGear: boolean;
+  hasRelated: boolean;
+}
+
+export function getVisibleEventSectionIds({ hasTheme, hasGear, hasRelated }: EventSectionVisibility): EventSectionId[] {
+  return [
+    hasTheme ? 'theme' : null,
+    hasGear ? 'gear' : null,
+    'reminders',
+    'travel',
+    'notes',
+    hasRelated ? 'related' : null,
+  ].filter((value): value is EventSectionId => Boolean(value));
+}
+
 export const SECTION_SPACING = "section-spacing";

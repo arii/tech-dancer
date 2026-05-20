@@ -10,7 +10,7 @@ import { EventTravel } from './components/EventTravel';
 import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
-import { SECTION_SPACING } from './constants';
+import { getVisibleEventSectionIds, SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
 
 export default function EventGuide() {
@@ -54,14 +54,11 @@ export default function EventGuide() {
     );
   }
 
-  const sectionIds = [
-    event.theme ? 'theme' : null,
-    gearSections.length > 0 ? 'gear' : null,
-    'reminders',
-    'travel',
-    'notes',
-    relatedEvents.length > 0 ? 'related' : null,
-  ].filter((value): value is string => Boolean(value));
+  const sectionIds = getVisibleEventSectionIds({
+    hasTheme: Boolean(event.theme),
+    hasGear: gearSections.length > 0,
+    hasRelated: relatedEvents.length > 0,
+  });
 
   return (
     <Box>

@@ -1,8 +1,8 @@
 import { Box, Text } from '@/layouts/Primitives';
-import { EVENT_TABS } from '../constants';
+import { EVENT_TABS, EventSectionId } from '../constants';
 
 interface EventNavigationProps {
-  sectionIds: string[];
+  sectionIds: EventSectionId[];
 }
 
 export function EventNavigation({ sectionIds }: EventNavigationProps) {
