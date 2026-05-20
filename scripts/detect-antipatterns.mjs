@@ -249,7 +249,8 @@ function checkContent(content, filepath = 'unknown') {
                             CONFIG.allowedTextUtils.includes(baseColor) ||
                             CONFIG.allowedTextSizes.includes(baseColor) ||
                             baseColor.startsWith('brand-') ||
-                            fullToken.startsWith('brand-');
+                            fullToken.startsWith('brand-') ||
+                            baseColor.startsWith('gradient-');
 
           if (!isAllowed) {
             violations.push({

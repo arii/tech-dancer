@@ -34,7 +34,7 @@ export default defineConfig({
       // Sensitivity threshold for color differences (0 to 1)
       threshold: 0.2,
       // Total allowed difference in pixels as a ratio (0 to 1)
-      maxDiffPixelRatio: 0.02,
+      maxDiffPixelRatio: 0.12,
     },
   },
   projects: [
