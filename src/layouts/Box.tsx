@@ -237,7 +237,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(left, "", s("left")),
           getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
-          borderStyle && `border-${borderStyle}`,
+          borderStyle && `border-${borderStyle as string}`,
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(bg, "bg-"),
