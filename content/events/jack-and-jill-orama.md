@@ -87,12 +87,6 @@ relatedEvents:
 
 This is my flagship one-stop Rainbow guide for JJO: why this event matters, what to pack, and how to show up ready.
 
-## Pro Tips for the Weekend
-
-- **The Hyatt Regency:** This hotel is huge. Give yourself an extra 5 minutes to get from your room to the ballroom, especially during peak workshop hours.
-- **Disneyland Proximity:** If you're planning a Disney day, Monday after the event is usually when the "survivors" head to the park.
-- **Competition Formats:** JJO is known for unique comps like the "Jack & Jill O'Rama" (random pairings across all levels). Don't miss the chance to enter or at least watch these!
-
 ## NorCal BestCal Merch Picks
 
 Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/), or start with these featured grid items. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.

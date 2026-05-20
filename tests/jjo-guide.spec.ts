@@ -35,8 +35,8 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
   test('should render the action timeline with multiple rows', async ({ page }) => {
     const remindersSection = page.getByTestId('reminders');
     await expect(remindersSection).toBeVisible();
-    // The class 'group' is on the container in TimelineRow.tsx
-    const rows = remindersSection.locator('.group');
+    // Using stable data-testid instead of .group class
+    const rows = remindersSection.getByTestId('timeline-row');
     await expect(rows).toHaveCount(5); // Standard WSDC timeline
   });
 
