@@ -37,7 +37,7 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <BarChart2 className="w-4 h-4 text-accent" />
-        <Text variant="mono" size="micro" weight="font-bold" uppercase>Score Distribution</Text>
+        <Text variant="mono" size="micro" weight="bold" uppercase>Score Distribution</Text>
       </Box>
       <Box flex={1} minHeight={0}>
         {data.length > 0 ? (
@@ -83,7 +83,7 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <TrendingUp className="w-4 h-4 text-accent" />
-        <Text variant="mono" size="micro" weight="font-bold" uppercase>Avg Score Trend</Text>
+        <Text variant="mono" size="micro" weight="bold" uppercase>Avg Score Trend</Text>
       </Box>
       <Box flex={1} minHeight={0}>
         {data.length > 0 ? (

@@ -90,7 +90,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
-    top, right, bottom, left, bgGradient,
+    top, right, bottom, left, bgGradient, borderStyle, truncate, clamp, bg,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,

@@ -27,19 +27,19 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (
     <Box border surface="default">
       <Box padding="compact" borderBottom display="flex" justify="between" align="center">
-        <Text variant="mono" size="xs" weight="font-bold" uppercase>Live Dataset</Text>
+        <Text variant="mono" size="xs" weight="bold" uppercase>Live Dataset</Text>
         <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
       </Box>
       <Box className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-line">
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Date</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Competitor</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Event</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal" className="hidden md:table-cell">Location</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Score</Text>
-              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal" className="hidden sm:table-cell">Status</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="normal">Date</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="normal">Competitor</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="normal">Event</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="normal" className="hidden md:table-cell">Location</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="normal">Score</Text>
+              <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="normal" className="hidden sm:table-cell">Status</Text>
             </tr>
           </thead>
           <tbody>
@@ -48,7 +48,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
                 <Text as="td" padding={4} variant="mono" size="xs" color="dim">{record.event_date}</Text>
                 <Box as="td" padding={4}>
                   <Stack gap={0}>
-                    <Text variant="body" size="xs" weight="font-bold">{record.competitor_name}</Text>
+                    <Text variant="body" size="xs" weight="bold">{record.competitor_name}</Text>
                     <Text variant="mono" size="micro" color="dim">#{record.Dancer_ID}</Text>
                   </Stack>
                 </Box>
@@ -76,7 +76,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
                     paddingY={0.5}
                     surface={record.Promoted ? 'accent' : 'muted'}
                     size="xs"
-                    weight="font-black"
+                    weight="black"
                     uppercase
                     tracking="widest"
                     className={record.Promoted ? 'text-accent-navy' : 'text-text-dim opacity-50'}
@@ -136,7 +136,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
       <Stack gap={6}>
         <Box display="flex" align="center" gap={3}>
           <Download className="w-5 h-5 text-accent" />
-          <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Console</Text>
+          <Text variant="mono" size="xs" weight="bold" uppercase>Export Console</Text>
         </Box>
         <Stack gap={3}>
           <ActionButton
@@ -148,7 +148,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
             <Box display="flex" align="center" gap={3} width="full" textAlign="left">
               <FileJson className="w-4 h-4 shrink-0" />
               <Stack gap={0}>
-                <Text variant="mono" size="micro" weight="font-bold">EXPORT_CSV</Text>
+                <Text variant="mono" size="micro" weight="bold">EXPORT_CSV</Text>
                 <Text variant="body" size="micro" color="dim">Raw machine-readable data</Text>
               </Stack>
             </Box>
@@ -162,7 +162,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
             <Box display="flex" align="center" gap={3} width="full" textAlign="left">
               <FileText className="w-4 h-4 shrink-0" />
               <Stack gap={0}>
-                <Text variant="mono" size="micro" weight="font-bold">EXPORT_PDF_REPORT</Text>
+                <Text variant="mono" size="micro" weight="bold">EXPORT_PDF_REPORT</Text>
                 <Text variant="body" size="micro" color="dim">Formatted analytical brief</Text>
               </Stack>
             </Box>
@@ -177,21 +177,21 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
   return (
     <Box paddingX={4} paddingY={6}>
       <Stack gap={4}>
-        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">System Intelligence</Text>
+        <Text variant="mono" size="micro" color="dim" uppercase weight="bold" tracking="widest">System Intelligence</Text>
         <Stack gap={4}>
           <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
             <Text variant="body" size="xs" color="dim">Status</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">OPERATIONAL</Text>
+            <Text variant="mono" size="xs" color="brand" weight="bold">OPERATIONAL</Text>
           </Box>
           <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
             <Text variant="body" size="xs" color="dim">Latency</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">
+            <Text variant="mono" size="xs" color="brand" weight="bold">
               {latency ? `${(latency / 1000).toFixed(2)}s` : '---'}
             </Text>
           </Box>
           <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
             <Text variant="body" size="xs" color="dim">Events Processed</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">{totalEvents || '---'}</Text>
+            <Text variant="mono" size="xs" color="brand" weight="bold">{totalEvents || '---'}</Text>
           </Box>
           <Box display="flex" justify="between" align="center">
             <Text variant="body" size="xs" color="dim">Safe Access</Text>
@@ -238,7 +238,7 @@ export function WCSScraperTool() {
         <Stack align="center" gap={4} paddingY={10}>
           <AlertCircle className="w-12 h-12 text-accent opacity-50" />
           <Stack align="center" gap={1}>
-            <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
+            <Text variant="mono" size="sm" weight="bold" uppercase>Data Synchronisation Failed</Text>
             <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
           </Stack>
           <Box paddingTop={4}>
@@ -256,11 +256,11 @@ export function WCSScraperTool() {
       <Box paddingBottom={8} borderBottom>
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Scraper Console v4.2</Text>
+            <Text variant="mono" size="xs" weight="bold" color="accent" uppercase tracking="widest">Scraper Console v4.2</Text>
             <StatusBadge label="active" />
           </Box>
           <Stack gap={2}>
-            <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
+            <Text variant="display" size="4xl" weight="black">WCS Scoring Analysis</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
               Research tool for extracting and analyzing public West Coast Swing competition results.
               Providing transparency on scoring patterns and promotion trends.
@@ -274,7 +274,7 @@ export function WCSScraperTool() {
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>
             <Stack gap={2}>
-              <Text variant="display" size="2xl" weight="font-black">Data Collection</Text>
+              <Text variant="display" size="2xl" weight="black">Data Collection</Text>
               <Text variant="body" size="lg" color="dim">
                 Our pipeline has indexed {(totalEvents || 6308).toLocaleString()} unique events since 2023.
                 We are currently synchronizing historical data, starting with the most recent seasons.
@@ -284,14 +284,14 @@ export function WCSScraperTool() {
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={Zap} size="sm" color="accent" />
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Safe Access</Text>
+                  <Text weight="bold" size="xs" uppercase tracking="widest" color="accent">Safe Access</Text>
                 </Box>
                 <Text size="xs" color="dim">Asynchronous extraction with intentional delays to ensure zero impact on host server performance.</Text>
               </Stack>
               <Stack gap={2}>
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={ShieldCheck} size="sm" color="accent" />
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Public Data</Text>
+                  <Text weight="bold" size="xs" uppercase tracking="widest" color="accent">Public Data</Text>
                 </Box>
                 <Text size="xs" color="dim">Strictly indexing public scoring data for aggregate research and statistical purposes.</Text>
               </Stack>
@@ -301,7 +301,7 @@ export function WCSScraperTool() {
             <Box padding={6} border radius="lg" surface="surface">
               <Stack gap={4}>
                 <Box display="flex" justify="between" align="center">
-                  <Text variant="mono" size="xs" weight="font-bold" color="dim">VERIFICATION</Text>
+                  <Text variant="mono" size="xs" weight="bold" color="dim">VERIFICATION</Text>
                   <Text variant="mono" size="micro" color="success">ACTIVE</Text>
                 </Box>
                 <Text size="sm" color="body">
@@ -309,7 +309,7 @@ export function WCSScraperTool() {
                 </Text>
                 <Box height={0.5} surface="muted" />
                 <Box display="flex" justify="between" align="center">
-                  <Text variant="mono" size="xs" weight="font-bold" color="dim">LAST SYNC</Text>
+                  <Text variant="mono" size="xs" weight="bold" color="dim">LAST SYNC</Text>
                   <Text variant="mono" size="micro" color="accent">{isLoading ? 'PENDING' : lastSync || 'RECENT'}</Text>
                 </Box>
               </Stack>
@@ -338,7 +338,7 @@ export function WCSScraperTool() {
             <Stack gap={6}>
               <Box display="flex" align="center" gap={3}>
                 <Search className="w-5 h-5 text-dim" />
-                <Text variant="mono" size="xs" weight="font-bold" uppercase color="dim">
+                <Text variant="mono" size="xs" weight="bold" uppercase color="dim">
                   Search Console
                 </Text>
               </Box>

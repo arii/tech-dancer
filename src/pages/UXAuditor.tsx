@@ -172,7 +172,7 @@ export default function UXAuditor() {
               padding={2}
               className={cardVariants()}
             >
-              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
+              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="bold">API KEY</Text>
               <Box
                 as="input"
                 type="password"
@@ -204,7 +204,7 @@ export default function UXAuditor() {
                 </Box>
               )}
             </Stack>
-            <Text variant="sans" size="xs" color="warning" paddingX={2} weight="font-medium">
+            <Text variant="sans" size="xs" color="warning" paddingX={2} weight="medium">
               ⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices.
             </Text>
           </Stack>
@@ -215,7 +215,7 @@ export default function UXAuditor() {
             padding={2}
             className={cardVariants()}
           >
-            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
+            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="bold">SNAPSHOT SERVICE</Text>
             <Box
               as="input"
               type="text"
@@ -238,7 +238,7 @@ export default function UXAuditor() {
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
         <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
-          <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
+          <Text variant="sans" size="xs" weight="bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
           <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
@@ -272,7 +272,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="sm" weight="bold" truncate display="block">
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                  <Text variant="mono" size="xs" weight="medium" color="dim" uppercase>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -293,7 +293,7 @@ export default function UXAuditor() {
                 gap={6} direction={{ base: "col", md: "row" }}
               >
                 <Stack gap={1} minWidth="0" flex={1}>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
+                  <Text variant="sans" size="xs" weight="bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
                   <Text variant="sans" size="xl" weight="black" truncate display="block" title={activeReport.url}>
@@ -347,11 +347,11 @@ export default function UXAuditor() {
                           <Box width={9} height={9} bg="surface" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
-                          <Text variant="sans" size="base" weight="font-bold">
+                          <Text variant="sans" size="base" weight="bold">
                             {vp.name} Analysis
                           </Text>
                         </Stack>
-                        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                        <Text variant="mono" size="xs" weight="bold" color="dim" uppercase tracking="widest">
                           {vp.width}w × {vp.height}h
                         </Text>
                       </Stack>
@@ -372,7 +372,7 @@ export default function UXAuditor() {
                               <Box marginBottom={2}>
                                 <Icon icon={ImageIcon} size="2xl" color="muted" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
+                              <Text variant="sans" size="xs" weight="bold" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
                             </Stack>
@@ -384,11 +384,11 @@ export default function UXAuditor() {
                             <>
                               <Box bg="surface-alt" padding={5} className="border border-line rounded-lg">
                                 <Box marginBottom={3}>
-                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
+                                  <Text variant="sans" size="xs" weight="black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
                                   </Text>
                                 </Box>
-                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block">
+                                <Text variant="sans" size="sm" weight="medium" className="leading-relaxed break-words block">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -412,7 +412,7 @@ export default function UXAuditor() {
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                             <Box bg="surface" padding={3} radius="lg" border={true}>
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
+                                <Text variant="sans" size="xs" weight="black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
                                           <Text variant="sans" size="xs" weight="bold" className="break-words whitespace-pre-wrap" clamp={4}>
                                             {imp.suggestion}
