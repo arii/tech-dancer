@@ -34,9 +34,9 @@ export function useToolbox() {
           case 'Best for travel':
             return safeSearch(resource.category, 'travel') || resource.tags?.includes('travel');
           case 'Highly recommended':
-            return resource.verdict === 'highly-recommended' || safeSearch(resource.category, 'dance');
+            return safeSearch(resource.verdict, 'highly recommended');
           case 'Competition ready':
-            return resource.verdict === 'competition-ready' || safeSearch(resource.excerpt, 'competition');
+            return safeSearch(resource.verdict, 'essential for competitors') || safeSearch(resource.verdict, 'competition');
           default:
             return true;
         }
