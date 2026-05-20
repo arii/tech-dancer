@@ -1,5 +1,6 @@
 ---
 type: event
+region: "Texas"
 title: "Wild Wild Westie"
 date: "2026-07-02"
 startDate: "2026-07-02"

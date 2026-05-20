@@ -1,5 +1,6 @@
 ---
 type: event
+region: "Southwest"
 title: "Phoenix 4th of July"
 date: "2026-07-02"
 startDate: "2026-07-02"

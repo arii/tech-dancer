@@ -1,5 +1,6 @@
 ---
 type: event
+region: "Pacific Northwest"
 title: "Swingtacular: The Galactic Open"
 date: "2026-08-14"
 startDate: "2026-08-14"

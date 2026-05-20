@@ -1,5 +1,6 @@
 ---
 type: event
+region: "Pacific Northwest"
 title: "Mission City Swing"
 date: "2026-05-01"
 startDate: "2026-05-01"
