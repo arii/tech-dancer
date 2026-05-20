@@ -12,6 +12,7 @@ const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
 const APPLE_TOUCH_PATH = path.join(process.cwd(), 'public/apple-touch-icon.png');
 const MASKABLE_ICON_PATH = path.join(process.cwd(), 'public/maskable-icon-512x512.png');
 const FAVICON_ICO_PATH = path.join(process.cwd(), 'public/favicon.ico');
+const ICON_SVG_PATH = path.join(process.cwd(), 'public/icon.svg');
 const CACHE_DIR = path.join(process.cwd(), 'node_modules/.cache');
 const HASH_FILE = path.join(CACHE_DIR, 'generate-assets.hash');
 
@@ -131,6 +132,11 @@ async function updateFaviconAndPNGs(tokens: DesignTokens) {
   const updatedContent = updateSVGContent(content, tokens);
   fs.writeFileSync(FAVICON_SVG_PATH, updatedContent);
   console.log(`Updated ${FAVICON_SVG_PATH}`);
+
+  if (fs.existsSync(ICON_SVG_PATH)) {
+    fs.writeFileSync(ICON_SVG_PATH, updatedContent);
+    console.log(`Updated ${ICON_SVG_PATH}`);
+  }
 
   // Generate PNGs
   try {
