@@ -73,7 +73,7 @@ export function EventHero({
       />
 
       <Stack
-        relative
+        position="relative"
         zIndex={10}
         gap={{ base: 6, md: 10 }}
         paddingX={{ base: 6, md: 12, lg: 24 }}
@@ -164,7 +164,7 @@ export function EventHero({
         )}
       </Stack>
 
-      <Box relative zIndex={20} marginTop="auto">
+      <Box position="relative" zIndex={20} marginTop="auto">
         <EventNavigation />
       </Box>
     </Box>
