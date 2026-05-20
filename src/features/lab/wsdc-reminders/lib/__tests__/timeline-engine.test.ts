@@ -47,12 +47,23 @@ describe('timeline-engine', () => {
     expect(hotelBlock?.date.getTime()).toBe(parseDate(mockEvent.hotelCutoffDate).getTime());
   });
 
-  it('should calculate competition window 14 days before start', () => {
+  it('should calculate competition window 14 days before start by default', () => {
     const timeline = calculateTimeline(mockEvent);
     const compWindow = timeline.find(item => item.id === 'comp-window');
 
     const expectedDate = addDays(parseDate(mockEvent.startDate), -14);
     expect(compWindow?.date.getTime()).toBe(expectedDate.getTime());
+  });
+
+  it('should use explicit registration deadline for competition window if provided', () => {
+    const eventWithDeadline: EventAnchors = {
+      ...mockEvent,
+      registrationDeadline: '2024-05-20'
+    };
+    const timeline = calculateTimeline(eventWithDeadline);
+    const compWindow = timeline.find(item => item.id === 'comp-window');
+
+    expect(compWindow?.date.getTime()).toBe(parseDate('2024-05-20').getTime());
   });
 
   it('should calculate cancel safety check 5 days before start', () => {

@@ -5,6 +5,7 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
   const start = parseDate(event.startDate);
   const early = parseDate(event.earlyBirdDate);
   const hotel = parseDate(event.hotelCutoffDate);
+  const registration = event.registrationDeadline ? parseDate(event.registrationDeadline) : addDays(start, -14);
 
   // Use a 2-day buffer for Early Bird as per the guide
   const earlyBuffer = addDays(early, -2);
@@ -30,7 +31,7 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
     },
     {
       id: 'comp-window',
-      date: addDays(start, -14),
+      date: registration,
       label: "Competition Signups",
       description: "Finalize Jack & Jill entries. Note: Competition fees are usually non-refundable.",
     },
