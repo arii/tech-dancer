@@ -11,11 +11,11 @@ interface RelatedEventsProps {
   events: Event[];
 }
 
-export function RelatedEvents({ id, title = "Related Resource Guides", events }: RelatedEventsProps) {
+export function RelatedEvents({ id, title = "Related Events", events }: RelatedEventsProps) {
   if (!events || events.length === 0) return null;
 
   return (
-    <Box id={id} as="section" data-testid="related">
+    <Box as="section" id={id}>
       <Stack gap={8}>
         <SectionHeader eyebrow="EXPLORE" title={title} />
         <Grid

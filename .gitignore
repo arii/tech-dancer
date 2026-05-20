@@ -42,8 +42,6 @@ TODO_ANTIPATTERNS.md
 ai-fix-prompt.txt
 .bundle-baseline
 any-count.txt
-ci_logs.txt
-eslint-errors.json
 
 # Tools
 dev-tools/config.json

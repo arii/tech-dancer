@@ -112,12 +112,9 @@ install_apt_tools() {
 
   if ! have node; then
     log "Installing Node.js ${NODE_MAJOR}.x..."
-    # Semgrep-ignore: bash.curl.security.curl-pipe-bash.curl-pipe-bash
-    if curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" > nodesource_setup.sh && run_sudo bash nodesource_setup.sh; then
-      rm nodesource_setup.sh
+    if curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" | run_sudo bash -; then
       run_sudo apt-get install -y nodejs || warn "Unable to install nodejs via apt."
     else
-      rm -f nodesource_setup.sh
       warn "Unable to configure NodeSource repository."
     fi
   fi

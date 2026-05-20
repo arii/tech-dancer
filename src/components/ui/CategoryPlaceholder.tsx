@@ -1,30 +1,11 @@
-import {
-  Cpu,
-  Globe,
-  Camera,
-  Heart,
-  HelpCircle,
-  Footprints,
-  Shirt,
-  Sparkles,
-  Package,
-  Calendar,
-  Trophy,
-  type LucideIcon
-} from 'lucide-react';
+import { Cpu, Globe, Camera, Heart, HelpCircle, type LucideIcon } from 'lucide-react';
 import { Box } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 
 export function getCategoryIcon(category: string): LucideIcon {
   const norm = (category || '').toLowerCase();
   if (norm.includes('tech')) return Cpu;
-  if (norm.includes('travel')) return Globe;
-  if (norm.includes('wcs') || norm.includes('event') || norm.includes('registry')) return Calendar;
-  if (norm.includes('shoe')) return Footprints;
-  if (norm.includes('outfit')) return Shirt;
-  if (norm.includes('accessory')) return Sparkles;
-  if (norm.includes('essential')) return Package;
-  if (norm.includes('competition')) return Trophy;
+  if (norm.includes('travel') || norm.includes('wcs')) return Globe;
   if (norm.includes('gear')) return Camera;
   if (norm.includes('lifestyle')) return Heart;
   return HelpCircle;

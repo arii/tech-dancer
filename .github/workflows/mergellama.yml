@@ -32,10 +32,7 @@ jobs:
         uses: pnpm/action-setup@v4
 
       - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
+        run: curl -fsSL https://ollama.com/install.sh | sh
 
       - name: Install Click
         run: pip install click

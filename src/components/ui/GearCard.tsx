@@ -94,7 +94,8 @@ export function GearCard({
       {/* Image zone */}
       <Box
         position="relative"
-        aspect="video"
+        height={48}
+        minHeight={48}
         overflow="hidden"
         radius="md"
         className="bg-surface-alt/20"

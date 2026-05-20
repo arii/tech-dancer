@@ -1,4 +1,4 @@
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GearCard } from '@/components/ui/GearCard';
 import { ResolvedGearSection } from '../useEventDetail';
@@ -13,31 +13,30 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
   if (!sections || sections.length === 0) return null;
 
   return (
-    <Box id={id} as="section" data-testid="gear">
-      <Stack gap={12}>
-        <SectionHeader eyebrow="TOOLS" title={title} />
+    <Stack id={id} gap={12}>
+      <SectionHeader eyebrow="TOOLS" title={title} />
 
-        {sections.map((section) => (
-          <Stack key={section.label} gap={8}>
-            <SectionHeader
-              title={section.label}
-              size="sm"
-            />
-            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
-              {section.items.map((item) => (
-                <GearCard
-                  key={item.id}
-                  slug={item.id}
-                  title={item.name}
-                  category={item.category}
-                  excerpt={item.description}
-                  basePath="/gear"
-                />
-              ))}
-            </Grid>
-          </Stack>
-        ))}
-      </Stack>
-    </Box>
+      {sections.map((section) => (
+        <Stack key={section.label} gap={8}>
+          <SectionHeader
+            title={section.label}
+            size="sm"
+          />
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+            {section.items.map((item) => (
+              <GearCard
+                key={item.id}
+                slug={item.id}
+                title={item.name}
+                category={item.category}
+                excerpt={item.description}
+                basePath="/gear"
+                image="#" // Fallback image since affiliate links don't have images yet
+              />
+            ))}
+          </Grid>
+        </Stack>
+      ))}
+    </Stack>
   );
 }

@@ -103,6 +103,6 @@ jobs:
           comment-id: ${{ steps.initial-comment.outputs.comment-id }}
           body: |
             ❌ Failed to update Playwright snapshots.
-            Please check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
+            Please check the workflow logs for more details.
           edit-mode: replace
           token: ${{ secrets.GITHUB_TOKEN }}

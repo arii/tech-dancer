@@ -12,15 +12,15 @@ export default function EventsFeed() {
   return (
     <Box as="section">
       <SEO
-        title="Event Resource Guides"
-        description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
+        title="Events"
+        description="A comprehensive guide to upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
       />
       <FolioGrid
         items={events}
-        categoryTitle="Upcoming Event Resource Guides"
+        categoryTitle="Upcoming Events"
         as="h1"
         label="COMPETE"
-        description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
+        description="A comprehensive guide to upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
         basePath="/events"
         view={view}
         onViewChange={setView}

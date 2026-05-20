@@ -27,23 +27,10 @@ export function EventCard({ title, slug, location, schedule }: EventCardProps) {
         className="absolute inset-0 z-10"
         aria-label={`View event: ${title}`}
       />
-      <Box display="flex" justify="between" align="center" width="full">
-        <Box display="flex" align="center" gap={2}>
-          <MapPin className="w-4 h-4 text-accent" />
-          <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
-            {schedule}
-          </Text>
-        </Box>
-        <Text
-          variant="mono"
-          size="micro"
-          weight="font-bold"
-          color="dim"
-          uppercase
-          tracking="tighter"
-          className="opacity-60"
-        >
-          Resource Guide
+      <Box display="flex" align="center" gap={2}>
+        <MapPin className="w-4 h-4 text-accent" />
+        <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
+          {schedule}
         </Text>
       </Box>
 

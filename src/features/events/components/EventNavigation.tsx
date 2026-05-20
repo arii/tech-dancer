@@ -5,25 +5,14 @@ export function EventNavigation() {
   return (
     <Box
       position="sticky"
-      top={{ base: 16, lg: 0 }}
+      top={0}
       zIndex={40}
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
-        {/* Right fade indicator for mobile horizontal scroll */}
-        <Box
-          position="absolute"
-          top={0}
-          right={0}
-          bottom={0}
-          width={12}
-          display={{ base: "block", md: "none" }}
-          className="bg-transparent pointer-events-none z-10"
-        />
-
+      <Box maxWidth="100vw" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }}>
         <Box
           display="flex"
-          gap={{ base: 8, md: 10 }}
+          gap={{ base: 6, md: 8 }}
           overflowX="auto"
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}

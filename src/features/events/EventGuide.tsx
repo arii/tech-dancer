@@ -2,12 +2,10 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
+import { EventDetails } from './components/EventDetails';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
-import { EventReminders } from './components/EventReminders';
-import { EventTravel } from './components/EventTravel';
-import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
@@ -57,13 +55,12 @@ export default function EventGuide() {
   return (
     <Box>
       <SEO
-        title={`${event.title} | Event Resource Guide`}
+        title={`${event.title} | Event Guide`}
         description={event.excerpt}
         jsonLd={getEventSchema(event)}
       />
 
       <EventHero
-        id="hero"
         title={event.title}
         location={event.city}
         date={event.schedule}
@@ -76,6 +73,8 @@ export default function EventGuide() {
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
+              <EventDetails event={event} />
+
               {event.theme && (
                 <ThemeSpotlight
                   id="theme"
@@ -95,12 +94,6 @@ export default function EventGuide() {
                   sections={gearSections}
                 />
               )}
-
-              <EventReminders id="reminders" event={event} />
-
-              <EventTravel id="travel" notes={event.description} />
-
-              <EventNotes id="notes" content={event.content} />
 
               {relatedEvents.length > 0 && (
                 <RelatedEvents
