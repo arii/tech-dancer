@@ -21,7 +21,7 @@ test.describe('Merch Page', () => {
   });
 
   test('should display product cards', async ({ page }) => {
-    const productCards = page.locator('div.bg-card-bg.border-line.group');
+    const productCards = page.getByTestId('product-card');
     await expect(productCards).toHaveCount(11);
   });
 
@@ -30,7 +30,7 @@ test.describe('Merch Page', () => {
     await page.getByRole('button', { name: 'Lead/Follow/Switch' }).click();
 
     // Check that we only see relevant products (should be 4 based on data)
-    const filteredCards = page.locator('div.bg-card-bg.border-line.group');
+    const filteredCards = page.getByTestId('product-card');
     await expect(filteredCards).toHaveCount(4);
 
     // Reset filter

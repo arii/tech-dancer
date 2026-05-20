@@ -37,7 +37,7 @@ export default function Merch() {
         />
 
         {/* Hero Referral Banner */}
-        <ReferralBanner variant="hero" />
+        <ReferralBanner layout="expanded" />
 
         {/* Collection Filters */}
         <Box border="b" paddingBottom={4} className="border-line overflow-x-auto">
@@ -83,7 +83,7 @@ export default function Merch() {
           </Box>
 
           {/* Detailed Referral Box */}
-          <ReferralBanner variant="footer" />
+          <ReferralBanner layout="compact" />
         </Grid>
       </Stack>
     </Box>
@@ -97,6 +97,7 @@ function ProductCard({ product }: { product: MerchProduct }) {
       radius="lg"
       border
       surface="card"
+      data-testid="product-card"
       className="group overflow-hidden transition-all hover:border-accent"
     >
       <Box aspect="square" position="relative" overflow="hidden" surface="alt">
