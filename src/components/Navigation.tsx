@@ -100,6 +100,7 @@ export default function Navigation() {
               <Box
                 as="button"
                 type="button"
+                tabIndex={0}
                 cursor="pointer"
                 onClick={handleSearchClick}
                 display="flex"
@@ -109,9 +110,10 @@ export default function Navigation() {
                 paddingY={3}
                 paddingX={6}
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
+                aria-label="Open search"
               >
                 <Box shrink={false}>
-                  <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" />
+                  <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" aria-hidden="true" />
                 </Box>
                 <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
               </Box>

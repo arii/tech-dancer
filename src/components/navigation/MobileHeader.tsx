@@ -39,7 +39,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         aria-expanded={isOpen}
         whileTap={{ scale: 0.95 }}
       >
-        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
       </Box>
     </Box>
   );

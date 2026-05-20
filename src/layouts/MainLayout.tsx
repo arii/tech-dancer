@@ -24,6 +24,12 @@ export function MainLayout({ children }: { children: ReactNode }) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[201] focus:px-6 focus:py-3 focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none"
+      >
+        Skip to Content
+      </a>
       <Box
         id="route-announcer"
         aria-live="polite"
@@ -35,6 +41,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
+          id="main-content"
+          tabIndex={-1}
           ref={scrollRef}
           flex={1}
           position="relative"
