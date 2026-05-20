@@ -33,7 +33,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
         zIndex="skipLink"
         paddingX={6}
         paddingY={3}
-        className="sr-only focus:not-sr-only focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none"
+        radius="sm"
+        className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none whitespace-nowrap"
       >
         Skip to Content
       </Box>
