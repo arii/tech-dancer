@@ -28,7 +28,7 @@ export function GlobalErrorBoundary() {
       justify="center"
       minHeight="screen"
       padding={6}
-      surface="default"
+      surface="main"
     >
       <Stack gap={8} align="center" maxWidth="2xl" textAlign="center">
         <Box
@@ -52,7 +52,7 @@ export function GlobalErrorBoundary() {
         <Box
           padding={4}
           radius="lg"
-          surface="alt"
+          surface="sunken"
           width="full"
           border
           overflow="auto"

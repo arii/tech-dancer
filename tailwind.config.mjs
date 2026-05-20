@@ -33,7 +33,7 @@ export default {
         tiny: "var(--text-tiny)",
       },
       zIndex: {
-        search: "200",
+        search: "9999",
       },
       keyframes: {
         gradient: {

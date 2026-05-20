@@ -234,13 +234,13 @@ export function GlobalSearch() {
           <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="safe-bottom">
             <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center" className="border-line">
+                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                 </Box>
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center" className="border-line">
+                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
                 </Box>
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
