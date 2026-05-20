@@ -5,6 +5,7 @@ import { SkeletonVariant } from '@/components/ui/PageSkeleton';
 export interface RouteConfig extends Omit<RouteObject, 'children'> {
   path: string;
   label?: string;
+  shortLabel?: string;
   icon?: LucideIcon;
   description?: string;
   children?: RouteConfig[];

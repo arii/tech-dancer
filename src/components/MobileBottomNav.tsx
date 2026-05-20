@@ -1,11 +1,13 @@
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 import { MOBILE_NAV_ROUTES } from '@/config/routes';
 
 export function MobileBottomNav() {
+  const location = useLocation();
+
   return (
     <Box
       as="nav"
@@ -19,18 +21,22 @@ export function MobileBottomNav() {
       <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
           const Icon = item.icon;
+          const isActive = item.path === '/'
+            ? location.pathname === '/'
+            : location.pathname.startsWith(item.path);
+
           return (
             <Box as="li" key={item.path} flex={1}>
               <NavLink
                 to={item.path}
-                className={({ isActive }) => cn(
+                className={cn(
                   "flex flex-col items-center justify-center h-full transition-colors tap-target",
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >
                 <Icon className={cn("w-6 h-6", stroke.thick)} />
                 <Text variant="mono" size="micro" weight="font-bold" marginTop={1}>
-                  {item.label.split(' ')[0]}
+                  {item.shortLabel || item.label}
                 </Text>
               </NavLink>
             </Box>

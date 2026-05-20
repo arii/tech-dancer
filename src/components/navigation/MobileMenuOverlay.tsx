@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Box, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
-import { routes } from '@/config/routes';
+import { routes, MOBILE_NAV_ROUTES } from '@/config/routes';
 import { useEffect, useRef } from 'react';
 import { NavItem } from './NavItem';
 
@@ -97,16 +97,21 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             </Text>
           </Box>
         </Box>
-        {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-          <NavItem
-            key={item.path}
-            to={item.path}
-            label={item.label}
-            icon={item.icon}
-            onClick={onClose}
-            isMobile
-          />
-        ))}
+        {routes
+          .filter((r): r is typeof r & { label: string } =>
+            !!(r.label && r.path !== '/' && !MOBILE_NAV_ROUTES.some(m => m.path === r.path))
+          )
+          .map((item) => (
+            <NavItem
+              key={item.path}
+              to={item.path}
+              label={item.label}
+              icon={item.icon}
+              onClick={onClose}
+              isMobile
+            />
+          ))
+        }
       </Box>
     </Box>
   );

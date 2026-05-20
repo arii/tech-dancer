@@ -9,6 +9,7 @@ export const routes: RouteConfig[] = [
     index: true,
     lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
     label: 'Home',
+    shortLabel: 'Home',
     icon: Home,
     skeleton: 'grid'
   },
@@ -16,6 +17,7 @@ export const routes: RouteConfig[] = [
     path: '/blog',
     lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
     label: 'Blog Posts',
+    shortLabel: 'Blog',
     icon: BookOpen,
     skeleton: 'grid'
   },
@@ -28,6 +30,7 @@ export const routes: RouteConfig[] = [
     path: '/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',
+    shortLabel: 'Gear',
     icon: ShoppingBag,
     skeleton: 'grid'
   },
@@ -40,6 +43,7 @@ export const routes: RouteConfig[] = [
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
     label: 'Event Resource Guides',
+    shortLabel: 'Events',
     icon: Calendar,
     skeleton: 'grid'
   },
@@ -52,6 +56,7 @@ export const routes: RouteConfig[] = [
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'Data & Development Lab',
+    shortLabel: 'Lab',
     icon: Database,
     skeleton: 'grid'
   },
