@@ -1,7 +1,17 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
-export function EventNavigation() {
+interface EventNavigationProps {
+  sectionIds: string[];
+}
+
+export function EventNavigation({ sectionIds }: EventNavigationProps) {
+  const visibleTabs = EVENT_TABS.filter(tab => sectionIds.includes(tab.id));
+
+  if (visibleTabs.length === 0) {
+    return null;
+  }
+
   return (
     <Box
       position="sticky"
@@ -28,7 +38,7 @@ export function EventNavigation() {
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}
         >
-          {EVENT_TABS.map(tab => (
+          {visibleTabs.map(tab => (
             <Box
               key={tab.id}
               as="a"

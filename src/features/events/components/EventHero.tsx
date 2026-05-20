@@ -11,20 +11,24 @@ interface EventHeroProps {
   title: string;
   location: string;
   date: string;
+  eventSlug: string;
   image?: string;
   eyebrow?: string;
   whyAttending?: string;
   id?: string;
+  sectionIds: string[];
 }
 
 export function EventHero({
   title,
   location,
   date,
+  eventSlug,
   image,
   eyebrow = "Event Resource Guide",
   whyAttending,
-  id
+  id,
+  sectionIds
 }: EventHeroProps) {
   const accentGradient = useMemo(() => ({
     background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
@@ -89,6 +93,12 @@ export function EventHero({
         transition={motionTokens.page.transition}
       >
         <Stack gap={6}>
+          <Box as="nav" aria-label="Breadcrumb">
+            <Text variant="mono" size="xs" color="dim">
+              Home › Event Resource Guides › {eventSlug}
+            </Text>
+          </Box>
+
           <Stack gap={2}>
             <Text
               variant="mono"
@@ -157,7 +167,7 @@ export function EventHero({
                 leading="relaxed"
                 className="italic text-white/90"
               >
-                {whyAttending}
+                {whyAttending} Plan smarter. Pack lighter. Dance more.
               </Text>
             </Stack>
           </Box>
@@ -165,7 +175,7 @@ export function EventHero({
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
+        <EventNavigation sectionIds={sectionIds} />
       </Box>
     </Box>
   );

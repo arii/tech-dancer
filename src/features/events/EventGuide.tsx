@@ -54,6 +54,15 @@ export default function EventGuide() {
     );
   }
 
+  const sectionIds = [
+    event.theme ? 'theme' : null,
+    gearSections.length > 0 ? 'gear' : null,
+    'reminders',
+    'travel',
+    'notes',
+    relatedEvents.length > 0 ? 'related' : null,
+  ].filter((value): value is string => Boolean(value));
+
   return (
     <Box>
       <SEO
@@ -67,9 +76,11 @@ export default function EventGuide() {
         title={event.title}
         location={event.city}
         date={event.schedule}
+        eventSlug={event.slug}
         eyebrow={event.category}
         image={event.heroImage}
         whyAttending={event.whyAttending}
+        sectionIds={sectionIds}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
