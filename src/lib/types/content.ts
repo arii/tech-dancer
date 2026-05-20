@@ -107,6 +107,9 @@ export interface Event {
   gearEssentialIds?: string[];
   gearTravelIds?: string[];
   relatedEvents?: string[];
+  region?: string;
+  resourceGuide?: boolean;
+  guideStatus?: 'live' | 'coming-soon' | 'planned';
 }
 
 export type ContentItem = Post | Resource | Study | Event;

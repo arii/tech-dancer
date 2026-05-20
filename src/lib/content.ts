@@ -88,6 +88,9 @@ function transform<T extends { date?: string }>(
         packingReminderDate: data.packingReminderDate
           ? String(data.packingReminderDate)
           : undefined,
+        region: data.region ? String(data.region) : undefined,
+        resourceGuide: data.resourceGuide === true,
+        guideStatus: data.guideStatus,
         tags: asArray(data.tags),
         content: content || "",
         slug: slugFrom(path),

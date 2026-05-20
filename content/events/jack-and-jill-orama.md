@@ -1,5 +1,8 @@
 ---
 type: event
+region: "Southern California"
+resourceGuide: true
+guideStatus: "live"
 title: "Jack & Jill O'Rama"
 date: "2026-06-04"
 startDate: "2026-06-04"

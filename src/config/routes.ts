@@ -44,6 +44,12 @@ export const routes: RouteConfig[] = [
     skeleton: 'grid'
   },
   {
+    path: '/event-resource-guides',
+    lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
+    skeleton: 'grid',
+    sitemap: true
+  },
+  {
     path: '/events/:slug',
     lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
     skeleton: 'post'

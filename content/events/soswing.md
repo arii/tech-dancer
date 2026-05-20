@@ -1,5 +1,8 @@
 ---
 type: event
+region: "Pacific Northwest"
+resourceGuide: true
+guideStatus: "live"
 title: "SOswing"
 date: "2026-05-14"
 startDate: "2026-05-14"

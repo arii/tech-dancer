@@ -80,25 +80,27 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
-            {filteredItems.map((item) => (
-              <Box
-                key={item.slug}
-                padding={4}
-                height="full"
-                className="bg-transparent"
-              >
-                {renderItem ? (
-                  renderItem(item)
-                ) : (
-                  <ContentCard
-                    {...item}
-                    basePath={basePath}
-                  />
-                )}
-              </Box>
-            ))}
-          </Grid>
+          basePath.includes('events') ? null : (
+            <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
+              {filteredItems.map((item) => (
+                <Box
+                  key={item.slug}
+                  padding={4}
+                  height="full"
+                  className="bg-transparent"
+                >
+                  {renderItem ? (
+                    renderItem(item)
+                  ) : (
+                    <ContentCard
+                      {...item}
+                      basePath={basePath}
+                    />
+                  )}
+                </Box>
+              ))}
+            </Grid>
+          )
         ) : (
           <Stack gap={0} border="t" className="border-line">
             {filteredItems.map((item) => (
