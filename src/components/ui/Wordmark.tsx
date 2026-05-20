@@ -14,6 +14,13 @@ const VARIANT_MAP: Record<WordmarkVariant, TextProps["variant"]> = {
   nav: "wordmark", // Legacy alias for navigation
 };
 
+const DEFAULT_SIZE_MAP: Record<WordmarkVariant, TextProps["size"]> = {
+  default: "base",
+  hero: undefined,
+  navigation: "sm",
+  nav: "sm",
+};
+
 const VARIANT_CLASSES: Record<WordmarkVariant, string> = {
   default: "",
   hero: "wordmark-hero",
@@ -24,20 +31,17 @@ const VARIANT_CLASSES: Record<WordmarkVariant, string> = {
 export function Wordmark({
   className,
   style,
-  variant = "navigation",
+  variant = "default",
   size,
   weight,
   ...props
 }: WordmarkProps) {
-  const isHero = variant === "hero";
-  const isNav = variant === "navigation" || variant === "nav";
-
   return (
     <Text
-      variant={VARIANT_MAP[variant]}
-      size={size || (isHero ? undefined : (isNav ? "sm" : "base"))}
+      variant={VARIANT_MAP[variant] || VARIANT_MAP.default}
+      size={size || DEFAULT_SIZE_MAP[variant] || DEFAULT_SIZE_MAP.default}
       weight={weight || "font-extrabold"}
-      className={cn(VARIANT_CLASSES[variant], className)}
+      className={cn(VARIANT_CLASSES[variant] || VARIANT_CLASSES.default, className)}
       style={style}
       tracking="wordmark"
       {...props}

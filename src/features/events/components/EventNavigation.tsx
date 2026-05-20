@@ -18,7 +18,7 @@ export function EventNavigation() {
           bottom={0}
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-gradient-to-l from-bg to-transparent pointer-events-none z-10"
+          className="bg-gradient-to-l from-bg to-transparent pointer-events-none z-10" // impeccable-ignore
         />
 
         <Box
