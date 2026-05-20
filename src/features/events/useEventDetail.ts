@@ -19,31 +19,28 @@ const GEAR_SECTION_CONFIG = [
     label: "Outfits",
     ctaLabel: "Shop the look",
     ctaHref: "/gear?category=outfit",
-    getIds: (gear: NonNullable<Event["gear"]>) => gear.outfitIds ?? [],
+    gearFields: ["outfitIds"] as const,
   },
   {
     key: "accessories" as const,
     label: "Accessories",
     ctaLabel: "View all accessories",
     ctaHref: "/gear?category=accessory",
-    getIds: (gear: NonNullable<Event["gear"]>) => gear.accessoryIds ?? [],
+    gearFields: ["accessoryIds"] as const,
   },
   {
     key: "shoes-essentials" as const,
     label: "Shoes & Essentials",
     ctaLabel: "Pack dance essentials",
     ctaHref: "/gear?category=essentials",
-    getIds: (gear: NonNullable<Event["gear"]>) => [
-      ...(gear.shoeIds ?? []),
-      ...(gear.essentialIds ?? []),
-    ],
+    gearFields: ["shoeIds", "essentialIds"] as const,
   },
   {
     key: "travel-extras" as const,
     label: "Travel Extras",
     ctaLabel: "Pack for this event",
     ctaHref: "/gear?category=travel",
-    getIds: (gear: NonNullable<Event["gear"]>) => gear.travelIds ?? [],
+    gearFields: ["travelIds"] as const,
   },
 ];
 
@@ -68,7 +65,9 @@ export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
     label: section.label,
     ctaLabel: section.ctaLabel,
     ctaHref: section.ctaHref,
-    items: resolveAffiliateLinks(section.getIds(gear)),
+    items: resolveAffiliateLinks(
+      section.gearFields.flatMap((field) => gear[field] ?? []),
+    ),
   })).filter((s) => s.items.length > 0);
 }
 
