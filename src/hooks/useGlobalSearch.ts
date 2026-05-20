@@ -1,21 +1,26 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSearchParam } from './useSearchParam';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
 import { withSimulationDelay } from '@/lib/utils';
 import Fuse from 'fuse.js';
+import { create } from 'zustand';
+
+interface GlobalSearchModalState {
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+}
+
+const useGlobalSearchModalStore = create<GlobalSearchModalState>((set) => ({
+  isOpen: false,
+  open: () => set({ isOpen: true }),
+  close: () => set({ isOpen: false }),
+}));
 
 export function useGlobalSearch() {
   const [query, setQuery] = useSearchParam('q');
-  const [isOpen, setIsOpen] = useState(false);
-
-  const open = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-
-  const close = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+  const { isOpen, open, close } = useGlobalSearchModalStore();
 
   const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [
@@ -51,12 +56,20 @@ export function useGlobalSearch() {
     return fuse.search(query).map(result => result.item);
   }, [fuse, query]);
 
+  const openModal = useCallback(() => {
+    open();
+  }, [open]);
+
+  const closeModal = useCallback(() => {
+    close();
+  }, [close]);
+
   return {
     query,
     setQuery,
     results,
     isOpen,
-    open,
-    close
+    open: openModal,
+    close: closeModal,
   };
 }
