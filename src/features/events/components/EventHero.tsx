@@ -92,12 +92,6 @@ export function EventHero({
         transition={motionTokens.page.transition}
       >
         <Stack gap={6}>
-          <Box as="nav" aria-label="Breadcrumb">
-            <Text variant="mono" size="xs" color="dim">
-              Home › Event Resource Guides › {title}
-            </Text>
-          </Box>
-
           <Stack gap={2}>
             <Text
               variant="mono"
@@ -166,7 +160,7 @@ export function EventHero({
                 leading="relaxed"
                 className="italic text-white/90"
               >
-                {whyAttending} Plan smarter. Pack lighter. Dance more.
+                {whyAttending}
               </Text>
             </Stack>
           </Box>
