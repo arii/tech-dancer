@@ -1,7 +1,7 @@
-import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
+import { ArticleActions } from '@/components/layout/ArticleActions';
 import { Post } from '@/lib/content';
 
 interface BlogPostDetailProps {
@@ -11,16 +11,6 @@ interface BlogPostDetailProps {
 }
 
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
-    }
-  };
-
   return (
     <DetailLayout
       title={post.title}
@@ -37,15 +27,12 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
              <Text variant="mono" size="xs">{post.author}</Text>
           </Stack>
           <Box flex />
-          <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:bg-accent/10 hover:shadow-glow transition-all active:scale-95 cursor-pointer">
-            <Share2 className="w-4 h-4" />
-            <Text variant="mono" size="xs" weight="font-bold">SHARE</Text>
-          </Stack>
+          <ArticleActions title={post.title} description={post.excerpt} />
         </Stack>
       }
     >
       {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+        <Box border="t" paddingTop={8} marginTop={10} className="border-line/30">
           <Stack gap={4}>
             <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Discovery Tags</Text>
             <Stack direction="row" wrap gap={2}>

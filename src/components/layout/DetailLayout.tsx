@@ -107,7 +107,7 @@ export function DetailLayout({
                 width="full"
                 marginX="auto"
                 maxWidth="prose"
-                className="prose prose-slate prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main"
+                className="prose prose-slate detail-prose prose-headings:font-display prose-p:font-sans prose-p:text-text-dim prose-strong:text-text-main"
               >
                 <MarkdownRenderer content={content} />
               </Box>
