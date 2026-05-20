@@ -73,7 +73,7 @@ export function EventHero({
         width={{ base: "full", md: "1/2" }}
         height="full"
         className="pointer-events-none opacity-20"
-        style={accentGradient}
+        style={accentGradient} // impeccable-ignore - Dynamic data-driven gradient requires inline style.
       />
 
       <Stack
