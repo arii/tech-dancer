@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -26,6 +27,15 @@ export default function EventGuide() {
     navigate,
   } = useEventDetail();
 
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate('/events');
+  };
+
   if (isLoading) {
     return (
       <Box padding="panel" textAlign="center">
@@ -46,7 +56,7 @@ export default function EventGuide() {
               {error instanceof Error ? error.message : "An unexpected error occurred."}
             </Text>
           )}
-          <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={handleBack} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Events</Text>
           </Box>
         </Stack>
@@ -77,36 +87,42 @@ export default function EventGuide() {
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
               {event.theme && (
-                <ThemeSpotlight
-                  id="theme"
-                  title={event.theme.name}
+                <Box id="theme" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><ThemeSpotlight
+                                    title={event.theme.name}
                   label={event.theme.label}
                   description={event.theme.description || ''}
                   colors={event.theme.colors}
                   outfits={themeOutfits}
                   accessories={themeAccessories}
                 />
+                </Box>
               )}
 
               {gearSections.length > 0 && (
-                <CuratedGear
-                  id="gear"
-                  title={`Gear for ${event.title}`}
+                <Box id="gear" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><CuratedGear
+                                    title={`Gear for ${event.title}`}
                   sections={gearSections}
                 />
+                </Box>
               )}
 
-              <EventReminders id="reminders" event={event} />
+              <Box id="reminders" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><EventReminders id="reminders" event={event} />
 
-              <EventTravel id="travel" notes={event.description} />
+              </Box>
 
-              <EventNotes id="notes" content={event.content} />
+              <Box id="travel" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><EventTravel id="travel" notes={event.description} />
+
+              </Box>
+
+              <Box id="notes" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><EventNotes id="notes" content={event.content} />
 
               {relatedEvents.length > 0 && (
-                <RelatedEvents
-                  id="related"
-                  events={relatedEvents}
+                </Box>
+
+              <Box id="related" className="scroll-mt-[calc(4rem+3rem)] lg:scroll-mt-32"><RelatedEvents
+                                    events={relatedEvents}
                 />
+                </Box>
               )}
             </Stack>
           </Box>

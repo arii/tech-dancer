@@ -1,17 +1,12 @@
-
-import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { Box } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
 
 interface MobileHeaderProps {
-  isOpen: boolean;
-  onToggle: () => void;
   onClose: () => void;
 }
 
-export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
+export function MobileHeader({ onClose }: MobileHeaderProps) {
   return (
     <Box
       as="nav"
@@ -24,22 +19,6 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         <Box shrink={false}>
           <Logo className="h-9 w-auto text-white" />
         </Box>
-      </Box>
-
-      <Box
-        as={motion.create("button")}
-        onClick={onToggle}
-        padding={4}
-        display="flex"
-        align="center"
-        justify="center"
-        radius="full"
-        className="min-h-12 min-w-12 hover:bg-bg/50 active:bg-accent/10 transition-colors"
-        aria-label={isOpen ? "Close menu" : "Open menu"}
-        aria-expanded={isOpen}
-        whileTap={{ scale: 0.95 }}
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </Box>
     </Box>
   );

@@ -16,21 +16,6 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
   },
   {
-    id: 'blog-drafter',
-    name: 'Blog Post Drafter',
-    category: 'Content Generation',
-    status: 'Active',
-    layman: 'Drafter tool to generate blog posts using AI with human feedback in the loop.'
-  },
-  {
-    id: 'ux-auditor',
-    name: 'Visual UX Auditor',
-    category: 'Development Tool',
-    status: 'Active',
-    layman: 'Automated visual regression and UX improvement suggestions across viewports.',
-    canonicalPath: '/ux-auditor'
-  },
-  {
     id: 'wsdc-event-reminders',
     name: 'WSDC Event Reminders',
     category: 'Travel Optimization',

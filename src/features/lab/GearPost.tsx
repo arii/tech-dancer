@@ -17,6 +17,15 @@ export default function GearPost() {
     initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
 
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate('/gear');
+  };
+
   const structuredData = useMemo(() => {
     if (!resource) return null;
     return {
@@ -75,8 +84,8 @@ export default function GearPost() {
       />
       <GearPostDetail
         post={resource}
-        onBack={() => navigate('/gear')}
-        backLabel="Back to Toolbox"
+        onBack={handleBack}
+        backLabel="Back"
       />
     </>
   );

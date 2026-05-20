@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSearchParam } from './useSearchParam';
 import { useQueries } from '@tanstack/react-query';
 import { getPosts, getResources, getStudies } from '@/lib/content';
@@ -7,17 +7,15 @@ import Fuse from 'fuse.js';
 
 export function useGlobalSearch() {
   const [query, setQuery] = useSearchParam('q');
-  const [searchState, setSearchState] = useSearchParam('modal');
-  
-  const isOpen = searchState === 'true';
+  const [isOpen, setIsOpen] = useState(false);
 
   const open = useCallback(() => {
-    setSearchState('true');
-  }, [setSearchState]);
+    setIsOpen(true);
+  }, []);
 
   const close = useCallback(() => {
-    setSearchState('');
-  }, [setSearchState]);
+    setIsOpen(false);
+  }, []);
 
   const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [

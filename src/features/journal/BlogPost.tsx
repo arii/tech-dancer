@@ -17,6 +17,15 @@ export default function BlogPost() {
     initialData: () => slug ? getPostBySlug(slug) : undefined,
   });
 
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate('/blog');
+  };
+
   const structuredData = useMemo(() => {
     if (!post) return null;
     return {
@@ -70,8 +79,8 @@ export default function BlogPost() {
       />
       <BlogPostDetail
         post={post}
-        onBack={() => navigate('/blog')}
-        backLabel="Back to Folio"
+        onBack={handleBack}
+        backLabel="Back"
       />
     </>
   );

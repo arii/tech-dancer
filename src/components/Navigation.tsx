@@ -1,8 +1,7 @@
 
 import { Search } from 'lucide-react';
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
 
@@ -10,12 +9,10 @@ import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
-import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
 
@@ -38,7 +35,6 @@ export default function Navigation() {
   }, []);
 
   const handleSearchClick = () => {
-    setIsOpen(false);
     if (isSearchOpen) {
       closeSearch();
     } else {
@@ -52,22 +48,7 @@ export default function Navigation() {
       <MobileBottomNav />
 
       {/* Mobile Header */}
-      <MobileHeader
-        isOpen={isOpen}
-        onToggle={() => setIsOpen(!isOpen)}
-        onClose={() => setIsOpen(false)}
-      />
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <MobileMenuOverlay
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            onSearchClick={handleSearchClick}
-          />
-        )}
-      </AnimatePresence>
+      <MobileHeader onClose={() => {}} />
 
       {/* Desktop Sidebar */}
       <Box
