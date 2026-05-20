@@ -12,11 +12,11 @@
   <rect width="512" height="512" rx="108" fill="#020617"/>
   <text
     x="50%"
-    y="54%"
+    y="53%"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="210"
-    letter-spacing="-18"
+    font-size="440"
+    letter-spacing="-38"
     class="brand-wordmark"
   >
     <tspan fill="#ffffff">b</tspan><tspan class="brand-text-accent" fill="#22d3ee">t</tspan>
