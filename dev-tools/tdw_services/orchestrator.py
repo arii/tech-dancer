@@ -321,11 +321,14 @@ class Orchestrator:
             context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## CI Status"]
 
             check_runs = self.github.fetch_check_runs(pr.head.sha)
+            failed_check_names = []
+            detected_errors = []
             if check_runs:
                 for run in check_runs:
                     status_icon = '✅' if run.get('conclusion') == 'success' else '❌' if run.get('conclusion') == 'failure' else '⏳'
                     context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
                     if run.get('conclusion') == 'failure':
+                        failed_check_names.append(run.get('name'))
                         logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
 
                         # Structured failure analysis
@@ -333,7 +336,9 @@ class Orchestrator:
                         if findings:
                             context_lines.append("  **Failing Tests/Build Errors:**")
                             for f in findings:
-                                context_lines.append(f"  - 🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})")
+                                error_msg = f"🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})"
+                                context_lines.append(f"  - {error_msg}")
+                                detected_errors.append(error_msg)
 
                         # Extract a snippet of the logs (last 50 lines or search for 'error')
                         log_lines = logs.splitlines()
@@ -361,9 +366,20 @@ class Orchestrator:
             os.makedirs(review_dir, exist_ok=True)
             with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
             template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
+
+            failed_checks_str = "\n".join(f"- {name}" for name in failed_check_names) if failed_check_names else "_None_"
+            errors_str = "\n".join(f"- {err}" for err in detected_errors) if detected_errors else "_None detected by parser._"
+
             if os.path.exists(template_path):
-                with open(template_path) as f: template = f.read().format(pr_num=pr_number, head_sha=pr.head.sha)
-            else: template = f"# PR Review: #{pr_number}\n- SHA: {pr.head.sha}\n"
+                with open(template_path) as f:
+                    template = f.read().format(
+                        pr_num=pr_number,
+                        head_sha=pr.head.sha,
+                        failed_checks=failed_checks_str,
+                        detected_errors=errors_str
+                    )
+            else:
+                template = f"# PR Review: #{pr_number}\n- SHA: {pr.head.sha}\n\n## CI Log Triage\n- **Failed Checks:**\n{failed_checks_str}\n- **Detected Errors:**\n{errors_str}\n"
             with open(rev_path, "w") as f: f.write(template)
             res["files"]["context"] = ctx_path; res["files"]["review"] = rev_path
         if audit:
