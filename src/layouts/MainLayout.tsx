@@ -24,12 +24,19 @@ export function MainLayout({ children }: { children: ReactNode }) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <a
+      <Box
+        as="a"
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[201] focus:px-6 focus:py-3 focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none" // impeccable-ignore
+        position="fixed"
+        top={4}
+        left={4}
+        zIndex="skipLink"
+        paddingX={6}
+        paddingY={3}
+        className="sr-only focus:not-sr-only focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none"
       >
         Skip to Content
-      </a>
+      </Box>
       <Box
         id="route-announcer"
         aria-live="polite"
