@@ -137,7 +137,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     )
 
     const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
-      if (!val) return ""
+      if (val === undefined || val === null || val === "") return ""
       const pfx = prefix ? `${prefix}-` : ""
 
       // Standard Tailwind tokens (numbers or specific strings without CSS units)

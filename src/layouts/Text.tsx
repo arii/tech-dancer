@@ -40,7 +40,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
   }, ref) => {
     // Standard JIT fallback for arbitrary values
     const resolveJIT = (val: string | number, prefix: string) => {
-      if (!val) return ""
+      if (val === undefined || val === null || (typeof val === 'string' && val === "")) return ""
       const pfx = prefix ? `${prefix}-` : ""
 
       // Standard Tailwind tokens (numbers or specific strings without CSS units)

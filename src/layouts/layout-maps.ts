@@ -6,6 +6,7 @@ export const SPACING_MAP: Record<string | number, string> = {
   2: '2',
   3: '3',
   4: '4',
+  4.5: '4.5',
   5: '5',
   6: '6',
   8: '8',
@@ -27,6 +28,7 @@ export const RADIUS_MAP: Record<string, string> = {
   none: 'rounded-none',
   sm: 'rounded-sm',
   md: 'rounded-md',
+  industrial: 'rounded-[2px]', // impeccable-ignore
   lg: 'rounded-lg',
   xl: 'rounded-xl',
   '2xl': 'rounded-2xl',
