@@ -65,10 +65,9 @@ export function EventReminders({ event, id }: EventRemindersProps) {
         as="section"
         padding={10}
         radius="2xl"
-        border
-        surface="surface"
+        surface="warning"
         textAlign="center"
-        className="bg-accent-purple/5 border-accent-purple/20"
+        border
       >
         <Stack gap={6} align="center">
           <Box
@@ -78,7 +77,8 @@ export function EventReminders({ event, id }: EventRemindersProps) {
             display="flex"
             align="center"
             justify="center"
-            className="bg-accent-purple/20 text-accent-purple"
+            surface="warning"
+            className="bg-accent-purple/20"
           >
             <CheckCircle2 className="w-8 h-8" />
           </Box>
@@ -186,9 +186,10 @@ export function EventReminders({ event, id }: EventRemindersProps) {
                   padding={3}
                   radius="lg"
                   border
+                  surface={selectedChannels.includes(channel.id) ? "warning" : "surface"}
                   className={cn(
                     "transition-all text-left relative",
-                    selectedChannels.includes(channel.id) ? "border-accent-purple bg-accent-purple/5" : "border-line hover:border-line-hover",
+                    !selectedChannels.includes(channel.id) && "hover:border-line-hover",
                     isSoon && "opacity-60 cursor-not-allowed"
                   )}
                 >
