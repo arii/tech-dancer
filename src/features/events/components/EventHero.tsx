@@ -11,7 +11,6 @@ interface EventHeroProps {
   title: string;
   location: string;
   date: string;
-  eventSlug: string;
   image?: string;
   eyebrow?: string;
   whyAttending?: string;
@@ -23,7 +22,6 @@ export function EventHero({
   title,
   location,
   date,
-  eventSlug,
   image,
   eyebrow = "Event Resource Guide",
   whyAttending,
@@ -40,10 +38,10 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "30vh", md: "40vh" }}
+      minHeight={{ base: "auto", md: "40vh" }}
       display="flex"
       direction="column"
-      overflow="hidden"
+      overflow={{ base: "visible", md: "hidden" }}
       className="bg-bg"
     >
       {/* Background Image or Particle Fallback */}
@@ -82,7 +80,7 @@ export function EventHero({
         gap={{ base: 6, md: 10 }}
         paddingX={{ base: 6, md: 12, lg: 24 }}
         paddingTop={{ base: 8, md: 12 }}
-        paddingBottom={{ base: 6, md: 8 }}
+        paddingBottom={{ base: 8, md: 8 }}
         maxWidth="screen-xl"
         marginX="auto"
         width="full"
@@ -95,7 +93,7 @@ export function EventHero({
         <Stack gap={6}>
           <Box as="nav" aria-label="Breadcrumb">
             <Text variant="mono" size="xs" color="dim">
-              Home › Event Resource Guides › {eventSlug}
+              Home › Event Resource Guides › {title}
             </Text>
           </Box>
 

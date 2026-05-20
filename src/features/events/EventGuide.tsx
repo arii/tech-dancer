@@ -76,7 +76,6 @@ export default function EventGuide() {
         title={event.title}
         location={event.city}
         date={event.schedule}
-        eventSlug={event.slug}
         eyebrow={event.category}
         image={event.heroImage}
         whyAttending={event.whyAttending}
