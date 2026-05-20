@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 
@@ -75,13 +74,17 @@ export function GearCard({
       padding={6}
       radius="lg"
       border
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+      surface="default"
+      position="relative"
+      className="group transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
       <Box
         as={NavLink}
         to={`${basePath}/${slug}`}
         aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10"
+        position="absolute"
+        inset
+        zIndex={10}
       />
       {verdict && (
         <Box display="flex" justify="end">
@@ -97,10 +100,18 @@ export function GearCard({
         aspect="video"
         overflow="hidden"
         radius="md"
-        className="bg-surface-alt/20"
+        surface="alt"
+        opacity={20}
       >
         {image ? (
-          <img src={image} alt={title} width={800} height={800} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <Box
+            as="img"
+            src={image}
+            alt={title}
+            width="full"
+            height="full"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         ) : (
           <CategoryPlaceholder category={category} />
         )}
@@ -120,7 +131,8 @@ export function GearCard({
           paddingY={1}
           radius="full"
           opacity={80}
-          className="bg-accent text-white backdrop-blur-md shadow-sm"
+          shadow="standard"
+          className="bg-accent text-white backdrop-blur-md"
         >
           <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
             {category}
@@ -145,7 +157,15 @@ export function GearCard({
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
+      <Box
+        display="flex"
+        align="center"
+        justify="between"
+        marginTop="auto"
+        paddingTop={3}
+        border="t"
+        className="border-line/30"
+      >
         {rating !== undefined && (
           <Box display="flex" align="center" gap={1}>
             <Star size={16} className="text-accent fill-accent" />

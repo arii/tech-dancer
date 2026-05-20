@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 // Auto-generated safelist to ensure dynamic tailwind classes used in Box.tsx are preserved.
 export const tailwindSafelist = [
   'bottom-0',
