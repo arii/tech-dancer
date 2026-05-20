@@ -1,45 +1,67 @@
 import { useState, useEffect, useRef } from 'react';
 
-interface UseScrollSpyOptions {
-  root?: HTMLElement | null;
-  rootMargin?: string;
-  threshold?: number | number[];
-}
+/**
+ * Hook to track which section is currently active in the viewport.
+ * Uses IntersectionObserver for performance and accuracy.
+ */
+export function useScrollSpy(ids: string[], options: IntersectionObserverInit = {}) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const intersectionRatios = useRef(new Map<string, number>());
 
-export function useScrollSpy(
-  itemIds: string[],
-  options: UseScrollSpyOptions = { rootMargin: '-20% 0% -70% 0%', threshold: 0 }
-) {
-  const [activeId, setActiveId] = useState<string>('');
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  // Use a ref to keep track of the current activeId without triggering effect re-runs
+  const activeIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
-      const winner = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    // Clean up previous observer
+    if (observer.current) {
+      observer.current.disconnect();
+    }
 
-      if (winner) {
-        setActiveId(winner.target.id);
+    observer.current = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        intersectionRatios.current.set(entry.target.id, entry.intersectionRatio);
+      });
+
+      // Find the element with the highest intersection ratio
+      let maxRatio = 0;
+      let winner: string | null = activeIdRef.current;
+
+      intersectionRatios.current.forEach((ratio, id) => {
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          winner = id;
+        }
+      });
+
+      // Threshold to avoid flickering when multiple elements are visible
+      if (winner && winner !== activeIdRef.current) {
+        activeIdRef.current = winner;
+        setActiveId(winner);
       }
-    }, options);
+    }, {
+      // Default to 10% visible to trigger, with a small rootMargin to handle headers
+      rootMargin: '-10% 0% -40% 0%',
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+      ...options,
+    });
 
-    const elements: HTMLElement[] = [];
-    itemIds.forEach((id) => {
+    // Observe all targeted IDs
+    ids.forEach((id) => {
       const element = document.getElementById(id);
-      if (element) {
-        observerRef.current?.observe(element);
-        elements.push(element);
+      if (element && observer.current) {
+        observer.current.observe(element);
       }
     });
 
     return () => {
-      if (observerRef.current) {
-        elements.forEach(el => observerRef.current?.unobserve(el));
-        observerRef.current.disconnect();
+      if (observer.current) {
+        observer.current.disconnect();
       }
     };
-  }, [itemIds, options.rootMargin, options.threshold, options.root]);
+    // ids and options are expected to be stable or handled by the caller (e.g., via useMemo)
+    // We intentionally exclude activeId/activeIdRef from dependencies to avoid observer re-registration
+  }, [ids, options]);
 
   return activeId;
 }

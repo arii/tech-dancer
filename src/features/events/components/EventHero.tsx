@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
-import { MapPin, Calendar, Globe } from 'lucide-react';
+import { MapPin, Calendar } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { Logo } from '@/components/ui/Logo';
@@ -11,9 +11,9 @@ interface EventHeroProps {
   title: string;
   location: string;
   date: string;
-  url?: string;
   image?: string;
   eyebrow?: string;
+  url?: string;
   whyAttending?: string;
   activeTab?: string;
   id?: string;
@@ -23,8 +23,8 @@ export function EventHero({
   title,
   location,
   date,
-  url,
   image,
+  url,
   eyebrow = "Event Resource Guide",
   whyAttending,
   activeTab,
@@ -73,7 +73,7 @@ export function EventHero({
         width={{ base: "full", md: "1/2" }}
         height="full"
         className="pointer-events-none opacity-20"
-        style={accentGradient} // impeccable-ignore - Dynamic data-driven gradient requires inline style.
+        style={accentGradient}
       />
 
       <Stack
@@ -132,7 +132,7 @@ export function EventHero({
             </Box>
             {url && (
               <Box as="a" href={url} target="_blank" rel="noopener noreferrer" display="flex" align="center" gap={2} className="group cursor-pointer">
-                <Globe className="w-4 h-4 md:w-5 md:h-5 text-accent group-hover:scale-110 transition-transform" />
+                <Logo className="h-4 w-4 text-accent group-hover:scale-110 transition-transform" />
                 <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" className="group-hover:text-accent transition-colors">
                   Official Site ↗
                 </Text>

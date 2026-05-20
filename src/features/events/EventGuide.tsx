@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 
 import { EventHero } from './components/EventHero';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
-import { ReminderSignups } from './components/ReminderSignups';
+import { EventReminders } from './components/EventReminders';
 import { EventTravel } from './components/EventTravel';
+import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
@@ -63,7 +63,7 @@ export default function EventGuide() {
     <Box>
       <SEO
         title={`${event.title} | Event Resource Guide`}
-        description={event.excerpt || event.description}
+        description={event.excerpt}
         jsonLd={getEventSchema(event)}
       />
 
@@ -103,25 +103,11 @@ export default function EventGuide() {
                 />
               )}
 
-              <ReminderSignups id="reminders" event={event} />
+              <EventReminders id="reminders" event={event} />
 
               <EventTravel id="travel" notes={event.description} />
 
-              {event.content?.trim() && (
-                <Box id="notes" scrollPaddingTop={80}>
-                  <Stack gap={8}>
-                    <Stack gap={2}>
-                      <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-                        Field Notes
-                      </Text>
-                      <Text variant="headline" size="3xl" weight="font-black">
-                        Expert Intelligence
-                      </Text>
-                    </Stack>
-                    <MarkdownRenderer content={event.content} />
-                  </Stack>
-                </Box>
-              )}
+              <EventNotes id="notes" content={event.content} />
 
               {relatedEvents.length > 0 && (
                 <RelatedEvents
