@@ -46,3 +46,13 @@ All review submissions MUST follow this JSON schema exactly.
 ## 3. Tooling Guidelines
 
 Agents must not directly use git or gh commands but reuse existing tooling. Agents should not use Copilot, but may use Ollama.
+
+## 4. CI Failure Gating (Blocking Rule)
+
+CI status in `pr-context-<PR_NUMBER>.md` is a hard gate for approval:
+
+- If any required CI check has `failure`, `timed_out`, or `cancelled`, the final recommendation must be `Not Approved`.
+- The review body must include: (a) failing check name, (b) failing suite/test or build step, and (c) at least one concrete remediation step.
+- If CI is still in progress, do not approve; use `Approved with Minor Changes` only when code quality is otherwise clean and the note explicitly states CI is pending verification.
+- Approval is only allowed when required checks are successful (or explicitly documented as non-blocking in repository policy).
+
