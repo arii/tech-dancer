@@ -1,0 +1,1246 @@
+Anti-Pattern Audit	Set up job	﻿2026-05-20T01:26:54.1373826Z Current runner version: '2.334.0'
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1400658Z ##[group]Runner Image Provisioner
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1401517Z Hosted Compute Agent
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1402221Z Version: 20260213.493
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1402821Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1403532Z Build Date: 2026-02-13T00:28:41Z
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1404244Z Worker ID: {7e766242-110f-4a24-bd6f-8882f9d26c0f}
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1404945Z Azure Region: eastus
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1405463Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1407170Z ##[group]Operating System
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1407805Z Ubuntu
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1408259Z 24.04.4
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1408812Z LTS
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1409252Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1410078Z ##[group]Runner Image
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1410652Z Image: ubuntu-24.04
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1411311Z Version: 20260513.135.3
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1412285Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260513.135/images/ubuntu/Ubuntu2404-Readme.md
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1413945Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260513.135
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1414870Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1416032Z ##[group]GITHUB_TOKEN Permissions
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1418265Z Actions: read
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1418791Z Contents: read
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1419414Z Metadata: read
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1420193Z ##[endgroup]
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1422183Z Secret source: Actions
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1423357Z Prepare workflow directory
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1935667Z Prepare all required actions
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.1973008Z Getting action download info
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.5861143Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.6851784Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:54.8924463Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:55.2288570Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+Anti-Pattern Audit	Set up job	2026-05-20T01:26:55.4246175Z Complete job name: Anti-Pattern Audit
+Anti-Pattern Audit	Checkout	﻿2026-05-20T01:26:55.5039944Z ##[group]Run actions/checkout@v4
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5041415Z with:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5042186Z   fetch-depth: 0
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5043002Z   repository: arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5044237Z   token: ***
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5044975Z   ssh-strict: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5045760Z   ssh-user: git
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5046570Z   persist-credentials: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5047459Z   clean: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5048278Z   sparse-checkout-cone-mode: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5049263Z   fetch-tags: false
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5050237Z   show-progress: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5051038Z   lfs: false
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5051784Z   submodules: false
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5052596Z   set-safe-directory: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5053713Z env:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5054499Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5055590Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5056418Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5057236Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.5057999Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6077791Z Syncing repository: arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6080717Z ##[group]Getting Git version info
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6082094Z Working directory is '/home/runner/work/tech-dancer/tech-dancer'
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6084481Z [command]/usr/bin/git version
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6566506Z git version 2.54.0
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6587591Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6601950Z Temporarily overriding HOME='/home/runner/work/_temp/94dcbf78-2888-4bc3-8a96-3d5b9641f4d2' before making global git config changes
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6606210Z Adding repository directory to the temporary git global config as a safe directory
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6609860Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6650787Z Deleting the contents of '/home/runner/work/tech-dancer/tech-dancer'
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6654210Z ##[group]Initializing the repository
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6658286Z [command]/usr/bin/git init /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6729188Z hint: Using 'master' as the name for the initial branch. This default branch name
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6732504Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6735524Z hint: to use in all of your new repositories, which will suppress this warning,
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6737529Z hint: call:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6738335Z hint:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6739839Z hint: 	git config --global init.defaultBranch <name>
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6741242Z hint:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6742778Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6744713Z hint: 'development'. The just-created branch can be renamed via this command:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6746996Z hint:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6747914Z hint: 	git branch -m <name>
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6748865Z hint:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6750480Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6752828Z Initialized empty Git repository in /home/runner/work/tech-dancer/tech-dancer/.git/
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6756143Z [command]/usr/bin/git remote add origin https://github.com/arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6787947Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6790449Z ##[group]Disabling automatic garbage collection
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6792834Z [command]/usr/bin/git config --local gc.auto 0
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6823577Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6825645Z ##[group]Setting up auth
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6828580Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.6862160Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7170007Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7203790Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7433390Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7465485Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7700672Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7737082Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7739792Z ##[group]Fetching the repository
+Anti-Pattern Audit	Checkout	2026-05-20T01:26:55.7749983Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +0e7e6d7ce1a2c7d3a654da254207578eff501054:refs/remotes/pull/1370/merge
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4148620Z From https://github.com/arii/tech-dancer
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4150124Z  * [new branch]          about-updates-v2-14156650094895102247 -> origin/about-updates-v2-14156650094895102247
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4151964Z  * [new branch]          accessibility-improvements-batch-1-2779850392413816961 -> origin/accessibility-improvements-batch-1-2779850392413816961
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4153807Z  * [new branch]          ari-agent-setup-17855018510360646567 -> origin/ari-agent-setup-17855018510360646567
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4154873Z  * [new branch]          ari/fix-event-detail -> origin/ari/fix-event-detail
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4155895Z  * [new branch]          ari/image-generation -> origin/ari/image-generation
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4156818Z  * [new branch]          ari/vis-update       -> origin/ari/vis-update
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4157871Z  * [new branch]          audit-tool-expansion-4990874942647797944 -> origin/audit-tool-expansion-4990874942647797944
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4159850Z  * [new branch]          auto-resolve/feature/curated-gear-section-10224847195886133438 -> origin/auto-resolve/feature/curated-gear-section-10224847195886133438
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4161219Z  * [new branch]          auto-resolve/fix/mobile-touch-ux-improvements-14239198124207945949 -> origin/auto-resolve/fix/mobile-touch-ux-improvements-14239198124207945949
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4162361Z  * [new branch]          auto-resolve/fix/ui-ux-regressions-2805114839771910443 -> origin/auto-resolve/fix/ui-ux-regressions-2805114839771910443
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4163691Z  * [new branch]          auto-resolve/infrastructure-design-system-compliance-834175024358615850 -> origin/auto-resolve/infrastructure-design-system-compliance-834175024358615850
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4165105Z  * [new branch]          auto-resolve/integrate-wsdc-reminders-event-detail-page-1705855282734090262 -> origin/auto-resolve/integrate-wsdc-reminders-event-detail-page-1705855282734090262
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4166404Z  * [new branch]          branding-standardization-wordmark-11393711044305707239 -> origin/branding-standardization-wordmark-11393711044305707239
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4167652Z  * [new branch]          branding-update-wordmark-standardization-9402318875250459447 -> origin/branding-update-wordmark-standardization-9402318875250459447
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4168938Z  * [new branch]          centralize-ollama-api-abstraction-871-16330538965032015382 -> origin/centralize-ollama-api-abstraction-871-16330538965032015382
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4170212Z  * [new branch]          chore-consolidated-branding-2928318327932561036 -> origin/chore-consolidated-branding-2928318327932561036
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4171303Z  * [new branch]          chore-consolidated-lab-tools-6839126484043152480 -> origin/chore-consolidated-lab-tools-6839126484043152480
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4172266Z  * [new branch]          chore-consolidated-ui-ux-18268890764632995871 -> origin/chore-consolidated-ui-ux-18268890764632995871
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4173290Z  * [new branch]          chore/audit-suppression-inventory-5860033050599464395 -> origin/chore/audit-suppression-inventory-5860033050599464395
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4174191Z  * [new branch]          chore/consolidated-branding -> origin/chore/consolidated-branding
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4175439Z  * [new branch]          chore/consolidated-ui-ux-18268890764632995871 -> origin/chore/consolidated-ui-ux-18268890764632995871
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4176464Z  * [new branch]          chore/document-audit-bypass-13147926786562756982 -> origin/chore/document-audit-bypass-13147926786562756982
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4177513Z  * [new branch]          ci-optimization-ollama-docker-1425602506695211491 -> origin/ci-optimization-ollama-docker-1425602506695211491
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4178517Z  * [new branch]          cleanup-td-cli-redundancies-10971288668083319072 -> origin/cleanup-td-cli-redundancies-10971288668083319072
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4180068Z  * [new branch]          codex-implement-front-end-improvements-for-boomtick.blog-17214063084778931829 -> origin/codex-implement-front-end-improvements-for-boomtick.blog-17214063084778931829
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4181446Z  * [new branch]          codex/audit-codebase-for-impeccable-ignore-errors -> origin/codex/audit-codebase-for-impeccable-ignore-errors
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4182482Z  * [new branch]          codex/complete-review-ux-workflow-and-create-issues -> origin/codex/complete-review-ux-workflow-and-create-issues
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4183607Z  * [new branch]          codex/create-agent-setup-script-for-dependencies -> origin/codex/create-agent-setup-script-for-dependencies
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4184871Z  * [new branch]          codex/implement-front-end-improvements-for-boomtick.blog -> origin/codex/implement-front-end-improvements-for-boomtick.blog
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4186240Z  * [new branch]          codex/implement-front-end-improvements-for-boomtick.blog-2068919482777334203 -> origin/codex/implement-front-end-improvements-for-boomtick.blog-2068919482777334203
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4187660Z  * [new branch]          codex/improve-pr-ux-for-front-end-workflow -> origin/codex/improve-pr-ux-for-front-end-workflow
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4188814Z  * [new branch]          codex/remove-temporary-files-and-update-.gitignore-zsuacp -> origin/codex/remove-temporary-files-and-update-.gitignore-zsuacp
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4190447Z  * [new branch]          codex/review-and-improve-github-workflows-4224772757655175956 -> origin/codex/review-and-improve-github-workflows-4224772757655175956
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4191661Z  * [new branch]          codex/review-codebase-and-create-github-issues -> origin/codex/review-codebase-and-create-github-issues
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4192579Z  * [new branch]          codex/run-mass-audit-pr-workflow -> origin/codex/run-mass-audit-pr-workflow
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4193599Z  * [new branch]          codex/update-homepage-to-emphasize-gear -> origin/codex/update-homepage-to-emphasize-gear
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4194639Z  * [new branch]          codex/verify-src/styles-impacts-tsx-formatting -> origin/codex/verify-src/styles-impacts-tsx-formatting
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4195738Z  * [new branch]          codex/verify-src/styles-impacts-tsx-formatting-tif7fi -> origin/codex/verify-src/styles-impacts-tsx-formatting-tif7fi
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4196984Z  * [new branch]          consolidate-button-styles-6586345525275043211 -> origin/consolidate-button-styles-6586345525275043211
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4198062Z  * [new branch]          consolidate-derived-state-16899255422545458835 -> origin/consolidate-derived-state-16899255422545458835
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4199095Z  * [new branch]          consolidate-ollama-api-logic-9180553374366050257 -> origin/consolidate-ollama-api-logic-9180553374366050257
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4200260Z  * [new branch]          copilot/fix-merge-conflicts -> origin/copilot/fix-merge-conflicts
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4201146Z  * [new branch]          decouple-cli-changes-15961401340945748124 -> origin/decouple-cli-changes-15961401340945748124
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4202270Z  * [new branch]          design-system-compliance-audit-fix-468764408471531407 -> origin/design-system-compliance-audit-fix-468764408471531407
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4203563Z  * [new branch]          design-system-standardization-3973358259743895350 -> origin/design-system-standardization-3973358259743895350
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4204993Z  * [new branch]          design-system-standardization-3973358259743895350-16275902658573136635 -> origin/design-system-standardization-3973358259743895350-16275902658573136635
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4206412Z  * [new branch]          enhance-pr-audit-workflow-5195834116413712586-12077750844145346502 -> origin/enhance-pr-audit-workflow-5195834116413712586-12077750844145346502
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4207762Z  * [new branch]          enrich-event-resources-metadata-13370510469479910973 -> origin/enrich-event-resources-metadata-13370510469479910973
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4208848Z  * [new branch]          fe-cva-variants-uxauditor-13693920154445553590 -> origin/fe-cva-variants-uxauditor-13693920154445553590
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4210192Z  * [new branch]          fe-text-primitive-enhancements-16203928488536483925 -> origin/fe-text-primitive-enhancements-16203928488536483925
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4211519Z  * [new branch]          feat/accessible-victorian-explorer-3579260108458270423 -> origin/feat/accessible-victorian-explorer-3579260108458270423
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4212633Z  * [new branch]          feat/auto-update-assets-4194932469597087626 -> origin/feat/auto-update-assets-4194932469597087626
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4213676Z  * [new branch]          feat/automated-ux-smoke-test-3111523203801414691 -> origin/feat/automated-ux-smoke-test-3111523203801414691
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4214798Z  * [new branch]          feat/consolidate-svg-styles-2301584815641430556 -> origin/feat/consolidate-svg-styles-2301584815641430556
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4215871Z  * [new branch]          feat/curated-gear-component-6239852585537682935 -> origin/feat/curated-gear-component-6239852585537682935
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4216923Z  * [new branch]          feat/event-guide-components-4939112353230097775 -> origin/feat/event-guide-components-4939112353230097775
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4218206Z  * [new branch]          feat/issue-6-related-events-10006296907220218992 -> origin/feat/issue-6-related-events-10006296907220218992
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4219774Z  * [new branch]          feat/issue-design-system-alignment-feature-components-8279954580429133519 -> origin/feat/issue-design-system-alignment-feature-components-8279954580429133519
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4221183Z  * [new branch]          feat/issue-event-detail-orchestration-11133561149292331471 -> origin/feat/issue-event-detail-orchestration-11133561149292331471
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4222453Z  * [new branch]          feat/issue-headless-ux-fallback-11579572067688160333 -> origin/feat/issue-headless-ux-fallback-11579572067688160333
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4223506Z  * [new branch]          feat/issue-log-drains-9571405390188082394 -> origin/feat/issue-log-drains-9571405390188082394
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4224589Z  * [new branch]          feat/issue-register-event-routes-5971867619151943622 -> origin/feat/issue-register-event-routes-5971867619151943622
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4225798Z  * [new branch]          feat/issue-related-events-section-11630970490765652318 -> origin/feat/issue-related-events-section-11630970490765652318
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4227036Z  * [new branch]          feat/issue-theme-spotlight-section-2-11183839174441315550 -> origin/feat/issue-theme-spotlight-section-2-11183839174441315550
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4228249Z  * [new branch]          feat/optimize-query-initial-data-1172494607182472244 -> origin/feat/optimize-query-initial-data-1172494607182472244
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4229378Z  * [new branch]          feat/pin-node-runtime-5230133219697182427 -> origin/feat/pin-node-runtime-5230133219697182427
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4230779Z  * [new branch]          feat/preview-server-cleanup-7455734928117012185 -> origin/feat/preview-server-cleanup-7455734928117012185
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4231954Z  * [new branch]          feat/update-audit-styles-coverage-11592055360400894061 -> origin/feat/update-audit-styles-coverage-11592055360400894061
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4233205Z  * [new branch]          feat/update-event-schema-and-parser-373494262317043504 -> origin/feat/update-event-schema-and-parser-373494262317043504
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4234725Z  * [new branch]          feature-event-hero-component-10257752978626672348-10107641846999832550 -> origin/feature-event-hero-component-10257752978626672348-10107641846999832550
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4235981Z  * [new branch]          feature/curated-gear-section-10224847195886133438 -> origin/feature/curated-gear-section-10224847195886133438
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4237106Z  * [new branch]          feature/event-hero-component-10257752978626672348 -> origin/feature/event-hero-component-10257752978626672348
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4238206Z  * [new branch]          feature/event-hero-section-12356302337326709341 -> origin/feature/event-hero-section-12356302337326709341
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4239360Z  * [new branch]          feature/integrate-use-event-detail-hook-17942518473527818780 -> origin/feature/integrate-use-event-detail-hook-17942518473527818780
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4240893Z  * [new branch]          feature/integrate-wsdc-reminders-8737593318457033674 -> origin/feature/integrate-wsdc-reminders-8737593318457033674
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4241955Z  * [new branch]          fix-anchor-scrolling-5153568393383495338 -> origin/fix-anchor-scrolling-5153568393383495338
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4242914Z  * [new branch]          fix-audit-pr-null-crash-3511749500559598366 -> origin/fix-audit-pr-null-crash-3511749500559598366
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4243941Z  * [new branch]          fix-base-path-drift-13021578602505954899 -> origin/fix-base-path-drift-13021578602505954899
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4245016Z  * [new branch]          fix-check-runs-api-endpoint-9640829391241932312 -> origin/fix-check-runs-api-endpoint-9640829391241932312
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4246092Z  * [new branch]          fix-ci-nodejs-20-deprecation-14745837020260920736 -> origin/fix-ci-nodejs-20-deprecation-14745837020260920736
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4247466Z  * [new branch]          fix-code-health-functional-issues-17044987823216720154 -> origin/fix-code-health-functional-issues-17044987823216720154
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4248547Z  * [new branch]          fix-favicon-contrast-184746075700276031 -> origin/fix-favicon-contrast-184746075700276031
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4249743Z  * [new branch]          fix-github-log-redirect-origin-main-11078619993559827761 -> origin/fix-github-log-redirect-origin-main-11078619993559827761
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4250938Z  * [new branch]          fix-github-logs-endpoint-12865535415525952257 -> origin/fix-github-logs-endpoint-12865535415525952257
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4251994Z  * [new branch]          fix-headless-audit-failure-3861346607894275167 -> origin/fix-headless-audit-failure-3861346607894275167
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4253021Z  * [new branch]          fix-mass-audit-prs-17226004357048500306 -> origin/fix-mass-audit-prs-17226004357048500306
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4254091Z  * [new branch]          fix-prototype-pollution-1747616510286916617 -> origin/fix-prototype-pollution-1747616510286916617
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4255049Z  * [new branch]          fix-smoke-test-linter-8295934985024655691 -> origin/fix-smoke-test-linter-8295934985024655691
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4256136Z  * [new branch]          fix-unused-usememo-herosection-10568282859807385424 -> origin/fix-unused-usememo-herosection-10568282859807385424
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4257319Z  * [new branch]          fix-use-home-duplicate-key-855087774785441811 -> origin/fix-use-home-duplicate-key-855087774785441811
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4258289Z  * [new branch]          fix/e2e-base-path-drift-9673731142129029095 -> origin/fix/e2e-base-path-drift-9673731142129029095
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4259362Z  * [new branch]          fix/etl-scraper-race-condition-10647998793240089423 -> origin/fix/etl-scraper-race-condition-10647998793240089423
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4332925Z  * [new branch]          fix/gh-pages-deployment-128-2161668640020291424 -> origin/fix/gh-pages-deployment-128-2161668640020291424
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4334823Z  * [new branch]          fix/github-actions-versions-1151824661250212695 -> origin/fix/github-actions-versions-1151824661250212695
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4336726Z  * [new branch]          fix/mobile-touch-ux-improvements-14239198124207945949 -> origin/fix/mobile-touch-ux-improvements-14239198124207945949
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4338306Z  * [new branch]          fix/pnpm-version-mismatch-14814531951502640562 -> origin/fix/pnpm-version-mismatch-14814531951502640562
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4340306Z  * [new branch]          fix/remove-implicit-git-config-cli-10662028601620146328 -> origin/fix/remove-implicit-git-config-cli-10662028601620146328
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4341728Z  * [new branch]          fix/ui-ux-regressions-2805114839771910443 -> origin/fix/ui-ux-regressions-2805114839771910443
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4343352Z  * [new branch]          fix/update-snapshots-workflow-integrity-1850408067846032985 -> origin/fix/update-snapshots-workflow-integrity-1850408067846032985
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4345159Z  * [new branch]          fix/wcs-etl-github-actions-push-1920935766606519385 -> origin/fix/wcs-etl-github-actions-push-1920935766606519385
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4347081Z  * [new branch]          fix/wsdc-reminders-tests-and-timezone-stability-11381232339079601866 -> origin/fix/wsdc-reminders-tests-and-timezone-stability-11381232339079601866
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4348530Z  * [new branch]          gh-pages             -> origin/gh-pages
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4349891Z  * [new branch]          icon-normalization-helper-1412885856262221001 -> origin/icon-normalization-helper-1412885856262221001
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4351637Z  * [new branch]          infrastructure-design-system-compliance-834175024358615850 -> origin/infrastructure-design-system-compliance-834175024358615850
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4353637Z  * [new branch]          integrate-wsdc-reminders-event-detail-page-1705855282734090262 -> origin/integrate-wsdc-reminders-event-detail-page-1705855282734090262
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4355636Z  * [new branch]          jules-10942239437074151141-f92bcc68 -> origin/jules-10942239437074151141-f92bcc68
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4356795Z  * [new branch]          jules-12095117736659633619-5676b48a -> origin/jules-12095117736659633619-5676b48a
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4357873Z  * [new branch]          jules-1644875693793732344-5b6fd198 -> origin/jules-1644875693793732344-5b6fd198
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4359194Z  * [new branch]          jules-about-page-layout-fix-8635497122355412229 -> origin/jules-about-page-layout-fix-8635497122355412229
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4360446Z  * [new branch]          main                 -> origin/main
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4361591Z  * [new branch]          migrate-playwright-container-8576380029556983654 -> origin/migrate-playwright-container-8576380029556983654
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4363365Z  * [new branch]          optimize-mobile-event-ui-1219134508907889532 -> origin/optimize-mobile-event-ui-1219134508907889532
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4364398Z  * [new branch]          optimize-mobile-event-ui-9211926877933577885 -> origin/optimize-mobile-event-ui-9211926877933577885
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4365401Z  * [new branch]          optimize-mobile-ui-event-page-10711695993855503399 -> origin/optimize-mobile-ui-event-page-10711695993855503399
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4366475Z  * [new branch]          orchestrate-event-detail-layout-15264023194469159731 -> origin/orchestrate-event-detail-layout-15264023194469159731
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4367534Z  * [new branch]          refactor-asset-path-resolution-2844712326549370492 -> origin/refactor-asset-path-resolution-2844712326549370492
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4368584Z  * [new branch]          refactor-audit-suppressions-14572047745563740183 -> origin/refactor-audit-suppressions-14572047745563740183
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4369761Z  * [new branch]          refactor-wordmark-props-3998074852195640797 -> origin/refactor-wordmark-props-3998074852195640797
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4370796Z  * [new branch]          refactor-wordmark-variants-3168348631766881578 -> origin/refactor-wordmark-variants-3168348631766881578
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4372228Z  * [new branch]          refactor-wsdc-reminders-9754922138867038239 -> origin/refactor-wsdc-reminders-9754922138867038239
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4374038Z  * [new branch]          refactor/ui-consolidate-event-sidebar-and-header-props-8811662275559392197 -> origin/refactor/ui-consolidate-event-sidebar-and-header-props-8811662275559392197
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4375365Z  * [new branch]          refactor/ui-consolidation-and-cleanup-12543868533480869595 -> origin/refactor/ui-consolidation-and-cleanup-12543868533480869595
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4376540Z  * [new branch]          remove-cli-side-effects-re-verification-15782105518218394756 -> origin/remove-cli-side-effects-re-verification-15782105518218394756
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4377776Z  * [new branch]          revert-1360-revert-1351-feat/site-audit-harness-8732504301701748260 -> origin/revert-1360-revert-1351-feat/site-audit-harness-8732504301701748260
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4378940Z  * [new branch]          revert-visual-regression-loosening-17377694848938759217 -> origin/revert-visual-regression-loosening-17377694848938759217
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4380034Z  * [new branch]          task/mass-audit-prs-final -> origin/task/mass-audit-prs-final
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4380820Z  * [new branch]          update-eventcard-links-9428070374692718568 -> origin/update-eventcard-links-9428070374692718568
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4381710Z  * [new branch]          ux-auditor-tablet-fixes-13311922177396830401 -> origin/ux-auditor-tablet-fixes-13311922177396830401
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4382357Z  * [new branch]          victorian            -> origin/victorian
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4383066Z  * [new branch]          workflow-action-updates-9437545176145856493 -> origin/workflow-action-updates-9437545176145856493
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4383780Z  * [new ref]             0e7e6d7ce1a2c7d3a654da254207578eff501054 -> pull/1370/merge
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4384964Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4385615Z ##[group]Determining the checkout info
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4386228Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4386539Z [command]/usr/bin/git sparse-checkout disable
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4408115Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4446143Z ##[group]Checking out the ref
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:10.4450901Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/1370/merge
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0846109Z Note: switching to 'refs/remotes/pull/1370/merge'.
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0846561Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0846875Z You are in 'detached HEAD' state. You can look around, make experimental
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0847638Z changes and commit them, and you can discard any commits you make in this
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0848358Z state without impacting any branches by switching back to a branch.
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0848773Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0849033Z If you want to create a new branch to retain commits you create, you may
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0849781Z do so (now or later) by using -c with the switch command. Example:
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0850121Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0850269Z   git switch -c <new-branch-name>
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0850490Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0850644Z Or undo this operation with:
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0850860Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0850978Z   git switch -
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0851137Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0851417Z Turn off this advice by setting config variable advice.detachedHead to false
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0851839Z 
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.0852319Z HEAD is now at 0e7e6d7ce Merge 46be3679fefd4d7301871ff299fe9f4d901d1492 into 99ecf408318ad8ae0f0fab1c60883462be9dddcf
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.1115538Z ##[endgroup]
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.1160078Z [command]/usr/bin/git log -1 --format=%H
+Anti-Pattern Audit	Checkout	2026-05-20T01:27:11.1187333Z 0e7e6d7ce1a2c7d3a654da254207578eff501054
+Anti-Pattern Audit	Setup pnpm	﻿2026-05-20T01:27:11.1406474Z ##[group]Run pnpm/action-setup@v4
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1406744Z with:
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1406943Z   dest: ~/setup-pnpm
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1407159Z   run_install: null
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1407346Z   cache: false
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1407571Z   cache_dependency_path: pnpm-lock.yaml
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1407853Z   package_json_file: package.json
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1408091Z   standalone: false
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1408274Z env:
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1408463Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1408725Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1408922Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1409124Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.1409308Z ##[endgroup]
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.2835657Z ##[group]Running self-installer...
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.6585267Z (node:2354) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.6587102Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:11.7948055Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.0988668Z 
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.0989264Z dependencies:
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.1131249Z + pnpm 10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.1132316Z 
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.1132430Z Packages: +1
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.1137134Z +
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.1703821Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.1889735Z Done in 740ms
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.2078605Z ##[endgroup]
+Anti-Pattern Audit	Setup pnpm	2026-05-20T01:27:12.2079440Z Installation Completed!
+Anti-Pattern Audit	Setup Node.js	﻿2026-05-20T01:27:12.2258760Z ##[group]Run actions/setup-node@v4
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2259138Z with:
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2259390Z   node-version-file: .nvmrc
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2259895Z   cache: pnpm
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2260147Z   always-auth: false
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2260416Z   check-latest: false
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2260842Z   token: ***
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2261090Z env:
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2261357Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2261733Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2262282Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2262573Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2262924Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.2263218Z ##[endgroup]
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.3626230Z Resolved .nvmrc as 22
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.3686291Z Found in cache @ /opt/hostedtoolcache/node/22.22.2/x64
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.3690468Z (node:2367) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.3691125Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:12.3693734Z ##[group]Environment details
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:14.9360541Z node: v22.22.2
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:14.9360936Z npm: 10.9.7
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:14.9361193Z yarn: 1.22.22
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:14.9362486Z ##[endgroup]
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:14.9401179Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:15.4542194Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:15.5202771Z Cache hit for: node-cache-Linux-x64-pnpm-20dc75dc306f02a576a52169e51466cb6740b0579fc6d1bdda7132b8a1dd88de
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:15.5303635Z (node:2367) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:16.3738790Z Received 160030305 of 160030305 (100.0%), 186.6 MBs/sec
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:16.3740240Z Cache Size: ~153 MB (160030305 B)
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:16.3773284Z [command]/usr/bin/tar -xf /home/runner/work/_temp/6f50a910-cc7b-4338-b3c1-a93b5e986f37/cache.tzst -P -C /home/runner/work/tech-dancer/tech-dancer --use-compress-program unzstd
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:18.5507833Z Cache restored successfully
+Anti-Pattern Audit	Setup Node.js	2026-05-20T01:27:18.5590033Z Cache restored from key: node-cache-Linux-x64-pnpm-20dc75dc306f02a576a52169e51466cb6740b0579fc6d1bdda7132b8a1dd88de
+Anti-Pattern Audit	Install dependencies	﻿2026-05-20T01:27:18.5791496Z ##[group]Run pnpm install --frozen-lockfile --prefer-offline
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5792009Z ^[[36;1mpnpm install --frozen-lockfile --prefer-offline^[[0m
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5872488Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5872755Z env:
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5872975Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5873261Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5873477Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5873679Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5873932Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.5874225Z ##[endgroup]
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:18.9062369Z Lockfile is up to date, resolution step is skipped
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:19.1895951Z Packages: +1169
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:19.1896867Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:19.1946902Z Progress: resolved 0, reused 1, downloaded 0, added 0
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:20.1957657Z Progress: resolved 0, reused 1138, downloaded 0, added 290
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.0512871Z Progress: resolved 0, reused 1138, downloaded 0, added 1169, done
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.2890948Z 
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4213484Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4214474Z │                                                                              │
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4215404Z │   Ignored build scripts: @firebase/util@1.15.0, core-js@3.49.0,              │
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4216422Z │   esbuild@0.25.12, esbuild@0.27.7, protobufjs@7.5.5, sharp@0.34.5.           │
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4217514Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4218355Z │   to run scripts.                                                            │
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4219111Z │                                                                              │
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4220135Z ╰──────────────────────────────────────────────────────────────────────────────╯
+Anti-Pattern Audit	Install dependencies	2026-05-20T01:27:21.4428500Z Done in 2.8s using pnpm v10.28.2
+Anti-Pattern Audit	Set up Python	﻿2026-05-20T01:27:21.4741548Z ##[group]Run actions/setup-python@v5
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4742017Z with:
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4742221Z   python-version: 3.11
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4742449Z   check-latest: false
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4742775Z   token: ***
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4742987Z   update-environment: true
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4743232Z   allow-prereleases: false
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4743450Z   freethreaded: false
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4743647Z env:
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4743849Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4744120Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4744327Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4744534Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4744786Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.4745075Z ##[endgroup]
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.6086386Z ##[group]Installed versions
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.6186937Z (node:2432) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.6188307Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.6189200Z Successfully set up CPython (3.11.15)
+Anti-Pattern Audit	Set up Python	2026-05-20T01:27:21.6190032Z ##[endgroup]
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	﻿2026-05-20T01:27:21.6297430Z ##[group]Run python3 -m pip install PyGithub click
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6297822Z ^[[36;1mpython3 -m pip install PyGithub click^[[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6298223Z ^[[36;1mPYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH || true^[[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6298677Z ^[[36;1mif ! pnpm run audit; then echo "Audit failed"; exit 1; fi^[[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6299059Z ^[[36;1mpython3 dev-tools/td_cli.py gh audit-gate^[[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6342163Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6342419Z env:
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6342642Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6342924Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6343133Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6343336Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6343592Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6344218Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6367301Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6367989Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6368412Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6368776Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6369144Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6369871Z   GH_TOKEN: ***
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:21.6370084Z ##[endgroup]
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.4547023Z Collecting PyGithub
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.5363911Z   Downloading pygithub-2.9.1-py3-none-any.whl.metadata (3.9 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.5590647Z Collecting click
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.5637131Z   Downloading click-8.4.0-py3-none-any.whl.metadata (2.6 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.5859115Z Collecting pynacl>=1.4.0 (from PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.5902338Z   Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (10.0 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.6128487Z Collecting requests>=2.14.0 (from PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.6193076Z   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.6512542Z Collecting pyjwt>=2.4.0 (from pyjwt[crypto]>=2.4.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.6777545Z   Downloading pyjwt-2.12.1-py3-none-any.whl.metadata (4.1 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.6963383Z Collecting typing-extensions>=4.5.0 (from PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.7001004Z   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.7219800Z Collecting urllib3>=1.26.0 (from PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.7261986Z   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.8767407Z Collecting cryptography>=3.4.0 (from pyjwt[crypto]>=2.4.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.8805057Z   Downloading cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.9562415Z Collecting cffi>=2.0.0 (from cryptography>=3.4.0->pyjwt[crypto]>=2.4.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.9602296Z   Downloading cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.9717377Z Collecting pycparser (from cffi>=2.0.0->cryptography>=3.4.0->pyjwt[crypto]>=2.4.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:22.9754682Z   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.0481855Z Collecting charset_normalizer<4,>=2 (from requests>=2.14.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.0525094Z   Downloading charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.0728312Z Collecting idna<4,>=2.5 (from requests>=2.14.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.0761747Z   Downloading idna-3.15-py3-none-any.whl.metadata (7.7 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.0985357Z Collecting certifi>=2023.5.7 (from requests>=2.14.0->PyGithub)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1018776Z   Downloading certifi-2026.4.22-py3-none-any.whl.metadata (2.5 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1098295Z Downloading pygithub-2.9.1-py3-none-any.whl (449 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1260290Z Downloading click-8.4.0-py3-none-any.whl (116 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1323430Z Downloading pyjwt-2.12.1-py3-none-any.whl (29 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1373390Z Downloading cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1768193Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 129.8 MB/s  0:00:00
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1804471Z Downloading cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (215 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1861276Z Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl (1.4 MB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1952094Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 165.4 MB/s  0:00:00
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.1985916Z Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.2047765Z Downloading charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (214 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.2117913Z Downloading idna-3.15-py3-none-any.whl (72 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.2637630Z Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.2699084Z Downloading certifi-2026.4.22-py3-none-any.whl (135 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.2768954Z Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.2837856Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:23.3373385Z Installing collected packages: urllib3, typing-extensions, pyjwt, pycparser, idna, click, charset_normalizer, certifi, requests, cffi, pynacl, cryptography, PyGithub
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.2677103Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.2691004Z Successfully installed PyGithub-2.9.1 certifi-2026.4.22 cffi-2.0.0 charset_normalizer-3.4.7 click-8.4.0 cryptography-48.0.0 idna-3.15 pycparser-3.0 pyjwt-2.12.1 pynacl-1.6.2 requests-2.34.2 typing-extensions-4.15.0 urllib3-2.7.0
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.5961013Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.5961982Z > react-example@0.0.0 audit /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.5962807Z > node scripts/detect-antipatterns.mjs
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.5963134Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.6312787Z ^[[34m🔍 Scanning for UI anti-patterns...^[[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.6313271Z 
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:24.7777290Z ^[[32m✔ No anti-patterns detected!^[[0m
+Anti-Pattern Audit	UI Anti-Pattern Audit - Gate	2026-05-20T01:27:30.1660092Z UI Anti-Pattern Audit: Current=0, Baseline=1
+Anti-Pattern Audit	Design Token Compliance	﻿2026-05-20T01:27:30.1939101Z ##[group]Run # Check for raw hex colors not in tokens.css
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1939822Z ^[[36;1m# Check for raw hex colors not in tokens.css^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1940250Z ^[[36;1mVIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1940633Z ^[[36;1m  --include="*.tsx" \^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1941009Z ^[[36;1m  | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1941398Z ^[[36;1mif [ "$VIOLATIONS" -gt 0 ]; then^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1941837Z ^[[36;1m  echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1942507Z ^[[36;1m  grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1943170Z ^[[36;1m  exit 1^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1943390Z ^[[36;1mfi^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1943610Z ^[[36;1mecho "✅ Design token compliance passed."^[[0m
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1980971Z shell: /usr/bin/bash -e {0}
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1981275Z env:
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1981494Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1981779Z   ANY_COUNT_BASELINE: 
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1981990Z   BUNDLE_BASELINE_KB: 
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1982196Z   AUDIT_BASELINE: 
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1982444Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1982812Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1983215Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1983618Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1983978Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1984341Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1984699Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.1985007Z ##[endgroup]
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.2073734Z /home/runner/work/_temp/5f49b7a8-2479-4680-a419-303c130af4b5.sh: line 5: [: 0
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.2074834Z ✅ Design token compliance passed.
+Anti-Pattern Audit	Design Token Compliance	2026-05-20T01:27:30.2075502Z 0: integer expression expected
+Anti-Pattern Audit	Post Set up Python	﻿2026-05-20T01:27:30.2120923Z Post job cleanup.
+Anti-Pattern Audit	Post Set up Python	2026-05-20T01:27:30.3327265Z (node:3477) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Anti-Pattern Audit	Post Set up Python	2026-05-20T01:27:30.3328616Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Post Setup Node.js	﻿2026-05-20T01:27:30.3480443Z Post job cleanup.
+Anti-Pattern Audit	Post Setup Node.js	2026-05-20T01:27:30.4725586Z (node:3485) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Anti-Pattern Audit	Post Setup Node.js	2026-05-20T01:27:30.4726426Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Anti-Pattern Audit	Post Setup Node.js	2026-05-20T01:27:30.4730035Z Cache hit occurred on the primary key node-cache-Linux-x64-pnpm-20dc75dc306f02a576a52169e51466cb6740b0579fc6d1bdda7132b8a1dd88de, not saving cache.
+Anti-Pattern Audit	Post Setup pnpm	﻿2026-05-20T01:27:30.4832658Z Post job cleanup.
+Anti-Pattern Audit	Post Setup pnpm	2026-05-20T01:27:30.6268982Z Pruning is unnecessary.
+Anti-Pattern Audit	Post Checkout	﻿2026-05-20T01:27:30.6400916Z Post job cleanup.
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7292097Z [command]/usr/bin/git version
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7364207Z git version 2.54.0
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7402521Z Temporarily overriding HOME='/home/runner/work/_temp/c2b97aaa-3a2b-4d16-a849-c876256cb6be' before making global git config changes
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7404038Z Adding repository directory to the temporary git global config as a safe directory
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7418171Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7454009Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7493819Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7751248Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7778418Z http.https://github.com/.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7790790Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.7827540Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.8082685Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Anti-Pattern Audit	Post Checkout	2026-05-20T01:27:30.8121085Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Anti-Pattern Audit	Complete job	﻿2026-05-20T01:27:30.8497582Z Cleaning up orphan processes
+Anti-Pattern Audit	Complete job	2026-05-20T01:27:30.8812187Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/setup-python@v5, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Lint & Type Check	Set up job	﻿2026-05-20T01:26:53.9284872Z Current runner version: '2.334.0'
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9310543Z ##[group]Runner Image Provisioner
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9311498Z Hosted Compute Agent
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9312014Z Version: 20260213.493
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9312689Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9313379Z Build Date: 2026-02-13T00:28:41Z
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9314000Z Worker ID: {d073063f-1027-4579-9b38-68216939511a}
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9314727Z Azure Region: eastus
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9315271Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9316683Z ##[group]Operating System
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9317349Z Ubuntu
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9317822Z 24.04.4
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9318238Z LTS
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9318739Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9319230Z ##[group]Runner Image
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9319765Z Image: ubuntu-24.04
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9320513Z Version: 20260513.135.3
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9321548Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260513.135/images/ubuntu/Ubuntu2404-Readme.md
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9323151Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260513.135
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9324195Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9325346Z ##[group]GITHUB_TOKEN Permissions
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9327717Z Actions: read
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9328242Z Contents: read
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9328821Z Metadata: read
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9329313Z ##[endgroup]
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9332055Z Secret source: Actions
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9332863Z Prepare workflow directory
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9837772Z Prepare all required actions
+Lint & Type Check	Set up job	2026-05-20T01:26:53.9873988Z Getting action download info
+Lint & Type Check	Set up job	2026-05-20T01:26:54.3356663Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Lint & Type Check	Set up job	2026-05-20T01:26:54.4494137Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Lint & Type Check	Set up job	2026-05-20T01:26:54.6139356Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Lint & Type Check	Set up job	2026-05-20T01:26:54.7088921Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+Lint & Type Check	Set up job	2026-05-20T01:26:54.8779166Z Complete job name: Lint & Type Check
+Lint & Type Check	Checkout	﻿2026-05-20T01:26:54.9492469Z ##[group]Run actions/checkout@v4
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9493371Z with:
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9493786Z   fetch-depth: 0
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9494237Z   repository: arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9494891Z   token: ***
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9495295Z   ssh-strict: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9495723Z   ssh-user: git
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9496154Z   persist-credentials: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9496634Z   clean: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9497054Z   sparse-checkout-cone-mode: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9497571Z   fetch-tags: false
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9497986Z   show-progress: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9498410Z   lfs: false
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9498804Z   submodules: false
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9499219Z   set-safe-directory: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9499894Z env:
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9500779Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9501421Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9501877Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9502311Z   AUDIT_BASELINE: 
+Lint & Type Check	Checkout	2026-05-20T01:26:54.9502701Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0443179Z Syncing repository: arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0445432Z ##[group]Getting Git version info
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0446373Z Working directory is '/home/runner/work/tech-dancer/tech-dancer'
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0447840Z [command]/usr/bin/git version
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0497766Z git version 2.54.0
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0517971Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0531736Z Temporarily overriding HOME='/home/runner/work/_temp/a7e00136-0d83-49a6-ac88-2503eda7c797' before making global git config changes
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0533671Z Adding repository directory to the temporary git global config as a safe directory
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0536236Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0580814Z Deleting the contents of '/home/runner/work/tech-dancer/tech-dancer'
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0585062Z ##[group]Initializing the repository
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0589446Z [command]/usr/bin/git init /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0678743Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0681042Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0682333Z hint: to use in all of your new repositories, which will suppress this warning,
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0683321Z hint: call:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0683983Z hint:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0684648Z hint: 	git config --global init.defaultBranch <name>
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0686031Z hint:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0687336Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0689789Z hint: 'development'. The just-created branch can be renamed via this command:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0691853Z hint:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0693207Z hint: 	git branch -m <name>
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0694597Z hint:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0696065Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0698382Z Initialized empty Git repository in /home/runner/work/tech-dancer/tech-dancer/.git/
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0702193Z [command]/usr/bin/git remote add origin https://github.com/arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0742021Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0743655Z ##[group]Disabling automatic garbage collection
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0745974Z [command]/usr/bin/git config --local gc.auto 0
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0775225Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0776898Z ##[group]Setting up auth
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0782656Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint & Type Check	Checkout	2026-05-20T01:26:55.0815402Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1136852Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1167715Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1379045Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1410033Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1623414Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1656127Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1657883Z ##[group]Fetching the repository
+Lint & Type Check	Checkout	2026-05-20T01:26:55.1667391Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +0e7e6d7ce1a2c7d3a654da254207578eff501054:refs/remotes/pull/1370/merge
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6514860Z From https://github.com/arii/tech-dancer
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6516951Z  * [new branch]          about-updates-v2-14156650094895102247 -> origin/about-updates-v2-14156650094895102247
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6519665Z  * [new branch]          accessibility-improvements-batch-1-2779850392413816961 -> origin/accessibility-improvements-batch-1-2779850392413816961
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6521611Z  * [new branch]          ari-agent-setup-17855018510360646567 -> origin/ari-agent-setup-17855018510360646567
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6522608Z  * [new branch]          ari/fix-event-detail -> origin/ari/fix-event-detail
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6523279Z  * [new branch]          ari/image-generation -> origin/ari/image-generation
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6523956Z  * [new branch]          ari/vis-update       -> origin/ari/vis-update
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6524913Z  * [new branch]          audit-tool-expansion-4990874942647797944 -> origin/audit-tool-expansion-4990874942647797944
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6526564Z  * [new branch]          auto-resolve/feature/curated-gear-section-10224847195886133438 -> origin/auto-resolve/feature/curated-gear-section-10224847195886133438
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6528197Z  * [new branch]          auto-resolve/fix/mobile-touch-ux-improvements-14239198124207945949 -> origin/auto-resolve/fix/mobile-touch-ux-improvements-14239198124207945949
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6529747Z  * [new branch]          auto-resolve/fix/ui-ux-regressions-2805114839771910443 -> origin/auto-resolve/fix/ui-ux-regressions-2805114839771910443
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6531321Z  * [new branch]          auto-resolve/infrastructure-design-system-compliance-834175024358615850 -> origin/auto-resolve/infrastructure-design-system-compliance-834175024358615850
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6532847Z  * [new branch]          auto-resolve/integrate-wsdc-reminders-event-detail-page-1705855282734090262 -> origin/auto-resolve/integrate-wsdc-reminders-event-detail-page-1705855282734090262
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6534368Z  * [new branch]          branding-standardization-wordmark-11393711044305707239 -> origin/branding-standardization-wordmark-11393711044305707239
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6535629Z  * [new branch]          branding-update-wordmark-standardization-9402318875250459447 -> origin/branding-update-wordmark-standardization-9402318875250459447
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6536939Z  * [new branch]          centralize-ollama-api-abstraction-871-16330538965032015382 -> origin/centralize-ollama-api-abstraction-871-16330538965032015382
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6538113Z  * [new branch]          chore-consolidated-branding-2928318327932561036 -> origin/chore-consolidated-branding-2928318327932561036
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6539394Z  * [new branch]          chore-consolidated-lab-tools-6839126484043152480 -> origin/chore-consolidated-lab-tools-6839126484043152480
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6540677Z  * [new branch]          chore-consolidated-ui-ux-18268890764632995871 -> origin/chore-consolidated-ui-ux-18268890764632995871
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6541900Z  * [new branch]          chore/audit-suppression-inventory-5860033050599464395 -> origin/chore/audit-suppression-inventory-5860033050599464395
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6542781Z  * [new branch]          chore/consolidated-branding -> origin/chore/consolidated-branding
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6543861Z  * [new branch]          chore/consolidated-ui-ux-18268890764632995871 -> origin/chore/consolidated-ui-ux-18268890764632995871
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6544928Z  * [new branch]          chore/document-audit-bypass-13147926786562756982 -> origin/chore/document-audit-bypass-13147926786562756982
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6545934Z  * [new branch]          ci-optimization-ollama-docker-1425602506695211491 -> origin/ci-optimization-ollama-docker-1425602506695211491
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6546966Z  * [new branch]          cleanup-td-cli-redundancies-10971288668083319072 -> origin/cleanup-td-cli-redundancies-10971288668083319072
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6548359Z  * [new branch]          codex-implement-front-end-improvements-for-boomtick.blog-17214063084778931829 -> origin/codex-implement-front-end-improvements-for-boomtick.blog-17214063084778931829
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6549765Z  * [new branch]          codex/audit-codebase-for-impeccable-ignore-errors -> origin/codex/audit-codebase-for-impeccable-ignore-errors
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6551123Z  * [new branch]          codex/complete-review-ux-workflow-and-create-issues -> origin/codex/complete-review-ux-workflow-and-create-issues
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6552287Z  * [new branch]          codex/create-agent-setup-script-for-dependencies -> origin/codex/create-agent-setup-script-for-dependencies
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6553515Z  * [new branch]          codex/implement-front-end-improvements-for-boomtick.blog -> origin/codex/implement-front-end-improvements-for-boomtick.blog
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6554978Z  * [new branch]          codex/implement-front-end-improvements-for-boomtick.blog-2068919482777334203 -> origin/codex/implement-front-end-improvements-for-boomtick.blog-2068919482777334203
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6556512Z  * [new branch]          codex/improve-pr-ux-for-front-end-workflow -> origin/codex/improve-pr-ux-for-front-end-workflow
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6557682Z  * [new branch]          codex/remove-temporary-files-and-update-.gitignore-zsuacp -> origin/codex/remove-temporary-files-and-update-.gitignore-zsuacp
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6558985Z  * [new branch]          codex/review-and-improve-github-workflows-4224772757655175956 -> origin/codex/review-and-improve-github-workflows-4224772757655175956
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6560409Z  * [new branch]          codex/review-codebase-and-create-github-issues -> origin/codex/review-codebase-and-create-github-issues
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6561379Z  * [new branch]          codex/run-mass-audit-pr-workflow -> origin/codex/run-mass-audit-pr-workflow
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6562270Z  * [new branch]          codex/update-homepage-to-emphasize-gear -> origin/codex/update-homepage-to-emphasize-gear
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6563331Z  * [new branch]          codex/verify-src/styles-impacts-tsx-formatting -> origin/codex/verify-src/styles-impacts-tsx-formatting
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6564474Z  * [new branch]          codex/verify-src/styles-impacts-tsx-formatting-tif7fi -> origin/codex/verify-src/styles-impacts-tsx-formatting-tif7fi
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6565544Z  * [new branch]          consolidate-button-styles-6586345525275043211 -> origin/consolidate-button-styles-6586345525275043211
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6567367Z  * [new branch]          consolidate-derived-state-16899255422545458835 -> origin/consolidate-derived-state-16899255422545458835
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6568487Z  * [new branch]          consolidate-ollama-api-logic-9180553374366050257 -> origin/consolidate-ollama-api-logic-9180553374366050257
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6569472Z  * [new branch]          copilot/fix-merge-conflicts -> origin/copilot/fix-merge-conflicts
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6570544Z  * [new branch]          decouple-cli-changes-15961401340945748124 -> origin/decouple-cli-changes-15961401340945748124
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6571660Z  * [new branch]          design-system-compliance-audit-fix-468764408471531407 -> origin/design-system-compliance-audit-fix-468764408471531407
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6572840Z  * [new branch]          design-system-standardization-3973358259743895350 -> origin/design-system-standardization-3973358259743895350
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6574375Z  * [new branch]          design-system-standardization-3973358259743895350-16275902658573136635 -> origin/design-system-standardization-3973358259743895350-16275902658573136635
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6575912Z  * [new branch]          enhance-pr-audit-workflow-5195834116413712586-12077750844145346502 -> origin/enhance-pr-audit-workflow-5195834116413712586-12077750844145346502
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6577195Z  * [new branch]          enrich-event-resources-metadata-13370510469479910973 -> origin/enrich-event-resources-metadata-13370510469479910973
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6578376Z  * [new branch]          fe-cva-variants-uxauditor-13693920154445553590 -> origin/fe-cva-variants-uxauditor-13693920154445553590
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6579467Z  * [new branch]          fe-text-primitive-enhancements-16203928488536483925 -> origin/fe-text-primitive-enhancements-16203928488536483925
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6580970Z  * [new branch]          feat/accessible-victorian-explorer-3579260108458270423 -> origin/feat/accessible-victorian-explorer-3579260108458270423
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6582192Z  * [new branch]          feat/auto-update-assets-4194932469597087626 -> origin/feat/auto-update-assets-4194932469597087626
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6583219Z  * [new branch]          feat/automated-ux-smoke-test-3111523203801414691 -> origin/feat/automated-ux-smoke-test-3111523203801414691
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6584260Z  * [new branch]          feat/consolidate-svg-styles-2301584815641430556 -> origin/feat/consolidate-svg-styles-2301584815641430556
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6585417Z  * [new branch]          feat/curated-gear-component-6239852585537682935 -> origin/feat/curated-gear-component-6239852585537682935
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6586423Z  * [new branch]          feat/event-guide-components-4939112353230097775 -> origin/feat/event-guide-components-4939112353230097775
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6587900Z  * [new branch]          feat/issue-6-related-events-10006296907220218992 -> origin/feat/issue-6-related-events-10006296907220218992
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6655418Z  * [new branch]          feat/issue-design-system-alignment-feature-components-8279954580429133519 -> origin/feat/issue-design-system-alignment-feature-components-8279954580429133519
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6656912Z  * [new branch]          feat/issue-event-detail-orchestration-11133561149292331471 -> origin/feat/issue-event-detail-orchestration-11133561149292331471
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6658126Z  * [new branch]          feat/issue-headless-ux-fallback-11579572067688160333 -> origin/feat/issue-headless-ux-fallback-11579572067688160333
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6659064Z  * [new branch]          feat/issue-log-drains-9571405390188082394 -> origin/feat/issue-log-drains-9571405390188082394
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6660000Z  * [new branch]          feat/issue-register-event-routes-5971867619151943622 -> origin/feat/issue-register-event-routes-5971867619151943622
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6661383Z  * [new branch]          feat/issue-related-events-section-11630970490765652318 -> origin/feat/issue-related-events-section-11630970490765652318
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6662505Z  * [new branch]          feat/issue-theme-spotlight-section-2-11183839174441315550 -> origin/feat/issue-theme-spotlight-section-2-11183839174441315550
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6663582Z  * [new branch]          feat/optimize-query-initial-data-1172494607182472244 -> origin/feat/optimize-query-initial-data-1172494607182472244
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6664511Z  * [new branch]          feat/pin-node-runtime-5230133219697182427 -> origin/feat/pin-node-runtime-5230133219697182427
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6665386Z  * [new branch]          feat/preview-server-cleanup-7455734928117012185 -> origin/feat/preview-server-cleanup-7455734928117012185
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6666387Z  * [new branch]          feat/update-audit-styles-coverage-11592055360400894061 -> origin/feat/update-audit-styles-coverage-11592055360400894061
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6667462Z  * [new branch]          feat/update-event-schema-and-parser-373494262317043504 -> origin/feat/update-event-schema-and-parser-373494262317043504
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6668875Z  * [new branch]          feature-event-hero-component-10257752978626672348-10107641846999832550 -> origin/feature-event-hero-component-10257752978626672348-10107641846999832550
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6670329Z  * [new branch]          feature/curated-gear-section-10224847195886133438 -> origin/feature/curated-gear-section-10224847195886133438
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6671387Z  * [new branch]          feature/event-hero-component-10257752978626672348 -> origin/feature/event-hero-component-10257752978626672348
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6672332Z  * [new branch]          feature/event-hero-section-12356302337326709341 -> origin/feature/event-hero-section-12356302337326709341
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6673435Z  * [new branch]          feature/integrate-use-event-detail-hook-17942518473527818780 -> origin/feature/integrate-use-event-detail-hook-17942518473527818780
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6674535Z  * [new branch]          feature/integrate-wsdc-reminders-8737593318457033674 -> origin/feature/integrate-wsdc-reminders-8737593318457033674
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6675459Z  * [new branch]          fix-anchor-scrolling-5153568393383495338 -> origin/fix-anchor-scrolling-5153568393383495338
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6676309Z  * [new branch]          fix-audit-pr-null-crash-3511749500559598366 -> origin/fix-audit-pr-null-crash-3511749500559598366
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6677157Z  * [new branch]          fix-base-path-drift-13021578602505954899 -> origin/fix-base-path-drift-13021578602505954899
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6678099Z  * [new branch]          fix-check-runs-api-endpoint-9640829391241932312 -> origin/fix-check-runs-api-endpoint-9640829391241932312
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6679067Z  * [new branch]          fix-ci-nodejs-20-deprecation-14745837020260920736 -> origin/fix-ci-nodejs-20-deprecation-14745837020260920736
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6680532Z  * [new branch]          fix-code-health-functional-issues-17044987823216720154 -> origin/fix-code-health-functional-issues-17044987823216720154
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6681506Z  * [new branch]          fix-favicon-contrast-184746075700276031 -> origin/fix-favicon-contrast-184746075700276031
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6682476Z  * [new branch]          fix-github-log-redirect-origin-main-11078619993559827761 -> origin/fix-github-log-redirect-origin-main-11078619993559827761
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6683489Z  * [new branch]          fix-github-logs-endpoint-12865535415525952257 -> origin/fix-github-logs-endpoint-12865535415525952257
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6684410Z  * [new branch]          fix-headless-audit-failure-3861346607894275167 -> origin/fix-headless-audit-failure-3861346607894275167
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6685263Z  * [new branch]          fix-mass-audit-prs-17226004357048500306 -> origin/fix-mass-audit-prs-17226004357048500306
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6686124Z  * [new branch]          fix-prototype-pollution-1747616510286916617 -> origin/fix-prototype-pollution-1747616510286916617
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6686981Z  * [new branch]          fix-smoke-test-linter-8295934985024655691 -> origin/fix-smoke-test-linter-8295934985024655691
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6687916Z  * [new branch]          fix-unused-usememo-herosection-10568282859807385424 -> origin/fix-unused-usememo-herosection-10568282859807385424
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6688886Z  * [new branch]          fix-use-home-duplicate-key-855087774785441811 -> origin/fix-use-home-duplicate-key-855087774785441811
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6689764Z  * [new branch]          fix/e2e-base-path-drift-9673731142129029095 -> origin/fix/e2e-base-path-drift-9673731142129029095
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6690931Z  * [new branch]          fix/etl-scraper-race-condition-10647998793240089423 -> origin/fix/etl-scraper-race-condition-10647998793240089423
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6691924Z  * [new branch]          fix/gh-pages-deployment-128-2161668640020291424 -> origin/fix/gh-pages-deployment-128-2161668640020291424
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6692859Z  * [new branch]          fix/github-actions-versions-1151824661250212695 -> origin/fix/github-actions-versions-1151824661250212695
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6693997Z  * [new branch]          fix/mobile-touch-ux-improvements-14239198124207945949 -> origin/fix/mobile-touch-ux-improvements-14239198124207945949
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6695002Z  * [new branch]          fix/pnpm-version-mismatch-14814531951502640562 -> origin/fix/pnpm-version-mismatch-14814531951502640562
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6696001Z  * [new branch]          fix/remove-implicit-git-config-cli-10662028601620146328 -> origin/fix/remove-implicit-git-config-cli-10662028601620146328
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6697241Z  * [new branch]          fix/ui-ux-regressions-2805114839771910443 -> origin/fix/ui-ux-regressions-2805114839771910443
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6699096Z  * [new branch]          fix/update-snapshots-workflow-integrity-1850408067846032985 -> origin/fix/update-snapshots-workflow-integrity-1850408067846032985
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6701191Z  * [new branch]          fix/wcs-etl-github-actions-push-1920935766606519385 -> origin/fix/wcs-etl-github-actions-push-1920935766606519385
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6702433Z  * [new branch]          fix/wsdc-reminders-tests-and-timezone-stability-11381232339079601866 -> origin/fix/wsdc-reminders-tests-and-timezone-stability-11381232339079601866
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6703315Z  * [new branch]          gh-pages             -> origin/gh-pages
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6704024Z  * [new branch]          icon-normalization-helper-1412885856262221001 -> origin/icon-normalization-helper-1412885856262221001
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6705599Z  * [new branch]          infrastructure-design-system-compliance-834175024358615850 -> origin/infrastructure-design-system-compliance-834175024358615850
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6707971Z  * [new branch]          integrate-wsdc-reminders-event-detail-page-1705855282734090262 -> origin/integrate-wsdc-reminders-event-detail-page-1705855282734090262
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6710017Z  * [new branch]          jules-10942239437074151141-f92bcc68 -> origin/jules-10942239437074151141-f92bcc68
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6711522Z  * [new branch]          jules-12095117736659633619-5676b48a -> origin/jules-12095117736659633619-5676b48a
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6712756Z  * [new branch]          jules-1644875693793732344-5b6fd198 -> origin/jules-1644875693793732344-5b6fd198
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6714220Z  * [new branch]          jules-about-page-layout-fix-8635497122355412229 -> origin/jules-about-page-layout-fix-8635497122355412229
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6715446Z  * [new branch]          main                 -> origin/main
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6716178Z  * [new branch]          migrate-playwright-container-8576380029556983654 -> origin/migrate-playwright-container-8576380029556983654
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6717179Z  * [new branch]          optimize-mobile-event-ui-1219134508907889532 -> origin/optimize-mobile-event-ui-1219134508907889532
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6718540Z  * [new branch]          optimize-mobile-event-ui-9211926877933577885 -> origin/optimize-mobile-event-ui-9211926877933577885
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6720490Z  * [new branch]          optimize-mobile-ui-event-page-10711695993855503399 -> origin/optimize-mobile-ui-event-page-10711695993855503399
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6722389Z  * [new branch]          orchestrate-event-detail-layout-15264023194469159731 -> origin/orchestrate-event-detail-layout-15264023194469159731
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6723467Z  * [new branch]          refactor-asset-path-resolution-2844712326549370492 -> origin/refactor-asset-path-resolution-2844712326549370492
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6724480Z  * [new branch]          refactor-audit-suppressions-14572047745563740183 -> origin/refactor-audit-suppressions-14572047745563740183
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6725412Z  * [new branch]          refactor-wordmark-props-3998074852195640797 -> origin/refactor-wordmark-props-3998074852195640797
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6726483Z  * [new branch]          refactor-wordmark-variants-3168348631766881578 -> origin/refactor-wordmark-variants-3168348631766881578
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6728323Z  * [new branch]          refactor-wsdc-reminders-9754922138867038239 -> origin/refactor-wsdc-reminders-9754922138867038239
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6730968Z  * [new branch]          refactor/ui-consolidate-event-sidebar-and-header-props-8811662275559392197 -> origin/refactor/ui-consolidate-event-sidebar-and-header-props-8811662275559392197
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6733404Z  * [new branch]          refactor/ui-consolidation-and-cleanup-12543868533480869595 -> origin/refactor/ui-consolidation-and-cleanup-12543868533480869595
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6735742Z  * [new branch]          remove-cli-side-effects-re-verification-15782105518218394756 -> origin/remove-cli-side-effects-re-verification-15782105518218394756
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6738068Z  * [new branch]          revert-1360-revert-1351-feat/site-audit-harness-8732504301701748260 -> origin/revert-1360-revert-1351-feat/site-audit-harness-8732504301701748260
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6740542Z  * [new branch]          revert-visual-regression-loosening-17377694848938759217 -> origin/revert-visual-regression-loosening-17377694848938759217
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6742170Z  * [new branch]          task/mass-audit-prs-final -> origin/task/mass-audit-prs-final
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6743517Z  * [new branch]          update-eventcard-links-9428070374692718568 -> origin/update-eventcard-links-9428070374692718568
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6745102Z  * [new branch]          ux-auditor-tablet-fixes-13311922177396830401 -> origin/ux-auditor-tablet-fixes-13311922177396830401
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6745836Z  * [new branch]          victorian            -> origin/victorian
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6746523Z  * [new branch]          workflow-action-updates-9437545176145856493 -> origin/workflow-action-updates-9437545176145856493
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6747239Z  * [new ref]             0e7e6d7ce1a2c7d3a654da254207578eff501054 -> pull/1370/merge
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6748753Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6749206Z ##[group]Determining the checkout info
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6749955Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6750653Z [command]/usr/bin/git sparse-checkout disable
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6768738Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6799020Z ##[group]Checking out the ref
+Lint & Type Check	Checkout	2026-05-20T01:27:09.6803190Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/1370/merge
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7913498Z Note: switching to 'refs/remotes/pull/1370/merge'.
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7914118Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7914561Z You are in 'detached HEAD' state. You can look around, make experimental
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7915561Z changes and commit them, and you can discard any commits you make in this
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7916533Z state without impacting any branches by switching back to a branch.
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7916955Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7917260Z If you want to create a new branch to retain commits you create, you may
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7917901Z do so (now or later) by using -c with the switch command. Example:
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7918301Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7918463Z   git switch -c <new-branch-name>
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7918695Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7918862Z Or undo this operation with:
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7919084Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7919210Z   git switch -
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7919376Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7919702Z Turn off this advice by setting config variable advice.detachedHead to false
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7920095Z 
+Lint & Type Check	Checkout	2026-05-20T01:27:09.7920910Z HEAD is now at 0e7e6d7ce Merge 46be3679fefd4d7301871ff299fe9f4d901d1492 into 99ecf408318ad8ae0f0fab1c60883462be9dddcf
+Lint & Type Check	Checkout	2026-05-20T01:27:09.8162855Z ##[endgroup]
+Lint & Type Check	Checkout	2026-05-20T01:27:09.8208942Z [command]/usr/bin/git log -1 --format=%H
+Lint & Type Check	Checkout	2026-05-20T01:27:09.8233558Z 0e7e6d7ce1a2c7d3a654da254207578eff501054
+Lint & Type Check	Setup pnpm	﻿2026-05-20T01:27:09.8456279Z ##[group]Run pnpm/action-setup@v4
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8456618Z with:
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8456834Z   dest: ~/setup-pnpm
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8457079Z   run_install: null
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8457303Z   cache: false
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8457561Z   cache_dependency_path: pnpm-lock.yaml
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8457871Z   package_json_file: package.json
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8458139Z   standalone: false
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8458353Z env:
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8458568Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8458865Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8459101Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8459338Z   AUDIT_BASELINE: 
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.8459549Z ##[endgroup]
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:09.9898980Z ##[group]Running self-installer...
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.3922247Z (node:2340) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.3924180Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.5488811Z Progress: resolved 1, reused 0, downloaded 0, added 0
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.8525276Z 
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.8525896Z dependencies:
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.8526738Z + pnpm 10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.8527483Z 
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.8617489Z Packages: +1
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.8641022Z +
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.9257688Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.9453285Z Done in 788ms
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.9605596Z ##[endgroup]
+Lint & Type Check	Setup pnpm	2026-05-20T01:27:10.9606276Z Installation Completed!
+Lint & Type Check	Setup Node.js	﻿2026-05-20T01:27:10.9774308Z ##[group]Run actions/setup-node@v4
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9774595Z with:
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9774789Z   node-version-file: .nvmrc
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9775027Z   cache: pnpm
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9775229Z   always-auth: false
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9775450Z   check-latest: false
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9775787Z   token: ***
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9775973Z env:
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9776175Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9776449Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9776838Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9777083Z   AUDIT_BASELINE: 
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9777352Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:10.9777655Z ##[endgroup]
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.1123512Z Resolved .nvmrc as 22
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.1188482Z Found in cache @ /opt/hostedtoolcache/node/22.22.2/x64
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.1193725Z (node:2356) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.1195185Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.1196467Z ##[group]Environment details
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.5097047Z node: v22.22.2
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.5097426Z npm: 10.9.7
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.5137190Z yarn: 1.22.22
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.5138236Z ##[endgroup]
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.5138595Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.8796977Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.9705249Z Cache hit for: node-cache-Linux-x64-pnpm-20dc75dc306f02a576a52169e51466cb6740b0579fc6d1bdda7132b8a1dd88de
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:11.9862648Z (node:2356) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:12.7792906Z Received 160030305 of 160030305 (100.0%), 199.2 MBs/sec
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:12.7794547Z Cache Size: ~153 MB (160030305 B)
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:12.7856327Z [command]/usr/bin/tar -xf /home/runner/work/_temp/978bd792-2a9e-483b-a473-00ce11f2ca13/cache.tzst -P -C /home/runner/work/tech-dancer/tech-dancer --use-compress-program unzstd
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:15.0504974Z Cache restored successfully
+Lint & Type Check	Setup Node.js	2026-05-20T01:27:15.0581687Z Cache restored from key: node-cache-Linux-x64-pnpm-20dc75dc306f02a576a52169e51466cb6740b0579fc6d1bdda7132b8a1dd88de
+Lint & Type Check	Verify lockfile integrity	﻿2026-05-20T01:27:15.0776178Z ##[group]Run pnpm install --frozen-lockfile
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0776606Z ^[[36;1mpnpm install --frozen-lockfile^[[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0776968Z ^[[36;1mif ! git diff --quiet pnpm-lock.yaml; then^[[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0777409Z ^[[36;1m  echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."^[[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0777798Z ^[[36;1m  exit 1^[[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0777992Z ^[[36;1mfi^[[0m
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0821620Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0821887Z env:
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0822094Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0822374Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0822576Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0822777Z   AUDIT_BASELINE: 
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0823031Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.0823328Z ##[endgroup]
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.4339850Z Lockfile is up to date, resolution step is skipped
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.6994968Z Packages: +1169
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.6995750Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:15.7074947Z Progress: resolved 0, reused 1, downloaded 0, added 0
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:16.7081992Z Progress: resolved 0, reused 1138, downloaded 0, added 144
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:17.7076647Z Progress: resolved 0, reused 1138, downloaded 0, added 1077
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.0370058Z Progress: resolved 0, reused 1138, downloaded 0, added 1169, done
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.3259688Z 
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4626576Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4627970Z │                                                                              │
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4629213Z │   Ignored build scripts: @firebase/util@1.15.0, core-js@3.49.0,              │
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4630763Z │   esbuild@0.25.12, esbuild@0.27.7, protobufjs@7.5.5, sharp@0.34.5.           │
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4631696Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4632954Z │   to run scripts.                                                            │
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4634499Z │                                                                              │
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4635664Z ╰──────────────────────────────────────────────────────────────────────────────╯
+Lint & Type Check	Verify lockfile integrity	2026-05-20T01:27:18.4811794Z Done in 3.3s using pnpm v10.28.2
+Lint & Type Check	Lint	﻿2026-05-20T01:27:18.5076079Z ##[group]Run pnpm run lint
+Lint & Type Check	Lint	2026-05-20T01:27:18.5076381Z ^[[36;1mpnpm run lint^[[0m
+Lint & Type Check	Lint	2026-05-20T01:27:18.5110776Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Lint	2026-05-20T01:27:18.5111195Z env:
+Lint & Type Check	Lint	2026-05-20T01:27:18.5111505Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Lint	2026-05-20T01:27:18.5111953Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Lint	2026-05-20T01:27:18.5112171Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Lint	2026-05-20T01:27:18.5112372Z   AUDIT_BASELINE: 
+Lint & Type Check	Lint	2026-05-20T01:27:18.5112617Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Lint	2026-05-20T01:27:18.5112918Z ##[endgroup]
+Lint & Type Check	Lint	2026-05-20T01:27:18.7877399Z 
+Lint & Type Check	Lint	2026-05-20T01:27:18.7878295Z > react-example@0.0.0 lint /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-20T01:27:18.7879356Z > run-p lint:*
+Lint & Type Check	Lint	2026-05-20T01:27:18.7879740Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.2235033Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.2236173Z > react-example@0.0.0 lint:types /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-20T01:27:19.2237003Z > tsc --noEmit
+Lint & Type Check	Lint	2026-05-20T01:27:19.2237257Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.2723213Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.2724692Z > react-example@0.0.0 lint:eslint /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-20T01:27:19.2726133Z > eslint . --max-warnings 0
+Lint & Type Check	Lint	2026-05-20T01:27:19.2726743Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.2882658Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.2884420Z > react-example@0.0.0 lint:ox /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Lint	2026-05-20T01:27:19.2885437Z > oxlint --deny-warnings
+Lint & Type Check	Lint	2026-05-20T01:27:19.2885890Z 
+Lint & Type Check	Lint	2026-05-20T01:27:19.3682492Z Found 0 warnings and 0 errors.
+Lint & Type Check	Lint	2026-05-20T01:27:19.3686586Z Finished in 33ms on 184 files with 93 rules using 4 threads.
+Lint & Type Check	Type-check	﻿2026-05-20T01:27:28.1234494Z ##[group]Run pnpm run type-check
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1235048Z ^[[36;1mpnpm run type-check^[[0m
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1283117Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1283555Z env:
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1283908Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1284412Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1284790Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1285155Z   AUDIT_BASELINE: 
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1285581Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Type-check	2026-05-20T01:27:28.1286178Z ##[endgroup]
+Lint & Type Check	Type-check	2026-05-20T01:27:28.3959591Z 
+Lint & Type Check	Type-check	2026-05-20T01:27:28.3960858Z > react-example@0.0.0 type-check /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Type-check	2026-05-20T01:27:28.3961359Z > tsc --noEmit
+Lint & Type Check	Type-check	2026-05-20T01:27:28.3961490Z 
+Lint & Type Check	Run Unit Tests - Vitest	﻿2026-05-20T01:27:28.4936904Z ##[group]Run pnpm test
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4937183Z ^[[36;1mpnpm test^[[0m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4971421Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4971678Z env:
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4971889Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4972164Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4972375Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4972581Z   AUDIT_BASELINE: 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4972845Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.4973163Z ##[endgroup]
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.7633378Z 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.7634365Z > react-example@0.0.0 test /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.7635110Z > vitest run
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:28.7635320Z 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:29.2762332Z 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:29.2764669Z ^[[1m^[[30m^[[46m RUN ^[[49m^[[39m^[[22m ^[[36mv4.1.5 ^[[39m^[[90m/home/runner/work/tech-dancer/tech-dancer^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:29.2765381Z 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:30.5622712Z  ^[[32m✓^[[39m src/features/events/__tests__/schema.spec.ts ^[[2m(^[[22m^[[2m6 tests^[[22m^[[2m)^[[22m^[[32m 9^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:30.6204246Z  ^[[32m✓^[[39m src/features/lab/wsdc-reminders/lib/__tests__/ics-generator.test.ts ^[[2m(^[[22m^[[2m16 tests^[[22m^[[2m)^[[22m^[[32m 23^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:30.6652701Z  ^[[32m✓^[[39m src/features/lab/wsdc-reminders/lib/__tests__/timeline-engine.test.ts ^[[2m(^[[22m^[[2m8 tests^[[22m^[[2m)^[[22m^[[32m 10^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:31.8861885Z  ^[[32m✓^[[39m src/lib/__tests__/utils.test.ts ^[[2m(^[[22m^[[2m9 tests^[[22m^[[2m)^[[22m^[[32m 19^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:31.9952536Z  ^[[32m✓^[[39m src/lib/__tests__/content.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 11^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:32.0162602Z ^[[90mstderr^[[2m | src/lib/__tests__/generate-assets.test.ts^[[2m > ^[[22m^[[2mgetTokens^[[2m > ^[[22m^[[2mshould return null if tokens file does not exist
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:32.0164761Z  ^[[32m✓^[[39m src/lib/__tests__/generate-assets.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m)^[[22m^[[32m 9^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:32.0175901Z ^[[22m^[[39mWarning: Tokens file not found at /home/runner/work/tech-dancer/tech-dancer/src/styles/tokens.css
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:32.0177098Z 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:32.9548629Z  ^[[32m✓^[[39m src/lib/routes-discovery.test.ts ^[[2m(^[[22m^[[2m5 tests^[[22m^[[2m)^[[22m^[[32m 6^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0039144Z  ^[[32m✓^[[39m src/lib/__tests__/prototype_pollution.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m)^[[22m^[[32m 4^[[2mms^[[22m^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0067543Z 
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0072855Z ^[[2m Test Files ^[[22m ^[[1m^[[32m8 passed^[[39m^[[22m^[[90m (8)^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0073975Z ^[[2m      Tests ^[[22m ^[[1m^[[32m52 passed^[[39m^[[22m^[[90m (52)^[[39m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0074851Z ^[[2m   Start at ^[[22m 01:27:29
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0076148Z ^[[2m   Duration ^[[22m 3.72s^[[2m (transform 422ms, setup 0ms, import 904ms, tests 89ms, environment 7.73s)^[[22m
+Lint & Type Check	Run Unit Tests - Vitest	2026-05-20T01:27:33.0077672Z 
+Lint & Type Check	Set up Python	﻿2026-05-20T01:27:33.0535003Z ##[group]Run actions/setup-python@v5
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0535295Z with:
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0535482Z   python-version: 3.11
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0535710Z   check-latest: false
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0536027Z   token: ***
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0536222Z   update-environment: true
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0536462Z   allow-prereleases: false
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0536691Z   freethreaded: false
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0536881Z env:
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0537076Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0537348Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0537566Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0537765Z   AUDIT_BASELINE: 
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0538006Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.0538295Z ##[endgroup]
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.1824193Z ##[group]Installed versions
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.1908396Z (node:2649) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.1909463Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.1910702Z Successfully set up CPython (3.11.15)
+Lint & Type Check	Set up Python	2026-05-20T01:27:33.1911537Z ##[endgroup]
+Lint & Type Check	Run CLI Unit Tests	﻿2026-05-20T01:27:33.2019479Z ##[group]Run python3 -m pip install PyGithub pytest click
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2019941Z ^[[36;1mpython3 -m pip install PyGithub pytest click^[[0m
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2020957Z ^[[36;1mPYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py^[[0m
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2062578Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2062841Z env:
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2063077Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2063371Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2063600Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2063812Z   AUDIT_BASELINE: 
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2064068Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2064458Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2064912Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2065356Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2065736Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2066160Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2066575Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:33.2066920Z ##[endgroup]
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.0057888Z Collecting PyGithub
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.0699433Z   Downloading pygithub-2.9.1-py3-none-any.whl.metadata (3.9 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1062779Z Collecting pytest
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1096571Z   Downloading pytest-9.0.3-py3-none-any.whl.metadata (7.6 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1270420Z Collecting click
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1305186Z   Downloading click-8.4.0-py3-none-any.whl.metadata (2.6 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1598423Z Collecting pynacl>=1.4.0 (from PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1708005Z   Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (10.0 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1918220Z Collecting requests>=2.14.0 (from PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.1956642Z   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2099207Z Collecting pyjwt>=2.4.0 (from pyjwt[crypto]>=2.4.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2130142Z   Downloading pyjwt-2.12.1-py3-none-any.whl.metadata (4.1 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2286403Z Collecting typing-extensions>=4.5.0 (from PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2318344Z   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2497804Z Collecting urllib3>=1.26.0 (from PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2547938Z   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2664296Z Collecting iniconfig>=1.0.1 (from pytest)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2699398Z   Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2871351Z Collecting packaging>=22 (from pytest)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.2918803Z   Downloading packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.3024299Z Collecting pluggy<2,>=1.5 (from pytest)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.3060058Z   Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.3225393Z Collecting pygments>=2.7.2 (from pytest)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.3371659Z   Downloading pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.5000098Z Collecting cryptography>=3.4.0 (from pyjwt[crypto]>=2.4.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.5083691Z   Downloading cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.5914051Z Collecting cffi>=2.0.0 (from cryptography>=3.4.0->pyjwt[crypto]>=2.4.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.5955917Z   Downloading cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.6070702Z Collecting pycparser (from cffi>=2.0.0->cryptography>=3.4.0->pyjwt[crypto]>=2.4.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.6105888Z   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.6897896Z Collecting charset_normalizer<4,>=2 (from requests>=2.14.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.6945762Z   Downloading charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7143010Z Collecting idna<4,>=2.5 (from requests>=2.14.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7177458Z   Downloading idna-3.15-py3-none-any.whl.metadata (7.7 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7346706Z Collecting certifi>=2023.5.7 (from requests>=2.14.0->PyGithub)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7398402Z   Downloading certifi-2026.4.22-py3-none-any.whl.metadata (2.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7503318Z Downloading pygithub-2.9.1-py3-none-any.whl (449 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7650970Z Downloading pytest-9.0.3-py3-none-any.whl (375 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7778246Z Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7858410Z Downloading click-8.4.0-py3-none-any.whl (116 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7927911Z Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.7990404Z Downloading packaging-26.2-py3-none-any.whl (100 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8047653Z Downloading pygments-2.20.0-py3-none-any.whl (1.2 MB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8147397Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 129.8 MB/s  0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8197033Z Downloading pyjwt-2.12.1-py3-none-any.whl (29 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8267383Z Downloading cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8457202Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 264.5 MB/s  0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8492299Z Downloading cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (215 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8567151Z Downloading pynacl-1.6.2-cp38-abi3-manylinux_2_34_x86_64.whl (1.4 MB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8842924Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 59.2 MB/s  0:00:00
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8883053Z Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.8945194Z Downloading charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (214 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.9010769Z Downloading idna-3.15-py3-none-any.whl (72 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.9070771Z Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.9134845Z Downloading certifi-2026.4.22-py3-none-any.whl (135 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.9187711Z Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.9238788Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:34.9982172Z Installing collected packages: urllib3, typing-extensions, pyjwt, pygments, pycparser, pluggy, packaging, iniconfig, idna, click, charset_normalizer, certifi, requests, pytest, cffi, pynacl, cryptography, PyGithub
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:36.7890311Z 
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:36.7905642Z Successfully installed PyGithub-2.9.1 certifi-2026.4.22 cffi-2.0.0 charset_normalizer-3.4.7 click-8.4.0 cryptography-48.0.0 idna-3.15 iniconfig-2.3.0 packaging-26.2 pluggy-1.6.0 pycparser-3.0 pygments-2.20.0 pyjwt-2.12.1 pynacl-1.6.2 pytest-9.0.3 requests-2.34.2 typing-extensions-4.15.0 urllib3-2.7.0
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5080634Z ============================= test session starts ==============================
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5081480Z platform linux -- Python 3.11.15, pytest-9.0.3, pluggy-1.6.0
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5082188Z rootdir: /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5082713Z configfile: pyproject.toml
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5083094Z collected 2 items
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5083262Z 
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5411817Z tests/dev-tools/test_modern_cli.py ..                                    [100%]
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5412392Z 
+Lint & Type Check	Run CLI Unit Tests	2026-05-20T01:27:37.5412755Z ============================== 2 passed in 0.28s ===============================
+Lint & Type Check	Check for dead code	﻿2026-05-20T01:27:37.5748801Z ##[group]Run pnpm run knip
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5749094Z ^[[36;1mpnpm run knip^[[0m
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5782931Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5783205Z env:
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5783412Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5783684Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5783901Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5784108Z   AUDIT_BASELINE: 
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5784368Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5784750Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5785193Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5785617Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5786004Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5786421Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5786823Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.5787183Z ##[endgroup]
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.8493180Z 
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.8494103Z > react-example@0.0.0 knip /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.8494842Z > knip
+Lint & Type Check	Check for dead code	2026-05-20T01:27:37.8495046Z 
+Lint & Type Check	TypeScript `any` Ratchet	﻿2026-05-20T01:27:39.5350624Z ##[group]Run PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH || true
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5351358Z ^[[36;1mPYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH || true^[[0m
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5351813Z ^[[36;1mpython3 dev-tools/td_cli.py gh ratchet-any^[[0m
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5385378Z shell: /usr/bin/bash -e {0}
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5385627Z env:
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5385834Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5386109Z   ANY_COUNT_BASELINE: 
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5386324Z   BUNDLE_BASELINE_KB: 
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5386526Z   AUDIT_BASELINE: 
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5386943Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5387318Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5387745Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5388163Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5388529Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5388931Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5389304Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5389883Z   GH_TOKEN: ***
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.5390088Z ##[endgroup]
+Lint & Type Check	TypeScript `any` Ratchet	2026-05-20T01:27:39.6785128Z TypeScript 'any' Ratchet: Current=0, Baseline=0
+Lint & Type Check	Post Set up Python	﻿2026-05-20T01:27:39.7080713Z Post job cleanup.
+Lint & Type Check	Post Set up Python	2026-05-20T01:27:39.8236802Z (node:2722) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint & Type Check	Post Set up Python	2026-05-20T01:27:39.8237947Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Post Setup Node.js	﻿2026-05-20T01:27:39.8389153Z Post job cleanup.
+Lint & Type Check	Post Setup Node.js	2026-05-20T01:27:39.9608050Z (node:2730) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint & Type Check	Post Setup Node.js	2026-05-20T01:27:39.9609332Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint & Type Check	Post Setup Node.js	2026-05-20T01:27:39.9611897Z Cache hit occurred on the primary key node-cache-Linux-x64-pnpm-20dc75dc306f02a576a52169e51466cb6740b0579fc6d1bdda7132b8a1dd88de, not saving cache.
+Lint & Type Check	Post Setup pnpm	﻿2026-05-20T01:27:39.9717884Z Post job cleanup.
+Lint & Type Check	Post Setup pnpm	2026-05-20T01:27:40.1167572Z Pruning is unnecessary.
+Lint & Type Check	Post Checkout	﻿2026-05-20T01:27:40.1301245Z Post job cleanup.
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2196027Z [command]/usr/bin/git version
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2267603Z git version 2.54.0
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2307154Z Temporarily overriding HOME='/home/runner/work/_temp/ee8b3575-e731-461c-9f6d-9d2cd4e46af9' before making global git config changes
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2308834Z Adding repository directory to the temporary git global config as a safe directory
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2313973Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tech-dancer/tech-dancer
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2351369Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2384298Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2606404Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2631111Z http.https://github.com/.extraheader
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2640419Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2672223Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2884983Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint & Type Check	Post Checkout	2026-05-20T01:27:40.2914971Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint & Type Check	Complete job	﻿2026-05-20T01:27:40.3267028Z Cleaning up orphan processes
+Lint & Type Check	Complete job	2026-05-20T01:27:40.3532280Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/setup-python@v5, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & E2E	Set up job	﻿2026-05-20T01:27:45.9358033Z Current runner version: '2.334.0'
+Build & E2E	Set up job	2026-05-20T01:27:45.9382384Z ##[group]Runner Image Provisioner
+Build & E2E	Set up job	2026-05-20T01:27:45.9383641Z Hosted Compute Agent
+Build & E2E	Set up job	2026-05-20T01:27:45.9384188Z Version: 20260213.493
+Build & E2E	Set up job	2026-05-20T01:27:45.9384852Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Build & E2E	Set up job	2026-05-20T01:27:45.9385579Z Build Date: 2026-02-13T00:28:41Z
+Build & E2E	Set up job	2026-05-20T01:27:45.9386196Z Worker ID: {50ad53f9-d008-46d9-9991-53571c15db6c}
+Build & E2E	Set up job	2026-05-20T01:27:45.9386915Z Azure Region: westcentralus
+Build & E2E	Set up job	2026-05-20T01:27:45.9387473Z ##[endgroup]
+Build & E2E	Set up job	2026-05-20T01:27:45.9389249Z ##[group]Operating System
+Build & E2E	Set up job	2026-05-20T01:27:45.9389853Z Ubuntu
+Build & E2E	Set up job	2026-05-20T01:27:45.9390432Z 24.04.4
+Build & E2E	Set up job	2026-05-20T01:27:45.9390895Z LTS
+Build & E2E	Set up job	2026-05-20T01:27:45.9391301Z ##[endgroup]
+Build & E2E	Set up job	2026-05-20T01:27:45.9391862Z ##[group]Runner Image
+Build & E2E	Set up job	2026-05-20T01:27:45.9392382Z Image: ubuntu-24.04
+Build & E2E	Set up job	2026-05-20T01:27:45.9393150Z Version: 20260513.135.3
+Build & E2E	Set up job	2026-05-20T01:27:45.9394208Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260513.135/images/ubuntu/Ubuntu2404-Readme.md
+Build & E2E	Set up job	2026-05-20T01:27:45.9395954Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260513.135
+Build & E2E	Set up job	2026-05-20T01:27:45.9396847Z ##[endgroup]
+Build & E2E	Set up job	2026-05-20T01:27:45.9397942Z ##[group]GITHUB_TOKEN Permissions
+Build & E2E	Set up job	2026-05-20T01:27:45.9400040Z Actions: read
+Build & E2E	Set up job	2026-05-20T01:27:45.9400572Z Contents: read
+Build & E2E	Set up job	2026-05-20T01:27:45.9401078Z Metadata: read
+Build & E2E	Set up job	2026-05-20T01:27:45.9401609Z ##[endgroup]
+Build & E2E	Set up job	2026-05-20T01:27:45.9403847Z Secret source: Actions
+Build & E2E	Set up job	2026-05-20T01:27:45.9404933Z Prepare workflow directory
+Build & E2E	Set up job	2026-05-20T01:27:46.0017571Z Prepare all required actions
+Build & E2E	Set up job	2026-05-20T01:27:46.0054398Z Getting action download info
+Build & E2E	Set up job	2026-05-20T01:27:46.5002136Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Build & E2E	Set up job	2026-05-20T01:27:46.6579079Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+Build & E2E	Set up job	2026-05-20T01:27:47.5369169Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Build & E2E	Set up job	2026-05-20T01:27:47.6319516Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+Build & E2E	Set up job	2026-05-20T01:27:47.7124083Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Build & E2E	Set up job	2026-05-20T01:27:47.9608599Z Complete job name: Build & E2E
+Build & E2E	Initialize containers	﻿2026-05-20T01:27:48.0157614Z ##[group]Checking docker version
+Build & E2E	Initialize containers	2026-05-20T01:27:48.0171272Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1104416Z '1.48'
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1121255Z Docker daemon API version: '1.48'
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1122998Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1283475Z '1.48'
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1296924Z Docker client API version: '1.48'
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1302427Z ##[endgroup]
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1306351Z ##[group]Clean up resources from previous jobs
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1311993Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=cb6a8d"
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1461317Z ##[command]/usr/bin/docker network prune --force --filter "label=cb6a8d"
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1585711Z ##[endgroup]
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1586949Z ##[group]Create local container network
+Build & E2E	Initialize containers	2026-05-20T01:27:48.1598897Z ##[command]/usr/bin/docker network create --label cb6a8d github_network_765d4212003c4a71ad19280176ab7764
+Build & E2E	Initialize containers	2026-05-20T01:27:48.2116483Z 6a444ded2690d691ece4f9dd797c1702428d1597623f1c415a1eb975b04c5d41
+Build & E2E	Initialize containers	2026-05-20T01:27:48.2133273Z ##[endgroup]
+Build & E2E	Initialize containers	2026-05-20T01:27:48.2158689Z ##[group]Starting job container
+Build & E2E	Initialize containers	2026-05-20T01:27:48.2181497Z ##[command]/usr/bin/docker pull mcr.microsoft.com/playwright:v1.49.0-noble
+Build & E2E	Initialize containers	2026-05-20T01:27:48.3933042Z v1.49.0-noble: Pulling from playwright
+Build & E2E	Initialize containers	2026-05-20T01:27:48.4675058Z 38dfbce43ec9: Pulling fs layer
+Build & E2E	Initialize containers	2026-05-20T01:27:48.4675752Z e3effa55608a: Pulling fs layer
+Build & E2E	Initialize containers	2026-05-20T01:27:48.4676300Z be57cc35b38c: Pulling fs layer
+Build & E2E	Initialize containers	2026-05-20T01:27:48.4676921Z 864641165f2f: Pulling fs layer
+Build & E2E	Initialize containers	2026-05-20T01:27:48.4677500Z 864641165f2f: Waiting
+Build & E2E	Initialize containers	2026-05-20T01:27:48.5590393Z be57cc35b38c: Verifying Checksum
+Build & E2E	Initialize containers	2026-05-20T01:27:48.5592079Z be57cc35b38c: Download complete
+Build & E2E	Initialize containers	2026-05-20T01:27:48.6783989Z 38dfbce43ec9: Verifying Checksum
+Build & E2E	Initialize containers	2026-05-20T01:27:48.6785248Z 38dfbce43ec9: Download complete
+Build & E2E	Initialize containers	2026-05-20T01:27:48.9621281Z e3effa55608a: Verifying Checksum
+Build & E2E	Initialize containers	2026-05-20T01:27:48.9622705Z e3effa55608a: Download complete
+Build & E2E	Initialize containers	2026-05-20T01:27:49.9755233Z 38dfbce43ec9: Pull complete
+Build & E2E	Initialize containers	2026-05-20T01:27:51.7443541Z 864641165f2f: Verifying Checksum
+Build & E2E	Initialize containers	2026-05-20T01:27:51.7444301Z 864641165f2f: Download complete
+Build & E2E	Initialize containers	2026-05-20T01:27:57.1450128Z e3effa55608a: Pull complete
+Build & E2E	Initialize containers	2026-05-20T01:27:57.1638094Z be57cc35b38c: Pull complete
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9523771Z 864641165f2f: Pull complete
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9577767Z Digest: sha256:0fc07c73230cb7c376a528d7ffc83c4bdcdcd3fc7efbe54a2eed72b1ec118377
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9589897Z Status: Downloaded newer image for mcr.microsoft.com/playwright:v1.49.0-noble
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9598164Z mcr.microsoft.com/playwright:v1.49.0-noble
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9679332Z ##[command]/usr/bin/docker create --name d16b4b8033044186ad94fbd6f2e50ffa_mcrmicrosoftcomplaywrightv1490noble_4a0b15 --label cb6a8d --workdir /__w/tech-dancer/tech-dancer --network github_network_765d4212003c4a71ad19280176ab7764  -e "HOME=/github/home" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work":"/__w" -v "/home/runner/actions-runner/cached/2.334.0/externals":"/__e":ro -v "/home/runner/work/_temp":"/__w/_temp" -v "/home/runner/work/_actions":"/__w/_actions" -v "/opt/hostedtoolcache":"/__t" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" --entrypoint "tail" mcr.microsoft.com/playwright:v1.49.0-noble "-f" "/dev/null"
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9934451Z cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd
+Build & E2E	Initialize containers	2026-05-20T01:28:12.9956346Z ##[command]/usr/bin/docker start cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1669717Z cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1692835Z ##[command]/usr/bin/docker ps --all --filter id=cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1806007Z cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd Up Less than a second
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1823442Z ##[command]/usr/bin/docker inspect --format "{{range .Config.Env}}{{println .}}{{end}}" cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1934894Z GITHUB_ACTIONS=true
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1935547Z CI=true
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1936011Z HOME=/github/home
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1936672Z PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1937323Z LANG=C.UTF-8
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1937893Z LC_ALL=C.UTF-8
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1938380Z PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1956023Z ##[endgroup]
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1965208Z ##[group]Waiting for all services to be ready
+Build & E2E	Initialize containers	2026-05-20T01:28:13.1967111Z ##[endgroup]
+Build & E2E	Install system utilities	﻿2026-05-20T01:28:13.2222743Z ##[group]Run apt-get update
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2223104Z ^[[36;1mapt-get update^[[0m
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2223348Z ^[[36;1mapt-get install -y lsof gh^[[0m
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2223743Z ^[[36;1mgit config --global --add safe.directory "$GITHUB_WORKSPACE"^[[0m
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2227207Z shell: sh -e {0}
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2227661Z env:
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2227873Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2228157Z   ANY_COUNT_BASELINE: 
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2228362Z   BUNDLE_BASELINE_KB: 
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2228554Z   AUDIT_BASELINE: 
+Build & E2E	Install system utilities	2026-05-20T01:28:13.2228740Z ##[endgroup]
+Build & E2E	Install system utilities	2026-05-20T01:28:13.4895537Z Get:1 https://deb.nodesource.com/node_22.x nodistro InRelease [12.1 kB]
+Build & E2E	Install system utilities	2026-05-20T01:28:13.5638643Z Get:2 https://deb.nodesource.com/node_22.x nodistro/main amd64 Packages [9970 B]
+Build & E2E	Install system utilities	2026-05-20T01:28:37.3689976Z Ign:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Build & E2E	Install system utilities	2026-05-20T01:28:37.3763289Z Ign:4 http://archive.ubuntu.com/ubuntu noble InRelease
+Build & E2E	Install system utilities	2026-05-20T01:28:44.4190621Z Ign:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Build & E2E	Install system utilities	2026-05-20T01:28:45.3789362Z Ign:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Build & E2E	Install system utilities	2026-05-20T01:28:53.3812244Z Ign:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Build & E2E	Install system utilities	2026-05-20T01:28:54.4208388Z Ign:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:01.3829384Z Ign:4 http://archive.ubuntu.com/ubuntu noble InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:06.4243425Z Err:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:06.4244109Z   Could not resolve 'security.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:07.4771973Z Ign:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:15.4798114Z Ign:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:20.3859355Z Ign:4 http://archive.ubuntu.com/ubuntu noble InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:28.3894873Z Ign:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:35.8199103Z Ign:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:43.8238385Z Err:4 http://archive.ubuntu.com/ubuntu noble InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:43.8239103Z   Could not resolve 'archive.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:47.7095629Z Err:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:47.7096317Z   Could not resolve 'archive.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:51.7935062Z Err:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Build & E2E	Install system utilities	2026-05-20T01:29:51.7935973Z   Could not resolve 'archive.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:51.7986823Z Fetched 22.1 kB in 1min 38s (224 B/s)
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8083150Z Reading package lists...
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8107445Z W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/noble/InRelease  Could not resolve 'archive.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8108989Z W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/noble-updates/InRelease  Could not resolve 'archive.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8110467Z W: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/noble-backports/InRelease  Could not resolve 'archive.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8112084Z W: Failed to fetch http://security.ubuntu.com/ubuntu/dists/noble-security/InRelease  Could not resolve 'security.ubuntu.com'
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8113784Z W: Some index files failed to download. They have been ignored, or old ones used instead.
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8259020Z Reading package lists...
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8292206Z Building dependency tree...
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8296508Z Reading state information...
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8307358Z E: Unable to locate package lsof
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8308014Z E: Unable to locate package gh
+Build & E2E	Install system utilities	2026-05-20T01:29:51.8365111Z ##[error]Process completed with exit code 100.
+Build & E2E	Upload Test Results	﻿2026-05-20T01:29:51.8529623Z ##[group]Run actions/upload-artifact@v4
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8529944Z with:
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8530124Z   name: playwright-report
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8530360Z   path: playwright-report/
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8530571Z   retention-days: 7
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8530770Z   if-no-files-found: warn
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8530979Z   compression-level: 6
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8531165Z   overwrite: false
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8531351Z   include-hidden-files: false
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8531547Z env:
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8531725Z   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8531967Z   ANY_COUNT_BASELINE: 
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8532157Z   BUNDLE_BASELINE_KB: 
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8532331Z   AUDIT_BASELINE: 
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8532759Z ##[endgroup]
+Build & E2E	Upload Test Results	2026-05-20T01:29:51.8573458Z ##[command]/usr/bin/docker exec  cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd sh -c "cat /etc/*release | grep ^ID"
+Build & E2E	Upload Test Results	2026-05-20T01:29:52.1271094Z (node:74) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Build & E2E	Upload Test Results	2026-05-20T01:29:52.1272269Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Build & E2E	Upload Test Results	2026-05-20T01:29:52.1309209Z ##[warning]No files were found with the provided path: playwright-report/. No artifacts will be uploaded.
+Build & E2E	Stop containers	﻿2026-05-20T01:29:52.1456375Z Stop and remove container: d16b4b8033044186ad94fbd6f2e50ffa_mcrmicrosoftcomplaywrightv1490noble_4a0b15
+Build & E2E	Stop containers	2026-05-20T01:29:52.1461008Z ##[command]/usr/bin/docker rm --force cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd
+Build & E2E	Stop containers	2026-05-20T01:29:52.2262825Z cf7bbd1634e16023ab86966b3f8dcf487715dfd0b7fcbb377cd7fe00d157e1bd
+Build & E2E	Stop containers	2026-05-20T01:29:52.2293836Z Remove container network: github_network_765d4212003c4a71ad19280176ab7764
+Build & E2E	Stop containers	2026-05-20T01:29:52.2298256Z ##[command]/usr/bin/docker network rm github_network_765d4212003c4a71ad19280176ab7764
+Build & E2E	Stop containers	2026-05-20T01:29:52.3207238Z github_network_765d4212003c4a71ad19280176ab7764
+Build & E2E	Complete job	﻿2026-05-20T01:29:52.3265502Z Cleaning up orphan processes
+Build & E2E	Complete job	2026-05-20T01:29:52.3678346Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
