@@ -80,14 +80,16 @@ export function GlobalSearch() {
       zIndex="search"
       position="fixed"
       inset
-      className="pointer-events-none"
+      pointerEvents="none"
     >
       {/* Backdrop */}
       <Box
         position="absolute"
         inset
         data-testid="search-backdrop"
-        className="bg-bg/80 backdrop-blur-md pointer-events-auto"
+        backdropBlur="md"
+        pointerEvents="auto"
+        className="bg-bg/80"
         onClick={close}
       />
 
@@ -116,7 +118,10 @@ export function GlobalSearch() {
           radius="lg"
           border
           shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
+          backdropBlur="2xl"
+          pointerEvents="auto"
+          outline="none"
+          className="bg-surface/90 border-accent/20"
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
@@ -148,7 +153,7 @@ export function GlobalSearch() {
             }
           }}
         >
-          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
+          <Box border="b" padding={5} display="flex" align="center" gap={4} position="relative">
             <Search className="w-5 h-5 text-accent shrink-0" />
             <Text
               as="input"
@@ -162,7 +167,8 @@ export function GlobalSearch() {
               size="xl"
               weight="font-bold"
               color="main"
-              className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50"
+              outline="none"
+              className="bg-transparent border-none focus:ring-0 placeholder:text-text-dim/50"
               autoFocus
             />
             <Box 
@@ -228,13 +234,13 @@ export function GlobalSearch() {
           <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="safe-bottom">
             <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                 </Box>
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
                 </Box>
                 <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>

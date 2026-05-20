@@ -119,7 +119,8 @@ export function GearCard({
         <Box
           position="absolute"
           inset
-          className="bg-black/15 pointer-events-none"
+          pointerEvents="none"
+          className="bg-black/15"
           aria-hidden="true"
         />
         {/* Category badge */}
@@ -132,7 +133,8 @@ export function GearCard({
           radius="full"
           opacity={80}
           shadow="standard"
-          className="bg-accent text-white backdrop-blur-md"
+          backdropBlur
+          className="bg-accent text-white"
         >
           <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
             {category}
