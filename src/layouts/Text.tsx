@@ -23,6 +23,9 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   clamp?: ResponsiveProp<number | boolean>
   truncate?: ResponsiveProp<boolean>
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
+  display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
+  whiteSpace?: ResponsiveProp<"normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap">
+  opacity?: number | string
   [key: string]: unknown
 }
 
@@ -32,6 +35,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
     clamp, truncate, leading,
+    display, whiteSpace, opacity,
     ...props 
   }, ref) => {
     // Standard JIT fallback for arbitrary values
@@ -56,6 +60,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
       <Box
         as={Component}
         ref={ref as Ref<HTMLDivElement>}
+        opacity={opacity}
         className={composeStyles(
           variant && typography[variant],
           intent && variants.intent[intent],
@@ -77,6 +82,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
+          getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
+          getResponsiveClasses(whiteSpace, "whitespace-"),
           className
         )}
         {...props}

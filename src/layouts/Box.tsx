@@ -101,6 +101,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     whileHover: _motionWhileHover, whileTap: _motionWhileTap, whileFocus: _motionWhileFocus, whileDrag: _motionWhileDrag, whileInView: _motionWhileInView, viewport: _motionViewport,
     layout: _motionLayout, layoutId: _motionLayoutId, onAnimationStart: _motionOnAnimationStart, onAnimationComplete: _motionOnAnimationComplete,
     onUpdate: _motionOnUpdate, custom: _motionCustom,
+    style: _style,
     ...props 
   }, ref) => {
     const isMotion = typeof Component !== "string"
@@ -134,11 +135,6 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       getResponsiveClasses(lgBorder, "lg:border-"),
       getResponsiveClasses(xlBorder, "xl:border-")
     )
-
-    // Remove props that shouldn't be spread to DOM elements
-    const { 
-      ...domProps 
-    } = props;
 
     const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
       if (!val) return ""
@@ -252,11 +248,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
-          ...motionProps.style,
-          ...props.style
+          ...(_style as React.CSSProperties),
+          ...(motionProps.style as React.CSSProperties)
         }}
         {...motionProps}
-        {...domProps}
+        {...props}
       />
     )
   }
