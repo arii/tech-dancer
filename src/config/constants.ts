@@ -1,6 +1,14 @@
 export const BASE_URL = (import.meta.env.VITE_APP_URL || 'https://boomtick.blog').replace(/\/$/, '');
 export const ASSET_PREFIX = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 export const SITE_NAME = 'BoomTick.blog';
+
+export const SOCIAL_LINKS = {
+  INSTAGRAM: 'https://www.instagram.com/onasafari/',
+  LINKEDIN: 'https://www.linkedin.com/in/ariel-anders/?skipRedirect=true',
+  GITHUB: 'https://github.com/arii',
+  PORTFOLIO: 'https://arii.github.io'
+} as const;
+
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
 const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.";
@@ -28,8 +36,8 @@ export const STATIC_SCHEMAS = {
       "jobTitle": bioRole,
       "url": `${BASE_URL}/about`,
       "sameAs": [
-        "https://github.com/arii",
-        "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true"
+        SOCIAL_LINKS.GITHUB,
+        SOCIAL_LINKS.LINKEDIN
       ]
     }
   })
