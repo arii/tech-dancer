@@ -69,6 +69,8 @@ export interface BaseProps {
   pointerEvents?: "auto" | "none"
   touchScroll?: boolean
   noScrollbar?: boolean
+  backdropBlur?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | boolean
+  bgOpacity?: number | string
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -91,6 +93,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
     pointerEvents, touchScroll, noScrollbar,
+    backdropBlur, bgOpacity,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -240,6 +243,8 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           pointerEvents && `pointer-events-${pointerEvents}`,
           touchScroll && "touch-scroll",
           noScrollbar && "no-scrollbar",
+          backdropBlur && (backdropBlur === true ? "backdrop-blur" : `backdrop-blur-${backdropBlur}`),
+          bgOpacity && `bg-opacity-${bgOpacity}`,
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
