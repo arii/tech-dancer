@@ -107,6 +107,9 @@ export interface Event {
   location: string;
   city: string;
   schedule: string;
+  region?: string;
+  resourceGuide?: string;
+  guideStatus?: string[];
   description: string;
   link?: string;
   content: string;
@@ -240,6 +243,11 @@ function transform<T extends { date?: string }>(
         result.theme = (data.theme as EventTheme | undefined) ?? flatTheme;
         result.gear = (data.gear as EventGear | undefined) ?? flatGear;
         result.relatedEvents = asArray(data.relatedEvents);
+        result.region = data.region ? String(data.region) : undefined;
+        result.resourceGuide = data.resourceGuide
+          ? String(data.resourceGuide)
+          : undefined;
+        result.guideStatus = asArray(data.guideStatus);
       }
 
       return result as unknown as T;
