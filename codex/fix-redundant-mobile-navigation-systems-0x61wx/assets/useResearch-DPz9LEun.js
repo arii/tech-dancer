@@ -1,0 +1,6 @@
+import{f as r,W as a}from"./index-lzJt6Feh.js";import{u as o}from"./useQuery-BKdJQGaU.js";/**
+ * @license lucide-react v0.546.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const n=[["path",{d:"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2",key:"169zse"}]],m=r("activity",n),s=[{id:"wcs-scraper",name:"WCS Prelim Scoring Scraper",category:"Dance Research",status:"Active",layman:"A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.",isPublic:!0},{id:"ux-auditor",name:"Visual UX Auditor",category:"Development Tool",status:"Active",layman:"Automated visual regression and UX improvement suggestions across viewports.",canonicalPath:"/ux-auditor",isPublic:!1},{id:"wsdc-event-reminders",name:"WSDC Event Reminders",category:"Travel Optimization",status:"Active",layman:"Secure early bird discounts without overcommitting. Sync verified WSDC travel milestones directly to your calendar.",isPublic:!0}];function y(){const{data:i=[]}=o({queryKey:["studies"],queryFn:a,initialData:a});return{studies:i,tools:s,getTool:e=>s.find(t=>t.id===e),getStudy:e=>i.find(t=>t.slug===e)}}export{m as A,y as u};
