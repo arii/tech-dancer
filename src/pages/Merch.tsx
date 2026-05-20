@@ -4,11 +4,13 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { ASSET_PREFIX } from '@/config/constants';
 import { MERCH_PRODUCTS, COLLECTIONS, MerchProduct } from '@/data/merch';
 import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { FilterButton } from '@/components/ui/FilterButton';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState('all');
@@ -26,36 +28,27 @@ export default function Merch() {
         jsonLd={generateMerchSchema(MERCH_PRODUCTS)}
       />
 
-      <Stack gap={12} width="full">
-        {/* Hero Section */}
-        <Stack gap={6} align="start" maxWidth="3xl">
-          <Text variant="mono" size="sm" color="accent" weight="font-bold" uppercase tracking="widest">
-            Storefront
-          </Text>
-          <Text as="h1" variant="hero" size="fluid-9">
-            West Coast Swing <br />
-            <span className="text-accent">Dance Merch</span>
-          </Text>
-          <Text variant="sans" size="xl" color="dim" className="leading-relaxed">
-            High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find your next weekend loadout here.
-          </Text>
+      <Stack gap={8} width="full">
+        <PageHeader
+          label="STOREFRONT"
+          title="West Coast Swing Dance Merch"
+          description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find your next weekend loadout here."
+          titleSize="fluid-8"
+        />
 
-          {/* Hero Referral Banner */}
-          <ReferralBanner variant="hero" />
-        </Stack>
+        {/* Hero Referral Banner */}
+        <ReferralBanner variant="hero" />
 
         {/* Collection Filters */}
         <Box border="b" paddingBottom={4} className="border-line overflow-x-auto">
-          <Stack direction="row" gap={2} className="min-w-max">
+          <Stack direction="row" gap={2} padding={1} className="min-w-max">
             {COLLECTIONS.map((collection) => (
-              <Button
+              <FilterButton
                 key={collection.id}
-                variant={activeCollection === collection.id ? 'primary' : 'ghost'}
+                label={collection.label}
+                isActive={activeCollection === collection.id}
                 onClick={() => setActiveCollection(collection.id)}
-                className="whitespace-nowrap"
-              >
-                {collection.label}
-              </Button>
+              />
             ))}
           </Stack>
         </Box>
@@ -68,22 +61,22 @@ export default function Merch() {
         </Grid>
 
         {/* Footer Callouts */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={12}>
+        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8}>
           {/* Design Suggestions */}
-          <Box padding={8} radius="md" className="bg-surface border border-line">
-            <Stack gap={4}>
+          <Box padding={8} radius="lg" border surface="card">
+            <Stack gap={6}>
               <Box padding={3} radius="full" width="fit" className="bg-accent/10 text-accent">
                 <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
               </Box>
               <Stack gap={2}>
-                <Text variant="sans" size="xl" weight="font-bold">
+                <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
                   Have a Design Idea?
                 </Text>
-                <Text variant="sans" size="sm" color="dim">
+                <Text variant="body" size="sm" color="dim">
                   We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
                 </Text>
               </Stack>
-              <Button as={NavLink} to="/contact" variant="ghost" className="w-fit border-line hover:bg-surface-alt">
+              <Button as={NavLink} to="/contact" variant="outline" className="w-fit">
                 Submit Suggestion
               </Button>
             </Stack>
@@ -101,14 +94,16 @@ function ProductCard({ product }: { product: MerchProduct }) {
   return (
     <Stack
       gap={0}
-      radius="md"
-      className="bg-surface border border-line group overflow-hidden transition-all hover:border-accent/50"
+      radius="lg"
+      border
+      surface="card"
+      className="group overflow-hidden transition-all hover:border-accent"
     >
-      <Box aspect="square" position="relative" className="overflow-hidden bg-surface-alt">
+      <Box aspect="square" position="relative" overflow="hidden" surface="alt">
         <Box
           as="img"
           src={`${ASSET_PREFIX}${product.imageUrl}`}
-          alt={`${product.title} for West Coast Swing`}
+          alt={`${product.title} with design detail for use case`}
           width="full"
           height="full"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -122,8 +117,9 @@ function ProductCard({ product }: { product: MerchProduct }) {
                   paddingX={2}
                   paddingY={0.5}
                   radius="full"
+                  border
                   className={cn(
-                    "text-micro font-mono font-bold uppercase tracking-wider border",
+                    "text-micro font-mono font-bold uppercase tracking-wider",
                     role === 'lead' && "bg-blue-500/10 text-blue-400 border-blue-500/20",
                     role === 'follow' && "bg-pink-500/10 text-pink-400 border-pink-500/20",
                     role === 'switch' && "bg-purple-500/10 text-purple-400 border-purple-500/20"
@@ -139,10 +135,10 @@ function ProductCard({ product }: { product: MerchProduct }) {
 
       <Stack padding={6} gap={4} flex={1}>
         <Stack gap={2}>
-          <Text variant="sans" size="lg" weight="font-bold" className="group-hover:text-accent transition-colors">
+          <Text variant="headline" size="lg" weight="font-bold" className="group-hover:text-accent transition-colors">
             {product.title}
           </Text>
-          <Text variant="sans" size="sm" color="dim" className="line-clamp-2">
+          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed">
             {product.description}
           </Text>
         </Stack>
@@ -155,8 +151,8 @@ function ProductCard({ product }: { product: MerchProduct }) {
           ))}
         </Stack>
 
-        <Stack direction="row" align="center" justify="between" marginTop="auto" paddingTop={4} className="border-t border-line">
-          <Text variant="sans" size="lg" weight="font-bold">
+        <Stack direction="row" align="center" justify="between" marginTop="auto" paddingTop={4} border="t" className="border-line">
+          <Text variant="headline" size="lg" weight="font-bold">
             From ${product.price}
           </Text>
           <Button
@@ -166,9 +162,10 @@ function ProductCard({ product }: { product: MerchProduct }) {
             rel="sponsored noopener noreferrer"
             variant="ghost"
             size="sm"
-            className="text-accent hover:bg-accent/10"
+            padding={2}
+            className="text-accent hover:bg-accent/10 h-auto"
           >
-            See Colors
+            SEE COLORS
             <Box as="span" marginLeft={2} display="inline-block">
               <ExternalLink className="w-3 h-3" />
             </Box>

@@ -18,11 +18,10 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
       <Box
         width="full"
         padding={6}
-        radius="md"
-        className={cn(
-          "bg-gradient-to-r from-accent/10 to-accent-purple/10 border border-accent/20",
-          className
-        )}
+        radius="lg"
+        border
+        surface="accent"
+        className={className}
       >
         <Stack direction={{ base: 'col', md: 'row' }} gap={6} align="center" justify="between">
           <Stack direction="row" gap={4} align="center">
@@ -30,10 +29,10 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
               <Gift className={cn("w-6 h-6", stroke.thick)} />
             </Box>
             <Stack gap={1}>
-              <Text variant="sans" size="lg" weight="font-bold">
+              <Text variant="headline" size="lg" weight="font-bold">
                 {PRINTFUL_REFERRAL.HERO_HEADING}
               </Text>
-              <Text variant="sans" size="sm" color="dim">
+              <Text variant="body" size="sm" color="dim">
                 {PRINTFUL_REFERRAL.HERO_SUBHEADING}
               </Text>
             </Stack>
@@ -55,18 +54,20 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
   return (
     <Box
       padding={8}
-      radius="md"
-      className={cn("bg-surface border border-line", className)}
+      radius="lg"
+      border
+      surface="card"
+      className={className}
     >
-      <Stack gap={4}>
+      <Stack gap={6}>
         <Box padding={3} radius="full" width="fit" className="bg-accent-purple/10 text-accent-purple">
           <Gift className={cn("w-6 h-6", stroke.thick)} />
         </Box>
         <Stack gap={2}>
-          <Text variant="sans" size="xl" weight="font-bold">
+          <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
             {PRINTFUL_REFERRAL.FOOTER_HEADING}
           </Text>
-          <Text variant="sans" size="sm" color="dim">
+          <Text variant="body" size="sm" color="dim">
             {PRINTFUL_REFERRAL.FOOTER_DESCRIPTION}
           </Text>
         </Stack>
