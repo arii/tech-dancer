@@ -1,5 +1,6 @@
 ---
 type: event
+region: "Pacific Northwest"
 title: "Weekly Class"
 date: "2024-01-01"
 startDate: "2024-01-01"
