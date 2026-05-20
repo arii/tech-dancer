@@ -4,7 +4,12 @@ import { useState, useEffect, useRef } from 'react';
  * Hook to track which section is currently active in the viewport.
  * Uses IntersectionObserver for performance and accuracy.
  */
-export function useScrollSpy(ids: string[], options: IntersectionObserverInit = {}) {
+const DEFAULT_OPTIONS: IntersectionObserverInit = {
+  rootMargin: '-10% 0% -40% 0%',
+  threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+};
+
+export function useScrollSpy(ids: string[], options: IntersectionObserverInit = DEFAULT_OPTIONS) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
   const intersectionRatios = useRef(new Map<string, number>());
@@ -39,12 +44,7 @@ export function useScrollSpy(ids: string[], options: IntersectionObserverInit = 
         activeIdRef.current = winner;
         setActiveId(winner);
       }
-    }, {
-      // Default to 10% visible to trigger, with a small rootMargin to handle headers
-      rootMargin: '-10% 0% -40% 0%',
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-      ...options,
-    });
+    }, options);
 
     // Observe all targeted IDs
     ids.forEach((id) => {

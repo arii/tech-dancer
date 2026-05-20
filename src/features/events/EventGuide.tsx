@@ -6,7 +6,7 @@ import { EventHero } from './components/EventHero';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
-import { EventReminders } from './components/EventReminders';
+import { ReminderSignups } from './components/ReminderSignups';
 import { EventTravel } from './components/EventTravel';
 import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
@@ -114,7 +114,7 @@ export default function EventGuide() {
                 />
               )}
 
-              <EventReminders id="reminders" event={event} />
+              <ReminderSignups id="reminders" event={event} />
 
               <EventTravel id="travel" notes={event.description} />
 

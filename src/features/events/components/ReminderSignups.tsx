@@ -7,12 +7,12 @@ import { TimelineRow } from '@/features/lab/wsdc-reminders/TimelineRow';
 import { TimelineItem } from '@/features/lab/wsdc-reminders/types';
 import { Event } from '@/lib/content';
 
-interface EventRemindersProps {
+interface ReminderSignupsProps {
   event: Event;
   id?: string;
 }
 
-export function EventReminders({ event, id }: EventRemindersProps) {
+export function ReminderSignups({ event, id }: ReminderSignupsProps) {
   const timeline = useMemo(() => {
     if (!event.startDate || !event.earlyBirdDate || !event.hotelCutoffDate) return [];
 
@@ -56,7 +56,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
               Strategic Planning
             </Text>
             <Text variant="headline" size="3xl" weight="font-black">
-              Action Timeline
+              Stay on Top of What Matters
             </Text>
           </Stack>
           <Button onClick={handleBulkSync} variant="primary">
