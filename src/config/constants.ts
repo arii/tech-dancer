@@ -29,7 +29,7 @@ export const STATIC_SCHEMAS = {
       "url": `${BASE_URL}/about`,
       "sameAs": [
         "https://github.com/arii",
-        "https://www.linkedin.com/in/arielanders/"
+        "https://www.linkedin.com/in/ariel-anders/?skipRedirect=true"
       ]
     }
   })

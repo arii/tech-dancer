@@ -103,8 +103,8 @@ const PROFILE_DATA: ProfileData = {
       id: "connect",
       eyebrow: "Connect & Networking",
       links: [
-        { label: 'Instagram', url: 'https://instagram.com/' },
-        { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
+        { label: 'Instagram', url: 'https://www.instagram.com/onasafari/' },
+        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/ariel-anders/?skipRedirect=true' },
         { label: 'GitHub', url: 'https://github.com/arii' }
       ]
     }
@@ -113,11 +113,11 @@ const PROFILE_DATA: ProfileData = {
     { label: "LOCATION", value: "San Francisco, CA" },
     { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
     { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
-    { label: "PORTFOLIO", value: "https://github.com/arii" }
+    { label: "PORTFOLIO", value: "https://arii.github.io" }
   ],
   links: [
-    { label: 'Instagram', url: 'https://instagram.com/' },
-    { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
+    { label: 'Instagram', url: 'https://www.instagram.com/onasafari/' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/ariel-anders/?skipRedirect=true' },
     { label: 'GitHub', url: 'https://github.com/arii' }
   ]
 };
