@@ -56,6 +56,11 @@ for (const port of ports) {
           timeout: 5000
         });
       } catch (error) {
+        // Some CI/container images do not provide lsof. In that case,
+        // skip cleanup rather than failing preview boot.
+        if (/lsof: not found|command not found|Command failed: lsof/i.test(String(error?.message))) {
+          continue;
+        }
         // lsof exits with code 1 if no processes are found, which is expected
         if (error.status === 1) continue;
         throw error;

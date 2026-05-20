@@ -6,10 +6,12 @@ import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 
 export default function GearPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const smartBackToGear = useSmartBackNavigation('/gear');
   const { data: resource } = useQuery({
     queryKey: ['resources', slug],
     queryFn: () => slug ? getResourceBySlug(slug) : undefined,
@@ -75,8 +77,8 @@ export default function GearPost() {
       />
       <GearPostDetail
         post={resource}
-        onBack={() => navigate('/gear')}
-        backLabel="Back to Toolbox"
+        onBack={smartBackToGear}
+        backLabel="Back to Gear"
       />
     </>
   );

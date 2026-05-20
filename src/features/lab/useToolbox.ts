@@ -25,6 +25,9 @@ export function useToolbox() {
     { id: 'travel', label: 'Row 3: Travel Related', description: 'Optimized logistics gear for the convention circuit and bougie-on-a-budget travel.' }
   ];
 
+  const normalizeVerdict = (value?: string) =>
+    value?.toLowerCase().replace(/\s+/g, '-').trim();
+
   const groupedResources = useMemo(() => {
     let filteredResources = resources;
 
@@ -34,9 +37,9 @@ export function useToolbox() {
           case 'Best for travel':
             return safeSearch(resource.category, 'travel') || resource.tags?.includes('travel');
           case 'Highly recommended':
-            return resource.tags?.includes('highly recommended');
+            return normalizeVerdict(resource.verdict) === 'highly-recommended' || resource.tags?.includes('highly recommended');
           case 'Competition ready':
-            return resource.tags?.includes('competition ready');
+            return normalizeVerdict(resource.verdict) === 'competition-ready' || resource.tags?.includes('competition ready');
           default:
             return true;
         }

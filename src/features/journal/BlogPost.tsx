@@ -6,10 +6,12 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { BlogPostDetail } from './components/BlogPostDetail';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const smartBackToBlog = useSmartBackNavigation('/blog');
   const { data: post } = useQuery({
     queryKey: ['posts', slug],
     queryFn: () => slug ? getPostBySlug(slug) : undefined,
@@ -70,8 +72,8 @@ export default function BlogPost() {
       />
       <BlogPostDetail
         post={post}
-        onBack={() => navigate('/blog')}
-        backLabel="Back to Folio"
+        onBack={smartBackToBlog}
+        backLabel="Back to Blog"
       />
     </>
   );

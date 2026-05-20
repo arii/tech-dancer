@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -11,6 +11,7 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
@@ -23,6 +24,8 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
 export default function ResearchDetail() {
   const { id: paramId } = useParams();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const smartBackToResearch = useSmartBackNavigation('/research');
 
   const { getTool, getStudy } = useResearch();
 
@@ -88,7 +91,7 @@ export default function ResearchDetail() {
           category={study.category}
           date={study.date}
           content={study.content}
-          onBack={() => navigate('/research')}
+          onBack={smartBackToResearch}
           backLabel="Back to Lab"
         />
       </>
@@ -101,7 +104,7 @@ export default function ResearchDetail() {
         <Stack gap={8} align="center">
           <Search size={48} className="opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={smartBackToResearch} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Laboratory</Text>
           </Box>
         </Stack>
@@ -120,7 +123,7 @@ export default function ResearchDetail() {
       <Stack gap={12}>
         <Box 
           as="button" 
-          onClick={() => navigate('/research')}
+          onClick={smartBackToResearch}
           display="flex" 
           align="center" 
           gap={2}
