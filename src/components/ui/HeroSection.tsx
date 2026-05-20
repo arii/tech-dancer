@@ -22,6 +22,7 @@ export function HeroSection() {
       overflow="hidden"
       className="relative hero-section"
       aria-label="Site hero"
+      data-testid="hero"
     >
       <HeroParticleCanvas />
 
