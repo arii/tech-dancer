@@ -80,7 +80,7 @@ export function GlobalSearch() {
       zIndex={9999}
       position="fixed"
       inset={true}
-      className="pointer-events-none"
+      className="pointer-events-none z-9999"
     >
       {/* Backdrop */}
       <Box
