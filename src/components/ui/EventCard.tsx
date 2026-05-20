@@ -5,9 +5,10 @@ import { Event } from '@/lib/content';
 
 interface EventCardProps {
   event: Event;
+  [key: string]: unknown;
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard({ event, ...rest }: EventCardProps) {
   const {
     title,
     slug,
@@ -22,10 +23,10 @@ export function EventCard({ event }: EventCardProps) {
   } = event;
   const hasReminders = !!(earlyBirdDate || hotelCutoffDate || registrationDeadline || packingReminderDate);
   const hasTheme = !!(theme || themeName);
-
   return (
     <Stack
       as="article"
+      {...rest}
       padding={8}
       radius="md"
       border
