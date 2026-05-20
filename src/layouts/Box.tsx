@@ -66,6 +66,10 @@ export interface BaseProps {
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
   bgGradient?: string
+  borderStyle?: "solid" | "dashed" | "dotted" | "double" | "none"
+  truncate?: ResponsiveProp<boolean>
+  clamp?: ResponsiveProp<number | boolean>
+  bg?: ResponsiveProp<"error" | "accent" | "accent-purple" | "surface" | "bg" | "surface-alt" | "card" | string>
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -233,6 +237,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(left, "", s("left")),
           getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
+          borderStyle && `border-${borderStyle}`,
+          getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
+          getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
+          getResponsiveClasses(bg, "bg-"),
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.

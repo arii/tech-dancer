@@ -70,9 +70,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       paddingX={3}
       paddingY={1}
       radius="md"
-      surface="default"
-      border={true}
-      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
+      className={actionButtonVariants({ variant: "subtle" })}
     >
       {isCopying ? (
         <Icon icon={RefreshCw} size="xs" className="animate-spin" />
@@ -81,7 +79,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       ) : (
         <Icon icon={Copy} size="xs" />
       )}
-      <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
+      <Text size="xs" weight="bold">{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</Text>
     </Box>
   );
 }
@@ -140,13 +138,14 @@ export default function UXAuditor() {
               value={url}
               title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
               width={{ base: "full", sm: 64, md: 80 }}
               paddingX={4}
               paddingY={2}
               radius="lg"
               placeholder="https://..."
               aria-label="URL to audit"
+              truncate
             />
             <Box
               as="button"
@@ -155,13 +154,13 @@ export default function UXAuditor() {
               display="flex"
               align="center"
               gap={2}
-              className="bg-accent hover:opacity-90 text-bg font-bold transition-all disabled:opacity-50"
+              className={actionButtonVariants({ variant: "primary" })}
               paddingX={6}
               paddingY={2}
               radius="md"
             >
               {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
-              {isAnalyzing ? 'Auditing...' : 'Start Audit'}
+              <Text weight="bold">{isAnalyzing ? 'Auditing...' : 'Start Audit'}</Text>
             </Box>
           </Stack>
           <Stack gap={2}>
@@ -178,13 +177,14 @@ export default function UXAuditor() {
                 type="password"
                 value={customApiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
-                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
                 flex={1}
                 paddingX={4}
                 paddingY={2}
                 radius="lg"
                 placeholder="OpenAI or Gemini API Key (optional override)"
                 aria-label="API Key"
+                truncate
               />
               {customApiKey && (
                 <Box
@@ -219,13 +219,14 @@ export default function UXAuditor() {
               type="text"
               value={snapshotService}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
               flex={1}
               paddingX={4}
               paddingY={2}
               radius="lg"
               placeholder="Custom service URL with {url}, {width}, {height} (optional)"
               aria-label="Snapshot Service URL"
+              truncate
             />
           </Stack>
         </Stack>
@@ -265,7 +266,7 @@ export default function UXAuditor() {
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
                 <Box flex={1} minWidth="0">
-                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
+                  <Text variant="sans" size="sm" weight="bold" truncate display="block">
                     {report.url.replace('https://', '')}
                   </Text>
                   <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
@@ -292,7 +293,7 @@ export default function UXAuditor() {
                   <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black" className="truncate block" title={activeReport.url}>
+                  <Text variant="sans" size="xl" weight="black" truncate display="block" title={activeReport.url}>
                     {activeReport.url}
                   </Text>
                 </Stack>
@@ -393,12 +394,12 @@ export default function UXAuditor() {
                                   <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
-                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
-                                        <Text variant="sans" size="sm" weight="font-black">
+                                        <Box width={2} height={2} radius="full" bg={imp.severity > 7 ? "error" : "accent-purple"} shadow="sm" />
+                                        <Text variant="sans" size="sm" weight="black">
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                      <Text variant="mono" size="xs" weight="black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
                                     </Box>
@@ -410,7 +411,7 @@ export default function UXAuditor() {
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                                 <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
-                                          <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
+                                          <Text variant="sans" size="xs" weight="bold" className="break-words whitespace-pre-wrap" clamp={4}>
                                             {imp.suggestion}
                                           </Text>
                                           {imp.element === "Manual Audit Required" && (

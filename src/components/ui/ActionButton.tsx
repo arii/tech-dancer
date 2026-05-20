@@ -1,11 +1,12 @@
 import { ReactNode, ElementType, forwardRef, Ref } from 'react';
 import { Box, BoxProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
+import { actionButtonVariants } from '@/lib/variants';
+import { VariantProps } from 'class-variance-authority';
 
-interface ActionButtonProps extends BoxProps {
+interface ActionButtonProps extends BoxProps, VariantProps<typeof actionButtonVariants> {
   children: ReactNode;
   as?: ElementType;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'accent';
   loading?: boolean;
 }
 
@@ -14,7 +15,7 @@ interface ActionButtonProps extends BoxProps {
  * Encapsulates brand-aligned interactive styling and typography.
  */
 export const ActionButton = forwardRef<HTMLElement, ActionButtonProps>(
-  ({ children, className, as = "button", variant = "primary", loading: _loading, ...props }, ref) => {
+  ({ children, className, as = "button", variant, loading: _loading, ...props }, ref) => {
     return (
       <Box
         as={as}
@@ -24,11 +25,8 @@ export const ActionButton = forwardRef<HTMLElement, ActionButtonProps>(
         justify="center"
         cursor="pointer"
         className={cn(
-          "transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed",
-          variant === 'primary' && "bg-accent text-bg hover:bg-accent/90",
-          variant === 'secondary' && "bg-surface-alt text-text-main border border-line hover:border-accent/50",
-          variant === 'accent' && "bg-accent-navy text-accent border border-accent/20 hover:bg-accent/10",
-          variant === 'ghost' && "bg-transparent text-text-dim hover:text-text-main hover:bg-line/10",
+          actionButtonVariants({ variant }),
+          "uppercase tracking-widest text-xs disabled:cursor-not-allowed",
           className
         )}
         {...props}

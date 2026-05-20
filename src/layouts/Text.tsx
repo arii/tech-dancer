@@ -14,7 +14,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   intent?: keyof typeof variants.intent
   color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "error"
   size?: ResponsiveProp<keyof typeof typeSizes>
-  weight?: ResponsiveProp<string>
+  weight?: ResponsiveProp<"thin" | "extralight" | "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold" | "black" | string>
   align?: ResponsiveProp<"left" | "center" | "right" | "justify">
   tracking?: ResponsiveProp<keyof typeof trackingTokens | string>
   uppercase?: ResponsiveProp<boolean>
@@ -68,7 +68,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           !intent && color === "bg" && "text-bg",
           !intent && color === "error" && "text-error",
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
-          getResponsiveClasses(weight, ""),
+          getResponsiveClasses(weight, "", (v) => (typeof v === "string" && !v.startsWith("font-") ? `font-${v}` : (v as string))),
           getResponsiveClasses(align, "text-"),
           getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v as string | number, "tracking")),
           getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),

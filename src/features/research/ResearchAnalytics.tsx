@@ -29,8 +29,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Intelligence Tools</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} CONSOLES</Text>
+            <Text variant="headline" size="2xl" weight="black">Intelligence Tools</Text>
+            <Text variant="mono" size="xs" color="dim" weight="semibold" uppercase tracking="widest">{tools.length} CONSOLES</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -50,12 +50,12 @@ export default function ResearchAnalytics() {
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
                       <Icon icon={tool.id === 'wcs-scraper' ? Activity : Search} size="md" color="dim" />
                     </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
+                    <Text size="micro" weight="bold" uppercase tracking="widest" color="accent">
                       {tool.status}
                     </Text>
                   </Box>
                   <Stack gap={2}>
-                    <Text variant="display" size="xl" weight="font-black">
+                    <Text variant="display" size="xl" weight="black">
                       {tool.name}
                     </Text>
                     <Text size="sm" color="dim">
@@ -64,7 +64,7 @@ export default function ResearchAnalytics() {
                   </Stack>
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Open Console</Text>
+                  <Text weight="bold" size="xs" uppercase tracking="widest" color="accent">Open Console</Text>
                   <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>
@@ -74,8 +74,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Published Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} ARTICLES</Text>
+            <Text variant="headline" size="2xl" weight="black">Published Studies</Text>
+            <Text variant="mono" size="xs" color="dim" weight="semibold" uppercase tracking="widest">{studies.length} ARTICLES</Text>
           </Box>
 
           {studies.length > 0 ? (
@@ -89,11 +89,11 @@ export default function ResearchAnalytics() {
                   className={cardVariants({ interactive: true })}
                 >
                   <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                    <Text variant="mono" size="micro" color="accent" weight="bold" uppercase tracking="widest">{study.category}</Text>
                     <Text variant="mono" size="micro" color="dim">{study.date}</Text>
                   </Box>
                   <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black">
+                    <Text variant="display" size="2xl" weight="black">
                       {study.title}
                     </Text>
                     <Text variant="body" size="sm" color="dim">
@@ -101,7 +101,7 @@ export default function ResearchAnalytics() {
                     </Text>
                   </Stack>
                   <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Paper</Text>
+                    <Text variant="mono" size="xs" weight="bold" uppercase tracking="widest" color="accent">Read Paper</Text>
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
                 </Stack>
@@ -114,7 +114,7 @@ export default function ResearchAnalytics() {
                   <Icon icon={Database} size="lg" color="muted" />
                 </Box>
                 <Stack gap={0.5}>
-                  <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
+                  <Text as="h2" size="lg" weight="black" color="accent" uppercase tracking="tight">
                     ETL Pipeline Synchronizing...
                   </Text>
                   <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>

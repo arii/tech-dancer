@@ -1,25 +1,12 @@
-import { cva } from 'class-variance-authority';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
 
-const returnButtonVariants = cva(
-  "group outline-none focus-visible:ring-2 focus-visible:ring-accent",
-  {
-    variants: {},
-  }
-);
-
-const returnButtonInnerVariants = cva(
-  "group-hover:bg-accent group-hover:text-white transition-all shadow-lg group-hover:shadow-accent/20",
-  {
-    variants: {},
-  }
-);
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ActionButton } from '@/components/ui/ActionButton';
+import { actionButtonVariants } from '@/lib/variants';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -42,13 +29,12 @@ export default function NotFound() {
                 paddingX={8}
                 paddingY={4}
                 radius="none"
-                border
-                className={cn(returnButtonVariants(), returnButtonInnerVariants())}
+                className={cn("group", actionButtonVariants({ variant: "outline" }))}
                 aria-label="Return to Home"
               >
                 <Stack direction="row" align="center" gap={2}>
                   <Icon icon={Home} />
-                  <Text variant="mono" size="sm" weight="font-bold">
+                  <Text variant="mono" size="sm" weight="bold">
                     RETURN TO HOME
                   </Text>
                   <Icon icon={ChevronRight} size="sm" className="group-hover:translate-x-1 transition-transform" />
@@ -59,7 +45,7 @@ export default function NotFound() {
         </Box>
 
         <Box opacity={0.3} marginTop={8} paddingX={{ base: 4, md: 16, lg: 20 }}>
-          <Box border="t" height={40} width="full" className="border-dashed" />
+          <Box border="t" height={40} width="full" borderStyle="dashed" />
         </Box>
       </Stack>
     </Box>

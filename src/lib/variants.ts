@@ -80,6 +80,8 @@ export const actionButtonVariants = cva(
         default: "hover:text-text-main",
         primary: "bg-accent text-bg hover:opacity-90 shadow-md",
         ghost: "hover:bg-line/10 text-text-dim hover:text-text-main",
+        subtle: "bg-surface border border-line hover:border-accent hover:text-accent font-bold text-xs transition-colors",
+        outline: "border border-line hover:border-accent hover:text-accent transition-colors",
       },
     },
     defaultVariants: {
