@@ -5,14 +5,14 @@ export function EventNavigation() {
   return (
     <Box
       position="sticky"
-      top={0}
+      top={{ base: 16, lg: 0 }}
       zIndex={40}
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
       <Box maxWidth="100vw" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }}>
         <Box
           display="flex"
-          gap={{ base: 6, md: 8 }}
+          gap={{ base: 8, md: 10 }}
           overflowX="auto"
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}

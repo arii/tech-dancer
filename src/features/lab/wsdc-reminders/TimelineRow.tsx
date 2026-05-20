@@ -56,7 +56,7 @@ export function TimelineRow({ item, formattedDate, onSync }: TimelineRowProps) {
               variant="outline"
               size="sm"
               onClick={() => onSync(item)}
-              className="h-10"
+              className="h-12 md:h-10 w-full md:w-auto"
             >
               <Box display="flex" align="center" gap={2} paddingX={4}>
                 <Calendar className="w-3 h-3" />
