@@ -1,10 +1,37 @@
 import { Share2, Link as LinkIcon, Check } from 'lucide-react';
 import { useState } from 'react';
+import { ReactNode } from 'react';
 import { Stack, Text } from '@/layouts/Primitives';
 
 interface ArticleActionsProps {
   title: string;
   description: string;
+}
+
+interface ActionChipProps {
+  label: string;
+  icon: ReactNode;
+  onClick: () => void;
+  className: string;
+}
+
+function ActionChip({ label, icon, onClick, className }: ActionChipProps) {
+  return (
+    <Stack
+      as="button"
+      direction="row"
+      onClick={onClick}
+      align="center"
+      gap={2}
+      paddingX={3}
+      paddingY={1.5}
+      radius="sm"
+      className={className}
+    >
+      {icon}
+      <Text variant="mono" size="xs" weight="font-bold">{label}</Text>
+    </Stack>
+  );
 }
 
 export function ArticleActions({ title, description }: ArticleActionsProps) {
@@ -33,36 +60,20 @@ export function ArticleActions({ title, description }: ArticleActionsProps) {
 
   return (
     <Stack direction="row" gap={2} wrap>
-      <Stack
-        as="button"
-        direction="row"
+      <ActionChip
+        label="SHARE"
+        icon={<Share2 className="w-4 h-4" />}
         onClick={handleShare}
-        align="center"
-        gap={2}
-        paddingX={3}
-        paddingY={1.5}
-        radius="sm"
         className="text-accent hover:bg-accent/10 transition-all active:scale-95 cursor-pointer"
-      >
-        <Share2 className="w-4 h-4" />
-        <Text variant="mono" size="xs" weight="font-bold">SHARE</Text>
-      </Stack>
+      />
 
       {!hasNativeShare && (
-        <Stack
-          as="button"
-          direction="row"
+        <ActionChip
+          label={copied ? 'COPIED' : 'COPY LINK'}
+          icon={copied ? <Check className="w-4 h-4" /> : <LinkIcon className="w-4 h-4" />}
           onClick={() => void handleCopyLink()}
-          align="center"
-          gap={2}
-          paddingX={3}
-          paddingY={1.5}
-          radius="sm"
           className="text-text-dim hover:text-accent hover:bg-accent/10 transition-all active:scale-95 cursor-pointer"
-        >
-          {copied ? <Check className="w-4 h-4" /> : <LinkIcon className="w-4 h-4" />}
-          <Text variant="mono" size="xs" weight="font-bold">{copied ? 'COPIED' : 'COPY LINK'}</Text>
-        </Stack>
+        />
       )}
     </Stack>
   );
