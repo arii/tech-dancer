@@ -13,6 +13,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Install system dependencies - git-lfs, gh
         run: |
@@ -60,10 +61,10 @@ jobs:
               echo "✅ No new events to process. Finishing."
               break
             elif [ $EXIT_CODE -eq 0 ]; then
-              echo "📦 Batch ${i} completed. Committing and pushing..."
+              echo "📦 Batch ${i} completed. Committing locally..."
               git add etl/data/wcs_prelims.parquet etl/data/event_queue.json
               if ! git commit -m "chore(etl): update wcs ledger and queue (batch ${i})"; then echo "No changes to commit"; fi
-              git pull --rebase origin "${GITHUB_REF_NAME:-main}" && git push origin HEAD:"$GITHUB_REF" || echo "Push failed, continuing..."
+              echo "✅ Local batch commit created."
             else
               echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
               exit 1
@@ -81,5 +82,20 @@ jobs:
           git lfs track "*.parquet"
           # Only track and add the Parquet ledger; Markdown studies are ignored
           git add etl/data/wcs_prelims.parquet etl/data/event_queue.json .gitattributes
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(etl): finalize automated WCS data refresh"
+          fi
 
-          git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git pull --rebase origin "${GITHUB_REF_NAME:-main}" && git push)
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(etl): automated WCS data refresh"
+          branch: "automation/wcs-etl-refresh"
+          delete-branch: true
+          title: "chore(etl): automated WCS data refresh"
+          body: |
+            ## Summary
+            - runs weekly WCS ETL scraping batches
+            - updates `etl/data/wcs_prelims.parquet` and `etl/data/event_queue.json`
+            - opens/updates a PR instead of pushing directly to `main`
