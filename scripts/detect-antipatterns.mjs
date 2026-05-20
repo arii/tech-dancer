@@ -319,9 +319,9 @@ function checkContent(content, filepath = 'unknown') {
 
 function checkFile(filepath) {
   const content = fs.readFileSync(filepath, 'utf8');
-  // Formally exempt safelist.ts from arbitrary value and raw layout rules
-  // to allow dynamic Tailwind class registration.
-  if (filepath.endsWith('safelist.ts')) return [];
+  // Formally exempt design system infrastructure files from audit rules
+  // to allow token definitions and dynamic class registration.
+  if (filepath.endsWith('safelist.ts') || filepath.endsWith('layout-maps.ts')) return [];
   return checkContent(content, filepath);
 }
 

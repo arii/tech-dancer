@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { composeStyles } from "@/lib/utils"
