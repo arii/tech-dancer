@@ -1,9 +1,8 @@
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GearCard } from '@/components/ui/GearCard';
 import { ResolvedGearSection } from '../useEventDetail';
 import { NavLink } from 'react-router-dom';
-import { Text } from '@/layouts/Primitives';
 
 interface CuratedGearProps {
   id?: string;

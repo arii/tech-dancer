@@ -13,6 +13,40 @@ export interface ResolvedGearSection {
   items: AffiliateLink[];
 }
 
+const GEAR_SECTION_CONFIG = [
+  {
+    key: "outfits" as const,
+    label: "Outfits",
+    ctaLabel: "Shop the look",
+    ctaHref: "/gear?category=outfit",
+    getIds: (gear: NonNullable<Event["gear"]>) => gear.outfitIds ?? [],
+  },
+  {
+    key: "accessories" as const,
+    label: "Accessories",
+    ctaLabel: "View all accessories",
+    ctaHref: "/gear?category=accessory",
+    getIds: (gear: NonNullable<Event["gear"]>) => gear.accessoryIds ?? [],
+  },
+  {
+    key: "shoes-essentials" as const,
+    label: "Shoes & Essentials",
+    ctaLabel: "Pack dance essentials",
+    ctaHref: "/gear?category=essentials",
+    getIds: (gear: NonNullable<Event["gear"]>) => [
+      ...(gear.shoeIds ?? []),
+      ...(gear.essentialIds ?? []),
+    ],
+  },
+  {
+    key: "travel-extras" as const,
+    label: "Travel Extras",
+    ctaLabel: "Pack for this event",
+    ctaHref: "/gear?category=travel",
+    getIds: (gear: NonNullable<Event["gear"]>) => gear.travelIds ?? [],
+  },
+];
+
 /**
  * Resolves a list of affiliate IDs into full link objects.
  * Extracted as a static helper to maintain purity and allow reuse.
@@ -29,39 +63,13 @@ export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
 export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
   if (!gear) return [];
 
-  return [
-    {
-      key: "outfits",
-      label: "Outfits",
-      ctaLabel: "Shop the look",
-      ctaHref: "/gear?category=outfit",
-      items: resolveAffiliateLinks(gear.outfitIds),
-    },
-    {
-      key: "accessories",
-      label: "Accessories",
-      ctaLabel: "View all accessories",
-      ctaHref: "/gear?category=accessory",
-      items: resolveAffiliateLinks(gear.accessoryIds),
-    },
-    {
-      key: "shoes-essentials",
-      label: "Shoes & Essentials",
-      ctaLabel: "Pack dance essentials",
-      ctaHref: "/gear?category=essentials",
-      items: resolveAffiliateLinks([
-        ...(gear.shoeIds ?? []),
-        ...(gear.essentialIds ?? []),
-      ]),
-    },
-    {
-      key: "travel-extras",
-      label: "Travel Extras",
-      ctaLabel: "Pack for this event",
-      ctaHref: "/gear?category=travel",
-      items: resolveAffiliateLinks(gear.travelIds),
-    },
-  ].filter((s) => s.items.length > 0);
+  return GEAR_SECTION_CONFIG.map((section) => ({
+    key: section.key,
+    label: section.label,
+    ctaLabel: section.ctaLabel,
+    ctaHref: section.ctaHref,
+    items: resolveAffiliateLinks(section.getIds(gear)),
+  })).filter((s) => s.items.length > 0);
 }
 
 export function useEventDetail() {
