@@ -201,5 +201,33 @@
     "url": "https://amazon.com",
     "category": "gear",
     "description": "Show your pride while staying cool."
+  },
+  "love-neon-follow-shirt": {
+    "id": "love-neon-follow-shirt",
+    "name": "LOVE neon tshirt - ask me to follow",
+    "url": "https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow",
+    "category": "gear",
+    "description": "Express your style and your role on the floor with this neon-inspired follow shirt."
+  },
+  "love-neon-lead-shirt": {
+    "id": "love-neon-lead-shirt",
+    "name": "Love neon tshirt - ask me to lead",
+    "url": "https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-lead",
+    "category": "gear",
+    "description": "Express your style and your role on the floor with this neon-inspired lead shirt."
+  },
+  "norcal-pride-gate-shirt": {
+    "id": "norcal-pride-gate-shirt",
+    "name": "NorCal BestCal Golden Gate Rainbow Pride Shirt",
+    "url": "https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt",
+    "category": "gear",
+    "description": "Classic Golden Gate bridge design with a vibrant rainbow twist for NorCal dancers."
+  },
+  "norcal-pride-bear-shirt": {
+    "id": "norcal-pride-bear-shirt",
+    "name": "NorCal Best Cal Pride California Bear Apparel",
+    "url": "https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel",
+    "category": "gear",
+    "description": "The iconic California bear, redesigned with Pride colors for the West Coast Swing community."
   }
 }

@@ -43,6 +43,10 @@ theme:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
+    - "love-neon-follow-shirt"
+    - "love-neon-lead-shirt"
+    - "norcal-pride-gate-shirt"
+    - "norcal-pride-bear-shirt"
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"
@@ -53,6 +57,10 @@ gear:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
+    - "love-neon-follow-shirt"
+    - "love-neon-lead-shirt"
+    - "norcal-pride-gate-shirt"
+    - "norcal-pride-bear-shirt"
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"
@@ -89,16 +97,4 @@ This is my flagship one-stop Rainbow guide for JJO: why this event matters, what
 
 ## NorCal BestCal Merch Picks
 
-Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/), or start with these featured grid items. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
-
-| Item | Preview | Price | Link |
-| :--- | :---: | :--- | :--- |
-| LOVE neon tshirt - ask me to follow | ![LOVE neon tshirt - ask me to follow](https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf5f177de8__360) | From $24.50 | [Link](https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow) |
-| Love neon tshirt - ask me to lead | ![Love neon tshirt - ask me to lead](https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf58bde26a__360) | From $24.00 | [Link](https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-lead) |
-| NorCal BestCal Golden Gate Rainbow Pride Shirt | ![NorCal BestCal Golden Gate Rainbow Pride Shirt](https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360) | From $23.00 | [Link](https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt) |
-| NorCal Best Cal Pride California Bear Apparel | ![NorCal Best Cal Pride California Bear Apparel](https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360) | From $15.50 | [Link](https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel) |
-
-### Merch Photo Gallery
-
-![NorCal BestCal rainbow tee model photo](https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a07b116ea5ce__360)
-![Golden Gate rainbow shirt photo](https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360)
+Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
