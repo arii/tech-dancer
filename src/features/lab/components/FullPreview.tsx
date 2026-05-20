@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { ExternalLink, Layout } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { DraftData, EventDraftData, PostDraftData, ResourceDraftData } from '../useBlogDrafter';
 import { ResourceSidebar, ResourceHeaderExtras, ResourceBodyExtras } from './sidebar/ResourceSidebar';
@@ -82,7 +82,7 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
 
   return (
     <Box position="relative">
-      <PrimaryActionButton
+      <ActionButton
         position="fixed"
         top={4}
         right={4}
@@ -95,7 +95,7 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
       >
         <Layout className="w-4 h-4" />
         EXIT_FULL_PREVIEW
-      </PrimaryActionButton>
+      </ActionButton>
 
       <DetailLayout
         title={props.title || 'Untitled Post'}
