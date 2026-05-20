@@ -6,5 +6,6 @@ export const IGNORED_ERROR_PATTERNS = [
   /Vercel Web Analytics/,
   /gtag is not defined/,
   /chrome-extension/,
-  /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/, // Common adblocker/extension interference
+  /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/,
+  /Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin/, // Common adblocker/extension interference
 ];
