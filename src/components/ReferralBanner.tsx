@@ -13,13 +13,33 @@ interface ReferralBannerProps {
 export function ReferralBanner({ layout = 'expanded', className }: ReferralBannerProps) {
   const isExpanded = layout === 'expanded';
 
+  const config = isExpanded ? {
+    heading: PRINTFUL_REFERRAL.HERO_HEADING,
+    subheading: PRINTFUL_REFERRAL.HERO_SUBHEADING,
+    buttonText: `Claim ${PRINTFUL_REFERRAL.DISCOUNT_AMOUNT} Discount`,
+    surface: 'accent' as const,
+    iconBg: 'bg-accent/20 text-accent',
+    headingSize: 'lg' as const,
+    uppercase: false,
+    tracking: 'normal' as const
+  } : {
+    heading: PRINTFUL_REFERRAL.FOOTER_HEADING,
+    subheading: PRINTFUL_REFERRAL.FOOTER_DESCRIPTION,
+    buttonText: `Get Your ${PRINTFUL_REFERRAL.DISCOUNT_AMOUNT} Discount`,
+    surface: 'card' as const,
+    iconBg: 'bg-accent-purple/10 text-accent-purple',
+    headingSize: 'xl' as const,
+    uppercase: true,
+    tracking: 'tight' as const
+  };
+
   return (
     <Box
       width="full"
       padding={isExpanded ? 6 : 8}
       radius="lg"
       border
-      surface={isExpanded ? 'accent' : 'card'}
+      surface={config.surface}
       className={className}
     >
       <Stack
@@ -28,39 +48,35 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
         align={isExpanded ? 'center' : 'start'}
         justify="between"
       >
-        <Stack direction="row" gap={4} align="center">
+        <Stack
+          direction={isExpanded ? 'row' : 'col'}
+          gap={isExpanded ? 4 : 6}
+          align={isExpanded ? 'center' : 'start'}
+        >
           <Box
             padding={3}
             radius="full"
             width="fit"
-            className={cn(
-              isExpanded ? "bg-accent/20 text-accent" : "bg-accent-purple/10 text-accent-purple"
-            )}
+            className={config.iconBg}
           >
             <Gift className={cn("w-6 h-6", stroke.thick)} />
           </Box>
-          {isExpanded && (
-            <Stack gap={1}>
-              <Text variant="headline" size="lg" weight="font-bold">
-                {PRINTFUL_REFERRAL.HERO_HEADING}
-              </Text>
-              <Text variant="body" size="sm" color="dim">
-                {PRINTFUL_REFERRAL.HERO_SUBHEADING}
-              </Text>
-            </Stack>
-          )}
-        </Stack>
 
-        {!isExpanded && (
-          <Stack gap={2}>
-            <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
-              {PRINTFUL_REFERRAL.FOOTER_HEADING}
+          <Stack gap={isExpanded ? 1 : 2}>
+            <Text
+              variant="headline"
+              size={config.headingSize}
+              weight="font-bold"
+              uppercase={config.uppercase}
+              tracking={config.tracking}
+            >
+              {config.heading}
             </Text>
             <Text variant="body" size="sm" color="dim">
-              {PRINTFUL_REFERRAL.FOOTER_DESCRIPTION}
+              {config.subheading}
             </Text>
           </Stack>
-        )}
+        </Stack>
 
         <Button
           as="a"
@@ -70,7 +86,7 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
           variant="primary"
           className={cn(!isExpanded && "w-fit")}
         >
-          {isExpanded ? "Claim" : "Get Your"} {PRINTFUL_REFERRAL.DISCOUNT_AMOUNT} Discount
+          {config.buttonText}
         </Button>
       </Stack>
     </Box>
