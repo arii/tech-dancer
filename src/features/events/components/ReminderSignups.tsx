@@ -24,7 +24,7 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
         </Stack>
 
         {/* CTA Section */}
-        <Box border radius="xl" padding={8} surface="accent" className="bg-accent/5 border-accent/20">
+        <Box border radius="xl" padding={8} surface="accent">
           <Stack direction={{ base: 'col', md: 'row' }} gap={8} align="center" justify="between">
             <Stack gap={2} flex={1}>
               <Box display="flex" align="center" gap={3}>

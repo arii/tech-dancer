@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -24,6 +24,21 @@ export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
   });
 
   const [selectedEventId, setSelectedEventId] = useState<string>(initialEventId || 'custom');
+
+  // Sync state if initialEventId prop changes (e.g. navigation between events)
+  useEffect(() => {
+    if (initialEventId) {
+      setSelectedEventId(initialEventId);
+    }
+  }, [initialEventId]);
+
+  // Handle default selection if no initialEventId is provided and we have events
+  useEffect(() => {
+    if (!initialEventId && selectedEventId === 'custom' && events.length > 0 && !customEvent.title) {
+      setSelectedEventId(events[0].slug);
+    }
+  }, [initialEventId, events, selectedEventId, customEvent.title]);
+
   const [customEvent, setCustomEvent] = useState<EventAnchors>({
     title: '',
     startDate: '',
@@ -32,13 +47,6 @@ export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
     registrationDeadline: '',
     url: ''
   });
-
-  // Sync initial selection when events load
-  const [hasInitialized, setHasInitialized] = useState(false);
-  if (!hasInitialized && events.length > 0 && selectedEventId === 'custom' && !customEvent.title && !initialEventId) {
-    setSelectedEventId(events[0].slug);
-    setHasInitialized(true);
-  }
 
   const activeEvent = useMemo(() => {
     if (selectedEventId === 'custom') return customEvent;
@@ -56,7 +64,19 @@ export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
 
   const timeline = useMemo(() => {
     if (!activeEvent.startDate || !activeEvent.earlyBirdDate || !activeEvent.hotelCutoffDate) return [];
-    return calculateTimeline(activeEvent).map(item => ({
+
+    // Gracefully handle invalid date strings
+    const isValidDate = (d?: string) => d && !isNaN(Date.parse(d));
+    if (!isValidDate(activeEvent.startDate) || !isValidDate(activeEvent.earlyBirdDate) || !isValidDate(activeEvent.hotelCutoffDate)) {
+      return [];
+    }
+
+    const sanitizedEvent = {
+      ...activeEvent,
+      registrationDeadline: isValidDate(activeEvent.registrationDeadline) ? activeEvent.registrationDeadline : undefined
+    };
+
+    return calculateTimeline(sanitizedEvent).map(item => ({
       ...item,
       formattedDate: item.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     }));
