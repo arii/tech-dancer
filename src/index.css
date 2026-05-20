@@ -185,7 +185,6 @@
   }
 }
 
-
 @utility transition-nav {
   transition-property: background-color, backdrop-filter, border-color;
   transition-duration: 300ms;
