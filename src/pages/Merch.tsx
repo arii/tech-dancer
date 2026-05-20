@@ -1,4 +1,4 @@
-import { ExternalLink, MessageCircle } from 'lucide-react';
+import { MessageCircle, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
@@ -33,7 +33,6 @@ export default function Merch() {
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find your next weekend loadout here."
-          titleSize="fluid-8"
         />
 
         {/* Hero Referral Banner */}
@@ -93,24 +92,58 @@ export default function Merch() {
 function ProductCard({ product }: { product: MerchProduct }) {
   return (
     <Stack
-      gap={0}
+      as="article"
+      gap={3}
+      height="full"
+      padding={6}
       radius="lg"
       border
-      surface="card"
       data-testid="product-card"
-      className="group overflow-hidden transition-all hover:border-accent"
+      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      <Box aspect="square" position="relative" overflow="hidden" surface="alt">
+      <Box
+        as="a"
+        href={product.printfulUrl}
+        target="_blank"
+        rel="sponsored noopener noreferrer"
+        aria-label={`Buy ${product.title} on Printful`}
+        className="absolute inset-0 z-10"
+      />
+
+      {/* Image zone */}
+      <Box
+        position="relative"
+        aspect="square"
+        overflow="hidden"
+        radius="md"
+        className="bg-surface-alt/20"
+      >
         <Box
           as="img"
           src={`${ASSET_PREFIX}${product.imageUrl}`}
-          alt={`${product.title} with design detail for use case`}
+          alt={product.title}
           width="full"
           height="full"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {/* Category badge */}
+        <Box
+          position="absolute"
+          top={3}
+          right={3}
+          paddingX={2}
+          paddingY={1}
+          radius="full"
+          opacity={80}
+          className="bg-accent text-white backdrop-blur-md shadow-sm"
+        >
+          <Text variant="mono" size="micro" weight="font-black" className="uppercase tracking-wide">
+            {product.price.includes('$') ? product.price : `$${product.price}`}
+          </Text>
+        </Box>
+
         {product.roles && (
-          <Box position="absolute" className="top-4 left-4">
+          <Box position="absolute" bottom={3} left={3}>
             <Stack direction="row" gap={1}>
               {product.roles.map((role) => (
                 <Box
@@ -118,12 +151,11 @@ function ProductCard({ product }: { product: MerchProduct }) {
                   paddingX={2}
                   paddingY={0.5}
                   radius="full"
-                  border
                   className={cn(
-                    "text-micro font-mono font-bold uppercase tracking-wider",
-                    role === 'lead' && "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                    role === 'follow' && "bg-pink-500/10 text-pink-400 border-pink-500/20",
-                    role === 'switch' && "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                    "text-micro font-mono font-bold uppercase tracking-wider backdrop-blur-md",
+                    role === 'lead' && "bg-blue-500/20 text-blue-200",
+                    role === 'follow' && "bg-pink-500/20 text-pink-200",
+                    role === 'switch' && "bg-purple-500/20 text-purple-200"
                   )}
                 >
                   {role}
@@ -134,45 +166,39 @@ function ProductCard({ product }: { product: MerchProduct }) {
         )}
       </Box>
 
-      <Stack padding={6} gap={4} flex={1}>
-        <Stack gap={2}>
-          <Text variant="headline" size="lg" weight="font-bold" className="group-hover:text-accent transition-colors">
-            {product.title}
-          </Text>
-          <Text variant="body" size="sm" color="dim" className="line-clamp-2 leading-relaxed">
-            {product.description}
-          </Text>
-        </Stack>
+      <Stack gap={2}>
+        <Text
+          as="h3"
+          variant="body"
+          size="lg"
+          weight="font-bold"
+          color="main"
+          leading="tight"
+          className="group-hover:text-accent transition-colors line-clamp-2"
+        >
+          {product.title}
+        </Text>
 
+        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+          {product.description}
+        </Text>
+      </Stack>
+
+      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         <Stack direction="row" gap={2} wrap="wrap">
-          {product.tags.slice(0, 3).map((tag) => (
-            <Text key={tag} variant="mono" size="micro" color="dim" className="opacity-60">
-              #{tag.replace(/\s+/g, '-').toLowerCase()}
+          {product.tags.slice(0, 2).map((tag) => (
+            <Text key={tag} variant="mono" size="micro" color="dim" className="opacity-60 uppercase tracking-tighter">
+              {tag}
             </Text>
           ))}
         </Stack>
-
-        <Stack direction="row" align="center" justify="between" marginTop="auto" paddingTop={4} border="t" className="border-line">
-          <Text variant="headline" size="lg" weight="font-bold">
-            From ${product.price}
-          </Text>
-          <Button
-            as="a"
-            href={product.printfulUrl}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            variant="ghost"
-            size="sm"
-            padding={2}
-            className="text-accent hover:bg-accent/10 h-auto"
-          >
+        <Box display="flex" align="center" gap={1}>
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
             SEE COLORS
-            <Box as="span" marginLeft={2} display="inline-block">
-              <ExternalLink className="w-3 h-3" />
-            </Box>
-          </Button>
-        </Stack>
-      </Stack>
+          </Text>
+          <ArrowRight className="w-3 h-3 text-accent" />
+        </Box>
+      </Box>
     </Stack>
   );
 }
