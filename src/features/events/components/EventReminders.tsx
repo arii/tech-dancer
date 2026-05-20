@@ -5,12 +5,12 @@ import { EmailForm } from '@/features/email-capture/EmailForm';
 import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { Event } from '@/lib/content';
 
-interface ReminderSignupsProps {
+interface EventRemindersProps {
   event: Event;
   id?: string;
 }
 
-export function ReminderSignups({ event, id }: ReminderSignupsProps) {
+export function EventReminders({ event, id }: EventRemindersProps) {
   return (
     <Box id={id} as="section" data-testid="reminders">
       <Stack gap={12}>

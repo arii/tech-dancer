@@ -24,13 +24,15 @@ interface EventSidebarProps {
   startDate?: string;
   earlyBirdDate?: string;
   hotelCutoffDate?: string;
+  registrationDeadline?: string;
 }
 
-export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate }: EventSidebarProps) {
+export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate, registrationDeadline }: EventSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const finalStartDate = event?.startDate || startDate;
   const finalEarlyBirdDate = event?.earlyBirdDate || earlyBirdDate;
   const finalHotelCutoffDate = event?.hotelCutoffDate || hotelCutoffDate;
+  const finalRegistrationDeadline = event?.registrationDeadline || registrationDeadline;
 
   return (
     <Box as="aside">
@@ -82,7 +84,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
               Travel Reminders
             </Text>
             <Stack gap={4}>
-              {getReminders(finalStartDate, finalEarlyBirdDate, finalHotelCutoffDate).map((reminder) => (
+              {getReminders(finalStartDate, finalEarlyBirdDate, finalHotelCutoffDate, finalRegistrationDeadline).map((reminder) => (
                 <Box
                   key={reminder.label}
                   border
@@ -112,7 +114,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
   );
 }
 
-function getReminders(startDate: string, earlyBirdDate?: string, hotelCutoffDate?: string) {
+function getReminders(startDate: string, earlyBirdDate?: string, hotelCutoffDate?: string, registrationDeadline?: string) {
   const start = parseDate(startDate);
 
   return [
@@ -136,7 +138,7 @@ function getReminders(startDate: string, earlyBirdDate?: string, hotelCutoffDate
     },
     {
       label: 'Comp Signups',
-      date: addDays(start, -14),
+      date: registrationDeadline ? parseDate(registrationDeadline) : addDays(start, -14),
       icon: Users,
       description: 'Registration for competitions typically closes 14 days prior.'
     },

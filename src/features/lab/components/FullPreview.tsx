@@ -69,7 +69,7 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
       case 'event': {
         const data = props as EventDraftData;
         return {
-          sidebar: <EventSidebar startDate={data.startDate} earlyBirdDate={data.earlyBirdDate} hotelCutoffDate={data.hotelCutoffDate} />,
+          sidebar: <EventSidebar startDate={data.startDate} earlyBirdDate={data.earlyBirdDate} hotelCutoffDate={data.hotelCutoffDate} registrationDeadline={data.registrationDeadline} />,
           headerExtras: <EventHeaderExtras author={data.author} />,
           content: data.description,
           bodyExtras: <EventBodyExtras />
