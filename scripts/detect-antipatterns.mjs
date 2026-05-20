@@ -237,7 +237,7 @@ function checkContent(content, filepath = 'unknown') {
       }
 
       // Colors check
-      if (/^(?:[a-z-]+:)?(bg|text|fill)-/.test(cls)) {
+      if (/^(?:[a-z-]+:)?(bg|text|fill)-/.test(cls) && !cls.includes('bg-gradient-')) {
         if (CONFIG.allowedColors.includes(cls) || cls.startsWith('brand-')) return;
         const colorMatch = cls.match(/^(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)$/);
         if (colorMatch) {
