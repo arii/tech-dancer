@@ -244,11 +244,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           touchScroll && "touch-scroll",
           noScrollbar && "no-scrollbar",
           backdropBlur && (backdropBlur === true ? "backdrop-blur" : `backdrop-blur-${backdropBlur}`),
-          bgOpacity && `bg-opacity-${bgOpacity}`,
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
+          ...((bgOpacity !== undefined) ? { '--tw-bg-opacity': typeof bgOpacity === 'number' ? bgOpacity / 100 : bgOpacity } : {}),
           ...motionProps.style,
           ...props.style
         }}

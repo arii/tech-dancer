@@ -14,6 +14,7 @@ import { routes as routeConfig } from './config/routes';
 import { MainLayout } from './layouts/MainLayout';
 import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
+import { Test } from './TestOpacity';
 import { getSkeletonVariant } from './lib/utils';
 
 export function RootLayout() {
@@ -74,6 +75,7 @@ export function RootLayout() {
             height="full"
           >
             <Suspense fallback={<PageSkeleton variant={skeletonVariant} />}>
+              <Test />
               <Outlet />
             </Suspense>
           </Box>

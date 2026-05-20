@@ -18,7 +18,9 @@ export function EventNavigation() {
         {/* Right fade indicator for mobile horizontal scroll */}
         <Box
           position="absolute"
-          inset="right"
+          top={0}
+          bottom={0}
+          right={0}
           width={12}
           display={{ base: "block", md: "none" }}
           bgGradient="bg-gradient-to-l from-bg via-bg/80 to-transparent"
