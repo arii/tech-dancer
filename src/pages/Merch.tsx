@@ -1,27 +1,29 @@
 import { ExternalLink, MessageCircle } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
+import { ASSET_PREFIX } from '@/config/constants';
 import { MERCH_PRODUCTS, COLLECTIONS, MerchProduct } from '@/data/merch';
+import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState('all');
 
-  const filteredProducts = useMemo(() => {
-    if (activeCollection === 'all') return MERCH_PRODUCTS;
-    return MERCH_PRODUCTS.filter((p) => p.collections.includes(activeCollection));
-  }, [activeCollection]);
+  const filteredProducts = activeCollection === 'all'
+    ? MERCH_PRODUCTS
+    : MERCH_PRODUCTS.filter((p) => p.collections.includes(activeCollection));
 
   return (
     <Box>
       <SEO
-        title="West Coast Swing Dance Merch & NorCal Apparel | BoomTick"
+        title="West Coast Swing Dance Merch & NorCal Apparel"
         description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
-        canonicalPath="/merch"
+        canonical="/merch"
+        jsonLd={generateMerchSchema(MERCH_PRODUCTS)}
       />
 
       <Stack gap={12} width="full">
@@ -48,7 +50,7 @@ export default function Merch() {
             {COLLECTIONS.map((collection) => (
               <Button
                 key={collection.id}
-                variant={activeCollection === collection.id ? 'accent' : 'ghost'}
+                variant={activeCollection === collection.id ? 'primary' : 'ghost'}
                 onClick={() => setActiveCollection(collection.id)}
                 className="whitespace-nowrap"
               >
@@ -90,31 +92,6 @@ export default function Merch() {
           {/* Detailed Referral Box */}
           <ReferralBanner variant="footer" />
         </Grid>
-
-        {/* JSON-LD Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            "itemListElement": MERCH_PRODUCTS.map((product, index) => ({
-              "@type": "ListItem",
-              "position": index + 1,
-              "item": {
-                "@type": "Product",
-                "name": product.title,
-                "description": product.description,
-                "image": `https://boomtick.blog${product.imageUrl}`,
-                "offers": {
-                  "@type": "Offer",
-                  "price": product.price,
-                  "priceCurrency": "USD",
-                  "url": product.printfulUrl,
-                  "availability": "https://schema.org/InStock"
-                }
-              }
-            }))
-          })}
-        </script>
       </Stack>
     </Box>
   );
@@ -127,10 +104,10 @@ function ProductCard({ product }: { product: MerchProduct }) {
       radius="md"
       className="bg-surface border border-line group overflow-hidden transition-all hover:border-accent/50"
     >
-      <Box ratio={1} position="relative" className="overflow-hidden bg-surface-alt">
+      <Box aspect="square" position="relative" className="overflow-hidden bg-surface-alt">
         <Box
           as="img"
-          src={product.imageUrl}
+          src={`${ASSET_PREFIX}${product.imageUrl}`}
           alt={`${product.title} for West Coast Swing`}
           width="full"
           height="full"

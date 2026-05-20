@@ -42,7 +42,7 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
             href="https://www.printful.com/give-5-get-5/GZB6C4"
             target="_blank"
             rel="sponsored noopener noreferrer"
-            variant="accent"
+            variant="primary"
           >
             Claim $5 Discount
           </Button>
@@ -74,7 +74,7 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
           href="https://www.printful.com/give-5-get-5/GZB6C4"
           target="_blank"
           rel="sponsored noopener noreferrer"
-          variant="accent"
+          variant="primary"
           className="w-fit"
         >
           Get Your $5 Discount
