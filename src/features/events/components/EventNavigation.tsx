@@ -7,9 +7,10 @@ export function EventNavigation() {
       position="sticky"
       top={{ base: 16, lg: 0 }}
       zIndex={40}
+      width="full"
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
+      <Box width="full" maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
         {/* Right fade indicator for mobile horizontal scroll */}
         <Box
           position="absolute"
@@ -18,15 +19,19 @@ export function EventNavigation() {
           bottom={0}
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-transparent pointer-events-none z-10"
+          bgGradient="bg-gradient-to-l from-bg via-bg/80 to-transparent"
+          className="pointer-events-none z-10"
         />
 
         <Box
           display="flex"
+          width="full"
           gap={{ base: 8, md: 10 }}
           overflowX="auto"
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}
+          paddingRight={{ base: 12, md: 0 }}
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {EVENT_TABS.map(tab => (
             <Box

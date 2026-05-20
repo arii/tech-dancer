@@ -31,14 +31,13 @@ export function EventHero({
   }), []);
 
   return (
-    <Box
+    <Stack
       id={id}
       data-testid="hero"
       position="relative"
       width="full"
       minHeight={{ base: "30vh", md: "40vh" }}
-      display="flex"
-      direction="column"
+      direction="col"
       overflow="hidden"
       className="bg-bg"
     >
@@ -164,9 +163,9 @@ export function EventHero({
         )}
       </Stack>
 
-      <Box relative zIndex={20} marginTop="auto">
+      <Box relative zIndex={20} marginTop="auto" width="full">
         <EventNavigation />
       </Box>
-    </Box>
+    </Stack>
   );
 }
