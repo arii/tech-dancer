@@ -56,6 +56,36 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 {...props}
               />
             </Box>
+          ),
+          table: ({node: _node, ...props}) => (
+            <Box width="full" overflowX="auto" marginY={8} radius="lg" border className="overflow-hidden">
+              <Box as="table" width="full" className="border-collapse" {...props} />
+            </Box>
+          ),
+          th: ({node: _node, ...props}) => (
+            <Text
+              as="th"
+              variant="mono"
+              size="xs"
+              color="dim"
+              uppercase
+              weight="font-bold"
+              padding={4}
+              textAlign="left"
+              surface="surface"
+              className="border-b border-line"
+              {...props}
+            />
+          ),
+          td: ({node: _node, ...props}) => (
+            <Box as="td" padding={4} className="border-b border-line/50" {...props} />
+          ),
+          img: ({node: _node, ...props}) => (
+            <img
+              className="rounded-lg shadow-sm max-h-40 w-auto object-contain mx-auto my-2"
+              loading="lazy"
+              {...props}
+            />
           )
         }}
       >
