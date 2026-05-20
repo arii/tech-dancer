@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Bell, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Event } from '@/lib/content';
+import { parseDate } from '@/lib/utils';
 
 interface Deadline {
   id: string;
@@ -95,7 +96,7 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                     {d.label}
                   </Text>
                   <Text variant="mono" size="xs" color="dim">
-                    {new Date(d.date).toLocaleDateString("en-US", {
+                    {parseDate(d.date).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
@@ -131,48 +132,46 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                 How you'll be notified
               </Text>
               <Grid cols={2} gap={3}>
-                {NOTIFICATION_CHANNELS.map((ch) => (
-                  <Box
-                    key={ch.id}
-                    as="button"
-                    onClick={() => toggleChannel(ch.id)}
-                    border
-                    radius="md"
-                    paddingX={3}
-                    paddingY={2}
-                    display="flex"
-                    align="center"
-                    gap={2}
-                    cursor="pointer"
-                    className={`transition-all ${
-                      channels.has(ch.id)
-                        ? "border-accent bg-accent/10 text-accent"
-                        : "border-line text-text-dim hover:border-accent/40"
-                    }`}
-                  >
+                {NOTIFICATION_CHANNELS.map((ch) => {
+                  const isActive = channels.has(ch.id);
+                  return (
                     <Box
-                      width={4}
-                      height={4}
+                      key={ch.id}
+                      as="button"
+                      onClick={() => toggleChannel(ch.id)}
                       border
-                      radius="sm"
+                      radius="md"
+                      paddingX={3}
+                      paddingY={2}
                       display="flex"
                       align="center"
-                      justify="center"
-                      className={
-                        channels.has(ch.id)
-                          ? "border-accent bg-accent"
-                          : "border-line"
-                      }
+                      gap={2}
+                      cursor="pointer"
+                      surface={isActive ? "accent" : "surface"}
+                      emphasis={isActive ? "high" : "low"}
+                      className="transition-all hover:border-accent/40"
                     >
-                      {channels.has(ch.id) && (
-                        <Check className="w-3 h-3 text-bg" />
-                      )}
+                      <Box
+                        width={4}
+                        height={4}
+                        border
+                        radius="sm"
+                        display="flex"
+                        align="center"
+                        justify="center"
+                        surface={isActive ? "accent" : "muted"}
+                        className={isActive ? "bg-accent border-accent" : "border-line"}
+                      >
+                        {isActive && (
+                          <Check className="w-3 h-3 text-bg" />
+                        )}
+                      </Box>
+                      <Text size="xs" weight="font-bold" color={isActive ? "accent" : "dim"}>
+                        {ch.label}
+                      </Text>
                     </Box>
-                    <Text size="xs" weight="font-bold">
-                      {ch.label}
-                    </Text>
-                  </Box>
-                ))}
+                  );
+                })}
               </Grid>
             </Stack>
 
