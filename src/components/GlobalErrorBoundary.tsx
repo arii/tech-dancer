@@ -55,7 +55,7 @@ export function GlobalErrorBoundary() {
           surface="sunken"
           width="full"
           overflow="auto"
-          maxHeight={80}
+          maxHeight={72}
           className="text-left border border-line/50"
         >
           <Text weight="bold" color="error" marginBottom={2} display="block">
