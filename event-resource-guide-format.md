@@ -62,6 +62,7 @@ whyAttending: >
 theme:
   name: "Rainbow"
   label: "NorCal Dancers Theme" # e.g. "NorCal Dancers Theme"
+  colors: ["#FF0000", "#FF7F00", "#FFFF00"]
   outfitIds:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"

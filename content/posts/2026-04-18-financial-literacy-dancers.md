@@ -1,6 +1,6 @@
 ---
 type: post
-title: "Coming Soon: The Comprehensive Financial Strategy Guide for Dancers"
+title: "Comprehensive Financial Strategy Guide for Dancers"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Miscellaneous"

@@ -29,4 +29,12 @@ describe('getAllRoutes', () => {
     expect(tools).toContain('/research/wcs-scraper');
     expect(tools).toContain('/ux-auditor');
   });
+
+  it('should return detailed route information with lastmod', () => {
+    const { detailed } = getAllRoutes();
+    expect(detailed.length).toBeGreaterThan(0);
+    expect(detailed[0]).toHaveProperty('path');
+    expect(detailed[0]).toHaveProperty('lastmod');
+    expect(new Date(detailed[0].lastmod).getTime()).not.toBeNaN();
+  });
 });
