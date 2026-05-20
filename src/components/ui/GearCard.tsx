@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { getContentCardCtaText } from '@/components/ui/contentCardText';
 
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
@@ -65,6 +66,8 @@ export function GearCard({
   link: _link,
   ...rest
 }: GearCardProps) {
+  const ctaText = getContentCardCtaText(basePath);
+
   return (
     <Stack
       as="article"
@@ -80,7 +83,7 @@ export function GearCard({
       <Box
         as={NavLink}
         to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
+        aria-label={`${ctaText}: ${title}`}
         className="absolute inset-0 z-10"
       />
       {verdict && (
@@ -156,7 +159,7 @@ export function GearCard({
         )}
         <Box display="flex" align="center" gap={1}>
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read review
+            {ctaText}
           </Text>
           <ArrowRight className="w-3 h-3 text-accent" />
         </Box>

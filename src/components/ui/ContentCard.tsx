@@ -1,12 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
-
-const GEAR_ROUTE_SEGMENT = '/gear';
-
-function getCardCtaText(basePath: string): string {
-  return basePath.includes(GEAR_ROUTE_SEGMENT) ? 'Read review' : 'Read article';
-}
+import { getContentCardCtaText } from '@/components/ui/contentCardText';
 
 function getTagColorClass(category: string): string {
   const normalizedCategory = category.toLowerCase();
@@ -76,7 +71,7 @@ export function ContentCard({
   link: _link,
   ...motionProps 
 }: ContentCardProps) {
-  const ctaText = getCardCtaText(basePath);
+  const ctaText = getContentCardCtaText(basePath);
   const cardMeta = [date, readingTime].filter(Boolean).join(' • ') || category;
 
   return (
