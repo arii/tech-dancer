@@ -14,13 +14,13 @@ export function EventNavigation() {
         {/* Right fade indicator for mobile horizontal scroll */}
         <Box
           position="absolute"
-          top={0}
-          right={0}
-          bottom={0}
+          inset="right"
           width={12}
           display={{ base: "block", md: "none" }}
           bgGradient="bg-gradient-to-l from-bg via-bg/80 to-transparent"
-          className="pointer-events-none z-10"
+          zIndex={10}
+          pointerEvents="none"
+          aria-hidden="true"
         />
 
         <Box
@@ -28,10 +28,11 @@ export function EventNavigation() {
           width="full"
           gap={{ base: 8, md: 10 }}
           overflowX="auto"
-          className="no-scrollbar scroll-smooth"
+          touchScroll
+          scrollBehavior="smooth"
+          noScrollbar
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
-          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {EVENT_TABS.map(tab => (
             <Box

@@ -66,6 +66,9 @@ export interface BaseProps {
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
   bgGradient?: string
+  pointerEvents?: "auto" | "none"
+  touchScroll?: boolean
+  noScrollbar?: boolean
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -87,6 +90,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
+    pointerEvents, touchScroll, noScrollbar,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -233,6 +237,9 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(left, "", s("left")),
           getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
+          pointerEvents && `pointer-events-${pointerEvents}`,
+          touchScroll && "touch-scroll",
+          noScrollbar && "no-scrollbar",
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
