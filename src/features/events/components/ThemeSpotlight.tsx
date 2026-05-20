@@ -103,7 +103,7 @@ export function ThemeSpotlight({
           {/* Outfit Recommendations */}
           {outfits.length > 0 && (
             <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
                 Recommended Outfits
               </Text>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
@@ -117,7 +117,7 @@ export function ThemeSpotlight({
           {/* Accessory Recommendations */}
           {accessories.length > 0 && (
             <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+              <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
                 Recommended Accessories
               </Text>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>

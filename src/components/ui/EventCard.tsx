@@ -13,14 +13,14 @@ export function EventCard({ title, slug, location, schedule }: EventCardProps) {
   return (
     <Stack
       as="article"
-      padding={8}
-      radius="md"
+      padding={10}
+      radius="xl"
       border
-      gap={4}
+      gap={6}
       height="full"
       width="full"
       textAlign="left"
-      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      className="group relative bg-surface hover:bg-surface-alt hover:border-accent/40 transition-all duration-500 hover:-translate-y-1"
     >
       <NavLink
         to={`/events/${slug}`}
@@ -28,40 +28,57 @@ export function EventCard({ title, slug, location, schedule }: EventCardProps) {
         aria-label={`View event: ${title}`}
       />
       <Box display="flex" justify="between" align="center" width="full">
-        <Box display="flex" align="center" gap={2}>
-          <MapPin className="w-4 h-4 text-accent" />
-          <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
+        <Box display="flex" align="center" gap={2.5}>
+          <Box radius="full" padding={2} className="bg-accent/10">
+            <MapPin className="w-4 h-4 text-accent" />
+          </Box>
+          <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
             {schedule}
           </Text>
         </Box>
-        <Text
-          variant="mono"
-          size="micro"
-          weight="font-bold"
-          color="dim"
-          uppercase
-          tracking="tighter"
-          className="opacity-60"
+        <Box
+          paddingX={3}
+          paddingY={1}
+          radius="full"
+          className="bg-accent-purple/10 border border-accent-purple/20"
         >
-          Resource Guide
-        </Text>
+          <Text
+            variant="mono"
+            size="micro"
+            weight="font-bold"
+            className="text-accent-purple uppercase tracking-widest"
+          >
+            Guide
+          </Text>
+        </Box>
       </Box>
 
-      <Stack gap={1}>
+      <Stack gap={2}>
         <Text
-          variant="body"
-          size="lg"
-          weight="font-bold"
+          variant="display"
+          size="xl"
+          weight="font-black"
           color="main"
           leading="tight"
           className="group-hover:text-accent transition-colors"
         >
           {title}
         </Text>
-        <Text size="sm" color="dim">
+        <Text size="sm" color="dim" weight="font-medium" className="opacity-80">
           {location}
         </Text>
       </Stack>
+
+      <Box
+        marginTop="auto"
+        display="flex"
+        align="center"
+        gap={2}
+        className="text-accent-purple font-mono text-tiny font-bold uppercase tracking-widest group-hover:gap-4 transition-all"
+      >
+        View Resource Journey
+        <span className="text-lg">→</span>
+      </Box>
     </Stack>
   );
 }

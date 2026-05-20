@@ -23,7 +23,7 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
               title={section.label}
               size="sm"
             />
-            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {section.items.map((item) => (
                 <GearCard
                   key={item.id}
@@ -32,6 +32,7 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
                   category={item.category}
                   excerpt={item.description}
                   basePath="/gear"
+                  variant="compact"
                 />
               ))}
             </Grid>

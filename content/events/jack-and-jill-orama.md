@@ -14,12 +14,7 @@ heroImage: ""
 description: "Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events on the circuit. It is famous for its creative competition formats, high-energy social dancing, and prime location near Disneyland."
 
 whyAttending: >
-  I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum
-  dance weekend: high-stakes rounds, late-night social magic, and that warm
-  SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a
-  Rainbow theme for Pride Month, and honestly that playful, bold energy is
-  exactly the vibe I want to bring to every finals watch party and every
-  2 a.m. social set.
+  I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set. If you're looking for the heart of the SoCal swing scene, this is where it beats the loudest.
 
 theme:
   name: "Rainbow"

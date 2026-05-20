@@ -9,6 +9,7 @@ import { EventReminders } from './components/EventReminders';
 import { EventTravel } from './components/EventTravel';
 import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
+import { WhyAttending } from './components/WhyAttending';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
@@ -69,44 +70,72 @@ export default function EventGuide() {
         date={event.schedule}
         eyebrow={event.category}
         image={event.heroImage}
-        whyAttending={event.whyAttending}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
+              {event.whyAttending && (
+                <Stack gap={4}>
+                  <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 1: The Vision</Text>
+                  <WhyAttending
+                    id="why-attending"
+                    content={event.whyAttending}
+                    author={event.author}
+                  />
+                </Stack>
+              )}
+
               {event.theme && (
-                <ThemeSpotlight
-                  id="theme"
-                  title={event.theme.name}
-                  label={event.theme.label}
-                  description={event.theme.description || ''}
-                  colors={event.theme.colors}
-                  outfits={themeOutfits}
-                  accessories={themeAccessories}
-                />
+                <Stack gap={4}>
+                  <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 2: The Vibe</Text>
+                  <ThemeSpotlight
+                    id="theme"
+                    title={event.theme.name}
+                    label={event.theme.label}
+                    description={event.theme.description || ''}
+                    colors={event.theme.colors}
+                    outfits={themeOutfits}
+                    accessories={themeAccessories}
+                  />
+                </Stack>
               )}
 
               {gearSections.length > 0 && (
-                <CuratedGear
-                  id="gear"
-                  title={`Gear for ${event.title}`}
-                  sections={gearSections}
-                />
+                <Stack gap={4}>
+                  <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 3: The Loadout</Text>
+                  <CuratedGear
+                    id="gear"
+                    title={`Gear for ${event.title}`}
+                    sections={gearSections}
+                  />
+                </Stack>
               )}
 
-              <EventReminders id="reminders" event={event} />
+              <Stack gap={4}>
+                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 4: The Strategy</Text>
+                <EventReminders id="reminders" event={event} />
+              </Stack>
 
-              <EventTravel id="travel" notes={event.description} />
+              <Stack gap={4}>
+                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 5: Logistics</Text>
+                <EventTravel id="travel" notes={event.description} />
+              </Stack>
 
-              <EventNotes id="notes" content={event.content} />
+              <Stack gap={4}>
+                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 6: Intelligence</Text>
+                <EventNotes id="notes" content={event.content} />
+              </Stack>
 
               {relatedEvents.length > 0 && (
-                <RelatedEvents
-                  id="related"
-                  events={relatedEvents}
-                />
+                <Stack gap={4}>
+                  <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">Step 7: Next Steps</Text>
+                  <RelatedEvents
+                    id="related"
+                    events={relatedEvents}
+                  />
+                </Stack>
               )}
             </Stack>
           </Box>

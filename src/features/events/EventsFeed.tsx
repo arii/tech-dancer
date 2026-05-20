@@ -17,10 +17,10 @@ export default function EventsFeed() {
       />
       <FolioGrid
         items={events}
-        categoryTitle="Upcoming Event Resource Guides"
+        categoryTitle="Event Resource Guides"
         as="h1"
-        label="COMPETE"
-        description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
+        label="THE HUB"
+        description="Your high-fidelity planning companion for the West Coast Swing circuit. From theme spotlights to curated gear checklists, start your journey to the next event here."
         basePath="/events"
         view={view}
         onViewChange={setView}

@@ -129,39 +129,6 @@ export function EventHero({
           </Box>
         </Stack>
 
-        {whyAttending && (
-          <Box
-            data-testid="why-attending"
-            padding={{ base: 4, md: 6 }}
-            radius="lg"
-            width={{ base: "full", md: "auto" }}
-            className="glass-panel max-w-2xl border-l-4 border-l-accent"
-          >
-            <Stack gap={{ base: 3, md: 4 }}>
-              <Box display="flex" align="center" gap={3}>
-                <Logo className="h-3 md:h-4" />
-                <Text
-                  variant="mono"
-                  size="tiny"
-                  weight="font-bold"
-                  uppercase
-                  tracking="widest"
-                  color="dim"
-                >
-                  Why I'm Attending
-                </Text>
-              </Box>
-              <Text
-                variant="body"
-                size="sm"
-                leading="relaxed"
-                className="italic text-white/90"
-              >
-                {whyAttending}
-              </Text>
-            </Stack>
-          </Box>
-        )}
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">

@@ -104,21 +104,44 @@ export default function Home() {
             </Stack>
           </Stack>
 
-          <Stack gap={8}>
-            <SectionHeader label="COMPETE" title="Upcoming Event Resource Guides" />
-            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
-              {upcomingEvents.map((event) => (
-                <Box
-                  key={event.slug}
-                  as={motion.div}
-                  variants={motionTokens.staggerItem}
-                  className="h-full"
-                >
-                  <EventCard {...event} />
-                </Box>
-              ))}
-            </Grid>
-          </Stack>
+          <Box
+            surface="surface-alt"
+            padding={{ base: 6, md: 10 }}
+            radius="xl"
+            border
+            className="border-accent/20 shadow-xl relative overflow-hidden"
+          >
+            {/* Background Decorative Element */}
+            <Box
+              position="absolute"
+              top={0}
+              right={0}
+              width="1/3"
+              height="full"
+              className="bg-gradient-to-l from-accent/5 to-transparent pointer-events-none"
+            />
+
+            <Stack gap={10}>
+              <Stack gap={2}>
+                <SectionHeader label="COMPETE" title="Upcoming Event Resource Guides" />
+                <Text variant="mono" size="xs" color="accent" className="opacity-80">
+                  The Dancer's Planning Hub
+                </Text>
+              </Stack>
+              <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+                {upcomingEvents.map((event) => (
+                  <Box
+                    key={event.slug}
+                    as={motion.div}
+                    variants={motionTokens.staggerItem}
+                    className="h-full"
+                  >
+                    <EventCard {...event} />
+                  </Box>
+                ))}
+              </Grid>
+            </Stack>
+          </Box>
         </Stack>
       </Stack>
     </Box>
