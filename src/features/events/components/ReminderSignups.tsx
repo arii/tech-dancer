@@ -1,5 +1,6 @@
 import { Bell } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 import { EmailForm } from '@/features/email-capture/EmailForm';
 import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { Event } from '@/lib/content';
@@ -13,15 +14,7 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
   return (
     <Box id={id} as="section" data-testid="reminders">
       <Stack gap={12}>
-        {/* Step Header */}
-        <Stack gap={3}>
-          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Step 5: Stay on Track
-          </Text>
-          <Text variant="headline" size="3xl" weight="font-black">
-            Action Timeline & Alerts
-          </Text>
-        </Stack>
+        <SectionHeader eyebrow="Step 5: Stay on Track" title="Action Timeline & Alerts" />
 
         {/* CTA Section */}
         <Box border radius="xl" padding={8} surface="accent">
