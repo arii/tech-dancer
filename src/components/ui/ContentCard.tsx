@@ -62,6 +62,8 @@ export function ContentCard({
   link: _link,
   ...motionProps 
 }: ContentCardProps) {
+  const isGearCard = basePath.includes('/gear');
+  const ctaText = isGearCard ? 'Read review' : 'Read article';
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();
@@ -83,56 +85,58 @@ export function ContentCard({
       className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
       {...motionProps}
     >
-      <Box
-        as={NavLink}
+      <NavLink
         to={`${basePath}/${slug}`}
-        aria-label={`Read article: ${title}`}
-        className="absolute inset-0 z-10"
-      />
-      <Box
-        paddingX={2}
-        paddingY={1}
-        radius="full"
-        border
-        className="border-line w-fit"
+        aria-label={`${ctaText}: ${title}`}
+        className="focus-visible:outline-none"
       >
-        <Text
-          variant="mono"
-          size="xs"
-          weight="font-black"
-          tracking="wide"
-          className={getTagColorClass(category)}
-        >
-          {category}
-        </Text>
-      </Box>
+        <Stack direction="col" gap={4} height="full">
+          <Box
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            border
+            className="border-line w-fit"
+          >
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-black"
+              tracking="wide"
+              className={getTagColorClass(category)}
+            >
+              {category}
+            </Text>
+          </Box>
 
-      <Stack gap={2}>
-        <Text
-          as="h3"
-          variant="body"
-          size="lg"
-          weight="font-bold"
-            color="main"
-            leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
+          <Stack gap={3}>
+            <Text
+              as="h3"
+              variant="body"
+              size="lg"
+              weight="font-bold"
+              color="main"
+              leading="tight"
+              className="group-hover:text-accent transition-colors line-clamp-2"
+            >
+              {title}
+            </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
-           {excerpt}
-        </Text>
-      </Stack>
+            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+              {excerpt}
+            </Text>
+          </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto">
-        <Text variant="mono" size="xs" color="dim" data-testid="content-date">
-          {[date, readingTime].filter(Boolean).join(' • ') || category}
-        </Text>
-        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-          Read article
-        </Text>
-      </Box>
+          <Box display="flex" align="center" justify="between" marginTop="auto">
+            <Text variant="mono" size="xs" color="dim" data-testid="content-date">
+              {[date, readingTime].filter(Boolean).join(' • ') || category}
+            </Text>
+            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+              {ctaText}
+            </Text>
+          </Box>
+        </Stack>
+      </NavLink>
     </Stack>
   );
 }

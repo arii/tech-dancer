@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Box, Grid, Stack } from '@/layouts/Primitives';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { SearchBox } from '@/components/ui/SearchBox';
@@ -49,6 +49,8 @@ export default function FolioGrid({
   });
 
   const searchPlaceholder = basePath.includes('gear') ? 'Search gear…' : 'Search posts…';
+  const resultLabel = `${filteredItems.length} ${filteredItems.length === 1 ? 'item' : 'items'}`;
+  const filterSummary = search ? `Filtered by “${search}”` : 'All items';
 
   return (
     <Box as="section" height="full">
@@ -60,16 +62,19 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        <Stack gap={3} marginTop={8}>
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={searchPlaceholder}
           />
-          {onViewChange && (
-            <ViewToggle view={view} onChange={onViewChange} />
-          )}
-        </Box>
+          <Box display="flex" align="center" justify="between" gap={3} flexWrap="wrap">
+            <Text variant="mono" size="xs" color="dim">{resultLabel} • {filterSummary}</Text>
+            {onViewChange && (
+              <ViewToggle view={view} onChange={onViewChange} />
+            )}
+          </Box>
+        </Stack>
       </Box>
 
       <Box marginTop={8}>
