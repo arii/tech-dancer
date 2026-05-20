@@ -63,6 +63,7 @@ export function GearCard({
   schedule: _schedule,
   description: _description,
   link: _link,
+  verdict: _verdict,
   variant = "default",
   ...rest
 }: GearCardProps & { variant?: "default" | "compact" }) {

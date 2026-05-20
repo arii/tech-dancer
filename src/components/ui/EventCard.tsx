@@ -69,16 +69,16 @@ export function EventCard({ title, slug, location, schedule }: EventCardProps) {
         </Text>
       </Stack>
 
-      <Box
+      <Stack
         marginTop="auto"
-        display="flex"
+        direction="row"
         align="center"
         gap={2}
-        className="text-accent-purple font-mono text-tiny font-bold uppercase tracking-widest group-hover:gap-4 transition-all"
+        className="text-accent-purple font-mono font-bold uppercase tracking-widest transition-all"
       >
-        View Resource Journey
-        <span className="text-lg">→</span>
-      </Box>
+        <Text size="xs">View Resource Journey</Text>
+        <Text size="lg" weight="font-bold" className="group-hover:translate-x-2 transition-transform">→</Text>
+      </Stack>
     </Stack>
   );
 }
