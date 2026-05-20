@@ -14,7 +14,7 @@ export function useResearch() {
 
   return {
     studies,
-    tools: RESEARCH_TOOLS,
+    tools: RESEARCH_TOOLS.filter((tool) => tool.isPublic !== false),
     getTool,
     getStudy
   };
