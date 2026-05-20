@@ -33,26 +33,19 @@ export function ScoreItem({ label, value, icon: IconComponent, color, intent }: 
 
 export function ScoreGrid({ children }: { children: ReactNode }) {
   return (
-    <Box
+    <Stack
+      direction="row"
+      wrap
+      justify="center"
+      width="full"
+      gap={{ base: 4, md: 0 }}
       border="y"
       paddingY={6}
       surface="muted"
-      width="full"
-      className="border-line/50"
+      className="border-line/50 divide-x-0 md:divide-x divide-line/30"
     >
-      <Stack
-        direction="row"
-        wrap
-        justify="center"
-        width="full"
-        gap={{ base: 4, md: 0 }}
-      >
-        {/* CSS Divide utilities are acceptable when used on Stack/Grid for layout separation */}
-        <Box display="flex" width="full" justify="center" wrap className="divide-x-0 md:divide-x divide-line/30">
-          {children}
-        </Box>
-      </Stack>
-    </Box>
+      {children}
+    </Stack>
   );
 }
 
