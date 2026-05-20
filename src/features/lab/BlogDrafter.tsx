@@ -3,7 +3,7 @@ import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { PrimaryActionButton } from '@/components/ui/PrimaryActionButton';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
@@ -497,14 +497,14 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               height={32}
               className={cn(inputs.base, "resize-none")}
             />
-            <PrimaryActionButton
+            <ActionButton
               onClick={handleApply}
               gap={3}
               padding={4}
             >
               <Send className="w-4 h-4" />
               APPLY_RESPONSE
-            </PrimaryActionButton>
+            </ActionButton>
           </Stack>
 
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">

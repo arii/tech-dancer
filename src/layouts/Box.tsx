@@ -65,6 +65,7 @@ export interface BaseProps {
   cursor?: "auto" | "default" | "pointer" | "wait" | "text" | "move" | "help" | "not-allowed" | "none" | string
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
+  bgGradient?: string
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -85,7 +86,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
-    top, right, bottom, left,
+    top, right, bottom, left, bgGradient,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -170,6 +171,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
           shadow && SHADOW_MAP[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
+          bgGradient,
           emphasis && variants.emphasis[emphasis],
           radiusProp && RADIUS_MAP[radiusProp],
           borderClasses,

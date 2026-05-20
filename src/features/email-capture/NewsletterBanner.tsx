@@ -3,7 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
 import { useEmailStore } from './emailStore';
-import { Button } from '@/layouts/Primitives';
+import { ActionButton } from '@/components/ui/ActionButton';
 
 export function NewsletterBanner() {
   const { showEmailBar, hideBar } = useEmailStore();
@@ -33,7 +33,7 @@ export function NewsletterBanner() {
 
       {/* Persistent Dismissal */}
       <Box position="absolute" className="top-4 right-4" zIndex="docked">
-        <Button
+        <ActionButton
           variant="ghost"
           onClick={hideBar}
           aria-label="Dismiss newsletter signup"
@@ -50,7 +50,7 @@ export function NewsletterBanner() {
             </Text>
             <X className="w-5 h-5 text-text-dim group-hover/close:text-accent transition-colors" />
           </Stack>
-        </Button>
+        </ActionButton>
       </Box>
 
       <Stack 
