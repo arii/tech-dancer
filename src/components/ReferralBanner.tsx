@@ -3,6 +3,7 @@ import { Gift } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { PRINTFUL_REFERRAL } from '@/config/constants';
 
 interface ReferralBannerProps {
   variant?: 'hero' | 'footer';
@@ -30,21 +31,21 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
             </Box>
             <Stack gap={1}>
               <Text variant="sans" size="lg" weight="font-bold">
-                Get $5 Off Your First Order
+                {PRINTFUL_REFERRAL.HERO_HEADING}
               </Text>
               <Text variant="sans" size="sm" color="dim">
-                New to Printful? Use our referral link to save $5 on your first purchase.
+                {PRINTFUL_REFERRAL.HERO_SUBHEADING}
               </Text>
             </Stack>
           </Stack>
           <Button
             as="a"
-            href="https://www.printful.com/give-5-get-5/GZB6C4"
+            href={PRINTFUL_REFERRAL.URL}
             target="_blank"
             rel="sponsored noopener noreferrer"
             variant="primary"
           >
-            Claim $5 Discount
+            Claim {PRINTFUL_REFERRAL.DISCOUNT_AMOUNT} Discount
           </Button>
         </Stack>
       </Box>
@@ -63,21 +64,21 @@ export function ReferralBanner({ variant = 'hero', className }: ReferralBannerPr
         </Box>
         <Stack gap={2}>
           <Text variant="sans" size="xl" weight="font-bold">
-            First-Time Buyer Discount
+            {PRINTFUL_REFERRAL.FOOTER_HEADING}
           </Text>
           <Text variant="sans" size="sm" color="dim">
-            Supporting BoomTick helps us keep the servers running and the content flowing. Save $5 on your first Printful order and support the blog at the same time.
+            {PRINTFUL_REFERRAL.FOOTER_DESCRIPTION}
           </Text>
         </Stack>
         <Button
           as="a"
-          href="https://www.printful.com/give-5-get-5/GZB6C4"
+          href={PRINTFUL_REFERRAL.URL}
           target="_blank"
           rel="sponsored noopener noreferrer"
           variant="primary"
           className="w-fit"
         >
-          Get Your $5 Discount
+          Get Your {PRINTFUL_REFERRAL.DISCOUNT_AMOUNT} Discount
         </Button>
       </Stack>
     </Box>
