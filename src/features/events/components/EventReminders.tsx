@@ -1,10 +1,5 @@
 import { useMemo } from 'react';
-import { Download } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
-import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
-import { generateICS, downloadICS } from '@/features/lab/wsdc-reminders/lib/ics-generator';
-import { TimelineRow } from '@/features/lab/wsdc-reminders/TimelineRow';
-import { TimelineItem } from '@/features/lab/wsdc-reminders/types';
 import { Event } from '@/lib/content';
 
 interface EventRemindersProps {
@@ -12,82 +7,100 @@ interface EventRemindersProps {
   id?: string;
 }
 
-export function EventReminders({ event, id }: EventRemindersProps) {
-  const timeline = useMemo(() => {
-    if (!event.startDate || !event.earlyBirdDate || !event.hotelCutoffDate) return [];
+interface ReminderRow {
+  id: string;
+  label: string;
+  date: string;
+  note: string;
+}
 
-    const anchors = {
-      title: event.title,
-      startDate: event.startDate,
-      earlyBirdDate: event.earlyBirdDate,
-      hotelCutoffDate: event.hotelCutoffDate,
-      url: event.url
-    };
+function formatDate(date: string): string {
+  return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
 
-    return calculateTimeline(anchors).map(item => ({
-      ...item,
-      formattedDate: item.date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    }));
-  }, [event]);
+export function EventReminders({ event, id = 'reminders' }: EventRemindersProps) {
+  const reminderRows = useMemo<ReminderRow[]>(() => {
+    const rows: ReminderRow[] = [];
 
-  const handleBulkSync = () => {
-    if (!timeline.length) return;
-    const icsContent = generateICS(event.title, timeline, event.url);
-    downloadICS(`${event.title.replace(/\s+/g, '_')}_Full_Plan.ics`, icsContent);
-  };
+    if (event.earlyBirdDate) {
+      rows.push({
+        id: 'early-bird',
+        label: 'Early-bird discount',
+        date: formatDate(event.earlyBirdDate),
+        note: 'Get notified before discounted pricing expires.'
+      });
+    }
 
-  const handleSingleSync = (item: TimelineItem) => {
-    const icsContent = generateICS(event.title, [item], event.url);
-    downloadICS(`${item.label.replace(/\s+/g, '_')}.ics`, icsContent);
-  };
+    if (event.registrationDeadline) {
+      rows.push({
+        id: 'registration',
+        label: 'Registration deadline',
+        date: formatDate(event.registrationDeadline),
+        note: 'Lock in your spot before registration closes.'
+      });
+    }
 
-  if (timeline.length === 0) return null;
+    if (event.hotelCutoffDate) {
+      rows.push({
+        id: 'hotel',
+        label: 'Hotel cutoff',
+        date: formatDate(event.hotelCutoffDate),
+        note: 'Book your event hotel rate before it ends.'
+      });
+    }
+
+    if (event.packingReminderDate) {
+      rows.push({
+        id: 'packing',
+        label: 'Packing reminder',
+        date: formatDate(event.packingReminderDate),
+        note: 'Prepare outfits and essentials before you travel.'
+      });
+    }
+
+    return rows;
+  }, [event.earlyBirdDate, event.registrationDeadline, event.hotelCutoffDate, event.packingReminderDate]);
+
+  if (reminderRows.length === 0) {
+    return null;
+  }
 
   return (
     <Box id={id} as="section" data-testid="reminders">
-      <Stack gap={8}>
-        <Box display="flex" justify="between" align="end" wrap gap={4}>
-          <Stack gap={2}>
-            <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-              Strategic Planning
-            </Text>
-            <Text variant="headline" size="3xl" weight="font-black">
-              Action Timeline
-            </Text>
-          </Stack>
-          <Button onClick={handleBulkSync} variant="primary">
-            <Box display="flex" align="center" gap={2}>
-              <Download className="w-4 h-4" />
-              <Text as="span">Sync Entire Plan</Text>
+      <Stack gap={6}>
+        <Stack gap={2}>
+          <Text variant="headline" size="2xl" weight="font-black">
+            Reminder signups
+          </Text>
+          <Text variant="body" color="muted">
+            Get notified about early-bird discounts and key event deadlines so you can focus on dancing.
+          </Text>
+        </Stack>
+
+        <Stack gap={3}>
+          {reminderRows.map((row) => (
+            <Box key={row.id} border="default" radius="lg" p={4}>
+              <Stack gap={1}>
+                <Text variant="body" weight="font-semibold">{row.label}</Text>
+                <Text variant="body" size="sm" color="muted">{row.date}</Text>
+                <Text variant="body" size="sm" color="muted">{row.note}</Text>
+              </Stack>
             </Box>
+          ))}
+        </Stack>
+
+        <Stack gap={2}>
+          <Text variant="body" size="sm" color="muted">
+            Notification options: email, browser push, SMS, and calendar/iCal.
+          </Text>
+          <Button variant="primary" aria-label="Sign up for reminders">
+            Sign up for reminders
           </Button>
-        </Box>
-
-        <Box position="relative">
-          <Box
-            position="absolute"
-            left={5}
-            top={0}
-            bottom={0}
-            width={0.5}
-            className="bg-line/40 hidden sm:block"
-          />
-
-          <Stack gap={6}>
-            {timeline.map((item) => (
-              <TimelineRow
-                key={item.id}
-                item={item}
-                formattedDate={item.formattedDate!}
-                onSync={handleSingleSync}
-              />
-            ))}
-          </Stack>
-        </Box>
+        </Stack>
       </Stack>
     </Box>
   );
