@@ -76,7 +76,7 @@ export default function GearPost() {
       <GearPostDetail
         post={resource}
         onBack={() => navigate('/gear')}
-        backLabel="Back to Toolbox"
+        backLabel="Back to Gear"
       />
     </>
   );
