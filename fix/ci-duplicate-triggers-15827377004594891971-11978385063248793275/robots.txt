@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/fix/ci-duplicate-triggers-15827377004594891971-11978385063248793275/sitemap.xml
