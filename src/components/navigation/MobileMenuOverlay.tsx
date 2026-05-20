@@ -1,4 +1,3 @@
-
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Box, Text } from '@/layouts/Primitives';
@@ -36,11 +35,9 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
           lastElement.focus();
           e.preventDefault();
         }
-      } else {
-        if (document.activeElement === lastElement) {
-          firstElement.focus();
-          e.preventDefault();
-        }
+      } else if (document.activeElement === lastElement) {
+        firstElement.focus();
+        e.preventDefault();
       }
     };
 
@@ -92,20 +89,11 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             <Box shrink={false}>
               <Search className={`w-6 h-6 ${stroke.thick}`} />
             </Box>
-            <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
-              Search
-            </Text>
+            <Text variant="sans" size="xl" weight="font-bold" className="leading-none">Search</Text>
           </Box>
         </Box>
         {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-          <NavItem
-            key={item.path}
-            to={item.path}
-            label={item.label}
-            icon={item.icon}
-            onClick={onClose}
-            isMobile
-          />
+          <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} onClick={onClose} isMobile />
         ))}
       </Box>
     </Box>

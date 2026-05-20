@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
@@ -16,6 +17,8 @@ export default function GearPost() {
     enabled: !!slug,
     initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
+
+  const handleBack = useSmartBackNavigation('/gear');
 
   const structuredData = useMemo(() => {
     if (!resource) return null;
@@ -75,8 +78,8 @@ export default function GearPost() {
       />
       <GearPostDetail
         post={resource}
-        onBack={() => navigate('/gear')}
-        backLabel="Back to Toolbox"
+        onBack={handleBack}
+        backLabel="Back"
       />
     </>
   );

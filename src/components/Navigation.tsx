@@ -58,7 +58,6 @@ export default function Navigation() {
         onClose={() => setIsOpen(false)}
       />
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <MobileMenuOverlay

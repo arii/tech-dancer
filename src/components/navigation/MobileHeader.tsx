@@ -1,4 +1,3 @@
-
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -27,7 +26,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
       </Box>
 
       <Box
-        as={motion.create("button")}
+        as={motion.create('button')}
         onClick={onToggle}
         padding={4}
         display="flex"
@@ -35,7 +34,7 @@ export function MobileHeader({ isOpen, onToggle, onClose }: MobileHeaderProps) {
         justify="center"
         radius="full"
         className="min-h-12 min-w-12 hover:bg-bg/50 active:bg-accent/10 transition-colors"
-        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
         whileTap={{ scale: 0.95 }}
       >

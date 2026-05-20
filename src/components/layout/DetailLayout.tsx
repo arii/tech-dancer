@@ -42,6 +42,8 @@ export function DetailLayout({
         {/* Navigation */}
         <Stack
           as="button"
+          type="button"
+          aria-label={backLabel}
           direction="row"
           onClick={onBack}
           align="center"

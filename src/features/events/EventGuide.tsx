@@ -12,6 +12,7 @@ import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
+import { useSmartBackNavigation } from '@/hooks/useSmartBackNavigation';
 
 export default function EventGuide() {
   const {
@@ -23,8 +24,9 @@ export default function EventGuide() {
     themeAccessories,
     gearSections,
     relatedEvents,
-    navigate,
   } = useEventDetail();
+
+  const handleBack = useSmartBackNavigation('/events');
 
   if (isLoading) {
     return (
@@ -39,15 +41,15 @@ export default function EventGuide() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">
-            {isError ? "Error Loading Event" : "Event Not Found"}
+            {isError ? 'Error Loading Event' : 'Event Not Found'}
           </Text>
           {isError && error && (
             <Text variant="body" color="dim" size="sm">
-              {error instanceof Error ? error.message : "An unexpected error occurred."}
+              {error instanceof Error ? error.message : 'An unexpected error occurred.'}
             </Text>
           )}
-          <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Events</Text>
+          <Box as="button" type="button" aria-label="Back" onClick={handleBack} className="hover:text-accent transition-colors">
+            <Text variant="mono" size="xs">Back</Text>
           </Box>
         </Stack>
       </Box>
