@@ -1,6 +1,19 @@
-{
-  "assertions": {
-    "largest-contentful-paint": ["warn", {"maxNumericValue": 2500}],
-    "cumulative-layout-shift": ["error", {"maxNumericValue": 0.1}]
+[
+  {
+    "name": "maxNumericValue",
+    "expected": 200,
+    "actual": 280.00000000000045,
+    "values": [
+      685.1932250000013,
+      280.00000000000045,
+      285
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "total-blocking-time",
+    "level": "error",
+    "url": "http://localhost:4173/",
+    "auditTitle": "Total Blocking Time",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/"
   }
-}
+]
