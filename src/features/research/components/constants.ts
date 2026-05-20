@@ -4,8 +4,8 @@
 
 export const CHART_TOOLTIP_STYLE = {
   backgroundColor: 'var(--raw-color-surface)',
-  border: '1px solid rgba(255,255,255,0.1)', /* impeccable-ignore */
-  fontSize: '11px', /* impeccable-ignore */
-  fontFamily: 'var(--font-mono)',
-  padding: '8px' /* impeccable-ignore */
+  border: 'var(--raw-border-width-px) solid var(--raw-color-line-muted)',
+  fontSize: 'var(--raw-chart-tooltip-font-size)',
+  fontFamily: 'var(--raw-font-mono)',
+  padding: 'var(--raw-chart-tooltip-padding)'
 };

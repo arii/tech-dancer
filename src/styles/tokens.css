@@ -5,6 +5,8 @@
   --raw-color-surface: #0f172a;
   --raw-color-surface-alt: #1e293b;
   --raw-color-line: #334155;
+  --raw-color-line-muted: rgba(255, 255, 255, 0.1);
+  --raw-border-width-px: 1px;
   --raw-color-accent: #22d3ee; /* Cyan 400 for WCAG AA contrast on dark surfaces */
   --raw-color-accent-purple: #8b5cf6;
   --raw-color-accent-magenta: #d946ef;
@@ -82,6 +84,10 @@
   /* Brand Logo */
   --brand-logo-size-text: 52px;
   --brand-logo-tracking: -1.5px;
+
+  /* Chart Tooltips */
+  --raw-chart-tooltip-font-size: 11px;
+  --raw-chart-tooltip-padding: 8px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {
