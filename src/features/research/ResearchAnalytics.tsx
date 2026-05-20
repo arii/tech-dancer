@@ -47,7 +47,7 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
+                    <Box width={10} height={10} bg="surface" border radius="md" display="flex" align="center" justify="center">
                       <Icon icon={tool.id === 'wcs-scraper' ? Activity : Search} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="bold" uppercase tracking="widest" color="accent">
@@ -108,7 +108,7 @@ export default function ResearchAnalytics() {
               ))}
             </Grid>
           ) : (
-            <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
+            <Box padding={6} border radius="lg" position="relative" overflow="hidden" bg="surface" textAlign="center">
               <Stack align="center" justify="center" gap={2}>
                 <Box>
                   <Icon icon={Database} size="lg" color="muted" />

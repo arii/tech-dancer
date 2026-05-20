@@ -69,7 +69,8 @@ export interface BaseProps {
   borderStyle?: "solid" | "dashed" | "dotted" | "double" | "none"
   truncate?: ResponsiveProp<boolean>
   clamp?: ResponsiveProp<number | boolean>
-  bg?: ResponsiveProp<"error" | "accent" | "accent-purple" | "surface" | "bg" | "surface-alt" | "card" | string>
+  bg?: ResponsiveProp<"error" | "accent" | "accent-purple" | "surface" | "bg" | "surface-alt" | "card" | "success" | "warning" | string>
+  whiteSpace?: ResponsiveProp<"normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap">
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -90,7 +91,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
-    top, right, bottom, left, bgGradient, borderStyle, truncate, clamp, bg,
+    top, right, bottom, left, bgGradient, borderStyle, truncate, clamp, bg, whiteSpace,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -240,7 +241,12 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           borderStyle && `border-${borderStyle as string}`,
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
-          getResponsiveClasses(bg, "bg-"),
+          getResponsiveClasses(bg, "bg-", (v) => {
+            if (v === "success") return "accent/10";
+            if (v === "warning") return "accent-purple/10";
+            return v as string;
+          }),
+          getResponsiveClasses(whiteSpace, "whitespace-"),
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.

@@ -197,7 +197,7 @@ export default function UXAuditor() {
                   justify="center"
                   padding={2}
                   radius="md"
-                  className="hover:bg-surface-alt text-dim hover:text-error transition-colors"
+                  className="hover:bg-surface-alt text-text-dim hover:text-error transition-colors"
                   title="Clear API Key"
                 >
                   <Icon icon={Trash2} size="sm" />
@@ -262,9 +262,12 @@ export default function UXAuditor() {
                   width={9}
                   height={9}
                   radius="full"
-                  bg={report.status === 'completed' ? 'accent' : 'accent-purple'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+                  bg={report.status === 'completed' ? 'success' : 'warning'}
+                  display="flex"
+                  align="center"
+                  justify="center"
                   shrink={0}
+                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
@@ -364,7 +367,7 @@ export default function UXAuditor() {
                               alt={`${vp.name} snapshot`}
                               loading="lazy"
                               data-testid="ux-analysis-snapshot"
-                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
+                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain max-h-96"
                               onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
                             />
                           ) : (
@@ -382,13 +385,13 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box bg="surface-alt" padding={5} className="border border-line rounded-lg">
+                              <Box bg="surface-alt" padding={5} borderStyle="solid" border={true} radius="lg">
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
                                   </Text>
                                 </Box>
-                                <Text variant="sans" size="sm" weight="medium" className="leading-relaxed break-words block">
+                                <Text variant="sans" size="sm" weight="medium" display="block">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -414,7 +417,7 @@ export default function UXAuditor() {
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                                 <Text variant="sans" size="xs" weight="black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
-                                          <Text variant="sans" size="xs" weight="bold" className="break-words whitespace-pre-wrap" clamp={4}>
+                                          <Text variant="sans" size="xs" weight="bold" display="block" whiteSpace="pre-wrap" clamp={4}>
                                             {imp.suggestion}
                                           </Text>
                                           {imp.element === "Manual Audit Required" && (
