@@ -10,16 +10,18 @@ import {
   Box,
   Stack,
   Text,
-  Grid,
-  Button
+  Grid
 } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Zap, ShieldCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { cn } from '@/lib/utils';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
+import { FilterButton } from '@/components/ui/FilterButton';
+import { ActionButton } from '@/components/ui/ActionButton';
 
 function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (
@@ -137,9 +139,10 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
           <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Console</Text>
         </Box>
         <Stack gap={3}>
-          <Button
+          <ActionButton
             variant="secondary"
             width="full"
+            padding={3}
             onClick={handleExportCSV}
           >
             <Box display="flex" align="center" gap={3} width="full" textAlign="left">
@@ -149,10 +152,11 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
                 <Text variant="body" size="micro" color="dim">Raw machine-readable data</Text>
               </Stack>
             </Box>
-          </Button>
-          <Button
+          </ActionButton>
+          <ActionButton
             variant="secondary"
             width="full"
+            padding={3}
             onClick={handleExportPDF}
           >
             <Box display="flex" align="center" gap={3} width="full" textAlign="left">
@@ -162,7 +166,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
                 <Text variant="body" size="micro" color="dim">Formatted analytical brief</Text>
               </Stack>
             </Box>
-          </Button>
+          </ActionButton>
         </Stack>
       </Stack>
     </Box>
@@ -238,9 +242,9 @@ export function WCSScraperTool() {
             <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
           </Stack>
           <Box paddingTop={4}>
-            <Button variant="secondary" onClick={() => window.location.reload()}>
+            <ActionButton variant="secondary" paddingX={6} paddingY={3} onClick={() => window.location.reload()}>
               Retry Connection
-            </Button>
+            </ActionButton>
           </Box>
         </Stack>
       </Box>
@@ -354,15 +358,16 @@ export function WCSScraperTool() {
                 <Box display="flex" gap={2}>
                   {(['all', 'promoted', 'not-promoted'] as const).map((filter) => (
                     <Box key={filter} flex={1}>
-                      <Button
-                        variant={filterPromoted === filter ? 'primary' : 'secondary'}
+                      <FilterButton
+                        variant="compact"
+                        label={filter.replace('-', ' ')}
                         onClick={() => handleFilterChange(filter)}
-                        width="full"
-                      >
-                        <Text uppercase size="xs" tracking="tighter">
-                          {filter.replace('-', ' ')}
-                        </Text>
-                      </Button>
+                        isActive={filterPromoted === filter}
+                        className={cn(
+                          "w-full justify-center",
+                          filterPromoted === filter ? "bg-accent text-bg border-accent" : "bg-surface-alt text-text-dim border-line/50"
+                        )}
+                      />
                     </Box>
                   ))}
                 </Box>
