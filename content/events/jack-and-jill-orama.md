@@ -102,7 +102,12 @@ Browse our featured collection or use the [Printful referral link](https://www.p
 | **War Eagle Oversized Shirt**<br>_High-neck t-shirt_ | ![War Eagle High Neck](https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0ba0a711254__360) | From $22.00 | [Buy Now](https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt) |
 | **Lead Follow or Switch**<br>_LOVE shirt in Neon_ | ![Lead Follow or Switch Neon](https://cdn.printful.me/t/quick-stores/products/w168/87343-679-6a0b93c3dcf19__360) | From $24.00 | [Buy Now](https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon) |
 | **Men's Bear Tank**<br>_NorCal BestCal Edition_ | ![Mens Bear Tank](https://cdn.printful.me/t/quick-stores/products/w168/18182963-537-6a0b755a9a348__360) | From $18.50 | [Buy Now](https://boomtick.printful.me/product/mens-bear-tank-nor-cal-best-cal) |
-| **NorCal BestCal Cropped Top** | ![NorCal BestCal Cropped Top](https://cdn.printful.me/t/quick-stores/products/w168/18182963-636-6a0b71ea8fae2__360) | _Check Site_ | [Buy Now](https://boomtick.printful.me/) |
+| **NorCal BestCal Cropped Top** | ![NorCal BestCal Cropped Top](https://cdn.printful.me/t/quick-stores/products/w168/18182963-636-6a0b71ea8fae2__360) | From $20.50 | [Buy Now](https://boomtick.printful.me/product/norcal-best-cal-cropped-top) |
+| **Golden Gate Crop Hoodie**<br>_NorCal BestCal_ | ![Golden Gate Crop Hoodie](https://cdn.printful.me/t/quick-stores/products/w168/18182963-317-6a0b6eab9f0f4__360) | From $34.00 | [Buy Now](https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie) |
+| **Golden Gate Rainbow Shirt**<br>_NorCal BestCal_ | ![Golden Gate Rainbow Shirt](https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360) | From $23.00 | [Buy Now](https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt) |
+| **Pride California Bear Apparel**<br>_NorCal BestCal_ | ![Pride California Bear Apparel](https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360) | From $15.50 | [Buy Now](https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel) |
+| **LOVE Lead Follow or Switch**<br>_Unisex shirt_ | ![LOVE Lead Follow or Switch](https://cdn.printful.me/t/quick-stores/products/w168/87343-71-6a0b962244279__360) | From $18.64 | [Buy Now](https://boomtick.printful.me/product/unisex-t-shirt) |
+| **NorCal BestCal Tee** | ![NorCal BestCal Tee](https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a07b116ea5ce__360) | From $12.00 | [Buy Now](https://boomtick.printful.me/product/norcal-bestcal) |
 
 > Prices and product availability are captured from your provided grid snapshot and can change over time at checkout.
 
