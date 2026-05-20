@@ -48,7 +48,7 @@ export default function Navigation() {
       <MobileBottomNav />
 
       {/* Mobile Header */}
-      <MobileHeader />
+      <MobileHeader onSearchToggle={handleSearchClick} />
 
       {/* Desktop Sidebar */}
       <Box
