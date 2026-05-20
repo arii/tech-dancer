@@ -1,6 +1,8 @@
 import { Resource } from '@/lib/content';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { VerdictCallout } from '@/components/layout/DetailElements';
+import { ArticleActions } from '@/components/layout/ArticleActions';
+import { Stack } from '@/layouts/Primitives';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
 import { ResourceScoreGrid } from './ResourceScoreGrid';
 
@@ -12,14 +14,17 @@ interface GearPostDetailProps {
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
   const headerExtras = (
-    <ResourceScoreGrid
-      rating={post.rating || 0}
-      durability={post.durability}
-      value={post.value}
-      priceCategory={post.priceCategory}
-      updatedDate={post.updatedDate}
-      date={post.date}
-    />
+    <Stack gap={6}>
+      <ResourceScoreGrid
+        rating={post.rating || 0}
+        durability={post.durability}
+        value={post.value}
+        priceCategory={post.priceCategory}
+        updatedDate={post.updatedDate}
+        date={post.date}
+      />
+      <ArticleActions title={post.title} description={post.excerpt} />
+    </Stack>
   );
 
   return (

@@ -1,5 +1,5 @@
 import { Share2, Link as LinkIcon, Check } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Stack, Text } from '@/layouts/Primitives';
 
 interface ArticleActionsProps {
@@ -9,8 +9,7 @@ interface ArticleActionsProps {
 
 export function ArticleActions({ title, description }: ArticleActionsProps) {
   const [copied, setCopied] = useState(false);
-
-  const hasNativeShare = useMemo(() => typeof navigator !== 'undefined' && !!navigator.share, []);
+  const hasNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   const handleCopyLink = async () => {
     try {
