@@ -19,7 +19,8 @@ export function EventNavigation() {
           bottom={0}
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-gradient-to-l from-bg to-transparent pointer-events-none z-10"
+          bgGradient="bg-gradient-to-l from-bg to-transparent"
+          className="pointer-events-none z-10"
         />
 
         <Box
@@ -27,10 +28,10 @@ export function EventNavigation() {
           width="full"
           gap={{ base: 8, md: 10 }}
           overflowX="auto"
+          momentumScroll
           className="no-scrollbar scroll-smooth"
           paddingLeft={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
-          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {EVENT_TABS.map(tab => (
             <Box

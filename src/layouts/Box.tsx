@@ -65,6 +65,8 @@ export interface BaseProps {
   cursor?: "auto" | "default" | "pointer" | "wait" | "text" | "move" | "help" | "not-allowed" | "none" | string
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
+  bgGradient?: string
+  momentumScroll?: boolean
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -84,6 +86,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
+    bgGradient, momentumScroll,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left,
     // Motion props filtering
@@ -223,6 +226,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           getResponsiveClasses(textAlign, "text-"),
+          bgGradient,
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
           getResponsiveClasses(top, "", s("top")),
@@ -235,6 +239,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
+          ...(momentumScroll ? { WebkitOverflowScrolling: 'touch' } : {}),
           ...motionProps.style,
           ...props.style
         }}

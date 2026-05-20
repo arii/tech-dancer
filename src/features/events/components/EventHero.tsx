@@ -38,7 +38,7 @@ export function EventHero({
       width="full"
       minHeight={{ base: "30vh", md: "40vh" }}
       display="flex"
-      direction="column"
+      flexDirection="column"
       overflow="hidden"
       className="bg-bg"
     >
