@@ -12,7 +12,7 @@ import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
-import { SECTION_SPACING, EVENT_TABS } from './constants';
+import { SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
 
 export default function EventGuide() {
@@ -28,8 +28,18 @@ export default function EventGuide() {
     navigate,
   } = useEventDetail();
 
-  const tabIds = useMemo(() => EVENT_TABS.map(tab => tab.id), []);
-  const activeTab = useScrollSpy(tabIds) || 'theme';
+  const visibleTabs = useMemo(() => {
+    const tabs = [];
+    if (event?.theme) tabs.push('theme');
+    if (gearSections.length > 0) tabs.push('gear');
+    if (event?.startDate && event?.earlyBirdDate && event?.hotelCutoffDate) tabs.push('reminders');
+    if (event?.description) tabs.push('travel');
+    if (event?.content) tabs.push('notes');
+    if (relatedEvents.length > 0) tabs.push('related');
+    return tabs;
+  }, [event, gearSections, relatedEvents]);
+
+  const activeTab = useScrollSpy(visibleTabs) || visibleTabs[0] || 'theme';
 
   if (isLoading) {
     return (
@@ -77,6 +87,7 @@ export default function EventGuide() {
         image={event.heroImage}
         whyAttending={event.whyAttending}
         activeTab={activeTab}
+        visibleTabs={visibleTabs}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>

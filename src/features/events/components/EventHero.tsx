@@ -16,6 +16,7 @@ interface EventHeroProps {
   url?: string;
   whyAttending?: string;
   activeTab?: string;
+  visibleTabs?: string[];
   id?: string;
 }
 
@@ -28,6 +29,7 @@ export function EventHero({
   eyebrow = "Event Resource Guide",
   whyAttending,
   activeTab,
+  visibleTabs,
   id
 }: EventHeroProps) {
   const accentGradient = useMemo(() => ({
@@ -177,7 +179,7 @@ export function EventHero({
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation activeTab={activeTab} />
+        <EventNavigation activeTab={activeTab} visibleTabs={visibleTabs} />
       </Box>
     </Box>
   );

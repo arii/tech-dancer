@@ -19,7 +19,11 @@ export default function WSDCReminders() {
     initialData: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
   });
 
-  const [selectedEventId, setSelectedEventId] = useState<string>('custom');
+  const [selectedEventId, setSelectedEventId] = useState<string>(() => {
+    const verifiedEvents = getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate);
+    return verifiedEvents.length > 0 ? verifiedEvents[0].slug : 'custom';
+  });
+
   const [customEvent, setCustomEvent] = useState<EventAnchors>({
     title: '',
     startDate: '',
@@ -27,13 +31,6 @@ export default function WSDCReminders() {
     hotelCutoffDate: '',
     url: ''
   });
-
-  // Sync initial selection when events load
-  const [hasInitialized, setHasInitialized] = useState(false);
-  if (!hasInitialized && events.length > 0 && selectedEventId === 'custom' && !customEvent.title) {
-    setSelectedEventId(events[0].slug);
-    setHasInitialized(true);
-  }
 
   const activeEvent = useMemo(() => {
     if (selectedEventId === 'custom') return customEvent;

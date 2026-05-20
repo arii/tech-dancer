@@ -3,9 +3,14 @@ import { EVENT_TABS } from '../constants';
 
 interface EventNavigationProps {
   activeTab?: string;
+  visibleTabs?: string[];
 }
 
-export function EventNavigation({ activeTab }: EventNavigationProps) {
+export function EventNavigation({ activeTab, visibleTabs }: EventNavigationProps) {
+  const filteredTabs = visibleTabs
+    ? EVENT_TABS.filter(tab => visibleTabs.includes(tab.id))
+    : EVENT_TABS;
+
   return (
     <Box
       position="sticky"
@@ -34,7 +39,7 @@ export function EventNavigation({ activeTab }: EventNavigationProps) {
           paddingRight={{ base: 12, md: 0 }}
           className="no-scrollbar scroll-smooth [-webkit-overflow-scrolling:touch]"
         >
-          {EVENT_TABS.map(tab => (
+          {filteredTabs.map(tab => (
             <Box
               key={tab.id}
               as="a"
