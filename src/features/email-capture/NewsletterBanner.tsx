@@ -15,7 +15,8 @@ export function NewsletterBanner() {
       position="relative"
       surface="alt"
       border="y"
-      className="border-accent/40 shadow-glow"
+      shadow="glow"
+      className="border-accent/40"
       paddingX={{ base: 6, md: 12 }}
       paddingY={{ base: 12, lg: 16 }}
       radius="none"
@@ -28,7 +29,8 @@ export function NewsletterBanner() {
         left={0} 
         width="px"
         height="full" 
-        className="bg-accent shadow-glow"
+        shadow="glow"
+        className="bg-accent"
       />
 
       {/* Persistent Dismissal */}

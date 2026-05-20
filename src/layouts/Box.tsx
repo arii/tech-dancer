@@ -62,6 +62,7 @@ export interface BaseProps {
   bottom?: ResponsiveProp<keyof typeof spacing | number | string>
   left?: ResponsiveProp<keyof typeof spacing | number | string>
   span?: ResponsiveProp<number | string>
+  order?: ResponsiveProp<number | string>
   cursor?: "auto" | "default" | "pointer" | "wait" | "text" | "move" | "help" | "not-allowed" | "none" | string
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
@@ -222,6 +223,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           shrink === false && "shrink-0",
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,
           getResponsiveClasses(span, "", (v) => SPAN_MAP[v as keyof typeof SPAN_MAP] || ""),
+          getResponsiveClasses(order, "order-", (v) => getVal(v, "")),
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           getResponsiveClasses(textAlign, "text-"),

@@ -100,7 +100,7 @@ export function DetailLayout({
             <Box
               span={{ base: 1, lg: sidebar ? 2 : 1 }}
               width="full"
-              className="order-1 lg:order-2"
+              order={{ base: 1, lg: 2 }}
             >
               {children}
               <Box
@@ -115,7 +115,7 @@ export function DetailLayout({
 
             {/* Sidebar - second on mobile via order classes */}
             {sidebar && (
-              <Box className="order-2 lg:order-1">
+              <Box order={{ base: 2, lg: 1 }}>
                 <Stack gap={4} position="sticky" top={32}>
                    {sidebar}
                 </Stack>

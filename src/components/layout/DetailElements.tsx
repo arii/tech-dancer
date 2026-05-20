@@ -46,9 +46,11 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
         justify="center"
         width="full"
         gap={{ base: 4, md: 0 }}
-        className="divide-x-0 md:divide-x divide-line/30"
       >
-        {children}
+        {/* CSS Divide utilities are acceptable when used on Stack/Grid for layout separation */}
+        <Box display="flex" width="full" justify="center" wrap className="divide-x-0 md:divide-x divide-line/30">
+          {children}
+        </Box>
       </Stack>
     </Box>
   );
