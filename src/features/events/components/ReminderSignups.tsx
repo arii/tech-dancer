@@ -9,7 +9,6 @@ interface Deadline {
   label: string;
   date: string;
   type: "Discount" | "Deadline" | "Reminder";
-  color: string;
 }
 
 interface ReminderSignupsProps {
@@ -36,14 +35,12 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
       label: "Early-bird discount ends",
       date: event.earlyBirdDate,
       type: "Discount" as const,
-      color: "text-accent border-accent/30 bg-accent/10",
     },
     event.hotelCutoffDate && {
       id: "hotel",
       label: "Hotel deadline",
       date: event.hotelCutoffDate,
       type: "Deadline" as const,
-      color: "text-accent border-accent/30 bg-accent/10",
     },
   ].filter((d): d is Deadline => !!d);
 
@@ -108,9 +105,10 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                   paddingX={2}
                   paddingY={0.5}
                   radius="full"
-                  className={d.color}
+                  surface="accent"
+                  emphasis="low"
                 >
-                  <Text variant="mono" size="micro" weight="font-bold">
+                  <Text variant="mono" size="micro" weight="font-bold" color="accent">
                     {d.type.toUpperCase()}
                   </Text>
                 </Box>
@@ -149,7 +147,6 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                       cursor="pointer"
                       surface={isActive ? "accent" : "surface"}
                       emphasis={isActive ? "high" : "low"}
-                      className="transition-all hover:border-accent/40"
                     >
                       <Box
                         width={4}
@@ -160,7 +157,7 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                         align="center"
                         justify="center"
                         surface={isActive ? "accent" : "muted"}
-                        className={isActive ? "bg-accent border-accent" : "border-line"}
+                        emphasis={isActive ? "high" : "low"}
                       >
                         {isActive && (
                           <Check className="w-3 h-3 text-bg" />
@@ -181,7 +178,6 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                 radius="lg"
                 padding={4}
                 surface="accent"
-                className="border-accent/30 bg-accent/10 text-center"
               >
                 <Box display="flex" align="center" justify="center" gap={2}>
                   <Check className="w-5 h-5 text-accent" />
@@ -199,16 +195,20 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
               <Box
                 as="button"
                 onClick={() => setSigned(true)}
+                border
                 radius="lg"
                 padding={4}
                 cursor="pointer"
-                className="bg-accent text-bg hover:bg-accent/90 transition-colors font-bold text-sm tracking-widest uppercase"
+                surface="accent"
+                emphasis="high"
               >
-                Sign me up!
+                <Text size="sm" weight="font-bold" uppercase tracking="widest" align="center">
+                  Sign me up!
+                </Text>
               </Box>
             )}
 
-            <Text size="xs" color="dim" className="text-center">
+            <Text size="xs" color="dim" align="center">
               You can update preferences anytime.
             </Text>
           </Stack>

@@ -6,12 +6,14 @@ interface EventNavigationProps {
 }
 
 export function EventNavigation({ activeTab }: EventNavigationProps) {
+  const navContainerClassName = "bg-bg/80 backdrop-blur-md border-b border-line/10";
+
   return (
     <Box
       position="sticky"
       top={{ base: 16, lg: 0 }}
       zIndex={40}
-      className="bg-bg/80 backdrop-blur-md border-b border-line/10"
+      className={navContainerClassName}
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
         {/* Right fade indicator for mobile horizontal scroll */}
