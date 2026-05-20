@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
