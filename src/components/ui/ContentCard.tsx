@@ -30,6 +30,14 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   schedule?: unknown;
   description?: unknown;
   link?: unknown;
+  // Missing metadata from CI logs
+  heroImage?: unknown;
+  startDate?: unknown;
+  earlyBirdDate?: unknown;
+  registrationDeadline?: unknown;
+  hotelCutoffDate?: unknown;
+  packingReminderDate?: unknown;
+  whyAttending?: unknown;
 }
 
 export function ContentCard({ 
@@ -60,6 +68,13 @@ export function ContentCard({
   schedule: _schedule,
   description: _description,
   link: _link,
+  heroImage: _heroImage,
+  startDate: _startDate,
+  earlyBirdDate: _earlyBirdDate,
+  registrationDeadline: _registrationDeadline,
+  hotelCutoffDate: _hotelCutoffDate,
+  packingReminderDate: _packingReminderDate,
+  whyAttending: _whyAttending,
   ...motionProps 
 }: ContentCardProps) {
 

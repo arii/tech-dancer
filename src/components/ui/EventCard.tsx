@@ -7,12 +7,51 @@ interface EventCardProps {
   slug: string;
   location: string;
   schedule: string;
+  [key: string]: unknown;
 }
 
-export function EventCard({ title, slug, location, schedule }: EventCardProps) {
+export function EventCard({
+  title,
+  slug,
+  location,
+  schedule,
+  // Metadata props to be ignored
+  type: _type,
+  date: _date,
+  author: _author,
+  category: _category,
+  excerpt: _excerpt,
+  content: _content,
+  description: _description,
+  link: _link,
+  url: _url,
+  heroImage: _heroImage,
+  whyAttending: _whyAttending,
+  startDate: _startDate,
+  earlyBirdDate: _earlyBirdDate,
+  registrationDeadline: _registrationDeadline,
+  hotelCutoffDate: _hotelCutoffDate,
+  packingReminderDate: _packingReminderDate,
+  theme: _theme,
+  gear: _gear,
+  themeName: _themeName,
+  themeLabel: _themeLabel,
+  themeDescription: _themeDescription,
+  themeColors: _themeColors,
+  themeOutfitIds: _themeOutfitIds,
+  themeAccessoryIds: _themeAccessoryIds,
+  gearOutfitIds: _gearOutfitIds,
+  gearAccessoryIds: _gearAccessoryIds,
+  gearShoeIds: _gearShoeIds,
+  gearEssentialIds: _gearEssentialIds,
+  gearTravelIds: _gearTravelIds,
+  relatedEvents: _relatedEvents,
+  ...rest
+}: EventCardProps) {
   return (
     <Stack
       as="article"
+      {...rest}
       padding={8}
       radius="md"
       border

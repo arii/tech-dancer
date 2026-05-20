@@ -33,6 +33,14 @@ interface GearCardProps extends BaseProps {
   schedule?: unknown;
   description?: unknown;
   link?: unknown;
+  // Missing metadata from CI logs
+  heroImage?: unknown;
+  startDate?: unknown;
+  earlyBirdDate?: unknown;
+  registrationDeadline?: unknown;
+  hotelCutoffDate?: unknown;
+  packingReminderDate?: unknown;
+  whyAttending?: unknown;
 }
 
 export function GearCard({
@@ -63,6 +71,13 @@ export function GearCard({
   schedule: _schedule,
   description: _description,
   link: _link,
+  heroImage: _heroImage,
+  startDate: _startDate,
+  earlyBirdDate: _earlyBirdDate,
+  registrationDeadline: _registrationDeadline,
+  hotelCutoffDate: _hotelCutoffDate,
+  packingReminderDate: _packingReminderDate,
+  whyAttending: _whyAttending,
   ...rest
 }: GearCardProps) {
   return (
