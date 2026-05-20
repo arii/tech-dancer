@@ -1,6 +1,8 @@
 import { FileText } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { Icon } from '@/components/ui/Icon';
 
 interface EventNotesProps {
   id?: string;
@@ -13,17 +15,13 @@ export function EventNotes({ id, content }: EventNotesProps) {
   return (
     <Box id={id} as="section" data-testid="notes">
       <Stack gap={8}>
-        <Stack gap={2}>
-          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Expert Intelligence
-          </Text>
-          <Box display="flex" align="center" gap={3}>
-            <FileText className="w-8 h-8 text-white" />
-            <Text variant="headline" size="3xl" weight="font-black">
-              Pro Tips & Notes
-            </Text>
-          </Box>
-        </Stack>
+        <Box display="flex" align="center" gap={4}>
+          <Icon icon={FileText} size="xl" color="accent" />
+          <SectionHeader
+            eyebrow="EXPERT INTELLIGENCE"
+            title="Pro Tips & Notes"
+          />
+        </Box>
 
         <Box className="prose prose-invert max-w-none">
           <MarkdownRenderer content={content} />

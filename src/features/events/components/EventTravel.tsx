@@ -1,5 +1,7 @@
 import { Plane } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { Icon } from '@/components/ui/Icon';
 
 interface EventTravelProps {
   id?: string;
@@ -12,20 +14,16 @@ export function EventTravel({ id, notes }: EventTravelProps) {
   return (
     <Box id={id} as="section" data-testid="travel">
       <Stack gap={8}>
-        <Stack gap={2}>
-          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Logistics
-          </Text>
-          <Box display="flex" align="center" gap={3}>
-            <Plane className="w-8 h-8 text-white" />
-            <Text variant="headline" size="3xl" weight="font-black">
-              Travel & Venue Notes
-            </Text>
-          </Box>
-        </Stack>
+        <Box display="flex" align="center" gap={4}>
+          <Icon icon={Plane} size="xl" color="accent" />
+          <SectionHeader
+            eyebrow="LOGISTICS"
+            title="Travel & Venue Notes"
+          />
+        </Box>
 
-        <Box border radius="lg" padding={8} surface="surface">
-          <Text variant="body" size="lg" className="leading-relaxed whitespace-pre-wrap">
+        <Box border radius="xl" padding={8} surface="surface">
+          <Text variant="body" size="lg" leading="relaxed" className="whitespace-pre-wrap">
             {notes}
           </Text>
         </Box>
