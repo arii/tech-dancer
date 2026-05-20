@@ -115,11 +115,6 @@ const PROFILE_DATA: ProfileData = {
     { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
     { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
     { label: "PORTFOLIO", value: SOCIAL_LINKS.PORTFOLIO }
-  ],
-  links: [
-    { label: 'Instagram', url: SOCIAL_LINKS.INSTAGRAM },
-    { label: 'LinkedIn', url: SOCIAL_LINKS.LINKEDIN },
-    { label: 'GitHub', url: SOCIAL_LINKS.GITHUB }
   ]
 };
 export function useProfile(): { bio: ProfileData } {
