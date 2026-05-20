@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
@@ -55,9 +54,11 @@ export function GlobalErrorBoundary() {
           radius="lg"
           surface="sunken"
           width="full"
-          className="text-left border border-line/50 overflow-auto max-h-[300px]"
+          overflow="auto"
+          maxHeight={80}
+          className="text-left border border-line/50"
         >
-          <Text weight="bold" color="error" className="mb-2 block">
+          <Text weight="bold" color="error" marginBottom={2} display="block">
             {errorMessage}
           </Text>
           {!isProduction && errorDetail && (

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
@@ -102,7 +101,7 @@ export function HeroSection() {
           className="opacity-0 hero-tagline-anim"
         >
           <Box
-            width="2px"
+            width={0.5}
             className="bg-white/20 shrink-0"
             aria-hidden="true"
           />

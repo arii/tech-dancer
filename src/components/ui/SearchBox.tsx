@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { ChangeEvent } from 'react';
 import { Search } from 'lucide-react';
 import { Box, Text } from '@/layouts/Primitives';
@@ -27,7 +26,7 @@ export function SearchBox({
       paddingY={1}
       maxWidth={maxWidth}
       flex={1}
-      minHeight="44px"
+      minHeight={11}
       radius="lg"
       className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
     >
@@ -43,7 +42,8 @@ export function SearchBox({
         placeholder={placeholder}
         variant="mono"
         size="sm"
-        className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
+        paddingLeft={10}
+        className="bg-transparent border-none outline-none w-full focus:ring-0"
         value={value}
         onChange={onChange}
       />
