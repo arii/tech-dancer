@@ -39,9 +39,9 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
   if (early) {
     timeline.push({
       id: 'early-bird',
-      date: addDays(early, -2), // Use a 2-day buffer for Early Bird as per the guide
+      date: addDays(early, -2),
       label: "Early Bird Deadline",
-      description: `Register for ${event.title} now. This is the final window to secure the discount while minimizing risk.`,
+      description: `Register for ${event.title} now. Secures maximum discount.`,
       icon: Trophy,
       badge: 'Money',
     });
@@ -52,7 +52,7 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       id: 'registration-deadline',
       date: registration,
       label: "Registration Deadline",
-      description: `Final call for online registration for ${event.title}. Avoid on-site registration lines and stress.`,
+      description: `Final call for online registration for ${event.title}.`,
       icon: CheckCircle2,
       badge: 'Required',
     });
@@ -63,7 +63,7 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       id: 'hotel-block',
       date: hotel,
       label: "Hotel Block Cutoff",
-      description: "Book your room within the discounted block. Hotel blocks often sell out before this date.",
+      description: "Book within the discounted block before it sells out.",
       icon: Hotel,
       badge: 'Logistics',
     });
@@ -74,7 +74,7 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       id: 'packing-reminder',
       date: packing,
       label: "Packing Reminder",
-      description: "Finalize your outfits, check the theme requirements, and make sure your dance shoes are in the bag.",
+      description: "Finalize outfits and check theme requirements.",
       icon: Briefcase,
       badge: 'Prep',
     });
