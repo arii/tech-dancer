@@ -2,6 +2,20 @@ import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 
+const GEAR_ROUTE_SEGMENT = '/gear';
+
+function getCardCtaText(basePath: string): string {
+  return basePath.includes(GEAR_ROUTE_SEGMENT) ? 'Read review' : 'Read article';
+}
+
+function getTagColorClass(category: string): string {
+  const normalizedCategory = category.toLowerCase();
+  if (normalizedCategory.includes('travel')) return 'text-accent-purple';
+  if (normalizedCategory.includes('tech')) return 'text-accent';
+  if (normalizedCategory.includes('data') || normalizedCategory.includes('research')) return 'text-accent-magenta';
+  return 'text-accent';
+}
+
 interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
@@ -62,16 +76,8 @@ export function ContentCard({
   link: _link,
   ...motionProps 
 }: ContentCardProps) {
-  const isGearCard = basePath.includes('/gear');
-  const ctaText = isGearCard ? 'Read review' : 'Read article';
-
-  const getTagColorClass = (cat: string) => {
-    const c = cat.toLowerCase();
-    if (c.includes('travel')) return 'text-accent-purple';
-    if (c.includes('tech')) return 'text-accent';
-    if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
-    return 'text-accent';
-  };
+  const ctaText = getCardCtaText(basePath);
+  const cardMeta = [date, readingTime].filter(Boolean).join(' • ') || category;
 
   return (
     <Stack
@@ -129,7 +135,7 @@ export function ContentCard({
 
           <Box display="flex" align="center" justify="between" marginTop="auto">
             <Text variant="mono" size="xs" color="dim" data-testid="content-date">
-              {[date, readingTime].filter(Boolean).join(' • ') || category}
+              {cardMeta}
             </Text>
             <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
               {ctaText}

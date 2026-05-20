@@ -11,6 +11,10 @@ import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { Search } from 'lucide-react';
 
+function getItemCountLabel(count: number): string {
+  return `${count} ${count === 1 ? 'item' : 'items'}`;
+}
+
 interface FolioGridProps {
   items: ContentItem[];
   categoryTitle: string;
@@ -49,7 +53,7 @@ export default function FolioGrid({
   });
 
   const searchPlaceholder = basePath.includes('gear') ? 'Search gear…' : 'Search posts…';
-  const resultLabel = `${filteredItems.length} ${filteredItems.length === 1 ? 'item' : 'items'}`;
+  const resultLabel = getItemCountLabel(filteredItems.length);
   const filterSummary = search ? `Filtered by “${search}”` : 'All items';
 
   return (
