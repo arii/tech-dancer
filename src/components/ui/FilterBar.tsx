@@ -1,6 +1,7 @@
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
 import { cn, formatCategory } from '@/lib/utils';
+import { FilterButton } from './FilterButton';
 
 interface FilterBarProps {
   categories: string[];
@@ -21,20 +22,18 @@ export function FilterBar({ categories }: FilterBarProps) {
     >
       <Stack direction="row" gap={4} className="min-w-max" paddingX={1}>
         {categories.map((cat) => (
-          <Box
+          <FilterButton
             key={cat}
-            as="button"
+            label={formatCategory(cat)}
             onClick={() => setActiveCategory(cat)}
-            aria-current={activeCategory === cat ? 'page' : undefined}
+            isActive={activeCategory === cat}
             className={cn(
-              "transition-all duration-300 text-sm font-bold uppercase tracking-wide cursor-pointer whitespace-nowrap min-h-11 px-3 rounded-full",
+              "transition-all duration-300 text-sm whitespace-nowrap px-3",
               activeCategory === cat
-                ? "text-accent border border-accent/60 bg-accent/10"
-                : "text-text-dim border border-transparent hover:text-text-main hover:border-line"
+                ? "text-accent border-accent/60 bg-accent/10"
+                : "text-text-dim border-transparent hover:text-text-main hover:border-line"
             )}
-          >
-            {formatCategory(cat)}
-          </Box>
+          />
         ))}
       </Stack>
     </Box>

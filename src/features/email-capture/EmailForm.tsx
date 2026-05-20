@@ -1,6 +1,7 @@
-import { Stack, Box, Text, Button } from '@/layouts/Primitives';
+import { Stack, Box, Text } from '@/layouts/Primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Loader2, Check } from 'lucide-react';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { inputs } from '@/styles/design-tokens';
 import { useEmailForm } from './useEmailForm';
 
@@ -32,16 +33,15 @@ export function EmailForm() {
           minHeight={11}
           width="full"
         />
-        <Button
+        <ActionButton
           type="submit"
-          variant="primary"
           disabled={status === 'loading' || status === 'success'}
           minHeight={11}
           width="auto"
           minWidth={{ base: 36, sm: 44 }}
           paddingX={6}
-          surface="accent"
-          className="hover:bg-accent/90 text-bg border-l border-accent/20"
+          radius="none"
+          className="border-l border-accent/20"
         >
           <AnimatePresence mode="wait">
             <Stack
@@ -76,7 +76,7 @@ export function EmailForm() {
               )}
             </Stack>
           </AnimatePresence>
-        </Button>
+        </ActionButton>
       </Stack>
     </Box>
   );

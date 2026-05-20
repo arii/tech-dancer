@@ -1,5 +1,6 @@
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
+import { ActionButton } from '@/components/ui/ActionButton';
 
 export function Footer() {
   const legalLinks = [
@@ -34,24 +35,25 @@ export function Footer() {
         </Stack>
         <Stack direction="row" gap={2} align="center">
           {legalLinks.map((link) => (
-            <Button
+            <ActionButton
               key={link.label}
               as="a"
               href={link.href}
               variant="ghost"
-              size="sm"
-              className="text-text-dim hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20 transition-all active:scale-95"
+              paddingX={3}
+              paddingY={1.5}
+              className="active:scale-95"
             >
               <Text
                 variant="mono"
                 size="xs"
                 uppercase
-                weight="font-semibold"
+                weight="font-bold"
                 className="tracking-widest"
               >
                 {link.label}
               </Text>
-            </Button>
+            </ActionButton>
           ))}
         </Stack>
       </Stack>
