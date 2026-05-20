@@ -71,6 +71,9 @@ export interface BaseProps {
   clamp?: ResponsiveProp<number | boolean>
   bg?: ResponsiveProp<"error" | "accent" | "accent-purple" | "surface" | "bg" | "surface-alt" | "card" | "success" | "warning" | string>
   whiteSpace?: ResponsiveProp<"normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap">
+  animation?: "pulse" | "spin" | "bounce" | "ping" | "none" | string
+  divide?: boolean | "x" | "y"
+  divideColor?: string
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -92,8 +95,9 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient, borderStyle, truncate, clamp, bg, whiteSpace,
+    animation, divide, divideColor,
     // Motion props filtering
-    initial, animate, exit, transition, variants: variantsProp,
+    initial, animate: animateProp, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
     layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
     onUpdate, custom,
@@ -111,7 +115,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const motionProps: Record<string, unknown> = {}
     if (isMotion) {
       const allMotionProps = {
-        initial, animate, exit, transition, variants: variantsProp,
+        initial, animate: _animateProp, exit, transition, variants: variantsProp,
         whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
         layout: layoutProp, layoutId, onAnimationStart, onAnimationComplete,
         onUpdate, custom
@@ -247,6 +251,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
             return v as string;
           }),
           getResponsiveClasses(whiteSpace, "whitespace-"),
+          animation && (animation === "none" ? "animate-none" : `animate-${animation}`),
+          divide === true && "divide-y divide-line",
+          divide === "x" && "divide-x divide-line",
+          divide === "y" && "divide-y divide-line",
+          divideColor && `divide-${divideColor}`,
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.

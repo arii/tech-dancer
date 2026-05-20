@@ -6,12 +6,12 @@ import {
   ChevronRight, Github, Trash2
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
-import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
+import { cardVariants, listRowVariants } from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -59,10 +59,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   };
 
   return (
-    <Box
-      as="button"
+    <Button
       onClick={handleCopy}
       disabled={isCopying}
+      useActionVariants
+      actionVariant="subtle"
       marginTop={2}
       display="flex"
       align="center"
@@ -70,17 +71,16 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       paddingX={3}
       paddingY={1}
       radius="md"
-      className={actionButtonVariants({ variant: "subtle" })}
     >
       {isCopying ? (
-        <Icon icon={RefreshCw} size="xs" className="animate-spin" />
+        <Icon icon={RefreshCw} size="xs" animation="spin" />
       ) : copied ? (
         <Icon icon={CheckCircle} size="xs" color="accent" />
       ) : (
         <Icon icon={Copy} size="xs" />
       )}
       <Text size="xs" weight="bold">{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</Text>
-    </Box>
+    </Button>
   );
 }
 
@@ -148,21 +148,21 @@ export default function UXAuditor() {
               aria-label="URL to audit"
               truncate
             />
-            <Box
-              as="button"
+            <Button
               onClick={() => runUXAudit(url)}
               disabled={isAnalyzing}
+              useActionVariants
+              actionVariant="primary"
               display="flex"
               align="center"
               gap={2}
-              className={actionButtonVariants({ variant: "primary" })}
               paddingX={6}
               paddingY={2}
               radius="md"
             >
-              {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
+              {isAnalyzing ? <Icon icon={RefreshCw} size="sm" animation="spin" /> : <Icon icon={Camera} size="sm" />}
               <Text weight="bold">{isAnalyzing ? 'Auditing...' : 'Start Audit'}</Text>
-            </Box>
+            </Button>
           </Stack>
           <Stack gap={2}>
             <Stack
@@ -189,19 +189,17 @@ export default function UXAuditor() {
                 truncate
               />
               {customApiKey && (
-                <Box
-                  as="button"
+                <Button
                   onClick={() => setCustomApiKey("")}
                   display="flex"
                   align="center"
                   justify="center"
                   padding={2}
                   radius="md"
-                  className="hover:bg-surface-alt text-text-dim hover:text-error transition-colors"
                   title="Clear API Key"
                 >
                   <Icon icon={Trash2} size="sm" />
-                </Box>
+                </Button>
               )}
             </Stack>
             <Text variant="sans" size="xs" color="warning" paddingX={2} weight="medium">
@@ -241,7 +239,7 @@ export default function UXAuditor() {
           <Text variant="sans" size="xs" weight="bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
+          <Stack divide="y" className={cardVariants({ overflow: "hidden" })} minWidth={0}>
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -250,9 +248,8 @@ export default function UXAuditor() {
               />
             )}
             {reports.map((report) => (
-              <Stack
+              <Button
                 key={report.id}
-                as="button"
                 direction="row"
                 onClick={() => setActiveReport(report)}
                 width="full" align="center" gap={3} padding={4} 
@@ -267,7 +264,7 @@ export default function UXAuditor() {
                   align="center"
                   justify="center"
                   shrink={0}
-                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
+                  animation={report.status !== 'completed' ? 'pulse' : 'none'}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
@@ -280,7 +277,7 @@ export default function UXAuditor() {
                   </Text>
                 </Box>
                 <Icon icon={ChevronRight} size="sm" color="muted" />
-              </Stack>
+              </Button>
             ))}
           </Stack>
         </Stack>
@@ -304,13 +301,13 @@ export default function UXAuditor() {
                   </Text>
                 </Stack>
                 <Stack direction="row" gap={3} shrink={0}>
-                  <Box
-                    as="button"
+                  <Button
                     onClick={copyMarkdown}
+                    useActionVariants
+                    actionVariant="default"
                     display="flex"
                     align="center"
                     gap={2}
-                    className={actionButtonVariants({ variant: "default" })}
                     bg="surface"
                     color="dim"
                     paddingX={4}
@@ -319,22 +316,22 @@ export default function UXAuditor() {
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
-                  </Box>
-                  <Box
-                    as="button"
+                  </Button>
+                  <Button
                     onClick={exportToGithub}
                     disabled={activeReport.status !== 'completed' || isExportingToGithub}
+                    useActionVariants
+                    actionVariant="primary"
                     display="flex"
                     align="center"
                     gap={2}
-                    className={actionButtonVariants({ variant: "primary" })}
                     paddingX={6}
                     paddingY={2}
                     radius="xl"
                   >
-                    {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
+                    {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" animation="spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
-                  </Box>
+                  </Button>
                 </Stack>
               </Stack>
 

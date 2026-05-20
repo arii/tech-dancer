@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Home, ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { ActionButton } from '@/components/ui/ActionButton';
-import { actionButtonVariants } from '@/lib/variants';
+import { Button } from '@/components/ui/Button';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -24,12 +23,13 @@ export default function NotFound() {
             titleSize="fluid-7"
             descriptionMaxWidth="prose"
             cta={
-              <ActionButton
+              <Button
                 onClick={() => navigate('/')}
                 paddingX={8}
                 paddingY={4}
                 radius="none"
-                className={cn("group", actionButtonVariants({ variant: "outline" }))}
+                variant="outline"
+                className="group"
                 aria-label="Return to Home"
               >
                 <Stack direction="row" align="center" gap={2}>
@@ -39,7 +39,7 @@ export default function NotFound() {
                   </Text>
                   <Icon icon={ChevronRight} size="sm" className="group-hover:translate-x-1 transition-transform" />
                 </Stack>
-              </ActionButton>
+              </Button>
             }
           />
         </Box>

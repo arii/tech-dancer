@@ -19,10 +19,18 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
       accent: "text-accent",
       muted: "text-text-dim opacity-50",
     },
+    animation: {
+      spin: "animate-spin",
+      pulse: "animate-pulse",
+      bounce: "animate-bounce",
+      ping: "animate-ping",
+      none: "",
+    }
   },
   defaultVariants: {
     size: "md",
     color: "primary",
+    animation: "none",
   },
 })
 
@@ -31,9 +39,9 @@ export interface IconProps extends React.HTMLAttributes<HTMLSpanElement>, Varian
   strokeWidth?: number
 }
 
-export function Icon({ icon: LucideIcon, size, color, className, strokeWidth, ...props }: IconProps) {
+export function Icon({ icon: LucideIcon, size, color, animation, className, strokeWidth, ...props }: IconProps) {
   return (
-    <span className={cn(iconVariants({ size, color }), className)} {...props}>
+    <span className={cn(iconVariants({ size, color, animation }), className)} {...props}>
       <LucideIcon width="100%" height="100%" strokeWidth={strokeWidth} />
     </span>
   )
