@@ -100,7 +100,6 @@ export default function Navigation() {
               <Box
                 as="button"
                 type="button"
-                tabIndex={0}
                 cursor="pointer"
                 onClick={handleSearchClick}
                 display="flex"
