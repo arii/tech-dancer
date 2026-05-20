@@ -11,14 +11,19 @@ export const CONTENT_DIR_MAP = {
   '/events': 'content/events',
 } as const;
 
-const cache = new Map<string, string[]>();
+export interface ContentItem {
+  slug: string;
+  lastmod: string;
+}
+
+const cache = new Map<string, ContentItem[]>();
 
 /**
- * Discovers markdown content files and returns their route-ready slugs.
+ * Discovers markdown content files and returns their route-ready slugs with last modified dates.
  * Implements defensive checks to handle missing directories gracefully.
  * Uses a simple memoization layer to optimize repeated calls during build.
  */
-export function getContentSlugs(dir: string, prefix: string): string[] {
+export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
   const cacheKey = `${dir}:${prefix}`;
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey)!;
@@ -28,17 +33,24 @@ export function getContentSlugs(dir: string, prefix: string): string[] {
     const fullPath = path.resolve(process.cwd(), dir);
 
     // Check if directory exists and is actually a directory
-    const stats = fs.statSync(fullPath);
-    if (!stats.isDirectory()) {
+    const dirStats = fs.statSync(fullPath);
+    if (!dirStats.isDirectory()) {
       return [];
     }
 
-    const slugs = fs.readdirSync(fullPath)
+    const items = fs.readdirSync(fullPath)
       .filter(f => f.endsWith('.md'))
-      .map(f => `${prefix}/${f.replace(/\.md$/, '')}`);
+      .map(f => {
+        const filePath = path.join(fullPath, f);
+        const stats = fs.statSync(filePath);
+        return {
+          slug: `${prefix}/${f.replace(/\.md$/, '')}`,
+          lastmod: stats.mtime.toISOString()
+        };
+      });
 
-    cache.set(cacheKey, slugs);
-    return slugs;
+    cache.set(cacheKey, items);
+    return items;
   } catch (error) {
     // Gracefully handle missing directories or permission issues
     console.warn(`[Content Loader] Skipping directory ${dir}: ${error instanceof Error ? error.message : String(error)}`);

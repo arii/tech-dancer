@@ -32,7 +32,12 @@ export default defineConfig(({mode}) => {
   const fullAppUrl = new URL(base, hostname).href;
 
   // Automatically discover dynamic routes
-  const { all: dynamicRoutes } = getAllRoutes();
+  const { all: dynamicRoutes, detailed: routeDetails } = getAllRoutes();
+
+  // Create lastmod mapping for the sitemap plugin
+  const lastmodMap = Object.fromEntries(
+    routeDetails.map(r => [r.path, new Date(r.lastmod)])
+  );
 
   return {
     base,
@@ -74,20 +79,7 @@ export default defineConfig(({mode}) => {
           image: false,
           video: false,
         },
-        changefreq: {
-          '/': 'daily',
-          '/blog': 'weekly',
-          '/gear': 'weekly',
-          '/research': 'weekly',
-          '*': 'monthly'
-        },
-        priority: {
-          '/': 1.0,
-          '/blog': 0.8,
-          '/gear': 0.8,
-          '/research': 0.8,
-          '*': 0.5
-        }
+        lastmod: lastmodMap
       }),
       ViteImageOptimizer({
         includePublic: true,
