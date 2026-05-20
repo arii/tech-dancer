@@ -1,7 +1,11 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
-export function EventNavigation() {
+interface EventNavigationProps {
+  activeTab?: string;
+}
+
+export function EventNavigation({ activeTab }: EventNavigationProps) {
   return (
     <Box
       position="sticky"
@@ -18,7 +22,8 @@ export function EventNavigation() {
           bottom={0}
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-transparent pointer-events-none z-10"
+          bgGradient="bg-gradient-to-l from-bg via-bg/80 to-transparent"
+          className="pointer-events-none z-10"
         />
 
         <Box
@@ -27,6 +32,8 @@ export function EventNavigation() {
           overflowX="auto"
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}
+          paddingRight={{ base: 12, md: 0 }}
+          style={{ WebkitOverflowScrolling: "touch" }}
         >
           {EVENT_TABS.map(tab => (
             <Box
@@ -41,7 +48,7 @@ export function EventNavigation() {
                 display="flex"
                 align="center"
                 gap={2}
-                color="dim"
+                color={activeTab === tab.id ? "accent" : "dim"}
                 className="group-hover:text-accent transition-colors whitespace-nowrap"
               >
                 <tab.icon size={14} />
@@ -61,7 +68,7 @@ export function EventNavigation() {
                 left={0}
                 right={0}
                 height={0.5}
-                className="bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+                className={`bg-accent transition-transform origin-left ${activeTab === tab.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
               />
             </Box>
           ))}
