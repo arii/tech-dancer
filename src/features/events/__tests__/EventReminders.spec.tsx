@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { EventReminders } from '../components/EventReminders';
-import { Event } from '@/lib/content';
+import { createMockEvent } from '../../../../tests/fixtures/events';
 
 // Mock the ics-generator to avoid issues with browser APIs in tests
 vi.mock('@/features/lab/wsdc-reminders/lib/ics-generator', () => ({
@@ -9,26 +9,17 @@ vi.mock('@/features/lab/wsdc-reminders/lib/ics-generator', () => ({
   downloadICS: vi.fn(),
 }));
 
-const baseEvent: Partial<Event> = {
-  type: 'event',
-  title: 'Test Convention',
-  startDate: '2024-06-01',
-  date: '2024-06-01',
-  url: 'https://example.com/event',
-};
-
 describe('EventReminders', () => {
   it('should not render when no reminder dates are provided', () => {
-    const event = { ...baseEvent } as Event;
+    const event = createMockEvent();
     const { container } = render(<EventReminders event={event} />);
     expect(container.firstChild).toBeNull();
   });
 
   it('should render when only registrationDeadline is provided', () => {
-    const event = {
-      ...baseEvent,
+    const event = createMockEvent({
       registrationDeadline: '2024-05-15'
-    } as Event;
+    });
     render(<EventReminders event={event} />);
 
     expect(screen.getByText(/Stay on Top of What Matters/i)).toBeDefined();
@@ -37,13 +28,12 @@ describe('EventReminders', () => {
   });
 
   it('should render all reminder dates when provided', () => {
-    const event = {
-      ...baseEvent,
+    const event = createMockEvent({
       earlyBirdDate: '2024-04-01',
       registrationDeadline: '2024-05-15',
       hotelCutoffDate: '2024-05-01',
       packingReminderDate: '2024-05-25',
-    } as Event;
+    });
     render(<EventReminders event={event} />);
 
     expect(screen.queryAllByText(/Early Bird Deadline/i)).toBeDefined();
@@ -53,10 +43,9 @@ describe('EventReminders', () => {
   });
 
   it('should show "Soon" badges for unimplemented channels', () => {
-    const event = {
-      ...baseEvent,
+    const event = createMockEvent({
       registrationDeadline: '2024-05-15'
-    } as Event;
+    });
     render(<EventReminders event={event} />);
 
     // Notification channels use "Soon" badges
@@ -65,10 +54,9 @@ describe('EventReminders', () => {
   });
 
   it('should show confirmation state after clicking the CTA', () => {
-    const event = {
-      ...baseEvent,
+    const event = createMockEvent({
       registrationDeadline: '2024-05-15'
-    } as Event;
+    });
     render(<EventReminders event={event} />);
 
     // In the test environment, Button might render as multiple elements or have accessibility roles that conflict

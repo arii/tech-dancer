@@ -16,7 +16,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedChannels, setSelectedChannels] = useState<string[]>(['calendar']);
 
-  const timeline = useMemo(() => {
+  const remindersData = useMemo(() => {
     const anchors = {
       title: event.title,
       startDate: event.startDate || event.date,
@@ -27,20 +27,22 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       url: event.url
     };
 
-    if (!anchors.startDate) return [];
+    if (!anchors.startDate) return { timeline: [], hasReminders: false };
 
-    return calculateTimeline(anchors).map(item => ({
+    const timeline = calculateTimeline(anchors).map(item => ({
       ...item,
       formattedDate: item.date.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
       })
     }));
+
+    const hasReminders = !!(event.earlyBirdDate || event.registrationDeadline || event.hotelCutoffDate || event.packingReminderDate);
+
+    return { timeline, hasReminders };
   }, [event]);
 
-  const hasReminders = useMemo(() => {
-    return event.earlyBirdDate || event.registrationDeadline || event.hotelCutoffDate || event.packingReminderDate;
-  }, [event]);
+  const { timeline, hasReminders } = remindersData;
 
   if (!hasReminders || timeline.length === 0) return null;
 
@@ -51,7 +53,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
   };
 
   const toggleChannel = (channel: string) => {
-    if (channel === 'calendar') return; // Always keep calendar for demo
+    if (channel === 'calendar') return;
     setSelectedChannels(prev =>
       prev.includes(channel) ? prev.filter(c => c !== channel) : [...prev, channel]
     );
@@ -86,7 +88,6 @@ export function EventReminders({ event, id }: EventRemindersProps) {
   return (
     <Box id={id} as="section" data-testid="reminders">
       <Box padding={8} radius="2xl" border surface="surface" className="overflow-hidden relative">
-        {/* Decorative background element */}
         <Box
           position="absolute"
           top={-20}
