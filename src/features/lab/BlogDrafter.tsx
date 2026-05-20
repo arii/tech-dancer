@@ -535,7 +535,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             surface="muted"
             padding={6}
             overflow="y-auto"
-            maxHeight="[600px]" {/* impeccable-ignore */}
+            maxHeight="[600px]" /* impeccable-ignore */
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
             <MarkdownRenderer content={markdownPreview} />
