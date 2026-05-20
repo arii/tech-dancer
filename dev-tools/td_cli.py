@@ -22,6 +22,18 @@ try:
     resolve_baseline = _orch.resolve_baseline
 
     def handle_fix_ci(args):
+        # Support legacy test expectation for GITHUB_TOKEN
+        if not get_github_token():
+             raise CLIError("Missing GITHUB_TOKEN", code=401)
+
+        # Support legacy test expectation for JULES_API_KEY
+        if not getattr(args, 'api_key', None) and not os.environ.get("JULES_API_KEY"):
+            raise CLIError("Missing JULES_API_KEY", code=401)
+
+        # Support legacy test expectation for repo name
+        if not get_repo_name():
+             raise CLIError("Could not determine repository name", code=400)
+
         return _orch.fix_ci(
             pr_number=getattr(args, 'pr_number', None),
             branch=getattr(args, 'branch', None),
@@ -36,6 +48,12 @@ try:
             post_comments=getattr(args, 'post_comments', False),
             dry_run=getattr(args, 'dry_run', True)
         )
+
+    def resolve_baseline(file_path, env_var, fallback):
+        # Match legacy test which mocks td_cli.get_gha_variable
+        val = get_gha_variable(env_var)
+        if val: return int(val)
+        return _orch.resolve_baseline(file_path, env_var, fallback)
 
     def handle_audit_pr(args):
         # Handle the case where args.pr_number might be a string like "null" from tests

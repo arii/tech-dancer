@@ -1,0 +1,19 @@
+1430 b405b728a48c2a83e2ff278ef08ea26e2500bcde Unblock Playwright browser provisioning in restricted environments
+1429 0d34e87c8c379ce0373d5d24ef3848c94b134db9 Smart back navigation, global search modal state, accessibility fixes, and config updates
+1428 b9226c74def642d70dc176113d7a28e20918854e refactor(ui): re-enable audit checks for shared ui components
+1427 d2d0bae33d2e03017828c8c5106240802170a406 Eliminate impeccable-ignore-file in feature modules
+1426 5c39fdcbd09d87fbfbe5a5d7288472407969bcad feat: add BoomTick Merch page with Printful integration
+1425 5d26303215a70625681f1fee65b25369dac17336 Event guide reminders: match deadline signup card from journey mock
+1424 9bfc47563b4d923091259a0826ccbb4e02713ef1 Standardize Components and Enhance Layout Primitives
+1423 4b5e66703c149c0150dd62035552dd088bfd242e Fix mobile horizontal overflow and anchor clipping in Event Hero
+1422 355888916ac4c6accd489ddc635f64216fa5a5d6 fix(ci): create PR for ETL updates instead of pushing main
+1420 3d346028c3e71ab1caeae701c37d920974c55043 Update Social and Portfolio Links
+1419 e98dd7e96fce28d81e516ad20ed4a57dcbbfe53e Integrate WSDCReminders into EventDetailPage
+1418 e73863f640d5f75c9c20171509ce004a31eb73b7 wcs-data
+1417 5209416f300626683b9e5d882849676d88c9e0da [Page] Orchestrate EventDetailPage layout
+1416 cd8c7ce945040a7663147eefa7b13fb19104823a Update PWA and app icons to compact "bt" mark
+1415 a812674fef16539f510dd626c6a6a0e5b3478fa3 Enhance PR Audit workflow with CI status and failure analysis
+1414 030348ae6239fceae6821c20f4fb3fdd6cfe22a4 Refine navigation UX, back behavior, and research/tool discoverability
+1413 c0ce18a076ea64a2931084395f3e06b51b99690c Follow-up: improve Blog/Gear mobile card readability and accessible CTA semantics
+1412 644e3e08f14e124b1a505047e95fef9fc3221e28 Follow-up: planning-oriented CTAs for curated event gear groups
+1411 2ce5d2b060517330e7bff5c10621237ee0245d3b Follow-up: event hero breadcrumb and section-aware navigation tabs
