@@ -20,7 +20,7 @@ export function getEventSchema(event: Event) {
     "@context": "https://schema.org",
     "@type": "Event",
     "name": event.title,
-    "description": event.description || event.excerpt,
+    "description": event.whyAttending || event.description || event.excerpt,
     "image": imageUrl,
     "startDate": event.startDate || event.date,
     "url": eventUrl,
