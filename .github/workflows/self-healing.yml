@@ -34,6 +34,7 @@ jobs:
       HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
       HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
       OLLAMA_MODEL: "qwen2.5-coder:1.5b"
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout trusted code
         uses: actions/checkout@v4
@@ -111,12 +112,12 @@ jobs:
 
           if [ -n "$TARGET_RUN_ID" ]; then
             echo "Fetching logs for run $TARGET_RUN_ID..."
-            gh run view "$TARGET_RUN_ID" --log > ci_logs.txt
+            gh run view "$TARGET_RUN_ID" --log > /tmp/ci_logs.txt
 
             # Generate fresh structured logs from current state
-            if ! pnpm eslint . --format json > eslint-errors.json; then echo "eslint failed"; exit 1; fi
+            if ! pnpm eslint . --format json > /tmp/eslint-errors.json; then echo "eslint failed"; exit 1; fi
 
-            python3 /tmp/repair-tool/repair.py ci_logs.txt --eslint-json eslint-errors.json
+            python3 /tmp/repair-tool/repair.py /tmp/ci_logs.txt --eslint-json /tmp/eslint-errors.json
           else
             echo "No failed run found to repair."
             exit 0
@@ -157,12 +158,26 @@ jobs:
             echo "::add-mask::${GH_TOKEN}"
             git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
 
+            # Capture failure summary for PR context
+            ERROR_SUMMARY=$(grep -i "error" /tmp/ci_logs.txt | tail -n 10 || echo "No explicit error lines found in logs.")
+
             PR_MSG="Automated repair attempt for failed run $WORKFLOW_RUN_ID"
             if [ "${{ steps.verify.outputs.success }}" == "success" ]; then
               PR_MSG="✅ $PR_MSG (Verified to pass lint/types)"
             else
               PR_MSG="⚠️ $PR_MSG (Partial fix, still has some issues)"
             fi
+
+            PR_MSG="${PR_MSG}
+
+            <details>
+            <summary>Last 10 Error Lines from CI Logs</summary>
+
+            \`\`\`
+            ${ERROR_SUMMARY}
+            \`\`\`
+
+            </details>"
 
             if [ "$EVENT_NAME" == "workflow_run" ]; then
               if [ "$HEAD_REPO" == "$REPO" ]; then
