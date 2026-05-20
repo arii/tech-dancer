@@ -9,6 +9,7 @@ const BASE_URL = `https://${REPO_OWNER}.github.io/${REPO_NAME}`;
 const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const TRACKING_URL = `${BASE_URL}/REVIEW_TRACKING.md`;
 const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
+const TOP_LEVEL_ROUTES = ['about', 'blog', 'gear', 'events', 'research', 'ux-auditor', 'preview', 'contact'];
 
 /**
  * @typedef {Object} Deployment
@@ -36,7 +37,10 @@ const ICONS = {
 let state = {
     /** @type {Deployment[]} */
     deployments: [],
+    /** @type {Object[]} */
+    mergedPRs: [],
     prStatuses: {},
+    deploymentExistence: {},
     rateLimitRemaining: null,
     filters: {
         query: '',
@@ -44,6 +48,37 @@ let state = {
         showAutomated: false
     }
 };
+
+/**
+ * Strips known sub-page routes to isolate the base branch name.
+ */
+function getBaseBranchName(path) {
+    const segments = path.split('/').filter(Boolean);
+    if (segments.length === 0) return '';
+
+    for (let i = 0; i < segments.length; i++) {
+        if (TOP_LEVEL_ROUTES.includes(segments[i].toLowerCase())) {
+            return segments.slice(0, i).join('/');
+        }
+    }
+    return path;
+}
+
+/**
+ * Checks if a deployment URL is still active.
+ */
+async function checkDeploymentExists(name) {
+    if (state.deploymentExistence[name] !== undefined) return state.deploymentExistence[name];
+    try {
+        const url = `${BASE_URL}/${name}/`;
+        const res = await fetch(url, { method: 'HEAD' });
+        state.deploymentExistence[name] = res.ok;
+        return res.ok;
+    } catch {
+        state.deploymentExistence[name] = false;
+        return false;
+    }
+}
 
 function timeAgo(seconds) {
     const diff = Math.floor(Date.now() / 1000) - seconds;
@@ -179,9 +214,12 @@ function el(tag, props = {}, children = []) {
 }
 
 function createBadge(text, color) {
-    const colorClasses = color === 'blue'
-        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800'
-        : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800';
+    const colorClasses = {
+        blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+        emerald: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
+        purple: 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-800'
+    }[color] || 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700';
+
     return el('span', { className: `${colorClasses} text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border` }, [text]);
 }
 
@@ -207,7 +245,7 @@ function createStatusBadge(status) {
 }
 
 function renderCard(deployment, isIdxEven) {
-    const { name, pr, isDraft } = deployment;
+    const { name, pr, isDraft, type } = deployment;
     const deploymentUrl = `${BASE_URL}/${name}/`;
     const zebraClass = isIdxEven ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/50 dark:bg-slate-900/50';
     const prStatus = state.prStatuses[name] || null;
@@ -217,7 +255,9 @@ function renderCard(deployment, isIdxEven) {
     });
 
     const badgeContainer = el('div', { className: 'flex items-center gap-1.5 sm:gap-2 flex-wrap' });
-    if (pr) {
+    if (type === 'merged') {
+        badgeContainer.appendChild(createBadge('Merged PR', 'purple'));
+    } else if (pr) {
         badgeContainer.appendChild(createBadge(isDraft ? 'Draft PR' : 'Open PR', 'blue'));
         const statusBadge = createStatusBadge(prStatus);
         if (statusBadge) badgeContainer.appendChild(statusBadge);
@@ -231,10 +271,10 @@ function renderCard(deployment, isIdxEven) {
         badgeContainer.appendChild(createBadge('Active Branch', 'emerald'));
     }
 
-    const titleEl = pr
-        ? el('a', { href: pr.html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-base sm:text-xl flex items-center gap-2 truncate outline-none focus:underline' }, [
+    const titleEl = (pr || type === 'merged')
+        ? el('a', { href: (pr || deployment).html_url, target: '_blank', rel: 'noopener', className: 'text-blue-600 dark:text-blue-400 hover:underline font-semibold text-base sm:text-xl flex items-center gap-2 truncate outline-none focus:underline' }, [
             el('span', { innerHTML: ICONS.pr }),
-            `PR #${pr.number}: ${pr.title}`
+            `PR #${(pr || deployment).number}: ${(pr || deployment).title}`
           ])
         : el('div', { className: 'text-slate-800 dark:text-slate-200 font-semibold text-base sm:text-xl flex items-center gap-2 text-balance' }, [
             el('span', { innerHTML: ICONS.branch }),
@@ -244,20 +284,48 @@ function renderCard(deployment, isIdxEven) {
     const compareUrl = `${GITHUB_REPO_URL}/compare/main...${encodeURIComponent(name)}`;
     const infoRow = el('div', { className: 'flex items-center gap-2.5 sm:gap-3 flex-wrap' }, [
         el('span', { className: 'text-[10px] sm:text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-slate-200 dark:border-slate-700 truncate max-w-[150px] sm:max-w-[200px]' }, [name]),
-        el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
+        type !== 'merged' && el('a', { href: `${GITHUB_REPO_URL}/tree/${encodeURIComponent(name)}`, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
             el('span', { innerHTML: ICONS.external }),
             'Source'
         ]),
-        el('a', { href: compareUrl, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
+        type !== 'merged' && el('a', { href: compareUrl, target: '_blank', rel: 'noopener', className: 'text-[10px] sm:text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 transition-colors outline-none focus:text-blue-500' }, [
             el('span', { innerHTML: ICONS.external }),
             'Compare'
         ]),
-        pr && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1' }, [
+        (pr || type === 'merged') && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1' }, [
             el('span', { innerHTML: ICONS.clock }),
-            timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))
+            type === 'merged' ? `Merged ${timeAgo(Math.floor(new Date(deployment.merged_at).getTime() / 1000))}` : timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))
         ]),
         el('div', { className: 'sm:hidden w-full mt-1' }, [badgeContainer.cloneNode(true)])
     ]);
+
+    const actionButton = el('div', { className: 'flex flex-col sm:flex-row gap-2 w-full sm:w-auto' });
+
+    if (type === 'merged') {
+        const prLink = el('a', {
+            href: deployment.html_url,
+            target: '_blank',
+            rel: 'noopener',
+            className: 'bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium py-2 sm:py-2.5 px-4 sm:px-5 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors'
+        }, [
+            'View PR ',
+            el('span', { innerHTML: ICONS.external })
+        ]);
+        actionButton.appendChild(prLink);
+    }
+
+    if (type !== 'merged' || state.deploymentExistence[name]) {
+        const deployLink = el('a', {
+            href: deploymentUrl,
+            target: '_blank',
+            rel: 'noopener',
+            className: 'bg-slate-900 dark:bg-blue-600 text-white font-medium py-2 sm:py-2.5 px-4 sm:px-5 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+        }, [
+            'View Deployment ',
+            el('span', { innerHTML: ICONS.external })
+        ]);
+        actionButton.appendChild(deployLink);
+    }
 
     card.append(
         el('div', { className: 'flex-1 min-w-0 w-full' }, [
@@ -267,10 +335,7 @@ function renderCard(deployment, isIdxEven) {
             ]),
             infoRow
         ]),
-        el('a', { href: deploymentUrl, target: '_blank', rel: 'noopener', className: 'w-full sm:w-auto bg-slate-900 dark:bg-blue-600 text-white font-medium py-2 sm:py-2.5 px-4 sm:px-5 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity shrink-0 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500' }, [
-            'View Deployment ',
-            el('span', { innerHTML: ICONS.external })
-        ])
+        actionButton
     );
 
     return card;
@@ -316,7 +381,13 @@ function renderGrid() {
     renderGroup('Pull Request Previews', prs, true);
     renderGroup('Other Deployed Branches', branches, false);
 
-    emptyState.classList.toggle('hidden', filtered.length > 0);
+    const merged = state.mergedPRs.filter(d => {
+        const matchesSearch = [d.name, d.title, d.user?.login].some(v => v?.toLowerCase().includes(query));
+        return matchesSearch && (status === 'all' || status === 'merged');
+    });
+    renderGroup('Recently Merged PRs', merged, true);
+
+    emptyState.classList.toggle('hidden', (filtered.length + (status === 'all' || status === 'merged' ? merged.length : 0)) > 0);
 }
 
 async function init() {
@@ -332,11 +403,18 @@ async function init() {
     });
 
     try {
-        const [treeData, prs, releases] = await Promise.all([
+        const [treeData, prs, closedPrs, releases] = await Promise.all([
             fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/git/trees/gh-pages?recursive=1`),
             fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=open&per_page=100`).catch(() => []),
+            fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=closed&per_page=20`).catch(() => []),
             fetchGitHub(`repos/${REPO_OWNER}/${REPO_NAME}/releases?per_page=1`).catch(() => [])
         ]);
+
+        state.mergedPRs = closedPrs.filter(pr => pr.merged_at).slice(0, 10).map(pr => ({
+            ...pr,
+            name: pr.head.ref,
+            type: 'merged'
+        }));
 
         if (state.rateLimitRemaining < 10) {
             const warning = el('div', { className: 'mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm font-medium' }, [
@@ -346,9 +424,11 @@ async function init() {
             grid.before(warning);
         }
 
-        const allFoldersRaw = treeData.tree
+        const allFoldersRaw = Array.from(new Set(treeData.tree
             .filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
-            .map(i => i.path.replace('/index.html', ''));
+            .map(i => getBaseBranchName(i.path.replace('/index.html', '')))
+            .filter(name => name !== '')
+        ));
 
         state.deployments = allFoldersRaw.map(name => {
             const pr = prs.find(p => p.head.ref === name);
@@ -376,10 +456,14 @@ async function init() {
         Object.entries(statsMap).forEach(([id, val]) => { const element = document.getElementById(id); if (element) element.textContent = val; });
 
         if (state.rateLimitRemaining > 5) {
-            Promise.all(prs.map(async (pr) => {
+            prs.forEach(async (pr) => {
                 state.prStatuses[pr.head.ref] = await fetchCIStatus(pr.head.sha);
                 debouncedRender();
-            }));
+            });
+            state.mergedPRs.forEach(async (pr) => {
+                await checkDeploymentExists(pr.head.ref);
+                debouncedRender();
+            });
         }
 
         renderGrid();
