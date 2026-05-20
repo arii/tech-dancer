@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
@@ -26,7 +26,7 @@ export function NewsletterBanner() {
         position="absolute" 
         top={0} 
         left={0} 
-        width="1px" 
+        width="px"
         height="full" 
         className="bg-accent shadow-glow"
       />

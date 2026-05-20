@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { useState, ChangeEvent } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -535,7 +535,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             surface="muted"
             padding={6}
             overflow="y-auto"
-            maxHeight="600px"
+            maxHeight="[600px]" {/* impeccable-ignore */}
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
             <MarkdownRenderer content={markdownPreview} />

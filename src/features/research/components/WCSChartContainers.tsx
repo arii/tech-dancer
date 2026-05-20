@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { BarChart2, TrendingUp } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -26,14 +26,14 @@ interface TrendData {
 
 const customTooltipStyle = {
   backgroundColor: 'var(--raw-color-surface)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  fontSize: '11px',
+  border: '1px solid rgba(255,255,255,0.1)', // impeccable-ignore
+  fontSize: '11px', // impeccable-ignore
   fontFamily: 'var(--font-mono)',
-  padding: '8px'
+  padding: '8px' // impeccable-ignore
 };
 
 export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
-  <Box border surface="default" padding="card" height="[400px]">
+  <Box border surface="default" padding="card" height="[400px]" {/* impeccable-ignore */}>
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <BarChart2 className="w-4 h-4 text-accent" />
@@ -79,7 +79,7 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
 );
 
 export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
-  <Box border surface="default" padding="card" height="[400px]">
+  <Box border surface="default" padding="card" height="[400px]" {/* impeccable-ignore */}>
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <TrendingUp className="w-4 h-4 text-accent" />

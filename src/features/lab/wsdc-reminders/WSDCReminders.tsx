@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { useState, useMemo } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -115,7 +115,7 @@ export default function WSDCReminders() {
               left={5}
               top={0}
               bottom={0}
-              width="2px"
+              width={0.5}
               className="bg-line/40 hidden sm:block"
             />
 
