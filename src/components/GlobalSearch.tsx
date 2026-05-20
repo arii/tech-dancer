@@ -121,6 +121,8 @@ export function GlobalSearch() {
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
             if (e.key === 'Escape') {
+              e.preventDefault();
+              e.stopPropagation();
               close();
               return;
             }
@@ -161,6 +163,13 @@ export function GlobalSearch() {
               placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
               defaultValue={query}
               onChange={handleInputChange}
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.key === 'Escape') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  close();
+                }
+              }}
               width="full"
               variant="sans"
               size="xl"
