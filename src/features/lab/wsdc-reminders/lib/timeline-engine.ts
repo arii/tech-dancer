@@ -2,7 +2,11 @@ import { Plane, Trophy, Hotel, CheckCircle2, ShieldCheck, Briefcase } from 'luci
 import { EventAnchors, TimelineItem } from '../types';
 import { parseDate, addDays } from '@/lib/utils';
 
-export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
+export interface TimelineOptions {
+  filterIds?: string[];
+}
+
+export const calculateTimeline = (event: EventAnchors, options: TimelineOptions = {}): TimelineItem[] => {
   const start = parseDate(event.startDate);
   const early = event.earlyBirdDate ? parseDate(event.earlyBirdDate) : null;
   const registration = event.registrationDeadline ? parseDate(event.registrationDeadline) : null;
@@ -80,5 +84,19 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
     });
   }
 
-  return timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
+  let result = timeline;
+  if (options.filterIds) {
+    result = result.filter(item => options.filterIds!.includes(item.id));
+  }
+
+  return result.sort((a, b) => a.date.getTime() - b.date.getTime());
+};
+
+const JOURNEY_IDS = ['early-bird', 'registration-deadline', 'hotel-block', 'packing-reminder'];
+
+/**
+ * Specifically calculates milestones required for the Event Guide journey.
+ */
+export const calculateJourneyTimeline = (event: EventAnchors): TimelineItem[] => {
+  return calculateTimeline(event, { filterIds: JOURNEY_IDS });
 };

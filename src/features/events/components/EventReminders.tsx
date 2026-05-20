@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Calendar, Mail, Smartphone, Bell, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
-import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
+import { calculateJourneyTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
 import { generateICS, downloadICS } from '@/features/lab/wsdc-reminders/lib/ics-generator';
 import { Event } from '@/lib/content';
 import { ActionButton } from '@/components/ui/ActionButton';
@@ -12,8 +12,6 @@ interface EventRemindersProps {
   id?: string;
 }
 
-const DISPLAY_IDS = ['early-bird', 'registration-deadline', 'hotel-block', 'packing-reminder'];
-
 export function EventReminders({ event, id }: EventRemindersProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedChannels, setSelectedChannels] = useState<string[]>(['calendar']);
@@ -22,7 +20,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
     const startDate = event.startDate || event.date;
     if (!startDate) return [];
 
-    return calculateTimeline({
+    return calculateJourneyTimeline({
       title: event.title,
       startDate,
       earlyBirdDate: event.earlyBirdDate,
@@ -31,7 +29,6 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       packingReminderDate: event.packingReminderDate,
       url: event.url
     })
-    .filter(item => DISPLAY_IDS.includes(item.id))
     .map(item => ({
       ...item,
       formattedDate: item.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
@@ -83,11 +80,11 @@ export function EventReminders({ event, id }: EventRemindersProps) {
   return (
     <Box id={id} as="section" data-testid="reminders">
       <Box padding={8} radius="2xl" border surface="surface" className="overflow-hidden relative">
+        {/* Decorative blur element */}
         <Box
           position="absolute"
-          inset="top"
-          right={-20}
-          top={-20}
+          top={-5}
+          right={-5}
           width={64}
           height={64}
           radius="full"
@@ -104,19 +101,26 @@ export function EventReminders({ event, id }: EventRemindersProps) {
             </Text>
           </Stack>
 
-          <Stack gap={4}>
+          <Stack gap={4} as="ul">
             {displayTimeline.map((item) => {
               const Icon = item.icon ?? Calendar;
               return (
-                <Box key={item.id} display="flex" align="center" gap={4} paddingY={3} border="b" className="last:border-b-0 border-line/40">
+                <Stack
+                  key={item.id}
+                  as="li"
+                  direction="row"
+                  align="center"
+                  gap={4}
+                  paddingY={3}
+                  border="b"
+                  className="last:border-b-0 border-line/40"
+                >
                   <Box display="flex" align="center" justify="center" width={10} height={10} radius="lg" className="bg-surface-alt text-accent shrink-0">
                     <Icon className="w-5 h-5" />
                   </Box>
                   <Box flex={1}>
-                    <Stack gap={0.5}>
-                      <Text weight="font-bold" size="sm">{item.label}</Text>
-                      <Text size="xs" color="dim">{item.formattedDate}</Text>
-                    </Stack>
+                    <Text weight="font-bold" size="sm" as="div">{item.label}</Text>
+                    <Text size="xs" color="dim" as="div">{item.formattedDate}</Text>
                   </Box>
                   {item.badge && (
                     <Box paddingX={2} paddingY={0.5} radius="md" className="bg-line/20">
@@ -125,7 +129,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
                       </Text>
                     </Box>
                   )}
-                </Box>
+                </Stack>
               );
             })}
           </Stack>
@@ -173,10 +177,10 @@ export function EventReminders({ event, id }: EventRemindersProps) {
               onClick={handleSync}
               className="w-full h-14 !bg-accent-purple hover:!bg-accent-purple/90 text-white shadow-lg" // impeccable-ignore
             >
-              <Box display="flex" align="center" gap={2}>
+              <Stack direction="row" align="center" gap={2}>
                 <Bell className="w-5 h-5" />
                 <Text size="md">Set Event Reminders</Text>
-              </Box>
+              </Stack>
             </ActionButton>
           </Stack>
         </Stack>
