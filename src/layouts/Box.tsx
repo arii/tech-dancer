@@ -97,32 +97,25 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     top, right, bottom, left, bgGradient, borderStyle, truncate, clamp, bg, whiteSpace,
     animation, divide, divideColor,
     // Motion props filtering
-    initial: _initial, animate: _animateProp, exit: _exit, transition: _transition, variants: _variantsProp,
-    whileHover: _whileHover, whileTap: _whileTap, whileFocus: _whileFocus, whileDrag: _whileDrag, whileInView: _whileInView, viewport: _viewport,
-    layout: _layoutProp, layoutId: _layoutId, onAnimationStart: _onAnimationStart, onAnimationComplete: _onAnimationComplete,
-    onUpdate: _onUpdate, custom: _custom,
+    initial: _motionInitial, animate: _motionAnimate, exit: _motionExit, transition: _motionTransition, variants: _motionVariants,
+    whileHover: _motionWhileHover, whileTap: _motionWhileTap, whileFocus: _motionWhileFocus, whileDrag: _motionWhileDrag, whileInView: _motionWhileInView, viewport: _motionViewport,
+    layout: _motionLayout, layoutId: _motionLayoutId, onAnimationStart: _motionOnAnimationStart, onAnimationComplete: _motionOnAnimationComplete,
+    onUpdate: _motionOnUpdate, custom: _motionCustom,
     ...props 
   }, ref) => {
     const isMotion = typeof Component !== "string"
     
-    const MOTION_PROPS = [
-      'initial', 'animate', 'exit', 'transition', 'variants',
-      'whileHover', 'whileTap', 'whileFocus', 'whileDrag', 'whileInView',
-      'viewport', 'layout', 'layoutId', 'onAnimationStart',
-      'onAnimationComplete', 'onUpdate', 'custom'
-    ];
-
     const motionProps: Record<string, unknown> = {}
     if (isMotion) {
       const allMotionProps = {
-        initial: _initial, animate: _animateProp, exit: _exit, transition: _transition, variants: _variantsProp,
-        whileHover: _whileHover, whileTap: _whileTap, whileFocus: _whileFocus, whileDrag: _whileDrag, whileInView: _whileInView, viewport: _viewport,
-        layout: _layoutProp, layoutId: _layoutId, onAnimationStart: _onAnimationStart, onAnimationComplete: _onAnimationComplete,
-        onUpdate: _onUpdate, custom: _custom
+        initial: _motionInitial, animate: _motionAnimate, exit: _motionExit, transition: _motionTransition, variants: _motionVariants,
+        whileHover: _motionWhileHover, whileTap: _motionWhileTap, whileFocus: _motionWhileFocus, whileDrag: _motionWhileDrag, whileInView: _motionWhileInView, viewport: _motionViewport,
+        layout: _motionLayout, layoutId: _motionLayoutId, onAnimationStart: _motionOnAnimationStart, onAnimationComplete: _motionOnAnimationComplete,
+        onUpdate: _motionOnUpdate, custom: _motionCustom
       };
 
       Object.entries(allMotionProps).forEach(([key, value]) => {
-        if (value !== undefined && MOTION_PROPS.includes(key)) {
+        if (value !== undefined) {
           motionProps[key] = value;
         }
       });
@@ -144,7 +137,6 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
 
     // Remove props that shouldn't be spread to DOM elements
     const { 
-      // ... already destructured above
       ...domProps 
     } = props;
 
@@ -177,7 +169,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
         ref={ref}
         className={composeStyles(
           panel && layoutTokens.panel,
-          _layoutProp && typeof _layoutProp === "string" && layoutTokens[_layoutProp as keyof typeof layoutTokens],
+          _motionLayout && typeof _motionLayout === "string" && layoutTokens[_motionLayout as keyof typeof layoutTokens],
           shadow && SHADOW_MAP[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
           bgGradient,
