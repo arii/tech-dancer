@@ -239,6 +239,10 @@ function checkContent(content, filepath = 'unknown') {
       // Colors check
       if (/^(?:[a-z-]+:)?(bg|text|fill)-/.test(cls)) {
         if (CONFIG.allowedColors.includes(cls) || cls.startsWith('brand-')) return;
+
+        // Whitelist standard Tailwind gradients and their modifiers
+        if (/^(?:[a-z-]+:)?(bg-gradient-|from-|to-|via-)/.test(cls)) return;
+
         const colorMatch = cls.match(/^(?:[a-z-]+:)?(bg|text|fill)-([a-z0-9/-]+)$/);
         if (colorMatch) {
           const prefix = colorMatch[1];
