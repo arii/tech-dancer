@@ -10,6 +10,7 @@ import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { Search } from 'lucide-react';
+import { ROUTE_PATHS } from '@/config/routePaths';
 
 function getItemCountLabel(count: number): string {
   return `${count} ${count === 1 ? 'item' : 'items'}`;
@@ -52,7 +53,7 @@ export default function FolioGrid({
     );
   });
 
-  const searchPlaceholder = basePath.includes('gear') ? 'Search gear…' : 'Search posts…';
+  const searchPlaceholder = basePath.includes(ROUTE_PATHS.gear) ? 'Search gear…' : 'Search posts…';
   const resultLabel = getItemCountLabel(filteredItems.length);
   const filterSummary = search ? `Filtered by “${search}”` : 'All items';
 

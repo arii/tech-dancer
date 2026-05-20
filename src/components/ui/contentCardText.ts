@@ -1,5 +1,5 @@
-const GEAR_ROUTE_SEGMENT = '/gear';
+import { ROUTE_PATHS } from '@/config/routePaths';
 
 export function getContentCardCtaText(basePath: string): string {
-  return basePath.includes(GEAR_ROUTE_SEGMENT) ? 'Read review' : 'Read article';
+  return basePath.includes(ROUTE_PATHS.gear) ? 'Read review' : 'Read article';
 }
