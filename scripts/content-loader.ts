@@ -55,7 +55,7 @@ export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
               lastmod = date.toISOString();
             }
           }
-        } catch (e) {
+        } catch {
           // Fallback to mtime if parsing fails
         }
 
