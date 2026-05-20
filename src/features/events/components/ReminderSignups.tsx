@@ -46,12 +46,17 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
     },
   ].filter((d): d is Deadline => !!d);
 
-  const toggleChannel = (id: string) =>
+  const toggleChannel = (id: string) => {
     setChannels((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
+  };
 
   if (deadlines.length === 0) return null;
 
@@ -185,9 +190,11 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
                     You're signed up!
                   </Text>
                 </Box>
-                <Text size="xs" color="dim" className="mt-1">
-                  You can update preferences anytime.
-                </Text>
+                <Box marginTop={1}>
+                  <Text size="xs" color="dim">
+                    You can update preferences anytime.
+                  </Text>
+                </Box>
               </Box>
             ) : (
               <Box

@@ -32,7 +32,7 @@ export default function EventGuide() {
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '-20% 0px -70% 0px',
+      rootMargin: '-20% 0% -70% 0%',
       threshold: 0,
     };
 

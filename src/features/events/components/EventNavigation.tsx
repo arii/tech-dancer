@@ -33,7 +33,7 @@ export function EventNavigation({ activeTab }: EventNavigationProps) {
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
-          style={{ WebkitOverflowScrolling: "touch" }}
+          className="no-scrollbar scroll-smooth scroll-touch"
         >
           {EVENT_TABS.map(tab => (
             <Box
