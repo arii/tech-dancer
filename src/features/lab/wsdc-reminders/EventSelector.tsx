@@ -1,5 +1,7 @@
-import { Plus, Search } from 'lucide-react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Search } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { FilterButton } from '@/components/ui/FilterButton';
+import { cn } from '@/lib/utils';
 import type { Event } from '@/lib/content';
 
 interface EventSelectorProps {
@@ -18,27 +20,30 @@ export function EventSelector({ events, selectedEventId, onSelect }: EventSelect
 
       <Box display="flex" gap={2} wrap>
         {events.map(event => (
-          <Button
+          <FilterButton
             key={event.slug}
-            variant={selectedEventId === event.slug ? 'primary' : 'outline'}
+            label={event.title}
             onClick={() => onSelect(event.slug)}
-            size="sm"
-            className="rounded-full"
-          >
-            {event.title}
-          </Button>
+            isActive={selectedEventId === event.slug}
+            className={cn(
+              "text-xs px-4 h-9 min-h-0 normal-case",
+              selectedEventId === event.slug
+                ? "bg-accent text-bg border-accent"
+                : "bg-surface-alt text-text-dim border-line/50"
+            )}
+          />
         ))}
-        <Button
-          variant={selectedEventId === 'custom' ? 'primary' : 'outline'}
+        <FilterButton
+          label="Add My Own"
           onClick={() => onSelect('custom')}
-          size="sm"
-          className="rounded-full"
-        >
-          <Box as="span" marginRight={1}>
-            <Plus className="w-3 h-3" />
-          </Box>
-          Add My Own
-        </Button>
+          isActive={selectedEventId === 'custom'}
+          className={cn(
+            "text-xs px-4 h-9 min-h-0 normal-case",
+            selectedEventId === 'custom'
+              ? "bg-accent text-bg border-accent"
+              : "bg-surface-alt text-text-dim border-line/50"
+          )}
+        />
       </Box>
     </Stack>
   );

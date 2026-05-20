@@ -2,7 +2,8 @@
 import { useState, useMemo } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { getEvents } from '@/lib/content';
 import { calculateTimeline } from './lib/timeline-engine';
 import { generateICS, downloadICS } from './lib/ics-generator';
@@ -99,12 +100,12 @@ export default function WSDCReminders() {
               <Text variant="display" size="2xl" weight="font-black" uppercase>Action Timeline</Text>
               <Text size="sm" color="dim">{activeEvent.title} Logistics Plan</Text>
             </Stack>
-            <Button onClick={handleBulkSync} variant="primary">
+            <ActionButton onClick={handleBulkSync} variant="primary" paddingX={4} paddingY={2}>
               <Box display="flex" align="center" gap={2}>
                 <Download className="w-4 h-4" />
                 <Text as="span">Sync Entire Plan</Text>
               </Box>
-            </Button>
+            </ActionButton>
           </Box>
 
           <Box position="relative">
@@ -152,9 +153,9 @@ export default function WSDCReminders() {
               <Text weight="font-bold" size="sm">Official Event Link</Text>
               <Text size="xs" color="dim" className="truncate">{activeEvent.url}</Text>
             </Stack>
-            <Button as="a" href={activeEvent.url} target="_blank" rel="noopener noreferrer" variant="primary" size="sm">
+            <ActionButton as="a" href={activeEvent.url} target="_blank" rel="noopener noreferrer" variant="primary" paddingX={4} paddingY={2}>
               Visit Website
-            </Button>
+            </ActionButton>
           </Box>
         </Box>
       )}

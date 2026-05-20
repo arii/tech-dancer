@@ -1,5 +1,6 @@
 import { Send } from 'lucide-react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
@@ -102,25 +103,24 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
             )}
 
             <Box display="flex" justify="end">
-              <Button
+              <ActionButton
                 type="submit"
-                variant="primary"
                 disabled={isSubmitting}
                 paddingX={8}
-                className="font-semibold text-base min-h-12"
+                height={12}
               >
                 {isSubmitting ? (
                   <Stack direction="row" align="center" gap={3}>
                     <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
-                    <Text variant="sans" color="inherit" size="sm" weight="font-semibold">Sending...</Text>
+                    <Text color="inherit" size="sm" weight="font-bold">Sending...</Text>
                   </Stack>
                 ) : (
                   <Stack direction="row" align="center" gap={2}>
                     <Send className="w-4 h-4" />
-                    <Text variant="sans" size="sm" weight="font-semibold" color="inherit">Send Message</Text>
+                    <Text size="sm" weight="font-bold" color="inherit">Send Message</Text>
                   </Stack>
                 )}
-              </Button>
+              </ActionButton>
             </Box>
           </Stack>
         </Stack>
