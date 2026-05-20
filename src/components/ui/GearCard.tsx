@@ -12,7 +12,6 @@ interface GearCardProps extends BaseProps {
   excerpt: string;
   basePath: string;
   rating?: number;
-  verdict?: string;
   image?: string;
   // Resource metadata properties that should not be spread to the DOM
   type?: unknown;
@@ -42,7 +41,6 @@ export function GearCard({
   excerpt,
   basePath,
   rating,
-  verdict,
   image,
   // Content metadata props to be ignored
   type: _type,
@@ -63,7 +61,6 @@ export function GearCard({
   schedule: _schedule,
   description: _description,
   link: _link,
-  verdict: _verdict,
   variant = "default",
   ...rest
 }: GearCardProps & { variant?: "default" | "compact" }) {
