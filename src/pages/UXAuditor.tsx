@@ -138,7 +138,8 @@ export default function UXAuditor() {
               value={url}
               title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+              className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+              bg="bg"
               width={{ base: "full", sm: 64, md: 80 }}
               paddingX={4}
               paddingY={2}
@@ -177,7 +178,8 @@ export default function UXAuditor() {
                 type="password"
                 value={customApiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
-                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+                className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+                bg="bg"
                 flex={1}
                 paddingX={4}
                 paddingY={2}
@@ -219,7 +221,8 @@ export default function UXAuditor() {
               type="text"
               value={snapshotService}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+              className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+              bg="bg"
               flex={1}
               paddingX={4}
               paddingY={2}
@@ -259,7 +262,7 @@ export default function UXAuditor() {
                   width={9}
                   height={9}
                   radius="full"
-                  surface={report.status === 'completed' ? 'success' : 'warning'}
+                  bg={report.status === 'completed' ? 'accent' : 'accent-purple'}
                   className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
                   shrink={0}
                 >
@@ -305,7 +308,7 @@ export default function UXAuditor() {
                     align="center"
                     gap={2}
                     className={actionButtonVariants({ variant: "default" })}
-                    surface="muted" 
+                    bg="surface"
                     color="dim"
                     paddingX={4}
                     paddingY={2}
@@ -339,9 +342,9 @@ export default function UXAuditor() {
 
                   return (
                     <Box key={vp.name} className={cardVariants({ overflow: "hidden" })}>
-                      <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
+                      <Stack padding={4} border="b" direction="row" align="center" justify="between" bg="surface">
                         <Stack direction="row" align="center" gap={3}>
-                          <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
+                          <Box width={9} height={9} bg="surface" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
                           <Text variant="sans" size="base" weight="font-bold">
@@ -354,7 +357,7 @@ export default function UXAuditor() {
                       </Stack>
 
                       <Stack direction={{ base: 'col', md: 'row' }} width="full">
-                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+                        <Box padding={8} bg="surface" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
                           {imgUrl ? (
                             <img
                               src={imgUrl}
@@ -379,7 +382,7 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box surface="alt" padding={5} className="border border-line rounded-lg">
+                              <Box bg="surface-alt" padding={5} className="border border-line rounded-lg">
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                                     Analysis Summary
@@ -399,7 +402,7 @@ export default function UXAuditor() {
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                      <Text variant="mono" size="xs" weight="black" paddingX={2} paddingY={0.5} radius="full" bg="surface" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
                                     </Box>
@@ -407,7 +410,7 @@ export default function UXAuditor() {
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
-                            <Box surface="muted" padding={3} radius="lg" border={true}>
+                            <Box bg="surface" padding={3} radius="lg" border={true}>
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                                 <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
