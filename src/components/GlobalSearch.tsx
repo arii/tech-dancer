@@ -150,20 +150,14 @@ export function GlobalSearch() {
         >
           <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
             <Search className="w-5 h-5 text-accent shrink-0" />
-            <Text
-              as="input"
+            <input
               ref={inputRef}
               type="text"
               placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
               defaultValue={query}
               onChange={handleInputChange}
-              width="full"
-              variant="sans"
-              size="xl"
-              weight="font-bold"
-              color="main"
-              className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50"
               autoFocus
+              className="w-full bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50 font-sans text-xl font-bold text-text-main"
             />
             <Box 
               as="button"

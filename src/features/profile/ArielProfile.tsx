@@ -47,7 +47,7 @@ function ArielProfile() {
   const hasHash = !!window.location.hash;
 
   return (
-    <Box as="section" height="full">
+    <Box as="section" height="full" surface="bg">
       <SEO
         title="About"
         description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technical systems and creative movement."
