@@ -60,9 +60,26 @@ export function EventReminders({ event, id }: EventRemindersProps) {
 
   if (isSubscribed) {
     return (
-      <Box id={id} padding={10} radius="2xl" border surface="surface" className="bg-accent-purple/5 border-accent-purple/20">
-        <Stack gap={6} align="center" textAlign="center">
-          <Box width={16} height={16} radius="full" display="flex" align="center" justify="center" className="bg-accent-purple/20 text-accent-purple">
+      <Box
+        id={id}
+        as="section"
+        padding={10}
+        radius="2xl"
+        border
+        surface="surface"
+        textAlign="center"
+        className="bg-accent-purple/5 border-accent-purple/20"
+      >
+        <Stack gap={6} align="center">
+          <Box
+            width={16}
+            height={16}
+            radius="full"
+            display="flex"
+            align="center"
+            justify="center"
+            className="bg-accent-purple/20 text-accent-purple"
+          >
             <CheckCircle2 className="w-8 h-8" />
           </Box>
           <Stack gap={2}>
@@ -78,113 +95,128 @@ export function EventReminders({ event, id }: EventRemindersProps) {
   }
 
   return (
-    <Box id={id} as="section" data-testid="reminders">
-      <Box padding={8} radius="2xl" border surface="surface" className="overflow-hidden relative">
-        {/* Decorative blur element */}
-        <Box
-          position="absolute"
-          top={-5}
-          right={-5}
-          width={64}
-          height={64}
-          radius="full"
-          className="bg-accent-purple/5 blur-3xl -z-10 pointer-events-none"
-        />
+    <Box
+      id={id}
+      as="section"
+      data-testid="reminders"
+      position="relative"
+      padding={8}
+      radius="2xl"
+      border
+      surface="surface"
+      className="overflow-hidden"
+    >
+      <Box
+        position="absolute"
+        top={-5}
+        right={-5}
+        width={64}
+        height={64}
+        radius="full"
+        className="bg-accent-purple/5 blur-3xl -z-10 pointer-events-none"
+      />
 
-        <Stack gap={10}>
-          <Stack gap={2}>
-            <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-              Journey Utility
-            </Text>
-            <Text variant="headline" size="3xl" weight="font-black">
-              Stay on Top of What Matters
-            </Text>
-          </Stack>
+      <Stack gap={10}>
+        <Stack gap={2}>
+          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
+            Journey Utility
+          </Text>
+          <Text variant="headline" size="3xl" weight="font-black">
+            Stay on Top of What Matters
+          </Text>
+        </Stack>
 
-          <Stack gap={4} as="ul">
-            {displayTimeline.map((item) => {
-              const Icon = item.icon ?? Calendar;
-              return (
-                <Stack
-                  key={item.id}
-                  as="li"
-                  direction="row"
+        <Stack as="ul" gap={0}>
+          {displayTimeline.map((item) => {
+            const Icon = item.icon ?? Calendar;
+            return (
+              <Stack
+                key={item.id}
+                as="li"
+                direction="row"
+                align="center"
+                gap={4}
+                paddingY={3}
+                border="b"
+                className="last:border-b-0 border-line/40"
+              >
+                <Box
+                  display="flex"
                   align="center"
-                  gap={4}
-                  paddingY={3}
-                  border="b"
-                  className="last:border-b-0 border-line/40"
+                  justify="center"
+                  width={10}
+                  height={10}
+                  radius="lg"
+                  className="bg-surface-alt text-accent shrink-0"
                 >
-                  <Box display="flex" align="center" justify="center" width={10} height={10} radius="lg" className="bg-surface-alt text-accent shrink-0">
-                    <Icon className="w-5 h-5" />
+                  <Icon className="w-5 h-5" />
+                </Box>
+                <Box flex={1}>
+                  <Text weight="font-bold" size="sm" as="div">{item.label}</Text>
+                  <Text size="xs" color="dim" as="div">{item.formattedDate}</Text>
+                </Box>
+                {item.badge && (
+                  <Box paddingX={2} paddingY={0.5} radius="md" className="bg-line/20">
+                    <Text variant="mono" size="xxs" weight="font-bold" uppercase>
+                      {item.badge}
+                    </Text>
                   </Box>
+                )}
+              </Stack>
+            );
+          })}
+        </Stack>
+
+        <Stack gap={6}>
+          <Text variant="mono" size="xs" weight="font-bold" uppercase color="dim">
+            Notification Channels
+          </Text>
+          <Grid cols={{ base: 1, sm: 2 }} gap={4}>
+            {channels.map((channel) => {
+              const Icon = channel.icon;
+              const isSoon = channel.status === 'soon';
+              return (
+                <Box
+                  key={channel.id}
+                  as="button"
+                  onClick={() => toggleChannel(channel.id)}
+                  display="flex"
+                  align="center"
+                  gap={3}
+                  padding={3}
+                  radius="lg"
+                  border
+                  className={cn(
+                    "transition-all text-left relative",
+                    selectedChannels.includes(channel.id) ? "border-accent-purple bg-accent-purple/5" : "border-line hover:border-line-hover",
+                    isSoon && "opacity-60 cursor-not-allowed"
+                  )}
+                >
+                  <Icon className={cn("w-4 h-4", selectedChannels.includes(channel.id) ? "text-accent-purple" : "text-dim")} />
                   <Box flex={1}>
-                    <Text weight="font-bold" size="sm" as="div">{item.label}</Text>
-                    <Text size="xs" color="dim" as="div">{item.formattedDate}</Text>
+                    <Text size="sm" weight="font-bold">{channel.label}</Text>
                   </Box>
-                  {item.badge && (
-                    <Box paddingX={2} paddingY={0.5} radius="md" className="bg-line/20">
-                      <Text variant="mono" size="xxs" weight="font-bold" uppercase>
-                        {item.badge}
-                      </Text>
+                  {isSoon && (
+                    <Box paddingX={1.5} paddingY={0.5} radius="sm" className="bg-line/40">
+                      <Text size="xxs" weight="font-bold" uppercase>Soon</Text>
                     </Box>
                   )}
-                </Stack>
+                </Box>
               );
             })}
-          </Stack>
+          </Grid>
 
-          <Stack gap={6}>
-            <Text variant="mono" size="xs" weight="font-bold" uppercase color="dim">
-              Notification Channels
-            </Text>
-            <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-              {channels.map((channel) => {
-                const Icon = channel.icon;
-                const isSoon = channel.status === 'soon';
-                return (
-                  <Box
-                    key={channel.id}
-                    as="button"
-                    onClick={() => toggleChannel(channel.id)}
-                    display="flex"
-                    align="center"
-                    gap={3}
-                    padding={3}
-                    radius="lg"
-                    border
-                    className={cn(
-                      "transition-all text-left relative",
-                      selectedChannels.includes(channel.id) ? "border-accent-purple bg-accent-purple/5" : "border-line hover:border-line-hover",
-                      isSoon && "opacity-60 cursor-not-allowed"
-                    )}
-                  >
-                    <Icon className={cn("w-4 h-4", selectedChannels.includes(channel.id) ? "text-accent-purple" : "text-dim")} />
-                    <Box flex={1}>
-                      <Text size="sm" weight="font-bold">{channel.label}</Text>
-                    </Box>
-                    {isSoon && (
-                      <Box paddingX={1.5} paddingY={0.5} radius="sm" className="bg-line/40">
-                        <Text size="xxs" weight="font-bold" uppercase>Soon</Text>
-                      </Box>
-                    )}
-                  </Box>
-                );
-              })}
-            </Grid>
-
-            <ActionButton
-              onClick={handleSync}
-              className="w-full h-14 !bg-accent-purple hover:!bg-accent-purple/90 text-white shadow-lg" // impeccable-ignore
-            >
-              <Stack direction="row" align="center" gap={2}>
-                <Bell className="w-5 h-5" />
-                <Text size="md">Set Event Reminders</Text>
-              </Stack>
-            </ActionButton>
-          </Stack>
+          <ActionButton
+            onClick={handleSync}
+            className="w-full h-14 !bg-accent-purple hover:!bg-accent-purple/90 text-white shadow-lg" // impeccable-ignore
+          >
+            <Stack direction="row" align="center" gap={2}>
+              <Bell className="w-5 h-5" />
+              <Text size="md">Set Event Reminders</Text>
+            </Stack>
+          </ActionButton>
         </Stack>
-      </Box>
+      </Stack>
     </Box>
   );
 }

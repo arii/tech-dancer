@@ -96,6 +96,7 @@ const JOURNEY_IDS = ['early-bird', 'registration-deadline', 'hotel-block', 'pack
 
 /**
  * Specifically calculates milestones required for the Event Guide journey.
+ * Decouples the display set from the UI component.
  */
 export const calculateJourneyTimeline = (event: EventAnchors): TimelineItem[] => {
   return calculateTimeline(event, { filterIds: JOURNEY_IDS });
