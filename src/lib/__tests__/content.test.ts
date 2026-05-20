@@ -55,6 +55,42 @@ Body content`;
     });
   });
 
+
+  it('should parse canonical nested event guide fields and allow missing optional fields', () => {
+    const markdown = `---
+type: event
+title: "Nested Event"
+date: "2026-08-01"
+startDate: "2026-08-01"
+author: "Guide Author"
+category: "WSDC Registry Event"
+excerpt: "Short summary"
+location: "Venue"
+city: "Austin, TX"
+schedule: "Aug 1 - 3, 2026"
+url: "https://example.com/event"
+theme:
+  name: "Neon"
+  colors: ["magenta"]
+  outfitIds: ["outfit-1"]
+gear:
+  shoeIds: ["shoe-1"]
+relatedEvents: ["weekly"]
+---
+Body`;
+
+    const { data } = content.parseFrontmatter(markdown);
+    expect(data.theme).toEqual({
+      name: 'Neon',
+      colors: ['magenta'],
+      outfitIds: ['outfit-1']
+    });
+    expect(data.gear).toEqual({ shoeIds: ['shoe-1'] });
+    expect(data.relatedEvents).toEqual(['weekly']);
+    expect(data.heroImage).toBeUndefined();
+    expect(data.whyAttending).toBeUndefined();
+  });
+
   it('should handle flat alternative keys in frontmatter', () => {
     const markdown = `---
 type: event

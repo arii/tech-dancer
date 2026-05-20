@@ -25,8 +25,8 @@ The new format adds **five new frontmatter sections** and a richer markdown body
 | Section         | New Fields                                                                        |
 | --------------- | --------------------------------------------------------------------------------- |
 | Event Hero      | `whyAttending`, `heroImage`                                                       |
-| Theme Spotlight | `theme.name`, `theme.outfits[]`, `theme.accessories[]`                            |
-| Curated Gear    | `gear.outfits[]`, `gear.accessories[]`, `gear.shoes[]`, `gear.travel[]`           |
+| Theme Spotlight | `theme.name`, `theme.label`, `theme.description`, `theme.colors[]`, `theme.outfitIds[]`, `theme.accessoryIds[]`                            |
+| Curated Gear    | `gear.outfitIds[]`, `gear.accessoryIds[]`, `gear.shoeIds[]`, `gear.essentialIds[]`, `gear.travelIds[]`           |
 | Reminders       | `earlyBirdDate`, `registrationDeadline`, `hotelCutoffDate`, `packingReminderDate` |
 | Discovery       | `relatedEvents[]`, `url`                                                          |
 
@@ -103,6 +103,32 @@ relatedEvents:
   - "boogie-by-the-bay"
 ---
 ```
+
+
+## 2.1 Validation Expectations (Canonical Rules)
+
+Use nested YAML as the **canonical authoring style**. Flat keys remain supported only for backward compatibility/migration.
+
+**Required fields**
+
+- `type` must be `event`
+- `title`, `date`, `startDate`, `author`, `category`, `excerpt`
+- `location`, `city`, `schedule`, `url`
+
+**Recommended but optional**
+
+- `heroImage`, `whyAttending`
+- `theme` object (`name`, `label`, `description`, `colors`, `outfitIds`, `accessoryIds`)
+- `gear` object (`outfitIds`, `accessoryIds`, `shoeIds`, `essentialIds`, `travelIds`)
+- Reminder dates: `earlyBirdDate`, `registrationDeadline`, `hotelCutoffDate`, `packingReminderDate`
+- `relatedEvents`
+
+**Graceful fallback behavior**
+
+- Missing `theme` or `gear`: corresponding page sections are omitted.
+- Missing optional reminder dates: reminders render only from available anchors.
+- Missing `registrationDeadline`: derived as 14 days before `startDate`.
+- Missing `heroImage`: page falls back to default hero visual treatment.
 
 ---
 
