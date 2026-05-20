@@ -1,4 +1,3 @@
-
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
@@ -19,7 +18,8 @@ export function HeroSection() {
       align="center"
       justify="center"
       overflow="hidden"
-      className="relative hero-section"
+      position="relative"
+      className="hero-section"
       aria-label="Site hero"
     >
       <HeroParticleCanvas />

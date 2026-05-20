@@ -18,6 +18,7 @@ export const SPACING_MAP: Record<string | number, string> = {
   40: '40',
   48: '48',
   64: '64',
+  72: '72',
   80: '80',
   'section-spacing': 'section-spacing',
   auto: 'auto',

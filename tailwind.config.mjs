@@ -32,6 +32,9 @@ export default {
         micro: "var(--text-micro)",
         tiny: "var(--text-tiny)",
       },
+      zIndex: {
+        search: "200",
+      },
       keyframes: {
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
