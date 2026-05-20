@@ -1,4 +1,4 @@
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GearCard } from '@/components/ui/GearCard';
 import { ResolvedGearSection } from '../useEventDetail';
@@ -19,7 +19,9 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
 
         {sections.map((section) => (
           <Stack key={section.key} gap={8}>
-            <SectionHeader eyebrow="TOOLS" title={section.label} />
+            <Text as="h3" variant="headline" size="2xl" weight="font-black" color="brand">
+              {section.label}
+            </Text>
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
               {section.items.map((item) => (
                 <GearCard
