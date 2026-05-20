@@ -36,6 +36,7 @@ function ActionChip({ label, icon, onClick, className }: ActionChipProps) {
 
 export function ArticleActions({ title, description }: ArticleActionsProps) {
   const [copied, setCopied] = useState(false);
+  const [showCopyFallback, setShowCopyFallback] = useState(false);
   const hasNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   const handleCopyLink = async () => {
@@ -54,6 +55,7 @@ export function ArticleActions({ title, description }: ArticleActionsProps) {
         await navigator.share({ title, text: description, url: window.location.href });
       } catch (error) {
         console.error('Share failed; falling back to copy link', error);
+        setShowCopyFallback(true);
         await handleCopyLink();
       }
       return;
@@ -70,7 +72,7 @@ export function ArticleActions({ title, description }: ArticleActionsProps) {
         className="text-accent hover:bg-accent/10 transition-all active:scale-95 cursor-pointer"
       />
 
-      {!hasNativeShare && (
+      {(!hasNativeShare || showCopyFallback) && (
         <ActionChip
           label={copied ? 'COPIED' : 'COPY LINK'}
           icon={copied ? <Check className="w-4 h-4" /> : <LinkIcon className="w-4 h-4" />}
