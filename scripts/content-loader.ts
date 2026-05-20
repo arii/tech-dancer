@@ -43,9 +43,25 @@ export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
       .map(f => {
         const filePath = path.join(fullPath, f);
         const stats = fs.statSync(filePath);
+        let lastmod = stats.mtime.toISOString();
+
+        // Attempt to get date from frontmatter for more stable lastmod
+        try {
+          const content = fs.readFileSync(filePath, 'utf-8');
+          const dateMatch = content.match(/^date:\s*["']?([^"'\n]+)["']?/m);
+          if (dateMatch?.[1]) {
+            const date = new Date(dateMatch[1]);
+            if (!isNaN(date.getTime())) {
+              lastmod = date.toISOString();
+            }
+          }
+        } catch (e) {
+          // Fallback to mtime if parsing fails
+        }
+
         return {
           slug: `${prefix}/${f.replace(/\.md$/, '')}`,
-          lastmod: stats.mtime.toISOString()
+          lastmod
         };
       });
 

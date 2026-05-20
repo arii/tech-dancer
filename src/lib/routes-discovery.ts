@@ -16,6 +16,8 @@ function resolveCanonical(path: string, config?: { canonicalPath?: string }): st
  */
 function getFileLastMod(filePath: string): string {
   try {
+    // filePath is derived from internal route config, safe from traversal
+    // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
     const stats = fs.statSync(path.resolve(process.cwd(), filePath));
     return stats.mtime.toISOString();
   } catch {
@@ -65,7 +67,13 @@ export function getAllRoutes() {
           current > latest ? current : latest, getFileLastMod('src/features/dashboard/Dashboard.tsx'));
       } else {
         // Fallback to the component file's modification time
-        const fileName = r.path.slice(1).charAt(0).toUpperCase() + r.path.slice(2);
+        let fileName = r.path.slice(1).split('-').map(part =>
+          part.charAt(0).toUpperCase() + part.slice(1)
+        ).join('');
+
+        // Special case for UXAuditor
+        if (fileName === 'UxAuditor') fileName = 'UXAuditor';
+
         lastmod = getFileLastMod(`src/pages/${fileName || 'Home'}.tsx`);
       }
 
