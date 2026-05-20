@@ -7,5 +7,5 @@ export const IGNORED_ERROR_PATTERNS = [
   /gtag is not defined/,
   /chrome-extension/,
   /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/, // Common adblocker/extension interference
-  /net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin/, // Printful image cross-origin policy noise
+  /net::ERR_BLOCKED_BY_RESPONSE\.NotSameOrigin/, // External CDNs with strict Cross-Origin-Resource-Policy
 ];
