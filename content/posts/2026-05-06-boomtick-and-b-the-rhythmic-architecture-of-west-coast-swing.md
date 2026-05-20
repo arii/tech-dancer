@@ -1,6 +1,6 @@
 ---
 type: post
-title: "BoomTick and B•: The Rhythmic Architecture of West Coast Swing"
+title: "BoomTick and B•: Rhythmic Architecture of WCS"
 date: "2026-05-06"
 author: "Ariel Anders, PhD"
 category: "WCS"
