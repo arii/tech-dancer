@@ -63,7 +63,7 @@ jobs:
               echo "📦 Batch ${i} completed. Committing and pushing..."
               git add etl/data/wcs_prelims.parquet etl/data/event_queue.json
               if ! git commit -m "chore(etl): update wcs ledger and queue (batch ${i})"; then echo "No changes to commit"; fi
-              if ! git push origin HEAD:"$GITHUB_REF"; then echo "Push failed, continuing..."; fi
+              git pull --rebase origin "${GITHUB_REF_NAME:-main}" && git push origin HEAD:"$GITHUB_REF" || echo "Push failed, continuing..."
             else
               echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
               exit 1
@@ -82,4 +82,4 @@ jobs:
           # Only track and add the Parquet ledger; Markdown studies are ignored
           git add etl/data/wcs_prelims.parquet etl/data/event_queue.json .gitattributes
 
-          git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git push)
+          git diff --staged --quiet || (git commit -m "Automated ETL: New WCS results added" && git pull --rebase origin "${GITHUB_REF_NAME:-main}" && git push)
