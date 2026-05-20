@@ -188,7 +188,8 @@ export function EventReminders({ event, id }: EventRemindersProps) {
 
             <ActionButton
               onClick={handleSync}
-              className="w-full h-14 !bg-accent-purple hover:!bg-accent-purple/90 text-white shadow-lg shadow-purple-500/20" // impeccable-ignore
+              variant="primary"
+              className="w-full h-14"
             >
               <Box display="flex" align="center" gap={2}>
                 <Bell className="w-5 h-5" />
