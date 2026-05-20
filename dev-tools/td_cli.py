@@ -14,6 +14,48 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from tdw_services.cli import cli
+    # Expose utilities for legacy tests
+    from utils import get_github_token, get_repo_name, get_gha_variable, CLIError, get_github_client
+    from tdw_services.orchestrator import Orchestrator
+
+    _orch = Orchestrator()
+    resolve_baseline = _orch.resolve_baseline
+
+    def handle_fix_ci(args):
+        return _orch.fix_ci(
+            pr_number=getattr(args, 'pr_number', None),
+            branch=getattr(args, 'branch', None),
+            api_key=getattr(args, 'api_key', None),
+            dry_run=getattr(args, 'dry_run', True)
+        )
+
+    def handle_validate_issue(args):
+        return _orch.validate_issue(
+            issue_number=getattr(args, 'issue_number', None),
+            all_open=getattr(args, 'all_open', False),
+            post_comments=getattr(args, 'post_comments', False),
+            dry_run=getattr(args, 'dry_run', True)
+        )
+
+    def handle_audit_pr(args):
+        # Handle the case where args.pr_number might be a string like "null" from tests
+        pr_num = getattr(args, 'pr_number', None)
+        if pr_num in ["null", "", None]:
+             raise CLIError("Invalid PR number")
+        try:
+            pr_num = int(pr_num)
+        except (ValueError, TypeError):
+             raise CLIError("Invalid PR number format")
+
+        return _orch.audit_pr(
+            pr_num,
+            fetch=getattr(args, 'fetch', False),
+            audit=getattr(args, 'audit', False),
+            submit=getattr(args, 'submit', False),
+            cleanup=getattr(args, 'cleanup', False),
+            dry_run=getattr(args, 'dry_run', True),
+            event=getattr(args, 'event', None)
+        )
 except ImportError as e:
     print(f"Error: Could not import tdw_services or its dependencies.")
     print(f"Details: {e}")
