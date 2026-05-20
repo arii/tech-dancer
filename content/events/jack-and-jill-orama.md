@@ -1,6 +1,6 @@
 ---
 type: event
-region: "Southern California"
+region: "Pacific Northwest"
 resourceGuide: true
 guideStatus: "live"
 title: "Jack & Jill O'Rama"

@@ -22,6 +22,8 @@ interface FolioGridProps {
   onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
   renderItem?: (item: ContentItem) => ReactNode;
+  renderGrid?: (items: ContentItem[], view: ViewMode) => ReactNode;
+  searchPlaceholder?: string;
 }
 
 export default function FolioGrid({
@@ -34,7 +36,9 @@ export default function FolioGrid({
   view = 'card',
   onViewChange,
   as,
-  renderItem
+  renderItem,
+  renderGrid,
+  searchPlaceholder: searchPlaceholderProp
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -48,7 +52,11 @@ export default function FolioGrid({
     );
   });
 
-  const searchPlaceholder = basePath.includes('gear') ? 'Search gear…' : 'Search posts…';
+  const searchPlaceholder = searchPlaceholderProp || (basePath.includes('gear')
+    ? 'Search gear…'
+    : basePath.includes('events')
+      ? 'Search events…'
+      : 'Search posts…');
 
   return (
     <Box as="section" height="full">
@@ -79,28 +87,28 @@ export default function FolioGrid({
             title="No results found"
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
+        ) : renderGrid ? (
+          renderGrid(filteredItems, view)
         ) : view === 'card' ? (
-          basePath.includes('events') ? null : (
-            <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
-              {filteredItems.map((item) => (
-                <Box
-                  key={item.slug}
-                  padding={4}
-                  height="full"
-                  className="bg-transparent"
-                >
-                  {renderItem ? (
-                    renderItem(item)
-                  ) : (
-                    <ContentCard
-                      {...item}
-                      basePath={basePath}
-                    />
-                  )}
-                </Box>
-              ))}
-            </Grid>
-          )
+          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
+            {filteredItems.map((item) => (
+              <Box
+                key={item.slug}
+                padding={4}
+                height="full"
+                className="bg-transparent"
+              >
+                {renderItem ? (
+                  renderItem(item)
+                ) : (
+                  <ContentCard
+                    {...item}
+                    basePath={basePath}
+                  />
+                )}
+              </Box>
+            ))}
+          </Grid>
         ) : (
           <Stack gap={0} border="t" className="border-line">
             {filteredItems.map((item) => (

@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Text, Stack } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
 export function EventNavigation() {
@@ -31,9 +31,15 @@ export function EventNavigation() {
           className="no-scrollbar scroll-smooth"
           paddingX={{ base: 6, md: 0 }}
         >
-          <NavLink
+          <Stack
+            as={NavLink}
             to="/event-resource-guides"
-            className="group flex items-center gap-2 py-4 shrink-0 hover:text-accent transition-colors"
+            direction="row"
+            align="center"
+            gap={2}
+            paddingY={4}
+            shrink={false}
+            className="group hover:text-accent transition-colors"
           >
             <ArrowLeft size={14} className="text-accent" />
             <Text
@@ -47,7 +53,7 @@ export function EventNavigation() {
             >
               All Guides
             </Text>
-          </NavLink>
+          </Stack>
 
           <Box width={1} height={4} className="bg-line/20 shrink-0" />
 
@@ -60,8 +66,8 @@ export function EventNavigation() {
               shrink={false}
               className="group relative cursor-pointer"
             >
-              <Box
-                display="flex"
+              <Stack
+                direction="row"
                 align="center"
                 gap={2}
                 color="dim"
@@ -77,7 +83,7 @@ export function EventNavigation() {
                 >
                   {tab.label}
                 </Text>
-              </Box>
+              </Stack>
               <Box
                 position="absolute"
                 bottom={0}

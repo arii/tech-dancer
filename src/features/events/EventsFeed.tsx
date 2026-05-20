@@ -1,28 +1,85 @@
-import { useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { ViewMode } from '@/components/ui/ViewToggle';
 import { useEvents } from './useEvents';
+import { useGroupedEvents } from './hooks/useGroupedEvents';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 import { EventCard } from '@/components/ui/EventCard';
-import { Event } from '@/lib/content';
+import { Event, ContentItem } from '@/lib/content';
 import { motion } from 'motion/react';
 import { motionTokens } from '@/styles/motion';
 
+function EventRegionalGrid({ filteredItems, currentView }: { filteredItems: ContentItem[], currentView: ViewMode }) {
+  if (currentView === 'list') {
+    return (
+      <Stack gap={0} border="t" className="border-line">
+        {filteredItems.map((item) => {
+          const event = item as Event;
+          return (
+            <EventCard
+              key={event.slug}
+              title={event.title}
+              slug={event.slug}
+              location={event.location}
+              schedule={event.schedule}
+              guideStatus={event.guideStatus}
+              hasTheme={!!event.theme}
+              hasReminders={!!(event.earlyBirdDate || event.hotelCutoffDate || event.registrationDeadline)}
+              variant="compact"
+            />
+          );
+        })}
+      </Stack>
+    );
+  }
+
+  // Card view with regional grouping
+  const { groupedEvents: filteredGrouped, regions: filteredRegions } = useGroupedEvents(filteredItems as Event[]);
+
+  return (
+    <Stack gap={12} marginTop={12}>
+      {filteredRegions.map((region) => (
+        <Stack key={region} gap={6}>
+          <Box border="b" className="border-line" paddingBottom={2}>
+            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+              {region}
+            </Text>
+          </Box>
+          <Grid
+            cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }}
+            gap={4}
+            as={motion.div}
+            variants={motionTokens.staggerContainer}
+            initial="initial"
+            animate="animate"
+          >
+            {filteredGrouped[region].map((event) => (
+              <Box
+                key={event.slug}
+                as={motion.div}
+                variants={motionTokens.staggerItem}
+              >
+                <EventCard
+                  title={event.title}
+                  slug={event.slug}
+                  location={event.location}
+                  schedule={event.schedule}
+                  guideStatus={event.guideStatus}
+                  hasTheme={!!event.theme}
+                  hasReminders={!!(event.earlyBirdDate || event.hotelCutoffDate || event.registrationDeadline)}
+                />
+              </Box>
+            ))}
+          </Grid>
+        </Stack>
+      ))}
+    </Stack>
+  );
+}
+
 export default function EventsFeed() {
   const { events, categories, view, setView } = useEvents();
-
-  const groupedEvents = useMemo(() => {
-    const groups: Record<string, Event[]> = {};
-    events.forEach(event => {
-      const region = event.region || 'Other Regions';
-      if (!groups[region]) groups[region] = [];
-      groups[region].push(event);
-    });
-    return groups;
-  }, [events]);
-
-  const regions = useMemo(() => Object.keys(groupedEvents).sort(), [groupedEvents]);
 
   return (
     <Box as="section">
@@ -37,70 +94,18 @@ export default function EventsFeed() {
         label="DISCOVER"
         description="Scalable planning hub for WSDC events. Browse by region to find live guides, theme gear, and travel reminders."
         basePath="/events"
+        searchPlaceholder="Search guides..."
         view={view}
         onViewChange={setView}
-        renderItem={(item) => {
-          const event = item as Event;
-          return (
-            <EventCard
-              title={event.title}
-              slug={event.slug}
-              location={event.location}
-              schedule={event.schedule}
-              guideStatus={event.guideStatus}
-              hasTheme={!!event.theme}
-              hasReminders={!!event.startDate}
-              variant={view === 'card' ? 'default' : 'compact'}
-            />
-          );
-        }}
+        renderGrid={(filteredItems, currentView) => (
+          <EventRegionalGrid filteredItems={filteredItems} currentView={currentView} />
+        )}
       >
         <Box marginTop={8}>
           <FilterBar
             categories={categories}
           />
         </Box>
-
-        {/* Regional Grouping in Card View */}
-        {view === 'card' && (
-          <Stack gap={12} marginTop={12}>
-            {regions.map((region) => (
-              <Stack key={region} gap={6}>
-                <Box border="b" className="border-line" paddingBottom={2}>
-                  <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
-                    {region}
-                  </Text>
-                </Box>
-                <Grid
-                  cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }}
-                  gap={4}
-                  as={motion.div}
-                  variants={motionTokens.staggerContainer}
-                  initial="initial"
-                  animate="animate"
-                >
-                  {groupedEvents[region].map((event) => (
-                    <Box
-                      key={event.slug}
-                      as={motion.div}
-                      variants={motionTokens.staggerItem}
-                    >
-                      <EventCard
-                        title={event.title}
-                        slug={event.slug}
-                        location={event.location}
-                        schedule={event.schedule}
-                        guideStatus={event.guideStatus}
-                        hasTheme={!!event.theme}
-                        hasReminders={!!event.startDate}
-                      />
-                    </Box>
-                  ))}
-                </Grid>
-              </Stack>
-            ))}
-          </Stack>
-        )}
       </FolioGrid>
     </Box>
   );
