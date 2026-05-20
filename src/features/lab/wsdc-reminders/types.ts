@@ -1,8 +1,10 @@
 export interface EventAnchors {
   title: string;
   startDate: string;      // The "Day 0" of the event
-  earlyBirdDate: string;  // Verified from event site
-  hotelCutoffDate: string; // Verified from event site
+  earlyBirdDate?: string;  // Verified from event site
+  registrationDeadline?: string;
+  hotelCutoffDate?: string; // Verified from event site
+  packingReminderDate?: string;
   url?: string;
 }
 
