@@ -9,7 +9,7 @@
   "postCreateCommand": "bash ./dev-tools/setup-agent.sh",
   "containerEnv": {
     "CI": "1",
-    "PLAYWRIGHT_BROWSERS_PATH": "0",
+    "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright",
     "PNPM_VERSION": "10.28.2",
     "NODE_MAJOR": "22",
     "SKIP_APT": "1"

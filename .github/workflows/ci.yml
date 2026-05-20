@@ -206,6 +206,7 @@ jobs:
           CI: true
           NODE_ENV: production
           REPO_NAME: ${{ github.event.repository.name }}
+          PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
 
       - name: Run Lighthouse CI
         run: |
