@@ -179,7 +179,9 @@ export function EventReminders({ event, id }: EventRemindersProps) {
                 <Box
                   key={channel.id}
                   as="button"
-                  onClick={() => toggleChannel(channel.id)}
+                  onClick={() => !isSoon && toggleChannel(channel.id)}
+                  disabled={isSoon}
+                  aria-disabled={isSoon}
                   display="flex"
                   align="center"
                   gap={3}
@@ -189,7 +191,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
                   surface={selectedChannels.includes(channel.id) ? "warning" : "surface"}
                   className={cn(
                     "transition-all text-left relative",
-                    !selectedChannels.includes(channel.id) && "hover:border-line-hover",
+                    !selectedChannels.includes(channel.id) && !isSoon && "hover:border-line-hover",
                     isSoon && "opacity-60 cursor-not-allowed"
                   )}
                 >
