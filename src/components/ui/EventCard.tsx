@@ -36,10 +36,8 @@ export function EventCard({
       height="full"
       width="full"
       textAlign="left"
-      className={cn(
-        "group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5",
-        isCompact && "sm:padding-6"
-      )}
+      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      padding={isCompact ? { base: 4, sm: 6 } : 8}
     >
       <NavLink
         to={`/events/${slug}`}

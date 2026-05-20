@@ -11,6 +11,9 @@ import { motion } from 'motion/react';
 import { motionTokens } from '@/styles/motion';
 
 function EventRegionalGrid({ filteredItems, currentView }: { filteredItems: ContentItem[], currentView: ViewMode }) {
+  // Card view with regional grouping
+  const { groupedEvents: filteredGrouped, regions: filteredRegions } = useGroupedEvents(filteredItems as Event[]);
+
   if (currentView === 'list') {
     return (
       <Stack gap={0} border="t" className="border-line">
@@ -33,9 +36,6 @@ function EventRegionalGrid({ filteredItems, currentView }: { filteredItems: Cont
       </Stack>
     );
   }
-
-  // Card view with regional grouping
-  const { groupedEvents: filteredGrouped, regions: filteredRegions } = useGroupedEvents(filteredItems as Event[]);
 
   return (
     <Stack gap={12} marginTop={12}>
