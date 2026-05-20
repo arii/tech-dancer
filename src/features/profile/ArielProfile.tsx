@@ -62,7 +62,7 @@ function ArielProfile() {
       <Stack gap={12} marginTop={12}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-            <Stack gap={12} className="lg:col-span-8 order-2 lg:order-1">
+            <Stack gap={12} span={{ base: 1, lg: 8 }} order={{ base: 2, lg: 1 }}>
               {bio.sections.map(renderSection)}
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
@@ -81,7 +81,7 @@ function ArielProfile() {
               </Stack>
             </Stack>
 
-            <Box className="lg:col-span-4 relative order-1 lg:order-2">
+            <Box span={{ base: 1, lg: 4 }} position="relative" order={{ base: 1, lg: 2 }}>
               <Stack gap={8} position="sticky" top={12} align={{ base: "center", lg: "start" }}>
                 {/* Profile portrait */}
                 <Box
