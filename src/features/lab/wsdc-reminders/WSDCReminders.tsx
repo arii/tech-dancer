@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -23,21 +23,19 @@ export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
     initialData: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
   });
 
-  const [selectedEventId, setSelectedEventId] = useState<string>(initialEventId || 'custom');
+  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(null);
 
-  // Sync state if initialEventId prop changes (e.g. navigation between events)
-  useEffect(() => {
-    if (initialEventId) {
-      setSelectedEventId(initialEventId);
-    }
-  }, [initialEventId]);
-
-  // Handle default selection if no initialEventId is provided and we have events
-  useEffect(() => {
-    if (!initialEventId && selectedEventId === 'custom' && events.length > 0 && !customEvent.title) {
-      setSelectedEventId(events[0].slug);
-    }
-  }, [initialEventId, events, selectedEventId, customEvent.title]);
+  // Derive the active selection
+  const selectedEventId = useMemo(() => {
+    // 1. Explicit internal user selection always wins
+    if (internalSelectedId) return internalSelectedId;
+    // 2. Prop-based initial selection
+    if (initialEventId) return initialEventId;
+    // 3. Fallback to first available event if not 'custom'
+    if (events.length > 0) return events[0].slug;
+    // 4. Ultimate fallback
+    return 'custom';
+  }, [internalSelectedId, initialEventId, events]);
 
   const [customEvent, setCustomEvent] = useState<EventAnchors>({
     title: '',
@@ -107,7 +105,7 @@ export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
           <EventSelector
             events={events}
             selectedEventId={selectedEventId}
-            onSelect={setSelectedEventId}
+            onSelect={setInternalSelectedId}
           />
 
           {selectedEventId === 'custom' && (
@@ -172,7 +170,7 @@ export default function WSDCReminders({ initialEventId }: WSDCRemindersProps) {
       )}
 
       {activeEvent.url && (
-        <Box border radius="lg" padding={6} surface="accent" className="bg-accent/5 border-accent/20">
+        <Box border radius="lg" padding={6} surface="accent">
           <Box display="flex" align="center" gap={4}>
             <Globe className="w-6 h-6 text-accent" />
             <Stack gap={1} flex={1}>
