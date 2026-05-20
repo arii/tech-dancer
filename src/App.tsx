@@ -22,29 +22,29 @@ export function RootLayout() {
   useEffect(() => {
     if (!import.meta.env.PROD || window.location.hostname === 'localhost') return;
 
-    // Inject Google Analytics script if not already present
-    if (!window.gtag) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-      document.head.appendChild(script);
+    // Inject Google Analytics script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
 
-      // Initialize dataLayer and gtag
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function() {
-        // eslint-disable-next-line prefer-rest-params
-        window.dataLayer?.push(arguments);
-      };
-      window.gtag?.('js', new Date());
-    }
+    // Initialize dataLayer and gtag
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function() {
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer?.push(arguments);
+    };
+    window.gtag?.('js', new Date());
 
     // Configure GA4 with automatic page_view tracking disabled
     // We'll track page views manually on location change to handle SPA routing correctly
-    // Explicitly use 'beacon' transport to prevent network aborts during route transitions
     window.gtag?.('config', GA_MEASUREMENT_ID, {
-      send_page_view: false,
-      transport_type: 'beacon'
+      send_page_view: false
     });
+
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
 
   useEffect(() => {
@@ -54,8 +54,7 @@ export function RootLayout() {
     window.gtag?.('event', 'page_view', {
       page_path: location.pathname + location.search,
       page_location: window.location.href,
-      page_title: document.title,
-      transport_type: 'beacon'
+      page_title: document.title
     });
   }, [location]);
 

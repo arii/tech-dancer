@@ -32,7 +32,6 @@ export default function EventsFeed() {
               slug={event.slug}
               location={event.location}
               schedule={event.schedule}
-              guideStatus={event.guideStatus}
             />
           );
         }}
