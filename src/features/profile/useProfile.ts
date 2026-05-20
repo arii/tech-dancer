@@ -1,5 +1,5 @@
 import { ProfileData } from './types';
-import { SOCIAL_LINKS } from '@/config/social';
+import { SOCIAL_LINKS } from '@/config/constants';
 import firstComp from '@/assets/first_comp.jpg';
 import glowBunny from '@/assets/glow_bunny.jpg';
 import madJamAri from '@/assets/mad_jam_ari.jpg';
