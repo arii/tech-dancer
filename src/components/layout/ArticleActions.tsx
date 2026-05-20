@@ -48,14 +48,17 @@ export function ArticleActions({ title, description }: ArticleActionsProps) {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (hasNativeShare) {
-      navigator
-        .share({ title, text: description, url: window.location.href })
-        .catch((error) => console.error('Share failed', error));
+      try {
+        await navigator.share({ title, text: description, url: window.location.href });
+      } catch (error) {
+        console.error('Share failed; falling back to copy link', error);
+        await handleCopyLink();
+      }
       return;
     }
-    void handleCopyLink();
+    await handleCopyLink();
   };
 
   return (
@@ -63,7 +66,7 @@ export function ArticleActions({ title, description }: ArticleActionsProps) {
       <ActionChip
         label="SHARE"
         icon={<Share2 className="w-4 h-4" />}
-        onClick={handleShare}
+        onClick={() => void handleShare()}
         className="text-accent hover:bg-accent/10 transition-all active:scale-95 cursor-pointer"
       />
 
