@@ -28,7 +28,9 @@ export function ReminderSignups({ event, id }: ReminderSignupsProps) {
           <Stack direction={{ base: 'col', md: 'row' }} gap={8} align="center" justify="between">
             <Stack gap={2} flex={1}>
               <Box display="flex" align="center" gap={3}>
-                <Bell className="w-5 h-5 text-accent" />
+                <Text color="accent" as="span">
+                  <Bell size={20} aria-hidden="true" />
+                </Text>
                 <Text variant="headline" size="lg" weight="font-bold">Never Miss a Deadline</Text>
               </Box>
               <Text size="sm" color="dim" maxWidth="xl">
