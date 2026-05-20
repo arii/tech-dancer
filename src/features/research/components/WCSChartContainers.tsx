@@ -26,7 +26,7 @@ interface TrendData {
 }
 
 export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
-  <Box border surface="default" padding="card" height="[400px]" /* impeccable-ignore */>
+  <Box border surface="default" padding="card" height="var(--raw-spacing-chart-h)">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <BarChart2 className="w-4 h-4 text-accent" />
@@ -72,7 +72,7 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
 );
 
 export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
-  <Box border surface="default" padding="card" height="[400px]" /* impeccable-ignore */>
+  <Box border surface="default" padding="card" height="var(--raw-spacing-chart-h)">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
         <TrendingUp className="w-4 h-4 text-accent" />

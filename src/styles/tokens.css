@@ -88,6 +88,10 @@
   /* Chart Tooltips */
   --raw-chart-tooltip-font-size: 11px;
   --raw-chart-tooltip-padding: 8px;
+
+  /* Layout Dimensions */
+  --raw-spacing-chart-h: 400px;
+  --raw-spacing-drafter-max-h: 600px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {
