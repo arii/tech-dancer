@@ -13,6 +13,7 @@ import {
   Brush
 } from 'recharts';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { CHART_TOOLTIP_STYLE } from './constants';
 
 interface ScoreData {
   score: number;
@@ -23,14 +24,6 @@ interface TrendData {
   date: string;
   avg: number;
 }
-
-const customTooltipStyle = {
-  backgroundColor: 'var(--raw-color-surface)',
-  border: '1px solid rgba(255,255,255,0.1)', // impeccable-ignore
-  fontSize: '11px', // impeccable-ignore
-  fontFamily: 'var(--font-mono)',
-  padding: '8px' // impeccable-ignore
-};
 
 export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
   <Box border surface="default" padding="card" height="[400px]" /* impeccable-ignore */>
@@ -57,7 +50,7 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
                 axisLine={false}
                 tick={{ fill: 'rgba(255,255,255,0.5)' }}
               />
-              <Tooltip contentStyle={customTooltipStyle} />
+              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
               <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
               <Brush
                 dataKey="score"
@@ -103,7 +96,7 @@ export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
                 axisLine={false}
                 tick={{ fill: 'rgba(255,255,255,0.5)' }}
               />
-              <Tooltip contentStyle={customTooltipStyle} />
+              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
               <Line
                 type="monotone"
                 dataKey="avg"
