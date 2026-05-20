@@ -9,6 +9,9 @@ excerpt: "San Francisco event. Check for roommate pairings on the Facebook group
 location: "Hyatt Regency San Francisco Airport"
 city: "Burlingame, CA"
 schedule: "August 14 - 17, 2026"
+region: "West Coast"
+guideStatus:
+  - "Coming Soon"
 url: "https://swingtacular.com"
 heroImage: ""
 description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."

@@ -48,6 +48,7 @@ PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR
 2. **Read the Context & Instructions**:
    - Read `.agent/workflows/REVIEW_INSTRUCTIONS.md` to understand the audit criteria. The audit scope includes `src/features`, `src/pages`, `src/components`, and `src/layouts`.
    - Read `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` to analyze the code diffs, stats, and **Last Commit Time**.
+   - If any CI check in the context has a failing conclusion, perform dedicated log triage before drafting recommendations: identify the failing suite, isolate the primary error, and include concrete remediation steps in the review body.
 
 3. **Draft the Feedback (Output)**:
    - Open the generated `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` file.
