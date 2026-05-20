@@ -20,11 +20,11 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
         {sections.map((section) => (
           <Stack key={section.key} gap={8}>
             <SectionHeader
-              eyebrow="CURATED"
+              eyebrow="TOOLS"
               title={section.label}
               link={{ text: section.ctaLabel, to: section.ctaHref }}
             />
-            <Grid cols={{ base: 1, sm: 2 }} gap={6}>
+            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
               {section.items.map((item) => (
                 <GearCard
                   key={item.id}
