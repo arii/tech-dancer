@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Jack & Jill O\'Rama Guide', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/jack-and-jill-orama');
+    await page.goto('./events/jack-and-jill-orama');
   });
 
   test('should render the hero section with correct title and whyAttending blurb', async ({ page }) => {
