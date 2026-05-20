@@ -1,18 +1,27 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
-    .brand-stop-purple { stop-color: #8b5cf6; }
-    .brand-text-accent { fill: #22d3ee; }
-    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
-    .brand-wordmark {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-weight: 800;
+    :root {
+      color-scheme: light dark;
+      --bt-text-base: #0f172a;
+      --bt-text-accent: #0891b2;
+      --bt-surface: #f8fafc;
     }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bt-text-base: #f8fafc;
+        --bt-text-accent: #67e8f9;
+        --bt-surface: #020617;
+      }
+    }
+
+    .surface { fill: var(--bt-surface); }
+    .text-base { fill: var(--bt-text-base); }
+    .text-accent { fill: var(--bt-text-accent); }
   </style>
-  <rect width="64" height="64" rx="14" fill="#020617"/>
-  
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="12" class="brand-wordmark">
-    <tspan fill="white">boom</tspan>
-    <tspan class="brand-text-accent" fill="#22d3ee">tick</tspan>
+
+  <rect class="surface" width="64" height="64" rx="14" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="12" font-family="'Bricolage Grotesque', sans-serif" font-weight="800">
+    <tspan class="text-base">boom</tspan><tspan class="text-accent">tick</tspan>
   </text>
 </svg>
