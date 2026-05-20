@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Download, Calendar, Mail, Smartphone, Bell, CheckCircle2, Trophy, Hotel, Plane, ShieldCheck, Briefcase } from 'lucide-react';
+import { Calendar, Mail, Smartphone, Bell, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
 import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
 import { generateICS, downloadICS } from '@/features/lab/wsdc-reminders/lib/ics-generator';
-import { TimelineItem } from '@/features/lab/wsdc-reminders/types';
 import { Event } from '@/lib/content';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { cn } from '@/lib/utils';
@@ -12,26 +11,6 @@ interface EventRemindersProps {
   event: Event;
   id?: string;
 }
-
-const ICON_MAP: Record<string, any> = {
-  'flight-track': Plane,
-  'early-bird': Trophy,
-  'registration-deadline': CheckCircle2,
-  'hotel-block': Hotel,
-  'comp-window': CheckCircle2,
-  'cancel-safety': ShieldCheck,
-  'packing-reminder': Briefcase,
-};
-
-const BADGE_MAP: Record<string, string> = {
-  'flight-track': 'Logistics',
-  'early-bird': 'Money',
-  'registration-deadline': 'Required',
-  'hotel-block': 'Logistics',
-  'comp-window': 'Action',
-  'cancel-safety': 'Safety',
-  'packing-reminder': 'Prep',
-};
 
 export function EventReminders({ event, id }: EventRemindersProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -130,7 +109,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
 
           <Stack gap={4}>
             {timeline.filter(item => ['early-bird', 'registration-deadline', 'hotel-block', 'packing-reminder'].includes(item.id)).map((item) => {
-              const Icon = ICON_MAP[item.id] || Calendar;
+              const Icon = item.icon || Calendar;
               return (
                 <Box key={item.id} display="flex" align="center" gap={4} paddingY={3} border="b" className="last:border-b-0 border-line/40">
                   <Box
@@ -150,16 +129,18 @@ export function EventReminders({ event, id }: EventRemindersProps) {
                       <Text size="xs" color="dim">{item.formattedDate}</Text>
                     </Stack>
                   </Box>
-                  <Box
-                    paddingX={2}
-                    paddingY={0.5}
-                    radius="md"
-                    className="bg-line/20"
-                  >
-                    <Text variant="mono" size="xxs" weight="font-bold" uppercase>
-                      {BADGE_MAP[item.id]}
-                    </Text>
-                  </Box>
+                  {item.badge && (
+                    <Box
+                      paddingX={2}
+                      paddingY={0.5}
+                      radius="md"
+                      className="bg-line/20"
+                    >
+                      <Text variant="mono" size="xxs" weight="font-bold" uppercase>
+                        {item.badge}
+                      </Text>
+                    </Box>
+                  )}
                 </Box>
               );
             })}
@@ -206,7 +187,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
 
             <ActionButton
               onClick={handleSync}
-              className="w-full h-14 !bg-[#8b5cf6] hover:!bg-[#7c3aed] text-white shadow-lg shadow-purple-500/20"
+              className="w-full h-14 !bg-accent-purple hover:!bg-accent-purple/90 text-white shadow-lg shadow-purple-500/20" // impeccable-ignore
             >
               <Box display="flex" align="center" gap={2}>
                 <Bell className="w-5 h-5" />

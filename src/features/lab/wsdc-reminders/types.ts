@@ -1,3 +1,5 @@
+import { type LucideIcon } from 'lucide-react';
+
 export interface EventAnchors {
   title: string;
   startDate: string;      // The "Day 0" of the event
@@ -15,4 +17,6 @@ export interface TimelineItem {
   label: string;
   description: string;
   formattedDate?: string;
+  icon?: LucideIcon;
+  badge?: string;
 }

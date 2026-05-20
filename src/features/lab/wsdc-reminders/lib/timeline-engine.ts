@@ -1,3 +1,4 @@
+import { Plane, Trophy, Hotel, CheckCircle2, ShieldCheck, Briefcase } from 'lucide-react';
 import { EventAnchors, TimelineItem } from '../types';
 import { parseDate, addDays } from '@/lib/utils';
 
@@ -14,18 +15,24 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       date: addDays(start, -90),
       label: "Start Flight Tracking",
       description: "Set United/Delta price alerts. Book Main Cabin to preserve credit flexibility.",
+      icon: Plane,
+      badge: 'Logistics',
     },
     {
       id: 'comp-window',
       date: addDays(start, -14),
       label: "Competition Signups",
       description: "Finalize Jack & Jill entries. Note: Competition fees are usually non-refundable.",
+      icon: CheckCircle2,
+      badge: 'Action',
     },
     {
       id: 'cancel-safety',
       date: addDays(start, -5),
       label: "Cancel Safety Check",
       description: "Execute final 'Go/No-Go' decision. Cancel or transfer hotel rooms to avoid penalties.",
+      icon: ShieldCheck,
+      badge: 'Safety',
     }
   ];
 
@@ -35,6 +42,8 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       date: addDays(early, -2), // Use a 2-day buffer for Early Bird as per the guide
       label: "Early Bird Deadline",
       description: `Register for ${event.title} now. This is the final window to secure the discount while minimizing risk.`,
+      icon: Trophy,
+      badge: 'Money',
     });
   }
 
@@ -44,6 +53,8 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       date: registration,
       label: "Registration Deadline",
       description: `Final call for online registration for ${event.title}. Avoid on-site registration lines and stress.`,
+      icon: CheckCircle2,
+      badge: 'Required',
     });
   }
 
@@ -53,6 +64,8 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       date: hotel,
       label: "Hotel Block Cutoff",
       description: "Book your room within the discounted block. Hotel blocks often sell out before this date.",
+      icon: Hotel,
+      badge: 'Logistics',
     });
   }
 
@@ -62,6 +75,8 @@ export const calculateTimeline = (event: EventAnchors): TimelineItem[] => {
       date: packing,
       label: "Packing Reminder",
       description: "Finalize your outfits, check the theme requirements, and make sure your dance shoes are in the bag.",
+      icon: Briefcase,
+      badge: 'Prep',
     });
   }
 

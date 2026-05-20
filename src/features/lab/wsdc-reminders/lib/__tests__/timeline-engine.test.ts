@@ -12,9 +12,37 @@ describe('timeline-engine', () => {
     url: 'https://example.com/event'
   };
 
-  it('should calculate all five timeline items', () => {
+  it('should calculate all five timeline items for base mock', () => {
     const timeline = calculateTimeline(mockEvent);
     expect(timeline).toHaveLength(5);
+  });
+
+  it('should include registration deadline if provided', () => {
+    const event = { ...mockEvent, registrationDeadline: '2024-05-20' };
+    const timeline = calculateTimeline(event);
+    const regItem = timeline.find(item => item.id === 'registration-deadline');
+    expect(regItem?.date.getTime()).toBe(parseDate('2024-05-20').getTime());
+    expect(regItem?.badge).toBe('Required');
+    expect(timeline).toHaveLength(6);
+  });
+
+  it('should include packing reminder if provided', () => {
+    const event = { ...mockEvent, packingReminderDate: '2024-05-30' };
+    const timeline = calculateTimeline(event);
+    const packingItem = timeline.find(item => item.id === 'packing-reminder');
+    expect(packingItem?.date.getTime()).toBe(parseDate('2024-05-30').getTime());
+    expect(packingItem?.badge).toBe('Prep');
+    expect(timeline).toHaveLength(6);
+  });
+
+  it('should include all possible items if all dates provided', () => {
+    const event = {
+      ...mockEvent,
+      registrationDeadline: '2024-05-20',
+      packingReminderDate: '2024-05-30'
+    };
+    const timeline = calculateTimeline(event);
+    expect(timeline).toHaveLength(7);
   });
 
   it('should sort items by date', () => {
