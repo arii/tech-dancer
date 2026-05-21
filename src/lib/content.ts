@@ -140,6 +140,7 @@ function transform<T extends { date?: string }>(
 
       return result as unknown as T;
     })
+    .filter((item) => !(item as any).draft)
     .sort((a, b) => {
       const timeA = a.date ? new Date(a.date).getTime() : 0;
       const timeB = b.date ? new Date(b.date).getTime() : 0;
