@@ -18,7 +18,9 @@
     "name": "Loop Experience Ear Plugs",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Better to reduce loud noises but still hear the beat."
+    "description": "Better to reduce loud noises but still hear the beat.",
+    "gearSlug": "2023-10-01-loop-earplugs",
+    "image": "/images/gear/loop-earplugs.webp"
   },
   "suede-sheets": {
     "id": "suede-sheets",

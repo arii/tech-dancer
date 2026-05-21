@@ -28,10 +28,13 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
                 <GearCard
                   key={item.id}
                   slug={item.id}
+                  href={item.href}
+                  external={item.isExternal}
                   title={item.name}
                   category={item.category}
                   excerpt={item.description}
                   basePath="/gear"
+                  image={item.image}
                 />
               ))}
             </Grid>
