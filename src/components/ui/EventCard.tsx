@@ -27,7 +27,7 @@ export function EventCard(props: EventCardProps) {
   const hasReminders = !!(earlyBirdDate || hotelCutoffDate || registrationDeadline || packingReminderDate);
   const hasTheme = !!(theme || themeName);
 
-  const rest = pickRest(props, ['event', ...CONTENT_METADATA_KEYS] as any);
+  const rest = pickRest(props, ['event', ...CONTENT_METADATA_KEYS] as (keyof EventCardProps)[]);
   return (
     <Stack
       as="article"

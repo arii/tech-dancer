@@ -34,11 +34,7 @@ export function GearCard(props: GearCardProps) {
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath'
-<<<<<<< HEAD
   ] as (keyof GearCardProps)[]);
-=======
-  ] as any);
->>>>>>> 19c3da448 (feat: enhance PR audit workflow and refactor card components)
   return (
     <Stack
       as="article"
