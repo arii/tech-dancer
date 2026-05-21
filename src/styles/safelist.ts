@@ -113,9 +113,4 @@ export const tailwindSafelist = [
   'lg:gap-8',
   'md:gap-6',
   'md:gap-8',
-  'backdrop-blur-md',
-  'bg-opacity-80',
-  'touch-scroll',
-  'no-scrollbar',
-  'pointer-events-none',
 ];

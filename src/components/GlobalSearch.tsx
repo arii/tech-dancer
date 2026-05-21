@@ -166,7 +166,6 @@ export function GlobalSearch() {
               placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
               defaultValue={query}
               onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
               width="full"
               variant="sans"
               size="xl"
