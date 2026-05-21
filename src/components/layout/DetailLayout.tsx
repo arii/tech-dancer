@@ -37,7 +37,7 @@ export function DetailLayout({
   const rt = readingTime(content);
 
   return (
-    <Box as="article" padding="panel">
+    <Box as="article" height="full" paddingY={12} paddingX={{ base: 6, md: 12, lg: 24 }}>
       <Stack gap={12} maxWidth="4xl" marginX="auto" width="full">
         {/* Navigation */}
         <Stack
