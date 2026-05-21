@@ -137,7 +137,7 @@ function ProductCard({ product }: { product: MerchProduct }) {
           opacity={80}
           className="bg-accent text-white backdrop-blur-md shadow-sm"
         >
-          <Text variant="mono" size="micro" weight="font-black" className="uppercase tracking-wide">
+          <Text variant="mono" size="micro" weight="font-black" uppercase tracking="wide">
             {product.price.includes('$') ? product.price : `$${product.price}`}
           </Text>
         </Box>
@@ -174,12 +174,13 @@ function ProductCard({ product }: { product: MerchProduct }) {
           weight="font-bold"
           color="main"
           leading="tight"
-          className="group-hover:text-accent transition-colors line-clamp-2"
+          clamp={2}
+          className="group-hover:text-accent transition-colors"
         >
           {product.title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+        <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={3}>
           {product.description}
         </Text>
       </Stack>
@@ -187,7 +188,7 @@ function ProductCard({ product }: { product: MerchProduct }) {
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         <Stack direction="row" gap={2} wrap="wrap">
           {product.tags.slice(0, 2).map((tag) => (
-            <Text key={tag} variant="mono" size="micro" color="dim" className="opacity-60 uppercase tracking-tighter">
+            <Text key={tag} variant="mono" size="micro" color="dim" uppercase tracking="tighter" className="opacity-60">
               {tag}
             </Text>
           ))}
