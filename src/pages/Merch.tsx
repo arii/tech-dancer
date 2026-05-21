@@ -120,7 +120,7 @@ function ProductCard({ product }: { product: MerchProduct }) {
       >
         <Box
           as="img"
-          src={`${ASSET_PREFIX}${product.imageUrl}`}
+          src={product.imageUrl.startsWith('http') ? product.imageUrl : `${ASSET_PREFIX}${product.imageUrl}`}
           alt={product.title}
           width="full"
           height="full"
