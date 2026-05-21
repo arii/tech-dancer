@@ -7,6 +7,7 @@ import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
 import { EventReminders } from './components/EventReminders';
 import { EventTravel } from './components/EventTravel';
+import { EventMerch } from './components/EventMerch';
 import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
@@ -22,6 +23,7 @@ export default function EventGuide() {
     themeOutfits,
     themeAccessories,
     gearSections,
+    merchItems,
     relatedEvents,
     navigate,
   } = useEventDetail();
@@ -86,6 +88,10 @@ export default function EventGuide() {
                   outfits={themeOutfits}
                   accessories={themeAccessories}
                 />
+              )}
+
+              {merchItems && merchItems.length > 0 && (
+                <EventMerch id="merch" items={merchItems} />
               )}
 
               {gearSections.length > 0 && (

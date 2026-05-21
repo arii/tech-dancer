@@ -23,6 +23,7 @@ whyAttending: >
   Rainbow theme for Pride Month, and honestly that playful, bold energy is
   exactly the vibe I want to bring to every finals watch party and every
   2 a.m. social set.
+merchCollection: "norcal-bestcal"
 
 theme:
   name: "Rainbow"
@@ -43,17 +44,6 @@ theme:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
-    - "love-neon-follow-shirt"
-    - "love-neon-lead-shirt"
-    - "war-eagle-shirt"
-    - "love-neon-switch-shirt"
-    - "norcal-bear-tank"
-    - "norcal-crop-top"
-    - "norcal-gate-crop-hoodie"
-    - "norcal-pride-gate-shirt"
-    - "norcal-pride-bear-shirt"
-    - "love-unisex-shirt"
-    - "norcal-bestcal-tshirt"
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"
@@ -64,17 +54,6 @@ gear:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
-    - "love-neon-follow-shirt"
-    - "love-neon-lead-shirt"
-    - "war-eagle-shirt"
-    - "love-neon-switch-shirt"
-    - "norcal-bear-tank"
-    - "norcal-crop-top"
-    - "norcal-gate-crop-hoodie"
-    - "norcal-pride-gate-shirt"
-    - "norcal-pride-bear-shirt"
-    - "love-unisex-shirt"
-    - "norcal-bestcal-tshirt"
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"

@@ -65,13 +65,14 @@ export function useEventDetail() {
 
   // Consolidate event-specific derived state into a single memoization block
   // to reduce dependency chains and potential extra re-renders.
-  const { themeOutfits, themeAccessories, gearSections } = useMemo(
+  const { themeOutfits, themeAccessories, gearSections, merchItems } = useMemo(
     () => ({
       themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
       themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
       gearSections: getGearSections(event?.gear),
+      merchItems: event?.merchCollection ? affiliateManager.getCollection(event.merchCollection) : [],
     }),
-    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
+    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear, event?.merchCollection],
   );
 
   // Resolve related events
@@ -92,6 +93,7 @@ export function useEventDetail() {
     themeOutfits,
     themeAccessories,
     gearSections,
+    merchItems,
     relatedEvents,
     navigate,
   };

@@ -94,6 +94,7 @@ export interface Event {
   // Gear and theme (resolved from affiliate IDs at render time)
   theme?: EventTheme;
   gear?: EventGear;
+  merchCollection?: string;
   // Flat alternatives for YAML parsers that don't handle nesting
   themeName?: string;
   themeLabel?: string;

@@ -13,6 +13,12 @@ export const affiliateManager = {
     return AFFILIATE_DATABASE[id];
   },
   
+  getCollection: (collectionId: string): AffiliateLink[] => {
+    return Object.values(AFFILIATE_DATABASE).filter(
+      (link) => link.collection === collectionId
+    );
+  },
+
   resolveUrl: (id: string, metadata?: Record<string, string>): string => {
     const link = AFFILIATE_DATABASE[id];
     if (!link) return '#';

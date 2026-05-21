@@ -13,7 +13,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
       <ReactMarkdown
         components={{
           a: ({node: _node, href, ...props}) => {
-            const isInternal = href?.startsWith('/');
+            const isInternal = href?.startsWith('/') || href?.startsWith('#');
             if (isInternal) {
               return <Link to={href} {...props} />;
             }
@@ -69,7 +69,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               uppercase
               weight="font-bold"
               padding={4}
-              textAlign="left"
               surface="surface"
               className="border-b border-line"
               {...props}
