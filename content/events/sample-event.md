@@ -1,5 +1,6 @@
 ---
 type: event
+draft: true
 title: "Sample Event Guide"
 date: "2026-10-01"
 startDate: "2026-10-01"

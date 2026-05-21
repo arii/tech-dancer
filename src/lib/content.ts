@@ -48,7 +48,7 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
-function transform<T extends { date?: string }>(
+function transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
 ): T[] {
   const asArray = (val: unknown) => (Array.isArray(val) ? (val as string[]) : []);
@@ -141,6 +141,7 @@ function transform<T extends { date?: string }>(
 
       return result as unknown as T;
     })
+    .filter((item) => !item.draft)
     .sort((a, b) => {
       const timeA = a.date ? new Date(a.date).getTime() : 0;
       const timeB = b.date ? new Date(b.date).getTime() : 0;

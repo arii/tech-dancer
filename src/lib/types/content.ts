@@ -5,6 +5,7 @@
 
 export interface Post {
   type: 'post';
+  draft?: boolean;
   slug: string;
   title: string;
   date: string;
@@ -20,6 +21,7 @@ export interface Post {
 
 export interface Resource {
   type: 'resource';
+  draft?: boolean;
   slug: string;
   title: string;
   date: string;
@@ -42,6 +44,7 @@ export interface Resource {
 
 export interface Study {
   type: 'study';
+  draft?: boolean;
   slug: string;
   title: string;
   date: string;
@@ -71,6 +74,7 @@ export interface EventGear {
 
 export interface Event {
   type: "event";
+  draft?: boolean;
   slug: string;
   title: string;
   date: string;

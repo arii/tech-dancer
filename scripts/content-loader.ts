@@ -48,6 +48,13 @@ export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
         // Attempt to get date from frontmatter for more stable lastmod
         try {
           const content = fs.readFileSync(filePath, 'utf-8');
+
+          // Skip draft items
+          const draftMatch = content.match(/^draft:\s*(true|false)/m);
+          if (draftMatch?.[1] === 'true') {
+            return null;
+          }
+
           const dateMatch = content.match(/^date:\s*["']?([^"'\n]+)["']?/m);
           if (dateMatch?.[1]) {
             const date = new Date(dateMatch[1]);
@@ -63,7 +70,8 @@ export function getContentSlugs(dir: string, prefix: string): ContentItem[] {
           slug: `${prefix}/${f.replace(/\.md$/, '')}`,
           lastmod
         };
-      });
+      })
+      .filter((item): item is ContentItem => item !== null);
 
     cache.set(cacheKey, items);
     return items;
