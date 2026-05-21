@@ -14,7 +14,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: "gh-pages-publish"
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
