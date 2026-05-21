@@ -48,7 +48,7 @@ export default function FolioGrid({
     );
   });
 
-  const searchPlaceholder = basePath.includes('gear') ? 'Search gear…' : 'Search posts…';
+  const searchPlaceholder = basePath.includes('gear') ? 'Search gear...' : 'Search posts…';
 
   return (
     <Box as="section" height="full">
