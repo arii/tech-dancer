@@ -9,6 +9,10 @@ const LOGO_SVG_PATH = path.join(process.cwd(), 'public/boomtick_logo.svg');
 const FAVICON_SVG_PATH = path.join(process.cwd(), 'public/favicon.svg');
 const PWA_192_PATH = path.join(process.cwd(), 'public/pwa-192x192.png');
 const PWA_512_PATH = path.join(process.cwd(), 'public/pwa-512x512.png');
+const APPLE_TOUCH_PATH = path.join(process.cwd(), 'public/apple-touch-icon.png');
+const MASKABLE_ICON_PATH = path.join(process.cwd(), 'public/maskable-icon-512x512.png');
+const FAVICON_ICO_PATH = path.join(process.cwd(), 'public/favicon.ico');
+const ICON_SVG_PATH = path.join(process.cwd(), 'public/icon.svg');
 const CACHE_DIR = path.join(process.cwd(), 'node_modules/.cache');
 const HASH_FILE = path.join(CACHE_DIR, 'generate-assets.hash');
 
@@ -99,6 +103,18 @@ function updateSVGContent(content: string, tokens: DesignTokens) {
     updatedContent = updatedContent.replace(attrRegex, `$1="${tokens.accentPurple}"`);
   }
 
+  // 4. Update background rect fill if present
+  if (tokens.rawColorBg) {
+    const bgRectMatch = updatedContent.match(/<rect[^>]+fill="([^"]+)"/);
+    if (bgRectMatch) {
+      const oldBg = bgRectMatch[1].trim();
+      if (oldBg !== 'none' && !oldBg.startsWith('url')) {
+        const attrRegex = new RegExp(`fill="${oldBg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`, 'gi');
+        updatedContent = updatedContent.replace(attrRegex, `fill="${tokens.rawColorBg}"`);
+      }
+    }
+  }
+
   return updatedContent;
 }
 
@@ -117,13 +133,34 @@ async function updateFaviconAndPNGs(tokens: DesignTokens) {
   fs.writeFileSync(FAVICON_SVG_PATH, updatedContent);
   console.log(`Updated ${FAVICON_SVG_PATH}`);
 
+  if (fs.existsSync(ICON_SVG_PATH)) {
+    fs.writeFileSync(ICON_SVG_PATH, updatedContent);
+    console.log(`Updated ${ICON_SVG_PATH}`);
+  }
+
   // Generate PNGs
   try {
     const svgBuffer = Buffer.from(updatedContent);
+
+    // Standard PWA icons
     await sharp(svgBuffer).resize(192, 192).png().toFile(PWA_192_PATH);
     console.log(`Generated ${PWA_192_PATH}`);
     await sharp(svgBuffer).resize(512, 512).png().toFile(PWA_512_PATH);
     console.log(`Generated ${PWA_512_PATH}`);
+
+    // Apple Touch Icon
+    await sharp(svgBuffer).resize(180, 180).png().toFile(APPLE_TOUCH_PATH);
+    console.log(`Generated ${APPLE_TOUCH_PATH}`);
+
+    // Favicon.ico (as 32x32 PNG)
+    await sharp(svgBuffer).resize(32, 32).png().toFile(FAVICON_ICO_PATH);
+    console.log(`Generated ${FAVICON_ICO_PATH}`);
+
+    // Maskable Icon (remove rx to fill canvas)
+    const maskableContent = updatedContent.replace(/rx="[^"]*"/g, 'rx="0"');
+    await sharp(Buffer.from(maskableContent)).resize(512, 512).png().toFile(MASKABLE_ICON_PATH);
+    console.log(`Generated ${MASKABLE_ICON_PATH}`);
+
   } catch (error) {
     console.error('Error generating PNGs:', error);
   }
