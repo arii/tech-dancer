@@ -44,6 +44,7 @@ ai-fix-prompt.txt
 any-count.txt
 ci_logs.txt
 eslint-errors.json
+open_prs.txt
 
 # Tools
 dev-tools/config.json
@@ -81,3 +82,4 @@ link-validation-report.md
 pr_overlaps.txt
 workflow_overlaps.txt
 dev-tools/logs/reviews/*.md
+product-mockups/

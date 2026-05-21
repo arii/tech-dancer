@@ -33,6 +33,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       backLabel={backLabel}
       sidebar={<ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />}
       headerExtras={headerExtras}
+      imageBack={post.imageBack}
     >
       {post.verdict && <VerdictCallout verdict={post.verdict} />}
     </DetailLayout>

@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { pickRest } from '@/lib/utils';
+import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   slug: string;
@@ -10,58 +12,25 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   basePath: string;
   date?: string;
   readingTime?: string;
-  // Resource metadata properties that should not be spread to the DOM
-  type?: unknown;
-  author?: unknown;
-  authorAvatar?: unknown;
-  content?: unknown;
-  image?: unknown;
-  tags?: unknown;
-  affiliateIds?: unknown;
-  rating?: unknown;
-  verdict?: unknown;
-  priceCategory?: unknown;
-  updatedDate?: unknown;
-  durability?: unknown;
-  value?: unknown;
-  specs?: unknown;
-  location?: unknown;
-  city?: unknown;
-  schedule?: unknown;
-  description?: unknown;
-  link?: unknown;
+  [key: string]: unknown;
 }
 
-export function ContentCard({ 
-  slug, 
-  title, 
-  category, 
-  excerpt, 
-  basePath, 
-  date,
-  readingTime,
-  // Metadata props to be ignored
-  type: _type,
-  author: _author,
-  authorAvatar: _authorAvatar,
-  content: _content,
-  image: _image,
-  tags: _tags,
-  affiliateIds: _affiliateIds,
-  rating: _rating,
-  verdict: _verdict,
-  priceCategory: _priceCategory,
-  updatedDate: _updatedDate,
-  durability: _durability,
-  value: _value,
-  specs: _specs,
-  location: _location,
-  city: _city,
-  schedule: _schedule,
-  description: _description,
-  link: _link,
-  ...motionProps 
-}: ContentCardProps) {
+export function ContentCard(props: ContentCardProps) {
+  const {
+    slug,
+    title,
+    category,
+    excerpt,
+    basePath,
+    date,
+    readingTime,
+  } = props;
+
+  const motionProps = pickRest(props, [
+    ...CONTENT_METADATA_KEYS,
+    'readingTime',
+    'basePath'
+  ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();

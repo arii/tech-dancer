@@ -2,12 +2,16 @@ import { MapPin, Bell, Briefcase } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Event } from '@/lib/content';
+import { pickRest } from '@/lib/utils';
+import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 interface EventCardProps {
   event: Event;
+  [key: string]: unknown;
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard(props: EventCardProps) {
+  const { event } = props;
   const {
     title,
     slug,
@@ -23,9 +27,11 @@ export function EventCard({ event }: EventCardProps) {
   const hasReminders = !!(earlyBirdDate || hotelCutoffDate || registrationDeadline || packingReminderDate);
   const hasTheme = !!(theme || themeName);
 
+  const rest = pickRest(props, ['event', ...CONTENT_METADATA_KEYS] as (keyof EventCardProps)[]);
   return (
     <Stack
       as="article"
+      {...rest}
       padding={8}
       radius="md"
       border
