@@ -6,6 +6,7 @@ author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "The original NorCal BestCal t-shirt."
 image: "/assets/gear/norcal-bestcal-front.webp"
+imageBack: "/assets/gear/norcal-bestcal-back.webp"
 affiliateIds: ["norcal-bestcal-tshirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
