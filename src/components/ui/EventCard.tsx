@@ -12,6 +12,8 @@ interface EventCardProps {
 
 export function EventCard(props: EventCardProps) {
   const { event } = props;
+
+export function EventCard({ event }: EventCardProps) {
   const {
     title,
     slug,
