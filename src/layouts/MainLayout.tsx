@@ -25,6 +25,20 @@ export function MainLayout({ children }: { children: ReactNode }) {
       onTouchEnd={handleTouchEnd}
     >
       <Box
+        as="a"
+        href="#main-content"
+        position="fixed"
+        top={4}
+        left={4}
+        zIndex="skipLink"
+        paddingX={6}
+        paddingY={3}
+        radius="sm"
+        className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none whitespace-nowrap"
+      >
+        Skip to Content
+      </Box>
+      <Box
         id="route-announcer"
         aria-live="polite"
         aria-atomic="true"
@@ -35,6 +49,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
           as="main"
+          id="main-content"
+          tabIndex={-1}
           ref={scrollRef}
           flex={1}
           position="relative"

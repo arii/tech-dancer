@@ -1,15 +1,28 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Bell, Briefcase } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Event } from '@/lib/content';
 
 interface EventCardProps {
-  title: string;
-  slug: string;
-  location: string;
-  schedule: string;
+  event: Event;
 }
 
-export function EventCard({ title, slug, location, schedule }: EventCardProps) {
+export function EventCard({ event }: EventCardProps) {
+  const {
+    title,
+    slug,
+    location,
+    schedule,
+    earlyBirdDate,
+    hotelCutoffDate,
+    registrationDeadline,
+    packingReminderDate,
+    theme,
+    themeName,
+  } = event;
+  const hasReminders = !!(earlyBirdDate || hotelCutoffDate || registrationDeadline || packingReminderDate);
+  const hasTheme = !!(theme || themeName);
+
   return (
     <Stack
       as="article"
@@ -58,9 +71,23 @@ export function EventCard({ title, slug, location, schedule }: EventCardProps) {
         >
           {title}
         </Text>
-        <Text size="sm" color="dim">
-          {location}
-        </Text>
+        <Box display="flex" align="center" justify="between">
+          <Text size="sm" color="dim">
+            {location}
+          </Text>
+          <Box display="flex" gap={2}>
+            {hasReminders && (
+              <Box color="accent" title="Reminders available">
+                <Bell className="w-3.5 h-3.5" />
+              </Box>
+            )}
+            {hasTheme && (
+              <Box color="dim" title="Theme gear available">
+                <Briefcase className="w-3.5 h-3.5" />
+              </Box>
+            )}
+          </Box>
+        </Box>
       </Stack>
     </Stack>
   );

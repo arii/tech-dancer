@@ -41,5 +41,4 @@ export interface ProfileData {
   role: string;
   sections: ProfileSection[];
   details: ProfileDetail[];
-  links: ProfileLink[];
 }
