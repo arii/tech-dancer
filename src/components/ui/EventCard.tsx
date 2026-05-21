@@ -8,8 +8,19 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
-  const { title, slug, location, schedule, earlyBirdDate, hotelCutoffDate, registrationDeadline, theme, themeName } = event;
-  const hasReminders = !!(earlyBirdDate || hotelCutoffDate || registrationDeadline);
+  const {
+    title,
+    slug,
+    location,
+    schedule,
+    earlyBirdDate,
+    hotelCutoffDate,
+    registrationDeadline,
+    packingReminderDate,
+    theme,
+    themeName,
+  } = event;
+  const hasReminders = !!(earlyBirdDate || hotelCutoffDate || registrationDeadline || packingReminderDate);
   const hasTheme = !!(theme || themeName);
 
   return (
