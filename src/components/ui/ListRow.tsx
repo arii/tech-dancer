@@ -23,7 +23,11 @@ export function ListRow(props: ListRowProps) {
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath'
+<<<<<<< HEAD
   ] as (keyof ListRowProps)[]);
+=======
+  ] as any);
+>>>>>>> 19c3da448 (feat: enhance PR audit workflow and refactor card components)
   const rt = readingTime(content, excerpt);
 
   return (

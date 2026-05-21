@@ -30,7 +30,11 @@ export function ContentCard(props: ContentCardProps) {
     ...CONTENT_METADATA_KEYS,
     'readingTime',
     'basePath'
+<<<<<<< HEAD
   ] as (keyof ContentCardProps)[]);
+=======
+  ] as any);
+>>>>>>> 19c3da448 (feat: enhance PR audit workflow and refactor card components)
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();
