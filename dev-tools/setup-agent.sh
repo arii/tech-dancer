@@ -33,7 +33,8 @@ SKIP_REMOTE_CONFIG="${SKIP_REMOTE_CONFIG:-0}"
 
 export CI="${CI:-1}"
 export DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-noninteractive}"
-export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-0}"
+export PLAYWRIGHT_DOWNLOAD_HOST="${PLAYWRIGHT_DOWNLOAD_HOST:-https://playwright.azureedge.net}"
+export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/ms-playwright}"
 
 if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
   export NPM_CONFIG_PREFIX="${NPM_CONFIG_PREFIX:-$HOME/.npm-global}"
