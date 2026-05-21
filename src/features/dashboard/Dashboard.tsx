@@ -114,7 +114,7 @@ export default function Home() {
                   variants={motionTokens.staggerItem}
                   className="h-full"
                 >
-                  <EventCard {...event} />
+                  <EventCard event={event} />
                 </Box>
               ))}
             </Grid>

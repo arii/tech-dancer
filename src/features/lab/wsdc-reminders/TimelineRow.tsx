@@ -1,15 +1,7 @@
-import { Calendar, Plane, Hotel, Trophy, ShieldCheck, CheckCircle2, type LucideIcon } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { TimelineItem } from './types';
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  'flight-track': Plane,
-  'early-bird': Trophy,
-  'hotel-block': Hotel,
-  'comp-window': CheckCircle2,
-  'cancel-safety': ShieldCheck,
-};
 
 interface TimelineRowProps {
   item: TimelineItem;
@@ -18,7 +10,7 @@ interface TimelineRowProps {
 }
 
 export function TimelineRow({ item, formattedDate, onSync }: TimelineRowProps) {
-  const Icon = ICON_MAP[item.id] || Calendar;
+  const Icon = item.icon || Calendar;
 
   return (
     <Box position="relative" display="flex" gap={{ base: 4, sm: 10 }} className="group">

@@ -39,6 +39,14 @@ export function GlobalSearch() {
     debouncedSetQuery(e.target.value);
   };
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      close();
+    }
+  }, [close]);
+
   // Sync input value with URL query for external changes (back/forward navigation)
   useEffect(() => {
     if (inputRef.current && inputRef.current.value !== query) {
@@ -120,6 +128,7 @@ export function GlobalSearch() {
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
+            handleKeyDown(e);
             if (e.key === 'Tab') {
               const dialog = e.currentTarget;
               const focusableElements = Array.from(dialog.querySelectorAll(
@@ -149,12 +158,13 @@ export function GlobalSearch() {
           }}
         >
           <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
-            <Search className="w-5 h-5 text-accent shrink-0" />
+            <Search className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
             <Text
               as="input"
               ref={inputRef}
               type="text"
               placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+              aria-label="Search Repository"
               defaultValue={query}
               onChange={handleInputChange}
               width="full"
@@ -176,7 +186,7 @@ export function GlobalSearch() {
               border
               className="group hover:bg-accent/10 transition-colors border-line/50"
             >
-              <X className="w-4 h-4 text-text-dim group-hover:text-accent" />
+              <X className="w-4 h-4 text-text-dim group-hover:text-accent" aria-hidden="true" />
             </Box>
           </Box>
 
