@@ -39,6 +39,14 @@ export function GlobalSearch() {
     debouncedSetQuery(e.target.value);
   };
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      close();
+    }
+  }, [close]);
+
   // Sync input value with URL query for external changes (back/forward navigation)
   useEffect(() => {
     if (inputRef.current && inputRef.current.value !== query) {
@@ -120,6 +128,7 @@ export function GlobalSearch() {
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
+            handleKeyDown(e);
             if (e.key === 'Tab') {
               const dialog = e.currentTarget;
               const focusableElements = Array.from(dialog.querySelectorAll(
