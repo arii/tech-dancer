@@ -34,7 +34,7 @@ export function GearCard(props: GearCardProps) {
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath'
-  ] as any);
+  ] as (keyof GearCardProps)[]);
   return (
     <Stack
       as="article"

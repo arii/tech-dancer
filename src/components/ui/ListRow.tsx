@@ -23,7 +23,7 @@ export function ListRow(props: ListRowProps) {
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath'
-  ] as any);
+  ] as (keyof ListRowProps)[]);
   const rt = readingTime(content, excerpt);
 
   return (

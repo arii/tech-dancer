@@ -14,7 +14,7 @@ interface EventCardProps {
 
 export function EventCard(props: EventCardProps) {
   const { title, slug, location, schedule } = props;
-  const rest = pickRest(props, CONTENT_METADATA_KEYS as any);
+  const rest = pickRest(props, CONTENT_METADATA_KEYS as (keyof EventCardProps)[]);
   return (
     <Stack
       as="article"
