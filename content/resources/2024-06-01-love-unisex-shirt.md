@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Unisex 'Lead, Follow, or Switch' LOVE shirt."
-image: "https://cdn.printful.me/t/quick-stores/products/w168/87343-71-6a0b962244279__360"
+image: "/assets/gear/love-unisex-shirt.jpg"
 affiliateIds: ["love-unisex-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5

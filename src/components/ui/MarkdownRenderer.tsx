@@ -1,6 +1,5 @@
 // impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +11,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
         components={{
           a: ({node: _node, href, ...props}) => {
             const isInternal = href?.startsWith('/');

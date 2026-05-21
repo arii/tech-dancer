@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "The iconic California bear, redesigned with Pride colors for the West Coast Swing community."
-image: "https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360"
+image: "/assets/gear/norcal-pride-bear-shirt.jpg"
 affiliateIds: ["norcal-pride-bear-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5

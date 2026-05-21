@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Comfortable men's tank top with the NorCal Best Cal bear design."
-image: "https://cdn.printful.me/t/quick-stores/products/w168/18182963-537-6a0b755a9a348__360"
+image: "/assets/gear/norcal-bear-tank.jpg"
 affiliateIds: ["norcal-bear-tank"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
