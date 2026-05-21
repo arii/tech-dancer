@@ -66,6 +66,7 @@ function transform<T extends { date?: string }>(
       };
 
       data.image = normalizeAsset(data.image);
+      data.imageBack = normalizeAsset(data.imageBack);
       data.heroImage = normalizeAsset(data.heroImage);
 
       const result: Record<string, unknown> = {

@@ -13,7 +13,7 @@ export function TimelineRow({ item, formattedDate, onSync }: TimelineRowProps) {
   const Icon = item.icon || Calendar;
 
   return (
-    <Box position="relative" display="flex" gap={{ base: 4, sm: 10 }} className="group">
+    <Box position="relative" display="flex" gap={{ base: 4, sm: 10 }} className="group" data-testid="timeline-row">
       {/* Dot / Icon */}
       <Box
         display="flex"

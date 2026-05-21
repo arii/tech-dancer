@@ -133,6 +133,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
               <Stack
                 key={item.id}
                 as="li"
+                data-testid="timeline-row"
                 direction="row"
                 align="center"
                 gap={4}

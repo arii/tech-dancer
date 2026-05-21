@@ -28,6 +28,7 @@ export interface Resource {
   excerpt: string;
   content: string;
   image?: string;
+  imageBack?: string;
   tags?: string[];
   affiliateIds?: string[];
   rating?: number;
