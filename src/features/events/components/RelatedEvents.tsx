@@ -34,12 +34,7 @@ export function RelatedEvents({ id, title = "Related Resource Guides", events }:
               variants={motionTokens.staggerItem}
               height="full"
             >
-              <EventCard
-                title={event.title || "Untitled Event"}
-                slug={event.slug}
-                location={event.location || event.city || "Location TBA"}
-                schedule={event.schedule || "Date TBA"}
-              />
+              <EventCard event={event} />
             </Box>
           ))}
         </Grid>

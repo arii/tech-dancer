@@ -24,17 +24,9 @@ export default function EventsFeed() {
         basePath="/events"
         view={view}
         onViewChange={setView}
-        renderItem={(item) => {
-          const event = item as Event;
-          return (
-            <EventCard
-              title={event.title}
-              slug={event.slug}
-              location={event.location}
-              schedule={event.schedule}
-            />
-          );
-        }}
+        renderItem={(item) => (
+          <EventCard event={item as Event} />
+        )}
       >
         <Box marginTop={8}>
           <FilterBar
