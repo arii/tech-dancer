@@ -22,9 +22,8 @@ export default function Merch() {
   return (
     <Box>
       <SEO
-        title="West Coast Swing Dance Merch & NorCal Apparel"
+        title="West Coast Swing Dance Merch"
         description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
-        canonical="/merch"
         jsonLd={generateMerchSchema(MERCH_PRODUCTS)}
       />
 
@@ -151,14 +150,17 @@ function ProductCard({ product }: { product: MerchProduct }) {
                   paddingX={2}
                   paddingY={0.5}
                   radius="full"
-                  className={cn(
-                    "text-micro font-mono font-bold uppercase tracking-wider backdrop-blur-md",
-                    role === 'lead' && "bg-blue-500/20 text-blue-200",
-                    role === 'follow' && "bg-pink-500/20 text-pink-200",
-                    role === 'switch' && "bg-purple-500/20 text-purple-200"
-                  )}
+                  surface={
+                    role === 'lead' ? 'accent' :
+                    role === 'follow' ? 'warning' :
+                    role === 'switch' ? 'alt' : 'default'
+                  }
+                  bgOpacity={80}
+                  className="font-mono font-bold uppercase tracking-wider backdrop-blur-md"
                 >
-                  {role}
+                  <Text size="micro" as="span" inherit>
+                    {role}
+                  </Text>
                 </Box>
               ))}
             </Stack>
