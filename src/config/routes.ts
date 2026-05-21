@@ -57,7 +57,8 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'Data & Development Lab',
     icon: Database,
-    skeleton: 'grid'
+    skeleton: 'grid',
+    isMobileVisible: true
   },
   {
     path: '/research/:id',

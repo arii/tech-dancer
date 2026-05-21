@@ -40,6 +40,8 @@ test.describe('Merch Page', () => {
 
   test('should have correct attributes on Printful external links', async ({ page }) => {
     const printfulLinks = page.locator('a[href*="boomtick.printful.me"]');
+    await expect(printfulLinks.first()).toBeVisible();
+
     for (const link of await printfulLinks.all()) {
       await expect(link).toHaveAttribute('rel', 'sponsored noopener noreferrer');
       await expect(link).toHaveAttribute('target', '_blank');
