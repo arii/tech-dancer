@@ -4,6 +4,8 @@ import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { pickRest } from '@/lib/utils';
+import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 interface ListRowProps {
   slug: string;
@@ -13,13 +15,20 @@ interface ListRowProps {
   date?: string;
   basePath: string;
   content?: string;
+  [key: string]: unknown;
 }
 
-export function ListRow({ slug, title, category, excerpt, date, basePath, content }: ListRowProps) {
+export function ListRow(props: ListRowProps) {
+  const { slug, title, category, excerpt, date, basePath, content } = props;
+  const rest = pickRest(props, [
+    ...CONTENT_METADATA_KEYS,
+    'basePath'
+  ] as (keyof ListRowProps)[]);
   const rt = readingTime(content, excerpt);
 
   return (
     <Box as={NavLink} to={`${basePath}/${slug}`}
+      {...rest}
       display="flex" align="center" border="b"
       className="group hover:bg-surface/50 transition-colors"
     >

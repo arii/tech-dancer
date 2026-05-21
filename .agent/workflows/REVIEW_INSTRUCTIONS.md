@@ -15,7 +15,14 @@ The pr-review-<PR_NUMBER>.md file contains a checklist. You MUST systematically 
 - **Token compliance**: Are they using raw Tailwind values (e.g., `text-[13px]`, `bg-[#f4f4f4]`) or inline styles instead of the established design tokens?
 - **Audit ratio**: If the PR adds > 100 lines of code, you must find at least 10 lines of code to recommend removing or refactoring.
 
-## 2. Formatting the JSON Output
+## 2. CI Failure Handling
+
+If the PR context indicates failing CI checks:
+- **Block Approvals**: You MUST NOT recommend "Approved" if there are failing CI checks that are related to the PR changes.
+- **Log Triage**: You must complete the "CI Log Triage" section in the review file. Use the "Detected Errors" and "Failure Logs Snippet" from the context file to perform a Root Cause Analysis and provide Remediation Steps.
+- **Prioritize Fixes**: Mention the CI failures prominently in your review body and prioritize their resolution.
+
+## 3. Formatting the JSON Output
 
 At the bottom of pr-review-<PR_NUMBER>.md, there is a JSON block. You must write your feedback strictly into this JSON structure. Your script will parse this exact block to submit to the GitHub API.
 
@@ -39,10 +46,11 @@ All review submissions MUST follow this JSON schema exactly.
 ### Output Rules:
 
 - **Checkboxes First**: You must interact with and check the `- [ ]` boxes in the markdown portion of the file before filling out the JSON.
+- **CI Status**: If CI is failing, ensure the `body` reflects the blocking nature of these failures.
 - **Always provide at least one comment** in the `comments` array. If the PR is flawless, mention it is clean in the main body but still provide at least one commendation comment.
 - **Line Numbers**: The `line` property in your comment must match an actual added or modified line (`+`) in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON. Escape double quotes `\"` and newlines `\n` within the string values.
 
-## 3. Tooling Guidelines
+## 4. Tooling Guidelines
 
 Agents must not directly use git or gh commands but reuse existing tooling. Agents should not use Copilot, but may use Ollama.

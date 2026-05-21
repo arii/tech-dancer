@@ -44,6 +44,7 @@ ai-fix-prompt.txt
 any-count.txt
 ci_logs.txt
 eslint-errors.json
+open_prs.txt
 
 # Tools
 dev-tools/config.json

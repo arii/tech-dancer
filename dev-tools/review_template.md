@@ -19,6 +19,9 @@ For EVERY changed file, verify against these standards. Mark as `- [x]` when ver
 
 (Populated if CI failures detected)
 - **Failed Checks:**
+{failed_checks}
+- **Detected Errors:**
+{detected_errors}
 - **Root Cause Analysis:**
 - **Remediation Steps:**
 
