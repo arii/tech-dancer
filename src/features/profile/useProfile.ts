@@ -1,4 +1,5 @@
 import { ProfileData } from './types';
+import { SOCIAL_LINKS } from '@/config/constants';
 import firstComp from '@/assets/first_comp.jpg';
 import glowBunny from '@/assets/glow_bunny.jpg';
 import madJamAri from '@/assets/mad_jam_ari.jpg';
@@ -103,9 +104,9 @@ const PROFILE_DATA: ProfileData = {
       id: "connect",
       eyebrow: "Connect & Networking",
       links: [
-        { label: 'Instagram', url: 'https://instagram.com/' },
-        { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
-        { label: 'GitHub', url: 'https://github.com/arii' }
+        { label: 'Instagram', url: SOCIAL_LINKS.INSTAGRAM },
+        { label: 'LinkedIn', url: SOCIAL_LINKS.LINKEDIN },
+        { label: 'GitHub', url: SOCIAL_LINKS.GITHUB }
       ]
     }
   ],
@@ -113,12 +114,7 @@ const PROFILE_DATA: ProfileData = {
     { label: "LOCATION", value: "San Francisco, CA" },
     { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
     { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
-    { label: "PORTFOLIO", value: "https://github.com/arii" }
-  ],
-  links: [
-    { label: 'Instagram', url: 'https://instagram.com/' },
-    { label: 'LinkedIn', url: 'https://linkedin.com/in/arianders' },
-    { label: 'GitHub', url: 'https://github.com/arii' }
+    { label: "PORTFOLIO", value: SOCIAL_LINKS.PORTFOLIO }
   ]
 };
 export function useProfile(): { bio: ProfileData } {
