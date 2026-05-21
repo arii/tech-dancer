@@ -158,12 +158,13 @@ export function GlobalSearch() {
           }}
         >
           <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
-            <Search className="w-5 h-5 text-accent shrink-0" />
+            <Search className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
             <Text
               as="input"
               ref={inputRef}
               type="text"
               placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
+              aria-label="Search Repository"
               defaultValue={query}
               onChange={handleInputChange}
               width="full"
@@ -185,7 +186,7 @@ export function GlobalSearch() {
               border
               className="group hover:bg-accent/10 transition-colors border-line/50"
             >
-              <X className="w-4 h-4 text-text-dim group-hover:text-accent" />
+              <X className="w-4 h-4 text-text-dim group-hover:text-accent" aria-hidden="true" />
             </Box>
           </Box>
 
