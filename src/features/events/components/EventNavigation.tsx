@@ -7,6 +7,7 @@ export function EventNavigation() {
       position="sticky"
       top={{ base: 16, lg: 0 }}
       zIndex={40}
+      width="full"
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
@@ -14,19 +15,22 @@ export function EventNavigation() {
         <Box
           position="absolute"
           top={0}
-          right={0}
           bottom={0}
+          right={0}
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-transparent pointer-events-none z-10"
+          className="bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-10"
+          aria-hidden="true"
         />
 
         <Box
           display="flex"
           gap={{ base: 8, md: 10 }}
           overflowX="auto"
-          className="no-scrollbar scroll-smooth"
+          scrollBehavior="smooth"
+          className="no-scrollbar"
           paddingX={{ base: 6, md: 0 }}
+          paddingRight={{ base: 12, md: 0 }}
         >
           {EVENT_TABS.map(tab => (
             <Box

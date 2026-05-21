@@ -62,7 +62,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           className="transition-all duration-300"
           data-testid="scroll-to-top-button"
         >
-          <ArrowUp size={iconSizes.lg} />
+          <ArrowUp size={iconSizes.lg} aria-hidden="true" />
         </Button>
       )}
     </AnimatePresence>

@@ -31,16 +31,16 @@ export function EventHero({
   }), []);
 
   return (
-    <Box
+    <Stack
       id={id}
       data-testid="hero"
       position="relative"
       width="full"
       minHeight={{ base: "30vh", md: "40vh" }}
-      display="flex"
-      direction="column"
+      direction="col"
+      gap={0}
       overflow="hidden"
-      className="bg-bg"
+      surface="bg"
     >
       {/* Background Image or Particle Fallback */}
       {image ? (
@@ -68,7 +68,8 @@ export function EventHero({
         right={0}
         width={{ base: "full", md: "1/2" }}
         height="full"
-        className="pointer-events-none opacity-20"
+        pointerEvents="none"
+        opacity={20}
         style={accentGradient}
       />
 
@@ -135,7 +136,8 @@ export function EventHero({
             padding={{ base: 4, md: 6 }}
             radius="lg"
             width={{ base: "full", md: "auto" }}
-            className="glass-panel max-w-2xl border-l-4 border-l-accent"
+            maxWidth="2xl"
+            className="glass-panel border-l-4 border-l-accent"
           >
             <Stack gap={{ base: 3, md: 4 }}>
               <Box display="flex" align="center" gap={3}>
@@ -167,6 +169,6 @@ export function EventHero({
       <Box relative zIndex={20} marginTop="auto">
         <EventNavigation />
       </Box>
-    </Box>
+    </Stack>
   );
 }
