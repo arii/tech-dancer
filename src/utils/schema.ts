@@ -13,7 +13,7 @@ export function generateMerchSchema(products: MerchProduct[]) {
         "@type": "Product",
         "name": product.title,
         "description": product.description,
-        "image": `${BASE_URL}${ASSET_PREFIX}${product.imageUrl}`,
+        "image": product.imageUrl.startsWith('http') ? product.imageUrl : `${BASE_URL}${ASSET_PREFIX}${product.imageUrl}`,
         "offers": {
           "@type": "Offer",
           "price": product.price,
