@@ -61,6 +61,16 @@ Run this before pushing to catch errors early:
 - **Types/Lint**: Standard TypeScript and ESLint checks.
 - **Conflicts**: Checks if your branch conflicts with other open PRs.
 
+### 🌐 Reliable Browser Provisioning
+
+If Playwright browser downloads fail in your environment (e.g., due to 403 Forbidden errors), you can:
+
+1. **Use a mirror**: Set `PLAYWRIGHT_DOWNLOAD_HOST=https://playwright.azureedge.net`.
+2. **Use pre-baked binaries**: If using the project's DevContainer, browsers are pre-installed in `/ms-playwright`. Ensure `PLAYWRIGHT_BROWSERS_PATH=/ms-playwright` is set.
+3. **Fallback to system browsers**: To skip downloads and use your locally installed browsers:
+   - Set `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`.
+   - Configure Playwright to use your system browser by setting the `executablePath` in `playwright.config.ts` or via the `executablePath` option in your tests.
+
 ### CI (`ci.yml`)
 
 - **Audit Gate**: Compares current anti-pattern violations against `origin/main`. It fails if violations _increase_.
