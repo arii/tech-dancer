@@ -66,11 +66,6 @@ export interface BaseProps {
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
   bgGradient?: string
-  pointerEvents?: "auto" | "none"
-  touchScroll?: boolean
-  noScrollbar?: boolean
-  backdropBlur?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | boolean
-  bgOpacity?: number | string
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -92,8 +87,6 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
-    pointerEvents, touchScroll, noScrollbar,
-    backdropBlur, bgOpacity,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -240,15 +233,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(left, "", s("left")),
           getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
-          pointerEvents && `pointer-events-${pointerEvents}`,
-          touchScroll && "touch-scroll",
-          noScrollbar && "no-scrollbar",
-          backdropBlur && (backdropBlur === true ? "backdrop-blur" : `backdrop-blur-${backdropBlur}`),
           className
         )}
         style={{ // impeccable-ignore - Dynamic and motion-driven styles require inline style pass-through.
           ...((scrollPaddingTop !== undefined) ? { scrollPaddingTop: typeof scrollPaddingTop === 'number' ? `${scrollPaddingTop}px` : scrollPaddingTop } : {}),
-          ...((bgOpacity !== undefined) ? { '--tw-bg-opacity': typeof bgOpacity === 'number' ? bgOpacity / 100 : bgOpacity } : {}),
           ...motionProps.style,
           ...props.style
         }}

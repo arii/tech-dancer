@@ -38,6 +38,7 @@ export function EventHero({
       width="full"
       minHeight={{ base: "30vh", md: "40vh" }}
       direction="col"
+      gap={0}
       overflow="hidden"
       surface="bg"
     >
@@ -165,7 +166,7 @@ export function EventHero({
         )}
       </Stack>
 
-      <Box relative zIndex={20} marginTop="auto" width="full">
+      <Box relative zIndex={20} marginTop="auto">
         <EventNavigation />
       </Box>
     </Stack>

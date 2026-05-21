@@ -8,13 +8,9 @@ export function EventNavigation() {
       top={{ base: 16, lg: 0 }}
       zIndex={40}
       width="full"
-      surface="default"
-      bgOpacity={80}
-      backdropBlur="md"
-      border="b"
-      className="border-line/10"
+      className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
-      <Box width="full" maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
         {/* Right fade indicator for mobile horizontal scroll */}
         <Box
           position="absolute"
@@ -23,20 +19,16 @@ export function EventNavigation() {
           right={0}
           width={12}
           display={{ base: "block", md: "none" }}
-          bgGradient="bg-gradient-to-l from-bg via-bg/80 to-transparent"
-          zIndex={10}
-          pointerEvents="none"
+          className="bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-10"
           aria-hidden="true"
         />
 
         <Box
           display="flex"
-          width="full"
           gap={{ base: 8, md: 10 }}
           overflowX="auto"
-          touchScroll
           scrollBehavior="smooth"
-          noScrollbar
+          className="no-scrollbar"
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
         >
