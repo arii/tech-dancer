@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Plane, Calendar, Hotel, Users, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
 import { Event } from '@/lib/content';
-import { parseDate, addDays } from '@/lib/utils';
 
 export function EventHeaderExtras({ author }: { author: string }) {
   return (
@@ -82,28 +82,38 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
               Travel Reminders
             </Text>
             <Stack gap={4}>
-              {getReminders(finalStartDate, finalEarlyBirdDate, finalHotelCutoffDate).map((reminder) => (
-                <Box
-                  key={reminder.label}
-                  border
-                  padding={4}
-                  surface="muted"
-                  className="hover:border-accent transition-colors"
-                >
-                  <Stack gap={2}>
-                    <Box display="flex" align="center" gap={2} color="brand">
-                      <reminder.icon className="w-4 h-4" />
-                      <Text variant="mono" size="xs" weight="font-bold">{reminder.label.toUpperCase()}</Text>
-                    </Box>
-                    <Text variant="mono" size="tiny" color="dim">
-                      Target: {reminder.date!.toLocaleDateString()}
-                    </Text>
-                    <Text variant="body" size="xs" color="dim">
-                      {reminder.description}
-                    </Text>
-                  </Stack>
-                </Box>
-              ))}
+              {calculateTimeline({
+                title: event?.title || 'Event',
+                startDate: finalStartDate,
+                earlyBirdDate: finalEarlyBirdDate,
+                hotelCutoffDate: finalHotelCutoffDate,
+              }, {
+                filterIds: ['flight-track', 'early-bird', 'hotel-block', 'comp-window', 'cancel-safety']
+              }).map((reminder) => {
+                const Icon = reminder.icon!;
+                return (
+                  <Box
+                    key={reminder.id}
+                    border
+                    padding={4}
+                    surface="muted"
+                    className="hover:border-accent transition-colors"
+                  >
+                    <Stack gap={2}>
+                      <Box display="flex" align="center" gap={2} color="brand">
+                        <Icon className="w-4 h-4" />
+                        <Text variant="mono" size="xs" weight="font-bold">{reminder.label.toUpperCase()}</Text>
+                      </Box>
+                      <Text variant="mono" size="tiny" color="dim">
+                        Target: {reminder.date.toLocaleDateString()}
+                      </Text>
+                      <Text variant="body" size="xs" color="dim">
+                        {reminder.description}
+                      </Text>
+                    </Stack>
+                  </Box>
+                );
+              })}
             </Stack>
           </Stack>
         )}
@@ -112,39 +122,3 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
   );
 }
 
-function getReminders(startDate: string, earlyBirdDate?: string, hotelCutoffDate?: string) {
-  const start = parseDate(startDate);
-
-  return [
-    {
-      label: 'Flight Tracking',
-      date: addDays(start, -90),
-      icon: Plane,
-      description: 'Book flights ~90 days out for best rates.'
-    },
-    {
-      label: 'Early Bird',
-      date: earlyBirdDate ? addDays(parseDate(earlyBirdDate), -2) : null,
-      icon: Calendar,
-      description: 'Register before early bird rates expire.'
-    },
-    {
-      label: 'Hotel Cutoff',
-      date: hotelCutoffDate ? parseDate(hotelCutoffDate) : null,
-      icon: Hotel,
-      description: 'Room block availability deadline.'
-    },
-    {
-      label: 'Comp Signups',
-      date: addDays(start, -14),
-      icon: Users,
-      description: 'Registration for competitions typically closes 14 days prior.'
-    },
-    {
-      label: 'Cancel Safety',
-      date: addDays(start, -5),
-      icon: ShieldAlert,
-      description: 'Last chance to cancel without full penalty.'
-    }
-  ].filter(r => r.date !== null).sort((a, b) => a.date!.getTime() - b.date!.getTime());
-}

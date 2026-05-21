@@ -1,8 +1,12 @@
+import { type LucideIcon } from 'lucide-react';
+
 export interface EventAnchors {
   title: string;
-  startDate: string;      // The "Day 0" of the event
-  earlyBirdDate: string;  // Verified from event site
-  hotelCutoffDate: string; // Verified from event site
+  startDate: string;
+  earlyBirdDate?: string;
+  registrationDeadline?: string;
+  hotelCutoffDate?: string;
+  packingReminderDate?: string;
   url?: string;
 }
 
@@ -13,4 +17,6 @@ export interface TimelineItem {
   label: string;
   description: string;
   formattedDate?: string;
+  icon?: LucideIcon;
+  badge?: string;
 }
