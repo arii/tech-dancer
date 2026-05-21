@@ -3,7 +3,8 @@ FROM mcr.microsoft.com/playwright:v1.44.0-jammy
 USER root
 
 ENV PNPM_VERSION=10.28.2
-ENV PLAYWRIGHT_BROWSERS_PATH=0
+ENV PLAYWRIGHT_DOWNLOAD_HOST=https://playwright.azureedge.net
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \

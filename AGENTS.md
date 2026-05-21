@@ -172,6 +172,9 @@ Heavy dependencies are installed only when needed:
 pnpm run setup:playwright
 ```
 
+> [!TIP]
+> **Reliable Browser Provisioning**: If downloads fail, set `PLAYWRIGHT_DOWNLOAD_HOST=https://playwright.azureedge.net`. In container environments, use `PLAYWRIGHT_BROWSERS_PATH=/ms-playwright` to utilize pre-baked binaries. To use local system browsers, set `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`.
+
 **Python ETL / data processing:**
 
 ```bash
