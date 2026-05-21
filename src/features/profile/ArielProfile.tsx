@@ -14,6 +14,7 @@ import {
 
 function ArielProfile() {
   const { bio } = useProfile();
+  const socialLinks = bio.sections.find(s => s.id === 'connect')?.links || [];
 
   const renderSection = (section: ProfileSection) => {
     return (
@@ -126,7 +127,7 @@ function ArielProfile() {
                 <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                   <Stack gap={6}>
                     <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
-                    <ProfileLinks links={bio.links} />
+                    <ProfileLinks links={socialLinks} />
                   </Stack>
                 </Box>
               </Stack>
