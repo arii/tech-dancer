@@ -1,5 +1,5 @@
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -13,6 +13,7 @@ interface DetailLayoutProps {
   date: string;
   content: string;
   image?: string;
+  imageBack?: string;
   onBack: () => void;
   backLabel: string;
   sidebar?: ReactNode;
@@ -27,6 +28,7 @@ export function DetailLayout({
   date,
   content,
   image,
+  imageBack,
   onBack,
   backLabel,
   sidebar,
@@ -35,6 +37,8 @@ export function DetailLayout({
   relatedContent
 }: DetailLayoutProps) {
   const rt = readingTime(content);
+  const [showBack, setShowBack] = useState(false);
+  const displayImage = showBack && imageBack ? imageBack : image;
 
   return (
     <Box as="article" padding="panel">
@@ -78,20 +82,55 @@ export function DetailLayout({
               as={motion.div}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              aspect="video"
               overflow="hidden"
               border
               radius="lg"
               className="bg-surface-alt"
             >
-              <img
-                src={image}
-                alt={title}
-                width={1280}
-                height={720}
-                loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700"
-              />
+              {imageBack && (
+                <Box
+                  display="flex"
+                  gap={2}
+                  padding={3}
+                  className="border-b border-line"
+                >
+                  <Box
+                    as="button"
+                    onClick={() => setShowBack(false)}
+                    className={[
+                      'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
+                      !showBack
+                        ? 'bg-accent text-white'
+                        : 'text-text-dim hover:text-text-main border border-line',
+                    ].join(' ')}
+                  >
+                    Front
+                  </Box>
+                  <Box
+                    as="button"
+                    onClick={() => setShowBack(true)}
+                    className={[
+                      'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
+                      showBack
+                        ? 'bg-accent text-white'
+                        : 'text-text-dim hover:text-text-main border border-line',
+                    ].join(' ')}
+                  >
+                    Back
+                  </Box>
+                </Box>
+              )}
+              <Box aspect="video" overflow="hidden">
+                <img
+                  key={displayImage}
+                  src={displayImage}
+                  alt={`${title}${showBack ? ' – back view' : ''}`}
+                  width={1280}
+                  height={720}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-opacity duration-300"
+                />
+              </Box>
             </Box>
           )}
 
