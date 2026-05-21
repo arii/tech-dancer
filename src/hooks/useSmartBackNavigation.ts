@@ -15,6 +15,8 @@ export function useSmartBackNavigation(fallbackPath: string) {
       const routerIdx = window.history.state?.idx;
       if (typeof routerIdx === 'number' && routerIdx > 0) return true;
 
+      if (window.history.length <= 1) return false;
+
       const referrer = document.referrer;
       if (!referrer) return false;
 
