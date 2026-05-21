@@ -5,8 +5,8 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Express your style and your role on the floor with this neon-inspired lead shirt."
-image: "/assets/gear/love-neon-lead-shirt.webp"
-imageBack: "/assets/gear/love-neon-lead-shirt-back.webp"
+image: "/assets/gear/love-neon-tshirt-ask-me-to-lead-front.webp"
+imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-lead-back.webp"
 affiliateIds: ["love-neon-lead-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5

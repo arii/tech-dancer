@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Oversized high-neck t-shirt featuring the War Eagle design."
-image: "/assets/gear/war-eagle-shirt.webp"
+image: "/assets/gear/war-eagle-oversized-high-neck-t-shirt-front.webp"
 affiliateIds: ["war-eagle-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
