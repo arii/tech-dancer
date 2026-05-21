@@ -1,6 +1,8 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { pickRest } from '@/lib/utils';
+import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
@@ -14,72 +16,25 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
-  // Resource metadata properties that should not be spread to the DOM
-  type?: unknown;
-  date?: unknown;
-  author?: unknown;
-  content?: unknown;
-  tags?: unknown;
-  affiliateIds?: unknown;
-  priceCategory?: unknown;
-  updatedDate?: unknown;
-  durability?: unknown;
-  value?: unknown;
-  specs?: unknown;
-  readingTime?: unknown;
-  authorAvatar?: unknown;
-  location?: unknown;
-  city?: unknown;
-  schedule?: unknown;
-  description?: unknown;
-  link?: unknown;
-  // Missing metadata from CI logs
-  heroImage?: unknown;
-  startDate?: unknown;
-  earlyBirdDate?: unknown;
-  registrationDeadline?: unknown;
-  hotelCutoffDate?: unknown;
-  packingReminderDate?: unknown;
-  whyAttending?: unknown;
+  [key: string]: unknown;
 }
 
-export function GearCard({
-  slug,
-  title,
-  category,
-  excerpt,
-  basePath,
-  rating,
-  verdict,
-  image,
-  // Content metadata props to be ignored
-  type: _type,
-  date: _date,
-  author: _author,
-  authorAvatar: _authorAvatar,
-  content: _content,
-  tags: _tags,
-  affiliateIds: _affiliateIds,
-  priceCategory: _priceCategory,
-  updatedDate: _updatedDate,
-  durability: _durability,
-  value: _value,
-  specs: _specs,
-  readingTime: _readingTime,
-  location: _location,
-  city: _city,
-  schedule: _schedule,
-  description: _description,
-  link: _link,
-  heroImage: _heroImage,
-  startDate: _startDate,
-  earlyBirdDate: _earlyBirdDate,
-  registrationDeadline: _registrationDeadline,
-  hotelCutoffDate: _hotelCutoffDate,
-  packingReminderDate: _packingReminderDate,
-  whyAttending: _whyAttending,
-  ...rest
-}: GearCardProps) {
+export function GearCard(props: GearCardProps) {
+  const {
+    slug,
+    title,
+    category,
+    excerpt,
+    basePath,
+    rating,
+    verdict,
+    image,
+  } = props;
+
+  const rest = pickRest(props, [
+    ...CONTENT_METADATA_KEYS,
+    'basePath'
+  ] as any);
   return (
     <Stack
       as="article"

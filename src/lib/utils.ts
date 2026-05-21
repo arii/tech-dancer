@@ -121,3 +121,15 @@ export function addDays(date: Date, days: number): Date {
   result.setDate(result.getDate() + days);
   return result;
 }
+
+/**
+ * Filters out specified keys from an object, returning the "rest" of the properties.
+ * Useful for preventing non-DOM props from being spread onto HTML elements.
+ */
+export function pickRest<T extends object, K extends keyof T>(props: T, keys: K[]): Omit<T, K> {
+  const rest = { ...props };
+  keys.forEach(key => {
+    delete rest[key];
+  });
+  return rest;
+}

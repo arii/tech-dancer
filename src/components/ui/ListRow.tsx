@@ -4,6 +4,8 @@ import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { pickRest } from '@/lib/utils';
+import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 interface ListRowProps {
   slug: string;
@@ -16,57 +18,12 @@ interface ListRowProps {
   [key: string]: unknown;
 }
 
-export function ListRow({
-  slug,
-  title,
-  category,
-  excerpt,
-  date,
-  basePath,
-  content,
-  // Metadata props to be ignored
-  type: _type,
-  author: _author,
-  authorAvatar: _authorAvatar,
-  image: _image,
-  tags: _tags,
-  affiliateIds: _affiliateIds,
-  rating: _rating,
-  verdict: _verdict,
-  priceCategory: _priceCategory,
-  updatedDate: _updatedDate,
-  durability: _durability,
-  value: _value,
-  specs: _specs,
-  location: _location,
-  city: _city,
-  schedule: _schedule,
-  description: _description,
-  link: _link,
-  url: _url,
-  heroImage: _heroImage,
-  whyAttending: _whyAttending,
-  startDate: _startDate,
-  earlyBirdDate: _earlyBirdDate,
-  registrationDeadline: _registrationDeadline,
-  hotelCutoffDate: _hotelCutoffDate,
-  packingReminderDate: _packingReminderDate,
-  theme: _theme,
-  gear: _gear,
-  themeName: _themeName,
-  themeLabel: _themeLabel,
-  themeDescription: _themeDescription,
-  themeColors: _themeColors,
-  themeOutfitIds: _themeOutfitIds,
-  themeAccessoryIds: _themeAccessoryIds,
-  gearOutfitIds: _gearOutfitIds,
-  gearAccessoryIds: _gearAccessoryIds,
-  gearShoeIds: _gearShoeIds,
-  gearEssentialIds: _gearEssentialIds,
-  gearTravelIds: _gearTravelIds,
-  relatedEvents: _relatedEvents,
-  ...rest
-}: ListRowProps) {
+export function ListRow(props: ListRowProps) {
+  const { slug, title, category, excerpt, date, basePath, content } = props;
+  const rest = pickRest(props, [
+    ...CONTENT_METADATA_KEYS,
+    'basePath'
+  ] as any);
   const rt = readingTime(content, excerpt);
 
   return (

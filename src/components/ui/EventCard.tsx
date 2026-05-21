@@ -1,6 +1,8 @@
 import { MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { pickRest } from '@/lib/utils';
+import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 interface EventCardProps {
   title: string;
@@ -10,44 +12,9 @@ interface EventCardProps {
   [key: string]: unknown;
 }
 
-export function EventCard({
-  title,
-  slug,
-  location,
-  schedule,
-  // Metadata props to be ignored
-  type: _type,
-  date: _date,
-  author: _author,
-  category: _category,
-  excerpt: _excerpt,
-  content: _content,
-  description: _description,
-  link: _link,
-  url: _url,
-  heroImage: _heroImage,
-  whyAttending: _whyAttending,
-  startDate: _startDate,
-  earlyBirdDate: _earlyBirdDate,
-  registrationDeadline: _registrationDeadline,
-  hotelCutoffDate: _hotelCutoffDate,
-  packingReminderDate: _packingReminderDate,
-  theme: _theme,
-  gear: _gear,
-  themeName: _themeName,
-  themeLabel: _themeLabel,
-  themeDescription: _themeDescription,
-  themeColors: _themeColors,
-  themeOutfitIds: _themeOutfitIds,
-  themeAccessoryIds: _themeAccessoryIds,
-  gearOutfitIds: _gearOutfitIds,
-  gearAccessoryIds: _gearAccessoryIds,
-  gearShoeIds: _gearShoeIds,
-  gearEssentialIds: _gearEssentialIds,
-  gearTravelIds: _gearTravelIds,
-  relatedEvents: _relatedEvents,
-  ...rest
-}: EventCardProps) {
+export function EventCard(props: EventCardProps) {
+  const { title, slug, location, schedule } = props;
+  const rest = pickRest(props, CONTENT_METADATA_KEYS as any);
   return (
     <Stack
       as="article"
