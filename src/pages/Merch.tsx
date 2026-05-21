@@ -153,9 +153,9 @@ function ProductCard({ product }: { product: MerchProduct }) {
                   radius="full"
                   className={cn(
                     "text-micro font-mono font-bold uppercase tracking-wider backdrop-blur-md",
-                    role === 'lead' && "bg-blue-500/20 text-blue-200",
-                    role === 'follow' && "bg-pink-500/20 text-pink-200",
-                    role === 'switch' && "bg-purple-500/20 text-purple-200"
+                    role === 'lead' && "bg-accent/20 text-accent",
+                    role === 'follow' && "bg-accent-magenta/20 text-accent-magenta",
+                    role === 'switch' && "bg-accent-purple/20 text-accent-purple"
                   )}
                 >
                   {role}
