@@ -80,7 +80,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           img: ({node: _node, ...props}) => (
             <img
-              className="rounded-lg shadow-sm max-h-40 w-auto object-contain mx-auto my-2"
+              className="rounded-lg shadow-sm"
               loading="lazy"
               {...props}
             />
