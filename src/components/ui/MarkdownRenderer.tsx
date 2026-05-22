@@ -1,7 +1,10 @@
 // impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
+import { Notice } from './Notice';
 
 interface MarkdownRendererProps {
   content: string;
@@ -11,7 +14,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
       <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
+          Notice: Notice as any,
           a: ({node: _node, href, ...props}) => {
             const isInternal = href?.startsWith('/');
             if (isInternal) {

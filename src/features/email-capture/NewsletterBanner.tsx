@@ -12,14 +12,17 @@ export function NewsletterBanner() {
 
   return (
     <Box 
-      position="relative"
+      position="fixed"
+      bottom={0}
+      left={0}
+      width="full"
+      zIndex={50}
       surface="alt"
-      border="y"
+      border="t"
       className="border-accent/40 shadow-glow"
       paddingX={{ base: 6, md: 12 }}
       paddingY={{ base: 12, lg: 16 }}
       radius="none"
-      width="full"
     >
       {/* Decorative Brand Accent - No arbitrary width, use standard spacing if possible or raw line */}
       <Box 

@@ -230,8 +230,11 @@
   @media (max-width: 640px) {
     body { line-height: 1.7; }
   }
-  :is(a, button, input, textarea, select, [role="button"], [tabindex], article):focus-visible {
-    outline: 2px solid var(--raw-color-accent);
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  :is(textarea, select, [role="button"], [tabindex], article):focus-visible {
+    outline: 2px solid #38bdf8;
     outline-offset: 2px;
   }
   .prose a {
