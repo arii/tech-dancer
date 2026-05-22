@@ -13,7 +13,7 @@ location: "Test Arena"
 city: "San Francisco, CA"
 schedule: "October 1 - 4, 2026"
 url: "https://example.com/sample-event"
-heroImage: "/assets/events/jjor-hero.jpg"
+heroImage: "/assets/events/jjo-hero.jpg"
 description: "This description field maps to the Travel & Venue Notes section."
 
 # ── Event Hero copy ────────────────────────────────────
