@@ -119,7 +119,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       <Stack gap={10}>
         <Stack gap={2}>
           <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Journey Utility
+            Event Reminders
           </Text>
           <Text variant="headline" size="3xl" weight="font-black">
             Stay on Top of What Matters

@@ -15,7 +15,7 @@ export function EventNotes({ id, content }: EventNotesProps) {
       <Stack gap={8}>
         <Stack gap={2}>
           <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Expert Intelligence
+            Expert Notes
           </Text>
           <Box display="flex" align="center" gap={3}>
             <FileText className="w-8 h-8 text-white" />

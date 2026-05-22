@@ -1,6 +1,6 @@
 ---
 type: post
-title: "BoomTick and B•: Rhythmic Architecture of WCS"
+title: "BoomTick and B•: The Rhythmic Side of WCS"
 date: "2026-05-06"
 author: "Ariel Anders, PhD"
 category: "WCS"
@@ -66,7 +66,7 @@ This intersection of technical structure and creative expression is why I dance,
 
 The aesthetic of BoomTick.blog is as intentional as a well-timed anchor. We’ve developed the **"Accessible Victorian"** design language—a blend of San Francisco’s architectural heritage and modern accessibility standards.
 
-This design system uses a palette of high-contrast teals, corals, and plums, ensuring that every insight is legible regardless of your device or visual environment. We believe that professional-grade data shouldn’t just be accurate; it should be beautiful and inclusive.
+This design uses a palette of high-contrast teals, corals, and plums, ensuring that every insight is easy to read regardless of your device. We believe that professional-grade research shouldn’t just be accurate; it should be beautiful and inclusive.
 
 ## Sources
 

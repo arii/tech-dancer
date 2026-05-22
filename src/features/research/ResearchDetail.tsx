@@ -155,7 +155,7 @@ export default function ResearchDetail() {
 
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
+                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Lab Status</Text>
                     <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
                       <Activity className="w-4 h-4 text-accent" />
                       <StatusBadge label={tool.status} />

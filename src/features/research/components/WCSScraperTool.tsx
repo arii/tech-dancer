@@ -177,7 +177,7 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
   return (
     <Box paddingX={4} paddingY={6}>
       <Stack gap={4}>
-        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">System Intelligence</Text>
+        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">Lab Insights</Text>
         <Stack gap={4}>
           <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
             <Text variant="body" size="xs" color="dim">Status</Text>

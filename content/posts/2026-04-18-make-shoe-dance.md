@@ -14,7 +14,7 @@ tags:
 
 ## Suede Your Dance Shoes
 
-Dedicated dance shoes cost more and offer limited styles. My preferred system is to "upgrade" high-comfort sneakers or flats using adhesive suede.
+Dedicated dance shoes cost more and offer limited styles. My preferred approach is to "upgrade" high-comfort sneakers or flats using adhesive suede.
 
 ### Potential Options and Analysis
 
@@ -24,4 +24,4 @@ I've experimented with several placement strategies for the suede stickers:
 2. **Just ball of the foot:** Minimalist. Allows for grip on the heel when you need it for stopping power.
 3. **Entire sticker coverage:** My preferred method. I like this best because it provides a uniform, Consistent grip under your whole foot.
 
-When you're dancing on high-variance hotel carpets or sticky social floors, it's the Best way to save your knees on a sticky hotel floor.
+When you're dancing on unpredictable hotel carpets or sticky social floors, it's the Best way to save your knees on a sticky hotel floor.

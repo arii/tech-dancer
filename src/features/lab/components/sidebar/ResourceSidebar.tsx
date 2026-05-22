@@ -99,7 +99,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
             )}
           </Box>
           <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight italic">
-            * Affiliate link support helps maintain this repository.
+            * Affiliate link support helps maintain BoomTick.
           </Text>
         </Stack>
       )}

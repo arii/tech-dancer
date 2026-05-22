@@ -33,8 +33,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'wsdc-event-reminders',
     name: 'WSDC Event Reminders',
-    category: 'Travel Optimization',
+    category: 'Travel Tips',
     status: 'Active',
-    layman: 'Secure early bird discounts without overcommitting. Sync verified WSDC travel milestones directly to your calendar.'
+    layman: 'Secure early bird discounts without overcommitting. Sync verified WSDC travel dates directly to your calendar.'
   }
 ];
