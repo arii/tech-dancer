@@ -20,7 +20,7 @@ test.describe('accessibility', () => {
 
     // Open search modal
     await page.keyboard.press('Control+k');
-    await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     const results = await new AxeBuilder({ page })
       .disableRules(['region'])
@@ -35,7 +35,7 @@ test.describe('accessibility', () => {
 
     // Open search modal
     await page.keyboard.press('Control+k');
-    const input = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');
+    const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await expect(input).toBeVisible();
     await expect(input).toBeFocused();
 
