@@ -32,7 +32,9 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
                   category={item.category}
                   excerpt={item.description}
                   image={item.image}
-                  basePath="/gear"
+                  href={item.href}
+                  isExternal={item.isExternal}
+                  basePath={item.slug ? "/gear" : undefined}
                 />
               ))}
             </Grid>

@@ -8,11 +8,13 @@ import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
-  slug: string;
+  slug?: string;
   title: string;
   category: string;
   excerpt: string;
-  basePath: string;
+  basePath?: string;
+  href?: string;
+  isExternal?: boolean;
   rating?: number;
   verdict?: string;
   image?: string;
@@ -26,6 +28,8 @@ export function GearCard(props: GearCardProps) {
     category,
     excerpt,
     basePath,
+    href,
+    isExternal,
     rating,
     verdict,
     image,
@@ -48,9 +52,12 @@ export function GearCard(props: GearCardProps) {
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
       <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
+        as={href ? "a" : NavLink}
+        href={href}
+        to={href ? undefined : `${basePath}/${slug}`}
         aria-label={`Read gear review: ${title}`}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "sponsored noopener noreferrer" : undefined}
         className="absolute inset-0 z-10"
       />
       {verdict && (

@@ -8,7 +8,13 @@ import { Resource } from "@/lib/types/content";
 
 export interface ResolvedGearSection {
   label: string;
-  items: (AffiliateLink & { slug: string; image?: string })[];
+  items: (AffiliateLink & {
+    slug?: string;
+    image?: string;
+    href: string;
+    isExternal: boolean;
+    linkKind: "resource" | "printful" | "affiliate";
+  })[];
 }
 
 /**
@@ -18,20 +24,30 @@ export interface ResolvedGearSection {
 export function resolveAffiliateLinks(
   ids: string[] = [],
   resourceByAffiliateId: Map<string, Resource> = new Map(),
-): (AffiliateLink & { slug: string; image?: string })[] {
+): ResolvedGearSection["items"] {
   return ids
     .map((id) => {
       const link = affiliateManager.getLink(id);
       if (!link) return undefined;
 
       const linkedResource = resourceByAffiliateId.get(id);
+      const isPrintful = /(^|\.)printful\./i.test(new URL(link.url).hostname);
       return {
         ...link,
-        slug: linkedResource?.slug ?? id,
+        slug: linkedResource?.slug,
         image: linkedResource?.image,
+        href: linkedResource ? `/gear/${linkedResource.slug}` : link.url,
+        isExternal: !linkedResource,
+        linkKind: linkedResource ? "resource" : isPrintful ? "printful" : "affiliate",
       };
     })
-    .filter((l): l is AffiliateLink & { slug: string; image?: string } => !!l);
+    .filter((l): l is AffiliateLink & {
+      slug?: string;
+      image?: string;
+      href: string;
+      isExternal: boolean;
+      linkKind: "resource" | "printful" | "affiliate";
+    } => !!l);
 }
 
 /**
