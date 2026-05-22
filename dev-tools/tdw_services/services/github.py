@@ -50,7 +50,8 @@ class GitHubClient:
                 url,
                 headers=headers,
                 json=json_data,
-                timeout=30
+                timeout=30,
+                allow_redirects=True
             )
             response.raise_for_status()
             if is_text:
@@ -92,10 +93,16 @@ class GitHubClient:
         # Ensure we have a valid ID and it's a string for the URL path
         job_id = str(external_id) if external_id is not None else str(check_run_id)
         try:
-            # GitHub API returns a 302 redirect to a URL that expires after a few minutes
-            # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
+            # First try the standard way with redirects allowed
             return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
         except Exception as e:
+            # If that fails due to 404 (common with logs API when job is old or ID is mismatched),
+            # we should gracefully return a clear message or retry with the raw check run ID if we used external_id
+            if external_id is not None and "404" in str(e):
+                try:
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+                except Exception as e2:
+                    return f"Failed to fetch logs for job {job_id} and {check_run_id}: {str(e)} | {str(e2)}"
             return f"Failed to fetch logs for job {job_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
