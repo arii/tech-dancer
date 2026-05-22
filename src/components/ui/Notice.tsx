@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Text } from '@/layouts/Primitives';
 
 interface NoticeProps {
@@ -24,7 +23,7 @@ export function Notice({ type = 'info', children }: NoticeProps) {
         position="absolute"
         top={0}
         left={0}
-        width="2px"
+        width={0.5}
         height="full"
         className={type === 'warning' ? "bg-accent-purple" : "bg-accent"}
       />

@@ -17,7 +17,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
         components={{
-          Notice: Notice as any,
+          Notice: Notice as React.ElementType,
           a: ({node: _node, href, ...props}) => {
             const isInternal = href?.startsWith('/');
             if (isInternal) {

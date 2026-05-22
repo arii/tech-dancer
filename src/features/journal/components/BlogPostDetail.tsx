@@ -37,9 +37,9 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
              <Text variant="mono" size="xs">{post.author}</Text>
           </Stack>
           <Box flex />
-          <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-[#38bdf8] hover:bg-[#38bdf8]/[0.08] transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
-            <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-[#38bdf8]" />
-            <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-[#38bdf8]">SHARE</Text>
+          <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-accent-sky hover:bg-accent-sky/10 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
+            <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-accent-sky" />
+            <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
           </Stack>
         </Stack>
       }
