@@ -60,7 +60,7 @@ export default function Toolbox() {
               className={cn(pill.color, "hover:opacity-90 transition-opacity")}
             />
           ))}
-        </Box>
+        </Stack>
       </Box>
 
       {/* Grid: Mobile-first stacking */}

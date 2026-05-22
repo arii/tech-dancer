@@ -370,7 +370,7 @@ export function WCSScraperTool() {
                       />
                     </Box>
                   ))}
-                </Box>
+                </Stack>
               </Grid>
             </Stack>
           </Box>

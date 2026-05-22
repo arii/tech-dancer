@@ -44,7 +44,7 @@ export function EventSelector({ events, selectedEventId, onSelect }: EventSelect
               : "bg-surface-alt text-text-dim border-line/50"
           )}
         />
-      </Box>
+      </Stack>
     </Stack>
   );
 }
