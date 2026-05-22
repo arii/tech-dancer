@@ -3,21 +3,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getEventBySlug, getEvents, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
-import { AffiliateLink } from "@/types";
+import { AffiliateGearItem } from "@/data/affiliateGear";
 
 export interface ResolvedGearSection {
   label: string;
-  items: AffiliateLink[];
+  items: AffiliateGearItem[];
 }
 
 /**
  * Resolves a list of affiliate IDs into full link objects.
  * Extracted as a static helper to maintain purity and allow reuse.
  */
-export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
+export function resolveAffiliateLinks(ids: string[] = []): AffiliateGearItem[] {
   return ids
     .map((id) => affiliateManager.getLink(id))
-    .filter((l): l is AffiliateLink => !!l);
+    .filter((l): l is AffiliateGearItem => !!l);
 }
 
 /**

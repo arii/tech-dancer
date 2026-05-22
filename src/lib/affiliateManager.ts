@@ -3,13 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AffiliateLink } from '../types';
-import AFFILIATE_DATABASE_JSON from '../data/affiliates.json';
+import { AffiliateGearItem, AFFILIATE_GEAR } from '../data/affiliateGear';
 
-const AFFILIATE_DATABASE: Record<string, AffiliateLink> = AFFILIATE_DATABASE_JSON as Record<string, AffiliateLink>;
+const AFFILIATE_DATABASE: Record<string, AffiliateGearItem> = Object.fromEntries(
+  AFFILIATE_GEAR.map(item => [item.id, item])
+);
 
 export const affiliateManager = {
-  getLink: (id: string): AffiliateLink | undefined => {
+  getLink: (id: string): AffiliateGearItem | undefined => {
     return AFFILIATE_DATABASE[id];
   },
   

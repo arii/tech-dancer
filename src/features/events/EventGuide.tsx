@@ -46,7 +46,7 @@ export default function EventGuide() {
               {error instanceof Error ? error.message : "An unexpected error occurred."}
             </Text>
           )}
-          <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={() => navigate('/resources/events')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Events</Text>
           </Box>
         </Stack>

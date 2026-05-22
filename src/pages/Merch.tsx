@@ -6,25 +6,26 @@ import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ASSET_PREFIX } from '@/config/constants';
-import { MERCH_PRODUCTS, COLLECTIONS, MerchProduct } from '@/data/merch';
+import { BOOMTICK_MERCH_PRODUCTS, COLLECTIONS, BoomTickMerchItem } from '@/data/boomtickMerch';
 import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 import { FilterButton } from '@/components/ui/FilterButton';
+import { MerchStoreNotice } from '@/components/resources/MerchStoreNotice';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState('all');
 
   const filteredProducts = activeCollection === 'all'
-    ? MERCH_PRODUCTS
-    : MERCH_PRODUCTS.filter((p) => p.collections.includes(activeCollection));
+    ? BOOMTICK_MERCH_PRODUCTS
+    : BOOMTICK_MERCH_PRODUCTS.filter((p) => p.collections.includes(activeCollection));
 
   return (
     <Box>
       <SEO
         title="West Coast Swing Dance Merch"
         description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
-        jsonLd={generateMerchSchema(MERCH_PRODUCTS)}
+        jsonLd={generateMerchSchema(BOOMTICK_MERCH_PRODUCTS)}
       />
 
       <Stack gap={8} width="full">
@@ -33,6 +34,8 @@ export default function Merch() {
           title="West Coast Swing Dance Merch"
           description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find your next weekend loadout here."
         />
+
+        <MerchStoreNotice />
 
         {/* Hero Referral Banner */}
         <ReferralBanner layout="expanded" />
@@ -88,7 +91,7 @@ export default function Merch() {
   );
 }
 
-function ProductCard({ product }: { product: MerchProduct }) {
+function ProductCard({ product }: { product: BoomTickMerchItem }) {
   return (
     <Stack
       as="article"

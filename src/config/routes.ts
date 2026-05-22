@@ -1,4 +1,4 @@
-import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar } from 'lucide-react';
+import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, Library } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -27,7 +27,15 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
-    path: '/gear',
+    path: '/resources',
+    lazy: () => import('@/pages/Resources').then(m => ({ Component: m.default })),
+    label: 'Resources',
+    icon: Library,
+    skeleton: 'grid',
+    isMobileVisible: true
+  },
+  {
+    path: '/resources/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',
     icon: ShoppingBag,
@@ -35,12 +43,12 @@ export const routes: RouteConfig[] = [
     isMobileVisible: true
   },
   {
-    path: '/gear/:slug',
+    path: '/resources/gear/:slug',
     lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
   {
-    path: '/events',
+    path: '/resources/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
     label: 'Event Resource Guides',
     icon: Calendar,
@@ -48,7 +56,7 @@ export const routes: RouteConfig[] = [
     isMobileVisible: true
   },
   {
-    path: '/events/:slug',
+    path: '/resources/events/:slug',
     lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
@@ -71,7 +79,7 @@ export const routes: RouteConfig[] = [
     skeleton: 'grid'
   },
   {
-    path: '/merch',
+    path: '/resources/merch',
     lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
     label: 'Merch',
     icon: ShoppingBag,
@@ -97,6 +105,32 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',
     sitemap: false
+  },
+  // Redirects for old routes
+  {
+    path: '/gear',
+    lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
+    skeleton: 'grid'
+  },
+  {
+    path: '/gear/:slug',
+    lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
+    path: '/events',
+    lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
+    skeleton: 'grid'
+  },
+  {
+    path: '/events/:slug',
+    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
+    path: '/merch',
+    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
+    skeleton: 'grid'
   },
   {
     path: '*',

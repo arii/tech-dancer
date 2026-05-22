@@ -70,14 +70,14 @@ export default function Toolbox() {
             <GearCard
               key={item.slug}
               {...item}
-              basePath="/gear"
+              basePath="/resources/gear"
             />
           ))}
         </Grid>
       ) : (
         <Stack gap={0} border="t" className="border-line">
           {allFilteredItems.map((item) => (
-            <ListRow key={item.slug} {...item} basePath="/gear" />
+            <ListRow key={item.slug} {...item} basePath="/resources/gear" />
           ))}
         </Stack>
       )}

@@ -56,7 +56,7 @@ export default function GearPost() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Review Not Found</Text>
-          <Box as="button" onClick={() => navigate('/gear')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={() => navigate('/resources/gear')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Toolbox</Text>
           </Box>
         </Stack>
@@ -75,7 +75,7 @@ export default function GearPost() {
       />
       <GearPostDetail
         post={resource}
-        onBack={() => navigate('/gear')}
+        onBack={() => navigate('/resources/gear')}
         backLabel="Back to Toolbox"
       />
     </>

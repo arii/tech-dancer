@@ -1,5 +1,4 @@
-
-export interface MerchProduct {
+export interface BoomTickMerchItem {
   id: string;
   title: string;
   description: string;
@@ -9,6 +8,8 @@ export interface MerchProduct {
   collections: string[];
   roles?: ('lead' | 'follow' | 'switch')[];
   tags: string[];
+  source: 'printful';
+  isAffiliate: false;
 }
 
 export const COLLECTIONS = [
@@ -18,7 +19,7 @@ export const COLLECTIONS = [
   { id: 'rainbow-pride', label: 'Rainbow Pride' },
 ] as const;
 
-export const MERCH_PRODUCTS: MerchProduct[] = [
+export const BOOMTICK_MERCH_PRODUCTS: BoomTickMerchItem[] = [
   {
     id: 'love-neon-follow',
     title: 'LOVE Neon T-Shirt - Ask Me to Follow',
@@ -29,6 +30,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['follow'],
     tags: ['West Coast Swing', 'Follower', 'Neon', 'Pride'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'love-neon-lead',
@@ -40,6 +43,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['lead'],
     tags: ['West Coast Swing', 'Leader', 'Neon', 'Pride'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'war-eagle-oversized',
@@ -50,6 +55,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Oversized', 'Dance Apparel', 'Streetwear'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'lead-follow-switch-love-neon',
@@ -61,6 +68,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['lead', 'follow', 'switch'],
     tags: ['Gender Neutral', 'Switch Dancer', 'Neon', 'Pride'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'mens-bear-tank-norcal',
@@ -71,6 +80,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/mens-bear-tank-nor-cal-best-cal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Tank Top', 'Workshop Wear', 'Summer'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'norcal-bestcal-cropped-top',
@@ -81,6 +92,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-cropped-top',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Cropped Top', 'Competition Wear', 'Breathable'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'norcal-bestcal-golden-gate-hoodie',
@@ -91,6 +104,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Hoodie', 'Travel', 'Layering'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'norcal-bestcal-golden-gate-pride',
@@ -101,6 +116,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt',
     collections: ['norcal-bestcal', 'rainbow-pride'],
     tags: ['NorCal', 'Pride', 'Golden Gate', 'West Coast Swing'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'norcal-bestcal-pride-bear',
@@ -111,6 +128,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel',
     collections: ['norcal-bestcal', 'rainbow-pride'],
     tags: ['NorCal', 'Pride', 'California Bear', 'Social Dance'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'love-lead-follow-switch-unisex',
@@ -122,6 +141,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     collections: ['lead-follow-switch'],
     roles: ['lead', 'follow', 'switch'],
     tags: ['Gender Neutral', 'Unisex', 'Social Dance', 'Classic'],
+    source: 'printful',
+    isAffiliate: false,
   },
   {
     id: 'norcal-bestcal-classic',
@@ -132,5 +153,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Classic', 'Team Apparel', 'Essential'],
+    source: 'printful',
+    isAffiliate: false,
   },
 ];

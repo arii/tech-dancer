@@ -1,8 +1,8 @@
 
-import { MerchProduct } from '@/data/merch';
+import { BoomTickMerchItem } from '@/data/boomtickMerch';
 import { ASSET_PREFIX, BASE_URL } from '@/config/constants';
 
-export function generateMerchSchema(products: MerchProduct[]) {
+export function generateMerchSchema(products: BoomTickMerchItem[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",

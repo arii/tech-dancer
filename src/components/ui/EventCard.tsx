@@ -42,7 +42,7 @@ export function EventCard(props: EventCardProps) {
       className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
       <NavLink
-        to={`/events/${slug}`}
+        to={`/resources/events/${slug}`}
         className="absolute inset-0 z-10"
         aria-label={`View event: ${title}`}
       />
