@@ -3,6 +3,8 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ResourceCard } from '@/components/resources/ResourceCard';
 import { ResourceCardItem } from '@/lib/types/resources';
+import { BoomTickMerchItem, AffiliateGearItem } from "@/lib/types/resources";
+import { Post, Event } from "@/lib/types/content";
 import { BOOMTICK_MERCH_PRODUCTS } from '@/data/boomtickMerch';
 import { AFFILIATE_GEAR } from '@/data/affiliateGear';
 import { getPosts, getEvents } from '@/lib/content';
@@ -15,7 +17,7 @@ export default function Resources() {
   const gear = AFFILIATE_GEAR.slice(0, 3);
   const merch = BOOMTICK_MERCH_PRODUCTS.slice(0, 3);
 
-  const formatMerchItem = (item: any): ResourceCardItem => ({
+  const formatMerchItem = (item: BoomTickMerchItem): ResourceCardItem => ({
     id: item.id,
     title: item.title,
     description: item.description,
@@ -27,7 +29,7 @@ export default function Resources() {
     tags: item.tags,
   });
 
-  const formatGearItem = (item: any): ResourceCardItem => ({
+  const formatGearItem = (item: AffiliateGearItem): ResourceCardItem => ({
     id: item.id,
     title: item.name,
     description: item.description,
@@ -38,7 +40,7 @@ export default function Resources() {
     image: item.image,
   });
 
-  const formatPostItem = (item: any): ResourceCardItem => ({
+  const formatPostItem = (item: Post): ResourceCardItem => ({
     id: item.slug,
     title: item.title,
     description: item.excerpt,
@@ -50,7 +52,7 @@ export default function Resources() {
     tags: item.tags,
   });
 
-  const formatEventItem = (item: any): ResourceCardItem => ({
+  const formatEventItem = (item: Event): ResourceCardItem => ({
     id: item.slug,
     title: item.title,
     description: item.excerpt || `Event in ${item.city}`,
@@ -80,8 +82,8 @@ export default function Resources() {
           <Box as="section">
             <Stack direction="row" align="center" justify="between" marginBottom={6}>
               <Text as="h2" variant="headline" size="2xl" weight="font-bold">Learn & Improve</Text>
-              <Button as={NavLink} to="/blog" variant="ghost" className="hidden sm:flex group">
-                All Guides <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Button as={NavLink} to="/blog" variant="ghost" display={{ base: "none", sm: "flex" }} className="group">
+                All Guides <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Stack>
             <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
@@ -95,8 +97,8 @@ export default function Resources() {
           <Box as="section">
             <Stack direction="row" align="center" justify="between" marginBottom={6}>
               <Text as="h2" variant="headline" size="2xl" weight="font-bold">Event Guides</Text>
-              <Button as={NavLink} to="/resources/events" variant="ghost" className="hidden sm:flex group">
-                All Events <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Button as={NavLink} to="/resources/events" variant="ghost" display={{ base: "none", sm: "flex" }} className="group">
+                All Events <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Stack>
             <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
@@ -113,8 +115,8 @@ export default function Resources() {
                 <Text as="h2" variant="headline" size="2xl" weight="font-bold">Gear Recommendations</Text>
                 <Text variant="body" size="sm" color="dim">Useful gear for dance weekends, practice sessions, travel days, and long nights.</Text>
               </Stack>
-              <Button as={NavLink} to="/resources/gear" variant="ghost" className="hidden sm:flex group">
-                All Gear <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Button as={NavLink} to="/resources/gear" variant="ghost" display={{ base: "none", sm: "flex" }} className="group">
+                All Gear <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Stack>
             <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>
@@ -131,8 +133,8 @@ export default function Resources() {
                 <Text as="h2" variant="headline" size="2xl" weight="font-bold">BoomTick Merch</Text>
                 <Text variant="body" size="sm" color="dim">Designed for West Coast Swing dancers, social dancers, Pride events, and NorCal.</Text>
               </Stack>
-              <Button as={NavLink} to="/resources/merch" variant="ghost" className="hidden sm:flex group">
-                Shop Merch <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Button as={NavLink} to="/resources/merch" variant="ghost" display={{ base: "none", sm: "flex" }} className="group">
+                Shop Merch <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Stack>
             <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={6}>

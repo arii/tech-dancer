@@ -46,14 +46,14 @@ export function ResourceCard({ item }: ResourceCardProps) {
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
       <Box
-        as={Component as any}
+        as={Component as React.ElementType}
         {...linkProps}
         className="absolute inset-0 z-10"
         aria-label={getCtaLabel(item.kind)}
       />
 
       {item.image && (
-        <Box position="relative" aspect="video" overflow="hidden" radius="md" className="bg-surface-alt/20 mb-2">
+        <Box position="relative" aspect="video" overflow="hidden" radius="md" marginBottom={2} className="bg-surface-alt/20">
           <Box
             as="img"
             src={item.image.startsWith('http') ? item.image : `${ASSET_PREFIX}${item.image}`}

@@ -3,11 +3,12 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ResourceCard } from '@/components/resources/ResourceCard';
 import { ResourceCardItem } from '@/lib/types/resources';
+import { AffiliateGearItem } from "@/lib/types/resources";
 import { AFFILIATE_GEAR } from '@/data/affiliateGear';
 import { AffiliateDisclosure } from '@/components/resources/AffiliateDisclosure';
 
 export default function Gear() {
-  const formatGearItem = (item: any): ResourceCardItem => ({
+  const formatGearItem = (item: AffiliateGearItem): ResourceCardItem => ({
     id: item.id,
     title: item.name,
     description: item.description,
