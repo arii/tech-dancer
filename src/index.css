@@ -231,10 +231,7 @@
   @media (max-width: 640px) {
     body { line-height: 1.7; }
   }
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  :is(textarea, select, [role="button"], [tabindex], article):focus-visible {
+  :where(:is(a, button, input, textarea, select, [role="button"], [tabindex], article)):focus-visible {
     outline: 2px solid var(--color-accent-sky);
     outline-offset: 2px;
   }

@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { Notice } from './Notice';
@@ -13,7 +14,18 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
       <ReactMarkdown
-        rehypePlugins={[rehypeRaw]}
+        rehypePlugins={[
+          rehypeRaw,
+          [rehypeSanitize, {
+            ...defaultSchema,
+            tagNames: [...(defaultSchema.tagNames || []), 'notice'],
+            attributes: {
+              ...defaultSchema.attributes,
+              notice: ['type']
+            },
+            clobberPrefix: ''
+          }]
+        ]}
         components={{
           a: ({node: _node, href, ...props}) => {
             const isInternal = href?.startsWith('/');
@@ -88,7 +100,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               {...props}
             />
           ),
-          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
+          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
         }}
       >
         {content}
