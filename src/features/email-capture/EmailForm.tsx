@@ -28,6 +28,8 @@ export function EmailForm() {
           type="email"
           placeholder="your@email.com"
           required
+          aria-required="true"
+          aria-label="Email address"
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}
           minHeight={11}

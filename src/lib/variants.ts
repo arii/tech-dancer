@@ -92,11 +92,11 @@ export const actionButtonVariants = cva(
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = cva(
-  "bg-surface rounded-lg shadow-sm border border-line transition-all",
+  "bg-surface rounded-lg shadow-sm border border-line transition-all duration-200",
   {
     variants: {
       interactive: {
-        true: "hover:border-accent cursor-pointer",
+        true: "hover:border-accent cursor-pointer hover:-translate-y-1 hover:shadow-glow",
         false: "",
       },
       overflow: {

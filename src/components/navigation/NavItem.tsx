@@ -37,6 +37,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             gap={3}
             paddingY={3}
             paddingX={isMobile ? 4 : 6}
+            minHeight={isMobile ? 14 : 12}
             border={isMobile ? "b" : undefined}
             className={cn(
               "transition-transform duration-200 group-hover:translate-x-1",
