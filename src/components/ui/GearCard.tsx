@@ -3,8 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
+import { affiliateManager } from '@/lib/affiliateManager';
 
-import { Star, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
@@ -25,16 +26,21 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
-    basePath,
     rating,
     verdict,
-    image,
+    image: propsImage,
   } = props;
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath'
   ] as (keyof GearCardProps)[]);
+
+  const resolvedHref = affiliateManager.resolveResourceHref(slug);
+  const isInternal = resolvedHref.startsWith('/');
+  const affiliate = affiliateManager.getLink(slug);
+  const image = propsImage || affiliate?.image;
+
   return (
     <Stack
       as="article"
@@ -47,12 +53,23 @@ export function GearCard(props: GearCardProps) {
       border
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10"
-      />
+      {isInternal ? (
+        <Box
+          as={NavLink}
+          to={resolvedHref}
+          aria-label={`Read gear review: ${title}`}
+          className="absolute inset-0 z-10"
+        />
+      ) : (
+        <Box
+          as="a"
+          href={resolvedHref}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          aria-label={`View ${title} on external site`}
+          className="absolute inset-0 z-10"
+        />
+      )}
       {verdict && (
         <Box display="flex" justify="end">
           <Text variant="mono" size="xs" color="body">
@@ -126,9 +143,13 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1}>
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read review
+            {isInternal ? 'Read review' : 'View store'}
           </Text>
-          <ArrowRight className="w-3 h-3 text-accent" />
+          {isInternal ? (
+            <ArrowRight className="w-3 h-3 text-accent" />
+          ) : (
+            <ExternalLink className="w-3 h-3 text-accent" />
+          )}
         </Box>
       </Box>
     </Stack>
