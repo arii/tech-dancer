@@ -9,6 +9,18 @@ import { ASSET_PREFIX } from '@/config/constants';
 
 const AFFILIATE_DATABASE: Record<string, AffiliateLink> = AFFILIATE_DATABASE_JSON as Record<string, AffiliateLink>;
 
+/**
+ * Applies default UTM tracking parameters to the URL if not already present.
+ */
+function applyDefaultTracking(url: URL) {
+  if (!url.searchParams.has('utm_source')) {
+    url.searchParams.append('utm_source', 'boomtick-blog');
+  }
+  if (!url.searchParams.has('utm_medium')) {
+    url.searchParams.append('utm_medium', 'portfolio');
+  }
+}
+
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
     const link = AFFILIATE_DATABASE[id];
@@ -31,9 +43,6 @@ export const affiliateManager = {
     
     const url = new URL(link.url);
 
-    // Don't add tracking to Printful links or if already present
-    const isPrintful = url.hostname.includes('printful.me');
-
     if (metadata) {
       Object.entries(metadata).forEach(([key, value]) => {
         if (!url.searchParams.has(key)) {
@@ -43,13 +52,9 @@ export const affiliateManager = {
     }
 
     // Add global tracking for non-Printful affiliate links
+    const isPrintful = url.hostname.includes('printful.me');
     if (!isPrintful) {
-      if (!url.searchParams.has('utm_source')) {
-        url.searchParams.append('utm_source', 'boomtick-blog');
-      }
-      if (!url.searchParams.has('utm_medium')) {
-        url.searchParams.append('utm_medium', 'portfolio');
-      }
+      applyDefaultTracking(url);
     }
     
     return url.toString();

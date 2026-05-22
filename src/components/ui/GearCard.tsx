@@ -35,8 +35,7 @@ export function GearCard(props: GearCardProps) {
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath',
-    'affiliateIds'
+    'basePath'
   ] as (keyof GearCardProps)[]);
 
   // Resolve link: prioritization check
