@@ -5,8 +5,8 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Stylish cropped top for NorCal dancers."
-image: "/images/gear/norcal-crop-top-front.webp"
-imageBack: "/images/gear/norcal-crop-top-back.webp"
+image: "/assets/gear/norcal-crop-top-front.webp"
+imageBack: "/assets/gear/norcal-crop-top-back.webp"
 affiliateIds: ["norcal-crop-top"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5

@@ -17,6 +17,7 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  affiliateIds?: string[];
   [key: string]: unknown;
 }
 
@@ -29,16 +30,27 @@ export function GearCard(props: GearCardProps) {
     rating,
     verdict,
     image: propsImage,
+    affiliateIds,
   } = props;
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath'
+    'basePath',
+    'affiliateIds'
   ] as (keyof GearCardProps)[]);
 
-  const resolvedHref = affiliateManager.resolveResourceHref(slug);
+  // Resolve link: prioritization check
+  const affiliateId = affiliateIds?.[0] || slug;
+  let resolvedHref = affiliateManager.resolveResourceHref(affiliateId);
+
+  // If we couldn't resolve via affiliate manager but we have a direct slug,
+  // assume it is an internal resource (common for Toolbox items).
+  if (resolvedHref === '#' && slug && slug !== affiliateId) {
+    resolvedHref = `/gear/${slug}`;
+  }
+
   const isInternal = resolvedHref.startsWith('/');
-  const affiliate = affiliateManager.getLink(slug);
+  const affiliate = affiliateManager.getLink(affiliateId);
   const image = propsImage || affiliate?.image;
 
   return (
@@ -53,20 +65,11 @@ export function GearCard(props: GearCardProps) {
       border
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      {isInternal ? (
+      {isInternal && (
         <Box
           as={NavLink}
           to={resolvedHref}
           aria-label={`Read gear review: ${title}`}
-          className="absolute inset-0 z-10"
-        />
-      ) : (
-        <Box
-          as="a"
-          href={resolvedHref}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          aria-label={`View ${title} on external site`}
           className="absolute inset-0 z-10"
         />
       )}
@@ -142,13 +145,30 @@ export function GearCard(props: GearCardProps) {
           </Box>
         )}
         <Box display="flex" align="center" gap={1}>
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            {isInternal ? 'Read review' : 'View store'}
-          </Text>
           {isInternal ? (
-            <ArrowRight className="w-3 h-3 text-accent" />
+            <>
+              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+                Read review
+              </Text>
+              <ArrowRight className="w-3 h-3 text-accent" />
+            </>
           ) : (
-            <ExternalLink className="w-3 h-3 text-accent" />
+            <Box
+              as="a"
+              href={resolvedHref}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              display="flex"
+              align="center"
+              gap={1}
+              className="z-20 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+              aria-label={`View ${title} on external site`}
+            >
+              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+                View store
+              </Text>
+              <ExternalLink className="w-3 h-3 text-accent" />
+            </Box>
           )}
         </Box>
       </Box>

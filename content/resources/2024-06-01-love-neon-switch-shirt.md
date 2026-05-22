@@ -5,8 +5,8 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Show your versatility on the dance floor with this neon 'Lead, Follow, or Switch' LOVE shirt."
-image: "/images/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"
-imageBack: "/images/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp"
+image: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"
+imageBack: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp"
 affiliateIds: ["love-neon-switch-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
