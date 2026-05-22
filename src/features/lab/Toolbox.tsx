@@ -44,7 +44,7 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
+        <Stack direction="row" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60" marginBottom={8}>
           <FilterButton
             label="All Gear"
             onClick={() => setSelectedPill('all')}

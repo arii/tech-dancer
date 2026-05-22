@@ -355,7 +355,7 @@ export function WCSScraperTool() {
                   />
                 </Box>
 
-                <Box display="flex" gap={2}>
+                <Stack direction="row" gap={2} width="full">
                   {(['all', 'promoted', 'not-promoted'] as const).map((filter) => (
                     <Box key={filter} flex={1}>
                       <FilterButton
