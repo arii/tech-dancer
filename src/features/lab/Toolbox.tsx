@@ -44,12 +44,12 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
+        <Box marginBottom={8} display="flex" flexWrap="nowrap" overflowX="auto" gap={3} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60 no-scrollbar">
           <FilterButton
             label="All Gear"
             onClick={() => setSelectedPill('all')}
             isActive={selectedPill === 'all'}
-            className="text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors"
+            className="text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors shrink-0"
           />
           {GEAR_PILLS.map((pill) => (
             <FilterButton
@@ -57,7 +57,7 @@ export default function Toolbox() {
               label={pill.label}
               onClick={() => setSelectedPill(pill.value)}
               isActive={selectedPill === pill.value}
-              className={cn(pill.color, "hover:opacity-90 transition-opacity")}
+              className={cn(pill.color, "hover:opacity-90 transition-opacity shrink-0")}
             />
           ))}
         </Box>
@@ -65,7 +65,7 @@ export default function Toolbox() {
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 4, md: 6 }}>
+        <Box display="grid" className="grid-cols-[repeat(auto-fit,minmax(280px,1fr))]" gap={{ base: 6, md: 8 }}>
           {allFilteredItems.map((item) => (
             <GearCard
               key={item.slug}

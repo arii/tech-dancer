@@ -34,7 +34,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
           aria-label={v === 'card' ? 'Grid view' : 'List view'}
           aria-pressed={view === v}
         >
-          {v === 'card' ? <LayoutGrid className="w-5 h-5" /> : <List className="w-5 h-5" />}
+          {v === 'card' ? <LayoutGrid className="w-5 h-5" aria-hidden="true" /> : <List className="w-5 h-5" aria-hidden="true" />}
         </Box>
       ))}
     </Box>

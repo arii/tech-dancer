@@ -35,7 +35,7 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             display="flex"
             align="center"
             gap={3}
-            paddingY={3}
+            paddingY={4}
             paddingX={isMobile ? 4 : 6}
             border={isMobile ? "b" : undefined}
             className={cn(

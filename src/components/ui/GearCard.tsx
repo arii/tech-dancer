@@ -45,21 +45,14 @@ export function GearCard(props: GearCardProps) {
       padding={6}
       radius="lg"
       border
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5 focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-4"
     >
       <Box
         as={NavLink}
         to={`${basePath}/${slug}`}
         aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-10 outline-none"
       />
-      {verdict && (
-        <Box display="flex" justify="end">
-          <Text variant="mono" size="xs" color="body">
-            Best for: {verdict}
-          </Text>
-        </Box>
-      )}
 
       {/* Image zone */}
       <Box
@@ -98,6 +91,13 @@ export function GearCard(props: GearCardProps) {
         </Box>
       </Box>
       <Stack gap={2}>
+        {verdict && (
+          <Box marginBottom={2}>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className="uppercase tracking-widest opacity-80">
+              Best for: {verdict}
+            </Text>
+          </Box>
+        )}
         <Text
           as="h3"
           variant="body"
@@ -118,8 +118,8 @@ export function GearCard(props: GearCardProps) {
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         {rating !== undefined && (
           <Box display="flex" align="center" gap={1}>
-            <Star size={16} className="text-accent fill-accent" />
-            <Text variant="mono" size="xs" weight="font-bold">
+            <Star size={16} className="text-accent fill-accent" aria-hidden="true" />
+            <Text variant="mono" size="xs" weight="font-bold" color="main">
               {rating.toFixed(1)}/5
             </Text>
           </Box>
@@ -128,7 +128,7 @@ export function GearCard(props: GearCardProps) {
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
             Read review
           </Text>
-          <ArrowRight className="w-3 h-3 text-accent" />
+          <ArrowRight className="w-3 h-3 text-accent" aria-hidden="true" />
         </Box>
       </Box>
     </Stack>
