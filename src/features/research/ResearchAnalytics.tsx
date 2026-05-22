@@ -14,14 +14,14 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="Research & Insights"
-        description="Technical studies and insights at the intersection of robotics and West Coast Swing."
+        title="DevAi Portfolio"
+        description="A technical portfolio showcasing DevAI orchestration, autonomous systems, and tech experiments in West Coast Swing."
       />
       <Stack gap={12}>
         <PageHeader
-          label="RESEARCH"
-          title="The Research Lab"
-          description="A look at the tools and research I'm building for the West Coast Swing community."
+          label="DEVAI"
+          title="DevAi Portfolio"
+          description="Showcase of dev, tech, and AI orchestration projects at the intersection of creative movement and autonomous systems."
           as="h1"
         />
 
@@ -29,7 +29,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Research Tools</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Orchestration Tools</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -115,10 +115,10 @@ export default function ResearchAnalytics() {
                 </Box>
                 <Stack gap={0.5}>
                   <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
-                    Getting the lab ready...
+                    Preparing System...
                   </Text>
                   <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
-                    The WCS Competition Data Scraper is processing competition results. Detailed studies will be available once our first look at the data is complete.
+                    The WCS Competition Data Scraper is synchronizing. Detailed studies will be available once the orchestration pipeline is complete.
                   </Text>
                 </Stack>
               </Stack>

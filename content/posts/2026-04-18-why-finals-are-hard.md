@@ -22,6 +22,6 @@ If there are 40 dancers in a heat and only 10 make the final, the 11th through 1
 
 ### Looking at the Big Picture
 
-I'm building tools in the [Research Lab](/research) to look at these results across multiple events. By tracking performance over time rather than just looking at one rank, we can see a much more reliable picture of improvement.
+I'm building tools in the [DevAi Portfolio](/research) to look at these results across multiple events. By tracking performance over time rather than just looking at one rank, we can see a much more reliable picture of improvement.
 
 Don't let a "no-recall" define your weekend. Look at your dance videos.
