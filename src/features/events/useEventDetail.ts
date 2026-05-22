@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getEventBySlug, getEvents, Event } from "@/lib/content";
+import { getEventBySlug, getEvents, getResources, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
 import { AffiliateLink } from "@/types";
 
@@ -15,8 +15,25 @@ export interface ResolvedGearSection {
  * Extracted as a static helper to maintain purity and allow reuse.
  */
 export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
+  const resources = getResources();
   return ids
-    .map((id) => affiliateManager.getLink(id))
+    .map((id) => {
+      const link = affiliateManager.getLink(id);
+      if (!link) return null;
+
+      const matchedResource = resources.find(r => r.affiliateIds?.includes(id));
+      if (matchedResource) {
+        return {
+          ...link,
+          resourceSlug: matchedResource.slug,
+          resourceTitle: matchedResource.title,
+          resourceExcerpt: matchedResource.excerpt,
+          resourceRating: matchedResource.rating,
+          resourceImage: matchedResource.image,
+        };
+      }
+      return link;
+    })
     .filter((l): l is AffiliateLink => !!l);
 }
 

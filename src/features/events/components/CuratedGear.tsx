@@ -27,10 +27,13 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
               {section.items.map((item) => (
                 <GearCard
                   key={item.id}
-                  slug={item.id}
-                  title={item.name}
+                  slug={item.resourceSlug || item.id}
+                  title={item.resourceTitle || item.name}
                   category={item.category}
-                  excerpt={item.description}
+                  excerpt={item.resourceExcerpt || item.description}
+                  image={item.resourceImage}
+                  rating={item.resourceRating}
+                  externalUrl={!item.resourceSlug ? item.url : undefined}
                   basePath="/gear"
                 />
               ))}

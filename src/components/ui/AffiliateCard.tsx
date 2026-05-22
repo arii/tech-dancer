@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateLink } from '@/types';
 
@@ -27,13 +28,19 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         </Box>
 
         <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors">
-          <a href={link.url} target="_blank" rel="noopener noreferrer" className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
-            {link.name}
-          </a>
+          {link.resourceSlug ? (
+            <NavLink to={`/gear/${link.resourceSlug}`} className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+              {link.resourceTitle || link.name}
+            </NavLink>
+          ) : (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+              {link.name}
+            </a>
+          )}
         </Text>
 
         <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed">
-          {link.description}
+          {link.resourceExcerpt || link.description}
         </Text>
       </Stack>
     </Box>

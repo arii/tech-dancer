@@ -14,6 +14,7 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  externalUrl?: string;
   // Resource metadata properties that should not be spread to the DOM
   type?: unknown;
   date?: unknown;
@@ -44,6 +45,7 @@ export function GearCard({
   rating,
   verdict,
   image,
+  externalUrl,
   // Content metadata props to be ignored
   type: _type,
   date: _date,
@@ -77,12 +79,23 @@ export function GearCard({
       border
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10"
-      />
+      {externalUrl ? (
+        <Box
+          as="a"
+          href={externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Shop Product: ${title}`}
+          className="absolute inset-0 z-10"
+        />
+      ) : (
+        <Box
+          as={NavLink}
+          to={`${basePath}/${slug}`}
+          aria-label={`Read gear review: ${title}`}
+          className="absolute inset-0 z-10"
+        />
+      )}
       {verdict && (
         <Box display="flex" justify="end">
           <Text variant="mono" size="xs" color="body">
@@ -156,7 +169,7 @@ export function GearCard({
         )}
         <Box display="flex" align="center" gap={1}>
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read review
+            {externalUrl ? "Buy on Amazon" : "Read review"}
           </Text>
           <ArrowRight className="w-3 h-3 text-accent" />
         </Box>
