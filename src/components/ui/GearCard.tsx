@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
-import { pickRest } from '@/lib/utils';
+import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
 import { Star, ArrowRight } from 'lucide-react';
@@ -19,18 +19,18 @@ interface GearCardProps extends BaseProps {
   [key: string]: unknown;
 }
 
-const CARD_STYLES = {
-  container: cn(
-    "group relative bg-surface transition-all duration-300",
-    "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5",
-    "focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-4"
-  ),
-  image: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 aspect-video",
-  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
-  verdict: "uppercase tracking-widest opacity-80"
-};
-
 export function GearCard(props: GearCardProps) {
+  const CARD_STYLES = {
+    container: cn(
+      "group relative bg-surface transition-all duration-300",
+      "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5",
+      "focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-4"
+    ),
+    image: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 aspect-video",
+    badge: "bg-accent text-white backdrop-blur-md shadow-sm",
+    verdict: "uppercase tracking-widest opacity-80"
+  };
+
   const {
     slug,
     title,
