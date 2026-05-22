@@ -10,7 +10,7 @@ const returnButtonVariants = cva(
 );
 
 const returnButtonInnerVariants = cva(
-  "group-hover:bg-accent group-hover:text-white transition-all shadow-lg group-hover:shadow-accent/20",
+  "group-hover:bg-accent group-hover:text-bg transition-all shadow-lg group-hover:shadow-accent/20",
   {
     variants: {},
   }

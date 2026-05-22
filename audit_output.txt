@@ -1,0 +1,9 @@
+
+> react-example@0.0.0 audit /app
+> node scripts/detect-antipatterns.mjs
+
+[34m🔍 Scanning for UI anti-patterns...[0m
+
+[33m⚠️  PR scope warning: Touching 5 core files in ['src/layouts/', 'src/components/']. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23).[0m
+
+[32m✔ No anti-patterns detected![0m
