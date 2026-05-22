@@ -63,7 +63,7 @@ export function GearCard(props: GearCardProps) {
         className="bg-surface-alt/20"
       >
         {image ? (
-          <img src={image} alt={title} width={800} height={800} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={image} alt={title} width={640} height={360} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <CategoryPlaceholder category={category} />
         )}

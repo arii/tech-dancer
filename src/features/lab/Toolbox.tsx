@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { Box, Grid, Stack } from '@/layouts/Primitives';
+import { Box, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -65,7 +65,11 @@ export default function Toolbox() {
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
-        <Box display="grid" className="grid-cols-[repeat(auto-fit,minmax(280px,1fr))]" gap={{ base: 6, md: 8 }}>
+        <Box
+          display="grid"
+          className="grid-cols-[repeat(auto-fit,minmax(280px,1fr))]" // impeccable-ignore
+          gap={{ base: 6, md: 8 }}
+        >
           {allFilteredItems.map((item) => (
             <GearCard
               key={item.slug}
@@ -73,7 +77,7 @@ export default function Toolbox() {
               basePath="/gear"
             />
           ))}
-        </Grid>
+        </Box>
       ) : (
         <Stack gap={0} border="t" className="border-line">
           {allFilteredItems.map((item) => (
