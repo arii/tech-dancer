@@ -32,7 +32,7 @@ export default function Merch() {
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
-          description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find your next weekend loadout here."
+          description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find something fun for your next dance weekend."
         />
 
         <MerchStoreNotice />
@@ -95,9 +95,9 @@ function ProductCard({ product }: { product: BoomTickMerchItem }) {
   return (
     <Stack
       as="article"
-      gap={3}
+      gap={4}
       height="full"
-      padding={6}
+      padding={5}
       radius="lg"
       border
       data-testid="product-card"
@@ -115,10 +115,11 @@ function ProductCard({ product }: { product: BoomTickMerchItem }) {
       {/* Image zone */}
       <Box
         position="relative"
-        aspect="square"
+        aspect="video"
+        maxHeight={{ base: 56, lg: 72 }}
         overflow="hidden"
         radius="md"
-        className="bg-surface-alt/20"
+        className="bg-surface-alt/35"
       >
         <Box
           as="img"
@@ -126,7 +127,8 @@ function ProductCard({ product }: { product: BoomTickMerchItem }) {
           alt={product.title}
           width="full"
           height="full"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          padding={4}
+          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
         />
         {/* Category badge */}
         <Box
