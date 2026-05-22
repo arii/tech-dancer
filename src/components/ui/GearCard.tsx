@@ -19,6 +19,17 @@ interface GearCardProps extends BaseProps {
   [key: string]: unknown;
 }
 
+const CARD_STYLES = {
+  container: cn(
+    "group relative bg-surface transition-all duration-300",
+    "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5",
+    "focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-4"
+  ),
+  image: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 aspect-video",
+  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
+  verdict: "uppercase tracking-widest opacity-80"
+};
+
 export function GearCard(props: GearCardProps) {
   const {
     slug,
@@ -45,7 +56,7 @@ export function GearCard(props: GearCardProps) {
       padding={6}
       radius="lg"
       border
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5 focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-4"
+      className={CARD_STYLES.container}
     >
       <Box
         as={NavLink}
@@ -63,7 +74,7 @@ export function GearCard(props: GearCardProps) {
         className="bg-surface-alt/20"
       >
         {image ? (
-          <img src={image} alt={title} width={640} height={360} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
         ) : (
           <CategoryPlaceholder category={category} />
         )}
@@ -83,7 +94,7 @@ export function GearCard(props: GearCardProps) {
           paddingY={1}
           radius="full"
           opacity={80}
-          className="bg-accent text-white backdrop-blur-md shadow-sm"
+          className={CARD_STYLES.badge}
         >
           <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
             {category}
@@ -93,7 +104,7 @@ export function GearCard(props: GearCardProps) {
       <Stack gap={2}>
         {verdict && (
           <Box marginBottom={2}>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className="uppercase tracking-widest opacity-80">
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
               Best for: {verdict}
             </Text>
           </Box>
