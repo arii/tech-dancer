@@ -5,12 +5,24 @@
 
 import { AffiliateLink } from '../types';
 import AFFILIATE_DATABASE_JSON from '../data/affiliates.json';
+import { ASSET_PREFIX } from '@/config/constants';
 
 const AFFILIATE_DATABASE: Record<string, AffiliateLink> = AFFILIATE_DATABASE_JSON as Record<string, AffiliateLink>;
 
 export const affiliateManager = {
   getLink: (id: string): AffiliateLink | undefined => {
-    return AFFILIATE_DATABASE[id];
+    const link = AFFILIATE_DATABASE[id];
+    if (!link) return undefined;
+
+    // Normalize image path if present and relative
+    if (link.image && link.image.startsWith('/')) {
+      return {
+        ...link,
+        image: `${ASSET_PREFIX}${link.image}`
+      };
+    }
+
+    return link;
   },
   
   resolveUrl: (id: string, metadata?: Record<string, string>): string => {
