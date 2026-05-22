@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/fix/preview-dashboard-clutter-merged-prs-8552350067528751662/sitemap.xml
