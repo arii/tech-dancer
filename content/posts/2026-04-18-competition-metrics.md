@@ -22,7 +22,7 @@ A careful, respectful way to use public scoring data to analyze progression and 
 
 In West Coast Swing, we are judged by humans. Humans are great, but results can vary from heat to heat. While one event result only tells part of the story, looking at scores across multiple events can reveal helpful patterns about how you're progressing and how different panels see your dancing.
 
-I am excited to announce the development of the **WCS Competition Data Scraper**, a tool designed to make competition results easier to understand and show what the tool will show.
+I am excited to announce the development of the **WCS Competition Data Scraper**, a tool designed to make competition results easier to understand.
 
 ### Core Philosophy
 
