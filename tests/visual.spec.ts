@@ -3,14 +3,14 @@ import { test, expect } from './fixtures/visual';
 const routes = [
   { name: 'home', path: './' },
   { name: 'blog', path: './blog' },
-  { name: 'gear', path: './gear' },
+  { name: 'gear', path: './resources/gear' },
   { name: 'research', path: './research' },
   { name: 'about', path: './about' },
   { name: 'contact', path: './contact' },
   { name: 'ux-auditor', path: './ux-auditor' },
   { name: 'preview', path: './preview' },
-  { name: 'merch', path: './merch' },
-  { name: 'event-guide', path: './events/boogie-by-the-bay' }
+  { name: 'merch', path: './resources/merch' },
+  { name: 'event-guide', path: './resources/events/boogie-by-the-bay' }
 ];
 
 test.describe('Visual Regression Tests', () => {

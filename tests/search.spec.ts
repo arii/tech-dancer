@@ -28,7 +28,7 @@ test.describe('Global Search Modal', () => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
 
-    await page.goto('./gear');
+    await page.goto('./resources/gear');
 
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).not.toBeVisible();
     await expect(page).toHaveURL(/.*gear/);
@@ -105,7 +105,7 @@ test.describe('Search and Filter URL Persistence', () => {
   });
 
   test('Gear search term should persist after reload', async ({ page }) => {
-    await page.goto('./gear');
+    await page.goto('./resources/gear');
 
     const searchInput = page.getByPlaceholder(/Search gear/i);
     await expect(searchInput).toBeVisible();
