@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, Activity, Database, FileText } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
@@ -32,9 +32,7 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black" id="intelligence-tools-heading">Intelligence Tools</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} CONSOLES</Text>
           </Box>
-          <Box
-            className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8" /* impeccable-ignore */
-          >
+          <Grid autoFill gap={8} overflow="visible">
             {tools.map((tool) => (
               <Stack
                 key={tool.id}
@@ -73,7 +71,7 @@ export default function ResearchAnalytics() {
                 </Box>
               </Stack>
             ))}
-          </Box>
+          </Grid>
         </Stack>
 
         <Stack gap={8}>
@@ -83,9 +81,7 @@ export default function ResearchAnalytics() {
           </Box>
 
           {studies.length > 0 ? (
-            <Box
-              className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8" /* impeccable-ignore */
-            >
+            <Grid autoFill gap={8} overflow="visible">
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
@@ -116,7 +112,7 @@ export default function ResearchAnalytics() {
                   </Box>
                 </Stack>
               ))}
-            </Box>
+          </Grid>
           ) : (
             <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
               <Stack align="center" justify="center" gap={2}>

@@ -9,16 +9,17 @@ import { COLS_MAP, ROWS_MAP } from "./layout-maps"
 interface GridProps extends BoxProps {
   cols?: ResponsiveProp<number | string>
   rows?: ResponsiveProp<number | string>
+  autoFill?: boolean
 }
 
 export const Grid = forwardRef<HTMLDivElement, GridProps>(
-  ({ className, cols = 12, rows, ...props }, ref) => {
+  ({ className, cols = 12, rows, autoFill, ...props }, ref) => {
     return (
       <Box
         ref={ref}
         className={composeStyles(
           "grid",
-          getResponsiveClasses(cols, "", (v) => COLS_MAP[v as keyof typeof COLS_MAP] || ""),
+          autoFill ? "grid-cols-[repeat(auto-fill,minmax(300px,1fr))]" : getResponsiveClasses(cols, "", (v) => COLS_MAP[v as keyof typeof COLS_MAP] || ""), /* impeccable-ignore */
           getResponsiveClasses(rows, "", (v) => ROWS_MAP[v as keyof typeof ROWS_MAP] || ""),
           className
         )}
