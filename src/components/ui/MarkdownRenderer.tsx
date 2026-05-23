@@ -18,10 +18,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice'],
+            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice'],
             attributes: {
               ...defaultSchema.attributes,
-              notice: ['type']
+              notice: ['type'],
+              Notice: ['type']
             },
             clobberPrefix: ''
           }]
@@ -100,7 +101,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               {...props}
             />
           ),
-          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
+          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
+          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
         }}
       >
         {content}
