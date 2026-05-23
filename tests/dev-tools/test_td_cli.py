@@ -14,8 +14,9 @@ class TestTDCLI(unittest.TestCase):
 
     @patch('td_cli.get_github_token')
     @patch('td_cli.get_github_client')
+    @patch('tdw_services.orchestrator.get_github_client')
     @patch('td_cli.get_repo_name')
-    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token):
+    def test_validate_issue_dry_run_default(self, mock_repo, mock_orch_get_client, mock_get_client, mock_token):
         """Test that validate-issue defaults to dry-run True"""
         mock_repo.return_value = "owner/repo"
 
@@ -25,6 +26,7 @@ class TestTDCLI(unittest.TestCase):
         mock_issue.body = "Test Body"
 
         mock_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
+        mock_orch_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
         args = MagicMock()
         args.issue_number = 123
@@ -38,6 +40,7 @@ class TestTDCLI(unittest.TestCase):
         # Verify comment was NOT created
         mock_issue.create_comment.assert_not_called()
 
+    @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
     @patch('submit_review.get_github_token')
     @patch('submit_review.get_repo_name')
     @patch('submit_review.get_github_client')
@@ -57,6 +60,7 @@ class TestTDCLI(unittest.TestCase):
         # Verify review was NOT created
         mock_pr.create_review.assert_not_called()
 
+    @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
     @patch('submit_review.get_github_token')
     @patch('submit_review.get_repo_name')
     @patch('submit_review.get_github_client')
