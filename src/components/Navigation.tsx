@@ -108,6 +108,7 @@ export default function Navigation() {
                 width="full"
                 paddingY={3}
                 paddingX={6}
+                minHeight={12}
                 className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
                 aria-label="Open search"
               >

@@ -32,7 +32,7 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black" id="intelligence-tools-heading">Intelligence Tools</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} CONSOLES</Text>
           </Box>
-          <Grid autoFill gap={8} overflow="visible">
+          <Grid cols={{ base: 1, md: 'auto-fill' }} gap={8} overflow="visible">
             {tools.map((tool) => (
               <Stack
                 key={tool.id}
@@ -81,7 +81,7 @@ export default function ResearchAnalytics() {
           </Box>
 
           {studies.length > 0 ? (
-            <Grid autoFill gap={8} overflow="visible">
+            <Grid cols={{ base: 1, md: 'auto-fill' }} gap={8} overflow="visible">
               {studies.map((study) => (
                 <Stack
                   key={study.slug}

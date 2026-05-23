@@ -59,6 +59,7 @@ export const COLS_MAP: Record<string | number, string> = {
   10: 'grid-cols-10',
   11: 'grid-cols-11',
   12: 'grid-cols-12',
+  'auto-fill': 'grid-cols-[repeat(auto-fill,minmax(300px,1fr))]', /* impeccable-ignore */
 };
 
 export const SPAN_MAP: Record<string | number, string> = {
