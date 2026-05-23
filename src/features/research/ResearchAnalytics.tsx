@@ -14,14 +14,13 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="Research & Analytics"
-        description="Technical studies and real-time data pipelines at the intersection of robotics and West Coast Swing."
+        title="DevAI Portfolio"
+        description="Technical portfolio showcasing DevAI-driven agent orchestration, analysis tools, and machine learning research applied to West Coast Swing."
       />
       <Stack gap={12}>
         <PageHeader
-          label="TECHNICAL PORTFOLIO"
-          title="Data & Development Lab"
-          description="Technical portfolio showcasing DevAI-driven analysis tools and machine learning research applied to West Coast Swing."
+          title="DevAI Portfolio"
+          description="A technical showcase of agent orchestration, analysis tools, and machine learning research applied to the world of West Coast Swing."
           as="h1"
         />
 

@@ -76,7 +76,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
       <Stack gap={4}>
         <Box display="flex" align="center" justify="between" width="full">
           <PageHeader
-            label="LABORATORY"
+            label="PORTFOLIO"
             title="CONTENT PIPELINE"
             paddingBottom={0}
             border="none"

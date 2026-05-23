@@ -24,7 +24,7 @@ export function useHome() {
 
   const hirePaths = [
     { label: "Tech blog posts", path: "/blog?category=Tech" },
-    { label: "Data and Development Lab", path: "/research" },
+    { label: "DevAI Portfolio", path: "/research" },
     { label: "About/Contact page", path: "/about" }
   ];
 

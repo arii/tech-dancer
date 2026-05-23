@@ -262,7 +262,7 @@ export function WCSScraperTool() {
           <Stack gap={2}>
             <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-              Research tool for extracting and analyzing public West Coast Swing competition results.
+              A specialized analysis tool for extracting and visualizing public West Coast Swing competition results.
               Providing transparency on scoring patterns and promotion trends.
             </Text>
           </Stack>
@@ -293,7 +293,7 @@ export function WCSScraperTool() {
                   <Icon icon={ShieldCheck} size="sm" color="accent" />
                   <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Public Data</Text>
                 </Box>
-                <Text size="xs" color="dim">Strictly indexing public scoring data for aggregate research and statistical purposes.</Text>
+                <Text size="xs" color="dim">Strictly indexing public scoring data for aggregate analysis and statistical purposes.</Text>
               </Stack>
             </Grid>
           </Stack>
