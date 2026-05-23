@@ -27,7 +27,7 @@ export const affiliateManager = {
     if (!link) return undefined;
 
     // Normalize image path if present and relative
-    if (link.image && link.image.startsWith('/')) {
+    if (link.image && link.image.startsWith('/') && !link.image.startsWith(ASSET_PREFIX)) {
       return {
         ...link,
         image: `${ASSET_PREFIX}${link.image}`

@@ -65,6 +65,7 @@ export function GearCard(props: GearCardProps) {
       padding={6}
       radius="lg"
       border
+      data-testid="gear-card"
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
       {isInternal && (
@@ -72,6 +73,7 @@ export function GearCard(props: GearCardProps) {
           as={NavLink}
           to={resolvedHref}
           aria-label={`Read gear review: ${title}`}
+          data-testid="gear-card-link"
           className="absolute inset-0 z-10"
         />
       )}
@@ -165,6 +167,7 @@ export function GearCard(props: GearCardProps) {
               gap={1}
               className="z-20 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
               aria-label={`View ${title} on external site`}
+              data-testid="gear-card-store-link"
             >
               <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
                 View store
