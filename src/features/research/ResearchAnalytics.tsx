@@ -14,12 +14,12 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio"
+        title="Research Lab"
         description="Technical portfolio showcasing DevAI-driven agent orchestration, analysis tools, and machine learning research applied to West Coast Swing."
       />
       <Stack gap={12}>
         <PageHeader
-          title="DevAI Portfolio"
+          title="Research Lab"
           description="A technical showcase of agent orchestration, analysis tools, and machine learning research applied to the world of West Coast Swing."
           as="h1"
         />

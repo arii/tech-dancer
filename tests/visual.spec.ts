@@ -9,7 +9,8 @@ const routes = [
   { name: 'contact', path: './contact' },
   { name: 'ux-auditor', path: './ux-auditor' },
   { name: 'preview', path: './preview' },
-  { name: 'event-guide', path: './events/boogie-by-the-bay' }
+  { name: 'event-guide', path: './events/boogie-by-the-bay' },
+  { name: 'gear-detail', path: './gear/2024-06-01-love-neon-follow-shirt' }
 ];
 
 test.describe('Visual Regression Tests', () => {
@@ -26,7 +27,7 @@ test.describe('Visual Regression Tests', () => {
       // Route-specific stability waits
       if (route.name === 'research') {
         // Wait for research lab header to be visible
-        await expect(page.getByRole('heading', { name: 'DevAI Portfolio' })).toBeVisible({ timeout: 30000 });
+        await expect(page.getByRole('heading', { name: 'Research Lab' })).toBeVisible({ timeout: 30000 });
       }
 
       if (route.name === 'preview') {
