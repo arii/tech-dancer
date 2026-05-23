@@ -48,7 +48,12 @@ export function GearCard(props: GearCardProps) {
 
   const isInternal = resolvedHref.startsWith('/');
   const affiliate = affiliateManager.getLink(affiliateId);
-  const image = propsImage || affiliate?.image;
+
+  // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
+  const rawImage = propsImage || affiliate?.image;
+  const image = (rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL))
+    ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
+    : rawImage;
 
   return (
     <Stack

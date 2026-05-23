@@ -7,7 +7,7 @@ export interface AffiliateLink {
   id: string;
   name: string;
   url: string;
-  category: 'gear' | 'tech' | 'travel' | 'recovery';
+  category: string;
   description: string;
   gearSlug?: string;
   image?: string;

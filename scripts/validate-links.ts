@@ -148,6 +148,12 @@ async function main() {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
+        // Whitelist Printful 403s which are common in bot-like CI environments
+        const isPrintful = link.url.includes('printful.me');
+        if (isPrintful && response.status === 403) {
+          console.log(`- [whitelisted] Ignoring 403 for ${link.url}`);
+          continue;
+        }
         brokenLinks.push({ ...link, reason: `HTTP Status ${response.status}` });
       }
     } catch (err) {
