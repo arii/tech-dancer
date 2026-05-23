@@ -81,7 +81,7 @@ export function GlobalErrorBoundary() {
             Reload Page
           </ActionButton>
           <ActionButton
-            variant="primary"
+            variant="accent"
             paddingX={6}
             paddingY={3}
             onClick={() => navigate('/')}

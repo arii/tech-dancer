@@ -1,6 +1,5 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
@@ -17,8 +16,6 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
-  href?: string;
-  external?: boolean;
   [key: string]: unknown;
 }
 
@@ -32,10 +29,7 @@ export function GearCard(props: GearCardProps) {
     rating,
     verdict,
     image,
-    href,
-    external,
   } = props;
-  const [imageFailed, setImageFailed] = useState(false);
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
@@ -53,23 +47,12 @@ export function GearCard(props: GearCardProps) {
       border
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      {external ? (
-        <Box
-          as="a"
-          href={href || `${basePath}/${slug}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Open resource: ${title}`}
-          className="absolute inset-0 z-10"
-        />
-      ) : (
-        <Box
-          as={NavLink}
-          to={href || `${basePath}/${slug}`}
-          aria-label={`Read gear review: ${title}`}
-          className="absolute inset-0 z-10"
-        />
-      )}
+      <Box
+        as={NavLink}
+        to={`${basePath}/${slug}`}
+        aria-label={`Read gear review: ${title}`}
+        className="absolute inset-0 z-10"
+      />
       {verdict && (
         <Box display="flex" justify="end">
           <Text variant="mono" size="xs" color="body">
@@ -86,8 +69,8 @@ export function GearCard(props: GearCardProps) {
         radius="md"
         className="bg-surface-alt/20"
       >
-        {image && !imageFailed ? (
-          <img src={image} alt={title} width={800} height={800} onError={() => setImageFailed(true)} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        {image ? (
+          <img src={image} alt={title} width={800} height={800} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <CategoryPlaceholder category={category} />
         )}

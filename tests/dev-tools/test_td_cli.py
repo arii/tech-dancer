@@ -97,7 +97,7 @@ class TestTDCLI(unittest.TestCase):
 class TestTDCliCrash(unittest.TestCase):
     @patch('td_cli.get_github_client')
     @patch('td_cli.get_repo_name')
-    def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client):
+    def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_orch_client, mock_client):
         """Test handle_audit_pr raises CLIError for various invalid PR numbers"""
         cases = [
             ("null", "Invalid PR number"),

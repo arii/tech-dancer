@@ -4,11 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getEventBySlug, getEvents, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
 import { AffiliateLink } from "@/types";
-import { resolveResourceHref } from './resolveResourceHref';
 
 export interface ResolvedGearSection {
   label: string;
-  items: Array<AffiliateLink & { href: string; isExternal: boolean; isAffiliate: boolean }>;
+  items: AffiliateLink[];
 }
 
 /**
@@ -21,13 +20,6 @@ export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
     .filter((l): l is AffiliateLink => !!l);
 }
 
-function resolveEventResourceItems(ids: string[] = []): ResolvedGearSection['items'] {
-  return resolveAffiliateLinks(ids).map((link) => ({
-    ...link,
-    ...resolveResourceHref(link),
-  }));
-}
-
 /**
  * Organizes an event's gear IDs into resolved semantic sections.
  */
@@ -35,16 +27,16 @@ export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
   if (!gear) return [];
 
   return [
-    { label: "Outfits", items: resolveEventResourceItems(gear.outfitIds) },
-    { label: "Accessories", items: resolveEventResourceItems(gear.accessoryIds) },
+    { label: "Outfits", items: resolveAffiliateLinks(gear.outfitIds) },
+    { label: "Accessories", items: resolveAffiliateLinks(gear.accessoryIds) },
     {
       label: "Shoes & Essentials",
-      items: resolveEventResourceItems([
+      items: resolveAffiliateLinks([
         ...(gear.shoeIds ?? []),
         ...(gear.essentialIds ?? []),
       ]),
     },
-    { label: "Travel Extras", items: resolveEventResourceItems(gear.travelIds) },
+    { label: "Travel Extras", items: resolveAffiliateLinks(gear.travelIds) },
   ].filter((s) => s.items.length > 0);
 }
 

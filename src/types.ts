@@ -9,6 +9,4 @@ export interface AffiliateLink {
   url: string;
   category: 'gear' | 'tech' | 'travel' | 'recovery';
   description: string;
-  gearSlug?: string;
-  image?: string;
 }

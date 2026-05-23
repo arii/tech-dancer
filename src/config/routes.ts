@@ -10,16 +10,14 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Home').then(m => ({ Component: m.default })),
     label: 'Home',
     icon: Home,
-    skeleton: 'grid',
-    isMobileVisible: true
+    skeleton: 'grid'
   },
   {
     path: '/blog',
     lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
     label: 'Blog Posts',
     icon: BookOpen,
-    skeleton: 'grid',
-    isMobileVisible: true
+    skeleton: 'grid'
   },
   {
     path: '/blog/:slug',
@@ -31,8 +29,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',
     icon: ShoppingBag,
-    skeleton: 'grid',
-    isMobileVisible: true
+    skeleton: 'grid'
   },
   {
     path: '/gear/:slug',
@@ -44,8 +41,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
     label: 'Event Resource Guides',
     icon: Calendar,
-    skeleton: 'grid',
-    isMobileVisible: true
+    skeleton: 'grid'
   },
   {
     path: '/events/:slug',
@@ -57,8 +53,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'Data & Development Lab',
     icon: Database,
-    skeleton: 'grid',
-    isMobileVisible: true
+    skeleton: 'grid'
   },
   {
     path: '/research/:id',
@@ -69,14 +64,6 @@ export const routes: RouteConfig[] = [
     path: '/ux-auditor',
     lazy: () => import('@/pages/UXAuditor').then(m => ({ Component: m.default })),
     skeleton: 'grid'
-  },
-  {
-    path: '/merch',
-    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
-    label: 'Merch',
-    icon: ShoppingBag,
-    skeleton: 'grid',
-    isMobileVisible: true
   },
   {
     path: '/about',
@@ -106,5 +93,5 @@ export const routes: RouteConfig[] = [
 ];
 
 export const MOBILE_NAV_ROUTES = routes.filter((r): r is RouteConfig & { label: string, icon: LucideIcon } =>
-  !!(r.label && r.icon && r.isMobileVisible)
+  !!(r.label && r.icon && ['/', '/blog', '/gear', '/events', '/research'].includes(r.path))
 );

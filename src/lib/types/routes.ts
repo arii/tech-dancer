@@ -11,5 +11,4 @@ export interface RouteConfig extends Omit<RouteObject, 'children'> {
   skeleton?: SkeletonVariant;
   sitemap?: boolean;
   canonicalPath?: string;
-  isMobileVisible?: boolean;
 }

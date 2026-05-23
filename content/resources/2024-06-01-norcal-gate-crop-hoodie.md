@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Cozy crop hoodie with the Golden Gate bridge design."
-image: "/images/gear/norcal-gate-crop-hoodie.webp"
+image: "/assets/gear/norcal-gate-crop-hoodie.webp"
 affiliateIds: ["norcal-gate-crop-hoodie"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
