@@ -9,7 +9,7 @@ import { Star, ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
-  slug: string;
+  slug?: string;
   title: string;
   category: string;
   excerpt: string;
@@ -35,18 +35,16 @@ export function GearCard(props: GearCardProps) {
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath'
+    'basePath',
+    'affiliateIds'
   ] as (keyof GearCardProps)[]);
 
   // Resolve link: prioritization check
-  const affiliateId = affiliateIds?.[0] || slug;
-  let resolvedHref = affiliateManager.resolveResourceHref(affiliateId);
-
-  // If we couldn't resolve via affiliate manager but we have a direct slug,
-  // assume it is an internal resource (common for Toolbox items).
-  if (resolvedHref === '#' && slug && slug !== affiliateId) {
-    resolvedHref = `/gear/${slug}`;
-  }
+  const affiliateId = affiliateIds?.[0];
+  const resolvedHref = affiliateManager.resolveResourceHref({
+    id: affiliateId,
+    gearSlug: slug
+  });
 
   const isInternal = resolvedHref.startsWith('/');
   const affiliate = affiliateManager.getLink(affiliateId);
