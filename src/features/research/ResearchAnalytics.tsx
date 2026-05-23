@@ -14,13 +14,13 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="Research & Analytics"
+        title="Research & Insights"
         description="Technical studies and real-time data pipelines at the intersection of robotics and West Coast Swing."
       />
       <Stack gap={12}>
         <PageHeader
           label="TECHNICAL PORTFOLIO"
-          title="Data & Development Lab"
+          title="The Research Lab"
           description="Technical portfolio showcasing DevAI-driven analysis tools and machine learning research applied to West Coast Swing."
           as="h1"
         />

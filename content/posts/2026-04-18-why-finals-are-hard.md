@@ -22,6 +22,6 @@ If there are 40 dancers in a heat and only 10 make the final, the 11th through 1
 
 ### Data Over Drama
 
-I'm building tools in the [Data & Development Lab](/research) to normalize this data across multiple events. By tracking performance relative to the median rather than absolute rank, we can see a much more reliable trajectory of improvement.
+I'm building tools in [The Research Lab](/research) to normalize this data across multiple events. By tracking performance relative to the median rather than absolute rank, we can see a much more reliable trajectory of improvement.
 
 Don't let a "no-recall" define your weekend. Look at your dance videos.
