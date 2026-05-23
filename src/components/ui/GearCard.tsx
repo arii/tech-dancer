@@ -24,7 +24,7 @@ const CARD_STYLES = {
     "group relative bg-surface transition-all duration-300",
     "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
   ),
-  image: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 aspect-video",
+  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
   verdict: "uppercase tracking-widest opacity-90"
 };
@@ -129,7 +129,7 @@ export function GearCard(props: GearCardProps) {
         {rating !== undefined && (
           <Box display="flex" align="center" gap={1.5}>
             <Star size={14} className="text-accent fill-accent" aria-hidden="true" />
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" className="brightness-125">
+            <Text variant="mono" size="xs" weight="font-bold" color="accent">
               {rating.toFixed(1)}/5
             </Text>
           </Box>
