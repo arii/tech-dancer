@@ -14,7 +14,7 @@ tags:
 ---
 
 <Notice type="info">
-**Lab Notes: Data Research**
+**Technical Notes: Data Research**
 A careful, respectful way to use public scoring data to analyze progression and judging consistency.
 </Notice>
 

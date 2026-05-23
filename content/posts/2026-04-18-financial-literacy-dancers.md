@@ -13,7 +13,7 @@ tags:
 ---
 
 <Notice type="info">
-**Lab Notes: Financial Planning**
+**Technical Notes: Financial Planning**
 Drafting a practical travel-hacking strategy specifically for WCS dancers to make the lifestyle sustainable.
 </Notice>
 
