@@ -3,6 +3,12 @@ import { test, expect } from '@playwright/test';
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('./contact');
+
+    // Dismiss newsletter banner if present as it may intercept clicks
+    const dismissButton = page.locator('button[aria-label="Dismiss newsletter signup"]');
+    if (await dismissButton.isVisible()) {
+      await dismissButton.click();
+    }
   });
 
   test('should show validation errors for empty fields', async ({ page }) => {

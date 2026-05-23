@@ -6,6 +6,12 @@ test.describe('accessibility', () => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
 
+    // Dismiss newsletter banner if present to avoid overlay issues during scan
+    const dismissButton = page.locator('button[aria-label="Dismiss newsletter signup"]');
+    if (await dismissButton.isVisible()) {
+      await dismissButton.click();
+    }
+
     // Wait for hero animations to complete to ensure stable contrast checks
     await page.waitForTimeout(2000);
 

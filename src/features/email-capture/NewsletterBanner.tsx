@@ -12,6 +12,8 @@ export function NewsletterBanner() {
 
   return (
     <Box 
+      as="aside"
+      id="newsletter-banner"
       position="fixed"
       bottom={0}
       left={0}
