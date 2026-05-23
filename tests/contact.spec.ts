@@ -5,14 +5,21 @@ test.describe('Contact Form', () => {
     await page.goto('./contact');
 
     // Dismiss newsletter banner if present as it may intercept clicks
-    const dismissButton = page.locator('button[aria-label="Dismiss newsletter signup"]');
+    // Using a more robust check for the banner
+    const banner = page.locator('#newsletter-banner');
+    const dismissButton = banner.getByLabel('Dismiss newsletter signup');
+
     if (await dismissButton.isVisible()) {
       await dismissButton.click();
+      await expect(banner).not.toBeVisible();
     }
   });
 
+  // Helper to get the specific contact form submit button to avoid ambiguity with newsletter
+  const getSubmitButton = (page) => page.locator('form').filter({ has: page.locator('input[name="name"]') }).getByRole('button', { name: /Send Message/i });
+
   test('should show validation errors for empty fields', async ({ page }) => {
-    await page.click('button[type="submit"]');
+    await getSubmitButton(page).click();
 
     await expect(page.locator('text=Personnel name required')).toBeVisible();
     await expect(page.locator('text=Signal destination required')).toBeVisible();
@@ -24,12 +31,12 @@ test.describe('Contact Form', () => {
     await page.fill('input[name="email"]', 'not-an-email');
     await page.fill('textarea[name="message"]', 'This is a test message that is long enough.');
 
-    await page.click('button[type="submit"]');
+    await getSubmitButton(page).click();
 
     // If it's the native validation, it might be blocking the submit event or react-hook-form might not be showing the error yet if it's blocked.
     // Let's try to fill a more realistic but invalid email if Zod is being strict
     await page.fill('input[name="email"]', 'not-an-email@com');
-    await page.click('button[type="submit"]');
+    await getSubmitButton(page).click();
 
     await expect(page.locator('text=Invalid signal coordinate')).toBeVisible();
   });
@@ -39,7 +46,7 @@ test.describe('Contact Form', () => {
     await page.fill('input[name="email"]', 'john@example.com');
     await page.fill('textarea[name="message"]', 'Short');
 
-    await page.click('button[type="submit"]');
+    await getSubmitButton(page).click();
 
     await expect(page.locator('text=Payload below minimum threshold (10 chars)')).toBeVisible();
   });
@@ -50,7 +57,7 @@ test.describe('Contact Form', () => {
     await page.selectOption('select[name="subject"]', 'General Feedback');
     await page.fill('textarea[name="message"]', 'This is a test message that is long enough.');
 
-    await page.click('button[type="submit"]');
+    await getSubmitButton(page).click();
 
     // Check for success state
     await expect(page.locator('text=Message Received.')).toBeVisible();
