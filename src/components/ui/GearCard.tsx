@@ -19,18 +19,17 @@ interface GearCardProps extends BaseProps {
   [key: string]: unknown;
 }
 
-export function GearCard(props: GearCardProps) {
-  const CARD_STYLES = {
-    container: cn(
-      "group relative bg-surface transition-all duration-300",
-      "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5",
-      "focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-4"
-    ),
-    image: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 aspect-video",
-    badge: "bg-accent text-white backdrop-blur-md shadow-sm",
-    verdict: "uppercase tracking-widest opacity-80"
-  };
+const CARD_STYLES = {
+  container: cn(
+    "group relative bg-surface transition-all duration-300",
+    "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+  ),
+  image: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 aspect-video",
+  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
+  verdict: "uppercase tracking-widest opacity-90"
+};
 
+export function GearCard(props: GearCardProps) {
   const {
     slug,
     title,
@@ -62,7 +61,7 @@ export function GearCard(props: GearCardProps) {
         as={NavLink}
         to={`${basePath}/${slug}`}
         aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10 outline-none"
+        className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
       />
 
       {/* Image zone */}
@@ -128,18 +127,18 @@ export function GearCard(props: GearCardProps) {
 
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         {rating !== undefined && (
-          <Box display="flex" align="center" gap={1}>
-            <Star size={16} className="text-accent fill-accent" aria-hidden="true" />
-            <Text variant="mono" size="xs" weight="font-bold" color="main">
+          <Box display="flex" align="center" gap={1.5}>
+            <Star size={14} className="text-accent fill-accent" aria-hidden="true" />
+            <Text variant="mono" size="xs" weight="font-bold" color="accent" className="brightness-125">
               {rating.toFixed(1)}/5
             </Text>
           </Box>
         )}
-        <Box display="flex" align="center" gap={1}>
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+        <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
             Read review
           </Text>
-          <ArrowRight className="w-3 h-3 text-accent" aria-hidden="true" />
+          <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
         </Box>
       </Box>
     </Stack>
