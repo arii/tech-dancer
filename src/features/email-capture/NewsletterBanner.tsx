@@ -23,7 +23,7 @@ export function NewsletterBanner() {
       border="t"
       className="border-accent/40 shadow-glow"
       paddingX={{ base: 6, md: 12 }}
-      paddingY={{ base: 12, lg: 16 }}
+      paddingY={{ base: 6, lg: 16 }}
       radius="none"
     >
       {/* Decorative Brand Accent - No arbitrary width, use standard spacing if possible or raw line */}
@@ -62,7 +62,7 @@ export function NewsletterBanner() {
         direction={{ base: 'col', lg: 'row' }} 
         align={{ base: 'start', lg: 'center' }} 
         justify="between" 
-        gap={8}
+        gap={{ base: 4, lg: 8 }}
         maxWidth="7xl"
         marginX="auto"
         width="full"
@@ -75,7 +75,7 @@ export function NewsletterBanner() {
             <Text 
               as="h2"
               variant="headline" 
-              size="2xl" 
+              size={{ base: 'xl', md: '2xl' }}
               weight="font-black" 
               color="main"
               className="uppercase tracking-tighter"
@@ -83,7 +83,7 @@ export function NewsletterBanner() {
               Get the latest dance insights.
             </Text>
             {/* Pill badges for topics - Sharp edges as requested */}
-            <Box display="flex" gap={2} wrap role="list" aria-label="Newsletter topics">
+            <Box display={{ base: 'none', sm: 'flex' }} gap={2} wrap role="list" aria-label="Newsletter topics">
               {['Dance Analytics', 'Gear Reviews', 'Community Updates'].map(tag => (
                 <Box
                   key={tag}
