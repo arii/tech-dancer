@@ -14,14 +14,14 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAi Portfolio"
-        description="A technical portfolio showcasing DevAI orchestration, autonomous systems, and tech experiments in West Coast Swing."
+        title="DevAI Portfolio"
+        description="A collection of technical tools and AI projects built for the WCS community."
       />
       <Stack gap={12}>
         <PageHeader
-          label="DEVAI"
-          title="DevAi Portfolio"
-          description="Showcase of dev, tech, and AI orchestration projects at the intersection of creative movement and autonomous systems."
+          label="PORTFOLIO"
+          title="DevAI Portfolio"
+          description="Technical projects focusing on AI automation and data tools for dancers."
           as="h1"
         />
 
@@ -29,7 +29,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Orchestration Tools</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Technical Tools</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -115,10 +115,10 @@ export default function ResearchAnalytics() {
                 </Box>
                 <Stack gap={0.5}>
                   <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
-                    Preparing System...
+                    Loading Data...
                   </Text>
                   <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
-                    The WCS Competition Data Scraper is synchronizing. Detailed studies will be available once the orchestration pipeline is complete.
+                    The WCS Competition Data Scraper is getting data ready. Detailed studies will be available soon.
                   </Text>
                 </Stack>
               </Stack>

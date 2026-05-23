@@ -89,7 +89,7 @@ export default function ResearchDetail() {
           date={study.date}
           content={study.content}
           onBack={() => navigate('/research')}
-          backLabel="Back to Lab"
+          backLabel="Back to Portfolio"
         />
       </>
     );
@@ -102,7 +102,7 @@ export default function ResearchDetail() {
           <Search size={48} className="opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Laboratory</Text>
+            <Text variant="mono" size="xs">Back to Portfolio</Text>
           </Box>
         </Stack>
       </Box>
@@ -129,7 +129,7 @@ export default function ResearchDetail() {
           cursor="pointer"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Lab</Text>
+          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
         </Box>
 
         <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
@@ -143,7 +143,7 @@ export default function ResearchDetail() {
               <Stack gap={12}>
                 <Stack gap={4}>
                     <PageHeader
-                      label={`LABORATORY_ACCESS // ${tool.category}`}
+                      label={`PORTFOLIO_ACCESS // ${tool.category}`}
                       title={tool.name}
                       paddingBottom={0}
                       border="none"
@@ -155,17 +155,17 @@ export default function ResearchDetail() {
 
                 <Grid cols={{ base: 1, md: 2 }} gap={12}>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">System Status</Text>
+                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Status</Text>
                     <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
                       <Activity className="w-4 h-4 text-accent" />
                       <StatusBadge label={tool.status} />
                     </Box>
                   </Stack>
                   <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Database Source</Text>
+                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
                     <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
                       <Database className="w-4 h-4 text-accent" />
-                      <Text variant="mono" size="xs">WSDC REGISTRY // AUTHENTICATED</Text>
+                      <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
                     </Box>
                   </Stack>
                 </Grid>

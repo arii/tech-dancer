@@ -10,31 +10,31 @@ export interface ResearchTool {
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'wcs-scraper',
-    name: 'WCS Scoring Pipeline',
-    category: 'Data Orchestration',
+    name: 'WCS Scoring Scraper',
+    category: 'Data Tools',
     status: 'Active',
-    layman: 'Autonomous extraction and multi-point verification of scoring data from competitive social dance events.'
+    layman: 'Scrapes and analyzes scoring data from WCS competitions to show trends and results.'
   },
   {
     id: 'blog-drafter',
-    name: 'Blog Orchestrator',
-    category: 'DevAI / Automation',
+    name: 'AI Blog Drafter',
+    category: 'Content Tools',
     status: 'Active',
-    layman: 'Agentic workflow to generate and refine blog content using AI with human-in-the-loop validation.'
+    layman: 'Uses AI to help draft and refine blog posts with human feedback.'
   },
   {
     id: 'ux-auditor',
-    name: 'Systems UX Auditor',
-    category: 'Verification',
+    name: 'UX Auditor',
+    category: 'Testing Tools',
     status: 'Active',
-    layman: 'Orchestrated visual regression and accessibility auditing system for cross-viewport integrity.',
+    layman: 'Checks for visual changes and accessibility issues across different screen sizes.',
     canonicalPath: '/ux-auditor'
   },
   {
     id: 'wsdc-event-reminders',
-    name: 'Travel Automations',
-    category: 'Service Orchestration',
+    name: 'Event Reminders',
+    category: 'Utility Tools',
     status: 'Active',
-    layman: 'Automated synchronization of verified event milestones and early-bird deadlines to personal calendars.'
+    layman: 'Syncs important event dates and early-bird deadlines directly to your calendar.'
   }
 ];

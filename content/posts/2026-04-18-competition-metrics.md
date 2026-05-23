@@ -44,4 +44,4 @@ This helps you see how consistent judging is across different events. It can hel
 
 Instead of just looking at your final placement, we look at how you did compared to the middle of the pack. This helps you see how you performed relative to the overall strength of the heat.
 
-_Stay tuned for the official release in the DevAi Portfolio._
+_Stay tuned for the official release in the DevAI Portfolio._
