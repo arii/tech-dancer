@@ -38,6 +38,7 @@ export default function ResearchAnalytics() {
                 key={tool.id}
                 as="button"
                 role="article"
+                data-testid="tool-card"
                 aria-labelledby={`tool-title-${tool.id}`}
                 onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
                 padding={6}
@@ -87,6 +88,7 @@ export default function ResearchAnalytics() {
                   key={study.slug}
                   as="button"
                   role="article"
+                  data-testid="study-card"
                   aria-labelledby={`study-title-${study.slug}`}
                   padding={8}
                   gap={4}
