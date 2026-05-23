@@ -15,13 +15,13 @@ export default function ResearchAnalytics() {
     <Box as="section">
       <SEO
         title="DevAI Portfolio"
-        description="A collection of technical tools and AI projects built for the WCS community."
+        description="Technical tools and AI projects for the West Coast Swing community."
       />
       <Stack gap={12}>
         <PageHeader
           label="PORTFOLIO"
           title="DevAI Portfolio"
-          description="Technical projects focusing on AI automation and data tools for dancers."
+          description="A collection of tools and technical projects built for the WCS community."
           as="h1"
         />
 
@@ -74,8 +74,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Published Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} ARTICLES</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} POSTS</Text>
           </Box>
 
           {studies.length > 0 ? (
