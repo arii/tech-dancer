@@ -459,7 +459,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                         paddingY={1}
                         className="bg-accent/10 text-accent hover:bg-accent hover:text-bg transition-all cursor-pointer"
                       >
-                        <Text variant="mono" size="micro" weight="font-bold">ROLLBACK</Text>
+                        <Text variant="mono" size="micro" weight="font-bold" className="text-inherit">ROLLBACK</Text>
                       </Box>
                       <Box
                         as="button"
@@ -574,7 +574,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               className="bg-accent text-bg hover:bg-accent transition-all cursor-pointer group"
             >
               <Github className="w-5 h-5" />
-              <Text variant="display" size="base" weight="font-bold">SUBMIT DRAFT</Text>
+              <Text variant="display" size="base" weight="font-bold" color="bg">SUBMIT DRAFT</Text>
               <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
             </Box>
           </Grid>

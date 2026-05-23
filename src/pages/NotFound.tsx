@@ -47,11 +47,11 @@ export default function NotFound() {
                 aria-label="Return to Home"
               >
                 <Stack direction="row" align="center" gap={2}>
-                  <Icon icon={Home} />
-                  <Text variant="mono" size="sm" weight="font-bold">
+                  <Icon icon={Home} color="bg" />
+                  <Text variant="mono" size="sm" weight="font-bold" color="bg">
                     RETURN TO HOME
                   </Text>
-                  <Icon icon={ChevronRight} size="sm" className="group-hover:translate-x-1 transition-transform" />
+                  <Icon icon={ChevronRight} size="sm" color="bg" className="group-hover:translate-x-1 transition-transform" />
                 </Stack>
               </ActionButton>
             }
