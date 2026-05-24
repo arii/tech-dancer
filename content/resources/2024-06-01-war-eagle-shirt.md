@@ -3,7 +3,7 @@ type: resource
 title: "War Eagle oversized high neck t-shirt"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
-category: "Dance Gear"
+category: "fashion"
 excerpt: "Oversized high-neck t-shirt featuring the War Eagle design."
 image: "/assets/gear/war-eagle-oversized-high-neck-t-shirt-front.webp"
 imageBack: "/assets/gear/war-eagle-oversized-high-neck-t-shirt-back.webp"
