@@ -27,14 +27,6 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
-    path: '/resources',
-    lazy: () => import('@/pages/Resources').then(m => ({ Component: m.default })),
-    label: 'Resources',
-    icon: ShoppingBag,
-    skeleton: 'grid',
-    isMobileVisible: true
-  },
-  {
     path: '/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',
