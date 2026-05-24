@@ -3,12 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
+import { affiliateManager } from '@/lib/affiliateManager';
 
-import { Star, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
-  slug: string;
+  slug?: string;
   title: string;
   category: string;
   excerpt: string;
@@ -16,6 +17,7 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  affiliateIds?: string[];
   [key: string]: unknown;
 }
 
@@ -25,16 +27,34 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
-    basePath,
     rating,
     verdict,
-    image,
+    image: propsImage,
+    affiliateIds,
   } = props;
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath'
+    'basePath',
+    'affiliateIds'
   ] as (keyof GearCardProps)[]);
+
+  // Resolve link: prioritization check
+  const affiliateId = affiliateIds?.[0];
+  const resolvedHref = affiliateManager.resolveResourceHref({
+    id: affiliateId,
+    gearSlug: slug
+  });
+
+  const isInternal = resolvedHref.startsWith('/');
+  const affiliate = affiliateManager.getLink(affiliateId);
+
+  // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
+  const rawImage = propsImage || affiliate?.image;
+  const image = (rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL))
+    ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
+    : rawImage;
+
   return (
     <Stack
       as="article"
@@ -45,14 +65,18 @@ export function GearCard(props: GearCardProps) {
       padding={6}
       radius="lg"
       border
+      data-testid="gear-card"
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10"
-      />
+      {isInternal && (
+        <Box
+          as={NavLink}
+          to={resolvedHref}
+          aria-label={`Read gear review: ${title}`}
+          data-testid="gear-card-link"
+          className="absolute inset-0 z-10"
+        />
+      )}
       {verdict && (
         <Box display="flex" justify="end">
           <Text variant="mono" size="xs" color="body">
@@ -125,10 +149,32 @@ export function GearCard(props: GearCardProps) {
           </Box>
         )}
         <Box display="flex" align="center" gap={1}>
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read review
-          </Text>
-          <ArrowRight className="w-3 h-3 text-accent" />
+          {isInternal ? (
+            <>
+              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+                Read review
+              </Text>
+              <ArrowRight className="w-3 h-3 text-accent" />
+            </>
+          ) : (
+            <Box
+              as="a"
+              href={resolvedHref}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              display="flex"
+              align="center"
+              gap={1}
+              className="z-20 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+              aria-label={`View ${title} on external site`}
+              data-testid="gear-card-store-link"
+            >
+              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+                View store
+              </Text>
+              <ExternalLink className="w-3 h-3 text-accent" />
+            </Box>
+          )}
         </Box>
       </Box>
     </Stack>

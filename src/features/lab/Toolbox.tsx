@@ -35,7 +35,7 @@ export default function Toolbox() {
         />
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap>
+        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">
           <SearchBox
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -45,6 +45,7 @@ export default function Toolbox() {
         </Box>
 
         <Stack direction="row" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60" marginBottom={8}>
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60" data-testid="toolbox-filters">
           <FilterButton
             label="All Gear"
             onClick={() => setSelectedPill('all')}

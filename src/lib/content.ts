@@ -90,6 +90,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
           ? String(data.packingReminderDate)
           : undefined,
         tags: asArray(data.tags),
+        affiliateIds: asArray(data.affiliateIds),
         content: content || "",
         slug: slugFrom(path),
       };
