@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /tech-dancer/
+Disallow: /tech-dancer/previews/
+Disallow: /tech-dancer/404.html
+Sitemap: https://arii.github.io/tech-dancer/sitemap.xml
