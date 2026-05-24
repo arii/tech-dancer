@@ -14,8 +14,9 @@ class TestTDCLI(unittest.TestCase):
 
     @patch('td_cli.get_github_token')
     @patch('td_cli.get_github_client')
+    @patch('tdw_services.orchestrator.get_github_client')
     @patch('td_cli.get_repo_name')
-    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token):
+    def test_validate_issue_dry_run_default(self, mock_repo, mock_orchestrator_client, mock_get_client, mock_token):
         """Test that validate-issue defaults to dry-run True"""
         mock_repo.return_value = "owner/repo"
 
@@ -25,6 +26,7 @@ class TestTDCLI(unittest.TestCase):
         mock_issue.body = "Test Body"
 
         mock_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
+        mock_orchestrator_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
         args = MagicMock()
         args.issue_number = 123
