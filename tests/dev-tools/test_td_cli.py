@@ -13,9 +13,11 @@ from submit_review import submit_review
 class TestTDCLI(unittest.TestCase):
 
     @patch('td_cli.get_github_token')
+    @patch('tdw_services.orchestrator.get_github_client')
     @patch('td_cli.get_github_client')
     @patch('td_cli.get_repo_name')
-    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token):
+    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_tdw_client, mock_token):
+        mock_tdw_client.return_value = mock_get_client.return_value
         """Test that validate-issue defaults to dry-run True"""
         mock_repo.return_value = "owner/repo"
 
@@ -91,9 +93,10 @@ class TestTDCLI(unittest.TestCase):
         mock_gha_get.assert_called_with("FAKE_VAR")
 
 class TestTDCliCrash(unittest.TestCase):
+    @patch('tdw_services.orchestrator.get_github_client')
     @patch('td_cli.get_github_client')
     @patch('td_cli.get_repo_name')
-    def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client):
+    def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client, mock_tdw_client=None):
         """Test handle_audit_pr raises CLIError for various invalid PR numbers"""
         cases = [
             ("null", "Invalid PR number"),
