@@ -2,7 +2,14 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Merch Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/merch');
+    await page.goto('./merch');
+    try {
+      const dismissButton = page.getByRole('button', { name: /dismiss/i });
+      await dismissButton.waitFor({ state: 'visible', timeout: 2000 });
+      await dismissButton.click();
+    } catch { // Ignore error if banner is not visible
+      // Banner might not be visible, that's ok
+    }
   });
 
   test('should load the merch page with correct title', async ({ page }) => {

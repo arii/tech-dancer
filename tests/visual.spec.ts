@@ -21,6 +21,15 @@ test.describe('Visual Regression Tests', () => {
       // Wait for the main content to be visible as a base stability measure
       await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
 
+      try {
+        const dismissButton = page.getByRole('button', { name: /dismiss/i });
+        await dismissButton.waitFor({ state: 'visible', timeout: 2000 });
+        await dismissButton.click();
+        await dismissButton.waitFor({ state: 'hidden', timeout: 2000 });
+      } catch { // Ignore error if banner is not visible
+        // Banner might not be visible, that's ok
+      }
+
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
 
