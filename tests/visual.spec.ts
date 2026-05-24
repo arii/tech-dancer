@@ -79,6 +79,10 @@ test.describe('Visual Regression Tests', () => {
           // Mask UX Auditor dynamic content
           page.locator('[class*="animate-pulse"]'),
           page.locator('text=/\\d{1,2}:\\d{2}:\\d{2}/'), // Matches timestamps like 12:00:00
+          // Mask search input values
+          page.getByTestId('search-input'),
+          // Mask timeline rows which contain dates
+          page.getByTestId('timeline-row'),
         ]
       });
     });
