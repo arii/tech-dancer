@@ -5,7 +5,7 @@ import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
-import { Star, ArrowRight, ExternalLink } from 'lucide-react';
+import { Star, ArrowRight } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
@@ -51,12 +51,7 @@ export function GearCard(props: GearCardProps) {
 
   // Resolve link: prioritization check
   const affiliateId = affiliateIds?.[0];
-  const resolvedHref = affiliateManager.resolveResourceHref({
-    id: affiliateId,
-    gearSlug: slug
-  });
 
-  const isInternal = resolvedHref.startsWith('/');
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
