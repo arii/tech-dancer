@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
+import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
@@ -78,6 +79,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         </Stack>
       </Box>
 
+      <NewsletterBanner />
       <GlobalSearch />
     </Box>
   );
