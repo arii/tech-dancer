@@ -50,7 +50,8 @@ class GitHubClient:
                 url,
                 headers=headers,
                 json=json_data,
-                timeout=30
+                timeout=30,
+                allow_redirects=True
             )
             response.raise_for_status()
             if is_text:
@@ -88,7 +89,7 @@ class GitHubClient:
             return []
 
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
-        """Fetches logs for a specific check run, using external_id (job_id) if available."""
+        """Fetches logs for a specific check run, using external_id (job_id) if available. Falls back to check_run_id if job_id returns 404."""
         # Ensure we have a valid ID and it's a string for the URL path
         job_id = str(external_id) if external_id is not None else str(check_run_id)
         try:
@@ -96,6 +97,11 @@ class GitHubClient:
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
             return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
         except Exception as e:
+            if external_id is not None and "404" in str(e):
+                try:
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+                except Exception as e2:
+                    return f"Failed to fetch logs for job {job_id} and fallback {check_run_id}: {str(e2)}"
             return f"Failed to fetch logs for job {job_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
