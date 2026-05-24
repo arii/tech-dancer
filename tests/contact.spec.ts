@@ -4,14 +4,17 @@ test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('./contact');
 
-    // Dismiss newsletter banner if present as it may intercept clicks
-    // Using a more robust check for the banner
+    // Dismiss newsletter banner if present as it intercepts clicks due to fixed positioning
     const banner = page.locator('#newsletter-banner');
     const dismissButton = banner.getByLabel('Dismiss newsletter signup');
 
-    if (await dismissButton.isVisible()) {
+    // Wait for the banner to potentially appear and dismiss it
+    try {
+      await dismissButton.waitFor({ state: 'visible', timeout: 5000 });
       await dismissButton.click();
-      await expect(banner).not.toBeVisible();
+      await banner.waitFor({ state: 'hidden' });
+    } catch {
+      // Banner might not appear or is already hidden
     }
   });
 
