@@ -40,15 +40,21 @@ export function SEO({
   const combinedSchema = useMemo(() => {
     if (!schema && !jsonLd) return null;
     const schemas = [];
+
+    // Helper to safely serialize schema objects
+    const serialize = (obj: unknown) => {
+      try {
+        return JSON.stringify(obj);
+      } catch (e) {
+        console.error('Failed to serialize Schema.org markup:', e);
+        return null;
+      }
+    };
+
     if (schema) schemas.push(schema);
     if (jsonLd) schemas.push(jsonLd);
 
-    try {
-      return JSON.stringify(schemas.length === 1 ? schemas[0] : schemas);
-    } catch (e) {
-      console.error('Failed to serialize Schema.org markup:', e);
-      return null;
-    }
+    return serialize(schemas.length === 1 ? schemas[0] : schemas);
   }, [schema, jsonLd]);
 
   return (
