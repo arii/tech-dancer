@@ -21,7 +21,7 @@ export function SearchBox({
       display="flex"
       align="center"
       position="relative"
-      surface="surface"
+      surface="default"
       border
       paddingX={4}
       paddingY={1}
@@ -29,19 +29,17 @@ export function SearchBox({
       flex={1}
       minHeight="44px"
       radius="lg"
-      className="border-line/80 focus-within:ring-2 focus-within:ring-accent focus-within:border-accent transition-all w-full sm:w-auto"
+      className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
     >
       <Text
         as={Search}
         size={18}
         color="dim"
         className="absolute left-4 pointer-events-none"
-        aria-hidden="true"
       />
       <Box
         as="input"
         type="text"
-        aria-label="Search"
         placeholder={placeholder}
         variant="mono"
         size="sm"

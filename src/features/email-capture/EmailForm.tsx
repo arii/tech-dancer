@@ -27,7 +27,6 @@ export function EmailForm() {
           name="email"
           type="email"
           placeholder="your@email.com"
-          autoComplete="email"
           required
           disabled={status === 'loading' || status === 'success'}
           className={inputs.base}

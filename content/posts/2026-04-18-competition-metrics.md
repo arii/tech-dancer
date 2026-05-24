@@ -44,4 +44,4 @@ Measuring the consistency across judging panels. This helps competitors understa
 
 Instead of looking at your raw placement, we compare your performance to the competition median. This accounts for the overall strength of the heat.
 
-_Stay tuned for the official release in the DevAI Portfolio._
+_Stay tuned for the official release in the Research Lab._

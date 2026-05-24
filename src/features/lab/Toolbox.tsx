@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -44,12 +44,12 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Box marginBottom={8} display="flex" flexWrap="nowrap" overflowX="auto" gap={3} padding={4} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60 no-scrollbar">
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60">
           <FilterButton
             label="All Gear"
             onClick={() => setSelectedPill('all')}
             isActive={selectedPill === 'all'}
-            className="text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors shrink-0"
+            className="text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors"
           />
           {GEAR_PILLS.map((pill) => (
             <FilterButton
@@ -57,7 +57,7 @@ export default function Toolbox() {
               label={pill.label}
               onClick={() => setSelectedPill(pill.value)}
               isActive={selectedPill === pill.value}
-              className={cn(pill.color, "hover:opacity-90 transition-opacity shrink-0")}
+              className={cn(pill.color, "hover:opacity-90 transition-opacity")}
             />
           ))}
         </Box>
@@ -65,11 +65,7 @@ export default function Toolbox() {
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
-        <Box
-          display="grid"
-          className="grid-cols-[repeat(auto-fit,minmax(280px,1fr))]" // impeccable-ignore
-          gap={6}
-        >
+        <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 4, md: 6 }}>
           {allFilteredItems.map((item) => (
             <GearCard
               key={item.slug}
@@ -77,7 +73,7 @@ export default function Toolbox() {
               basePath="/gear"
             />
           ))}
-        </Box>
+        </Grid>
       ) : (
         <Stack gap={0} border="t" className="border-line">
           {allFilteredItems.map((item) => (

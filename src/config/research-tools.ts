@@ -11,30 +11,30 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'wcs-scraper',
     name: 'WCS Prelim Scoring Scraper',
-    category: 'Data Analysis',
+    category: 'Dance Research',
     status: 'Active',
-    layman: 'Technical tool for extracting and analyzing preliminary scoring data from WCS competitions.'
+    layman: 'A sophisticated scraper for extracting and analyzing preliminary scoring data from WCS competitions.'
   },
   {
     id: 'blog-drafter',
-    name: 'Agentic Content Drafter',
-    category: 'Agent Orchestration',
+    name: 'Blog Post Drafter',
+    category: 'Content Generation',
     status: 'Active',
-    layman: 'AI agent orchestration for generating and refining blog posts with human oversight.'
+    layman: 'Drafter tool to generate blog posts using AI with human feedback in the loop.'
   },
   {
     id: 'ux-auditor',
-    name: 'DevAI UX Auditor',
-    category: 'Visual Intelligence',
+    name: 'Visual UX Auditor',
+    category: 'Development Tool',
     status: 'Active',
-    layman: 'Autonomous visual regression and UX improvement analysis powered by DevAI.',
+    layman: 'Automated visual regression and UX improvement suggestions across viewports.',
     canonicalPath: '/ux-auditor'
   },
   {
     id: 'wsdc-event-reminders',
-    name: 'Travel Milestone Engine',
-    category: 'Workflow Automation',
+    name: 'WSDC Event Reminders',
+    category: 'Travel Optimization',
     status: 'Active',
-    layman: 'Automated travel planning and calendar integration for WSDC event milestones.'
+    layman: 'Secure early bird discounts without overcommitting. Sync verified WSDC travel milestones directly to your calendar.'
   }
 ];
