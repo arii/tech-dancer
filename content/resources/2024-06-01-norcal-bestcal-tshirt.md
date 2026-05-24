@@ -3,7 +3,7 @@ type: resource
 title: "NorCal BestCal"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
-category: "Dance Gear"
+category: "fashion"
 excerpt: "The original NorCal BestCal t-shirt."
 image: "/assets/gear/norcal-bestcal-front.webp"
 imageBack: "/assets/gear/norcal-bestcal-back.webp"
