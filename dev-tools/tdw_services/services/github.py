@@ -37,7 +37,7 @@ class GitHubClient:
             raise Exception(f"GH command failed: {proc.stderr}")
         return proc.stdout
 
-    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None) -> Any:
+    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
         headers = {
             "Authorization": f"Bearer {self.token}",
@@ -51,7 +51,7 @@ class GitHubClient:
                 headers=headers,
                 json=json_data,
                 timeout=30,
-                allow_redirects=True
+                allow_redirects=allow_redirects
             )
             response.raise_for_status()
             if is_text:
@@ -95,7 +95,7 @@ class GitHubClient:
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
-            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
         except Exception as e:
             error_msg = str(e)
             if external_id is not None and "404" in error_msg:
