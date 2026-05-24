@@ -3,7 +3,7 @@ type: resource
 title: "LOVE neon tshirt - ask me to follow"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
-category: "Dance Gear"
+category: "fashion"
 excerpt: "Express your style and your role on the floor with this neon-inspired follow shirt."
 image: "/assets/gear/love-neon-tshirt-ask-me-to-follow-front.webp"
 imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-follow-back.webp"

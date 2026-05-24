@@ -15,8 +15,10 @@ async function validateUrlNavigation(page: Page, href: string) {
       await page.goto(baseUrl);
       await expect(page.locator('main')).toBeVisible();
     }
-    const locator = page.locator(`#${fragment}`);
-    await expect(locator).toBeVisible({ timeout: 5000 });
+    if (fragment) {
+      const locator = page.locator(`#${fragment}`);
+      await expect(locator).toBeVisible({ timeout: 5000 });
+    }
   } else {
     const response = await page.goto(href);
     await expect(page.locator('main')).toBeVisible();

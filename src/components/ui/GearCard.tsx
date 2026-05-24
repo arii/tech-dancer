@@ -3,12 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
+import { affiliateManager } from '@/lib/affiliateManager';
 
-import { Star, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
-  slug: string;
+  slug?: string;
   title: string;
   category: string;
   excerpt: string;
@@ -16,6 +17,7 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  affiliateIds?: string[];
   [key: string]: unknown;
 }
 
@@ -35,16 +37,34 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
-    basePath,
     rating,
     verdict,
-    image,
+    image: propsImage,
+    affiliateIds,
   } = props;
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath'
+    'basePath',
+    'affiliateIds'
   ] as (keyof GearCardProps)[]);
+
+  // Resolve link: prioritization check
+  const affiliateId = affiliateIds?.[0];
+  const resolvedHref = affiliateManager.resolveResourceHref({
+    id: affiliateId,
+    gearSlug: slug
+  });
+
+  const isInternal = resolvedHref.startsWith('/');
+  const affiliate = affiliateManager.getLink(affiliateId);
+
+  // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
+  const rawImage = propsImage || affiliate?.image;
+  const image = (rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL))
+    ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
+    : rawImage;
+
   return (
     <Stack
       as="article"
