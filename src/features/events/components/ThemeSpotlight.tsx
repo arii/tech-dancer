@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { AffiliateLink } from '@/types';
+import { ProductCard } from '@/components/products/ProductCard';
+import { ProductCatalogItem } from '@/data/products/catalog';
 
 interface ThemeSpotlightProps {
   id?: string;
@@ -9,8 +9,8 @@ interface ThemeSpotlightProps {
   label?: string;
   description: string;
   image?: string;
-  outfits?: AffiliateLink[];
-  accessories?: AffiliateLink[];
+  outfits?: ProductCatalogItem[];
+  accessories?: ProductCatalogItem[];
   colors?: string[];
   accentColor?: string;
 }
@@ -107,8 +107,8 @@ export function ThemeSpotlight({
                 Recommended Outfits
               </Text>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                {outfits.map(link => (
-                  <AffiliateCard key={link.id} link={link} />
+                {outfits.map(product => (
+                  <ProductCard key={product.id} product={product} variant="event" />
                 ))}
               </Grid>
             </Stack>
@@ -121,8 +121,8 @@ export function ThemeSpotlight({
                 Recommended Accessories
               </Text>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                {accessories.map(link => (
-                  <AffiliateCard key={link.id} link={link} />
+                {accessories.map(product => (
+                  <ProductCard key={product.id} product={product} variant="event" />
                 ))}
               </Grid>
             </Stack>

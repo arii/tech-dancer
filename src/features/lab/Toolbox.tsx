@@ -4,7 +4,6 @@ import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { GearCard } from '@/components/ui/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
@@ -13,6 +12,9 @@ import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
 import { FilterButton } from '@/components/ui/FilterButton';
+import { ProductCard } from '@/components/products/ProductCard';
+import { affiliateToCatalogItem } from '@/data/products/catalog';
+import { ProductDisclosure } from '@/components/products/ProductDisclosure';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
@@ -67,10 +69,17 @@ export default function Toolbox() {
       {view === 'card' ? (
         <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 4, md: 6 }}>
           {allFilteredItems.map((item) => (
-            <GearCard
+            <ProductCard
               key={item.slug}
-              {...item}
-              basePath="/gear"
+              product={affiliateToCatalogItem({
+                id: item.affiliateIds?.[0] || item.slug,
+                name: item.title,
+                url: `/gear/${item.slug}`,
+                category: item.category,
+                description: item.excerpt,
+                image: item.image,
+              })}
+              variant="resource-preview"
             />
           ))}
         </Grid>
@@ -89,6 +98,10 @@ export default function Toolbox() {
           description={`No gear found matching current filters.`}
         />
       )}
+
+      <Box marginTop={12}>
+        <ProductDisclosure source="affiliate" />
+      </Box>
     </Box>
   );
 }

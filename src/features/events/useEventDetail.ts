@@ -2,41 +2,37 @@ import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getEventBySlug, getEvents, Event } from "@/lib/content";
-import { affiliateManager } from "@/lib/affiliateManager";
-import { AffiliateLink } from "@/types";
+import { ProductCatalogItem } from "@/data/products/catalog";
+import { getProductsForEvent } from "@/lib/productCatalog";
 
 export interface ResolvedGearSection {
   label: string;
-  items: AffiliateLink[];
+  items: ProductCatalogItem[];
 }
 
 /**
- * Resolves a list of affiliate IDs into full link objects.
- * Extracted as a static helper to maintain purity and allow reuse.
+ * Organizes an event's products into resolved semantic sections.
  */
-export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
-  return ids
-    .map((id) => affiliateManager.getLink(id))
-    .filter((l): l is AffiliateLink => !!l);
-}
+export function getGearSections(event?: Event): ResolvedGearSection[] {
+  if (!event || !event.gear) return [];
 
-/**
- * Organizes an event's gear IDs into resolved semantic sections.
- */
-export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
-  if (!gear) return [];
+  const allProducts = getProductsForEvent(event);
+  const gear = event.gear;
+
+  const resolve = (ids: string[] = []) =>
+    allProducts.filter(p => ids.includes(p.id));
 
   return [
-    { label: "Outfits", items: resolveAffiliateLinks(gear.outfitIds) },
-    { label: "Accessories", items: resolveAffiliateLinks(gear.accessoryIds) },
+    { label: "Outfits", items: resolve(gear.outfitIds) },
+    { label: "Accessories", items: resolve(gear.accessoryIds) },
     {
       label: "Shoes & Essentials",
-      items: resolveAffiliateLinks([
+      items: resolve([
         ...(gear.shoeIds ?? []),
         ...(gear.essentialIds ?? []),
       ]),
     },
-    { label: "Travel Extras", items: resolveAffiliateLinks(gear.travelIds) },
+    { label: "Travel Extras", items: resolve(gear.travelIds) },
   ].filter((s) => s.items.length > 0);
 }
 
@@ -63,19 +59,21 @@ export function useEventDetail() {
     staleTime: 3600000, // 1 hour
   });
 
-  // Consolidate event-specific derived state into a single memoization block
-  // to reduce dependency chains and potential extra re-renders.
-  const { themeOutfits, themeAccessories, gearSections } = useMemo(
-    () => ({
-      themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
-      themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
-      gearSections: getGearSections(event?.gear),
-    }),
-    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
-  );
+  const { themeOutfits, themeAccessories, gearSections } = useMemo(() => {
+    if (!event) {
+      return { themeOutfits: [], themeAccessories: [], gearSections: [] };
+    }
+
+    const allProducts = getProductsForEvent(event);
+
+    return {
+      themeOutfits: allProducts.filter(p => event.theme?.outfitIds?.includes(p.id)),
+      themeAccessories: allProducts.filter(p => event.theme?.accessoryIds?.includes(p.id)),
+      gearSections: getGearSections(event),
+    };
+  }, [event]);
 
   // Resolve related events
-  // Dependent on both the current event and the full list
   const relatedEvents = useMemo(
     (): Event[] =>
       (event?.relatedEvents ?? [])

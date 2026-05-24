@@ -1,7 +1,7 @@
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GearCard } from '@/components/ui/GearCard';
 import { ResolvedGearSection } from '../useEventDetail';
+import { ProductCard } from '@/components/products/ProductCard';
 
 interface CuratedGearProps {
   id?: string;
@@ -25,13 +25,10 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
             />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
               {section.items.map((item) => (
-                <GearCard
+                <ProductCard
                   key={item.id}
-                  affiliateIds={[item.id]}
-                  title={item.name}
-                  category={item.category}
-                  excerpt={item.description}
-                  basePath="/gear"
+                  product={item}
+                  variant="event"
                 />
               ))}
             </Grid>
