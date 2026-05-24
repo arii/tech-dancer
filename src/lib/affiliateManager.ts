@@ -60,6 +60,10 @@ export const affiliateManager = {
     return url.toString();
   },
 
+  getAllLinks: (): Record<string, AffiliateLink> => {
+    return AFFILIATE_DATABASE;
+  },
+
   resolveResourceHref: (config: { id?: string; gearSlug?: string }): string => {
     const { id, gearSlug } = config;
 

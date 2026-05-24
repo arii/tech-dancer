@@ -11,6 +11,7 @@ import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 import { FilterButton } from '@/components/ui/FilterButton';
+import { MerchStoreNotice } from '@/components/ui/MerchStoreNotice';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState('all');
@@ -33,6 +34,8 @@ export default function Merch() {
           title="West Coast Swing Dance Merch"
           description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find something fun for your next dance weekend."
         />
+
+        <MerchStoreNotice />
 
         {/* Hero Referral Banner */}
         <ReferralBanner layout="expanded" />
@@ -104,7 +107,7 @@ function ProductCard({ product }: { product: MerchProduct }) {
         as="a"
         href={product.printfulUrl}
         target="_blank"
-        rel="sponsored noopener noreferrer"
+        rel="noopener noreferrer"
         aria-label={`Buy ${product.title} on Printful`}
         className="absolute inset-0 z-10"
       />

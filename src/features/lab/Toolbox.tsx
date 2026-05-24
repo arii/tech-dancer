@@ -13,6 +13,7 @@ import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
 import { FilterButton } from '@/components/ui/FilterButton';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
@@ -33,6 +34,8 @@ export default function Toolbox() {
           title="Gear Reviews"
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
+
+        <AffiliateDisclosure />
 
         {/* Modern Search Bar & Toggle */}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">
