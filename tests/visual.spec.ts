@@ -26,7 +26,7 @@ test.describe('Visual Regression Tests', () => {
       // Route-specific stability waits
       if (route.name === 'research') {
         // Wait for research lab header to be visible
-        await expect(page.getByRole('heading', { name: 'The Research Lab' })).toBeVisible({ timeout: 30000 });
+        await expect(page.getByRole('heading', { name: 'Data & Development Lab' })).toBeVisible({ timeout: 30000 });
       }
 
       if (route.name === 'preview') {
@@ -78,7 +78,6 @@ test.describe('Visual Regression Tests', () => {
           // Mask UX Auditor dynamic content
           page.locator('[class*="animate-pulse"]'),
           page.locator('text=/\\d{1,2}:\\d{2}:\\d{2}/'), // Matches timestamps like 12:00:00
-          page.locator('#newsletter-banner'),
         ]
       });
     });
