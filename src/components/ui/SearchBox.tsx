@@ -46,6 +46,7 @@ export function SearchBox({
         className="bg-transparent border-none outline-none pl-10 w-full focus:ring-0"
         value={value}
         onChange={onChange}
+        data-testid="search-input"
       />
     </Box>
   );
