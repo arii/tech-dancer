@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -54,6 +55,19 @@ export default function EventGuide() {
     );
   }
 
+  const activeTabIds = useMemo(() => {
+    const ids: string[] = [];
+    if (event.theme) ids.push('theme');
+    if (gearSections.length > 0) ids.push('gear');
+    // For now we assume reminders and travel are always shown if event exists,
+    // or we could check for specific fields
+    ids.push('reminders');
+    ids.push('travel');
+    if (event.content) ids.push('notes');
+    if (relatedEvents.length > 0) ids.push('related');
+    return ids;
+  }, [event, gearSections, relatedEvents]);
+
   return (
     <Box>
       <SEO
@@ -65,11 +79,15 @@ export default function EventGuide() {
       <EventHero
         id="hero"
         title={event.title}
-        location={event.city}
+        location={event.location}
+        city={event.city}
         date={event.schedule}
+        startDate={event.startDate}
+        endDate={event.endDate}
         eyebrow={event.category}
         image={event.heroImage}
         whyAttending={event.whyAttending}
+        activeTabIds={activeTabIds}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>

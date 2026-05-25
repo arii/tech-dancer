@@ -3,6 +3,7 @@ type: event
 title: "Jack & Jill O'Rama"
 date: "2026-06-04"
 startDate: "2026-06-04"
+endDate: "2026-06-07"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
 excerpt: "The ultimate West Coast Swing party and competition weekend in Southern California."

@@ -77,6 +77,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
         date: String(data.date || ""),
         author: String(data.author || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
+        endDate: data.endDate ? String(data.endDate) : undefined,
         earlyBirdDate: data.earlyBirdDate
           ? String(data.earlyBirdDate)
           : undefined,

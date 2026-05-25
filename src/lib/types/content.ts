@@ -92,6 +92,7 @@ export interface Event {
   whyAttending?: string;
   // Reminder tool anchors
   startDate?: string;
+  endDate?: string;
   earlyBirdDate?: string;
   registrationDeadline?: string;
   hotelCutoffDate?: string;

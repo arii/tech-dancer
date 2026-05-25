@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
-import { MapPin, Calendar } from 'lucide-react';
+import { MapPin, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { Logo } from '@/components/ui/Logo';
@@ -10,21 +11,29 @@ import { EventNavigation } from './EventNavigation';
 interface EventHeroProps {
   title: string;
   location: string;
+  city?: string;
   date: string;
+  startDate?: string;
+  endDate?: string;
   image?: string;
   eyebrow?: string;
   whyAttending?: string;
   id?: string;
+  activeTabIds?: string[];
 }
 
 export function EventHero({
   title,
   location,
+  city,
   date,
+  startDate,
+  endDate,
   image,
   eyebrow = "Event Resource Guide",
   whyAttending,
-  id
+  id,
+  activeTabIds
 }: EventHeroProps) {
   const accentGradient = useMemo(() => ({
     background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
@@ -44,12 +53,17 @@ export function EventHero({
     >
       {/* Background Image or Particle Fallback */}
       {image ? (
-        <Box position="absolute" inset zIndex={0}>
+        <Box
+          position="absolute"
+          inset
+          zIndex={0}
+          height={{ base: "60vh", md: "full" }}
+          maxHeight={{ base: "400px", md: "none" }}
+        >
           <img
             src={image}
-            alt=""
+            alt={title}
             className="w-full h-full object-cover opacity-40"
-            aria-hidden="true"
           />
           <Box
             position="absolute"
@@ -90,6 +104,31 @@ export function EventHero({
         transition={motionTokens.page.transition}
       >
         <Stack gap={6}>
+          {/* Back Navigation & Breadcrumbs */}
+          <Stack gap={4}>
+            <Link
+              to="/events"
+              className="flex items-center gap-1.5 text-dim hover:text-accent transition-colors group w-fit"
+            >
+              <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+              <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
+                Back to Events
+              </Text>
+            </Link>
+
+            <Box display="flex" align="center" gap={2} color="dim" className="opacity-60">
+              <Link to="/" className="hover:text-accent-sky transition-colors">
+                <Text variant="mono" size="tiny" weight="font-bold" uppercase>Home</Text>
+              </Link>
+              <ChevronRight size={10} />
+              <Link to="/events" className="hover:text-accent-sky transition-colors">
+                <Text variant="mono" size="tiny" weight="font-bold" uppercase>Event Resource Guides</Text>
+              </Link>
+              <ChevronRight size={10} />
+              <Text variant="mono" size="tiny" weight="font-bold" uppercase color="accent">{title}</Text>
+            </Box>
+          </Stack>
+
           <Stack gap={2}>
             <Text
               variant="mono"
@@ -103,29 +142,52 @@ export function EventHero({
             </Text>
             <Text
               as="h1"
-              variant="headline"
-              size={{ base: "fluid-5", md: "fluid-7" }}
+              variant="display"
+              size={{ base: "3xl", md: "5xl", lg: "7xl" }}
               weight="font-black"
               color="white"
-              leading="tight"
-              tracking="tight"
+              leading="none"
+              tracking="tighter"
+              className="uppercase italic"
             >
               {title}
             </Text>
           </Stack>
 
-          <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center">
-            <Box display="flex" align="center" gap={2}>
-              <Calendar className="w-4 h-4 md:w-5 md:h-5 text-accent" />
-              <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
-                {date}
-              </Text>
+          <Text
+            variant="mono"
+            size={{ base: "tiny", md: "xs" }}
+            weight="font-bold"
+            color="dim"
+            uppercase
+            tracking="widest"
+            className="opacity-80"
+          >
+            Plan smarter. Pack lighter. Dance more.
+          </Text>
+
+          <Box display="flex" wrap gap={{ base: 4, md: 8 }} align="center">
+            <Box display="flex" align="center" gap={3}>
+              <Calendar className="w-5 h-5 text-accent" />
+              <Stack gap={0}>
+                <Text variant="body" size={{ base: "sm", md: "md" }} weight="font-bold" color="white">
+                  {startDate && endDate ? `${startDate} — ${endDate}` : date}
+                </Text>
+                <Text variant="mono" size="tiny" color="dim" uppercase tracking="wider">
+                  Event Dates
+                </Text>
+              </Stack>
             </Box>
-            <Box display="flex" align="center" gap={2}>
-              <MapPin className="w-4 h-4 md:w-5 md:h-5 text-accent" />
-              <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
-                {location}
-              </Text>
+            <Box display="flex" align="center" gap={3}>
+              <MapPin className="w-5 h-5 text-accent" />
+              <Stack gap={0}>
+                <Text variant="body" size={{ base: "sm", md: "md" }} weight="font-bold" color="white">
+                  {city ? `${city}` : location}
+                </Text>
+                <Text variant="mono" size="tiny" color="dim" uppercase tracking="wider">
+                  {city ? location : 'Location'}
+                </Text>
+              </Stack>
             </Box>
           </Box>
         </Stack>
@@ -133,31 +195,41 @@ export function EventHero({
         {whyAttending && (
           <Box
             data-testid="why-attending"
-            padding={{ base: 4, md: 6 }}
-            radius="lg"
-            width={{ base: "full", md: "auto" }}
-            maxWidth="2xl"
-            className="glass-panel border-l-4 border-l-accent"
+            padding={{ base: 6, md: 8 }}
+            radius="xl"
+            width="full"
+            maxWidth="3xl"
+            className="glass-panel border-l-4 border-l-accent shadow-2xl"
           >
-            <Stack gap={{ base: 3, md: 4 }}>
-              <Box display="flex" align="center" gap={3}>
-                <Logo className="h-3 md:h-4" />
-                <Text
-                  variant="mono"
-                  size="tiny"
-                  weight="font-bold"
-                  uppercase
-                  tracking="widest"
-                  color="dim"
+            <Stack gap={{ base: 4, md: 6 }}>
+              <Box display="flex" align="center" justify="between">
+                <Box display="flex" align="center" gap={3}>
+                  <Logo className="h-4 md:h-5" />
+                  <Text
+                    variant="mono"
+                    size="tiny"
+                    weight="font-bold"
+                    uppercase
+                    tracking="widest"
+                    color="dim"
+                  >
+                    Why I'm Attending
+                  </Text>
+                </Box>
+                <Box
+                  as="a"
+                  href="#notes"
+                  className="hidden md:flex items-center gap-2 text-accent hover:text-white transition-colors"
                 >
-                  Why I'm Attending
-                </Text>
+                  <Text variant="mono" size="tiny" weight="font-bold" uppercase>Full Preview</Text>
+                  <ChevronRight size={12} />
+                </Box>
               </Box>
               <Text
                 variant="body"
-                size="sm"
+                size={{ base: "sm", md: "md" }}
                 leading="relaxed"
-                className="italic text-white/90"
+                className="italic text-white/90 line-clamp-3 md:line-clamp-none"
               >
                 {whyAttending}
               </Text>
@@ -167,7 +239,7 @@ export function EventHero({
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
+        <EventNavigation activeTabIds={activeTabIds} />
       </Box>
     </Stack>
   );
