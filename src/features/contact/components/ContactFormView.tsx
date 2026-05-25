@@ -57,7 +57,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
               />
             </FormField>
 
-            <FormField label="Your Email" error={errors.email?.message}>
+            <FormField label="Email address" error={errors.email?.message}>
               <Box as="input"
                 {...register('email')}
                 type="email"
@@ -82,7 +82,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
               </Box>
             </FormField>
 
-            <FormField label="Message" error={errors.message?.message}>
+            <FormField label="Message destination" error={errors.message?.message}>
               <Box as="textarea"
                 {...register('message')}
                 rows={5}

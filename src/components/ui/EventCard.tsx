@@ -1,6 +1,6 @@
 import { MapPin, Bell, Briefcase } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { BaseCard } from './BaseCard';
 import { Event } from '@/lib/content';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
@@ -29,23 +29,17 @@ export function EventCard(props: EventCardProps) {
 
   const rest = pickRest(props, ['event', ...CONTENT_METADATA_KEYS] as (keyof EventCardProps)[]);
   return (
-    <Stack
+    <BaseCard
       as="article"
+      href={`/events/${slug}`}
+      ariaLabel={`View event: ${title}`}
       {...rest}
       padding={8}
-      radius="md"
-      border
       gap={4}
       height="full"
       width="full"
       textAlign="left"
-      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
-      <NavLink
-        to={`/events/${slug}`}
-        className="absolute inset-0 z-10"
-        aria-label={`View event: ${title}`}
-      />
       <Box display="flex" justify="between" align="center" width="full">
         <Box display="flex" align="center" gap={2}>
           <MapPin className="w-4 h-4 text-accent" />
@@ -95,6 +89,6 @@ export function EventCard(props: EventCardProps) {
           </Box>
         </Box>
       </Stack>
-    </Stack>
+    </BaseCard>
   );
 }

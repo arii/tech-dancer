@@ -22,6 +22,7 @@ interface FolioGridProps {
   onViewChange?: (v: ViewMode) => void;
   as?: keyof JSX.IntrinsicElements;
   renderItem?: (item: ContentItem) => ReactNode;
+  searchPlaceholder?: string;
 }
 
 export default function FolioGrid({
@@ -34,7 +35,8 @@ export default function FolioGrid({
   view = 'card',
   onViewChange,
   as,
-  renderItem
+  renderItem,
+  searchPlaceholder
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -48,7 +50,7 @@ export default function FolioGrid({
     );
   });
 
-  const searchPlaceholder = basePath.includes('gear') ? 'Search gear...' : 'Search posts…';
+  const placeholder = searchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');
 
   return (
     <Box as="section" height="full">
@@ -64,7 +66,7 @@ export default function FolioGrid({
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
+            placeholder={placeholder}
           />
           {onViewChange && (
             <ViewToggle view={view} onChange={onViewChange} />

@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { BaseCard } from '@/components/ui/BaseCard';
 import { ASSET_PREFIX } from '@/config/constants';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
@@ -7,24 +8,16 @@ import { stroke } from '@/styles/design-tokens';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
   return (
-    <Stack
+    <BaseCard
       as="article"
+      href={item.href}
+      isExternal
+      ariaLabel={`Buy ${item.title} on storefront`}
       gap={4}
       height="full"
       padding={5}
-      radius="lg"
-      border
       data-testid="product-card"
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      <Box
-        as="a"
-        href={item.href}
-        target="_blank"
-        rel="sponsored noopener noreferrer"
-        aria-label={`Buy ${item.title} on storefront`}
-        className="absolute inset-0 z-10"
-      />
 
       <Box
         position="relative"
@@ -99,6 +92,6 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} />
         </Box>
       </Box>
-    </Stack>
+    </BaseCard>
   );
 }

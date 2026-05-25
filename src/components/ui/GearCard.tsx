@@ -1,6 +1,6 @@
 // impeccable-ignore-file
-import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { BaseCard } from './BaseCard';
 import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -21,10 +21,6 @@ interface GearCardProps extends BaseProps {
 }
 
 const CARD_STYLES = {
-  container: cn(
-    "group relative bg-surface transition-all duration-300",
-    "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
-  ),
   image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
   verdict: "uppercase tracking-widest opacity-90"
@@ -65,35 +61,17 @@ export function GearCard(props: GearCardProps) {
     : rawImage;
 
   return (
-    <Stack
+    <BaseCard
       as="article"
+      href={resolvedHref}
+      isExternal={isExternal}
+      ariaLabel={isExternal ? `Open external gear link: ${title}` : `Read gear review: ${title}`}
       {...rest}
       direction="col"
       gap={3}
       height="full"
       padding={6}
-      radius="lg"
-      border
-      className={CARD_STYLES.container}
     >
-      {isInternal ? (
-        <Box
-          as={NavLink}
-          to={resolvedHref}
-          aria-label={`Read gear review: ${title}`}
-          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
-        />
-      ) : (
-        <Box
-          as="a"
-          href={resolvedHref}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
-          aria-label={`Open external gear link: ${title}`}
-          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
-        />
-      )}
-
       {/* Image zone */}
       <Box
         position="relative"
@@ -175,6 +153,6 @@ export function GearCard(props: GearCardProps) {
           )}
         </Box>
       </Box>
-    </Stack>
+    </BaseCard>
   );
 }

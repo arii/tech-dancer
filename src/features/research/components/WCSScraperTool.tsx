@@ -27,7 +27,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (
     <Box border surface="default">
       <Box padding="compact" borderBottom display="flex" justify="between" align="center">
-        <Text variant="mono" size="xs" weight="font-bold" uppercase>Scoring Results</Text>
+        <Text variant="mono" size="xs" weight="font-bold" uppercase>Extraction Results</Text>
         <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
       </Box>
       <Box className="overflow-x-auto">
@@ -107,7 +107,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
   );
 }
 
-function WCSExportConsole({ data }: { data: WCSRecord[] }) {
+function WCSExportTools({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
   const handleExportPDF = useCallback(() => {
@@ -269,7 +269,7 @@ export function WCSScraperTool() {
         </Stack>
       </Box>
 
-      {/* Harvesting & Impact Dashboard */}
+      {/* Extraction & Impact Dashboard */}
       <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden">
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>
@@ -385,7 +385,7 @@ export function WCSScraperTool() {
             </Stack>
 
             <Stack gap={8}>
-              <WCSExportConsole data={filteredData} />
+              <WCSExportTools data={filteredData} />
               <WCSScraperStats latency={latency} totalEvents={totalEvents} />
             </Stack>
           </Grid>

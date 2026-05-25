@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 
@@ -68,15 +69,13 @@ export function DetailLayout({
 
         <Stack gap={10}>
           {/* Header */}
-          <Stack gap={4}>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" tracking="widest" uppercase data-testid="detail-metadata">
-              {category} • {date} • {rt} min read
-            </Text>
-            <Text variant="headline" size="fluid-5" weight="font-black" color="brand" leading="tight" tracking="tight">
-              {title}
-            </Text>
-            {headerExtras}
-          </Stack>
+          <PageHeader
+            label={`${category} • ${date} • ${rt} min read`}
+            title={title}
+            border="none"
+            paddingBottom={0}
+            cta={headerExtras}
+          />
 
           {/* Hero Image */}
           {image && (
