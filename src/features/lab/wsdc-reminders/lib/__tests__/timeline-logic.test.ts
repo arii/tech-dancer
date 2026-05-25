@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { calculateTimeline, calculateJourneyTimeline } from '../timeline-engine';
+import { calculateTimeline, calculateJourneyTimeline } from '../timeline-logic';
 import { EventAnchors } from '../../types';
 
-describe('timeline-engine', () => {
+describe('timeline-logic', () => {
   const mockEvent: EventAnchors = {
     title: 'Test Event',
     startDate: '2024-06-01',

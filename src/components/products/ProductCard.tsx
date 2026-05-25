@@ -4,28 +4,18 @@ import { ASSET_PREFIX } from '@/config/constants';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { BaseCard } from '../ui/BaseCard';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
   return (
-    <Stack
-      as="article"
+    <BaseCard
+      href={item.href}
+      isExternal
       gap={4}
-      height="full"
       padding={5}
-      radius="lg"
-      border
-      data-testid="product-card"
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+      dataTestId="product-card"
+      aria-label={`Buy ${item.title} on storefront`}
     >
-      <Box
-        as="a"
-        href={item.href}
-        target="_blank"
-        rel="sponsored noopener noreferrer"
-        aria-label={`Buy ${item.title} on storefront`}
-        className="absolute inset-0 z-10"
-      />
-
       <Box
         position="relative"
         aspect="video"
@@ -99,6 +89,6 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} />
         </Box>
       </Box>
-    </Stack>
+    </BaseCard>
   );
 }

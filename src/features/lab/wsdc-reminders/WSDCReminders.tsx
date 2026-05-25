@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { getEvents } from '@/lib/content';
-import { calculateTimeline } from './lib/timeline-engine';
+import { calculateTimeline } from './lib/timeline-logic';
 import { generateICS, downloadICS } from './lib/ics-generator';
 import { EventAnchors, TimelineItem } from './types';
 import { TimelineRow } from './TimelineRow';

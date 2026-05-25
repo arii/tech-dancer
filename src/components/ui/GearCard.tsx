@@ -7,6 +7,7 @@ import { affiliateManager } from '@/lib/affiliateManager';
 
 import { Star, ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
+import { BaseCard } from './BaseCard';
 
 interface GearCardProps extends BaseProps {
   slug?: string;
@@ -56,25 +57,19 @@ export function GearCard(props: GearCardProps) {
     : rawImage;
 
   return (
-    <Stack
-      as="article"
+    <BaseCard
       {...rest}
       direction="col"
       gap={3}
-      height="full"
-      padding={6}
-      radius="lg"
-      border
-      data-testid="gear-card"
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+      dataTestId="gear-card"
+      hoverable
     >
       {isInternal && (
-        <Box
-          as={NavLink}
+        <NavLink
           to={resolvedHref}
+          className="absolute inset-0 z-10"
           aria-label={`Read gear review: ${title}`}
           data-testid="gear-card-link"
-          className="absolute inset-0 z-10"
         />
       )}
       {verdict && (
@@ -177,6 +172,6 @@ export function GearCard(props: GearCardProps) {
           )}
         </Box>
       </Box>
-    </Stack>
+    </BaseCard>
   );
 }

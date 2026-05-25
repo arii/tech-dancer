@@ -170,7 +170,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           panel && layoutTokens.panel,
           layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
           shadow && SHADOW_MAP[shadow],
-          typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
+          typeof surface === "string" ? variants.surface[surface] : (surface === true ? variants.surface.default : ""),
           bgGradient,
           emphasis && variants.emphasis[emphasis],
           radiusProp && RADIUS_MAP[radiusProp],

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
+import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-logic';
 import { Event } from '@/lib/content';
 
 export function EventHeaderExtras({ author }: { author: string }) {
@@ -47,7 +47,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
                 width="full"
                 className="lg:pointer-events-none"
                 aria-expanded={isOpen}
-                aria-controls="quick-intelligence-content"
+                aria-controls="event-at-a-glance-content"
               >
                 <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
                   At a Glance
@@ -58,7 +58,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
               </Box>
 
               <Box
-                id="quick-intelligence-content"
+                id="event-at-a-glance-content"
                 display={{ base: isOpen ? "block" : "none", lg: "block" }}
               >
                 <Stack gap={4}>

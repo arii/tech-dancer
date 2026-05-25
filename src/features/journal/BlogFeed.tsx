@@ -20,6 +20,7 @@ export default function BlogFeed() {
         label="INSIGHTS"
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
+        searchPlaceholder="Search posts..."
         view={view}
         onViewChange={setView}
       >

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Calendar, Mail, Smartphone, Bell, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Button, Grid } from '@/layouts/Primitives';
-import { calculateJourneyTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-engine';
+import { calculateJourneyTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-logic';
 import { generateICS, downloadICS } from '@/features/lab/wsdc-reminders/lib/ics-generator';
 import { Event } from '@/lib/content';
 import { ActionButton } from '@/components/ui/ActionButton';

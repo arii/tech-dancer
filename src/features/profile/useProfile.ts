@@ -33,8 +33,8 @@ const PROFILE_DATA: ProfileData = {
         },
         {
           icon: 'zap',
-          title: "AI Strategy (DevAI)",
-          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my GitHub at github.com/arii."
+          title: "Automation & Tooling",
+          content: "I build internal tools to automate content management and developer workflows. Projects include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying software architecture and internal tools are available on my GitHub at github.com/arii."
         },
         {
           icon: 'globe',

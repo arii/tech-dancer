@@ -107,7 +107,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
   );
 }
 
-function WCSExportConsole({ data }: { data: WCSRecord[] }) {
+function WCSExportTool({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
   const handleExportPDF = useCallback(() => {
@@ -385,7 +385,7 @@ export function WCSScraperTool() {
             </Stack>
 
             <Stack gap={8}>
-              <WCSExportConsole data={filteredData} />
+              <WCSExportTool data={filteredData} />
               <WCSScraperStats latency={latency} totalEvents={totalEvents} />
             </Stack>
           </Grid>

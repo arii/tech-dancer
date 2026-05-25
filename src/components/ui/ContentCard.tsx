@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { motion, HTMLMotionProps } from 'motion/react';
+import { motion } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
+import { BaseCard } from './BaseCard';
 
-interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
+interface ContentCardProps extends BaseProps {
   slug: string;
   title: string;
   category: string;
@@ -26,10 +27,15 @@ export function ContentCard(props: ContentCardProps) {
     readingTime,
   } = props;
 
-  const motionProps = pickRest(props, [
+  const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
-    'basePath'
+    'basePath',
+    'slug',
+    'title',
+    'category',
+    'excerpt',
+    'date'
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -41,22 +47,17 @@ export function ContentCard(props: ContentCardProps) {
   };
 
   return (
-    <Stack
+    <BaseCard
       as={motion.create("article")}
       direction="col"
       gap={4}
-      height="full"
-      padding={6}
-      radius="lg"
-      border
-      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
-      {...motionProps}
+      hoverable
+      {...rest}
     >
-      <Box
-        as={NavLink}
+      <NavLink
         to={`${basePath}/${slug}`}
-        aria-label={`Read article: ${title}`}
         className="absolute inset-0 z-10"
+        aria-label={`Read article: ${title}`}
       />
       <Box
         paddingX={2}
@@ -102,6 +103,6 @@ export function ContentCard(props: ContentCardProps) {
           Read article
         </Text>
       </Box>
-    </Stack>
+    </BaseCard>
   );
 }

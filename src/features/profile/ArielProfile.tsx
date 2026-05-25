@@ -51,7 +51,7 @@ function ArielProfile() {
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technology and creative movement."
+        description="Ariel Anders, PhD: MIT Roboticist, West Coast Swing dancer, and Software Engineer. Exploring the intersection of technology and movement."
       />
 
       <PageHeader

@@ -17,6 +17,7 @@ interface FolioGridProps {
   basePath: string;
   label?: string;
   description?: string;
+  searchPlaceholder?: string;
   children?: ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
@@ -30,6 +31,7 @@ export default function FolioGrid({
   basePath,
   label,
   description,
+  searchPlaceholder = 'Search items...',
   children,
   view = 'card',
   onViewChange,
@@ -47,8 +49,6 @@ export default function FolioGrid({
       safeSearch(item.excerpt, search)
     );
   });
-
-  const searchPlaceholder = basePath.includes('gear') ? 'Search gear...' : 'Search posts…';
 
   return (
     <Box as="section" height="full">

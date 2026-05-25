@@ -4,6 +4,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Event } from '@/lib/content';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
+import { BaseCard } from './BaseCard';
 
 interface EventCardProps {
   event: Event;
@@ -29,17 +30,11 @@ export function EventCard(props: EventCardProps) {
 
   const rest = pickRest(props, ['event', ...CONTENT_METADATA_KEYS] as (keyof EventCardProps)[]);
   return (
-    <Stack
-      as="article"
+    <BaseCard
       {...rest}
       padding={8}
-      radius="md"
-      border
       gap={4}
-      height="full"
-      width="full"
-      textAlign="left"
-      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      hoverable
     >
       <NavLink
         to={`/events/${slug}`}
@@ -95,6 +90,6 @@ export function EventCard(props: EventCardProps) {
           </Box>
         </Box>
       </Stack>
-    </Stack>
+    </BaseCard>
   );
 }
