@@ -251,3 +251,22 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
    - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
    - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
 5. Ensure your changes introduce no new violations in touched files
+
+
+## Follow-up: Harden `td_cli.py gh conflicts` against malformed GitHub remote/token URLs
+
+`python3 dev-tools/td_cli.py gh conflicts` resolves correctly after the command-path fix, but it can still fail in Codex/Jules-style environments when the GitHub remote or token-derived URL is malformed.
+
+### Goal
+
+Make `gh conflicts` fail with a clear remediation message instead of a low-level malformed URL/auth error.
+
+### Acceptance criteria
+
+- Detect missing or malformed `origin` remote before running conflict logic.
+- Detect missing GitHub token / invalid token-derived URL separately.
+- Print a clear fix message, for example:
+  - `git remote add origin https://github.com/arii/tech-dancer.git`
+  - `Set CODEX_GH_TOKEN or GITHUB_TOKEN`
+- Prefer `CODEX_GH_TOKEN` when available, then fall back to `GITHUB_TOKEN`.
+- Do not mark command registration as failed when the command exists but environment setup is incomplete.
