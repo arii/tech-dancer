@@ -44,6 +44,8 @@ export function getProductsForEvent(event: Event): ProductCatalogItem[] {
   const shoeIds = event.gear?.shoeIds || [];
   const essentialIds = event.gear?.essentialIds || [];
   const travelIds = event.gear?.travelIds || [];
+  const themeOutfitIds = event.theme?.outfitIds || [];
+  const themeAccessoryIds = event.theme?.accessoryIds || [];
 
   const allIds = [
     ...outfitIds,
@@ -51,6 +53,8 @@ export function getProductsForEvent(event: Event): ProductCatalogItem[] {
     ...shoeIds,
     ...essentialIds,
     ...travelIds,
+    ...themeOutfitIds,
+    ...themeAccessoryIds,
   ];
 
   // In this system, we check both sources for the IDs.

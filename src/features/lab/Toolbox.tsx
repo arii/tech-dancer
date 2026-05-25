@@ -18,6 +18,7 @@ import { ProductDisclosure } from '@/components/products/ProductDisclosure';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
+  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
   const allFilteredItems = useMemo(() =>
     filteredCategories.flatMap(cat => cat.items),
@@ -74,7 +75,7 @@ export default function Toolbox() {
               product={affiliateToCatalogItem({
                 id: item.affiliateIds?.[0] || item.slug,
                 name: item.title,
-                url: `/gear/${item.slug}`,
+                url: `${baseUrl}/gear/${item.slug}`,
                 category: item.category,
                 description: item.excerpt,
                 image: item.image,

@@ -18,6 +18,12 @@ interface ProductCardProps {
 
 export function ProductCard({ product, variant = 'full' }: ProductCardProps) {
   const isCompact = variant === 'compact' || variant === 'resource-preview';
+  const isExternalImage = product.imageUrl.startsWith('http');
+  const isRootRelativeImage = product.imageUrl.startsWith('/');
+  const isPrefixedImage = ASSET_PREFIX !== '' && product.imageUrl.startsWith(`${ASSET_PREFIX}/`);
+  const productImageUrl = isExternalImage || !isRootRelativeImage || isPrefixedImage
+    ? product.imageUrl
+    : `${ASSET_PREFIX}${product.imageUrl}`;
 
   return (
     <Stack
@@ -53,7 +59,7 @@ export function ProductCard({ product, variant = 'full' }: ProductCardProps) {
       >
         <Box
           as="img"
-          src={product.imageUrl.startsWith('http') ? product.imageUrl : `${ASSET_PREFIX}${product.imageUrl}`}
+          src={productImageUrl}
           alt={product.title}
           width="full"
           height="full"
