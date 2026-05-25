@@ -28,10 +28,7 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
         overflow="x-auto"
         gap={4}
         paddingY={2}
-        className="scrollbar-hide snap-x snap-mandatory"
-        style={{
-          scrollBehavior: 'smooth',
-        }}
+        className="scrollbar-hide snap-x snap-mandatory scroll-smooth"
       >
         {gearItems.map((gear) => (
           <Box
@@ -45,7 +42,12 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
             <Box
               as={NavLink}
               to={`/gear/${gear.slug}`}
-              className="group flex flex-col h-full rounded-lg overflow-hidden bg-surface border border-line transition-all duration-300 hover:border-accent/40 hover:shadow-lg hover:-translate-y-0.5"
+              display="flex"
+              direction="col"
+              height="full"
+              radius="lg"
+              overflow="hidden"
+              className="group bg-surface border border-line transition-all duration-300 hover:border-accent/40 hover:shadow-lg hover:-translate-y-0.5"
             >
               {/* Image Container */}
               <Box
