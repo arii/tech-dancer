@@ -27,6 +27,20 @@ export default function EventGuide() {
     navigate,
   } = useEventDetail();
 
+  const activeTabIds = useMemo(() => {
+    if (!event) return [];
+    const ids: string[] = [];
+    if (event.theme) ids.push('theme');
+    if (gearSections.length > 0) ids.push('gear');
+    // For now we assume reminders and travel are always shown if event exists,
+    // or we could check for specific fields
+    ids.push('reminders');
+    ids.push('travel');
+    if (event.content) ids.push('notes');
+    if (relatedEvents.length > 0) ids.push('related');
+    return ids;
+  }, [event, gearSections, relatedEvents]);
+
   if (isLoading) {
     return (
       <Box padding="panel" textAlign="center">
@@ -54,19 +68,6 @@ export default function EventGuide() {
       </Box>
     );
   }
-
-  const activeTabIds = useMemo(() => {
-    const ids: string[] = [];
-    if (event.theme) ids.push('theme');
-    if (gearSections.length > 0) ids.push('gear');
-    // For now we assume reminders and travel are always shown if event exists,
-    // or we could check for specific fields
-    ids.push('reminders');
-    ids.push('travel');
-    if (event.content) ids.push('notes');
-    if (relatedEvents.length > 0) ids.push('related');
-    return ids;
-  }, [event, gearSections, relatedEvents]);
 
   return (
     <Box>

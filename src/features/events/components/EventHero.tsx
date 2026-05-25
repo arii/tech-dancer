@@ -58,7 +58,7 @@ export function EventHero({
           inset
           zIndex={0}
           height={{ base: "60vh", md: "full" }}
-          maxHeight={{ base: "400px", md: "none" }}
+          maxHeight={{ base: 80, md: "none" }}
         >
           <img
             src={image}
@@ -106,15 +106,20 @@ export function EventHero({
         <Stack gap={6}>
           {/* Back Navigation & Breadcrumbs */}
           <Stack gap={4}>
-            <Link
+            <Stack
+              as={Link}
               to="/events"
-              className="flex items-center gap-1.5 text-dim hover:text-accent transition-colors group w-fit"
+              direction="row"
+              align="center"
+              gap={1.5}
+              color="dim"
+              className="hover:text-accent transition-colors group w-fit"
             >
               <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
               <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wider">
                 Back to Events
               </Text>
-            </Link>
+            </Stack>
 
             <Box display="flex" align="center" gap={2} color="dim" className="opacity-60">
               <Link to="/" className="hover:text-accent-sky transition-colors">
@@ -219,7 +224,11 @@ export function EventHero({
                 <Box
                   as="a"
                   href="#notes"
-                  className="hidden md:flex items-center gap-2 text-accent hover:text-white transition-colors"
+                  display={{ base: "none", md: "flex" }}
+                  align="center"
+                  gap={2}
+                  color="accent"
+                  className="hover:text-white transition-colors"
                 >
                   <Text variant="mono" size="tiny" weight="font-bold" uppercase>Full Preview</Text>
                   <ChevronRight size={12} />
