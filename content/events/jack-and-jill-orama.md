@@ -11,6 +11,7 @@ city: "Garden Grove, CA"
 schedule: "June 4 - 7, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
+featured: true
 description: >
   Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events
   on the circuit. It is famous for its creative competition formats,

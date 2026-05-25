@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -6,7 +5,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 
 export function FeaturedEventGuide() {
-  const featured = getEvents().filter((event) => !!event.heroImage);
+  const featured = getEvents().filter((event) => event.featured && event.heroImage);
   const [index, setIndex] = useState(0);
   const event = featured[index];
   if (!event) return null;
@@ -15,7 +14,7 @@ export function FeaturedEventGuide() {
     <Box as="section">
       <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={6}>Featured Event Guide</Text>
       <Box display="flex" gap={5} border radius="lg" overflow="hidden" className="bg-surface">
-        <Box width={32} shrink={0} position="relative" display={{ base: 'none', sm: 'block' }}><img src={event.heroImage} alt={event.title} className="h-full w-full object-cover" /></Box>
+        <Box width={32} shrink={0} position="relative" display={{ base: 'none', sm: 'block' }}><img src={event.heroImage} alt={event.title} className="h-full w-full object-cover object-center" /></Box>
         <Stack gap={3} padding={6} flex justify="between">
           <Stack gap={2}>
             <Box display="flex" align="center" gap={2}><MapPin className="h-3.5 w-3.5 text-accent" /><Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>{event.location}</Text></Box>

@@ -12,14 +12,41 @@ const FEATURED = {
 
 export function FeaturedGuidePanel() {
   return (
-    <Box as={NavLink} to={FEATURED.href} display={{ base: 'none', lg: 'flex' }} direction="col" justify="end" padding={8} position="relative" overflow="hidden" border="l" surface="alt" className="group">
-      <Box position="absolute" inset className="bg-cover bg-center opacity-25 transition-opacity duration-500 group-hover:opacity-35" style={{ backgroundImage: `url(${ASSET_PREFIX}${FEATURED.image})` }} aria-hidden="true" />
+    <Box
+      as={NavLink}
+      to={FEATURED.href}
+      display={{ base: 'flex', lg: 'flex' }}
+      direction="col"
+      justify="end"
+      minHeight={{ base: 72, lg: 96 }}
+      padding={8}
+      position="relative"
+      overflow="hidden"
+      border="l"
+      surface="alt"
+      className="group"
+    >
+      <Box position="absolute" inset aria-hidden="true">
+        <img
+          src={`${ASSET_PREFIX}${FEATURED.image}`}
+          alt=""
+          className="h-full w-full object-cover object-center opacity-25 transition-opacity duration-500 group-hover:opacity-35"
+        />
+      </Box>
       <Box position="absolute" inset className="bg-gradient-to-t from-bg via-bg/70 to-transparent" aria-hidden="true" />
       <Stack gap={3} position="relative" zIndex={10}>
-        <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">{FEATURED.eyebrow}</Text>
-        <Text variant="headline" size="2xl" weight="font-black" color="main" leading="tight">{FEATURED.title}</Text>
-        <Text variant="body" size="sm" color="dim">{FEATURED.subtitle}</Text>
-        <Text variant="mono" size="xs" color="accent" weight="font-bold" className="mt-2 group-hover:underline">Read the guide →</Text>
+        <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
+          {FEATURED.eyebrow}
+        </Text>
+        <Text variant="headline" size="2xl" weight="font-black" color="main" leading="tight">
+          {FEATURED.title}
+        </Text>
+        <Text variant="body" size="sm" color="dim">
+          {FEATURED.subtitle}
+        </Text>
+        <Text variant="mono" size="xs" color="accent" weight="font-bold" className="group-hover:underline">
+          Read the guide →
+        </Text>
       </Stack>
     </Box>
   );

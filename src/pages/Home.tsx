@@ -11,25 +11,32 @@ import { HomeHero } from '@/features/home/HomeHero';
 
 export default function Home() {
   return (
-    <Box as="main" className="pb-safe-bottom">
+    <Box as="main" paddingBottom={{ base: 16, md: 12 }}>
       <SEO
         title="Home"
-        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."
+        description="BoomTick helps West Coast Swing dancers train smarter, travel better, and prepare for better dance weekends with practical guides and reviews."
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      <Box as="section" display="grid" gap={8} className="items-center lg:grid-cols-[minmax(0,1fr)_360px]">
+      <Box
+        as="section"
+        display="grid"
+        gap={{ base: 8, lg: 10 }}
+        align="center"
+        cols={{ base: 1, lg: 2 }}
+        className="max-w-screen-xl"
+      >
         <HomeHero />
         <FeaturedGuidePanel />
       </Box>
 
-      <Stack gap={12} padding="panel" className="mx-auto max-w-screen-xl">
+      <Stack gap={10} padding="panel" marginTop={{ base: 10, md: 12, lg: 14 }} className="max-w-screen-xl">
         <TopicGrid />
-        <Box display="grid" className="gap-12 lg:grid-cols-[1fr_340px]">
+        <Box display="grid" gap={{ base: 8, lg: 10 }} cols={{ base: 1, lg: 2 }}>
           <FeaturedEventGuide />
           <GearShelf />
         </Box>
-        <Box display="grid" className="gap-12 lg:grid-cols-[1fr_340px]">
+        <Box display="grid" gap={{ base: 8, lg: 10 }} cols={{ base: 1, lg: 2 }}>
           <LatestPosts />
           <DevLabCallout />
         </Box>
