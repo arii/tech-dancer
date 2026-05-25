@@ -2,6 +2,8 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
+import { NavLink } from 'react-router-dom';
+import { ActionButton } from './ActionButton';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
@@ -12,7 +14,7 @@ const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
   delay: ((i * HERO_CONFIG.SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
 })) as const;
 
-export function HeroSection() {
+export function HeroSection({ showWordmark = true }: { showWordmark?: boolean }) {
 
   return (
     <Stack
@@ -48,7 +50,7 @@ export function HeroSection() {
       >
 
 
-        <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" />
+        {showWordmark ? <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" /> : null}
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
@@ -79,7 +81,7 @@ export function HeroSection() {
             color="white"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            Dance better.
+            Travel better.
           </Text>
         </Stack>
 
@@ -114,12 +116,29 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
-            plus technical deep dives into building the platform with DevAI.
+            Practical guides for West Coast Swing dancers — training notes, event travel tips,
+            gear reviews, and tools for better dance weekends.
           </Text>
         </Stack>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
+
+
+        <Stack direction="row" gap={4} marginTop={8} wrap className="opacity-0 hero-cta-anim">
+          <ActionButton as={NavLink} to="/events" variant="primary" paddingX={6} paddingY={3} className="text-sm">
+            Start with Event Guides
+          </ActionButton>
+          <ActionButton as={NavLink} to="/gear" variant="secondary" paddingX={6} paddingY={3} className="text-sm">
+            Browse Gear Reviews
+          </ActionButton>
+        </Stack>
+
+        <Box marginTop={5} className="opacity-0 hero-cta-anim">
+          <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent">
+            New to WCS? Start Here →
+          </Text>
+        </Box>
+
         <Stack
           direction="row"
           align="end"
