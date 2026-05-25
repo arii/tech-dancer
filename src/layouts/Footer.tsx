@@ -1,3 +1,4 @@
+import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 
