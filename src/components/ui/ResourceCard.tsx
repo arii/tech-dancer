@@ -3,6 +3,7 @@ import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { ASSET_PREFIX } from '@/config/constants';
 
 import { Star, ArrowRight, ExternalLink, ShoppingBag } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
@@ -88,7 +89,9 @@ export function ResourceCard(props: ResourceCardProps) {
     : resolvedHref;
 
   // Image normalization
-  const image = propsImage;
+  const image = propsImage?.startsWith('/') && !propsImage.startsWith(ASSET_PREFIX)
+    ? `${ASSET_PREFIX}${propsImage}`
+    : propsImage;
 
   const getCTAText = () => {
     switch (kind) {

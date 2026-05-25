@@ -61,7 +61,12 @@ export const affiliateManager = {
   },
 
   getAllLinks: (): Record<string, AffiliateLink> => {
-    return AFFILIATE_DATABASE;
+    const normalized: Record<string, AffiliateLink> = {};
+    Object.keys(AFFILIATE_DATABASE).forEach(id => {
+      const link = affiliateManager.getLink(id);
+      if (link) normalized[id] = link;
+    });
+    return normalized;
   },
 
   resolveResourceHref: (config: { id?: string; gearSlug?: string }): string => {

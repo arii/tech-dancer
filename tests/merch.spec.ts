@@ -43,7 +43,7 @@ test.describe('Merch Page', () => {
     await expect(printfulLinks.first()).toBeVisible();
 
     for (const link of await printfulLinks.all()) {
-      await expect(link).toHaveAttribute('rel', 'sponsored noopener noreferrer');
+      await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       await expect(link).toHaveAttribute('target', '_blank');
     }
   });
