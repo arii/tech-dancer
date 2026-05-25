@@ -94,6 +94,8 @@ export const tailwindSafelist = [
   'right-8',
   'top-0',
   'top-4',
+  'h-72',
+  'md:h-80',
   'grid-cols-1',
   'grid-cols-2',
   'grid-cols-3',

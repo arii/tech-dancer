@@ -28,20 +28,22 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
 
       <Box
         position="relative"
-        aspect="video"
-        maxHeight={{ base: 56, lg: 72 }}
+        display="flex"
+        align="center"
+        justify="center"
+        height={{ base: 72, md: 80 }}
         overflow="hidden"
-        radius="md"
+        radius="lg"
         className="bg-surface-alt/35"
       >
         <Box
           as="img"
           src={item.imageUrl.startsWith('http') ? item.imageUrl : `${ASSET_PREFIX}${item.imageUrl}`}
           alt={item.title}
-          width="full"
-          height="full"
+          maxWidth="full"
+          maxHeight="full"
           padding={4}
-          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+          className="object-contain transition-transform duration-300 group-hover:scale-105"
         />
         {item.price ? (
           <Box position="absolute" top={3} right={3} paddingX={2} paddingY={1} radius="full" opacity={80} className="bg-accent text-white backdrop-blur-md shadow-sm">

@@ -51,7 +51,7 @@ export default function Merch() {
         </Box>
 
         {/* Product Grid */}
-        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
+        <Grid cols={{ base: 1, sm: 2, xl: 3 }} gap={6}>
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} item={product} />
           ))}
