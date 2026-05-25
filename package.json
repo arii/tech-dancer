@@ -29,7 +29,10 @@
     "review:ux:prep": "pnpm run setup:playwright && pnpm run audit",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
-    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context"
+    "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context",
+    "doctor": "node scripts/check-runtime.mjs",
+    "check:runtime-files": "node scripts/check-runtime-files.mjs",
+    "preinstall": "node scripts/check-runtime.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -71,8 +74,8 @@
     "zustand": "^5.0.12"
   },
   "engines": {
-    "node": "22",
-    "pnpm": ">=10.0.0"
+    "node": "22.x",
+    "pnpm": "10.28.2"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
@@ -106,5 +109,5 @@
     "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^4.1.5"
   },
-  "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264"
+  "packageManager": "pnpm@10.28.2"
 }
