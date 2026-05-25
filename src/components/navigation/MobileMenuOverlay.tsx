@@ -13,6 +13,15 @@ interface MobileMenuOverlayProps {
   onSearchClick: () => void;
 }
 
+const MOBILE_MENU_COPY: Record<string, { label?: string; subtitle: string }> = {
+  '/': { label: 'Start Here', subtitle: 'Quick orientation for new visitors' },
+  '/blog': { label: 'Guides', subtitle: 'Training, travel, and WCS prep' },
+  '/gear': { subtitle: 'Useful products for dance weekends' },
+  '/events': { label: 'Events', subtitle: 'What to expect and what to pack' },
+  '/merch': { subtitle: 'BoomTick shirts, hats, and designs' },
+  '/about': { subtitle: 'Who writes BoomTick and why' },
+};
+
 export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenuOverlayProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -97,11 +106,12 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             </Text>
           </Box>
         </Box>
-        {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
+        {routes.filter((r): r is typeof r & { label: string } => !!r.label).map((item) => (
           <NavItem
             key={item.path}
             to={item.path}
-            label={item.label}
+            label={MOBILE_MENU_COPY[item.path]?.label ?? item.label}
+            subtitle={MOBILE_MENU_COPY[item.path]?.subtitle}
             icon={item.icon}
             onClick={onClose}
             isMobile

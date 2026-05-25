@@ -8,12 +8,13 @@ import { cn } from '@/lib/utils';
 export interface NavItemProps {
   to: string;
   label: string;
+  subtitle?: string;
   icon?: LucideIcon;
   onClick?: () => void;
   isMobile?: boolean;
 }
 
-export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
+export function NavItem({ to, label, subtitle, icon, onClick, isMobile }: NavItemProps) {
   if (!icon) {
     console.warn(`Navigation icon missing for route: ${label}. Falling back to Terminal icon.`);
   }
@@ -47,9 +48,16 @@ export function NavItem({ to, label, icon, onClick, isMobile }: NavItemProps) {
             <Box shrink={false}>
               <Icon className={cn(`${stroke.thick}`, isMobile ? "w-5 h-5" : "w-4 h-4")} />
             </Box>
-            <Text variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
-              {label}
-            </Text>
+            <Box>
+              <Text variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
+                {label}
+              </Text>
+              {isMobile && subtitle ? (
+                <Text variant="sans" size="sm" color="dim" marginTop={1} className="leading-tight">
+                  {subtitle}
+                </Text>
+              ) : null}
+            </Box>
           </Box>
         )}
       </NavLink>
