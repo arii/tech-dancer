@@ -59,7 +59,7 @@ Verify the following routes and features:
 - `/gear`
 - `/research`
 - Search modal
-  Verify: Design consistency, typography, Recharts rendering, and ContentCard/GearCard 16:9 aspect ratio.
+  Verify: Design consistency, typography, Recharts rendering, and ArticleCard/GearCard 16:9 aspect ratio.
 
 ```bash
 playwright-cli snapshot

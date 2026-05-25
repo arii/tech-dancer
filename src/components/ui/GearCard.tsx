@@ -13,11 +13,13 @@ interface GearCardProps extends BaseProps {
   title: string;
   category: string;
   excerpt: string;
-  basePath: string;
+  basePath?: string;
   rating?: number;
   verdict?: string;
   image?: string;
   affiliateIds?: string[];
+  variant?: 'default' | 'minimal';
+  href?: string;
   [key: string]: unknown;
 }
 
@@ -31,17 +33,21 @@ export function GearCard(props: GearCardProps) {
     verdict,
     image: propsImage,
     affiliateIds,
+    variant = 'default',
+    href,
   } = props;
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath',
-    'affiliateIds'
+    'affiliateIds',
+    'variant',
+    'href'
   ] as (keyof GearCardProps)[]);
 
   // Resolve link: prioritization check
   const affiliateId = affiliateIds?.[0];
-  const resolvedHref = affiliateManager.resolveResourceHref({
+  const resolvedHref = href || affiliateManager.resolveResourceHref({
     id: affiliateId,
     gearSlug: slug
   });
@@ -54,6 +60,41 @@ export function GearCard(props: GearCardProps) {
   const image = (rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL))
     ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
     : rawImage;
+
+  if (variant === 'minimal') {
+    return (
+      <Box
+        position="relative"
+        display="flex"
+        direction="col"
+        padding={5}
+        surface="default"
+        border
+        radius="lg"
+        className="group transition-all h-full hover:border-accent"
+        {...rest}
+      >
+        <Stack gap={2} flex={1}>
+          <Box display="flex" align="center" justify="between">
+            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+              {category}
+            </Text>
+            <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100 transition-opacity" />
+          </Box>
+
+          <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors">
+            <a href={resolvedHref} target="_blank" rel="noopener noreferrer" className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+              {title}
+            </a>
+          </Text>
+
+          <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed">
+            {excerpt}
+          </Text>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <Stack

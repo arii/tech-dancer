@@ -4,7 +4,7 @@ import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
-interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
+interface ArticleCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
   category: string;
@@ -15,7 +15,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   [key: string]: unknown;
 }
 
-export function ContentCard(props: ContentCardProps) {
+export function ArticleCard(props: ArticleCardProps) {
   const {
     slug,
     title,
@@ -30,7 +30,7 @@ export function ContentCard(props: ContentCardProps) {
     ...CONTENT_METADATA_KEYS,
     'readingTime',
     'basePath'
-  ] as (keyof ContentCardProps)[]);
+  ] as (keyof ArticleCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();

@@ -1,11 +1,12 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, Database, FileText } from 'lucide-react';
+import { Search, ArrowRight, Activity, Database } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
+import { ArticleCard } from '@/components/ui/ArticleCard';
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
@@ -24,8 +25,6 @@ export default function ResearchAnalytics() {
           description="A collection of tools and technical projects built for the WCS community."
           as="h1"
         />
-
-
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
@@ -81,30 +80,11 @@ export default function ResearchAnalytics() {
           {studies.length > 0 ? (
             <Grid cols={{ base: 1, md: 2 }} gap={8}>
               {studies.map((study) => (
-                <Stack
+                <ArticleCard
                   key={study.slug}
-                  padding={8}
-                  gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                  className={cardVariants({ interactive: true })}
-                >
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
-                  </Box>
-                  <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black">
-                      {study.title}
-                    </Text>
-                    <Text variant="body" size="sm" color="dim">
-                      {study.excerpt}
-                    </Text>
-                  </Stack>
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Paper</Text>
-                    <Icon icon={FileText} size="sm" color="accent" />
-                  </Box>
-                </Stack>
+                  {...study}
+                  basePath="/research"
+                />
               ))}
             </Grid>
           ) : (
