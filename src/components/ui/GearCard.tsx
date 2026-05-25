@@ -54,7 +54,8 @@ export function GearCard(props: GearCardProps) {
     gearSlug: slug
   });
 
-  const isInternal = resolvedHref.startsWith('/');
+  const isExternal = /^https?:\/\//.test(resolvedHref);
+  const isInternal = !isExternal;
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
@@ -165,12 +166,12 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            {isInternal ? "Read review" : "View deal"}
+            {isExternal ? "View deal" : "Read review"}
           </Text>
-          {isInternal ? (
-            <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
-          ) : (
+          {isExternal ? (
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
+          ) : (
+            <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
           )}
         </Box>
       </Box>
