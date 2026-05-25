@@ -112,12 +112,12 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
                 {isSubmitting ? (
                   <Stack direction="row" align="center" gap={3}>
                     <Box width={4} height={4} border={2} className="border-current border-t-transparent animate-spin" />
-                    <Text color="inherit" size="sm" weight="font-bold">Sending...</Text>
+                    <Text className="text-inherit" size="sm" weight="font-bold">Sending...</Text>
                   </Stack>
                 ) : (
                   <Stack direction="row" align="center" gap={2}>
                     <Send className="w-4 h-4" />
-                    <Text size="sm" weight="font-bold" color="inherit">Send Message</Text>
+                    <Text size="sm" weight="font-bold" className="text-inherit">Send Message</Text>
                   </Stack>
                 )}
               </ActionButton>
