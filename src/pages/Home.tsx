@@ -25,7 +25,7 @@ export default function Home() {
         <FeaturedGuidePanel />
       </Box>
 
-      <Box className="lg:hidden" padding={4}
+      <Box display={{ base: 'block', lg: 'none' }} padding={4}
       >
         <Box as={NavLink} to="/gear/2026-04-19-gear-essentials" display="flex" direction="col" gap={3} padding={4} border radius="lg" className="group bg-surface">
           <Box width="full" height={48} radius="md" overflow="hidden" className="bg-surface-alt">

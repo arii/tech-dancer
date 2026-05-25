@@ -13,7 +13,7 @@ const FEATURED = {
 
 export function FeaturedGuidePanel() {
   return (
-    <Box as={NavLink} to={FEATURED.href} display="flex" direction="col" justify="end" padding={8} position="relative" overflow="hidden" className="group hidden border-l border-line bg-surface-alt lg:flex">
+    <Box as={NavLink} to={FEATURED.href} display={{ base: 'none', lg: 'flex' }} direction="col" justify="end" padding={8} position="relative" overflow="hidden" border="l" surface="alt" className="group">
       <Box position="absolute" inset className="bg-cover bg-center opacity-25 transition-opacity duration-500 group-hover:opacity-35" style={{ backgroundImage: `url(${ASSET_PREFIX}${FEATURED.image})` }} aria-hidden="true" />
       <Box position="absolute" inset className="bg-gradient-to-t from-bg via-bg/70 to-transparent" aria-hidden="true" />
       <Stack gap={3} position="relative" zIndex={10}>
