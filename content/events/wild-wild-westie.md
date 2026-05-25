@@ -10,7 +10,7 @@ location: "Westin Dallas Fort Worth Airport"
 city: "Dallas, TX"
 schedule: "July 2 - 5, 2026"
 url: "https://wildwildwestie.com"
-heroImage: ""
+heroImage: "/assets/events/wild-wild-westie-hero.svg"
 description: "Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere."
 
 whyAttending: >

@@ -29,12 +29,12 @@ const PROFILE_DATA: ProfileData = {
         {
           icon: 'terminal',
           title: "Robotics & Engineering",
-          content: "My background is in robot software engineering and architecture, helping startups build scalable, production-ready systems. My specialized skillsets include perception, motion planning, custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep autonomous fleets reliable and mission-ready."
+          content: "My background is in robot software engineering and architecture, helping startups build scalable, high-performance systems. My specialized skillsets include perception, motion planning, custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep autonomous fleets reliable and efficient."
         },
         {
           icon: 'zap',
           title: "AI Strategy (DevAI)",
-          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying agentic workflows and internal tools are visible on my GitHub at github.com/arii."
+          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying workflows and internal tools are visible on my GitHub at github.com/arii."
         },
         {
           icon: 'globe',

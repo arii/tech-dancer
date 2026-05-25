@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="bg_dt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#080c14"/>
+      <stop offset="100%" stop-color="#040810"/>
+    </linearGradient>
+    <linearGradient id="bar_col" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00cfff"/>
+      <stop offset="100%" stop-color="#0080cc"/>
+    </linearGradient>
+    <linearGradient id="bar_col2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#7020c0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="340" fill="url(#bg_dt)"/>
+
+  <!-- Grid lines -->
+  <g stroke="#0e1a28" stroke-width="1">
+    <line x1="80" y1="40" x2="80" y2="260"/>
+    <line x1="80" y1="260" x2="560" y2="260"/>
+    <line x1="80" y1="220" x2="560" y2="220" opacity="0.5"/>
+    <line x1="80" y1="180" x2="560" y2="180" opacity="0.5"/>
+    <line x1="80" y1="140" x2="560" y2="140" opacity="0.5"/>
+    <line x1="80" y1="100" x2="560" y2="100" opacity="0.5"/>
+  </g>
+
+  <!-- Y-axis labels -->
+  <g font-family="monospace" font-size="10" fill="#2a4060">
+    <text x="55" y="264" text-anchor="end">0</text>
+    <text x="55" y="224" text-anchor="end">25</text>
+    <text x="55" y="184" text-anchor="end">50</text>
+    <text x="55" y="144" text-anchor="end">75</text>
+    <text x="55" y="104" text-anchor="end">100</text>
+  </g>
+
+  <!-- Data bars — event results -->
+  <g opacity="0.85">
+    <rect x="100" y="148" width="28" height="112" fill="url(#bar_col)"/>
+    <rect x="148" y="120" width="28" height="140" fill="url(#bar_col)"/>
+    <rect x="196" y="160" width="28" height="100" fill="url(#bar_col)"/>
+    <rect x="244" y="108" width="28" height="152" fill="url(#bar_col)"/>
+    <rect x="292" y="136" width="28" height="124" fill="url(#bar_col)"/>
+    <!-- Second series -->
+    <rect x="108" y="178" width="12" height="82" fill="url(#bar_col2)" opacity="0.7"/>
+    <rect x="156" y="155" width="12" height="105" fill="url(#bar_col2)" opacity="0.7"/>
+    <rect x="204" y="188" width="12" height="72" fill="url(#bar_col2)" opacity="0.7"/>
+    <rect x="252" y="135" width="12" height="125" fill="url(#bar_col2)" opacity="0.7"/>
+    <rect x="300" y="165" width="12" height="95" fill="url(#bar_col2)" opacity="0.7"/>
+  </g>
+
+  <!-- Trend line -->
+  <polyline points="114,148 162,120 210,160 258,108 306,136 354,125 402,115 450,100 498,88"
+    fill="none" stroke="#00cfff" stroke-width="2" opacity="0.5" stroke-dasharray="5,3"/>
+
+  <!-- X labels -->
+  <g font-family="monospace" font-size="9" fill="#2a4060" text-anchor="middle">
+    <text x="114" y="278">JJO</text>
+    <text x="162" y="278">WWW</text>
+    <text x="210" y="278">P4J</text>
+    <text x="258" y="278">SWIG</text>
+    <text x="306" y="278">BBB</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="380" y="80" width="10" height="10" fill="url(#bar_col)"/>
+  <text x="396" y="90" font-family="monospace" font-size="10" fill="#4a8aaa">Prelim Score</text>
+  <rect x="380" y="100" width="10" height="10" fill="url(#bar_col2)" opacity="0.8"/>
+  <text x="396" y="110" font-family="monospace" font-size="10" fill="#8a50c0">Recall Rate</text>
+
+  <!-- Title -->
+  <rect x="0" y="295" width="600" height="45" fill="#040810" opacity="0.85"/>
+  <text x="20" y="318" font-family="monospace" font-size="12" fill="#00cfff" letter-spacing="2">WCS COMPETITION DATA SCRAPER</text>
+  <text x="20" y="334" font-family="monospace" font-size="10" fill="#4a6080">Dev Lab · Data Science</text>
+</svg>

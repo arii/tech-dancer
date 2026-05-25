@@ -1,4 +1,5 @@
 // impeccable-ignore-file
+import { useState, useEffect } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { EmailForm } from './EmailForm';
 import { Mail, X } from 'lucide-react';
@@ -7,8 +8,36 @@ import { ActionButton } from '@/components/ui/ActionButton';
 
 export function NewsletterBanner() {
   const { showEmailBar, hideBar } = useEmailStore();
+  const [hasWaited, setHasWaited] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
-  if (!showEmailBar) return null;
+  useEffect(() => {
+    if (!showEmailBar) return;
+
+    const timer = setTimeout(() => {
+      setHasWaited(true);
+    }, 30000); // 30 seconds
+
+    return () => clearTimeout(timer);
+  }, [showEmailBar]);
+
+  useEffect(() => {
+    if (!showEmailBar || hasScrolled) return;
+
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setHasScrolled(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial check in case page is already scrolled
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [showEmailBar, hasScrolled]);
+
+  if (!showEmailBar || !hasWaited || !hasScrolled) return null;
 
   return (
     <Box 

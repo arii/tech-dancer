@@ -6,7 +6,7 @@ author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Compact, efficient, and dual-voltage. Keep your competition shirts and skirts wrinkle-free on the road."
 image: "/assets/gear/travel-steamer.jpg"
-affiliateIds: ["amazon"]
+affiliateIds: ["garment-steamer"]
 tags: ["travel", "clothing", "competition"]
 rating: 4.5
 verdict: "Essential for Competitors"
