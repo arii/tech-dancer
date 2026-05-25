@@ -10,7 +10,6 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <NewsletterBanner />
       <Box paddingY={12} paddingX={4} surface="bg" border="t" opacity={80} marginTop={8}>
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
