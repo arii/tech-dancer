@@ -45,7 +45,7 @@ export function Wordmark({
       boom
       <span className="text-accent">tick</span>
       <span
-        className="text-text-body font-light opacity-70"
+        className="text-text-dim font-light"
       >
         .blog
       </span>

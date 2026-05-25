@@ -34,14 +34,14 @@ export function DevLabTerminal({ devPosts }: DevLabTerminalProps) {
           gap={2}
           paddingX={4}
           paddingY={3}
-          className="bg-slate-800/50 border-b border-line/40 backdrop-blur-sm"
+          className="bg-surface-alt/50 border-b border-line/40 backdrop-blur-sm"
         >
           <Box display="flex" gap={1.5}>
             <Box width={3} height={3} radius="full" className="bg-red-500/70" />
-            <Box width={3} height={3} radius="full" className="bg-yellow-500/70" />
-            <Box width={3} height={3} radius="full" className="bg-green-500/70" />
+            <Box width={3} height={3} radius="full" className="bg-yellow-400/70" />
+            <Box width={3} height={3} radius="full" className="bg-emerald-500/70" />
           </Box>
-          <Text variant="mono" size="xs" color="dim" className="ml-auto">
+          <Text variant="mono" size="xs" color="dim" marginLeft="auto">
             ~ boomtick@lab
           </Text>
         </Box>
@@ -49,7 +49,9 @@ export function DevLabTerminal({ devPosts }: DevLabTerminalProps) {
         {/* Terminal Content */}
         <Stack gap={4} paddingX={6} paddingY={6}>
           <Box display="flex" align="start" gap={3}>
-            <Terminal size={20} className="text-accent/70 flex-shrink-0 mt-0.5" />
+            <Box shrink={false} marginTop={0.5}>
+              <Terminal size={20} className="text-accent/70" />
+            </Box>
             <Stack gap={3} flex={1}>
               <Text variant="mono" size="xs" color="dim" className="opacity-60">
                 Latest articles from the lab...
@@ -59,17 +61,21 @@ export function DevLabTerminal({ devPosts }: DevLabTerminalProps) {
 
           {/* Dev Posts Grid */}
           <Stack gap={3} className="divide-y divide-line/20">
-            {devPosts.map((post, idx) => (
+            {devPosts.map((post, _idx) => (
               <Box
                 key={post.slug}
                 as={NavLink}
                 to={`/blog/${post.slug}`}
                 paddingY={3}
-                className="group transition-all hover:bg-slate-800/30 rounded-md px-3 -mx-3"
+                paddingX={3}
+                marginX={-3}
+                className="group transition-all hover:bg-surface-alt/30 rounded-md"
               >
                 <Stack gap={2}>
                   <Box display="flex" align="center" gap={2}>
-                    <Code2 size={14} className="text-accent/60 flex-shrink-0" />
+                    <Box shrink={false}>
+                      <Code2 size={14} className="text-accent/60" />
+                    </Box>
                     <Text
                       size="sm"
                       weight="font-bold"
