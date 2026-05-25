@@ -4,6 +4,7 @@
  */
 
 import { ArrowRight } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 import { ProductCatalogItem } from '@/data/products/catalog';
@@ -33,14 +34,23 @@ export function ProductCard({ product, variant = 'full' }: ProductCardProps) {
         variant === 'resource-preview' && "border-line/50"
       )}
     >
-      <Box
-        as="a"
-        href={product.href}
-        target="_blank"
-        rel="sponsored noopener noreferrer"
-        aria-label={`Buy ${product.title}`}
-        className="absolute inset-0 z-10"
-      />
+      {product.href.startsWith('/') ? (
+        <Box
+          as={NavLink}
+          to={product.href}
+          aria-label={`View ${product.title}`}
+          className="absolute inset-0 z-10"
+        />
+      ) : (
+        <Box
+          as="a"
+          href={product.href}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          aria-label={`Buy ${product.title}`}
+          className="absolute inset-0 z-10"
+        />
+      )}
 
       {/* Image zone */}
       <Box
@@ -53,7 +63,7 @@ export function ProductCard({ product, variant = 'full' }: ProductCardProps) {
       >
         <Box
           as="img"
-          src={product.imageUrl.startsWith('http') ? product.imageUrl : `${ASSET_PREFIX}${product.imageUrl}`}
+          src={product.imageUrl.startsWith('http') || product.imageUrl.startsWith(ASSET_PREFIX) ? product.imageUrl : `${ASSET_PREFIX}${product.imageUrl}`}
           alt={product.title}
           width="full"
           height="full"
