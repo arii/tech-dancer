@@ -212,6 +212,20 @@ If a dependency install fails, do not delete `pnpm-lock.yaml` unless explicitly 
 
 If a build fails, fix source code or configuration first. Do not switch package managers.
 
+## GitHub Actions runtime policy
+
+- Do not downgrade GitHub Actions to avoid Node 24 warnings.
+- Prefer current major versions of official actions:
+  - `actions/checkout@v6`
+  - `actions/setup-node@v6`
+- Keep `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` at workflow or job level.
+- Keep app runtime pinned separately via:
+  - `.node-version`
+  - `.nvmrc`
+  - `package.json#engines`
+  - `package.json#packageManager`
+- Do not set `ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION` unless explicitly approved as a temporary emergency workaround.
+
 ### On-Demand Dependencies
 
 Heavy dependencies are installed only when needed:
