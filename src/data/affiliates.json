@@ -20,7 +20,7 @@
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
     "gearSlug": "2023-10-01-loop-earplugs",
-    "image": "/assets/gear/loop-earplugs.jpg"
+    "image": "/assets/gear/loop-earplugs.svg"
   },
   "suede-sheets": {
     "id": "suede-sheets",
@@ -34,7 +34,8 @@
     "name": "Compression Packing Cubes",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Save space and keep outfits organized."
+    "description": "Save space and keep outfits organized.",
+    "image": "/assets/gear/compression-cubes.svg"
   },
   "travel-bottles": {
     "id": "travel-bottles",
@@ -83,7 +84,8 @@
     "name": "Portable Garment Steamer",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Keep your outfits wrinkle-free while traveling."
+    "description": "Keep your outfits wrinkle-free while traveling.",
+    "image": "/assets/gear/travel-steamer.svg"
   },
   "epsom-salt": {
     "id": "epsom-salt",
@@ -167,7 +169,8 @@
     "name": "Handheld Mini Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "A life-saver on a crowded, hot dance floor."
+    "description": "A life-saver on a crowded, hot dance floor.",
+    "image": "/assets/gear/portable-fan.svg"
   },
   "liquid-iv": {
     "id": "liquid-iv",

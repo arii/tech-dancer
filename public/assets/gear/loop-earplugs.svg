@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bg_ep" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0a0a14"/>
+    </radialGradient>
+    <radialGradient id="ep_body" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#d0f0ff"/>
+      <stop offset="60%" stop-color="#60c8e8"/>
+      <stop offset="100%" stop-color="#1a7090"/>
+    </radialGradient>
+    <radialGradient id="ep_body2" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#d0ffd8"/>
+      <stop offset="60%" stop-color="#50d890"/>
+      <stop offset="100%" stop-color="#0a7040"/>
+    </radialGradient>
+    <filter id="shadow_ep">
+      <feDropShadow dx="4" dy="8" stdDeviation="8" flood-color="#000020" flood-opacity="0.6"/>
+    </filter>
+    <filter id="glow_ep">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="400" fill="url(#bg_ep)"/>
+
+  <!-- Product platform / shadow -->
+  <ellipse cx="200" cy="340" rx="120" ry="18" fill="#000020" opacity="0.5"/>
+
+  <!-- Left earplug -->
+  <g transform="translate(135, 190) rotate(-20)" filter="url(#shadow_ep)">
+    <!-- Stem -->
+    <rect x="-8" y="20" width="16" height="55" rx="8" fill="url(#ep_body)"/>
+    <!-- Tip (dome) -->
+    <ellipse cx="0" cy="18" rx="22" ry="26" fill="url(#ep_body)"/>
+    <!-- Highlight -->
+    <ellipse cx="-7" cy="8" rx="8" ry="11" fill="white" opacity="0.3"/>
+    <!-- Ring detail -->
+    <ellipse cx="0" cy="40" rx="8" ry="4" fill="none" stroke="#1a7090" stroke-width="1.5" opacity="0.5"/>
+  </g>
+
+  <!-- Right earplug -->
+  <g transform="translate(268, 190) rotate(20)" filter="url(#shadow_ep)">
+    <rect x="-8" y="20" width="16" height="55" rx="8" fill="url(#ep_body2)"/>
+    <ellipse cx="0" cy="18" rx="22" ry="26" fill="url(#ep_body2)"/>
+    <ellipse cx="-7" cy="8" rx="8" ry="11" fill="white" opacity="0.3"/>
+    <ellipse cx="0" cy="40" rx="8" ry="4" fill="none" stroke="#0a7040" stroke-width="1.5" opacity="0.5"/>
+  </g>
+
+  <!-- Carry case hint (circular, bottom) -->
+  <ellipse cx="200" cy="318" rx="55" ry="16" fill="#1e2a3a" stroke="#00cfff" stroke-width="1" opacity="0.7"/>
+  <ellipse cx="200" cy="314" rx="50" ry="12" fill="#141e2e" stroke="#00cfff" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- Glow accent -->
+  <ellipse cx="200" cy="200" rx="140" ry="140" fill="none" stroke="#00cfff" stroke-width="0.5" opacity="0.15" filter="url(#glow_ep)"/>
+
+  <!-- Label area -->
+  <rect x="0" y="345" width="400" height="55" fill="#0a0a14" opacity="0.8"/>
+  <text x="200" y="372" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#00cfff" text-anchor="middle" letter-spacing="2">LOOP EXPERIENCE</text>
+  <text x="200" y="392" font-family="Georgia, serif" font-size="11" fill="#64748b" text-anchor="middle">Hearing Protection · ★★★★★</text>
+</svg>
