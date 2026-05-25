@@ -120,35 +120,6 @@ export function HeroSection() {
           </Text>
         </Stack>
 
-        <Stack
-          direction={{ base: "column", sm: "row" }}
-          align="start"
-          gap={3}
-          marginTop={6}
-          className="opacity-0 hero-tagline-anim"
-        >
-          <Box
-            as={NavLink}
-            to="/events"
-            paddingX={5}
-            paddingY={2.5}
-            radius="full"
-            className="bg-accent text-bg font-semibold hover:opacity-90 transition-opacity"
-          >
-            Explore Guides
-          </Box>
-          <Box
-            as={NavLink}
-            to="/gear"
-            paddingX={5}
-            paddingY={2.5}
-            radius="full"
-            className="border border-line text-text-main font-semibold hover:bg-surface-alt transition-colors"
-          >
-            Browse Gear
-          </Box>
-        </Stack>
-
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Stack
           direction="row"
@@ -185,7 +156,28 @@ export function HeroSection() {
         zIndex={10}
         className="opacity-0 hero-cta-anim"
       >
-
+        <Stack direction={{ base: "column", sm: "row" }} align="center" gap={3}>
+          <Box
+            as={NavLink}
+            to="/events"
+            paddingX={5}
+            paddingY={2.5}
+            radius="full"
+            className="bg-accent text-bg font-semibold hover:opacity-90 transition-opacity"
+          >
+            Explore Guides
+          </Box>
+          <Box
+            as={NavLink}
+            to="/gear"
+            paddingX={5}
+            paddingY={2.5}
+            radius="full"
+            className="border border-line text-text-main font-semibold hover:bg-surface-alt transition-colors"
+          >
+            Browse Gear
+          </Box>
+        </Stack>
       </Stack>
     </Stack>
   );
