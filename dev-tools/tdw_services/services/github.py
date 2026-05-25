@@ -92,16 +92,20 @@ class GitHubClient:
         """Fetches logs for a specific check run, using external_id (job_id) if available."""
         # Ensure we have a valid ID and it's a string for the URL path
         job_id = str(external_id) if external_id is not None else str(check_run_id)
+
+        fallback_id = str(check_run_id)
+        has_ext_id = (external_id is not None)
+
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
             return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
         except Exception as e:
-            if "404" in str(e) and external_id is not None:
+            if has_ext_id and "404" in str(e):
                 try:
-                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
-                except Exception as e2:
-                    return f"Failed to fetch logs for job {check_run_id} (fallback): {str(e2)}"
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{fallback_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
+                except Exception as e_fallback:
+                    return f"Failed to fetch logs for job {fallback_id}: {str(e_fallback)}"
             return f"Failed to fetch logs for job {job_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
