@@ -157,7 +157,7 @@ export function GlobalSearch() {
             }
           }}
         >
-          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative">
+          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
             <Search className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
             <Text
               as="input"

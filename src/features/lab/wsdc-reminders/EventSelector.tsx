@@ -18,7 +18,7 @@ export function EventSelector({ events, selectedEventId, onSelect }: EventSelect
         <Text variant="headline" size="lg" weight="font-bold">Select WCS Event</Text>
       </Box>
 
-      <Box display="flex" gap={2} wrap>
+      <Stack direction="row" gap={2} wrap>
         {events.map(event => (
           <FilterButton
             key={event.slug}
@@ -44,7 +44,7 @@ export function EventSelector({ events, selectedEventId, onSelect }: EventSelect
               : "bg-surface-alt text-text-dim border-line/50"
           )}
         />
-      </Box>
+      </Stack>
     </Stack>
   );
 }
