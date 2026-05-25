@@ -51,18 +51,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check runtime contract files
+        run: pnpm run check:runtime-files
+
+      - name: Check active runtime
+        run: pnpm run doctor
 
       - name: Verify lockfile integrity
         run: |
@@ -106,18 +118,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check active runtime
+        run: pnpm run doctor
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
@@ -166,16 +187,25 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check active runtime
+        run: pnpm run doctor
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline

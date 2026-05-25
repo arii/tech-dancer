@@ -412,23 +412,52 @@ class Orchestrator:
         handler = CommandHandler(self)
         return handler.handle(pr_number, command, comment_id)
 
+    def runtime_check(self):
+        """Ensures the runtime environment matches the contract."""
+        run_command(["corepack", "enable"], check=False)
+        run_command(["corepack", "prepare", "pnpm@10.28.2", "--activate"], check=False)
+
+        # Mirror scripts/check-runtime.mjs logic in Python
+        try:
+            with open(".node-version", "r") as f:
+                expected_node = f.read().strip().replace('v', '')
+        except FileNotFoundError:
+            try:
+                with open(".nvmrc", "r") as f:
+                    expected_node = f.read().strip().replace('v', '')
+            except FileNotFoundError:
+                expected_node = "22.22.2"
+
+        actual_node = run_command(["node", "-v"]).strip().replace('v', '')
+        if actual_node != expected_node:
+            print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
+            raise CLIError("Node version mismatch. Do not switch versions manually.")
+
+        with open("package.json", "r") as f:
+            pkg = json.load(f)
+        expected_pnpm = pkg.get("packageManager", "").replace("pnpm@", "") or "10.28.2"
+
+        try:
+            actual_pnpm = run_command(["pnpm", "--version"]).strip()
+        except Exception:
+            actual_pnpm = None
+
+        if not actual_pnpm or actual_pnpm != expected_pnpm:
+            print(f"❌ pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
+            raise CLIError(f"Run: corepack enable && corepack prepare pnpm@{expected_pnpm} --activate")
+
+        return {"node": actual_node, "pnpm": actual_pnpm}
+
     def pre_submit_checks(self):
         results = {"steps": []}
 
-        # 1. Node Runtime Check (Fail Fast)
+        # 1. Runtime Check (Fail Fast)
         try:
-            with open(".nvmrc", "r") as f:
-                pinned_version = f.read().strip().lstrip('v')
-            current_version = run_command(["node", "-v"]).strip().lstrip('v')
-            pinned_major = pinned_version.split('.')[0]
-            current_major = current_version.split('.')[0]
-            if current_major != pinned_major:
-                error_msg = f"Node version mismatch! Expected: {pinned_version}, Actual: {current_version}. Please use the pinned runtime requirement."
-                results["steps"].append({"name": "Node Runtime Check", "status": "failure", "error": error_msg})
-                raise CLIError(error_msg)
-            results["steps"].append({"name": "Node Runtime Check", "status": "success"})
-        except FileNotFoundError:
-            results["steps"].append({"name": "Node Runtime Check", "status": "warning", "message": ".nvmrc missing"})
+            self.runtime_check()
+            results["steps"].append({"name": "Runtime Check", "status": "success"})
+        except CLIError as e:
+            results["steps"].append({"name": "Runtime Check", "status": "failure", "error": str(e)})
+            raise e
 
         def run_step(name, cmd):
             try:
