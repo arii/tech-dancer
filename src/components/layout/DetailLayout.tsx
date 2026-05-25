@@ -20,6 +20,7 @@ interface DetailLayoutProps {
   children?: ReactNode;
   headerExtras?: ReactNode;
   relatedContent?: ReactNode;
+  showImagePair?: boolean;
 }
 
 export function DetailLayout({
@@ -34,7 +35,8 @@ export function DetailLayout({
   sidebar,
   children,
   headerExtras,
-  relatedContent
+  relatedContent,
+  showImagePair = false
 }: DetailLayoutProps) {
   const rt = readingTime(content);
   const [showBack, setShowBack] = useState(false);
@@ -87,50 +89,87 @@ export function DetailLayout({
               radius="lg"
               className="bg-surface-alt"
             >
-              {imageBack && (
-                <Box
-                  display="flex"
-                  gap={2}
-                  padding={3}
-                  className="border-b border-line"
-                >
-                  <Box
-                    as="button"
-                    onClick={() => setShowBack(false)}
-                    className={[
-                      'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
-                      !showBack
-                        ? 'bg-accent text-white'
-                        : 'text-text-dim hover:text-text-main border border-line',
-                    ].join(' ')}
-                  >
-                    Front
+              {imageBack && showImagePair ? (
+                <Grid cols={{ base: 1, md: 2 }} gap={4} padding={4}>
+                  <Stack gap={2}>
+                    <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
+                      Front
+                    </Text>
+                    <Box aspect="video" overflow="hidden" border radius="md">
+                      <img
+                        src={image}
+                        alt={`${title} – front view`}
+                        width={1280}
+                        height={720}
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                    </Box>
+                  </Stack>
+                  <Stack gap={2}>
+                    <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
+                      Back
+                    </Text>
+                    <Box aspect="video" overflow="hidden" border radius="md">
+                      <img
+                        src={imageBack}
+                        alt={`${title} – back view`}
+                        width={1280}
+                        height={720}
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                    </Box>
+                  </Stack>
+                </Grid>
+              ) : (
+                <>
+                  {imageBack && (
+                    <Box
+                      display="flex"
+                      gap={2}
+                      padding={3}
+                      className="border-b border-line"
+                    >
+                      <Box
+                        as="button"
+                        onClick={() => setShowBack(false)}
+                        className={[
+                          'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
+                          !showBack
+                            ? 'bg-accent text-white'
+                            : 'text-text-dim hover:text-text-main border border-line',
+                        ].join(' ')}
+                      >
+                        Front
+                      </Box>
+                      <Box
+                        as="button"
+                        onClick={() => setShowBack(true)}
+                        className={[
+                          'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
+                          showBack
+                            ? 'bg-accent text-white'
+                            : 'text-text-dim hover:text-text-main border border-line',
+                        ].join(' ')}
+                      >
+                        Back
+                      </Box>
+                    </Box>
+                  )}
+                  <Box aspect="video" overflow="hidden">
+                    <img
+                      key={displayImage}
+                      src={displayImage}
+                      alt={`${title}${showBack ? ' – back view' : ''}`}
+                      width={1280}
+                      height={720}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-opacity duration-300"
+                    />
                   </Box>
-                  <Box
-                    as="button"
-                    onClick={() => setShowBack(true)}
-                    className={[
-                      'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
-                      showBack
-                        ? 'bg-accent text-white'
-                        : 'text-text-dim hover:text-text-main border border-line',
-                    ].join(' ')}
-                  >
-                    Back
-                  </Box>
-                </Box>
+                </>
               )}
-              <Box aspect="video" overflow="hidden">
-                <img
-                  key={displayImage}
-                  src={displayImage}
-                  alt={`${title}${showBack ? ' – back view' : ''}`}
-                  width={1280}
-                  height={720}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-opacity duration-300"
-                />
-              </Box>
             </Box>
           )}
 
