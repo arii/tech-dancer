@@ -46,13 +46,6 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           padding={4}
           className="object-contain transition-transform duration-300 group-hover:scale-105"
         />
-        {item.price ? (
-          <Box position="absolute" top={3} right={3} paddingX={2} paddingY={1} radius="full" opacity={80} className="bg-accent text-white backdrop-blur-md shadow-sm">
-            <Text variant="mono" size="micro" weight="font-black" uppercase tracking="wide">
-              {item.price.includes('$') ? item.price : `$${item.price}`}
-            </Text>
-          </Box>
-        ) : null}
 
       </Box>
 
