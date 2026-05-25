@@ -20,7 +20,7 @@
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
     "gearSlug": "2023-10-01-loop-earplugs",
-    "image": "/assets/gear/loop-earplugs.svg"
+    "image": "/assets/gear/loop-earplugs.jpg"
   },
   "suede-sheets": {
     "id": "suede-sheets",
@@ -34,8 +34,7 @@
     "name": "Compression Packing Cubes",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Save space and keep outfits organized.",
-    "image": "/assets/gear/compression-cubes.svg"
+    "description": "Save space and keep outfits organized."
   },
   "travel-bottles": {
     "id": "travel-bottles",
@@ -85,7 +84,8 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "Keep your outfits wrinkle-free while traveling.",
-    "image": "/assets/gear/travel-steamer.svg"
+    "gearSlug": "2023-11-01-travel-steamer",
+    "image": "/assets/gear/travel-steamer.jpg"
   },
   "epsom-salt": {
     "id": "epsom-salt",
@@ -169,8 +169,7 @@
     "name": "Handheld Mini Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "A life-saver on a crowded, hot dance floor.",
-    "image": "/assets/gear/portable-fan.svg"
+    "description": "A life-saver on a crowded, hot dance floor."
   },
   "liquid-iv": {
     "id": "liquid-iv",
@@ -305,5 +304,12 @@
     "description": "The original NorCal BestCal t-shirt.",
     "image": "/assets/gear/norcal-bestcal-front.webp",
     "gearSlug": "2024-06-01-norcal-bestcal-tshirt"
+  },
+  "dance-bag": {
+    "id": "dance-bag",
+    "name": "Dance Bag",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Weekend essential dance bag for all levels."
   }
 }
