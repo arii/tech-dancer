@@ -5,7 +5,6 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { EventCard } from '@/components/ui/EventCard';
@@ -28,14 +27,14 @@ export default function Home() {
           <Stack gap={6}>
             <Stack gap={1}>
               <Box width="full" display="flex" justify="between" align="end" direction={{ base: "col", sm: "row" }} gap={{ base: 3, sm: 0 }}>
-                <PageHeader
-                  label="Latest Updates"
-                  title="Recent Posts"
-                  paddingBottom={0}
-                  border="none"
-                  as="h2"
-                  titleSize="fluid-5"
-                />
+                <Stack gap={1}>
+                  <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
+                    Latest Updates
+                  </Text>
+                  <Text as="h2" variant="headline" size="4xl" weight="font-black" leading="tight" tracking="tight">
+                    Recent Posts
+                  </Text>
+                </Stack>
                 <Box
                   as={NavLink}
                   to="/blog"

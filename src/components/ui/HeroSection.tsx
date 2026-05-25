@@ -4,7 +4,6 @@ import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
-import { NavLink } from 'react-router-dom';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
 const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
@@ -146,7 +145,6 @@ export function HeroSection() {
         </Stack>
       </Stack>
 
-      {/* Scroll Down Indicator - Enhanced Mobile CTA */}
       <Stack
         position="absolute"
         inset="bottom"
@@ -155,30 +153,7 @@ export function HeroSection() {
         paddingBottom={8}
         zIndex={10}
         className="opacity-0 hero-cta-anim"
-      >
-        <Stack direction={{ base: "column", sm: "row" }} align="center" gap={3}>
-          <Box
-            as={NavLink}
-            to="/events"
-            paddingX={5}
-            paddingY={2.5}
-            radius="full"
-            className="bg-accent text-bg font-semibold hover:opacity-90 transition-opacity"
-          >
-            Explore Guides
-          </Box>
-          <Box
-            as={NavLink}
-            to="/gear"
-            paddingX={5}
-            paddingY={2.5}
-            radius="full"
-            className="border border-line text-text-main font-semibold hover:bg-surface-alt transition-colors"
-          >
-            Browse Gear
-          </Box>
-        </Stack>
-      </Stack>
+      />
     </Stack>
   );
 }
