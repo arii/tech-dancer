@@ -72,7 +72,7 @@ export function EventCard(props: EventCardProps) {
         >
           <NavLink
             to={`/events/${slug}`}
-            className="focus:outline-none after:absolute after:inset-0 after:z-10"
+            className="after:absolute after:inset-0 after:z-10"
           >
             {title}
           </NavLink>

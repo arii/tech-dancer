@@ -60,7 +60,7 @@ export function ContentCard(props: ContentCardProps) {
         paddingY={1}
         radius="full"
         border
-        className="border-line w-fit relative z-20"
+        className="border-line w-fit relative z-20 pointer-events-none"
       >
         <Text
           variant="mono"
@@ -85,7 +85,7 @@ export function ContentCard(props: ContentCardProps) {
         >
           <NavLink
             to={`${basePath}/${slug}`}
-            className="focus:outline-none after:absolute after:inset-0 after:z-10"
+            className="after:absolute after:inset-0 after:z-10"
           >
             {title}
           </NavLink>

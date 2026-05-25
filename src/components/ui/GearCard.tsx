@@ -125,7 +125,7 @@ export function GearCard(props: GearCardProps) {
           {isInternal ? (
             <NavLink
               to={resolvedHref}
-              className="focus:outline-none after:absolute after:inset-0 after:z-10"
+              className="after:absolute after:inset-0 after:z-10"
             >
               {title}
             </NavLink>

@@ -33,7 +33,7 @@ export function SearchBox({
     >
       <Search
         size={18}
-        className="absolute left-4 pointer-events-none text-slate-400"
+        className="absolute left-4 pointer-events-none text-text-dim"
       />
       <Box
         as="input"
