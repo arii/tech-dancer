@@ -1,7 +1,11 @@
 import { Box, Text } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
-export function EventNavigation() {
+export function EventNavigation({ activeTabIds = [] }: { activeTabIds?: string[] }) {
+  const visibleTabs = EVENT_TABS.filter(tab => activeTabIds.includes(tab.id));
+
+  if (visibleTabs.length === 0) return null;
+
   return (
     <Box
       position="sticky"
@@ -32,7 +36,7 @@ export function EventNavigation() {
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
         >
-          {EVENT_TABS.map(tab => (
+          {visibleTabs.map(tab => (
             <Box
               key={tab.id}
               as="a"

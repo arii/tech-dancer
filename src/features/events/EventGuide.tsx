@@ -54,6 +54,15 @@ export default function EventGuide() {
     );
   }
 
+  const activeTabIds = [
+    event.theme && 'theme',
+    gearSections.length > 0 && 'gear',
+    event.startDate || event.date ? 'reminders' : null,
+    event.description && 'travel',
+    event.content && 'notes',
+    relatedEvents.length > 0 && 'related',
+  ].filter((id): id is string => !!id);
+
   return (
     <Box>
       <SEO
@@ -70,6 +79,7 @@ export default function EventGuide() {
         eyebrow={event.category}
         image={event.heroImage}
         whyAttending={event.whyAttending}
+        activeTabIds={activeTabIds}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>

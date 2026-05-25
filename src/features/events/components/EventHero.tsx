@@ -15,6 +15,7 @@ interface EventHeroProps {
   eyebrow?: string;
   whyAttending?: string;
   id?: string;
+  activeTabIds?: string[];
 }
 
 export function EventHero({
@@ -24,7 +25,8 @@ export function EventHero({
   image,
   eyebrow = "Event Resource Guide",
   whyAttending,
-  id
+  id,
+  activeTabIds = []
 }: EventHeroProps) {
   const accentGradient = useMemo(() => ({
     background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
@@ -167,7 +169,7 @@ export function EventHero({
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
+        <EventNavigation activeTabIds={activeTabIds} />
       </Box>
     </Stack>
   );
