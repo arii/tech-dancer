@@ -44,8 +44,7 @@ export function DetailLayout({
   const displayImage = showBack && imageBack ? imageBack : image;
 
   return (
-    <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" width="full">
+    <Stack as="article" gap={12} maxWidth="4xl" marginX="auto" width="full" padding="panel">
         {/* Navigation */}
         <Stack
           as="button"
@@ -202,7 +201,6 @@ export function DetailLayout({
 
           {relatedContent}
         </Stack>
-      </Stack>
-    </Box>
+    </Stack>
   );
 }
