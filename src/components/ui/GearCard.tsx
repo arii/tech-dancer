@@ -77,12 +77,23 @@ export function GearCard(props: GearCardProps) {
       border
       className={CARD_STYLES.container}
     >
-      <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
-      />
+      {isInternal ? (
+        <Box
+          as={NavLink}
+          to={resolvedHref}
+          aria-label={`Read gear review: ${title}`}
+          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
+        />
+      ) : (
+        <Box
+          as="a"
+          href={resolvedHref}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          aria-label={`Open external gear link: ${title}`}
+          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
+        />
+      )}
 
       {/* Image zone */}
       <Box
@@ -156,9 +167,13 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            Read review
+            {isInternal ? "Read review" : "View deal"}
           </Text>
-          <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
+          {isInternal ? (
+            <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
+          ) : (
+            <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
+          )}
         </Box>
       </Box>
     </Stack>
