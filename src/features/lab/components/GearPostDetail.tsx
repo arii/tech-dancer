@@ -2,7 +2,7 @@ import { Resource } from '@/lib/content';
 import { DetailLayout } from '@/components/layout/DetailLayout';
 import { VerdictCallout } from '@/components/layout/DetailElements';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
-import { ResourceScoreGrid } from './ResourceScoreGrid';
+import { ResourceStats } from './ResourceStats';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -12,7 +12,7 @@ interface GearPostDetailProps {
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
   const headerExtras = (
-    <ResourceScoreGrid
+    <ResourceStats
       rating={post.rating || 0}
       durability={post.durability}
       value={post.value}

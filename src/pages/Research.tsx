@@ -1,2 +1,2 @@
-import Research from '@/features/research/ResearchAnalytics';
+import Research from '@/features/research/ToolsGrid';
 export default Research;

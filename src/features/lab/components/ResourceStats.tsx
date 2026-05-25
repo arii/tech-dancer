@@ -10,7 +10,7 @@ interface ResourceScoreGridProps {
   date?: string;
 }
 
-export function ResourceScoreGrid({
+export function ResourceStats({
   rating,
   durability,
   value,
