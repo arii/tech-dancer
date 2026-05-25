@@ -1,5 +1,5 @@
 
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -37,12 +37,10 @@ export function DetailLayout({
   relatedContent
 }: DetailLayoutProps) {
   const rt = readingTime(content);
-  const [showBack, setShowBack] = useState(false);
-  const displayImage = showBack && imageBack ? imageBack : image;
 
   return (
     <Box as="article" padding="panel">
-      <Stack gap={12} maxWidth="4xl" marginX="auto" width="full">
+      <Stack gap={12} maxWidth="7xl" marginX="auto" width="full">
         {/* Navigation */}
         <Stack
           as="button"
@@ -82,55 +80,55 @@ export function DetailLayout({
               as={motion.div}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              overflow="hidden"
-              border
-              radius="lg"
-              className="bg-surface-alt"
+              className="bg-transparent"
             >
-              {imageBack && (
-                <Box
-                  display="flex"
-                  gap={2}
-                  padding={3}
-                  className="border-b border-line"
-                >
-                  <Box
-                    as="button"
-                    onClick={() => setShowBack(false)}
-                    className={[
-                      'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
-                      !showBack
-                        ? 'bg-accent text-white'
-                        : 'text-text-dim hover:text-text-main border border-line',
-                    ].join(' ')}
-                  >
-                    Front
-                  </Box>
-                  <Box
-                    as="button"
-                    onClick={() => setShowBack(true)}
-                    className={[
-                      'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
-                      showBack
-                        ? 'bg-accent text-white'
-                        : 'text-text-dim hover:text-text-main border border-line',
-                    ].join(' ')}
-                  >
-                    Back
+              {imageBack ? (
+                <Grid cols={{ base: 1, md: 2 }} gap={6}>
+                  <Stack gap={2}>
+                    <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest" uppercase>
+                      Front
+                    </Text>
+                    <Box aspect="video" overflow="hidden" border radius="lg" className="bg-surface-alt">
+                      <img
+                        src={image}
+                        alt={`${title} – front view`}
+                        width={1280}
+                        height={720}
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                    </Box>
+                  </Stack>
+                  <Stack gap={2}>
+                    <Text variant="mono" size="xs" weight="font-bold" color="dim" tracking="widest" uppercase>
+                      Back
+                    </Text>
+                    <Box aspect="video" overflow="hidden" border radius="lg" className="bg-surface-alt">
+                      <img
+                        src={imageBack}
+                        alt={`${title} – back view`}
+                        width={1280}
+                        height={720}
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                    </Box>
+                  </Stack>
+                </Grid>
+              ) : (
+                <Box overflow="hidden" border radius="lg" className="bg-surface-alt">
+                  <Box aspect="video" overflow="hidden">
+                    <img
+                      src={image}
+                      alt={title}
+                      width={1280}
+                      height={720}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-opacity duration-300"
+                    />
                   </Box>
                 </Box>
               )}
-              <Box aspect="video" overflow="hidden">
-                <img
-                  key={displayImage}
-                  src={displayImage}
-                  alt={`${title}${showBack ? ' – back view' : ''}`}
-                  width={1280}
-                  height={720}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-opacity duration-300"
-                />
-              </Box>
             </Box>
           )}
 
