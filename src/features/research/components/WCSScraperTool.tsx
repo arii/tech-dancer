@@ -27,7 +27,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (
     <Box border surface="default">
       <Box padding="compact" borderBottom display="flex" justify="between" align="center">
-        <Text variant="mono" size="xs" weight="font-bold" uppercase>Live Dataset</Text>
+        <Text variant="mono" size="xs" weight="font-bold" uppercase>Scoring Results</Text>
         <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
       </Box>
       <Box className="overflow-x-auto">
@@ -136,7 +136,7 @@ function WCSExportConsole({ data }: { data: WCSRecord[] }) {
       <Stack gap={6}>
         <Box display="flex" align="center" gap={3}>
           <Download className="w-5 h-5 text-accent" />
-          <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Console</Text>
+          <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Data</Text>
         </Box>
         <Stack gap={3}>
           <ActionButton
@@ -177,7 +177,7 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
   return (
     <Box paddingX={4} paddingY={6}>
       <Stack gap={4}>
-        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">System Intelligence</Text>
+        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">Stats</Text>
         <Stack gap={4}>
           <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
             <Text variant="body" size="xs" color="dim">Status</Text>
@@ -256,14 +256,14 @@ export function WCSScraperTool() {
       <Box paddingBottom={8} borderBottom>
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Scraper Console v4.2</Text>
+            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Scoring Tool</Text>
             <StatusBadge label="active" />
           </Box>
           <Stack gap={2}>
             <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-              Research tool for extracting and analyzing public West Coast Swing competition results.
-              Providing transparency on scoring patterns and promotion trends.
+              A tool for extracting and analyzing public West Coast Swing competition results.
+              Provides transparency on scoring patterns and promotion trends through data analysis.
             </Text>
           </Stack>
         </Stack>
@@ -274,10 +274,10 @@ export function WCSScraperTool() {
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>
             <Stack gap={2}>
-              <Text variant="display" size="2xl" weight="font-black">Data Collection</Text>
+              <Text variant="display" size="2xl" weight="font-black">Event Data</Text>
               <Text variant="body" size="lg" color="dim">
-                Our pipeline has indexed {(totalEvents || 6308).toLocaleString()} unique events since 2023.
-                We are currently synchronizing historical data, starting with the most recent seasons.
+                We have collected data from {(totalEvents || 6308).toLocaleString()} events since 2023.
+                We are currently adding more past results to the database.
               </Text>
             </Stack>
             <Grid cols={{ base: 1, md: 2 }} gap={6}>
@@ -293,7 +293,7 @@ export function WCSScraperTool() {
                   <Icon icon={ShieldCheck} size="sm" color="accent" />
                   <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Public Data</Text>
                 </Box>
-                <Text size="xs" color="dim">Strictly indexing public scoring data for aggregate research and statistical purposes.</Text>
+                <Text size="xs" color="dim">Strictly indexing public scoring data for aggregate research and statistical analysis.</Text>
               </Stack>
             </Grid>
           </Stack>
@@ -305,7 +305,7 @@ export function WCSScraperTool() {
                   <Text variant="mono" size="micro" color="success">ACTIVE</Text>
                 </Box>
                 <Text size="sm" color="body">
-                  Using multi-point verification (Result ID, Event URL, and Dancer Metadata) to ensure data accuracy across various event formats.
+                  We check multiple data points (Result IDs and Event URLs) to ensure the scores are accurate.
                 </Text>
                 <Box height={0.5} surface="muted" />
                 <Box display="flex" justify="between" align="center">
@@ -339,7 +339,7 @@ export function WCSScraperTool() {
               <Box display="flex" align="center" gap={3}>
                 <Search className="w-5 h-5 text-dim" />
                 <Text variant="mono" size="xs" weight="font-bold" uppercase color="dim">
-                  Search Console
+                  Search
                 </Text>
               </Box>
 

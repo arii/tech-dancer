@@ -50,7 +50,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
                 aria-controls="quick-intelligence-content"
               >
                 <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                  Quick Intelligence
+                  At a Glance
                 </Text>
                 <Box display={{ base: 'block', lg: 'none' }}>
                   {isOpen ? <ChevronUp className="w-4 h-4 text-accent" /> : <ChevronDown className="w-4 h-4 text-accent" />}

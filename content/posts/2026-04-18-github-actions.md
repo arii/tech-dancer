@@ -13,17 +13,17 @@ tags:
 ---
 
 <Notice type="warning">
-**Lab Notes: Dev-Ops**
+**Technical Notes: Dev-Ops**
 Automating the "Impeccable" audit gate and bundle size checks to maintain high design standards and performance.
 </Notice>
 
 ## Reliable Deployments for the Tech-Dancer
 
-Building a "living portfolio" requires a system that handles the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform. This ensures that every update, from a new gear review to a deep-dive data study, is verified before it goes live.
+Building a "living portfolio" requires a way to handle the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform. This ensures that every update, from a new gear review to a deep-dive research study, is verified before it goes live.
 
-### The CI/CD Architecture
+### The CI/CD Setup
 
-My workflow is split into three primary stages: **Verification**, **Audit**, and **Deployment**.
+My process is split into three primary stages: **Verification**, **Audit**, and **Deployment**.
 
 #### 1. Verification (Lint & Test)
 
