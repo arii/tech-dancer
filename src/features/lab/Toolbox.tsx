@@ -4,7 +4,7 @@ import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { GearCard } from '@/components/ui/GearCard';
+import { GearCard } from '@/components/cards/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';

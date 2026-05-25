@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { Event } from '@/lib/content';
 import { Stack, Grid, Box } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { EventCard } from '@/components/ui/EventCard';
+import { EventCard } from '@/components/cards/EventCard';
 import { motionTokens } from '@/styles/motion';
 
 interface RelatedEventsProps {

@@ -3,7 +3,7 @@ import { useEvents } from './useEvents';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
-import { EventCard } from '@/components/ui/EventCard';
+import { EventCard } from '@/components/cards/EventCard';
 import { Event } from '@/lib/content';
 
 export default function EventsFeed() {

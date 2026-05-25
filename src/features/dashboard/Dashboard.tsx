@@ -8,7 +8,7 @@ import { STATIC_SCHEMAS } from '@/config/constants';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
-import { EventCard } from '@/components/ui/EventCard';
+import { EventCard } from '@/components/cards/EventCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {

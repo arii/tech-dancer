@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
-import { ContentCard } from '@/components/ui/ContentCard';
+import { ArticleCard } from '@/components/cards/ArticleCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
@@ -91,7 +91,7 @@ export default function FolioGrid({
                 {renderItem ? (
                   renderItem(item)
                 ) : (
-                  <ContentCard
+                  <ArticleCard
                     {...item}
                     basePath={basePath}
                   />

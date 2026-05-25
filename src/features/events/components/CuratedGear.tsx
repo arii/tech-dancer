@@ -1,6 +1,6 @@
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GearCard } from '@/components/ui/GearCard';
+import { GearCard } from '@/components/cards/GearCard';
 import { ResolvedGearSection } from '../useEventDetail';
 
 interface CuratedGearProps {

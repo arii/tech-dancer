@@ -6,7 +6,7 @@ import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
-import { ProductCard } from '@/components/products/ProductCard';
+import { GearCard } from '@/components/cards/GearCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
@@ -53,7 +53,18 @@ export default function Merch() {
         {/* Product Grid */}
         <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} item={product} />
+            <GearCard
+              key={product.id}
+              title={product.title}
+              category="merch"
+              excerpt={product.description}
+              image={product.imageUrl}
+              href={product.href}
+              price={product.price}
+              roles={product.roles}
+              tags={product.tags}
+              disclosure={product.disclosure}
+            />
           ))}
         </Grid>
 
