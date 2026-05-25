@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
@@ -7,8 +6,8 @@ const FEATURED = {
   eyebrow: 'FEATURED GUIDE',
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
-  image: '/assets/events/jjo-hero.jpg',
-  href: '/gear/2026-04-19-gear-essentials',
+  image: '/assets/home/wcs-travel-pack.jpg',
+  href: '/gear',
 };
 
 export function FeaturedGuidePanel() {

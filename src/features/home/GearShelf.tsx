@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
@@ -7,9 +6,7 @@ import { ASSET_PREFIX } from '@/config/constants';
 const PICKS = [
   { label: 'Earplugs', image: '/assets/gear/loop-earplugs.jpg', href: '/gear/2023-10-01-loop-earplugs' },
   { label: 'Steamer', image: '/assets/gear/travel-steamer.jpg', href: '/gear/2023-11-01-travel-steamer' },
-  { label: 'Fan', image: '/assets/gear/ue-wonderboom.jpg', href: '/gear/2024-01-01-portable-speaker' },
-  { label: 'Organizer', image: '/assets/events/jjo-hero.jpg', href: '/gear' },
-  { label: 'Dance Bag', image: '/assets/events/jjo-hero.jpg', href: '/gear' },
+  { label: 'Portable Speaker', image: '/assets/gear/ue-wonderboom.jpg', href: '/gear/2024-01-01-portable-speaker' },
 ];
 
 export function GearShelf() {
