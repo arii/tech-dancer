@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router-dom';
-import { Star, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, Package } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
@@ -15,7 +15,7 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
     <Stack gap={8} paddingX={{ base: 4, md: 6, lg: 12 }} as={motion.div} variants={motionTokens.staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-50px" }}>
       <Stack gap={2}>
         <Text as="h2" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
-          Essential Reviews
+          Essential Guides
         </Text>
         <Text as="h3" size="fluid-5" weight="font-black" leading="tight">
           Gear Reviews
@@ -63,9 +63,9 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
-                  <CategoryPlaceholder category={gear.category} />
+                  <CategoryPlaceholder category={gear.category} size="lg" />
                 )}
-                {/* Category Badge */}
+                {/* Category + Type Badge */}
                 <Box
                   position="absolute"
                   top={2}
@@ -73,10 +73,11 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
                   paddingX={2}
                   paddingY={1}
                   radius="full"
-                  className="bg-accent/90 backdrop-blur-sm text-white shadow-sm"
+                  className="bg-accent/90 backdrop-blur-sm text-white shadow-sm flex items-center gap-1"
                 >
+                  <Package size={12} className="text-white" />
                   <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wide">
-                    {gear.category}
+                    Gear
                   </Text>
                 </Box>
               </Box>
@@ -84,7 +85,7 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
               {/* Content */}
               <Stack gap={3} padding={4} height="full">
                 {gear.verdict && (
-                  <Text variant="mono" size="xs" color="accent" weight="font-bold" className="line-clamp-1">
+                  <Text variant="mono" size="xs" color="accent" weight="font-bold" className="line-clamp-2">
                     Best for: {gear.verdict}
                   </Text>
                 )}
@@ -97,6 +98,9 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
                     className="group-hover:text-accent transition-colors line-clamp-2"
                   >
                     {gear.title}
+                  </Text>
+                  <Text size="xs" color="dim" className="line-clamp-1">
+                    {gear.category}
                   </Text>
                 </Stack>
 
@@ -117,11 +121,11 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
                       </Text>
                     </Box>
                   )}
-                  <Box display="flex" align="center" gap={1}>
-                    <Text variant="mono" size="xs" weight="font-bold" color="accent">
-                      View
+                  <Box display="flex" align="center" gap={1} className="text-accent group-hover:text-accent/80 transition-colors">
+                    <Text variant="mono" size="xs" weight="font-bold">
+                      Read
                     </Text>
-                    <ArrowRight size={14} className="text-accent group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                   </Box>
                 </Box>
               </Stack>
