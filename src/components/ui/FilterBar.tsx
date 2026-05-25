@@ -20,7 +20,7 @@ export function FilterBar({ categories }: FilterBarProps) {
       className="bg-bg/80 backdrop-blur-md top-16 lg:top-0 no-scrollbar"
       paddingY={4}
     >
-      <Stack direction="row" gap={4} className="min-w-max" paddingX={1}>
+      <Stack direction="row" gap={2} className="min-w-max" paddingX={1}>
         {categories.map((cat) => (
           <FilterButton
             key={cat}
