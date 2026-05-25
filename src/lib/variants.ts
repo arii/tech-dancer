@@ -70,7 +70,7 @@ export const buttonVariants = cva(
 );
 
 /**
- * Shared variants for Console-style action buttons (compact, high-contrast)
+ * Shared variants for Tools-style action buttons (compact, high-contrast)
  */
 export const actionButtonVariants = cva(
   "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
