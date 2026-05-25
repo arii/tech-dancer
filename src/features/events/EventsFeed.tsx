@@ -22,6 +22,7 @@ export default function EventsFeed() {
         label="COMPETE"
         description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
         basePath="/events"
+        searchPlaceholder="Search events..."
         view={view}
         onViewChange={setView}
         renderItem={(item) => (

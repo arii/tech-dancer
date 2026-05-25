@@ -107,7 +107,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
   );
 }
 
-function WCSExportConsole({ data }: { data: WCSRecord[] }) {
+function WCSExportTools({ data }: { data: WCSRecord[] }) {
   const { exportCSV, exportPDF } = useExport();
 
   const handleExportPDF = useCallback(() => {
@@ -269,14 +269,14 @@ export function WCSScraperTool() {
         </Stack>
       </Box>
 
-      {/* Harvesting & Impact Dashboard */}
+      {/* Extraction & Impact Dashboard */}
       <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden">
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>
             <Stack gap={2}>
               <Text variant="display" size="2xl" weight="font-black">Event Data</Text>
               <Text variant="body" size="lg" color="dim">
-                We have collected data from {(totalEvents || 6308).toLocaleString()} events since 2023.
+                We have retrieved data from {(totalEvents || 6308).toLocaleString()} events since 2023.
                 We are currently adding more past results to the database.
               </Text>
             </Stack>
@@ -385,7 +385,7 @@ export function WCSScraperTool() {
             </Stack>
 
             <Stack gap={8}>
-              <WCSExportConsole data={filteredData} />
+              <WCSExportTools data={filteredData} />
               <WCSScraperStats latency={latency} totalEvents={totalEvents} />
             </Stack>
           </Grid>

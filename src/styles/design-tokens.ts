@@ -13,9 +13,6 @@ export const spacing = {
   compact: "p-compact",
   nav: "p-nav",
   emailBar: "py-email-bar-y px-email-bar-x-sm md:px-email-bar-x-md",
-  hero: "py-hero",
-  comfort: "py-comfort",
-  endPad: "pb-end-pad",
 };
 
 export const animation = {
@@ -38,8 +35,6 @@ export const layout = {
   card: "bg-surface border border-line rounded-none transition-all duration-300 w-full",
   interactive: "cursor-pointer",
   grid: "grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 w-full",
-  section: "mt-24 space-y-8",
-  divider: "border-b border-line pb-4 flex items-end justify-between",
 };
 
 export const inputs = {
