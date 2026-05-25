@@ -1,9 +1,8 @@
-
 import { Search } from 'lucide-react';
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { Logo } from '@/components/ui/Logo';
 
@@ -12,134 +11,66 @@ import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
-import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
-
-  const timer = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (timer.current) return;
-      timer.current = setTimeout(() => {
-        setScrolled(window.scrollY > 20);
-        timer.current = null;
-      }, 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (timer.current) clearTimeout(timer.current);
-    };
-  }, []);
 
   const handleSearchClick = () => {
     setIsOpen(false);
-    if (isSearchOpen) {
-      closeSearch();
-    } else {
-      openSearch();
-    }
+    if (isSearchOpen) closeSearch();
+    else openSearch();
   };
+
+  const topRoutes = routes.filter((r): r is typeof r & { label: string } =>
+    !!(r.path !== '/' && r.label && ['/events', '/gear', '/blog', '/research', '/about', '/contact'].includes(r.path))
+  );
 
   return (
     <>
-      {/* Mobile Bottom Tabs */}
       <MobileBottomNav />
-
-      {/* Mobile Header */}
-      <MobileHeader
-        isOpen={isOpen}
-        onToggle={() => setIsOpen(!isOpen)}
-        onClose={() => setIsOpen(false)}
-      />
-
-      {/* Mobile Menu Overlay */}
+      <MobileHeader isOpen={isOpen} onToggle={() => setIsOpen(!isOpen)} onClose={() => setIsOpen(false)} />
       <AnimatePresence>
-        {isOpen && (
-          <MobileMenuOverlay
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            onSearchClick={handleSearchClick}
-          />
-        )}
+        {isOpen && <MobileMenuOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} onSearchClick={handleSearchClick} />}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
       <Box
         as="nav"
         aria-label="Main Navigation"
-        layout="navRail"
-        className={cn(
-          "transition-nav border-r border-line bg-surface",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
-        )}
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        zIndex="sticky"
+        border="b"
+        className="hidden border-line bg-surface/90 backdrop-blur-xl lg:block"
       >
-        <Stack
-          padding={0}
-          gap={0}
-          flex={1}
-        >
-          <Box
-            as={NavLink}
-            to="/"
-            display="block"
-            paddingX={5}
-            paddingY={3}
-            className="group border-b border-line"
-          >
+        <Box display="flex" align="center" justify="between" paddingX={8} paddingY={3}>
+          <Box as={NavLink} to="/" className="group">
             <Logo className="h-8 w-auto text-white transition-opacity group-hover:opacity-80" />
           </Box>
 
-          <Stack as="ul" gap={1} flex={1} paddingY={4}>
-            <Box as="li">
-              <Box
-                as="button"
-                type="button"
-                cursor="pointer"
-                onClick={handleSearchClick}
-                display="flex"
-                align="center"
-                gap={3}
-                width="full"
-                paddingY={3}
-                paddingX={6}
-                className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
-                aria-label="Open search"
-              >
-                <Box shrink={false}>
-                  <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" aria-hidden="true" />
-                </Box>
-                <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
+          <Box as="ul" display="flex" align="center" gap={6}>
+            {topRoutes.map((item) => (
+              <Box as="li" key={item.path}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) => cn('text-sm transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-text-dim')}
+                >
+                  {item.path === '/blog' ? 'Training Notes' : item.path === '/research' ? 'DevAI' : item.label.replace('Blog Posts', 'Training Notes').replace('Event Resource Guides', 'Event Guides')}
+                </NavLink>
               </Box>
-            </Box>
-
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
             ))}
-          </Stack>
-
-          {/* impeccable-ignore */}
-          <Box paddingX={6} paddingBottom={4}>
-            <ActionButton as={NavLink} to="/subscribe" variant="primary" width="full" paddingY={2.5} className="text-xs uppercase tracking-widest">
-              Subscribe
-            </ActionButton>
+            <Box as="button" type="button" onClick={handleSearchClick} padding={2} className="text-text-dim transition-colors hover:text-accent" aria-label="Open search">
+              <Search className="h-4 w-4" aria-hidden="true" />
+            </Box>
           </Box>
 
-          <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
-            <Text variant="sans" size="xs" color="dim" marginBottom={1} className="leading-normal">
-              Written by <strong className="text-accent">Tech Dancer </strong>
-            </Text>
-            <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
-              2026 boomtick.blog
-            </Text>
-          </Box>
-        </Stack>
+          <ActionButton as={NavLink} to="/subscribe" variant="primary" paddingX={4} paddingY={2} className="text-xs uppercase tracking-widest">
+            Subscribe
+          </ActionButton>
+        </Box>
       </Box>
     </>
   );
