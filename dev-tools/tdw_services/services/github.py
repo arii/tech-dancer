@@ -98,11 +98,10 @@ class GitHubClient:
             return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
         except Exception as e:
             if "404" in str(e) and external_id is not None:
-                job_id = str(check_run_id)
                 try:
-                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
                 except Exception as e2:
-                    return f"Failed to fetch logs for job {job_id}: {str(e2)}"
+                    return f"Failed to fetch logs for job {check_run_id} (fallback): {str(e2)}"
             return f"Failed to fetch logs for job {job_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:

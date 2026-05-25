@@ -12,14 +12,19 @@ export function NewsletterBanner() {
 
   return (
     <Box 
-      position="relative"
+      as="aside"
+      id="newsletter-banner"
+      position="fixed"
+      bottom={0}
+      left={0}
+      width="full"
+      zIndex={50}
       surface="alt"
-      border="y"
+      border="t"
       className="border-accent/40 shadow-glow"
       paddingX={{ base: 6, md: 12 }}
-      paddingY={{ base: 12, lg: 16 }}
+      paddingY={{ base: 6, lg: 16 }}
       radius="none"
-      width="full"
     >
       {/* Decorative Brand Accent - No arbitrary width, use standard spacing if possible or raw line */}
       <Box 
@@ -57,10 +62,11 @@ export function NewsletterBanner() {
         direction={{ base: 'col', lg: 'row' }} 
         align={{ base: 'start', lg: 'center' }} 
         justify="between" 
-        gap={8}
+        gap={{ base: 4, lg: 8 }}
         maxWidth="7xl"
         marginX="auto"
         width="full"
+        paddingRight={{ base: 12, lg: 0 }}
       >
         <Stack direction={{ base: 'col', sm: 'row' }} align={{ base: 'start', sm: 'center' }} gap={8} flex={1}>
           <Box padding={4} surface="accent" opacity={0.1} display={{ base: 'none', md: 'block' }} radius="none">
@@ -70,7 +76,7 @@ export function NewsletterBanner() {
             <Text 
               as="h2"
               variant="headline" 
-              size="2xl" 
+              size={{ base: 'xl', md: '2xl' }}
               weight="font-black" 
               color="main"
               className="uppercase tracking-tighter"
@@ -78,7 +84,7 @@ export function NewsletterBanner() {
               Get the latest dance insights.
             </Text>
             {/* Pill badges for topics - Sharp edges as requested */}
-            <Box display="flex" gap={2} wrap role="list" aria-label="Newsletter topics">
+            <Box display={{ base: 'none', sm: 'flex' }} gap={2} wrap role="list" aria-label="Newsletter topics">
               {['Dance Analytics', 'Gear Reviews', 'Community Updates'].map(tag => (
                 <Box
                   key={tag}
