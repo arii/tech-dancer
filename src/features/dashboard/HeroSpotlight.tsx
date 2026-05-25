@@ -66,7 +66,10 @@ export function HeroSpotlight({ featuredPost, recentPosts }: HeroSpotlightProps)
                 paddingX={2}
                 paddingY={1.5}
                 radius="full"
-                className="bg-accent/90 backdrop-blur-sm flex items-center gap-2 shadow-sm"
+                display="flex"
+                align="center"
+                gap={2}
+                className="bg-accent/90 backdrop-blur-sm shadow-sm"
               >
                 <BookOpen size={14} className="text-white" />
                 <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wide" className="text-white">
@@ -98,7 +101,8 @@ export function HeroSpotlight({ featuredPost, recentPosts }: HeroSpotlightProps)
                 size="fluid-7"
                 weight="font-black"
                 leading="tight"
-                className="text-gradient bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent group-hover:from-accent group-hover:to-accent/80 transition-colors"
+                color="accent"
+                className="transition-colors group-hover:opacity-80"
               >
                 {featuredPost.title}
               </Text>

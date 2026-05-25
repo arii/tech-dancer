@@ -28,10 +28,8 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
         overflow="x-auto"
         gap={4}
         paddingY={2}
+        scrollBehavior="smooth"
         className="scrollbar-hide snap-x snap-mandatory"
-        style={{
-          scrollBehavior: 'smooth',
-        }}
       >
         {gearItems.map((gear) => (
           <Box
@@ -39,13 +37,14 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
             as={motion.div}
             variants={motionTokens.staggerItem}
             flex="0 0 auto"
-            width={{ base: "280px", sm: "320px" }}
+            width={{ base: 72, sm: 80 }}
             className="snap-start"
           >
-            <Box
+            <Stack
               as={NavLink}
               to={`/gear/${gear.slug}`}
-              className="group flex flex-col h-full rounded-lg overflow-hidden bg-surface border border-line transition-all duration-300 hover:border-accent/40 hover:shadow-lg hover:-translate-y-0.5"
+              height="full"
+              className="group rounded-lg overflow-hidden bg-surface border border-line transition-all duration-300 hover:border-accent/40 hover:shadow-lg hover:-translate-y-0.5"
             >
               {/* Image Container */}
               <Box
@@ -73,7 +72,10 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
                   paddingX={2}
                   paddingY={1}
                   radius="full"
-                  className="bg-accent/90 backdrop-blur-sm text-white shadow-sm flex items-center gap-1"
+                  display="flex"
+                  align="center"
+                  gap={1}
+                  className="bg-accent/90 backdrop-blur-sm text-white shadow-sm"
                 >
                   <Package size={12} className="text-white" />
                   <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wide">
@@ -129,7 +131,7 @@ export function GearCarousel({ gearItems }: GearCarouselProps) {
                   </Box>
                 </Box>
               </Stack>
-            </Box>
+            </Stack>
           </Box>
         ))}
       </Box>
