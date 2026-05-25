@@ -39,6 +39,7 @@ export function GearCard(props: GearCardProps) {
     excerpt,
     rating,
     verdict,
+    basePath,
     image: propsImage,
     affiliateIds,
   } = props;
