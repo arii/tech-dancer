@@ -15,4 +15,9 @@ RUN apt-get update \
 RUN corepack enable \
   && corepack prepare pnpm@10.28.2 --activate
 
+RUN mkdir -p /workspace \
+  && chown -R node:node /workspace
+
+USER node
+
 WORKDIR /workspace

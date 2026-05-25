@@ -11,5 +11,7 @@
         "esbenp.prettier-vscode"
       ]
     }
-  }
+  },
+  "workspaceFolder": "/workspace",
+  "remoteUser": "node"
 }
