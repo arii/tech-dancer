@@ -2,6 +2,8 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
+import { NavLink } from 'react-router-dom';
+import { ActionButton } from './ActionButton';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
@@ -120,6 +122,23 @@ export function HeroSection() {
         </Stack>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
+
+
+        <Stack direction="row" gap={4} marginTop={8} wrap className="opacity-0 hero-cta-anim">
+          <ActionButton as={NavLink} to="/events" variant="primary">
+            Explore Event Guides
+          </ActionButton>
+          <ActionButton as={NavLink} to="/gear" variant="secondary">
+            Browse Gear Reviews
+          </ActionButton>
+        </Stack>
+
+        <Box marginTop={5} className="opacity-0 hero-cta-anim">
+          <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent">
+            New to WCS traveling? Start here →
+          </Text>
+        </Box>
+
         <Stack
           direction="row"
           align="end"
