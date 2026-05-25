@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { Logo } from '@/components/ui/Logo';
 
 import { routes } from '@/config/routes';
@@ -122,6 +123,13 @@ export default function Navigation() {
               <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
             ))}
           </Stack>
+
+          {/* impeccable-ignore */}
+          <Box paddingX={6} paddingBottom={4}>
+            <ActionButton as={NavLink} to="/subscribe" variant="primary" width="full" paddingY={2.5} className="text-xs uppercase tracking-widest">
+              Subscribe
+            </ActionButton>
+          </Box>
 
           <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
             <Text variant="sans" size="xs" color="dim" marginBottom={1} className="leading-normal">
