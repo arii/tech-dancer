@@ -10,6 +10,8 @@ import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { EventCard } from '@/components/ui/EventCard';
 import { motionTokens } from '@/styles/motion';
+import { getFeaturedMerch } from '@/lib/productCatalog';
+import { ProductRail } from '@/components/products/ProductRail';
 
 export default function Home() {
   const { recentPosts, upcomingEvents } = useHome();
@@ -118,6 +120,11 @@ export default function Home() {
                 </Box>
               ))}
             </Grid>
+          </Stack>
+
+          <Stack gap={8}>
+            <SectionHeader label="STOREFRONT" title="Featured Merch" />
+            <ProductRail items={getFeaturedMerch(3)} variant="compact" />
           </Stack>
         </Stack>
       </Stack>

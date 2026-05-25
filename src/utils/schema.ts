@@ -1,8 +1,8 @@
 
-import { MerchProduct } from '@/data/merch';
+import { ProductCatalogItem } from '@/data/products/catalog';
 import { ASSET_PREFIX, BASE_URL } from '@/config/constants';
 
-export function generateMerchSchema(products: MerchProduct[]) {
+export function generateMerchSchema(products: ProductCatalogItem[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -18,7 +18,7 @@ export function generateMerchSchema(products: MerchProduct[]) {
           "@type": "Offer",
           "price": product.price,
           "priceCurrency": "USD",
-          "url": product.printfulUrl,
+          "url": product.href,
           "availability": "https://schema.org/InStock"
         }
       }

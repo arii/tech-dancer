@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MERCH_PRODUCTS } from '@/data/products/merch';
+import { MERCH_PRODUCTS, COLLECTIONS } from '@/data/products/merch';
 import { affiliateManager } from '@/lib/affiliateManager';
 import {
   ProductCatalogItem,
@@ -15,6 +15,8 @@ export function getAllMerchProducts(): ProductCatalogItem[] {
   return MERCH_PRODUCTS;
 }
 
+export { COLLECTIONS };
+
 export function getFeaturedMerch(limit = 3): ProductCatalogItem[] {
   return MERCH_PRODUCTS.slice(0, limit);
 }
@@ -24,11 +26,6 @@ export function getMerchByCollection(collectionId: string): ProductCatalogItem[]
   return MERCH_PRODUCTS.filter((item) => item.collections.includes(collectionId));
 }
 
-export function getProductsByUseCase(useCase: string, limit = 6): ProductCatalogItem[] {
-  return MERCH_PRODUCTS.filter((item) =>
-    item.useCases?.includes(useCase as never),
-  ).slice(0, limit);
-}
 
 function resolveAffiliateProducts(ids: string[] = []): ProductCatalogItem[] {
   return ids
