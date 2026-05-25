@@ -103,10 +103,9 @@ export function ProductCard({ product, variant = 'full' }: ProductCardProps) {
                     role === 'follow' ? 'warning' :
                     role === 'switch' ? 'alt' : 'default'
                   }
-                  bgOpacity={80}
-                  className="font-mono font-bold uppercase tracking-wider backdrop-blur-md"
+                  className="bg-opacity-80 font-mono font-bold uppercase tracking-wider backdrop-blur-md"
                 >
-                  <Text size="micro" as="span" inherit>
+                  <Text size="micro" as="span">
                     {role}
                   </Text>
                 </Box>

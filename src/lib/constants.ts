@@ -1,6 +1,6 @@
 export const CONTENT_METADATA_KEYS = [
   'type', 'slug', 'title', 'date', 'author', 'authorAvatar', 'category', 'excerpt',
-  'content', 'image', 'tags', 'affiliateIds', 'rating', 'verdict', 'priceCategory',
+  'content', 'image', 'imageBack', 'tags', 'affiliateIds', 'rating', 'verdict', 'priceCategory',
   'updatedDate', 'durability', 'value', 'specs', 'location', 'city', 'schedule',
   'description', 'link', 'url', 'heroImage', 'whyAttending', 'startDate',
   'earlyBirdDate', 'registrationDeadline', 'hotelCutoffDate', 'packingReminderDate',
