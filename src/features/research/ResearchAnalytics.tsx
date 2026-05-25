@@ -14,14 +14,14 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="Research & Analytics"
-        description="Technical studies and real-time data pipelines at the intersection of robotics and West Coast Swing."
+        title="DevAI Portfolio"
+        description="Technical tools and AI projects for the West Coast Swing community."
       />
       <Stack gap={12}>
         <PageHeader
-          label="TECHNICAL PORTFOLIO"
-          title="Data & Development Lab"
-          description="Technical portfolio showcasing DevAI-driven analysis tools and machine learning research applied to West Coast Swing."
+          label="PORTFOLIO"
+          title="DevAI Portfolio"
+          description="A collection of tools and technical projects built for the WCS community."
           as="h1"
         />
 
@@ -123,10 +123,10 @@ export default function ResearchAnalytics() {
                 </Box>
                 <Stack gap={0.5}>
                   <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
-                    ETL Pipeline Synchronizing...
+                    Loading Data...
                   </Text>
                   <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
-                    The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies will be available once baseline analysis is complete.
+                    The WCS Competition Data Scraper is getting data ready. Detailed studies will be available soon.
                   </Text>
                 </Stack>
               </Stack>

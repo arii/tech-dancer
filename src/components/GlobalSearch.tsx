@@ -115,7 +115,7 @@ export function GlobalSearch() {
           role="dialog"
           data-testid="search-dialog"
           aria-modal="true"
-          aria-label="Search Repository"
+          aria-label="Search BoomTick"
           width="full"
           maxWidth="3xl"
           height="fit"
@@ -163,8 +163,8 @@ export function GlobalSearch() {
               as="input"
               ref={inputRef}
               type="text"
-              placeholder="SEARCH REPOSITORY // FILTER BLOG & GEAR"
-              aria-label="Search Repository"
+              placeholder="Search BoomTick guides, gear, and posts"
+              aria-label="Search BoomTick"
               defaultValue={query}
               onChange={handleInputChange}
               width="full"
@@ -228,7 +228,7 @@ export function GlobalSearch() {
                 <Stack align="center" gap={4} className="opacity-60">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                     {query ? "No coordinates found" : "Calibrating Variance..."}
+                     {query ? "No results found" : "Search gear, guides, and posts"}
                   </Text>
                 </Stack>
               </Box>

@@ -11,7 +11,7 @@ interface RelatedEventsProps {
   events: Event[];
 }
 
-export function RelatedEvents({ id, title = "Related Resource Guides", events }: RelatedEventsProps) {
+export function RelatedEvents({ id, title = "More Events", events }: RelatedEventsProps) {
   if (!events || events.length === 0) return null;
 
   return (

@@ -2,7 +2,7 @@
 import { cva } from "class-variance-authority";
 
 /**
- * Standardized Variant Contracts for the Systems Console.
+ * Standardized Variant Contracts for BoomTick UI.
  * Ensures all components share a common mental model for intent, surface, and emphasis.
  */
 export const variants = {
