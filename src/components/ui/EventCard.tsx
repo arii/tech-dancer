@@ -32,7 +32,7 @@ export function EventCard(props: EventCardProps) {
     <Stack
       as="article"
       {...rest}
-      padding={8}
+      padding={{ base: 6, md: 8 }}
       radius="md"
       border
       gap={4}
@@ -41,11 +41,6 @@ export function EventCard(props: EventCardProps) {
       textAlign="left"
       className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
     >
-      <NavLink
-        to={`/events/${slug}`}
-        className="absolute inset-0 z-10"
-        aria-label={`View event: ${title}`}
-      />
       <Box display="flex" justify="between" align="center" width="full">
         <Box display="flex" align="center" gap={2}>
           <MapPin className="w-4 h-4 text-accent" />
@@ -69,13 +64,18 @@ export function EventCard(props: EventCardProps) {
       <Stack gap={1}>
         <Text
           variant="body"
-          size="lg"
+          size={{ base: "md", md: "lg" }}
           weight="font-bold"
           color="main"
           leading="tight"
           className="group-hover:text-accent transition-colors"
         >
-          {title}
+          <NavLink
+            to={`/events/${slug}`}
+            className="focus:outline-none after:absolute after:inset-0 after:z-10"
+          >
+            {title}
+          </NavLink>
         </Text>
         <Box display="flex" align="center" justify="between">
           <Text size="sm" color="dim">

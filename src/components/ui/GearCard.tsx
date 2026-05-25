@@ -62,21 +62,12 @@ export function GearCard(props: GearCardProps) {
       direction="col"
       gap={3}
       height="full"
-      padding={6}
+      padding={{ base: 4, md: 6 }}
       radius="lg"
       border
       data-testid="gear-card"
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
-      {isInternal && (
-        <Box
-          as={NavLink}
-          to={resolvedHref}
-          aria-label={`Read gear review: ${title}`}
-          data-testid="gear-card-link"
-          className="absolute inset-0 z-10"
-        />
-      )}
       {verdict && (
         <Box display="flex" justify="end">
           <Text variant="mono" size="xs" color="body">
@@ -125,16 +116,29 @@ export function GearCard(props: GearCardProps) {
         <Text
           as="h3"
           variant="body"
-          size="lg"
+          size={{ base: "md", md: "lg" }}
           weight="font-bold"
-            color="main"
-            leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
+          color="main"
+          leading="tight"
+          className="group-hover:text-accent transition-colors line-clamp-2"
         >
-          {title}
+          {isInternal ? (
+            <NavLink
+              to={resolvedHref}
+              className="focus:outline-none after:absolute after:inset-0 after:z-10"
+            >
+              {title}
+            </NavLink>
+          ) : title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+        <Text
+          variant="body"
+          size="sm"
+          color="dim"
+          leading="relaxed"
+          className="line-clamp-3 max-w-[65ch]"
+        >
            {excerpt}
         </Text>
       </Stack>
@@ -150,12 +154,12 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1}>
           {isInternal ? (
-            <>
+            <Box display="flex" align="center" gap={1} className="relative z-20 pointer-events-none">
               <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
                 Read review
               </Text>
               <ArrowRight className="w-3 h-3 text-accent" />
-            </>
+            </Box>
           ) : (
             <Box
               as="a"
@@ -170,7 +174,7 @@ export function GearCard(props: GearCardProps) {
               data-testid="gear-card-store-link"
             >
               <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-                View store
+                View gear
               </Text>
               <ExternalLink className="w-3 h-3 text-accent" />
             </Box>

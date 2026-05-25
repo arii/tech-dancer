@@ -12,6 +12,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   basePath: string;
   date?: string;
   readingTime?: string;
+  ctaText?: string;
   [key: string]: unknown;
 }
 
@@ -24,6 +25,7 @@ export function ContentCard(props: ContentCardProps) {
     basePath,
     date,
     readingTime,
+    ctaText = "Read article",
   } = props;
 
   const motionProps = pickRest(props, [
@@ -44,26 +46,20 @@ export function ContentCard(props: ContentCardProps) {
     <Stack
       as={motion.create("article")}
       direction="col"
-      gap={4}
+      gap={{ base: 3, md: 4 }}
       height="full"
-      padding={6}
+      padding={{ base: 4, md: 6 }}
       radius="lg"
       border
       className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
       {...motionProps}
     >
       <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read article: ${title}`}
-        className="absolute inset-0 z-10"
-      />
-      <Box
         paddingX={2}
         paddingY={1}
         radius="full"
         border
-        className="border-line w-fit"
+        className="border-line w-fit relative z-20"
       >
         <Text
           variant="mono"
@@ -80,26 +76,44 @@ export function ContentCard(props: ContentCardProps) {
         <Text
           as="h3"
           variant="body"
-          size="lg"
+          size={{ base: "md", md: "lg" }}
           weight="font-bold"
-            color="main"
-            leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
+          color="main"
+          leading="tight"
+          className="group-hover:text-accent transition-colors line-clamp-2"
         >
-          {title}
+          <NavLink
+            to={`${basePath}/${slug}`}
+            className="focus:outline-none after:absolute after:inset-0 after:z-10"
+          >
+            {title}
+          </NavLink>
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+        <Text
+          variant="body"
+          size="sm"
+          color="dim"
+          leading="relaxed"
+          className="line-clamp-3 max-w-[65ch]"
+        >
            {excerpt}
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto">
-        <Text variant="mono" size="xs" color="dim" data-testid="content-date">
+      <Box display="flex" align="center" justify="between" marginTop="auto" gap={2}>
+        <Text variant="mono" size="micro" color="dim" data-testid="content-date" className="uppercase tracking-wider">
           {[date, readingTime].filter(Boolean).join(' • ') || category}
         </Text>
-        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-          Read article
+        <Text
+          variant="mono"
+          size="sm"
+          weight="font-bold"
+          color="accent"
+          tracking="wide"
+          className="relative z-20 pointer-events-none"
+        >
+          {ctaText}
         </Text>
       </Box>
     </Stack>

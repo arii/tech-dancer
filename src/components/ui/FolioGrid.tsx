@@ -60,16 +60,30 @@ export default function FolioGrid({
           as={as}
         />
         {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
-          <SearchBox
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
-          />
-          {onViewChange && (
-            <ViewToggle view={view} onChange={onViewChange} />
-          )}
-        </Box>
+        <Stack gap={4} marginTop={8}>
+          <Box display="flex" align="center" justify="between" gap={4} flexWrap="wrap">
+            <SearchBox
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={searchPlaceholder}
+            />
+            {onViewChange && (
+              <Box className="hidden sm:block">
+                <ViewToggle view={view} onChange={onViewChange} />
+              </Box>
+            )}
+          </Box>
+          <Box display="flex" align="center" justify="between">
+             <Text variant="mono" size="xs" color="dim" className="uppercase tracking-widest">
+              {filteredItems.length} {filteredItems.length === 1 ? 'Result' : 'Results'}
+            </Text>
+            {onViewChange && (
+              <Box className="sm:hidden">
+                <ViewToggle view={view} onChange={onViewChange} />
+              </Box>
+            )}
+          </Box>
+        </Stack>
       </Box>
 
       <Box marginTop={8}>

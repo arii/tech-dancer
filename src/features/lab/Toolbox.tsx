@@ -35,16 +35,29 @@ export default function Toolbox() {
         />
 
         {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">
-          <SearchBox
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search gear..."
-          />
-          <ViewToggle view={view} onChange={setView} />
-        </Box>
+        <Stack gap={4} marginTop={8} data-testid="toolbox-search-bar">
+          <Box display="flex" align="center" justify="between" gap={4} wrap>
+            <SearchBox
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search gear..."
+            />
+            <Box className="hidden sm:block">
+              <ViewToggle view={view} onChange={setView} />
+            </Box>
+          </Box>
 
-        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60" data-testid="toolbox-filters">
+          <Box display="flex" align="center" justify="between">
+            <Text variant="mono" size="xs" color="dim" className="uppercase tracking-widest">
+              {allFilteredItems.length} {allFilteredItems.length === 1 ? 'Item' : 'Items'}
+            </Text>
+            <Box className="sm:hidden">
+              <ViewToggle view={view} onChange={setView} />
+            </Box>
+          </Box>
+        </Stack>
+
+        <Box marginBottom={8} display="flex" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60 overflow-x-auto no-scrollbar" data-testid="toolbox-filters">
           <FilterButton
             label="All Gear"
             onClick={() => setSelectedPill('all')}

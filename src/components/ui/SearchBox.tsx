@@ -31,11 +31,9 @@ export function SearchBox({
       radius="lg"
       className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
     >
-      <Text
-        as={Search}
+      <Search
         size={18}
-        color="dim"
-        className="absolute left-4 pointer-events-none"
+        className="absolute left-4 pointer-events-none text-slate-400"
       />
       <Box
         as="input"
