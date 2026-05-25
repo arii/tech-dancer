@@ -10,7 +10,7 @@ location: "Hyatt Regency Orange County"
 city: "Garden Grove, CA"
 schedule: "June 4 - 7, 2026"
 url: "https://jackandjillorama.com"
-heroImage: "/assets/events/jjo-hero.jpg"
+heroImage: "/assets/events/jjo-hero.svg"
 description: >
   Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events
   on the circuit. It is famous for its creative competition formats,

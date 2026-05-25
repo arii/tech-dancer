@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="bg_tv" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0c10"/>
+      <stop offset="100%" stop-color="#141820"/>
+    </linearGradient>
+    <filter id="glow_tv">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="600" height="340" fill="url(#bg_tv)"/>
+
+  <!-- Flat lay grid of items -->
+
+  <!-- Suitcase outline -->
+  <rect x="30" y="30" width="150" height="110" rx="12" fill="#1a2030" stroke="#2a3848" stroke-width="2"/>
+  <rect x="45" y="23" width="50" height="14" rx="6" fill="none" stroke="#2a3848" stroke-width="2"/>
+  <line x1="30" y1="78" x2="180" y2="78" stroke="#2a3848" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="105" cy="78" r="6" fill="#00cfff" opacity="0.6"/>
+  <text x="105" y="57" font-family="monospace" font-size="9" fill="#4a6080" text-anchor="middle">CARRY-ON</text>
+  <text x="105" y="105" font-family="monospace" font-size="9" fill="#4a6080" text-anchor="middle">PACKED</text>
+
+  <!-- Dance shoes box -->
+  <rect x="210" y="30" width="130" height="80" rx="8" fill="#1e1830" stroke="#4a3870" stroke-width="2"/>
+  <text x="275" y="75" font-family="monospace" font-size="10" fill="#8060c0" text-anchor="middle">DANCE SHOES</text>
+  <ellipse cx="245" cy="65" rx="18" ry="8" fill="#3a2860" opacity="0.6"/>
+  <ellipse cx="305" cy="65" rx="18" ry="8" fill="#3a2860" opacity="0.6"/>
+
+  <!-- Loop earplugs small icon -->
+  <rect x="370" y="30" width="90" height="60" rx="8" fill="#0e1824" stroke="#006088" stroke-width="2"/>
+  <circle cx="400" cy="58" r="14" fill="#1e4060" stroke="#00aadd" stroke-width="1.5"/>
+  <circle cx="430" cy="58" r="14" fill="#1e4060" stroke="#00aadd" stroke-width="1.5"/>
+  <text x="415" y="82" font-family="monospace" font-size="7" fill="#4a8aaa" text-anchor="middle">LOOP</text>
+
+  <!-- Steamer -->
+  <rect x="480" y="30" width="90" height="110" rx="8" fill="#181410" stroke="#8a7050" stroke-width="2"/>
+  <rect x="495" y="45" width="60" height="45" rx="5" fill="#2a2018" opacity="0.8"/>
+  <text x="525" y="115" font-family="monospace" font-size="7" fill="#8a7050" text-anchor="middle">STEAMER</text>
+
+  <!-- Checklist items (bottom row) -->
+  <rect x="30" y="165" width="540" height="130" rx="8" fill="#0e1218" stroke="#1e2830" stroke-width="1"/>
+  <text x="50" y="188" font-family="monospace" font-size="11" fill="#00cfff" letter-spacing="1">THE WCS TRAVEL PACK</text>
+  <line x1="50" y1="196" x2="550" y2="196" stroke="#1e2830" stroke-width="1"/>
+
+  <g font-family="monospace" font-size="10" fill="#4a6080">
+    <text x="60" y="216">✓</text><text x="80" y="216" fill="#8aabb0">Loop Experience earplugs</text>
+    <text x="60" y="233">✓</text><text x="80" y="233" fill="#8aabb0">Industrial travel steamer</text>
+    <text x="60" y="250">✓</text><text x="80" y="250" fill="#8aabb0">Compression packing cubes</text>
+    <text x="310" y="216">✓</text><text x="330" y="216" fill="#8aabb0">Dance shoes + brush</text>
+    <text x="310" y="233">✓</text><text x="330" y="233" fill="#8aabb0">Portable charger</text>
+    <text x="310" y="250">✓</text><text x="330" y="250" fill="#8aabb0">Liquid I.V. packets</text>
+  </g>
+
+  <!-- Tag -->
+  <rect x="0" y="295" width="600" height="45" fill="#0a0c10" opacity="0.9"/>
+  <text x="20" y="318" font-family="monospace" font-size="12" fill="#f0c060" letter-spacing="2">3 ESSENTIALS YOU'RE FORGETTING</text>
+  <text x="20" y="334" font-family="monospace" font-size="10" fill="#4a6080">Travel · Gear Guide</text>
+</svg>

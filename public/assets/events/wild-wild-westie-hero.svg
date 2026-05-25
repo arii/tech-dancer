@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a0808"/>
+      <stop offset="30%" stop-color="#7c1f00"/>
+      <stop offset="60%" stop-color="#c2440a"/>
+      <stop offset="80%" stop-color="#e8700a"/>
+      <stop offset="100%" stop-color="#f0a030"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a1505"/>
+      <stop offset="100%" stop-color="#180d02"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff0a0"/>
+      <stop offset="60%" stop-color="#f09020"/>
+      <stop offset="100%" stop-color="#c05010"/>
+    </radialGradient>
+    <filter id="heat">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#sunset)"/>
+
+  <!-- Sun haze -->
+  <circle cx="400" cy="310" r="80" fill="#f09020" filter="url(#heat)" opacity="0.3"/>
+  <!-- Sun -->
+  <circle cx="400" cy="330" r="45" fill="url(#sun)" opacity="0.9"/>
+
+  <!-- Cacti silhouettes -->
+  <g fill="#180d02">
+    <!-- Left cactus -->
+    <rect x="80" y="240" width="16" height="130"/>
+    <rect x="50" y="260" width="46" height="10"/>
+    <rect x="50" y="230" width="10" height="40"/>
+    <rect x="86" y="230" width="10" height="40"/>
+    <!-- Second left -->
+    <rect x="160" y="280" width="12" height="90"/>
+    <rect x="138" y="295" width="36" height="8"/>
+    <rect x="138" y="272" width="8" height="30"/>
+    <!-- Right cactus -->
+    <rect x="640" y="250" width="18" height="120"/>
+    <rect x="608" y="268" width="52" height="10"/>
+    <rect x="608" y="238" width="10" height="40"/>
+    <rect x="650" y="238" width="10" height="40"/>
+    <!-- Far right -->
+    <rect x="720" y="285" width="12" height="85"/>
+    <rect x="700" y="300" width="34" height="8"/>
+    <rect x="700" y="278" width="8" height="28"/>
+  </g>
+
+  <!-- Horizon mesa shapes -->
+  <g fill="#2a1505" opacity="0.85">
+    <polygon points="0,340 120,240 200,285 300,230 400,270 500,228 620,260 720,235 800,255 800,340"/>
+  </g>
+
+  <!-- Ground -->
+  <rect x="0" y="340" width="800" height="110" fill="url(#ground)"/>
+
+  <!-- Desert cracks on ground -->
+  <g stroke="#3a1e08" stroke-width="1" opacity="0.4" fill="none">
+    <polyline points="100,380 130,360 160,375 190,358"/>
+    <polyline points="400,390 440,370 480,385"/>
+    <polyline points="600,375 640,360 680,372"/>
+  </g>
+
+  <!-- Tumbleweed -->
+  <circle cx="280" cy="355" r="14" fill="none" stroke="#4a2808" stroke-width="2" opacity="0.6"/>
+  <circle cx="280" cy="355" r="8" fill="none" stroke="#4a2808" stroke-width="1" opacity="0.4"/>
+  <line x1="268" y1="343" x2="292" y2="367" stroke="#4a2808" stroke-width="1" opacity="0.5"/>
+  <line x1="292" y1="343" x2="268" y2="367" stroke="#4a2808" stroke-width="1" opacity="0.5"/>
+
+  <!-- Stars beginning to appear -->
+  <circle cx="100" cy="50" r="1.5" fill="white" opacity="0.6"/>
+  <circle cx="240" cy="35" r="1" fill="white" opacity="0.5"/>
+  <circle cx="580" cy="40" r="1.3" fill="white" opacity="0.55"/>
+  <circle cx="700" cy="28" r="1" fill="white" opacity="0.5"/>
+  <circle cx="760" cy="55" r="1.5" fill="white" opacity="0.6"/>
+
+  <!-- Label -->
+  <rect x="0" y="380" width="800" height="70" fill="#180d02" opacity="0.65"/>
+  <text x="32" y="412" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#e8700a" letter-spacing="2">WILD WILD WESTIE</text>
+  <text x="32" y="436" font-family="Georgia, serif" font-size="13" fill="#94a3b8" letter-spacing="1">Dallas, TX  ·  July 2–5, 2026</text>
+</svg>

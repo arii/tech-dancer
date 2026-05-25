@@ -83,7 +83,9 @@
     "name": "Portable Garment Steamer",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Keep your outfits wrinkle-free while traveling."
+    "description": "Keep your outfits wrinkle-free while traveling.",
+    "gearSlug": "2023-11-01-travel-steamer",
+    "image": "/assets/gear/travel-steamer.jpg"
   },
   "epsom-salt": {
     "id": "epsom-salt",
@@ -302,5 +304,12 @@
     "description": "The original NorCal BestCal t-shirt.",
     "image": "/assets/gear/norcal-bestcal-front.webp",
     "gearSlug": "2024-06-01-norcal-bestcal-tshirt"
+  },
+  "dance-bag": {
+    "id": "dance-bag",
+    "name": "Dance Bag",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Weekend essential dance bag for all levels."
   }
 }

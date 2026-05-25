@@ -10,7 +10,7 @@ location: "Hyatt Regency San Francisco Airport"
 city: "Burlingame, CA"
 schedule: "August 14 - 17, 2026"
 url: "https://swingtacular.com"
-heroImage: ""
+heroImage: "/assets/events/swingtacular-hero.svg"
 description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."
 
 whyAttending: >
