@@ -16,7 +16,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/blog',
     lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
-    label: 'Blog Posts',
+    label: 'Training Notes',
     icon: BookOpen,
     skeleton: 'grid',
     isMobileVisible: true
@@ -42,7 +42,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Event Resource Guides',
+    label: 'Event Guides',
     icon: Calendar,
     skeleton: 'grid',
     isMobileVisible: true
@@ -55,7 +55,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
-    label: 'DevAI Portfolio',
+    label: 'Dev Lab',
     icon: Database,
     skeleton: 'grid',
     isMobileVisible: true
@@ -83,13 +83,6 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
     label: 'About',
     icon: User,
-    skeleton: 'simple'
-  },
-  {
-    path: '/subscribe',
-    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
-    label: 'Subscribe',
-    icon: Send,
     skeleton: 'simple'
   },
   {
