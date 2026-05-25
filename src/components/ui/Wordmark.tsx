@@ -8,10 +8,10 @@ export interface WordmarkProps extends Omit<TextProps, 'variant'> {
 }
 
 const VARIANT_MAP: Record<WordmarkVariant, TextProps["variant"]> = {
-  default: "wordmark",
-  hero: "wordmarkHero",
-  navigation: "wordmark",
-  nav: "wordmark", // Legacy alias for navigation
+  default: "sans",
+  hero: "display",
+  navigation: "sans",
+  nav: "sans", // Legacy alias for navigation
 };
 
 const VARIANT_CLASSES: Record<WordmarkVariant, string> = {

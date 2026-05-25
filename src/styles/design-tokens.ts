@@ -8,14 +8,8 @@
 
 
 export const spacing = {
-  container: "p-container-sm md:p-container-md",
   card: "p-card",
   compact: "p-compact",
-  nav: "p-nav",
-  emailBar: "py-email-bar-y px-email-bar-x-sm md:px-email-bar-x-md",
-  hero: "py-hero",
-  comfort: "py-comfort",
-  endPad: "pb-end-pad",
 };
 
 export const animation = {
@@ -35,11 +29,6 @@ export const layout = {
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
   mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
-  card: "bg-surface border border-line rounded-none transition-all duration-300 w-full",
-  interactive: "cursor-pointer",
-  grid: "grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 w-full",
-  section: "mt-24 space-y-8",
-  divider: "border-b border-line pb-4 flex items-end justify-between",
 };
 
 export const inputs = {
@@ -104,19 +93,10 @@ export const typography = {
   h2: "font-display font-bold tracking-tight leading-tight",
   h3: "font-display font-semibold tracking-tight leading-snug",
   headline: "font-display font-bold tracking-tighter leading-[0.9]",
-  hero: "font-serif font-black tracking-tight leading-[1.2]",
   display: "font-display font-bold tracking-tight leading-none",
   body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
   mono: "font-mono tracking-widest uppercase",
-  utility: `font-mono ${tracking.utility} uppercase`,
-  label: `font-mono font-bold uppercase ${tracking.label}`,
-  micro: "font-mono uppercase tracking-widest",
-  tight: "tracking-[0.15em] uppercase",
-  content: "font-sans leading-relaxed text-text-body max-w-[70ch]",
-  headerAccent: `font-mono font-bold ${tracking["wide-editorial"]} uppercase text-accent`,
   sans: "font-sans",
-  wordmark: `font-sans leading-none text-white ${tracking.wordmark}`,
-  wordmarkHero: `font-display leading-none text-white ${tracking.wordmark}`,
 };
 
 export const typeSizes = {
