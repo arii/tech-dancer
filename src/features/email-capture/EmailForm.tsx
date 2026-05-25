@@ -38,8 +38,8 @@ export function EmailForm() {
           disabled={status === 'loading' || status === 'success'}
           minHeight={11}
           width="auto"
-          minWidth={{ base: 36, sm: 44 }}
-          paddingX={6}
+          minWidth={{ base: 32, sm: 44 }}
+          paddingX={{ base: 4, sm: 6 }}
           radius="none"
           className="border-l border-accent/20"
         >

@@ -24,7 +24,7 @@ export function NewsletterBanner() {
       className="border-accent/40 shadow-glow"
       paddingY={{ base: 6, md: 16 }}
       paddingLeft={{ base: 6, md: 12 }}
-      paddingRight={{ base: 28, md: 12 }}
+      paddingRight={{ base: 20, md: 12 }}
       radius="none"
     >
       {/* Decorative Brand Accent - No arbitrary width, use standard spacing if possible or raw line */}
