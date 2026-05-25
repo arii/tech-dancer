@@ -21,8 +21,10 @@ export function NewsletterBanner() {
       zIndex={50}
       surface="alt"
       border="t"
-      className="border-accent/40 shadow-glow px-6 md:px-12 pr-24 md:pr-12"
-      paddingY={{ base: 6, lg: 16 }}
+      className="border-accent/40 shadow-glow"
+      paddingY={{ base: 6, md: 16 }}
+      paddingLeft={{ base: 6, md: 12 }}
+      paddingRight={{ base: 28, md: 12 }}
       radius="none"
     >
       {/* Decorative Brand Accent - No arbitrary width, use standard spacing if possible or raw line */}
@@ -36,7 +38,7 @@ export function NewsletterBanner() {
       />
 
       {/* Persistent Dismissal */}
-      <Box position="absolute" className="top-4 right-6" zIndex="docked">
+      <Box position="absolute" className="top-4 right-4" zIndex="docked">
         <ActionButton
           variant="ghost"
           onClick={hideBar}
