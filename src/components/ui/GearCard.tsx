@@ -13,7 +13,6 @@ interface GearCardProps extends BaseProps {
   title: string;
   category: string;
   excerpt: string;
-  basePath: string;
   rating?: number;
   verdict?: string;
   image?: string;
@@ -45,7 +44,6 @@ export function GearCard(props: GearCardProps) {
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath',
     'affiliateIds'
   ] as (keyof GearCardProps)[]);
 
@@ -56,7 +54,8 @@ export function GearCard(props: GearCardProps) {
     gearSlug: slug
   });
 
-  const isInternal = resolvedHref.startsWith('/');
+  const isExternal = /^https?:\/\//.test(resolvedHref);
+  const isInternal = !isExternal;
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
@@ -77,12 +76,23 @@ export function GearCard(props: GearCardProps) {
       border
       className={CARD_STYLES.container}
     >
-      <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read gear review: ${title}`}
-        className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
-      />
+      {isInternal ? (
+        <Box
+          as={NavLink}
+          to={resolvedHref}
+          aria-label={`Read gear review: ${title}`}
+          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
+        />
+      ) : (
+        <Box
+          as="a"
+          href={resolvedHref}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          aria-label={`Open external gear link: ${title}`}
+          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
+        />
+      )}
 
       {/* Image zone */}
       <Box
@@ -156,9 +166,13 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            Read review
+            {isExternal ? "View deal" : "Read review"}
           </Text>
-          <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
+          {isExternal ? (
+            <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
+          ) : (
+            <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
+          )}
         </Box>
       </Box>
     </Stack>
