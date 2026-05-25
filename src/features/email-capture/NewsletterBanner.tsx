@@ -22,7 +22,8 @@ export function NewsletterBanner() {
       surface="alt"
       border="t"
       className="border-accent/40 shadow-glow"
-      paddingX={{ base: 6, md: 12 }}
+      paddingLeft={{ base: 6, md: 12 }}
+      paddingRight={{ base: 32, md: 12 }}
       paddingY={{ base: 6, lg: 16 }}
       radius="none"
     >
@@ -49,6 +50,7 @@ export function NewsletterBanner() {
             <Text 
               variant="mono" 
               size="micro" 
+              display={{ base: 'none', sm: 'block' }}
               className="opacity-0 group-hover/close:opacity-100 transition-opacity"
             >
               DISMISS
@@ -66,7 +68,6 @@ export function NewsletterBanner() {
         maxWidth="7xl"
         marginX="auto"
         width="full"
-        paddingRight={{ base: 12, lg: 0 }}
       >
         <Stack direction={{ base: 'col', sm: 'row' }} align={{ base: 'start', sm: 'center' }} gap={8} flex={1}>
           <Box padding={4} surface="accent" opacity={0.1} display={{ base: 'none', md: 'block' }} radius="none">
