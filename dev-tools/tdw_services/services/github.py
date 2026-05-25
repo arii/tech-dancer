@@ -97,12 +97,11 @@ class GitHubClient:
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
             return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
         except Exception as e:
-            if external_id is not None and "404" in str(e):
+            if "404" in str(e) and external_id is not None:
                 try:
-                    fallback_id = str(check_run_id)
-                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{fallback_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
-                except Exception as fallback_e:
-                    return f"Failed to fetch logs for job {job_id} and fallback {fallback_id}: {str(fallback_e)}"
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
+                except Exception as e2:
+                    return f"Failed to fetch logs for job {check_run_id} (fallback): {str(e2)}"
             return f"Failed to fetch logs for job {job_id}: {str(e)}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:

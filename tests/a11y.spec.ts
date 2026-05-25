@@ -2,10 +2,19 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 test.describe('accessibility', () => {
-  test('homepage should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('./');
-    await expect(page.locator('main')).toBeVisible();
+  test.beforeEach(async ({ page }) => {
+     await page.goto('./');
+     await expect(page.locator('main')).toBeVisible();
 
+     // Dismiss newsletter banner if present to avoid overlay issues during scan
+     const dismissButton = page.locator('button[aria-label="Dismiss newsletter signup"]');
+     if (await dismissButton.isVisible()) {
+       await dismissButton.click();
+       await expect(dismissButton).not.toBeVisible();
+     }
+  });
+
+  test('homepage should not have any automatically detectable accessibility issues', async ({ page }) => {
     // Wait for hero animations to complete to ensure stable contrast checks
     await page.waitForTimeout(2000);
 
@@ -15,9 +24,6 @@ test.describe('accessibility', () => {
   });
 
   test('search modal should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('./');
-    await expect(page.locator('main')).toBeVisible();
-
     // Open search modal
     await page.keyboard.press('Control+k');
     await expect(page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR')).toBeVisible();
@@ -30,9 +36,6 @@ test.describe('accessibility', () => {
   });
 
   test('search modal should trap focus', async ({ page }) => {
-    await page.goto('./');
-    await expect(page.locator('main')).toBeVisible();
-
     // Open search modal
     await page.keyboard.press('Control+k');
     const input = page.getByPlaceholder('SEARCH REPOSITORY // FILTER BLOG & GEAR');

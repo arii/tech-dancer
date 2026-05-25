@@ -5,7 +5,8 @@
   --raw-color-surface: #0f172a;
   --raw-color-surface-alt: #1e293b;
   --raw-color-line: #334155;
-  --raw-color-accent: #22d3ee; /* Calmer tone per reviewer feedback */
+  --raw-color-accent: #22d3ee; /* Cyan 400 for WCAG AA contrast on dark surfaces */
+  --raw-color-accent-sky: #38bdf8;
   --raw-color-accent-purple: #a78bfa;
   --raw-color-accent-magenta: #e879f9;
   --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
