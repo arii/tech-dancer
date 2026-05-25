@@ -34,7 +34,7 @@ export function NavItem({ to, label, subtitle, icon, onClick, isMobile }: NavIte
         {({ isActive }) => (
           <Box
             display="flex"
-            align="center"
+            align={isMobile ? "start" : "center"}
             gap={3}
             paddingY={3}
             paddingX={isMobile ? 4 : 6}
@@ -48,12 +48,12 @@ export function NavItem({ to, label, subtitle, icon, onClick, isMobile }: NavIte
             <Box shrink={false}>
               <Icon className={cn(`${stroke.thick}`, isMobile ? "w-5 h-5" : "w-4 h-4")} />
             </Box>
-            <Box>
-              <Text variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
+            <Box flex={1}>
+              <Text as="p" variant="sans" size={isMobile ? "lg" : "sm"} weight={isMobile ? "font-bold" : "font-medium"} className="leading-none">
                 {label}
               </Text>
               {isMobile && subtitle ? (
-                <Text variant="sans" size="sm" color="dim" marginTop={1} className="leading-tight">
+                <Text as="p" variant="sans" size="sm" color="dim" marginTop={1} className="leading-tight">
                   {subtitle}
                 </Text>
               ) : null}
