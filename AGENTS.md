@@ -10,12 +10,40 @@ These are **rules for writing clean `.tsx` files** so UI code consistently follo
 
 ## 0) Quick Start (Run at the beginning of UI work)
 
-1. `python3 dev-tools/td_cli.py conflicts`
+1. `python3 dev-tools/td_cli.py gh conflicts`
 2. `pnpm run audit`
 3. Read `TODO_ANTIPATTERNS.md`
 4. Implement changes using primitives/tokens only
 5. Re-run `pnpm run audit`
-6. Run `python3 dev-tools/td_cli.py pre-submit`
+6. Run `python3 dev-tools/td_cli.py gh pre-submit`
+
+---
+
+
+## DevTools CLI command contract
+
+- `dev-tools/td_cli.py` uses grouped commands; for repository/PR checks use the `gh` group.
+- Do **not** call top-level `conflicts`/`pre-submit`; use:
+
+```bash
+python3 dev-tools/td_cli.py gh conflicts
+python3 dev-tools/td_cli.py gh pre-submit
+```
+
+- For discovery:
+
+```bash
+python3 dev-tools/td_cli.py --help
+python3 dev-tools/td_cli.py gh --help
+```
+
+- If a DevTools subcommand is unavailable in a local environment, report it separately and continue core verification with:
+
+```bash
+pnpm run audit
+pnpm run -s test -- --runInBand
+pnpm build
+```
 
 ---
 
@@ -119,7 +147,7 @@ These are **rules for writing clean `.tsx` files** so UI code consistently follo
 
 When multiple agents work simultaneously:
 
-1. **Run conflict check first**: `python3 dev-tools/td_cli.py conflicts`
+1. **Run conflict check first**: `python3 dev-tools/td_cli.py gh conflicts`
 2. **Stagger feature files**: Agents should not touch the same component file
 3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`)
 4. **Shared primitives**: Do not modify `src/layouts/*.tsx` in feature branches without coordination
@@ -130,18 +158,18 @@ When multiple agents work simultaneously:
 
 ### PR Review Lifecycle
 
-1. **Fetch context**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch`
-2. **Perform audit**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit`
-3. **Submit review**: `python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup`
+1. **Fetch context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch`
+2. **Perform audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit`
+3. **Submit review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup`
 
 ### Quality Gates & Submission Protocol
 
 - **Autonomous repair** (for persistent lint/type errors):
   ```bash
-  python3 dev-tools/td_cli.py repair
-  python3 dev-tools/td_cli.py repair --worktree
+  python3 dev-tools/td_cli.py ai repair
+  python3 dev-tools/td_cli.py ai repair --worktree
   ```
-- **Pre-submit check**: Always run `python3 dev-tools/td_cli.py pre-submit` before pushing
+- **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
 - **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
 - **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
 
@@ -161,6 +189,70 @@ To prepare the base environment (Node.js/pnpm):
 ```bash
 ./dev-tools/snapshot.sh
 ```
+
+# Codex / Agent Runtime Rules
+
+This repo uses:
+
+- Node.js 22.22.2
+- pnpm 10.28.2
+
+Runtime files:
+
+- `.node-version`
+- `.nvmrc`
+- `package.json#packageManager`
+- `package.json#engines`
+
+Before installing, testing, building, or editing dependencies, run:
+
+```bash
+corepack enable
+corepack prepare pnpm@10.28.2 --activate
+pnpm run doctor
+```
+
+Use:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm run lint
+pnpm run build
+```
+
+Do not run:
+
+```bash
+npm install
+npm install -g pnpm
+pnpm env use
+nvm install
+nvm use
+volta pin
+asdf local nodejs
+```
+
+If Node or pnpm mismatches, stop and report the mismatch.
+
+Do not change runtime versions unless the user explicitly asks to update the runtime contract.
+
+If a dependency install fails, do not delete `pnpm-lock.yaml` unless explicitly instructed.
+
+If a build fails, fix source code or configuration first. Do not switch package managers.
+
+## GitHub Actions runtime policy
+
+- Do not downgrade GitHub Actions to avoid Node 24 warnings.
+- Prefer current major versions of official actions:
+  - `actions/checkout@v6`
+  - `actions/setup-node@v6`
+- Keep `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` at workflow or job level.
+- Keep app runtime pinned separately via:
+  - `.node-version`
+  - `.nvmrc`
+  - `package.json#engines`
+  - `package.json#packageManager`
+- Do not set `ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION` unless explicitly approved as a temporary emergency workaround.
 
 ### On-Demand Dependencies
 
@@ -209,7 +301,7 @@ The hook runs targeted audit on changed `.tsx` files.
 Before submitting a PR, run:
 
 ```bash
-python3 dev-tools/td_cli.py pre-submit
+python3 dev-tools/td_cli.py gh pre-submit
 ```
 
 ### Pre-Commit Checklist
@@ -223,3 +315,22 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
    - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
    - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
 5. Ensure your changes introduce no new violations in touched files
+
+
+## Follow-up: Harden `td_cli.py gh conflicts` against malformed GitHub remote/token URLs
+
+`python3 dev-tools/td_cli.py gh conflicts` resolves correctly after the command-path fix, but it can still fail in Codex/Jules-style environments when the GitHub remote or token-derived URL is malformed.
+
+### Goal
+
+Make `gh conflicts` fail with a clear remediation message instead of a low-level malformed URL/auth error.
+
+### Acceptance criteria
+
+- Detect missing or malformed `origin` remote before running conflict logic.
+- Detect missing GitHub token / invalid token-derived URL separately.
+- Print a clear fix message, for example:
+  - `git remote add origin https://github.com/arii/tech-dancer.git`
+  - `Set CODEX_GH_TOKEN or GITHUB_TOKEN`
+- Prefer `CODEX_GH_TOKEN` when available, then fall back to `GITHUB_TOKEN`.
+- Do not mark command registration as failed when the command exists but environment setup is incomplete.
