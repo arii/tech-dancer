@@ -14,6 +14,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       padding={5}
       radius="lg"
       border
+      maxWidth="sm"
       data-testid="product-card"
       className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
     >
@@ -53,30 +54,9 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           </Box>
         ) : null}
 
-        {item.roles && (
-          <Box position="absolute" bottom={3} left={3}>
-            <Stack direction="row" gap={1}>
-              {item.roles.map((role) => (
-                <Box
-                  key={role}
-                  paddingX={2}
-                  paddingY={0.5}
-                  radius="full"
-                  surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                  bgOpacity={80}
-                  className="font-mono font-bold uppercase tracking-wider backdrop-blur-md"
-                >
-                  <Text size="micro" as="span" inherit>
-                    {role}
-                  </Text>
-                </Box>
-              ))}
-            </Stack>
-          </Box>
-        )}
       </Box>
 
-      <Stack gap={2}>
+      <Stack gap={3}>
         <Text as="h3" variant="body" size="lg" weight="font-bold" color="main" leading="tight" clamp={2} className="group-hover:text-accent transition-colors">
           {item.title}
         </Text>
@@ -84,6 +64,29 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
         <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={3}>
           {item.description}
         </Text>
+
+        {item.roles && (
+          <Stack direction="row" gap={1.5} wrap="wrap">
+            {item.roles.map((role) => (
+              <Box
+                key={role}
+                paddingX={2}
+                paddingY={0.5}
+                radius="md"
+                surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
+                bgOpacity={10}
+                className={cn(
+                  "border border-line/30",
+                  role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
+                )}
+              >
+                <Text size="micro" weight="font-bold" uppercase tracking="wider">
+                  {role}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
+        )}
       </Stack>
 
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
