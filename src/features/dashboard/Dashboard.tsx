@@ -34,7 +34,7 @@ export default function Home() {
                   paddingBottom={0}
                   border="none"
                   as="h2"
-                  titleSize="fluid-6"
+                  titleSize="fluid-5"
                 />
                 <Box
                   as={NavLink}
