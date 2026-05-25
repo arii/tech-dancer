@@ -27,7 +27,7 @@ export const ActionButton = forwardRef<HTMLElement, ActionButtonProps>(
           "transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed",
           variant === 'primary' && "bg-accent text-bg hover:bg-accent/90",
           variant === 'secondary' && "bg-surface-alt text-text-main border border-line hover:border-accent/50",
-          variant === 'accent' && "bg-accent-navy text-accent border border-accent/20 hover:bg-accent/10",
+          variant === 'accent' && "bg-accent-navy text-bg border border-accent/20 hover:bg-accent/10",
           variant === 'ghost' && "bg-transparent text-text-dim hover:text-text-main hover:bg-line/10",
           className
         )}

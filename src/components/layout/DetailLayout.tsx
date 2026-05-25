@@ -100,7 +100,7 @@ export function DetailLayout({
                     className={[
                       'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
                       !showBack
-                        ? 'bg-accent text-white'
+                        ? 'bg-accent text-bg'
                         : 'text-text-dim hover:text-text-main border border-line',
                     ].join(' ')}
                   >
@@ -112,7 +112,7 @@ export function DetailLayout({
                     className={[
                       'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all',
                       showBack
-                        ? 'bg-accent text-white'
+                        ? 'bg-accent text-bg'
                         : 'text-text-dim hover:text-text-main border border-line',
                     ].join(' ')}
                   >
