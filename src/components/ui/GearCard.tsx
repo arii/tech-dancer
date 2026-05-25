@@ -137,7 +137,8 @@ export function GearCard(props: GearCardProps) {
           size="sm"
           color="dim"
           leading="relaxed"
-          className="line-clamp-3 max-w-[65ch]"
+          clamp={3}
+          maxWidth="prose"
         >
            {excerpt}
         </Text>
