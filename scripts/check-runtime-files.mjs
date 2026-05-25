@@ -1,0 +1,47 @@
+import { readFileSync } from "node:fs";
+
+const expectedNodeExact = "22.22.2";
+const expectedNodeMajorForVercel = "22.x";
+const expectedPnpm = "10.28.2";
+
+const errors = [];
+
+function readTrimmed(path) {
+  return readFileSync(path, "utf8").trim().replace(/^v/, "");
+}
+
+const nvmrc = readTrimmed(".nvmrc");
+const nodeVersionFile = readTrimmed(".node-version");
+const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+
+if (nvmrc !== expectedNodeExact) {
+  errors.push(`.nvmrc must be ${expectedNodeExact}, found ${nvmrc}`);
+}
+
+if (nodeVersionFile !== expectedNodeExact) {
+  errors.push(`.node-version must be ${expectedNodeExact}, found ${nodeVersionFile}`);
+}
+
+if (pkg.packageManager !== `pnpm@${expectedPnpm}`) {
+  errors.push(`packageManager must be pnpm@${expectedPnpm}, found ${pkg.packageManager}`);
+}
+
+if (pkg.engines?.node !== expectedNodeMajorForVercel) {
+  errors.push(`engines.node must be ${expectedNodeMajorForVercel}, found ${pkg.engines?.node}`);
+}
+
+if (pkg.engines?.pnpm !== expectedPnpm) {
+  errors.push(`engines.pnpm must be ${expectedPnpm}, found ${pkg.engines?.pnpm}`);
+}
+
+if (errors.length > 0) {
+  console.error("❌ Runtime contract drift detected:");
+  for (const error of errors) {
+    console.error(`- ${error}`);
+  }
+  console.error("");
+  console.error("Do not change runtime files unless the task explicitly updates the runtime contract.");
+  process.exit(1);
+}
+
+console.log("✅ Runtime contract files are consistent");

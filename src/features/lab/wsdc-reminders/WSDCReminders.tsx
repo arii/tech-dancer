@@ -101,9 +101,9 @@ export default function WSDCReminders() {
               <Text size="sm" color="dim">{activeEvent.title} Logistics Plan</Text>
             </Stack>
             <ActionButton onClick={handleBulkSync} variant="primary" paddingX={4} paddingY={2}>
-              <Box display="flex" align="center" gap={2}>
+              <Box display="flex" align="center" gap={2} className="text-bg">
                 <Download className="w-4 h-4" />
-                <Text as="span">Sync Entire Plan</Text>
+                <Text as="span" color="bg" weight="font-bold">Sync Entire Plan</Text>
               </Box>
             </ActionButton>
           </Box>
@@ -154,7 +154,7 @@ export default function WSDCReminders() {
               <Text size="xs" color="dim" className="truncate">{activeEvent.url}</Text>
             </Stack>
             <ActionButton as="a" href={activeEvent.url} target="_blank" rel="noopener noreferrer" variant="primary" paddingX={4} paddingY={2}>
-              Visit Website
+              <Text weight="font-bold" color="bg">Go to Event Website</Text>
             </ActionButton>
           </Box>
         </Box>
