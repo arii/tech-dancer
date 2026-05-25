@@ -257,7 +257,7 @@
 @layer utilities {
   .hero-section {
     background: var(--hero-bg);
-    min-height: 47vh;
+    min-height: 54vh;
   }
   .hero-bottom-gradient {
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
