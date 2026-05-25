@@ -24,9 +24,9 @@ test.describe('Contact Form', () => {
   test('should show validation errors for empty fields', async ({ page }) => {
     await getSubmitButton(page).click();
 
-    await expect(page.locator('text=Personnel name required')).toBeVisible();
-    await expect(page.locator('text=Signal destination required')).toBeVisible();
-    await expect(page.locator('text=Data payload missing')).toBeVisible();
+    await expect(page.locator('text=Name required')).toBeVisible();
+    await expect(page.locator('text=Email address required')).toBeVisible();
+    await expect(page.locator('text=Message missing')).toBeVisible();
   });
 
   test('should show validation error for invalid email', async ({ page }) => {
@@ -41,7 +41,7 @@ test.describe('Contact Form', () => {
     await page.fill('input[name="email"]', 'not-an-email@com');
     await getSubmitButton(page).click();
 
-    await expect(page.locator('text=Invalid signal coordinate')).toBeVisible();
+    await expect(page.locator('text=Invalid email address')).toBeVisible();
   });
 
   test('should show validation error for short message', async ({ page }) => {
@@ -51,7 +51,7 @@ test.describe('Contact Form', () => {
 
     await getSubmitButton(page).click();
 
-    await expect(page.locator('text=Payload below minimum threshold (10 chars)')).toBeVisible();
+    await expect(page.locator('text=Message too short (min 10 chars)')).toBeVisible();
   });
 
   test('should submit form successfully', async ({ page }) => {

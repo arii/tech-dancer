@@ -52,6 +52,8 @@ export function GearCard(props: GearCardProps) {
     disclosure,
   } = props;
 
+  const isMerch = disclosure === 'owned-printful' || !!price;
+
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'affiliateIds',
@@ -59,7 +61,8 @@ export function GearCard(props: GearCardProps) {
     'roles',
     'tags',
     'href',
-    'disclosure'
+    'disclosure',
+    'data-testid'
   ] as (keyof GearCardProps)[]);
 
   // Resolve link: prioritization check
@@ -79,8 +82,6 @@ export function GearCard(props: GearCardProps) {
     ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
     : rawImage;
 
-  const isMerch = disclosure === 'owned-printful' || !!price;
-
   const getCtaText = () => {
     if (isMerch) return "SEE COLORS";
     if (isExternal) return "VIEW DEAL";
@@ -93,6 +94,7 @@ export function GearCard(props: GearCardProps) {
     <Stack
       as="article"
       {...rest}
+      data-testid={props["data-testid"] || (isMerch ? "product-card" : undefined)}
       direction="col"
       gap={3}
       height="full"
@@ -120,85 +122,101 @@ export function GearCard(props: GearCardProps) {
       )}
 
       {/* Image zone */}
-      <Box
-        position="relative"
-        aspect="video"
-        overflow="hidden"
-        radius="md"
-        className="bg-surface-alt/20"
-      >
-        {image ? (
-          <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
-        ) : (
-          <CategoryPlaceholder category={category} />
-        )}
-        {/* Dark overlay */}
+      {(image || !isInternal) && (
         <Box
-          position="absolute"
-          inset
-          className="bg-black/15 pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* Price badge */}
-        {price && (
+          position="relative"
+          aspect="video"
+          maxHeight={isMerch ? { base: 56, lg: 72 } : undefined}
+          overflow="hidden"
+          radius="md"
+          className={isMerch ? "bg-surface-alt/35" : "bg-surface-alt/20"}
+        >
+          {image ? (
+            <Box
+              as="img"
+              src={image}
+              alt={title}
+              width="full"
+              height="full"
+              padding={isMerch ? 4 : 0}
+              className={cn(
+                "h-full w-full transition-transform duration-500 group-hover:scale-105",
+                isMerch ? "object-contain" : "object-cover object-center-20"
+              )}
+            />
+          ) : (
+            <CategoryPlaceholder category={category} />
+          )}
+          {/* Dark overlay */}
           <Box
             position="absolute"
-            top={3}
-            right={3}
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacity={80}
-            className="bg-accent text-white backdrop-blur-md shadow-sm z-20"
-          >
-            <Text variant="mono" size="micro" weight="font-black" uppercase tracking="wide">
-              {price.includes('$') ? price : `$${price}`}
-            </Text>
-          </Box>
-        )}
+            inset
+            className="bg-black/15 pointer-events-none"
+            aria-hidden="true"
+          />
 
-        {/* Category badge (if no price) */}
-        {!price && (
-          <Box
-            position="absolute"
-            top={3}
-            right={3}
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacity={80}
-            className="bg-accent text-bg backdrop-blur-md shadow-sm z-20"
-          >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-              {category}
-            </Text>
-          </Box>
-        )}
+          {/* Price badge */}
+          {price && (
+            <Box
+              position="absolute"
+              top={3}
+              right={3}
+              paddingX={2}
+              paddingY={1}
+              radius="full"
+              opacity={80}
+              zIndex={20}
+              className="bg-accent text-white backdrop-blur-md shadow-sm"
+            >
+              <Text variant="mono" size="micro" weight="font-black" uppercase tracking="wide">
+                {price.includes('$') ? price : `$${price}`}
+              </Text>
+            </Box>
+          )}
 
-        {/* Roles badges */}
-        {roles && (
-          <Box position="absolute" bottom={3} left={3} z-20>
-            <Stack direction="row" gap={1}>
-              {roles.map((role) => (
-                <Box
-                  key={role}
-                  paddingX={2}
-                  paddingY={0.5}
-                  radius="full"
-                  surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                  bgOpacity={80}
-                  className="font-mono font-bold uppercase tracking-wider backdrop-blur-md"
-                >
-                  <Text size="micro" as="span" inherit>
-                    {role}
-                  </Text>
-                </Box>
-              ))}
-            </Stack>
-          </Box>
-        )}
-      </Box>
+          {/* Category badge (if no price) */}
+          {!price && (
+            <Box
+              position="absolute"
+              top={3}
+              right={3}
+              paddingX={2}
+              paddingY={1}
+              radius="full"
+              opacity={80}
+              zIndex={20}
+              className="bg-accent text-bg backdrop-blur-md shadow-sm"
+            >
+              <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+                {category}
+              </Text>
+            </Box>
+          )}
+
+          {/* Roles badges */}
+          {roles && (
+            <Box position="absolute" bottom={3} left={3} zIndex={20}>
+              <Stack direction="row" gap={1}>
+                {roles.map((role) => (
+                  <Box
+                    key={role}
+                    paddingX={2}
+                    paddingY={0.5}
+                    radius="full"
+                    surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
+                    bgOpacity={80}
+                    className="font-mono font-bold uppercase tracking-wider backdrop-blur-md"
+                  >
+                    <Text size="micro" as="span" inherit>
+                      {role}
+                    </Text>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
+          )}
+        </Box>
+      )}
 
       <Stack gap={2}>
         {verdict && (

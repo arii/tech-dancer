@@ -55,6 +55,7 @@ export default function Merch() {
           {filteredProducts.map((product) => (
             <GearCard
               key={product.id}
+              {...({ "data-testid": "product-card" } as any)}
               title={product.title}
               category="merch"
               excerpt={product.description}
@@ -97,4 +98,3 @@ export default function Merch() {
     </Box>
   );
 }
-
