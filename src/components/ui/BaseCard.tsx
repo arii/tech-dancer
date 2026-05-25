@@ -44,7 +44,7 @@ export function BaseCard({
       {isLink && (
         <Box
           as={isExternal ? "a" : "div"}
-          {...(isExternal ? { href, target: "_blank", rel: "noopener noreferrer", "aria-label": ariaLabel } : {})}
+          {...(isExternal ? { href, target: "_blank", rel: "sponsored noopener noreferrer", "aria-label": ariaLabel } : {})}
           className="absolute inset-0 z-10 cursor-pointer"
         />
       )}

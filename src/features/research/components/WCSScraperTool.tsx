@@ -269,7 +269,7 @@ export function WCSScraperTool() {
         </Stack>
       </Box>
 
-      {/* Harvesting & Impact Dashboard */}
+      {/* Data Summary & Impact */}
       <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden">
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>

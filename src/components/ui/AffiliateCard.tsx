@@ -13,6 +13,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
       href={link.url}
       isExternal
       padding={5}
+      aria-label={`View ${link.name}`}
     >
       <Stack gap={2} flex={1}>
         <Box display="flex" align="center" justify="between">
@@ -23,9 +24,12 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         </Box>
 
         <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors">
-          <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`View ${link.name}`} className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+          <Box
+            as="span"
+            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+          >
             {link.name}
-          </a>
+          </Box>
         </Text>
 
         <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed">
