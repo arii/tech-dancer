@@ -192,23 +192,14 @@ To prepare the base environment (Node.js/pnpm):
 
 # Codex / Agent Runtime Rules
 
-This repo uses:
-
-- Node.js 22.22.2
-- pnpm 10.28.2
-
-Runtime files:
-
-- `.node-version`
-- `.nvmrc`
-- `package.json#packageManager`
-- `package.json#engines`
+This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md) and [docs/runtime-consistency.md](./docs/runtime-consistency.md).
 
 Before installing, testing, building, or editing dependencies, run:
 
 ```bash
 corepack enable
 corepack prepare pnpm@10.28.2 --activate
+pnpm run check:runtime-files
 pnpm run doctor
 ```
 
@@ -232,13 +223,7 @@ volta pin
 asdf local nodejs
 ```
 
-If Node or pnpm mismatches, stop and report the mismatch.
-
-Do not change runtime versions unless the user explicitly asks to update the runtime contract.
-
-If a dependency install fails, do not delete `pnpm-lock.yaml` unless explicitly instructed.
-
-If a build fails, fix source code or configuration first. Do not switch package managers.
+If Node or pnpm mismatches, stop and report the mismatch. Do not change runtime versions unless the user explicitly asks to update the runtime contract.
 
 ## GitHub Actions runtime policy
 

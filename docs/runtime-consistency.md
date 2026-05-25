@@ -1,28 +1,36 @@
 # Runtime Consistency Contract
 
-This project enforces a strict runtime contract to ensure consistency across local development, CI/CD, and production environments.
+To ensure predictable behavior across local development, CI, and production, this repository enforces a strict runtime contract.
 
-## Contract
+## Contract Specifications
 
-| Runtime | Version | Source of Truth |
-|---------|---------|-----------------|
-| Node.js | 22.22.2  | `.node-version`, `.nvmrc` |
-| pnpm    | 10.28.2 | `package.json` (`packageManager`) |
+- **Node.js**: `22.22.2` (exactly)
+- **pnpm**: `10.28.2` (exactly)
 
-## Enforcement
+## Implementation Files
 
-- **`scripts/check-runtime.mjs`**: Validates that the active Node.js and pnpm versions match the contract. Runs automatically on `preinstall`.
-- **`scripts/check-runtime-files.mjs`**: Validates that the configuration files themselves (`.node-version`, `.nvmrc`, `package.json`) have not drifted.
-- **`pnpm doctor`**: Alias for `node scripts/check-runtime.mjs`.
-- **`pnpm check:runtime-files`**: Alias for `node scripts/check-runtime-files.mjs`.
+The following files define and enforce the contract:
 
-## How to Align
+- `.node-version`: Primary source for Node.js version.
+- `.nvmrc`: Compatibility file for NVM users.
+- `package.json`:
+    - `engines.node`: Set to `22.x` for Vercel compatibility.
+    - `engines.pnpm`: Set to `10.28.2`.
+    - `packageManager`: Set to `pnpm@10.28.2`.
+- `vercel.json`: Ensures Corepack and the pinned pnpm version are used during deployment.
+- `.devcontainer/Dockerfile`: Uses `node:22.22.2-bookworm` as the base image.
+- `.github/workflows/*.yml`: All workflows use `actions/setup-node` with `node-version-file: '.node-version'`.
 
-If your environment is out of sync:
+## Enforcement Commands
 
-1. **Node.js**: Use a version manager like `fnm` or `nvm` that respects `.node-version` or `.nvmrc`. Ensure you are using exactly `22.22.2`.
-2. **pnpm**: Use Corepack to manage pnpm:
-   ```bash
-   corepack enable
-   corepack prepare pnpm@10.28.2 --activate
-   ```
+- `pnpm run check:runtime-files`: Validates that configuration files match the contract.
+- `pnpm run doctor`: Validates that the current active environment matches the contract.
+
+## Activation Protocol
+
+If you encounter a version mismatch, run the following to activate the correct pnpm version:
+
+```bash
+corepack enable
+corepack prepare pnpm@10.28.2 --activate
+```

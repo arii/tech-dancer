@@ -8,6 +8,7 @@ env:
   NODE_ENV: production
   REPO_NAME: ${{ github.event.repository.name }}
   VITE_BASE_PATH: /${{ github.event.repository.name }}/
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   update-snapshots:
@@ -58,8 +59,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
