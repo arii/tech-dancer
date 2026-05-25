@@ -1,10 +1,10 @@
 ---
 type: post
-title: "BoomTick and B•: Rhythmic Architecture of WCS"
+title: "BoomTick and B\\: Rhythmic Architecture of WCS"
 date: "2026-05-06"
 author: "Ariel Anders, PhD"
 category: "WCS"
-excerpt: "Exploring the legacy of Skippy Blair, the Universal Unit System, and why the B• logo represents the soul of syncopated movement."
+excerpt: "Exploring the legacy of Skippy Blair, the Universal Unit System, and why the B\\ logo represents the soul of syncopated movement."
 ---
 
 ## Welcome to BoomTick.blog: The Pulse of the Music
@@ -20,7 +20,7 @@ To understand the dance, you have to understand the pulse:
 - The "Boom": This is the downbeat (1, 3, 5, 7). It’s the bass drum, the floor, and the foundation. In our dance, the "Boom" is where we find our grounding. It’s the "hook" in the handhold and the "pin" in the connection. It’s the moment we drop our level to give our partner a "tell" that something big is coming.
 - The "Tick": This is the upbeat (2, 4, 6, 8). It’s the snare, the "high" sound, and the finish line. It’s where we strike our triples and hit our anchors. The "Tick" is the exclamation point at the end of the pattern.
 
-## The Logo: B•
+## The Logo: B\
 
 The logo is a piece of rhythmic shorthand derived from Blair’s [Universal Unit System (UUS)](https://www.worldsdc.com/special-recognition/skippy-blair/).
 
@@ -28,9 +28,9 @@ The logo is a piece of rhythmic shorthand derived from Blair’s [Universal Unit
 
 In UUS notation, symbols dictate the distribution of weight. While a forward slash (/) represents a non-weight change (a touch, tap, or hold), the dot (•) signifies a full weight change (a step). It is the visual representation of committing your weight into the floor.
 
-### B• — The Boom-Step
+### B\ — The Boom-Step
 
-The B• stands for the 'Boom-Step.' It represents that specific moment where the music hits a heavy 'Boom' (Beat 1), and you decisively take that first step, committing your weight and initiating the momentum of the pattern.
+The B\ stands for the 'Boom-Step.' It represents that specific moment where the music hits a heavy 'Boom' (Beat 1), and you decisively take that first step, committing your weight and initiating the momentum of the pattern.
 
 It symbolizes the three pillars of modern WCS:
 

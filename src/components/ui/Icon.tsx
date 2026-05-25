@@ -18,6 +18,7 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
       dim: "text-text-dim",
       accent: "text-accent",
       muted: "text-text-dim opacity-50",
+      bg: "text-bg",
     },
   },
   defaultVariants: {

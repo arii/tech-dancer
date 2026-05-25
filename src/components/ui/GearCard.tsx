@@ -123,7 +123,7 @@ export function GearCard(props: GearCardProps) {
           paddingY={1}
           radius="full"
           opacity={80}
-          className={CARD_STYLES.badge}
+          className="bg-accent text-bg backdrop-blur-md shadow-sm"
         >
           <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
             {category}
