@@ -13,7 +13,6 @@ interface GearCardProps extends BaseProps {
   title: string;
   category: string;
   excerpt: string;
-  basePath: string;
   rating?: number;
   verdict?: string;
   image?: string;
@@ -45,7 +44,6 @@ export function GearCard(props: GearCardProps) {
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath',
     'affiliateIds'
   ] as (keyof GearCardProps)[]);
 
