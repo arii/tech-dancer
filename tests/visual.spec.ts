@@ -24,6 +24,13 @@ test.describe('Visual Regression Tests', () => {
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
 
+      // Dismiss newsletter banner when present to stabilize full-page height in snapshots
+      const dismissNewsletterButton = page.getByLabel('Dismiss newsletter signup').first();
+      if (await dismissNewsletterButton.isVisible()) {
+        await dismissNewsletterButton.click();
+        await expect(dismissNewsletterButton).not.toBeVisible();
+      }
+
       // Route-specific stability waits
       if (route.name === 'research') {
         // Wait for research lab header to be visible
