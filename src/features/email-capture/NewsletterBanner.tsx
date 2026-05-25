@@ -21,9 +21,7 @@ export function NewsletterBanner() {
       zIndex={50}
       surface="alt"
       border="t"
-      className="border-accent/40 shadow-glow"
-      paddingLeft={{ base: 6, md: 12 }}
-      paddingRight={{ base: 32, md: 12 }}
+      className="border-accent/40 shadow-glow px-6 md:px-12 pr-24 md:pr-12"
       paddingY={{ base: 6, lg: 16 }}
       radius="none"
     >
@@ -38,7 +36,7 @@ export function NewsletterBanner() {
       />
 
       {/* Persistent Dismissal */}
-      <Box position="absolute" className="top-4 right-4" zIndex="docked">
+      <Box position="absolute" className="top-4 right-6" zIndex="docked">
         <ActionButton
           variant="ghost"
           onClick={hideBar}
