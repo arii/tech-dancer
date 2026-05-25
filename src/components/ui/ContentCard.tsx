@@ -95,7 +95,7 @@ export function ContentCard(props: ContentCardProps) {
           size="sm"
           color="dim"
           leading="relaxed"
-          className="line-clamp-3 max-w-[65ch]"
+          className="line-clamp-3"
         >
            {excerpt}
         </Text>

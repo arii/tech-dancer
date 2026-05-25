@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { ChangeEvent } from 'react';
 import { Search } from 'lucide-react';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 
 interface SearchBoxProps {
   value: string;
