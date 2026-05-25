@@ -223,3 +223,55 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
    - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
    - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
 5. Ensure your changes introduce no new violations in touched files
+
+---
+
+# Codex / Agent Runtime Rules
+
+This repo uses:
+
+- Node.js 22.22.2
+- pnpm 10.28.2
+
+Runtime files:
+
+- `.node-version`
+- `.nvmrc`
+- `package.json#packageManager`
+- `package.json#engines`
+
+Before installing, testing, building, or editing dependencies, run:
+
+```bash
+corepack enable
+corepack prepare pnpm@10.28.2 --activate
+pnpm doctor
+```
+
+Use:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm build
+```
+
+Do not run:
+
+```bash
+npm install
+npm install -g pnpm
+pnpm env use
+nvm install
+nvm use
+volta pin
+asdf local nodejs
+```
+
+If Node or pnpm mismatches, stop and report the mismatch.
+
+Do not change runtime versions unless the user explicitly asks to update the runtime contract.
+
+If a dependency install fails, do not delete `pnpm-lock.yaml` unless explicitly instructed.
+
+If a build fails, fix source code or configuration first. Do not switch package managers.

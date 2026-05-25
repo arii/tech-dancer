@@ -1,29 +1,17 @@
 {
-  "name": "BoomTick Agent Dev Environment",
+  "name": "BoomTick Dev",
   "build": {
-    "dockerfile": "Dockerfile",
-    "context": ".."
+    "dockerfile": "Dockerfile"
   },
-  "workspaceFolder": "/workspace",
-  "remoteUser": "pwuser",
-  "postCreateCommand": "bash ./dev-tools/setup-agent.sh",
-  "containerEnv": {
-    "CI": "1",
-    "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright",
-    "PLAYWRIGHT_DOWNLOAD_HOST": "https://playwright.azureedge.net",
-    "PNPM_VERSION": "10.28.2",
-    "NODE_MAJOR": "22",
-    "SKIP_APT": "1"
-  },
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@10.28.2 --activate && pnpm doctor && pnpm install --frozen-lockfile",
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-azuretools.vscode-docker",
-        "eamodio.gitlens",
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss"
+        "esbenp.prettier-vscode"
       ]
     }
-  }
+  },
+  "workspaceFolder": "/workspace",
+  "remoteUser": "node"
 }
