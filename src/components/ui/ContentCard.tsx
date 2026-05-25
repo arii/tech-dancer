@@ -89,7 +89,7 @@ export function ContentCard(props: ContentCardProps) {
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
            {excerpt}
         </Text>
       </Stack>
