@@ -9,10 +9,11 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { EventCard } from '@/components/ui/EventCard';
+import { ProductCard } from '@/components/products/ProductCard';
 import { motionTokens } from '@/styles/motion';
 
 export default function Home() {
-  const { recentPosts, upcomingEvents } = useHome();
+  const { recentPosts, upcomingEvents, featuredMerch } = useHome();
 
   return (
     <Box as="section">
@@ -102,6 +103,37 @@ export default function Home() {
                 </Box>
               ))}
             </Stack>
+          </Stack>
+
+          <Stack gap={8}>
+            <SectionHeader
+              eyebrow="BOOMTICK STYLE"
+              title="Featured BoomTick merch"
+              link={{ text: "Shop all merch", to: "/merch" }}
+            />
+            <Text variant="body" size="lg" color="dim" maxWidth="prose" marginBottom={4}>
+              Shirts, hats, and designs made for West Coast Swing weekends, practice nights, and dance friends.
+            </Text>
+            <Grid
+              cols={{ base: 1, sm: 2, lg: 4 }}
+              gap={6}
+              as={motion.div}
+              variants={motionTokens.staggerContainer}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              {featuredMerch.map((item) => (
+                <Box
+                  key={item.id}
+                  as={motion.div}
+                  variants={motionTokens.staggerItem}
+                  className="h-full"
+                >
+                  <ProductCard item={item} />
+                </Box>
+              ))}
+            </Grid>
           </Stack>
 
           <Stack gap={8}>
