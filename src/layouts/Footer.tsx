@@ -17,7 +17,7 @@ export function Footer() {
           <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest" data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
           </Text>
-          <Box className="hidden md:block w-px h-3 bg-white/10" />
+          <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
           <Text variant="mono" size="xs" color="body" className="hover:opacity-100 transition-opacity">
             v{import.meta.env.VITE_APP_VERSION} (
             <a
