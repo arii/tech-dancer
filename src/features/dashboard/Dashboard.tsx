@@ -1,18 +1,28 @@
 import { motion } from 'motion/react';
-import { NavLink } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { SectionHeader } from '@/components/ui/SectionHeader';
 import { HeroSection } from '@/components/ui/HeroSection';
 import { EventCard } from '@/components/ui/EventCard';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { HeroSpotlight } from './HeroSpotlight';
+import { GearCarousel } from './GearCarousel';
+import { DevLabTerminal } from './DevLabTerminal';
 import { motionTokens } from '@/styles/motion';
 
-export default function Home() {
-  const { recentPosts, upcomingEvents } = useHome();
+export default function Dashboard() {
+  const { 
+    featuredPost, 
+    recentPosts, 
+    gearItems, 
+    devPosts,
+    upcomingEvents 
+  } = useHome();
+
+  if (!featuredPost) {
+    return <Box padding={8}>No featured content available</Box>;
+  }
 
   return (
     <Box as="section">
@@ -21,90 +31,28 @@ export default function Home() {
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."
         schema={STATIC_SCHEMAS.HOME}
       />
-      <Stack gap={16}>
+      <Stack gap={20} paddingY={{ base: 8, md: 12 }}>
         <HeroSection />
 
-        <Stack gap={16} paddingX={{ base: 4, md: 6, lg: 12 }}>
-          <Stack gap={6}>
-            <Stack gap={1}>
-              <Box width="full" display="flex" justify="between" align="end" direction={{ base: "col", sm: "row" }} gap={{ base: 3, sm: 0 }}>
-                <PageHeader
-                  label="Latest Updates"
-                  title="Recent Posts"
-                  paddingBottom={0}
-                  border="none"
-                  as="h2"
-                  titleSize="fluid-6"
-                />
-                <Box
-                  as={NavLink}
-                  to="/blog"
-                  display="flex"
-                  align="center"
-                  gap={2}
-                  paddingY={{ base: 3, sm: 0 }}
-                  paddingX={{ base: 4, sm: 0 }}
-                  radius={{ base: "sm", sm: "none" }}
-                  className="text-xs font-bold uppercase tracking-widest text-accent hover:text-accent/80 transition-colors sm:hover:bg-transparent"
-                >
-                  View all posts
-                  <ArrowRight className="w-4 h-4" />
-                </Box>
-              </Box>
-            </Stack>
+        {/* Dance Focus: Hero Spotlight */}
+        <HeroSpotlight 
+          featuredPost={featuredPost} 
+          recentPosts={recentPosts} 
+        />
 
-            <Stack
-              direction="col"
-              gap={0}
-              className="divide-y divide-line"
-              as={motion.div}
-              variants={motionTokens.staggerContainer}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
-            >
-              {recentPosts.map((post) => (
-                <Box key={post.slug} paddingY={4} as={motion.div} variants={motionTokens.staggerItem}>
-                  <Stack
-                    as={NavLink}
-                    to={`/blog/${post.slug}`}
-                    direction={{ base: "col", sm: "row" }}
-                    gap={{ base: 3, sm: 4 }}
-                    paddingX={{ base: 3, sm: 5 }}
-                    paddingY={{ base: 5, sm: 6 }}
-                    marginX={{ sm: -2 }}
-                    align={{ sm: "start" }}
-                    className="group rounded-lg transition-colors hover:bg-surface"
-                  >
-                    <Box display="flex" shrink={0} wrap align="center" gap={{ base: 2, sm: 3 }} paddingTop={0.5} className="sm:w-44">
-                      <Box 
-                        as="span" 
-                        radius="sm" 
-                        paddingX={2} 
-                        paddingY={0.5} 
-                        className="text-xs font-bold text-accent border-2 border-accent"
-                      >
-                        {post.category}
-                      </Box>
-                      <Text variant="mono" tracking="widest" uppercase size="xs" className="whitespace-nowrap text-text-dim">
-                        {post.date}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Text as="h3" color="main" size="base" weight="font-bold" marginBottom={1} className="transition-colors group-hover:text-accent leading-snug">
-                        {post.title}
-                      </Text>
-                      <Text as="span" size="sm" className="leading-7 text-text-body/72 line-clamp-2">
-                        {post.excerpt}
-                      </Text>
-                    </Box>
-                  </Stack>
-                </Box>
-              ))}
-            </Stack>
-          </Stack>
+        {/* Gear Reviews: Carousel */}
+        {gearItems.length > 0 && (
+          <GearCarousel gearItems={gearItems} />
+        )}
 
-          <Stack gap={8}>
+        {/* Tech/Dev: Terminal Lab */}
+        {devPosts.length > 0 && (
+          <DevLabTerminal devPosts={devPosts} />
+        )}
+
+        {/* Upcoming Events */}
+        {upcomingEvents.length > 0 && (
+          <Stack gap={8} paddingX={{ base: 4, md: 6, lg: 12 }} as={motion.div} variants={motionTokens.staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, margin: "-50px" }}>
             <SectionHeader label="COMPETE" title="Upcoming Event Resource Guides" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (
@@ -119,7 +67,7 @@ export default function Home() {
               ))}
             </Grid>
           </Stack>
-        </Stack>
+        )}
       </Stack>
     </Box>
   );

@@ -1,14 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getPosts, getEvents } from '@/lib/content';
+import { getPosts, getEvents, getResources } from '@/lib/content';
 
-/** Matches `artifacts/boomtick/index.html` “Where Dancers Go” cards (venue + location + cadence). */
+/** Provides data for the new dashboard layout with HeroSpotlight, GearCarousel, and DevLabTerminal sections. */
 export function useHome() {
   const navigate = useNavigate();
-  const { data: recentPosts = [] } = useQuery({
-    queryKey: ['posts', 'recent'],
-    queryFn: () => getPosts().slice(0, 3),
-    initialData: () => getPosts().slice(0, 3),
+
+  const { data: allPosts = [] } = useQuery({
+    queryKey: ['posts', 'all'],
+    queryFn: () => getPosts(),
+    initialData: () => getPosts(),
+  });
+
+  const { data: gearItems = [] } = useQuery({
+    queryKey: ['resources', 'gear'],
+    queryFn: () => getResources().slice(0, 6),
+    initialData: () => getResources().slice(0, 6),
   });
 
   const { data: upcomingEvents = [] } = useQuery({
@@ -17,31 +24,29 @@ export function useHome() {
     initialData: () => getEvents().slice(0, 3),
   });
 
-  const dancerPaths = [
-    { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },
-    { label: "Gear reviews", path: "/gear" }
-  ];
+  // Split posts by category
+  const dancePosts = allPosts.filter(p => !p.category?.toLowerCase().includes('tech') && !p.category?.toLowerCase().includes('data') && !p.category?.toLowerCase().includes('research'));
+  const devPosts = allPosts.filter(p => p.category?.toLowerCase().includes('tech') || p.category?.toLowerCase().includes('data') || p.category?.toLowerCase().includes('research'));
 
-  const hirePaths = [
-    { label: "Tech blog posts", path: "/blog?category=Tech" },
-    { label: "Data and Development Lab", path: "/research" },
-    { label: "About/Contact page", path: "/about" }
-  ];
+  // Feature post is the first dance post, recent updates are the next 2
+  const featuredPost = dancePosts[0];
+  const recentPosts = dancePosts.slice(1, 4);
 
   const handleNavigateToBlog = () => navigate('/blog');
   const handleNavigateToPost = (slug: string) => navigate(`/blog/${slug}`);
   const handleNavigate = (path: string) => navigate(path);
 
   return { 
-    recentPosts, 
+    featuredPost,
+    recentPosts,
+    gearItems,
+    devPosts: devPosts.slice(0, 4),
     upcomingEvents: upcomingEvents.map(event => ({
       slug: event.slug,
       title: event.title,
       location: event.location,
       schedule: event.schedule,
     })),
-    dancerPaths,
-    hirePaths,
     handleNavigateToBlog,
     handleNavigateToPost,
     handleNavigate
