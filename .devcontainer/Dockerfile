@@ -1,6 +1,9 @@
-FROM mcr.microsoft.com/playwright:v1.44.0-jammy
+FROM node:22.22.2-bookworm
 
 USER root
+
+# Create pwuser to match expected devcontainer environment
+RUN useradd -m pwuser && chsh -s /bin/bash pwuser
 
 ENV PNPM_VERSION=10.28.2
 ENV PLAYWRIGHT_DOWNLOAD_HOST=https://playwright.azureedge.net
@@ -20,7 +23,7 @@ RUN apt-get update \
     build-essential \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g pnpm@${PNPM_VERSION}
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
 
 RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 

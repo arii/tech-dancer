@@ -225,12 +225,41 @@ def bundle_size(ctx, baseline_file, threshold, update, dry_run):
     else:
         out(ctx, msg, data=res)
 
+@cli.command()
+@click.pass_context
+def doctor(ctx):
+    """Runtime Consistency Check"""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.runtime_check()
+        out(ctx, f"✅ Runtime OK: node {res['node']}, pnpm {res['pnpm']}", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
 @gh.command()
 @click.pass_context
 def pre_submit(ctx):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.pre_submit_checks()
     out(ctx, "Pre-submit checks complete.", data={"results": res})
+
+@cli.command()
+@click.pass_context
+def build(ctx):
+    """Build the project after runtime check"""
+    orch = ctx.obj['ORCHESTRATOR']
+    orch.runtime_check()
+    run_command(["pnpm", "run", "build"])
+    out(ctx, "✅ Build complete")
+
+@cli.command()
+@click.pass_context
+def lint(ctx):
+    """Lint the project after runtime check"""
+    orch = ctx.obj['ORCHESTRATOR']
+    orch.runtime_check()
+    run_command(["pnpm", "run", "lint"])
+    out(ctx, "✅ Lint complete")
 
 # ==========================================
 # AI COMMAND GROUP
