@@ -12,7 +12,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   className?: string
   variant?: keyof typeof typography
   intent?: keyof typeof variants.intent
-  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "error"
+  color?: "main" | "body" | "dim" | "accent" | "brand" | "white" | "bg" | "error" | "current" | "inherit"
   size?: ResponsiveProp<keyof typeof typeSizes>
   weight?: ResponsiveProp<string>
   align?: ResponsiveProp<"left" | "center" | "right" | "justify">
@@ -67,6 +67,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           !intent && color === "white" && "text-white",
           !intent && color === "bg" && "text-bg",
           !intent && color === "error" && "text-error",
+          !intent && color === "current" && "text-current",
+          !intent && color === "inherit" && "text-inherit",
           size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
           getResponsiveClasses(weight, ""),
           getResponsiveClasses(align, "text-"),

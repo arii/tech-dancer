@@ -98,12 +98,12 @@ export function ProductCard({ product, variant = 'full' }: ProductCardProps) {
                   paddingX={2}
                   paddingY={0.5}
                   radius="full"
-                  surface={
-                    role === 'lead' ? 'accent' :
-                    role === 'follow' ? 'warning' :
-                    role === 'switch' ? 'alt' : 'default'
-                  }
-                  className="bg-opacity-80 font-mono font-bold uppercase tracking-wider backdrop-blur-md"
+                  className={cn(
+                    "font-mono font-bold uppercase tracking-wider backdrop-blur-md",
+                    role === 'lead' ? 'bg-accent/80 text-white' :
+                    role === 'follow' ? 'bg-accent-purple/80 text-white' :
+                    role === 'switch' ? 'bg-surface-alt/80 text-text-main' : 'bg-surface/80 text-text-main'
+                  )}
                 >
                   <Text size="micro" as="span">
                     {role}
