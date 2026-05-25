@@ -37,6 +37,7 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
+    basePath,
     rating,
     verdict,
     image: propsImage,

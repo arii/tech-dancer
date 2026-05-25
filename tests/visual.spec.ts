@@ -19,7 +19,7 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
 
       // Wait for the main content to be visible as a base stability measure
-      await expect(page.locator('#main-content')).toBeVisible({ timeout: 30000 });
+      await expect(page.locator('main#main-content')).toBeVisible({ timeout: 30000 });
 
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
