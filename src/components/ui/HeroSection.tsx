@@ -4,6 +4,7 @@ import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
+import { NavLink } from 'react-router-dom';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
 const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
@@ -62,14 +63,14 @@ export function HeroSection() {
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
             Built for dancers.
           </Text>
           <Text
             as="span"
             variant="hero"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "7xl", lg: "8xl" }}
           >
             <span className="hero-accent-color">Train smarter.</span>
           </Text>
@@ -77,7 +78,7 @@ export function HeroSection() {
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "7xl", lg: "8xl" }}
           >
             Dance better.
           </Text>
@@ -98,7 +99,7 @@ export function HeroSection() {
           align="stretch"
           gap={5}
           marginTop={{ base: 6, lg: 8 }}
-          maxWidth="2xl"
+          maxWidth="xl"
           className="opacity-0 hero-tagline-anim"
         >
           <Box
@@ -117,6 +118,35 @@ export function HeroSection() {
             Field guides, gear notes, and event prep for West Coast Swing dancers who want to
             train smarter, travel better, and show up ready.
           </Text>
+        </Stack>
+
+        <Stack
+          direction={{ base: "column", sm: "row" }}
+          align="start"
+          gap={3}
+          marginTop={6}
+          className="opacity-0 hero-tagline-anim"
+        >
+          <Box
+            as={NavLink}
+            to="/events"
+            paddingX={5}
+            paddingY={2.5}
+            radius="full"
+            className="bg-accent text-bg font-semibold hover:opacity-90 transition-opacity"
+          >
+            Explore Guides
+          </Box>
+          <Box
+            as={NavLink}
+            to="/gear"
+            paddingX={5}
+            paddingY={2.5}
+            radius="full"
+            className="border border-line text-text-main font-semibold hover:bg-surface-alt transition-colors"
+          >
+            Browse Gear
+          </Box>
         </Stack>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
