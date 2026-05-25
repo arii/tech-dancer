@@ -56,8 +56,9 @@ for (const port of ports) {
           timeout: 5000
         });
       } catch (error) {
-        // lsof exits with code 1 if no processes are found, which is expected
-        if (error.status === 1) continue;
+        // lsof exits with code 1 if no processes are found, which is expected.
+        // Some minimal Linux containers do not include lsof at all (exit 127 / ENOENT).
+        if (error.status === 1 || error.status === 127 || error.code === 'ENOENT') continue;
         throw error;
       }
 
