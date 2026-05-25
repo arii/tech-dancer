@@ -89,7 +89,7 @@ class GitHubClient:
             return []
 
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
-        """Fetches logs for a specific check run, using external_id (job_id) if available."""
+        """Fetches logs for a specific check run, using external_id (job_id) if available. Gracefully fallback to check_run_id if external_id 404s."""
         # Ensure we have a valid ID and it's a string for the URL path
         job_id = str(external_id) if external_id is not None else str(check_run_id)
         try:
@@ -97,12 +97,15 @@ class GitHubClient:
             # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
             return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
         except Exception as e:
-            if "404" in str(e) and external_id is not None:
+            error_msg = str(e)
+            if external_id is not None and "404" in error_msg:
+                # Fallback to query by raw check_run_id
+                job_id = str(check_run_id)
                 try:
-                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{check_run_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
-                except Exception as e2:
-                    return f"Failed to fetch logs for job {check_run_id} (fallback): {str(e2)}"
-            return f"Failed to fetch logs for job {job_id}: {str(e)}"
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+                except Exception as fallback_e:
+                    return f"Failed to fetch logs for job {job_id} after fallback: {str(fallback_e)}"
+            return f"Failed to fetch logs for job {job_id}: {error_msg}"
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})

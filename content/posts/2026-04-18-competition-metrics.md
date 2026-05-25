@@ -4,7 +4,7 @@ title: "Coming Soon: WCS Competition Data Scraper"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
-excerpt: "Announcing a new tool for objective, ethical analysis of West Coast Swing competition data."
+excerpt: "Announcing a new tool for a clearer way to look at West Coast Swing competition results."
 image: ""
 tags:
   - competition
@@ -14,34 +14,34 @@ tags:
 ---
 
 <Notice type="info">
-**Lab Notes: Data Science**
-Defining an ethical framework for public scoring data collection to analyze progression and judging consistency.
+**Technical Notes: Data Research**
+A careful, respectful way to use public scoring data to analyze progression and judging consistency.
 </Notice>
 
-## Objective Analysis in a Subjective Sport
+## A Clearer Look at a Subjective Sport
 
-In West Coast Swing, we are judged by humans. Humans have bias, variance, and limited focus. While individual placements are high-variance data points, aggregated scores across multiple events can reveal powerful insights about progression and judging consistency.
+In West Coast Swing, we are judged by humans. Humans are great, but results can vary from heat to heat. While one event result only tells part of the story, looking at scores across multiple events can reveal helpful patterns about how you're progressing and how different panels see your dancing.
 
-I am excited to announce the development of the **WCS Competition Data Scraper**, a specialized research tool designed to bring data-driven clarity to the competitive landscape.
+I am excited to announce the development of the **WCS Competition Data Scraper**, a tool designed to make competition results easier to understand.
 
 ### Core Philosophy
 
-The goal of this project isn't to rank dancers, but to provide tools for self-improvement and to understand the underlying mechanics of competition scoring.
+The goal of this project isn't to rank dancers, but to provide tools for self-improvement and to understand how competition scoring works.
 
-- **Anonymous data collection:** The tool focuses on trends and distributions. No individual dancer names are stored in our public datasets.
-- **Ethical approach:** We only use public competition data that has already been published. Our scraper respects `robots.txt` and implements rate-limiting.
-- **Privacy guarantees:** All raw data is processed in a secure environment and discarded after aggregation.
+- **Anonymous data collection:** The tool focuses on trends and overall patterns. No individual dancer names are stored in our public datasets.
+- **Respectful approach:** We only use public competition data that has already been published. Our tool is built to be a good citizen of the web.
+- **Privacy focus:** All raw data is processed securely and we don't keep individual records after we've looked at the big picture.
 
-### Analytical Features
+### What the tool will show
 
 Once launched, the lab will feature:
 
-#### Judge Variance Analysis
+#### How judging can differ across panels
 
-Measuring the consistency across judging panels. This helps competitors understand which aspects of their dance resonate with different judging styles.
+This helps you see how consistent judging is across different events. It can help you understand which aspects of your dance resonate with different judging styles.
 
-#### Median-Relative Performance Tracking
+#### Compare your results to the field
 
-Instead of looking at your raw placement, we compare your performance to the competition median. This accounts for the overall strength of the heat.
+Instead of just looking at your final placement, we look at how you did compared to the middle of the pack. This helps you see how you performed relative to the overall strength of the heat.
 
-_Stay tuned for the official release in the Research Lab._
+_Stay tuned for the official release in the DevAI Portfolio._

@@ -29,7 +29,7 @@ export default function EventGuide() {
   if (isLoading) {
     return (
       <Box padding="panel" textAlign="center">
-        <Text variant="mono" size="xs">Loading Intelligence...</Text>
+        <Text variant="mono" size="xs">Loading Guide...</Text>
       </Box>
     );
   }

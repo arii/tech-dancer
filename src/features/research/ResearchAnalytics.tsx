@@ -14,14 +14,14 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="Research & Analytics"
-        description="Technical studies and real-time data pipelines at the intersection of robotics and West Coast Swing."
+        title="DevAI Portfolio"
+        description="Technical tools and AI projects for the West Coast Swing community."
       />
       <Stack gap={12}>
         <PageHeader
-          label="TECHNICAL PORTFOLIO"
-          title="Data & Development Lab"
-          description="Technical portfolio showcasing DevAI-driven analysis tools and machine learning research applied to West Coast Swing."
+          label="PORTFOLIO"
+          title="DevAI Portfolio"
+          description="A collection of tools and technical projects built for the WCS community."
           as="h1"
         />
 
@@ -29,8 +29,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Intelligence Tools</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} CONSOLES</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Technical Tools</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
             {tools.map((tool) => (
@@ -74,8 +74,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Published Studies</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} ARTICLES</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} POSTS</Text>
           </Box>
 
           {studies.length > 0 ? (
@@ -115,10 +115,10 @@ export default function ResearchAnalytics() {
                 </Box>
                 <Stack gap={0.5}>
                   <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
-                    ETL Pipeline Synchronizing...
+                    Loading Data...
                   </Text>
                   <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
-                    The WCS Competition Data Scraper is ingesting and validating public datasets. Detailed studies will be available once baseline analysis is complete.
+                    The WCS Competition Data Scraper is getting data ready. Detailed studies will be available soon.
                   </Text>
                 </Stack>
               </Stack>

@@ -54,7 +54,7 @@ export default function Contact() {
       setSubmitted(true);
       resetForm();
     } catch {
-      setError('root', { message: 'System error: Unable to transmit payload. Please try again later.' });
+      setError('root', { message: 'Something went wrong while sending your message. Please try again later.' });
     }
   };
 
