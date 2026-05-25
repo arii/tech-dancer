@@ -17,9 +17,6 @@ export function getAllMerchProducts(): ProductCatalogItem[] {
 
 export { COLLECTIONS };
 
-export function getFeaturedMerch(limit = 3): ProductCatalogItem[] {
-  return MERCH_PRODUCTS.slice(0, limit);
-}
 
 export function getMerchByCollection(collectionId: string): ProductCatalogItem[] {
   if (collectionId === 'all') return MERCH_PRODUCTS;
