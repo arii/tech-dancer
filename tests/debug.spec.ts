@@ -17,7 +17,7 @@ test('check for console errors on /events', async ({ page }) => {
 
   console.log('Console errors:', errors);
 
-  const mainVisible = await page.locator('main').isVisible();
+  const mainVisible = await page.locator('#main-content').isVisible();
   console.log('Main visible:', mainVisible);
 
   if (errors.length > 0) {

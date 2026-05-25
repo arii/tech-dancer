@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Global Search Modal', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('./');
-    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('#main-content')).toBeVisible();
   });
 
   test('should open and close search modal via button', async ({ page }) => {
@@ -51,7 +51,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
   test('Global Search parameter should persist after reload', async ({ page }) => {
     await page.goto('./');
-    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('#main-content')).toBeVisible();
 
     const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
     await searchButton.click();
