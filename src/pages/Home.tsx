@@ -16,22 +16,22 @@ export default function Home() {
     <Box as="main" className="pb-safe-bottom">
       <SEO
         title="Home"
-        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."
+        description="BoomTick: Practical guides, event travel notes, and gear reviews for competitive West Coast Swing dancers."
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      <Box display="grid" className="min-h-[420px] lg:grid-cols-[1fr_380px]">
+      <Box display="grid" className="min-h-[360px] lg:grid-cols-[1fr_380px]">
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
 
       <Box className="lg:hidden" padding={4}>
-        <Box as={NavLink} to="/gear/2026-04-19-gear-essentials" display="flex" gap={4} padding={4} border radius="lg" className="group bg-surface">
+        <Box as={NavLink} to="/blog/2026-04-19-gear-essentials" display="flex" gap={4} padding={4} border radius="lg" className="group bg-surface">
           <Stack gap={1} flex>
             <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>Featured Guide</Text>
             <Text variant="body" size="lg" weight="font-black" className="transition-colors group-hover:text-accent">The WCS Travel Pack</Text>
             <Text variant="body" size="sm" color="dim">Your checklist for a smoother, better dance weekend.</Text>
-            <Text variant="mono" size="xs" color="accent" className="mt-2">Read the guide →</Text>
+            <Text variant="mono" size="xs" color="accent" marginTop={2}>Read the guide →</Text>
           </Stack>
           <Box width={20} height={20} radius="md" overflow="hidden" className="shrink-0 bg-surface-alt">
             <img src={`${ASSET_PREFIX}/assets/events/jjo-hero.jpg`} alt="WCS Travel Pack" className="h-full w-full object-cover" />

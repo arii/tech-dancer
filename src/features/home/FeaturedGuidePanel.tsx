@@ -8,7 +8,7 @@ const FEATURED = {
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/events/jjo-hero.jpg',
-  href: '/gear/2026-04-19-gear-essentials',
+  href: '/blog/2026-04-19-gear-essentials',
 };
 
 export function FeaturedGuidePanel() {
@@ -20,7 +20,7 @@ export function FeaturedGuidePanel() {
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">{FEATURED.eyebrow}</Text>
         <Text variant="headline" size="2xl" weight="font-black" color="main" leading="tight">{FEATURED.title}</Text>
         <Text variant="body" size="sm" color="dim">{FEATURED.subtitle}</Text>
-        <Text variant="mono" size="xs" color="accent" weight="font-bold" className="mt-2 group-hover:underline">Read the guide →</Text>
+        <Text variant="mono" size="xs" color="accent" weight="font-bold" marginTop={2} className="group-hover:underline">Read the guide →</Text>
       </Stack>
     </Box>
   );

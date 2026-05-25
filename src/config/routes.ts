@@ -42,7 +42,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Event Resource Guides',
+    label: 'Event Guides',
     icon: Calendar,
     skeleton: 'grid',
     isMobileVisible: true
@@ -55,7 +55,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
-    label: 'DevAI Portfolio',
+    label: 'Dev Lab',
     icon: Database,
     skeleton: 'grid',
     isMobileVisible: true
@@ -87,7 +87,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/subscribe',
-    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+    lazy: () => import('@/pages/Subscribe').then(m => ({ Component: m.default })),
     label: 'Subscribe',
     icon: Send,
     skeleton: 'simple'

@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';

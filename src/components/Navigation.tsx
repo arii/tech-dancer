@@ -58,7 +58,7 @@ export default function Navigation() {
                   to={item.path}
                   className={({ isActive }) => cn('text-sm transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-text-dim')}
                 >
-                  {item.path === '/blog' ? 'Training Notes' : item.path === '/research' ? 'DevAI' : item.label.replace('Blog Posts', 'Training Notes').replace('Event Resource Guides', 'Event Guides')}
+                  {item.path === '/blog' ? 'Training Notes' : item.path === '/research' ? 'DevAI' : item.label}
                 </NavLink>
               </Box>
             ))}
