@@ -1,4 +1,4 @@
-import { ArrowRight, Package, ShoppingBag, Map } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -13,7 +13,6 @@ export default function Resources() {
   const allEvents = getEvents();
 
   // Featured resources
-  const featuredResources = allResources.filter(r => r.tags?.includes('featured')).slice(0, 3);
   const educationalGuides = allResources.filter(r => r.category?.toLowerCase() === 'learn' || r.category?.toLowerCase() === 'general').slice(0, 3);
 
   // Gear previews (from affiliates)
@@ -73,7 +72,7 @@ export default function Resources() {
                 Gear Recommendations
               </Text>
             </Stack>
-            <Button as={NavLink} to="/gear" variant="ghost" className="text-accent gap-2 group">
+            <Button as={NavLink} to="/gear" variant="ghost" gap={2} className="text-accent group">
               View all gear <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Box>
@@ -105,7 +104,7 @@ export default function Resources() {
                 BoomTick Merch
               </Text>
             </Stack>
-            <Button as={NavLink} to="/merch" variant="ghost" className="text-accent gap-2 group">
+            <Button as={NavLink} to="/merch" variant="ghost" gap={2} className="text-accent group">
               Shop all merch <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Box>
@@ -137,7 +136,7 @@ export default function Resources() {
                 Event Resource Guides
               </Text>
             </Stack>
-            <Button as={NavLink} to="/events" variant="ghost" className="text-accent gap-2 group">
+            <Button as={NavLink} to="/events" variant="ghost" gap={2} className="text-accent group">
               Explore event guides <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Box>

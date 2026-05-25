@@ -67,11 +67,16 @@ export function ResourceCard(props: ResourceCardProps) {
   // Resolve link
   let resolvedHref = href;
   if (!resolvedHref) {
-    const affiliateId = affiliateIds?.[0] || id;
-    resolvedHref = affiliateManager.resolveResourceHref({
-      id: affiliateId,
-      gearSlug: slug
-    });
+    if (kind === 'affiliate-product') {
+      const affiliateId = affiliateIds?.[0] || id;
+      resolvedHref = affiliateManager.resolveResourceHref({
+        id: affiliateId,
+        gearSlug: slug
+      });
+    } else {
+      // Articles, guides, event-guides, tools etc. should use the basePath
+      resolvedHref = `${basePath}/${slug || id}`;
+    }
   }
 
   const isInternal = resolvedHref.startsWith('/') || (kind === 'article' || kind === 'guide' || kind === 'event-guide' || kind === 'tool');
