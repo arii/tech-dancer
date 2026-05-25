@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
-import { pickRest } from '@/lib/utils';
+import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
@@ -13,13 +13,22 @@ interface GearCardProps extends BaseProps {
   title: string;
   category: string;
   excerpt: string;
-  basePath: string;
   rating?: number;
   verdict?: string;
   image?: string;
   affiliateIds?: string[];
   [key: string]: unknown;
 }
+
+const CARD_STYLES = {
+  container: cn(
+    "group relative bg-surface transition-all duration-300",
+    "hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+  ),
+  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
+  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
+  verdict: "uppercase tracking-widest opacity-90"
+};
 
 export function GearCard(props: GearCardProps) {
   const {
@@ -35,7 +44,6 @@ export function GearCard(props: GearCardProps) {
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'basePath',
     'affiliateIds'
   ] as (keyof GearCardProps)[]);
 
@@ -46,7 +54,8 @@ export function GearCard(props: GearCardProps) {
     gearSlug: slug
   });
 
-  const isInternal = resolvedHref.startsWith('/');
+  const isExternal = /^https?:\/\//.test(resolvedHref);
+  const isInternal = !isExternal;
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
@@ -65,24 +74,24 @@ export function GearCard(props: GearCardProps) {
       padding={6}
       radius="lg"
       border
-      data-testid="gear-card"
-      className="group relative bg-surface transition-all duration-300 hover:bg-surface/80 hover:border-accent/30 hover:-translate-y-0.5"
+      className={CARD_STYLES.container}
     >
-      {isInternal && (
+      {isInternal ? (
         <Box
           as={NavLink}
           to={resolvedHref}
           aria-label={`Read gear review: ${title}`}
-          data-testid="gear-card-link"
-          className="absolute inset-0 z-10"
+          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
         />
-      )}
-      {verdict && (
-        <Box display="flex" justify="end">
-          <Text variant="mono" size="xs" color="body">
-            Best for: {verdict}
-          </Text>
-        </Box>
+      ) : (
+        <Box
+          as="a"
+          href={resolvedHref}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          aria-label={`Open external gear link: ${title}`}
+          className="absolute inset-0 z-10 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-lg"
+        />
       )}
 
       {/* Image zone */}
@@ -94,7 +103,7 @@ export function GearCard(props: GearCardProps) {
         className="bg-surface-alt/20"
       >
         {image ? (
-          <img src={image} alt={title} width={800} height={800} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
         ) : (
           <CategoryPlaceholder category={category} />
         )}
@@ -122,6 +131,13 @@ export function GearCard(props: GearCardProps) {
         </Box>
       </Box>
       <Stack gap={2}>
+        {verdict && (
+          <Box marginBottom={2}>
+            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
+              Best for: {verdict}
+            </Text>
+          </Box>
+        )}
         <Text
           as="h3"
           variant="body"
@@ -141,39 +157,21 @@ export function GearCard(props: GearCardProps) {
 
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         {rating !== undefined && (
-          <Box display="flex" align="center" gap={1}>
-            <Star size={16} className="text-accent fill-accent" />
-            <Text variant="mono" size="xs" weight="font-bold">
+          <Box display="flex" align="center" gap={1.5}>
+            <Star size={14} className="text-accent fill-accent" aria-hidden="true" />
+            <Text variant="mono" size="xs" weight="font-bold" color="accent">
               {rating.toFixed(1)}/5
             </Text>
           </Box>
         )}
-        <Box display="flex" align="center" gap={1}>
-          {isInternal ? (
-            <>
-              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-                Read review
-              </Text>
-              <ArrowRight className="w-3 h-3 text-accent" />
-            </>
+        <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+            {isExternal ? "View deal" : "Read review"}
+          </Text>
+          {isExternal ? (
+            <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
           ) : (
-            <Box
-              as="a"
-              href={resolvedHref}
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              display="flex"
-              align="center"
-              gap={1}
-              className="z-20 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
-              aria-label={`View ${title} on external site`}
-              data-testid="gear-card-store-link"
-            >
-              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-                View store
-              </Text>
-              <ExternalLink className="w-3 h-3 text-accent" />
-            </Box>
+            <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
           )}
         </Box>
       </Box>
