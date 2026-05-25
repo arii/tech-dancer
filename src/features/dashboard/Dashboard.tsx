@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { useHome } from './useHome';
 import { SEO } from '@/components/SEO';
 import { STATIC_SCHEMAS } from '@/config/constants';
@@ -20,9 +20,6 @@ export default function Dashboard() {
     upcomingEvents 
   } = useHome();
 
-  if (!featuredPost) {
-    return <Box padding={8}>No featured content available</Box>;
-  }
 
   return (
     <Box as="section">
@@ -35,10 +32,16 @@ export default function Dashboard() {
         <HeroSection />
 
         {/* Dance Focus: Hero Spotlight */}
-        <HeroSpotlight 
-          featuredPost={featuredPost} 
-          recentPosts={recentPosts} 
-        />
+        {featuredPost ? (
+          <HeroSpotlight 
+            featuredPost={featuredPost} 
+            recentPosts={recentPosts} 
+          />
+        ) : (
+          <Box paddingX={{ base: 4, md: 6, lg: 12 }}>
+            <Text color="dim">No blog posts available yet.</Text>
+          </Box>
+        )}
 
         {/* Gear Reviews: Carousel */}
         {gearItems.length > 0 && (

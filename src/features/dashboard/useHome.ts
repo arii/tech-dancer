@@ -28,9 +28,10 @@ export function useHome() {
   const dancePosts = allPosts.filter(p => !p.category?.toLowerCase().includes('tech') && !p.category?.toLowerCase().includes('data') && !p.category?.toLowerCase().includes('research'));
   const devPosts = allPosts.filter(p => p.category?.toLowerCase().includes('tech') || p.category?.toLowerCase().includes('data') || p.category?.toLowerCase().includes('research'));
 
-  // Feature post is the first dance post, recent updates are the next 2
-  const featuredPost = dancePosts[0];
-  const recentPosts = dancePosts.slice(1, 4);
+  // Prefer dance content for the hero; fall back to the latest post so homepage sections always render
+  const featuredPost = dancePosts[0] ?? allPosts[0];
+  const heroPool = dancePosts.length > 0 ? dancePosts : allPosts;
+  const recentPosts = heroPool.filter(post => post.slug !== featuredPost?.slug).slice(0, 3);
 
   const handleNavigateToBlog = () => navigate('/blog');
   const handleNavigateToPost = (slug: string) => navigate(`/blog/${slug}`);
