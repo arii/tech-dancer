@@ -61,8 +61,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check runtime contract files
+        run: pnpm run check:runtime-files
+
+      - name: Check active runtime
+        run: pnpm run doctor
 
       - name: Verify lockfile integrity
         run: |
@@ -116,8 +128,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check active runtime
+        run: pnpm run doctor
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
@@ -174,8 +195,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Check active runtime
+        run: pnpm run doctor
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
