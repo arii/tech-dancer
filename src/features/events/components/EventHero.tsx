@@ -62,7 +62,7 @@ export function EventHero({
         >
           <img
             src={image}
-            alt={title}
+            alt={`${title} event backdrop`}
             className="w-full h-full object-cover opacity-40"
           />
           <Box
@@ -221,18 +221,20 @@ export function EventHero({
                     Why I'm Attending
                   </Text>
                 </Box>
-                <Box
-                  as="a"
-                  href="#notes"
-                  display={{ base: "none", md: "flex" }}
-                  align="center"
-                  gap={2}
-                  color="accent"
-                  className="hover:text-white transition-colors"
-                >
-                  <Text variant="mono" size="tiny" weight="font-bold" uppercase>Full Preview</Text>
-                  <ChevronRight size={12} />
-                </Box>
+                {activeTabIds?.includes('notes') && (
+                  <Box
+                    as="a"
+                    href="#notes"
+                    display={{ base: "none", md: "flex" }}
+                    align="center"
+                    gap={2}
+                    color="accent"
+                    className="hover:text-white transition-colors"
+                  >
+                    <Text variant="mono" size="tiny" weight="font-bold" uppercase>Full Preview</Text>
+                    <ChevronRight size={12} />
+                  </Box>
+                )}
               </Box>
               <Text
                 variant="body"

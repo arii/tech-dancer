@@ -76,6 +76,11 @@ function transform<T extends { date?: string; draft?: boolean }>(
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
         author: String(data.author || ""),
+        location: String(data.location || ""),
+        city: String(data.city || ""),
+        schedule: String(data.schedule || ""),
+        description: String(data.description || ""),
+        whyAttending: data.whyAttending ? String(data.whyAttending) : undefined,
         startDate: data.startDate ? String(data.startDate) : undefined,
         endDate: data.endDate ? String(data.endDate) : undefined,
         earlyBirdDate: data.earlyBirdDate

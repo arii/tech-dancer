@@ -32,10 +32,14 @@ export default function EventGuide() {
     const ids: string[] = [];
     if (event.theme) ids.push('theme');
     if (gearSections.length > 0) ids.push('gear');
-    // For now we assume reminders and travel are always shown if event exists,
-    // or we could check for specific fields
-    ids.push('reminders');
-    ids.push('travel');
+
+    // Only show reminders if at least one milestone date exists
+    const hasTimeline = event.earlyBirdDate || event.registrationDeadline || event.hotelCutoffDate || event.packingReminderDate;
+    if (hasTimeline) ids.push('reminders');
+
+    // Only show travel if specific venue/logistics description is present
+    if (event.description) ids.push('travel');
+
     if (event.content) ids.push('notes');
     if (relatedEvents.length > 0) ids.push('related');
     return ids;
