@@ -1,6 +1,6 @@
-import { NavLink } from 'react-router-dom';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { BaseCard } from './BaseCard';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
@@ -41,23 +41,16 @@ export function ContentCard(props: ContentCardProps) {
   };
 
   return (
-    <Stack
+    <BaseCard
       as={motion.create("article")}
       direction="col"
       gap={4}
       height="full"
       padding={6}
-      radius="lg"
-      border
-      className="group relative bg-surface hover:border-accent/40 transition-all duration-300 hover:-translate-y-0.5"
+      to={`${basePath}/${slug}`}
+      ariaLabel={`Read article: ${title}`}
       {...motionProps}
     >
-      <Box
-        as={NavLink}
-        to={`${basePath}/${slug}`}
-        aria-label={`Read article: ${title}`}
-        className="absolute inset-0 z-10"
-      />
       <Box
         paddingX={2}
         paddingY={1}
@@ -102,6 +95,6 @@ export function ContentCard(props: ContentCardProps) {
           Read article
         </Text>
       </Box>
-    </Stack>
+    </BaseCard>
   );
 }

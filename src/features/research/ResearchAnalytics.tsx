@@ -64,7 +64,7 @@ export default function ResearchAnalytics() {
                   </Stack>
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Open Console</Text>
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Open Tools</Text>
                   <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>

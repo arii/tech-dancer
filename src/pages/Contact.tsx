@@ -7,10 +7,10 @@ import { ContactFormView } from '@/features/contact/components/ContactFormView';
 import { SEO } from '@/components/SEO';
 
 const contactFormSchema = z.object({
-  name: z.string().min(1, 'Personnel name required'),
-  email: z.string().min(1, 'Signal destination required').email('Invalid signal coordinate'),
+  name: z.string().min(1, 'Name required'),
+  email: z.string().min(1, 'Email address required').email('Invalid email address'),
   subject: z.string().min(1, 'Subject required'),
-  message: z.string().min(1, 'Data payload missing').min(10, 'Payload below minimum threshold (10 chars)'),
+  message: z.string().min(1, 'Message destination required').min(10, 'Message destination below minimum threshold (10 chars)'),
 });
 
 type ContactFormData = z.infer<typeof contactFormSchema>;

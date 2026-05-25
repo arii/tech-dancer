@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { BaseCard } from './BaseCard';
 import { AffiliateLink } from '@/types';
 
 interface AffiliateCardProps {
@@ -8,15 +9,11 @@ interface AffiliateCardProps {
 
 export function AffiliateCard({ link }: AffiliateCardProps) {
   return (
-    <Box
-      position="relative"
-      display="flex"
-      direction="col"
+    <BaseCard
       padding={5}
-      surface="default"
-      border
-      radius="lg"
-      className="group transition-all h-full hover:border-accent"
+      height="full"
+      href={link.url}
+      ariaLabel={`Open ${link.name}`}
     >
       <Stack gap={2} flex={1}>
         <Box display="flex" align="center" justify="between">
@@ -27,15 +24,13 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         </Box>
 
         <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors">
-          <a href={link.url} target="_blank" rel="noopener noreferrer" className="after:absolute after:inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
-            {link.name}
-          </a>
+          {link.name}
         </Text>
 
         <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed">
           {link.description}
         </Text>
       </Stack>
-    </Box>
+    </BaseCard>
   );
 }
