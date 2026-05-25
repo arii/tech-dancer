@@ -1,5 +1,4 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 import { ActionButton } from '@/components/ui/ActionButton';
 
 export function Footer() {

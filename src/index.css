@@ -9,6 +9,7 @@
   --color-surface-alt: var(--raw-color-surface-alt);
   --color-line: var(--raw-color-line);
   --color-accent: var(--raw-color-accent);
+  --color-accent-sky: var(--raw-color-accent-sky);
   --color-accent-purple: var(--raw-color-accent-purple);
   --color-accent-magenta: var(--raw-color-accent-magenta);
   --color-accent-shadow: var(--raw-color-accent-shadow);
@@ -230,8 +231,8 @@
   @media (max-width: 640px) {
     body { line-height: 1.7; }
   }
-  :is(a, button, input, textarea, select, [role="button"], [tabindex], article):focus-visible {
-    outline: 2px solid var(--raw-color-accent);
+  :where(:is(a, button, input, textarea, select, [role="button"], [tabindex], article)):focus-visible {
+    outline: 2px solid var(--color-accent-sky);
     outline-offset: 2px;
   }
   .prose a {
