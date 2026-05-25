@@ -2,6 +2,9 @@ name: 'Auto Conflict Resolver'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  TARGET: ${{ inputs.target_branch || 'main' }}
+  SOURCE: ${{ inputs.source_branch }}
+  PR_NUMBER: ${{ inputs.pr_number || github.event.issue.number || '0' }}
 
 on:
   issue_comment:
@@ -34,11 +37,6 @@ on:
         description: 'The PR number to comment on (required for feedback)'
         required: true
         type: string
-
-env:
-  TARGET: ${{ inputs.target_branch || 'main' }}
-  SOURCE: ${{ inputs.source_branch }}
-  PR_NUMBER: ${{ inputs.pr_number || github.event.issue.number || '0' }}
 
 jobs:
   merge_and_resolve:
@@ -110,7 +108,7 @@ jobs:
       - name: Activate pinned pnpm
         run: corepack prepare pnpm@10.28.2 --activate
 
-      - name: Check active runtime
+      - name: Validate Runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
