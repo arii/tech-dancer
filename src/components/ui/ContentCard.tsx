@@ -31,7 +31,8 @@ export function ContentCard(props: ContentCardProps) {
   const motionProps = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
-    'basePath'
+    'basePath',
+    'ctaText'
   ] as (keyof ContentCardProps)[]);
 
   const getTagColorClass = (cat: string) => {
@@ -44,7 +45,7 @@ export function ContentCard(props: ContentCardProps) {
 
   return (
     <Stack
-      as={motion.create("article")}
+      as={motion.article}
       direction="col"
       gap={{ base: 3, md: 4 }}
       height="full"
@@ -95,7 +96,8 @@ export function ContentCard(props: ContentCardProps) {
           size="sm"
           color="dim"
           leading="relaxed"
-          className="line-clamp-3"
+          clamp={3}
+          maxWidth="prose"
         >
            {excerpt}
         </Text>

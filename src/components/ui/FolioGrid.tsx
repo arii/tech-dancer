@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Box, Grid, Stack } from '@/layouts/Primitives';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { SearchBox } from '@/components/ui/SearchBox';
