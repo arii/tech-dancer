@@ -35,6 +35,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       headerExtras={headerExtras}
       imageBack={post.imageBack}
       showImagePair
+      imageFit="contain"
     >
       {post.verdict && <VerdictCallout verdict={post.verdict} />}
     </DetailLayout>
