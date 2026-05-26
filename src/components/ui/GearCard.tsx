@@ -15,7 +15,6 @@
  */
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
-import { SourceBadge } from './SourceBadge';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -150,8 +149,6 @@ export function GearCard(props: GearCardProps) {
           )}
         </Box>
 
-        {/* Source badge */}
-        <SourceBadge type="affiliate" position="bottom-left" />
       </Box>
       <Stack gap={2}>
         {verdict && (
