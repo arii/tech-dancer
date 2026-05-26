@@ -122,19 +122,6 @@ export function HeroSection() {
           </Text>
         </Stack>
 
-        <Box marginTop={8} className="opacity-0 hero-cta-anim">
-          <ActionButton
-            as={NavLink}
-            to="/events"
-            className="group/cta"
-          >
-            <Stack direction="row" align="center" gap={2}>
-              <Text weight="font-bold">Browse Resource Guides</Text>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover/cta:translate-x-1" />
-            </Stack>
-          </ActionButton>
-        </Box>
-
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Stack
           direction="row"

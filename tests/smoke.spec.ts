@@ -36,14 +36,6 @@ test.describe('Navigation Smoke Tests', () => {
     expect(filteredErrors).toHaveLength(0);
   });
 
-  test('hero cta navigates to events', async ({ page }) => {
-    await page.goto('./');
-    const cta = page.getByRole('link', { name: 'Browse Resource Guides' });
-    await expect(cta).toBeVisible();
-    await cta.click();
-    await expect(page).toHaveURL(/.*\/events/);
-  });
-
   test('all nav links are reachable and error-free', async ({ page, pageErrors }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
