@@ -8,11 +8,11 @@ import { FeaturedEventGuide } from '@/features/home/FeaturedEventGuide';
 import { GearShelf } from '@/features/home/GearShelf';
 import { LatestPosts } from '@/features/home/LatestPosts';
 import { DevLabCallout } from '@/features/home/DevLabCallout';
-import { HeroSection } from '@/components/ui/HeroSection';
+import { HomeHero } from '@/features/home/HomeHero';
 
 export default function Home() {
   return (
-    <Box className="pb-safe-bottom mx-auto w-full max-w-[1240px]">
+    <Box as="main" className="pb-safe-bottom mx-auto w-full max-w-[1240px]">
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -25,7 +25,7 @@ export default function Home() {
         display="grid"
         className="items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
       >
-        <HeroSection />
+        <HomeHero />
         <FeaturedGuidePanel />
       </Box>
 
