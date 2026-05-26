@@ -2,7 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
-import { ResourceStats } from '../ResourceStats';
+import { ResourceScoreGrid } from '../ResourceScoreGrid';
 
 interface ResourceHeaderExtrasProps {
   author: string;
@@ -20,7 +20,7 @@ export function ResourceHeaderExtras({ author, rating, durability, value, priceC
         <Text variant="mono" size="xs">{author}</Text>
       </Stack>
 
-      <ResourceStats
+      <ResourceScoreGrid
         rating={rating}
         durability={durability}
         value={value}

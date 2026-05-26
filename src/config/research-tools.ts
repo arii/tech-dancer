@@ -10,10 +10,10 @@ export interface ResearchTool {
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'wcs-scraper',
-    name: 'WCS Results Tracker',
-    category: 'Practice Tools',
+    name: 'WCS Scoring Scraper',
+    category: 'Data Tools',
     status: 'Active',
-    layman: 'Tracks and analyzes scoring data from WCS competitions to show trends and results.'
+    layman: 'Scrapes and analyzes scoring data from WCS competitions to show trends and results.'
   },
   {
     id: 'blog-drafter',

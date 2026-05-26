@@ -1,6 +1,6 @@
 ---
 type: post
-title: "Coming Soon: WCS Results Tracker"
+title: "Coming Soon: WCS Competition Data Scraper"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
@@ -22,7 +22,7 @@ A careful, respectful way to use public scoring data to analyze progression and 
 
 In West Coast Swing, we are judged by humans. Humans are great, but results can vary from heat to heat. While one event result only tells part of the story, looking at scores across multiple events can reveal helpful patterns about how you're progressing and how different panels see your dancing.
 
-I am excited to announce the development of the **WCS Results Tracker**, a tool designed to make competition results easier to understand.
+I am excited to announce the development of the **WCS Competition Data Scraper**, a tool designed to make competition results easier to understand.
 
 ### Core Philosophy
 
@@ -44,4 +44,4 @@ This helps you see how consistent judging is across different events. It can hel
 
 Instead of just looking at your final placement, we look at how you did compared to the middle of the pack. This helps you see how you performed relative to the overall strength of the heat.
 
-_Stay tuned for the official release in the Tools & Research section._
+_Stay tuned for the official release in the DevAI Portfolio._

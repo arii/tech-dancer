@@ -7,21 +7,21 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 
-export default function ToolsGrid() {
+export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   return (
     <Box as="section">
       <SEO
-        title="Tools & Research"
-        description="Technical tools and research projects for the West Coast Swing community."
+        title="DevAI Portfolio"
+        description="Technical tools and AI projects for the West Coast Swing community."
       />
       <Stack gap={12}>
         <PageHeader
           label="PORTFOLIO"
-          title="Tools & Research"
-          description="A collection of tools and research projects built for the WCS community."
+          title="DevAI Portfolio"
+          description="A collection of tools and technical projects built for the WCS community."
           as="h1"
         />
 
@@ -29,7 +29,7 @@ export default function ToolsGrid() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Practice Tools</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Technical Tools</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -64,7 +64,7 @@ export default function ToolsGrid() {
                   </Stack>
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Tool</Text>
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Open Tools</Text>
                   <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>

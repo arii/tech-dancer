@@ -5,25 +5,25 @@ category: "Data Science"
 excerpt: "Analysis of the initial large-scale synchronization of West Coast Swing competition results, focusing on historical backfill and data accuracy."
 ---
 
-# WCS Results Tracker: Data Quality Report
+# WCS Scraper: Initial Synchronization Study
 
-This report documents the initial setup and data collection phase of the WCS Results Tracker. Our goal is to provide a complete and accurate set of West Coast Swing competition results for community research.
+This study documents the initial deployment and synchronization phase of the WCS Scraper tool. Our goal is to provide a comprehensive, transparent, and accurate dataset of West Coast Swing preliminary competition results for research and statistical analysis.
 
-## Data Collection Progress
+## Synchronization Progress
 
-As of May 2026, we have set up the main data processing system and completed the following:
+As of May 2026, we have successfully implemented the core ETL (Extract, Transform, Load) pipeline and completed the following:
 
-- **2026 Data**: Results from the 2026 season are being captured as they happen.
-- **Historical Results**: We are currently adding results from 2023 to 2025 to provide better historical context.
-- **Data Checks**: All records are checked to ensure they are correctly assigned to the right dancer and event.
+- **2026 Data Prioritization**: Real-time results from the 2026 season are being captured with high fidelity.
+- **Historical Backfill**: We are currently processing results from 2023 to 2025 to ensure longitudinal depth in our analysis.
+- **Schema Validation**: All records undergo strict validation to ensure unique indexing via Dancer ID and Result ID.
 
 ## Data Integrity Focus
 
 We have addressed several critical issues identified during the pilot phase:
 
 1. **Registry Link Resilience**: Competitors without direct WSDC registry links are no longer dropped; they are indexed using robust temporary identifiers.
-2. **Result Restoration**: Missing prelim and semi-final data for specific events (e.g., Easter Swing) have been found and added.
-3. **Accuracy Checks**: We use several data points to ensure that event locations and dates match the scoring records.
+2. **Result Restoration**: Missing prelim and semi-final data for specific events (e.g., Easter Swing) have been manually audited and restored.
+3. **Multi-Point Verification**: We use a combination of metadata to ensure that event locations and dates are correctly associated with scoring records.
 
 ## Community Feedback (Interactive Data Lab)
 
@@ -42,4 +42,4 @@ Please send an email to [research@ariidance.com](mailto:research@ariidance.com?s
 - Link to the original result page (if available)
 - Description of the discrepancy
 
-Your input directly helps us improve our data processing and ensure accuracy for the entire community.
+Your input directly helps us stabilize the pipeline and ensure 100% data accuracy for the entire community.
