@@ -101,17 +101,31 @@ export function useEventDetail() {
     const themeAccessoryCount = 3;
     const remainingGearQuota = 15 - (allOutfits.length > 0 ? themePickCount : 0) - (allAccessories.length > 0 ? themeAccessoryCount : 0);
 
-    let currentGearCount = 0;
-    const compactGear = allGearSections.map((section) => {
-      const take = Math.max(0, Math.min(3, remainingGearQuota - currentGearCount));
-      const items = section.items.slice(0, take);
-      currentGearCount += items.length;
-      return {
-        ...section,
-        items,
-        hasMore: section.items.length > take,
-      };
-    }).filter(s => s.items.length > 0);
+    const compactGearResult = allGearSections.reduce(
+      (acc, section) => {
+        const take = Math.max(0, Math.min(3, remainingGearQuota - acc.count));
+        const items = section.items.slice(0, take);
+        if (items.length > 0) {
+          return {
+            sections: [
+              ...acc.sections,
+              {
+                ...section,
+                items,
+                hasMore: section.items.length > take,
+              },
+            ],
+            count: acc.count + items.length,
+          };
+        }
+        return acc;
+      },
+      {
+        sections: [] as (ResolvedGearSection & { hasMore: boolean })[],
+        count: 0,
+      },
+    );
+    const compactGear = compactGearResult.sections;
 
     return {
       themeOutfits: allOutfits,
