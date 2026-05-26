@@ -1,12 +1,9 @@
 // impeccable-ignore-file
 
-import { NavLink } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
-import { ActionButton } from './ActionButton';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
 const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
