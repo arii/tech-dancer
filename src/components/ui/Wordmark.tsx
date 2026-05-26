@@ -35,9 +35,10 @@ export function Wordmark({
   return (
     <Text
       variant={VARIANT_MAP[variant]}
+      color="white"
       size={size || (isHero ? undefined : (isNav ? "sm" : "base"))}
       weight={weight || "font-extrabold"}
-      className={cn(VARIANT_CLASSES[variant], className)}
+      className={cn("leading-none", VARIANT_CLASSES[variant], className)}
       style={style}
       tracking="wordmark"
       {...props}
