@@ -28,7 +28,7 @@ export default function Merch() {
 
       <Stack gap={8} width="full">
         <PageHeader
-          label="STOREFRONT"
+          eyebrow="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find something fun for your next dance weekend."
         />
