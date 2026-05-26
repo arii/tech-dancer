@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { MapPin, Calendar, Palette, Building2, Target, Bell, Package } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
-import { Logo } from '@/components/ui/Logo';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
 import { EventNavigation } from './EventNavigation';
 
