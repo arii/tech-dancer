@@ -1,63 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-interface AmazonPriceData {
+interface AmazonPriceResponse {
   price: string | null;
   title: string | null;
-  loading: boolean;
-  error: boolean;
 }
 
 export function useAmazonPrice(asin?: string) {
-  const [data, setData] = useState<AmazonPriceData>({
-    price: null,
-    title: null,
-    loading: !!asin,
-    error: false,
+  const { data, isLoading, isError } = useQuery<AmazonPriceResponse>({
+    queryKey: ['amazon-price', asin],
+    queryFn: async () => {
+      if (!asin) return { price: null, title: null };
+      const response = await fetch(`/api/amazon-price?asin=${asin}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch price');
+      }
+      return response.json();
+    },
+    enabled: !!asin,
+    staleTime: 1000 * 60 * 60, // 1 hour
   });
 
-  useEffect(() => {
-    if (!asin) {
-      setData({ price: null, title: null, loading: false, error: false });
-      return;
-    }
-
-    let isMounted = true;
-
-    async function fetchPrice() {
-      setData(prev => ({ ...prev, loading: true, error: false }));
-      try {
-        const response = await fetch(`/api/amazon-price?asin=${asin}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch price');
-        }
-        const result = await response.json();
-        if (isMounted) {
-          setData({
-            price: result.price,
-            title: result.title,
-            loading: false,
-            error: false,
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching Amazon price:', err);
-        if (isMounted) {
-          setData({
-            price: null,
-            title: null,
-            loading: false,
-            error: true,
-          });
-        }
-      }
-    }
-
-    fetchPrice();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [asin]);
-
-  return data;
+  return {
+    price: data?.price ?? null,
+    title: data?.title ?? null,
+    loading: isLoading,
+    error: isError,
+  };
 }
