@@ -4,14 +4,16 @@
     "name": "Loop Quiet 2 Ear Plugs",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "The quiet version of the loop earplugs are good for very loud ballrooms and sleeping with roommates."
+    "description": "The quiet version of the loop earplugs are good for very loud ballrooms and sleeping with roommates.",
+    "image": "/images/gear/amazon/loop-quiet-2-ear-plugs.jpg"
   },
   "bloch-grecian": {
     "id": "bloch-grecian",
     "name": "Bloch Grecian Sandal",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Popular shoe worn by champion swing dancers. Requires foot strength."
+    "description": "Popular shoe worn by champion swing dancers. Requires foot strength.",
+    "image": "/images/gear/amazon/bloch-women-s-grecian-sandal-dance-shoes.jpg"
   },
   "loop-experience": {
     "id": "loop-experience",
@@ -27,56 +29,64 @@
     "name": "Suede Stick-on Sheets",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Turn regular sneakers into dance shoes for indoor floors."
+    "description": "Turn regular sneakers into dance shoes for indoor floors.",
+    "image": "/images/gear/amazon/suede-stick-on-sheets.jpg"
   },
   "compression-cubes": {
     "id": "compression-cubes",
     "name": "Compression Packing Cubes",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Save space and keep outfits organized."
+    "description": "Save space and keep outfits organized.",
+    "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
   },
   "travel-bottles": {
     "id": "travel-bottles",
     "name": "Silicone Travel Bottles",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Leak-proof refillable containers for TSA-approved liquids."
+    "description": "Leak-proof refillable containers for TSA-approved liquids.",
+    "image": "/images/gear/amazon/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.jpg"
   },
   "dance-socks": {
     "id": "dance-socks",
     "name": "2 FEET Dance Socks",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Slip over sneakers for smooth pivots and turns on wood floors."
+    "description": "Slip over sneakers for smooth pivots and turns on wood floors.",
+    "image": "/images/gear/amazon/2-feet-sock-for-dancing-on-smooth-floors-over-sneakers-smooth-pivots-t.jpg"
   },
   "listerine-tabs": {
     "id": "listerine-tabs",
     "name": "Listerine Ready! Tabs",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Revolutionary 4-hour fresh breath in a chewable tablet."
+    "description": "Revolutionary 4-hour fresh breath in a chewable tablet.",
+    "image": "/images/gear/amazon/listerine-ready-tabs-chewable-tablets-with-clean-mint-flavor-revolutio.jpg"
   },
   "rave-fan": {
     "id": "rave-fan",
     "name": "Zolee Large Rave Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Stay cool while adding a touch of flair to your performance."
+    "description": "Stay cool while adding a touch of flair to your performance.",
+    "image": "/images/gear/amazon/zolee-large-rave-folding-hand-fan-with-bamboo-ribs-for-men-women-chine.jpg"
   },
   "neck-fan": {
     "id": "neck-fan",
     "name": "OLV Neck Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Keeps you cooler during hot workshops, comps, and late nights."
+    "description": "Keeps you cooler during hot workshops, comps, and late nights.",
+    "image": "/images/gear/amazon/olv-neck-fan-5000mah-foldable-neck-fan-portable-rechargeable-led-displ.jpg"
   },
   "hanging-toiletry-bag": {
     "id": "hanging-toiletry-bag",
     "name": "Relavel Hanging Toiletry Bag",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Waterproof and spacious organizer for all your toiletries."
+    "description": "Waterproof and spacious organizer for all your toiletries.",
+    "image": "/images/gear/amazon/relavel-travel-hanging-toiletry-bag-for-men-women-travel-kit-shaving-b.jpg"
   },
   "garment-steamer": {
     "id": "garment-steamer",
@@ -92,119 +102,136 @@
     "name": "Epsom Salt / Bath Bombs",
     "url": "https://amazon.com",
     "category": "recovery",
-    "description": "Soothe tired muscles and refresh your skin after a long weekend."
+    "description": "Soothe tired muscles and refresh your skin after a long weekend.",
+    "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg"
   },
   "foam-roller": {
     "id": "foam-roller",
     "name": "Foam Roller / Hypervolt",
     "url": "https://amazon.com",
     "category": "recovery",
-    "description": "Good for sore legs, tight hips, and post-event recovery."
+    "description": "Good for sore legs, tight hips, and post-event recovery.",
+    "image": "/images/gear/amazon/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpg"
   },
   "rainbow-fringe-dress": {
     "id": "rainbow-fringe-dress",
     "name": "Rainbow Fringe Dance Dress",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Vibrant fringe dress perfect for theme nights."
+    "description": "Vibrant fringe dress perfect for theme nights.",
+    "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg"
   },
   "sequin-bomber-jacket": {
     "id": "sequin-bomber-jacket",
     "name": "Sequin Bomber Jacket",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Flashy jacket to stand out on the social floor."
+    "description": "Flashy jacket to stand out on the social floor.",
+    "image": "/images/gear/amazon/cresay-women-s-sequin-fitted-long-sleeve-zipper-blazer-bomber-jacket-r.jpg"
   },
   "ombre-dance-dress": {
     "id": "ombre-dance-dress",
     "name": "Ombre Flowy Dance Dress",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Gradient dress that moves beautifully with every turn."
+    "description": "Gradient dress that moves beautifully with every turn.",
+    "image": "/images/gear/amazon/prettygarden-women-s-summer-casual-deep-v-neck-short-sleeve-wrap-draws.jpg"
   },
   "rainbow-earrings": {
     "id": "rainbow-earrings",
     "name": "Rainbow Statement Earrings",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Bold accessories to complete your theme outfit."
+    "description": "Bold accessories to complete your theme outfit.",
+    "image": "/images/gear/amazon/didder-gold-crystal-tiara-crown-headband-princess-elegant-crown-with-c.jpg"
   },
   "pride-sunglasses": {
     "id": "pride-sunglasses",
     "name": "Pride Heart Sunglasses",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Fun sunglasses for pool parties and daytime events."
+    "description": "Fun sunglasses for pool parties and daytime events.",
+    "image": "/images/gear/amazon/volpeblu-24-pack-light-up-cups-led-flash-shot-glasses-for-party-favors.jpg"
   },
   "portable-charger": {
     "id": "portable-charger",
     "name": "Anker Portable Power Bank",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "High-capacity charger to keep your phone alive during long event days."
+    "description": "High-capacity charger to keep your phone alive during long event days.",
+    "image": "/images/gear/amazon/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpg"
   },
   "travel-pillow": {
     "id": "travel-pillow",
     "name": "Memory Foam Travel Pillow",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Essential for catching some sleep on flights or between sessions."
+    "description": "Essential for catching some sleep on flights or between sessions.",
+    "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg"
   },
   "microfiber-towel": {
     "id": "microfiber-towel",
     "name": "Quick-Dry Microfiber Towel",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Compact and fast-drying towel for the gym or pool."
+    "description": "Compact and fast-drying towel for the gym or pool.",
+    "image": "/images/gear/amazon/the-gym-people-womens-high-waisted-running-shorts-quick-dry-athletic-w.jpg"
   },
   "dry-shampoo": {
     "id": "dry-shampoo",
     "name": "Batiste Dry Shampoo",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Refresh your hair quickly between workshops and social dancing."
+    "description": "Refresh your hair quickly between workshops and social dancing.",
+    "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg"
   },
   "electric-fan": {
     "id": "electric-fan",
     "name": "Handheld Mini Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "A life-saver on a crowded, hot dance floor."
+    "description": "A life-saver on a crowded, hot dance floor.",
+    "image": "/images/gear/amazon/olv-neck-fan-5000mah-foldable-neck-fan-portable-rechargeable-led-displ.jpg"
   },
   "liquid-iv": {
     "id": "liquid-iv",
     "name": "Liquid I.V. Hydration Multiplier",
     "url": "https://amazon.com",
     "category": "recovery",
-    "description": "Stay hydrated and maintain electrolyte balance during intense weekends."
+    "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
+    "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg"
   },
   "shoe-brush": {
     "id": "shoe-brush",
     "name": "Suede Shoe Brush",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Keep your suede soles clean and grippy."
+    "description": "Keep your suede soles clean and grippy.",
+    "image": "/images/gear/amazon/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpg"
   },
   "mints": {
     "id": "mints",
     "name": "Altoids Peppermint Mints",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Essential for social dancing confidence."
+    "description": "Essential for social dancing confidence.",
+    "image": "/images/gear/amazon/listerine-ready-tabs-chewable-tablets-with-clean-mint-flavor-revolutio.jpg"
   },
   "hand-sanitizer": {
     "id": "hand-sanitizer",
     "name": "Purell Advanced Hand Sanitizer",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Stay healthy while dancing with hundreds of people."
+    "description": "Stay healthy while dancing with hundreds of people.",
+    "image": "/images/gear/amazon/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.jpg"
   },
   "rainbow-fan": {
     "id": "rainbow-fan",
     "name": "Rainbow Folding Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Show your pride while staying cool."
+    "description": "Show your pride while staying cool.",
+    "image": "/images/gear/amazon/zolee-large-rave-folding-hand-fan-with-bamboo-ribs-for-men-women-chine.jpg"
   },
   "love-neon-follow-shirt": {
     "id": "love-neon-follow-shirt",
@@ -310,42 +337,48 @@
     "name": "Dance Bag",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Weekend essential dance bag for all levels."
+    "description": "Weekend essential dance bag for all levels.",
+    "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
   },
   "rainbow-bob-wig": {
     "id": "rainbow-bob-wig",
     "name": "Rainbow Bob Wig",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Vibrant rainbow bob wig to complete your event look."
+    "description": "Vibrant rainbow bob wig to complete your event look.",
+    "image": "/images/gear/amazon/qhq-shininglifi-rainbow-bob-wigs-and-a-wig-cap-women-s-short-straight.jpg"
   },
   "rainbow-sequin-bomber-jacket": {
     "id": "rainbow-sequin-bomber-jacket",
     "name": "Rainbow Sequin Bomber Jacket",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Dazzle on the dance floor with this rainbow sequin jacket."
+    "description": "Dazzle on the dance floor with this rainbow sequin jacket.",
+    "image": "/images/gear/amazon/cresay-women-s-sequin-fitted-long-sleeve-zipper-blazer-bomber-jacket-r.jpg"
   },
   "rainbow-bustle-skirt": {
     "id": "rainbow-bustle-skirt",
     "name": "Rainbow Bustle Skirt",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "A fun and flowy rainbow bustle skirt for themed nights."
+    "description": "A fun and flowy rainbow bustle skirt for themed nights.",
+    "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg"
   },
   "holographic-rave-fan": {
     "id": "holographic-rave-fan",
     "name": "Holographic Rave Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Keep cool and stay flashy with this holographic folding fan."
+    "description": "Keep cool and stay flashy with this holographic folding fan.",
+    "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg"
   },
   "led-scrunchies": {
     "id": "led-scrunchies",
     "name": "LED Light Up Scrunchies",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Add some glow to your hair with these LED scrunchies."
+    "description": "Add some glow to your hair with these LED scrunchies.",
+    "image": "/images/gear/amazon/9-pcs-led-light-hair-scrunchies-satin-elastic-bands-ties-ropes-3-color.jpg"
   },
   "portable-steamer": {
     "id": "portable-steamer",

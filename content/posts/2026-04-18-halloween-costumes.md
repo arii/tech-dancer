@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test."
-image: ""
+image: "/images/gear/amazon/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.jpg"
 tags:
   - fashion
   - halloween
