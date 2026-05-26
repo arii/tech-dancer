@@ -19,6 +19,15 @@ export interface Post {
   affiliateIds?: string[];
 }
 
+export interface MerchImageView {
+  src: string;
+  label: "Front" | "Back" | "Detail";
+  alt: string;
+}
+
+export type MerchDisplayMode = "single" | "pair" | "featured";
+export type MerchFeaturedSide = "front" | "back";
+
 export interface Resource {
   type: 'resource';
   draft?: boolean;
@@ -31,6 +40,10 @@ export interface Resource {
   content: string;
   image?: string;
   imageBack?: string;
+  // New flexible merch image system
+  images?: MerchImageView[];
+  displayMode?: MerchDisplayMode;
+  featuredSide?: MerchFeaturedSide;
   tags?: string[];
   affiliateIds?: string[];
   shopUrl?: string; // For Printful or direct shop links (non-affiliate merch)

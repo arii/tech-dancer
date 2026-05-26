@@ -1,0 +1,105 @@
+/**
+ * Merch card image display layouts.
+ * Supports single, pair, and featured display modes.
+ */
+
+.merch_image_single,
+.merch_image_featured,
+.merch_image_pair {
+  position: relative;
+  background: rgb(17, 24, 39);
+  border-radius: 18px;
+  padding: 14px;
+  width: 100%;
+}
+
+/* Single view: one large image */
+.merch_image_single img,
+.merch_image_featured > img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: rgb(22, 32, 50);
+  border-radius: 14px;
+}
+
+/* Single image label (Front, Back, or Detail) */
+.merch_image_single span {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(142, 160, 184);
+}
+
+/* Pair view: side-by-side images */
+.merch_image_pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.merch_image_pair figure {
+  margin: 0;
+}
+
+.merch_image_pair img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  background: rgb(22, 32, 50);
+  border-radius: 14px;
+}
+
+.merch_image_pair figcaption,
+.merch_image_inset span {
+  margin-top: 6px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(142, 160, 184);
+}
+
+/* Featured view: primary image with small inset secondary */
+.merch_image_inset {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 32%;
+  padding: 6px;
+  background: rgb(11, 16, 32);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.merch_image_inset img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Mobile responsive: stack and adjust sizing */
+@media (max-width: 640px) {
+  .merch_image_pair {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .merch_image_inset {
+    width: 28%;
+    right: 16px;
+    bottom: 16px;
+    padding: 4px;
+  }
+
+  .merch_image_single span,
+  .merch_image_featured > span {
+    left: 16px;
+    bottom: 16px;
+    font-size: 9px;
+  }
+}

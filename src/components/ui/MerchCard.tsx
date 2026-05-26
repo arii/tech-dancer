@@ -1,32 +1,40 @@
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
 import { SourceBadge } from './SourceBadge';
+import { MerchImageSingle, MerchImagePair, MerchImageFeatured } from './merch/MerchImageDisplay';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
+import { getMerchImageConfig, legacyImageToMerchImages } from '@/lib/merch/imageDisplay';
+import { MerchImageView, MerchDisplayMode, MerchFeaturedSide } from '@/lib/types/content';
 
 interface MerchCardProps extends BaseProps {
   slug?: string;
   title: string;
   category: string;
   excerpt: string;
-  image?: string;
+  image?: string; // Legacy support
+  imageBack?: string; // Legacy support
+  images?: MerchImageView[];
+  displayMode?: MerchDisplayMode;
+  featuredSide?: MerchFeaturedSide;
   shopUrl: string;
   [key: string]: unknown;
 }
 
-const CARD_STYLES = {
-  image: "w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 aspect-video",
-};
-
 /**
  * MerchCard for BoomTick Printful items.
+ * 
+ * Supports flexible image display modes:
+ * - "single": One image (front-only or back-only)
+ * - "pair": Two equally important images side by side
+ * - "featured": Primary image large with secondary as small inset
  * 
  * Distinct from affiliate gear cards:
  * - CTA is always "Shop merch"
  * - Links directly to Printful shop URL
- * - Source badge shows "BoomTick Printful merch"
+ * - Source badge shows "BoomTick merch"
  * - Simplified layout (no rating badges)
  */
 export function MerchCard(props: MerchCardProps) {
@@ -36,13 +44,44 @@ export function MerchCard(props: MerchCardProps) {
     category,
     excerpt,
     image,
+    imageBack,
+    images,
+    displayMode,
+    featuredSide,
     shopUrl,
   } = props;
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'shopUrl'
+    'shopUrl',
+    'images',
+    'displayMode',
+    'featuredSide',
+    'imageBack',
   ] as (keyof MerchCardProps)[]);
+
+  // Normalize images: use new format if available, fall back to legacy
+  const normalizedImages = images || legacyImageToMerchImages(image, imageBack);
+
+  // Determine display configuration
+  const config = getMerchImageConfig(normalizedImages, displayMode, featuredSide);
+
+  // Render image based on display mode
+  const renderImage = () => {
+    if (config.displayMode === 'pair' && config.primary && config.secondary) {
+      return <MerchImagePair images={[config.primary, config.secondary]} />;
+    }
+
+    if (config.displayMode === 'featured' && config.primary) {
+      return <MerchImageFeatured primary={config.primary} secondary={config.secondary} />;
+    }
+
+    if (config.primary) {
+      return <MerchImageSingle image={config.primary} />;
+    }
+
+    return <CategoryPlaceholder category={category} />;
+  };
 
   return (
     <BaseCard
@@ -59,16 +98,11 @@ export function MerchCard(props: MerchCardProps) {
       {/* Image zone */}
       <Box
         position="relative"
-        aspect="video"
         overflow="hidden"
         radius="md"
-        className="bg-surface-alt/20"
       >
-        {image ? (
-          <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
-        ) : (
-          <CategoryPlaceholder category={category} />
-        )}
+        {renderImage()}
+
         {/* Dark overlay */}
         <Box
           position="absolute"
@@ -76,6 +110,7 @@ export function MerchCard(props: MerchCardProps) {
           className="bg-black/15 pointer-events-none"
           aria-hidden="true"
         />
+
         {/* Category badge */}
         <Box position="absolute" top={3} right={3}>
           <Box
