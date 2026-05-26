@@ -23,6 +23,8 @@ export default function ResearchAnalytics() {
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
 
+  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+
   return (
     <Box as="section">
       <SEO
@@ -31,8 +33,8 @@ export default function ResearchAnalytics() {
       />
       <Stack gap={12}>
         <PageHeader
-          eyebrow="DEVAI_PORTFOLIO"
-          title="AI Orchestration & ML Engineering"
+          label="DEVAI_PORTFOLIO"
+          title="DevAI Portfolio as a Platform"
           description="Real-world examples of AI-assisted product development, DevAI orchestration consoles, and high-fidelity telemetry pipelines."
           as="h1"
         />
@@ -61,7 +63,7 @@ export default function ResearchAnalytics() {
                   {tool.image && (
                     <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
                       <img
-                        src={tool.image}
+                        src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
                         alt={tool.title}
                         className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
                       />
