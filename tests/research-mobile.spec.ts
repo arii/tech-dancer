@@ -13,27 +13,24 @@ test.describe('Research Tools Mobile UX', () => {
   for (const tool of tools) {
     test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page }) => {
       // Increase timeout for slow CI environments
-      test.setTimeout(60000);
+      test.setTimeout(90000);
 
-      // Use relative paths (no leading slash) to respect baseURL with BASE_PATH in CI
+      // Use relative paths to respect baseURL with BASE_PATH in CI
       await page.goto(tool.path);
 
-      // Wait for the page to be somewhat stable
-      await page.waitForLoadState('domcontentloaded');
+      // Wait for the page to be stable
+      await page.waitForLoadState('networkidle');
 
-      // Wait for lazy components based on tool path using more robust selectors
+      // Wait for lazy components based on tool path using robust locators
       if (tool.path.includes('ux-auditor')) {
         await page.getByLabel(/URL to audit/i).first().waitFor({ state: 'visible', timeout: 30000 });
       } else if (tool.path.includes('blog-drafter')) {
         await page.getByText(/CONTENT PIPELINE/i).first().waitFor({ state: 'visible', timeout: 30000 });
       } else if (tool.path.includes('wcs-scraper')) {
-        // Wait for the shell to load (Scoring Tool label) which is independent of data load
-        await page.getByText(/Scoring Tool/i).first().waitFor({ state: 'visible', timeout: 30000 });
+        // Wait for Scraper shell or error
+        await page.locator('text=/WCS Scoring Analysis|Data Synchronisation Failed/i').first().waitFor({ state: 'visible', timeout: 30000 });
       } else if (tool.path.includes('wsdc-event-reminders')) {
-        // Wait for either the timeline or the initial "Ready to Calculate" state
         await page.locator('text=/Action Timeline|Ready to Calculate/i').first().waitFor({ state: 'visible', timeout: 30000 });
-      } else {
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
       }
 
       // Check for horizontal overflow

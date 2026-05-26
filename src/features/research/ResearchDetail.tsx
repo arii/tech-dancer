@@ -36,7 +36,6 @@ export default function ResearchDetail() {
   const id = useMemo(() => {
     if (paramId) return paramId;
     const segments = pathname.split('/').filter(Boolean);
-    // Handle potential basename prefix by looking for segment after 'research'
     const resIndex = segments.indexOf('research');
     if (resIndex !== -1 && segments[resIndex + 1]) {
       return segments[resIndex + 1];
@@ -79,11 +78,8 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // Check if tool.canonicalPath exists and is different from the current path.
-  // We use a more robust check that handles potential basename prefix variations.
   const isResearchPath = useMemo(() => {
-    const segments = pathname.split('/').filter(Boolean);
-    return segments.includes('research');
+    return pathname.split('/').filter(Boolean).includes('research');
   }, [pathname]);
 
   if (tool?.canonicalPath && pathname !== tool.canonicalPath && isResearchPath) {
@@ -145,7 +141,7 @@ export default function ResearchDetail() {
           className="hover:text-accent transition-all group"
           cursor="pointer"
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <Activity className="w-4 h-4" />
           <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
         </Box>
 
