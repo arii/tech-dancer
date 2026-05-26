@@ -117,12 +117,17 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       />
 
       <Stack gap={10}>
-        <Stack gap={2}>
-          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Event Reminders
-          </Text>
-          <Text variant="headline" size="3xl" weight="font-black">
-            Stay on Top of What Matters
+        <Stack gap={4}>
+          <Stack gap={2}>
+            <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
+              Event Reminders
+            </Text>
+            <Text variant="headline" size="3xl" weight="font-black">
+              Never miss a deadline
+            </Text>
+          </Stack>
+          <Text variant="body" size="lg" color="dim" className="leading-relaxed">
+            Get alerts for early-bird discounts, registration deadlines, and hotel cutoffs so you can focus on dancing.
           </Text>
         </Stack>
 
@@ -216,7 +221,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
           >
             <Stack direction="row" align="center" gap={2}>
               <Bell className="w-5 h-5 text-bg" />
-              <Text size="md" color="bg">Set Event Reminders</Text>
+              <Text size="md" color="bg">Sign up for reminders</Text>
             </Stack>
           </ActionButton>
         </Stack>

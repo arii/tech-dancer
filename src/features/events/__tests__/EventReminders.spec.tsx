@@ -18,8 +18,9 @@ describe('EventReminders', () => {
 
   it('should render when only registrationDeadline is provided', () => {
     render(<EventReminders event={createMockEvent({ registrationDeadline: '2024-05-15' })} />);
-    expect(screen.getByText(/Stay on Top of What Matters/i)).toBeTruthy();
-    expect(screen.getByText(/Registration Deadline/i)).toBeTruthy();
+    expect(screen.getByText(/Never miss a deadline/i)).toBeTruthy();
+    // Use getAllByText because it also appears in the description
+    expect(screen.getAllByText(/Registration Deadline/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Required/i)).toBeTruthy();
   });
 
@@ -32,7 +33,7 @@ describe('EventReminders', () => {
     })} />);
 
     expect(screen.getByText(/Early Bird Deadline/i)).toBeTruthy();
-    expect(screen.getByText(/Registration Deadline/i)).toBeTruthy();
+    expect(screen.getAllByText(/Registration Deadline/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Hotel Block Cutoff/i)).toBeTruthy();
     expect(screen.getByText(/Packing Reminder/i)).toBeTruthy();
   });
@@ -45,7 +46,7 @@ describe('EventReminders', () => {
 
   it('should show confirmation state after clicking the CTA', () => {
     render(<EventReminders event={createMockEvent({ registrationDeadline: '2024-05-15' })} />);
-    fireEvent.click(screen.getByText(/Set Event Reminders/i));
+    fireEvent.click(screen.getByText(/Sign up for reminders/i));
     expect(screen.getByText(/You're All Set!/i)).toBeTruthy();
   });
 });
