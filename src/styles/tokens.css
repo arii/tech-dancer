@@ -116,3 +116,9 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* Flagship tag styling */
+.flagship-tag {
+  background-color: color-mix(in srgb, var(--raw-color-line) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--raw-color-accent) 10%, transparent);
+}
