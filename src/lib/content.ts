@@ -62,7 +62,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
       if (path.includes('/events/')) {
         const validation = EventFrontmatterSchema.safeParse(data);
         if (!validation.success) {
-          console.warn(`Validation failed for event guide: ${path}`, validation.error.format());
+          console.warn('Validation failed for event guide:', path, validation.error.format());
         }
       }
 

@@ -73,5 +73,3 @@ export const EventFrontmatterSchema = z.object({
   gearTravelIds: z.array(z.string()).optional(),
   gearTravelDescription: z.string().optional(),
 });
-
-export type EventFrontmatter = z.infer<typeof EventFrontmatterSchema>;
