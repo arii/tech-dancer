@@ -19,7 +19,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus guides on building the platform with modern web tools."
+        description="BoomTick: Training tips, event resource guides, and gear reviews for West Coast Swing dancers, plus guides on building the platform with modern web tools."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={16}>
@@ -106,38 +106,7 @@ export default function Home() {
           </Stack>
 
           <Stack gap={8}>
-            <SectionHeader
-              eyebrow="BOOMTICK STYLE"
-              title="Featured BoomTick merch"
-              link={{ text: "Shop all merch", to: "/merch" }}
-            />
-            <Text variant="body" size="lg" color="dim" maxWidth="prose" marginBottom={4}>
-              Shirts, hats, and designs made for West Coast Swing weekends, practice nights, and dance friends.
-            </Text>
-            <Grid
-              cols={{ base: 1, sm: 2, lg: 4 }}
-              gap={6}
-              as={motion.div}
-              variants={motionTokens.staggerContainer}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
-            >
-              {featuredMerch.map((item) => (
-                <Box
-                  key={item.id}
-                  as={motion.div}
-                  variants={motionTokens.staggerItem}
-                  className="h-full"
-                >
-                  <ProductCard item={item} />
-                </Box>
-              ))}
-            </Grid>
-          </Stack>
-
-          <Stack gap={8}>
-            <SectionHeader eyebrow="COMPETE" title="Upcoming Event Resource Guides" />
+            <SectionHeader label="PLAN" title="Upcoming Event Resource Guides" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (
                 <Box

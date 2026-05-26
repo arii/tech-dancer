@@ -114,7 +114,7 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
+            Training tips, event resource guides, and gear reviews for competitive West Coast Swing dancers,
             plus technical deep dives into building the platform with DevAI.
           </Text>
         </Stack>

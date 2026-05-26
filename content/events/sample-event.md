@@ -11,6 +11,7 @@ excerpt: "A fully populated sample event for schema and rendering verification."
 # ── Logistics ──────────────────────────────────────────
 location: "Test Arena"
 city: "San Francisco, CA"
+region: "NorCal"
 schedule: "October 1 - 4, 2026"
 url: "https://example.com/sample-event"
 heroImage: "/assets/events/jjo-hero.svg"
@@ -23,30 +24,54 @@ whyAttending: >
 
 # ── Theme Spotlight ────────────────────────────────────
 theme:
-  name: "Cyberpunk"
-  label: "Verification Theme"
-  description: "Neon lights and futuristic vibes."
+  name: "Rainbow Paradise"
+  label: "Rainbow Theme"
+  description: "Vibrant colors and pride vibes for the big weekend."
   colors:
-    - "#00ff00"
-    - "#ff00ff"
-    - "#00ffff"
+    - "#FF0000"
+    - "#FF7F00"
+    - "#FFFF00"
+    - "#00FF00"
+    - "#0000FF"
+    - "#4B0082"
+    - "#8B00FF"
   outfitIds:
     - "rainbow-fringe-dress"
+    - "rainbow-sequin-bomber-jacket"
+    - "rainbow-bustle-skirt"
   accessoryIds:
     - "rainbow-earrings"
+    - "pride-sunglasses"
+    - "rainbow-bob-wig"
+    - "led-scrunchies"
 
 # ── Curated Gear ───────────────────────────────────────
 gear:
   outfitIds:
     - "rainbow-fringe-dress"
+    - "rainbow-sequin-bomber-jacket"
+    - "rainbow-bustle-skirt"
+  outfitDescription: "Statement pieces for the main event and social dancing."
   accessoryIds:
     - "rainbow-earrings"
+    - "pride-sunglasses"
+    - "holographic-rave-fan"
+    - "rainbow-bob-wig"
+    - "led-scrunchies"
+  accessoryDescription: "Pop of color and functional flair to keep you cool."
   shoeIds:
     - "bloch-grecian"
+    - "dance-socks"
+  shoeDescription: "Trusted footwear for long hours on the floor."
   essentialIds:
     - "loop-experience"
+    - "loop-quiet"
+  essentialDescription: "Protect your hearing without missing the music."
   travelIds:
     - "compression-cubes"
+    - "travel-bottles"
+    - "portable-steamer"
+  travelDescription: "Packing essentials to keep your gear organized and fresh."
 
 # ── Reminder Deadlines ─────────────────────────────────
 earlyBirdDate: "2026-08-15"

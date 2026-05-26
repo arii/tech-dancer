@@ -1,12 +1,9 @@
-import { useMemo } from 'react';
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useMemo, lazy, Suspense } from 'react';
+import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
-import { BlogDrafter } from '@/features/lab/BlogDrafter';
-import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
-import { WCSScraperTool } from './components/WCSScraperTool';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
@@ -14,13 +11,23 @@ import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
+// Lazy load tool components to help with bundle size
+const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
+const WSDCReminders = lazy(() => import('@/features/lab/wsdc-reminders/WSDCReminders'));
+const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
+const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
+const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m => ({ default: m.BlastRadiusTool })));
+
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
+  'gitops-pr-reviewer': GitOpsReviewerTool,
+  'scope-blast-radius': BlastRadiusTool,
 };
 
 export default function ResearchDetail() {
+  const navigate = useNavigate();
   const { id: paramId } = useParams();
   const { pathname } = useLocation();
 
@@ -28,10 +35,14 @@ export default function ResearchDetail() {
 
   const id = useMemo(() => {
     if (paramId) return paramId;
-    if (pathname.startsWith('/research/')) {
-      return pathname.split('/').filter(Boolean).pop();
+    const segments = pathname.split('/').filter(Boolean);
+    // Find the segment after 'research' to identify the tool
+    const resIndex = segments.indexOf('research');
+    if (resIndex !== -1 && segments[resIndex + 1]) {
+      return segments[resIndex + 1];
     }
-    return null;
+    // Fallback to the last segment if we are in this component
+    return segments[segments.length - 1] || null;
   }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
@@ -42,8 +53,8 @@ export default function ResearchDetail() {
       return {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": tool.name,
-        "description": tool.layman,
+        "name": tool.title,
+        "description": tool.description,
         "applicationCategory": "EducationalApplication"
       };
     }
@@ -69,9 +80,14 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // Check both paramId and tool.canonicalPath to support centralized config
-  if (paramId === 'ux-auditor' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
-    return <Navigate to={tool?.canonicalPath || "/ux-auditor"} replace />;
+  // pathname is relative to basename in React Router 6/7.
+  const isResearchPath = useMemo(() => {
+    const segments = pathname.split('/').filter(Boolean);
+    return segments.includes('research');
+  }, [pathname]);
+
+  if (tool?.canonicalPath && pathname !== tool.canonicalPath && isResearchPath) {
+    return <Navigate to={tool.canonicalPath} replace />;
   }
 
   if (study) {
@@ -112,10 +128,11 @@ export default function ResearchDetail() {
   return (
     <Box as="section" padding="panel">
       <SEO
-        title={tool.name}
-        description={tool.layman}
+        title={tool.title}
+        description={tool.description}
         type="website"
         schema={structuredData}
+        canonical={tool.canonicalPath ? `${BASE_URL}${tool.canonicalPath}` : undefined}
       />
       <Stack gap={12}>
         <Box 
@@ -132,24 +149,30 @@ export default function ResearchDetail() {
           <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
         </Box>
 
-        <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
+        <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
           <Stack gap={12}>
             {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
-              (() => {
-                const ToolComponent = TOOL_REGISTRY[id];
-                return <ToolComponent />;
-              })()
+              <Suspense fallback={
+                <Box padding={20} display="flex" align="center" justify="center">
+                  <Activity className="animate-spin text-accent" />
+                </Box>
+              }>
+                {(() => {
+                  const ToolComponent = TOOL_REGISTRY[id];
+                  return <ToolComponent />;
+                })()}
+              </Suspense>
             ) : (
               <Stack gap={12}>
                 <Stack gap={4}>
                     <PageHeader
-                      eyebrow={`PROJECT // ${tool.category}`}
-                      title={tool.name}
+                      label={`PROJECT // ${tool.category}`}
+                      title={tool.title}
                       paddingBottom={0}
                       border="none"
                     />
                   <Box border radius="md" surface="default" padding="compact">
-                    <Text variant="body" size="lg" color="dim">{tool.layman}</Text>
+                    <Text variant="body" size="lg" color="dim">{tool.description}</Text>
                   </Box>
                 </Stack>
 

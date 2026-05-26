@@ -11,13 +11,16 @@ interface RelatedEventsProps {
   events: Event[];
 }
 
-export function RelatedEvents({ id, title = "More Events", events }: RelatedEventsProps) {
+export function RelatedEvents({ id, title, events }: RelatedEventsProps) {
   if (!events || events.length === 0) return null;
+
+  const firstRegion = events[0]?.region;
+  const dynamicTitle = title || (firstRegion ? `More ${firstRegion} Guides` : "More Guides");
 
   return (
     <Box id={id} as="section" data-testid="related">
       <Stack gap={8}>
-        <SectionHeader eyebrow="EXPLORE" title={title} />
+        <SectionHeader eyebrow="EXPLORE" title={dynamicTitle} />
         <Grid
           cols={{ base: 1, sm: 2, lg: 3 }}
           gap={4}

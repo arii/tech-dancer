@@ -66,11 +66,18 @@ export interface EventTheme {
 
 export interface EventGear {
   outfitIds?: string[];
+  outfitDescription?: string;
   accessoryIds?: string[];
+  accessoryDescription?: string;
   shoeIds?: string[];
+  shoeDescription?: string;
   essentialIds?: string[];
+  essentialDescription?: string;
   travelIds?: string[];
+  travelDescription?: string;
 }
+
+export type EventRegion = 'NorCal' | 'SoCal' | 'Southwest' | 'Pacific Northwest' | 'South' | 'International' | 'Other';
 
 export interface Event {
   type: "event";
@@ -83,6 +90,7 @@ export interface Event {
   excerpt: string;
   location: string;
   city: string;
+  region?: EventRegion;
   schedule: string;
   description: string;
   link?: string;
@@ -107,10 +115,15 @@ export interface Event {
   themeOutfitIds?: string[];
   themeAccessoryIds?: string[];
   gearOutfitIds?: string[];
+  gearOutfitDescription?: string;
   gearAccessoryIds?: string[];
+  gearAccessoryDescription?: string;
   gearShoeIds?: string[];
+  gearShoeDescription?: string;
   gearEssentialIds?: string[];
+  gearEssentialDescription?: string;
   gearTravelIds?: string[];
+  gearTravelDescription?: string;
   relatedEvents?: string[];
 }
 

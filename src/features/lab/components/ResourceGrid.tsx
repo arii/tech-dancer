@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react';
 import { ScoreGrid, ScoreItem } from '@/components/layout/DetailElements';
 
-interface ResourceScoreGridProps {
+interface ResourceGridProps {
   rating: number;
   durability?: number;
   value?: number;
@@ -10,14 +10,14 @@ interface ResourceScoreGridProps {
   date?: string;
 }
 
-export function ResourceScoreGrid({
+export function ResourceGrid({
   rating,
   durability,
   value,
   priceCategory,
   updatedDate,
   date
-}: ResourceScoreGridProps) {
+}: ResourceGridProps) {
   return (
     <ScoreGrid>
       <ScoreItem label="Overall" value={rating || 'N/A'} icon={Star} intent="warning" />

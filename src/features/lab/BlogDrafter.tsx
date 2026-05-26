@@ -72,7 +72,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   }
 
   return (
-    <Stack gap={10} height="full">
+    <Stack gap={{ base: 6, md: 10 }} height="full">
       <Stack gap={4}>
         <Box display="flex" align="center" justify="between" width="full">
           <PageHeader
@@ -95,7 +95,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
 
         {/* Type Selector */}
-        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+        <Grid cols={{ base: 1, sm: 3 }} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
           {types.map((type) => {
             const Icon = type.icon;
             const isActive = data.type === type.id;
@@ -136,11 +136,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
       </Stack>
 
-      <Grid cols={{ base: 1, md: 2 }} gap={12}>
+      <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
         {/* Form Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Text variant="mono" size="micro" color="brand">METADATA_INPUT</Text>
+             <Text variant="mono" size="micro" color="brand">Metadata</Text>
              <Box
                as="button"
                onClick={saveToHistory}
@@ -150,7 +150,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                className="text-accent hover:opacity-70 transition-all cursor-pointer"
              >
                 <Save className="w-3 h-3" />
-                <Text variant="mono" size="micro" weight="font-bold">SNAPSHOT_NOW</Text>
+                <Text variant="mono" size="micro" weight="font-bold">Save Snapshot</Text>
              </Box>
           </Box>
 
@@ -158,7 +158,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CONTENT_TYPE</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Content Type</Text>
                 <Box
                   as="select"
                   value={data.type}
@@ -171,7 +171,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CATEGORY</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Category</Text>
                 <Box
                   as="select"
                   value={data.category}
@@ -190,7 +190,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Grid>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>POST_TITLE</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Title</Text>
               <Box
                 as="input"
                 type="text"
@@ -203,7 +203,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>PUBLISH_DATE</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Publish Date</Text>
                 <Box
                   as="input"
                   type="date"
@@ -213,7 +213,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 />
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AUTHOR</Text>
+                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Author</Text>
                 <Box
                   as="input"
                   type="text"
@@ -227,7 +227,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             {data.type === 'resource' && (
               <Box border padding={4} surface="muted" radius="md">
                 <Stack gap={4}>
-                   <Text variant="mono" size="micro" color="brand" weight="font-bold">RESOURCE_METADATA</Text>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Resource Metadata</Text>
                    <Grid cols={3} gap={4}>
                       <Stack gap={2}>
                         <Text variant="mono" size="micro" color="dim">RATING (0-5)</Text>
@@ -244,11 +244,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                    </Grid>
                    <Grid cols={2} gap={4}>
                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">PRICE_CATEGORY</Text>
+                        <Text variant="mono" size="micro" color="dim">Price Category</Text>
                         <Box as="input" type="text" value={data.priceCategory} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('priceCategory', e.target.value)} placeholder="e.g. $$$" className={inputs.base} />
                      </Stack>
                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">UPDATED_DATE</Text>
+                        <Text variant="mono" size="micro" color="dim">Updated Date</Text>
                         <Box as="input" type="text" value={data.updatedDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('updatedDate', e.target.value)} placeholder="Oct 2026" className={inputs.base} />
                      </Stack>
                    </Grid>
@@ -271,7 +271,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             {data.type === 'event' && (
               <Box border padding={4} surface="muted" radius="md">
                 <Stack gap={4}>
-                   <Text variant="mono" size="micro" color="brand" weight="font-bold">EVENT_LOGISTICS</Text>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Event Logistics</Text>
                    <Stack gap={2}>
                       <Text variant="mono" size="micro" color="dim">EVENT_START_DATE</Text>
                       <Box as="input" type="date" value={data.startDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('startDate', e.target.value)} className={inputs.base} />
@@ -295,7 +295,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             )}
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>EXCERPT_SUMMARY</Text>
+              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Excerpt</Text>
               <Box
                 as="textarea"
                 value={data.excerpt}
@@ -310,7 +310,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             {data.type === 'post' && (
               <>
                 <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>AMAZON_AFFILIATE_LINK (OPTIONAL)</Text>
+                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Amazon Link (Optional)</Text>
                   <Box
                     as="input"
                     type="url"
@@ -322,7 +322,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 </Stack>
 
                 <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>BODY_COMMENTARY</Text>
+                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Content</Text>
                   <Box
                     as="textarea"
                     value={data.commentary}
@@ -479,11 +479,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         {/* Preview Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
-             <Text variant="mono" size="micro" color="brand">AI_INTEGRATION</Text>
+             <Text variant="mono" size="micro" color="brand">AI Tools</Text>
              {showAppliedSuccess && (
                 <Box display="flex" align="center" gap={2}>
                   <Check className="w-3 h-3 text-accent" />
-                  <Text variant="mono" size="micro" color="brand" weight="font-bold">APPLIED_SUCCESSFULLY</Text>
+                  <Text variant="mono" size="micro" color="brand" weight="font-bold">Applied Successfully</Text>
                 </Box>
              )}
           </Box>
@@ -503,13 +503,13 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               padding={4}
             >
               <Send className="w-4 h-4" />
-              APPLY_RESPONSE
+              Apply Draft
             </ActionButton>
           </Stack>
 
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">
              <Box display="flex" align="center" gap={2}>
-               <Text variant="mono" size="micro" color="brand">MARKDOWN_PREVIEW</Text>
+               <Text variant="mono" size="micro" color="brand">Markdown Preview</Text>
                <Box
                  as="button"
                  onClick={() => setPreviewMode('full')}

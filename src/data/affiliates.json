@@ -311,5 +311,48 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "Weekend essential dance bag for all levels."
+  },
+  "rainbow-bob-wig": {
+    "id": "rainbow-bob-wig",
+    "name": "Rainbow Bob Wig",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Vibrant rainbow bob wig to complete your event look."
+  },
+  "rainbow-sequin-bomber-jacket": {
+    "id": "rainbow-sequin-bomber-jacket",
+    "name": "Rainbow Sequin Bomber Jacket",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Dazzle on the dance floor with this rainbow sequin jacket."
+  },
+  "rainbow-bustle-skirt": {
+    "id": "rainbow-bustle-skirt",
+    "name": "Rainbow Bustle Skirt",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "A fun and flowy rainbow bustle skirt for themed nights."
+  },
+  "holographic-rave-fan": {
+    "id": "holographic-rave-fan",
+    "name": "Holographic Rave Fan",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Keep cool and stay flashy with this holographic folding fan."
+  },
+  "led-scrunchies": {
+    "id": "led-scrunchies",
+    "name": "LED Light Up Scrunchies",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "Add some glow to your hair with these LED scrunchies."
+  },
+  "portable-steamer": {
+    "id": "portable-steamer",
+    "name": "Portable Garment Steamer",
+    "url": "https://amazon.com",
+    "category": "travel",
+    "description": "Keep your event outfits wrinkle-free with this compact steamer.",
+    "image": "/assets/gear/travel-steamer.jpg"
   }
 }
