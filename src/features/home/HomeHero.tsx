@@ -12,7 +12,7 @@ export function HomeHero() {
       justify="center"
       aria-label="BoomTick homepage hero"
       position="relative"
-      className="overflow-hidden py-10 lg:py-16 min-h-[380px]"
+      className="overflow-hidden py-10 lg:py-14 min-h-[320px]"
     >
       {/* Particle background — decorative, content leads */}
       <Box

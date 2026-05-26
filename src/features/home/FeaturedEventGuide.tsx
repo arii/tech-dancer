@@ -29,7 +29,7 @@ export function FeaturedEventGuide() {
           <img
             src={event.heroImage}
             alt={event.title}
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover object-top"
           />
           {/* Subtle gradient at bottom to soften any embedded text */}
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />
