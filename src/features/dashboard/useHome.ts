@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts, getEvents } from '@/lib/content';
-import { getFeaturedMerch } from '@/lib/productCatalog';
+import { useFeaturedMerch } from '@/features/products/useFeaturedMerch';
 
 /** Matches `artifacts/boomtick/index.html` “Where Dancers Go” cards (venue + location + cadence). */
 export function useHome() {
@@ -18,11 +18,7 @@ export function useHome() {
     initialData: () => getEvents().slice(0, 3),
   });
 
-  const { data: featuredMerch = [] } = useQuery({
-    queryKey: ['merch', 'featured'],
-    queryFn: () => getFeaturedMerch(4),
-    initialData: () => getFeaturedMerch(4),
-  });
+  const { featuredMerch } = useFeaturedMerch(4);
 
   const dancerPaths = [
     { label: "Lifestyle blog posts", path: "/blog?category=Travel/Lifestyle" },

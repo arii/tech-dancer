@@ -137,7 +137,7 @@ export default function Home() {
           </Stack>
 
           <Stack gap={8}>
-            <SectionHeader label="COMPETE" title="Upcoming Event Resource Guides" />
+            <SectionHeader eyebrow="COMPETE" title="Upcoming Event Resource Guides" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (
                 <Box
