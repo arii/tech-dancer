@@ -22,10 +22,10 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="grid bg-surface md:grid-cols-[260px_1fr]"
+        className="grid bg-surface md:grid-cols-[260px_1fr] md:h-[200px]"
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="h-44 md:h-auto md:min-h-[180px]">
+        <Box position="relative" className="h-44 md:h-full">
           <img
             src={event.heroImage}
             alt={event.title}
@@ -37,7 +37,7 @@ export function FeaturedEventGuide() {
 
         {/* Content */}
         <Stack gap={3} padding={6} className="justify-between">
-          <Stack gap={2}>
+          <Stack gap={1.5}>
             <Box display="flex" align="center" gap={2}>
               <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
               <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="truncate">
@@ -47,7 +47,7 @@ export function FeaturedEventGuide() {
             <Text variant="headline" size="xl" weight="font-black" leading="tight">
               {event.title}
             </Text>
-            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-2">
               {event.excerpt}
             </Text>
           </Stack>

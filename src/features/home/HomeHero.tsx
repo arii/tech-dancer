@@ -12,7 +12,7 @@ export function HomeHero() {
       justify="center"
       aria-label="BoomTick homepage hero"
       position="relative"
-      className="overflow-hidden py-10 lg:py-14 min-h-[320px]"
+      className="overflow-hidden py-4 lg:py-6"
     >
       {/* Particle background — decorative, content leads */}
       <Box
@@ -46,7 +46,7 @@ export function HomeHero() {
           color="dim"
           className="max-w-[600px] leading-relaxed"
         >
-          Practical guides for West Coast Swing dancers — blog posts, event travel tips,
+          Practical guides for West Coast Swing dancers — training notes, event travel tips,
           gear reviews, and tools for better dance weekends.
         </Text>
 
@@ -84,7 +84,7 @@ export function HomeHero() {
             color="dim"
             className="underline underline-offset-4 transition-colors hover:text-accent"
           >
-            Start with practical blog posts →
+            Start with practical notes →
           </Text>
         </Box>
       </Stack>

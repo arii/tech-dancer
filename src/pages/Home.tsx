@@ -12,7 +12,7 @@ import { HomeHero } from '@/features/home/HomeHero';
 
 export default function Home() {
   return (
-    <Box as="main" className="pb-safe-bottom">
+    <Box as="main" className="pb-safe-bottom mx-auto w-full max-w-[1240px]">
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
