@@ -6,7 +6,7 @@ import { ResolvedGearSection } from '../useEventDetail';
 interface CuratedGearProps {
   id?: string;
   title?: string;
-  sections: ResolvedGearSection[];
+  sections: (ResolvedGearSection & { hasMore?: boolean })[];
 }
 
 export function CuratedGear({ id, title = "Recommended Gear", sections }: CuratedGearProps) {
@@ -20,10 +20,17 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
         {sections.map((section) => (
           <Stack key={section.label} gap={8}>
             <Stack gap={2}>
-              <SectionHeader
-                title={section.label}
-                size="sm"
-              />
+              <Box display="flex" align="center" justify="between">
+                <SectionHeader
+                  title={section.label}
+                  size="sm"
+                />
+                {section.hasMore && (
+                  <Box as="a" href="/gear" className="text-accent hover:underline">
+                    <Text variant="mono" size="xxs" weight="font-bold" uppercase>View Full Collection</Text>
+                  </Box>
+                )}
+              </Box>
               {section.description && (
                 <Text variant="body" size="sm" color="dim" className="leading-relaxed italic">
                   {section.description}

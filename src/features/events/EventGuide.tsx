@@ -2,6 +2,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
+import { EventNavigation } from './components/EventNavigation';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
@@ -22,6 +23,11 @@ export default function EventGuide() {
     themeOutfits,
     themeAccessories,
     gearSections,
+    compactThemeOutfits,
+    compactThemeAccessories,
+    compactGearSections,
+    hasMoreThemeOutfits,
+    hasMoreThemeAccessories,
     relatedEvents,
     navigate,
   } = useEventDetail();
@@ -72,8 +78,25 @@ export default function EventGuide() {
         whyAttending={event.whyAttending}
       />
 
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
-        <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
+      <EventNavigation />
+
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingBottom={SECTION_SPACING}>
+        {/* Essentials Chips for mobile/compact context */}
+        <Box display="flex" wrap gap={3} paddingY={6} border="b" className="border-line/10">
+          <Box paddingX={3} paddingY={1.5} radius="full" border className="bg-surface-alt/40">
+             <Text variant="mono" size="xxs" weight="font-bold" uppercase color="dim">Category: {event.category}</Text>
+          </Box>
+          <Box paddingX={3} paddingY={1.5} radius="full" border className="bg-surface-alt/40">
+             <Text variant="mono" size="xxs" weight="font-bold" uppercase color="dim">Location: {event.city}</Text>
+          </Box>
+          {event.theme?.name && (
+            <Box paddingX={3} paddingY={1.5} radius="full" border className="bg-surface-alt/40">
+              <Text variant="mono" size="xxs" weight="font-bold" uppercase color="dim">Theme: {event.theme.name}</Text>
+            </Box>
+          )}
+        </Box>
+
+        <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }} paddingTop={8}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
               {event.theme && (
@@ -83,20 +106,24 @@ export default function EventGuide() {
                   label={event.theme.label}
                   description={event.theme.description || ''}
                   colors={event.theme.colors}
-                  outfits={themeOutfits}
-                  accessories={themeAccessories}
+                  outfits={compactThemeOutfits}
+                  accessories={compactThemeAccessories}
+                  hasMoreOutfits={hasMoreThemeOutfits}
+                  hasMoreAccessories={hasMoreThemeAccessories}
                 />
               )}
 
-              {gearSections.length > 0 && (
+              {compactGearSections.length > 0 && (
                 <CuratedGear
                   id="gear"
                   title={`Gear for ${event.title}`}
-                  sections={gearSections}
+                  sections={compactGearSections}
                 />
               )}
 
-              <EventReminders id="reminders" event={event} />
+              <Box display={{ base: "block", lg: "none" }}>
+                <EventReminders id="reminders" event={event} />
+              </Box>
 
               <EventTravel id="travel" notes={event.description} />
 
@@ -110,7 +137,9 @@ export default function EventGuide() {
               )}
             </Stack>
           </Box>
-          <EventSidebar event={event} />
+          <Box display={{ base: "none", lg: "block" }}>
+            <EventSidebar event={event} />
+          </Box>
         </Grid>
       </Box>
     </Box>

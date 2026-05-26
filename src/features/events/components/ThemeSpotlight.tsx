@@ -24,8 +24,10 @@ export function ThemeSpotlight({
   outfits = [],
   accessories = [],
   colors = [],
-  accentColor = 'var(--raw-color-accent)'
-}: ThemeSpotlightProps) {
+  accentColor = 'var(--raw-color-accent)',
+  hasMoreOutfits = false,
+  hasMoreAccessories = false,
+}: ThemeSpotlightProps & { hasMoreOutfits?: boolean; hasMoreAccessories?: boolean }) {
   const accentStyle = useMemo(() => ({ backgroundColor: accentColor } as React.CSSProperties), [accentColor]);
 
   return (
@@ -103,9 +105,16 @@ export function ThemeSpotlight({
           {/* Outfit Recommendations */}
           {outfits.length > 0 && (
             <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
-                Recommended Outfits
-              </Text>
+              <Box display="flex" align="center" justify="between">
+                <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+                  Recommended Outfits
+                </Text>
+                {hasMoreOutfits && (
+                  <Box as="a" href="/merch" className="text-accent hover:underline">
+                    <Text variant="mono" size="xxs" weight="font-bold" uppercase>View All</Text>
+                  </Box>
+                )}
+              </Box>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
                 {outfits.map(link => (
                   <AffiliateCard key={link.id} link={link} />
@@ -117,9 +126,16 @@ export function ThemeSpotlight({
           {/* Accessory Recommendations */}
           {accessories.length > 0 && (
             <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
-                Recommended Accessories
-              </Text>
+              <Box display="flex" align="center" justify="between">
+                <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+                  Recommended Accessories
+                </Text>
+                {hasMoreAccessories && (
+                  <Box as="a" href="/gear" className="text-accent hover:underline">
+                    <Text variant="mono" size="xxs" weight="font-bold" uppercase>View All</Text>
+                  </Box>
+                )}
+              </Box>
               <Grid cols={{ base: 1, sm: 2 }} gap={4}>
                 {accessories.map(link => (
                   <AffiliateCard key={link.id} link={link} />

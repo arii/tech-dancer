@@ -81,14 +81,49 @@ export function useEventDetail() {
 
   // Consolidate event-specific derived state into a single memoization block
   // to reduce dependency chains and potential extra re-renders.
-  const { themeOutfits, themeAccessories, gearSections } = useMemo(
-    () => ({
-      themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
-      themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
-      gearSections: getGearSections(event?.gear),
-    }),
-    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
-  );
+  const {
+    themeOutfits,
+    themeAccessories,
+    gearSections,
+    compactThemeOutfits,
+    compactThemeAccessories,
+    compactGearSections,
+    hasMoreThemeOutfits,
+    hasMoreThemeAccessories,
+  } = useMemo(() => {
+    const allOutfits = resolveAffiliateLinks(event?.theme?.outfitIds);
+    const allAccessories = resolveAffiliateLinks(event?.theme?.accessoryIds);
+    const allGearSections = getGearSections(event?.gear);
+
+    // Requirement: 15 visible product items max.
+    // 6 theme picks + 3 theme accessories + up to 6 gear items (across sections) = 15
+    const themePickCount = 6;
+    const themeAccessoryCount = 3;
+    const remainingGearQuota = 15 - (allOutfits.length > 0 ? themePickCount : 0) - (allAccessories.length > 0 ? themeAccessoryCount : 0);
+
+    let currentGearCount = 0;
+    const compactGear = allGearSections.map((section) => {
+      const take = Math.max(0, Math.min(3, remainingGearQuota - currentGearCount));
+      const items = section.items.slice(0, take);
+      currentGearCount += items.length;
+      return {
+        ...section,
+        items,
+        hasMore: section.items.length > take,
+      };
+    }).filter(s => s.items.length > 0);
+
+    return {
+      themeOutfits: allOutfits,
+      themeAccessories: allAccessories,
+      gearSections: allGearSections,
+      compactThemeOutfits: allOutfits.slice(0, themePickCount),
+      compactThemeAccessories: allAccessories.slice(0, themeAccessoryCount),
+      compactGearSections: compactGear,
+      hasMoreThemeOutfits: allOutfits.length > themePickCount,
+      hasMoreThemeAccessories: allAccessories.length > themeAccessoryCount,
+    };
+  }, [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear]);
 
   // Resolve related events
   // Dependent on both the current event and the full list
@@ -108,6 +143,11 @@ export function useEventDetail() {
     themeOutfits,
     themeAccessories,
     gearSections,
+    compactThemeOutfits,
+    compactThemeAccessories,
+    compactGearSections,
+    hasMoreThemeOutfits,
+    hasMoreThemeAccessories,
     relatedEvents,
     navigate,
   };
