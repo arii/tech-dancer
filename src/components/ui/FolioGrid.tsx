@@ -11,8 +11,22 @@ import { EmptyState } from './EmptyState';
 import { Search } from 'lucide-react';
 import { FilterBar, CategoryOption } from './FilterBar';
 
+interface FolioItem {
+  id?: string;
+  slug?: string;
+  title?: string;
+  name?: string;
+  category?: string;
+  region?: string;
+  collection?: string;
+  tags?: string[];
+  excerpt?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
 interface FolioGridProps {
-  items: any[];
+  items: FolioItem[];
   categoryTitle: string;
   basePath: string;
   label?: string;
@@ -21,7 +35,7 @@ interface FolioGridProps {
   categories?: (string | CategoryOption)[];
   categoryParam?: string;
   as?: keyof JSX.IntrinsicElements;
-  renderItem?: (item: any) => ReactNode;
+  renderItem?: (item: FolioItem) => ReactNode;
   searchPlaceholder?: string;
 }
 
@@ -56,7 +70,7 @@ export default function FolioGrid({
 
     // Search filter
     const title = item.title || item.name || '';
-    const tags = 'tags' in item ? item.tags : [];
+    const tags = item.tags || [];
     const excerpt = item.excerpt || item.description || '';
 
     return (
@@ -116,8 +130,12 @@ export default function FolioGrid({
                   renderItem(item)
                 ) : (
                   <ContentCard
-                    {...item}
+                    slug={item.slug || ''}
+                    title={item.title || ''}
+                    category={item.category || ''}
+                    excerpt={item.excerpt || ''}
                     basePath={basePath}
+                    {...item}
                   />
                 )}
               </Box>
@@ -126,7 +144,15 @@ export default function FolioGrid({
         ) : (
           <Stack gap={0} border="t" className="border-line">
             {filteredItems.map((item) => (
-              <ListRow key={item.slug || item.id} {...item} basePath={basePath} />
+              <ListRow
+                key={item.slug || item.id}
+                slug={item.slug || ''}
+                title={item.title || ''}
+                category={item.category || ''}
+                excerpt={item.excerpt || ''}
+                basePath={basePath}
+                {...item}
+              />
             ))}
           </Stack>
         )}
