@@ -32,19 +32,24 @@ theme:
 gear:
   outfitIds:
     - "ombre-dance-dress"
+  outfitDescription: "Breathable pieces for the high-energy Dallas social floor."
   accessoryIds:
     - "electric-fan"
+  accessoryDescription: "Essential cooling gear for the Texas summer heat."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  shoeDescription: "Durable soles for intense competition and long nights."
   essentialIds:
     - "liquid-iv"
     - "shoe-brush"
     - "loop-experience"
+  essentialDescription: "Stay hydrated and keep your shoes ready for the Texas floor."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
     - "portable-charger"
+  travelDescription: "Packing light for a fast-paced Dallas weekend."
 
 earlyBirdDate: "2026-05-01"
 registrationDeadline: "2026-06-15"

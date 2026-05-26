@@ -29,15 +29,20 @@ theme:
 
 gear:
   outfitIds: []
+  outfitDescription: "City-ready styles for the heartbeat of SF West Coast Swing."
   accessoryIds: []
+  accessoryDescription: "Practical items for an urban weekly class and social."
   shoeIds:
     - "dance-socks"
     - "suede-sheets"
+  shoeDescription: "Versatile footwear for the varied floors of a city venue."
   essentialIds:
     - "mints"
     - "hand-sanitizer"
+  essentialDescription: "Essentials to keep you fresh during a mid-week San Francisco set."
   travelIds:
     - "portable-charger"
+  travelDescription: "Compact gear for easy transit to the Mission City Swing classes."
 
 earlyBirdDate: ""
 registrationDeadline: ""

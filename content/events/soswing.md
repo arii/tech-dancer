@@ -30,17 +30,22 @@ theme:
 
 gear:
   outfitIds: []
+  outfitDescription: "Flowy, comfortable styles for the welcoming Ashland community."
   accessoryIds: []
+  accessoryDescription: "Functional cooling for the intimate Pacific Northwest ballroom."
   shoeIds:
     - "bloch-grecian"
     - "dance-socks"
+  shoeDescription: "Reliable shoes for leveled workshops and late-night social dancing."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "mints"
+  essentialDescription: "Hearing protection and recovery for a focused dance weekend."
   travelIds:
     - "compression-cubes"
     - "travel-pillow"
+  travelDescription: "Practical gear for traveling to the beautiful theater town of Ashland."
 
 earlyBirdDate: "2026-03-15"
 registrationDeadline: "2026-05-01"

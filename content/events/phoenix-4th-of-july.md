@@ -33,19 +33,24 @@ theme:
 gear:
   outfitIds:
     - "ombre-dance-dress"
+  outfitDescription: "Lightweight layers for transitioning from desert heat to resort AC."
   accessoryIds:
     - "electric-fan"
     - "pride-sunglasses"
+  accessoryDescription: "Essential protection for the legendary All-Star Pool Party."
   shoeIds:
     - "bloch-grecian"
+  shoeDescription: "Comfortable footwear for the sprawling Camelback Inn property."
   essentialIds:
     - "liquid-iv"
     - "dry-shampoo"
     - "loop-experience"
+  essentialDescription: "Hydration and refreshers for the intense Arizona summer heat."
   travelIds:
     - "microfiber-towel"
     - "travel-bottles"
     - "hanging-toiletry-bag"
+  travelDescription: "Essentials for a luxury resort getaway and patriotic celebration."
 
 earlyBirdDate: "2026-05-15"
 registrationDeadline: "2026-06-18"

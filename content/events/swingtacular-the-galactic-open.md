@@ -38,19 +38,24 @@ theme:
 gear:
   outfitIds:
     - "sequin-bomber-jacket"
+  outfitDescription: "Metallics and neons to match the high-production galactic vibe."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+  accessoryDescription: "Out-of-this-world accessories for the signature Saturday night social."
   shoeIds:
     - "bloch-grecian"
     - "dance-socks"
+  shoeDescription: "Trusted shoes for world-class competitions and non-stop dancing."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "shoe-brush"
+  essentialDescription: "Tools to keep you fresh and your shoes grippy on the Hyatt floor."
   travelIds:
     - "compression-cubes"
     - "portable-charger"
+  travelDescription: "Space-saving solutions for an international-caliber event."
 
 earlyBirdDate: "2026-06-15"
 registrationDeadline: "2026-07-31"

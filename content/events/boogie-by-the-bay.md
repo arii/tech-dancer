@@ -34,20 +34,25 @@ gear:
   outfitIds:
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
+  outfitDescription: "Sharp looks for the most prestigious event on the NorCal circuit."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+  accessoryDescription: "Functional flair for the legendary late-night sets at the Hyatt SFO."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  shoeDescription: "Top-tier footwear for the flagship Champions Jack & Jill."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "shoe-brush"
+  essentialDescription: "Recovery tools and floor-ready essentials for the cornerstone event."
   travelIds:
     - "compression-cubes"
     - "portable-charger"
     - "mints"
+  travelDescription: "Smart packing for the bay breeze and the massive Hyatt Regency."
 
 earlyBirdDate: "2026-08-15"
 registrationDeadline: "2026-09-24"

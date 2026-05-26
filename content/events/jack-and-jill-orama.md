@@ -76,24 +76,29 @@ gear:
     - "norcal-pride-bear-shirt"
     - "love-unisex-shirt"
     - "norcal-bestcal-tshirt"
+  outfitDescription: "Bold, expressive colors for the annual Rainbow Pride celebration."
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"
     - "rainbow-fan"
+  accessoryDescription: "Statement pieces to match the high-energy SoCal community buzz."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  shoeDescription: "Reliable shoes for creative competition formats and non-stop social magic."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "liquid-iv"
     - "shoe-brush"
+  essentialDescription: "Everything you need to keep your energy up through the 2 a.m. sets."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
     - "hanging-toiletry-bag"
     - "portable-charger"
     - "mints"
+  travelDescription: "Organized gear for a full-spectrum SoCal dance weekend."
 
 earlyBirdDate: "2026-02-24"
 registrationDeadline: "2026-06-03"

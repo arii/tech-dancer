@@ -29,15 +29,20 @@ theme:
 
 gear:
   outfitIds: []
+  outfitDescription: "Relaxed, casual pieces for a mid-week South Bay social."
   accessoryIds: []
+  accessoryDescription: "Simple essentials for a welcoming community atmosphere."
   shoeIds:
     - "dance-socks"
     - "suede-sheets"
+  shoeDescription: "Easy-to-wear options for weekly practice and social dancing."
   essentialIds:
     - "mints"
     - "hand-sanitizer"
+  essentialDescription: "Quick refreshers for a post-lesson social floor."
   travelIds:
     - "portable-charger"
+  travelDescription: "Grab-and-go gear for your weekly San Jose dance fix."
 
 earlyBirdDate: ""
 registrationDeadline: ""
