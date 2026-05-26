@@ -8,10 +8,10 @@ export interface WordmarkProps extends Omit<TextProps, 'variant'> {
 }
 
 const VARIANT_MAP: Record<WordmarkVariant, TextProps["variant"]> = {
-  default: "wordmark",
-  hero: "wordmarkHero",
-  navigation: "wordmark",
-  nav: "wordmark", // Legacy alias for navigation
+  default: "sans",
+  hero: "display",
+  navigation: "sans",
+  nav: "sans", // Legacy alias for navigation
 };
 
 const VARIANT_CLASSES: Record<WordmarkVariant, string> = {
@@ -35,9 +35,10 @@ export function Wordmark({
   return (
     <Text
       variant={VARIANT_MAP[variant]}
+      color="white"
       size={size || (isHero ? undefined : (isNav ? "sm" : "base"))}
       weight={weight || "font-extrabold"}
-      className={cn(VARIANT_CLASSES[variant], className)}
+      className={cn("leading-none", VARIANT_CLASSES[variant], className)}
       style={style}
       tracking="wordmark"
       {...props}
