@@ -81,7 +81,7 @@ export function ThemeSpotlight({
           <Stack gap={2}>
             <Text
               variant="mono"
-              size="xs"
+              size="micro"
               color="dim"
               uppercase
               tracking="widest"
