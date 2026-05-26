@@ -35,8 +35,10 @@ export default function ResearchDetail() {
 
   const id = useMemo(() => {
     if (paramId) return paramId;
-    if (pathname.startsWith('/research/')) {
-      return pathname.split('/').filter(Boolean).pop();
+    const parts = pathname.split('/').filter(Boolean);
+    const resIndex = parts.indexOf('research');
+    if (resIndex !== -1 && parts[resIndex + 1]) {
+      return parts[resIndex + 1];
     }
     return null;
   }, [paramId, pathname]);
