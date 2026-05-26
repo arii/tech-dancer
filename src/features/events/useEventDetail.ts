@@ -40,7 +40,9 @@ export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
     },
     {
       label: "Shoes & Essentials",
-      description: gear.shoeDescription || gear.essentialDescription,
+      description: [gear.shoeDescription, gear.essentialDescription]
+        .filter(Boolean)
+        .join(" "),
       items: resolveAffiliateLinks([
         ...(gear.shoeIds ?? []),
         ...(gear.essentialIds ?? []),
