@@ -7,6 +7,7 @@ import { AffiliateLink } from "@/types";
 
 export interface ResolvedGearSection {
   label: string;
+  description?: string;
   items: AffiliateLink[];
 }
 
@@ -27,16 +28,31 @@ export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
   if (!gear) return [];
 
   return [
-    { label: "Outfits", items: resolveAffiliateLinks(gear.outfitIds) },
-    { label: "Accessories", items: resolveAffiliateLinks(gear.accessoryIds) },
+    {
+      label: "Outfits",
+      description: gear.outfitDescription,
+      items: resolveAffiliateLinks(gear.outfitIds),
+    },
+    {
+      label: "Accessories",
+      description: gear.accessoryDescription,
+      items: resolveAffiliateLinks(gear.accessoryIds),
+    },
     {
       label: "Shoes & Essentials",
+      description: [gear.shoeDescription, gear.essentialDescription]
+        .filter(Boolean)
+        .join(" "),
       items: resolveAffiliateLinks([
         ...(gear.shoeIds ?? []),
         ...(gear.essentialIds ?? []),
       ]),
     },
-    { label: "Travel Extras", items: resolveAffiliateLinks(gear.travelIds) },
+    {
+      label: "Travel Extras",
+      description: gear.travelDescription,
+      items: resolveAffiliateLinks(gear.travelIds),
+    },
   ].filter((s) => s.items.length > 0);
 }
 
