@@ -28,7 +28,7 @@ export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
 /**
  * Organizes an event's gear IDs into resolved semantic sections.
  */
-export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
+export function getGearSections(gear?: Event["gear"], excludeLabels: string[] = []): ResolvedGearSection[] {
   if (!gear) return [];
 
   return [
@@ -57,7 +57,7 @@ export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
       description: gear.travelDescription,
       items: resolveAffiliateLinks(gear.travelIds),
     },
-  ].filter((s) => s.items.length > 0);
+  ].filter((s) => s.items.length > 0 && !excludeLabels.includes(s.label));
 }
 
 export function useEventDetail() {

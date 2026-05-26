@@ -11,7 +11,7 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     await expect(page.getByTestId('why-attending')).toContainText('I keep coming back to Jack & Jill O\'Rama');
   });
 
-  test('should render the theme spotlight with rainbow colors', async ({ page }) => {
+  test('should render the theme spotlight with rainbow colors and inspiration tiles', async ({ page }) => {
     const themeSection = page.getByTestId('theme');
     await expect(themeSection).toBeVisible();
     await expect(themeSection.getByText('Rainbow', { exact: true })).toBeVisible();
@@ -19,6 +19,10 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     // Check if color swatches are present
     const swatches = themeSection.locator('div[title^="#"]');
     await expect(swatches).toHaveCount(6);
+
+    // Check for inspiration sections
+    await expect(themeSection.getByText('Outfit Inspiration')).toBeVisible();
+    await expect(themeSection.getByText('Accessory Ideas')).toBeVisible();
   });
 
   test('should render curated gear sections (with deduplication and capping)', async ({ page }) => {
