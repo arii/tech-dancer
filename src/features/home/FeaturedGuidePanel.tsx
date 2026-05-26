@@ -29,7 +29,7 @@ export function FeaturedGuidePanel() {
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         alt={FEATURED.title}
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-40 transition-opacity duration-500 group-hover:opacity-55"
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-60 transition-opacity duration-500 group-hover:opacity-70"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility */}
