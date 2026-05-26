@@ -19,7 +19,7 @@ export default function ResearchAnalytics() {
       />
       <Stack gap={12}>
         <PageHeader
-          label="PORTFOLIO"
+          eyebrow="PORTFOLIO"
           title="DevAI Portfolio"
           description="A collection of tools and technical projects built for the WCS community."
           as="h1"
