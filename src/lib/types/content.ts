@@ -59,7 +59,7 @@ export interface Study {
   author: string;
 }
 
-export type EventRegion = NonNullable<EventFrontmatter['region']>;
+type EventRegion = NonNullable<EventFrontmatter['region']>;
 
 export interface Event extends Omit<EventFrontmatter, 'theme' | 'gear'> {
   slug: string;
