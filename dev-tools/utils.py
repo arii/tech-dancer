@@ -27,7 +27,7 @@ def get_ollama_url() -> str:
 
 def get_ollama_model() -> str:
     """Dynamic getter for Ollama Model."""
-    return os.environ.get("OLLAMA_MODEL", "llama3")
+    return os.environ.get("OLLAMA_MODEL", "llama3.2")
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
@@ -78,7 +78,7 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
     for attempt in range(1, max_retries + 1):
         try:
             try:
-                with urllib.request.urlopen(req, timeout=120) as response:
+                with urllib.request.urlopen(req, timeout=300) as response:
                     res_data = json.loads(response.read().decode("utf-8"))
                     return res_data.get("response")
             except (urllib.error.HTTPError, urllib.error.URLError) as e:
