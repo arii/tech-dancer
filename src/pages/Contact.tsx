@@ -10,7 +10,7 @@ const contactFormSchema = z.object({
   name: z.string().min(1, 'Name required'),
   email: z.string().min(1, 'Email address required').email('Invalid email address'),
   subject: z.string().min(1, 'Subject required'),
-  message: z.string().min(1, 'Message destination required').min(10, 'Message destination below minimum threshold (10 chars)'),
+  message: z.string().min(1, 'Message required').min(10, 'Message below minimum threshold (10 chars)'),
 });
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
@@ -63,7 +63,7 @@ export default function Contact() {
       <>
         <SEO
           title="Message Sent"
-          description="Your transmission has been successfully received. We will respond shortly."
+          description="Your message has been successfully received. We will respond shortly."
         />
         <SuccessState onReset={() => setSubmitted(false)} />
       </>

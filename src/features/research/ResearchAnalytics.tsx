@@ -101,7 +101,7 @@ export default function ResearchAnalytics() {
                     </Text>
                   </Stack>
                   <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Paper</Text>
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
                 </Stack>

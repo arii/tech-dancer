@@ -11,11 +11,11 @@ This study documents the initial deployment and synchronization phase of the WCS
 
 ## Synchronization Progress
 
-As of May 2026, we have successfully implemented the core ETL (Extract, Transform, Load) pipeline and completed the following:
+As of May 2026, we have successfully implemented the core data processing pipeline and completed the following:
 
-- **2026 Data Prioritization**: Real-time results from the 2026 season are being captured with high fidelity.
-- **Historical Backfill**: We are currently processing results from 2023 to 2025 to ensure longitudinal depth in our analysis.
-- **Schema Validation**: All records undergo strict validation to ensure unique indexing via Dancer ID and Result ID.
+- **2026 Data**: Real-time results from the 2026 season are being captured with high accuracy.
+- **Historical Results**: We are currently processing results from 2023 to 2025 to provide better historical context for our analysis.
+- **Data checks**: All records undergo strict validation to ensure they are correctly assigned to each dancer.
 
 ## Data Integrity Focus
 
@@ -23,7 +23,7 @@ We have addressed several critical issues identified during the pilot phase:
 
 1. **Registry Link Resilience**: Competitors without direct WSDC registry links are no longer dropped; they are indexed using robust temporary identifiers.
 2. **Result Restoration**: Missing prelim and semi-final data for specific events (e.g., Easter Swing) have been manually audited and restored.
-3. **Multi-Point Verification**: We use a combination of metadata to ensure that event locations and dates are correctly associated with scoring records.
+3. **Accuracy Verification**: We use several metadata points to ensure that event locations and dates are correctly associated with scoring records.
 
 ## Community Feedback (Interactive Data Lab)
 
@@ -42,4 +42,4 @@ Please send an email to [research@ariidance.com](mailto:research@ariidance.com?s
 - Link to the original result page (if available)
 - Description of the discrepancy
 
-Your input directly helps us stabilize the pipeline and ensure 100% data accuracy for the entire community.
+Your input directly helps us improve our data processing and ensure accuracy for the entire community.

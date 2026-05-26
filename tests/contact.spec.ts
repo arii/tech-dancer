@@ -26,7 +26,7 @@ test.describe('Contact Form', () => {
 
     await expect(page.locator('text=Name required')).toBeVisible();
     await expect(page.locator('text=Email address required')).toBeVisible();
-    await expect(page.locator('text=Message destination required')).toBeVisible();
+    await expect(page.locator('text=Message required')).toBeVisible();
   });
 
   test('should show validation error for invalid email', async ({ page }) => {
@@ -51,7 +51,7 @@ test.describe('Contact Form', () => {
 
     await getSubmitButton(page).click();
 
-    await expect(page.locator('text=Message destination below minimum threshold (10 chars)')).toBeVisible();
+    await expect(page.locator('text=Message below minimum threshold (10 chars)')).toBeVisible();
   });
 
   test('should submit form successfully', async ({ page }) => {
