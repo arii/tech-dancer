@@ -1,3 +1,4 @@
+import { Sparkles } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -78,10 +79,34 @@ export default function EventGuide() {
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         {event.whyAttending && (
-          <Box maxWidth="2xl" marginBottom={12}>
-            <Text variant="body" size="lg" leading="relaxed" color="dim">
-              {event.whyAttending}
-            </Text>
+          <Box
+            maxWidth="3xl"
+            marginBottom={16}
+            padding={{ base: 6, md: 8 }}
+            radius="2xl"
+            className="bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group"
+          >
+            {/* Decorative background accent */}
+            <Box
+              position="absolute"
+              top={-20}
+              right={-20}
+              width={40}
+              height={40}
+              className="bg-accent/10 blur-3xl rounded-full"
+            />
+
+            <Stack gap={4}>
+              <Box display="flex" align="center" gap={2} color="accent">
+                <Sparkles size={16} />
+                <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">
+                  Why I&apos;m Attending
+                </Text>
+              </Box>
+              <Text variant="body" size="lg" leading="relaxed" color="white" className="relative z-10 italic font-medium opacity-90">
+                &ldquo;{event.whyAttending}&rdquo;
+              </Text>
+            </Stack>
           </Box>
         )}
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
