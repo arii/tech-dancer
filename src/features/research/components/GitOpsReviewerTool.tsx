@@ -1,14 +1,11 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Cpu, ShieldAlert } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
-
-const GITOPS_ASSETS = [
-  { path: 'dev-tools/mergellama.py', label: 'PR Auditor' },
-  { path: 'dev-tools/ollama_reviewer.py', label: 'Local LLM Reviewer' },
-  { path: 'dev-tools/td_cli.py', label: 'CLI Manager' }
-];
+import { DEVAI_ASSETS } from '@/config/devai-assets';
 
 export function GitOpsReviewerTool() {
+  const assets = DEVAI_ASSETS.filter(a => a.toolId === 'gitops-pr-reviewer');
+
   return (
     <Box border radius="lg" padding={8} surface="default">
       <Stack gap={8}>
@@ -40,7 +37,7 @@ export function GitOpsReviewerTool() {
           </Stack>
         </Grid>
 
-        <ArchitecturalAssetsList assets={GITOPS_ASSETS} />
+        <ArchitecturalAssetsList assets={assets} />
       </Stack>
     </Box>
   );
