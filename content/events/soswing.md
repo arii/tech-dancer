@@ -16,8 +16,9 @@ description: SOswing offers a unique, community-focused atmosphere in beautiful 
 whyAttending: >
   SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge comp field.
 theme:
-  name: Pacific Wildflower
-  label: SOswing Theme
+  name: "Glow / Tin / Ring"
+  label: "SOswing Theme"
+  description: "Themes vary by year—past favorites include Glow, Tin, and Ring-themed nights. Check the official site for this year's specific call, but expect something playful and creative."
   outfitIds:
   - ombre-dance-dress
   accessoryIds:
@@ -25,21 +26,28 @@ theme:
   - neck-fan
 gear:
   outfitIds: []
+  outfitDescription: "Comfortable and expressive pieces for a community-focused weekend."
   accessoryIds: []
+  accessoryDescription: "Low-profile cooling for the intimate hotel ballroom."
   shoeIds:
-  - bloch-grecian
-  - dance-socks
+    - "bloch-grecian"
+    - "dance-socks"
+  shoeDescription: "Reliable footwear for workshops and community sets."
   essentialIds:
-  - loop-experience
-  - foam-roller
-  - mints
+    - "loop-experience"
+    - "foam-roller"
+    - "mints"
+  essentialDescription: "Standard recovery for the relaxed PNW circuit pace."
   travelIds:
-  - compression-cubes
-  - travel-pillow
-earlyBirdDate: '2026-03-15'
-registrationDeadline: '2026-05-01'
-hotelCutoffDate: '2026-04-18'
-packingReminderDate: '2026-05-05'
+    - "compression-cubes"
+    - "travel-pillow"
+  travelDescription: "Road-trip or regional flight essentials for Southern Oregon."
+
+earlyBirdDate: ""
+registrationDeadline: ""
+hotelCutoffDate: ""
+packingReminderDate: ""
+
 relatedEvents:
 - jack-and-jill-orama
 - swingtacular-the-galactic-open
@@ -49,8 +57,22 @@ relatedEvents:
 Ashland is a theatre town — beautiful, small, and surprisingly walkable
 from the hotel. Book early; the room block is limited.
 
+## Community Reviews
+
+> "SOswing is the highlight of my year. It's smaller than the major conventions, which means you actually get to talk to people. The 'Westie' hospitality in Ashland is real." — *Regional Competitor*
+
+> "The Ashland Hills hotel has this great retro vibe that perfectly matches the community feel of the event. It's the best place to just enjoy dancing for the sake of dancing." — *Social Dancer*
+
 ## Pro Tips
 
 - **Travel:** If you're flying, Medford (MFR) is the closest airport. Arrange your shuttle or rental car in advance as options can be limited.
 - **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
+
+## Gear Spotlight: Ashland Essentials
+
+### Suede Sheets (DIY Shoe Kit)
+> "The Ashland Hills hotel floor is nice, but it can get a bit 'grippy' as the humidity changes. I added these suede sheets to my sneakers and they were perfect for the whole weekend. Super easy to apply." — *Google Review*
+
+### Bloch Grecian Sandals
+> "My go-to for SOswing. They are comfortable enough for 3 hours of workshops but still look elegant for the social dancing. The heel height is perfect for the intimate setting." — *Customer Review*

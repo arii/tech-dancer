@@ -33,5 +33,12 @@ class TestModernCLI(unittest.TestCase):
         self.assertTrue(kwargs['fetch'])
         self.assertFalse(kwargs['audit'])
 
+    @patch('tdw_services.orchestrator.Orchestrator.analyze_file')
+    def test_analyze_calls_orchestrator(self, mock_analyze):
+        mock_analyze.return_value = "solid code"
+        result = self.runner.invoke(cli, ['ai', 'analyze', 'README.md'])
+        self.assertEqual(result.exit_code, 0)
+        mock_analyze.assert_called_once_with('README.md')
+
 if __name__ == '__main__':
     unittest.main()

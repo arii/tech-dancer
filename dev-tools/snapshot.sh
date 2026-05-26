@@ -51,10 +51,10 @@ else
     echo "GitHub token: Missing"
 fi
 
-if [ -n "$JULES_API_KEY" ]; then
-    echo "Jules API key: Present"
+if [ -n "$ANTIGRAVITY_API_KEY" ] || [ -n "$JULES_API_KEY" ]; then
+    echo "Antigravity/Jules API key: Present"
 else
-    echo "Jules API key: Missing"
+    echo "Antigravity/Jules API key: Missing"
 fi
 
 if [ -n "$GEMINI_API_KEY" ]; then
@@ -64,6 +64,6 @@ else
 fi
 
 echo "Ollama URL: ${OLLAMA_URL:-http://localhost:11434/api/generate}"
-echo "Ollama Model: ${OLLAMA_MODEL:-qwen2.5-coder:7b}"
+echo "Ollama Model: ${OLLAMA_MODEL:-llama3.2}"
 
 echo "=== Snapshot Complete ==="
