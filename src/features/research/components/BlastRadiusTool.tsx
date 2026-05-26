@@ -2,9 +2,10 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { GitBranch, Layers, Activity } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
+import { TOOL_ID_SCOPE_BLAST_RADIUS } from '@/config/devai-tool-ids';
 
 export function BlastRadiusTool() {
-  const assets = DEVAI_ASSETS.filter(a => a.toolId === 'scope-blast-radius');
+  const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_SCOPE_BLAST_RADIUS);
 
   return (
     <Box border radius="lg" padding={8} surface="default">
