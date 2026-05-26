@@ -1,89 +1,73 @@
 import { MessageCircle } from 'lucide-react';
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
-import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
+import { getAllMerchProducts } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
-import { FilterButton } from '@/components/ui/FilterButton';
+import FolioGrid from '@/components/ui/FolioGrid';
 
 export default function Merch() {
-  const [activeCollection, setActiveCollection] = useState('all');
+  const products = getAllMerchProducts();
 
-  const filteredProducts = getMerchByCollection(activeCollection);
+  const categories = COLLECTIONS.map(c => ({ id: c.id, label: c.label }));
 
   return (
     <Box>
       <SEO
         title="West Coast Swing Dance Merch"
         description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
-        jsonLd={generateMerchSchema(getAllMerchProducts())}
+        jsonLd={generateMerchSchema(products)}
       />
 
-      <Stack gap={8} width="full">
-        <PageHeader
-          label="STOREFRONT"
-          title="West Coast Swing Dance Merch"
-          description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find something fun for your next dance weekend."
-        />
-
+      <FolioGrid
+        items={products}
+        categoryTitle="West Coast Swing Dance Merch"
+        label="STOREFRONT"
+        description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find something fun for your next dance weekend."
+        basePath="/merch"
+        searchPlaceholder="Search products..."
+        categories={categories}
+        categoryParam="collection"
+        renderItem={(product) => (
+          <ProductCard key={product.id} item={product} />
+        )}
+      >
         {/* Hero Referral Banner */}
-        <ReferralBanner layout="expanded" />
+        <Box marginTop={8}>
+            <ReferralBanner layout="expanded" />
+        </Box>
+      </FolioGrid>
 
-        {/* Collection Filters */}
-        <Box border="b" paddingBottom={4} className="border-line overflow-x-auto">
-          <Stack direction="row" gap={2} padding={1} className="min-w-max">
-            {COLLECTIONS.map((collection) => (
-              <FilterButton
-                key={collection.id}
-                label={collection.label}
-                isActive={activeCollection === collection.id}
-                onClick={() => setActiveCollection(collection.id)}
-              />
-            ))}
+      {/* Footer Callouts */}
+      <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={12}>
+        {/* Design Suggestions */}
+        <Box padding={8} radius="lg" border surface="card">
+          <Stack gap={6}>
+            <Box padding={3} radius="full" width="fit" className="bg-accent/10 text-accent">
+              <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
+            </Box>
+            <Stack gap={2}>
+              <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
+                Have a Design Idea?
+              </Text>
+              <Text variant="body" size="sm" color="dim">
+                We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
+              </Text>
+            </Stack>
+            <Button as={NavLink} to="/contact" variant="outline" className="w-fit">
+              Submit Suggestion
+            </Button>
           </Stack>
         </Box>
 
-        {/* Product Grid */}
-        <Grid cols={{ base: 1, sm: 2, md: 3, xl: 4 }} gap={6}>
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} item={product} />
-          ))}
-        </Grid>
-
-        {/* Footer Callouts */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8}>
-          {/* Design Suggestions */}
-          <Box padding={8} radius="lg" border surface="card">
-            <Stack gap={6}>
-              <Box padding={3} radius="full" width="fit" className="bg-accent/10 text-accent">
-                <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
-              </Box>
-              <Stack gap={2}>
-                <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
-                  Have a Design Idea?
-                </Text>
-                <Text variant="body" size="sm" color="dim">
-                  We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
-                </Text>
-              </Stack>
-              <Button as={NavLink} to="/contact" variant="outline" className="w-fit">
-                Submit Suggestion
-              </Button>
-            </Stack>
-          </Box>
-
-          {/* Detailed Referral Box */}
-          <ReferralBanner layout="compact" />
-        </Grid>
-      </Stack>
+        {/* Detailed Referral Box */}
+        <ReferralBanner layout="compact" />
+      </Grid>
     </Box>
   );
 }
-

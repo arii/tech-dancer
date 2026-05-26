@@ -3,12 +3,19 @@ import { Box, Stack } from '@/layouts/Primitives';
 import { formatCategory } from '@/lib/utils';
 import { FilterButton } from './FilterButton';
 
-interface FilterBarProps {
-  categories: string[];
+export interface CategoryOption {
+  id: string;
+  label: string;
+  className?: string;
 }
 
-export function FilterBar({ categories }: FilterBarProps) {
-  const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
+interface FilterBarProps {
+  categories: (string | CategoryOption)[];
+  paramName?: string;
+}
+
+export function FilterBar({ categories, paramName = 'category' }: FilterBarProps) {
+  const [activeCategory, setActiveCategory] = useSearchParam(paramName, 'All');
 
   return (
     <Box
@@ -21,15 +28,21 @@ export function FilterBar({ categories }: FilterBarProps) {
       paddingY={6}
     >
       <Stack direction="row" gap={3} className="min-w-max" paddingX={1}>
-        {categories.map((cat) => (
-          <FilterButton
-            key={cat}
-            label={formatCategory(cat)}
-            onClick={() => setActiveCategory(cat)}
-            isActive={activeCategory === cat}
-            className="transition-all duration-300 text-xs whitespace-nowrap"
-          />
-        ))}
+        {categories.map((cat) => {
+          const id = typeof cat === 'string' ? cat : cat.id;
+          const label = typeof cat === 'string' ? formatCategory(cat) : cat.label;
+          const className = typeof cat === 'string' ? '' : cat.className;
+
+          return (
+            <FilterButton
+              key={id}
+              label={label}
+              onClick={() => setActiveCategory(id)}
+              isActive={activeCategory === id}
+              className={className}
+            />
+          );
+        })}
       </Stack>
     </Box>
   );

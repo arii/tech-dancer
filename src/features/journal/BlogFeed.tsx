@@ -1,11 +1,14 @@
-import { Box } from '@/layouts/Primitives';
-import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
-import { FilterBar } from '@/components/ui/FilterBar';
+import { getPosts } from '@/lib/content';
+import { useMemo } from 'react';
 
 export default function BlogFeed() {
-  const { posts, categories, view, setView } = useBlog();
+  const posts = getPosts();
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(posts.map(p => p.category)));
+    return ['All', ...cats];
+  }, [posts]);
 
   return (
     <>
@@ -21,15 +24,8 @@ export default function BlogFeed() {
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
         searchPlaceholder="Search posts..."
-        view={view}
-        onViewChange={setView}
-      >
-        <Box marginTop={8}>
-          <FilterBar
-            categories={categories}
-          />
-        </Box>
-      </FolioGrid>
+        categories={categories}
+      />
     </>
   );
 }
