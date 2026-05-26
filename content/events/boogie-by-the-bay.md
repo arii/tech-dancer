@@ -1,5 +1,6 @@
 ---
 type: event
+featured: true
 title: "Boogie by the Bay"
 date: "2026-10-08"
 startDate: "2026-10-08"

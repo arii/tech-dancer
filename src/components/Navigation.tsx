@@ -22,29 +22,38 @@ export default function Navigation() {
   };
 
   const topRoutes = routes.filter((r): r is typeof r & { label: string } =>
-    !!(r.path !== '/' && r.label && ['/events', '/gear', '/blog', '/research', '/about'].includes(r.path))
+    !!(r.label && ['/blog', '/gear', '/events', '/research', '/about'].includes(r.path))
   );
 
   return (
     <>
       <MobileBottomNav />
-      <Box as="nav" aria-label="Main Navigation" className="fixed inset-x-0 top-0 z-[130] h-16 border-b border-line bg-bg/95 backdrop-blur-xl">
+      <Box as="nav" aria-label="Main Navigation" zIndex="sticky" className="fixed inset-x-0 top-0 h-16 border-b border-line bg-bg/95 backdrop-blur-xl">
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" height="full">
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} className="group">
               <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-80" />
             </Box>
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={8}>
-              {topRoutes.map((item) => (
-                <Box as="li" key={item.path}>
-                  <NavLink
-                    to={item.path}
-                    className={({ isActive }) => cn('relative text-sm transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
-                  >
-                    {item.label}
-                  </NavLink>
-                </Box>
-              ))}
+              {['/blog', '/gear', '/events', '/research', '/about'].map((path) => {
+                const route = topRoutes.find((r) => r.path === path);
+                if (!route) return null;
+                return (
+                  <Box as="li" key={route.path}>
+                    <NavLink
+                      to={route.path}
+                      className={({ isActive }) =>
+                        cn(
+                          'relative text-sm transition-colors hover:text-accent py-1',
+                          isActive ? 'text-accent' : 'text-text-dim'
+                        )
+                      }
+                    >
+                      {route.label}
+                    </NavLink>
+                  </Box>
+                );
+              })}
             </Box>
           </Stack>
 
