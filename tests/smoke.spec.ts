@@ -38,7 +38,7 @@ test.describe('Navigation Smoke Tests', () => {
 
   test('hero cta navigates to events', async ({ page }) => {
     await page.goto('./');
-    const cta = page.get_by_role('link', { name: 'Browse Resource Guides' });
+    const cta = page.getByRole('link', { name: 'Browse Resource Guides' });
     await expect(cta).toBeVisible();
     await cta.click();
     await expect(page).toHaveURL(/.*\/events/);
