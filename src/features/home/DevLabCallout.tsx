@@ -16,10 +16,37 @@ export function DevLabCallout() {
         </Text>
       </Stack>
 
-      {/* Body */}
-      <Text variant="body" size="sm" color="dim" leading="relaxed">
-        Behind-the-scenes notes on BoomTick data tools, content systems, and experiments
-        for dance media.
+      {/* Metadata Fields */}
+      <Stack gap={2} className="border-y border-line/30 py-3.5 my-1">
+        <Box display="flex" justify="between" align="center" gap={2}>
+          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide">
+            Status
+          </Text>
+          <Text variant="mono" size="xs" color="accent" weight="font-bold">
+            ORCHESTRATION ACTIVE
+          </Text>
+        </Box>
+        <Box display="flex" justify="between" align="center" gap={2}>
+          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide">
+            Quality Gates
+          </Text>
+          <Text variant="mono" size="xs" className="text-emerald-500 font-bold">
+            ENABLED
+          </Text>
+        </Box>
+        <Box display="flex" justify="between" align="center" gap={2}>
+          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide">
+            Frameworks
+          </Text>
+          <Text variant="mono" size="xs" color="white" weight="font-bold">
+            CUSTOM DEVAI SDK
+          </Text>
+        </Box>
+      </Stack>
+
+      {/* Description */}
+      <Text variant="body" size="xs" color="dim" leading="relaxed">
+        Welcome to my active research sandbox. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
       </Text>
 
       {/* CTA */}
