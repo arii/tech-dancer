@@ -19,6 +19,7 @@ interface FolioItem {
   category?: string;
   region?: string;
   collection?: string;
+  collections?: string[];
   tags?: string[];
   excerpt?: string;
   description?: string;
@@ -59,24 +60,30 @@ export default function FolioGrid({
   const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');
 
   const filteredItems = items.filter(item => {
-    // Category filter
-    const itemCat = item.category || item.region || item.collection || '';
+    // Category/Collection filter
     const isAll = activeCategory.toLowerCase() === 'all';
-    const categoryMatch = isAll ||
-                         itemCat === activeCategory ||
-                         (Array.isArray(item.tags) && item.tags.includes(activeCategory));
+    if (!isAll) {
+        const itemCat = item.category || item.region || item.collection || '';
+        const itemCollections = item.collections || [];
+        const itemTags = item.tags || [];
 
-    if (!categoryMatch) return false;
+        const categoryMatch = itemCat === activeCategory ||
+                             itemCollections.includes(activeCategory) ||
+                             itemTags.includes(activeCategory);
+
+        if (!categoryMatch) return false;
+    }
 
     // Search filter
     const title = item.title || item.name || '';
+    const itemCat = item.category || item.region || item.collection || '';
     const tags = item.tags || [];
     const excerpt = item.excerpt || item.description || '';
 
     return (
       safeSearch(title, search) ||
-      tags?.some((t: string) => safeSearch(t, search)) ||
       safeSearch(itemCat, search) ||
+      tags.some((t: string) => safeSearch(t, search)) ||
       safeSearch(excerpt, search)
     );
   });
