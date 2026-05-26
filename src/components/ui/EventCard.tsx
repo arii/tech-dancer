@@ -16,6 +16,7 @@ export function EventCard(props: EventCardProps) {
     title,
     slug,
     location,
+    region,
     schedule,
     earlyBirdDate,
     hotelCutoffDate,
@@ -72,7 +73,7 @@ export function EventCard(props: EventCardProps) {
         </Text>
         <Box display="flex" align="center" justify="between">
           <Text size="sm" color="dim">
-            {location}
+            {location}{region ? ` • ${region}` : ''}
           </Text>
           <Box display="flex" gap={2}>
             {hasReminders && (

@@ -77,6 +77,8 @@ export interface EventGear {
   travelDescription?: string;
 }
 
+export type EventRegion = 'NorCal' | 'SoCal' | 'Southwest' | 'Pacific Northwest' | 'South' | 'International' | 'Other';
+
 export interface Event {
   type: "event";
   draft?: boolean;
@@ -88,6 +90,7 @@ export interface Event {
   excerpt: string;
   location: string;
   city: string;
+  region?: EventRegion;
   schedule: string;
   description: string;
   link?: string;
