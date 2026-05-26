@@ -105,7 +105,7 @@ export default function Home() {
           </Stack>
 
           <Stack gap={8}>
-            <SectionHeader label="PLAN" title="Upcoming Event Resource Guides" />
+            <SectionHeader eyebrow="PLAN" title="Upcoming Event Resource Guides" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (
                 <Box
