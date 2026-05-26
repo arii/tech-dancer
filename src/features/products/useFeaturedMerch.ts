@@ -5,7 +5,7 @@ export function useFeaturedMerch(limit = 4) {
   const { data: featuredMerch = [] } = useQuery({
     queryKey: ['merch', 'featured', limit],
     queryFn: () => getFeaturedMerch(limit),
-    initialData: getFeaturedMerch(limit),
+    initialData: () => getFeaturedMerch(limit),
   });
 
   return { featuredMerch };

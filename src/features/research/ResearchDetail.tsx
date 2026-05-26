@@ -143,7 +143,7 @@ export default function ResearchDetail() {
               <Stack gap={12}>
                 <Stack gap={4}>
                     <PageHeader
-                      label={`PROJECT // ${tool.category}`}
+                      eyebrow={`PROJECT // ${tool.category}`}
                       title={tool.name}
                       paddingBottom={0}
                       border="none"

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -6,7 +7,7 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
-export function ProductCard({ item }: { item: ProductCatalogItem }) {
+export const ProductCard = memo(function ProductCard({ item }: { item: ProductCatalogItem }) {
   return (
     <BaseCard
       gap={4}
@@ -92,4 +93,4 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       </Box>
     </BaseCard>
   );
-}
+});
