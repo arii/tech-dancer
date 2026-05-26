@@ -1,13 +1,12 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { GitBranch, Layers, Activity } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
-
-const BLAST_RADIUS_ASSETS = [
-  { path: 'dev-tools/scope_check.py', label: 'Impact Analyzer' },
-  { path: 'dev-tools/workflow_summary.py', label: 'SDLC Profiler' }
-];
+import { DEVAI_ASSETS } from '@/config/devai-assets';
+import { TOOL_ID_SCOPE_BLAST_RADIUS } from '@/config/devai-tool-ids';
 
 export function BlastRadiusTool() {
+  const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_SCOPE_BLAST_RADIUS);
+
   return (
     <Box border radius="lg" padding={8} surface="default">
       <Stack gap={8}>
@@ -51,7 +50,7 @@ export function BlastRadiusTool() {
           </Box>
         </Stack>
 
-        <ArchitecturalAssetsList assets={BLAST_RADIUS_ASSETS} />
+        <ArchitecturalAssetsList assets={assets} />
       </Stack>
     </Box>
   );
