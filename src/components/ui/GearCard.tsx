@@ -7,6 +7,7 @@ import { affiliateManager } from '@/lib/affiliateManager';
 
 import { Star, ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
+import { AmazonPrice } from './AmazonPrice';
 
 interface GearCardProps extends BaseProps {
   slug?: string;
@@ -131,6 +132,7 @@ export function GearCard(props: GearCardProps) {
         <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
            {excerpt}
         </Text>
+        {affiliate?.asin && <AmazonPrice asin={affiliate.asin} />}
       </Stack>
 
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">

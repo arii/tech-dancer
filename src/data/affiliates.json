@@ -20,7 +20,8 @@
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
     "gearSlug": "2023-10-01-loop-earplugs",
-    "image": "/assets/gear/loop-earplugs.jpg"
+    "image": "/assets/gear/loop-earplugs.jpg",
+    "asin": "B08TCH6CVB"
   },
   "suede-sheets": {
     "id": "suede-sheets",
@@ -48,7 +49,8 @@
     "name": "2 FEET Dance Socks",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Slip over sneakers for smooth pivots and turns on wood floors."
+    "description": "Slip over sneakers for smooth pivots and turns on wood floors.",
+    "asin": "B01D0Y6Y1A"
   },
   "listerine-tabs": {
     "id": "listerine-tabs",
@@ -85,7 +87,8 @@
     "category": "travel",
     "description": "Keep your outfits wrinkle-free while traveling.",
     "gearSlug": "2023-11-01-travel-steamer",
-    "image": "/assets/gear/travel-steamer.jpg"
+    "image": "/assets/gear/travel-steamer.jpg",
+    "asin": "B01G9MC7GC"
   },
   "epsom-salt": {
     "id": "epsom-salt",

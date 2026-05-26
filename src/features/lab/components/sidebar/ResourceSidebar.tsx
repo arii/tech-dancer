@@ -3,6 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
 import { ResourceGrid } from '../ResourceGrid';
+import { AmazonPrice } from '@/components/ui/AmazonPrice';
 
 interface ResourceHeaderExtrasProps {
   author: string;
@@ -76,7 +77,10 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <Stack gap={1} align="end">
+                  {link.asin && <AmazonPrice asin={link.asin} />}
+                  <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                </Stack>
               </Box>
             ))}
             {affiliateLink && (

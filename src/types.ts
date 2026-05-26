@@ -11,4 +11,5 @@ export interface AffiliateLink {
   description: string;
   gearSlug?: string;
   image?: string;
+  asin?: string;
 }
