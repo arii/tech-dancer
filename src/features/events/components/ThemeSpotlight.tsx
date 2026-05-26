@@ -82,8 +82,7 @@ export function ThemeSpotlight({
             <Text
               variant="mono"
               size="xs"
-              weight="font-bold"
-              color="accent"
+              color="dim"
               uppercase
               tracking="widest"
               marginBottom={1}
@@ -93,9 +92,9 @@ export function ThemeSpotlight({
             {label && (
               <Text
                 variant="mono"
-                size="micro"
-                weight="font-medium"
-                color="dim"
+                size="xs"
+                weight="font-bold"
+                color="accent"
                 uppercase
                 tracking="widest"
                 marginBottom={1}
