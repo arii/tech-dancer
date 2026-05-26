@@ -1,0 +1,13 @@
+npm warn Unknown project config "node-linker". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › visual.spec.ts:18:5 › Visual Regression Tests › visual comparison for event-guide
+[1A[2K[chromium] › visual.spec.ts:18:5 › Visual Regression Tests › visual comparison for event-guide
+/app/tests/visual.spec.ts-snapshots/event-guide-chromium-linux.png is re-generated, writing actual.
+
+[1A[2K  1 passed (11.5s)
+
+To open last HTML report run:
+
+  npx playwright show-report
