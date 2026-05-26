@@ -99,6 +99,17 @@ class Orchestrator:
         """
         return self.ai.resolve_file_conflicts(file_path)
 
+    def analyze_file(self, file_path: str) -> str:
+        if not os.path.exists(file_path):
+            raise CLIError(f"File not found: {file_path}")
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+            prompt = f"Analyze this file for bugs, style issues, and potential improvements:\n\n{content[:20000]}"
+            return self.ai.generate(prompt)
+        except Exception as e:
+            raise CLIError(f"Failed to analyze file: {e}")
+
     def find_conflict_files(self) -> List[str]:
         """
         Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.

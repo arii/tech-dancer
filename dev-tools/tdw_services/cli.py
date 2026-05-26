@@ -282,7 +282,7 @@ def review(ctx, pr_number):
 @click.pass_context
 def analyze(ctx, file):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.resolve_conflict(file) # Placeholder for analyze
+    res = orch.analyze_file(file)
     out(ctx, f"✅ Analyzed {file}", data={"result": res})
 
 @ai.command()
