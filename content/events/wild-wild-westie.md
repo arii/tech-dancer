@@ -54,8 +54,8 @@ gear:
 
 earlyBirdDate: "2026-05-31"
 registrationDeadline: "2026-07-02"
-hotelCutoffDate: ""
-packingReminderDate: ""
+hotelCutoffDate: "2026-06-15"
+packingReminderDate: "2026-06-30"
 
 relatedEvents:
   - "boogie-by-the-bay"

@@ -55,10 +55,10 @@ gear:
     - "mints"
   travelDescription: "Organization essentials for a major airport-based convention."
 
-earlyBirdDate: ""
-registrationDeadline: ""
-hotelCutoffDate: ""
-packingReminderDate: ""
+earlyBirdDate: "2026-08-15"
+registrationDeadline: "2026-10-01"
+hotelCutoffDate: "2026-09-10"
+packingReminderDate: "2026-10-05"
 
 relatedEvents:
   - "jack-and-jill-orama"

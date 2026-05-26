@@ -57,10 +57,10 @@ gear:
     - "portable-charger"
   travelDescription: "Organization for a busy international dance convention."
 
-earlyBirdDate: ""
-registrationDeadline: ""
-hotelCutoffDate: ""
-packingReminderDate: ""
+earlyBirdDate: "2026-06-15"
+registrationDeadline: "2026-08-01"
+hotelCutoffDate: "2026-07-10"
+packingReminderDate: "2026-08-04"
 
 relatedEvents:
   - "boogie-by-the-bay"
