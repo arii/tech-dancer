@@ -69,11 +69,13 @@ function transform<T extends { date?: string; draft?: boolean }>(
       data.imageBack = normalizeAsset(data.imageBack);
       data.heroImage = normalizeAsset(data.heroImage);
 
+      const VALID_REGIONS = ['NorCal', 'SoCal', 'Southwest', 'Pacific Northwest', 'South', 'International', 'Other'];
+
       const result: Record<string, unknown> = {
         ...data,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
-        region: data.region ? String(data.region) : undefined,
+        region: (data.region && VALID_REGIONS.includes(String(data.region))) ? String(data.region) : undefined,
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
         author: String(data.author || ""),
