@@ -1,4 +1,6 @@
 import os
+import sys
+import time
 import json
 import re
 import requests
@@ -16,7 +18,9 @@ class LocalAIClient:
         if env_fallback is not None:
             self.use_gemini_fallback = env_fallback.lower() in ("true", "1", "yes")
         else:
-            self.use_gemini_fallback = True
+            # Default: Ollama-only. Gemini fallback must be explicitly enabled via
+            # USE_GEMINI_FALLBACK=true env var or "use_gemini_fallback": true in project_config.json
+            self.use_gemini_fallback = False
             try:
                 config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "project_config.json")
                 if os.path.exists(config_path):
@@ -124,7 +128,8 @@ class LocalAIClient:
             return False
 
     def generate_code_review(self, pr: Dict, diff: str) -> Dict:
-        checks_summary = "\\n".join([f"- {c.get('name')}: {c.get('status')} ({c.get('conclusion', 'Pending')})" for c in pr.get('checkResults', [])]) if pr.get('checkResults') else "No checks found."
+        pr_num = pr.get('number', 'unknown')
+        checks_summary = "\n".join([f"- {c.get('name')}: {c.get('status')} ({c.get('conclusion', 'Pending')})" for c in pr.get('checkResults', [])]) if pr.get('checkResults') else "No checks found."
 
         failing_context = ""
         if pr.get('checkResults'):
@@ -134,7 +139,7 @@ class LocalAIClient:
                 for f in failures:
                     failing_context += f"- {f.get('name')} FAILED\n"
 
-        prompt = f"""Perform Code Review for PR #{pr.get('number')} - "{pr.get('title')}".
+        prompt = f"""Perform Code Review for PR #{pr_num} - "{pr.get('title')}".
 Description: {pr.get('body', 'No description')}
 Checks: {checks_summary}
 {failing_context}
@@ -143,6 +148,7 @@ IMPORTANT:
 - If ANY critical CI check has failed (conclusion='failure'), you MUST NOT recommend 'Approved'.
 - Analyze any failing test logs provided in the description, check results, or failing context to suggest specific fixes.
 - Your reviewComment should include actionable feedback for fixing test failures if they exist.
+- Output ONLY valid JSON matching the required schema. Do not add markdown, prose, or commentary outside the JSON.
 
 Diff: {diff[:45000]}"""
 
@@ -155,19 +161,134 @@ Diff: {diff[:45000]}"""
             },
             "required": ["reviewComment", "labels", "recommendation"]
         }
-        # Use code-reviewer model specifically if possible
-        res = self.generate(prompt, schema, model="code-reviewer")
+
+        # ── Diagnostics ────────────────────────────────────────────────────────
+        ollama_ok = self.is_ollama_available()
+        model_name = self.ollama_model
+        print(f"\n{'='*60}")
+        print(f"🔍 PR #{pr_num} – Code Review Diagnostics")
+        print(f"{'='*60}")
+        print(f"  Ollama available : {'✅ YES' if ollama_ok else '❌ NO'}")
+        print(f"  Model            : {model_name} (requesting 'code-reviewer')")
+        print(f"  Gemini fallback  : {'enabled' if self.use_gemini_fallback else 'DISABLED'}")
+        print(f"  Diff size        : {len(diff):,} chars")
+        print(f"  Prompt size      : {len(prompt):,} chars (capped diff at 45 000)")
+        print(f"  Schema           : {list(schema['properties'].keys())}")
+        print(f"{'='*60}\n")
+
+        if not ollama_ok and not self.use_gemini_fallback:
+            print("❌ ABORT: Ollama is unreachable and Gemini fallback is disabled.", file=sys.stderr)
+            return {"reviewComment": "Ollama unavailable and fallback disabled.", "labels": [], "recommendation": "Not Approved"}
+
+        print("🤖 Sending prompt to Ollama (model: 'code-reviewer') …")
+        start_time = time.time()
         try:
-            # Clean markdown JSON block if Ollama returned it
-            res = self.clean_llm_output(res)
-            review = json.loads(res)
+            res = self.generate(prompt, schema, model="code-reviewer")
+        except EnvironmentError as e:
+            print(f"❌ generate() raised EnvironmentError: {e}", file=sys.stderr)
+            return {"reviewComment": str(e), "labels": [], "recommendation": "Not Approved"}
+        except Exception as e:
+            print(f"❌ generate() raised unexpected error: {e}", file=sys.stderr)
+            return {"reviewComment": str(e), "labels": [], "recommendation": "Not Approved"}
+        duration = time.time() - start_time
+
+        if not res:
+            print(f"❌ Ollama returned empty response after {duration:.2f}s", file=sys.stderr)
+            return {"reviewComment": "Empty response from Ollama.", "labels": [], "recommendation": "Not Approved"}
+
+        print(f"✅ Received response ({len(res):,} chars) in {duration:.2f}s")
+        print(f"--- RAW RESPONSE (first 500 chars) ---")
+        print(res[:500])
+        print(f"--- END RAW RESPONSE ---\n")
+
+        try:
+            cleaned = self.clean_llm_output(res)
+            review = json.loads(cleaned)
 
             # Enforce CI status check logic
             has_failures = any(c.get('conclusion') == 'failure' for c in pr.get('checkResults', []))
             if has_failures and review.get('recommendation') == 'Approved':
-                 review['recommendation'] = 'Not Approved'
-                 review['reviewComment'] = "CI checks are failing. Review recommendation downgraded to 'Not Approved'.\n\n" + review['reviewComment']
+                review['recommendation'] = 'Not Approved'
+                review['reviewComment'] = "CI checks are failing. Review recommendation downgraded to 'Not Approved'.\n\n" + review['reviewComment']
+
+            # ── Write filled review template to disk ───────────────────────
+            self._write_review_file(pr_num, pr, review)
 
             return review
-        except Exception:
-            return {"reviewComment": "Failed to parse AI review", "labels": [], "recommendation": "Not Approved"}
+        except Exception as e:
+            print(f"❌ Failed to parse AI review JSON: {e}", file=sys.stderr)
+            print(f"Full raw response:\n{res}", file=sys.stderr)
+            return {"reviewComment": f"Failed to parse AI review: {e}. Raw response (first 1000 chars): {res[:1000]}", "labels": [], "recommendation": "Not Approved"}
+
+    def _write_review_file(self, pr_num: int, pr: Dict, review: Dict) -> None:
+        """Populate and persist the review template with AI-generated content."""
+        head_sha = pr.get('head', {}).get('sha', 'unknown')
+        check_results = pr.get('checkResults', [])
+        failed_checks = [c.get('name') for c in check_results if c.get('conclusion') == 'failure']
+        detected_errors_raw = pr.get('structuredFailures', [])
+
+        failed_checks_str = '\n'.join(f'  - {c}' for c in failed_checks) if failed_checks else '_None_'
+        detected_errors_str = '\n'.join(
+            f"  - `{e.get('file','?')}:{e.get('line','?')}` {e.get('message','')}"
+            for e in detected_errors_raw
+        ) if detected_errors_raw else '_None detected by parser._'
+
+        recommendation = review.get('recommendation', 'Unknown')
+        review_comment = review.get('reviewComment', '')
+        labels = review.get('labels', [])
+        labels_str = ', '.join(labels) if labels else '_None_'
+
+        # Build inline comments JSON block
+        inline_comments = review.get('comments', [])
+        if not inline_comments:
+            inline_comments = [{"path": "<see reviewComment above>", "line": 1, "body": review_comment[:500]}]
+        comments_json = json.dumps({"body": review_comment, "comments": inline_comments}, indent=2)
+
+        content = f"""# PR Review: #{pr_num}
+
+## Context
+
+- **Last Commit Tracked (SHA):** {head_sha}
+- **Labels:** {labels_str}
+- **Recommendation:** {recommendation}
+
+## Audit Checklist
+
+For EVERY changed file, verify against these standards. Mark as `- [x]` when verified.
+
+- [ ] Dead abstractions: No new class, context, or hook that a simpler primitive handles.
+- [ ] Unnecessary indirection: No layer of wrapping where a direct function call suffices.
+- [ ] Responsibility creep: Component does not take on state/logic belonging in parent/hook.
+- [ ] Import bloat: No unnecessary `import React from 'react'` (React 17+).
+- [ ] Token compliance: Uses established design tokens (no raw Tailwind values or inline styles).
+- [ ] Audit ratio: If > 100 lines added, identified at least 10 lines to refactor/remove.
+
+## CI Log Triage
+
+(Populated if CI failures detected)
+- **Failed Checks:**
+{failed_checks_str}
+- **Detected Errors:**
+{detected_errors_str}
+- **Root Cause Analysis:**
+- **Remediation Steps:**
+
+## AI Review Comment
+
+{review_comment}
+
+## Output JSON
+
+Provide your findings and inline comments in the JSON block below.
+DO NOT REMOVE THE BACKTICKS.
+
+```json
+{comments_json}
+```
+"""
+        output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'logs', 'reviews')
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, f'pr-review-{pr_num}.md')
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"📝 Review written to: {output_path}")

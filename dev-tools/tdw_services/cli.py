@@ -271,10 +271,34 @@ def ai():
 
 @ai.command()
 @click.argument('pr_number', type=int)
+@click.option('--no-cache', is_flag=True, default=False, help='Bust the diff cache and force a fresh Ollama call')
 @click.pass_context
-def review(ctx, pr_number):
+def review(ctx, pr_number, no_cache):
+    import glob
+    import sys as _sys
+
+    # Optionally bust the /tmp review cache so stale results are not silently returned
+    if no_cache:
+        pattern = f"/tmp/review_cache_{pr_number}_*.json"
+        removed = glob.glob(pattern)
+        for f in removed:
+            import os as _os
+            _os.remove(f)
+        if removed:
+            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
+        else:
+            print("ℹ️  No cache files found to remove.")
+
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)
+
+    # Surface errors clearly
+    if isinstance(res, dict) and res.get('recommendation') == 'Not Approved' and not res.get('reviewComment', '').strip().startswith('CI'):
+        # Likely an error result – dump full dict to stderr for diagnosis
+        print(f"⚠️  Review returned 'Not Approved' (may indicate an error).", file=_sys.stderr)
+        print(f"    recommendation : {res.get('recommendation')}", file=_sys.stderr)
+        print(f"    reviewComment  : {res.get('reviewComment', '')[:500]}", file=_sys.stderr)
+
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 
 @ai.command()
