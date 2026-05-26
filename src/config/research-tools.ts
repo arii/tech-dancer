@@ -7,9 +7,35 @@ export interface ResearchTool {
   status: string;
   tags: string[];
   canonicalPath?: string;
+  externalUrl?: string;
+  sourceUrl?: string;
+  isFlagship?: boolean;
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
+  {
+    id: 'hrm-flagship',
+    title: 'HRM (Heart Rate Monitor)',
+    subtitle: 'Flagship Training Dashboard',
+    description: 'The flagship product that started this DevAI workflow. It combines workout timing, Spotify playback context, and heart-rate data into a browser-based training dashboard.',
+    category: 'Product development',
+    status: 'Active',
+    tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
+    externalUrl: 'https://arii.github.io/hrm/',
+    isFlagship: true
+  },
+  {
+    id: 'repo-auditor-ai',
+    title: 'RepoAuditor AI',
+    subtitle: 'DevAI Workflow Console',
+    description: 'A GitHub-focused DevAI workflow console for pull request review, workflow health analysis, structured issue generation, and Jules coding-agent handoff. Evolved from HRM internal tooling.',
+    category: 'DevAI Tooling',
+    status: 'Active',
+    tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
+    externalUrl: 'https://repo-auditor-ai.vercel.app/',
+    sourceUrl: 'https://github.com/arii/hrm-project-management',
+    isFlagship: true
+  },
   {
     id: 'gitops-pr-reviewer',
     title: 'GitOps Code Review Agent',

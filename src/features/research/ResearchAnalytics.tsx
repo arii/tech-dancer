@@ -1,9 +1,10 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, Database, FileText, Cpu, ShieldCheck, Zap, LucideIcon } from 'lucide-react';
+import { Search, ArrowRight, Activity, Database, FileText, Cpu, ShieldCheck, Zap, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { BaseCard } from '@/components/ui/BaseCard';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
@@ -11,12 +12,16 @@ import { ResearchTool } from '@/config/research-tools';
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
   if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
+  if (tool.id.includes('hrm')) return Globe;
   return Search;
 }
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
+
+  const flagshipTools = tools.filter(t => t.isFlagship);
+  const engineeringTools = tools.filter(t => !t.isFlagship);
 
   // Dashboard status could be moved to a config or API later
   const statusConfig = {
@@ -35,7 +40,7 @@ export default function ResearchAnalytics() {
         <PageHeader
           label="SYSTEM_DASHBOARD"
           title="DevAI Portfolio as a Platform"
-          description="Current Orchestration Status // Agentic Sandbox"
+          description="DevAI projects and tooling built to ship real products, review AI-generated work, and keep repository workflows moving."
           as="h1"
         />
 
@@ -73,11 +78,115 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+            <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
+          </Box>
+          <Grid cols={{ base: 1, md: 2 }} gap={6}>
+            {flagshipTools.map((tool) => (
+              <BaseCard
+                key={tool.id}
+                padding={8}
+                gap={6}
+                surface="surface"
+                className="border-accent/10 h-full"
+              >
+                <Stack gap={6} height="full">
+                  <Box display="flex" justify="between" align="start" width="full">
+                    <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
+                      <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+                    </Box>
+                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" className="px-3 py-1 rounded-full bg-accent/10">
+                      Flagship
+                    </Text>
+                  </Box>
+
+                  <Stack gap={3}>
+                    <Stack gap={1}>
+                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                        {tool.category}
+                      </Text>
+                      <Text variant="display" size="2xl" weight="font-black">
+                        {tool.title}
+                      </Text>
+                    </Stack>
+                    <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
+                      {tool.subtitle}
+                    </Text>
+                    <Text variant="body" size="md" color="dim" className="leading-relaxed">
+                      {tool.description}
+                    </Text>
+                  </Stack>
+
+                  <Box display="flex" wrap="wrap" gap={2}>
+                    {tool.tags.map(tag => (
+                      <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="bg-surface-muted/50 border border-white/5" /* impeccable-ignore */>
+                        {tag}
+                      </Text>
+                    ))}
+                  </Box>
+
+                  <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
+                    {tool.externalUrl && (
+                      <Box
+                        as="a"
+                        href={tool.externalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        display="flex"
+                        align="center"
+                        gap={2}
+                        className="text-accent hover:text-accent-hover transition-colors z-20"
+                      >
+                        <Text weight="font-bold" size="xs" uppercase tracking="widest">
+                          {tool.id.includes('hrm') ? 'View HRM' : 'Open RepoAuditor AI'}
+                        </Text>
+                        <ExternalLink className="w-4 h-4" />
+                      </Box>
+                    )}
+                    {tool.sourceUrl && (
+                      <Box
+                        as="a"
+                        href={tool.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        display="flex"
+                        align="center"
+                        gap={2}
+                        className="text-dim hover:text-accent transition-colors z-20"
+                      >
+                        <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
+                        <Github className="w-4 h-4" />
+                      </Box>
+                    )}
+                  </Box>
+                </Stack>
+              </BaseCard>
+            ))}
+          </Grid>
+        </Stack>
+
+        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
+          <Stack gap={6}>
+            <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
+            <Text variant="body" size="lg" color="body" className="leading-relaxed">
+              HRM exposed the need for better AI-assisted repo operations: reviewing pull requests, diagnosing CI/workflow failures, creating precise implementation issues, and handing branch-specific work to coding agents. <strong>RepoAuditor AI</strong> was created to support that loop and later became part of the development workflow for <strong>tech-dancer/BoomTick</strong>.
+            </Text>
+          </Stack>
+          <Stack gap={6}>
+            <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
+            <Text variant="body" size="lg" color="body" className="leading-relaxed">
+              Real product development requires grounded DevAI tooling. By focusing on <strong>AI-assisted workflows</strong> rather than total autonomy, we maintain high engineering standards while shipping complex features like real-time telemetry and multi-platform integrations.
+            </Text>
+          </Stack>
+        </Grid>
+
+        <Stack gap={8}>
+          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{tools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
-            {tools.map((tool) => (
+            {engineeringTools.map((tool) => (
               <Stack
                 key={tool.id}
                 as="button"
