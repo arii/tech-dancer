@@ -12,7 +12,7 @@ import { HomeHero } from '@/features/home/HomeHero';
 
 export default function Home() {
   return (
-    <Box as="main" paddingBottom="safe-bottom">
+    <Box paddingBottom="safe-bottom">
       <SEO
         title="Home"
         description="BoomTick helps West Coast Swing dancers train smarter, travel better, and prepare for better dance weekends."
