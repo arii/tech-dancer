@@ -5,6 +5,10 @@ import { getEventBySlug, getEvents, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
 import { AffiliateLink } from "@/types";
 
+const MAX_THEME_OUTFITS = 6;
+const MAX_THEME_ACCESSORIES = 3;
+const MAX_TOTAL_PRODUCTS = 15;
+
 export interface ResolvedGearSection {
   label: string;
   description?: string;
@@ -97,9 +101,12 @@ export function useEventDetail() {
 
     // Requirement: 15 visible product items max.
     // 6 theme picks + 3 theme accessories + up to 6 gear items (across sections) = 15
-    const themePickCount = 6;
-    const themeAccessoryCount = 3;
-    const remainingGearQuota = 15 - (allOutfits.length > 0 ? themePickCount : 0) - (allAccessories.length > 0 ? themeAccessoryCount : 0);
+    const themePickCount = MAX_THEME_OUTFITS;
+    const themeAccessoryCount = MAX_THEME_ACCESSORIES;
+    const remainingGearQuota =
+      MAX_TOTAL_PRODUCTS -
+      (allOutfits.length > 0 ? themePickCount : 0) -
+      (allAccessories.length > 0 ? themeAccessoryCount : 0);
 
     const compactGearResult = allGearSections.reduce(
       (acc, section) => {
