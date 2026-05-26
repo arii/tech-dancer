@@ -71,9 +71,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             maxWidth="7xl"
             width="full"
           >
-            <Box flex={1} width="full">
-              {children}
-            </Box>
+            {children}
             <Footer />
           </Stack>
         </Stack>
