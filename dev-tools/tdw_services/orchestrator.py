@@ -645,3 +645,72 @@ class Orchestrator:
                         p = pipeline.generate_prompt(line)
                         if p: prompts.append(p)
         return prompts
+
+    def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
+        """
+        Aggregates multiple PRs into a single target branch and creates a consolidated PR.
+        """
+        def run(cmd, check=True):
+            return run_command(cmd, check=check)
+
+        # 1. Isolation & Cleanliness
+        run(["git", "checkout", "main"])
+        run(["git", "pull", "origin", "main"])
+        run(["git", "checkout", "-b", target_branch])
+
+        aggregate_body = ""
+        successfully_merged = []
+
+        for pr_num in pr_numbers:
+            # 2. Sequential Extraction & Deterministic Sequence
+            try:
+                pr_data = self.github.fetch_pr_details(pr_num)
+                head_ref = pr_data.get('head', {}).get('ref')
+                title = pr_data.get('title')
+                body = pr_data.get('body') or ""
+
+                if not head_ref:
+                    raise CLIError(f"Could not determine head ref for PR #{pr_num}")
+
+                # 2.5 Handle forks by using gh pr checkout
+                # This ensures the branch is available locally and handles forks correctly
+                run(["gh", "pr", "checkout", str(pr_num)])
+
+                # Switch back to the target branch
+                run(["git", "checkout", target_branch])
+
+                # 3. Safety First: Attempt automated integration merge
+                # Use 'ort' strategy implicitly by standard merge if git version supports it,
+                # or just standard merge.
+                res = run_command(["git", "merge", head_ref, "-m", f"Merging PR #{pr_num}: {title}"], check=False)
+
+                if res.returncode != 0:
+                    # Conflict encountered
+                    run(["git", "merge", "--abort"])
+                    raise CLIError(f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.", code=res.returncode)
+
+                # 4. Metadata Preservation
+                successfully_merged.append(pr_num)
+                aggregate_body += f"Closes #{pr_num}\n\n### Description from PR #{pr_num} ({title}):\n{body}\n\n---\n"
+
+            except Exception as e:
+                # Restore stable state is handled by checkout -f or similar if needed,
+                # but since we abort merge, we are back to the state before this PR.
+                raise e
+
+        # Push the compiled branch
+        run(["git", "push", "-u", "origin", target_branch])
+
+        # Create consolidated PR
+        pr_title = f"Aggregated Feature: {target_branch}"
+        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base main
+        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", "main"]
+        pr_url = self.github.run_authenticated_gh(create_args).strip()
+
+        return {
+            "status": "success",
+            "branch": target_branch,
+            "merged_prs": successfully_merged,
+            "pr_url": pr_url,
+            "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
+        }
