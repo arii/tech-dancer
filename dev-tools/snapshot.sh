@@ -64,6 +64,6 @@ else
 fi
 
 echo "Ollama URL: ${OLLAMA_URL:-http://localhost:11434/api/generate}"
-echo "Ollama Model: ${OLLAMA_MODEL:-llama3}"
+echo "Ollama Model: ${OLLAMA_MODEL:-llama3.2}"
 
 echo "=== Snapshot Complete ==="

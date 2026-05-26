@@ -10,12 +10,29 @@ class LocalAIClient:
         # Note: ollama_url is now managed centrally in utils.py via get_ollama_url()
         self.ollama_model = ollama_model or get_ollama_model()
         self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
+        
+        # Check environment or project config JSON for fallback toggle (env var takes precedence)
+        env_fallback = os.environ.get("USE_GEMINI_FALLBACK")
+        if env_fallback is not None:
+            self.use_gemini_fallback = env_fallback.lower() in ("true", "1", "yes")
+        else:
+            self.use_gemini_fallback = True
+            try:
+                config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "project_config.json")
+                if os.path.exists(config_path):
+                    with open(config_path, 'r') as f:
+                        cfg = json.load(f)
+                        val = cfg.get("use_gemini_fallback")
+                        if val is not None:
+                            self.use_gemini_fallback = str(val).lower() in ("true", "1", "yes")
+            except Exception:
+                pass
 
     def is_ollama_available(self) -> bool:
         return is_ollama_available()
 
-    def call_ollama(self, prompt: str, model: str = None, max_retries: int = 3) -> Optional[str]:
-        return call_ollama(prompt, model=model or self.ollama_model, max_retries=max_retries)
+    def call_ollama(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
+        return call_ollama(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:
@@ -51,16 +68,17 @@ class LocalAIClient:
             # For JSON schema, we just append instruction for Ollama
             if schema:
                 prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
-            res = self.call_ollama(prompt, model=model)
+            res = self.call_ollama(prompt, model=model, schema=schema)
             if res:
                 return res
 
-        # Fallback to Gemini
-        res = self.call_gemini(prompt, schema)
-        if res:
-            return res
-
-        raise EnvironmentError("No inference engine available.")
+        # Fallback to Gemini only if enabled
+        if self.use_gemini_fallback:
+            res = self.call_gemini(prompt, schema)
+            if res:
+                return res
+ 
+        raise EnvironmentError("No inference engine available (Ollama unavailable/failed, Gemini fallback disabled).")
 
     def clean_llm_output(self, text: str) -> str:
         return clean_llm_output(text)

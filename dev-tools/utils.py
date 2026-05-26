@@ -52,7 +52,21 @@ def is_ollama_available() -> bool:
     except Exception:
         return False
 
-def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3) -> Optional[str]:
+def to_standard_schema(schema):
+    """Recursively converts Gemini-style uppercase types to standard lowercase JSON schema types."""
+    if isinstance(schema, dict):
+        new_schema = {}
+        for k, v in schema.items():
+            if k == "type" and isinstance(v, str):
+                new_schema[k] = v.lower()
+            else:
+                new_schema[k] = to_standard_schema(v)
+        return new_schema
+    elif isinstance(schema, list):
+        return [to_standard_schema(item) for item in schema]
+    return schema
+
+def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call local Ollama API with retries using urllib."""
     base_url = url or get_ollama_url()
     if not base_url.endswith("/"):
@@ -69,6 +83,9 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
         "stream": False
     }
 
+    if schema:
+        data["format"] = to_standard_schema(schema)
+
     req = urllib.request.Request(
         target_url,
         data=json.dumps(data).encode("utf-8"),
@@ -78,7 +95,7 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
     for attempt in range(1, max_retries + 1):
         try:
             try:
-                with urllib.request.urlopen(req, timeout=300) as response:
+                with urllib.request.urlopen(req, timeout=900) as response:
                     res_data = json.loads(response.read().decode("utf-8"))
                     return res_data.get("response")
             except (urllib.error.HTTPError, urllib.error.URLError) as e:
