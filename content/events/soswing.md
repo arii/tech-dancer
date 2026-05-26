@@ -22,16 +22,14 @@ whyAttending: >
 theme:
   name: "Pacific Wildflower"
   label: "SOswing Theme"
+
+gear:
   outfitIds:
     - "ombre-dance-dress"
+  outfitDescription: "Flowy, comfortable styles for the welcoming Ashland community."
   accessoryIds:
     - "rave-fan"
     - "neck-fan"
-
-gear:
-  outfitIds: []
-  outfitDescription: "Flowy, comfortable styles for the welcoming Ashland community."
-  accessoryIds: []
   accessoryDescription: "Functional cooling for the intimate Pacific Northwest ballroom."
   shoeIds:
     - "bloch-grecian"

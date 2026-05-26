@@ -28,20 +28,16 @@ theme:
     - "#6366f1"
     - "#a855f7"
     - "#ec4899"
-  outfitIds:
-    - "sequin-bomber-jacket"
-    - "rainbow-fringe-dress"
-  accessoryIds:
-    - "rave-fan"
-    - "pride-sunglasses"
 
 gear:
   outfitIds:
     - "sequin-bomber-jacket"
+    - "rainbow-fringe-dress"
   outfitDescription: "Metallics and neons to match the high-production galactic vibe."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+    - "pride-sunglasses"
   accessoryDescription: "Out-of-this-world accessories for the signature Saturday night social."
   shoeIds:
     - "bloch-grecian"

@@ -22,15 +22,13 @@ whyAttending: >
 theme:
   name: "Community Social"
   label: "Weekly Style"
-  outfitIds:
-    - "sequin-bomber-jacket"
-  accessoryIds:
-    - "hand-sanitizer"
 
 gear:
-  outfitIds: []
+  outfitIds:
+    - "sequin-bomber-jacket"
   outfitDescription: "Relaxed, casual pieces for a mid-week South Bay social."
-  accessoryIds: []
+  accessoryIds:
+    - "hand-sanitizer"
   accessoryDescription: "Simple essentials for a welcoming community atmosphere."
   shoeIds:
     - "dance-socks"

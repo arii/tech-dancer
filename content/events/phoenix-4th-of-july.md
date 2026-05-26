@@ -23,20 +23,17 @@ whyAttending: >
 theme:
   name: "Red, White & Blue"
   label: "Patriotic Theme"
-  outfitIds:
-    - "rainbow-fringe-dress"
-    - "sequin-bomber-jacket"
-  accessoryIds:
-    - "pride-sunglasses"
-    - "rave-fan"
 
 gear:
   outfitIds:
     - "ombre-dance-dress"
+    - "rainbow-fringe-dress"
+    - "sequin-bomber-jacket"
   outfitDescription: "Lightweight layers for transitioning from desert heat to resort AC."
   accessoryIds:
     - "electric-fan"
     - "pride-sunglasses"
+    - "rave-fan"
   accessoryDescription: "Essential protection for the legendary All-Star Pool Party."
   shoeIds:
     - "bloch-grecian"

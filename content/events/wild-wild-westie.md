@@ -23,18 +23,16 @@ whyAttending: >
 theme:
   name: "Texas Spirit"
   label: "Wild West Theme"
-  outfitIds:
-    - "sequin-bomber-jacket"
-    - "rainbow-fringe-dress"
-  accessoryIds:
-    - "rave-fan"
 
 gear:
   outfitIds:
     - "ombre-dance-dress"
+    - "sequin-bomber-jacket"
+    - "rainbow-fringe-dress"
   outfitDescription: "Breathable pieces for the high-energy Dallas social floor."
   accessoryIds:
     - "electric-fan"
+    - "rave-fan"
   accessoryDescription: "Essential cooling gear for the Texas summer heat."
   shoeIds:
     - "bloch-grecian"

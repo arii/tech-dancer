@@ -35,16 +35,6 @@ theme:
     - "#0000FF"
     - "#4B0082"
     - "#8B00FF"
-  outfitIds:
-    - "rainbow-fringe-dress"
-    - "rainbow-sequin-bomber-jacket"
-    - "rainbow-bustle-skirt"
-  accessoryIds:
-    - "rainbow-earrings"
-    - "pride-sunglasses"
-    - "rainbow-bob-wig"
-    - "led-scrunchies"
-
 # ── Curated Gear ───────────────────────────────────────
 gear:
   outfitIds:

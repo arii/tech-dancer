@@ -22,15 +22,13 @@ whyAttending: >
 theme:
   name: "City Style"
   label: "Urban Social"
-  outfitIds:
-    - "sequin-bomber-jacket"
-  accessoryIds:
-    - "hand-sanitizer"
 
 gear:
-  outfitIds: []
+  outfitIds:
+    - "sequin-bomber-jacket"
   outfitDescription: "City-ready styles for the heartbeat of SF West Coast Swing."
-  accessoryIds: []
+  accessoryIds:
+    - "hand-sanitizer"
   accessoryDescription: "Practical items for an urban weekly class and social."
   shoeIds:
     - "dance-socks"

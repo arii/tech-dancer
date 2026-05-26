@@ -19,8 +19,6 @@ export default function EventGuide() {
     isLoading,
     isError,
     error,
-    themeOutfits,
-    themeAccessories,
     gearSections,
     relatedEvents,
     navigate,
@@ -83,8 +81,6 @@ export default function EventGuide() {
                   label={event.themeLabel}
                   description={event.themeDescription || ''}
                   colors={event.themeColors}
-                  outfits={themeOutfits}
-                  accessories={themeAccessories}
                 />
               )}
 

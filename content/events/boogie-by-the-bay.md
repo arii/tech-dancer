@@ -23,12 +23,6 @@ whyAttending: >
 theme:
   name: "Classic San Francisco"
   label: "Flagship Theme"
-  outfitIds:
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
-  accessoryIds:
-    - "rainbow-earrings"
-    - "rave-fan"
 
 gear:
   outfitIds:
@@ -38,6 +32,7 @@ gear:
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+    - "rainbow-earrings"
   accessoryDescription: "Functional flair for the legendary late-night sets at the Hyatt SFO."
   shoeIds:
     - "bloch-grecian"

@@ -27,16 +27,28 @@ export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
 export function getGearSections(event?: Event): ResolvedGearSection[] {
   if (!event) return [];
 
+  // Merge theme-specific IDs that might still exist in legacy frontmatter
+  // into the main gear sections to ensure no lost curation during cleanup.
+  const outfitIds = [
+    ...(event.gearOutfitIds ?? []),
+    ...(event.themeOutfitIds ?? []),
+  ].filter((id, index, self) => self.indexOf(id) === index);
+
+  const accessoryIds = [
+    ...(event.gearAccessoryIds ?? []),
+    ...(event.themeAccessoryIds ?? []),
+  ].filter((id, index, self) => self.indexOf(id) === index);
+
   return [
     {
       label: "Outfits",
       description: event.gearOutfitDescription,
-      items: resolveAffiliateLinks(event.gearOutfitIds),
+      items: resolveAffiliateLinks(outfitIds),
     },
     {
       label: "Accessories",
       description: event.gearAccessoryDescription,
-      items: resolveAffiliateLinks(event.gearAccessoryIds),
+      items: resolveAffiliateLinks(accessoryIds),
     },
     {
       label: "Shoes & Essentials",
@@ -81,10 +93,8 @@ export function useEventDetail() {
 
   // Consolidate event-specific derived state into a single memoization block
   // to reduce dependency chains and potential extra re-renders.
-  const { themeOutfits, themeAccessories, gearSections } = useMemo(
+  const { gearSections } = useMemo(
     () => ({
-      themeOutfits: resolveAffiliateLinks(event?.themeOutfitIds),
-      themeAccessories: resolveAffiliateLinks(event?.themeAccessoryIds),
       gearSections: getGearSections(event),
     }),
     [
@@ -118,8 +128,6 @@ export function useEventDetail() {
     isLoading,
     isError,
     error,
-    themeOutfits,
-    themeAccessories,
     gearSections,
     relatedEvents,
     navigate,

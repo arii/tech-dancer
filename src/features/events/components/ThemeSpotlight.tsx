@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { AffiliateLink } from '@/types';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface ThemeSpotlightProps {
   id?: string;
@@ -9,8 +7,6 @@ interface ThemeSpotlightProps {
   label?: string;
   description: string;
   image?: string;
-  outfits?: AffiliateLink[];
-  accessories?: AffiliateLink[];
   colors?: string[];
   accentColor?: string;
 }
@@ -21,8 +17,6 @@ export function ThemeSpotlight({
   label,
   description,
   image,
-  outfits = [],
-  accessories = [],
   colors = [],
   accentColor = 'var(--raw-color-accent)'
 }: ThemeSpotlightProps) {
@@ -99,34 +93,6 @@ export function ThemeSpotlight({
           >
             {description}
           </Text>
-
-          {/* Outfit Recommendations */}
-          {outfits.length > 0 && (
-            <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
-                Recommended Outfits
-              </Text>
-              <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                {outfits.map(link => (
-                  <AffiliateCard key={link.id} link={link} />
-                ))}
-              </Grid>
-            </Stack>
-          )}
-
-          {/* Accessory Recommendations */}
-          {accessories.length > 0 && (
-            <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
-                Recommended Accessories
-              </Text>
-              <Grid cols={{ base: 1, sm: 2 }} gap={4}>
-                {accessories.map(link => (
-                  <AffiliateCard key={link.id} link={link} />
-                ))}
-              </Grid>
-            </Stack>
-          )}
         </Stack>
 
         {/* Image Section */}
