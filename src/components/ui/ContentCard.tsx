@@ -46,7 +46,7 @@ export function ContentCard(props: ContentCardProps) {
       direction="col"
       gap={4}
       height="full"
-      padding={6}
+      padding={{ base: 5, md: 6 }}
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
       {...motionProps}
@@ -69,11 +69,11 @@ export function ContentCard(props: ContentCardProps) {
         </Text>
       </Box>
 
-      <Stack gap={2}>
+      <Stack gap={3}>
         <Text
           as="h3"
           variant="body"
-          size="lg"
+          size="xl"
           weight="font-bold"
             color="main"
             leading="tight"

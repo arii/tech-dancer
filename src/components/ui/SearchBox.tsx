@@ -21,21 +21,19 @@ export function SearchBox({
       display="flex"
       align="center"
       position="relative"
-      surface="default"
-      border
-      paddingX={4}
-      paddingY={1}
+      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 focus-within:border-accent/50 focus-within:ring-4 focus-within:ring-accent/10 transition-all w-full sm:w-auto shadow-inner"
+      paddingX={5}
+      paddingY={1.5}
       maxWidth={maxWidth}
       flex={1}
-      minHeight="44px"
-      radius="lg"
-      className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
+      minHeight="48px"
+      radius="full"
     >
       <Text
         as={Search}
         size={18}
         color="dim"
-        className="absolute left-4 pointer-events-none"
+        className="absolute left-5 pointer-events-none"
       />
       <Box
         as="input"

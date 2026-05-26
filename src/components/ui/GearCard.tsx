@@ -64,9 +64,9 @@ export function GearCard(props: GearCardProps) {
     <BaseCard
       {...rest}
       direction="col"
-      gap={3}
+      gap={4}
       height="full"
-      padding={6}
+      padding={{ base: 5, md: 6 }}
       to={isInternal ? resolvedHref : undefined}
       href={!isInternal ? resolvedHref : undefined}
       rel={!isInternal ? "noopener noreferrer sponsored" : undefined}
@@ -119,7 +119,7 @@ export function GearCard(props: GearCardProps) {
         <Text
           as="h3"
           variant="body"
-          size="lg"
+          size="xl"
           weight="font-bold"
             color="main"
             leading="tight"

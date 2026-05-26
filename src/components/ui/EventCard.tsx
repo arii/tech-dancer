@@ -32,8 +32,8 @@ export function EventCard(props: EventCardProps) {
   return (
     <BaseCard
       {...rest}
-      padding={8}
-      gap={4}
+      padding={{ base: 5, md: 6 }}
+      gap={5}
       height="full"
       width="full"
       textAlign="left"
@@ -60,10 +60,10 @@ export function EventCard(props: EventCardProps) {
         </Text>
       </Box>
 
-      <Stack gap={1}>
+      <Stack gap={2}>
         <Text
           variant="body"
-          size="lg"
+          size="xl"
           weight="font-bold"
           color="main"
           leading="tight"

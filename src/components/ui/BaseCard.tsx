@@ -32,17 +32,19 @@ export function BaseCard({
 
   // Standardized hover and transition classes
   const cardClasses = cn(
-    "group relative bg-surface transition-all duration-200",
-    isLink && "hover:-translate-y-0.5 hover:border-accent/40",
+    "group relative transition-all duration-300",
+    "bg-gradient-to-br from-slate-800/40 to-slate-900/40 backdrop-blur-md",
+    "shadow-sm hover:shadow-md",
+    isLink && "hover:-translate-y-1 hover:border-accent/40 hover:from-slate-800/50 hover:to-slate-900/50",
     className
   );
 
-  const linkClasses = "absolute inset-0 z-10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-accent";
+  const linkClasses = "absolute inset-0 z-10 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
   return (
     <Stack
       as="article"
-      radius="lg"
+      radius="xl"
       border
       className={cardClasses}
       {...props}
