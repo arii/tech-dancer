@@ -22,7 +22,7 @@ export default function Navigation() {
   };
 
   const topRoutes = routes.filter((r): r is typeof r & { label: string } =>
-    !!(r.path !== '/' && r.label && ['/events', '/gear', '/blog', '/research', '/about'].includes(r.path))
+    !!(r.path !== '/' && r.label && ['/events', '/gear', '/blog', '/merch', '/research', '/about'].includes(r.path))
   );
 
   return (
@@ -34,12 +34,12 @@ export default function Navigation() {
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} className="group">
               <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-80" />
             </Box>
-            <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={8}>
+            <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
               {topRoutes.map((item) => (
                 <Box as="li" key={item.path}>
                   <NavLink
                     to={item.path}
-                    className={({ isActive }) => cn('relative text-sm transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
+                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
                   >
                     {item.label}
                   </NavLink>

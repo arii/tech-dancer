@@ -1,4 +1,4 @@
-import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar } from 'lucide-react';
+import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, Tag } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -16,7 +16,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/blog',
     lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
-    label: 'Training Notes',
+    label: 'Blog Posts',
     icon: BookOpen,
     skeleton: 'grid',
     isMobileVisible: true
@@ -55,7 +55,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
-    label: 'Dev Lab',
+    label: 'DevAI Lab',
     icon: Database,
     skeleton: 'grid',
     isMobileVisible: true
@@ -74,7 +74,7 @@ export const routes: RouteConfig[] = [
     path: '/merch',
     lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
     label: 'Merch',
-    icon: ShoppingBag,
+    icon: Tag,
     skeleton: 'grid',
     isMobileVisible: true
   },

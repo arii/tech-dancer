@@ -20,9 +20,9 @@ const TOPICS = [
   },
   {
     icon: BookOpen,
-    label: 'Training Notes',
+    label: 'Blog Posts',
     description: 'Dance concepts, practice systems, and competition prep without the jargon.',
-    cta: 'Read notes →',
+    cta: 'Read posts →',
     href: '/blog',
   },
 ];

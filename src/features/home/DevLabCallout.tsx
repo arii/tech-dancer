@@ -16,7 +16,7 @@ export function DevLabCallout() {
         </Box>
         <Stack gap={1.5}>
           <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-            Dev Lab
+            DevAI Lab
           </Text>
           <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
             Behind-the-scenes notes on BoomTick data tools, content systems, and experiments
