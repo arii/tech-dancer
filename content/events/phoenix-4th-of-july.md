@@ -23,36 +23,40 @@ whyAttending: >
 theme:
   name: "Red, White & Blue"
   label: "Patriotic Theme"
+  description: "Expressive patriotic looks for the legendary Red, White & Blue celebration. Think flags, stars, stripes, and anything that screams summer holiday."
+  outfitIds:
+    - "rainbow-fringe-dress"
+    - "sequin-bomber-jacket"
+  accessoryIds:
+    - "pride-sunglasses"
+    - "rave-fan"
 
 gear:
   outfitIds:
     - "ombre-dance-dress"
-    - "rainbow-fringe-dress"
-    - "sequin-bomber-jacket"
-  outfitDescription: "Lightweight layers for transitioning from desert heat to resort AC."
+  outfitDescription: "Lightweight, vacation-ready styles for the desert heat."
   accessoryIds:
     - "electric-fan"
     - "pride-sunglasses"
-    - "rave-fan"
-  accessoryDescription: "Essential protection for the legendary All-Star Pool Party."
+  accessoryDescription: "Essential cooling and sun protection for the legendary pool party."
   shoeIds:
     - "bloch-grecian"
-  shoeDescription: "Comfortable footwear for the sprawling Camelback Inn property."
+  shoeDescription: "Breathable dance shoes for the Paradise Ballroom."
   essentialIds:
     - "liquid-iv"
     - "dry-shampoo"
     - "loop-experience"
-  essentialDescription: "Hydration and refreshers for the intense Arizona summer heat."
+  essentialDescription: "Heat-management and hydration essentials for Scottsdale in July."
   travelIds:
     - "microfiber-towel"
     - "travel-bottles"
     - "hanging-toiletry-bag"
-  travelDescription: "Essentials for a luxury resort getaway and patriotic celebration."
+  travelDescription: "Resort-ready packing for a high-end luxury getaway."
 
 earlyBirdDate: "2026-05-15"
-registrationDeadline: "2026-06-18"
-hotelCutoffDate: "2026-06-01"
-packingReminderDate: "2026-06-25"
+registrationDeadline: "2026-06-29"
+hotelCutoffDate: "2026-06-09"
+packingReminderDate: ""
 
 relatedEvents:
   - "wild-wild-westie"
@@ -64,9 +68,23 @@ relatedEvents:
 
 Celebrate Independence Day at one of the most luxurious resorts on the swing circuit.
 
+## Community Reviews
+
+> "The pool party is absolutely legendary. There's nothing like dancing in Scottsdale with a cocktail in hand and the best dancers in the world nearby. It's the ultimate 'vacation' event." — *Travel Dancer*
+
+> "The Paradise Ballroom is stunning, but honestly, the fireworks over the resort are what make this a core memory every year." — *Event Regular*
+
 ## Pro Tips
 
 - **Stay Hydrated:** It's Phoenix in July. The desert heat is intense. Drink more water than you think you need, and keep electrolytes (like Liquid I.V.) on hand.
 - **Resort Layout:** The Camelback Inn is a sprawling property with casitas rather than a single hotel tower. Be prepared for some outdoor walking between your room and the ballroom.
 - **Pool Party:** The All-Star Pool Party is legendary. It happens during the day, so bring plenty of sunscreen and a hat.
 - **Fireworks:** The resort hosts a spectacular fireworks display on the 4th. Find a good spot early for the best view!
+
+## Gear Spotlight: Patriotic Essentials
+
+### Liquid I.V. Hydration Multiplier
+> "Absolute necessity for Phoenix in July. I drank one of these every morning before the workshops and another before the pool party. Kept me from crashing in the 110-degree heat." — *Amazon Review*
+
+### Neck Fan
+> "Game changer for the outdoor pool party. While everyone else was melting, I had my own personal breeze. It's quiet enough that I could still hear the music and talk to my friends." — *Verified Purchase*

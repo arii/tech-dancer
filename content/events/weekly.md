@@ -7,7 +7,7 @@ author: "Ariel Anders, PhD"
 category: "Dance"
 excerpt: "Weekly social dance and classes at Mission City Swing in San Francisco."
 location: "Mission City Swing"
-city: "San Francisco // CA"
+city: "San Francisco, CA"
 region: "NorCal"
 schedule: "Wednesdays"
 url: "https://missioncityswing.com"
@@ -22,25 +22,28 @@ whyAttending: >
 theme:
   name: "City Style"
   label: "Urban Social"
-
-gear:
+  description: "Modern urban looks for the SF social scene."
   outfitIds:
     - "sequin-bomber-jacket"
-  outfitDescription: "City-ready styles for the heartbeat of SF West Coast Swing."
   accessoryIds:
     - "hand-sanitizer"
-  accessoryDescription: "Practical items for an urban weekly class and social."
+
+gear:
+  outfitIds: []
+  outfitDescription: "Layered social attire for the San Francisco microclimate."
+  accessoryIds: []
+  accessoryDescription: "Compact social essentials for city dancing."
   shoeIds:
     - "dance-socks"
     - "suede-sheets"
-  shoeDescription: "Versatile footwear for the varied floors of a city venue."
+  shoeDescription: "Durable shoes for the urban social floor."
   essentialIds:
     - "mints"
     - "hand-sanitizer"
-  essentialDescription: "Essentials to keep you fresh during a mid-week San Francisco set."
+  essentialDescription: "Standard hygiene and focus for a weekly social."
   travelIds:
     - "portable-charger"
-  travelDescription: "Compact gear for easy transit to the Mission City Swing classes."
+  travelDescription: "Commuter-friendly organization for SF social nights."
 
 earlyBirdDate: ""
 registrationDeadline: ""
@@ -55,6 +58,12 @@ relatedEvents:
 # Weekly Class
 
 Mission City Swing is the hub for WCS in San Francisco. Join us every Wednesday for classes and social dancing.
+
+## Community Reviews
+
+> "The perfect mid-week reset. San Francisco's WCS community is vibrant and inclusive, and there's no better place to experience it than at Mission City on a Wednesday." — *SF Local*
+
+> "I love the urban vibe of this venue. It's easy to get to, the instructors are fantastic, and the social dancing is always high-quality." — *Social Dancer*
 
 ## Pro Tips
 

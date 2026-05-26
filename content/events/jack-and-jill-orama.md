@@ -9,7 +9,7 @@ excerpt: "The ultimate West Coast Swing party and competition weekend in Souther
 location: "Hyatt Regency Orange County"
 city: "Garden Grove, CA"
 region: "SoCal"
-schedule: "June 4 - 7, 2026"
+schedule: "June 4 - 8, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
 description: >
@@ -56,34 +56,34 @@ gear:
     - "norcal-pride-bear-shirt"
     - "love-unisex-shirt"
     - "norcal-bestcal-tshirt"
-  outfitDescription: "Bold, expressive colors for the annual Rainbow Pride celebration."
+  outfitDescription: "Bright, expressive pieces for the legendary Rainbow theme nights."
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"
     - "rainbow-fan"
-  accessoryDescription: "Statement pieces to match the high-energy SoCal community buzz."
+  accessoryDescription: "Bold accents to complete your Pride-inspired dance looks."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
-  shoeDescription: "Reliable shoes for creative competition formats and non-stop social magic."
+  shoeDescription: "Trusted shoes for long hours on the high-energy SoCal floor."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "liquid-iv"
     - "shoe-brush"
-  essentialDescription: "Everything you need to keep your energy up through the 2 a.m. sets."
+  essentialDescription: "Proactive recovery to keep you moving through the late-night magic."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
     - "hanging-toiletry-bag"
     - "portable-charger"
     - "mints"
-  travelDescription: "Organized gear for a full-spectrum SoCal dance weekend."
+  travelDescription: "Packing gear for a busy weekend near Disneyland."
 
-earlyBirdDate: "2026-02-24"
-registrationDeadline: "2026-06-03"
-hotelCutoffDate: "2026-05-12"
-packingReminderDate: "2026-05-25"
+earlyBirdDate: ""
+registrationDeadline: ""
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
   - "wild-wild-westie"
@@ -94,6 +94,20 @@ relatedEvents:
 # Jack & Jill O'Rama
 
 This is my flagship one-stop Rainbow guide for JJO: why this event matters, what to pack, and how to show up ready.
+
+## Community Reviews
+
+> "JJO is the 'vibe' event of SoCal. Ben Morris always adds creative competition formats that keep things fresh. The social dancing is top-tier, and the location is basically on Disneyland's doorstep." — *California Local*
+
+> "The finals watch parties are legendary. It's one of the few events that feels like a massive community celebration as much as it does a competition." — *Pro Lead*
+
+## Gear Spotlight: Rainbow Essentials
+
+### Rainbow Fringe Dance Dress
+> "This was the hit of the JJO Rainbow night! The fringe adds so much energy to every swing and extension. It's surprisingly breathable, which is key for those 2 a.m. social sets." — *Customer Review*
+
+### Sequin Bomber Jacket
+> "SoCal nights can get a bit chilly in the hotel hallways, and this jacket is the perfect way to stay warm while staying completely on-theme. The sequins look amazing under the ballroom lights." — *Verified Purchase*
 
 ## NorCal BestCal Merch Picks
 

@@ -75,8 +75,8 @@ export default function WSDCReminders() {
   const isFormValid = activeEvent.title && activeEvent.startDate && activeEvent.earlyBirdDate && activeEvent.hotelCutoffDate;
 
   return (
-    <Stack gap={10} width="full">
-      <Box border radius="xl" padding={6} surface="surface">
+    <Stack gap={{ base: 6, md: 10 }} width="full">
+      <Box border radius="xl" padding={{ base: 4, md: 6 }} surface="surface">
         <Stack gap={6}>
           <EventSelector
             events={events}
@@ -95,13 +95,13 @@ export default function WSDCReminders() {
 
       {isFormValid ? (
         <Stack gap={8}>
-          <Box display="flex" justify="between" align="center" border="b" paddingBottom={4}>
+          <Box display="flex" direction={{ base: 'col', sm: 'row' }} justify="between" align={{ base: 'start', sm: 'center' }} gap={4} border="b" paddingBottom={4}>
             <Stack gap={1}>
               <Text variant="display" size="2xl" weight="font-black" uppercase>Action Timeline</Text>
               <Text size="sm" color="dim">{activeEvent.title} Logistics Plan</Text>
             </Stack>
-            <ActionButton onClick={handleBulkSync} variant="primary" paddingX={4} paddingY={2}>
-              <Box display="flex" align="center" gap={2} className="text-bg">
+            <ActionButton onClick={handleBulkSync} variant="primary" paddingX={4} paddingY={2} width={{ base: 'full', sm: 'auto' }}>
+              <Box display="flex" align="center" gap={2} className="text-bg" justify="center">
                 <Download className="w-4 h-4" />
                 <Text as="span" color="bg" weight="font-bold">Sync Entire Plan</Text>
               </Box>
@@ -146,15 +146,17 @@ export default function WSDCReminders() {
       )}
 
       {activeEvent.url && (
-        <Box border radius="lg" padding={6} surface="accent" className="bg-accent/5 border-accent/20">
-          <Box display="flex" align="center" gap={4}>
-            <Globe className="w-6 h-6 text-accent" />
-            <Stack gap={1} flex={1}>
-              <Text weight="font-bold" size="sm">Official Event Link</Text>
-              <Text size="xs" color="dim" className="truncate">{activeEvent.url}</Text>
-            </Stack>
-            <ActionButton as="a" href={activeEvent.url} target="_blank" rel="noopener noreferrer" variant="primary" paddingX={4} paddingY={2}>
-              <Text weight="font-bold" color="bg">Go to Event Website</Text>
+        <Box border radius="lg" padding={{ base: 4, md: 6 }} surface="accent" className="bg-accent/5 border-accent/20">
+          <Box display="flex" direction={{ base: 'col', sm: 'row' }} align={{ base: 'start', sm: 'center' }} gap={4}>
+            <Box display="flex" align="center" gap={4} width="full">
+              <Globe className="w-6 h-6 text-accent shrink-0" />
+              <Stack gap={1} flex={1} minWidth={0}>
+                <Text weight="font-bold" size="sm">Official Event Link</Text>
+                <Text size="xs" color="dim" className="truncate">{activeEvent.url}</Text>
+              </Stack>
+            </Box>
+            <ActionButton as="a" href={activeEvent.url} target="_blank" rel="noopener noreferrer" variant="primary" paddingX={4} paddingY={2} width={{ base: 'full', sm: 'auto' }}>
+              <Text weight="font-bold" color="bg" textAlign="center" width="full">Go to Event Website</Text>
             </ActionButton>
           </Box>
         </Box>
