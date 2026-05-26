@@ -46,10 +46,10 @@ gear:
     - "travel-bottles"
     - "portable-charger"
 
-earlyBirdDate: "2026-05-01"
-registrationDeadline: "2026-06-15"
-hotelCutoffDate: "2026-06-05"
-packingReminderDate: "2026-06-20"
+earlyBirdDate: "2026-05-31"
+registrationDeadline: "2026-07-02"
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
   - "boogie-by-the-bay"

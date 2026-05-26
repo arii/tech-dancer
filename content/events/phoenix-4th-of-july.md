@@ -48,9 +48,9 @@ gear:
     - "hanging-toiletry-bag"
 
 earlyBirdDate: "2026-05-15"
-registrationDeadline: "2026-06-18"
-hotelCutoffDate: "2026-06-01"
-packingReminderDate: "2026-06-25"
+registrationDeadline: "2026-06-29"
+hotelCutoffDate: "2026-06-09"
+packingReminderDate: ""
 
 relatedEvents:
   - "wild-wild-westie"
