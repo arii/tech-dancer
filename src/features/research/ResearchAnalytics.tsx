@@ -18,6 +18,13 @@ export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
+  // Dashboard status could be moved to a config or API later
+  const statusConfig = {
+    orchestration: "ACTIVE",
+    qualityGates: "ENABLED",
+    frameworks: "CUSTOM DEVAI SDK"
+  };
+
   return (
     <Box as="section">
       <SEO
@@ -28,54 +35,55 @@ export default function ResearchAnalytics() {
         <PageHeader
           label="SYSTEM_DASHBOARD"
           title="DevAI Portfolio as a Platform"
-          description="Active Research Sandbox // Agentic Orchestration Active"
+          description="Current Orchestration Status // Agentic Sandbox"
           as="h1"
         />
 
-        <Box border radius="lg" padding={8} surface="surface" className="border-accent/20">
-          <Stack gap={6}>
-            <Grid cols={{ base: 1, md: 3 }} gap={4}>
-              <Box display="flex" align="center" gap={3} padding={4} border radius="md" surface="default">
-                <Cpu className="w-5 h-5 text-accent" />
-                <Stack gap={0.5}>
-                  <Text variant="mono" size="micro" color="dim" uppercase>Status</Text>
-                  <Text variant="mono" size="xs" weight="font-bold">ORCHESTRATION ACTIVE</Text>
-                </Stack>
-              </Box>
-              <Box display="flex" align="center" gap={3} padding={4} border radius="md" surface="default">
-                <ShieldCheck className="w-5 h-5 text-accent" />
-                <Stack gap={0.5}>
-                  <Text variant="mono" size="micro" color="dim" uppercase>Quality Gates</Text>
-                  <Text variant="mono" size="xs" weight="font-bold">ENABLED</Text>
-                </Stack>
-              </Box>
-              <Box display="flex" align="center" gap={3} padding={4} border radius="md" surface="default">
-                <Zap className="w-5 h-5 text-accent" />
-                <Stack gap={0.5}>
-                  <Text variant="mono" size="micro" color="dim" uppercase>Frameworks</Text>
-                  <Text variant="mono" size="xs" weight="font-bold">CUSTOM DEVAI SDK</Text>
-                </Stack>
-              </Box>
-            </Grid>
+        <Stack gap={8} width="full" maxWidth="4xl">
+          <Grid cols={{ base: 1, md: 3 }} gap={4} width="full">
+            <Box display="flex" align="center" gap={3} padding={5} border radius="lg" surface="surface" className="border-accent/10">
+              <Cpu className="w-5 h-5 text-accent" />
+              <Stack gap={0.5}>
+                <Text variant="mono" size="micro" color="dim" uppercase opacity={0.4}>Status</Text>
+                <Text variant="mono" size="xs" weight="font-bold">ORCHESTRATION {statusConfig.orchestration}</Text>
+              </Stack>
+            </Box>
+            <Box display="flex" align="center" gap={3} padding={5} border radius="lg" surface="surface" className="border-accent/10">
+              <ShieldCheck className="w-5 h-5 text-accent" />
+              <Stack gap={0.5}>
+                <Text variant="mono" size="micro" color="dim" uppercase opacity={0.4}>Quality Gates</Text>
+                <Text variant="mono" size="xs" weight="font-bold">{statusConfig.qualityGates}</Text>
+              </Stack>
+            </Box>
+            <Box display="flex" align="center" gap={3} padding={5} border radius="lg" surface="surface" className="border-accent/10">
+              <Zap className="w-5 h-5 text-accent" />
+              <Stack gap={0.5}>
+                <Text variant="mono" size="micro" color="dim" uppercase opacity={0.4}>Frameworks</Text>
+                <Text variant="mono" size="xs" weight="font-bold">{statusConfig.frameworks}</Text>
+              </Stack>
+            </Box>
+          </Grid>
 
+          <Box maxWidth="2xl">
             <Text variant="body" size="lg" color="body">
               Welcome to my active research sandbox. This platform is a <strong>live production testbed</strong> where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
             </Text>
-          </Stack>
-        </Box>
+          </Box>
+        </Stack>
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{tools.length} TOOLS</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
+          <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
             {tools.map((tool) => (
               <Stack
                 key={tool.id}
                 as="button"
                 onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
                 padding={6}
+                paddingBottom={10}
                 gap={4}
                 height="full"
                 align="start"
@@ -84,23 +92,23 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
+                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
                       <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
                       {tool.status}
                     </Text>
                   </Box>
-                  <Stack gap={2}>
-                    <Stack gap={0.5}>
-                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                  <Stack gap={3}>
+                    <Stack gap={1}>
+                        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
                             {tool.category}
                         </Text>
                         <Text variant="display" size="xl" weight="font-black">
                             {tool.title}
                         </Text>
                     </Stack>
-                    <Text size="xs" color="accent" weight="font-bold" uppercase tracking="tighter">
+                    <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
                         {tool.subtitle}
                     </Text>
                     <Text size="sm" color="dim">
@@ -108,7 +116,7 @@ export default function ResearchAnalytics() {
                     </Text>
                     <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
                         {tool.tags.map(tag => (
-                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} border radius="full" color="dim">
+                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="bg-surface-muted/30">
                                 {tag}
                             </Text>
                         ))}
@@ -127,7 +135,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} POSTS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
           </Box>
 
           {studies.length > 0 ? (
@@ -142,7 +150,7 @@ export default function ResearchAnalytics() {
                 >
                   <Box display="flex" justify="between" align="center">
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                    <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
                   </Box>
                   <Stack gap={2}>
                     <Text variant="display" size="2xl" weight="font-black">

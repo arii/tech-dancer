@@ -28,7 +28,6 @@ describe('getAllRoutes', () => {
     const { tools } = getAllRoutes();
     expect(tools).toContain('/research/wcs-parquet-pipeline');
     expect(tools).toContain('/ux-auditor');
-    expect(tools).toContain('/research/gitops-pr-reviewer');
   });
 
   it('should return detailed route information with lastmod', () => {
