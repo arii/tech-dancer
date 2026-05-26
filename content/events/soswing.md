@@ -48,10 +48,10 @@ gear:
     - "travel-pillow"
   travelDescription: "Road-trip or regional flight essentials for Southern Oregon."
 
-earlyBirdDate: "2026-03-15"
-registrationDeadline: "2026-05-01"
-hotelCutoffDate: "2026-04-18"
-packingReminderDate: "2026-05-05"
+earlyBirdDate: ""
+registrationDeadline: ""
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
   - "jack-and-jill-orama"
