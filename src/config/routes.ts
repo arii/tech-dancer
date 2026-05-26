@@ -94,7 +94,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/subscribe',
-    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+    lazy: () => import('@/pages/Subscribe').then(m => ({ Component: m.default })),
     skeleton: 'simple'
   },
   {

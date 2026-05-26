@@ -28,7 +28,7 @@ export function GearShelf() {
         </Stack>
       </Box>
 
-      <Box display={{ base: 'block', lg: 'none' }} overflowX="auto" className="-mx-4 px-4">
+      <Box display={{ base: 'block', lg: 'none' }} overflowX="auto" marginX={-4} paddingX={4}>
         <Box display="flex" gap={3} className="min-w-max">
           {PICKS.map(({ label, image, href }) => (
             <Box key={`mobile-${label}`} as={NavLink} to={href} display="flex" direction="col" align="center" gap={2} padding={3} border radius="md" className="group min-w-24 bg-surface">
