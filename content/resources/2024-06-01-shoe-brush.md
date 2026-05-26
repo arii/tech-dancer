@@ -1,5 +1,6 @@
 ---
 type: resource
+draft: true
 title: "Suede Shoe Brush"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"

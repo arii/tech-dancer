@@ -1,5 +1,6 @@
 ---
 type: resource
+draft: true
 title: "Anker Portable Power Bank"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
