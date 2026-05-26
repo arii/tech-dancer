@@ -46,7 +46,7 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "Leak-proof refillable containers for TSA-approved liquids.",
-    "image": "/images/gear/amazon/relavel-travel-hanging-toiletry-bag-for-men-women-travel-kit-shaving-b.jpg"
+    "image": "/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.png"
   },
   "dance-socks": {
     "id": "dance-socks",
@@ -223,7 +223,7 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "Stay healthy while dancing with hundreds of people.",
-    "image": "/images/gear/amazon/relavel-travel-hanging-toiletry-bag-for-men-women-travel-kit-shaving-b.jpg"
+    "draft": true
   },
   "rainbow-fan": {
     "id": "rainbow-fan",
