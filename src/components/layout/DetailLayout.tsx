@@ -6,6 +6,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Icon } from '@/components/ui/Icon';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
 import { readingTime } from '@/lib/content';
 
 interface DetailLayoutProps {
@@ -22,6 +23,7 @@ interface DetailLayoutProps {
   headerExtras?: ReactNode;
   relatedContent?: ReactNode;
   showImagePair?: boolean;
+  imageFit?: 'cover' | 'contain';
 }
 
 export function DetailLayout({
@@ -37,7 +39,8 @@ export function DetailLayout({
   children,
   headerExtras,
   relatedContent,
-  showImagePair = false
+  showImagePair = false,
+  imageFit = 'cover'
 }: DetailLayoutProps) {
   const rt = readingTime(content);
   const [showBack, setShowBack] = useState(false);
@@ -93,31 +96,23 @@ export function DetailLayout({
                     <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
                       Front
                     </Text>
-                    <Box aspect="video" overflow="hidden" border radius="md">
-                      <img
-                        src={image}
-                        alt={`${title} – front view`}
-                        width={1280}
-                        height={720}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                      />
-                    </Box>
+                    <ProductImageFrame
+                      src={image}
+                      alt={`${title} – front view`}
+                      objectFit={imageFit}
+                      border
+                    />
                   </Stack>
                   <Stack gap={2}>
                     <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
                       Back
                     </Text>
-                    <Box aspect="video" overflow="hidden" border radius="md">
-                      <img
-                        src={imageBack}
-                        alt={`${title} – back view`}
-                        width={1280}
-                        height={720}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                      />
-                    </Box>
+                    <ProductImageFrame
+                      src={imageBack}
+                      alt={`${title} – back view`}
+                      objectFit={imageFit}
+                      border
+                    />
                   </Stack>
                 </Grid>
               ) : (
@@ -155,17 +150,14 @@ export function DetailLayout({
                       </Box>
                     </Box>
                   )}
-                  <Box aspect="video" overflow="hidden">
-                    <img
-                      key={displayImage}
-                      src={displayImage}
-                      alt={`${title}${showBack ? ' – back view' : ''}`}
-                      width={1280}
-                      height={720}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-opacity duration-300"
-                    />
-                  </Box>
+                  <ProductImageFrame
+                    key={displayImage}
+                    src={displayImage || ""}
+                    alt={`${title}${showBack ? ' – back view' : ''}`}
+                    objectFit={imageFit}
+                    border={false}
+                    radius="none"
+                  />
                 </>
               )}
             </Box>

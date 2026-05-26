@@ -106,6 +106,7 @@ export function FullPreview(props: FullPreviewProps & DraftData) {
         backLabel="Back to Editor"
         headerExtras={headerExtras}
         sidebar={sidebar}
+        imageFit={props.type === 'resource' ? 'contain' : 'cover'}
       >
          {props.excerpt && (
            <Box marginY={8} border="l" paddingLeft={6} className="border-accent">
