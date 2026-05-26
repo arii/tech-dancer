@@ -49,7 +49,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'A model-agnostic ML engineering example using local LLMs to audit code style and pattern consistency. It serves as a GitOps-driven RAG prototype for private codebase documentation and policy enforcement.',
     category: 'DevAI System',
     status: 'Active',
-    tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python']
+    tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
+    canonicalPath: '/research/gitops-pr-reviewer'
   },
   {
     id: 'scope-blast-radius',
@@ -58,10 +59,11 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'Demonstrates AI-assisted static analysis by calculating the semantic impact of code changes. Essential for AI orchestration to minimize token waste and provide agents with high-precision context.',
     category: 'DevAI System',
     status: 'Active',
-    tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping']
+    tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
+    canonicalPath: '/research/scope-blast-radius'
   },
   {
-    id: 'ux-perception-debug',
+    id: 'ux-auditor',
     title: 'Visual Regression & UX Auditor',
     subtitle: 'Perception Telemetry System',
     description: 'An AI-assisted perception pipeline that maps DOM shifts to visual regressions. It uses automated Playwright workflows to provide high-fidelity telemetry for AI-driven frontend optimization.',
@@ -71,13 +73,14 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     canonicalPath: '/ux-auditor'
   },
   {
-    id: 'wcs-parquet-pipeline',
+    id: 'wcs-scraper',
     title: 'High-Scale Telemetry Ingestion ETL',
     subtitle: 'Scraper-to-Parquet Pipeline',
     description: 'A data engineering showcase for Dev AI systems, transforming raw competitive dance records into compressed Parquet formats. This enables efficient RAG indexing and complex analytical queries.',
     category: 'Data Engineering',
     status: 'Active',
-    tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines']
+    tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
+    canonicalPath: '/research/wcs-scraper'
   },
   {
     id: 'blog-drafter',
@@ -86,7 +89,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'A prompt engineering platform designed for brand-consistent content generation. It combines RAG over existing blog posts with a human-in-the-loop workflow to maintain editorial quality.',
     category: 'Content Tools',
     status: 'Active',
-    tags: ['LLM', 'Content Generation', 'Productivity']
+    tags: ['LLM', 'Content Generation', 'Productivity'],
+    canonicalPath: '/research/blog-drafter'
   },
   {
     id: 'wsdc-event-reminders',
@@ -95,6 +99,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'A utility tool showcasing AI-assisted automation of calendar synchronization. It extracts logistics from fragmented data sources to maintain high-precision schedule telemetry.',
     category: 'Utility Tools',
     status: 'Active',
-    tags: ['Automation', 'Calendar', 'WCS']
+    tags: ['Automation', 'Calendar', 'WCS'],
+    canonicalPath: '/research/wsdc-event-reminders'
   }
 ];
