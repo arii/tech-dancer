@@ -1,6 +1,7 @@
 import { SEO } from '@/components/SEO';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
+import { layout } from '@/styles/design-tokens';
 import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { TopicGrid } from '@/features/home/TopicGrid';
 import { FeaturedEventGuide } from '@/features/home/FeaturedEventGuide';
@@ -23,7 +24,7 @@ export default function Home() {
         as="section"
         gap={10}
         align="center"
-        cols={{ base: 1, lg: '[minmax(0,1fr)_380px]' }}
+        cols={{ base: 1, lg: layout.heroEditorial }}
       >
         <HomeHero />
         <FeaturedGuidePanel />
@@ -39,7 +40,7 @@ export default function Home() {
         <TopicGrid />
 
         {/* Events + Gear Shelf */}
-        <Grid gap={12} cols={{ base: 1, lg: '[1fr_340px]' }}>
+        <Grid gap={12} cols={{ base: 1, lg: layout.sidebarEditorial }}>
           <Box order={{ base: 1, lg: 0 }}>
             <FeaturedEventGuide />
           </Box>
@@ -49,7 +50,7 @@ export default function Home() {
         </Grid>
 
         {/* Latest Posts + Dev Lab */}
-        <Grid gap={12} cols={{ base: 1, lg: '[1fr_340px]' }}>
+        <Grid gap={12} cols={{ base: 1, lg: layout.sidebarEditorial }}>
           <Box order={{ base: 1, lg: 0 }}>
             <LatestPosts />
           </Box>

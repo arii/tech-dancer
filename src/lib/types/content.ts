@@ -112,6 +112,7 @@ export interface Event {
   gearEssentialIds?: string[];
   gearTravelIds?: string[];
   relatedEvents?: string[];
+  featured?: boolean;
 }
 
 export type ContentItem = Post | Resource | Study | Event;

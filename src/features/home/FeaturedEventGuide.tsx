@@ -11,10 +11,8 @@ export function FeaturedEventGuide() {
   // 1. featured: true
   // 2. all with heroImage (as already filtered above)
   const featured = events.sort((a, b) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const aFeatured = (a as any).featured === true;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const bFeatured = (b as any).featured === true;
+    const aFeatured = a.featured === true;
+    const bFeatured = b.featured === true;
     if (aFeatured && !bFeatured) return -1;
     if (!aFeatured && bFeatured) return 1;
     return 0;
