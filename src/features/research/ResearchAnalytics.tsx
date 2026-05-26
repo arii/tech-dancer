@@ -26,20 +26,20 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio | Multi-Agent Systems & SDLC Automation"
-        description="Active production testbed for multi-agent software engineering systems, GitOps code review agents, and high-scale telemetry pipelines."
+        title="DevAI Portfolio | AI Orchestration & ML Engineering"
+        description="Showcase of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
       />
       <Stack gap={12}>
         <PageHeader
-          label="SYSTEM_DASHBOARD"
-          title="DevAI Portfolio as a Platform"
-          description="DevAI projects and tooling built to ship real products, review AI-generated work, and keep repository workflows moving."
+          eyebrow="DEVAI_PORTFOLIO"
+          title="AI Orchestration & ML Engineering"
+          description="Real-world examples of AI-assisted product development, DevAI orchestration consoles, and high-fidelity telemetry pipelines."
           as="h1"
         />
 
         <Box maxWidth="2xl">
           <Text variant="body" size="lg" color="body">
-            Welcome to my active research sandbox. This platform is a <strong>live production testbed</strong> where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+            Grounded DevAI solutions built to ship products, not hype. From <strong>custom RAG pipelines</strong> to <strong>autonomous repository auditing</strong>, these projects demonstrate practical applications of prompt engineering and agentic workflows in modern software engineering.
           </Text>
         </Box>
 
@@ -52,80 +52,91 @@ export default function ResearchAnalytics() {
             {flagshipTools.map((tool) => (
               <BaseCard
                 key={tool.id}
-                padding={8}
-                gap={6}
+                padding={0}
+                gap={0}
                 surface="surface"
-                className="border-accent/10 h-full"
+                className="border-accent/10 h-full overflow-hidden"
               >
-                <Stack gap={6} height="full">
-                  <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
-                      <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+                <Stack gap={0} height="full">
+                  {tool.image && (
+                    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
+                      <img
+                        src={tool.image}
+                        alt={tool.title}
+                        className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
+                      />
                     </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
-                      Flagship
-                    </Text>
-                  </Box>
-
-                  <Stack gap={3}>
-                    <Stack gap={1}>
-                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                        {tool.category}
+                  )}
+                  <Stack gap={6} padding={8} flex={1}>
+                    <Box display="flex" justify="between" align="start" width="full">
+                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
+                        <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+                      </Box>
+                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
+                        Flagship
                       </Text>
-                      <Text variant="display" size="2xl" weight="font-black">
-                        {tool.title}
+                    </Box>
+
+                    <Stack gap={3}>
+                      <Stack gap={1}>
+                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                          {tool.category}
+                        </Text>
+                        <Text variant="display" size="2xl" weight="font-black">
+                          {tool.title}
+                        </Text>
+                      </Stack>
+                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
+                        {tool.subtitle}
+                      </Text>
+                      <Text variant="body" size="md" color="dim" className="leading-relaxed">
+                        {tool.description}
                       </Text>
                     </Stack>
-                    <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
-                      {tool.subtitle}
-                    </Text>
-                    <Text variant="body" size="md" color="dim" className="leading-relaxed">
-                      {tool.description}
-                    </Text>
-                  </Stack>
 
-                  <Box display="flex" wrap="wrap" gap={2}>
-                    {tool.tags.map(tag => (
-                      <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                        {tag}
-                      </Text>
-                    ))}
-                  </Box>
-
-                  <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
-                    {tool.externalUrl && (
-                      <Box
-                        as="a"
-                        href={tool.externalUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        display="flex"
-                        align="center"
-                        gap={2}
-                        className="text-accent hover:opacity-80 transition-colors z-20"
-                      >
-                        <Text weight="font-bold" size="xs" uppercase tracking="widest">
-                          {tool.externalLinkDisplayLabel || 'Open Link'}
+                    <Box display="flex" wrap="wrap" gap={2}>
+                      {tool.tags.map(tag => (
+                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                          {tag}
                         </Text>
-                        <ExternalLink className="w-4 h-4" />
-                      </Box>
-                    )}
-                    {tool.sourceUrl && (
-                      <Box
-                        as="a"
-                        href={tool.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        display="flex"
-                        align="center"
-                        gap={2}
-                        className="text-dim hover:text-accent transition-colors z-20"
-                      >
-                        <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
-                        <Github className="w-4 h-4" />
-                      </Box>
-                    )}
-                  </Box>
+                      ))}
+                    </Box>
+
+                    <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
+                      {tool.externalUrl && (
+                        <Box
+                          as="a"
+                          href={tool.externalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          display="flex"
+                          align="center"
+                          gap={2}
+                          className="text-accent hover:opacity-80 transition-colors z-20"
+                        >
+                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
+                            {tool.externalLinkDisplayLabel || 'Open Link'}
+                          </Text>
+                          <ExternalLink className="w-4 h-4" />
+                        </Box>
+                      )}
+                      {tool.sourceUrl && (
+                        <Box
+                          as="a"
+                          href={tool.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          display="flex"
+                          align="center"
+                          gap={2}
+                          className="text-dim hover:text-accent transition-colors z-20"
+                        >
+                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
+                          <Github className="w-4 h-4" />
+                        </Box>
+                      )}
+                    </Box>
+                  </Stack>
                 </Stack>
               </BaseCard>
             ))}
@@ -136,13 +147,13 @@ export default function ResearchAnalytics() {
           <Stack gap={6}>
             <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              HRM exposed the need for better AI-assisted repo operations: reviewing pull requests, diagnosing CI/workflow failures, creating precise implementation issues, and handing branch-specific work to coding agents. <strong>RepoAuditor AI</strong> was created to support that loop and later became part of the development workflow for <strong>tech-dancer/BoomTick</strong>.
+              HRM exposed the need for sophisticated <strong>AI orchestration</strong> in repository operations. From automated PR reviews to diagnosing CI failures, the project demanded a <strong>Dev AI</strong> console capable of precise <strong>prompt engineering</strong> and structured agent handoff. <strong>RepoAuditor AI</strong> was built to close this loop, now serving as the backbone for <strong>ML engineering</strong> workflows across tech-dancer/BoomTick.
             </Text>
           </Stack>
           <Stack gap={6}>
             <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              Real product development requires grounded DevAI tooling. By focusing on <strong>AI-assisted workflows</strong> rather than total autonomy, we maintain high engineering standards while shipping complex features like real-time telemetry and multi-platform integrations.
+              Shipping high-fidelity products requires more than just AI hype—it requires practical <strong>AI orchestration</strong> and robust <strong>RAG</strong> pipelines. By focusing on <strong>ML engineering</strong> that keeps the developer in the loop, we maintain high standards while leveraging <strong>Dev AI</strong> to handle high-scale telemetry and complex multi-platform integrations.
             </Text>
           </Stack>
         </Grid>
