@@ -10,7 +10,7 @@ export function LatestPosts() {
 
   return (
     <Box as="section">
-      <Box display="flex" align="center" justify="between" gap={2} marginBottom={5}>
+      <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
           Latest from BoomTick
         </Text>
@@ -27,6 +27,7 @@ export function LatestPosts() {
         </Text>
       </Box>
 
+      {/* Compact editorial post rows — no card wrapper, border-bottom only */}
       <Stack gap={0} border="t" className="border-line">
         {posts.map((post) => (
           <Box
@@ -36,18 +37,22 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            paddingY={4}
-            border="b"
-            className="group border-line transition-colors hover:bg-surface/50"
+            className="group border-b border-line py-3.5 transition-colors hover:bg-surface/50"
           >
-            {/* Thumbnail — slightly larger on mobile for editorial feel */}
-            <Box width={16} height={16} radius="md" overflow="hidden" className="mt-0.5 shrink-0 bg-surface-alt">
+            {/* Thumbnail — rectangular, 72×56 desktop feel */}
+            <Box
+              radius="md"
+              overflow="hidden"
+              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
+            >
               {post.image ? (
                 <img src={post.image} alt={post.title} className="h-full w-full object-cover" />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />
               )}
             </Box>
+
+            {/* Text content */}
             <Stack gap={1} className="min-w-0 flex-1">
               <Box display="flex" align="center" gap={3}>
                 <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
@@ -57,14 +62,14 @@ export function LatestPosts() {
                   {post.date}
                 </Text>
               </Box>
-              {/* Allow title to wrap to 2 lines on mobile */}
-              <Text variant="body" size="base" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
+              <Text variant="body" size="sm" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
                 {post.title}
               </Text>
               <Text variant="body" size="xs" color="dim" className="line-clamp-1">
                 {post.excerpt}
               </Text>
             </Stack>
+
             <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-40 transition-opacity group-hover:opacity-100" />
           </Box>
         ))}

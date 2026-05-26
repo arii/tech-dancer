@@ -8,23 +8,23 @@ export function DevLabCallout() {
     <Box
       border
       radius="lg"
-      className="flex h-full flex-col justify-between bg-surface-alt p-5 lg:p-6"
+      className="flex h-full flex-col justify-between p-5"
     >
-      <Stack gap={4}>
-        <Box padding={2} radius="md" className="w-fit bg-accent/10">
-          <Terminal className="h-5 w-5 text-accent" />
+      <Stack gap={3}>
+        <Box className="w-fit rounded-md bg-accent/10 p-2">
+          <Terminal className="h-4 w-4 text-accent" />
         </Box>
-        <Stack gap={2}>
-          <Text variant="headline" size="base" weight="font-black" color="main">
+        <Stack gap={1.5}>
+          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
             Dev Lab
           </Text>
-          <Text variant="body" size="sm" color="dim" leading="relaxed">
-            Behind-the-scenes notes on building BoomTick: data tools, content systems, and
-            experiments for dance media.
+          <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+            Behind-the-scenes notes on BoomTick data tools, content systems, and experiments
+            for dance media.
           </Text>
         </Stack>
       </Stack>
-      <Box marginTop={5}>
+      <Box className="mt-4">
         <Text
           as={NavLink}
           to="/research"

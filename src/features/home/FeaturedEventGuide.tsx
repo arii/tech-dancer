@@ -13,64 +13,63 @@ export function FeaturedEventGuide() {
 
   return (
     <Box as="section">
-      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={5}>
+      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={4}>
         Featured Event Guide
       </Text>
-      <Box border radius="lg" overflow="hidden" className="bg-surface">
-        {/* Mobile: 16/9 image stacked above content */}
-        <Box className="block sm:hidden">
+
+      {/* Editorial card: image-led grid */}
+      <Box
+        border
+        radius="xl"
+        overflow="hidden"
+        className="grid bg-surface md:grid-cols-[260px_1fr]"
+      >
+        {/* Image column — full height, strong crop */}
+        <Box position="relative" className="min-h-[180px]">
           <img
             src={event.heroImage}
             alt={event.title}
-            className="aspect-video w-full object-cover object-center"
+            className="h-full w-full object-cover object-center"
           />
+          {/* Subtle gradient at bottom to soften any embedded text */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />
         </Box>
 
-        <Box display="flex" gap={0}>
-          {/* Desktop/tablet: side image */}
-          <Box className="hidden w-44 shrink-0 sm:block lg:w-52" position="relative">
-            <img
-              src={event.heroImage}
-              alt={event.title}
-              className="h-full w-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-surface/20" aria-hidden="true" />
-          </Box>
+        {/* Content */}
+        <Stack gap={3} padding={6} className="justify-between">
+          <Stack gap={2}>
+            <Box display="flex" align="center" gap={2}>
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="truncate">
+                {event.location}
+              </Text>
+            </Box>
+            <Text variant="headline" size="xl" weight="font-black" leading="tight">
+              {event.title}
+            </Text>
+            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+              {event.excerpt}
+            </Text>
+          </Stack>
 
-          {/* Content */}
-          <Stack gap={4} padding={5} className="min-w-0 flex-1 justify-between">
-            <Stack gap={2}>
-              <Box display="flex" align="center" gap={2}>
-                <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
-                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="truncate">
-                  {event.location}
-                </Text>
-              </Box>
-              <Text variant="headline" size="xl" weight="font-black" leading="tight">
-                {event.title}
-              </Text>
-              <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
-                {event.excerpt}
-              </Text>
-            </Stack>
-
-            <Box display="flex" align="center" justify="between">
-              <Text
-                as={NavLink}
-                to={`/events/${event.slug}`}
-                variant="mono"
-                size="xs"
-                color="accent"
-                weight="font-bold"
-                className="hover:underline"
-              >
-                Read the guide →
-              </Text>
+          <Box display="flex" align="center" justify="between">
+            <Text
+              as={NavLink}
+              to={`/events/${event.slug}`}
+              variant="mono"
+              size="xs"
+              color="accent"
+              weight="font-bold"
+              className="hover:underline"
+            >
+              Read the guide →
+            </Text>
+            {featured.length > 1 && (
               <Box display="flex" gap={2}>
                 <Box
                   as="button"
                   onClick={() => setIndex((i) => Math.max(0, i - 1))}
-                  padding={2}
+                  padding={1.5}
                   border
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
@@ -82,7 +81,7 @@ export function FeaturedEventGuide() {
                 <Box
                   as="button"
                   onClick={() => setIndex((i) => Math.min(featured.length - 1, i + 1))}
-                  padding={2}
+                  padding={1.5}
                   border
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
@@ -92,9 +91,9 @@ export function FeaturedEventGuide() {
                   <ChevronRight className="h-4 w-4" />
                 </Box>
               </Box>
-            </Box>
-          </Stack>
-        </Box>
+            )}
+          </Box>
+        </Stack>
       </Box>
     </Box>
   );

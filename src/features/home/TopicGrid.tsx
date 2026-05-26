@@ -39,20 +39,21 @@ export function TopicGrid() {
             key={label}
             as={NavLink}
             to={href}
-            gap={3}
-            padding={5}
+            gap={2}
+            padding={4}
             border
             radius="lg"
-            className="group bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40"
+            className="group bg-surface transition-all duration-200 hover:border-accent/40"
           >
-            <Box padding={2} radius="md" className="w-fit bg-accent/10">
-              <Icon className="h-5 w-5 text-accent" />
+            {/* Icon — compact container */}
+            <Box className="w-fit rounded-md bg-accent/10 p-1.5">
+              <Icon className="h-4 w-4 text-accent" />
             </Box>
-            <Stack gap={1}>
-              <Text variant="body" size="lg" weight="font-bold" className="transition-colors group-hover:text-accent">
+            <Stack gap={0.5}>
+              <Text variant="body" size="base" weight="font-bold" className="transition-colors group-hover:text-accent">
                 {label}
               </Text>
-              <Text variant="body" size="sm" color="dim" leading="relaxed">
+              <Text variant="body" size="xs" color="dim" leading="relaxed">
                 {description}
               </Text>
             </Stack>

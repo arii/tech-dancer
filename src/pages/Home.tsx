@@ -30,7 +30,7 @@ export default function Home() {
       </Box>
 
       {/* Remaining sections — tighter vertical rhythm on mobile */}
-      <Stack gap={10} className="mt-10 lg:mt-14">
+      <Stack gap={{ base: 10, lg: 14 }} className="mt-12 lg:mt-16">
         <TopicGrid />
 
         <Box
