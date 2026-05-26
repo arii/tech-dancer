@@ -77,7 +77,7 @@ export function ThemeSpotlight({
     >
       <Stack direction={{ base: "col", md: "row" }} align="stretch">
         {/* Content Section */}
-        <Stack gap={6} padding={8} flex={1} justify="center">
+        <Stack gap={{ base: 4, md: 6 }} padding={{ base: 4, md: 8 }} flex={1} justify="center">
           <Stack gap={2}>
             <Text
               variant="mono"
@@ -85,7 +85,6 @@ export function ThemeSpotlight({
               color="dim"
               uppercase
               tracking="widest"
-              marginBottom={1}
             >
               Theme Spotlight
             </Text>
@@ -97,7 +96,6 @@ export function ThemeSpotlight({
                 color="accent"
                 uppercase
                 tracking="widest"
-                marginBottom={1}
               >
                 {label}
               </Text>
@@ -106,13 +104,14 @@ export function ThemeSpotlight({
               width={12}
               height={1}
               radius="full"
-              marginBottom={2}
+              marginTop={1}
+              marginBottom={1}
               style={accentStyle} // impeccable-ignore - Dynamic theme-driven accent color requires inline style.
             />
             <Text
               as="h3"
               variant="display"
-              size="2xl"
+              size={{ base: "xl", md: "2xl" }}
               weight="font-black"
               color="white"
               tracking="tight"
@@ -140,7 +139,7 @@ export function ThemeSpotlight({
 
           <Text
             variant="body"
-            size="base"
+            size={{ base: "sm", md: "base" }}
             color="dim"
             className="leading-relaxed"
           >
@@ -149,11 +148,11 @@ export function ThemeSpotlight({
 
           {/* Outfit Inspiration */}
           {outfits.length > 0 && (
-            <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+            <Stack gap={{ base: 3, md: 4 }} marginTop={{ base: 2, md: 4 }}>
+              <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="widest">
                 Outfit Inspiration
               </Text>
-              <Grid cols={{ base: 2, md: 3 }} gap={4}>
+              <Grid cols={{ base: 2, md: 3 }} gap={{ base: 3, md: 4 }}>
                 {outfits.map(link => (
                   <InspirationTile key={link.id} link={link} />
                 ))}
@@ -163,11 +162,11 @@ export function ThemeSpotlight({
 
           {/* Accessory Ideas */}
           {accessories.length > 0 && (
-            <Stack gap={4} marginTop={4}>
-              <Text variant="mono" size="sm" weight="font-bold" color="dim" uppercase tracking="widest">
+            <Stack gap={{ base: 3, md: 4 }} marginTop={{ base: 2, md: 4 }}>
+              <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="widest">
                 Accessory Ideas
               </Text>
-              <Grid cols={{ base: 2, md: 3 }} gap={4}>
+              <Grid cols={{ base: 2, md: 3 }} gap={{ base: 3, md: 4 }}>
                 {accessories.map(link => (
                   <InspirationTile key={link.id} link={link} />
                 ))}
