@@ -123,6 +123,7 @@ export const tailwindSafelist = [
   'z-overlay',
   'z-modal',
   'z-search',
+  'z-[130]', // impeccable-ignore
   'lg:grid-cols-[minmax(0,1fr)_380px]', // impeccable-ignore
   'lg:grid-cols-[1fr_340px]', // impeccable-ignore
   'h-16',

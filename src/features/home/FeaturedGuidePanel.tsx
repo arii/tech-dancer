@@ -31,8 +31,8 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-cover bg-center opacity-25 transition-opacity duration-500 group-hover:opacity-35" // impeccable-ignore
-        style={{ backgroundImage: `url(${ASSET_PREFIX}${FEATURED.image})` }} // impeccable-ignore
+        className="bg-cover bg-center opacity-25 transition-opacity duration-500 group-hover:opacity-35" /* impeccable-ignore */
+        style={{ backgroundImage: `url(${ASSET_PREFIX}${FEATURED.image})` }} /* impeccable-ignore */
         aria-hidden="true"
       />
       <Box
