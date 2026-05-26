@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/ux-updates-notice-contrast-cls-a11y-2998501538508497147/sitemap.xml
