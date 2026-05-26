@@ -44,37 +44,11 @@ export default function ResearchAnalytics() {
           as="h1"
         />
 
-        <Stack gap={8} width="full" maxWidth="4xl">
-          <Grid cols={{ base: 1, md: 3 }} gap={4} width="full">
-            <Box display="flex" align="center" gap={3} padding={5} border radius="lg" surface="surface" className="border-accent/10">
-              <Cpu className="w-5 h-5 text-accent" />
-              <Stack gap={0.5}>
-                <Text variant="mono" size="micro" color="dim" uppercase opacity={0.4}>Status</Text>
-                <Text variant="mono" size="xs" weight="font-bold">ORCHESTRATION {statusConfig.orchestration}</Text>
-              </Stack>
-            </Box>
-            <Box display="flex" align="center" gap={3} padding={5} border radius="lg" surface="surface" className="border-accent/10">
-              <ShieldCheck className="w-5 h-5 text-accent" />
-              <Stack gap={0.5}>
-                <Text variant="mono" size="micro" color="dim" uppercase opacity={0.4}>Quality Gates</Text>
-                <Text variant="mono" size="xs" weight="font-bold">{statusConfig.qualityGates}</Text>
-              </Stack>
-            </Box>
-            <Box display="flex" align="center" gap={3} padding={5} border radius="lg" surface="surface" className="border-accent/10">
-              <Zap className="w-5 h-5 text-accent" />
-              <Stack gap={0.5}>
-                <Text variant="mono" size="micro" color="dim" uppercase opacity={0.4}>Frameworks</Text>
-                <Text variant="mono" size="xs" weight="font-bold">{statusConfig.frameworks}</Text>
-              </Stack>
-            </Box>
-          </Grid>
-
-          <Box maxWidth="2xl">
-            <Text variant="body" size="lg" color="body">
-              Welcome to my active research sandbox. This platform is a <strong>live production testbed</strong> where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
-            </Text>
-          </Box>
-        </Stack>
+        <Box maxWidth="2xl">
+          <Text variant="body" size="lg" color="body">
+            Welcome to my active research sandbox. This platform is a <strong>live production testbed</strong> where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+          </Text>
+        </Box>
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
@@ -119,7 +93,7 @@ export default function ResearchAnalytics() {
 
                   <Box display="flex" wrap="wrap" gap={2}>
                     {tool.tags.map(tag => (
-                      <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="bg-surface-muted/50 border border-white/5" /* impeccable-ignore */>
+                      <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
                         {tag}
                       </Text>
                     ))}
@@ -138,7 +112,7 @@ export default function ResearchAnalytics() {
                         className="text-accent hover:opacity-80 transition-colors z-20"
                       >
                         <Text weight="font-bold" size="xs" uppercase tracking="widest">
-                          {tool.id.includes('hrm') ? 'View HRM' : 'Open RepoAuditor AI'}
+                          {tool.externalLinkDisplayLabel || 'Open Link'}
                         </Text>
                         <ExternalLink className="w-4 h-4" />
                       </Box>
@@ -225,7 +199,7 @@ export default function ResearchAnalytics() {
                     </Text>
                     <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
                         {tool.tags.map(tag => (
-                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="bg-surface-muted/30" /* impeccable-ignore */>
+                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
                                 {tag}
                             </Text>
                         ))}
@@ -241,13 +215,13 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
-          </Box>
+        {studies.length > 0 && (
+          <Stack gap={8}>
+            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+              <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
+            </Box>
 
-          {studies.length > 0 ? (
             <Grid cols={{ base: 1, md: 2 }} gap={8}>
               {studies.map((study) => (
                 <Stack
@@ -276,24 +250,8 @@ export default function ResearchAnalytics() {
                 </Stack>
               ))}
             </Grid>
-          ) : (
-            <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
-              <Stack align="center" justify="center" gap={2}>
-                <Box>
-                  <Icon icon={Database} size="lg" color="muted" />
-                </Box>
-                <Stack gap={0.5}>
-                  <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
-                    Loading Data...
-                  </Text>
-                  <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
-                    The WCS Competition Data Scraper is getting data ready. Detailed studies will be available soon.
-                  </Text>
-                </Stack>
-              </Stack>
-            </Box>
-          )}
-        </Stack>
+          </Stack>
+        )}
       </Stack>
     </Box>
   );

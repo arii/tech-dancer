@@ -84,6 +84,10 @@
   --brand-logo-size-text: 52px;
   --brand-logo-tracking: -1.5px;
 }
+
+.flagship-tag {
+  @apply bg-line/30 border border-white/5;
+}
 /* ── Hero Section ────────────────────────────────────── */
 :root {
   /* Background */

@@ -8,6 +8,7 @@ export interface ResearchTool {
   tags: string[];
   canonicalPath?: string;
   externalUrl?: string;
+  externalLinkDisplayLabel?: string;
   sourceUrl?: string;
   isFlagship?: boolean;
 }
@@ -22,6 +23,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     externalUrl: 'https://arii.github.io/hrm/',
+    externalLinkDisplayLabel: 'View HRM',
     isFlagship: true
   },
   {
@@ -33,6 +35,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
     externalUrl: 'https://repo-auditor-ai.vercel.app/',
+    externalLinkDisplayLabel: 'Open RepoAuditor AI',
     sourceUrl: 'https://github.com/arii/hrm-project-management',
     isFlagship: true
   },
