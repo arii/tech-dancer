@@ -24,6 +24,7 @@
     "lint:types": "tsc --noEmit",
     "knip": "knip",
     "type-check": "tsc --noEmit",
+    "validate:events": "tsx scripts/validate-event-guides.ts",
     "audit": "node scripts/detect-antipatterns.mjs",
     "audit:inventory": "node scripts/check-suppression-inventory.mjs",
     "review:ux:prep": "pnpm run setup:playwright && pnpm run audit",

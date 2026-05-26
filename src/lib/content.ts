@@ -6,6 +6,7 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
+import { EventFrontmatterSchema } from './types/event-frontmatter.schema';
 import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear } from './types/content';
 
 export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear };
@@ -57,6 +58,13 @@ function transform<T extends { date?: string; draft?: boolean }>(
     .map(([path, raw]) => {
       const contentStr = typeof raw === "string" ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
+
+      if (path.includes('/events/')) {
+        const validation = EventFrontmatterSchema.safeParse(data);
+        if (!validation.success) {
+          console.warn(`Validation failed for event guide: ${path}`, validation.error.format());
+        }
+      }
 
       const normalizeAsset = (val: unknown) => {
         if (val === "") return undefined;
