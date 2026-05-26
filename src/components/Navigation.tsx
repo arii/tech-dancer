@@ -31,7 +31,12 @@ export default function Navigation() {
       <Box
         as="nav"
         aria-label="Main Navigation"
-        className="fixed inset-x-0 top-0 z-[130] h-16 border-b border-line bg-bg/95 backdrop-blur-xl" /* impeccable-ignore */
+        position="fixed"
+        inset="top"
+        zIndex="navBar"
+        height={16}
+        border="b"
+        className="bg-bg/95 backdrop-blur-xl"
       >
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" height="full">
           <Stack direction="row" align="center" gap={8}>

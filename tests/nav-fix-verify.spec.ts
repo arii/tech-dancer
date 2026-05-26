@@ -7,16 +7,10 @@ test('navigation bar is visible and works', async ({ page }) => {
   const nav = page.locator('nav[aria-label="Main Navigation"]');
   await expect(nav).toBeAttached();
 
-  // Print classes for debugging
-  const classes = await nav.getAttribute('class');
-  console.log('Nav classes:', classes);
-
   // 2. Check z-index (computed style)
   const zIndex = await nav.evaluate((el) => window.getComputedStyle(el).zIndex);
-  console.log('Computed z-index:', zIndex);
 
   const position = await nav.evaluate((el) => window.getComputedStyle(el).position);
-  console.log('Computed position:', position);
 
   await expect(nav).toBeVisible();
 

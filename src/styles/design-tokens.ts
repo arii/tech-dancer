@@ -75,6 +75,7 @@ export const iconSizes = {
 export const zIndex = {
   hide: "hide",
   base: "base",
+  navBar: "z-[130]",
   docked: "docked",
   dropdown: "dropdown",
   sticky: "sticky",
