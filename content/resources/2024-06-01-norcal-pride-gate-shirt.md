@@ -12,6 +12,7 @@ rating: 5
 verdict: "Regional Pride"
 priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/norcal-pride-golden-gate-shirt
 ---
 
 Celebrate your Northern California roots and Pride month with this custom Golden Gate bridge design. It's a favorite for Team NorCal BestCal members at flagship events like Jack & Jill O'Rama.

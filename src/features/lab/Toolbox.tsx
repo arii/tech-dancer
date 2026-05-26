@@ -47,23 +47,23 @@ export default function Toolbox() {
           <ViewToggle view={view} onChange={setView} />
         </Box>
 
-        <Stack direction="row" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60" marginBottom={8} data-testid="toolbox-filters">
-          <FilterButton
-            label="All Gear"
-            onClick={() => setSelectedPill('all')}
-            isActive={selectedPill === 'all'}
-            className="text-text-dim border-line/50 bg-bg hover:bg-surface transition-colors"
-          />
-          {GEAR_PILLS.map((pill) => (
+        <Box display="flex" justify="center" marginTop={8} marginBottom={8} className="overflow-x-auto">
+          <Box display="flex" gap="1" padding="1" radius="2xl" border className="border-line bg-surface-alt min-w-max" data-testid="toolbox-filters">
             <FilterButton
-              key={pill.label}
-              label={pill.label}
-              onClick={() => setSelectedPill(pill.value)}
-              isActive={selectedPill === pill.value}
-              className={cn(pill.color, "hover:opacity-90 transition-opacity")}
+              label="All gear"
+              onClick={() => setSelectedPill('all')}
+              isActive={selectedPill === 'all'}
             />
-          ))}
-        </Stack>
+            {GEAR_PILLS.map((pill) => (
+              <FilterButton
+                key={pill.label}
+                label={pill.label}
+                onClick={() => setSelectedPill(pill.value)}
+                isActive={selectedPill === pill.value}
+              />
+            ))}
+          </Box>
+        </Box>
       </Box>
 
       {/* Grid: Mobile-first stacking */}

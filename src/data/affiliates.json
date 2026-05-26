@@ -328,5 +328,14 @@
         "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
         "gearSlug": "2024-06-01-mesh-fishnet-top",
         "image": "/images/gear/sketches/mesh-fishnet-top.png"
+    },
+    "portable-speaker": {
+        "id": "portable-speaker",
+        "name": "Portable Bluetooth Speaker (UE Wonderboom 4)",
+        "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "category": "gear",
+        "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
+        "gearSlug": "2024-01-01-portable-speaker",
+        "image": "/assets/gear/ue-wonderboom.jpg"
     }
 }

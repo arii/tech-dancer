@@ -33,6 +33,7 @@ export interface Resource {
   imageBack?: string;
   tags?: string[];
   affiliateIds?: string[];
+  shopUrl?: string; // For Printful or direct shop links (non-affiliate merch)
   rating?: number;
   verdict?: string;
   priceCategory?: string;

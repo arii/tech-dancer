@@ -12,6 +12,7 @@ rating: 5
 verdict: "Trendy & Airy"
 priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/norcal-crop-top
 ---
 
 A stylish crop top designed for movement and regional pride.
