@@ -11,7 +11,7 @@ import { HomeHero } from '@/features/home/HomeHero';
 
 export default function Home() {
   return (
-    <Box as="main" paddingBottom="safe-bottom">
+    <Box paddingBottom="safe-bottom">
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."

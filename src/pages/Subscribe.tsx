@@ -5,7 +5,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 
 export default function Subscribe() {
   return (
-    <Box as="main" minHeight="[calc(100vh-64px)]">
+    <Box minHeight="[calc(100vh-64px)]">
       <SEO
         title="Subscribe"
         description="Join the BoomTick mailing list for the latest West Coast Swing training notes, travel guides, and gear reviews."
