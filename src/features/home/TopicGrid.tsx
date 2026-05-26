@@ -39,11 +39,11 @@ export function TopicGrid() {
             key={label}
             as={NavLink}
             to={href}
-            gap={2.5}
-            padding={5}
+            gap={2}
+            padding={6}
             border
             radius="lg"
-            className="group min-h-[135px] md:h-[140px] transition-all duration-200 hover:border-accent/40 hover:bg-surface/60"
+            className="group min-h-[145px] md:h-[150px] transition-all duration-200 hover:border-accent/40 hover:bg-surface/60"
           >
             {/* Icon — exactly 32px container */}
             <Box className="w-8 h-8 flex items-center justify-center rounded-md bg-accent/10">
