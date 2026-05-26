@@ -4,7 +4,7 @@ import { AffiliateLink } from '@/types';
 
 function InspirationTile({ link }: { link: AffiliateLink }) {
   return (
-    <Box
+    <Stack
       as="a"
       href={link.url}
       target="_blank"
@@ -13,7 +13,7 @@ function InspirationTile({ link }: { link: AffiliateLink }) {
       overflow="hidden"
       surface="surface-alt"
       border
-      className="group/tile hover:border-accent/40 transition-all duration-300 flex flex-col"
+      className="group/tile hover:border-accent/40 transition-all duration-300"
     >
       <Box aspect="square" overflow="hidden" className="bg-bg/50">
         {link.image ? (
@@ -36,7 +36,7 @@ function InspirationTile({ link }: { link: AffiliateLink }) {
           {link.name}
         </Text>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
 
