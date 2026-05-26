@@ -40,26 +40,6 @@ theme:
     - "#008026"
     - "#004DFF"
     - "#750787"
-  outfitIds:
-    - "rainbow-fringe-dress"
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
-    - "love-neon-follow-shirt"
-    - "love-neon-lead-shirt"
-    - "war-eagle-shirt"
-    - "love-neon-switch-shirt"
-    - "norcal-bear-tank"
-    - "norcal-crop-top"
-    - "norcal-gate-crop-hoodie"
-    - "norcal-pride-gate-shirt"
-    - "norcal-pride-bear-shirt"
-    - "love-unisex-shirt"
-    - "norcal-bestcal-tshirt"
-  accessoryIds:
-    - "rainbow-earrings"
-    - "pride-sunglasses"
-    - "rainbow-fan"
-
 gear:
   outfitDescription: >
     Curated picks from the NorCal BestCal collection, featuring our 2026

@@ -46,8 +46,6 @@ interface ThemeSpotlightProps {
   label?: string;
   description: string;
   image?: string;
-  outfits?: AffiliateLink[];
-  accessories?: AffiliateLink[];
   colors?: string[];
   accentColor?: string;
 }
@@ -58,8 +56,6 @@ export function ThemeSpotlight({
   label,
   description,
   image,
-  outfits = [],
-  accessories = [],
   colors = [],
   accentColor = 'var(--raw-color-accent)',
   hasMoreOutfits = false,

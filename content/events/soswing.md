@@ -25,6 +25,7 @@ theme:
   description: "Themes vary by year—past favorites include Glow, Tin, and Ring-themed nights. Check the official site for this year's specific call, but expect something playful and creative."
   outfitIds:
     - "ombre-dance-dress"
+  outfitDescription: "Flowy, comfortable styles for the welcoming Ashland community."
   accessoryIds:
     - "rave-fan"
     - "neck-fan"

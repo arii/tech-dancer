@@ -96,7 +96,7 @@ export default function EventGuide() {
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }} paddingTop={8}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
-              {event.theme && (
+              {event.themeName && (
                 <ThemeSpotlight
                   id="theme"
                   title={event.theme.name}

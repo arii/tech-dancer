@@ -28,12 +28,6 @@ theme:
     - "#6366f1"
     - "#a855f7"
     - "#ec4899"
-  outfitIds:
-    - "sequin-bomber-jacket"
-    - "rainbow-fringe-dress"
-  accessoryIds:
-    - "rave-fan"
-    - "pride-sunglasses"
 
 gear:
   outfitDescription: "Metallic and neon pieces for the Saturday night space social."

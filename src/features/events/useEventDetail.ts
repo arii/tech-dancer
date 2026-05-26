@@ -34,28 +34,28 @@ export function getGearSections(gear?: Event["gear"], excludeLabels: string[] = 
   return [
     {
       label: "Outfits",
-      description: gear.outfitDescription,
-      items: resolveAffiliateLinks(gear.outfitIds),
+      description: event.gearOutfitDescription,
+      items: resolveAffiliateLinks(outfitIds),
     },
     {
       label: "Accessories",
-      description: gear.accessoryDescription,
-      items: resolveAffiliateLinks(gear.accessoryIds),
+      description: event.gearAccessoryDescription,
+      items: resolveAffiliateLinks(accessoryIds),
     },
     {
       label: "Shoes & Essentials",
-      description: [gear.shoeDescription, gear.essentialDescription]
+      description: [event.gearShoeDescription, event.gearEssentialDescription]
         .filter(Boolean)
         .join(" "),
       items: resolveAffiliateLinks([
-        ...(gear.shoeIds ?? []),
-        ...(gear.essentialIds ?? []),
+        ...(event.gearShoeIds ?? []),
+        ...(event.gearEssentialIds ?? []),
       ]),
     },
     {
       label: "Travel Extras",
-      description: gear.travelDescription,
-      items: resolveAffiliateLinks(gear.travelIds),
+      description: event.gearTravelDescription,
+      items: resolveAffiliateLinks(event.gearTravelIds),
     },
   ].filter((s) => s.items.length > 0 && !excludeLabels.includes(s.label));
 }
@@ -173,8 +173,6 @@ export function useEventDetail() {
     isLoading,
     isError,
     error,
-    themeOutfits,
-    themeAccessories,
     gearSections,
     compactThemeOutfits,
     compactThemeAccessories,
