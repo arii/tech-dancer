@@ -19,34 +19,32 @@ export function FeaturedGuidePanel() {
       display={{ base: 'none', lg: 'flex' }}
       direction="col"
       justify="end"
-      padding={8}
       position="relative"
       overflow="hidden"
       border
-      surface="alt"
       radius="lg"
-      className="group min-h-[380px]"
+      className="group self-stretch"
     >
-      {/* Background image */}
-      <Box
-        position="absolute"
-        inset
-        className="bg-cover bg-center object-center opacity-30 transition-opacity duration-500 group-hover:opacity-45"
-        style={{ backgroundImage: `url(${ASSET_PREFIX}${FEATURED.image})` }}
+      {/* Background image — fills the column height naturally */}
+      <img
+        src={`${ASSET_PREFIX}${FEATURED.image}`}
+        alt={FEATURED.title}
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-40 transition-opacity duration-500 group-hover:opacity-55"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility */}
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg via-bg/80 to-transparent"
+        className="bg-gradient-to-t from-bg via-bg/70 to-transparent"
         aria-hidden="true"
       />
-      <Stack gap={3} position="relative" zIndex={10}>
+      {/* Content pinned to bottom */}
+      <Stack gap={2} position="relative" zIndex={10} padding={6}>
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
-        <Text variant="headline" size="2xl" weight="font-black" color="main" leading="tight">
+        <Text variant="headline" size="xl" weight="font-black" color="main" leading="tight">
           {FEATURED.title}
         </Text>
         <Text variant="body" size="sm" color="dim">
@@ -57,7 +55,7 @@ export function FeaturedGuidePanel() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="mt-2 group-hover:underline"
+          className="mt-1 group-hover:underline"
         >
           Read the guide →
         </Text>
