@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const tools = [
   { name: 'UX Auditor', path: '/ux-auditor' },
   { name: 'Blog Drafter', path: '/research/blog-drafter' },
-  { name: 'WCS Scraper', path: '/research/wcs-parquet-pipeline' },
+  { name: 'WCS Scraper', path: '/research/wcs-scraper' },
   { name: 'Event Reminders', path: '/research/wsdc-event-reminders' },
 ];
 
