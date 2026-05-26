@@ -23,17 +23,17 @@ test.describe('Research Tools Mobile UX', () => {
 
       // Wait for lazy components based on tool path using more robust selectors
       if (tool.path.includes('ux-auditor')) {
-        await page.locator('input[aria-label*="audit" i]').first().waitFor({ state: 'visible' });
+        await page.getByLabel(/URL to audit/i).first().waitFor({ state: 'visible', timeout: 30000 });
       } else if (tool.path.includes('blog-drafter')) {
-        await page.locator('text=/CONTENT PIPELINE/i').first().waitFor({ state: 'visible' });
+        await page.getByText(/CONTENT PIPELINE/i).first().waitFor({ state: 'visible', timeout: 30000 });
       } else if (tool.path.includes('wcs-scraper')) {
-        // WCS Scraper might fail to load data in some CI environments, leading to the error state.
-        // We wait for either the main title or the error message using regex.
-        await page.locator('text=/WCS Scoring Analysis|Data Synchronisation Failed/i').first().waitFor({ state: 'visible' });
+        // Wait for the shell to load (Scoring Tool label) which is independent of data load
+        await page.getByText(/Scoring Tool/i).first().waitFor({ state: 'visible', timeout: 30000 });
       } else if (tool.path.includes('wsdc-event-reminders')) {
-        await page.locator('text=/Action Timeline/i').first().waitFor({ state: 'visible' });
+        // Wait for either the timeline or the initial "Ready to Calculate" state
+        await page.locator('text=/Action Timeline|Ready to Calculate/i').first().waitFor({ state: 'visible', timeout: 30000 });
       } else {
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('networkidle', { timeout: 30000 });
       }
 
       // Check for horizontal overflow

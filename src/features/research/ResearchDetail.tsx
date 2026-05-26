@@ -35,12 +35,13 @@ export default function ResearchDetail() {
 
   const id = useMemo(() => {
     if (paramId) return paramId;
-    const parts = pathname.split('/').filter(Boolean);
-    const resIndex = parts.indexOf('research');
-    if (resIndex !== -1 && parts[resIndex + 1]) {
-      return parts[resIndex + 1];
+    const segments = pathname.split('/').filter(Boolean);
+    // Handle potential basename prefix by looking for segment after 'research'
+    const resIndex = segments.indexOf('research');
+    if (resIndex !== -1 && segments[resIndex + 1]) {
+      return segments[resIndex + 1];
     }
-    return null;
+    return segments[segments.length - 1] || null;
   }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
@@ -78,8 +79,14 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // Check if tool.canonicalPath exists and is different from the current path
-  if (tool?.canonicalPath && pathname !== tool.canonicalPath && pathname.startsWith('/research/')) {
+  // Check if tool.canonicalPath exists and is different from the current path.
+  // We use a more robust check that handles potential basename prefix variations.
+  const isResearchPath = useMemo(() => {
+    const segments = pathname.split('/').filter(Boolean);
+    return segments.includes('research');
+  }, [pathname]);
+
+  if (tool?.canonicalPath && pathname !== tool.canonicalPath && isResearchPath) {
     return <Navigate to={tool.canonicalPath} replace />;
   }
 
