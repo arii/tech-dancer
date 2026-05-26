@@ -387,5 +387,13 @@
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
     "image": "/assets/gear/travel-steamer.jpg"
+  },
+  "sports-crop-tops": {
+    "id": "sports-crop-tops",
+    "name": "Sports Crop Tank Tops",
+    "url": "https://amazon.com",
+    "category": "fashion",
+    "description": "Comfortable and stylish crop tops for dancing.",
+    "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.jpg"
   }
 }
