@@ -23,6 +23,10 @@ whyAttending: >
 theme:
   name: "Classic San Francisco"
   label: "Flagship Theme"
+  description: >
+    Lean into the sleek, sophisticated vibe of the Bay Area's flagship event.
+    Think sharp lines, elegant silhouettes, and performance fabrics that handle
+    the heat of a packed Hyatt ballroom.
   outfitIds:
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
@@ -31,19 +35,24 @@ theme:
     - "rave-fan"
 
 gear:
+  outfitDescription: "Editorial-ready dance wear for the main stage."
   outfitIds:
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
+  accessoryDescription: "Essential tools for staying cool under stage lights."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+  shoeDescription: "The best soles for the Hyatt's massive wooden floor."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  essentialDescription: "Must-haves for a four-day marathon."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "shoe-brush"
+  travelDescription: "Packing smarter for the cross-bay trek."
   travelIds:
     - "compression-cubes"
     - "portable-charger"

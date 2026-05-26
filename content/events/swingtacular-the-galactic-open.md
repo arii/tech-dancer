@@ -36,18 +36,23 @@ theme:
     - "pride-sunglasses"
 
 gear:
+  outfitDescription: "Metallic and neon pieces for the Saturday night space social."
   outfitIds:
     - "sequin-bomber-jacket"
+  accessoryDescription: "Glow-ready gear for high-production dance floors."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+  shoeDescription: "Trusted footwear for Burlingame's fast floors."
   shoeIds:
     - "bloch-grecian"
     - "dance-socks"
+  essentialDescription: "Recovery tools for non-stop social dancing."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "shoe-brush"
+  travelDescription: "Minimalist packing for the SFO airport hotel stay."
   travelIds:
     - "compression-cubes"
     - "portable-charger"

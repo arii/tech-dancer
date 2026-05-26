@@ -23,6 +23,10 @@ whyAttending: >
 theme:
   name: "Texas Spirit"
   label: "Wild West Theme"
+  description: >
+    Western flair meets contemporary dance aesthetics. Think bold fringe,
+    rugged-but-breathable fabrics, and statement pieces that command
+    the Texas dance floor.
   outfitIds:
     - "sequin-bomber-jacket"
     - "rainbow-fringe-dress"
@@ -30,17 +34,22 @@ theme:
     - "rave-fan"
 
 gear:
+  outfitDescription: "Durable, high-performance wear for high-stakes competition."
   outfitIds:
     - "ombre-dance-dress"
+  accessoryDescription: "Cooling essentials for the Dallas heat."
   accessoryIds:
     - "electric-fan"
+  shoeDescription: "Footwear tuned for Dallas's premier competition floor."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  essentialDescription: "Hydration and maintenance for a grueling schedule."
   essentialIds:
     - "liquid-iv"
     - "shoe-brush"
     - "loop-experience"
+  travelDescription: "Flight-ready packing for the DFW airport arrival."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
