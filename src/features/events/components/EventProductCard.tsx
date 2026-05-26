@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { detectContentType, getCtaLabel, getSourceBadge } from '@/lib/contentTypeDetector';
 import type { AffiliateLink } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +20,10 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
     ? { href, rel: 'noopener noreferrer sponsored', target: '_blank' }
     : { to: href };
 
+  const contentType = detectContentType(product);
+  const ctaLabel = getCtaLabel(contentType, isExternal);
+  const sourceBadge = getSourceBadge(contentType);
+
   return (
     <Box
       as="article"
@@ -28,7 +33,7 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
       padding={4}
       height="full"
       maxHeight={64}
-      className="overflow-hidden transition-colors hover:border-line-hover"
+      className="overflow-hidden transition-colors hover:border-line-hover relative"
     >
       <Stack direction={{ base: 'row', md: 'col' }} gap={4} height="full">
         <Box
@@ -38,6 +43,7 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
           overflow="hidden"
           shrink={false}
           surface="muted"
+          className="relative"
         >
           {product.image ? (
             <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="lazy" />
@@ -48,6 +54,20 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
               </Text>
             </Box>
           )}
+          {/* Source badge on image thumbnail */}
+          <Box
+            position="absolute"
+            bottom={1}
+            left={1}
+            paddingX={1.5}
+            paddingY={0.5}
+            radius="sm"
+            className="bg-bg/70 backdrop-blur-sm"
+          >
+            <Text size="xs" weight="font-medium" color="dim" className="whitespace-nowrap">
+              {sourceBadge}
+            </Text>
+          </Box>
         </Box>
 
         <Stack gap={3} height="full" flex={1} justify="between" minWidth="0">
@@ -76,7 +96,7 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
             className={cn(!isExternal && 'hover:underline')}
             {...ctaProps}
           >
-            View pick
+            {ctaLabel}
           </Text>
         </Stack>
       </Stack>
