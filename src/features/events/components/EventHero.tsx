@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, ComponentType } from 'react';
 import { motion } from 'motion/react';
 import { MapPin, Calendar, Palette, Building2, Target, Bell, Package } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -20,7 +20,7 @@ interface EventHeroProps {
   id?: string;
 }
 
-function MetadataPill({ icon: Icon, label, value }: { icon: any, label: string, value: string }) {
+function MetadataPill({ icon: Icon, label, value }: { icon: ComponentType<{ className?: string }>, label: string, value: string }) {
   return (
     <Box
       display="flex"
