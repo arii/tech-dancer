@@ -9,6 +9,7 @@ import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
+import { BASE_URL } from '@/config/constants';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
@@ -108,8 +109,9 @@ export default function UXAuditor() {
   return (
     <Stack gap={8} width="full">
       <SEO
-        title="Visual UX Auditor"
+        title="Visual UX Auditor | Perception Telemetry System"
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
+        canonical={`${BASE_URL}/ux-auditor`}
       />
       <Stack
         direction={{ base: 'col', md: 'row' }}

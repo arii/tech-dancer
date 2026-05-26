@@ -17,7 +17,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'An autonomous, model-agnostic review agent (mergellama.py) analyzing code styles and patterns against strict repository contracts.',
     category: 'DevAI System',
     status: 'Active',
-    tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python']
+    tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
+    canonicalPath: '/research/gitops-pr-reviewer'
   },
   {
     id: 'scope-blast-radius',
@@ -26,10 +27,11 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'Calculates the semantic scope of code modifications (scope_check.py). Prevents downstream regressions before running heavy integrations.',
     category: 'DevAI System',
     status: 'Active',
-    tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping']
+    tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
+    canonicalPath: '/research/scope-blast-radius'
   },
   {
-    id: 'ux-perception-debug',
+    id: 'ux-auditor',
     title: 'Visual Regression & UX Auditor',
     subtitle: 'Perception Telemetry System',
     description: 'An automated testing framework mapping visual DOM shifts, Lighthouse scores, and Playwright screenshots to detect UI regression.',
@@ -39,13 +41,14 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     canonicalPath: '/ux-auditor'
   },
   {
-    id: 'wcs-parquet-pipeline',
+    id: 'wcs-scraper',
     title: 'High-Scale Telemetry Ingestion ETL',
     subtitle: 'Scraper-to-Parquet Pipeline',
     description: 'Engineered ETL pipeline scraping unstructured raw dance competitive records and outputting compressed Apache Parquet formats.',
     category: 'Data Engineering',
     status: 'Active',
-    tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines']
+    tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
+    canonicalPath: '/research/wcs-scraper'
   },
   {
     id: 'blog-drafter',
@@ -54,7 +57,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'Uses AI to help draft and refine blog posts with human feedback, ensuring brand voice consistency.',
     category: 'Content Tools',
     status: 'Active',
-    tags: ['LLM', 'Content Generation', 'Productivity']
+    tags: ['LLM', 'Content Generation', 'Productivity'],
+    canonicalPath: '/research/blog-drafter'
   },
   {
     id: 'wsdc-event-reminders',
@@ -63,6 +67,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'Syncs important event dates and early-bird deadlines directly to your calendar via iCal generation.',
     category: 'Utility Tools',
     status: 'Active',
-    tags: ['Automation', 'Calendar', 'WCS']
+    tags: ['Automation', 'Calendar', 'WCS'],
+    canonicalPath: '/research/wsdc-event-reminders'
   }
 ];

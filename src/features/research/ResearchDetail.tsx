@@ -20,7 +20,7 @@ const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
-  'wcs-parquet-pipeline': WCSScraperTool,
+  'wcs-scraper': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
   'gitops-pr-reviewer': GitOpsReviewerTool,
   'scope-blast-radius': BlastRadiusTool,
@@ -76,9 +76,9 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // Check both paramId and tool.canonicalPath to support centralized config
-  if (paramId === 'ux-auditor' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
-    return <Navigate to={tool?.canonicalPath || "/ux-auditor"} replace />;
+  // Check if tool.canonicalPath exists and is different from the current path
+  if (tool?.canonicalPath && pathname !== tool.canonicalPath && pathname.startsWith('/research/')) {
+    return <Navigate to={tool.canonicalPath} replace />;
   }
 
   if (study) {
@@ -123,6 +123,7 @@ export default function ResearchDetail() {
         description={tool.description}
         type="website"
         schema={structuredData}
+        canonical={tool.canonicalPath ? `${BASE_URL}${tool.canonicalPath}` : undefined}
       />
       <Stack gap={12}>
         <Box 
@@ -139,7 +140,7 @@ export default function ResearchDetail() {
           <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
         </Box>
 
-        <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
+        <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
           <Stack gap={12}>
             {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
               <Suspense fallback={
