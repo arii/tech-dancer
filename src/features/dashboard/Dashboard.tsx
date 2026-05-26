@@ -30,7 +30,7 @@ export default function Home() {
             <Stack gap={1}>
               <Box width="full" display="flex" justify="between" align="end" direction={{ base: "col", sm: "row" }} gap={{ base: 3, sm: 0 }}>
                 <PageHeader
-                  label="Latest Updates"
+                  eyebrow="Latest Updates"
                   title="Recent Posts"
                   paddingBottom={0}
                   border="none"
@@ -107,7 +107,7 @@ export default function Home() {
 
           <Stack gap={8}>
             <SectionHeader
-              label="BOOMTICK STYLE"
+              eyebrow="BOOMTICK STYLE"
               title="Featured BoomTick merch"
               link={{ text: "Shop all merch", to: "/merch" }}
             />
