@@ -1,15 +1,15 @@
 ---
 type: event
 title: "Swingtacular: The Galactic Open"
-date: "2026-08-14"
-startDate: "2026-08-14"
+date: "2026-08-06"
+startDate: "2026-08-06"
 author: "Ariel Anders"
 category: "WSDC Registry Event"
 excerpt: "San Francisco event. Check for roommate pairings on the Facebook group early."
 location: "Hyatt Regency San Francisco Airport"
 city: "Burlingame, CA"
 region: "NorCal"
-schedule: "August 14 - 17, 2026"
+schedule: "August 6 - 9, 2026"
 url: "https://swingtacular.com"
 heroImage: "/assets/events/swingtacular-hero.svg"
 description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."
@@ -52,10 +52,10 @@ gear:
     - "portable-charger"
   travelDescription: "Organization for a busy international dance convention."
 
-earlyBirdDate: "2026-06-15"
-registrationDeadline: "2026-07-31"
-hotelCutoffDate: "2026-07-20"
-packingReminderDate: "2026-08-05"
+earlyBirdDate: ""
+registrationDeadline: ""
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
   - "boogie-by-the-bay"

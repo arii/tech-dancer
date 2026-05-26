@@ -9,7 +9,7 @@ excerpt: "The ultimate West Coast Swing party and competition weekend in Souther
 location: "Hyatt Regency Orange County"
 city: "Garden Grove, CA"
 region: "SoCal"
-schedule: "June 4 - 7, 2026"
+schedule: "June 4 - 8, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
 description: >
@@ -87,10 +87,10 @@ gear:
     - "mints"
   travelDescription: "Packing gear for a busy weekend near Disneyland."
 
-earlyBirdDate: "2026-02-24"
-registrationDeadline: "2026-06-03"
-hotelCutoffDate: "2026-05-12"
-packingReminderDate: "2026-05-25"
+earlyBirdDate: ""
+registrationDeadline: ""
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
   - "wild-wild-westie"
