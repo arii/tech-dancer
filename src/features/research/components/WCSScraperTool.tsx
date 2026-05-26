@@ -270,8 +270,8 @@ export function WCSScraperTool() {
       </Box>
 
       {/* Extraction & Impact Dashboard */}
-      <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden">
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
+      <Box padding={{ base: 4, md: 8 }} border radius="xl" surface="muted" className="relative overflow-hidden">
+        <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
           <Stack gap={6}>
             <Stack gap={2}>
               <Text variant="display" size="2xl" weight="font-black">Event Data</Text>
@@ -321,7 +321,7 @@ export function WCSScraperTool() {
       {isLoading ? (
         <Grid cols={{ base: 1, lg: 3 }} gap={8} align="start">
           <Stack gap={8} className="lg:col-span-2">
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+            <Grid cols={{ base: 1, md: 2 }} gap={{ base: 4, md: 8 }}>
               <Skeleton height={64} width="full" />
               <Skeleton height={64} width="full" />
             </Grid>
@@ -377,7 +377,7 @@ export function WCSScraperTool() {
 
           <Grid cols={{ base: 1, lg: 3 }} gap={8}>
             <Stack gap={8} className="lg:col-span-2">
-              <Grid cols={{ base: 1, md: 2 }} gap={8}>
+              <Grid cols={{ base: 1, md: 2 }} gap={{ base: 4, md: 8 }}>
                 <ScoreDistributionChart data={scoreDistribution} />
                 <AvgScoreTrendChart data={trendData} />
               </Grid>

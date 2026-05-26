@@ -32,23 +32,23 @@ This script installs and configures:
 
 | Variable | Required? | Purpose |
 |---|---|---|
-| `CODEX_GH_TOKEN` | **Recommended (preferred)** | Primary secret for Codex/Jules agent runs; setup maps it to `GH_TOKEN`/`GITHUB_TOKEN` for `gh` + dev-tools commands. |
+| `CODEX_GH_TOKEN` | **Recommended (preferred)** | Primary secret for Codex/Jules/Antigravity agent runs; setup maps it to `GH_TOKEN`/`GITHUB_TOKEN` for `gh` + dev-tools commands. |
 | `GITHUB_TOKEN` or `GH_TOKEN` | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
-| `JULES_API_KEY` | Optional | Enables `td_cli.py jules ...` cloud workflows. |
+| `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 | `OLLAMA_URL` | Optional | Override local Ollama endpoint (default shown by `snapshot.sh`). |
 | `OLLAMA_MODEL` | Optional | Override local Ollama model selection. |
 
 **Secret handling guidance**
-- GitHub Actions / agent runners: store `CODEX_GH_TOKEN` (preferred), plus `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
+- GitHub Actions / agent runners: store `CODEX_GH_TOKEN` (preferred), plus `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
 - Dev containers/local shells: export secrets before running setup/CLI, for example:
 
 ```bash
 export CODEX_GH_TOKEN="<token>"
 export GITHUB_REPOSITORY="owner/repo"
 # optional
-export JULES_API_KEY="<key>"
+export ANTIGRAVITY_API_KEY="<key>"
 export GEMINI_API_KEY="<key>"
 ```
 
@@ -65,7 +65,7 @@ export GEMINI_API_KEY="<key>"
 - `NODE_MAJOR` — override Node major used for apt installation (default `22`).
 
 
-### Non-Traditional Workflows (Deploy, Jules, Ollama)
+### Non-Traditional Workflows (Deploy, Antigravity, Jules, Ollama)
 
 After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
@@ -77,13 +77,13 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Pre-submit quality gate before push/merge:
   - `python3 dev-tools/td_cli.py gh pre-submit`
 
-#### 2) Jules Workflows
-- Required secret: `JULES_API_KEY`.
+#### 2) Antigravity / Jules Workflows
+- Required secret: `ANTIGRAVITY_API_KEY` or `JULES_API_KEY`.
 - Optional context env vars:
-  - `JULES_SOURCE_ID` (if your environment already knows the source mapping)
+  - `ANTIGRAVITY_SOURCE_ID` or `JULES_SOURCE_ID` (if your environment already knows the source mapping)
 - Typical commands:
-  - `python3 dev-tools/td_cli.py jules repair`
-  - `python3 dev-tools/td_cli.py jules repair --worktree`
+  - `python3 dev-tools/td_cli.py antigravity repair`
+  - `python3 dev-tools/td_cli.py antigravity repair --worktree`
 
 #### 3) Ollama Local Review Workflows
 - Optional local runtime vars:

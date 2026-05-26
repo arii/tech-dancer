@@ -120,5 +120,35 @@ class TestTDCliCrash(unittest.TestCase):
                     td_cli.handle_audit_pr(args)
                 self.assertIn(expected_msg, cm.exception.message)
 
+class TestOllamaSchemaConversion(unittest.TestCase):
+    def test_to_standard_schema(self):
+        from utils import to_standard_schema
+        gemini_schema = {
+            "type": "OBJECT",
+            "properties": {
+                "name": {"type": "STRING"},
+                "age": {"type": "INTEGER"},
+                "tags": {
+                    "type": "ARRAY",
+                    "items": {"type": "STRING"}
+                }
+            },
+            "required": ["name", "age"]
+        }
+        expected_schema = {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "age": {"type": "integer"},
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                }
+            },
+            "required": ["name", "age"]
+        }
+        self.assertEqual(to_standard_schema(gemini_schema), expected_schema)
+
 if __name__ == '__main__':
     unittest.main()
+

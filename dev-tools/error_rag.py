@@ -134,7 +134,12 @@ class ASTContextualizer:
 class RAGPipeline:
     """Coordinates extraction, lookup, and prompt construction."""
 
-    def __init__(self, knowledge_base_path=".jules/knowledge/errors.json"):
+    def __init__(self, knowledge_base_path=None):
+        if knowledge_base_path is None:
+            if os.path.exists(".antigravity/knowledge/errors.json"):
+                knowledge_base_path = ".antigravity/knowledge/errors.json"
+            else:
+                knowledge_base_path = ".jules/knowledge/errors.json"
         self.knowledge_base_path = knowledge_base_path
         self.knowledge_base = self._load_kb()
 

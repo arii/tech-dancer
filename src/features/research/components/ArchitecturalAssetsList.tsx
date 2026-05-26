@@ -4,6 +4,7 @@ import { FileCode, Terminal, LucideIcon } from 'lucide-react';
 export interface ArchitecturalAsset {
   path: string;
   label: string;
+  description?: string;
   icon?: LucideIcon;
 }
 
@@ -34,10 +35,23 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
         {assets.map((asset) => {
           const Icon = asset.icon || getIconForPath(asset.path);
           return (
-            <Box key={asset.path} display="flex" align="center" gap={3} padding={3} border radius="md" surface="surface">
-              <Icon size={16} className="text-accent" />
-              <Text variant="mono" size="xs">{asset.path}</Text>
-              <Text variant="mono" size="micro" color="dim" marginLeft="auto" opacity={0.6}>{asset.label}</Text>
+            <Box key={asset.path} border radius="md" surface="surface" padding={3}>
+              <Box display="flex" gap={3}>
+                <Box className="shrink-0" paddingTop={0.5}>
+                  <Icon size={16} className="text-accent" />
+                </Box>
+                <Stack gap={2} width="full">
+                  <Box display="flex" align="center" justify="between" width="full">
+                    <Text variant="mono" size="xs">{asset.path}</Text>
+                    <Text variant="mono" size="micro" color="dim" opacity={0.6}>{asset.label}</Text>
+                  </Box>
+                  {asset.description && (
+                    <Text variant="body" size="micro" color="dim">
+                      {asset.description}
+                    </Text>
+                  )}
+                </Stack>
+              </Box>
             </Box>
           );
         })}
