@@ -72,7 +72,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   }
 
   return (
-    <Stack gap={10} height="full">
+    <Stack gap={{ base: 6, md: 10 }} height="full">
       <Stack gap={4}>
         <Box display="flex" align="center" justify="between" width="full">
           <PageHeader
@@ -95,7 +95,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
 
         {/* Type Selector */}
-        <Grid cols={3} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+        <Grid cols={{ base: 1, sm: 3 }} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
           {types.map((type) => {
             const Icon = type.icon;
             const isActive = data.type === type.id;
@@ -136,7 +136,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
       </Stack>
 
-      <Grid cols={{ base: 1, md: 2 }} gap={12}>
+      <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
         {/* Form Column */}
         <Stack gap={8}>
           <Box border="b" paddingBottom={2} display="flex" justify="between" align="center">

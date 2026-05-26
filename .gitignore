@@ -83,3 +83,10 @@ pr_overlaps.txt
 workflow_overlaps.txt
 dev-tools/logs/reviews/*.md
 product-mockups/
+
+# Antigravity
+.antigravity/
+.antigravitycli/
+
+# Runtime audit reports
+.agent/workflows/ai-slop-audit-*.md
