@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Keep your suede soles clean and grippy."
-image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
+image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
 affiliateIds: ["shoe-brush"]
 tags: ["gear", "shoes"]
 rating: 5
