@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search, ArrowRight, Activity, Database, FileText,
+  ArrowRight, Activity, Database, FileText,
   Layout, Code2, ShieldCheck, Terminal, Cpu,
   GitBranch, Eye, Binary, Microscope
 } from 'lucide-react';
@@ -148,7 +148,16 @@ export default function ResearchAnalytics() {
           </Grid>
 
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
-            <Box padding={8} border radius="lg" className="bg-surface/50 border-dashed flex items-center justify-center text-center">
+            <Box
+              padding={8}
+              border
+              radius="lg"
+              display="flex"
+              align="center"
+              justify="center"
+              textAlign="center"
+              className="bg-surface/50 border-dashed"
+            >
               <Stack gap={4} align="center">
                 <Code2 className="w-8 h-8 text-accent opacity-50" />
                 <Stack gap={2}>
