@@ -26,7 +26,7 @@ describe('getAllRoutes', () => {
 
   it('should handle tool routes correctly', () => {
     const { tools } = getAllRoutes();
-    expect(tools).toContain('/research/wcs-scraper');
+    expect(tools).toContain('/research/pr-reviewer');
     expect(tools).toContain('/ux-auditor');
   });
 

@@ -86,7 +86,7 @@ export function getAllRoutes() {
   // 2. Dynamic research tool routes
   // Use canonicalPath if available to avoid duplicates (e.g. /ux-auditor vs /research/ux-auditor)
   const toolRoutes = RESEARCH_TOOLS.map(tool => ({
-    path: resolveCanonical(`/research/${tool.id}`, tool),
+    path: resolveCanonical(tool.route || `/research/${tool.id}`, tool),
     lastmod: getFileLastMod('src/config/research-tools.ts')
   }));
 
