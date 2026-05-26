@@ -36,10 +36,12 @@ export default function ResearchDetail() {
   const id = useMemo(() => {
     if (paramId) return paramId;
     const segments = pathname.split('/').filter(Boolean);
+    // Find the segment after 'research' to identify the tool
     const resIndex = segments.indexOf('research');
     if (resIndex !== -1 && segments[resIndex + 1]) {
       return segments[resIndex + 1];
     }
+    // Fallback to the last segment if we are in this component
     return segments[segments.length - 1] || null;
   }, [paramId, pathname]);
 
@@ -78,8 +80,10 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
+  // pathname is relative to basename in React Router 6/7.
   const isResearchPath = useMemo(() => {
-    return pathname.split('/').filter(Boolean).includes('research');
+    const segments = pathname.split('/').filter(Boolean);
+    return segments.includes('research');
   }, [pathname]);
 
   if (tool?.canonicalPath && pathname !== tool.canonicalPath && isResearchPath) {

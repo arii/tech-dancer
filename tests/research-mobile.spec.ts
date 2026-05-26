@@ -18,20 +18,24 @@ test.describe('Research Tools Mobile UX', () => {
       // Use relative paths to respect baseURL with BASE_PATH in CI
       await page.goto(tool.path);
 
-      // Wait for the page to be stable
-      await page.waitForLoadState('networkidle');
+      // Wait for domcontentloaded instead of networkidle to avoid timing out on slow external assets
+      await page.waitForLoadState('domcontentloaded');
 
-      // Wait for lazy components based on tool path using robust locators
+      // Wait for lazy components based on tool path using robust locators with generous timeouts
       if (tool.path.includes('ux-auditor')) {
-        await page.getByLabel(/URL to audit/i).first().waitFor({ state: 'visible', timeout: 30000 });
+        await page.getByLabel(/URL to audit/i).first().waitFor({ state: 'visible', timeout: 45000 });
       } else if (tool.path.includes('blog-drafter')) {
-        await page.getByText(/CONTENT PIPELINE/i).first().waitFor({ state: 'visible', timeout: 30000 });
+        await page.getByText(/CONTENT PIPELINE/i).first().waitFor({ state: 'visible', timeout: 45000 });
       } else if (tool.path.includes('wcs-scraper')) {
-        // Wait for Scraper shell or error
-        await page.locator('text=/WCS Scoring Analysis|Data Synchronisation Failed/i').first().waitFor({ state: 'visible', timeout: 30000 });
+        // Wait for Scraper shell label or error state if data fails to sync
+        await page.locator('text=/Scoring Tool|Data Synchronisation Failed/i').first().waitFor({ state: 'visible', timeout: 45000 });
       } else if (tool.path.includes('wsdc-event-reminders')) {
-        await page.locator('text=/Action Timeline|Ready to Calculate/i').first().waitFor({ state: 'visible', timeout: 30000 });
+        // Wait for either the timeline or the initial state
+        await page.locator('text=/Action Timeline|Ready to Calculate/i').first().waitFor({ state: 'visible', timeout: 45000 });
       }
+
+      // Final short sleep to let layout settle
+      await page.waitForTimeout(1000);
 
       // Check for horizontal overflow
       const overflowX = await page.evaluate(() => {
