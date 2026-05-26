@@ -9,8 +9,10 @@ test('navigation bar is visible and works', async ({ page }) => {
 
   // 2. Check z-index (computed style)
   const zIndex = await nav.evaluate((el) => window.getComputedStyle(el).zIndex);
+  expect(zIndex).toBe('130');
 
   const position = await nav.evaluate((el) => window.getComputedStyle(el).position);
+  expect(position).toBe('fixed');
 
   await expect(nav).toBeVisible();
 
