@@ -97,16 +97,28 @@ export function useEventDetail() {
   } = useMemo(() => {
     const allOutfits = resolveAffiliateLinks(event?.theme?.outfitIds);
     const allAccessories = resolveAffiliateLinks(event?.theme?.accessoryIds);
-    const allGearSections = getGearSections(event?.gear);
 
-    // Requirement: 15 visible product items max.
-    // 6 theme picks + 3 theme accessories + up to 6 gear items (across sections) = 15
     const themePickCount = MAX_THEME_OUTFITS;
     const themeAccessoryCount = MAX_THEME_ACCESSORIES;
+
+    const compactOutfits = allOutfits.slice(0, themePickCount);
+    const compactAccessories = allAccessories.slice(0, themeAccessoryCount);
+
+    // Track IDs already shown in the Theme Spotlight
+    const shownIds = new Set([
+      ...compactOutfits.map((i) => i.id),
+      ...compactAccessories.map((i) => i.id),
+    ]);
+
+    const allGearSections = getGearSections(event?.gear).map((section) => ({
+      ...section,
+      items: section.items.filter((item) => !shownIds.has(item.id)),
+    }));
+
+    // Requirement: 15 visible product items max.
+    // Use dynamic quota: 15 - (actual theme items) = remaining for gear
     const remainingGearQuota =
-      MAX_TOTAL_PRODUCTS -
-      (allOutfits.length > 0 ? themePickCount : 0) -
-      (allAccessories.length > 0 ? themeAccessoryCount : 0);
+      MAX_TOTAL_PRODUCTS - compactOutfits.length - compactAccessories.length;
 
     const compactGearResult = allGearSections.reduce(
       (acc, section) => {
@@ -138,8 +150,8 @@ export function useEventDetail() {
       themeOutfits: allOutfits,
       themeAccessories: allAccessories,
       gearSections: allGearSections,
-      compactThemeOutfits: allOutfits.slice(0, themePickCount),
-      compactThemeAccessories: allAccessories.slice(0, themeAccessoryCount),
+      compactThemeOutfits: compactOutfits,
+      compactThemeAccessories: compactAccessories,
       compactGearSections: compactGear,
       hasMoreThemeOutfits: allOutfits.length > themePickCount,
       hasMoreThemeAccessories: allAccessories.length > themeAccessoryCount,

@@ -61,6 +61,9 @@ theme:
     - "rainbow-fan"
 
 gear:
+  outfitDescription: >
+    Curated picks from the NorCal BestCal collection, featuring our 2026
+    signature Love and Rainbow designs for maximum impact on the floor.
   outfitIds:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"
@@ -76,18 +79,26 @@ gear:
     - "norcal-pride-bear-shirt"
     - "love-unisex-shirt"
     - "norcal-bestcal-tshirt"
+  accessoryDescription: >
+    Small details that make a big difference when the spotlights hit.
   accessoryIds:
     - "rainbow-earrings"
     - "pride-sunglasses"
     - "rainbow-fan"
+  shoeDescription: >
+    Reliable traction and support for Garden Grove's fast ballroom floors.
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  essentialDescription: >
+    Recovery and maintenance gear to keep you dancing until the sunrise sets.
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "liquid-iv"
     - "shoe-brush"
+  travelDescription: >
+    Pro packing tools to keep your rainbow wardrobe organized and wrinkle-free.
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
