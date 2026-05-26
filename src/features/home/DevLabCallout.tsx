@@ -8,11 +8,10 @@ export function DevLabCallout() {
     <Box
       border
       radius="lg"
-      padding={6}
-      className="flex h-full flex-col justify-between bg-surface-alt"
+      className="flex h-full flex-col justify-between bg-surface-alt p-5 lg:p-6"
     >
       <Stack gap={4}>
-        <Box padding={3} radius="md" className="w-fit bg-accent/10">
+        <Box padding={2} radius="md" className="w-fit bg-accent/10">
           <Terminal className="h-5 w-5 text-accent" />
         </Box>
         <Stack gap={2}>
@@ -25,7 +24,7 @@ export function DevLabCallout() {
           </Text>
         </Stack>
       </Stack>
-      <Box marginTop={6}>
+      <Box marginTop={5}>
         <Text
           as={NavLink}
           to="/research"

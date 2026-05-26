@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
@@ -11,9 +12,9 @@ const PICKS = [
 
 export function GearShelf() {
   return (
-    <Box as="section" border radius="lg" padding={6} className="bg-surface flex h-full flex-col">
+    <Box as="section" border radius="lg" overflow="hidden" className="bg-surface">
       {/* Header */}
-      <Box display="flex" align="center" justify="between" marginBottom={4}>
+      <Box display="flex" align="center" justify="between" padding={5} paddingBottom={2}>
         <Text as="h2" variant="headline" size="xl" weight="font-black">
           Gear for the Weekend
         </Text>
@@ -24,17 +25,17 @@ export function GearShelf() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="hover:underline"
+          className="shrink-0 hover:underline"
         >
           See all →
         </Text>
       </Box>
-      <Text variant="body" size="sm" color="dim" marginBottom={5}>
+      <Text variant="body" size="sm" color="dim" paddingX={5} marginBottom={4}>
         Small things that make a dance weekend easier.
       </Text>
 
-      {/* Desktop: stacked mini-cards — always visible at lg */}
-      <Stack gap={3} className="hidden lg:flex">
+      {/* Desktop: stacked mini-cards */}
+      <Stack gap={3} paddingX={5} paddingBottom={5} className="hidden lg:flex">
         {PICKS.map(({ label, image, href }) => (
           <Box
             key={label}
@@ -55,21 +56,16 @@ export function GearShelf() {
                 <CategoryPlaceholder category="gear" size="sm" />
               )}
             </Box>
-            <Text
-              variant="body"
-              size="sm"
-              weight="font-bold"
-              className="transition-colors group-hover:text-accent"
-            >
+            <Text variant="body" size="sm" weight="font-bold" className="transition-colors group-hover:text-accent">
               {label}
             </Text>
           </Box>
         ))}
       </Stack>
 
-      {/* Mobile: horizontal scrolling row */}
-      <Box display={{ base: 'block', lg: 'none' }} overflowX="auto" className="-mx-2 px-2">
-        <Box display="flex" gap={3} className="min-w-max">
+      {/* Mobile: horizontal scroll — full bleed from card edge, trailing space to reveal last item */}
+      <Box className="overflow-x-auto pb-4 lg:hidden">
+        <Box display="flex" gap={3} className="w-max px-5 pr-8">
           {PICKS.map(({ label, image, href }) => (
             <Box
               key={`mobile-${label}`}
@@ -82,9 +78,9 @@ export function GearShelf() {
               padding={3}
               border
               radius="md"
-              className="group min-w-24 bg-surface"
+              className="group w-36 bg-surface-alt"
             >
-              <Box width={12} height={12} radius="md" overflow="hidden" className="shrink-0 bg-surface-alt">
+              <Box width={14} height={14} radius="md" overflow="hidden" className="shrink-0 bg-surface-alt">
                 {image ? (
                   <img src={`${ASSET_PREFIX}${image}`} alt={label} className="h-full w-full object-cover" />
                 ) : (

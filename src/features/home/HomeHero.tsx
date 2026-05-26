@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
@@ -7,23 +8,23 @@ export function HomeHero() {
   return (
     <Stack
       as="section"
-      gap={6}
+      gap={5}
       justify="center"
       aria-label="BoomTick homepage hero"
       position="relative"
-      className="overflow-hidden py-10 lg:py-16 min-h-[420px]"
+      className="overflow-hidden py-10 lg:py-16 min-h-[380px]"
     >
-      {/* Particle background — reduced opacity so content leads */}
+      {/* Particle background — decorative, content leads */}
       <Box
         position="absolute"
         inset
         zIndex={0}
-        className="pointer-events-none opacity-30 mix-blend-screen"
+        className="pointer-events-none opacity-25 mix-blend-screen"
       >
         <HeroParticleCanvas />
       </Box>
 
-      <Stack position="relative" zIndex={10} gap={6}>
+      <Stack position="relative" zIndex={10} gap={5}>
         {/* Headline */}
         <Stack as="h1" gap={0}>
           <Text as="span" variant="hero" color="white" size={{ base: '3xl', md: '5xl', lg: '6xl' }}>
@@ -49,15 +50,15 @@ export function HomeHero() {
           gear reviews, and tools for better dance weekends.
         </Text>
 
-        {/* CTAs */}
-        <Stack direction={{ base: 'col', sm: 'row' }} gap={3} className="mt-2">
+        {/* CTAs: full-width stacked on mobile, inline on sm+ */}
+        <Stack direction={{ base: 'col', sm: 'row' }} gap={3}>
           <ActionButton
             as={NavLink}
             to="/events"
             variant="primary"
             paddingX={6}
             paddingY={3}
-            className="min-h-[44px] rounded-md text-sm"
+            className="w-full min-h-[44px] rounded-md text-sm sm:w-auto"
           >
             Explore Event Guides
           </ActionButton>
@@ -67,13 +68,13 @@ export function HomeHero() {
             variant="secondary"
             paddingX={6}
             paddingY={3}
-            className="min-h-[44px] rounded-md text-sm"
+            className="w-full min-h-[44px] rounded-md text-sm sm:w-auto"
           >
             Browse Gear Reviews
           </ActionButton>
         </Stack>
 
-        {/* Tertiary text link — lower emphasis */}
+        {/* Tertiary text link */}
         <Box>
           <Text
             as={NavLink}

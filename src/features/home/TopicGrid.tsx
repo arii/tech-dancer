@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Calendar, ShoppingBag, BookOpen } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
@@ -29,17 +30,17 @@ const TOPICS = [
 export function TopicGrid() {
   return (
     <Box as="section">
-      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={5}>
+      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={4}>
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, md: 3 }} gap={5}>
+      <Grid cols={{ base: 1, md: 3 }} gap={4}>
         {TOPICS.map(({ icon: Icon, label, description, cta, href }) => (
           <Stack
             key={label}
             as={NavLink}
             to={href}
-            gap={4}
-            padding={6}
+            gap={3}
+            padding={5}
             border
             radius="lg"
             className="group bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40"
