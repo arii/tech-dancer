@@ -84,7 +84,7 @@ export function HomeHero() {
             color="dim"
             className="underline underline-offset-4 transition-colors hover:text-accent"
           >
-            Start with practical training notes →
+            Start with practical blog posts →
           </Text>
         </Box>
       </Stack>
