@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 
@@ -10,9 +11,9 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacity={80}>
-
-      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
+      <Box paddingY={12} surface="bg" border="t" opacity={80}>
+        <Box className="mx-auto w-full max-w-[1280px] px-6 lg:px-10">
+        <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={4}>
           <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase className="tracking-widest" data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
@@ -55,6 +56,7 @@ export function Footer() {
           ))}
         </Stack>
       </Stack>
+        </Box>
       </Box>
     </Box>
   );

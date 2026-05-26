@@ -5,34 +5,84 @@ import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
 
 export function HomeHero() {
   return (
-    <Stack as="section" gap={6} justify="center" aria-label="BoomTick homepage hero" position="relative" className="overflow-hidden p-6 lg:p-12 -mx-6 lg:-mx-12 min-h-[400px]">
-      <Box position="absolute" inset zIndex={0} className="pointer-events-none opacity-50 mix-blend-screen">
+    <Stack
+      as="section"
+      gap={6}
+      justify="center"
+      aria-label="BoomTick homepage hero"
+      position="relative"
+      className="overflow-hidden py-10 lg:py-16 min-h-[420px]"
+    >
+      {/* Particle background — reduced opacity so content leads */}
+      <Box
+        position="absolute"
+        inset
+        zIndex={0}
+        className="pointer-events-none opacity-30 mix-blend-screen"
+      >
         <HeroParticleCanvas />
       </Box>
+
       <Stack position="relative" zIndex={10} gap={6}>
-        <Stack as="h1" gap={1}>
-          <Text as="span" variant="hero" color="white" size={{ base: '3xl', md: '5xl' }}>
-          Built for dancers.
-        </Text>
-        <Text as="span" variant="hero" size={{ base: '4xl', md: '6xl' }}>
-          <span className="hero-accent-color">Train smarter.</span>
-        </Text>
-        <Text as="span" variant="hero" color="white" size={{ base: '4xl', md: '6xl' }}>
-          Travel better.
-        </Text>
-      </Stack>
+        {/* Headline */}
+        <Stack as="h1" gap={0}>
+          <Text as="span" variant="hero" color="white" size={{ base: '3xl', md: '5xl', lg: '6xl' }}>
+            Built for dancers.
+          </Text>
+          <Text as="span" variant="hero" size={{ base: '4xl', md: '5xl', lg: '7xl' }}>
+            <span className="hero-accent-color">Train smarter.</span>
+          </Text>
+          <Text as="span" variant="hero" color="white" size={{ base: '4xl', md: '5xl', lg: '7xl' }}>
+            Travel better.
+          </Text>
+        </Stack>
 
-      <Text as="p" variant="body" size={{ base: 'base', md: 'lg' }} color="dim" maxWidth="2xl">
-        Practical guides for West Coast Swing dancers — training notes, event travel tips, gear reviews, and tools for better dance weekends.
-      </Text>
+        {/* Tagline */}
+        <Text
+          as="p"
+          variant="body"
+          size={{ base: 'base', md: 'lg' }}
+          color="dim"
+          className="max-w-[600px] leading-relaxed"
+        >
+          Practical guides for West Coast Swing dancers — training notes, event travel tips,
+          gear reviews, and tools for better dance weekends.
+        </Text>
 
-      <Stack direction={{ base: 'col', sm: 'row' }} gap={3}>
-        <ActionButton as={NavLink} to="/events" variant="primary">Explore Event Guides</ActionButton>
-        <ActionButton as={NavLink} to="/gear" variant="secondary">Browse Gear Reviews</ActionButton>
-      </Stack>
+        {/* CTAs */}
+        <Stack direction={{ base: 'col', sm: 'row' }} gap={3} className="mt-2">
+          <ActionButton
+            as={NavLink}
+            to="/events"
+            variant="primary"
+            paddingX={6}
+            paddingY={3}
+            className="min-h-[44px] rounded-md text-sm"
+          >
+            Explore Event Guides
+          </ActionButton>
+          <ActionButton
+            as={NavLink}
+            to="/gear"
+            variant="secondary"
+            paddingX={6}
+            paddingY={3}
+            className="min-h-[44px] rounded-md text-sm"
+          >
+            Browse Gear Reviews
+          </ActionButton>
+        </Stack>
 
+        {/* Tertiary text link — lower emphasis */}
         <Box>
-          <Text as={NavLink} to="/blog" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent">
+          <Text
+            as={NavLink}
+            to="/blog"
+            variant="mono"
+            size="xs"
+            color="dim"
+            className="underline underline-offset-4 transition-colors hover:text-accent"
+          >
             Start with practical training notes →
           </Text>
         </Box>

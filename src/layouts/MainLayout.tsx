@@ -55,19 +55,19 @@ export function MainLayout({ children }: { children: ReactNode }) {
           ref={scrollRef}
           flex={1}
           position="relative"
-          paddingTop={{ base: 20, lg: 20 }}
+          paddingTop={{ base: 16, lg: 16 }}
           maxWidth="full"
           width="full"
           surface="bg"
           direction="col"
         >
           <Stack
-            paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}
-            paddingTop={{ base: 16, md: 12 }}
+            paddingX={{ base: 4, md: 6, lg: 10 }}
+            paddingTop={{ base: 8, md: 6 }}
             paddingBottom={{ base: 28, md: 12 }}
             flex={1}
             direction="col"
-            marginX={{ base: "auto", lg: 0 }}
+            marginX="auto"
             maxWidth="7xl"
             width="full"
           >

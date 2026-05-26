@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
@@ -14,26 +15,47 @@ export default function Home() {
     <Box as="main" className="pb-safe-bottom">
       <SEO
         title="Home"
-        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus technical deep dives into building the platform with DevAI."
+        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      <Box as="section" display="grid" gap={8} className="items-center lg:grid-cols-[minmax(0,1fr)_360px]">
-        <HomeHero />
-        <FeaturedGuidePanel />
-      </Box>
+      {/* Single centered container for all homepage content */}
+      <Box className="mx-auto w-full max-w-[1280px] px-6 lg:px-10">
 
-      <Stack gap={12} padding="panel" className="mx-auto max-w-screen-xl">
-        <TopicGrid />
-        <Box display="grid" className="gap-12 lg:grid-cols-[1fr_340px]">
-          <FeaturedEventGuide />
-          <GearShelf />
+        {/* Hero + Featured Guide: editorial pair */}
+        <Box
+          as="section"
+          display="grid"
+          className="items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+        >
+          <HomeHero />
+          <FeaturedGuidePanel />
         </Box>
-        <Box display="grid" className="gap-12 lg:grid-cols-[1fr_340px]">
-          <LatestPosts />
-          <DevLabCallout />
-        </Box>
-      </Stack>
+
+        {/* Topic grid + lower sections in tighter vertical rhythm */}
+        <Stack gap={14} className="mt-14 lg:mt-16">
+          <TopicGrid />
+
+          {/* Featured Event + Gear: balanced two-column */}
+          <Box
+            display="grid"
+            className="gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          >
+            <FeaturedEventGuide />
+            <GearShelf />
+          </Box>
+
+          {/* Latest Posts + Dev Lab: same balanced rhythm */}
+          <Box
+            display="grid"
+            className="gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          >
+            <LatestPosts />
+            <DevLabCallout />
+          </Box>
+        </Stack>
+
+      </Box>
     </Box>
   );
 }

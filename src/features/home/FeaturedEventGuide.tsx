@@ -13,17 +13,86 @@ export function FeaturedEventGuide() {
 
   return (
     <Box as="section">
-      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={6}>Featured Event Guide</Text>
-      <Box display="flex" gap={5} border radius="lg" overflow="hidden" className="bg-surface">
-        <Box width={32} shrink={0} position="relative" display={{ base: 'none', sm: 'block' }}><img src={event.heroImage} alt={event.title} className="h-full w-full object-cover" /></Box>
-        <Stack gap={3} padding={6} flex justify="between">
+      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={5}>
+        Featured Event Guide
+      </Text>
+      <Box
+        display="flex"
+        gap={0}
+        border
+        radius="lg"
+        overflow="hidden"
+        className="bg-surface"
+      >
+        {/* Image — intentional crop, no embedded text artifacts */}
+        <Box
+          className="hidden w-40 shrink-0 sm:block lg:w-52"
+          position="relative"
+        >
+          <img
+            src={event.heroImage}
+            alt={event.title}
+            className="h-full w-full object-cover object-center"
+          />
+          {/* Gradient to soften any embedded text in image */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-surface/30" aria-hidden="true" />
+        </Box>
+
+        {/* Content */}
+        <Stack gap={4} padding={6} flex justify="between" className="min-h-[200px]">
           <Stack gap={2}>
-            <Box display="flex" align="center" gap={2}><MapPin className="h-3.5 w-3.5 text-accent" /><Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>{event.location}</Text></Box>
-            <Text variant="headline" size="xl" weight="font-black" leading="tight">{event.title}</Text>
-            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">{event.excerpt}</Text>
+            <Box display="flex" align="center" gap={2}>
+              <MapPin className="h-3.5 w-3.5 text-accent" />
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
+                {event.location}
+              </Text>
+            </Box>
+            <Text variant="headline" size="xl" weight="font-black" leading="tight">
+              {event.title}
+            </Text>
+            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+              {event.excerpt}
+            </Text>
           </Stack>
-          <Box display="flex" align="center" justify="between"><Text as={NavLink} to={`/events/${event.slug}`} variant="mono" size="xs" color="accent" weight="font-bold" className="hover:underline">Read the guide →</Text>
-            <Box display="flex" gap={2}><Box as="button" onClick={() => setIndex((i) => Math.max(0, i - 1))} padding={2} border radius="sm" className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30" disabled={index === 0} aria-label="Previous event"><ChevronLeft className="h-4 w-4" /></Box><Box as="button" onClick={() => setIndex((i) => Math.min(featured.length - 1, i + 1))} padding={2} border radius="sm" className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30" disabled={index === featured.length - 1} aria-label="Next event"><ChevronRight className="h-4 w-4" /></Box></Box>
+
+          <Box display="flex" align="center" justify="between">
+            <Text
+              as={NavLink}
+              to={`/events/${event.slug}`}
+              variant="mono"
+              size="xs"
+              color="accent"
+              weight="font-bold"
+              className="hover:underline"
+            >
+              Read the guide →
+            </Text>
+            <Box display="flex" gap={2}>
+              <Box
+                as="button"
+                onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                padding={2}
+                border
+                radius="sm"
+                className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                disabled={index === 0}
+                aria-label="Previous event"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Box>
+              <Box
+                as="button"
+                onClick={() => setIndex((i) => Math.min(featured.length - 1, i + 1))}
+                padding={2}
+                border
+                radius="sm"
+                className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                disabled={index === featured.length - 1}
+                aria-label="Next event"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Box>
+            </Box>
           </Box>
         </Stack>
       </Box>
