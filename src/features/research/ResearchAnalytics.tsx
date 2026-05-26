@@ -9,79 +9,80 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
+import { ResearchTool } from '@/config/research-tools';
+
+const ToolCard = ({ tool }: { tool: ResearchTool | undefined }) => {
+  const navigate = useNavigate();
+  if (!tool) return null;
+
+  return (
+    <Stack
+      as="button"
+      onClick={() => navigate(tool.canonicalPath || tool.route || `/research/${tool.id}`)}
+      padding={6}
+      gap={4}
+      height="full"
+      align="start"
+      textAlign="left"
+      className={cardVariants({ interactive: true })}
+    >
+      <Stack gap={4} width="full">
+        <Box display="flex" justify="between" align="start" width="full">
+          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
+            <Icon
+              icon={
+                tool.id.includes('ux') ? Layout :
+                tool.id.includes('pr') ? ShieldCheck :
+                tool.id.includes('scope') ? GitBranch :
+                tool.id.includes('wcs') ? Database : Activity
+              }
+              size="md"
+              color="dim"
+            />
+          </Box>
+          <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
+            {tool.status}
+          </Text>
+        </Box>
+        <Stack gap={2}>
+          <Text variant="display" size="xl" weight="font-black">
+            {tool.title}
+          </Text>
+          <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
+            {tool.subtitle}
+          </Text>
+          <Text size="sm" color="dim">
+            {tool.description}
+          </Text>
+          <Box display="flex" flexWrap="wrap" gap={2} marginTop={2}>
+             {tool.tags.map((tag: string) => (
+               <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} border radius="full" color="dim">
+                 {tag}
+               </Text>
+             ))}
+          </Box>
+        </Stack>
+      </Stack>
+      <Box display="flex" align="center" gap={2} marginTop="auto">
+        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Explore System</Text>
+        <Icon icon={ArrowRight} size="md" color="accent" />
+      </Box>
+    </Stack>
+  );
+};
+
+const SectionFeature = ({ title, description }: { title: string, description: string }) => (
+  <Stack gap={1} paddingLeft={4} className="border-l-2 border-accent">
+    <Text variant="mono" size="xs" weight="font-bold" uppercase color="accent">{title}</Text>
+    <Text size="sm" color="dim">{description}</Text>
+  </Stack>
+);
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   const getTool = (id: string) => tools.find(t => t.id === id);
-
-  const ToolCard = ({ id }: { id: string }) => {
-    const tool = getTool(id);
-    if (!tool) return null;
-
-    return (
-      <Stack
-        as="button"
-        onClick={() => navigate(tool.canonicalPath || tool.route || `/research/${tool.id}`)}
-        padding={6}
-        gap={4}
-        height="full"
-        align="start"
-        textAlign="left"
-        className={cardVariants({ interactive: true })}
-      >
-        <Stack gap={4} width="full">
-          <Box display="flex" justify="between" align="start" width="full">
-            <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
-              <Icon
-                icon={
-                  tool.id.includes('ux') ? Layout :
-                  tool.id.includes('pr') ? ShieldCheck :
-                  tool.id.includes('scope') ? GitBranch :
-                  tool.id.includes('wcs') ? Database : Activity
-                }
-                size="md"
-                color="dim"
-              />
-            </Box>
-            <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
-              {tool.status}
-            </Text>
-          </Box>
-          <Stack gap={2}>
-            <Text variant="display" size="xl" weight="font-black">
-              {tool.title}
-            </Text>
-            <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-              {tool.subtitle}
-            </Text>
-            <Text size="sm" color="dim">
-              {tool.description}
-            </Text>
-            <Box display="flex" flexWrap="wrap" gap={2} marginTop={2}>
-               {tool.tags.map(tag => (
-                 <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} border radius="full" color="dim">
-                   {tag}
-                 </Text>
-               ))}
-            </Box>
-          </Stack>
-        </Stack>
-        <Box display="flex" align="center" gap={2} marginTop="auto">
-          <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Explore System</Text>
-          <Icon icon={ArrowRight} size="md" color="accent" />
-        </Box>
-      </Stack>
-    );
-  };
-
-  const SectionFeature = ({ title, description }: { title: string, description: string }) => (
-    <Stack gap={1} paddingLeft={4} className="border-l-2 border-accent">
-      <Text variant="mono" size="xs" weight="font-bold" uppercase color="accent">{title}</Text>
-      <Text size="sm" color="dim">{description}</Text>
-    </Stack>
-  );
 
   return (
     <Box as="section">
@@ -195,8 +196,8 @@ export default function ResearchAnalytics() {
           </Grid>
 
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
-            <ToolCard id="gitops-pr-reviewer" />
-            <ToolCard id="scope-blast-radius" />
+            <ToolCard tool={getTool('gitops-pr-reviewer')} />
+            <ToolCard tool={getTool('scope-blast-radius')} />
           </Grid>
         </Stack>
 
@@ -226,7 +227,7 @@ export default function ResearchAnalytics() {
           </Grid>
 
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
-            <ToolCard id="ux-perception-debug" />
+            <ToolCard tool={getTool('ux-perception-debug')} />
           </Grid>
         </Stack>
 
@@ -256,7 +257,7 @@ export default function ResearchAnalytics() {
           </Grid>
 
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
-            <ToolCard id="wcs-parquet-pipeline" />
+            <ToolCard tool={getTool('wcs-parquet-pipeline')} />
           </Grid>
         </Stack>
 
