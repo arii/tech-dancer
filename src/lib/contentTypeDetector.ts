@@ -38,7 +38,7 @@ export function detectContentType(resource: ResourceWithType | null | undefined)
 export function getCtaLabel(type: ContentType, isExternal: boolean = false): string {
   switch (type) {
     case 'affiliate':
-      return isExternal ? 'View on Amazon' : 'Read review';
+      return 'View product';
     case 'merch':
       return 'Shop merch';
     case 'event':
@@ -50,13 +50,14 @@ export function getCtaLabel(type: ContentType, isExternal: boolean = false): str
 
 /**
  * Get the appropriate source badge text for a content type.
+ * Avoids Amazon trademark by using neutral terms.
  */
 export function getSourceBadge(type: ContentType): string {
   switch (type) {
     case 'affiliate':
-      return 'Amazon affiliate pick';
+      return 'Affiliate pick';
     case 'merch':
-      return 'BoomTick Printful merch';
+      return 'BoomTick merch';
     case 'event':
       return 'Event resource';
     default:

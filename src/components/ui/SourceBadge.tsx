@@ -8,8 +8,8 @@ interface SourceBadgeProps {
 }
 
 const BADGE_TEXT: Record<ContentType, string> = {
-  affiliate: 'Amazon affiliate pick',
-  merch: 'BoomTick Printful merch',
+  affiliate: 'Affiliate pick',
+  merch: 'BoomTick merch',
   event: 'Event resource',
 };
 
