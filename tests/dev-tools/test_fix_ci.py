@@ -57,5 +57,26 @@ class TestFixCIValidation(unittest.TestCase):
         self.assertEqual(cm.exception.code, 400)
         self.assertIn("Could not determine repository name", cm.exception.message)
 
+    @patch('td_cli.get_github_token')
+    @patch('td_cli.get_repo_name')
+    @patch('td_cli._orch.fix_ci')
+    @patch('os.environ.get')
+    def test_handle_fix_ci_with_antigravity_api_key(self, mock_env_get, mock_fix_ci, mock_repo, mock_token):
+        """Test that handle_fix_ci passes and calls fix_ci when ANTIGRAVITY_API_KEY is present"""
+        mock_token.return_value = "fake-token"
+        mock_repo.return_value = "owner/repo"
+        mock_env_get.side_effect = lambda k, default=None: "fake-antigravity-key" if k == "ANTIGRAVITY_API_KEY" else default
+        mock_fix_ci.return_value = {"branch": "main", "agent_name": "Antigravity"}
+
+        args = MagicMock()
+        args.api_key = None
+        args.pr_number = 123
+        args.branch = "main"
+        args.dry_run = True
+
+        res = td_cli.handle_fix_ci(args)
+        self.assertEqual(res["agent_name"], "Antigravity")
+        mock_fix_ci.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()

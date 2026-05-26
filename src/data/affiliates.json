@@ -337,48 +337,42 @@
     "name": "Dance Bag",
     "url": "https://amazon.com",
     "category": "travel",
-    "description": "Weekend essential dance bag for all levels.",
-    "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
+    "description": "Weekend essential dance bag for all levels."
   },
   "rainbow-bob-wig": {
     "id": "rainbow-bob-wig",
     "name": "Rainbow Bob Wig",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Vibrant rainbow bob wig to complete your event look.",
-    "image": "/images/gear/amazon/qhq-shininglifi-rainbow-bob-wigs-and-a-wig-cap-women-s-short-straight.jpg"
+    "description": "Vibrant rainbow bob wig to complete your event look."
   },
   "rainbow-sequin-bomber-jacket": {
     "id": "rainbow-sequin-bomber-jacket",
     "name": "Rainbow Sequin Bomber Jacket",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Dazzle on the dance floor with this rainbow sequin jacket.",
-    "image": "/images/gear/amazon/cresay-women-s-sequin-fitted-long-sleeve-zipper-blazer-bomber-jacket-r.jpg"
+    "description": "Dazzle on the dance floor with this rainbow sequin jacket."
   },
   "rainbow-bustle-skirt": {
     "id": "rainbow-bustle-skirt",
     "name": "Rainbow Bustle Skirt",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "A fun and flowy rainbow bustle skirt for themed nights.",
-    "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg"
+    "description": "A fun and flowy rainbow bustle skirt for themed nights."
   },
   "holographic-rave-fan": {
     "id": "holographic-rave-fan",
     "name": "Holographic Rave Fan",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Keep cool and stay flashy with this holographic folding fan.",
-    "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg"
+    "description": "Keep cool and stay flashy with this holographic folding fan."
   },
   "led-scrunchies": {
     "id": "led-scrunchies",
     "name": "LED Light Up Scrunchies",
     "url": "https://amazon.com",
     "category": "gear",
-    "description": "Add some glow to your hair with these LED scrunchies.",
-    "image": "/images/gear/amazon/9-pcs-led-light-hair-scrunchies-satin-elastic-bands-ties-ropes-3-color.jpg"
+    "description": "Add some glow to your hair with these LED scrunchies."
   },
   "portable-steamer": {
     "id": "portable-steamer",
@@ -387,13 +381,5 @@
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
     "image": "/assets/gear/travel-steamer.jpg"
-  },
-  "sports-crop-tops": {
-    "id": "sports-crop-tops",
-    "name": "Sports Crop Tank Tops",
-    "url": "https://amazon.com",
-    "category": "fashion",
-    "description": "Comfortable and stylish crop tops for dancing.",
-    "image": "/images/gear/amazon/the-gym-people-womens-high-waisted-running-shorts-quick-dry-athletic-w.jpg"
   }
 }

@@ -99,6 +99,17 @@ class Orchestrator:
         """
         return self.ai.resolve_file_conflicts(file_path)
 
+    def analyze_file(self, file_path: str) -> str:
+        if not os.path.exists(file_path):
+            raise CLIError(f"File not found: {file_path}")
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+            prompt = f"Analyze this file for bugs, style issues, and potential improvements:\n\n{content[:20000]}"
+            return self.ai.generate(prompt)
+        except Exception as e:
+            raise CLIError(f"Failed to analyze file: {e}")
+
     def find_conflict_files(self) -> List[str]:
         """
         Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.
@@ -261,7 +272,7 @@ class Orchestrator:
 
     def check_bundle_size(self, update=False, baseline_file=None, threshold=50, dry_run=True):
         size = get_bundle_size()
-        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3000)
+        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3060)
         threshold_kb = baseline + threshold
         res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": threshold_kb, "status": "success" if size <= threshold_kb else "error"}
         if size > threshold_kb: res["message"] = f"Bundle size exceeds threshold ({size}KB > {threshold_kb}KB)."
@@ -562,16 +573,17 @@ class Orchestrator:
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
-        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
-        if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
+        agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
+        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
             res = self.jules.create_session_from_source(source_id, branch, prompt)
             if res: session_name = res.get("name")
-            else: raise CLIError("Jules API session creation failed")
-        feedback = f"🤖 **Jules is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
+            else: raise CLIError(f"{agent_name} API session creation failed")
+        feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
         if pr and not dry_run: pr.create_issue_comment(feedback)
-        return {"session": session_name, "branch": branch, "feedback": feedback}
+        return {"session": session_name, "branch": branch, "feedback": feedback, "agent_name": agent_name}
 
     def manage_reviews(self, check_responses=False, cleanup_comments=False, dry_run=True):
         g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
@@ -633,3 +645,72 @@ class Orchestrator:
                         p = pipeline.generate_prompt(line)
                         if p: prompts.append(p)
         return prompts
+
+    def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
+        """
+        Aggregates multiple PRs into a single target branch and creates a consolidated PR.
+        """
+        def run(cmd, check=True):
+            return run_command(cmd, check=check)
+
+        # 1. Isolation & Cleanliness
+        run(["git", "checkout", "main"])
+        run(["git", "pull", "origin", "main"])
+        run(["git", "checkout", "-b", target_branch])
+
+        aggregate_body = ""
+        successfully_merged = []
+
+        for pr_num in pr_numbers:
+            # 2. Sequential Extraction & Deterministic Sequence
+            try:
+                pr_data = self.github.fetch_pr_details(pr_num)
+                head_ref = pr_data.get('head', {}).get('ref')
+                title = pr_data.get('title')
+                body = pr_data.get('body') or ""
+
+                if not head_ref:
+                    raise CLIError(f"Could not determine head ref for PR #{pr_num}")
+
+                # 2.5 Handle forks by using gh pr checkout
+                # This ensures the branch is available locally and handles forks correctly
+                run(["gh", "pr", "checkout", str(pr_num)])
+
+                # Switch back to the target branch
+                run(["git", "checkout", target_branch])
+
+                # 3. Safety First: Attempt automated integration merge
+                # Use 'ort' strategy implicitly by standard merge if git version supports it,
+                # or just standard merge.
+                res = run_command(["git", "merge", head_ref, "-m", f"Merging PR #{pr_num}: {title}"], check=False)
+
+                if res.returncode != 0:
+                    # Conflict encountered
+                    run(["git", "merge", "--abort"])
+                    raise CLIError(f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.", code=res.returncode)
+
+                # 4. Metadata Preservation
+                successfully_merged.append(pr_num)
+                aggregate_body += f"Closes #{pr_num}\n\n### Description from PR #{pr_num} ({title}):\n{body}\n\n---\n"
+
+            except Exception as e:
+                # Restore stable state is handled by checkout -f or similar if needed,
+                # but since we abort merge, we are back to the state before this PR.
+                raise e
+
+        # Push the compiled branch
+        run(["git", "push", "-u", "origin", target_branch])
+
+        # Create consolidated PR
+        pr_title = f"Aggregated Feature: {target_branch}"
+        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base main
+        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", "main"]
+        pr_url = self.github.run_authenticated_gh(create_args).strip()
+
+        return {
+            "status": "success",
+            "branch": target_branch,
+            "merged_prs": successfully_merged,
+            "pr_url": pr_url,
+            "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
+        }

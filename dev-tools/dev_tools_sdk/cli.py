@@ -34,6 +34,12 @@ def build_parser() -> argparse.ArgumentParser:
     jules_dispatch.add_argument("pr", type=int)
     jules_sub.add_parser("sync", help="Sync active Jules sessions")
 
+    antigravity = root.add_parser("antigravity", help="Antigravity agent operations")
+    antigravity_sub = antigravity.add_subparsers(dest="command", required=True)
+    antigravity_dispatch = antigravity_sub.add_parser("dispatch", help="Dispatch review task")
+    antigravity_dispatch.add_argument("pr", type=int)
+    antigravity_sub.add_parser("sync", help="Sync active Antigravity sessions")
+
     env = root.add_parser("env", help="Environment checks")
     env_sub = env.add_subparsers(dest="command", required=True)
     env_sub.add_parser("verify", help="Verify runtime integrations")
@@ -66,11 +72,11 @@ def main(argv: list[str] | None = None) -> int:
         print(orchestrator.analyze_file(args.path))
         return 0
 
-    if args.group == "jules" and args.command == "dispatch":
+    if args.group in ("jules", "antigravity") and args.command == "dispatch":
         status = orchestrator.dispatch_jules_review(args.pr)
         print(f"status={status}")
         return 0
-    if args.group == "jules" and args.command == "sync":
+    if args.group in ("jules", "antigravity") and args.command == "sync":
         print(json.dumps(orchestrator.sync_jules(), indent=2))
         return 0
 
