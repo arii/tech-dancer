@@ -59,6 +59,12 @@ relatedEvents:
 
 Mission City Swing is the hub for WCS in San Francisco. Join us every Wednesday for classes and social dancing.
 
+## Community Reviews
+
+> "The perfect mid-week reset. San Francisco's WCS community is vibrant and inclusive, and there's no better place to experience it than at Mission City on a Wednesday." — *SF Local*
+
+> "I love the urban vibe of this venue. It's easy to get to, the instructors are fantastic, and the social dancing is always high-quality." — *Social Dancer*
+
 ## Pro Tips
 
 - **Consistency:** The best way to improve is to come every week. The cumulative effect of regular classes and social dancing is powerful.

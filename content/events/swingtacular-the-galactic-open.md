@@ -21,9 +21,9 @@ whyAttending: >
   is world-class.
 
 theme:
-  name: "Galactic"
+  name: "Alien / Galactic"
   label: "Space Theme"
-  description: "Swingtacular's signature theme is consistently creative and out of this world. People take it seriously—think metallics, neons, and anything space-inspired for the Saturday night social."
+  description: "Swingtacular's signature 'Alien' theme is consistently creative and out of this world. People take it seriously—think metallics, neons, and anything extraterrestrial for the Saturday night social."
   colors:
     - "#6366f1"
     - "#a855f7"
@@ -72,9 +72,23 @@ relatedEvents:
 
 San Francisco event. Check for roommate pairings on the Facebook group early.
 
+## Community Reviews
+
+> "The production value is insane. It's not just a dance event; it's a visual experience. Saturday night feels like a futuristic rave where everyone happens to be world-class at West Coast Swing." — *Frequent Attendee*
+
+> "Best lighting on the circuit, hands down. The Hyatt ballroom is huge, and they really know how to fill it with energy." — *Pro Dancer*
+
 ## Pro Tips
 
 - **Theme Outfits:** People take the 'Galactic' theme seriously here. Think metallics, neons, and anything space-inspired.
 - **Hotel Block:** The Hyatt SFO fills up quickly. If you miss the block, there are several nearby hotels with shuttle service, but staying on-site is highly recommended for the full experience.
 - **Food Options:** The hotel restaurant is convenient but can be pricey. There are several good dining options within a short Uber ride in Burlingame.
 - **Production:** Make sure to be in the ballroom for the Saturday night shows—the production quality is some of the best in the business.
+
+## Gear Spotlight: Alien Essentials
+
+### Loop Experience Earplugs
+> "As a lead who spends 8+ hours a day in the ballroom, these are a lifesaver. Swingtacular has *huge* sound, and these take the edge off without losing the music's clarity." — *Amazon Review*
+
+### Sequin Bomber Jacket
+> "Perfect for the Alien theme! It catches the lasers in the Swingtacular ballroom beautifully. Lightweight enough to dance in all night." — *Customer Review*

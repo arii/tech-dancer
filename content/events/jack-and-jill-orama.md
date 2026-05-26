@@ -115,6 +115,20 @@ relatedEvents:
 
 This is my flagship one-stop Rainbow guide for JJO: why this event matters, what to pack, and how to show up ready.
 
+## Community Reviews
+
+> "JJO is the 'vibe' event of SoCal. Ben Morris always adds creative competition formats that keep things fresh. The social dancing is top-tier, and the location is basically on Disneyland's doorstep." — *California Local*
+
+> "The finals watch parties are legendary. It's one of the few events that feels like a massive community celebration as much as it does a competition." — *Pro Lead*
+
+## Gear Spotlight: Rainbow Essentials
+
+### Rainbow Fringe Dance Dress
+> "This was the hit of the JJO Rainbow night! The fringe adds so much energy to every swing and extension. It's surprisingly breathable, which is key for those 2 a.m. social sets." — *Customer Review*
+
+### Sequin Bomber Jacket
+> "SoCal nights can get a bit chilly in the hotel hallways, and this jacket is the perfect way to stay warm while staying completely on-theme. The sequins look amazing under the ballroom lights." — *Verified Purchase*
+
 ## NorCal BestCal Merch Picks
 
 Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.

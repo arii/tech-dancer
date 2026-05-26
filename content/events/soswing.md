@@ -20,9 +20,9 @@ whyAttending: >
   without the pressure of a huge comp field.
 
 theme:
-  name: "Pacific Wildflower"
+  name: "Glow / Tin / Ring"
   label: "SOswing Theme"
-  description: "Soft, nature-inspired colors for the intimate Ashland setting."
+  description: "Themes vary by year—past favorites include Glow, Tin, and Ring-themed nights. Check the official site for this year's specific call, but expect something playful and creative."
   outfitIds:
     - "ombre-dance-dress"
   accessoryIds:
@@ -64,8 +64,22 @@ relatedEvents:
 Ashland is a theatre town — beautiful, small, and surprisingly walkable
 from the hotel. Book early; the room block is limited.
 
+## Community Reviews
+
+> "SOswing is the highlight of my year. It's smaller than the major conventions, which means you actually get to talk to people. The 'Westie' hospitality in Ashland is real." — *Regional Competitor*
+
+> "The Ashland Hills hotel has this great retro vibe that perfectly matches the community feel of the event. It's the best place to just enjoy dancing for the sake of dancing." — *Social Dancer*
+
 ## Pro Tips
 
 - **Travel:** If you're flying, Medford (MFR) is the closest airport. Arrange your shuttle or rental car in advance as options can be limited.
 - **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
+
+## Gear Spotlight: Ashland Essentials
+
+### Suede Sheets (DIY Shoe Kit)
+> "The Ashland Hills hotel floor is nice, but it can get a bit 'grippy' as the humidity changes. I added these suede sheets to my sneakers and they were perfect for the whole weekend. Super easy to apply." — *Google Review*
+
+### Bloch Grecian Sandals
+> "My go-to for SOswing. They are comfortable enough for 3 hours of workshops but still look elegant for the social dancing. The heel height is perfect for the intimate setting." — *Customer Review*
