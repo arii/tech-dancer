@@ -286,10 +286,34 @@ def ai():
 
 @ai.command()
 @click.argument('pr_number', type=int)
+@click.option('--no-cache', is_flag=True, default=False, help='Bust the diff cache and force a fresh Ollama call')
 @click.pass_context
-def review(ctx, pr_number):
+def review(ctx, pr_number, no_cache):
+    import glob
+    import sys as _sys
+
+    # Optionally bust the /tmp review cache so stale results are not silently returned
+    if no_cache:
+        pattern = f"/tmp/review_cache_{pr_number}_*.json"
+        removed = glob.glob(pattern)
+        for f in removed:
+            import os as _os
+            _os.remove(f)
+        if removed:
+            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
+        else:
+            print("ℹ️  No cache files found to remove.")
+
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)
+
+    # Surface errors clearly
+    if isinstance(res, dict) and res.get('recommendation') == 'Not Approved' and not res.get('reviewComment', '').strip().startswith('CI'):
+        # Likely an error result – dump full dict to stderr for diagnosis
+        print(f"⚠️  Review returned 'Not Approved' (may indicate an error).", file=_sys.stderr)
+        print(f"    recommendation : {res.get('recommendation')}", file=_sys.stderr)
+        print(f"    reviewComment  : {res.get('reviewComment', '')[:500]}", file=_sys.stderr)
+
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 
 @ai.command()
@@ -297,7 +321,7 @@ def review(ctx, pr_number):
 @click.pass_context
 def analyze(ctx, file):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.resolve_conflict(file) # Placeholder for analyze
+    res = orch.analyze_file(file)
     out(ctx, f"✅ Analyzed {file}", data={"result": res})
 
 @ai.command()
@@ -344,7 +368,8 @@ def sync(ctx):
 def fix_ci(ctx, pr_number, branch, api_key, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.fix_ci(pr_number=pr_number, branch=branch, api_key=api_key, dry_run=dry_run)
-    out(ctx, f"🚀 Initialized Jules session for branch `{res['branch']}`", data=res)
+    agent_name = res.get('agent_name', 'Jules')
+    out(ctx, f"🚀 Initialized {agent_name} session for branch `{res['branch']}`", data=res)
 
 @jules.command()
 @click.option('--log')
@@ -368,6 +393,20 @@ def repair(ctx, logs, stdin, worktree):
         out(ctx, res['message'], data=res)
     else:
         err(ctx, res['message'], data=res)
+
+# ==========================================
+# ANTIGRAVITY COMMAND GROUP
+# ==========================================
+@cli.group()
+def antigravity():
+    """Antigravity Agent Operations"""
+    pass
+
+antigravity.add_command(dispatch)
+antigravity.add_command(sync)
+antigravity.add_command(fix_ci)
+antigravity.add_command(repair_context)
+antigravity.add_command(repair)
 
 if __name__ == "__main__":
     cli(obj={})
