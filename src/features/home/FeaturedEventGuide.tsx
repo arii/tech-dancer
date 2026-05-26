@@ -25,7 +25,7 @@ export function FeaturedEventGuide() {
         className="grid bg-surface md:grid-cols-[260px_1fr]"
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="min-h-[180px]">
+        <Box position="relative" className="h-44 md:h-auto md:min-h-[180px]">
           <img
             src={event.heroImage}
             alt={event.title}

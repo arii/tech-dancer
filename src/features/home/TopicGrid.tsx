@@ -50,10 +50,10 @@ export function TopicGrid() {
               <Icon className="h-4 w-4 text-accent" />
             </Box>
             <Stack gap={1}>
-              <Text variant="body" size="sm" weight="font-bold" className="transition-colors group-hover:text-accent">
+              <Text variant="body" size={{ base: 'base', md: 'sm' }} weight="font-bold" className="transition-colors group-hover:text-accent">
                 {label}
               </Text>
-              <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-snug">
+              <Text variant="body" size={{ base: 'sm', md: 'xs' }} color="dim" className="line-clamp-none md:line-clamp-2 leading-relaxed">
                 {description}
               </Text>
             </Stack>

@@ -16,33 +16,6 @@ export function DevLabCallout() {
         </Text>
       </Stack>
 
-      {/* Metadata Fields */}
-      <Stack gap={2} className="border-y border-line/30 py-3.5 my-1">
-        <Box display="flex" justify="between" align="center" gap={2}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide">
-            Status
-          </Text>
-          <Text variant="mono" size="xs" color="accent" weight="font-bold">
-            ORCHESTRATION ACTIVE
-          </Text>
-        </Box>
-        <Box display="flex" justify="between" align="center" gap={2}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide">
-            Quality Gates
-          </Text>
-          <Text variant="mono" size="xs" className="text-emerald-500 font-bold">
-            ENABLED
-          </Text>
-        </Box>
-        <Box display="flex" justify="between" align="center" gap={2}>
-          <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide">
-            Frameworks
-          </Text>
-          <Text variant="mono" size="xs" color="white" weight="font-bold">
-            CUSTOM DEVAI SDK
-          </Text>
-        </Box>
-      </Stack>
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed">
