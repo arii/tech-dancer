@@ -6,6 +6,7 @@ export interface ResearchTool {
   category: string;
   tags: string[];
   status: string;
+  iconName: string;
   route?: string;
   canonicalPath?: string;
 }
@@ -19,6 +20,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'DevAI System',
     tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
     status: 'Active',
+    iconName: 'ShieldCheck',
     route: '/research/pr-reviewer'
   },
   {
@@ -29,6 +31,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'DevAI System',
     tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
     status: 'Active',
+    iconName: 'GitBranch',
     route: '/research/scope-analysis'
   },
   {
@@ -39,6 +42,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Perception Debugging',
     tags: ['Automation', 'Visual Regression', 'Lighthouse', 'Playwright'],
     status: 'Active',
+    iconName: 'Layout',
     route: '/ux-auditor',
     canonicalPath: '/ux-auditor'
   },
@@ -50,6 +54,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Data Engineering',
     tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
     status: 'Active',
+    iconName: 'Database',
     route: '/research/wcs-data'
   }
 ];

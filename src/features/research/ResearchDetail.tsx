@@ -7,6 +7,7 @@ import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { WCSScraperTool } from './components/WCSScraperTool';
+import { WCSParquetPipelineDetail } from './tools/WCSParquetPipelineDetail';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
@@ -18,7 +19,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
-  'wcs-parquet-pipeline': WCSScraperTool, // Fallback for now as it's related
+  'wcs-parquet-pipeline': WCSParquetPipelineDetail,
 };
 
 export default function ResearchDetail() {
@@ -71,8 +72,8 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  if (paramId === 'ux-auditor' || paramId === 'ux-perception-debug' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
-    return <Navigate to={tool?.canonicalPath || "/ux-auditor"} replace />;
+  if (tool?.canonicalPath && pathname.startsWith('/research/')) {
+    return <Navigate to={tool.canonicalPath} replace />;
   }
 
   if (study) {

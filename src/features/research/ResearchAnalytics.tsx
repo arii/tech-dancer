@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Activity, Database, FileText,
   Layout, Code2, ShieldCheck, Terminal, Cpu,
-  GitBranch, Eye, Binary, Microscope
+  GitBranch, Eye, Binary, Microscope, LucideIcon
 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -11,9 +11,19 @@ import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 
+const ICON_MAP: Record<string, LucideIcon> = {
+  ShieldCheck,
+  GitBranch,
+  Layout,
+  Database,
+  Activity
+};
+
 const ToolCard = ({ tool }: { tool: ResearchTool | undefined }) => {
   const navigate = useNavigate();
   if (!tool) return null;
+
+  const ToolIcon = tool.iconName ? ICON_MAP[tool.iconName] : Activity;
 
   return (
     <Stack
@@ -30,12 +40,7 @@ const ToolCard = ({ tool }: { tool: ResearchTool | undefined }) => {
         <Box display="flex" justify="between" align="start" width="full">
           <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
             <Icon
-              icon={
-                tool.id.includes('ux') ? Layout :
-                tool.id.includes('pr') ? ShieldCheck :
-                tool.id.includes('scope') ? GitBranch :
-                tool.id.includes('wcs') ? Database : Activity
-              }
+              icon={ToolIcon}
               size="md"
               color="dim"
             />
