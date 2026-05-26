@@ -48,8 +48,12 @@ theme:
   - pride-sunglasses
   - rainbow-fan
 gear:
-  outfitIds: []
-  accessoryIds: []
+  outfitIds:
+  - rainbow-fringe-dress
+  - sequin-bomber-jacket
+  accessoryIds:
+  - rainbow-earrings
+  - pride-sunglasses
   shoeIds:
   - bloch-grecian
   - suede-sheets

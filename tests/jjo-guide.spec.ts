@@ -25,11 +25,11 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     const gearSection = page.getByTestId('gear');
     await expect(gearSection).toBeVisible();
 
-    // Using headings to be more specific and avoid strict mode violations with descriptions
-    await expect(gearSection.getByRole('heading', { name: 'Outfits' })).toBeVisible();
-    await expect(gearSection.getByRole('heading', { name: 'Accessories' })).toBeVisible();
-    await expect(gearSection.getByRole('heading', { name: 'Shoes & Essentials' })).toBeVisible();
-    await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).toBeVisible();
+    // Using stable data-testids to avoid heading level conflicts
+    await expect(page.getByTestId('gear-section-outfits')).toBeVisible();
+    await expect(page.getByTestId('gear-section-accessories')).toBeVisible();
+    await expect(page.getByTestId('gear-section-shoes-&-essentials')).toBeVisible();
+    await expect(page.getByTestId('gear-section-travel-extras')).toBeVisible();
   });
 
   test('should render the action timeline with multiple rows', async ({ page }) => {

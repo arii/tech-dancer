@@ -21,6 +21,7 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
           <Stack key={section.label} gap={8}>
             <Stack gap={2}>
               <SectionHeader
+                data-testid={`gear-section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
                 title={section.label}
                 size="sm"
               />

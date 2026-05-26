@@ -80,6 +80,7 @@ export default function EventGuide() {
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         {event.whyAttending && (
           <Box
+            data-testid="why-attending"
             maxWidth="3xl"
             marginBottom={16}
             padding={{ base: 6, md: 8 }}
