@@ -1,23 +1,17 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
+import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
 
 export function HomeHero() {
   return (
-    <Stack
-      as="section"
-      gap={8}
-      justify="center"
-      aria-label="BoomTick homepage hero"
-      paddingY={{ base: 8, lg: 12 }}
-    >
-      <Stack as="h1" gap={2}>
-        <Text
-          as="span"
-          variant="hero"
-          color="white"
-          size={{ base: '4xl', lg: '6xl', xl: '7xl' }}
-        >
+    <Stack as="section" gap={6} justify="center" aria-label="BoomTick homepage hero" position="relative" className="overflow-hidden p-6 lg:p-12 -mx-6 lg:-mx-12 min-h-[400px]">
+      <Box position="absolute" inset zIndex={0} className="pointer-events-none opacity-50 mix-blend-screen">
+        <HeroParticleCanvas />
+      </Box>
+      <Stack position="relative" zIndex={10} gap={6}>
+        <Stack as="h1" gap={1}>
+          <Text as="span" variant="hero" color="white" size={{ base: '3xl', md: '5xl' }}>
           Built for dancers.
         </Text>
         <Text
@@ -77,18 +71,12 @@ export function HomeHero() {
         </ActionButton>
       </Box>
 
-      <Box>
-        <Text
-          as={NavLink}
-          to="/blog"
-          variant="mono"
-          size="xs"
-          color="dim"
-          className="underline underline-offset-4 transition-colors hover:text-accent"
-        >
-          Start with practical training notes →
-        </Text>
-      </Box>
+        <Box>
+          <Text as={NavLink} to="/blog" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent">
+            Start with practical training notes →
+          </Text>
+        </Box>
+      </Stack>
     </Stack>
   );
 }
