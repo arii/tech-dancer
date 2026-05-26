@@ -35,7 +35,7 @@ export default function ComponentPreview() {
 
         <Box border padding={6} radius="lg">
           <Text variant="mono" size="sm" marginBottom={4}>CuratedGear</Text>
-          <CuratedGear items={[]} />
+          <CuratedGear sections={[]} />
         </Box>
 
         <Box border padding={6} radius="lg">
