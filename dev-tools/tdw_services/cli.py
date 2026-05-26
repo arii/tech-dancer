@@ -329,7 +329,8 @@ def sync(ctx):
 def fix_ci(ctx, pr_number, branch, api_key, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.fix_ci(pr_number=pr_number, branch=branch, api_key=api_key, dry_run=dry_run)
-    out(ctx, f"🚀 Initialized Jules session for branch `{res['branch']}`", data=res)
+    agent_name = res.get('agent_name', 'Jules')
+    out(ctx, f"🚀 Initialized {agent_name} session for branch `{res['branch']}`", data=res)
 
 @jules.command()
 @click.option('--log')
@@ -353,6 +354,20 @@ def repair(ctx, logs, stdin, worktree):
         out(ctx, res['message'], data=res)
     else:
         err(ctx, res['message'], data=res)
+
+# ==========================================
+# ANTIGRAVITY COMMAND GROUP
+# ==========================================
+@cli.group()
+def antigravity():
+    """Antigravity Agent Operations"""
+    pass
+
+antigravity.add_command(dispatch)
+antigravity.add_command(sync)
+antigravity.add_command(fix_ci)
+antigravity.add_command(repair_context)
+antigravity.add_command(repair)
 
 if __name__ == "__main__":
     cli(obj={})

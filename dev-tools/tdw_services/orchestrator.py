@@ -562,16 +562,17 @@ class Orchestrator:
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
-        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
-        if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
+        agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
+        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
             res = self.jules.create_session_from_source(source_id, branch, prompt)
             if res: session_name = res.get("name")
-            else: raise CLIError("Jules API session creation failed")
-        feedback = f"🤖 **Jules is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
+            else: raise CLIError(f"{agent_name} API session creation failed")
+        feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
         if pr and not dry_run: pr.create_issue_comment(feedback)
-        return {"session": session_name, "branch": branch, "feedback": feedback}
+        return {"session": session_name, "branch": branch, "feedback": feedback, "agent_name": agent_name}
 
     def manage_reviews(self, check_responses=False, cleanup_comments=False, dry_run=True):
         g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
