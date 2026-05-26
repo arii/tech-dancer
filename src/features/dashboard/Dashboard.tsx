@@ -107,7 +107,7 @@ export default function Home() {
 
           <Stack gap={8}>
             <SectionHeader
-              eyebrow="BOOMTICK STYLE"
+              label="BOOMTICK STYLE"
               title="Featured BoomTick merch"
               link={{ text: "Shop all merch", to: "/merch" }}
             />

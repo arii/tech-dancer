@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import { Stack, Text } from '@/layouts/Primitives';
 
 interface SectionHeaderProps {
-  eyebrow: string;
+  label?: string; // Legacy support
+  eyebrow?: string;
   title: string;
   link?: {
     text: string;
@@ -10,12 +11,13 @@ interface SectionHeaderProps {
   };
 }
 
-export function SectionHeader({ eyebrow, title, link }: SectionHeaderProps) {
+export function SectionHeader({ label, eyebrow, title, link }: SectionHeaderProps) {
+  const displayEyebrow = eyebrow || label;
   return (
     <Stack direction="row" align="end" justify="between" marginBottom={4}>
       <Stack direction="col" gap={1}>
         <Text variant="mono" size="xs" color="dim" uppercase tracking="widest">
-          {eyebrow}
+          {displayEyebrow}
         </Text>
         <Text as="h3" size="3xl" weight="font-black" color="brand">
           {title}
