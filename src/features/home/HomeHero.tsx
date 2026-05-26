@@ -46,7 +46,7 @@ export function HomeHero() {
           color="dim"
           className="max-w-[600px] leading-relaxed"
         >
-          Practical guides for West Coast Swing dancers — training notes, event travel tips,
+          Practical guides for West Coast Swing dancers — blog posts, event travel tips,
           gear reviews, and tools for better dance weekends.
         </Text>
 
