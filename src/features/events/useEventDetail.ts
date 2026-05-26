@@ -24,34 +24,34 @@ export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
 /**
  * Organizes an event's gear IDs into resolved semantic sections.
  */
-export function getGearSections(gear?: Event["gear"]): ResolvedGearSection[] {
-  if (!gear) return [];
+export function getGearSections(event?: Event): ResolvedGearSection[] {
+  if (!event) return [];
 
   return [
     {
       label: "Outfits",
-      description: gear.outfitDescription,
-      items: resolveAffiliateLinks(gear.outfitIds),
+      description: event.gearOutfitDescription,
+      items: resolveAffiliateLinks(event.gearOutfitIds),
     },
     {
       label: "Accessories",
-      description: gear.accessoryDescription,
-      items: resolveAffiliateLinks(gear.accessoryIds),
+      description: event.gearAccessoryDescription,
+      items: resolveAffiliateLinks(event.gearAccessoryIds),
     },
     {
       label: "Shoes & Essentials",
-      description: [gear.shoeDescription, gear.essentialDescription]
+      description: [event.gearShoeDescription, event.gearEssentialDescription]
         .filter(Boolean)
         .join(" "),
       items: resolveAffiliateLinks([
-        ...(gear.shoeIds ?? []),
-        ...(gear.essentialIds ?? []),
+        ...(event.gearShoeIds ?? []),
+        ...(event.gearEssentialIds ?? []),
       ]),
     },
     {
       label: "Travel Extras",
-      description: gear.travelDescription,
-      items: resolveAffiliateLinks(gear.travelIds),
+      description: event.gearTravelDescription,
+      items: resolveAffiliateLinks(event.gearTravelIds),
     },
   ].filter((s) => s.items.length > 0);
 }
@@ -83,11 +83,24 @@ export function useEventDetail() {
   // to reduce dependency chains and potential extra re-renders.
   const { themeOutfits, themeAccessories, gearSections } = useMemo(
     () => ({
-      themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
-      themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
-      gearSections: getGearSections(event?.gear),
+      themeOutfits: resolveAffiliateLinks(event?.themeOutfitIds),
+      themeAccessories: resolveAffiliateLinks(event?.themeAccessoryIds),
+      gearSections: getGearSections(event),
     }),
-    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
+    [
+      event?.themeOutfitIds,
+      event?.themeAccessoryIds,
+      event?.gearOutfitIds,
+      event?.gearOutfitDescription,
+      event?.gearAccessoryIds,
+      event?.gearAccessoryDescription,
+      event?.gearShoeIds,
+      event?.gearShoeDescription,
+      event?.gearEssentialIds,
+      event?.gearEssentialDescription,
+      event?.gearTravelIds,
+      event?.gearTravelDescription,
+    ],
   );
 
   // Resolve related events

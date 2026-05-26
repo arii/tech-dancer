@@ -107,87 +107,27 @@ function transform<T extends { date?: string; draft?: boolean }>(
       };
 
       if (data.type === "event") {
-        // Promote flat gear/theme fields into structured objects
-        const hasFlatTheme =
-          data.themeName ||
-          data.themeLabel ||
-          data.themeDescription ||
-          data.themeColors ||
-          data.themeOutfitIds ||
-          data.themeAccessoryIds;
+        const theme = (data.theme as Record<string, unknown>) || {};
+        const gear = (data.gear as Record<string, unknown>) || {};
 
-        const flatTheme: EventTheme | undefined = hasFlatTheme
-          ? {
-              name: String(data.themeName || ""),
-              label: data.themeLabel ? String(data.themeLabel) : undefined,
-              description: data.themeDescription
-                ? String(data.themeDescription)
-                : undefined,
-              colors: asArray(data.themeColors),
-              outfitIds: asArray(data.themeOutfitIds),
-              accessoryIds: asArray(data.themeAccessoryIds),
-            }
-          : undefined;
+        result.themeName = String(theme.name || data.themeName || "");
+        result.themeLabel = theme.label ? String(theme.label) : (data.themeLabel ? String(data.themeLabel) : undefined);
+        result.themeDescription = theme.description ? String(theme.description) : (data.themeDescription ? String(data.themeDescription) : undefined);
+        result.themeColors = asArray(theme.colors || data.themeColors);
+        result.themeOutfitIds = asArray(theme.outfitIds || data.themeOutfitIds);
+        result.themeAccessoryIds = asArray(theme.accessoryIds || data.themeAccessoryIds);
 
-        const hasFlatGear =
-          data.gearOutfitIds ||
-          data.gearOutfitDescription ||
-          data.gearAccessoryIds ||
-          data.gearAccessoryDescription ||
-          data.gearShoeIds ||
-          data.gearShoeDescription ||
-          data.gearEssentialIds ||
-          data.gearEssentialDescription ||
-          data.gearTravelIds ||
-          data.gearTravelDescription;
+        result.gearOutfitIds = asArray(gear.outfitIds || data.gearOutfitIds);
+        result.gearOutfitDescription = gear.outfitDescription ? String(gear.outfitDescription) : (data.gearOutfitDescription ? String(data.gearOutfitDescription) : undefined);
+        result.gearAccessoryIds = asArray(gear.accessoryIds || data.gearAccessoryIds);
+        result.gearAccessoryDescription = gear.accessoryDescription ? String(gear.accessoryDescription) : (data.gearAccessoryDescription ? String(data.gearAccessoryDescription) : undefined);
+        result.gearShoeIds = asArray(gear.shoeIds || data.gearShoeIds);
+        result.gearShoeDescription = gear.shoeDescription ? String(gear.shoeDescription) : (data.gearShoeDescription ? String(data.gearShoeDescription) : undefined);
+        result.gearEssentialIds = asArray(gear.essentialIds || data.gearEssentialIds);
+        result.gearEssentialDescription = gear.essentialDescription ? String(gear.essentialDescription) : (data.gearEssentialDescription ? String(data.gearEssentialDescription) : undefined);
+        result.gearTravelIds = asArray(gear.travelIds || data.gearTravelIds);
+        result.gearTravelDescription = gear.travelDescription ? String(gear.travelDescription) : (data.gearTravelDescription ? String(data.gearTravelDescription) : undefined);
 
-        const flatGear: EventGear | undefined = hasFlatGear
-          ? {
-              outfitIds: asArray(data.gearOutfitIds),
-              outfitDescription: data.gearOutfitDescription ? String(data.gearOutfitDescription) : undefined,
-              accessoryIds: asArray(data.gearAccessoryIds),
-              accessoryDescription: data.gearAccessoryDescription ? String(data.gearAccessoryDescription) : undefined,
-              shoeIds: asArray(data.gearShoeIds),
-              shoeDescription: data.gearShoeDescription ? String(data.gearShoeDescription) : undefined,
-              essentialIds: asArray(data.gearEssentialIds),
-              essentialDescription: data.gearEssentialDescription ? String(data.gearEssentialDescription) : undefined,
-              travelIds: asArray(data.gearTravelIds),
-              travelDescription: data.gearTravelDescription ? String(data.gearTravelDescription) : undefined,
-            }
-          : undefined;
-
-        // Normalize nested theme if present
-        const nestedTheme = data.theme as Record<string, unknown> | undefined;
-        const normalizedNestedTheme: EventTheme | undefined = nestedTheme
-          ? {
-              name: String(nestedTheme.name || ""),
-              label: nestedTheme.label ? String(nestedTheme.label) : undefined,
-              description: nestedTheme.description ? String(nestedTheme.description) : undefined,
-              colors: asArray(nestedTheme.colors),
-              outfitIds: asArray(nestedTheme.outfitIds),
-              accessoryIds: asArray(nestedTheme.accessoryIds),
-            }
-          : undefined;
-
-        // Normalize nested gear if present
-        const nestedGear = data.gear as Record<string, unknown> | undefined;
-        const normalizedNestedGear: EventGear | undefined = nestedGear
-          ? {
-              outfitIds: asArray(nestedGear.outfitIds),
-              outfitDescription: nestedGear.outfitDescription ? String(nestedGear.outfitDescription) : undefined,
-              accessoryIds: asArray(nestedGear.accessoryIds),
-              accessoryDescription: nestedGear.accessoryDescription ? String(nestedGear.accessoryDescription) : undefined,
-              shoeIds: asArray(nestedGear.shoeIds),
-              shoeDescription: nestedGear.shoeDescription ? String(nestedGear.shoeDescription) : undefined,
-              essentialIds: asArray(nestedGear.essentialIds),
-              essentialDescription: nestedGear.essentialDescription ? String(nestedGear.essentialDescription) : undefined,
-              travelIds: asArray(nestedGear.travelIds),
-              travelDescription: nestedGear.travelDescription ? String(nestedGear.travelDescription) : undefined,
-            }
-          : undefined;
-
-        result.theme = normalizedNestedTheme ?? flatTheme;
-        result.gear = normalizedNestedGear ?? flatGear;
         result.relatedEvents = asArray(data.relatedEvents);
       }
 
