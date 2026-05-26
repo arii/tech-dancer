@@ -79,7 +79,7 @@ export default function EventGuide() {
               {event.theme && (
                 <ThemeSpotlight
                   id="theme"
-                  title={event.theme.name}
+                  title={`${event.theme.name}`}
                   label={event.theme.label}
                   description={event.theme.description || ''}
                   colors={event.theme.colors}
