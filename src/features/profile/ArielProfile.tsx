@@ -55,7 +55,7 @@ function ArielProfile() {
       />
 
       <PageHeader
-        label="BIOGRAPHY"
+        eyebrow="BIOGRAPHY"
         title={bio.name}
         description={bio.role}
       />

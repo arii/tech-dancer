@@ -120,7 +120,7 @@ export default function UXAuditor() {
       >
         <Box>
           <PageHeader
-            label="Visual UX Auditor"
+            eyebrow="Visual UX Auditor"
             title="Multimodal AI Analysis"
             description="Automated visual regression and UX improvement suggestions across viewports."
           />

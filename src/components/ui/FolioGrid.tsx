@@ -94,7 +94,7 @@ export default function FolioGrid({
     <Box as="section" height="full">
       <Box as="header" marginBottom={{ base: 6, md: 12 }}>
         <PageHeader
-          label={label || "FOLIO"}
+          eyebrow={label || "FOLIO"}
           title={categoryTitle}
           description={description}
           as={as}

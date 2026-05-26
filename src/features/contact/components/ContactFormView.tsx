@@ -28,7 +28,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
     <Box as="section" minHeight="[calc(100vh-64px)]">
       <Stack gap={12} maxWidth="3xl" marginX="auto">
         <PageHeader
-          label="CONTACT"
+          eyebrow="CONTACT"
           title="Get in Touch"
           description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I'll reply soon."
           border="b"

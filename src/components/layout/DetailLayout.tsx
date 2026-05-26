@@ -72,7 +72,7 @@ export function DetailLayout({
         <Stack gap={10}>
           {/* Header */}
           <PageHeader
-            label={`${category} • ${date} • ${rt} min read`}
+            eyebrow={`${category} • ${date} • ${rt} min read`}
             title={title}
             border="none"
             paddingBottom={0}

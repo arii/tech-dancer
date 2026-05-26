@@ -33,7 +33,7 @@ export default function ResearchAnalytics() {
       />
       <Stack gap={12}>
         <PageHeader
-          label="SYSTEM_DASHBOARD"
+          eyebrow="DEV LAB"
           title="DevAI Portfolio as a Platform"
           description="Current Orchestration Status // Agentic Sandbox"
           as="h1"
