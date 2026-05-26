@@ -15,8 +15,7 @@ url: https://example.com/sample-event
 heroImage: /assets/events/jjo-hero.svg
 description: This description field maps to the Travel & Venue Notes section.
 whyAttending: >
-  This whyAttending field provides the main descriptive copy for the event hero. It
-  highlights the unique value of attending this specific event.
+  This whyAttending field provides the main descriptive copy for the event hero. It highlights the unique value of attending this specific event.
 theme:
   name: Rainbow Paradise
   label: Rainbow Theme
@@ -39,15 +38,10 @@ theme:
   - rainbow-bob-wig
   - led-scrunchies
 gear:
-  outfitIds:
-  - rainbow-sequin-bomber-jacket
-  - rainbow-bustle-skirt
+  outfitIds: []
   outfitDescription: Statement pieces for the main event and social dancing.
   accessoryIds:
-  - pride-sunglasses
   - holographic-rave-fan
-  - rainbow-bob-wig
-  - led-scrunchies
   accessoryDescription: Pop of color and functional flair to keep you cool.
   shoeIds:
   - bloch-grecian

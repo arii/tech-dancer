@@ -1,8 +1,37 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
 export function EventNavigation() {
+  const [activeTab, setActiveTab] = useState<string>('');
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = EVENT_TABS
+        .filter(tab => !('path' in tab))
+        .map(tab => ({
+          id: tab.id,
+          offset: document.getElementById(tab.id)?.offsetTop || 0
+        }))
+        .sort((a, b) => b.offset - a.offset);
+
+      const scrollPosition = window.scrollY + 100; // Offset for header
+
+      for (const section of sections) {
+        if (scrollPosition >= section.offset) {
+          setActiveTab(section.id);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location]);
+
   return (
     <Box
       position="sticky"
@@ -35,6 +64,8 @@ export function EventNavigation() {
         >
           {EVENT_TABS.map(tab => {
             const isExternal = 'path' in tab;
+            const isActive = activeTab === tab.id;
+
             return (
               <Box
                 key={tab.id}
@@ -47,14 +78,13 @@ export function EventNavigation() {
                 <Box
                   display="flex"
                   align="center"
-                  gap={1.5}
-                  color="dim"
-                  className="group-hover:text-accent transition-colors whitespace-nowrap"
+                  gap={2}
+                  className={`${isActive ? 'text-accent' : 'text-dim'} group-hover:text-accent transition-colors whitespace-nowrap`}
                 >
-                  <tab.icon size={12} />
+                  <tab.icon size={16} />
                   <Text
                     variant="mono"
-                    size="tiny"
+                    size="xs"
                     weight="font-bold"
                     uppercase
                     tracking="wider"
@@ -68,7 +98,7 @@ export function EventNavigation() {
                   left={0}
                   right={0}
                   height={0.5}
-                  className="bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+                  className={`bg-accent transition-transform origin-left ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
                 />
               </Box>
             );

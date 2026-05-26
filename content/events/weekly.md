@@ -14,9 +14,7 @@ url: https://missioncityswing.com
 heroImage: ''
 description: Weekly social dance and classes at Mission City Swing.
 whyAttending: >
-  Weekly classes are the foundation of any dancer's growth. Mission City Swing offers
-  a consistent, high-quality environment to hone your skills, learn new concepts,
-  and connect with the local community every week.
+  Weekly classes are the foundation of any dancer's growth. Mission City Swing offers a consistent, high-quality environment to hone your skills, learn new concepts, and connect with the local community every week.
 theme:
   name: City Style
   label: Urban Social

@@ -12,12 +12,9 @@ region: South
 schedule: July 2 - 5, 2026
 url: https://wildwildwestie.com
 heroImage: /assets/events/wild-wild-westie-hero.svg
-description: Wild Wild Westie is a premier WCS event in Dallas, known for its high
-  energy and competitive atmosphere.
+description: Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere.
 whyAttending: >
-  Wild Wild Westie is legendary for its intense competition and high-octane social
-  dancing. If you want to test your skills against some of the best dancers on the
-  circuit while enjoying true Texas-sized hospitality, this is the event for you.
+  Wild Wild Westie is legendary for its intense competition and high-octane social dancing. If you want to test your skills against some of the best dancers on the circuit while enjoying true Texas-sized hospitality, this is the event for you.
 theme:
   name: Texas Spirit
   label: Wild West Theme
