@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, Database, FileText, Cpu, ShieldCheck, Zap, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -22,13 +22,6 @@ export default function ResearchAnalytics() {
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
-
-  // Dashboard status could be moved to a config or API later
-  const statusConfig = {
-    orchestration: "ACTIVE",
-    qualityGates: "ENABLED",
-    frameworks: "CUSTOM DEVAI SDK"
-  };
 
   return (
     <Box as="section">

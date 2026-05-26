@@ -19,7 +19,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     title: 'HRM (Heart Rate Monitor)',
     subtitle: 'Flagship Training Dashboard',
     description: 'The flagship product that started this DevAI workflow. It combines workout timing, Spotify playback context, and heart-rate data into a browser-based training dashboard.',
-    category: 'Product development',
+    category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     externalUrl: 'https://arii.github.io/hrm/',
