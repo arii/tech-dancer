@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Recovery"
 excerpt: "Good for sore legs, tight hips, and post-event recovery."
-image: "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
+image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
 affiliateIds: ["foam-roller"]
 tags: ["recovery", "health"]
 rating: 5
