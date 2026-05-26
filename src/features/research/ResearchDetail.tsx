@@ -141,7 +141,7 @@ export default function ResearchDetail() {
           className="hover:text-accent transition-all group"
           cursor="pointer"
         >
-          <Activity className="w-4 h-4" />
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
         </Box>
 
