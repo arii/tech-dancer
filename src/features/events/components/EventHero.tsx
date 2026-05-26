@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
-import { MapPin, Calendar } from 'lucide-react';
+import { MapPin, Calendar, Palette, Building2, Target, Bell, Package } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { Logo } from '@/components/ui/Logo';
@@ -13,8 +13,36 @@ interface EventHeroProps {
   date: string;
   image?: string;
   eyebrow?: string;
-  whyAttending?: string;
+  theme?: string;
+  venue?: string;
+  bestFor?: string;
+  deadline?: string;
+  packingCue?: string;
   id?: string;
+}
+
+function MetadataPill({ icon: Icon, label, value }: { icon: any, label: string, value: string }) {
+  return (
+    <Box
+      display="flex"
+      align="center"
+      gap={2}
+      paddingX={3}
+      paddingY={1.5}
+      radius="full"
+      className="bg-white/5 border border-white/10 whitespace-nowrap shrink-0"
+    >
+      <Icon className="w-3 h-3 text-accent/80" />
+      <Stack gap={0}>
+        <Text variant="mono" size="micro" color="dim" uppercase tracking="tighter">
+          {label}
+        </Text>
+        <Text variant="body" size="xs" weight="font-medium">
+          {value}
+        </Text>
+      </Stack>
+    </Box>
+  );
 }
 
 export function EventHero({
@@ -23,7 +51,11 @@ export function EventHero({
   date,
   image,
   eyebrow = "Event Resource Guide",
-  whyAttending,
+  theme,
+  venue,
+  bestFor,
+  deadline,
+  packingCue,
   id
 }: EventHeroProps) {
   const accentGradient = useMemo(() => ({
@@ -36,7 +68,7 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "30vh", md: "40vh" }}
+      minHeight={{ base: "20vh", md: "25vh" }}
       direction="col"
       gap={0}
       overflow="hidden"
@@ -76,10 +108,10 @@ export function EventHero({
       <Stack
         relative
         zIndex={10}
-        gap={{ base: 6, md: 10 }}
+        gap={{ base: 4, md: 6 }}
         paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingTop={{ base: 8, md: 12 }}
-        paddingBottom={{ base: 6, md: 8 }}
+        paddingTop={{ base: 6, md: 10 }}
+        paddingBottom={{ base: 4, md: 6 }}
         maxWidth="screen-xl"
         marginX="auto"
         width="full"
@@ -89,8 +121,8 @@ export function EventHero({
         animate={{ opacity: 1, y: 0 }}
         transition={motionTokens.page.transition}
       >
-        <Stack gap={6}>
-          <Stack gap={2}>
+        <Stack gap={4}>
+          <Stack gap={1}>
             <Text
               variant="mono"
               size="xs"
@@ -104,7 +136,7 @@ export function EventHero({
             <Text
               as="h1"
               variant="headline"
-              size={{ base: "fluid-5", md: "fluid-7" }}
+              size={{ base: "fluid-4", md: "fluid-6" }}
               weight="font-black"
               color="white"
               leading="tight"
@@ -114,56 +146,48 @@ export function EventHero({
             </Text>
           </Stack>
 
-          <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center">
+          <Box display="flex" wrap gap={{ base: 3, md: 5 }} align="center">
             <Box display="flex" align="center" gap={2}>
-              <Calendar className="w-4 h-4 md:w-5 md:h-5 text-accent" />
-              <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
+              <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent" />
+              <Text variant="body" size={{ base: "xs", md: "sm" }} weight="font-medium">
                 {date}
               </Text>
             </Box>
             <Box display="flex" align="center" gap={2}>
-              <MapPin className="w-4 h-4 md:w-5 md:h-5 text-accent" />
-              <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
+              <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent" />
+              <Text variant="body" size={{ base: "xs", md: "sm" }} weight="font-medium">
                 {location}
               </Text>
             </Box>
           </Box>
-        </Stack>
 
-        {whyAttending && (
+          {/* Metadata Pill Row */}
           <Box
-            data-testid="why-attending"
-            padding={{ base: 4, md: 6 }}
-            radius="lg"
-            width={{ base: "full", md: "auto" }}
-            maxWidth="2xl"
-            className="glass-panel border-l-4 border-l-accent"
+            display="flex"
+            gap={3}
+            overflowX="auto"
+            className="no-scrollbar"
+            marginX={{ base: -6, md: 0 }}
+            paddingX={{ base: 6, md: 0 }}
+            paddingY={2}
           >
-            <Stack gap={{ base: 3, md: 4 }}>
-              <Box display="flex" align="center" gap={3}>
-                <Logo className="h-3 md:h-4" />
-                <Text
-                  variant="mono"
-                  size="tiny"
-                  weight="font-bold"
-                  uppercase
-                  tracking="widest"
-                  color="dim"
-                >
-                  Why I'm Attending
-                </Text>
-              </Box>
-              <Text
-                variant="body"
-                size="sm"
-                leading="relaxed"
-                className="italic text-white/90"
-              >
-                {whyAttending}
-              </Text>
-            </Stack>
+            {theme && (
+              <MetadataPill icon={Palette} label="Theme" value={theme} />
+            )}
+            {venue && (
+              <MetadataPill icon={Building2} label="Venue" value={venue} />
+            )}
+            {bestFor && (
+              <MetadataPill icon={Target} label="Best for" value={bestFor} />
+            )}
+            {deadline && (
+              <MetadataPill icon={Bell} label="Deadline" value={deadline} />
+            )}
+            {packingCue && (
+              <MetadataPill icon={Package} label="Packing" value={packingCue} />
+            )}
           </Box>
-        )}
+        </Stack>
       </Stack>
 
       <Box relative zIndex={20} marginTop="auto">

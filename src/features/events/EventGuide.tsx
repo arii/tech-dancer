@@ -69,10 +69,21 @@ export default function EventGuide() {
         date={event.schedule}
         eyebrow={event.category}
         image={event.heroImage}
-        whyAttending={event.whyAttending}
+        theme={event.theme?.name}
+        venue={event.location}
+        bestFor={event.category}
+        deadline={event.registrationDeadline}
+        packingCue={event.packingReminderDate}
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
+        {event.whyAttending && (
+          <Box maxWidth="2xl" marginBottom={12}>
+            <Text variant="body" size="lg" leading="relaxed" color="dim">
+              {event.whyAttending}
+            </Text>
+          </Box>
+        )}
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
