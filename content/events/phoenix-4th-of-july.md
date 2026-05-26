@@ -23,6 +23,7 @@ whyAttending: >
 theme:
   name: "Red, White & Blue"
   label: "Patriotic Theme"
+  description: "Expressive patriotic looks for the Red, White & Blue celebration."
   outfitIds:
     - "rainbow-fringe-dress"
     - "sequin-bomber-jacket"
@@ -33,19 +34,24 @@ theme:
 gear:
   outfitIds:
     - "ombre-dance-dress"
+  outfitDescription: "Lightweight, vacation-ready styles for the desert heat."
   accessoryIds:
     - "electric-fan"
     - "pride-sunglasses"
+  accessoryDescription: "Essential cooling and sun protection for the legendary pool party."
   shoeIds:
     - "bloch-grecian"
+  shoeDescription: "Breathable dance shoes for the Paradise Ballroom."
   essentialIds:
     - "liquid-iv"
     - "dry-shampoo"
     - "loop-experience"
+  essentialDescription: "Heat-management and hydration essentials for Scottsdale in July."
   travelIds:
     - "microfiber-towel"
     - "travel-bottles"
     - "hanging-toiletry-bag"
+  travelDescription: "Resort-ready packing for a high-end luxury getaway."
 
 earlyBirdDate: "2026-05-15"
 registrationDeadline: "2026-06-18"

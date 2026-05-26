@@ -23,6 +23,7 @@ whyAttending: >
 theme:
   name: "Classic San Francisco"
   label: "Flagship Theme"
+  description: "Classic and sophisticated attire for San Francisco's premier dance weekend."
   outfitIds:
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
@@ -34,20 +35,25 @@ gear:
   outfitIds:
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
+  outfitDescription: "Polished looks for high-level competitions and social sets."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+  accessoryDescription: "Functional cooling for intense social dancing sessions."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  shoeDescription: "High-performance footwear for the massive Hyatt ballroom floor."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "shoe-brush"
+  essentialDescription: "Recovery and maintenance tools for a flagship four-day event."
   travelIds:
     - "compression-cubes"
     - "portable-charger"
     - "mints"
+  travelDescription: "Organization essentials for a major airport-based convention."
 
 earlyBirdDate: "2026-08-15"
 registrationDeadline: "2026-09-24"

@@ -23,6 +23,7 @@ whyAttending: >
 theme:
   name: "Texas Spirit"
   label: "Wild West Theme"
+  description: "Bold Texas-inspired styles for a high-octane weekend."
   outfitIds:
     - "sequin-bomber-jacket"
     - "rainbow-fringe-dress"
@@ -32,19 +33,24 @@ theme:
 gear:
   outfitIds:
     - "ombre-dance-dress"
+  outfitDescription: "Standout pieces for intense Dallas competitions."
   accessoryIds:
     - "electric-fan"
+  accessoryDescription: "High-power cooling for the high-energy ballroom floor."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
+  shoeDescription: "High-traction shoes for the fast Texas social floor."
   essentialIds:
     - "liquid-iv"
     - "shoe-brush"
     - "loop-experience"
+  essentialDescription: "Competition-grade recovery and hydration tools."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
     - "portable-charger"
+  travelDescription: "Organization for a major Southern dance hub."
 
 earlyBirdDate: "2026-05-01"
 registrationDeadline: "2026-06-15"

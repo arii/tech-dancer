@@ -22,6 +22,7 @@ whyAttending: >
 theme:
   name: "Pacific Wildflower"
   label: "SOswing Theme"
+  description: "Soft, nature-inspired colors for the intimate Ashland setting."
   outfitIds:
     - "ombre-dance-dress"
   accessoryIds:
@@ -30,17 +31,22 @@ theme:
 
 gear:
   outfitIds: []
+  outfitDescription: "Comfortable and expressive pieces for a community-focused weekend."
   accessoryIds: []
+  accessoryDescription: "Low-profile cooling for the intimate hotel ballroom."
   shoeIds:
     - "bloch-grecian"
     - "dance-socks"
+  shoeDescription: "Reliable footwear for workshops and community sets."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "mints"
+  essentialDescription: "Standard recovery for the relaxed PNW circuit pace."
   travelIds:
     - "compression-cubes"
     - "travel-pillow"
+  travelDescription: "Road-trip or regional flight essentials for Southern Oregon."
 
 earlyBirdDate: "2026-03-15"
 registrationDeadline: "2026-05-01"

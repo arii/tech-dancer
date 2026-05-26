@@ -38,19 +38,24 @@ theme:
 gear:
   outfitIds:
     - "sequin-bomber-jacket"
+  outfitDescription: "Futuristic and high-production looks for the Galactic theme."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
+  accessoryDescription: "Neon and metallic accents for the signature space vibe."
   shoeIds:
     - "bloch-grecian"
     - "dance-socks"
+  shoeDescription: "Polished shoes for the world-class Hyatt ballroom floor."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "shoe-brush"
+  essentialDescription: "Production-ready maintenance for a high-intensity weekend."
   travelIds:
     - "compression-cubes"
     - "portable-charger"
+  travelDescription: "Organization for a busy international dance convention."
 
 earlyBirdDate: "2026-06-15"
 registrationDeadline: "2026-07-31"

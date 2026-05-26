@@ -5,14 +5,14 @@ date: "2026-05-01"
 startDate: "2026-05-01"
 author: "Ariel Anders, PhD"
 category: "Event"
-excerpt: "Weekly social dance in San Jose."
+excerpt: "The premier weekly West Coast Swing social and workshop hub in the South Bay."
 location: "San Jose, CA"
 city: "San Jose"
 region: "NorCal"
 schedule: "Every Wednesday"
 url: "https://missioncityswing.com"
 heroImage: ""
-description: "Mission City Swing is a weekly social dance event in San Jose, California, featuring West Coast Swing. It's a great opportunity to practice, learn, and connect with the local dance community."
+description: "A cornerstone of the NorCal dance community, offering top-tier instruction and a welcoming social environment every Wednesday."
 
 whyAttending: >
   Mission City Swing is the heartbeat of the South Bay WCS community. Whether
@@ -22,6 +22,7 @@ whyAttending: >
 theme:
   name: "Community Social"
   label: "Weekly Style"
+  description: "Casual and comfortable styles for weekly workshops and social dancing."
   outfitIds:
     - "sequin-bomber-jacket"
   accessoryIds:
@@ -29,15 +30,20 @@ theme:
 
 gear:
   outfitIds: []
+  outfitDescription: "Breathable social attire that moves with you."
   accessoryIds: []
+  accessoryDescription: "Simple essentials for a mid-week dance night."
   shoeIds:
     - "dance-socks"
     - "suede-sheets"
+  shoeDescription: "Versatile shoes for the South Bay wood floor."
   essentialIds:
     - "mints"
     - "hand-sanitizer"
+  essentialDescription: "Quick hygiene and focus tools for social dancing."
   travelIds:
     - "portable-charger"
+  travelDescription: "Daily carry items for a consistent weekly routine."
 
 earlyBirdDate: ""
 registrationDeadline: ""
