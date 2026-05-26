@@ -1,11 +1,18 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, Database, FileText, Cpu, ShieldCheck, Zap } from 'lucide-react';
+import { Search, ArrowRight, Activity, Database, FileText, Cpu, ShieldCheck, Zap, LucideIcon } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
+import { ResearchTool } from '@/config/research-tools';
+
+function getToolIcon(tool: ResearchTool): LucideIcon {
+  if (tool.category.includes('DevAI')) return Cpu;
+  if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
+  return Search;
+}
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
@@ -51,14 +58,9 @@ export default function ResearchAnalytics() {
               </Box>
             </Grid>
 
-            <Stack gap={4}>
-              <Text variant="body" size="lg" color="body">
-                Welcome to my active research sandbox. This platform is not a static blog; it is a <strong>live production testbed</strong> for multi-agent software engineering systems.
-              </Text>
-              <Text variant="body" size="md" color="dim">
-                Every feature, page, and data pipeline on this domain is audited, maintained, and optimized by an autonomous suite of developer agents operating across local development environments (Inner Loop) and CI/CD pipelines (Outer Loop).
-              </Text>
-            </Stack>
+            <Text variant="body" size="lg" color="body">
+              Welcome to my active research sandbox. This platform is a <strong>live production testbed</strong> where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+            </Text>
           </Stack>
         </Box>
 
@@ -83,7 +85,7 @@ export default function ResearchAnalytics() {
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
-                      <Icon icon={tool.category.includes('DevAI') ? Cpu : tool.id.includes('scraper') || tool.id.includes('pipeline') ? Activity : Search} size="md" color="dim" />
+                      <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
                       {tool.status}

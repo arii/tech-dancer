@@ -18,7 +18,6 @@ import { DetailLayout } from '@/components/layout/DetailLayout';
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
-  'wcs-scraper': WCSScraperTool,
   'wcs-parquet-pipeline': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
   'gitops-pr-reviewer': GitOpsReviewerTool,
