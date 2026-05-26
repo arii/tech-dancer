@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, Database, FileText } from 'lucide-react';
+import { Search, ArrowRight, Activity, Database, FileText, Cpu, ShieldCheck, Zap } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -14,22 +14,57 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio"
-        description="Technical tools and AI projects for the West Coast Swing community."
+        title="DevAI Portfolio | Multi-Agent Systems & SDLC Automation"
+        description="Active production testbed for multi-agent software engineering systems, GitOps code review agents, and high-scale telemetry pipelines."
       />
       <Stack gap={12}>
         <PageHeader
-          label="PORTFOLIO"
-          title="DevAI Portfolio"
-          description="A collection of tools and technical projects built for the WCS community."
+          label="SYSTEM_DASHBOARD"
+          title="DevAI Portfolio as a Platform"
+          description="Active Research Sandbox // Agentic Orchestration Active"
           as="h1"
         />
 
+        <Box border radius="lg" padding={8} surface="surface" className="border-accent/20">
+          <Stack gap={6}>
+            <Grid cols={{ base: 1, md: 3 }} gap={4}>
+              <Box display="flex" align="center" gap={3} padding={4} border radius="md" surface="default">
+                <Cpu className="w-5 h-5 text-accent" />
+                <Stack gap={0.5}>
+                  <Text variant="mono" size="micro" color="dim" uppercase>Status</Text>
+                  <Text variant="mono" size="xs" weight="font-bold">ORCHESTRATION ACTIVE</Text>
+                </Stack>
+              </Box>
+              <Box display="flex" align="center" gap={3} padding={4} border radius="md" surface="default">
+                <ShieldCheck className="w-5 h-5 text-accent" />
+                <Stack gap={0.5}>
+                  <Text variant="mono" size="micro" color="dim" uppercase>Quality Gates</Text>
+                  <Text variant="mono" size="xs" weight="font-bold">ENABLED</Text>
+                </Stack>
+              </Box>
+              <Box display="flex" align="center" gap={3} padding={4} border radius="md" surface="default">
+                <Zap className="w-5 h-5 text-accent" />
+                <Stack gap={0.5}>
+                  <Text variant="mono" size="micro" color="dim" uppercase>Frameworks</Text>
+                  <Text variant="mono" size="xs" weight="font-bold">CUSTOM DEVAI SDK</Text>
+                </Stack>
+              </Box>
+            </Grid>
 
+            <Stack gap={4}>
+              <Text variant="body" size="lg" color="body">
+                Welcome to my active research sandbox. This platform is not a static blog; it is a <strong>live production testbed</strong> for multi-agent software engineering systems.
+              </Text>
+              <Text variant="body" size="md" color="dim">
+                Every feature, page, and data pipeline on this domain is audited, maintained, and optimized by an autonomous suite of developer agents operating across local development environments (Inner Loop) and CI/CD pipelines (Outer Loop).
+              </Text>
+            </Stack>
+          </Stack>
+        </Box>
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Technical Tools</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{tools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -37,7 +72,7 @@ export default function ResearchAnalytics() {
               <Stack
                 key={tool.id}
                 as="button"
-                onClick={() => navigate(tool.id === 'ux-auditor' ? '/ux-auditor' : `/research/${tool.id}`)}
+                onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
                 padding={6}
                 gap={4}
                 height="full"
@@ -48,23 +83,38 @@ export default function ResearchAnalytics() {
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
-                      <Icon icon={tool.id === 'wcs-scraper' ? Activity : Search} size="md" color="dim" />
+                      <Icon icon={tool.category.includes('DevAI') ? Cpu : tool.id.includes('scraper') || tool.id.includes('pipeline') ? Activity : Search} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
                       {tool.status}
                     </Text>
                   </Box>
                   <Stack gap={2}>
-                    <Text variant="display" size="xl" weight="font-black">
-                      {tool.name}
+                    <Stack gap={0.5}>
+                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                            {tool.category}
+                        </Text>
+                        <Text variant="display" size="xl" weight="font-black">
+                            {tool.title}
+                        </Text>
+                    </Stack>
+                    <Text size="xs" color="accent" weight="font-bold" uppercase tracking="tighter">
+                        {tool.subtitle}
                     </Text>
                     <Text size="sm" color="dim">
-                      {tool.layman}
+                      {tool.description}
                     </Text>
+                    <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
+                        {tool.tags.map(tag => (
+                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} border radius="full" color="dim">
+                                {tag}
+                            </Text>
+                        ))}
+                    </Box>
                   </Stack>
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">Open Tools</Text>
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
                   <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>

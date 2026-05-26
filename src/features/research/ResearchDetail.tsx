@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -7,6 +7,8 @@ import { useResearch } from './useResearch';
 import { BlogDrafter } from '@/features/lab/BlogDrafter';
 import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
 import { WCSScraperTool } from './components/WCSScraperTool';
+import { GitOpsReviewerTool } from './components/GitOpsReviewerTool';
+import { BlastRadiusTool } from './components/BlastRadiusTool';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
@@ -17,7 +19,10 @@ import { DetailLayout } from '@/components/layout/DetailLayout';
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
+  'wcs-parquet-pipeline': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
+  'gitops-pr-reviewer': GitOpsReviewerTool,
+  'scope-blast-radius': BlastRadiusTool,
 };
 
 export default function ResearchDetail() {
@@ -43,8 +48,8 @@ export default function ResearchDetail() {
       return {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": tool.name,
-        "description": tool.layman,
+        "name": tool.title,
+        "description": tool.description,
         "applicationCategory": "EducationalApplication"
       };
     }
@@ -113,8 +118,8 @@ export default function ResearchDetail() {
   return (
     <Box as="section" padding="panel">
       <SEO
-        title={tool.name}
-        description={tool.layman}
+        title={tool.title}
+        description={tool.description}
         type="website"
         schema={structuredData}
       />
@@ -145,12 +150,12 @@ export default function ResearchDetail() {
                 <Stack gap={4}>
                     <PageHeader
                       label={`PROJECT // ${tool.category}`}
-                      title={tool.name}
+                      title={tool.title}
                       paddingBottom={0}
                       border="none"
                     />
                   <Box border radius="md" surface="default" padding="compact">
-                    <Text variant="body" size="lg" color="dim">{tool.layman}</Text>
+                    <Text variant="body" size="lg" color="dim">{tool.description}</Text>
                   </Box>
                 </Stack>
 
