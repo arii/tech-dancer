@@ -19,43 +19,36 @@ export default function Home() {
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      {/* Single centered container for all homepage content */}
-      <Box className="mx-auto w-full max-w-[1280px] px-6 lg:px-10">
+      {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
+      <Box
+        as="section"
+        display="grid"
+        className="items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+      >
+        <HomeHero />
+        <FeaturedGuidePanel />
+      </Box>
 
-        {/* Hero + Featured Guide: editorial pair */}
+      {/* Remaining sections — tighter vertical rhythm on mobile */}
+      <Stack gap={10} className="mt-10 lg:mt-14">
+        <TopicGrid />
+
         <Box
-          as="section"
           display="grid"
-          className="items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
-          <HomeHero />
-          <FeaturedGuidePanel />
+          <FeaturedEventGuide />
+          <GearShelf />
         </Box>
 
-        {/* Topic grid + lower sections in tighter vertical rhythm */}
-        <Stack gap={14} className="mt-14 lg:mt-16">
-          <TopicGrid />
-
-          {/* Featured Event + Gear: balanced two-column */}
-          <Box
-            display="grid"
-            className="gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
-          >
-            <FeaturedEventGuide />
-            <GearShelf />
-          </Box>
-
-          {/* Latest Posts + Dev Lab: same balanced rhythm */}
-          <Box
-            display="grid"
-            className="gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
-          >
-            <LatestPosts />
-            <DevLabCallout />
-          </Box>
-        </Stack>
-
-      </Box>
+        <Box
+          display="grid"
+          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+        >
+          <LatestPosts />
+          <DevLabCallout />
+        </Box>
+      </Stack>
     </Box>
   );
 }
