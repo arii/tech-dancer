@@ -46,7 +46,7 @@ export function ContentCard(props: ContentCardProps) {
       direction="col"
       gap={4}
       height="full"
-      padding={{ base: 5, md: 6 }}
+      padding={{ base: 4, md: 6 }}
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
       {...motionProps}
@@ -73,9 +73,9 @@ export function ContentCard(props: ContentCardProps) {
         <Text
           as="h3"
           variant="body"
-          size="xl"
+          size={{ base: 'lg', md: 'xl' }}
           weight="font-bold"
-            color="main"
+          color="main"
             leading="tight"
             className="group-hover:text-accent transition-colors line-clamp-2"
         >

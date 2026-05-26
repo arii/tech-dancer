@@ -92,7 +92,7 @@ export default function FolioGrid({
 
   return (
     <Box as="section" height="full">
-      <Box as="header" marginBottom={12}>
+      <Box as="header" marginBottom={{ base: 6, md: 12 }}>
         <PageHeader
           label={label || "FOLIO"}
           title={categoryTitle}
@@ -126,7 +126,7 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : currentView === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={{ base: 6, md: 8 }} marginTop={{ base: 8, md: 12 }}>
+          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={{ base: 4, md: 8 }} marginTop={{ base: 6, md: 12 }}>
             {filteredItems.map((item) => (
               <Box
                 key={item.slug || item.id}

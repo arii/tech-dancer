@@ -22,11 +22,11 @@ export function SearchBox({
       align="center"
       position="relative"
       className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 focus-within:border-accent/50 focus-within:ring-4 focus-within:ring-accent/10 transition-all w-full sm:w-auto shadow-inner"
-      paddingX={5}
+      paddingX={{ base: 4, md: 5 }}
       paddingY={1.5}
       maxWidth={maxWidth}
       flex={1}
-      minHeight="48px"
+      minHeight={{ base: "44px", md: "48px" }}
       radius="full"
     >
       <Text

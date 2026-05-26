@@ -25,7 +25,7 @@ export function FilterBar({ categories, paramName = 'category' }: FilterBarProps
       zIndex={40}
       overflowX="auto"
       className="bg-bg/80 backdrop-blur-md top-16 lg:top-0 no-scrollbar"
-      paddingY={6}
+      paddingY={{ base: 4, md: 6 }}
     >
       <Stack direction="row" gap={3} className="min-w-max" paddingX={1}>
         {categories.map((cat) => {

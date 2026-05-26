@@ -35,7 +35,7 @@ export function BaseCard({
     "group relative transition-all duration-300",
     "bg-gradient-to-br from-slate-800/40 to-slate-900/40 backdrop-blur-md",
     "shadow-sm hover:shadow-md",
-    isLink && "hover:-translate-y-1 hover:border-accent/40 hover:from-slate-800/50 hover:to-slate-900/50",
+    isLink && "md:hover:-translate-y-1 hover:border-accent/40 hover:from-slate-800/50 hover:to-slate-900/50",
     className
   );
 
