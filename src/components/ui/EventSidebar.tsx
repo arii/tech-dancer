@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-utils';
+import { calculateJourneyTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-utils';
 import { Event } from '@/lib/content';
 
 export function EventHeaderExtras({ author }: { author: string }) {
@@ -33,7 +33,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
   const finalHotelCutoffDate = event?.hotelCutoffDate || hotelCutoffDate;
 
   return (
-    <Box as="aside">
+    <Box as="aside" className="h-full">
       <Stack gap={8} className="sticky top-24">
         {event && (
           <Box border radius="lg" padding={6} surface="surface-alt">
@@ -79,16 +79,16 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
         {finalStartDate && (
           <Stack gap={4}>
             <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
-              Travel Reminders
+              Important Dates
             </Text>
             <Stack gap={4}>
-              {calculateTimeline({
+              {calculateJourneyTimeline({
                 title: event?.title || 'Event',
                 startDate: finalStartDate,
                 earlyBirdDate: finalEarlyBirdDate,
                 hotelCutoffDate: finalHotelCutoffDate,
-              }, {
-                filterIds: ['flight-track', 'early-bird', 'hotel-block', 'comp-window', 'cancel-safety']
+                registrationDeadline: event?.registrationDeadline,
+                packingReminderDate: event?.packingReminderDate,
               }).map((reminder) => {
                 const Icon = reminder.icon!;
                 return (

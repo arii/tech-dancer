@@ -5,7 +5,6 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { Logo } from '@/components/ui/Logo';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
-import { EventNavigation } from './EventNavigation';
 
 interface EventHeroProps {
   title: string;
@@ -165,10 +164,6 @@ export function EventHero({
           </Box>
         )}
       </Stack>
-
-      <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
-      </Box>
     </Stack>
   );
 }

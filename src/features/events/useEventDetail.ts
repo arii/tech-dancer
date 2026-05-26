@@ -5,6 +5,10 @@ import { getEventBySlug, getEvents, Event } from "@/lib/content";
 import { affiliateManager } from "@/lib/affiliateManager";
 import { AffiliateLink } from "@/types";
 
+const MAX_THEME_OUTFITS = 6;
+const MAX_THEME_ACCESSORIES = 3;
+const MAX_TOTAL_PRODUCTS = 15;
+
 export interface ResolvedGearSection {
   label: string;
   description?: string;
@@ -81,14 +85,78 @@ export function useEventDetail() {
 
   // Consolidate event-specific derived state into a single memoization block
   // to reduce dependency chains and potential extra re-renders.
-  const { themeOutfits, themeAccessories, gearSections } = useMemo(
-    () => ({
-      themeOutfits: resolveAffiliateLinks(event?.theme?.outfitIds),
-      themeAccessories: resolveAffiliateLinks(event?.theme?.accessoryIds),
-      gearSections: getGearSections(event?.gear),
-    }),
-    [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear],
-  );
+  const {
+    themeOutfits,
+    themeAccessories,
+    gearSections,
+    compactThemeOutfits,
+    compactThemeAccessories,
+    compactGearSections,
+    hasMoreThemeOutfits,
+    hasMoreThemeAccessories,
+  } = useMemo(() => {
+    const allOutfits = resolveAffiliateLinks(event?.theme?.outfitIds);
+    const allAccessories = resolveAffiliateLinks(event?.theme?.accessoryIds);
+
+    const themePickCount = MAX_THEME_OUTFITS;
+    const themeAccessoryCount = MAX_THEME_ACCESSORIES;
+
+    const compactOutfits = allOutfits.slice(0, themePickCount);
+    const compactAccessories = allAccessories.slice(0, themeAccessoryCount);
+
+    // Track IDs already shown in the Theme Spotlight
+    const shownIds = new Set([
+      ...compactOutfits.map((i) => i.id),
+      ...compactAccessories.map((i) => i.id),
+    ]);
+
+    const allGearSections = getGearSections(event?.gear).map((section) => ({
+      ...section,
+      items: section.items.filter((item) => !shownIds.has(item.id)),
+    }));
+
+    // Requirement: 15 visible product items max.
+    // Use dynamic quota: 15 - (actual theme items) = remaining for gear
+    const remainingGearQuota =
+      MAX_TOTAL_PRODUCTS - compactOutfits.length - compactAccessories.length;
+
+    const compactGearResult = allGearSections.reduce(
+      (acc, section) => {
+        const take = Math.max(0, Math.min(3, remainingGearQuota - acc.count));
+        const items = section.items.slice(0, take);
+        if (items.length > 0) {
+          return {
+            sections: [
+              ...acc.sections,
+              {
+                ...section,
+                items,
+                hasMore: section.items.length > take,
+              },
+            ],
+            count: acc.count + items.length,
+          };
+        }
+        return acc;
+      },
+      {
+        sections: [] as (ResolvedGearSection & { hasMore: boolean })[],
+        count: 0,
+      },
+    );
+    const compactGear = compactGearResult.sections;
+
+    return {
+      themeOutfits: allOutfits,
+      themeAccessories: allAccessories,
+      gearSections: allGearSections,
+      compactThemeOutfits: compactOutfits,
+      compactThemeAccessories: compactAccessories,
+      compactGearSections: compactGear,
+      hasMoreThemeOutfits: allOutfits.length > themePickCount,
+      hasMoreThemeAccessories: allAccessories.length > themeAccessoryCount,
+    };
+  }, [event?.theme?.outfitIds, event?.theme?.accessoryIds, event?.gear]);
 
   // Resolve related events
   // Dependent on both the current event and the full list
@@ -108,6 +176,11 @@ export function useEventDetail() {
     themeOutfits,
     themeAccessories,
     gearSections,
+    compactThemeOutfits,
+    compactThemeAccessories,
+    compactGearSections,
+    hasMoreThemeOutfits,
+    hasMoreThemeAccessories,
     relatedEvents,
     navigate,
   };
