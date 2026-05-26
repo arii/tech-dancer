@@ -95,7 +95,7 @@ export default function ResearchAnalytics() {
                     <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
                       <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                     </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" className="px-3 py-1 rounded-full bg-accent/10">
+                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
                       Flagship
                     </Text>
                   </Box>
@@ -135,7 +135,7 @@ export default function ResearchAnalytics() {
                         display="flex"
                         align="center"
                         gap={2}
-                        className="text-accent hover:text-accent-hover transition-colors z-20"
+                        className="text-accent hover:opacity-80 transition-colors z-20"
                       >
                         <Text weight="font-bold" size="xs" uppercase tracking="widest">
                           {tool.id.includes('hrm') ? 'View HRM' : 'Open RepoAuditor AI'}
