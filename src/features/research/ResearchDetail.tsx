@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -18,6 +18,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
+  'wcs-parquet-pipeline': WCSScraperTool, // Fallback for now as it's related
 };
 
 export default function ResearchDetail() {
@@ -43,8 +44,8 @@ export default function ResearchDetail() {
       return {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": tool.name,
-        "description": tool.layman,
+        "name": tool.title,
+        "description": tool.description,
         "applicationCategory": "EducationalApplication"
       };
     }
@@ -70,8 +71,7 @@ export default function ResearchDetail() {
   }, [tool, study]);
 
   // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // Check both paramId and tool.canonicalPath to support centralized config
-  if (paramId === 'ux-auditor' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
+  if (paramId === 'ux-auditor' || paramId === 'ux-perception-debug' || (tool?.canonicalPath && pathname.startsWith('/research/'))) {
     return <Navigate to={tool?.canonicalPath || "/ux-auditor"} replace />;
   }
 
@@ -113,8 +113,8 @@ export default function ResearchDetail() {
   return (
     <Box as="section" padding="panel">
       <SEO
-        title={tool.name}
-        description={tool.layman}
+        title={tool.title}
+        description={tool.description}
         type="website"
         schema={structuredData}
       />
@@ -145,12 +145,12 @@ export default function ResearchDetail() {
                 <Stack gap={4}>
                     <PageHeader
                       label={`PROJECT // ${tool.category}`}
-                      title={tool.name}
+                      title={tool.title}
                       paddingBottom={0}
                       border="none"
                     />
                   <Box border radius="md" surface="default" padding="compact">
-                    <Text variant="body" size="lg" color="dim">{tool.layman}</Text>
+                    <Text variant="body" size="lg" color="dim">{tool.description}</Text>
                   </Box>
                 </Stack>
 
@@ -166,19 +166,19 @@ export default function ResearchDetail() {
                     <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
                     <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
                       <Database className="w-4 h-4 text-accent" />
-                      <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
+                      <Text variant="mono" size="xs">SYSTEM REPOSITORY // INTERNAL</Text>
                     </Box>
                   </Stack>
                 </Grid>
 
-                {tool.status === 'Coming Soon' && (
+                {(tool.status === 'Coming Soon' || !TOOL_REGISTRY[id]) && (
                   <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
                       <Stack gap={2}>
-                        <Text variant="display" size="xl">Work in Progress</Text>
+                        <Text variant="display" size="xl">Technical Documentation Pending</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
-                          This tool is currently being built. We are finishing the data analysis and layout.
+                          Detailed architectural breakdown for this system is being finalized. Please refer to the repository source for immediate implementation details.
                         </Text>
                       </Stack>
                     </Stack>
