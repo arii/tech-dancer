@@ -56,3 +56,7 @@ export const EventFrontmatterSchema = z.object({
   packingReminderDate: z.string().optional(),
   relatedEvents: z.array(z.string()).optional(),
 });
+
+export type EventTheme = z.infer<typeof EventThemeSchema>;
+export type EventGear = z.infer<typeof EventGearSchema>;
+export type EventFrontmatter = z.infer<typeof EventFrontmatterSchema>;
