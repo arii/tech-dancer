@@ -1,12 +1,9 @@
-import { useMemo } from 'react';
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useMemo, lazy, Suspense } from 'react';
+import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
-import { BlogDrafter } from '@/features/lab/BlogDrafter';
-import WSDCReminders from '@/features/lab/wsdc-reminders/WSDCReminders';
-import { WCSScraperTool } from './components/WCSScraperTool';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
@@ -14,10 +11,19 @@ import { BASE_URL, SITE_NAME } from '@/config/constants';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
 
+// Lazy load tool components to help with bundle size
+const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
+const WSDCReminders = lazy(() => import('@/features/lab/wsdc-reminders/WSDCReminders'));
+const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
+const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
+const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m => ({ default: m.BlastRadiusTool })));
+
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
-  'wcs-scraper': WCSScraperTool,
+  'wcs-parquet-pipeline': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
+  'gitops-pr-reviewer': GitOpsReviewerTool,
+  'scope-blast-radius': BlastRadiusTool,
 };
 
 export default function ResearchDetail() {
@@ -43,8 +49,8 @@ export default function ResearchDetail() {
       return {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": tool.name,
-        "description": tool.layman,
+        "name": tool.title,
+        "description": tool.description,
         "applicationCategory": "EducationalApplication"
       };
     }
@@ -113,8 +119,8 @@ export default function ResearchDetail() {
   return (
     <Box as="section" padding="panel">
       <SEO
-        title={tool.name}
-        description={tool.layman}
+        title={tool.title}
+        description={tool.description}
         type="website"
         schema={structuredData}
       />
@@ -136,21 +142,27 @@ export default function ResearchDetail() {
         <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
           <Stack gap={12}>
             {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
-              (() => {
-                const ToolComponent = TOOL_REGISTRY[id];
-                return <ToolComponent />;
-              })()
+              <Suspense fallback={
+                <Box padding={20} display="flex" align="center" justify="center">
+                  <Activity className="animate-spin text-accent" />
+                </Box>
+              }>
+                {(() => {
+                  const ToolComponent = TOOL_REGISTRY[id];
+                  return <ToolComponent />;
+                })()}
+              </Suspense>
             ) : (
               <Stack gap={12}>
                 <Stack gap={4}>
                     <PageHeader
                       label={`PROJECT // ${tool.category}`}
-                      title={tool.name}
+                      title={tool.title}
                       paddingBottom={0}
                       border="none"
                     />
                   <Box border radius="md" surface="default" padding="compact">
-                    <Text variant="body" size="lg" color="dim">{tool.layman}</Text>
+                    <Text variant="body" size="lg" color="dim">{tool.description}</Text>
                   </Box>
                 </Stack>
 
