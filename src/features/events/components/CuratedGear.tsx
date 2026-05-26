@@ -22,8 +22,8 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
             <Stack gap={2}>
               <Box display="flex" align="center" justify="between">
                 <SectionHeader
+                  eyebrow="COLLECTION"
                   title={section.label}
-                  size="sm"
                 />
                 {section.hasMore && (
                   <Box as="a" href="/gear" className="text-accent hover:underline">
