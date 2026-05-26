@@ -6,12 +6,10 @@ import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { GearCard } from '@/components/ui/GearCard';
-import { MerchCard } from '@/components/ui/MerchCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { detectContentType } from '@/lib/contentTypeDetector';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
@@ -71,29 +69,13 @@ export default function Toolbox() {
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
         <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 3, md: 4 }}>
-          {allFilteredItems.map((item) => {
-            const contentType = detectContentType(item);
-            if (contentType === 'merch') {
-              return (
-                <MerchCard
-                  key={item.slug}
-                  {...item}
-                  title={item.title || item.name}
-                  category={item.category}
-                  excerpt={item.excerpt || item.description}
-                  image={item.image}
-                  shopUrl={item.shopUrl || ''}
-                />
-              );
-            }
-            return (
-              <GearCard
-                key={item.slug}
-                {...item}
-                basePath="/gear"
-              />
-            );
-          })}
+          {allFilteredItems.map((item) => (
+            <GearCard
+              key={item.slug}
+              {...item}
+              basePath="/gear"
+            />
+          ))}
         </Grid>
       ) : (
         <Stack gap={0} border="t" className="border-line">
