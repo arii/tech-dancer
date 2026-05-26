@@ -24,8 +24,8 @@ export function FilterButton({
       aria-pressed={isActive}
       className={cn(
         "inline-flex items-center rounded-full border font-semibold uppercase tracking-emphasized cursor-pointer transition-all",
-        variant === "default" && "px-5 py-2.5 text-xs min-h-[44px]",
-        variant === "compact" && "px-4 py-1.5 text-xs min-h-[36px]",
+        variant === "default" && "px-5 py-2.5 text-xs min-h-11",
+        variant === "compact" && "px-4 py-1.5 text-xs min-h-9",
         isActive
           ? "border-accent/60 text-accent bg-accent/10 ring-2 ring-accent/20"
           : "border-slate-700/50 text-text-dim bg-slate-800/30 hover:border-slate-600 hover:text-text-main hover:bg-slate-800/60",

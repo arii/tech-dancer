@@ -1,6 +1,6 @@
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
-import { cn, formatCategory } from '@/lib/utils';
+import { formatCategory } from '@/lib/utils';
 import { FilterButton } from './FilterButton';
 
 interface FilterBarProps {
