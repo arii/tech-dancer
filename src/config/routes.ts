@@ -27,6 +27,19 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
+    path: '/shop',
+    lazy: () => import('@/features/shop/Shop').then(m => ({ Component: m.default })),
+    label: 'Merch',
+    icon: ShoppingBag,
+    skeleton: 'grid',
+    isMobileVisible: true
+  },
+  {
+    path: '/shop/:slug',
+    lazy: () => import('@/features/shop/ShopPost').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
     path: '/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',

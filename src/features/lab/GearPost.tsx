@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -16,6 +16,13 @@ export default function GearPost() {
     enabled: !!slug,
     initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
+
+  // Redirect merch items to shop page
+  useEffect(() => {
+    if (resource && resource.shopUrl) {
+      navigate(`/shop/${slug}`, { replace: true });
+    }
+  }, [resource, slug, navigate]);
 
   const structuredData = useMemo(() => {
     if (!resource) return null;
