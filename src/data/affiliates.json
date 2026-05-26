@@ -88,22 +88,14 @@
         "description": "Waterproof and spacious organizer for all your toiletries.",
         "image": "/images/gear/amazon/relavel-travel-hanging-toiletry-bag-for-men-women-travel-kit-shaving-b.jpg"
     },
-    "garment-steamer": {
-        "id": "garment-steamer",
-        "name": "Portable Garment Steamer",
-        "url": "https://www.amazon.com/dp/B08J45WG5B?tag=onasafari04-20&linkCode=ll2&language=en_US",
-        "category": "travel",
-        "description": "Keep your outfits wrinkle-free while traveling.",
-        "gearSlug": "2023-11-01-travel-steamer",
-        "image": "/assets/gear/travel-steamer.jpg"
-    },
     "epsom-salt": {
         "id": "epsom-salt",
         "name": "Epsom Salt / Bath Bombs",
         "url": "https://amazon.com",
         "category": "recovery",
         "description": "Soothe tired muscles and refresh your skin after a long weekend.",
-        "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg"
+        "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg",
+        "draft": true
     },
     "foam-roller": {
         "id": "foam-roller",
@@ -111,7 +103,8 @@
         "url": "https://amazon.com",
         "category": "recovery",
         "description": "Good for sore legs, tight hips, and post-event recovery.",
-        "image": "/images/gear/amazon/hyperice-vyper-foam-roller.jpg"
+        "image": "/images/gear/amazon/hyperice-vyper-foam-roller.jpg",
+        "draft": true
     },
     "rainbow-fringe-dress": {
         "id": "rainbow-fringe-dress",
@@ -140,7 +133,7 @@
     "rainbow-earrings": {
         "id": "rainbow-earrings",
         "name": "Rainbow Statement Earrings",
-        "url": "https://www.amazon.com/dp/B0CFB4ZGHV?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/dp/B09FWYRDH2?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
         "description": "Bold accessories to complete your theme outfit.",
         "image": "/images/gear/amazon/didder-gold-crystal-tiara-crown-headband-princess-elegant-crown-with-c.jpg"
@@ -151,7 +144,8 @@
         "url": "https://amazon.com",
         "category": "gear",
         "description": "Fun sunglasses for pool parties and daytime events.",
-        "image": "/images/gear/amazon/volpeblu-24-pack-light-up-cups-led-flash-shot-glasses-for-party-favors.jpg"
+        "image": "/images/gear/amazon/volpeblu-24-pack-light-up-cups-led-flash-shot-glasses-for-party-favors.jpg",
+        "draft": true
     },
     "portable-charger": {
         "id": "portable-charger",
@@ -164,7 +158,7 @@
     "travel-pillow": {
         "id": "travel-pillow",
         "name": "Memory Foam Travel Pillow",
-        "url": "https://www.amazon.com/dp/B08HK9WS7S?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/dp/B09QRZNV8R?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "travel",
         "description": "Essential for catching some sleep on flights or between sessions.",
         "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg"
@@ -183,12 +177,13 @@
         "url": "https://amazon.com",
         "category": "travel",
         "description": "Refresh your hair quickly between workshops and social dancing.",
-        "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg"
+        "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg",
+        "draft": true
     },
     "electric-fan": {
         "id": "electric-fan",
         "name": "Handheld Mini Fan",
-        "url": "https://www.amazon.com/dp/B0BQWC8B7D?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/dp/B08LQNP7N2?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
         "description": "A life-saver on a crowded, hot dance floor.",
         "image": "/images/gear/amazon/jisulife-handheld-mini-fan.jpg"
@@ -199,7 +194,8 @@
         "url": "https://amazon.com",
         "category": "recovery",
         "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
-        "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg"
+        "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg",
+        "draft": true
     },
     "shoe-brush": {
         "id": "shoe-brush",
@@ -213,7 +209,7 @@
     "mints": {
         "id": "mints",
         "name": "Altoids Peppermint Mints",
-        "url": "https://www.amazon.com/dp/B0CFB4ZGHV?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/dp/B00K2RIQBK?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "travel",
         "description": "Essential for social dancing confidence.",
         "image": "/images/gear/amazon/altoids-peppermint-mints.jpg"
@@ -221,7 +217,7 @@
     "hand-sanitizer": {
         "id": "hand-sanitizer",
         "name": "Purell Advanced Hand Sanitizer",
-        "url": "https://www.amazon.com/dp/B08HK9WS7S?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/dp/B00EAQX2LE?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "travel",
         "description": "Stay healthy while dancing with hundreds of people.",
         "image": "/images/gear/amazon/purell-advanced-hand-sanitizer.jpg"
@@ -239,35 +235,40 @@
         "name": "Dance Bag",
         "url": "https://amazon.com",
         "category": "travel",
-        "description": "Weekend essential dance bag for all levels."
+        "description": "Weekend essential dance bag for all levels.",
+        "draft": true
     },
     "rainbow-bob-wig": {
         "id": "rainbow-bob-wig",
         "name": "Rainbow Bob Wig",
         "url": "https://amazon.com",
         "category": "gear",
-        "description": "Vibrant rainbow bob wig to complete your event look."
+        "description": "Vibrant rainbow bob wig to complete your event look.",
+        "draft": true
     },
     "rainbow-sequin-bomber-jacket": {
         "id": "rainbow-sequin-bomber-jacket",
         "name": "Rainbow Sequin Bomber Jacket",
         "url": "https://amazon.com",
         "category": "gear",
-        "description": "Dazzle on the dance floor with this rainbow sequin jacket."
+        "description": "Dazzle on the dance floor with this rainbow sequin jacket.",
+        "draft": true
     },
     "rainbow-bustle-skirt": {
         "id": "rainbow-bustle-skirt",
         "name": "Rainbow Bustle Skirt",
         "url": "https://amazon.com",
         "category": "gear",
-        "description": "A fun and flowy rainbow bustle skirt for themed nights."
+        "description": "A fun and flowy rainbow bustle skirt for themed nights.",
+        "draft": true
     },
     "holographic-rave-fan": {
         "id": "holographic-rave-fan",
         "name": "Holographic Rave Fan",
         "url": "https://amazon.com",
         "category": "gear",
-        "description": "Keep cool and stay flashy with this holographic folding fan."
+        "description": "Keep cool and stay flashy with this holographic folding fan.",
+        "draft": true
     },
     "led-scrunchies": {
         "id": "led-scrunchies",
@@ -305,7 +306,7 @@
     "mini-fan": {
         "id": "mini-fan",
         "name": "Handheld Mini Fan",
-        "url": "https://www.amazon.com/dp/B0BQWC8B7D?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/dp/B08LQNP7N2?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
         "description": "A life-saver on a crowded, hot dance floor.",
         "draft": true,
