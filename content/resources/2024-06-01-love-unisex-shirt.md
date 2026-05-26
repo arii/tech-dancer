@@ -7,7 +7,6 @@ category: "fashion"
 excerpt: "Unisex 'Lead, Follow, or Switch' LOVE shirt."
 image: "/assets/gear/unisex-t-shirt-front.webp"
 imageBack: "/assets/gear/unisex-t-shirt-back.webp"
-affiliateIds: ["love-unisex-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Classic & Inclusive"

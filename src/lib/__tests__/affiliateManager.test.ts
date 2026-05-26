@@ -38,9 +38,11 @@ describe('affiliateManager', () => {
       expect(url).toContain('utm_medium=portfolio');
     });
 
-    it('does NOT apply tracking to Printful links', () => {
+    it('does NOT apply tracking to Printful links (removed from affiliates)', () => {
+      // Printful merch items are no longer managed as affiliates per FTC best practices
+      // They should not have affiliate entries in affiliates.json
       const url = affiliateManager.resolveUrl('love-neon-follow-shirt');
-      expect(url).toContain('printful.me');
+      expect(url).toBe('#');
       expect(url).not.toContain('utm_source');
     });
   });

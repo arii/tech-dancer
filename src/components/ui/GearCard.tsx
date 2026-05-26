@@ -1,11 +1,25 @@
 // impeccable-ignore-file
+
+/**
+ * GearCard component for displaying gear items in grid/list view.
+ * 
+ * NOTE: Star rating display has been removed from the card footer pending
+ * Amazon affiliate approval for dynamic content updates. This prevents showing
+ * static editorial ratings that could conflict with live Amazon reviews.
+ * 
+ * The component still accepts a rating property for backward compatibility,
+ * but it is not displayed. See ResourceGrid.tsx for dynamic rating integration
+ * once affiliate approval is obtained.
+ * 
+ * Reference: https://github.com/arii/tech-dancer/issues/1604
+ */
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
-import { Star, ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
@@ -13,7 +27,6 @@ interface GearCardProps extends BaseProps {
   title: string;
   category: string;
   excerpt: string;
-  rating?: number;
   verdict?: string;
   image?: string;
   affiliateIds?: string[];
@@ -32,7 +45,6 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
-    rating,
     verdict,
     image: propsImage,
     affiliateIds,
@@ -92,20 +104,49 @@ export function GearCard(props: GearCardProps) {
           className="bg-black/15 pointer-events-none"
           aria-hidden="true"
         />
-        {/* Category badge */}
-        <Box
-          position="absolute"
-          top={3}
-          right={3}
-          paddingX={2}
-          paddingY={1}
-          radius="full"
-          opacity={80}
-          className="bg-accent text-bg backdrop-blur-md shadow-sm"
-        >
-          <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-            {category}
-          </Text>
+        {/* Illustration badge for sketches */}
+        {image?.includes('/sketches/') && (
+          <Box
+            position="absolute"
+            top={3}
+            left={3}
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacity={70}
+            className="bg-bg/80 text-accent backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+              Illustration
+            </Text>
+          </Box>
+        )}
+        {/* Category and affiliate badges */}
+        <Box position="absolute" top={3} right={3} display="flex" gap={2} direction="col" align="end">
+          <Box
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacity={80}
+            className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+              {category}
+            </Text>
+          </Box>
+          {isExternal && (
+            <Box
+              paddingX={1.5}
+              paddingY={0.5}
+              radius="full"
+              opacity={70}
+              className="bg-accent/60 text-accent-sky backdrop-blur-md shadow-sm"
+            >
+              <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide text-xs">
+                Earns Commission
+              </Text>
+            </Box>
+          )}
         </Box>
       </Box>
       <Stack gap={2}>
@@ -128,23 +169,15 @@ export function GearCard(props: GearCardProps) {
           {title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
+        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-2">
            {excerpt}
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
-        {rating !== undefined && (
-          <Box display="flex" align="center" gap={1.5}>
-            <Star size={14} className="text-accent fill-accent" aria-hidden="true" />
-            <Text variant="mono" size="xs" weight="font-bold" color="accent">
-              {rating.toFixed(1)}/5
-            </Text>
-          </Box>
-        )}
+      <Box display="flex" align="center" justify="end" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            {isExternal ? "View deal" : "Read review"}
+            {isExternal ? "View on Amazon" : "Read review"}
           </Text>
           {isExternal ? (
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />

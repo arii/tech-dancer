@@ -1,4 +1,13 @@
-import { Star } from 'lucide-react';
+/**
+ * Displays rating/durability/value metrics for individual gear items.
+ * 
+ * NOTE: Rating display is currently DISABLED pending Amazon affiliate approval
+ * for dynamic content updates. Once approved, we'll integrate the Amazon Product
+ * Advertising API v5 to fetch live ratings, prices, and availability.
+ * 
+ * For now, we preserve the data structure but hide the display in ResourceGrid.
+ * See: https://github.com/arii/tech-dancer/issues/1604
+ */
 import { ScoreGrid, ScoreItem } from '@/components/layout/DetailElements';
 
 interface ResourceGridProps {
@@ -10,6 +19,16 @@ interface ResourceGridProps {
   date?: string;
 }
 
+/**
+ * Displays rating/durability/value metrics for individual gear items.
+ * 
+ * NOTE: Rating display is currently DISABLED pending Amazon affiliate approval
+ * for dynamic content updates. Once approved, we'll integrate the Amazon Product
+ * Advertising API v5 to fetch live ratings, prices, and availability.
+ * 
+ * For now, we preserve the data structure but hide the display in ResourceGrid.
+ * See: https://github.com/arii/tech-dancer/issues/1604
+ */
 export function ResourceGrid({
   rating,
   durability,
@@ -18,13 +37,7 @@ export function ResourceGrid({
   updatedDate,
   date
 }: ResourceGridProps) {
-  return (
-    <ScoreGrid>
-      <ScoreItem label="Overall" value={rating || 'N/A'} icon={Star} intent="warning" />
-      {durability !== undefined && durability > 0 && <ScoreItem label="Durability" value={`${durability}/5`} />}
-      {value !== undefined && value > 0 && <ScoreItem label="Value" value={`${value}/5`} />}
-      <ScoreItem label="Price" value={priceCategory || '$$'} intent="warning" />
-      {(updatedDate || date) && <ScoreItem label="Updated" value={updatedDate || date || ''} />}
-    </ScoreGrid>
-  );
+  // Ratings hidden pending affiliate approval for dynamic updates
+  // TODO: Re-enable when Amazon PA-API integration approved
+  return null;
 }

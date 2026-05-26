@@ -7,7 +7,6 @@ category: "fashion"
 excerpt: "Classic Golden Gate bridge design with a vibrant rainbow twist for NorCal dancers."
 image: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp"
 imageBack: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-back.webp"
-affiliateIds: ["norcal-pride-gate-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Regional Pride"

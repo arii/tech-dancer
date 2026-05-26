@@ -19,6 +19,9 @@ export default function GearPost() {
 
   const structuredData = useMemo(() => {
     if (!resource) return null;
+    // Note: Schema.org rating data is preserved for SEO purposes, but visual
+    // display of ratings is currently hidden pending Amazon affiliate approval
+    // for dynamic content updates. See ResourceGrid.tsx for details.
     return {
       "@context": "https://schema.org",
       "@type": "Product",

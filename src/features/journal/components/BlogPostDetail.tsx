@@ -2,6 +2,7 @@ import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post } from '@/lib/content';
 
 interface BlogPostDetailProps {
@@ -20,6 +21,9 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       }).catch(console.error);
     }
   };
+
+  // Check if post contains affiliate links (has amazon.com or affiliate marker)
+  const hasAffiliates = post.content?.includes('amazon.com') || post.content?.includes('affiliate') || post.affiliateIds?.length;
 
   return (
     <DetailLayout
@@ -44,6 +48,11 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         </Stack>
       }
     >
+      {hasAffiliates && (
+        <Box marginY={8} marginTop={-6}>
+          <AffiliateDisclosure type="blog" />
+        </Box>
+      )}
       {post.tags && post.tags.length > 0 && (
         <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
           <Stack gap={4}>

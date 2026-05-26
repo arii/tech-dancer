@@ -7,7 +7,6 @@ category: "fashion"
 excerpt: "Show your versatility on the dance floor with this neon 'Lead, Follow, or Switch' LOVE shirt."
 image: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"
 imageBack: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp"
-affiliateIds: ["love-neon-switch-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Versatile & Vibrant"

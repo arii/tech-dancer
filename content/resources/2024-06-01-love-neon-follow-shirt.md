@@ -7,7 +7,6 @@ category: "fashion"
 excerpt: "Express your style and your role on the floor with this neon-inspired follow shirt."
 image: "/assets/gear/love-neon-tshirt-ask-me-to-follow-front.webp"
 imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-follow-back.webp"
-affiliateIds: ["love-neon-follow-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Stylish & Social"

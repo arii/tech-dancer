@@ -6,7 +6,6 @@ author: "Ariel Anders, PhD"
 category: "fashion"
 excerpt: "Cozy crop hoodie with the Golden Gate bridge design."
 image: "/assets/gear/norcal-gate-crop-hoodie.webp"
-affiliateIds: ["norcal-gate-crop-hoodie"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Cozy & Regional"
