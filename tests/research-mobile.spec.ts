@@ -14,8 +14,18 @@ test.describe('Research Tools Mobile UX', () => {
     test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page }) => {
       await page.goto(tool.path);
 
-      // Wait for lazy components
-      await page.waitForTimeout(2000);
+      // Wait for lazy components based on tool path
+      if (tool.path === '/ux-auditor') {
+        await page.waitForSelector('input[aria-label="URL to audit"]', { state: 'visible' });
+      } else if (tool.path === '/research/blog-drafter') {
+        await page.waitForSelector('text=METADATA', { state: 'visible' });
+      } else if (tool.path === '/research/wcs-scraper') {
+        await page.waitForSelector('text=SCORING RESULTS', { state: 'visible' });
+      } else if (tool.path === '/research/wsdc-event-reminders') {
+        await page.waitForSelector('text=ACTION TIMELINE', { state: 'visible' });
+      } else {
+        await page.waitForLoadState('networkidle');
+      }
 
       // Check for horizontal overflow
       const overflowX = await page.evaluate(() => {
