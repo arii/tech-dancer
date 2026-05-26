@@ -1,59 +1,54 @@
 ---
 type: event
-title: "SOswing"
-date: "2026-05-14"
-startDate: "2026-05-14"
-author: "Ariel Anders, PhD"
-category: "WSDC Registry Event"
-excerpt: "A charming WCS experience in beautiful Ashland, OR."
-location: "Ashland Hills Hotel & Suites"
-city: "Ashland, OR"
-region: "Pacific Northwest"
-schedule: "May 14 - 17, 2026"
-url: "https://soswing.com"
-heroImage: ""
-description: "SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing."
-
+title: SOswing
+date: '2026-05-14'
+startDate: '2026-05-14'
+author: Ariel Anders, PhD
+category: WSDC Registry Event
+excerpt: A charming WCS experience in beautiful Ashland, OR.
+location: Ashland Hills Hotel & Suites
+city: Ashland, OR
+region: Pacific Northwest
+schedule: May 14 - 17, 2026
+url: https://soswing.com
+heroImage: ''
+description: SOswing offers a unique, community-focused atmosphere in beautiful Ashland.
+  Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions,
+  leveled workshops with top-tier pros, and late-night social dancing.
 whyAttending: >
-  SOswing has the most welcoming, community-first atmosphere on the
-  Pacific Northwest circuit. It's a perfect event to focus on dancing
-  without the pressure of a huge comp field.
-
+  SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest
+  circuit. It's a perfect event to focus on dancing without the pressure of a huge
+  comp field.
 theme:
-  name: "Pacific Wildflower"
-  label: "SOswing Theme"
+  name: Pacific Wildflower
+  label: SOswing Theme
   outfitIds:
-    - "ombre-dance-dress"
+  - ombre-dance-dress
   accessoryIds:
-    - "rave-fan"
-    - "neck-fan"
-
+  - rave-fan
+  - neck-fan
 gear:
   outfitIds: []
   accessoryIds: []
   shoeIds:
-    - "bloch-grecian"
-    - "dance-socks"
+  - bloch-grecian
+  - dance-socks
   essentialIds:
-    - "loop-experience"
-    - "foam-roller"
-    - "mints"
+  - loop-experience
+  - foam-roller
+  - mints
   travelIds:
-    - "compression-cubes"
-    - "travel-pillow"
-
-earlyBirdDate: "2026-03-15"
-registrationDeadline: "2026-05-01"
-hotelCutoffDate: "2026-04-18"
-packingReminderDate: "2026-05-05"
-
+  - compression-cubes
+  - travel-pillow
+earlyBirdDate: '2026-03-15'
+registrationDeadline: '2026-05-01'
+hotelCutoffDate: '2026-04-18'
+packingReminderDate: '2026-05-05'
 relatedEvents:
-  - "jack-and-jill-orama"
-  - "swingtacular-the-galactic-open"
-  - "boogie-by-the-bay"
+- jack-and-jill-orama
+- swingtacular-the-galactic-open
+- boogie-by-the-bay
 ---
-
-# SOswing
 
 Ashland is a theatre town — beautiful, small, and surprisingly walkable
 from the hotel. Book early; the room block is limited.

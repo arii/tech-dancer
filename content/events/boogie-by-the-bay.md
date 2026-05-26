@@ -1,66 +1,61 @@
 ---
 type: event
-title: "Boogie by the Bay"
-date: "2026-10-08"
-startDate: "2026-10-08"
-author: "Ariel Anders"
-category: "WSDC Registry Event"
-excerpt: "The flagship event of The Next Generation Swing Dance Club, held every Columbus Day weekend."
-location: "Hyatt Regency San Francisco Airport"
-city: "Burlingame, CA"
-region: "NorCal"
-schedule: "October 8 - 11, 2026"
-url: "https://boogiebythebay.org"
-heroImage: "/assets/events/boogie-by-the-bay-hero.svg"
-description: "One of the longest-running and most prestigious events in the world. Boogie by the Bay features the Champions/All-Star Jack & Jill, professional intensives, and a massive ballroom floor that hosts dancers from every corner of the globe."
-
+title: Boogie by the Bay
+date: '2026-10-08'
+startDate: '2026-10-08'
+author: Ariel Anders
+category: WSDC Registry Event
+excerpt: The flagship event of The Next Generation Swing Dance Club, held every Columbus
+  Day weekend.
+location: Hyatt Regency San Francisco Airport
+city: Burlingame, CA
+region: NorCal
+schedule: October 8 - 11, 2026
+url: https://boogiebythebay.org
+heroImage: /assets/events/boogie-by-the-bay-hero.svg
+description: One of the longest-running and most prestigious events in the world.
+  Boogie by the Bay features the Champions/All-Star Jack & Jill, professional intensives,
+  and a massive ballroom floor that hosts dancers from every corner of the globe.
 whyAttending: >
   Boogie by the Bay is a cornerstone of the West Coast Swing calendar. It's where
   tradition meets high-level competition, all in a beautiful setting. The atmosphere
   is electric, especially during the Champions Jack & Jill, making it an unmissable
   experience for any serious dancer.
-
 theme:
-  name: "Classic San Francisco"
-  label: "Flagship Theme"
+  name: Classic San Francisco
+  label: Flagship Theme
   outfitIds:
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
+  - sequin-bomber-jacket
+  - ombre-dance-dress
   accessoryIds:
-    - "rainbow-earrings"
-    - "rave-fan"
-
+  - rainbow-earrings
+  - rave-fan
 gear:
   outfitIds:
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
+  - ombre-dance-dress
   accessoryIds:
-    - "electric-fan"
-    - "rave-fan"
+  - electric-fan
+  - rave-fan
   shoeIds:
-    - "bloch-grecian"
-    - "suede-sheets"
+  - bloch-grecian
+  - suede-sheets
   essentialIds:
-    - "loop-experience"
-    - "foam-roller"
-    - "shoe-brush"
+  - loop-experience
+  - foam-roller
+  - shoe-brush
   travelIds:
-    - "compression-cubes"
-    - "portable-charger"
-    - "mints"
-
-earlyBirdDate: "2026-08-15"
-registrationDeadline: "2026-09-24"
-hotelCutoffDate: "2026-09-10"
-packingReminderDate: "2026-10-01"
-
+  - compression-cubes
+  - portable-charger
+  - mints
+earlyBirdDate: '2026-08-15'
+registrationDeadline: '2026-09-24'
+hotelCutoffDate: '2026-09-10'
+packingReminderDate: '2026-10-01'
 relatedEvents:
-  - "jack-and-jill-orama"
-  - "swingtacular-the-galactic-open"
-  - "wild-wild-westie"
+- jack-and-jill-orama
+- swingtacular-the-galactic-open
+- wild-wild-westie
 ---
-
-# Boogie by the Bay
 
 The flagship event of The Next Generation Swing Dance Club, held every Columbus Day weekend.
 

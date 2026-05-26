@@ -1,55 +1,48 @@
 ---
 type: event
-title: "Weekly Class"
-date: "2024-01-01"
-startDate: "2024-01-01"
-author: "Ariel Anders, PhD"
-category: "Dance"
-excerpt: "Weekly social dance and classes at Mission City Swing in San Francisco."
-location: "Mission City Swing"
-city: "San Francisco // CA"
-region: "NorCal"
-schedule: "Wednesdays"
-url: "https://missioncityswing.com"
-heroImage: ""
-description: "Weekly social dance and classes at Mission City Swing."
-
+title: Weekly Class
+date: '2024-01-01'
+startDate: '2024-01-01'
+author: Ariel Anders, PhD
+category: Dance
+excerpt: Weekly social dance and classes at Mission City Swing in San Francisco.
+location: Mission City Swing
+city: San Francisco // CA
+region: NorCal
+schedule: Wednesdays
+url: https://missioncityswing.com
+heroImage: ''
+description: Weekly social dance and classes at Mission City Swing.
 whyAttending: >
-  Weekly classes are the foundation of any dancer's growth. Mission City Swing
-  offers a consistent, high-quality environment to hone your skills, learn new
-  concepts, and connect with the local community every week.
-
+  Weekly classes are the foundation of any dancer's growth. Mission City Swing offers
+  a consistent, high-quality environment to hone your skills, learn new concepts,
+  and connect with the local community every week.
 theme:
-  name: "City Style"
-  label: "Urban Social"
+  name: City Style
+  label: Urban Social
   outfitIds:
-    - "sequin-bomber-jacket"
+  - sequin-bomber-jacket
   accessoryIds:
-    - "hand-sanitizer"
-
+  - hand-sanitizer
 gear:
   outfitIds: []
   accessoryIds: []
   shoeIds:
-    - "dance-socks"
-    - "suede-sheets"
+  - dance-socks
+  - suede-sheets
   essentialIds:
-    - "mints"
-    - "hand-sanitizer"
+  - mints
+  - hand-sanitizer
   travelIds:
-    - "portable-charger"
-
-earlyBirdDate: ""
-registrationDeadline: ""
-hotelCutoffDate: ""
-packingReminderDate: ""
-
+  - portable-charger
+earlyBirdDate: ''
+registrationDeadline: ''
+hotelCutoffDate: ''
+packingReminderDate: ''
 relatedEvents:
-  - "boogie-by-the-bay"
-  - "mission-city-swing"
+- boogie-by-the-bay
+- mission-city-swing
 ---
-
-# Weekly Class
 
 Mission City Swing is the hub for WCS in San Francisco. Join us every Wednesday for classes and social dancing.
 
