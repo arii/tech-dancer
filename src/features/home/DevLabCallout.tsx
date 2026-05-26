@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
