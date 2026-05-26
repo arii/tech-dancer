@@ -37,19 +37,15 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
   test('should render the action timeline in sidebar (desktop)', async ({ page }) => {
     // On desktop, reminders are in the sidebar under "IMPORTANT DATES" (uppercase in UI)
     const sidebar = page.locator('aside');
-    await expect(sidebar.getByText('IMPORTANT DATES')).toBeVisible();
-
-    // Check for timeline items - they don't have testids in sidebar yet but we can check labels
-    await expect(sidebar.getByText('EARLY BIRD DEADLINE')).toBeVisible();
-    await expect(sidebar.getByText('REGISTRATION DEADLINE')).toBeVisible();
+    // JJO has no dates, so important dates section should not be visible
+    await expect(sidebar.getByText('IMPORTANT DATES')).not.toBeVisible();
   });
 
   test('should render the action timeline inline (mobile)', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
+    // JJO has no dates, so reminders section should be hidden entirely
     const remindersSection = page.getByTestId('reminders');
-    await expect(remindersSection).toBeVisible();
-    const rows = remindersSection.getByTestId('timeline-row');
-    await expect(rows).toHaveCount(4);
+    await expect(remindersSection).not.toBeVisible();
   });
 
   test('should render related events', async ({ page }) => {
