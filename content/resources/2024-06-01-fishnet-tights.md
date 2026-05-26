@@ -1,0 +1,17 @@
+---
+type: resource
+title: "Fishnet Lace Tights"
+date: "2024-06-01"
+author: "Ariel Anders, PhD"
+category: "Fashion"
+excerpt: "Six-pack of fishnet lace tights for elegant leg coverage and style."
+image: "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.png"
+affiliateIds: ["fishnet-tights"]
+tags: ["fashion", "footwear", "elegance"]
+rating: 4.5
+verdict: "Best for elegance"
+priceCategory: "$$"
+updatedDate: "Jun 2024"
+---
+
+Quality fishnet tights that complement both casual and formal dancewear. Durable and affordable when buying in bulk.
