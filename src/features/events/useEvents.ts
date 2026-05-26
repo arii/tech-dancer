@@ -37,6 +37,7 @@ export function useEvents() {
         safeSearch(e.category, searchTerm) ||
         safeSearch(e.excerpt, searchTerm) ||
         safeSearch(e.city, searchTerm) ||
+        safeSearch(e.region || '', searchTerm) ||
         safeSearch(e.location, searchTerm)
       );
     }

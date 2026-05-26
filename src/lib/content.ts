@@ -73,6 +73,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
         ...data,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
+        region: data.region ? String(data.region) : undefined,
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
         author: String(data.author || ""),

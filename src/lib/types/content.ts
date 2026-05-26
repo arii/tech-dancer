@@ -83,6 +83,7 @@ export interface Event {
   excerpt: string;
   location: string;
   city: string;
+  region?: string;
   schedule: string;
   description: string;
   link?: string;

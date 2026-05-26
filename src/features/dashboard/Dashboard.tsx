@@ -18,7 +18,7 @@ export default function Home() {
     <Box as="section">
       <SEO
         title="Home"
-        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers, plus guides on building the platform with modern web tools."
+        description="BoomTick: Training tips, event resource guides, and gear reviews for West Coast Swing dancers, plus guides on building the platform with modern web tools."
         schema={STATIC_SCHEMAS.HOME}
       />
       <Stack gap={16}>
@@ -105,7 +105,7 @@ export default function Home() {
           </Stack>
 
           <Stack gap={8}>
-            <SectionHeader label="COMPETE" title="Upcoming Event Resource Guides" />
+            <SectionHeader label="PLAN" title="Upcoming Event Resource Guides" />
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
               {upcomingEvents.map((event) => (
                 <Box

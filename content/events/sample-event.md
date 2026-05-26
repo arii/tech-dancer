@@ -11,6 +11,7 @@ excerpt: "A fully populated sample event for schema and rendering verification."
 # ── Logistics ──────────────────────────────────────────
 location: "Test Arena"
 city: "San Francisco, CA"
+region: "NorCal"
 schedule: "October 1 - 4, 2026"
 url: "https://example.com/sample-event"
 heroImage: "/assets/events/jjo-hero.svg"

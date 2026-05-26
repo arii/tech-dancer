@@ -1,9 +1,12 @@
 // impeccable-ignore-file
 
+import { NavLink } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
+import { ActionButton } from './ActionButton';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
 const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
@@ -114,10 +117,23 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers,
+            Training tips, event resource guides, and gear reviews for competitive West Coast Swing dancers,
             plus technical deep dives into building the platform with DevAI.
           </Text>
         </Stack>
+
+        <Box marginTop={8} className="opacity-0 hero-cta-anim">
+          <ActionButton
+            as={NavLink}
+            to="/events"
+            className="group/cta"
+          >
+            <Stack direction="row" align="center" gap={2}>
+              <Text weight="font-bold">Browse Resource Guides</Text>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover/cta:translate-x-1" />
+            </Stack>
+          </ActionButton>
+        </Box>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
         <Stack
