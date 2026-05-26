@@ -111,7 +111,7 @@
     "url": "https://amazon.com",
     "category": "recovery",
     "description": "Good for sore legs, tight hips, and post-event recovery.",
-    "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
+    "draft": true
   },
   "rainbow-fringe-dress": {
     "id": "rainbow-fringe-dress",
@@ -159,7 +159,7 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "High-capacity charger to keep your phone alive during long event days.",
-    "image": "/images/gear/amazon/olv-neck-fan-5000mah-foldable-neck-fan-portable-rechargeable-led-displ.jpg"
+    "draft": true
   },
   "travel-pillow": {
     "id": "travel-pillow",
@@ -191,7 +191,7 @@
     "url": "https://amazon.com",
     "category": "gear",
     "description": "A life-saver on a crowded, hot dance floor.",
-    "image": "/images/gear/amazon/olv-neck-fan-5000mah-foldable-neck-fan-portable-rechargeable-led-displ.jpg"
+    "draft": true
   },
   "liquid-iv": {
     "id": "liquid-iv",
@@ -207,7 +207,7 @@
     "url": "https://amazon.com",
     "category": "gear",
     "description": "Keep your suede soles clean and grippy.",
-    "image": "/images/gear/amazon/suede-stick-on-sheets.jpg"
+    "draft": true
   },
   "mints": {
     "id": "mints",
@@ -215,7 +215,7 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "Essential for social dancing confidence.",
-    "image": "/images/gear/amazon/listerine-ready-tabs-chewable-tablets-with-clean-mint-flavor-revolutio.jpg"
+    "draft": true
   },
   "hand-sanitizer": {
     "id": "hand-sanitizer",
@@ -231,7 +231,7 @@
     "url": "https://amazon.com",
     "category": "gear",
     "description": "Show your pride while staying cool.",
-    "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg"
+    "draft": true
   },
   "love-neon-follow-shirt": {
     "id": "love-neon-follow-shirt",
@@ -380,6 +380,6 @@
     "url": "https://amazon.com",
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
-    "image": "/assets/gear/travel-steamer.jpg"
+    "draft": true
   }
 }
