@@ -38,7 +38,7 @@ theme:
 gear:
   outfitIds:
     - "sequin-bomber-jacket"
-  outfitDescription: "Futuristic and high-production looks for the Galactic theme."
+  outfitDescription: "Visionary outfits designed for the epic scale of the Galactic Open."
   accessoryIds:
     - "electric-fan"
     - "rave-fan"
