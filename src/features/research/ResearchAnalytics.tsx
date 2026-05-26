@@ -115,27 +115,27 @@ export default function ResearchAnalytics() {
           </Box>
 
           <Stack gap={6}>
-            <Box display="flex" align="center" gap={3}>
-              <Cpu className="text-accent w-6 h-6" />
-              <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="widest">[SYSTEM_DASHBOARD]</Text>
+            <Box display="flex" align="center" gap={3} opacity={0.7}>
+              <Cpu className="text-accent w-5 h-5" />
+              <Text variant="mono" size="xs" weight="font-bold" color="accent" tracking="widest">[SYSTEM_DASHBOARD]</Text>
             </Box>
-            <Text variant="display" as="h1" size={{ base: '4xl', md: '6xl' }} weight="font-black" uppercase tracking="tighter" lineHeight="none">
+            <Text variant="display" as="h1" size={{ base: '4xl', md: '7xl' }} weight="font-black" uppercase tracking="tighter" lineHeight="none">
               DevAI Portfolio as a Platform
             </Text>
-            <Text variant="body" size="lg" color="dim" maxWidth="3xl" lineHeight="relaxed">
+            <Text variant="body" size="lg" color="dim" maxWidth="2xl" lineHeight="relaxed">
               Welcome to my active research sandbox. This platform is not a static blog; it is a live production testbed for multi-agent software engineering systems. Every feature, page, and data pipeline on this domain is audited, maintained, and optimized by an autonomous suite of developer agents operating across my local development environment (Inner Loop) and CI/CD pipelines (Outer Loop).
             </Text>
           </Stack>
         </Stack>
 
         {/* 1. Inner Loop */}
-        <Stack gap={10}>
+        <Stack gap={10} marginTop={8}>
           <Stack gap={4}>
             <Box borderBottom paddingBottom={4} display="flex" justify="between" align="end">
-              <Text variant="headline" size="2xl" weight="font-black">1. Transforming the Inner Loop: Spec-Driven Multi-Agent Code Gen</Text>
-              <Terminal className="text-dim opacity-50 w-8 h-8" />
+              <Text variant="headline" size="xl" weight="font-black" uppercase tracking="tight">1. Transforming the Inner Loop: Spec-Driven Multi-Agent Code Gen</Text>
+              <Terminal className="text-dim opacity-30 w-6 h-6" />
             </Box>
-            <Text color="dim" maxWidth="3xl">To maximize developer velocity, I engineered a custom, context-aware DevAI SDK (/dev-tools) designed around Spec-Driven Development methodologies.</Text>
+            <Text color="dim" maxWidth="2xl" size="sm">To maximize developer velocity, I engineered a custom, context-aware DevAI SDK (/dev-tools) designed around Spec-Driven Development methodologies.</Text>
           </Stack>
 
           <Grid cols={{ base: 1, md: 3 }} gap={8}>
@@ -176,13 +176,13 @@ export default function ResearchAnalytics() {
         </Stack>
 
         {/* 2. Outer Loop */}
-        <Stack gap={10}>
+        <Stack gap={10} marginTop={8}>
           <Stack gap={4}>
             <Box borderBottom paddingBottom={4} display="flex" justify="between" align="end">
-              <Text variant="headline" size="2xl" weight="font-black">2. Automating the Outer Loop: GitOps Code Review & Blast-Radius Auditing</Text>
-              <ShieldCheck className="text-dim opacity-50 w-8 h-8" />
+              <Text variant="headline" size="xl" weight="font-black" uppercase tracking="tight">2. Automating the Outer Loop: GitOps Code Review & Blast-Radius Auditing</Text>
+              <ShieldCheck className="text-dim opacity-30 w-6 h-6" />
             </Box>
-            <Text color="dim" maxWidth="3xl">To maintain architectural consistency and prevent regression at scale, I built and integrated deterministic GitOps agents directly into our code review lifecycle.</Text>
+            <Text color="dim" maxWidth="2xl" size="sm">To maintain architectural consistency and prevent regression at scale, I built and integrated deterministic GitOps agents directly into our code review lifecycle.</Text>
           </Stack>
 
           <Grid cols={{ base: 1, md: 3 }} gap={8}>
@@ -207,13 +207,13 @@ export default function ResearchAnalytics() {
         </Stack>
 
         {/* 3. Perception Debugging */}
-        <Stack gap={10}>
+        <Stack gap={10} marginTop={8}>
           <Stack gap={4}>
             <Box borderBottom paddingBottom={4} display="flex" justify="between" align="end">
-              <Text variant="headline" size="2xl" weight="font-black">3. Web UI "Perception Debugging" & Telemetry Telepresence</Text>
-              <Eye className="text-dim opacity-50 w-8 h-8" />
+              <Text variant="headline" size="xl" weight="font-black" uppercase tracking="tight">3. Web UI "Perception Debugging" & Telemetry Telepresence</Text>
+              <Eye className="text-dim opacity-30 w-6 h-6" />
             </Box>
-            <Text color="dim" maxWidth="3xl">Just as high-complexity software and real-time systems require deep perception debugging to analyze complex behaviors, this platform deploys a dedicated simulation suite.</Text>
+            <Text color="dim" maxWidth="2xl" size="sm">Just as high-complexity software and real-time systems require deep perception debugging to analyze complex behaviors, this platform deploys a dedicated simulation suite.</Text>
           </Stack>
 
           <Grid cols={{ base: 1, md: 3 }} gap={8}>
@@ -237,13 +237,13 @@ export default function ResearchAnalytics() {
         </Stack>
 
         {/* 4. Data Pipelines */}
-        <Stack gap={10}>
+        <Stack gap={10} marginTop={8}>
           <Stack gap={4}>
             <Box borderBottom paddingBottom={4} display="flex" justify="between" align="end">
-              <Text variant="headline" size="2xl" weight="font-black">4. Productionizing Data Pipelines: Scaled Telemetry Ingestion</Text>
-              <Binary className="text-dim opacity-50 w-8 h-8" />
+              <Text variant="headline" size="xl" weight="font-black" uppercase tracking="tight">4. Productionizing Data Pipelines: Scaled Telemetry Ingestion</Text>
+              <Binary className="text-dim opacity-30 w-6 h-6" />
             </Box>
-            <Text color="dim" maxWidth="3xl">Demonstrating expertise in production-grade data pipelines, I engineered an unstructured-to-structured ETL pipeline for raw web telemetry.</Text>
+            <Text color="dim" maxWidth="2xl" size="sm">Demonstrating expertise in production-grade data pipelines, I engineered an unstructured-to-structured ETL pipeline for raw web telemetry.</Text>
           </Stack>
 
           <Grid cols={{ base: 1, md: 3 }} gap={8}>
@@ -267,58 +267,60 @@ export default function ResearchAnalytics() {
         </Stack>
 
         {/* Articles Section */}
-        <Stack gap={8} marginTop={12}>
+        <Stack gap={8} marginTop={20}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+            <Text variant="headline" size="xl" weight="font-black" uppercase tracking="tight">Articles & Research</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest">{studies.length} POSTS</Text>
           </Box>
 
-          {studies.length > 0 ? (
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
-              {studies.map((study) => (
-                <Stack
-                  key={study.slug}
-                  padding={8}
-                  gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                  className={cardVariants({ interactive: true })}
-                >
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+          <Grid cols={{ base: 1, md: 2 }} gap={8}>
+            {studies.map((study) => (
+              <Stack
+                key={study.slug}
+                as="button"
+                padding={8}
+                gap={4}
+                onClick={() => navigate(`/research/${study.slug}`)}
+                className={cardVariants({ interactive: true })}
+                textAlign="left"
+              >
+                <Box display="flex" justify="between" align="center">
+                  <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                  <Text variant="mono" size="micro" color="dim">{study.date}</Text>
+                </Box>
+                <Stack gap={2}>
+                  <Text variant="display" size="2xl" weight="font-black">
+                    {study.title}
+                  </Text>
+                  <Text variant="body" size="sm" color="dim">
+                    {study.excerpt}
+                  </Text>
+                </Stack>
+                <Box display="flex" align="center" gap={2} marginTop="auto">
+                  <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
+                  <Icon icon={FileText} size="sm" color="accent" />
+                </Box>
+              </Stack>
+            ))}
+
+            {studies.length === 0 && (
+              <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center" gridColumn="span 2">
+                <Stack align="center" justify="center" gap={2}>
+                  <Box>
+                    <Icon icon={Microscope} size="lg" color="muted" />
                   </Box>
-                  <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black">
-                      {study.title}
+                  <Stack gap={0.5}>
+                    <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
+                      Loading Data...
                     </Text>
-                    <Text variant="body" size="sm" color="dim">
-                      {study.excerpt}
+                    <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
+                      Agentic scrapers are processing competitive datasets. Detailed studies will be available soon.
                     </Text>
                   </Stack>
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
-                    <Icon icon={FileText} size="sm" color="accent" />
-                  </Box>
                 </Stack>
-              ))}
-            </Grid>
-          ) : (
-            <Box padding={6} border radius="lg" position="relative" overflow="hidden" surface="surface" textAlign="center">
-              <Stack align="center" justify="center" gap={2}>
-                <Box>
-                  <Icon icon={Microscope} size="lg" color="muted" />
-                </Box>
-                <Stack gap={0.5}>
-                  <Text as="h2" size="lg" weight="font-black" color="accent" uppercase tracking="tight">
-                    Loading Data...
-                  </Text>
-                  <Text marginX="auto" maxWidth="md" size="xs" color="body" opacity={0.8}>
-                    Agentic scrapers are processing competitive datasets. Detailed studies will be available soon.
-                  </Text>
-                </Stack>
-              </Stack>
-            </Box>
-          )}
+              </Box>
+            )}
+          </Grid>
         </Stack>
       </Stack>
     </Box>

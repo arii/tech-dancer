@@ -27,7 +27,7 @@ export default function ResearchDetail() {
   const { id: paramId } = useParams();
   const { pathname } = useLocation();
 
-  const { getTool, getStudy } = useResearch();
+  const { getTool, getStudy, tools } = useResearch();
 
   const id = useMemo(() => {
     if (paramId) return paramId;
@@ -37,8 +37,15 @@ export default function ResearchDetail() {
     return null;
   }, [paramId, pathname]);
 
-  const tool = id ? getTool(id) : null;
+  const tool = useMemo(() => {
+    if (!id) return null;
+    // Attempt lookup by ID first, then by route matching
+    return getTool(id) || tools.find(t => t.route === pathname || t.canonicalPath === pathname);
+  }, [id, pathname, tools, getTool]);
+
   const study = !tool && id ? getStudy(id) : null;
+
+  const registryId = tool?.id || id;
 
   const structuredData = useMemo(() => {
     if (tool) {
@@ -136,9 +143,9 @@ export default function ResearchDetail() {
 
         <Box border surface="surface" radius="lg" padding={{ base: 8, md: 12 }}>
           <Stack gap={12}>
-            {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
+            {tool.status !== 'Coming Soon' && registryId && TOOL_REGISTRY[registryId] ? (
               (() => {
-                const ToolComponent = TOOL_REGISTRY[id];
+                const ToolComponent = TOOL_REGISTRY[registryId];
                 return <ToolComponent />;
               })()
             ) : (
@@ -172,7 +179,7 @@ export default function ResearchDetail() {
                   </Stack>
                 </Grid>
 
-                {(tool.status === 'Coming Soon' || !TOOL_REGISTRY[id]) && (
+                {(tool.status === 'Coming Soon' || (registryId && !TOOL_REGISTRY[registryId])) && (
                   <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-50" />
