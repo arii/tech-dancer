@@ -118,21 +118,6 @@ def validate_issue(ctx, issue_number, all_open, post_comments, dry_run):
         out(ctx, "✅ Issue validation complete.", data=res)
 
 @gh.command()
-@click.argument('target_branch')
-@click.argument('pr_numbers', nargs=-1, type=int)
-@click.pass_context
-def aggregate(ctx, target_branch, pr_numbers):
-    """Aggregate multiple PRs into a single branch."""
-    if not pr_numbers:
-        err(ctx, "Provide at least one PR number to aggregate.")
-    orch = ctx.obj['ORCHESTRATOR']
-    try:
-        res = orch.aggregate_prs(target_branch, list(pr_numbers))
-        out(ctx, res['message'], data=res)
-    except CLIError as e:
-        err(ctx, str(e), code=e.code)
-
-@gh.command()
 @click.option('--base')
 @click.pass_context
 def conflicts(ctx, base):

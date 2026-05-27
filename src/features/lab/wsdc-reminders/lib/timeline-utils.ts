@@ -8,10 +8,18 @@ export interface TimelineOptions {
 
 export const calculateTimeline = (event: EventAnchors, options: TimelineOptions = {}): TimelineItem[] => {
   const start = parseDate(event.startDate);
+
+  const isValidDate = (d: any) => d instanceof Date && !isNaN(d.getTime());
+
   const early = event.earlyBirdDate ? parseDate(event.earlyBirdDate) : null;
   const registration = event.registrationDeadline ? parseDate(event.registrationDeadline) : null;
   const hotel = event.hotelCutoffDate ? parseDate(event.hotelCutoffDate) : null;
   const packing = event.packingReminderDate ? parseDate(event.packingReminderDate) : null;
+
+  const safeEarly = isValidDate(early) ? early : null;
+  const safeRegistration = isValidDate(registration) ? registration : null;
+  const safeHotel = isValidDate(hotel) ? hotel : null;
+  const safePacking = isValidDate(packing) ? packing : null;
 
   const timeline: TimelineItem[] = [
     {
@@ -40,10 +48,10 @@ export const calculateTimeline = (event: EventAnchors, options: TimelineOptions 
     }
   ];
 
-  if (early) {
+  if (safeEarly) {
     timeline.push({
       id: 'early-bird',
-      date: addDays(early, -2),
+      date: addDays(safeEarly, -2),
       label: "Early Bird Deadline",
       description: `Register for ${event.title} now. Secures maximum discount.`,
       icon: Trophy,
@@ -51,10 +59,10 @@ export const calculateTimeline = (event: EventAnchors, options: TimelineOptions 
     });
   }
 
-  if (registration) {
+  if (safeRegistration) {
     timeline.push({
       id: 'registration-deadline',
-      date: registration,
+      date: safeRegistration,
       label: "Registration Deadline",
       description: `Final call for online registration for ${event.title}.`,
       icon: CheckCircle2,
@@ -62,10 +70,10 @@ export const calculateTimeline = (event: EventAnchors, options: TimelineOptions 
     });
   }
 
-  if (hotel) {
+  if (safeHotel) {
     timeline.push({
       id: 'hotel-block',
-      date: hotel,
+      date: safeHotel,
       label: "Hotel Block Cutoff",
       description: "Book within the discounted block before it sells out.",
       icon: Hotel,
@@ -73,10 +81,10 @@ export const calculateTimeline = (event: EventAnchors, options: TimelineOptions 
     });
   }
 
-  if (packing) {
+  if (safePacking) {
     timeline.push({
       id: 'packing-reminder',
-      date: packing,
+      date: safePacking,
       label: "Packing Reminder",
       description: "Finalize outfits and check theme requirements.",
       icon: Briefcase,
