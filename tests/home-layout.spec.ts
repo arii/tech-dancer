@@ -60,4 +60,25 @@ test.describe('Home Page Layout and Navigation', () => {
     // Check if gear section exists
     await expect(page.getByText('Gear for the Weekend', { exact: false })).toBeVisible();
   });
+
+  test('mobile layout should not overflow horizontally and nav stays in viewport', async ({ page }) => {
+    for (const viewport of [{ width: 375, height: 812 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto('./');
+
+      const widths = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        innerWidth: window.innerWidth,
+      }));
+      expect(widths.scrollWidth).toBeLessThanOrEqual(widths.innerWidth);
+
+      const nav = page.locator('nav[aria-label="Main Navigation"]');
+      const box = await nav.boundingBox();
+      expect(box).not.toBeNull();
+      if (!box) return;
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
+    }
+  });
+
 });
