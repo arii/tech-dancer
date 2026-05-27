@@ -120,7 +120,7 @@ export function GearCard(props: GearCardProps) {
             opacity={80}
             className="bg-accent/80 text-white backdrop-blur-md shadow-sm"
           >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide" color="white">
               Amazon affiliate link
             </Text>
           </Box>
