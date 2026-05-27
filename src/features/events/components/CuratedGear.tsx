@@ -17,12 +17,6 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
       <Stack gap={12}>
         <SectionHeader eyebrow="TOOLS" title={title} />
 
-        <Box border radius="xl" paddingX={4} paddingY={3} className="border-line/80 bg-surface/70">
-          <Text variant="body" size="sm" color="dim" className="leading-relaxed">
-            <Text as="span" variant="body" size="sm" weight="font-bold" color="main">Affiliate disclosure:</Text> As an Amazon Associate, BoomTick earns from qualifying purchases. Some gear links in this guide are affiliate links, which may earn a small commission at no extra cost to you.
-          </Text>
-        </Box>
-
         {sections.map((section) => (
           <Stack key={section.label} gap={8}>
             <Stack gap={2}>

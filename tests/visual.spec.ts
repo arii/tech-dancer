@@ -19,7 +19,7 @@ test.describe('Visual Regression Tests', () => {
       await page.goto(route.path);
 
       // Wait for the main content to be visible as a base stability measure
-      await expect(page.locator('main').first()).toBeVisible({ timeout: 30000 });
+      await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
 
       // Wait for fonts to be loaded to prevent text-rendering flakiness
       await page.evaluate(() => document.fonts.ready);
@@ -70,7 +70,6 @@ test.describe('Visual Regression Tests', () => {
         fullPage: true,
         allowSizeMismatch: true,
         animations: 'disabled',
-        maxDiffPixelRatio: 0.25,
         mask: [
           page.getByTestId('content-date'),
           page.getByTestId('detail-metadata'),
