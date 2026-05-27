@@ -1,10 +1,11 @@
 import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
-  entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.mjs'],
+  entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.mjs', 'dev-tools/*.ts'],
   project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
   ignore: [
-    'src/components/Equalizer.tsx'
+    'src/components/Equalizer.tsx',
+    'src/lib/draftFiltering.ts'
   ],
   ignoreDependencies: [
     'tw-animate-css',
