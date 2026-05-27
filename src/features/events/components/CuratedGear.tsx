@@ -23,7 +23,7 @@ export function CuratedGear({
   featuredDescription,
   packingPicks,
   packingDescription,
-  packingMaxItems = 6,
+  packingMaxItems = 3,
   travelPicks,
   travelDescription,
   showFullGearListCta = false,
@@ -84,7 +84,7 @@ export function CuratedGear({
       {canRenderTravel && (
         <EventSection
           eyebrow="Travel setup"
-          title="Travel Essentials"
+          title="Travel Extras"
           description={travelDescription || 'Practical items that make the weekend easier.'}
         >
           <EventProductGrid
