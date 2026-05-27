@@ -89,7 +89,7 @@ export default function EventGuide() {
       <SEO title={`${event.title} | Event Resource Guide`} description={event.excerpt} jsonLd={getEventSchema(event)} />
       <EventHero id="hero" title={event.title} location={event.city} date={event.schedule} eyebrow={event.category} image={event.heroImage} whyAttending={event.whyAttending} />
 
-      <Box maxWidth="screen-2xl" marginX="auto" paddingX={{ base: 6, lg: 6 }} paddingTop={8}>
+      <Box maxWidth="screen-lg" marginX="auto" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingTop={10}>
         <Stack direction={{ base: 'col', lg: 'row' }} gap={8} align="start">
           <Box as="main" flex={1} minWidth="0" className={MAIN_GAP}>
             {event.theme && (

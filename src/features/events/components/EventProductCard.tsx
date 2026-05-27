@@ -20,13 +20,13 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
   const ctaLabel = getCtaLabel(detectContentType(product), isExternal);
 
   return (
-    <Box as="article" border radius="xl" surface="surface" padding={3} height="full" className="overflow-hidden transition-colors hover:border-line-hover">
+    <Box as="article" border radius="xl" surface="surface" padding={4} height="full" className="overflow-hidden border-white/10 bg-white/[0.035] shadow-sm transition-colors hover:border-cyan-400/40 hover:bg-white/[0.055]">
       <Stack direction="col" gap={3} height="full">
-        <Box className={cn('w-full rounded-lg bg-surface-alt overflow-hidden shrink-0', variant === 'featured' ? 'h-28' : 'h-24')}>
+        <Box className={cn('w-full h-32 md:h-36 rounded-xl bg-slate-100 overflow-hidden shrink-0')}>
           {product.image ? (
             <Box as={isExternal ? 'a' : Link} href={isExternal ? href : undefined} to={!isExternal ? href : undefined} rel={isExternal ? 'noopener noreferrer sponsored' : undefined} target={isExternal ? '_blank' : undefined} display="flex" height="full" width="full" className="hover:opacity-90 transition-opacity">
-              <Box padding={2} width="full" height="full">
-                <img src={product.image} alt={product.name} className="h-full w-full object-contain" loading="lazy" />
+              <Box padding={6} width="full" height="full" display="flex" align="center" justify="center">
+                <img src={product.image} alt={product.name} className="max-h-full w-4/5 object-contain" loading="lazy" />
               </Box>
             </Box>
           ) : (
@@ -38,15 +38,15 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
 
         <Stack gap={2} height="full" flex={1} justify="between" minWidth="0">
           <Stack gap={1} minWidth="0">
-            <Text as="h3" size={variant === 'featured' ? 'base' : 'sm'} weight="font-bold" color="white" clamp={2} className="leading-snug">
+            <Text as="h3" size={variant === 'featured' ? 'lg' : 'base'} weight="font-bold" color="white" clamp={2} className="leading-snug">
               {product.name}
             </Text>
-            <Text size="xs" color="dim" clamp={2} className="leading-relaxed">
+            <Text size="sm" color="dim" clamp={2} className="leading-6">
               {product.description}
             </Text>
           </Stack>
 
-          <Text as={CtaTag} variant="mono" size="xs" weight="font-bold" color="accent" className={cn(!isExternal && 'hover:underline')} {...ctaProps}>
+          <Text as={CtaTag} variant="mono" size="sm" weight="font-semibold" color="accent" className={cn(!isExternal && 'hover:underline')} {...ctaProps}>
             {ctaLabel}
           </Text>
         </Stack>
