@@ -15,7 +15,7 @@ interface FolioGridProps {
   items: ContentItem[];
   categoryTitle: string;
   basePath: string;
-  label?: string;
+  eyebrow?: string;
   description?: string;
   children?: ReactNode;
   view?: ViewMode;
@@ -29,7 +29,7 @@ export default function FolioGrid({
   items,
   categoryTitle,
   basePath,
-  label,
+  eyebrow,
   description,
   children,
   view = 'card',
@@ -56,7 +56,7 @@ export default function FolioGrid({
     <Box as="section" height="full">
       <Box as="header" marginBottom={12}>
         <PageHeader
-          eyebrow={label || "FOLIO"}
+          eyebrow={eyebrow || "FOLIO"}
           title={categoryTitle}
           description={description}
           as={as}

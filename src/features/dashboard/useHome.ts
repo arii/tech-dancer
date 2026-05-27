@@ -38,6 +38,7 @@ export function useHome() {
   return { 
     recentPosts, 
     upcomingEvents,
+    featuredMerch,
     dancerPaths,
     hirePaths,
     handleNavigateToBlog,

@@ -17,7 +17,7 @@ export default function BlogFeed() {
         items={posts}
         categoryTitle="Blog Posts"
         as="h1"
-        label="INSIGHTS"
+        eyebrow="INSIGHTS"
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
         searchPlaceholder="Search posts..."
